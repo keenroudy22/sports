@@ -7,6 +7,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import gates
@@ -222,6 +223,40 @@ class BuildTests(unittest.TestCase):
         ticket, reason = ladder.build([leg])
         self.assertIsNone(reason)
         self.assertEqual((ticket['odds'], len(ticket['legs']), ticket['gameIds']), (-175, 1, ['g1']))
+
+    def test_best_ticket_is_ranked_across_leagues_not_first_league(self):
+        games = {'g1': dict(GAMES['g1'], league='NFL'), 'g2': dict(GAMES['g2'], league='CFB')}
+        def supported(game, *args):
+            return [{'id': game['id'], 'title': game['id'] + ' moneyline', 'gameId': game['id'],
+                     'book': 'DraftKings', 'odds': -175, 'chance': .80 if game['league']=='CFB' else .70,
+                     'kickoff': game['kickoff'], 'observedAt': '2026-09-27T12:10:00Z'}]
+        with patch.object(ladder, 'moneyline_legs', side_effect=supported), patch.object(ladder, 'legs_for_game', return_value=[]):
+            pick, reason = ladder.candidate(ctx(), games, NOW)
+        self.assertIsNone(reason)
+        self.assertEqual(pick['_league'], 'CFB')
+        self.assertEqual(pick['gameIds'], ['g2'])
+
+    def test_standalone_monday_nfl_game_can_supply_single_leg(self):
+        now = datetime(2026, 9, 28, 12, 30, tzinfo=timezone.utc)
+        games = {'g1': dict(GAMES['g1'], kickoff='2026-09-29T00:15Z')}
+        leg = {'id':'solo','title':'NFL moneyline','gameId':'g1','book':'DraftKings','odds':-175,
+               'chance':.75,'kickoff':games['g1']['kickoff'],'observedAt':'2026-09-28T12:10:00Z'}
+        with patch.object(ladder, 'moneyline_legs', return_value=[leg]), patch.object(ladder, 'legs_for_game', return_value=[]):
+            pick, reason = ladder.candidate(ctx(), games, now)
+        self.assertIsNone(reason)
+        self.assertEqual(pick['gameIds'], ['g1'])
+
+    def test_standalone_thursday_nfl_game_can_supply_player_prop(self):
+        now = datetime(2026, 10, 1, 12, 30, tzinfo=timezone.utc)
+        games = {'g1': dict(GAMES['g1'], kickoff='2026-10-02T00:15Z')}
+        leg = {'id':'solo-prop','title':'Quarterback 175+ passing yards','gameId':'g1',
+               'book':'DraftKings','odds':-175,'chance':.75,'marketType':'player_prop',
+               'athleteId':'solo','kickoff':games['g1']['kickoff'],'observedAt':'2026-10-01T12:10:00Z'}
+        with patch.object(ladder, 'moneyline_legs', return_value=[]), patch.object(ladder, 'legs_for_game', return_value=[leg]):
+            pick, reason = ladder.candidate(ctx(), games, now)
+        self.assertIsNone(reason)
+        self.assertEqual(pick['legs'][0]['marketType'], 'player_prop')
+        self.assertEqual(pick['gameIds'], ['g1'])
 
     def test_saturday_replay_can_use_two_exact_main_moneylines(self):
         games = {gid: dict(GAMES[gid], league='CFB', market={

@@ -205,6 +205,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Climb route honesty (owner, October20):** show only completed and currently posted steps plus actual
+  balances. Do not publish unselected future game dates, leagues, assumed prices/payouts or a promised
+  completion date. The next step is unselected until admitted and released. Compare all eligible NFL/CFB
+  tickets using the existing conservative ticket ranking rather than league-loop priority. Standalone TNF,
+  MNF and other NFL games can supply one eligible side or player-prop leg. Existing news/role/calibration,
+  price, dollar, one-open-rung and early Discord-first release rules stay unchanged. Never force CFB to fit
+  a chart, or revise already-sent cards/posts and append-only results.
+
 - **Current Climb social voice (owner, October20):** future social captions lead with `$50 → $1,000`
   and the current step, without the restart/run number (`Climb #3`). Use the actual stored start/goal,
   stake, return, bank and next ride; the goal is not a promised return. Keep run IDs and numbered history

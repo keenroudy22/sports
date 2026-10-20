@@ -633,7 +633,7 @@ def manual_candidate(ctx, games, now, spec):
 
 def candidate(ctx, games, now, exclude=()):
     """The next rung as a pick, or (None, reason). Games in `exclude` (the desk has a reason against them) are left off.
-    NFL first, then college: a rung stays inside one league, as a report does."""
+    Compare eligible NFL and college tickets; a rung stays inside one league, as a report does."""
     if not v3_enabled():
         return None, 'Climb v3 is switched off'
     where = state(ctx.first, ctx.latest)
@@ -645,6 +645,7 @@ def candidate(ctx, games, now, exclude=()):
     policy = getattr(ctx, 'policy', None)
     strict = direction.climb_rules(policy, now)
     reasons = []
+    supported = []
     for league in ('NFL', 'CFB'):
         today = todays_games(games, now, league, exclude)
         if not today:
@@ -667,7 +668,12 @@ def candidate(ctx, games, now, exclude=()):
             if not ticket:
                 reasons.append(f'{league} {label}: {reason}' + ('; the stricter Climb pool is on' if strict else ''))
                 continue
-            return ticket_pick(ticket, league, where, now, games), None
+            score = (round(ticket['chance'] - pricing.break_even(ticket['odds']), 4),
+                     ticket['chance'], ticket['odds'])
+            supported.append((score, ticket, league))
+    if supported:
+        _, ticket, league = max(supported, key=lambda row: row[0])
+        return ticket_pick(ticket, league, where, now, games), None
     return None, '; '.join(reasons) or 'no games today'
 
 

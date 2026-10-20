@@ -1,5 +1,21 @@
 # October 5 product implementation tracker
 
+## October20 — remove unselected Climb future and compare eligible leagues (release pending)
+
+Owner rejects a chart that implies future CFB selections or excludes standalone TNF/MNF. Public map PNG
+and route JSON/HTML now use only ledger-backed completed/open rows, with actual35banked/81riding.
+Tonight's immutable FIU row remains81→120/bank24/ride96 if won. No future date, league, price, payout,
+completion date or projected bank appears; next step explicitly not selected, NFL/CFB sides/props eligible.
+Rendering handles an empty/new climb without fictional rows. Previously posted social/card bytes remain.
+
+Selection already supported a one-leg standalone NFL game but returned the first NFL candidate before
+checking CFB. Collect all qualifying league/window tickets and compare using the same existing ticket
+edge/chance/price ranking. Keep one league per ticket, own-segment calibration, news, role, exact-price,
+bank/stake, overlap and one-open-step gates unchanged. Existing morning scans and Discord-first windows
+remain; do not invent a second open rung or future price. Regressions cover strongest eligible league,
+single-game MNF side and TNF prop, empty map and stale future rows filtered from HTML.
+O-20261020-CLIMBROUTE tracks full gates, production/hosted release and live375/1440 proof.
+
 ## October20 — Climb step3 actual release and prospective social voice
 
 Normal guarded release sent FIU-5.5 FanDuel-210 to Plays & Results (message1562113102873501756),

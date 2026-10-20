@@ -41,6 +41,16 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(continued[0]['bet'], 94)
         self.assertGreaterEqual(continued[-1]['banked'] + continued[-1]['ride'], 1000)
 
+    def test_unselected_future_is_absent_even_with_no_posted_steps(self):
+        state = {'run': 1, 'step': 1, 'stake': 50, 'banked': 0, 'saved': 0,
+                 'cashed': [], 'open': None, 'missed': None}
+        self.assertEqual(route.public_route(state, NOW, self.games)['rows'], [])
+        card = route.climb_route(state, NOW, self.games)
+        self.assertIn('NEXT STEP: NOT SELECTED', card.svg())
+        self.assertNotIn('typical', card.svg())
+        self.assertNotIn('>TUE ', card.svg())
+        self.assertEqual(kit.qa(card, 'unselected-route'), [])
+
     def test_window_requires_two_games_one_league_more_than_ninety_minutes_out(self):
         scan = datetime(2026, 10, 8, 16, 0, tzinfo=route.ET)
         first = {'id': 'only', 'league': 'CFB', 'kickoff': scan + timedelta(minutes=91)}
@@ -132,7 +142,8 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(public['rows'][0]['cashes'], 83)
         self.assertEqual(public['rows'][0]['legs'][0]['href'], '#pick/win')
         self.assertEqual(public['rows'][1]['kind'], 'open')
-        self.assertEqual(public['rows'][2]['plannedAt'], 'typical -160')
+        self.assertEqual(len(public['rows']), 2)
+        self.assertTrue(all(row['plannedAt'] is None for row in public['rows']))
         with TemporaryDirectory() as folder:
             path, rendered_state, rendered_rows = route.render(Path(folder) / 'climb-route.png', NOW, stores)
             self.assertTrue(path.is_file())
@@ -158,8 +169,10 @@ class RouteTests(unittest.TestCase):
         mid, instant = route.fixture_states(NOW, self.games)['midclimb']
         card = route.climb_route(mid, instant, self.games, fixture=True)
         svg = card.svg()
-        for text in (route.PLAN_LABEL, '21+ · Entertainment only', 'ALL CLIMBS', 'FIXTURE'):
+        for text in ('POSTED STEPS ONLY', 'NEXT STEP: NOT SELECTED', '21+ · Entertainment only', 'ALL CLIMBS', 'FIXTURE'):
             self.assertIn(text, svg)
+        self.assertNotIn(route.PLAN_LABEL, svg)
+        self.assertNotIn('typical -160', svg)
         self.assertNotIn('1-800-', svg)
         self.assertNotIn('SEASON', svg)
         self.assertNotIn('DraftKings', svg)

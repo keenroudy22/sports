@@ -91,6 +91,8 @@ test('the real app shared interface renders every lazy view with fixture data', 
   const climbHtml = await views.record({ tab: 'climb' });
   assert.match(climbHtml, /climb-route\.png/);
   assert.match(climbHtml, /#pick\/real-rung/);
-  assert.match(climbHtml, /Next step · not posted yet/);
-  assert.match(climbHtml, /typical −160/);
+  assert.doesNotMatch(climbHtml, /Next step · not posted yet/);
+  assert.match(climbHtml, /next pick is not selected/);
+  assert.doesNotMatch(climbHtml, /Plan · typical −160/);
+  assert.match(climbHtml, /standalone Thursday and Monday/);
 });

@@ -193,10 +193,20 @@ def route_rows(state, now, games):
     return rows
 
 
+def posted_rows(state):
+    """Only ledger-backed rows; no planning-window inference enters public surfaces."""
+    rows = [('cashed', row, {'league': row['league'], 'first': row['first'], 'last': row['last']})
+            for row in state['cashed']]
+    if state.get('open'):
+        row = state['open']
+        rows.append(('open', row, {'league': row['league'], 'first': row['first'], 'last': row['last']}))
+    return rows
+
+
 def public_route(state, now, games):
     """Small companion to the PNG; real dollars stay real and plan dollars stay labeled."""
     rows = []
-    for kind, row, window in route_rows(state, now, games):
+    for kind, row, window in posted_rows(state):
         day, clock = window_label(window)
         rows.append({'kind': kind, 'step': row['step'], 'league': (window or {}).get('league'),
                      'day': day, 'clock': clock, 'bet': row['bet'], 'cashes': row['cashes'],
@@ -204,7 +214,7 @@ def public_route(state, now, games):
                      'id': row.get('id'), 'legs': row.get('legs') or [],
                      'plannedAt': 'typical -160' if kind in ('next', 'plan') else None})
     return {'run': state['run'], 'step': state['step'], 'saved': state['saved'],
-            'banked': state['banked'], 'stake': state['stake'], 'planOdds': PLAN_ODDS,
+            'banked': state['banked'], 'stake': state['stake'],
             'goal': GOAL, 'rows': rows, 'image': 'data/cards/climb-route.png'}
 
 
@@ -264,10 +274,8 @@ def bank_line(state):
 
 def climb_route(state, now, games, fixture=False):
     """The 1080×1350 review card; the labelled future is a plan, not a post schedule."""
-    rows = route_rows(state, now, games)
-    if not rows:
-        raise ValueError('Climb route has no real or planned steps')
-    card = kit.Card()
+    rows = posted_rows(state)
+    card = kit.Card(height=max(1350, 850 + len(rows) * 70))
     panel_bottom = 400
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(780, 290))
     label = (f'FIXTURE · CLIMB #{state["run"]} ROUTE MAP' if fixture
@@ -278,17 +286,18 @@ def climb_route(state, now, games, fixture=False):
     inner += card.text(COL_X, 384, 'Bank 20% of every win. Ride 80%.', 40, CHALK, 'd', 600)
 
     hy = panel_bottom + 52
-    stamp_w = width(PLAN_LABEL, 40, tracking=1) + 28
+    posted_label = 'POSTED STEPS ONLY'
+    stamp_w = width(posted_label, 40, tracking=1) + 28
     inner += (f'<rect x="{X1}" y="{hy - 38}" width="{stamp_w:.0f}" height="50" rx="8" fill="none" '
               f'stroke="{INK}" stroke-width="3"/>'
-              + card.text(X1 + 14, hy, PLAN_LABEL, 40, INK, tracking=1))
+              + card.text(X1 + 14, hy, posted_label, 40, INK, tracking=1))
     for name, right, _, _ in COLS:
         inner += card.text(right, hy, name, 40, INK_SOFT, anchor='end', tracking=1)
     inner += f'<line x1="{X1}" y1="{hy + 18}" x2="{X2}" y2="{hy + 18}" stroke="{INK}" stroke-width="3"/>'
     top = hy + 22
     bars = sum(kind in ('next', 'open') for kind, _, _ in rows)
     after = 56 + 30 + 124
-    pitch = int(min(60, (BOTTOM_MAX - after - top - bars * (BAR_HEAD + BAR_PAD)) // len(rows)))
+    pitch = int(min(60, (BOTTOM_MAX - after - top - bars * (BAR_HEAD + BAR_PAD)) // max(1, len(rows))))
     if pitch < MIN_ROUTE_PITCH:
         raise ValueError(f'route does not fit: pitch {pitch} for {len(rows)} rows')
     y, previous_week = top, None
@@ -314,14 +323,14 @@ def climb_route(state, now, games, fixture=False):
             if nxt and nxt[0] not in ('next', 'open'):
                 inner += f'<line x1="{X1}" y1="{y}" x2="{X2}" y2="{y}" stroke="{RULE}" stroke-width="2"/>'
 
-    last = rows[-1][1]
-    flag_x, fy = X1 + 14, y + 56
+    flag_x, fy = X1 + 14, max(y + 170, 900)
+    inner += card.text(X1, fy - 124, 'NEXT STEP: NOT SELECTED', 44, INK, tracking=1)
+    inner += card.text(X1, fy - 68, 'NFL / CFB · SIDES OR PLAYER PROPS', 40, INK_SOFT, tracking=1)
     inner += (f'<path d="M{flag_x} {fy + 6} V{fy - 50}" stroke="{INK}" stroke-width="6" stroke-linecap="round"/>'
               f'<path d="M{flag_x + 3} {fy - 50} h44 l-12 15 l12 15 h-44 z" fill="{INK}"/>')
-    inner += card.text(flag_x + 66, fy, '$1,000', 56, INK)
-    summary = (f'{kit.money(last["banked"])} banked + {kit.money(last["ride"])} riding = '
-               f'{kit.money(last["banked"] + last["ride"])}')
-    room = X2 - (flag_x + 66 + width('$1,000', 56) + 20)
+    inner += card.text(flag_x + 66, fy, 'GOAL $1,000', 48, INK)
+    summary = f'{kit.money(state["banked"])} BANKED · {kit.money(state["stake"])} RIDING'
+    room = X2 - (flag_x + 66 + width('GOAL $1,000', 48) + 20)
     inner += card.text(X2, fy, summary, fit(summary, 40, room, 'd', 600),
                        INK_SOFT, 'd', 600, anchor='end')
     perf = fy + 30
@@ -358,7 +367,7 @@ def render(path, now=None, stores=None):
     pick_card.render(card.svg(), path)
     if path.stat().st_size >= 8_000_000:
         raise ValueError('route PNG exceeds Discord 8 MB limit')
-    return path, state, route_rows(state, now, games)
+    return path, state, posted_rows(state)
 
 
 def fixture_states(now, games):
