@@ -51,6 +51,13 @@ class RouteTests(unittest.TestCase):
         self.assertNotIn('>TUE ', card.svg())
         self.assertEqual(kit.qa(card, 'unselected-route'), [])
 
+    def test_real_history_can_grow_without_squeezing_rows_or_clipping_footer(self):
+        state, instant = route.fixture_states(NOW, self.games)['midclimb']
+        state = dict(state, cashed=[dict(state['cashed'][0], step=i + 1) for i in range(15)], open=None)
+        card = route.climb_route(state, instant, self.games, fixture=True)
+        self.assertGreater(card.h, 1350)
+        self.assertEqual(kit.qa(card, 'long-posted-history'), [])
+
     def test_window_requires_two_games_one_league_more_than_ninety_minutes_out(self):
         scan = datetime(2026, 10, 8, 16, 0, tzinfo=route.ET)
         first = {'id': 'only', 'league': 'CFB', 'kickoff': scan + timedelta(minutes=91)}

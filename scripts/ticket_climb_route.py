@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""A dated, clearly labelled 80/20 Climb map from the real rung ledger and stored slate.
+"""Public 80/20 Climb map from real posted ledger rows, never inferred future picks.
 
-This builder is review-only until the first real render is approved. It does not
-schedule a post, change a rung, or read the incomplete Today ladder summary.
+Private planning helpers remain for stored fixture checks only. They do not drive
+selection, public map rows or posting. This renderer never changes a rung.
 """
 import argparse
 from datetime import datetime, timedelta, timezone
@@ -204,7 +204,7 @@ def posted_rows(state):
 
 
 def public_route(state, now, games):
-    """Small companion to the PNG; real dollars stay real and plan dollars stay labeled."""
+    """Small companion to the PNG, containing only real posted ledger rows."""
     rows = []
     for kind, row, window in posted_rows(state):
         day, clock = window_label(window)
@@ -273,9 +273,9 @@ def bank_line(state):
 
 
 def climb_route(state, now, games, fixture=False):
-    """The 1080×1350 review card; the labelled future is a plan, not a post schedule."""
+    """Posted-only card; its canvas grows when actual history needs more room."""
     rows = posted_rows(state)
-    card = kit.Card(height=max(1350, 850 + len(rows) * 70))
+    card = kit.Card(height=max(1350, 1100 + len(rows) * 70))
     panel_bottom = 400
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(780, 290))
     label = (f'FIXTURE · CLIMB #{state["run"]} ROUTE MAP' if fixture
@@ -295,9 +295,7 @@ def climb_route(state, now, games, fixture=False):
         inner += card.text(right, hy, name, 40, INK_SOFT, anchor='end', tracking=1)
     inner += f'<line x1="{X1}" y1="{hy + 18}" x2="{X2}" y2="{hy + 18}" stroke="{INK}" stroke-width="3"/>'
     top = hy + 22
-    bars = sum(kind in ('next', 'open') for kind, _, _ in rows)
-    after = 56 + 30 + 124
-    pitch = int(min(60, (BOTTOM_MAX - after - top - bars * (BAR_HEAD + BAR_PAD)) // max(1, len(rows))))
+    pitch = 60  # the canvas grows with real history; never squeeze or invent future rows
     if pitch < MIN_ROUTE_PITCH:
         raise ValueError(f'route does not fit: pitch {pitch} for {len(rows)} rows')
     y, previous_week = top, None
@@ -329,7 +327,8 @@ def climb_route(state, now, games, fixture=False):
     inner += (f'<path d="M{flag_x} {fy + 6} V{fy - 50}" stroke="{INK}" stroke-width="6" stroke-linecap="round"/>'
               f'<path d="M{flag_x + 3} {fy - 50} h44 l-12 15 l12 15 h-44 z" fill="{INK}"/>')
     inner += card.text(flag_x + 66, fy, 'GOAL $1,000', 48, INK)
-    summary = f'{kit.money(state["banked"])} BANKED · {kit.money(state["stake"])} RIDING'
+    stake_label = 'RIDING' if state.get('open') else 'AVAILABLE'
+    summary = f'{kit.money(state["banked"])} BANKED · {kit.money(state["stake"])} {stake_label}'
     room = X2 - (flag_x + 66 + width('GOAL $1,000', 48) + 20)
     inner += card.text(X2, fy, summary, fit(summary, 40, room, 'd', 600),
                        INK_SOFT, 'd', 600, anchor='end')

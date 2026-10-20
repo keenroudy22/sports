@@ -226,15 +226,16 @@ class BuildTests(unittest.TestCase):
 
     def test_best_ticket_is_ranked_across_leagues_not_first_league(self):
         games = {'g1': dict(GAMES['g1'], league='NFL'), 'g2': dict(GAMES['g2'], league='CFB')}
-        def supported(game, *args):
-            return [{'id': game['id'], 'title': game['id'] + ' moneyline', 'gameId': game['id'],
-                     'book': 'DraftKings', 'odds': -175, 'chance': .80 if game['league']=='CFB' else .70,
-                     'kickoff': game['kickoff'], 'observedAt': '2026-09-27T12:10:00Z'}]
-        with patch.object(ladder, 'moneyline_legs', side_effect=supported), patch.object(ladder, 'legs_for_game', return_value=[]):
-            pick, reason = ladder.candidate(ctx(), games, NOW)
-        self.assertIsNone(reason)
-        self.assertEqual(pick['_league'], 'CFB')
-        self.assertEqual(pick['gameIds'], ['g2'])
+        for preferred in ('NFL', 'CFB'):
+            def supported(game, *args):
+                return [{'id': game['id'], 'title': game['id'] + ' moneyline', 'gameId': game['id'],
+                         'book': 'DraftKings', 'odds': -175, 'chance': .80 if game['league']==preferred else .70,
+                         'kickoff': game['kickoff'], 'observedAt': '2026-09-27T12:10:00Z'}]
+            with patch.object(ladder, 'moneyline_legs', side_effect=supported), patch.object(ladder, 'legs_for_game', return_value=[]):
+                pick, reason = ladder.candidate(ctx(), games, NOW)
+            self.assertIsNone(reason)
+            self.assertEqual(pick['_league'], preferred)
+            self.assertEqual(pick['gameIds'], ['g1' if preferred == 'NFL' else 'g2'])
 
     def test_standalone_monday_nfl_game_can_supply_single_leg(self):
         now = datetime(2026, 9, 28, 12, 30, tzinfo=timezone.utc)
