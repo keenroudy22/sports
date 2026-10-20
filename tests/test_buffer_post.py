@@ -258,6 +258,22 @@ class PlanTests(unittest.TestCase):
 
 
 class SpacingTests(unittest.TestCase):
+    def test_simultaneous_near_misses_use_ten_minute_result_slots(self):
+        now = datetime(2026, 10, 20, 3, 44, 13, tzinfo=timezone.utc)
+        rows = [{'key': f'burnt:{name}', 'kind': 'cashed', 'text': 'Missed by one.',
+                 'due': now, 'stale': now + timedelta(hours=1), 'card': name}
+                for name in ('kittle', 'mccaffrey')]
+        with mock.patch.object(bp.receipts, 'house_posts', return_value=rows), \
+                mock.patch.object(bp.receipts, 'guard', return_value=[]), \
+                mock.patch.object(bp.post_windows, 'jitter', return_value=timedelta()):
+            plans = bp.plan({}, {}, {}, now, {'posts': []})
+            self.assertEqual([p[3] for p in plans],
+                             [now + timedelta(minutes=2), now + timedelta(minutes=12)])
+            queued = {'posts': [{'id': 'other', 'dueAt': bp.gates.stamp(plans[0][3])}]}
+            retry = bp.plan({}, {}, {}, now, queued)
+            self.assertEqual([p[3] for p in retry],
+                             [now + timedelta(minutes=12), now + timedelta(minutes=22)])
+
     def test_a_later_run_never_takes_a_queued_posts_slot(self):
         # 2026-09-26: the 11:45 run scheduled three plays at 12:00, 12:10 and 12:20 beside the six already queued there.
         queued = [{'id': f'q{i}', 'dueAt': f'2026-09-26T16:{10 * i:02d}:00Z', 'kind': 'buffer:play'} for i in range(6)]
