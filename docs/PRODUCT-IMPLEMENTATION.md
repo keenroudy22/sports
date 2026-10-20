@@ -1,6 +1,21 @@
 # October 5 product implementation tracker
 
-## October20 — NBA website visibility and cross-page consistency (release pending)
+## October20 — NBA website visibility and cross-page consistency (verified release)
+
+UI sourced4291cd1 and freshness repair5ccdc3cc are live; hosted39433048960 succeeded. The superseded
+UI-only workflow39432223159 was canceled only after the replacement included its full changes; unrelated
+main39430750751 succeeded untouched. Final normal and clean-copy each1535 Python(two skips)/261Node,
+build500, record108/NBA0,568-file public guard, no hard budget issue, assets and isolated0830
+`kookn-rehearsal-o9r0tf1n` exit0/outcomeok/outsideWrite0/privateRead0. Push retry rebased over data-only
+captures; scripts/front-end/test code is identical to the tested source.
+
+Live app183 on the plain production URL verified at375 and1440: NBA Today, Research, Upcoming and
+All Today all show the expected NBA content, without overflow or caught load errors. Six other-sport Today
+pages checked at375 stay isolated; CFB Today retains FIU and its own Climb. No console errors observed.
+Three current-day NBA games/58 fresh current-day player comparisons at review; tomorrow's slate is
+separated. Evidence: owner nba-website-review-2026-10-20.json and nba-website-live-2026-10-20.png.
+Technical repairs are shipped; no old quote timestamp was rewritten. Retention of a new unchanged quote
+begins with a real subsequent capture, not a fabricated freshness/backfill observation.
 
 Freshness follow-through: NBA quote journals deduplicated identical prices while ignoring retrievedAt,
 so successful rechecks could leave an old last-seen time. Preserve newer same-price observations as new
@@ -24,7 +39,7 @@ NBA Trial/football records separate, no new calls, paid feeds, schedules, posts 
 
 Other sports retain their supported live-score/research boundaries; this release does not invent NBA-like
 player models for NHL/MLB/soccer/CBB. X search found no verifiable Oct20 competitor post in the public
-index; old examples are not timing evidence. Source and local verification are pending release.
+index; old examples are not timing evidence. The verified release receipt above closes this website repair.
 
 ## October20 — confirmed personal-ticket cash units (release pending)
 
