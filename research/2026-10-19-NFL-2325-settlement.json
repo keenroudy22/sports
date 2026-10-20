@@ -1,0 +1,910 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-20T03:25:06Z",
+  "targetWeek": 7,
+  "summary": "Research update for Oct 19: Settled 2: George Kittle OVER 5.5 receptions loss; Christian McCaffrey UNDER 14.5 carries loss. Nothing to close. Nothing published. odds_api.py: CFB: skipped (8 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "TE",
+      "athleteId": "3040151",
+      "market": "rec",
+      "line": 5.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873008"
+      ],
+      "book": "FanDuel",
+      "odds": 102,
+      "projection": 6.3,
+      "edge": "Price-checked chance 51.1% against the exact two-sided price; 49.5% needed at +102: +1.6 percentage points.",
+      "cutoff": "OVER 5.5 at +102 or better; off the card at 6+, or at -113 or worse at 5.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-19T16:15:09Z",
+      "quotedAt": "2026-10-19T17:44:27Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 1:44 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-19T21:30:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.604,
+        "chance": 0.511,
+        "calibrated": true,
+        "calibration": 0.11,
+        "calibrationN": 2285,
+        "push": 0.0,
+        "breakEven": 0.495,
+        "edgePoints": 1.6,
+        "evPerUnit": 0.033,
+        "snapshotAt": "2026-10-19T16:15:09Z",
+        "evaluatedAt": "2026-10-19T18:01:50Z",
+        "fairChance": 0.462,
+        "anchoredChance": 0.511,
+        "gap": 4.9,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "title": "George Kittle OVER 5.5 receptions",
+      "id": "NFL-2026-W6-kittle-over-5-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873008",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://www.commanders.com/news/commanders-vs-49ers-week-6-injury-report-2026",
+        "https://www.49ers.com/news/kyle-juszczyk-available-deebo-ruled-out-vs-commanders-in-week-6-wasvssf"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 3 of 10 over 5.5.",
+        "context": [
+          "Role: projected for 7.9 targets a game.",
+          "Defense: WSH allows 6.4 receptions a game to TEs, 24th-stingiest of 32 this season.",
+          "Matchup: Washington Commanders at San Francisco 49ers."
+        ],
+        "cautions": [
+          "Only 3 of the last 10 games cleared this side of the line; recent results oppose it."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 6.3 against 5.5. The over reads 51.1% after adjustment from the raw 60.4%; 49.5% is needed at +102. Last 10 games: 3 of 10 over 5.5. Role: projected for 7.9 targets a game. Defense: WSH allows 6.4 receptions a game to TEs, 24th-stingiest of 32 this season.",
+      "risk": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 5 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 5.5. I say 6.3.",
+            "numbers": {
+              "projection": 6.3,
+              "line": 5.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-19T16:15:09Z"
+          },
+          {
+            "text": "Deebo Samuel Sr. is out with a hamstring injury, while Mike Evans is questionable with rib and Achilles injuries and Christian Kirk is questionable with a calf injury.",
+            "numbers": {},
+            "source": "https://www.49ers.com/news/kyle-juszczyk-available-deebo-ruled-out-vs-commanders-in-week-6-wasvssf",
+            "time": "2026-10-19T18:01:50Z"
+          },
+          {
+            "text": "Deebo Samuel Sr. is out with a hamstring injury, while Mike Evans is questionable with rib and Achilles injuries and Christian Kirk is questionable with a calf injury.",
+            "numbers": {},
+            "source": "https://www.49ers.com/news/kyle-juszczyk-available-deebo-ruled-out-vs-commanders-in-week-6-wasvssf",
+            "time": "2026-10-19T18:01:50Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "1 of his last 5 games finished over 5.5 receptions.",
+            "numbers": {
+              "values": [
+                2,
+                4,
+                6,
+                4,
+                5
+              ],
+              "hits": 1,
+              "games": 5,
+              "line": 5.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-11T20:25Z"
+          },
+          {
+            "text": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 5 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-10-19T18:01:50Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Deebo Samuel Sr. is out with a hamstring injury, while Mike Evans is questionable with rib and Achilles injuries and Christian Kirk is questionable with a calf injury.",
+            "numbers": {},
+            "source": "https://www.49ers.com/news/kyle-juszczyk-available-deebo-ruled-out-vs-commanders-in-week-6-wasvssf",
+            "time": "2026-10-19T18:01:50Z"
+          },
+          {
+            "text": "Deebo Samuel Sr. is out with a hamstring injury, while Mike Evans is questionable with rib and Achilles injuries and Christian Kirk is questionable with a calf injury.",
+            "numbers": {},
+            "source": "https://www.49ers.com/news/kyle-juszczyk-available-deebo-ruled-out-vs-commanders-in-week-6-wasvssf",
+            "time": "2026-10-19T18:01:50Z"
+          },
+          {
+            "text": "Mike Evans (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans",
+            "time": "2026-10-19T15:21Z"
+          },
+          {
+            "text": "Mykel Williams (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685623/mykel-williams",
+            "time": "2026-10-18T02:40Z"
+          },
+          {
+            "text": "Upton Stout (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4565200/upton-stout",
+            "time": "2026-10-18T02:38Z"
+          },
+          {
+            "text": "Marques Sigle (SF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4693337/marques-sigle",
+            "time": "2026-10-18T02:23Z"
+          },
+          {
+            "text": "Nick Bosa (SF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa",
+            "time": "2026-10-18T02:19Z"
+          },
+          {
+            "text": "Siran Neal (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3057524/siran-neal",
+            "time": "2026-10-15T23:27Z"
+          },
+          {
+            "text": "Gracen Halton (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685369/gracen-halton",
+            "time": "2026-10-15T23:26Z"
+          },
+          {
+            "text": "Deebo Samuel Sr. (SF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3126486/deebo-samuel-sr",
+            "time": "2026-10-15T19:54Z"
+          },
+          {
+            "text": "Garret Wallow (SF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4241807/garret-wallow",
+            "time": "2026-10-12T21:19Z"
+          },
+          {
+            "text": "Javontae Jean-Baptiste (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361357/javontae-jean-baptiste",
+            "time": "2026-10-18T02:51Z"
+          },
+          {
+            "text": "Charles Omenihu (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu",
+            "time": "2026-10-18T02:46Z"
+          },
+          {
+            "text": "Stefon Diggs (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs",
+            "time": "2026-10-17T19:24Z"
+          },
+          {
+            "text": "Nick Cross (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross",
+            "time": "2026-10-17T19:10Z"
+          },
+          {
+            "text": "Marcus Mariota (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota",
+            "time": "2026-10-17T16:55Z"
+          },
+          {
+            "text": "Jacory Croskey-Merritt (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt",
+            "time": "2026-10-17T16:46Z"
+          },
+          {
+            "text": "Lucas Patrick (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2576736/lucas-patrick",
+            "time": "2026-10-16T22:18Z"
+          },
+          {
+            "text": "Javon Kinlaw (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4259491/javon-kinlaw",
+            "time": "2026-10-16T22:17Z"
+          },
+          {
+            "text": "Tyler Owens (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4572460/tyler-owens",
+            "time": "2026-10-13T17:10Z"
+          },
+          {
+            "text": "Percy Butler (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4363097/percy-butler",
+            "time": "2026-10-13T17:10Z"
+          }
+        ],
+        "weather": {
+          "tempF": 66,
+          "windMph": 10,
+          "windDirection": "NW",
+          "precipProb": 0,
+          "periodStart": "2026-10-19T17:00:00-07:00",
+          "issuedAt": "2026-10-19T04:57:13+00:00",
+          "source": "https://api.weather.gov/gridpoints/MTR/97,83/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 5.5,
+                "price": -106,
+                "time": "2026-10-18T04:50:38Z"
+              },
+              "now": {
+                "line": 5.5,
+                "price": -102,
+                "time": "2026-10-19T17:44:27Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 5.5,
+                "price": 102,
+                "time": "2026-10-18T04:50:38Z"
+              },
+              "now": {
+                "line": 5.5,
+                "price": 102,
+                "time": "2026-10-19T17:44:27Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 5.5,
+            "price": 102,
+            "time": "2026-10-19T17:44:27Z"
+          }
+        },
+        "ours": {
+          "projection": 6.3,
+          "line": 5.5,
+          "market": "rec",
+          "text": "Book says 5.5. I say 6.3.",
+          "snapshotAt": "2026-10-19T16:15:09Z"
+        },
+        "history": "Last 10 games: 3 of 10 over 5.5.",
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://www.49ers.com/news/kyle-juszczyk-available-deebo-ruled-out-vs-commanders-in-week-6-wasvssf",
+            "time": "2026-10-19T18:01:50Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/16737/mike-evans",
+            "time": "2026-10-19T15:21Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685623/mykel-williams",
+            "time": "2026-10-18T02:40Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4565200/upton-stout",
+            "time": "2026-10-18T02:38Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4693337/marques-sigle",
+            "time": "2026-10-18T02:23Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa",
+            "time": "2026-10-18T02:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3057524/siran-neal",
+            "time": "2026-10-15T23:27Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685369/gracen-halton",
+            "time": "2026-10-15T23:26Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3126486/deebo-samuel-sr",
+            "time": "2026-10-15T19:54Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4241807/garret-wallow",
+            "time": "2026-10-12T21:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361357/javontae-jean-baptiste",
+            "time": "2026-10-18T02:51Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu",
+            "time": "2026-10-18T02:46Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs",
+            "time": "2026-10-17T19:24Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross",
+            "time": "2026-10-17T19:10Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota",
+            "time": "2026-10-17T16:55Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt",
+            "time": "2026-10-17T16:46Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2576736/lucas-patrick",
+            "time": "2026-10-16T22:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4259491/javon-kinlaw",
+            "time": "2026-10-16T22:17Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4572460/tyler-owens",
+            "time": "2026-10-13T17:10Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4363097/percy-butler",
+            "time": "2026-10-13T17:10Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/MTR/97,83/forecast/hourly",
+            "time": "2026-10-19T04:57:13+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873008",
+            "time": "2026-10-19T18:01:50Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-19T18:01:50Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.commanders.com/news/commanders-vs-49ers-week-6-injury-report-2026",
+            "time": "2026-10-19T18:01:50Z"
+          }
+        ],
+        "partial": false
+      },
+      "lane": "gut_call",
+      "riskUnits": 0.5,
+      "publishedAt": "2026-10-19T18:14:10Z",
+      "result": "loss",
+      "actual": "George Kittle: 5 receptions",
+      "settledAt": "2026-10-20T03:25:06Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873008",
+      "actualValue": 5,
+      "units": -0.5
+    },
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "3117251",
+      "market": "car",
+      "line": 14.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401873008"
+      ],
+      "book": "DraftKings",
+      "odds": -104,
+      "projection": 12.7,
+      "edge": "Price-checked chance 51.4% against the exact two-sided price; 51.0% needed at -104: +0.4 percentage points.",
+      "cutoff": "UNDER 14.5 at -104 or better; off the card at 14 or lower, or at -119 or worse at 14.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-19T16:15:09Z",
+      "quotedAt": "2026-10-19T18:52:13Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 2:52 PM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-19T21:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "probabilityAtPublication": {
+        "rawChance": 0.629,
+        "chance": 0.514,
+        "calibrated": true,
+        "calibration": 0.11,
+        "calibrationN": 2285,
+        "push": 0.0,
+        "breakEven": 0.51,
+        "edgePoints": 0.4,
+        "evPerUnit": 0.009,
+        "snapshotAt": "2026-10-19T16:15:09Z",
+        "evaluatedAt": "2026-10-19T20:28:09Z",
+        "fairChance": 0.481,
+        "anchoredChance": 0.514,
+        "gap": 3.3,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Washington Commanders at San Francisco 49ers",
+      "title": "Christian McCaffrey UNDER 14.5 carries",
+      "id": "NFL-2026-W6-mccaffrey-under-14-5-car-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873008",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://www.commanders.com/news/game-status-commanders-49ers-week-6",
+        "https://www.49ers.com/news/kyle-juszczyk-available-deebo-ruled-out-vs-commanders-in-week-6-wasvssf",
+        "https://www.commanders.com/news/commanders-activate-amos-magee-mcnichols-croskey-merritt-jean-baptiste"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 5 of 10 under 14.5.",
+        "context": [
+          "Role: 1st of 3 SF RBs by projected carries, 12.7 a game.",
+          "Defense: WSH allows 19.6 carries a game to RBs, 6th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 12.7 against 14.5. The under reads 51.4% after adjustment from the raw 62.9%; 51.0% is needed at -104. Last 10 games: 5 of 10 under 14.5. Role: 1st of 3 SF RBs by projected carries, 12.7 a game. Defense: WSH allows 19.6 carries a game to RBs, 6th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 5 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 14.5. I say 12.7.",
+            "numbers": {
+              "projection": 12.7,
+              "line": 14.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-19T16:15:09Z"
+          },
+          {
+            "text": "3 of his last 5 games finished under 14.5 carries.",
+            "numbers": {
+              "values": [
+                10,
+                10,
+                15,
+                15,
+                11
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 14.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-11T20:25Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 5 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-10-19T20:28:09Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Mike Evans (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans",
+            "time": "2026-10-19T15:21Z"
+          },
+          {
+            "text": "Mykel Williams (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685623/mykel-williams",
+            "time": "2026-10-18T02:40Z"
+          },
+          {
+            "text": "Upton Stout (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4565200/upton-stout",
+            "time": "2026-10-18T02:38Z"
+          },
+          {
+            "text": "Marques Sigle (SF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4693337/marques-sigle",
+            "time": "2026-10-18T02:23Z"
+          },
+          {
+            "text": "Nick Bosa (SF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa",
+            "time": "2026-10-18T02:19Z"
+          },
+          {
+            "text": "Siran Neal (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3057524/siran-neal",
+            "time": "2026-10-15T23:27Z"
+          },
+          {
+            "text": "Gracen Halton (SF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685369/gracen-halton",
+            "time": "2026-10-15T23:26Z"
+          },
+          {
+            "text": "Deebo Samuel Sr. (SF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3126486/deebo-samuel-sr",
+            "time": "2026-10-15T19:54Z"
+          },
+          {
+            "text": "Garret Wallow (SF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4241807/garret-wallow",
+            "time": "2026-10-12T21:19Z"
+          },
+          {
+            "text": "Javontae Jean-Baptiste (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361357/javontae-jean-baptiste",
+            "time": "2026-10-18T02:51Z"
+          },
+          {
+            "text": "Charles Omenihu (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu",
+            "time": "2026-10-18T02:46Z"
+          },
+          {
+            "text": "Stefon Diggs (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs",
+            "time": "2026-10-17T19:24Z"
+          },
+          {
+            "text": "Nick Cross (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross",
+            "time": "2026-10-17T19:10Z"
+          },
+          {
+            "text": "Marcus Mariota (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota",
+            "time": "2026-10-17T16:55Z"
+          },
+          {
+            "text": "Jacory Croskey-Merritt (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt",
+            "time": "2026-10-17T16:46Z"
+          },
+          {
+            "text": "Lucas Patrick (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2576736/lucas-patrick",
+            "time": "2026-10-16T22:18Z"
+          },
+          {
+            "text": "Javon Kinlaw (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4259491/javon-kinlaw",
+            "time": "2026-10-16T22:17Z"
+          },
+          {
+            "text": "Tyler Owens (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4572460/tyler-owens",
+            "time": "2026-10-13T17:10Z"
+          },
+          {
+            "text": "Percy Butler (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4363097/percy-butler",
+            "time": "2026-10-13T17:10Z"
+          }
+        ],
+        "weather": {
+          "tempF": 66,
+          "windMph": 9,
+          "windDirection": "NW",
+          "precipProb": 0,
+          "periodStart": "2026-10-19T17:00:00-07:00",
+          "issuedAt": "2026-10-19T18:27:15+00:00",
+          "source": "https://api.weather.gov/gridpoints/MTR/97,83/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 14.5,
+                "price": -109,
+                "time": "2026-10-18T04:50:38Z"
+              },
+              "now": {
+                "line": 14.5,
+                "price": -104,
+                "time": "2026-10-19T18:52:13Z"
+              }
+            },
+            "FanDuel": null
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 14.5,
+            "price": -104,
+            "time": "2026-10-19T18:52:13Z"
+          }
+        },
+        "ours": {
+          "projection": 12.7,
+          "line": 14.5,
+          "market": "car",
+          "text": "Book says 14.5. I say 12.7.",
+          "snapshotAt": "2026-10-19T16:15:09Z"
+        },
+        "history": "Last 10 games: 5 of 10 under 14.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/16737/mike-evans",
+            "time": "2026-10-19T15:21Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685623/mykel-williams",
+            "time": "2026-10-18T02:40Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4565200/upton-stout",
+            "time": "2026-10-18T02:38Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4693337/marques-sigle",
+            "time": "2026-10-18T02:23Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa",
+            "time": "2026-10-18T02:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3057524/siran-neal",
+            "time": "2026-10-15T23:27Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685369/gracen-halton",
+            "time": "2026-10-15T23:26Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3126486/deebo-samuel-sr",
+            "time": "2026-10-15T19:54Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4241807/garret-wallow",
+            "time": "2026-10-12T21:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361357/javontae-jean-baptiste",
+            "time": "2026-10-18T02:51Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu",
+            "time": "2026-10-18T02:46Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs",
+            "time": "2026-10-17T19:24Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross",
+            "time": "2026-10-17T19:10Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota",
+            "time": "2026-10-17T16:55Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt",
+            "time": "2026-10-17T16:46Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2576736/lucas-patrick",
+            "time": "2026-10-16T22:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4259491/javon-kinlaw",
+            "time": "2026-10-16T22:17Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4572460/tyler-owens",
+            "time": "2026-10-13T17:10Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4363097/percy-butler",
+            "time": "2026-10-13T17:10Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/MTR/97,83/forecast/hourly",
+            "time": "2026-10-19T18:27:15+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873008",
+            "time": "2026-10-19T20:28:09Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-19T20:28:09Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.commanders.com/news/game-status-commanders-49ers-week-6",
+            "time": "2026-10-19T20:28:09Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.49ers.com/news/kyle-juszczyk-available-deebo-ruled-out-vs-commanders-in-week-6-wasvssf",
+            "time": "2026-10-19T20:28:09Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.commanders.com/news/commanders-activate-amos-magee-mcnichols-croskey-merritt-jean-baptiste",
+            "time": "2026-10-19T20:28:09Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-19T20:32:55Z",
+      "result": "loss",
+      "actual": "Christian McCaffrey: 16 carries",
+      "settledAt": "2026-10-20T03:25:06Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873008",
+      "actualValue": 16,
+      "units": -1
+    }
+  ]
+}
