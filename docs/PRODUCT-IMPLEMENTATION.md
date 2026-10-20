@@ -1,6 +1,22 @@
 # October 5 product implementation tracker
 
-## October20 — sourced NBA role reviews and minutes estimates (prepared)
+## October20 — sourced NBA role reviews and minutes estimates (verified release)
+
+Finald4cc9a67 (tested2b0052cb; rebased over capture-only changes), hosted39481030931 succeeded.
+Normal/clean each1555Python(two skips)/268Node, build483pages/120games,record110/NBA0,guard558,
+assets current,budgets no hard issues; offline1330z5rvstzt exit0/outcomeok/no outside writes/private
+reads. Live375/1440 app190: all seven reviewed players reachable in60rows, Harper's changed-role
+hold present, Keldon12.3/20 estimate and old14.7/24/source links clear; no overflow/load/console
+errors. Proof /tmp/kookn-nba-roles-final-proof.png, final-live-phone.png and final-live-desktop.png
+under the /tmp/kookn-nba-roles prefix. No old forecast, posted art, official record or stake rewritten.
+
+Normal current screen18:53Z used10free ESPN/12NBA Sharp reads;375paired props/partial coverage,
+no prop-feed errors, one team quote unavailable. Availability18:53:54Z. Official Trial returned
+no-play. Team screen retains current injury holds; NBA props still require their separate forward
+validation. No new official NBA play/X/Discord release was fabricated. Existing Keldon/Wemb
+research X2112597030212096027 and research Discord17:32:02Z remain immutable; their original
+14.7Keldon snapshot is historical, not overwritten with the newer12.3estimate. Future qualifying
+official release continues through ordinary rules; this receipt does not claim one happened.
 
 Initial source989fd1d3 hosted39478715430 succeeded; normal/clean1553Python(two skips)/268Node,
 build483/120,record110/NBA0,guard558,assets,budgets no hard issues, offline1330 0c70jdzp ok.
