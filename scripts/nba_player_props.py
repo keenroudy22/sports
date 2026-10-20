@@ -19,6 +19,7 @@ import espn_props
 import nba_capture
 import nba_roles
 import sharp_odds
+from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
 STORE = nba_capture.STORE
@@ -222,6 +223,27 @@ def hit_rate(logs,stat,line,side,n=None):
     return {'hits':hits,'games':len(values),'push':push,'values':values}
 
 
+def display_rows(rows,limit):
+    """Fill the visible cap day-first, fairly across games, not tomorrow's gaps."""
+    if limit is None:return rows
+    buckets={}
+    for row in rows:
+        key=(eastern_date(boxscores.instant(row['kickoff'])),row['kickoff'],row['eventId'])
+        buckets.setdefault(key,[]).append(row)
+    selected=[]
+    for day in sorted({k[0] for k in buckets}):
+        queues=[iter(buckets[k]) for k in sorted(buckets) if k[0]==day]
+        while queues and len(selected)<limit:
+            active=[]
+            for queue in queues:
+                row=next(queue,None)
+                if row is not None:
+                    selected.append(row);active.append(queue)
+                    if len(selected)>=limit:return selected
+            queues=active
+    return selected
+
+
 def build(now, root=STORE, boxes=None, limit=60):
     role_reviews=nba_roles.reviews(Path(root),now)
     root=Path(root)
@@ -288,7 +310,7 @@ def build(now, root=STORE, boxes=None, limit=60):
     # Keep complete per-game coverage visible; a large slate is explicitly capped
     # for the lazy page payload rather than silently claiming full feed coverage.
     held={r['athleteId']:r['hold'] for r in out if r.get('hold')}
-    return {'rows':out[:limit] if limit is not None else out,'availableRows':len(out),
+    return {'rows':display_rows(out,limit),'availableRows':len(out),
             'availabilityAt':injury.get('retrievedAt'),
             'holds':[{'name':next(r['name'] for r in out if r['athleteId']==a),'reason':reason} for a,reason in held.items()],
             'note':'Research baselines, not NBA Best Bets. Up to 60 fresh comparisons, favorites first. Hit rates are at this exact line in the labeled recorded sample; they are not forecast probabilities.'}

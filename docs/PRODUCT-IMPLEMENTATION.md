@@ -2,6 +2,15 @@
 
 ## October20 — sourced NBA role reviews and minutes estimates (prepared)
 
+Initial source989fd1d3 hosted39478715430 succeeded; normal/clean1553Python(two skips)/268Node,
+build483/120,record110/NBA0,guard558,assets,budgets no hard issues, offline1330 0c70jdzp ok.
+Live375/1440 app190 verified Keldon12.3/20 and old14.7/24, sources/no overflow/load/console errors.
+The expanded live check exposed a pre-existing display cap: tomorrow's high-gap props crowded
+tonight's Knicks/Sixers out of the60rows. Completion therefore remains open for the bounded
+day-first/per-game-fair cap fix, not falsely claiming all six live. Hold Harper's old workload-based
+under because the new starting role has no supported current minutes estimate. Seventh role review
+saved append-only. Repeat full gates and verify all reviewed players actually reachable live.
+
 Owner requests current news, expected minutes and qualifying early plays, not a last-season-only
 decision. O-20261020-NBAROLES adds append-only exact-game/player/team role reviews with public
 sources and checked time. Research may use explicitly labeled analyst or reported minutes; role-only

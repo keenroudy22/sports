@@ -22,6 +22,8 @@ def validate(row):
     for key in ('headline', 'explanation'):
         if not isinstance(row.get(key), str) or not 1 <= len(row[key]) <= 500:
             raise ValueError('Role review explanation unavailable')
+    if 'hold' in row and (not isinstance(row['hold'],str) or not 1 <= len(row['hold']) <= 240):
+        raise ValueError('Invalid news role hold')
     sources = row.get('sources')
     if not isinstance(sources, list) or not 1 <= len(sources) <= 4:
         raise ValueError('Role review needs sources')
@@ -69,6 +71,8 @@ def apply(projection, quote, review, now):
             or not timedelta(0) <= now-boxscores.instant(review['checkedAt']) <= timedelta(hours=24)
             or now >= boxscores.instant(review['kickoff'])):
         return projection, None, 'Current role review needs renewal'
+    if review.get('hold'):
+        return None, review, review['hold']
     if not projection or review['kind'] == 'role-only':
         return projection, review, None
     minutes = review['minutes']

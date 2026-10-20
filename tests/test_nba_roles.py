@@ -71,3 +71,21 @@ class RoleTests(unittest.TestCase):
             self.assertEqual(rows[0],old)
             self.assertNotEqual(rows[0]['id'],rows[1]['id'])
             self.assertEqual(props.record_forward(NOW,root,boxes),0)
+    def test_new_starting_role_can_hold_old_bench_baseline_without_injury_override(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);boxes=fixtures.NBAPlayerPropTests().write(root)
+            r=review();r.update(kind='role-only',hold='New starting role; workload estimate needed');r.pop('minutes')
+            n.record(r,NOW,root)
+            after=props.build(NOW,root,boxes)['rows'][0]
+            self.assertIsNone(after['projection']);self.assertEqual(after['hold'],r['hold'])
+            self.assertNotIn('favorite',after)
+    def test_display_cap_prioritizes_tonight_and_shares_slots_across_games(self):
+        row=lambda event,kickoff,name:dict(eventId=event,kickoff=kickoff,name=name)
+        a=row('1','2026-10-20T23:00:00Z','A')
+        b=row('2','2026-10-21T01:30:00Z','B')
+        tomorrow=row('3','2026-10-21T23:00:00Z','Tomorrow')
+        rows=[tomorrow,dict(a,name='A1'),dict(a,name='A2'),dict(a,name='A3'),b]
+        chosen=props.display_rows(rows,3)
+        self.assertEqual([r['name'] for r in chosen],['A1','B','A2'])
+        self.assertEqual(props.display_rows(rows,None),rows)
+        self.assertEqual(len(props.display_rows(rows,60)),5)
