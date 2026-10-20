@@ -1827,7 +1827,7 @@
       <span class="k">Total</span><span class="num">${esc(C.fixed(v2.total, 1))}</span><span class="num">${esc(C.fixed(m.total, 1))}</span><span>${lean.total ? ourSide(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalCaution) : '<span class="muted">No lean</span>'}</span></div>`;
     const gap = gapScore(g);
     /* No generic caution (owner, Oct 7): a specific, data-supplied reason arrives through opts.extra when one applies. */
-    const note = g.fcs ? 'FBS vs FCS: my number is not reliable here.' : hasScore ? '' : v2.sparse ? 'Thin history: a team has fewer than three games, so this leans on last season.' : '';
+    const note = g.fcs ? 'FBS vs FCS: my number is not reliable here.' : hasScore || g.league === 'NBA' ? '' : v2.sparse ? 'Thin history: a team has fewer than three games, so this leans on last season.' : '';
     const linked = opts.link !== false;
     return `<div class="proj${opts.big ? ' big' : ''}${live ? ' live' : ''}">${linked ? `<a class="proj-link" href="#game/${esc(g.id)}">` : '<div class="proj-link">'}
       <div class="pc-meta"><span>${live ? '<span class="live-dot"></span>' : ''}${esc(g.statusWord ? `${g.statusWord} · was ${whenShort(g.kickoff)}` : final ? `${/OT/.test(g.status || '') ? g.status : 'Final'} · ${whenShort(g.kickoff).split(',')[0]}` : live ? (g.status || 'Live') : whenShort(g.kickoff))} · ${esc(g.league === 'CFB' ? 'College' : g.league)}${g.neutral ? ' · neutral site' : ''}</span>${opts.badge || (!hasScore && gap >= 80 ? `<span class="gap-chip big" title="Bigger gap than ${gap}% of stored games">Unusual gap vs market</span>` : '')}</div>
@@ -1927,7 +1927,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-e79ee86a369e';
-  const GAMES_ASSET = 'app-games.js?v=sha256-384e67122f69';
+  const GAMES_ASSET = 'app-games.js?v=sha256-6fd5c330a958';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

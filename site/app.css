@@ -302,9 +302,8 @@ details.more-box > div { padding: 0 0 14px; }
 .with-art > div, .with-art > span:last-child { min-width: 0; }
 
 /* ---------- projection cards (the old site's projected scores, kept front and center) ---------- */
-.projs { display: grid; gap: 12px; }
-@media (min-width: 760px) { .projs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 1140px) { .projs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* Fit the section, not the viewport: Today also nests these in a half-width column. */
+.projs { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
 .proj { display: grid; gap: 10px; background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px 14px; color: var(--chalk); align-content: start; }
 .proj:hover { border-color: var(--line-strong); }
 .proj-link { display: grid; gap: 10px; color: inherit; min-width: 0; margin: -12px -14px -14px; padding: 12px 14px 14px; }

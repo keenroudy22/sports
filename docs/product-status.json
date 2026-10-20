@@ -3,6 +3,15 @@
   "updatedAt": "2026-10-20T13:56:11+00:00",
   "items": [
     {
+      "id": "O-20261020-NBAREFLOW",
+      "title": "Fit NBA projection cards to their actual section width",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Test nested All Today and full NBA cards at phone/tablet/desktop widths; deploy and verify actual team-score rectangles, not just document overflow.",
+      "doneWhen": "Cards reflow without team/score overlap, NBA history context appears once neutrally, football safeguards stay intact; full normal/clean gates, hosted success and live visual evidence recorded.",
+      "evidence": "Owner screenshot catches nested-column collision missed by prior document-width checks. Source/test correction in progress; not live yet. No model/gate/record changes."
+    },
+    {
       "id": "O-20261020-TODAYRECAP",
       "title": "Complete posted-day recap and cross-sport website review",
       "status": "ready",

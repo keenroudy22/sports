@@ -15,6 +15,22 @@ test('NBA Today and All-sports summary use football projection cards and separat
  assert.ok(html.indexOf('Tomorrow Away')>fold);assert.ok(!html.slice(0,fold).includes('Tomorrow Away'));
  assert.ok(html.includes('NBA Trial is open'));assert.ok(!html.includes('NBA Trial starts Oct. 20'));
  const summary=views.nbaSummary(data);assert.ok(summary.includes('Today’s NBA'));assert.ok(summary.includes('Boston Celtics'));assert.ok(!summary.includes('Tomorrow Away'));
+ assert.equal((summary.match(/class="small muted nba-history"/g)||[]).length,1);
+ assert.doesNotMatch(summary,/Thin history|class="caution"|Research projection, not a best bet/);
+ assert.match(summary,/last season’s team ratings/);
+ assert.match(html,/Research projections/);
+});
+test('projection grid fits its own container instead of forcing viewport columns',()=>{
+ const css=fs.readFileSync('site/app.css','utf8');
+ assert.match(css,/\.projs \{[^}]*repeat\(auto-fit, minmax\(min\(100%, 320px\), 1fr\)\)/);
+ assert.doesNotMatch(css,/@media[^{}]*\{\s*\.projs\s*\{[^}]*repeat\([23],/);
+});
+test('NBA neutral context does not erase football-specific history or FCS warnings',()=>{
+ const s=load(),api=s.module.exports,ctx=api.gamesContext({get:async()=>({})});
+ const game={id:'CFB-1',league:'CFB',kickoff:new Date().toISOString(),away:{name:'Away'},home:{name:'Home'},v2:{away:10,home:20,total:30,sparse:true}};
+ assert.match(ctx.projCard(game),/Thin history/);
+ assert.match(ctx.projCard({...game,fcs:true}),/FBS vs FCS/);
+ assert.doesNotMatch(ctx.projCard({...game,league:'NBA'}),/Thin history/);
 });
 test('NBA Research and Games expose stored projections instead of a football-only dead end',async()=>{
  const s=load(),api=s.module.exports,kickoff=new Date(Date.now()+3600000).toISOString();

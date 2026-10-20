@@ -1,5 +1,15 @@
 # October 5 product implementation tracker
 
+## October20 — NBA nested-card reflow correction (release pending)
+
+Owner screenshot exposed a gap in the previous visual check: no document overflow did not catch team/score
+collisions inside All Today's narrow right column. O-20261020-NBAREFLOW replaces viewport-forced card counts
+with a container-fitted grid. Verify team/score rectangles at phone, tablet and desktop widths, including the
+nested All Today section and full-width NBA pages. Replace repeated red NBA thin-history warnings and per-card
+research boilerplate with one neutral section-level historical context; keep research identification and real
+football/FCS warnings. Historical ratings remain in use; no model, admission, injury, price or record changes.
+Full suites, isolated rehearsal, hosted release and live geometry evidence required before closing.
+
 ## October20 — complete posted-day recap, website sweep and early delivery recovery (release pending)
 
 Owner asks Today to list every prior-day posted play, reconcile full-slate units and calendar, review all
