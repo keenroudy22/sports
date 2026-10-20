@@ -1,29 +1,37 @@
 {
- "at": "2026-10-20T14:23:51Z",
+ "at": "2026-10-20T14:32:55Z",
  "confirmed": {
-  "CFB-401871055": "2026-10-20T14:23:51Z",
-  "CFB-401871069": "2026-10-20T14:23:51Z",
-  "CFB-401871070": "2026-10-20T14:23:51Z",
-  "CFB-401871092": "2026-10-20T14:23:51Z"
+  "CFB-401871055": "2026-10-20T14:32:55Z",
+  "CFB-401871069": "2026-10-20T14:32:55Z",
+  "CFB-401871070": "2026-10-20T14:32:55Z",
+  "CFB-401871092": "2026-10-20T14:32:55Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 127,
+    "draftkings": 692,
     "fanduel": 513
    },
    "eventsListed": 56,
    "eventsMatched": 4,
    "games": 4,
    "marketTypes": {
-    "player_passing_touchdowns": 17,
-    "player_passing_yards": 63,
-    "player_receiving_yards": 307,
-    "player_receptions": 58,
-    "player_rushing_yards": 195
+    "player_field_goals_made": 2,
+    "player_kicking_points": 2,
+    "player_longest_passing_completion": 2,
+    "player_longest_reception": 20,
+    "player_longest_rush": 7,
+    "player_passing_attempts": 16,
+    "player_passing_completions": 14,
+    "player_passing_touchdowns": 31,
+    "player_passing_yards": 127,
+    "player_receiving_yards": 523,
+    "player_receptions": 99,
+    "player_rushing_attempts": 23,
+    "player_rushing_yards": 339
    },
-   "requestsLeft": 54,
-   "rows": 640,
+   "requestsLeft": 7,
+   "rows": 1205,
    "slateGames": [
     "Middle Tennessee Blue Raiders at Florida International Panthers 2026-10-20T23:00Z",
     "Missouri State Bears at Delaware Blue Hens 2026-10-20T23:00Z",
@@ -144,7 +152,7 @@
      "type": "fixture"
     },
     {
-     "away": "Liberty Flames",
+     "away": "Liberty",
      "external": {
       "bet365": "203048977",
       "betmgm": "6:47391",
@@ -179,10 +187,10 @@
       "underdog": "underdog_183141",
       "underdog_multipliers": "underdog_183141"
      },
-     "home": "Kennesaw State Owls",
+     "home": "Kennesaw State",
      "sample": {
-      "away_team": "Liberty Flames",
-      "home_team": "Kennesaw State Owls",
+      "away_team": "Liberty",
+      "home_team": "Kennesaw State",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -230,6 +238,7 @@
        "total_points_band",
        "total_points_odd_even",
        "total_rushing_touchdowns",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -339,6 +348,7 @@
        "total_points_band",
        "total_points_odd_even",
        "total_rushing_touchdowns",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -532,6 +542,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -613,6 +624,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -717,7 +729,7 @@
       "fliff": "fobj__conflict_event__420163",
       "gemini": "NCAAF-2610240230-NCS-STA-S",
       "hardrock": "2559323490134131103",
-      "kalshi": "KXNCAAF1H-26OCT23NCSTSTAN",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT23NCSTSTAN",
       "ladbrokes": "95fa53dd-b11b-4e13-9517-eba63bacc272",
       "novig": "01a14291-af4f-7d40-926e-baf7f98a550c",
       "onexbet": "762818644",

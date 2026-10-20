@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T14:23:15Z",
+  "updatedAt": "2026-10-20T14:32:04Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-20T14:00Z",
+              "reportedAt": "2026-10-20T14:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-20T14:00Z",
+              "reportedAt": "2026-10-20T14:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4039052",
+              "name": "Jordan Elliott",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-20T14:12Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4039052/jordan-elliott"
+            },
+            {
               "id": "3925357",
               "name": "Calvin Ridley",
               "position": "WR",
@@ -6941,15 +6950,6 @@
               "injury": "Quadriceps",
               "reportedAt": "2026-10-19T17:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685617/kevin-winston-jr"
-            },
-            {
-              "id": "4039052",
-              "name": "Jordan Elliott",
-              "position": "DT",
-              "status": "Out",
-              "injury": null,
-              "reportedAt": "2026-10-19T17:18Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4039052/jordan-elliott"
             },
             {
               "id": "4039160",
@@ -7185,7 +7185,7 @@
               "id": "3121422",
               "name": "Terry McLaurin",
               "position": "WR",
-              "status": "Out",
+              "status": "Doubtful",
               "injury": "Knee",
               "reportedAt": "2026-10-20T00:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/3121422/terry-mclaurin"
@@ -7365,22 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "26",
-          "name": "Robert Henry Jr.",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:31:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5151317/robert-henry-jr"
-        },
-        {
-          "teamId": "26",
-          "name": "Jalen Milroe",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:31:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4432734/jalen-milroe"
-        },
         {
           "teamId": "26",
           "name": "Avery Smith",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-10-20T14:23:15Z",
           "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
+        },
+        {
+          "teamId": "10",
+          "name": "Jordan Elliott",
+          "from": "Out",
+          "to": "Active",
+          "observedAt": "2026-10-20T14:32:04Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4039052/jordan-elliott"
+        },
+        {
+          "teamId": "28",
+          "name": "Terry McLaurin",
+          "from": "Out",
+          "to": "Doubtful",
+          "observedAt": "2026-10-20T14:32:04Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3121422/terry-mclaurin"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-20T14:23:15Z",
-      "lastAttemptAt": "2026-10-20T14:23:15Z",
+      "checkedAt": "2026-10-20T14:32:04Z",
+      "lastAttemptAt": "2026-10-20T14:32:04Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-20T14:23:15Z",
-      "lastAttemptAt": "2026-10-20T14:23:15Z",
+      "checkedAt": "2026-10-20T14:32:04Z",
+      "lastAttemptAt": "2026-10-20T14:32:04Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
