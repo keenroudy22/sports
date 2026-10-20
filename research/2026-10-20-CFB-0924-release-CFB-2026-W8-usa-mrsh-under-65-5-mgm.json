@@ -1,0 +1,196 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-20T13:24:37Z",
+  "summary": "Released 1: South Alabama at Marshall under 65.5 -110 at BetMGM.",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 65.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401871092"
+      ],
+      "book": "BetMGM",
+      "odds": -110,
+      "projection": 60.7,
+      "edge": "Price-checked chance 54.3% against the exact two-sided price; 52.4% needed at -110: +1.9 percentage points.",
+      "cutoff": "UNDER 65.5 at -110 or better; off the card at 64 or lower, or at -125 or worse at 65.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-18T02:51:04Z",
+      "quotedAt": "2026-10-20T07:55:07Z",
+      "quoteType": "capture",
+      "quoteNote": "BetMGM's number and price from the 3:55 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-20T15:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "probabilityAtPublication": {
+        "rawChance": 0.616,
+        "chance": 0.543,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.524,
+        "edgePoints": 1.9,
+        "evPerUnit": 0.037,
+        "snapshotAt": "2026-10-18T02:51:04Z",
+        "evaluatedAt": "2026-10-20T12:30:06Z",
+        "fairChance": 0.502,
+        "anchoredChance": 0.543,
+        "gap": 4.1,
+        "calibrationFamily": "CFB/total"
+      },
+      "matchup": "South Alabama Jaguars at Marshall Thundering Herd",
+      "title": "South Alabama at Marshall under 65.5",
+      "id": "CFB-2026-W8-usa-mrsh-under-65-5-mgm",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401871092",
+        "https://wvmetronews.com/2026/10/19/gibson-eager-to-see-if-herd-can-offer-strong-response-in-midweek-matchup-with-south-alabama/",
+        "https://usajaguars.com/news/2026/10/17/football-jags-head-to-marshall-for-tuesday-night-game.aspx"
+      ],
+      "why": "Model lean, our number only. We have the total at 60.7; the book is at 65.5. That makes the under 54.3%, and -110 needs 52.4%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Carlos Del Rio-Wilson started Marshall's first six games, but Tony Gibson said the quarterback job is open for this game and Zion Turner is competing for it. The market: The total opened 62.5 and is 65.5 at DraftKings, 3 toward the over. 6 books span 2.5 to 3.5 on the spread; the middle is 3. 6 books span 64.5 to 65.5 on the total; the middle is 65.5. Our spread is 0.1 points off, bigger than 1% of our past gaps. Gaps this size went 1767-1759 against the close in 3584 games. Our total is 4.8 points off, bigger than 77% of our past gaps. Gaps this size went 463-383 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: South Alabama scored 52 points against ULM and 56 against Arkansas State in its last two games. Statistical counterpoint: Marshall opponents have averaged 33.7 points and 447.3 yards per game through six contests. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Marshall quarterbacks threw three interceptions and the offense lost three fumbles in its 27-21 loss to Coastal Carolina."
+        ],
+        "cautions": [
+          "South Alabama scored 52 points against ULM and 56 against Arkansas State in its last two games.",
+          "Marshall opponents have averaged 33.7 points and 447.3 yards per game through six contests."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 65.5. I say 60.7.",
+            "numbers": {
+              "projection": 60.7,
+              "line": 65.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-18T02:51:04Z"
+          },
+          {
+            "text": "Marshall quarterbacks threw three interceptions and the offense lost three fumbles in its 27-21 loss to Coastal Carolina.",
+            "numbers": {},
+            "source": "https://wvmetronews.com/2026/10/19/gibson-eager-to-see-if-herd-can-offer-strong-response-in-midweek-matchup-with-south-alabama/",
+            "time": "2026-10-20T12:30:06Z"
+          },
+          {
+            "text": "Marshall quarterbacks threw three interceptions and the offense lost three fumbles in its 27-21 loss to Coastal Carolina.",
+            "numbers": {},
+            "source": "https://wvmetronews.com/2026/10/19/gibson-eager-to-see-if-herd-can-offer-strong-response-in-midweek-matchup-with-south-alabama/",
+            "time": "2026-10-20T12:30:06Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "South Alabama scored 52 points against ULM and 56 against Arkansas State in its last two games.",
+            "numbers": {},
+            "source": "https://usajaguars.com/news/2026/10/17/football-jags-head-to-marshall-for-tuesday-night-game.aspx",
+            "time": "2026-10-20T12:30:06Z"
+          },
+          {
+            "text": "Marshall opponents have averaged 33.7 points and 447.3 yards per game through six contests.",
+            "numbers": {},
+            "source": "https://usajaguars.com/news/2026/10/17/football-jags-head-to-marshall-for-tuesday-night-game.aspx",
+            "time": "2026-10-20T12:30:06Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 61,
+          "windMph": 2,
+          "windDirection": "NE",
+          "precipProb": 0,
+          "periodStart": "2026-10-20T19:00:00-04:00",
+          "issuedAt": "2026-10-19T16:34:44+00:00",
+          "source": "https://api.weather.gov/gridpoints/RLX/34,68/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 62.5,
+                "price": -110,
+                "time": "2026-10-17T04:06:07Z"
+              },
+              "now": {
+                "line": 65.5,
+                "price": -112,
+                "time": "2026-10-20T07:55:07Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 60.5,
+                "price": -115,
+                "time": "2026-10-15T04:02:14Z"
+              },
+              "now": {
+                "line": 65.5,
+                "price": -110,
+                "time": "2026-10-20T07:55:07Z"
+              }
+            }
+          },
+          "best": {
+            "book": "BetMGM",
+            "line": 65.5,
+            "price": -110,
+            "time": "2026-10-20T07:55:07Z"
+          }
+        },
+        "ours": {
+          "projection": 60.7,
+          "line": 65.5,
+          "market": "total",
+          "text": "Book says 65.5. I say 60.7.",
+          "snapshotAt": "2026-10-18T02:51:04Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://usajaguars.com/news/2026/10/17/football-jags-head-to-marshall-for-tuesday-night-game.aspx",
+            "time": "2026-10-20T12:30:06Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://wvmetronews.com/2026/10/19/gibson-eager-to-see-if-herd-can-offer-strong-response-in-midweek-matchup-with-south-alabama/",
+            "time": "2026-10-20T12:30:06Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/RLX/34,68/forecast/hourly",
+            "time": "2026-10-19T16:34:44+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401871092",
+            "time": "2026-10-20T12:30:06Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-20T13:24:37Z"
+    }
+  ]
+}
