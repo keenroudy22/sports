@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T03:40:56Z",
+  "updatedAt": "2026-10-20T03:49:22Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-20T03:27Z",
+              "reportedAt": "2026-10-20T03:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2555,6 +2555,15 @@
               "source": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams"
             },
             {
+              "id": "4047365",
+              "name": "Josh Jacobs",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-19T21:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
+            },
+            {
               "id": "4361423",
               "name": "Micah Parsons",
               "position": "DE",
@@ -2562,15 +2571,6 @@
               "injury": "Knee - ACL",
               "reportedAt": "2026-10-19T21:14Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons"
-            },
-            {
-              "id": "4047365",
-              "name": "Josh Jacobs",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-19T20:58Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
             },
             {
               "id": "4258206",
@@ -6217,6 +6217,24 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "16737",
+              "name": "Mike Evans",
+              "position": "WR",
+              "status": "Doubtful",
+              "injury": "Achilles",
+              "reportedAt": "2026-10-20T03:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
+            },
+            {
+              "id": "3117251",
+              "name": "Christian McCaffrey",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-20T03:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3117251/christian-mccaffrey"
+            },
+            {
               "id": "3116097",
               "name": "Luke Gifford",
               "position": "LB",
@@ -6224,15 +6242,6 @@
               "injury": "Groin",
               "reportedAt": "2026-10-20T02:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116097/luke-gifford"
-            },
-            {
-              "id": "16737",
-              "name": "Mike Evans",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Achilles",
-              "reportedAt": "2026-10-20T02:02Z",
-              "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
             },
             {
               "id": "4685623",
@@ -6431,15 +6440,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-13T00:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4573188/nick-martin"
-            },
-            {
-              "id": "4426698",
-              "name": "Tatum Bethune",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-12T19:37Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426698/tatum-bethune"
             }
           ]
         },
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Nahshon Wright",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:31:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4570470/nahshon-wright"
-        },
-        {
-          "teamId": "20",
           "name": "Jack Heflin",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-20T03:40:56Z",
           "source": "https://www.espn.com/nfl/player/_/id/4259491/javon-kinlaw"
+        },
+        {
+          "teamId": "25",
+          "name": "Mike Evans",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-20T03:49:22Z",
+          "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-20T03:40:56Z",
-      "lastAttemptAt": "2026-10-20T03:40:56Z",
+      "checkedAt": "2026-10-20T03:49:22Z",
+      "lastAttemptAt": "2026-10-20T03:49:22Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-20T03:40:56Z",
-      "lastAttemptAt": "2026-10-20T03:40:56Z",
+      "checkedAt": "2026-10-20T03:49:22Z",
+      "lastAttemptAt": "2026-10-20T03:49:22Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
