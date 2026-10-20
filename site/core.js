@@ -299,6 +299,7 @@
   /* A pick is staked at one unit unless it recorded its own size. Parlays never carry a full unit. */
   const stakeOf = pick => { const r = Number(pick.riskUnits); return Number.isFinite(r) && r > 0 ? r : 1; };
   const unitsFor = pick => {
+    if (pick.accountingUnknown) return null;
     if (!pick.odds || !['win', 'loss', 'push'].includes(pick.result)) return null;
     /* Units saved with the result when the play was graded stand as written; older plays are summed the same way. */
     if (typeof pick.units === 'number' && Number.isFinite(pick.units) && !pick.earlyExit) return pick.units;

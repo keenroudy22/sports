@@ -384,7 +384,7 @@
       state, mode, status, statusNote, statusShort, standing, stub, kickoff: pick.kickoff, featured: Boolean(pick.featured), posted: Boolean(pick.posted),
       estimated: Boolean(pick.priceEstimated), assumed: Boolean(pick.priceAssumed), lotto: kind === 'fun' && Number(pick.odds) >= 1000,
       legs: (pick.legs || []).map(leg => niceTitle(typeof leg === 'string' ? leg : leg.title || leg.displayTitle || leg.selection || leg.player || '')).filter(Boolean),
-      href: `#pick/${encodeURIComponent(pick.id)}`, result,
+      href: pick.community && pick.card ? pick.card : `#pick/${encodeURIComponent(pick.id)}`, result,
     };
   };
 
@@ -956,13 +956,14 @@
   };
   /* A slip: settled plays on the spike (with an equal-size stamp), open ones in the fold. */
   const slipTitle = (p, g) => { const parts = betParts(p, g);
+    if (p.community) return `<span>${esc(p.displayTitle || p.title)}</span>`;
     return isParlayLike(p) ? `<span>${esc(marketLabel(p))}</span> ${esc(odd(p.odds))}` : `<span>${esc(parts.kind === 'spread' ? '' : parts.name)}</span> ${esc(parts.bet)}${parts.kind === 'prop' && parts.unit.length ? ` ${esc(parts.unit.join(' '))}` : ''}`; };
   const slip = (p, opts = {}) => {
     const vm = pickVM(p), g = gameOf(p), kicker = `${p.community ? 'Personal fun ticket' : vm.featured ? 'Hot Plate (POTD)' : vm.kind === 'fun' ? 'Fun ticket' : vm.kind === 'climb' ? '80/20 Climb' : 'Best bet'}${opts.when ? ` · ${ticketWhen(p.kickoff)}` : ''}`;
-    const price = `${odd(p.odds)} ${vm.book || ''}`.trim();
+    const price = `${odd(p.odds)} ${vm.book || ''}${p.accountingUnknown ? ' · original quote' : ''}`.trim();
     const resultName = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ` : '';
     const detail = p.result ? `${resultName}${resultLine(p)} ${price}.` : opts.waiting ? `${price}.` : `${price}. ${vm.statusShort || (vm.mode === 'open' && vm.calibrated && vm.chance != null ? `I have it at ${pctOne(vm.chance)}.` : '')}`;
-    const personal = p.community ? '<p class="kt-slip-personal">The chef\'s own ticket · just for fun · not a Kook\'n best bet</p>' : '';
+    const personal = p.community ? `<p class="kt-slip-personal">The chef's own ticket · just for fun · not a Kook'n best bet${p.entryNote ? `. ${esc(p.entryNote)}` : ''}</p>` : '';
     const body = `<a class="kt-slip${p.community ? ' is-community' : ''}" href="${esc(vm.href)}" aria-label="${esc(`${p.result ? `${RESULT_WORD[p.result]}: ` : ''}${vm.title}, ${oddsText(p.odds)}${vm.book ? ` at ${vm.book}` : ''}`)}"><p class="kt-slip-k">${esc(kicker)}</p><p class="kt-slip-t">${slipTitle(p, g)}</p><p class="kt-slip-d">${esc(detail.trim())}</p>${personal}${opts.waiting ? '<span class="kt-waiting">WAITING ON THE FINAL</span>' : ''}</a>`;
     return opts.spike ? `<div class="kt-spiked"><span class="kt-spike" aria-hidden="true"></span>${body}${stampFor(p.result)}</div>` : body;
   };
@@ -1922,7 +1923,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-1f45e950ef4f';
+  const MORE_ASSET = 'app-more.js?v=sha256-95812950830c';
   const GAMES_ASSET = 'app-games.js?v=sha256-1a2744157a63';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

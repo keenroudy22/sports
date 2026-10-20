@@ -1887,6 +1887,7 @@ def build(now=None):
     route_state, route_games = ticket_climb_route.from_stores(ticket_climb_route.gates.Stores(), now)
     write(OUT / 'record.json', {'generatedAt': stamp(now),
                                 'picks': [{**pick, 'card': record_card(pick)} for pick in picks],
+                                'communityPicks': __import__('community_record').build(ROOT),
                                 'climbRoute': ticket_climb_route.public_route(route_state, now, route_games)})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)

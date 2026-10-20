@@ -59,6 +59,22 @@ const views = (overrides = {}) => {
 };
 const near = (a, b) => Math.abs(a - b) < 1e-9;
 
+test('posted personal parlays count once in All plays and Fun, never Best bets or assumed profit', () => {
+  const cal = views().calendarModel;
+  const ticket = { id: 'personal', league: 'NFL', season: 2026, kind: 'parlays', parlayType: 'community',
+    lane: 'personal', posted: true, result: 'win', odds: 654, accountingUnknown: true,
+    kickoff: '2026-10-20T00:16:00Z', legs: [{title: 'A'}, {title: 'B void'}] };
+  for (const ledger of ['all', 'fun']) {
+    const model = cal.month([ticket], '2026-10', ledger);
+    assert.equal(model.days.get('2026-10-19').wins, 1);
+    assert.equal(model.totals.plays, 1);
+    assert.equal(model.totals.priced, 0);
+    assert.equal(model.totals.net, 0);
+  }
+  assert.equal(cal.month([ticket], '2026-10', 'best').totals.plays, 0);
+  assert.equal(C.unitsFor(ticket), null);
+});
+
 test('unposted plays and Gut calls never enter the Best bets calendar', () => {
   const cal = views().calendarModel;
   const unposted = { ...picks[7], id: 'not-posted', posted: false, result: 'loss' };
@@ -169,15 +185,16 @@ test('the rendered calendar has a header, filters, totals, ink-on-fill cells wit
   assert.match(html, /data-set="rcal:ledger=all" aria-pressed="true"/);
   assert.match(html, /data-set="rcal:ledger=fun" aria-pressed="false"/);
   assert.match(html, /data-set="rcal:ledger=best" aria-pressed="false"/);
-  assert.match(html, /<button type="button" class="cal-day neg" data-set="rcal:day=2026-10-04" aria-pressed="false" aria-label="Oct 4: 1-1-1, −0\.09u"><span class="d">4<\/span><b class="n num">−0\.09<\/b><small>1-1-1<\/small><\/button>/, 'a loss under a tenth shows two decimals, never −0.0');
-  assert.match(html, /<small>Per play<\/small><b class="num">−0\.03u<\/b><span>net ÷ priced plays<\/span>/);
+  assert.match(html, /aria-label="Oct 4: 1-2-1, −0\.34u"/, 'All plays now includes the losing fun ticket too');
+  assert.match(html, /<small>Per play<\/small><b class="num">−0\.09u<\/b><span>net ÷ priced plays<\/span>/);
+  assert.match(await views({ledger: 'best'}).record({tab: 'official'}), /<b class="n num">−0\.09<\/b>/, 'a small straight loss still shows two decimals');
   assert.ok(html.indexOf('<section class="cal"') < html.indexOf('class="kpis'), 'the calendar sits at the top of the Record, above the headline strip');
   assert.match(moreSource, /\.cal \{[^}]*scroll-margin-top: 64px/, 'landing on #record/calendar clears the sticky header');
   assert.match(html, /class="cal-day none open" data-set="rcal:day=2026-10-11"[^>]*><span class="d">11<\/span><small>open<\/small>/);
   assert.match(html, /class="cal-day none today"><span class="d">7<\/span>/, 'today (Oct 7) carries the outline');
   for (const cell of html.match(/<button type="button" class="cal-day (pos|neg|zero)[^]*?<\/button>/g) || []) assert.match(cell, /<b class="n num">[−+]?\d/, 'every filled cell shows its number');
-  assert.match(html, /<small>Record<\/small><b class="num">1–1–1<\/b>/);
-  assert.match(html, /<small>Worst day<\/small><b class="num red">−0\.09u<\/b><span>Oct 4<\/span>/);
+  assert.match(html, /<small>Record<\/small><b class="num">1–2–1<\/b>/);
+  assert.match(html, /<small>Worst day<\/small><b class="num red">−0\.34u<\/b><span>Oct 4<\/span>/);
   assert.match(html, /<small>Best day<\/small><b class="num green">–<\/b>/);
   assert.match(html, /Green with a plus is a winning day, red with a minus a losing day/);
   assert.doesNotMatch(html, /Week 1 at an assumed/, 'October has no assumed-price plays');
@@ -209,7 +226,7 @@ test('tapping a day opens its slips with the card link; tapping again closes it;
   assert.match(climb, /class="cal-day pos" data-set="rcal:day=2026-10-02" aria-pressed="true" aria-label="Oct 2: 1-0, \+\$42"/);
   const fun = await views({ ledger: 'fun' }).record({ tab: 'official' });
   assert.match(fun, /class="cal-day neg" data-set="rcal:day=2026-10-04" aria-pressed="false" aria-label="Oct 4: 0-1, −0\.25u"/);
-  assert.match(fun, /Fun tickets keep their own 0\.25u ledger/);
+  assert.match(fun, /Each posted parlay counts as one ticket/);
 });
 
 test('the header sport filters the calendar and hides the league chips', async () => {

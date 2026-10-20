@@ -49,7 +49,11 @@ def main(argv=None):
     parser.add_argument('--research', type=Path, default=ROOT / 'site' / 'data' / 'research.json')
     parser.add_argument('--today', type=Path, default=ROOT / 'site' / 'data' / 'app' / 'today.json')
     args = parser.parse_args(argv)
-    issues = audit(load(args.research), load(args.today))
+    public = load(args.today)
+    issues = audit(load(args.research), public)
+    import community_record
+    if public.get('communityPicks', []) != community_record.build(ROOT):
+        issues.append('personal-ticket record differs from pregame receipts and append-only settlements')
     print(json.dumps({'picksChecked': len(load(args.today).get('picks') or []), 'issues': issues}, sort_keys=True))
     return 1 if issues else 0
 

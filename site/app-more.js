@@ -41,7 +41,7 @@
   const CAL_LEDGERS = [['all', 'All plays'], ['best', 'Best bets'], ['fun', 'Fun tickets'], ['climb', 'Climb']];
   const cal = {
     dayKey: p => C.dayOf(p.kickoff || p.publishedAt),
-    ledgerRows: (picks, ledger) => picks.filter(p => !C.isUnpricedImport(p) && C.countsPublic(p) && (ledger === 'climb' ? C.isLadder(p) : ledger === 'fun' ? C.isParlay(p) && !C.isLadder(p) : ledger === 'best' ? !C.isParlay(p) && C.isHeadline(p) : !C.isParlay(p))),
+    ledgerRows: (picks, ledger) => picks.filter(p => !C.isUnpricedImport(p) && C.countsPublic(p) && (ledger === 'climb' ? C.isLadder(p) : ledger === 'fun' ? C.isParlay(p) && !C.isLadder(p) : ledger === 'best' ? !C.isParlay(p) && C.isHeadline(p) : !C.isLadder(p))),
     headlineUnits: p => C.recordBreakdown([p]).captured.units,
     postedUnits: p => p.priceAssumed || C.isUnpricedImport(p) ? null : C.unitsFor(p),
     climbMoney: p => { const info = p.ladder || {}, stake = Number(info.stake) || 0;
@@ -121,7 +121,7 @@
       ${ledger === 'climb' ? `<div class="receipts">${picked.rows.map(climbRow).join('')}</div>` : `<div class="kt-slips">${picked.rows.map(p => `${slip(p, { spike: true })}${CARD_PATH.test(p.card || '') ? `<a class="cal-card" href="${esc(p.card)}" target="_blank" rel="noopener">See the card ↗</a>` : ''}`).join('')}</div>`}</div>`;
     const assumedNote = t.assumed ? '<p class="cal-legend">Week 1 at an assumed −115: those plays count in W–L and stay out of the units and Per play.</p>' : '';
     const voidNote = t.voids ? `<p class="cal-legend">${t.voids === 1 ? 'One void play' : `${t.voids} void plays`} this month: not counted in W–L or units, the same as the Record headline.</p>` : '';
-    const straight = every.filter(p => !C.isParlay(p) && C.countsPublic(p) && (ledger === 'best' ? C.isHeadline(p) : true));
+    const straight = cal.ledgerRows(every, ledger);
     const points = ['all', 'best'].includes(ledger) ? cumulativeUnits(straight.filter(p => league === 'ALL' || p.league === league), ledger === 'best' ? cal.headlineUnits : cal.postedUnits) : [];
     const line = points.length > 1 ? `<div class="card" style="margin-top:14px">${unitsChart(points, { from: `${ym}-01`, to: `${ym}-31`, label: cal.label(ym) })}<p class="chart-cap">Cumulative units at posted prices${league !== 'ALL' ? ` · ${esc(LEAGUE_NAME[league])}` : ''}; ${esc(cal.label(ym))} is the lighter band.</p></div>` : '';
     const per = t.perPlay == null ? '–' : ledger === 'climb' ? calMoney(t.perPlay) : `${t.perPlay > 0 ? '+' : t.perPlay < 0 ? '−' : ''}${Math.abs(t.perPlay).toFixed(2)}u`;
@@ -129,13 +129,13 @@
       <div class="cal-head"><h2 id="cal-h">${esc(cal.label(ym))}</h2><div class="cal-nav"><button type="button" data-set="rcal:month=${cal.shift(ym, -1)}" aria-label="Previous month">‹</button><button type="button" data-set="rcal:month=${cal.shift(ym, 1)}" aria-label="Next month"${ym >= current ? ' disabled' : ''}>›</button></div></div>
       <div class="cal-ctl">${state.league === 'ALL' ? `<div class="chips" role="group" aria-label="League">${leagues.map(l => `<button type="button" class="chip" data-set="rcal:league=${l}" aria-pressed="${l === league}">${esc(l === 'ALL' ? 'All' : l)}</button>`).join('')}</div>` : `<span class="small muted">${esc(LEAGUE_NAME[league] || league)} only · pick All sports above for every league</span>`}${seg('rcal', CAL_LEDGERS.map(([k, l]) => [`ledger=${k}`, l]), `ledger=${ledger}`)}</div>
       <div class="cal-tot"><div><small>${ledger === 'climb' ? 'Steps' : 'Record'}</small><b class="num">${esc(wl)}</b><span>${t.plays ? `${t.plays} graded` : 'nothing graded'}${t.open ? ` · ${t.open} open` : ''}</span></div>
-        <div><small>Net</small><b class="num ${t.net > 0 ? 'green' : t.net < 0 ? 'red' : ''}">${esc(t.plays ? calNet(t.net, ledger) : '–')}</b><span>${ledger === 'climb' ? 'dollars, stake to return' : ledger === 'fun' ? 'at 0.25u a ticket' : 'at posted prices'}</span></div>
+        <div><small>Net</small><b class="num ${t.net > 0 ? 'green' : t.net < 0 ? 'red' : ''}">${esc(t.priced ? calNet(t.net, ledger) : '–')}</b><span>${ledger === 'climb' ? 'dollars, stake to return' : 'verified unit stakes only'}</span></div>
         <div><small>Per play</small><b class="num">${esc(t.priced ? per : '–')}</b><span>net ÷ priced plays</span></div>
         <div><small>Best day</small><b class="num green">${t.best ? esc(calNet(t.best.net, ledger)) : '–'}</b><span>${t.best ? esc(calDate(t.best.day)) : 'none yet'}</span></div>
         <div><small>Worst day</small><b class="num red">${t.worst ? esc(calNet(t.worst.net, ledger)) : '–'}</b><span>${t.worst ? esc(calDate(t.worst.day)) : 'none'}</span></div></div>
       <div class="cal-dow" aria-hidden="true">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => `<span>${d}</span>`).join('')}</div>
       <div class="cal-grid" role="group" aria-label="${esc(cal.label(ym))}: tap a day for its plays">${cells.join('')}</div>
-      <p class="cal-legend">Green with a plus is a winning day, red with a minus a losing day, gray is even. A ring marks a day still waiting on a result. ${ledger === 'all' ? 'Every released straight play appears here at its posted stake; Best bets keep their own record.' : ledger === 'best' ? 'W–L counts every graded best bet; units use recorded prices only.' : ledger === 'fun' ? 'Fun tickets keep their own 0.25u ledger, never mixed into best bets.' : 'The Climb is tracked in dollars from each step\'s ledger, apart from best bets.'}</p>${assumedNote}${voidNote}${slips}${line}</section>`;
+      <p class="cal-legend">Green with a plus is a winning day, red with a minus a losing day, gray is even. A ring marks a day still waiting on a result. ${ledger === 'all' ? 'Every released straight and fun ticket counts once; Best bets keep their own record. Personal tickets without verified unit stakes count in W–L, not net units.' : ledger === 'best' ? 'W–L counts every graded best bet; units use recorded prices only.' : ledger === 'fun' ? 'Each posted parlay counts as one ticket, never one win per leg. Personal stakes and injury-adjusted payouts are not assumed.' : 'The Climb is tracked in dollars from each step\'s ledger, apart from best bets.'}</p>${assumedNote}${voidNote}${slips}${line}</section>`;
   };
   const moreGroup = (title, links) => `<p class="eyebrow more-group">${title}</p><div class="list-links">${links}</div>`;
   const views = {};
@@ -291,7 +291,8 @@
 
   views.record = async route => {
     const tab = route.tab || 'official';
-    const [today, board, lab, trials, every] = await Promise.all([get('app/today.json'), maybe('scoreboard.json'), tab === 'trials' ? maybe('market-lab.json') : null, tab === 'trials' ? maybe('app/sport-research.json') : null, allPicks()]);
+    const [today, board, lab, trials, official, recordData] = await Promise.all([get('app/today.json'), maybe('scoreboard.json'), tab === 'trials' ? maybe('market-lab.json') : null, tab === 'trials' ? maybe('app/sport-research.json') : null, allPicks(), get('app/record.json')]);
+    const every = [...new Map([...official, ...(recordData.communityPicks || [])].map(p => [p.id, p])).values()];
     const climbRoute = tab === 'climb' ? (await get('app/record.json')).climbRoute : null;
     indexGames(today);
     const all = every.filter(inLeague);

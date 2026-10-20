@@ -415,7 +415,7 @@ test('Today reconciles its last-slate headline and slips to released plays only'
 
 test('the browser shell requests the core build that exports the shared headline counter', () => {
   const index = fs.readFileSync('site/index.html', 'utf8');
-  assert.match(index, /core\.js\?v=76/);
+  assert.match(index, /core\.js\?v=77/);
   assert.equal(typeof C.isHeadline, 'function');
 });
 

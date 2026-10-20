@@ -1,5 +1,21 @@
 # October 5 product implementation tracker
 
+## October20 — personal-ticket calendar correction (release pending)
+
+Owner explicitly authorizes pregame-posted personal parlays in the overall record, one result per ticket,
+including losses, without relabeling them Best Bets. Separate communityPicks payload and append-only
+community settlement journal retain the original public timestamps and quoted odds. Oct19 adds Q1 win,
+eight-leg win with owner-confirmed McLaurin injury void, and Juszczyk first-TD loss (Kittle scored first).
+All plays changes0-2 to2-3; Fun adds2-0; official108-row source, Best Bet headline and unit totals remain
+unchanged. Personal tickets without verified unit stakes/adjusted prices do not manufacture unit profit.
+The +217 double-under screenshot proves a win but no original pregame public receipt was found; it is not
+retrospectively counted as a posted pick. Older pre-posted tickets remain visible pending verified settlement.
+O-20261020-PERSONALRECORD tracks tests, release and live verification; not shipped yet.
+
+Climb scan Oct20 around08:27ET: run3/step3, $81 riding/$35 banked, no open rung. No qualifying ticket;
+FIU-380 is outside the approved -220..-130 band and only1.5 points above its fair price. Scheduled route
+dates are opportunities, not preselected guaranteed plays. Existing fresh-capture/Climb scans remain active.
+
 ## October19 — NBA plays above research; early prop decision
 
 Owner requests the website's bets first and an early Oct20 NBA prop choice, not another research-only answer.
