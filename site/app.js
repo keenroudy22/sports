@@ -1456,12 +1456,16 @@
     indexGames(today);
     const top = researchHead(route.mode);
     if (NOT_YET(state.league)) return top + notYet();
+    const nbaData = state.league === 'ALL' ? await maybe('app/nba.json') : null;
+    const nbaResearch = state.league !== 'ALL' ? '' : nbaData
+      ? await (await ensureGames()).nbaToday({data:nbaData,research:true,embedded:true,mode:route.mode || 'lines',type:state.board.type,q:route.mode === 'players' ? state.players.q : state.q})
+      : '<section class="kt-page-sec"><h2>NBA research</h2><p class="small muted">NBA data is unavailable right now. Football research remains available.</p></section>';
     const filtering = state.q ? `<p class="small" style="margin:0 0 10px">Filtering for <b>${esc(state.q)}</b> · <button type="button" class="linkish" data-clear-q>Clear</button></p>` : '';
-    if (route.mode === 'trends') return top + filtering + await researchTrends(route);
-    if (route.mode === 'players') return top + await researchPlayers(route);
-    if (route.mode === 'news') return top + await researchNews();
+    if (route.mode === 'trends') return top + filtering + nbaResearch + await researchTrends(route);
+    if (route.mode === 'players') return top + nbaResearch + await researchPlayers(route);
+    if (route.mode === 'news') return top + nbaResearch + await researchNews();
     const lines = await lineData();
-    if (!lines) return top + empty('Lines did not load', 'The current line files are unavailable right now. <button type="button" class="btn small" data-retry>Try again</button>', 'clock');
+    if (!lines) return top + nbaResearch + empty('Football lines did not load', 'The current football line files are unavailable right now. <button type="button" class="btn small" data-retry>Try again</button>', 'clock');
     const now = Date.now();
     const posted = new Map((today.picks || []).filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(p => [officialKey(p), p]));
     const b = state.board;
@@ -1493,6 +1497,7 @@
         <div class="find-row"><label class="sr" for="sort">Sort</label><select id="sort" class="select" data-select="sort"><option value="edge"${b.sort === 'edge' ? ' selected' : ''}>Sort: biggest chance gap</option><option value="chance"${b.sort === 'chance' ? ' selected' : ''}>Sort: most likely</option><option value="kickoff"${b.sort === 'kickoff' ? ' selected' : ''}>Sort: kickoff</option></select>
         <div class="grow"><label class="sr" for="q">Search</label><input id="q" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off"></div></div></div>
       <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} lines${older ? ` · ${older} older prices hidden` : ''} · ✓ passes our price check · ${shareLink('lines', route)}</p>
+      ${nbaResearch}${nbaResearch ? '<h2>Football lines</h2><p class="small muted">The price-check counts and ranking above apply to these football lines. NBA research keeps its own samples and comparisons.</p>' : ''}
       ${list}
       ${b.show === 'value' && rows.length < 5 && nAll > rows.length ? `<p class="small" style="margin-top:10px"><button type="button" class="linkish" data-set="show:all">See all ${nAll} current lines →</button></p>` : ''}
       ${unpriced.length ? `<details class="more-box" data-box="unpriced" style="margin-top:12px"><summary>Player lines with no price yet · ${unpriced.length}</summary><div class="receipts">${unpriced.slice(0, 60).map(r => `<div class="receipt" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${r.athleteId ? `<a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a>` : esc(niceTitle(r.title))}</b><span>${esc(marketLabel(r))} · ${esc(whenShort(r.kickoff))}${isNum((r.grade || {}).projection) ? ` · our middle estimate ${esc(C.fixed(r.grade.projection))}` : ''}</span></div><span class="small muted">No price yet</span></div>`).join('')}</div><p class="small muted" style="margin-top:8px">The book lists these lines, but we have not seen a price, so we cannot compare our chance with what the price needs.</p></details>` : ''}
@@ -1926,8 +1931,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-e79ee86a369e';
-  const GAMES_ASSET = 'app-games.js?v=sha256-6fd5c330a958';
+  const MORE_ASSET = 'app-more.js?v=sha256-06f88c63b33f';
+  const GAMES_ASSET = 'app-games.js?v=sha256-4c3c1160fde6';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
@@ -1998,7 +2003,7 @@
     $('#top-tabs').innerHTML = links;
     const sel = $('#league');
     if (!sel.options.length) { const opt = k => `<option value="${k}">${esc(LEAGUE_NAME[k])}</option>`;
-      sel.innerHTML = `${opt('ALL')}<optgroup label="Best bets and research">${FOOTBALL.map(opt).join('')}</optgroup><optgroup label="Scores and trials">${Object.keys(LEAGUE_NAME).filter(k => k !== 'ALL' && !FOOTBALL.includes(k)).map(opt).join('')}</optgroup>`; }
+      sel.innerHTML = `${opt('ALL')}<optgroup label="Plays and research">${[...FOOTBALL,'NBA'].map(opt).join('')}</optgroup><optgroup label="Scores and trials">${Object.keys(LEAGUE_NAME).filter(k => k !== 'ALL' && k !== 'NBA' && !FOOTBALL.includes(k)).map(opt).join('')}</optgroup>`; }
     sel.value = state.league;
     let bar = $('#ticket-bar');
     if (!bar) { bar = document.createElement('a'); bar.id = 'ticket-bar'; bar.className = 'ticket-bar'; bar.href = '#ticket'; document.body.appendChild(bar); }

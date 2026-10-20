@@ -15,6 +15,19 @@ Prospective admission captions lead with the stored start→goal and current ste
 the restart number. Website IDs/history and already-sent posts/cards remain immutable. Source tests/release
 remain to verify before calling this copy change shipped.
 
+## October20 — All sports NBA integration (release pending)
+
+O-20261020-NBAALL addresses the owner's screenshot: All Games still read only football despite dedicated
+NBA pages. Join stored NBA schedule/projections into day counts, search, kickoff ordering and finals, with
+NBA cards in their own section; college window/conference/competitive filters affect college only.
+All Research Lines/Trends/Players now include matching NBA comparisons and labeled historical samples;
+News shows availability context and explicitly does not claim a separate NBA news feed. Reuse the same
+fresh-price and season boundaries as NBA Today, without ranking historical samples as football chances.
+All Record surfaces actual NBA Trial summary separately from football totals and paper performance.
+Promote NBA into the selector's plays/research group. No new models, requests, jobs, betting/record changes.
+Verify mixed slate counts/search/filter combinations and actual route content on phone/desktop, full gates,
+isolated rehearsal, hosted release and live evidence before closing.
+
 ## October20 — NBA nested-card reflow correction (verified release)
 
 Source3020597c; hosted39440329704 succeeded. Normal and clean-copy each1541Python(two skips)/265Node,
