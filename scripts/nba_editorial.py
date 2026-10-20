@@ -136,21 +136,21 @@ def choices(data, now, history=None):
         p=g['projection'];a=g['teams']['away'];h=g['teams']['home']
         projected.append({'subject':f"{a['abbreviation']} at {h['abbreviation']}",
                           'line':f"My score {p['away']:g} - {p['home']:g}", 'right':f"{p['total']:g}",
-                          'detail':'Early team ratings · research', 'logo':a.get('logo'),
+                          'detail':'Early estimate · new season', 'logo':a.get('logo'),
                           'caption':f"{names(g)}: {p['away']:g}-{p['home']:g}"})
     if len(games)==1:
         g=games[0]
         projected=[{'subject':g['teams'][s]['abbreviation'],'line':'My projected points',
-                    'right':f"{g['projection'][s]:g}",'detail':'Team research',
+                    'right':f"{g['projection'][s]:g}",'detail':'Early estimate · new season',
                     'logo':g['teams'][s].get('logo'),
                     'caption':f"{g['teams'][s].get('name') or g['teams'][s].get('displayName') or g['teams'][s]['abbreviation']}: {g['projection'][s]:g}"}
                    for s in ('away','home')]
     trends = team_trends(games,now,history)
     # Keep one window per card. Never blend last season with this season.
     chosen = [r for r in trends if r['season']==max((t['season'] for t in trends),default=0)][:5]
-    trend_rows=[{'subject':r['team']['abbreviation'], 'line':f"Scored {r['points']:g} · allowed {r['allowed']:g}",
-                 'right':f"{r['games']} G", 'detail':f"{r['window']} · regular season", 'logo':r['team'].get('logo'),
-                 'caption':f"{r['team'].get('name') or r['team'].get('displayName') or r['team']['abbreviation']}: {r['points']:g} scored / {r['allowed']:g} allowed",
+    trend_rows=[{'subject':r['team']['abbreviation'], 'line':f"Gave up {r['allowed']:g} per game",
+                 'right':f"{r['points']:g}", 'detail':f"Last {r['games']} games · {r['window'].lower()}", 'logo':r['team'].get('logo'),
+                 'caption':f"{r['team'].get('name') or r['team'].get('displayName') or r['team']['abbreviation']}: {r['points']:g} scored / {r['allowed']:g} given up per game",
                  'history':r} for r in chosen]
     out=[]
     for family,rows,hour,title in [('projections',projected,8,'NBA PROJECTIONS'),('trends',trend_rows,10,'NBA TEAM TRENDS')]:
@@ -162,8 +162,10 @@ def choices(data, now, history=None):
             continue
         import x_post
         prefix=(f"NBA {target:%b %-d}: my scores" if family=='projections' else
-                f"NBA {target:%b %-d}: {chosen[0]['window'].lower()}, last {chosen[0]['games']} recorded games")
-        note='Early team ratings; not player projections.' if family=='projections' else 'Regular season. Team history, not prop picks.'
+                f"NBA · Last {chosen[0]['games']} games, {chosen[0]['window'].lower()}")
+        note=('Early score estimates. New rosters can change them.' if family=='projections' else
+              ('Scoring context, not a forecast. New rosters can change it.'
+               if chosen[0]['window']=='LAST SEASON' else 'Scoring context, not a forecast.'))
         # All rows on the graphic also appear in the caption; shorten the card,
         # never use +N more or silently drop a displayed team from the words.
         while len(rows)>=2:
@@ -176,7 +178,10 @@ def choices(data, now, history=None):
         out.append({'key':f'nba-{family}-{target}', 'family':family, 'day':target.isoformat(),
                     'capturedAt':boxscores.stamp(now),'sourceAt':data['sourceAt'],
                     'due':boxscores.stamp(due),'stale':boxscores.stamp(cutoff),'rows':rows,'text':text,
-                    'title':title,'kicker':f"{target:%b %-d} · TEAM RESEARCH",'right_label':'MY TOTAL' if family=='projections' else 'SAMPLE'})
+                    'title':title,'kicker':(f"{target:%b %-d} · TEAM RESEARCH" if family=='projections' else
+                        ('LAST SEASON · NEW ROSTERS MAY DIFFER' if chosen[0]['window']=='LAST SEASON' else
+                         'THIS SEASON · SCORING CONTEXT')),
+                    'right_label':'MY TOTAL' if family=='projections' else 'AVG POINTS'})
     return out
 
 

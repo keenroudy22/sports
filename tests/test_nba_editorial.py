@@ -37,6 +37,26 @@ class NBAEditorialTests(unittest.TestCase):
                 self.assertIn(source['caption'],r['text'])
         self.assertIn('last season',rows[1]['text'])
         self.assertNotIn('100%',rows[1]['text'])
+    def test_plain_trends_explain_averages_and_new_roster_limit(self):
+        data,h=fixture();r=n.choices(data,NOW,h)[1]
+        self.assertEqual(r['right_label'],'AVG POINTS')
+        self.assertIn('Scoring context, not a forecast.',r['text'])
+        self.assertIn('New rosters can change it.',r['text'])
+        for row in r['rows']:
+            self.assertEqual(row['right'],str(row['history']['points']).removesuffix('.0'))
+            self.assertEqual(row['detail'],'Last 10 games · last season')
+            self.assertIn('per game',row['line'])
+            self.assertIn('given up per game',row['caption'])
+        self.assertNotIn('SAMPLE',json.dumps(r))
+        self.assertNotIn('10 G',json.dumps(r))
+        self.assertLessEqual(x_post.tweet_length(r['text']),x_post.LIMIT)
+    def test_current_season_trends_never_claim_last_season_or_blend(self):
+        data,h=fixture()
+        current=[{**r,'season':2027,'kickoff':f'2026-10-{i%10+1:02}T00:00:00Z'} for i,r in enumerate(h)]
+        r=n.choices(data,NOW,h+current)[1]
+        self.assertIn('current season',r['text'])
+        self.assertNotIn('last season',r['text'])
+        self.assertTrue(all('current season' in row['detail'] for row in r['rows']))
     def test_future_postseason_missing_and_unplayed_history_never_counts(self):
         data,h=fixture();base=n.team_trends(data['games'],NOW,h)
         h.extend([{**h[0],'type':3,'homeScore':999},{**h[0],'kickoff':'2026-12-01T00:00:00Z'},

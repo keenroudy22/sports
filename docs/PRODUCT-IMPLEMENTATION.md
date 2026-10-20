@@ -1,5 +1,14 @@
 # October 5 product implementation tracker
 
+## October20 — plain NBA team research and new-season limits (prepared)
+
+O-20261020-NBAPLAIN replaces SAMPLE/10 G with AVG POINTS and explicit Last N games/season.
+Rows explain points given up per game; every displayed row retains its full team name and facts in
+the caption. The caption explains these are scoring context, not tonight's forecast. Prior-season
+graphics and captions explicitly note new rosters may differ; early score estimates also retain a
+new-roster caution. Current and prior seasons still never blend; no roster-adjusted model claim,
+pick promotion, new feed, record change or rewriting frozen/queued/sent publications. Release pending.
+
 ## October20 — current Climb focus, history below (verified release)
 
 Source98eaaac2 (tested909a016e, rebased over data-only capture); hosted39450390584 succeeded.

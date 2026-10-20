@@ -205,6 +205,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Plain NBA posts (owner, October20):** explain numbers without SAMPLE/10 G shorthand.
+  State averages per game, last N games and season. Say what they show (past scoring context),
+  not an unsupported betting conclusion. Last-season results are background, not tonight's
+  forecast: new rosters and roles may differ. Keep seasons separate, current availability/role
+  checks and research labels; do not imply roster-adjusted predictions or rewrite sent posts.
+
 - **Current Climb visual focus (owner, October20):** current route graphic/section shows only this
   climb's posted steps and balances. No previous-climb loss banner or combined-history totals inside it.
   Keep old runs, losses and all-climbs accounting in the separate history/summary below; never erase records.
