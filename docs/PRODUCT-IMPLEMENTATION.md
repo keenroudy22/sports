@@ -5,8 +5,15 @@
 Owner requests the website's bets first and an early Oct20 NBA prop choice, not another research-only answer.
 NBA Today now places its published Trial tickets before player comparisons/team projections, with older results
 inside the separate record fold. Football Today already leads with posted Best Bets and remains unchanged.
-Source tests cover open-ticket order, empty state, old-result placement and no research-to-official relabeling.
-Release evidence is pending; this paragraph is not a deployment receipt.
+Source tests cover upcoming/live/awaiting-final ticket order, empty state, old-result placement and no
+research-to-official relabeling. Verified source `905191b6ea7c8e80096eaf78f95e3683724a0f47`, hosted
+**39347267441 succeeded**. Earlier39346439110 was intentionally canceled in favor of the final version.
+Locked normal/clean-export suites each passed1527 Python(two skipped)/256 Node tests. Build500 pages,
+budget(no hard issues; existing Today/More/NBA warnings), record108/NBA0, guard568, assets and unchanged
+NBA Trial SVG check passed. Isolated20:00 rehearsal `kookn-rehearsal-vlvjbyul` exited0/outcomeok,
+zero outside writes/private reads. Live375/1440 app180: play section precedes player/team research,
+no overflow/load error/console errors. Proof `/tmp/kookn-nba-top-live-phone.png` and
+`/tmp/kookn-nba-top-live-desktop.png`. O-20261019-NBAFIRST shipped; no new NBA bet was posted.
 
 Fresh operational ESPN/Sharp capture at00:06–00:08Z Oct20 (8:06–8:08PM ET Oct19) returned321 paired NBA
 quotes, partial market coverage, no feed errors. Early favorite: San Antonio Spurs Keldon Johnson over8.5 points
