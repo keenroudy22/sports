@@ -1,0 +1,161 @@
+{
+  "key": "nba-props-2026-10-20",
+  "family": "props",
+  "day": "2026-10-20",
+  "capturedAt": "2026-10-20T14:20:38Z",
+  "sourceAt": "2026-10-20T14:03:08Z",
+  "due": "2026-10-20T13:15:00Z",
+  "stale": "2026-10-20T17:00:00Z",
+  "rows": [
+    {
+      "subject": "Keldon Johnson",
+      "line": "Over 7.5 points -136",
+      "right": "14.7",
+      "logo": "https://a.espncdn.com/i/headshots/nba/players/full/4395723.png",
+      "detail": "SA · FanDuel · 10/10 last season",
+      "caption": "Keldon Johnson · San Antonio Spurs\nOver 7.5 points -136 · I have 14.7 · 10/10"
+    },
+    {
+      "subject": "Cade Cunningham",
+      "line": "Under 23.5 points +100",
+      "right": "17",
+      "logo": "https://a.espncdn.com/i/headshots/nba/players/full/4432166.png",
+      "detail": "DET · FanDuel · 7/10 last season",
+      "caption": "Cade Cunningham · Detroit Pistons\nUnder 23.5 points +100 · I have 17 · 7/10"
+    }
+  ],
+  "evidence": [
+    {
+      "eventId": "401909090",
+      "athleteId": "4395723",
+      "name": "Keldon Johnson",
+      "team": "24",
+      "teamName": "San Antonio Spurs",
+      "teamAbbr": "SA",
+      "photo": "https://a.espncdn.com/i/headshots/nba/players/full/4395723.png",
+      "kickoff": "2026-10-21T01:30:00Z",
+      "stat": "pts",
+      "line": 7.5,
+      "book": "FanDuel",
+      "over": -136,
+      "under": 102,
+      "sourceAt": "2026-10-20T14:03:18.50752674Z",
+      "statName": "points",
+      "projection": {
+        "value": 14.7,
+        "minutes": 24,
+        "rate": 0.6141,
+        "model": "nba-minutes-rate-v1",
+        "season": 2026,
+        "sample": 10,
+        "historyGames": 37,
+        "window": "Last season",
+        "low": 10.2,
+        "high": 19.6,
+        "first": "2026-03-26T00:00Z",
+        "last": "2026-04-13T00:30Z"
+      },
+      "hold": null,
+      "side": "over",
+      "odds": -136,
+      "gap": 7.2,
+      "last5": {
+        "hits": 5,
+        "games": 5,
+        "push": 0
+      },
+      "last10": {
+        "hits": 10,
+        "games": 10,
+        "push": 0,
+        "values": [
+          15,
+          16,
+          15,
+          11,
+          13,
+          10,
+          13,
+          20,
+          17,
+          18
+        ]
+      },
+      "seasonHistory": {
+        "hits": 30,
+        "games": 37,
+        "push": 0
+      },
+      "favorite": true
+    },
+    {
+      "eventId": "401909088",
+      "athleteId": "4432166",
+      "name": "Cade Cunningham",
+      "team": "8",
+      "teamName": "Detroit Pistons",
+      "teamAbbr": "DET",
+      "photo": "https://a.espncdn.com/i/headshots/nba/players/full/4432166.png",
+      "kickoff": "2026-10-20T19:00:00Z",
+      "stat": "pts",
+      "line": 23.5,
+      "book": "FanDuel",
+      "over": -132,
+      "under": 100,
+      "sourceAt": "2026-10-20T14:03:18.50752674Z",
+      "statName": "points",
+      "projection": {
+        "value": 17.0,
+        "minutes": 28,
+        "rate": 0.6089,
+        "model": "nba-minutes-rate-v1",
+        "season": 2026,
+        "sample": 9,
+        "historyGames": 27,
+        "window": "Last season",
+        "low": 8.0,
+        "high": 25.0,
+        "first": "2026-03-06T01:00Z",
+        "last": "2026-04-12T22:00Z"
+      },
+      "hold": null,
+      "side": "under",
+      "odds": 100,
+      "gap": -6.5,
+      "last5": {
+        "hits": 4,
+        "games": 5,
+        "push": 0
+      },
+      "last10": {
+        "hits": 7,
+        "games": 10,
+        "push": 0,
+        "values": [
+          26,
+          26,
+          21,
+          8,
+          17,
+          33,
+          6,
+          13,
+          14,
+          7
+        ]
+      },
+      "seasonHistory": {
+        "hits": 13,
+        "games": 27,
+        "push": 0
+      },
+      "favorite": true
+    }
+  ],
+  "text": "NBA prop looks · FanDuel\nKeldon Johnson · San Antonio Spurs\nOver 7.5 points -136 · I have 14.7 · 10/10\nCade Cunningham · Detroit Pistons\nUnder 23.5 points +100 · I have 17 · 7/10\nLast season · last 10 recorded games.\n#NBA",
+  "title": "NBA PROP LOOKS",
+  "preview": false,
+  "kicker": "Oct 20 · PLAYER RESEARCH",
+  "right_label": "MY NUMBER",
+  "supersedesCapturedAt": "2026-10-20T12:36:07Z"
+}
