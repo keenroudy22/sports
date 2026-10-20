@@ -1,29 +1,38 @@
 {
- "at": "2026-10-20T02:04:24Z",
+ "at": "2026-10-20T03:41:42Z",
  "confirmed": {
-  "CFB-401871055": "2026-10-20T02:04:24Z",
-  "CFB-401871069": "2026-10-20T02:04:24Z",
-  "CFB-401871070": "2026-10-20T01:33:32Z",
-  "CFB-401871092": "2026-10-20T02:04:24Z"
+  "CFB-401871055": "2026-10-20T03:41:42Z",
+  "CFB-401871069": "2026-10-20T03:41:42Z",
+  "CFB-401871070": "2026-10-20T03:41:42Z",
+  "CFB-401871092": "2026-10-20T03:41:42Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 53,
+    "draftkings": 411,
     "fanduel": 424
    },
    "eventsListed": 56,
    "eventsMatched": 4,
    "games": 4,
    "marketTypes": {
-    "player_passing_touchdowns": 17,
-    "player_passing_yards": 41,
-    "player_receiving_yards": 229,
-    "player_receptions": 48,
-    "player_rushing_yards": 142
+    "player_field_goals_made": 1,
+    "player_kicking_points": 1,
+    "player_longest_passing_completion": 1,
+    "player_longest_reception": 10,
+    "player_longest_rush": 4,
+    "player_passing_+_rushing_yards": 21,
+    "player_passing_attempts": 9,
+    "player_passing_completions": 7,
+    "player_passing_touchdowns": 23,
+    "player_passing_yards": 80,
+    "player_receiving_yards": 356,
+    "player_receptions": 67,
+    "player_rushing_attempts": 12,
+    "player_rushing_yards": 243
    },
-   "requestsLeft": 9,
-   "rows": 477,
+   "requestsLeft": 8,
+   "rows": 835,
    "slateGames": [
     "Middle Tennessee Blue Raiders at Florida International Panthers 2026-10-20T23:00Z",
     "Missouri State Bears at Delaware Blue Hens 2026-10-20T23:00Z",
@@ -48,7 +57,7 @@
       "fliff": "420157_c_p_209_prematch",
       "gemini": "NCAAF-2610222300-JMU-APP-M",
       "hardrock": "3478057814117712287",
-      "kalshi": "KXNCAAF1H-26OCT22JMUAPP",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT22JMUAPP",
       "ladbrokes": "c412bb8f-3a67-4253-b67a-b6f259eb9e23",
       "novig": "01a13cae-d3ee-7741-ae8f-e1b320d9a59d",
       "onexbet": "762919554",
@@ -57,7 +66,6 @@
       "polymarket": "nfl_appalachianstate_jamesmadisondukes_2026-10-22_b3",
       "prophetx": "1700104123",
       "rebet": "sr:match:70898894",
-      "sbobet": "10748289",
       "smarkets": "45375068",
       "sport888_it": "1027553093",
       "sportzino": "sz-17863762",
@@ -105,6 +113,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -129,7 +138,7 @@
       "fliff": "fobj__conflict_event__419542",
       "gemini": "NCAAF-2610222300-LIB-KENN-T",
       "hardrock": "2321239640302027151",
-      "kalshi": "KXNCAAF1H-26OCT22LIBKENN",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT22LIBKENN",
       "ladbrokes": "42bc6f07-1ab5-4d5e-a906-e419065d0e89",
       "novig": "01a13cae-d357-77e1-a5b9-e21dd00ca896",
       "onexbet": "762874853",
@@ -199,6 +208,7 @@
        "total_points_band",
        "total_points_odd_even",
        "total_rushing_touchdowns",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -272,6 +282,7 @@
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
        "draw_no_bet",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "match_result_both_teams_to_score",
@@ -406,7 +417,7 @@
      "type": "fixture"
     },
     {
-     "away": "UMass",
+     "away": "Massachusetts",
      "external": {
       "betmgm": "6:47424",
       "betonline": "491157838",
@@ -421,7 +432,7 @@
       "fliff": "420160_c_p_209_prematch",
       "gemini": "NCAAF-2610232300-MAS-UCO-M",
       "hardrock": "8929594794305520023",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT23MASSCONN",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT23MASSCONN",
       "ladbrokes": "1d7e24c7-fc9b-4b94-a8fa-673ca8b0a7d4",
       "novig": "01a141d1-8c4d-7201-affb-8ff56cad483d",
       "onexbet": "762891390",
@@ -435,10 +446,10 @@
       "sportzino": "sz-17873411",
       "thescorebet": "StandardEvent:09451265-ea10-47d9-8057-c26ee62ab55f"
      },
-     "home": "UConn",
+     "home": "Connecticut",
      "sample": {
-      "away_team": "UMass",
-      "home_team": "UConn",
+      "away_team": "Massachusetts",
+      "home_team": "Connecticut",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -560,6 +571,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -583,7 +595,7 @@
       "fliff": "420162_c_p_209_prematch",
       "gemini": "NCAAF-2610240100-AF-WYO-M",
       "hardrock": "5945185984986612103",
-      "kalshi": "KXNCAAF1H-26OCT23AFAWYO",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT23AFAWYO",
       "ladbrokes": "c12b3015-67e7-4cc5-a7fe-4bde22541652",
       "novig": "01a1423f-3b5b-7b50-b913-9a44f4238784",
       "onexbet": "762906546",
@@ -660,7 +672,7 @@
       "fliff": "fobj__conflict_event__420163",
       "gemini": "NCAAF-2610240230-NCS-STA-M",
       "hardrock": "2559323490134131103",
-      "kalshi": "KXNCAAF1H-26OCT23NCSTSTAN",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT23NCSTSTAN",
       "ladbrokes": "95fa53dd-b11b-4e13-9517-eba63bacc272",
       "novig": "01a14291-af4f-7d40-926e-baf7f98a550c",
       "onexbet": "762818644",
@@ -767,7 +779,7 @@
       "fliff": "419768_c_p_209_prematch",
       "gemini": "NCAAF-2610241600-LSU-AUB-S",
       "hardrock": "5241498543209972123",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT24LSUAUB",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT24LSUAUB",
       "ladbrokes": "5e974911-b2dc-4fc0-bc98-091198dd5b5e",
       "novig": "01a14577-5683-72f0-9e5b-6a3d76f11e78",
       "onexbet": "762919555",
@@ -843,7 +855,7 @@
      "type": "fixture"
     },
     {
-     "away": "California",
+     "away": "California Golden Bears",
      "external": {
       "bet365": "203051125",
       "betmgm": "6:47541",
@@ -859,7 +871,7 @@
       "fliff": "419847_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-CAL-SMU-M",
       "hardrock": "2423019232661995925",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT24CALSMU",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT24CALSMU",
       "ladbrokes": "650a7ca8-0b34-4fe0-8ae4-d0cded12014d",
       "novig": "01a14577-5036-7032-b901-ba2b0fafc547",
       "onexbet": "762874857",
@@ -874,10 +886,10 @@
       "stake": "41fe3b05-ea56-455d-a177-0bddb3290505",
       "thescorebet": "StandardEvent:c5b36b1e-6c58-4691-a468-dff511e1ff54"
      },
-     "home": "SMU",
+     "home": "SMU Mustangs",
      "sample": {
-      "away_team": "California",
-      "home_team": "SMU",
+      "away_team": "California Golden Bears",
+      "home_team": "SMU Mustangs",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -921,7 +933,7 @@
      "type": "fixture"
     },
     {
-     "away": "Texas Tech",
+     "away": "Texas Tech Red Raiders",
      "external": {
       "bet365": "203038599",
       "betmgm": "6:47555",
@@ -937,7 +949,7 @@
       "fliff": "419764_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-TTU-CIN-M",
       "hardrock": "8632146112666534303",
-      "kalshi": "KXNCAAF1H-26OCT23TTUCIN",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT24TTUCIN",
       "ladbrokes": "06590fc1-6658-420a-ad2e-396a567de5e5",
       "novig": "01a142e4-240a-7910-af28-0ada2ad9d4b0",
       "onexbet": "762932200",
@@ -952,10 +964,10 @@
       "stake": "92f8068f-fd83-4f3a-b7b1-23c524754e06",
       "thescorebet": "StandardEvent:108d6f43-a583-49bf-ad6a-b804a76d2c3e"
      },
-     "home": "Cincinnati",
+     "home": "Cincinnati Bearcats",
      "sample": {
-      "away_team": "Texas Tech",
-      "home_team": "Cincinnati",
+      "away_team": "Texas Tech Red Raiders",
+      "home_team": "Cincinnati Bearcats",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -1020,7 +1032,7 @@
       "fliff": "419829_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-RIC-FAU-M",
       "hardrock": "4082595695348023687",
-      "kalshi": "KXNCAAF1H-26OCT23RICEFAU",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT24RICEFAU",
       "ladbrokes": "bb956278-59ab-43c4-ba6a-48b783e0c2a5",
       "novig": "01a14577-5a6d-76c3-8e64-250053e86e1f",
       "onexbet": "762932198",
