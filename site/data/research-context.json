@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T14:09:07Z",
+  "updatedAt": "2026-10-20T14:23:15Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-20T14:00Z",
+              "reportedAt": "2026-10-20T14:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -6217,6 +6217,15 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "16737",
+              "name": "Mike Evans",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Achilles",
+              "reportedAt": "2026-10-20T14:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
+            },
+            {
               "id": "16731",
               "name": "Brandin Cooks",
               "position": "WR",
@@ -6251,15 +6260,6 @@
               "injury": null,
               "reportedAt": "2026-10-20T03:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361741/brock-purdy"
-            },
-            {
-              "id": "16737",
-              "name": "Mike Evans",
-              "position": "WR",
-              "status": "Doubtful",
-              "injury": "Achilles",
-              "reportedAt": "2026-10-20T03:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
             },
             {
               "id": "3117251",
@@ -6947,7 +6947,7 @@
               "name": "Jordan Elliott",
               "position": "DT",
               "status": "Out",
-              "injury": "Personal",
+              "injury": null,
               "reportedAt": "2026-10-19T17:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4039052/jordan-elliott"
             },
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "20",
-          "name": "Jack Heflin",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:31:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4039485/jack-heflin"
-        },
-        {
           "teamId": "26",
           "name": "Robert Henry Jr.",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Doubtful",
           "observedAt": "2026-10-20T03:49:22Z",
           "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
+        },
+        {
+          "teamId": "25",
+          "name": "Mike Evans",
+          "from": "Doubtful",
+          "to": "Questionable",
+          "observedAt": "2026-10-20T14:23:15Z",
+          "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-20T14:09:07Z",
-      "lastAttemptAt": "2026-10-20T14:09:07Z",
+      "checkedAt": "2026-10-20T14:23:15Z",
+      "lastAttemptAt": "2026-10-20T14:23:15Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-20T14:09:07Z",
-      "lastAttemptAt": "2026-10-20T14:09:07Z",
+      "checkedAt": "2026-10-20T14:23:15Z",
+      "lastAttemptAt": "2026-10-20T14:23:15Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
