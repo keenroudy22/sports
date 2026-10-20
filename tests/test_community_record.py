@@ -9,6 +9,16 @@ import community_record as record
 
 
 class CommunityRecordTests(unittest.TestCase):
+    def test_actual_cash_at_fifty_dollars_per_unit_never_uses_original_voided_odds(self):
+        self.assertEqual(record.accounting({'result':'win','stakeDollars':10,'returnDollars':159.30,'unitDollars':50})['units'], 2.986)
+        paid = record.accounting({'result':'win','stakeDollars':15,'returnDollars':83.65,'unitDollars':50,'odds':654})
+        self.assertEqual(paid['units'],1.373);self.assertEqual(paid['riskUnits'],.3)
+        self.assertEqual(record.accounting({'result':'loss','stakeDollars':5,'returnDollars':0,'unitDollars':50})['units'],-.1)
+        self.assertEqual(record.accounting({'result':'void','stakeDollars':5,'returnDollars':5,'unitDollars':50})['units'],0)
+        for changes in ({'returnDollars':None},{'unitDollars':0},{'stakeDollars':True},{'returnDollars':-1},{'returnDollars':10}):
+            with self.assertRaises(ValueError):
+                record.accounting({'result':'win','stakeDollars':10,'returnDollars':159.30,'unitDollars':50}|changes)
+
     def test_pregame_once_separate_no_fabricated_units_and_append_correction(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder); (root/'data').mkdir()

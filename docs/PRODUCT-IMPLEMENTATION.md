@@ -1,5 +1,17 @@
 # October 5 product implementation tracker
 
+## October20 — confirmed personal-ticket cash units (release pending)
+
+Owner clarifies1u=$50 and actual parlay stakes vary ($10-$15), superseding the ambiguous interim0.25u
+answer. Q1 $10→$159.30 earns2.986u; eight-leg $15→$83.65 after McLaurin void earns1.373u;
+Juszczyk $5 first-TD loss is-0.10u. Both posted parlays2-0/+4.359u; all Oct19 posted tickets2-3/+2.759u,
+including unchanged official-1u/FullSend-0.5u losses. Before cash clarification the calendar knowingly
+excluded personal units and showed-1.50u; after verified release it should show+2.76u. Counts unchanged.
+Append cash corrections with stake/total-return/unit-size; derive net profit in decimal money arithmetic,
+never multiply the eight-leg's original+654 after a void. Keep original quote clearly labeled. No generic
+0.25u normalization and no changes to older official stakes/prices/results. Owner-confirmed cash inputs
+are not represented as independently obtained sportsbook settlement data. Source/tests/release pending.
+
 ## October20 — personal-ticket calendar correction (release pending)
 
 Exact Climb3 report rehearsal found a real validator mismatch: ladder builders allow one/two legs but

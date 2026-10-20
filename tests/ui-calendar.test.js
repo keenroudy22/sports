@@ -59,6 +59,20 @@ const views = (overrides = {}) => {
 };
 const near = (a, b) => Math.abs(a - b) < 1e-9;
 
+test('October19 confirmed $50-unit cash settlements restore both parlay profits without changing Best bets', () => {
+  const cal=views().calendarModel;
+  const base={league:'NFL',season:2026,posted:true,kickoff:'2026-10-20T00:16:00Z',odds:654};
+  const rows=[{...base,id:'q1',kind:'parlays',parlayType:'community',lane:'personal',result:'win',units:2.986,riskUnits:.2},
+    {...base,id:'eight',kind:'parlays',parlayType:'community',lane:'personal',result:'win',units:1.373,riskUnits:.3},
+    {...base,id:'first',kind:'props',lane:'personal',result:'loss',units:-.1,riskUnits:.1},
+    {...base,id:'best',kind:'props',lane:'best_bet',result:'loss',units:-1,riskUnits:1},
+    {...base,id:'full',kind:'props',lane:'gut_call',result:'loss',units:-.5,riskUnits:.5}];
+  const all=cal.month(rows,'2026-10','all').days.get('2026-10-19');
+  assert.equal(all.wins,2);assert.equal(all.losses,3);assert.ok(near(all.net,2.759));
+  assert.ok(near(cal.month(rows,'2026-10','fun').totals.net,4.359));
+  assert.ok(near(cal.month(rows,'2026-10','best').totals.net,-1));
+});
+
 test('posted personal parlays count once in All plays and Fun, never Best bets or assumed profit', () => {
   const cal = views().calendarModel;
   const ticket = { id: 'personal', league: 'NFL', season: 2026, kind: 'parlays', parlayType: 'community',
