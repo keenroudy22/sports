@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T19:06:09Z",
+  "updatedAt": "2026-10-20T19:15:13Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-20T18:46Z",
+              "reportedAt": "2026-10-20T19:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-20T18:46Z",
+              "reportedAt": "2026-10-20T19:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "5076652",
+              "name": "Brandon Cisse",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-20T19:05Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse"
+            },
+            {
               "id": "4258206",
               "name": "Benjamin St-Juste",
               "position": "CB",
@@ -2661,15 +2670,6 @@
               "injury": null,
               "reportedAt": "2026-10-19T04:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4572680/tucker-kraft"
-            },
-            {
-              "id": "5076652",
-              "name": "Brandon Cisse",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-19T03:36Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse"
             },
             {
               "id": "4428037",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-20T18:46Z",
+              "reportedAt": "2026-10-20T19:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "33",
-          "name": "Matt Hibner",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4432260/matt-hibner"
-        },
-        {
-          "teamId": "33",
           "name": "Lamar Jackson",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Doubtful",
           "observedAt": "2026-10-20T18:57:57Z",
           "source": "https://www.espn.com/nfl/player/_/id/4259646/alijah-vera-tucker"
+        },
+        {
+          "teamId": "9",
+          "name": "Brandon Cisse",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-20T19:15:13Z",
+          "source": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-20T19:06:09Z",
-      "lastAttemptAt": "2026-10-20T19:06:09Z",
+      "checkedAt": "2026-10-20T19:15:13Z",
+      "lastAttemptAt": "2026-10-20T19:15:13Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-20T19:06:09Z",
-      "lastAttemptAt": "2026-10-20T19:06:09Z",
+      "checkedAt": "2026-10-20T19:15:13Z",
+      "lastAttemptAt": "2026-10-20T19:15:13Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
