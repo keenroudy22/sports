@@ -1,13 +1,21 @@
 # October 5 product implementation tracker
 
-## October20 — plain NBA team research and new-season limits (prepared)
+## October20 — plain NBA team research and new-season limits (verified release)
+
+Source187c741f, hosted39471251383 success. Normal/clean each1548Python(two skips)/268Node,
+build500,record110/NBA0,guard558,assets,budgets no hard issue. Isolated1330irk9g5qp
+exit0/outcomeok/zero outside writes/private reads. Real frozen BOS/DET facts rendered through
+new row expression: SVG/PNG QA clear, actual matching caption258characters. Preview
+/tmp/kookn-nba-plain-preview.png. Live375 NBA loaded without overflow/load/console errors;
+proof /tmp/kookn-nba-plain-live-phone.png. This is prospective team-card/caption generation;
+today's frozen/sent team cards remain original. Next natural team post observes the new wording.
 
 O-20261020-NBAPLAIN replaces SAMPLE/10 G with AVG POINTS and explicit Last N games/season.
 Rows explain points given up per game; every displayed row retains its full team name and facts in
 the caption. The caption explains these are scoring context, not tonight's forecast. Prior-season
 graphics and captions explicitly note new rosters may differ; early score estimates also retain a
 new-roster caution. Current and prior seasons still never blend; no roster-adjusted model claim,
-pick promotion, new feed, record change or rewriting frozen/queued/sent publications. Release pending.
+pick promotion, new feed, record change or rewriting frozen/queued/sent publications.
 First full gate stopped at one pre-existing clock-dependent NBA queue test: its fixed13:00Z
 quote aged against the actual post-capture clock. Freeze the test clock at its supplied14:00Z;
 the live freshness check is unchanged. Repeat all gates rather than bypass the failure.
