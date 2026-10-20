@@ -289,7 +289,8 @@ def validate_report(report, games):
             assert isinstance(pick['odds'], (int, float)) and abs(pick['odds']) >= 100
             assert pick['gameIds'], 'No games attached'
             if pick in report.get('parlays', []):
-                assert len(pick.get('legs', [])) >= 2 and pick.get('correlation')
+                minimum = 1 if pick.get('parlayType') == 'ladder' else 2
+                assert len(pick.get('legs', [])) >= minimum and pick.get('correlation')
             elif pick in report.get('gamePicks', []):
                 assert pick.get('marketType') in ('spread', 'total', 'moneyline')
                 assert isinstance(pick.get('line'), (int, float))

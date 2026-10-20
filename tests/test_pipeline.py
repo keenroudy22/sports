@@ -10,6 +10,20 @@ from io import BytesIO
 import json
 
 class PipelineTests(unittest.TestCase):
+    def test_single_leg_climb_is_valid_but_other_single_leg_parlays_and_empty_climbs_are_not(self):
+        g = self.game()
+        p = dict(id='climb-single', title='Climb step 3', why='Verified matchup reason', risk='Game can miss',
+                 sources=['https://example.com'], status='active', book='FanDuel', odds=-205,
+                 quotedAt='2026-09-17T15:00:00Z', expiresAt='2026-09-17T17:00:00Z',
+                 gameIds=[g['id']], cutoff='Exact quoted line', confidence=1, edge='Reviewed Climb',
+                 parlayType='ladder', legs=[{'title':'Home -5.5'}], correlation='Only one game')
+        r = dict(league='NFL', publishedAt='2026-09-17T16:00:00Z', parlays=[p])
+        self.assertIs(validate_report(r, {g['id']:g}), r)
+        p['parlayType']='longshot'
+        with self.assertRaises(AssertionError): validate_report(r, {g['id']:g})
+        p['parlayType']='ladder';p['legs']=[]
+        with self.assertRaises(AssertionError): validate_report(r, {g['id']:g})
+
     def test_priced_game_pick_does_not_require_parlay_legs(self):
         g = self.game()
         p = dict(id='spread-1', title='Home -3.5', why='Independent price review', risk='Uncertain game',

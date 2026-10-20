@@ -2,6 +2,30 @@
 
 ## October20 — personal-ticket calendar correction (release pending)
 
+Exact Climb3 report rehearsal found a real validator mismatch: ladder builders allow one/two legs but
+refresh.validate_report still required two for every active parlay. Restrict the one-leg exception to
+parlayType ladder; ordinary one-leg parlays and empty Climbs still reject. Add regressions and run the
+complete release recipe. Prepared row is held until repair deploys; required why/risk fields are filled
+before the public-report check. Failed private-climb3-check evidence is preserved, not deleted.
+
+Follow-through: sourcefbff2b62 rebased/pushed asf6e29e43; hosted39424391279 is running, not yet shipped.
+Normal and clean-copy suites each1531Python(two skips)/257Node passed, build500, budget no hard issue,
+record108/NBA0, guard573, assets and isolated0830 `kookn-rehearsal-q3ptvkh9` exit0/outcomeok,
+zero outside/private reads/writes. Local375/1440 clean; Oct19 All2-3, Fun2-0, official headline unchanged.
+MNF follow-up X2112520714368512196 sent12:26:01Z, wins Discord12:27:15Z. It sent before the owner's
+shorter-copy request; preserve sent post, no duplicate.
+
+Owner Oct20 explicitly permits discretionary selection and asks the agent to make its own Climb3 choice,
+not copy suggested Delaware/FIU/South Alabama tickets. One-off operator-reviewed selection privately queued:
+CFB-2026-W8-ladder-1020-c3s3-fd, FIU-5.5 FanDuel-205 (oppositeMTSU+5.5+158), exact same-read pair
+12:45:02Z via freeSharp. Agent has FIU by14.1; school preview reports14.7 points allowed/game andMTSU0-3
+road. Single leg avoids Delaware QB uncertainty and an extra South Alabama leg. $81/$35 preserved;
+return121, bank24, ride97 if won. Real card/SVG/T20 clear. Raw margin is directional support, NOT a
+calibrated probability or proven segment; automatic model weights/selection thresholds remain unchanged.
+Admission passed all ordinary ladder admission safeguards. Existing release worker still performs hard-news
+check, Discord-first/public report/X; target around09:30ET, quote expires10:45ET. Not yet posted.
+O-20261020-CLIMB3 observes real receipts or exact hold; no new recurring task or fake future evidence.
+
 Owner explicitly authorizes pregame-posted personal parlays in the overall record, one result per ticket,
 including losses, without relabeling them Best Bets. Separate communityPicks payload and append-only
 community settlement journal retain the original public timestamps and quoted odds. Oct19 adds Q1 win,
