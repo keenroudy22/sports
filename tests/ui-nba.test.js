@@ -13,6 +13,8 @@ test('NBA posted play leads research, while older results stay in the record fol
  assert.ok(html.indexOf('under 220.5')<html.indexOf('<summary>NBA Trial record'));
  assert.ok(html.indexOf('under 219.5')>html.indexOf('<summary>NBA Trial record'));
  assert.equal((html.match(/id="nba-plays"/g)||[]).length,1);
+ data.trial.plays=[{...play,kickoff:new Date(Date.now()-3600000).toISOString()}];html=await views.nbaToday();
+ assert.ok(html.indexOf('under 220.5')<html.indexOf('<summary>NBA Trial record'),'live and awaiting-final plays stay above research');
  data.trial.plays=[];html=await views.nbaToday();assert.ok(html.indexOf('No NBA Trial play has been posted.')<html.indexOf('Player projections vs lines'));
  assert.doesNotMatch(html,/BEST BET.*220.5/);
 });

@@ -587,7 +587,7 @@
   function nbaTrialSection(data) {
     const trial = data.trial || {};
     const plays = (trial.plays || []).slice().reverse();
-    const open = plays.filter(p => !p.result && Date.parse(p.kickoff) > Date.now());
+    const open = plays.filter(p => !p.result);
     const past = plays.filter(p => !open.includes(p));
     const ticket = p => {
       const side = p.marketType === 'total' ? `${p.direction} ${p.line}` : p.marketType === 'moneyline' ? `${p.teams[p.direction].abbreviation} moneyline` : `${p.teams[p.direction].abbreviation} ${C.signed(p.line)}`;
