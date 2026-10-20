@@ -86,6 +86,11 @@ class RoleTests(unittest.TestCase):
         tomorrow=row('3','2026-10-21T23:00:00Z','Tomorrow')
         rows=[tomorrow,dict(a,name='A1'),dict(a,name='A2'),dict(a,name='A3'),b]
         chosen=props.display_rows(rows,3)
-        self.assertEqual([r['name'] for r in chosen],['A1','B','A2'])
+        self.assertEqual([r['name'] for r in chosen],['A1','A2','B'])
         self.assertEqual(props.display_rows(rows,None),rows)
         self.assertEqual(len(props.display_rows(rows,60)),5)
+        duplicates=[dict(a,athleteId='10',stat=str(i)) for i in range(50)]
+        reviewed=[dict(a,athleteId=str(i),name=str(i),roleReview={'headline':'Reviewed'}) for i in range(20,24)]
+        chosen=props.display_rows(duplicates+reviewed+[b],6)
+        self.assertTrue(all(r in chosen for r in reviewed))
+        self.assertIn(b,chosen)

@@ -231,17 +231,29 @@ def display_rows(rows,limit):
         key=(eastern_date(boxscores.instant(row['kickoff'])),row['kickoff'],row['eventId'])
         buckets.setdefault(key,[]).append(row)
     selected=[]
+    rank={id(row):i for i,row in enumerate(rows)}
     for day in sorted({k[0] for k in buckets}):
-        queues=[iter(buckets[k]) for k in sorted(buckets) if k[0]==day]
+        queues=[]
+        for key in sorted(buckets):
+            if key[0]!=day:continue
+            first=[];rest=[];seen=set()
+            for row in buckets[key]:
+                athlete=row.get('athleteId',row.get('name'))
+                (rest if athlete in seen else first).append(row)
+                seen.add(athlete)
+            # One comparison per reviewed player before duplicate books/stats.
+            # This changes visibility only, never selection or value ranking.
+            first.sort(key=lambda r:not bool(r.get('roleReview')))
+            queues.append(iter(first+rest))
         while queues and len(selected)<limit:
             active=[]
             for queue in queues:
                 row=next(queue,None)
                 if row is not None:
                     selected.append(row);active.append(queue)
-                    if len(selected)>=limit:return selected
+                    if len(selected)>=limit:return sorted(selected,key=lambda r:rank[id(r)])
             queues=active
-    return selected
+    return sorted(selected,key=lambda r:rank[id(r)])
 
 
 def build(now, root=STORE, boxes=None, limit=60):

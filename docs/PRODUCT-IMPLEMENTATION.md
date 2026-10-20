@@ -10,6 +10,10 @@ tonight's Knicks/Sixers out of the60rows. Completion therefore remains open for 
 day-first/per-game-fair cap fix, not falsely claiming all six live. Hold Harper's old workload-based
 under because the new starting role has no supported current minutes estimate. Seventh role review
 saved append-only. Repeat full gates and verify all reviewed players actually reachable live.
+The first fair-cap attempt still let duplicate books/stats crowd reviewed players; its own pending
+release helper was interrupted before promotion (no deployment). Include one row per reviewed
+player before duplicates, preserve original value ordering after selection, and repeat every gate.
+Stored-input check now reaches all seven reviewed players within60rows, including Harper's hold.
 
 Owner requests current news, expected minutes and qualifying early plays, not a last-season-only
 decision. O-20261020-NBAROLES adds append-only exact-game/player/team role reviews with public
