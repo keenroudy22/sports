@@ -325,6 +325,6 @@ p = 0.5 + k * (raw - 0.5); k = w*k_market + (1-w)*k_league; w = n_train/(n_train
 - R2: observation active; public behavior unchanged
 - R3: 11 prop markets observed
 - R4: observation active; public behavior unchanged
-- R5: 6 heavy alternates observed; default unchanged
+- R5: 82 heavy alternates observed; default unchanged
 - R6: observation active; public behavior unchanged
 - R7: observation active; public behavior unchanged
