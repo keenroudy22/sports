@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T18:26:22Z",
+  "updatedAt": "2026-10-20T18:57:57Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-20T18:00Z",
+              "reportedAt": "2026-10-20T18:46Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-20T18:00Z",
+              "reportedAt": "2026-10-20T18:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4837,6 +4837,24 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "4362890",
+              "name": "Ben Brown",
+              "position": "C",
+              "status": "Doubtful",
+              "injury": "Knee",
+              "reportedAt": "2026-10-20T18:21Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362890/ben-brown"
+            },
+            {
+              "id": "4259646",
+              "name": "Alijah Vera-Tucker",
+              "position": "G",
+              "status": "Doubtful",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-20T18:19Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4259646/alijah-vera-tucker"
+            },
+            {
               "id": "4606666",
               "name": "Karon Prunty",
               "position": "CB",
@@ -4979,24 +4997,6 @@
               "injury": "Foot",
               "reportedAt": "2026-10-18T20:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
-            },
-            {
-              "id": "4362890",
-              "name": "Ben Brown",
-              "position": "C",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-18T19:58Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362890/ben-brown"
-            },
-            {
-              "id": "4259646",
-              "name": "Alijah Vera-Tucker",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-18T19:31Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4259646/alijah-vera-tucker"
             },
             {
               "id": "4685298",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-20T18:00Z",
+              "reportedAt": "2026-10-20T18:46Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "33",
-          "name": "Broderick Washington Jr.",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3915837/broderick-washington-jr"
-        },
-        {
-          "teamId": "33",
-          "name": "Cam Jurgens",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361178/cam-jurgens"
-        },
-        {
-          "teamId": "33",
           "name": "Matt Hibner",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Doubtful",
           "observedAt": "2026-10-20T18:08:38Z",
           "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
+        },
+        {
+          "teamId": "17",
+          "name": "Ben Brown",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-20T18:57:57Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4362890/ben-brown"
+        },
+        {
+          "teamId": "17",
+          "name": "Alijah Vera-Tucker",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-20T18:57:57Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4259646/alijah-vera-tucker"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-20T18:26:22Z",
-      "lastAttemptAt": "2026-10-20T18:26:22Z",
+      "checkedAt": "2026-10-20T18:57:57Z",
+      "lastAttemptAt": "2026-10-20T18:57:57Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-20T18:26:22Z",
-      "lastAttemptAt": "2026-10-20T18:26:22Z",
+      "checkedAt": "2026-10-20T18:57:57Z",
+      "lastAttemptAt": "2026-10-20T18:57:57Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
