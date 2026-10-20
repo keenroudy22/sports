@@ -122,7 +122,7 @@
     const assumedNote = t.assumed ? '<p class="cal-legend">Week 1 at an assumed −115: those plays count in W–L and stay out of the units and Per play.</p>' : '';
     const voidNote = t.voids ? `<p class="cal-legend">${t.voids === 1 ? 'One void play' : `${t.voids} void plays`} this month: not counted in W–L or units, the same as the Record headline.</p>` : '';
     const straight = cal.ledgerRows(every, ledger);
-    const points = ['all', 'best'].includes(ledger) ? cumulativeUnits(straight.filter(p => league === 'ALL' || p.league === league), ledger === 'best' ? cal.headlineUnits : cal.postedUnits) : [];
+    const points = ['all', 'best'].includes(ledger) ? cumulativeUnits(straight.filter(p => league === 'ALL' || p.league === league), ledger === 'best' ? cal.headlineUnits : cal.postedUnits, ledger === 'all') : [];
     const line = points.length > 1 ? `<div class="card" style="margin-top:14px">${unitsChart(points, { from: `${ym}-01`, to: `${ym}-31`, label: cal.label(ym) })}<p class="chart-cap">Cumulative units at posted prices${league !== 'ALL' ? ` · ${esc(LEAGUE_NAME[league])}` : ''}; ${esc(cal.label(ym))} is the lighter band.</p></div>` : '';
     const per = t.perPlay == null ? '–' : ledger === 'climb' ? calMoney(t.perPlay) : `${t.perPlay > 0 ? '+' : t.perPlay < 0 ? '−' : ''}${Math.abs(t.perPlay).toFixed(2)}u`;
     return `<section class="cal" id="calendar" aria-labelledby="cal-h">

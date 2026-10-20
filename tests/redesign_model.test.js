@@ -202,6 +202,19 @@ test('cumulative units end at the captured-price total and exclude promo credits
   assert.equal(pts.at(-1).units, Math.round((100 / 110 - 1) * 100) / 100);
 });
 
+test('all-play unit chart includes settled personal parlay cash without changing straight-only default', () => {
+  const picks = [
+    { id: 'q1', kind: 'parlays', legs: [{}, {}], odds: 1493, result: 'win', units: 2.986 },
+    { id: 'eight', kind: 'parlays', legs: [{}, {}], odds: 654, result: 'win', units: 1.373 },
+    { id: 'td', kind: 'props', odds: 3000, result: 'loss', units: -0.1 },
+    { id: 'best', odds: -110, result: 'loss', units: -1 },
+    { id: 'full', odds: -110, result: 'loss', units: -0.5 },
+  ];
+  const units = globalThis.KRCore.unitsFor;
+  assert.equal(M.cumulativeUnits(picks, units, true).at(-1).units, 2.76);
+  assert.equal(M.cumulativeUnits(picks, units).at(-1).units, -1.6);
+});
+
 test('closing-line summary counts beat, tied and lost', () => {
   const s = M.clvSummary([{ clv: 1 }, { clv: 0 }, { clv: -0.5 }, { clv: null }]);
   assert.deepEqual([s.measured, s.beat, s.tied, s.lost], [3, 1, 1, 1]);

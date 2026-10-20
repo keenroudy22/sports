@@ -515,8 +515,8 @@
   };
 
   /* Record: cumulative units at captured prices (same rule as recordBreakdown().captured: credits excluded). */
-  const cumulativeUnits = (picks, unitsFor) => {
-    const rows = picks.filter(p => !isParlayLike(p) && !p.priceAssumed && typeof p.odds === 'number' && ['win', 'loss', 'push'].includes(p.result))
+  const cumulativeUnits = (picks, unitsFor, includeParlays = false) => {
+    const rows = picks.filter(p => (includeParlays || !isParlayLike(p)) && !p.priceAssumed && typeof p.odds === 'number' && ['win', 'loss', 'push'].includes(p.result))
       .map(p => p.earlyExit && p.result === 'loss' ? { ...p, earlyExit: false, units: -1 * (Number(p.riskUnits) > 0 ? Number(p.riskUnits) : 1) } : p)
       .sort((a, b) => String(a.settledAt || a.kickoff).localeCompare(String(b.settledAt || b.kickoff)));
     let total = 0;
@@ -1923,7 +1923,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-95812950830c';
+  const MORE_ASSET = 'app-more.js?v=sha256-79e4554d621c';
   const GAMES_ASSET = 'app-games.js?v=sha256-1a2744157a63';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
