@@ -78,7 +78,10 @@ class TrialRuntimeTests(unittest.TestCase):
   self.assertFalse(rt.reserve_delivery(play['id'],NOW,self.root))
  def test_admission_is_one_per_day_and_respects_football_queue_reserve(self):
   play={**offer(),'eventId':'NBA-1','direction':'under','game':{'teams':{}},'reasons':['Source 1','Source 2'],'projection':210.,'model':'hoops-v1'}
-  with patch.dict('os.environ',{'BUFFER_TOKEN':'fixture-token'}),patch.object(rt,'candidates',return_value=[play]),patch.object(rt.nba_readiness,'live_ready',return_value=True):
+  # Admission advances to the real post-capture clock. Freeze that clock too:
+  # this queue test must not age its fixed morning quote as the real day passes.
+  with patch.dict('os.environ',{'BUFFER_TOKEN':'fixture-token'}),patch.object(rt,'candidates',return_value=[play]),patch.object(rt.nba_readiness,'live_ready',return_value=True),patch.object(rt,'datetime') as clock:
+   clock.now.return_value=NOW
    result=rt.admission(NOW,root=self.root,review=self.review(),log_book={'posts':[]},capture=False)
    self.assertEqual(result['state'],'admitted')
    self.assertEqual(rt.admission(NOW,root=self.root,review=self.review(),log_book={'posts':[]},capture=False)['reason'],'one NBA Trial per day')

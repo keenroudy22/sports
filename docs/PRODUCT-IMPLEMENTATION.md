@@ -8,6 +8,9 @@ the caption. The caption explains these are scoring context, not tonight's forec
 graphics and captions explicitly note new rosters may differ; early score estimates also retain a
 new-roster caution. Current and prior seasons still never blend; no roster-adjusted model claim,
 pick promotion, new feed, record change or rewriting frozen/queued/sent publications. Release pending.
+First full gate stopped at one pre-existing clock-dependent NBA queue test: its fixed13:00Z
+quote aged against the actual post-capture clock. Freeze the test clock at its supplied14:00Z;
+the live freshness check is unchanged. Repeat all gates rather than bypass the failure.
 
 ## October20 — current Climb focus, history below (verified release)
 
