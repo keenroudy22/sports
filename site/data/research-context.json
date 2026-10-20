@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T19:15:13Z",
+  "updatedAt": "2026-10-20T19:25:03Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-20T19:01Z",
+              "reportedAt": "2026-10-20T19:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-20T19:01Z",
+              "reportedAt": "2026-10-20T19:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7203,7 +7203,7 @@
               "id": "3121422",
               "name": "Terry McLaurin",
               "position": "WR",
-              "status": "Doubtful",
+              "status": "Out",
               "injury": "Knee",
               "reportedAt": "2026-10-20T14:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/3121422/terry-mclaurin"
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "33",
-          "name": "Lamar Jackson",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
-        },
         {
           "teamId": "2",
           "name": "DJ Moore",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-20T19:15:13Z",
           "source": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse"
+        },
+        {
+          "teamId": "28",
+          "name": "Terry McLaurin",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-10-20T19:25:03Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3121422/terry-mclaurin"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-20T19:15:13Z",
-      "lastAttemptAt": "2026-10-20T19:15:13Z",
+      "checkedAt": "2026-10-20T19:25:03Z",
+      "lastAttemptAt": "2026-10-20T19:25:03Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-20T19:15:13Z",
-      "lastAttemptAt": "2026-10-20T19:15:13Z",
+      "checkedAt": "2026-10-20T19:25:03Z",
+      "lastAttemptAt": "2026-10-20T19:25:03Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
