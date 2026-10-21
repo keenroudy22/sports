@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T21:01:33Z",
+  "updatedAt": "2026-10-21T21:21:06Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-21T20:48Z",
+              "reportedAt": "2026-10-21T21:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-21T20:48Z",
+              "reportedAt": "2026-10-21T21:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1387,6 +1387,15 @@
           "name": "Cincinnati Bengals",
           "players": [
             {
+              "id": "5092508",
+              "name": "Colbie Young",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-21T20:55Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
+            },
+            {
               "id": "4819215",
               "name": "Josh Kattus",
               "position": "TE",
@@ -1412,15 +1421,6 @@
               "injury": null,
               "reportedAt": "2026-10-14T02:47Z",
               "source": "https://www.espn.com/nfl/player/_/id/4384852/dohnte-meyers"
-            },
-            {
-              "id": "5092508",
-              "name": "Colbie Young",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-13T17:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
             },
             {
               "id": "4401811",
@@ -2077,6 +2077,15 @@
           "name": "Denver Broncos",
           "players": [
             {
+              "id": "4702555",
+              "name": "Jonah Coleman",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-21T20:59Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4702555/jonah-coleman"
+            },
+            {
               "id": "4372012",
               "name": "Pat Surtain II",
               "position": "CB",
@@ -2291,15 +2300,6 @@
               "injury": null,
               "reportedAt": "2026-10-10T00:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4039057/liljordan-humphrey"
-            },
-            {
-              "id": "4600981",
-              "name": "Pat Bryant",
-              "position": "WR",
-              "status": "Injured Reserve",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-09T21:47Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4600981/pat-bryant"
             }
           ]
         },
@@ -4168,8 +4168,8 @@
               "id": "4243181",
               "name": "Nate Landman",
               "position": "LB",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Concussion",
               "reportedAt": "2026-10-21T02:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
             },
@@ -4377,6 +4377,15 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4242512",
+              "name": "Malik Willis",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-21T20:52Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242512/malik-willis"
+            },
+            {
               "id": "4682745",
               "name": "Jaylen Wright",
               "position": "RB",
@@ -4447,15 +4456,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-21T20:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4869645/caleb-douglas"
-            },
-            {
-              "id": "4242512",
-              "name": "Malik Willis",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-19T14:56Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242512/malik-willis"
             },
             {
               "id": "4430681",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-21T20:48Z",
+              "reportedAt": "2026-10-21T21:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "3",
-          "name": "Anthony Johnson Jr.",
-          "from": "Out",
-          "to": "Injured Reserve",
-          "observedAt": "2026-10-21T18:07:06Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
-        },
-        {
-          "teamId": "14",
-          "name": "Kobie Turner",
-          "from": "Out",
-          "to": "Injured Reserve",
-          "observedAt": "2026-10-21T18:15:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4250621/kobie-turner"
-        },
-        {
           "teamId": "17",
           "name": "Channing Canada",
           "from": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-10-21T21:01:33Z",
           "source": "https://www.espn.com/nfl/player/_/id/4034729/tucker-addington"
+        },
+        {
+          "teamId": "4",
+          "name": "Colbie Young",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-21T21:21:06Z",
+          "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
+        },
+        {
+          "teamId": "14",
+          "name": "Nate Landman",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-21T21:21:06Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-21T21:01:33Z",
-      "lastAttemptAt": "2026-10-21T21:01:33Z",
+      "checkedAt": "2026-10-21T21:21:06Z",
+      "lastAttemptAt": "2026-10-21T21:21:06Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-21T21:01:33Z",
-      "lastAttemptAt": "2026-10-21T21:01:33Z",
+      "checkedAt": "2026-10-21T21:21:06Z",
+      "lastAttemptAt": "2026-10-21T21:21:06Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
