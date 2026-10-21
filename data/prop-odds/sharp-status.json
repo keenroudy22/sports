@@ -1,11 +1,11 @@
 {
- "at": "2026-10-21T07:43:46Z",
+ "at": "2026-10-21T08:01:58Z",
  "confirmed": {
-  "CFB-401862807": "2026-10-21T07:43:46Z",
-  "CFB-401869845": "2026-10-21T07:43:46Z",
-  "CFB-401871056": "2026-10-21T07:43:46Z",
-  "CFB-401871070": "2026-10-21T07:43:46Z",
-  "NFL-401873010": "2026-10-21T07:43:46Z"
+  "CFB-401862807": "2026-10-21T08:01:58Z",
+  "CFB-401869845": "2026-10-21T08:01:58Z",
+  "CFB-401871056": "2026-10-21T08:01:58Z",
+  "CFB-401871070": "2026-10-21T08:01:58Z",
+  "NFL-401873010": "2026-10-21T08:01:58Z"
  },
  "leagues": {
   "CFB": {
@@ -378,6 +378,7 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
+       "2nd_half_total_points",
        "2nd_quarter_moneyline",
        "2nd_quarter_moneyline_3-way",
        "2nd_quarter_point_spread",
@@ -387,6 +388,7 @@
        "3rd_quarter_point_spread",
        "3rd_quarter_total_points",
        "4th_quarter_moneyline",
+       "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
@@ -1173,7 +1175,7 @@
      "type": "fixture"
     },
     {
-     "away": "Rutgers Scarlet Knights",
+     "away": "Rutgers",
      "external": {
       "bet365": "203051131",
       "betonline": "491157935",
@@ -1204,10 +1206,10 @@
       "stake": "65302e48-d7e0-4aba-8a80-feef4e9a5ebb",
       "thescorebet": "StandardEvent:465430c4-9b32-4ea0-abcd-040f061a685c"
      },
-     "home": "Northwestern Wildcats",
+     "home": "Northwestern",
      "sample": {
-      "away_team": "Rutgers Scarlet Knights",
-      "home_team": "Northwestern Wildcats",
+      "away_team": "Rutgers",
+      "home_team": "Northwestern",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -1580,7 +1582,7 @@
       "fliff": "fobj__conflict_event__407875",
       "gemini": "NFL-2610251700-CIN-BAL-S",
       "hardrock": "6887203087019278759",
-      "kalshi": "KXNFL3QTOTAL-26OCT25CINBAL",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25CINBAL",
       "ladbrokes": "c21b9632-07d2-49f6-9e0b-3b48ffae5444",
       "novig": "01a136e2-eb8c-7492-82a7-9b44bdc66cee",
       "paddypower": "36188997",
@@ -1846,7 +1848,7 @@
       "fliff": "fobj__conflict_event__407878",
       "gemini": "NFL-2610251700-TB-CAR-S",
       "hardrock": "8831632226136490404",
-      "kalshi": "KXNFL1HTOTAL-26OCT25TBCAR",
+      "kalshi": "KXNFL1QTOTAL-26OCT25TBCAR",
       "ladbrokes": "867215bb-4f9d-48e8-b67f-43a5b58f92f0",
       "novig": "01a136e2-ea35-7911-9fe2-43f84a337c27",
       "paddypower": "36188995",
@@ -2376,7 +2378,7 @@
       "fliff": "fobj__conflict_event__407879",
       "gemini": "NFL-2610252005-DEN-ARI-T",
       "hardrock": "8903689820174418335",
-      "kalshi": "KXNFLTD-26OCT25DENARI-ARIZKNIGHT20-2",
+      "kalshi": "KXNFLPASSYDS-26OCT25DENARI-DENBNIX10-250",
       "ladbrokes": "b32e8da1-f0c5-4ec6-a8f0-fb7f2f6f88bd",
       "novig": "01a136e2-ed41-7f12-9786-25d6715adc49",
       "paddypower": "36189004",
