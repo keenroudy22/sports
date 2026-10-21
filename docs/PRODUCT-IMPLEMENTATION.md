@@ -2,6 +2,12 @@
 
 ## October21 — owner-requested failed-gate and weekly follow-through repair
 
+Follow-through found weekly result-summary delivery still blocked by its retired graphic.
+Use text-only for the exact existing receipt:week:YYYY-MM-DD category (owner permits plain
+result summaries). Preserve daily receipt/official play art, copy checks, weekly counts,
+normal caps/spacing, deduplication and all published artifacts. Regression requires the
+weekly card absent and daily card retained. Repeat all release gates; no new category.
+
 Resume D-20261021-FAVORITE: retain posted-ticket reassurance alongside exact current-price,
 missing-price and availability blockers; never present a negative-value direction as a favorite.
 Focused UI14/14 now passes. Weekly repair requires actual observed closing-price movement before

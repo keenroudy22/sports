@@ -162,6 +162,18 @@ TICKET = dict(legs=[{'title': 'Iowa at Michigan over 38.5'}, {'title': 'Oklahoma
 
 
 class PlanTests(unittest.TestCase):
+    def test_weekly_summary_is_text_only_but_daily_receipt_keeps_card(self):
+        now = datetime(2026, 10, 21, 12, 0, tzinfo=timezone.utc)
+        house = [{'key': f'receipt:{kind}:2026-10-20', 'kind': 'receipt',
+                  'card': f'receipt-{kind}-2026-10-20', 'text': 'The posted results.',
+                  'due': now, 'stale': now + timedelta(hours=4)} for kind in ('week', 'day')]
+        with mock.patch.object(bp.receipts, 'house_posts', return_value=house), \
+                mock.patch.object(bp.receipts, 'guard', return_value=[]):
+            plans = bp.plan({}, {}, {}, now, {'posts': []})
+        cards = {p[0]: p[4] for p in plans}
+        self.assertIsNone(cards['receipt:week:2026-10-20'])
+        self.assertEqual(cards['receipt:day:2026-10-20'], 'receipt-day-2026-10-20')
+
     def test_a_private_admission_is_not_scheduled_by_the_public_buffer_path(self):
         private = pick('private', _pendingRelease=True)
         self.assertEqual(bp.plan({'private': private}, {}, GAMES, NOW, {'posts': []}), [])

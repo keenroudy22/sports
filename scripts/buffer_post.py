@@ -444,7 +444,12 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             if refused is not None:
                 refused.append((post['key'], problems))
             continue
-        plays.append((post['due'], order[post['kind']], post['stale'], post['key'], post['text'], post['kind'], post['card']))
+        # Weekly category totals read cleanly as text. Do not send the retired
+        # summary artwork or hold the existing result category indefinitely.
+        # Daily receipts and every official play retain their required cards.
+        weekly_text = post['kind'] == 'receipt' and re.fullmatch(r'receipt:week:\d{4}-\d{2}-\d{2}', post['key'])
+        card = None if weekly_text else post['card']
+        plays.append((post['due'], order[post['kind']], post['stale'], post['key'], post['text'], post['kind'], card))
     # News is useful but optional. Reserve every official play and house post first, then admit no more news than
     # the day's remaining room. A late headline can never crowd a pick or receipt out of the queue.
     essential_today = sum(1 for row in plays if eastern_date(row[0]) == today)
