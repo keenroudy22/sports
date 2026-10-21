@@ -1,5 +1,30 @@
 # October 5 product implementation tracker
 
+## October21 — reviewed NBA props delivered early
+
+Source39dd3f0e, containing df22dad2; hosted39606598089 SUCCESS. Invalid never-queued
+NBA prop drafts can append a fresh revision when price/role evidence no longer matches;
+queued/sent snapshots remain immutable. Normal and clean1560Python(two skips)/268Node;
+record110/NBA0,guard592,assets/budgets clear,offline0830kyw794ph ok. Six dated role
+reviews retain old baselines and freeze reviewed forecasts separately. Trae's old21-minute
+restriction, da Silva's changed shooting volume, Jones' post-injury role and Franz's
+unverified22-minute workload are held rather than promoted from raw historical gaps.
+
+Buzelis over5.5reb -101DK:7 at30 analyst-estimated minutes; Barnes over5.5ast -140DK:
+9.2 at32 estimated minutes. Sources and teammate/usage risks visible live375/1440;
+zero overflow/load/console errors. Corrected browser-zoom screenshot coordinates saved
+/tmp/kookn-oct21-props-phone.png and desktop.png; initial blank scrolled captures were
+a capture-coordinate issue, not accepted as visual proof. Research graphic inspected.
+X2112900982682116151 sent13:37:05Z, research Discord13:37:37Z. Not official Best Bets;
+no record/stake change. Existing Climb recap moved intact from09:33 to11:33ET to make room.
+
+D-20261021-NBADELIVERYSTATE remains an explicit provenance audit, not claimed repaired:
+replacement6ad8bc690811076dd03d1b5a carried an earlier cancellation and was absent in
+Buffer. Complete current-day API listing proved no duplicate before operator recovery.
+Old attempt preserved inside deliveryHistory; replacement6ad8bf87b535ec9954c28651
+actually delivered. Trace responsible writer and test attempt isolation before declaring
+the recurrence cause fixed. Existing forward validation remains required for official props.
+
 ## October21 — repair follow-through verified and stale blockers closed
 
 Favorite/learning source5ad00c81/07d2da21, containing hosted39599223964 SUCCESS.

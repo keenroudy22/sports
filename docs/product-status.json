@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-21T12:43:39Z",
+  "updatedAt": "2026-10-21T13:38:00Z",
   "items": [
+    {
+      "id": "D-20261021-NBAEARLY",
+      "title": "Refresh invalid unqueued NBA drafts and release reviewed early props",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Grade the two research looks through the existing forward writer; keep estimates explicit and official props separate. Preserve sent art, source reviews and original forecasts.",
+      "doneWhen": "Invalid never-queued drafts append a new revision without altering queued/sent artifacts; full gates and hosted pass; sourced live projections and actual X/research Discord delivery verified.",
+      "evidence": "Source39dd3f0e in df22dad2; hosted39606598089 SUCCESS. Normal/clean1560Python(2skip)/268Node;record110/NBA0,guard592,offline0830kyw794ph ok. Buzelis7reb/30min vs5.5 -101DK; Barnes9.2ast/32min vs5.5 -140DK. Live375/1440 no errors/overflow; X2112900982682116151 at13:37:05Z; research Discord13:37:37Z. No official record change."
+    },
+    {
+      "id": "D-20261021-NBADELIVERYSTATE",
+      "title": "Audit cancellation provenance across NBA replacement attempts",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Trace the13:19 cancellation and13:21 replacement writers; test attempt-bound terminal state and duplicate prevention. Today is delivered; preserve its receipt and all earlier-attempt evidence.",
+      "doneWhen": "The writer responsible is identified and replacement-attempt regression proves an older cancellation cannot suppress or erase a newer scheduled/sent attempt; any source repair passes normal release gates.",
+      "evidence": "Observed replacement6ad8bc690811076dd03d1b5a had postedAt13:21:31Z but cancelledAt13:19:17Z; Buffer returned not-found and complete actual-day API listing had no matching sent/queued text. Normal operator recovery preserved old attempt in deliveryHistory, scheduled6ad8bf87b535ec9954c28651 and verified X/Discord. Recurrence cause not yet proven."
+    },
     {
       "id": "D-20261021-FAVORITE",
       "title": "Show exact game-favorite quote and price blockers",
