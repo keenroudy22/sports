@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T23:13:50Z",
+  "updatedAt": "2026-10-21T23:23:33Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-21T23:04Z",
+              "reportedAt": "2026-10-21T23:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-21T23:01Z",
+              "reportedAt": "2026-10-21T23:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1617,6 +1617,15 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "4876017",
+              "name": "Carson Schwesinger",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-21T23:14Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4876017/carson-schwesinger"
+            },
+            {
               "id": "5081397",
               "name": "Dylan Sampson",
               "position": "RB",
@@ -1696,15 +1705,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-21T20:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115336/derek-barnett"
-            },
-            {
-              "id": "4876017",
-              "name": "Carson Schwesinger",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-21T01:47Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4876017/carson-schwesinger"
             },
             {
               "id": "4873232",
@@ -2243,7 +2243,7 @@
               "name": "Jaylen Waddle",
               "position": "WR",
               "status": "Active",
-              "injury": null,
+              "injury": "Chest",
               "reportedAt": "2026-10-16T04:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/4372016/jaylen-waddle"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-21T23:04Z",
+              "reportedAt": "2026-10-21T23:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "4592823",
+              "name": "Beau Stephens",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-21T23:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4592823/beau-stephens"
+            },
+            {
               "id": "4605491",
               "name": "Connor O'Toole",
               "position": "LB",
@@ -6661,15 +6670,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T04:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/3912547/sam-darnold"
-            },
-            {
-              "id": "4887558",
-              "name": "Emanuel Wilson",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-16T04:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4887558/emanuel-wilson"
             }
           ]
         },
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "5",
-          "name": "Maliek Collins",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-21T20:08:39Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3040471/maliek-collins"
-        },
-        {
-          "teamId": "5",
           "name": "Justin Jefferson",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-21T23:13:50Z",
           "source": "https://www.espn.com/nfl/player/_/id/4686540/tyrice-knight"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-21T23:23:33Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-21T23:13:50Z",
-      "lastAttemptAt": "2026-10-21T23:13:50Z",
+      "checkedAt": "2026-10-21T23:23:33Z",
+      "lastAttemptAt": "2026-10-21T23:23:33Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-21T23:13:50Z",
-      "lastAttemptAt": "2026-10-21T23:13:50Z",
+      "checkedAt": "2026-10-21T23:23:33Z",
+      "lastAttemptAt": "2026-10-21T23:23:33Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
