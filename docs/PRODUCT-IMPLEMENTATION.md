@@ -1,5 +1,31 @@
 # October 5 product implementation tracker
 
+## October21 — Thursday packet ready; overnight handoff explicitly scheduled
+
+8f678ec2/d1ce5e72 is contained in hosted39645216266SUCCESS. Normal/clean each
+1579Python(two skips)/269Node,443pages,record111/NBA0,guard586 and assets clear;
+offline1330namt_4wb outcomeok/zero outside writes-private reads. Existing soft
+payload warnings remain. Live375/1440 NE–CHI page exposes NE moneyline+130,
+oppositeCHI-155, feed time17:46:17Z, no load/console/overflow problems. Proof
+/tmp/kookn-thursday-prep-live-phone.png and desktop.png. The multi-book capture
+no longer erases that independent actual moneyline pair. No model/threshold change.
+
+Used official OpenAI scheduling guidance and app automation_update to amend the
+existing Kook'n overnight prompt with a dated October22 preparation priority.
+Verified ACTIVE, same00:45 Eastern cadence, same model/effort/project; still exactly
+three Kook'n automations. Final NFL/NBA reports, fresh next-day props/role evidence,
+updated shortlist and morning qualification are explicit next actions. No new task
+or schedule; no instruction to publish an unqualified or stale overnight ticket.
+
+Preparation also exposed an unfinished O-MORNING football fallback case: canonical
+Patriots MONEYLINE differs from catalog NE moneyline after normalization. The current
+strict title-based refusal match therefore misses that row. Ordinary official
+release and existing NBA research are unaffected. This is tracked as a bounded
+overnight repair using stable market identities and a real alias regression before
+6:45; do not describe the entire no-play fallback as proven by the earlier NBA test.
+The next natural morning delivery and tonight's reports are future observations,
+not completed receipts. Private packet retains dated quotes, source links and holds.
+
 ## October21 — Thursday preparation and moneyline pool repair
 
 Owner requested advance Best Bet/Climb work without another reminder. Private packet
