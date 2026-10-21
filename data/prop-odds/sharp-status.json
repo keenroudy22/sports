@@ -1,11 +1,11 @@
 {
- "at": "2026-10-21T08:19:21Z",
+ "at": "2026-10-21T08:36:29Z",
  "confirmed": {
-  "CFB-401862807": "2026-10-21T08:19:21Z",
-  "CFB-401869845": "2026-10-21T08:19:21Z",
-  "CFB-401871056": "2026-10-21T08:19:21Z",
-  "CFB-401871070": "2026-10-21T08:19:21Z",
-  "NFL-401873010": "2026-10-21T08:19:21Z"
+  "CFB-401862807": "2026-10-21T08:36:29Z",
+  "CFB-401869845": "2026-10-21T08:36:29Z",
+  "CFB-401871056": "2026-10-21T08:36:29Z",
+  "CFB-401871070": "2026-10-21T08:36:29Z",
+  "NFL-401873010": "2026-10-21T08:36:29Z"
  },
  "leagues": {
   "CFB": {
@@ -42,7 +42,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "Duke Blue Devils",
+     "away": "Duke",
      "external": {
       "betmgm": "6:47427",
       "betonline": "491157985",
@@ -76,10 +76,10 @@
       "underdog": "underdog_183143",
       "underdog_multipliers": "underdog_183143"
      },
-     "home": "Virginia Cavaliers",
+     "home": "Virginia",
      "sample": {
-      "away_team": "Duke Blue Devils",
-      "home_team": "Virginia Cavaliers",
+      "away_team": "Duke",
+      "home_team": "Virginia",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -158,7 +158,7 @@
      "type": "fixture"
     },
     {
-     "away": "Massachusetts",
+     "away": "UMass",
      "external": {
       "betmgm": "6:47424",
       "betonline": "491157838",
@@ -188,10 +188,10 @@
       "sportzino": "sz-17873411",
       "thescorebet": "StandardEvent:09451265-ea10-47d9-8057-c26ee62ab55f"
      },
-     "home": "Connecticut",
+     "home": "UConn",
      "sample": {
-      "away_team": "Massachusetts",
-      "home_team": "Connecticut",
+      "away_team": "UMass",
+      "home_team": "UConn",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -661,7 +661,7 @@
       "fliff": "fobj__conflict_event__419847",
       "gemini": "NCAAF-2610242000-CAL-SMU-M",
       "hardrock": "2423019232661995925",
-      "kalshi": "KXNCAAF1H-26OCT23CALSMU",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT24CALSMU",
       "ladbrokes": "650a7ca8-0b34-4fe0-8ae4-d0cded12014d",
       "novig": "01a14577-5036-7032-b901-ba2b0fafc547",
       "onexbet": "762874857",
@@ -1310,7 +1310,7 @@
       "fliff": "fobj__conflict_event__391741",
       "gemini": "NFL-2610251330-PIT-NO-T",
       "hardrock": "3910323733327380887",
-      "kalshi": "KXNFL1HTOTAL-26OCT25PITNO",
+      "kalshi": "KXNFLRECYDS-26OCT25PITNO-NOAKAMARA41-40",
       "ladbrokes": "d8aae200-aa0c-4de2-843f-902d91183141",
       "novig": "01a136e2-e717-7c30-807e-7952b04dee72",
       "paddypower": "35605985",
@@ -1385,6 +1385,7 @@
        "4th_quarter_point_spread",
        "4th_quarter_team_total",
        "4th_quarter_total_points",
+       "4th_quarter_total_points_odd_even",
        "anytime_touchdown_scorer",
        "both_teams_to_score",
        "correct_score",
@@ -1435,7 +1436,7 @@
     {
      "away": "San Francisco 49ers",
      "external": {
-      "bet365": "202868614",
+      "bet365": "202868662",
       "betmgm": "6:43671",
       "betonline": "491153656",
       "betparx": "1028823696",
@@ -1567,7 +1568,7 @@
     {
      "away": "Cincinnati Bengals",
      "external": {
-      "bet365": "202868623",
+      "bet365": "202868662",
       "betmgm": "6:43675",
       "betonline": "491153660",
       "betparx": "1028823698",
@@ -1581,7 +1582,7 @@
       "fliff": "fobj__conflict_event__407875",
       "gemini": "NFL-2610251700-CIN-BAL-S",
       "hardrock": "6887203087019278759",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25CINBAL",
+      "kalshi": "KXNFL1HTOTAL-26OCT25CINBAL",
       "ladbrokes": "c21b9632-07d2-49f6-9e0b-3b48ffae5444",
       "novig": "01a136e2-eb8c-7492-82a7-9b44bdc66cee",
       "paddypower": "36188997",
@@ -1715,7 +1716,7 @@
       "fliff": "fobj__conflict_event__407877",
       "gemini": "NFL-2610251700-CLE-TEN-S",
       "hardrock": "4620555468312543622",
-      "kalshi": "KXNFL1QSPREAD-26OCT25CLETEN",
+      "kalshi": "KXNFLTD-26OCT25CLETEN-TENNSINGLETON32-2",
       "ladbrokes": "86e78aee-0e3e-4b60-8386-6a6eabdc5c2e",
       "novig": "01a136e2-e8c4-7c83-b360-6d356120b5db",
       "paddypower": "36189001",
@@ -1978,7 +1979,7 @@
       "fliff": "fobj__conflict_event__408407",
       "gemini": "NFL-2610251700-IND-MIN-S",
       "hardrock": "3863950730914300297",
-      "kalshi": "KXNFL1HTOTAL-26OCT25INDMIN",
+      "kalshi": "KXNFLTD-26OCT25INDMIN-MINAJONES33-2",
       "ladbrokes": "04d0c20e-dcc5-4f5e-8cb1-d59db206f7f4",
       "novig": "01a136e2-e7cb-7032-9e39-2298f48a892c",
       "paddypower": "36189002",
@@ -2377,7 +2378,7 @@
       "fliff": "fobj__conflict_event__407879",
       "gemini": "NFL-2610252005-DEN-ARI-T",
       "hardrock": "8903689820174418335",
-      "kalshi": "KXNFLPASSYDS-26OCT25DENARI-DENBNIX10-250",
+      "kalshi": "KXNFLRECYDS-26OCT25DENARI-ARITMCBRIDE85-140",
       "ladbrokes": "b32e8da1-f0c5-4ec6-a8f0-fb7f2f6f88bd",
       "novig": "01a136e2-ed41-7f12-9786-25d6715adc49",
       "paddypower": "36189004",
@@ -2648,7 +2649,7 @@
       "fliff": "fobj__conflict_event__407881",
       "gemini": "NFL-2610252025-LAR-LV-T",
       "hardrock": "1958013294862270870",
-      "kalshi": "KXNFL1HTOTAL-26OCT25LARLV",
+      "kalshi": "KXNFL2QTOTAL-26OCT25LARLV",
       "ladbrokes": "9e70c69e-0cb8-4a79-b602-8859ec8f54be",
       "novig": "01a136e2-ee10-7373-841a-15273c9c9ea9",
       "paddypower": "36189003",
