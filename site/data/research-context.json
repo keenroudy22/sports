@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T19:35:11Z",
+  "updatedAt": "2026-10-21T19:52:12Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-21T19:23Z",
+              "reportedAt": "2026-10-21T19:28Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-21T19:23Z",
+              "reportedAt": "2026-10-21T19:28Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6677,6 +6677,42 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "3052587",
+              "name": "Baker Mayfield",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Thumb",
+              "reportedAt": "2026-10-21T19:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
+            },
+            {
+              "id": "4596448",
+              "name": "Bucky Irving",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Illness",
+              "reportedAt": "2026-10-21T19:30Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
+            },
+            {
+              "id": "4567750",
+              "name": "Emeka Egbuka",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-21T19:26Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
+            },
+            {
+              "id": "4430871",
+              "name": "Sean Tucker",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-21T19:24Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430871/sean-tucker"
+            },
+            {
               "id": "4427673",
               "name": "Calijah Kancey",
               "position": "DT",
@@ -6704,15 +6740,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3909013/christian-rozeboom"
             },
             {
-              "id": "4250392",
-              "name": "Zyon McCollum",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Illness",
-              "reportedAt": "2026-10-21T19:22Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4250392/zyon-mccollum"
-            },
-            {
               "id": "4380507",
               "name": "Luke Goedeke",
               "position": "OT",
@@ -6720,33 +6747,6 @@
               "injury": "Calf",
               "reportedAt": "2026-10-21T19:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4380507/luke-goedeke"
-            },
-            {
-              "id": "4596448",
-              "name": "Bucky Irving",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Illness",
-              "reportedAt": "2026-10-21T19:22Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
-            },
-            {
-              "id": "4567750",
-              "name": "Emeka Egbuka",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-21T19:17Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
-            },
-            {
-              "id": "3052587",
-              "name": "Baker Mayfield",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Thumb",
-              "reportedAt": "2026-10-21T16:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
             },
             {
               "id": "4428522",
@@ -6765,6 +6765,15 @@
               "injury": null,
               "reportedAt": "2026-10-21T02:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/5093694/keionte-scott"
+            },
+            {
+              "id": "4250392",
+              "name": "Zyon McCollum",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Illness",
+              "reportedAt": "2026-10-21T02:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4250392/zyon-mccollum"
             },
             {
               "id": "4870998",
@@ -6792,15 +6801,6 @@
               "injury": "Ribs",
               "reportedAt": "2026-10-20T16:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
-            },
-            {
-              "id": "4430871",
-              "name": "Sean Tucker",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": null,
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430871/sean-tucker"
             },
             {
               "id": "3150744",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "19",
-          "name": "Tyler Nubin",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430261/tyler-nubin"
-        },
-        {
-          "teamId": "19",
           "name": "Colton Hood",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-21T19:35:11Z",
           "source": "https://www.espn.com/nfl/player/_/id/2574056/kevin-byard"
+        },
+        {
+          "teamId": "27",
+          "name": "Sean Tucker",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-21T19:52:12Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4430871/sean-tucker"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-21T19:35:11Z",
-      "lastAttemptAt": "2026-10-21T19:35:11Z",
+      "checkedAt": "2026-10-21T19:52:12Z",
+      "lastAttemptAt": "2026-10-21T19:52:12Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-21T19:35:11Z",
-      "lastAttemptAt": "2026-10-21T19:35:11Z",
+      "checkedAt": "2026-10-21T19:52:12Z",
+      "lastAttemptAt": "2026-10-21T19:52:12Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
