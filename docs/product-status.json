@@ -1,15 +1,24 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-21T11:52:05.436463+00:00",
+  "updatedAt": "2026-10-21T12:43:39Z",
   "items": [
     {
       "id": "D-20261021-FAVORITE",
       "title": "Show exact game-favorite quote and price blockers",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Reassurance and exact blockers now pass focused tests. Finish full normal/clean gates, locked release, hosted success and live375/1440 proof. Preserve published tickets and record math.",
+      "next": "Preserve posted-ticket reassurance and specific price/availability blockers; keep published tickets and record math unchanged. Continue current-price checks in normal runs.",
       "doneWhen": "Every active game has a fresh positive-price research favorite or exact quote/price/availability blocker; negative-value directions never inherit positive-value heading; existing posted-game reassurance stays; every release gate passes.",
-      "evidence": "Oct21 live375 CFB-401871070 generic no-price message after ESPN BET over44.5-110 observed07:43:44Z expired. Source/test patch in dev, no commit/deploy. Focused13pass/1fail, exact failure work/daily-20261021-focused.log; outcomes work/daily-20261021-outcomes.json."
+      "evidence": "5ad00c81/07d2da21; containing hosted39599223964 success. Normal/clean1558Python(2skip)/268Node,record110,guard591,offline0800ok. Live app191 at375/1440 has exact price blocker/no overflow or errors; posted-ticket reassurance regression passes. Proof /tmp/kookn-oct21-repair-live-phone.png. Earlier failed gates retained."
+    },
+    {
+      "id": "W-20261020-1",
+      "title": "Complete weekly learning, recap and schedule follow-through",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Observe queued weekly recap10:53ET via normal reconciliation; verify next natural Tuesday report retains same-day moves. Preserve original history and the dated four-change audit correction.",
+      "doneWhen": "Closing-price guards and same-day reporting pass all gates; weekly recap no longer waits on retired art; hosted success, live proof and unchanged working schedules recorded.",
+      "evidence": "108246e9/hosted39600328504 success; normal/clean1559Python(2skip)/268Node,record110,guard591,offline0800ok. Weekly text accepted Buffer6ad8b2339c5d256f659d8a3e for10:53ET, not sent. Three Codex prompts repaired; seven Mac schedules match;08:30 resumed12:31:49Z. a0ece43a appends four audit corrections for unsupported CFB gap/pause moves, no record or valid-hold change."
     },
     {
       "id": "O-20261020-NBAROLES",
@@ -59,11 +68,11 @@
     {
       "id": "O-20261020-NBAALL",
       "title": "Include NBA throughout All sports views",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Verify joined Games dates/search/finals, All Research sections and separate NBA Trial summary; run full gates, release and check live responsive pages.",
+      "next": "Preserve NBA in All Games/Research/Record and independent Trial accounting; retain live phone and desktop coverage checks in future releases.",
       "doneWhen": "NBA content appears in All Games and matching Research modes and actual Trial summary appears in All Record; football filters/ledgers remain isolated; hosted/live phone/desktop receipts verified.",
-      "evidence": "Owner screenshot exposed All Games using football-only source. Bounded joins and tests prepared; not live yet. No new feeds, models, schedules or record arithmetic."
+      "evidence": "Containing hosted39444276895 and successor39599223964 succeeded. Oct21 live NBA sections in All Games, Research and Record at375/1440: zero overflow/load/console errors. No new feed/model/schedule or record arithmetic. Prior weekly lock blocker is historical, not an unfinished deployment."
     },
     {
       "id": "O-20261020-NBAREFLOW",

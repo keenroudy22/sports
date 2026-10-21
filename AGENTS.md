@@ -205,6 +205,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Repair follow-through (owner, October21):** a failed test stops promotion, not the repair.
+  Diagnose and repair the bounded cause, rerun affected checks and every required release gate;
+  never weaken a test or safety rule to pass. Scheduled Codex runs allow up to three reasoned
+  repair attempts. An occupied release lock is not completion: wait in bounded intervals without
+  stealing it or interrupting the holder, then continue. After15minutes retain the exact blocker,
+  stable queue item and next action for the next existing run. Resume unfinished repairs before
+  new audits. Preserve only three Codex schedules and archive older completed run chats, keeping
+  the latest and running/owner-action-required chats. Keep genuine failure alerts. Weekly category
+  result summaries may use text only; daily receipts and official plays keep their cards.
+
 - **Current NBA role evidence (owner, October20):** review current news, lineup and expected workload
   before leaning on last-season rates. Store sourced game/player-specific role reviews; any minutes
   chosen by the desk must say analyst estimate, not coach-announced or confirmed. Show the prior

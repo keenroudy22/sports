@@ -1,5 +1,38 @@
 # October 5 product implementation tracker
 
+## October21 — repair follow-through verified and stale blockers closed
+
+Favorite/learning source5ad00c81/07d2da21, containing hosted39599223964 SUCCESS.
+Weekly text recovery108246e9, hosted39600328504 SUCCESS. Final normal and clean-copy
+each1559Python(two skipped)/268Node;451pages/87games,record110/NBA0,guard591,assets current,
+budgets no hard issue (existing Today/More/NBA soft warnings). Offline0800ot26r50_ exit0,
+outcomeok,zero outside writes/private reads; two expected network denials. Earlier
+attempt's invalid queue-next length was fixed, focused11passed, full suites repeated.
+No failed gate was bypassed. Earlier failed attempts remain above/below as dated evidence.
+
+Live app191 gameCFB-401871070 at375/1440: explicit price refusal, posted-ticket regression,
+no overflow/load/console errors. Proof /tmp/kookn-oct21-repair-live-phone.png and
+live-desktop.png. Fresh All Games/Research/Record at375/1440 each include NBA, zero issues;
+the old NBAALL weekly lock blocker is closed. Normal08:30 run waited for release and
+resumed12:31:49Z, finishing12:38:16Z. Weekly summary accepted12:38:11Z as text-only
+Buffer6ad8b2339c5d256f659d8a3e, due10:53ET; delivery is not yet confirmed. Original
+daily/official art, counts, spacing, caps and sent posts remain unchanged.
+
+Three existing Codex schedules retained, active/same cadence/model: bounded repair attempts,
+lock follow-through and previous completed-run archiving added via app tool. Seven loaded
+Mac schedules match repository plists. Heartbeat's historical result-speed/pilot-review
+alerts are not scheduler crashes and were not hidden. Latest failed CI39544098581 and
+three sampled preceding failures share the fixed-date NBA fixture clock issue; repaired
+overnight73f2620b/39546545941. Genuine GitHub failure notifications remain enabled.
+
+Current-state audit found the four Oct20 missing-CLV gap/pause moves still active. Normal
+two_way.apply_signal/learning.save_policy writer appended dated audit-correction entries
+at2026-10-21T12:43:08Z, committed a0ece43a through normal locked commit/push. Original
+history prefix and all unrelated policy verified unchanged. CFB passYds/rec gapFloor2→0,
+paused true→false; trust0.95 retained, restoration promotionBar2 retained. No public
+record/stake/result or new play changed; price/injury/QB/role/calibration holds remain.
+This is explicit rollback of bug-produced restrictions, not an unlogged threshold change.
+
 ## October21 — owner-requested failed-gate and weekly follow-through repair
 
 Follow-through found weekly result-summary delivery still blocked by its retired graphic.
