@@ -199,9 +199,10 @@ def prepare(now, root=STORE, data=None, history=None):
     for row in choices(data,now,history)+([prop] if prop else []):
         old=previous.get(row['key'])
         if old:
+            current_draft=(old.get('family')!='props' or props_current(old,now))
             # Never rewrite a frozen/queued publication. A never-queued invalid or expired
             # draft may get a new immutable revision under the same deduplicated post ID.
-            if row['key'] in attempted or (boxscores.instant(old['stale'])>now
+            if row['key'] in attempted or (current_draft and boxscores.instant(old['stale'])>now
                     and not x_post.x_style(old['text'])
                     and x_post.tweet_length(old['text'])<=x_post.LIMIT):
                 continue

@@ -26,6 +26,24 @@ def fixture():
 
 
 class NBAEditorialTests(unittest.TestCase):
+    def test_invalid_never_queued_prop_draft_gets_append_only_revision(self):
+        now=datetime(2026,10,20,13,tzinfo=timezone.utc)
+        old=dict(key='nba-props-2026-10-20',family='props',capturedAt=boxscores.stamp(now-timedelta(minutes=20)),
+                 stale=boxscores.stamp(now+timedelta(hours=2)),text='Old research',rows=[])
+        new=dict(old,capturedAt=boxscores.stamp(now),text='Reviewed research')
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);path=root/(old['key']+'.json')
+            path.write_text(json.dumps(old));original=path.read_bytes()
+            with patch.object(n,'prop_choice',return_value=new),patch.object(n,'choices',return_value=[]),\
+                 patch.object(n,'props_current',return_value=False),patch.object(x_post,'load_log',return_value={'posts':[]}):
+                self.assertEqual(n.prepare(now,root,{}),[old['key']])
+            self.assertEqual(path.read_bytes(),original)
+            self.assertEqual(n.stored(root)[0]['text'],'Reviewed research')
+            with patch.object(n,'prop_choice',return_value=new),patch.object(n,'choices',return_value=[]),\
+                 patch.object(n,'props_current',return_value=False),patch.object(x_post,'load_log',return_value={'posts':[{'id':old['key'],'bufferPostId':'queued'}]}):
+                self.assertEqual(n.prepare(now+timedelta(seconds=1),root,{}),[])
+            self.assertEqual(len(list(root.glob('*.json'))),2)
+
     def test_two_early_posts_real_numbers_and_all_card_names_in_words(self):
         data,history=fixture();rows=n.choices(data,NOW,history)
         self.assertEqual(len(rows),2)
