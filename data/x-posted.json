@@ -4033,7 +4033,16 @@
    "cardKey": "receipt-day-2026-10-19",
    "sentAt": "2026-10-20T13:05:19.349Z",
    "link": "https://x.com/1753110091912413184/status/2112530601739747349",
-   "tweetId": "2112530601739747349"
+   "tweetId": "2112530601739747349",
+   "metrics": {
+    "reactions": 0,
+    "comments": 0,
+    "engagementRate": 0,
+    "reposts": 0,
+    "impressions": 30,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-21T13:21:31Z"
   },
   {
    "id": "research:end-zone:2026-10-20",
@@ -4346,6 +4355,22 @@
    "kind": "buffer:receipt",
    "card": false,
    "cardTheme": "none"
+  },
+  {
+   "id": "nba-props-2026-10-21",
+   "postedAt": "2026-10-21T13:21:31Z",
+   "dueAt": "2026-10-21T15:13:00Z",
+   "bufferPostId": "6ad8bc690811076dd03d1b5a",
+   "textHash": "53315007fdef4c20",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "NBA prop looks · DraftKings\nMatas Buzelis · Chicago Bulls\nOver 5.5 rebounds -101 · I have 7 at 30 estimated min · 8/10\nScottie Barnes · Toronto Raptors\nOver 5.5 assists -140 · I have 9.2 at 32 estimated min · 7/10\nLast season · last 10 recorded games.\n#NBA",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/nba-props-2026-10-21.png"
+   }
   }
  ]
 }
