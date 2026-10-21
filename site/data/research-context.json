@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T18:57:18Z",
+  "updatedAt": "2026-10-21T19:15:36Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-21T18:32Z",
+              "reportedAt": "2026-10-21T19:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -927,6 +927,33 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4242975",
+              "name": "Jaelan Phillips",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-21T18:55Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips"
+            },
+            {
+              "id": "4870694",
+              "name": "Monroe Freeling",
+              "position": "OT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-21T18:55Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
+            },
+            {
+              "id": "4239934",
+              "name": "AJ Dillon",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-21T18:55Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4239934/aj-dillon"
+            },
+            {
               "id": "4709392",
               "name": "Anthony Tyus III",
               "position": "RB",
@@ -934,24 +961,6 @@
               "injury": null,
               "reportedAt": "2026-10-20T23:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4709392/anthony-tyus-iii"
-            },
-            {
-              "id": "4870694",
-              "name": "Monroe Freeling",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
-            },
-            {
-              "id": "4239934",
-              "name": "AJ Dillon",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4239934/aj-dillon"
             },
             {
               "id": "4568263",
@@ -1051,15 +1060,6 @@
               "injury": null,
               "reportedAt": "2026-10-19T00:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/4372780/tommy-tremble"
-            },
-            {
-              "id": "4242975",
-              "name": "Jaelan Phillips",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-18T19:23Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips"
             },
             {
               "id": "4714157",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-21T18:32Z",
+              "reportedAt": "2026-10-21T19:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1187,7 +1187,7 @@
               "id": "4608686",
               "name": "Kyle Monangai",
               "position": "RB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Toe",
               "reportedAt": "2026-10-20T21:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
@@ -1206,7 +1206,7 @@
               "name": "Jonah Jackson",
               "position": "G",
               "status": "Questionable",
-              "injury": "Hip",
+              "injury": null,
               "reportedAt": "2026-10-20T02:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/3930040/jonah-jackson"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-21T18:32Z",
+              "reportedAt": "2026-10-21T19:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "30",
-          "name": "Montaric Brown",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4242149/montaric-brown"
-        },
-        {
-          "teamId": "13",
-          "name": "Tonka Hemingway",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4429109/tonka-hemingway"
-        },
-        {
-          "teamId": "24",
-          "name": "Rodney Shelley",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4838693/rodney-shelley"
-        },
-        {
-          "teamId": "24",
-          "name": "Tre' Harris",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4686612/tre-harris"
-        },
-        {
           "teamId": "24",
           "name": "Donte Jackson",
           "from": "Out",
@@ -7764,11 +7732,43 @@
           "to": "Out",
           "observedAt": "2026-10-21T18:34:05Z",
           "source": "https://www.espn.com/nfl/player/_/id/4606666/karon-prunty"
+        },
+        {
+          "teamId": "29",
+          "name": "Jaelan Phillips",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-21T19:15:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips"
+        },
+        {
+          "teamId": "29",
+          "name": "Monroe Freeling",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-21T19:15:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
+        },
+        {
+          "teamId": "29",
+          "name": "AJ Dillon",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-21T19:15:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4239934/aj-dillon"
+        },
+        {
+          "teamId": "3",
+          "name": "Kyle Monangai",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-21T19:15:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-21T18:57:18Z",
-      "lastAttemptAt": "2026-10-21T18:57:18Z",
+      "checkedAt": "2026-10-21T19:15:36Z",
+      "lastAttemptAt": "2026-10-21T19:15:36Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-21T18:57:18Z",
-      "lastAttemptAt": "2026-10-21T18:57:18Z",
+      "checkedAt": "2026-10-21T19:15:36Z",
+      "lastAttemptAt": "2026-10-21T19:15:36Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
