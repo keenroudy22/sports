@@ -27593,5 +27593,203 @@
         "units": 0.909
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-21T15:39:22Z",
+    "summary": "Released 1: New Mexico State at Sam Houston over 44.5 -110 at ESPN BET.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 44.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401871070"
+        ],
+        "book": "ESPN BET",
+        "odds": -110,
+        "projection": 48.8,
+        "edge": "Price-checked chance 53.7% against the exact two-sided price; 52.4% needed at -110: +1.4 percentage points.",
+        "cutoff": "OVER 44.5 at -110 or better; off the card at 46+, or at -125 or worse at 44.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-18T03:08:14Z",
+        "quotedAt": "2026-10-21T07:43:44Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 3:43 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-21T15:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "probabilityAtPublication": {
+          "rawChance": 0.604,
+          "chance": 0.537,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.524,
+          "edgePoints": 1.4,
+          "evPerUnit": 0.026,
+          "snapshotAt": "2026-10-18T03:08:14Z",
+          "evaluatedAt": "2026-10-21T12:30:06Z",
+          "fairChance": 0.5,
+          "anchoredChance": 0.537,
+          "gap": 3.7,
+          "calibrationFamily": "CFB/total"
+        },
+        "matchup": "New Mexico State Aggies at Sam Houston Bearkats",
+        "title": "New Mexico State at Sam Houston over 44.5",
+        "id": "CFB-2026-W8-nmsu-shsu-over-44-5-espnbet",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401871070",
+          "https://www.abqjournal.com/sports/aggies-finally-back-on-the-field-looking-for-bounce-back-in-midweek-cusa-showdown-1/3146472",
+          "https://gobearkats.com/news/2026/10/20/football-game-7-preview-vs-nm-state"
+        ],
+        "why": "Model lean, our number only. We have the total at 48.8; the book is at 44.5. That makes the over 53.7%, and -110 needs 52.4%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: New Mexico State coach Tony Sanchez said Adam Damante will start at quarterback against Sam Houston. Checked before publishing: New Mexico State has prepared Adam Damante, season-opening starter Trey Hedden and Kalani McLeod at quarterback, with Hedden and McLeod listed as alternate backups on its two-deep depth chart. The market: The total opened 47.5 and is 45.5 at DraftKings, 2 toward the under. 6 books span 44.5 to 45.5 on the total; the middle is 45.5. Our spread is 3.2 points off, bigger than 47% of our past gaps. Gaps this size went 952-944 against the close in 3584 games. Our total is 3.3 points off, bigger than 54% of our past gaps. Gaps this size went 888-767 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Adam Damante completed 9 of 22 passes for 104 yards and an interception in New Mexico State's October 7 loss to FIU. Statistical counterpoint: Sam Houston has allowed 137.8 passing yards per game and held five of its first six opponents below 200 passing yards. 1 more verified statistical counterpoints. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Sam Houston has allowed 200.3 rushing yards per game, while New Mexico State running back James Jones leads Conference USA in rushing yards per game.",
+            "Landyn Locke has thrown 11 touchdown passes, including six of at least 30 yards."
+          ],
+          "cautions": [
+            "Adam Damante completed 9 of 22 passes for 104 yards and an interception in New Mexico State's October 7 loss to FIU.",
+            "Sam Houston has allowed 137.8 passing yards per game and held five of its first six opponents below 200 passing yards.",
+            "Sam Houston scored 3 points in each of its last two games, against Liberty and Western Kentucky."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 44.5. I say 48.8.",
+              "numbers": {
+                "projection": 48.8,
+                "line": 44.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-18T03:08:14Z"
+            },
+            {
+              "text": "Sam Houston has allowed 200.3 rushing yards per game, while New Mexico State running back James Jones leads Conference USA in rushing yards per game.",
+              "numbers": {},
+              "source": "https://www.abqjournal.com/sports/aggies-finally-back-on-the-field-looking-for-bounce-back-in-midweek-cusa-showdown-1/3146472",
+              "time": "2026-10-21T12:30:06Z"
+            },
+            {
+              "text": "Landyn Locke has thrown 11 touchdown passes, including six of at least 30 yards.",
+              "numbers": {},
+              "source": "https://gobearkats.com/news/2026/10/20/football-game-7-preview-vs-nm-state",
+              "time": "2026-10-21T12:30:06Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Adam Damante completed 9 of 22 passes for 104 yards and an interception in New Mexico State's October 7 loss to FIU.",
+              "numbers": {},
+              "source": "https://www.abqjournal.com/sports/aggies-finally-back-on-the-field-looking-for-bounce-back-in-midweek-cusa-showdown-1/3146472",
+              "time": "2026-10-21T12:30:06Z"
+            },
+            {
+              "text": "Sam Houston has allowed 137.8 passing yards per game and held five of its first six opponents below 200 passing yards.",
+              "numbers": {},
+              "source": "https://gobearkats.com/news/2026/10/20/football-game-7-preview-vs-nm-state",
+              "time": "2026-10-21T12:30:06Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 72,
+            "windMph": 5,
+            "windDirection": "NE",
+            "precipProb": 1,
+            "periodStart": "2026-10-21T19:00:00-05:00",
+            "issuedAt": "2026-10-21T04:35:55+00:00",
+            "source": "https://api.weather.gov/gridpoints/HGX/56,137/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 47.5,
+                  "price": -110,
+                  "time": "2026-10-17T04:06:07Z"
+                },
+                "now": {
+                  "line": 44.5,
+                  "price": -118,
+                  "time": "2026-10-21T07:43:44Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 47.5,
+                  "price": -115,
+                  "time": "2026-10-16T04:02:45Z"
+                },
+                "now": {
+                  "line": 45.5,
+                  "price": -105,
+                  "time": "2026-10-21T07:43:44Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 44.5,
+              "price": -110,
+              "time": "2026-10-21T07:43:44Z"
+            }
+          },
+          "ours": {
+            "projection": 48.8,
+            "line": 44.5,
+            "market": "total",
+            "text": "Book says 44.5. I say 48.8.",
+            "snapshotAt": "2026-10-18T03:08:14Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://www.abqjournal.com/sports/aggies-finally-back-on-the-field-looking-for-bounce-back-in-midweek-cusa-showdown-1/3146472",
+              "time": "2026-10-21T12:30:06Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://gobearkats.com/news/2026/10/20/football-game-7-preview-vs-nm-state",
+              "time": "2026-10-21T12:30:06Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/HGX/56,137/forecast/hourly",
+              "time": "2026-10-21T04:35:55+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401871070",
+              "time": "2026-10-21T12:30:06Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-21T15:39:22Z"
+      }
+    ]
   }
 ]
