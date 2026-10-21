@@ -4523,7 +4523,18 @@
     "destination": "wins",
     "image": "https://keenroudy.com/sports/img/tickets/personal-nba-lotto-2026-10-21.png",
     "sentAt": "2026-10-21T16:37:09Z",
-    "beforeX": false
+    "beforeX": false,
+    "routingCorrections": [
+     {
+      "at": "2026-10-21T18:00:14.327455Z",
+      "reason": "Pregame personal tickets belong in Plays & Results, not Wins & Bad Beats",
+      "originalDestination": "wins",
+      "originalMessageId": "1562505036628762658",
+      "replacementDestination": "plays",
+      "replacementMessageId": "1562525936665104445",
+      "channelId": "1554299657432211558"
+     }
+    ]
    },
    "cardKey": "https://keenroudy.com/sports/img/tickets/personal-nba-lotto-2026-10-21.png",
    "sentAt": "2026-10-21T16:37:02.827Z",
