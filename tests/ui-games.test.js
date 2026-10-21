@@ -296,7 +296,7 @@ test('a game without a bet shows the current lines without presenting a model ga
     : path === `app/games/${g.id}.json` ? row : (() => { throw new Error('no ' + path); })() })).game({ id: g.id }));
   const empty = await render(detail);
   assert.match(empty, /No official bet in this game/);
-  assert.match(empty, /No price-checked lean clears my bar here/);
+  assert.match(empty, /No captured main-line price and supported probability/);
   assert.match(empty, /53\.5 book · 50\.5 mine/);
   assert.ok(empty.indexOf('No official bet in this game') < empty.indexOf('class="proj big"'));
   const watched = await render({ ...detail, favoriteLines: [{ id: 'f1', sourceId: 'f1', kind: 'game',
@@ -313,6 +313,22 @@ test('a game without a bet shows the current lines without presenting a model ga
   assert.match(belowBar, /What I like most here \(research only\)/);
   assert.match(belowBar, /Strongest current lean · not a best bet/);
   assert.match(belowBar, /Positive value, but below the official-play bar/);
+  const refused = await render({ ...detail, favoriteLines: [{ title: 'Pitt over 53.5', odds: -110,
+    book: 'DraftKings', chance: 0.51, needs: 0.524, edge: -1.4,
+    observedAt: new Date(Date.now() - 600000).toISOString() }] });
+  assert.match(refused, /our chance is 51%; this price needs 52%/);
+  assert.doesNotMatch(refused, /Price-checked lines worth a look|Current prices where my estimated chance is above/);
+  const expired = await render({ ...detail, favoriteLines: [{ title: 'Pitt over 53.5', odds: -110,
+    book: 'DraftKings', chance: 0.55, needs: 0.524,
+    observedAt: new Date(Date.now() - 5 * 3600000).toISOString() }] });
+  assert.match(expired, /Pitt over 53.5 · -110 DraftKings: the quote captured/);
+  assert.match(expired, /outside the current-price window/);
+  assert.doesNotMatch(expired, /Price-checked lines worth a look|Strongest current lean/);
+  const held = await render({ ...detail, modelReads: [{ title: 'Pitt over 53.5', odds: -110,
+    book: 'DraftKings', chance: null, warnings: ['Current player availability is unverified.'],
+    observedAt: new Date(Date.now() - 600000).toISOString() }] });
+  assert.match(held, /Current player availability is unverified/);
+
   const stale = await render({ ...detail, market: { ...detail.market, retrievedAt: new Date(Date.now() - 6 * 3600000).toISOString() } });
   assert.match(stale, /Last recorded lines · check a current price at your book/);
   assert.doesNotMatch(stale, /checked \d+ min ago/);

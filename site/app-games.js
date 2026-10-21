@@ -351,7 +351,23 @@
     }
 
     /* Lines we like: fresh, priced, calibrated, with the history and the defense behind each. */
-    const fav = pregame ? (detail.favoriteLines || []).filter(f => C.quoteStatus({ ...f, state: 'open' }, g.kickoff, now).current).sort((a, b) => (b.edge ?? 0) - (a.edge ?? 0)) : [];
+    const currentQuote = f => C.quoteStatus({ ...f, state: 'open' }, g.kickoff, now).current;
+    const fav = pregame ? (detail.favoriteLines || []).filter(f => currentQuote(f)
+      && !(isNum(f.chance) && isNum(f.needs) && f.chance <= f.needs)).sort((a, b) => (b.edge ?? 0) - (a.edge ?? 0)) : [];
+    // Preserve the exact refusal when a saved favorite expires or no priced read qualifies.
+    // A below-price direction must never inherit the favorites panel's positive-value heading.
+    const blocked = [...(detail.favoriteLines || []), ...(detail.modelReads || [])]
+      .sort((a, b) => Number(currentQuote(b)) - Number(currentQuote(a)) || (b.edge ?? -999) - (a.edge ?? -999))[0];
+    const blocker = !blocked ? 'No captured main-line price and supported probability are available for this game.'
+      : `${niceTitle(blocked.title)} · ${oddsText(blocked.odds)} ${bookLabel(blocked.book) || ''}: ` +
+        (!isNum(blocked.odds) || !Number.isFinite(Date.parse(blocked.observedAt)) ? 'a verified quote with a capture time is missing.'
+          : !currentQuote(blocked) ? `the quote captured ${whenShort(blocked.observedAt)} is outside the current-price window; a fresh matching price is required.`
+          : isNum(blocked.chance) && isNum(blocked.needs) && blocked.chance <= blocked.needs
+            ? `our chance is ${pctText(blocked.chance)}; this price needs ${pctText(blocked.needs)}. It does not pass the price check.`
+          : (blocked.warnings || []).length ? blocked.warnings.join(' ')
+          : blocked.holdReason || (isNum(blocked.chance) && isNum(blocked.needs)
+            ? `our chance is ${pctText(blocked.chance)}; this price needs ${pctText(blocked.needs)}, below the research bar.`
+            : 'a supported probability is unavailable; the price cannot be cleared.'));
     const favHtml = fav.length ? `<div class="board">${fav.map(f => {
       const dm = f.kind === 'player' ? defenseMatch(f, teams, g.league) : null;
       const script = f.kind === 'player' ? scriptCaution(g, f, model) : null;
@@ -368,7 +384,7 @@
         sub: [f.belowBar ? 'Strongest current lean · not a best bet' : '', historyWords(f.history), dm ? `${dm.pos} matchup: ${dm.rank} of ${dm.of}${dm.tone === 'soft' ? ', soft' : dm.tone === 'tough' ? ', tough' : ''}` : ''].filter(Boolean).join(' · '), extraFa, src,
         clears: !f.belowBar };
       return boardRow(vm);
-    }).join('')}</div>` : `<p class="muted small">${pregame ? 'No current line in this game passes my price check right now. ' : 'Lines close at kickoff. Saved pregame lines are below.'}</p>`;
+    }).join('')}</div>` : `<p class="muted small">${pregame ? esc(blocker) : 'Lines close at kickoff. Saved pregame lines are below.'}</p>`;
 
     /* Put the card and the line status before the large projection. A game with no play must not look empty,
        but a difference between my number and the book is not itself a bet or a supported lean. */
@@ -384,7 +400,7 @@
         <p><b>Total</b><span>${esc(isNum(m.total) ? C.fixed(m.total) : 'not recorded')} book · ${esc(isNum(model.total) ? C.fixed(model.total) : 'not available')} mine</span></p></div>
       <p class="small muted">${marketFresh ? `${esc(bookLabel(m.book) || 'Book')} · checked ${esc(ago(m.retrievedAt))}` : 'Last recorded lines · check a current price at your book'}.</p>
       ${fav.length ? `<p class="game-front-watch"><b>${fav.every(f => f.belowBar) ? 'What I like most here (research only):' : 'Price-checked lines worth a look:'}</b> ${fav.slice(0, 2).map(f => `${esc(niceTitle(f.title))} · ${esc(oddsText(f.odds))} ${esc(bookLabel(f.book) || '')}`).join(' · ')}${fav.length > 2 ? ` · +${fav.length - 2} more` : ''}. <a href="#game/${esc(g.id)}#lines-we-like">See the research ›</a></p>`
-        : `<p class="game-front-watch">${picks.length ? 'No additional current research line clears my price check. The posted ticket above stays on the record.' : 'No price-checked lean clears my bar here.'} <a href="#game/${esc(g.id)}#model-vs">See the full comparison ›</a></p>`}
+        : `<p class="game-front-watch">${picks.length ? 'No additional current research line clears my price check. The posted ticket above stays on the record. ' : ''}${esc(blocker)} <a href="#game/${esc(g.id)}#model-vs">See the full comparison ›</a></p>`}
       </section>` : '';
 
     /* Matchup edges and every other line the model read. */
@@ -549,7 +565,7 @@
     return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${postedHtml}${linePreview}${header}${quickNumber}${actions}${liveStamp(liveNow.refreshed)}
       ${finalHtml}
       ${whySection(g, why, final)}
-      ${pregame ? anchored('lines-we-like', section('Lines we like', favHtml, why && !final ? `<a class="more" href="#game/${esc(g.id)}#why">Why my number differs →</a>` : '', 'Current prices where my estimated chance is above what the price needs. Research, not extra best bets.')) : ''}
+      ${pregame ? anchored('lines-we-like', section('Lines we like', favHtml, why && !final ? `<a class="more" href="#game/${esc(g.id)}#why">Why my number differs →</a>` : '', fav.length ? 'Current prices where my estimated chance is above what the price needs. Research, not extra best bets.' : 'Research held until the stated check clears. Not an official play.')) : ''}
       ${edgesHtml ? section('Matchup lines', edgesHtml, '<span class="small muted">Research, not posted plays</span>', 'Our projection, this-season hit rate at the exact line, and the opponent defense in one view. College game-script cautions rank lower.') : ''}
       ${othersHtml ? `<section class="section">${othersHtml}</section>` : ''}
       ${final && detail.final ? '' : anchored('model-vs', section('Model vs market', modelBlock))}

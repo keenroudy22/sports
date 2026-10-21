@@ -648,6 +648,21 @@ def learn_direction(policy, rows, now, games, props, record=None, dry=False):
     return section, applied, None
 
 
+def changes_on_day(history, now):
+    """Report saved moves from this Eastern day without applying or pinging them again."""
+    zone = ZoneInfo('America/New_York')
+    day = now.astimezone(zone).date()
+    out = []
+    for row in history:
+        try:
+            at = datetime.fromisoformat(str(row.get('at')).replace('Z', '+00:00'))
+            if at.tzinfo and at <= now and at.astimezone(zone).date() == day and row not in out:
+                out.append(copy.deepcopy(row))
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
 def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=None, games=None, record=None):
     now = now or learning.now_utc()
     policy_path = policy_path or Path(root) / 'policy.json'
@@ -709,6 +724,7 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
               'matchups': matchup_scorecard(rows),
               'tickets': ticket_scorecard(first_picks, latest_picks, log_book),
               'model': model_findings(), 'changes': changes,
+              'changesToday': changes_on_day(policy.get('history') or [], now),
               'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows,
               'direction': direction_report, 'weekLanes': week_lanes,
               'climb': {'run': climb.get('run'), 'step': climb.get('step'), 'stake': climb.get('stake'),
@@ -738,7 +754,10 @@ def owner_note(report, now):
     overall = score.get('overall') or {}
     direction_ = report.get('direction') or {}
     two = report.get('twoWay') or {}
-    applied = list(direction_.get('applied') or []) + list(two.get('applied') or [])
+    applied = list(report.get('changesToday') or direction_.get('applied') or [])
+    for change in two.get('applied') or []:
+        if change not in applied:
+            applied.append(change)
     pending = {**(direction_.get('pending') or {}), **(two.get('pending') or {})}
     segments = report.get('segments') or []
     changed = '; '.join(str(row.get('why') or row.get('sentence') or row.get('key')) for row in applied[:3])
@@ -806,8 +825,9 @@ def markdown(report):
              f"{report['graded']} graded. Closing line value is how far the "
              "market moved toward our side by kickoff; it is the first thing learning trusts.", '']
     lines += ['## Changes this week', '']
-    if report['changes']:
-        for c in report['changes']:
+    visible_changes = report.get('changesToday') or report['changes']
+    if visible_changes:
+        for c in visible_changes:
             why = c['why'].rstrip('.')
             lines.append(f"- **{c['segment']}** {c['knob']}: {c['from']} to {c['to']}. {why[0].upper() + why[1:]}.")
     else:

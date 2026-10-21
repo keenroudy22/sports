@@ -1,5 +1,19 @@
 # October 5 product implementation tracker
 
+## October21 — owner-requested failed-gate and weekly follow-through repair
+
+Resume D-20261021-FAVORITE: retain posted-ticket reassurance alongside exact current-price,
+missing-price and availability blockers; never present a negative-value direction as a favorite.
+Focused UI14/14 now passes. Weekly repair requires actual observed closing-price movement before
+raising a gap floor or pausing a segment; missing evidence is not nonpositive movement. Same-day
+learning reports/owner notes retain saved changes and undo keys, separate from newly applied changes,
+without replaying or modifying historical policy. Earlier October20 adjustments are not silently undone.
+Full gates, locked release, hosted success and live verification remain pending at this entry.
+
+GitHub latest failed39544098581 (Oct21 04:27Z) is the fixed-date NBA queue fixture using real clock;
+overnight73f2620b/39546545941 repaired it. Subsequent completed runs pass; superseded queued runs
+are cancelled, not test failures. Preserve genuine failure alerts, do not mute GitHub notifications.
+
 ## October20 — sourced NBA role reviews and minutes estimates (verified release)
 
 Finald4cc9a67 (tested2b0052cb; rebased over capture-only changes), hosted39481030931 succeeded.
@@ -2507,3 +2521,10 @@ app `168` / CSS `96` loaded with the Best bets and 80/20 Climb anchors and no ca
 post-release 11:45 screen evaluated 173 NFL candidates and published none: no row cleared positive value plus the
 required fresh price, role/injury and strong-reason checks. The Climb scan likewise held; its nearest priced rung was
 DraftKings Patriots moneyline at -345, outside the approved -220 to -130 range.
+
+
+### 2026-10-21T11:52:05.436463+00:00 — Daily D-20261021-FAVORITE stopped at focused gate
+
+One bounded fix prepared in app-games.js: retain exact expired quote/price/sample refusal and prevent a negative-price direction inheriting positive-value favorites copy. Focused gate FAILED13/14: tests/ui-games.test.js:231 requires the posted-game reassurance “No additional current research line clears my price check. The posted ticket above stays on the record”; replacement blocker removed it. Stopped immediately; no full gates, commit, promotion or deployment. Preserve reassurance alongside blocker, then repeat every AGENTS gate under release/run locks and watched hosted/live375 verification.
+
+Compact health: chosenNotPosted0,officialUnscheduled0,no overdue/failedX/Discord.46 released rows match live result/settledAt/units. Marshallwin+0.909u andClimbloss graded/site/officialDiscord; overnight confirmed grade8.83/.28minutes and Discord24.17/21.62minutes. MorningFinal andClimbX still scheduled, actualsentAt absent. Existing Mac jobs own delivery. Today oneCFB gameNMSU-SHSU; eight candidates have exact college availability-web-check holds, no fully cleared official withheld. Expired07:43:44Z favorite leaves generic live refusal; tracked above. Climb35protected/no supported new leg. NBA10/14clean,2/50paper; trialopen,promotionevidencefalse,propsresearchonly. Local homepage actually updated3stories10:50:54Z; exact successful morning call count overwritten bysettle-onlystatus and not claimed. WeeklyOct20 verifiedlocal27B1call,0failures,161.19s,summaryAvailabletrue. Odds360/500projected434;SGO629/2500stop1800;no budget changes. LiveToday/Record/game375zerooverflow/load/consoleerrors. Prior31d21a9f healthreader fix is ancestor oforigin/main; latest completed hosted39592504740success, no fresh release claimed. Evidence work/daily-20261021-outcomes.json.

@@ -70,6 +70,23 @@ class TwoWayLearningTests(unittest.TestCase):
         self.assertEqual(applied, [])
         self.assertEqual(policy.get('twoWay', {}).get('pending'), {})
 
+    def test_missing_closing_prices_cannot_raise_gap_or_pause(self):
+        for closing in (None, .2):
+            policy = learning.default_policy()
+            sample = rows(80, 20, clv=closing)
+            two_way.step(policy, sample, NOW)
+            found, applied = two_way.step(policy, sample, NOW + timedelta(days=7))
+            self.assertFalse(any(r['kind'] in ('gap', 'pause') for r in found))
+            self.assertFalse(any(r['knob'] in ('twoWay.gap', 'twoWay.pause') for r in applied))
+            self.assertEqual(two_way.gap_floor(policy, 'NFL/total'), 0)
+            self.assertFalse(two_way.paused(policy, 'NFL/total'))
+
+    def test_sparse_closing_prices_do_not_count_as_complete_evidence(self):
+        sample = rows(80, 20, clv=None)
+        sample[0]['clv'] = -.2
+        found = two_way.signals(learning.default_policy(), sample)
+        self.assertFalse(any(r['kind'] in ('gap', 'pause') for r in found))
+
     def test_reason_weight_can_turn_off_and_back_on_only_after_confirmation(self):
         policy = learning.default_policy()
         bad = rows(80, 20, segment='NFL/prop:recYds')
@@ -109,6 +126,20 @@ class TwoWayLearningTests(unittest.TestCase):
         self.assertIn('second Tuesday', note)
         self.assertIn('Owner needed:', note)
         self.assertIn('Audience:', note)
+
+    def test_same_day_report_keeps_prior_moves_without_reapplying(self):
+        history = [{'at': '2026-10-13T12:00:00Z', 'key': 'gap:NFL/total',
+                    'undoKey': 'gap:NFL/total', 'why': 'Earlier confirmed gap adjustment'},
+                   {'at': '2026-10-12T12:00:00Z', 'key': 'old'},
+                   {'at': '2026-10-13T15:00:00Z', 'key': 'future'}, {'at': 'bad'}]
+        original = copy.deepcopy(history)
+        saved = learn.changes_on_day(history, NOW)
+        self.assertEqual(saved, [history[0]])
+        note = learn.owner_note({'changes': [], 'changesToday': saved}, NOW)
+        self.assertIn('Earlier confirmed gap adjustment', note)
+        self.assertIn('undo keys gap:NFL/total', note)
+        self.assertNotIn('Changed: held', note)
+        self.assertEqual(history, original)
 
     def test_policy_loader_and_readers_clamp_hand_edited_values(self):
         policy = learning.default_policy()

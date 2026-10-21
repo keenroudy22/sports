@@ -122,7 +122,7 @@ def signals(policy, rows):
                                     f'{segment} trust {trust:.2f} to {value:.2f}'))
         floor = float(saved.get('gapFloor', 0.0))
         if n >= 50 and evidence['hitRate'] is not None and evidence['need'] is not None:
-            if evidence['hitRate'] <= evidence['need'] - .07 and (evidence['clv'] is None or evidence['clv'] <= 0) and floor < 10:
+            if evidence['hitRate'] <= evidence['need'] - .07 and evidence['clv'] is not None and evidence['clv'] <= 0 and floor < 10:
                 found.append(signal(f'gap:{segment}', 'gap', segment, 1, min(10.0, floor + 2), evidence,
                                     f'{segment} gap floor +2 points'))
             elif evidence['hitRate'] >= evidence['need'] and floor > 0:
@@ -131,7 +131,7 @@ def signals(policy, rows):
         paused = bool(saved.get('paused'))
         upper = (evidence.get('roi80') or {}).get('high')
         if not paused and n >= 60 and roi is not None and roi <= -.10 and upper is not None and upper < 0 \
-                and (evidence['clv'] is None or evidence['clv'] <= 0):
+                and evidence['clv'] is not None and evidence['clv'] <= 0:
             found.append(signal(f'pause:{segment}', 'pause', segment, 1, True, evidence,
                                 f'Pause {segment}; research and shadow continue'))
         if paused:
