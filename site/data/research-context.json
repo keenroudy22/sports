@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T13:56:48Z",
+  "updatedAt": "2026-10-21T14:12:49Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-21T13:27Z",
+              "reportedAt": "2026-10-21T14:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-21T13:27Z",
+              "reportedAt": "2026-10-21T14:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5300,9 +5300,9 @@
               "id": "3115303",
               "name": "Jermaine Eluemunor",
               "position": "OT",
-              "status": "Questionable",
+              "status": "Active",
               "injury": "Calf",
-              "reportedAt": "2026-10-21T13:27Z",
+              "reportedAt": "2026-10-21T14:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "29",
-          "name": "AJ Dillon",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4239934/aj-dillon"
-        },
-        {
           "teamId": "3",
           "name": "Kyle Monangai",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-21T04:58:10Z",
           "source": "https://www.espn.com/nfl/player/_/id/4565200/upton-stout"
+        },
+        {
+          "teamId": "19",
+          "name": "Jermaine Eluemunor",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-21T14:12:49Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-21T13:56:48Z",
-      "lastAttemptAt": "2026-10-21T13:56:48Z",
+      "checkedAt": "2026-10-21T14:12:49Z",
+      "lastAttemptAt": "2026-10-21T14:12:49Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-21T13:56:48Z",
-      "lastAttemptAt": "2026-10-21T13:56:48Z",
+      "checkedAt": "2026-10-21T14:12:49Z",
+      "lastAttemptAt": "2026-10-21T14:12:49Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
