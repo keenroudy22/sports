@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T17:11:03Z",
+  "updatedAt": "2026-10-21T17:20:02Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -467,6 +467,24 @@
           "name": "Baltimore Ravens",
           "players": [
             {
+              "id": "4360939",
+              "name": "Rashod Bateman",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-21T17:10Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360939/rashod-bateman"
+            },
+            {
+              "id": "3916387",
+              "name": "Lamar Jackson",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-21T17:05Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
+            },
+            {
               "id": "4575517",
               "name": "Kyle Hamilton",
               "position": "S",
@@ -530,15 +548,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4432260/matt-hibner"
             },
             {
-              "id": "3916387",
-              "name": "Lamar Jackson",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
-            },
-            {
               "id": "4697745",
               "name": "Tyler Loop",
               "position": "PK",
@@ -555,15 +564,6 @@
               "injury": null,
               "reportedAt": "2026-10-19T23:38Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116365/mark-andrews"
-            },
-            {
-              "id": "4360939",
-              "name": "Rashod Bateman",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-19T19:16Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360939/rashod-bateman"
             },
             {
               "id": "4035463",
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-21T17:05Z",
+              "reportedAt": "2026-10-21T17:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-21T17:00Z",
+              "reportedAt": "2026-10-21T17:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-21T17:05Z",
+              "reportedAt": "2026-10-21T17:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7010,7 +7010,7 @@
               "name": "Tyjae Spears",
               "position": "RB",
               "status": "Active",
-              "injury": null,
+              "injury": "Undisclosed",
               "reportedAt": "2026-10-19T03:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
             },
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-21T17:11:03Z",
-      "lastAttemptAt": "2026-10-21T17:11:03Z",
+      "checkedAt": "2026-10-21T17:20:02Z",
+      "lastAttemptAt": "2026-10-21T17:20:02Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-21T17:11:03Z",
-      "lastAttemptAt": "2026-10-21T17:11:03Z",
+      "checkedAt": "2026-10-21T17:20:02Z",
+      "lastAttemptAt": "2026-10-21T17:20:02Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
