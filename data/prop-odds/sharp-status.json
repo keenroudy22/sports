@@ -1,16 +1,16 @@
 {
- "at": "2026-10-21T14:13:33Z",
+ "at": "2026-10-21T14:23:19Z",
  "confirmed": {
-  "CFB-401862807": "2026-10-21T14:13:33Z",
-  "CFB-401869845": "2026-10-21T14:13:33Z",
-  "CFB-401871056": "2026-10-21T14:13:33Z",
-  "CFB-401871070": "2026-10-21T14:13:33Z",
-  "NFL-401873010": "2026-10-21T14:13:33Z"
+  "CFB-401862807": "2026-10-21T14:23:19Z",
+  "CFB-401869845": "2026-10-21T14:23:19Z",
+  "CFB-401871056": "2026-10-21T14:23:19Z",
+  "CFB-401871070": "2026-10-21T14:23:19Z",
+  "NFL-401873010": "2026-10-21T14:23:19Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 677,
+    "draftkings": 774,
     "fanduel": 418
    },
    "eventsListed": 53,
@@ -25,15 +25,15 @@
     "player_passing_+_rushing_yards": 46,
     "player_passing_attempts": 16,
     "player_passing_completions": 20,
-    "player_passing_touchdowns": 33,
-    "player_passing_yards": 148,
-    "player_receiving_yards": 463,
+    "player_passing_touchdowns": 36,
+    "player_passing_yards": 161,
+    "player_receiving_yards": 498,
     "player_receptions": 46,
     "player_rushing_attempts": 15,
-    "player_rushing_yards": 275
+    "player_rushing_yards": 321
    },
-   "requestsLeft": 7,
-   "rows": 1095,
+   "requestsLeft": 6,
+   "rows": 1192,
    "slateGames": [
     "New Mexico State Aggies at Sam Houston Bearkats 2026-10-22T00:00Z",
     "James Madison Dukes at App State Mountaineers 2026-10-22T23:00Z",
@@ -229,6 +229,7 @@
        "moneyline_3-way",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -1286,8 +1287,7 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 488,
-    "fanduel": 112
+    "draftkings": 400
    },
    "eventsListed": 29,
    "eventsMatched": 1,
@@ -1303,16 +1303,13 @@
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
-    "player_passing_touchdowns": 14,
-    "player_passing_yards": 75,
-    "player_receiving_yards": 252,
-    "player_receptions": 106,
-    "player_rushing_+_receiving_yards": 6,
-    "player_rushing_attempts": 10,
-    "player_rushing_yards": 69
+    "player_passing_touchdowns": 4,
+    "player_passing_yards": 54,
+    "player_receiving_yards": 171,
+    "player_receptions": 103
    },
    "requestsLeft": 3,
-   "rows": 600,
+   "rows": 400,
    "slateGames": [
     "New England Patriots at Chicago Bears 2026-10-23T00:15Z"
    ],
@@ -1334,7 +1331,7 @@
       "fliff": "fobj__conflict_event__391741",
       "gemini": "NFL-2610251330-PIT-NO-T",
       "hardrock": "3910323733327380887",
-      "kalshi": "KXNFLRSHYDS-26OCT25PITNO-NOTSHOUGH6-20",
+      "kalshi": "KXNFLRECYDS-26OCT25PITNO-NODVELE14-15",
       "ladbrokes": "d8aae200-aa0c-4de2-843f-902d91183141",
       "novig": "01a136e2-e717-7c30-807e-7952b04dee72",
       "paddypower": "35605985",
@@ -1477,7 +1474,7 @@
       "fliff": "fobj__conflict_event__408410",
       "gemini": "NFL-2610251700-SF-ATL-T",
       "hardrock": "450222213367464351",
-      "kalshi": "KXNFLRSHYDS-26OCT25SFATL-ATLBROBINSON7-110",
+      "kalshi": "KXNFLRSHYDS-26OCT25SFATL-SFBPURDY13-25",
       "ladbrokes": "cbff4bee-d00f-4e31-b67d-c4e55281ae35",
       "novig": "01a136e2-eac0-7dd3-9129-aa16dd49076a",
       "paddypower": "36188996",
@@ -1617,7 +1614,7 @@
       "fliff": "fobj__conflict_event__407875",
       "gemini": "NFL-2610251700-CIN-BAL-S",
       "hardrock": "6887203087019278759",
-      "kalshi": "KXNFLRSHYDS-26OCT25CINBAL-CINCBROWN30-25",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25CINBAL",
       "ladbrokes": "c21b9632-07d2-49f6-9e0b-3b48ffae5444",
       "novig": "01a136e2-eb8c-7492-82a7-9b44bdc66cee",
       "paddypower": "36188997",
@@ -1752,7 +1749,7 @@
       "fliff": "fobj__conflict_event__407877",
       "gemini": "NFL-2610251700-CLE-TEN-S",
       "hardrock": "4620555468312543622",
-      "kalshi": "KXNFL2HSPREAD-26OCT25CLETEN",
+      "kalshi": "KXNFLPASSYDS-26OCT25CLETEN-CLEDWATSON4-175",
       "ladbrokes": "86e78aee-0e3e-4b60-8386-6a6eabdc5c2e",
       "novig": "01a136e2-e8c4-7c83-b360-6d356120b5db",
       "paddypower": "36189001",
@@ -2424,7 +2421,7 @@
       "fliff": "fobj__conflict_event__407879",
       "gemini": "NFL-2610252005-DEN-ARI-T",
       "hardrock": "8903689820174418335",
-      "kalshi": "KXNFLRSHYDS-26OCT25DENARI-DENJDOBBINS27-30",
+      "kalshi": "KXNFLRSHYDS-26OCT25DENARI-DENBNIX10-20",
       "ladbrokes": "b32e8da1-f0c5-4ec6-a8f0-fb7f2f6f88bd",
       "novig": "01a136e2-ed41-7f12-9786-25d6715adc49",
       "paddypower": "36189004",
@@ -2559,7 +2556,7 @@
       "fliff": "fobj__conflict_event__407880",
       "gemini": "NFL-2610252025-GB-DET-S",
       "hardrock": "7899387103270797721",
-      "kalshi": "KXNFLRSHYDS-26OCT25GBDET-DETJGIBBS0-110",
+      "kalshi": "KXNFLRECYDS-26OCT25GBDET-DETJGIBBS0-15",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "novig": "01a136e2-eecd-78b0-ad17-c6ca310ae109",
       "paddypower": "36189005",
@@ -2697,7 +2694,7 @@
       "fliff": "fobj__conflict_event__407881",
       "gemini": "NFL-2610252025-LAR-LV-T",
       "hardrock": "1958013294862270870",
-      "kalshi": "KXNFLRSHYDS-26OCT25LARLV-LVMWASHINGTON4-30",
+      "kalshi": "KXNFLRSHYDS-26OCT25LARLV-LARBCORUM24-20",
       "ladbrokes": "9e70c69e-0cb8-4a79-b602-8859ec8f54be",
       "novig": "01a136e2-ee10-7373-841a-15273c9c9ea9",
       "paddypower": "36189003",
