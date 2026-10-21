@@ -1,5 +1,17 @@
 # October 5 product implementation tracker
 
+## October21 — owner refines the next Climb's ticket shape
+
+Owner wants conservative alternate lines, preferably two legs and at most three,
+with roughly -150 to -200 combined ticket odds, while preserving useful progress.
+Recorded as prospective policy in AGENTS.md; not a claim of risk-free betting or a
+runtime release. Supersedes the earlier1–3 leg/-220..-130 envelope. Existing weekly
+cadence, source/price support, news/role/risk, one-open-step and80/20 banking remain.
+Reopened O-20261021-CLIMBSELECTIVE for the bounded constructor/admission/release and
+public policy alignment before the next ticket. Original shipped policy receipts
+and all past steps remain below. Thursday preparation must use this latest shape;
+do not admit an old-shape ticket merely because the prior code accepted it.
+
 ## October21 — Discord routing repair fully verified
 
 Hosted39649766663 containing093dc128/6788f818 SUCCESS at18:19Z. Rechecked the

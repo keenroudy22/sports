@@ -205,6 +205,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Climb ticket shape (owner, October21 follow-up):** target two alternate-line
+  legs, with three only when independently justified, at roughly -150 to -200 for
+  the combined ticket, not each leg. Favor conservative supported lines while
+  retaining useful progress toward $1,000; do not add risk merely to accelerate it.
+  This replaces the earlier one-to-three-leg / -220 to -130 ticket envelope for
+  future admissions. Align construction, admission and release before the next
+  Climb; track under O-20261021-CLIMBSELECTIVE. Preserve real-price support, news,
+  role and ticket-risk checks, one open step, weekly cadence and 80/20 banking.
+  No ticket is guaranteed safe; skip an unsupported step rather than force it.
+
 - **Pregame Discord tickets (owner, October21):** new personal/fun tickets go to
   Plays & Results, labeled as personal/fun and still separate from Best Bet accounting.
   Wins & Bad Beats is for verified winning slips and defined settled bad beats, never
