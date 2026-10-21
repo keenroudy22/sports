@@ -110,8 +110,13 @@ class TrialRuntimeTests(unittest.TestCase):
  def test_late_send_uses_reserved_football_slots_and_has_no_discord_payload(self):
   import buffer_post
   play={**offer(),'publishedAt':'2026-10-20T13:00:00Z','eventId':'NBA-1','direction':'under','projection':210.,'reasons':['Last season, A scored 100.0 a game across its last five recorded regular-season games.'],'game':{'teams':{'home':{'abbreviation':'A'},'away':{'abbreviation':'B'}}}}
-  with patch.object(rt,'public_rows',return_value=[play]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(nba_capture,'step',return_value={}):
+  # social_plans advances to the post-capture clock; keep this fixed-date
+  # queue fixture on its game day on developer machines and hosted runners.
+  with patch.object(rt,'public_rows',return_value=[play]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(nba_capture,'step',return_value={}),patch.object(rt,'datetime',wraps=datetime) as clock:
+   clock.now.return_value=NOW
    plans=rt.social_plans(NOW,{'posts':[]},root=self.root,reserved=[('football','play','text',NOW+timedelta(minutes=15),'card')])
+   clock.now.return_value=NOW+timedelta(days=1)
+   self.assertEqual(rt.social_plans(NOW,{'posts':[]},root=self.root),[])
   self.assertEqual(plans[0][1],'nba-trial');self.assertGreaterEqual(plans[0][3],NOW+timedelta(minutes=25))
   self.assertIn('NBA Trial',plans[0][2]);self.assertNotIn('1u',plans[0][2])
   self.assertIn('I have the total at 210.',plans[0][2]);self.assertNotIn('1u',plans[0][2])
