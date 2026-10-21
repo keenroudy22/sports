@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T17:00:48Z",
+  "updatedAt": "2026-10-21T17:11:03Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-21T16:50Z",
+              "reportedAt": "2026-10-21T17:05Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-21T16:17Z",
+              "reportedAt": "2026-10-21T17:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1617,6 +1617,15 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "5081397",
+              "name": "Dylan Sampson",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Knee",
+              "reportedAt": "2026-10-21T16:46Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5081397/dylan-sampson"
+            },
+            {
               "id": "4685702",
               "name": "Quinshon Judkins",
               "position": "RB",
@@ -1831,15 +1840,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T20:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/3040471/maliek-collins"
-            },
-            {
-              "id": "5081397",
-              "name": "Dylan Sampson",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Knee",
-              "reportedAt": "2026-10-16T18:20Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5081397/dylan-sampson"
             }
           ]
         },
@@ -3457,6 +3457,15 @@
           "name": "Kansas City Chiefs",
           "players": [
             {
+              "id": "4428331",
+              "name": "Rashee Rice",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-21T16:59Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428331/rashee-rice"
+            },
+            {
               "id": "4426659",
               "name": "George Karlaftis",
               "position": "DE",
@@ -3491,15 +3500,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-21T00:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4567826/cooper-mcdonald"
-            },
-            {
-              "id": "4428331",
-              "name": "Rashee Rice",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4428331/rashee-rice"
             },
             {
               "id": "4569659",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-21T16:50Z",
+              "reportedAt": "2026-10-21T17:05Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4427366",
+              "name": "Breece Hall",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-21T16:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
+            },
+            {
               "id": "4597500",
               "name": "Adonai Mitchell",
               "position": "WR",
@@ -5570,15 +5579,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-20T16:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham"
-            },
-            {
-              "id": "4427366",
-              "name": "Breece Hall",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
             },
             {
               "id": "4695404",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "5",
-          "name": "Mason Graham",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-20T18:08:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
-        },
-        {
-          "teamId": "5",
           "name": "Mike Hall Jr.",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-21T17:00:48Z",
           "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-21T17:11:03Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-21T17:00:48Z",
-      "lastAttemptAt": "2026-10-21T17:00:48Z",
+      "checkedAt": "2026-10-21T17:11:03Z",
+      "lastAttemptAt": "2026-10-21T17:11:03Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-21T17:00:48Z",
-      "lastAttemptAt": "2026-10-21T17:00:48Z",
+      "checkedAt": "2026-10-21T17:11:03Z",
+      "lastAttemptAt": "2026-10-21T17:11:03Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
