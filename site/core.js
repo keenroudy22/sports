@@ -321,6 +321,7 @@
     /* Pulled over news before its post went out: that stays the word through kickoff, until it is graded. */
     if (/before its post went out|^Pulled before posting:/.test(p.entryNote || '')) return { word: 'Pulled', tone: 'closed' };
     if (p.kickoff && Date.parse(p.kickoff) <= now) return { word: 'In play', tone: 'reference' };
+    if (p.community && p.posted) return { word: 'Posted ticket', tone: 'reference' };
     if (p.entryNote) return { word: 'Line moved', tone: 'closed' };
     if (p.status === 'expired' || (p.expiresAt && Date.parse(p.expiresAt) <= now)) return { word: 'Price expired', tone: 'closed' };
     return { word: 'Open', tone: 'open' };

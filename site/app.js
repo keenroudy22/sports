@@ -367,7 +367,7 @@
     const graded = `graded at ${pick.line != null && !isParlayLike(pick) && word === 'Line moved' ? `${pick.line} ` : ''}${at}`;
     const awaitingResult = word === 'In play' && Date.parse(pick.kickoff) < now - 4 * 3600000;
     const statusShort = awaitingResult ? `Awaiting result · ${graded}` : mode === 'expired' ? goodTo(pick) || 'Posted quote is older than four hours' : word === 'Line moved' ? `Off the card · ${graded}` : word === 'Pulled' ? `Pulled before posting · ${graded}`
-      : word === 'Withdrawn' ? 'Withdrawn before kickoff' : word === 'In play' ? `In play · ${graded}` : '';
+      : word === 'Withdrawn' ? 'Withdrawn before kickoff' : word === 'Posted ticket' ? 'Posted ticket · not settled' : word === 'In play' ? `In play · ${graded}` : '';
     const stub = result === 'win' ? { cls: 'hit', big: '✓', small: 'Hit' }
       : result === 'loss' ? { cls: 'miss', big: '✗', small: 'Miss' }
         : result === 'push' || result === 'void' ? { cls: 'push', big: '–', small: result === 'void' ? 'Void' : 'Push' }
