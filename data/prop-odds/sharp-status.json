@@ -1,11 +1,11 @@
 {
- "at": "2026-10-21T12:29:44Z",
+ "at": "2026-10-21T12:31:51Z",
  "confirmed": {
-  "CFB-401862807": "2026-10-21T12:29:44Z",
+  "CFB-401862807": "2026-10-21T12:31:51Z",
   "CFB-401869845": "2026-10-21T11:36:19Z",
-  "CFB-401871056": "2026-10-21T12:29:44Z",
-  "CFB-401871070": "2026-10-21T12:29:44Z",
-  "NFL-401873010": "2026-10-21T12:29:44Z"
+  "CFB-401871056": "2026-10-21T12:31:51Z",
+  "CFB-401871070": "2026-10-21T12:31:51Z",
+  "NFL-401873010": "2026-10-21T12:31:51Z"
  },
  "leagues": {
   "CFB": {
@@ -32,7 +32,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "Duke",
+     "away": "Duke Blue Devils",
      "external": {
       "betmgm": "6:47427",
       "betonline": "491157985",
@@ -66,10 +66,10 @@
       "underdog": "underdog_183143",
       "underdog_multipliers": "underdog_183143"
      },
-     "home": "Virginia",
+     "home": "Virginia Cavaliers",
      "sample": {
-      "away_team": "Duke",
-      "home_team": "Virginia",
+      "away_team": "Duke Blue Devils",
+      "home_team": "Virginia Cavaliers",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -1263,22 +1263,34 @@
   },
   "NFL": {
    "books": {
+    "draftkings": 482,
     "fanduel": 379
    },
    "eventsListed": 29,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {
-    "player_passing_touchdowns": 10,
-    "player_passing_yards": 23,
-    "player_receiving_yards": 171,
-    "player_receptions": 97,
-    "player_rushing_+_receiving_yards": 6,
-    "player_rushing_yards": 59,
+    "player_extra_points_made": 4,
+    "player_field_goals_made": 4,
+    "player_interceptions": 4,
+    "player_kicking_points": 4,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 26,
+    "player_longest_rush": 10,
+    "player_passing_+_rushing_yards": 4,
+    "player_passing_attempts": 4,
+    "player_passing_completions": 4,
+    "player_passing_touchdowns": 14,
+    "player_passing_yards": 75,
+    "player_receiving_yards": 339,
+    "player_receptions": 202,
+    "player_rushing_+_receiving_yards": 12,
+    "player_rushing_attempts": 10,
+    "player_rushing_yards": 128,
     "player_sacks": 13
    },
-   "requestsLeft": 7,
-   "rows": 379,
+   "requestsLeft": 4,
+   "rows": 861,
    "slateGames": [
     "New England Patriots at Chicago Bears 2026-10-23T00:15Z"
    ],
@@ -1576,7 +1588,7 @@
       "fliff": "fobj__conflict_event__407875",
       "gemini": "NFL-2610251700-CIN-BAL-S",
       "hardrock": "6887203087019278759",
-      "kalshi": "KXNFL2HSPREAD-26OCT25CINBAL",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25CINBAL",
       "ladbrokes": "c21b9632-07d2-49f6-9e0b-3b48ffae5444",
       "novig": "01a136e2-eb8c-7492-82a7-9b44bdc66cee",
       "paddypower": "36188997",
@@ -2366,6 +2378,7 @@
       "bwin": "6:43677",
       "caesars": "61fad2d0-cf01-f53c-3528-85bde1e31fc9",
       "circa": "228801",
+      "draftkings": "34118123",
       "fanatics": "5624041",
       "fanduel": "36189004",
       "fliff": "fobj__conflict_event__407879",
