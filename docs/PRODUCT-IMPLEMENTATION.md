@@ -1,5 +1,33 @@
 # October 5 product implementation tracker
 
+## October21 — Discord routing repair fully verified
+
+Hosted39649766663 containing093dc128/6788f818 SUCCESS at18:19Z. Rechecked the
+live Today page at375 after deploy: Best Bet and exact NBA lotto link intact,
+scrollWidth375, no did-not-load state or console errors. Evidence screenshot
+/tmp/kookn-discord-routing-live-phone.png. Live Discord shows the original ticket
+and screenshot in Plays & Results message1562525936665104445; original wins
+message1562505036628762658 is now only a correction link, no ticket art. Verified
+current operational destination and future pull routing are plays; original sentAt
+and destination evidence survive in routingCorrections/private original. No X
+duplicate, stake/result change or record rewrite. Queue O-20261021-NBALOTTO shipped;
+normal settlement and next natural delivery checks remain ordinary follow-through.
+
+## October21 — Discord correction installed; hosted verification in progress
+
+Source3ba4478c rebased6788f818 installed under release/run locks. Normal and clean
+export1581Python(two skips)/269Node;443pages, record111/NBA0, guard586/assets clear;
+existing soft payload warnings only. Offline1330/0ept7dzu outcomeok, zero outside
+writes/private reads. First local suite found the bounded queue had reached160;
+reopened the existing O-20261021-NBALOTTO item instead of expanding the limit or
+discarding history, then repeated full gates. Followup093dc128 sets the corrected
+ticket's current destination/message ID and community type to plays/ticket so a
+later pull update cannot return to wins. Original destination survives in the
+appended correction/private original; original sentAt, X and record remain unchanged.
+Hosted containing093dc128 run39649766663 is in progress; earlier source-only run
+39649709678 was superseded, not a completed release. Live Discord correction is
+already verified in both channels; final hosted/live-site receipt remains observation.
+
 ## October21 — pregame personal-ticket Discord routing correction
 
 Owner reported new tickets still entering Wins & Bad Beats. Confirmed today's NBA
