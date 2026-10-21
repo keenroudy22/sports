@@ -1307,11 +1307,16 @@
       COMMUNITY,
       state.league === 'ALL' ? ktSec('sports', 'More sports', `<div class="pill-row">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
         return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) || !sports ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''].join('');
+    const brief = today.morningBrief;
+    const morningHtml = !rows.length && brief && (state.league === 'ALL' || state.league === brief.league)
+      && C.dayOf(brief.kickoff) === etDay() && Date.parse(brief.kickoff) > now
+      && now - Date.parse(brief.observedAt) >= 0 && now - Date.parse(brief.observedAt) <= 4 * 3600000
+      ? ktSec('morning', 'Strongest morning lean', `<p class="small" style="white-space:pre-line;overflow-wrap:anywhere">${esc(brief.text)}</p><p class="tiny muted">Checked ${esc(whenShort(brief.capturedAt))}</p>`, {kind:'Research · not a Best Bet'}) : '';
     const evaluated = today.generatedAt && C.dayOf(today.generatedAt) === etDay()
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
     return `<p class="small muted" style="margin-bottom:12px"><b>Best Bets · 1u</b> · <b>Chef's Picks · 2u</b> · the rarer, stronger tier. Earlier plays keep their posted stakes.</p><div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
-      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, favorite: favoriteHtml, spotlight: nflSpotlight, nextSlate,
+      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
       nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
   };
@@ -1932,7 +1937,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-ea92642691cf';
-  const GAMES_ASSET = 'app-games.js?v=sha256-2c2171f3bc19';
+  const GAMES_ASSET = 'app-games.js?v=sha256-386e201a693e';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

@@ -669,6 +669,8 @@ def house_posts(first, latest, games, log_book, now, log=print):
     out += cashed(first, latest, games, log_book, now)
     import research_posts
     out += research_posts.touchdown_followups(log_book, now)
+    import morning_brief
+    morning=morning_brief.post(now)
     import sheet
     projection = sheet.post(games, now)
     posted_ids = {row.get('id') for row in log_book.get('posts', [])
@@ -680,7 +682,9 @@ def house_posts(first, latest, games, log_book, now, log=print):
     # Wednesday's ordinary slate research slot.
     research_already = research_posts.already_posted(log_book, research.get('countsFor', eastern_date(now))
                                                      if research else eastern_date(now))
-    if research and research['stale'] > now and not research_already:
+    if morning and morning['stale'] > now and not research_posts.already_posted(log_book,eastern_date(now)):
+        out.append(morning)
+    elif research and research['stale'] > now and not research_already:
         out.append(research)
     import sports_posts
     sports = sports_posts.post(now)

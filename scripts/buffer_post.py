@@ -361,6 +361,46 @@ def discord_first_due(now):
     return post_windows.delivery_ready(now)
 
 
+def yield_optional(log_book, desired, now, channel_id, key=None, send=http_send):
+    """Move at most two unsent routine posts, never a public play or sent post.
+
+    Keep copy/art intact and preserve every prior Buffer identity as a receipt.
+    Restore the original schedule if its replacement is refused.
+    """
+    moved=[]
+    for entry in sorted(log_book.get('posts',[]),key=lambda r:r.get('dueAt') or ''):
+        if len(moved)>=2:break
+        if entry.get('kind') not in ('buffer:receipt','buffer:book'):continue
+        if any(entry.get(k) for k in ('sentAt','cancelledAt','deletedAt','error')) or not entry.get('bufferPostId'):continue
+        old_due=gates.when(entry['dueAt'])
+        if old_due<=now+SOON or abs((old_due-desired).total_seconds())>=SPACING.total_seconds():continue
+        query='query($id: PostId!) { post(input: {id: $id}) { id status text } }'
+        post=graphql(query,{'id':entry['bufferPostId']},key=key,send=send).get('post') or {}
+        if post.get('status')!='scheduled' or x_post.text_hash(post.get('text',''))!=entry.get('textHash'):continue
+        busy=taken({'posts':[r for r in log_book['posts'] if r is not entry]},now)+[desired]
+        due=free_slot(max(old_due,desired+SPACING),busy)
+        if eastern_date(due)!=eastern_date(old_due):continue
+        # Do not carry a time-sensitive research quote past its existing cutoff.
+        import nba_editorial
+        snapshot=next((r for r in nba_editorial.stored() if r['key']==entry['id']),None)
+        if snapshot and due>=gates.when(snapshot['stale']):continue
+        mirror=entry.get('discord') or {}
+        image=(mirror.get('image') or card_url(entry.get('cardKey') or entry['id'])) if entry.get('card') else None
+        old_id=entry['bufferPostId']
+        delete_post(old_id,key=key,send=send)
+        entry.setdefault('deliveryHistory',[]).append({'bufferPostId':old_id,'dueAt':gates.stamp(old_due),
+            'rescheduledAt':gates.stamp(now),'reason':'Fresh official play takes priority'})
+        try:new_id=create_post(post['text'],channel_id,due,image,key=key,send=send)
+        except BufferError:
+            try:entry['bufferPostId']=create_post(post['text'],channel_id,old_due,image,key=key,send=send)
+            except BufferError:
+                entry['error']='Optional post rescheduling and restoration failed; operator recovery required'
+            raise
+        entry.update(bufferPostId=new_id,dueAt=gates.stamp(due),rescheduledAt=gates.stamp(now))
+        moved.append(entry['id'])
+    return moved
+
+
 def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None, log=print):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 

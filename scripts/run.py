@@ -63,7 +63,7 @@ SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a sl
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
-WHITELIST = ('data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
+WHITELIST = ('data/morning-brief/', 'data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
              'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
@@ -150,7 +150,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/',
+LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
@@ -2715,6 +2715,15 @@ def _run(args, now, slot, kinds, status):
                 status['nbaTrial'] = nba_trial_runtime.admission(now, capture='nbaCapture' not in status)
         except Exception as error:
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
+        try:
+            import morning_brief
+            public_today=any(not dict(p,**ctx.latest.get(k,{})).get('result') and not p.get('parlayType')
+                and any(g in games and eastern_date(gates.when(games[g]['kickoff']))==eastern_date(now)
+                        for g in p.get('gameIds',[])) for k,p in ctx.first.items())
+            status['morningBriefPrepared']=morning_brief.prepare(
+                now if args.dry_run else datetime.now(timezone.utc),screened,official=bool(admitted or public_today))
+        except Exception as error:
+            status['errors'].append(f'morning brief: {type(error).__name__}: {error}')
         # The lane is fixed at admission, but the public feature store cannot
         # reveal an unreleased play.
         pick_of_the_day(now, ctx, status, current=potd_market, write=not bool(admitted))
@@ -3135,6 +3144,16 @@ def release_private(now, log=log, only=None):
         kickoff = starts[0]
         target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
         due = max(target, now + post_windows.DISCORD_PLAY_LEAD)
+        if now >= target-post_windows.DISCORD_PLAY_LEAD and not row.get('bufferPostId'):
+            try:
+                moved=buffer_post.yield_optional(log_book,due,now,channel['id'])
+                if moved:log(f'release: routine posts moved behind fresh play: {moved}')
+            except buffer_post.BufferError as error:
+                log(f'release: optional queue move failed; keeping official release active: {error}')
+            finally:
+                # Persist even a restored replacement identity after an API refusal.
+                x_post.save_log(log_book)
+            busy=buffer_post.taken(log_book,now)
         # Find the first open slot from this play's own target.  A later
         # research/community post must not push an earlier official release
         # behind it; free_slot already preserves spacing around every post.

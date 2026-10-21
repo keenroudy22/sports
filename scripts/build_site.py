@@ -1892,7 +1892,9 @@ def build(now=None):
                                                'afterPostingHolds': [p['id'] for p in picks if (p.get('held') or {}).get('afterPosting')]})
     community_records = __import__('community_record').build(ROOT)
     posted_records = list({p['id']: p for p in picks + community_records}.values())
+    import morning_brief
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
+                               'morningBrief': morning_brief.current(now),
                                'health': research_views.health(freshness, now), 'games': cards,
                                'picks': recent_picks(posted_records, now),
                                'historyFile': 'record.json', 'model': summary,
@@ -1937,7 +1939,7 @@ def build(now=None):
     write(OUT / 'research.json', {'generatedAt': stamp(now), **build_research(context, reports, now)})
     write(OUT / 'sport-research.json', sport_research.build(now))
     import nba_today
-    write(OUT / 'nba.json', nba_today.build(now))
+    write(OUT / 'nba.json', dict(nba_today.build(now),morningBrief=morning_brief.current(now)))
     import shutil as nba_copy
     nba_preview = ROOT / 'design/final/nba-trial-preview.png'
     if nba_preview.exists():
