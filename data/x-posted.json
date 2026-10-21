@@ -4177,6 +4177,106 @@
    "sentAt": "2026-10-20T17:29:17.292Z",
    "link": "https://x.com/1753110091912413184/status/2112597030212096027",
    "tweetId": "2112597030212096027"
+  },
+  {
+   "id": "receipt:day:2026-10-20",
+   "postedAt": "2026-10-21T05:27:02Z",
+   "dueAt": "2026-10-21T13:03:00Z",
+   "bufferPostId": "6ad84d2fa9967de0497718ee",
+   "textHash": "622fb225c04056f2",
+   "kind": "buffer:receipt",
+   "card": true,
+   "cardTheme": "ticket",
+   "cardKey": "receipt-day-2026-10-20"
+  },
+  {
+   "id": "ladder-loss:CFB-2026-W8-ladder-1020-c3s3-fd",
+   "postedAt": "2026-10-21T05:27:02Z",
+   "dueAt": "2026-10-21T13:33:00Z",
+   "bufferPostId": "6ad84d2fa9967de049771927",
+   "textHash": "7ca3319d0c89f8c5",
+   "kind": "buffer:cashed",
+   "card": true,
+   "cardTheme": "ticket",
+   "cardKey": "ladder-result-CFB-2026-W8-ladder-1020-c3s3-fd"
+  },
+  {
+   "id": "research:td-hit:research:end-zone:2026-10-20",
+   "postedAt": "2026-10-21T05:27:02Z",
+   "dueAt": "2026-10-21T05:29:07Z",
+   "bufferPostId": "6ad84d3050009d9e950d41c7",
+   "textHash": "736adf9b52ef8a3c",
+   "kind": "buffer:research",
+   "card": false,
+   "cardTheme": "none",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 PJ Martin found the end zone.\nThat was my anytime TD lean this morning.\n#CFB",
+    "destination": "research"
+   }
+  },
+  {
+   "id": "nba-projections-2026-10-21",
+   "postedAt": "2026-10-21T05:27:02Z",
+   "dueAt": "2026-10-21T12:06:00Z",
+   "bufferPostId": "6ad84d30db7d81982148479c",
+   "textHash": "5e33992c43add8cc",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "NBA Oct 21: my scores\nAtlanta Hawks at Orlando Magic: 116.7-120.7\nMilwaukee Bucks at Washington Wizards: 125-122.9\nMinnesota Timberwolves at Miami Heat: 119.7-122.1\nEarly score estimates. New rosters can change them.\nFull board: keenroudy.com/sports/#today?sport=NBA\n#NBA",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/nba-projections-2026-10-21.png"
+   }
+  },
+  {
+   "id": "nba-trends-2026-10-21",
+   "postedAt": "2026-10-21T05:27:02Z",
+   "dueAt": "2026-10-21T14:01:00Z",
+   "bufferPostId": "6ad84d31d894396f66c9141b",
+   "textHash": "9030b779b8132c2b",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "NBA · Last 10 games, last season\nAtlanta Hawks: 120 scored / 113.6 given up per game\nOrlando Magic: 116.4 scored / 117.5 given up per game\nScoring context, not a forecast. New rosters can change it.\nFull board: keenroudy.com/sports/#today?sport=NBA\n#NBA",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/nba-trends-2026-10-21.png"
+   }
+  },
+  {
+   "id": "research:end-zone:2026-10-21",
+   "postedAt": "2026-10-21T05:27:02Z",
+   "dueAt": "2026-10-21T14:33:00Z",
+   "bufferPostId": "6ad84d32aff466fe09021283",
+   "textHash": "ef17ebbac46ae645",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nMy TD lean: James Jones\n10 red-zone opportunities · 8 inside the 10\n#CFB",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-10-21.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "James Jones",
+      "athleteId": "5220253",
+      "gameId": "CFB-401871070",
+      "league": "CFB",
+      "kickoff": "2026-10-22T00:00Z",
+      "anytime": true,
+      "firstTd": true
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-10-21"
   }
  ]
 }
