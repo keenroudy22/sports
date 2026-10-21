@@ -1948,6 +1948,134 @@
    "to": 0.95,
    "undoKey": "trust:NFL/total",
    "why": "NFL/total trust 1.00 to 0.95"
+  },
+  {
+   "at": "2026-10-21T12:43:08Z",
+   "engine": "two-way",
+   "evidence": {
+    "originalChangeAt": "2026-10-20T12:25:05Z",
+    "originalEvidence": {
+     "clv": null,
+     "clvN": 0,
+     "hitRate": 0.4592,
+     "losses": 53,
+     "n": 98,
+     "need": 0.5319,
+     "roi": -0.1361,
+     "roi80": {
+      "high": -0.003,
+      "low": -0.252,
+      "mean": -0.136,
+      "n": 98
+     },
+     "wins": 45
+    },
+    "reason": "Missing required closing-price evidence",
+    "repairRelease": "5ad00c81"
+   },
+   "from": 2.0,
+   "key": "audit-correction:gap:CFB/prop:passYds",
+   "knob": "twoWay.gap",
+   "segment": "CFB/prop:passYds",
+   "to": 0.0,
+   "undoKey": "audit-correction:gap:CFB/prop:passYds",
+   "why": "Audit correction: reverse unsupported October20 gap for CFB/prop:passYds; required closing-price evidence was missing. Other safety holds stay."
+  },
+  {
+   "at": "2026-10-21T12:43:08Z",
+   "engine": "two-way",
+   "evidence": {
+    "originalChangeAt": "2026-10-20T12:25:05Z",
+    "originalEvidence": {
+     "clv": null,
+     "clvN": 0,
+     "hitRate": 0.4592,
+     "losses": 53,
+     "n": 98,
+     "need": 0.5319,
+     "roi": -0.1361,
+     "roi80": {
+      "high": -0.003,
+      "low": -0.252,
+      "mean": -0.136,
+      "n": 98
+     },
+     "wins": 45
+    },
+    "reason": "Missing required closing-price evidence",
+    "repairRelease": "5ad00c81"
+   },
+   "from": true,
+   "key": "audit-correction:pause:CFB/prop:passYds",
+   "knob": "twoWay.pause",
+   "segment": "CFB/prop:passYds",
+   "to": false,
+   "undoKey": "audit-correction:pause:CFB/prop:passYds",
+   "why": "Audit correction: reverse unsupported October20 pause for CFB/prop:passYds; required closing-price evidence was missing. Other safety holds stay."
+  },
+  {
+   "at": "2026-10-21T12:43:08Z",
+   "engine": "two-way",
+   "evidence": {
+    "originalChangeAt": "2026-10-20T12:25:05Z",
+    "originalEvidence": {
+     "clv": null,
+     "clvN": 0,
+     "hitRate": 0.4787,
+     "losses": 49,
+     "n": 94,
+     "need": 0.5764,
+     "roi": -0.1554,
+     "roi80": {
+      "high": -0.036,
+      "low": -0.274,
+      "mean": -0.155,
+      "n": 94
+     },
+     "wins": 45
+    },
+    "reason": "Missing required closing-price evidence",
+    "repairRelease": "5ad00c81"
+   },
+   "from": 2.0,
+   "key": "audit-correction:gap:CFB/prop:rec",
+   "knob": "twoWay.gap",
+   "segment": "CFB/prop:rec",
+   "to": 0.0,
+   "undoKey": "audit-correction:gap:CFB/prop:rec",
+   "why": "Audit correction: reverse unsupported October20 gap for CFB/prop:rec; required closing-price evidence was missing. Other safety holds stay."
+  },
+  {
+   "at": "2026-10-21T12:43:08Z",
+   "engine": "two-way",
+   "evidence": {
+    "originalChangeAt": "2026-10-20T12:25:05Z",
+    "originalEvidence": {
+     "clv": null,
+     "clvN": 0,
+     "hitRate": 0.4787,
+     "losses": 49,
+     "n": 94,
+     "need": 0.5764,
+     "roi": -0.1554,
+     "roi80": {
+      "high": -0.036,
+      "low": -0.274,
+      "mean": -0.155,
+      "n": 94
+     },
+     "wins": 45
+    },
+    "reason": "Missing required closing-price evidence",
+    "repairRelease": "5ad00c81"
+   },
+   "from": true,
+   "key": "audit-correction:pause:CFB/prop:rec",
+   "knob": "twoWay.pause",
+   "segment": "CFB/prop:rec",
+   "to": false,
+   "undoKey": "audit-correction:pause:CFB/prop:rec",
+   "why": "Audit correction: reverse unsupported October20 pause for CFB/prop:rec; required closing-price evidence was missing. Other safety holds stay."
   }
  ],
  "knobs": {
@@ -2111,13 +2239,15 @@
   "researchOrder": [],
   "segments": {
    "CFB/prop:passYds": {
-    "gapFloor": 2.0,
-    "paused": true,
+    "gapFloor": 0.0,
+    "paused": false,
+    "promotionBar": 2.0,
     "trust": 0.95
    },
    "CFB/prop:rec": {
-    "gapFloor": 2.0,
-    "paused": true,
+    "gapFloor": 0.0,
+    "paused": false,
+    "promotionBar": 2.0,
     "trust": 0.95
    },
    "CFB/prop:recYds": {
