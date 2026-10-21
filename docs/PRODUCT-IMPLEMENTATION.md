@@ -1,5 +1,29 @@
 # October 5 product implementation tracker
 
+## October21 — pregame personal-ticket Discord routing correction
+
+Owner reported new tickets still entering Wins & Bad Beats. Confirmed today's NBA
+lotto there in live Discord; Best Bet and research destinations independently correct.
+Webhook metadata matches channel IDs: plays1554299657432211558,
+wins1554299882855207022, research1559402689895469156. Root cause is the blanket
+buffer:community -> wins assignment, not a swapped webhook. Latest owner correction
+supersedes the older blanket personal-slip destination: registered pregame personal
+tickets go to Plays & Results while remaining community content and separate from
+Best Bet accounting. Explicit verified community wins/defined bad beats retain wins;
+unknown announcements hold. Sender rechecks legacy pending routes. Research, official
+result routing, original X posts, category caps and public record are unchanged.
+Focused23Discord/42Buffer tests pass, including the actual NBA ticket's stale pending
+wins route, exact original attachment, no duplicate replay and unknown/result holds.
+Today's NBA ticket corrected under the run lock at18:00Z: Plays & Results message
+1562525936665104445 contains the original text and durable screenshot; GET confirms
+channel1554299657432211558. Old wins message1562505036628762658 now contains only a
+redirect, no wager art/embeds. Original bytes/message and replacement receipt saved
+privately in ~/.config/keenroudy/discord-ticket-routing-2026-10-21.json; appended
+routingCorrections in the post log, never erased its original sentAt/destination or
+changed X/public accounting. Full source release remains pending, tracked
+O-20261021-NBALOTTO reopened for this correction. The bounded queue remains160
+items; original delivery/release evidence is preserved in the earlier receipt below.
+
 ## October21 — Thursday packet ready; overnight handoff explicitly scheduled
 
 8f678ec2/d1ce5e72 is contained in hosted39645216266SUCCESS. Normal/clean each

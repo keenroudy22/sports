@@ -205,6 +205,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Pregame Discord tickets (owner, October21):** new personal/fun tickets go to
+  Plays & Results, labeled as personal/fun and still separate from Best Bet accounting.
+  Wins & Bad Beats is for verified winning slips and defined settled bad beats, never
+  an open wager. The community namespace is not a result signal. Recheck queued legacy
+  routes at send time; unclassified community announcements hold rather than default
+  to wins. Research retains its dedicated channel. Preserve original delivery evidence
+  when correcting a misplaced message; this supersedes older blanket community-slip routing.
+
 - **Selective Climb cadence (owner, October21):** target one to three qualified steps per
   Eastern Monday–Sunday week, with one to three legs per ticket. This replaces the earlier
   minimum-two-step expectation; it is not a quota or permission to force a restart. Prefer

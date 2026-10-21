@@ -677,14 +677,16 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
         # Official plays and their settled win updates stay together in Plays
-        # & Results. Owner/community tickets use the separate community feed.
+        # & Results. Pregame personal tickets belong there too, while remaining
+        # community content and separate from the official Best Bet record.
         # Approved research follows its X post into the dedicated research feed.
         if kind in ('play', 'community', 'research') or (kind == 'cashed' and guid.startswith(('cashed:', 'burnt:'))):
             entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
         if kind == 'community':
-            # Owner-submitted model-assisted slips belong in the community wins feed, not the official-play feed.
-            # Its dedicated webhook has no public-channel fallback, so a missing destination holds the receipt.
-            entry['discord']['destination'] = 'wins'
+            import discord_post
+            phase = discord_post.community_type(guid, items)
+            entry['discord']['communityType'] = phase
+            entry['discord']['destination'] = {'ticket': 'plays', 'result': 'wins'}.get(phase)
         if kind == 'research':
             # There is deliberately no readyAt: research mirrors only after Buffer confirms X.
             entry['discord']['destination'] = 'research'

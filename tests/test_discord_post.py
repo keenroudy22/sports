@@ -185,7 +185,7 @@ class DiscordPostTests(unittest.TestCase):
     def test_community_win_uses_dedicated_destination_without_public_fallback(self):
         sent = []
         entry = {'id': 'community:win', 'kind': 'buffer:community', 'sentAt': '2026-09-28T15:59:00Z',
-                 'discord': {'state': 'pending', 'destination': 'wins', 'text': 'MODEL COOKED'}}
+                 'discord': {'state': 'pending', 'destination': 'wins', 'communityType': 'result', 'text': 'MODEL COOKED'}}
         send = lambda url, body, headers: (sent.append((url, body)) or (204, b''))
         self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', wins_url='wins',
                                                   send=send, log=lambda *_: None), [])
@@ -193,12 +193,44 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(sent[0][1]['content'], 'MODEL COOKED')
 
         held = {'id': 'community:held', 'kind': 'buffer:community', 'sentAt': '2026-09-28T15:59:00Z',
-                'discord': {'state': 'pending', 'destination': 'wins', 'text': 'WIN'}}
+                'discord': {'state': 'pending', 'destination': 'wins', 'communityType': 'result', 'text': 'WIN'}}
         failures = discord_post.mirror_sent({'posts': [held]}, NOW, url='plays', wins_url='',
                                             send=send, log=lambda *_: None)
         self.assertEqual(failures, [{'id': 'community:held', 'error': 'Discord destination is not configured'}])
         self.assertEqual(held['discord']['state'], 'pending')
         self.assertEqual(len(sent), 1, 'a community win must never leak into the official plays channel')
+
+    def test_actual_nba_ticket_cannot_follow_legacy_pending_wins_route(self):
+        row = {'id': 'community:personal-ticket:2026-10-21-nba-lotto', 'kind': 'buffer:community',
+               'sentAt': '2026-09-28T15:59:00Z',
+               'discord': {'state': 'pending', 'destination': 'wins', 'text': 'NBA FUN LOTTO',
+                           'image': 'https://example.com/ticket.png'}}
+        sent = []
+        send = lambda url, body, headers: (sent.append((url, body)) or (204, b''))
+        fetch = lambda _: (b'original screenshot', 'image/png', 'ticket.png')
+        discord_post.mirror_sent({'posts': [row]}, NOW, url='plays', wins_url='wins', send=send,
+                                 fetch=fetch, log=lambda *_: None)
+        self.assertEqual([s[0] for s in sent], ['plays'])
+        self.assertIn(b'original screenshot', sent[0][1])
+        self.assertEqual(row['discord']['destination'], 'plays')
+        self.assertEqual(row['kind'], 'buffer:community')
+        discord_post.mirror_sent({'posts': [row]}, NOW, url='plays', wins_url='wins', send=send,
+                                 fetch=fetch, log=lambda *_: None)
+        self.assertEqual(len(sent), 1)
+
+    def test_unknown_community_and_unsettled_result_never_default_to_wins(self):
+        self.assertIsNone(discord_post.community_type('community:unknown'))
+        self.assertIsNone(discord_post.community_type('community:unknown', {
+            'community:unknown': {'communityResult': True, 'result': 'win'}}))
+        self.assertIsNone(discord_post.community_type('community:ordinary-loss', {
+            'community:ordinary-loss': {'communityResult': True, 'result': 'loss', 'settledAt': NOW.isoformat()}}))
+        row = {'id': 'community:unknown', 'kind': 'buffer:community', 'sentAt': NOW.isoformat(),
+               'discord': {'state': 'pending', 'destination': 'wins', 'text': 'A new ticket'}}
+        sent = []
+        discord_post.mirror_sent({'posts': [row]}, NOW, url='plays', wins_url='wins',
+                                 send=lambda *a: (sent.append(a) or (204, b'')), log=lambda *_: None)
+        self.assertFalse(sent)
+        self.assertEqual(row['discord']['state'], 'skipped')
 
     def test_wins_webhook_never_falls_back(self):
         self.assertEqual(discord_post.wins_webhook({'DISCORD_WINS_WEBHOOK_URL': 'wins'}), 'wins')

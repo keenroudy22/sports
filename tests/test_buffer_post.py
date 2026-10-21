@@ -428,19 +428,21 @@ class ScheduleTests(unittest.TestCase):
         created = next(call for call in fake.calls if 'createPost' in call['query'])
         self.assertEqual(created['variables']['input']['assets'][0]['image']['url'], live)
 
-    def test_schedule_routes_official_play_and_win_together_and_keeps_community_apart(self):
+    def test_schedule_routes_pregame_tickets_to_plays_without_changing_their_record_kind(self):
         due = NOW + timedelta(hours=1)
         plans = [('p', 'play', 'Play', due, None), ('cashed:p', 'cashed', 'Win', due + bp.SPACING, None),
                  ('ladder-loss:p', 'cashed', 'Loss', due + 2 * bp.SPACING, None),
                  ('r', 'research', 'Research', due + 3 * bp.SPACING, None),
                  ('community:owner', 'play', 'Owner ticket', due + 4 * bp.SPACING, None)]
-        rows = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)['posts']
+        rows = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None,
+                           items={'community:owner': {'personalTicket': True}})['posts']
         self.assertEqual(rows[0]['discord'].get('destination'), None)
         self.assertNotIn('destination', rows[1]['discord'])
         self.assertNotIn('discord', rows[2])
         self.assertEqual(rows[3]['discord']['destination'], 'research')
         self.assertNotIn('readyAt', rows[3]['discord'], 'research must wait for confirmed X delivery')
-        self.assertEqual((rows[4]['kind'], rows[4]['discord']['destination']), ('buffer:community', 'wins'))
+        self.assertEqual((rows[4]['kind'], rows[4]['discord']['destination']), ('buffer:community', 'plays'))
+        self.assertEqual(rows[4]['discord']['communityType'], 'ticket')
 
     def test_card_theme_is_resolved_before_buffer_accepts_the_post(self):
         fake = FakeBuffer()
@@ -544,17 +546,20 @@ class ScheduleTests(unittest.TestCase):
     def test_community_receipts_are_routed_to_the_wins_channel(self):
         result = bp.schedule([('community:model-slip', 'community', 'MODEL COOKED',
                                NOW + timedelta(hours=1), None)],
-                             'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
+                             'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None,
+                             items={'community:model-slip': {'communityResult': True, 'result': 'win',
+                                                             'settledAt': NOW.isoformat()}})
         self.assertEqual(result['posts'][0]['discord'], {
-            'state': 'pending', 'text': 'MODEL COOKED', 'destination': 'wins'})
+            'state': 'pending', 'text': 'MODEL COOKED', 'destination': 'wins', 'communityType': 'result'})
 
     def test_owner_ticket_cannot_be_mislabeled_as_an_official_play(self):
         result = bp.schedule([('community:boosted-mnf:2026-10-05-atl-no', 'play', 'Owner ticket',
                                NOW + timedelta(hours=1), None)],
-                             'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
+                             'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None,
+                             items={'community:boosted-mnf:2026-10-05-atl-no': {'personalTicket': True}})
         post = result['posts'][0]
         self.assertEqual(post['kind'], 'buffer:community')
-        self.assertEqual(post['discord']['destination'], 'wins')
+        self.assertEqual(post['discord']['destination'], 'plays')
         self.assertNotIn('readyAt', post['discord'])
 
     def test_cancelled_discord_first_play_gets_a_public_pull_update(self):

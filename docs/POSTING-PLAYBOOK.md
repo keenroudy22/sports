@@ -60,6 +60,11 @@ Our own data: Oct 4 had 15 posts and got 0 likes and 0 reposts; Oct 2 had 6 post
 
 ## 2. Discord routing
 
+October21 correction: pregame owner-submitted personal/fun tickets also use Plays &
+Results, still labeled separately from Best Bets. Only verified settled winning slips
+and defined bad beats use Wins & Bad Beats. Unknown community posts hold; the
+community ID prefix is not proof of a result. This supersedes blanket slip routing.
+
 **Plays & Results:**
 - Hot Plate, best bets, Chef's Special and other fun tickets, and Climb steps.
 - Every official settled result update, directly beneath the feed that released the play.

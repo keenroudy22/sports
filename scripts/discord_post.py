@@ -42,6 +42,27 @@ def research_webhook(env=None):
     return ((env if env is not None else os.environ).get('DISCORD_RESEARCH_WEBHOOK_URL') or '').strip()
 
 
+def community_type(guid, items=None):
+    """Separate an exact registered ticket from an explicitly verified result.
+
+    The community namespace alone says nothing about whether a wager has settled.
+    Unknown announcements must not default into the wins feed.
+    """
+    item = (items or {}).get(guid) or {}
+    if item.get('personalTicket') is True:
+        return 'ticket'
+    if item.get('communityResult') is True and item.get('settledAt') and (
+            item.get('result') == 'win' or item.get('result') == 'loss' and item.get('badBeat') is True):
+        return 'result'
+    try:
+        tickets = json.loads((Path(__file__).resolve().parents[1] / 'data/community.json').read_text())
+    except (OSError, ValueError):
+        return None
+    if any(t.get('id') == guid and t.get('personalTicket') is True for t in tickets.get('tickets', [])):
+        return 'ticket'
+    return None
+
+
 def http_send(url, body, headers):
     data = body if isinstance(body, bytes) else json.dumps(body).encode('utf-8')
     request = urllib.request.Request(url, data=data, headers=headers, method='POST')
@@ -227,10 +248,19 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         mirror = entry.get('discord') or {}
         kind = entry.get('kind')
         destination = mirror.get('destination')
+        if kind == 'buffer:community' and mirror.get('state') == 'pending':
+            phase = community_type(entry.get('id')) or mirror.get('communityType')
+            # Recheck legacy pending payloads at send time as well. Already-sent
+            # receipts remain historical; an operator correction preserves them.
+            destination = {'ticket': 'plays', 'result': 'wins'}.get(phase)
+            if destination:
+                mirror['destination'] = destination
+                mirror['communityType'] = phase
         allowed = ((kind == 'buffer:play' and destination != 'wins')
                    or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith(('cashed:', 'burnt:'))
                        and destination != 'wins')
-                   or (kind == 'buffer:community' and destination == 'wins')
+                   or (kind == 'buffer:community' and destination in ('plays', 'wins')
+                       and mirror.get('communityType') in ('ticket', 'result'))
                    or (kind == 'buffer:research' and destination == 'research'))
         if not allowed:
             # Older queue entries may still carry a pending mirror payload.
