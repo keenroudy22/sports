@@ -4362,9 +4362,9 @@
   },
   {
    "id": "nba-props-2026-10-21",
-   "postedAt": "2026-10-21T13:21:31Z",
-   "dueAt": "2026-10-21T15:13:00Z",
-   "bufferPostId": "6ad8bc690811076dd03d1b5a",
+   "postedAt": "2026-10-21T13:35:00Z",
+   "dueAt": "2026-10-21T13:37:00Z",
+   "bufferPostId": "6ad8bf87b535ec9954c28651",
    "textHash": "53315007fdef4c20",
    "kind": "buffer:research",
    "card": true,
@@ -4375,8 +4375,28 @@
     "destination": "research",
     "image": "https://keenroudy.com/sports/data/cards/nba-props-2026-10-21.png"
    },
-   "cancelledAt": "2026-10-21T13:19:17Z",
-   "cancelReason": "NBA research review or current-price/availability hold"
+   "deliveryHistory": [
+    {
+     "id": "nba-props-2026-10-21",
+     "postedAt": "2026-10-21T13:21:31Z",
+     "dueAt": "2026-10-21T15:13:00Z",
+     "bufferPostId": "6ad8bc690811076dd03d1b5a",
+     "textHash": "53315007fdef4c20",
+     "kind": "buffer:research",
+     "card": true,
+     "cardTheme": "ticket",
+     "discord": {
+      "state": "pending",
+      "text": "NBA prop looks · DraftKings\nMatas Buzelis · Chicago Bulls\nOver 5.5 rebounds -101 · I have 7 at 30 estimated min · 8/10\nScottie Barnes · Toronto Raptors\nOver 5.5 assists -140 · I have 9.2 at 32 estimated min · 7/10\nLast season · last 10 recorded games.\n#NBA",
+      "destination": "research",
+      "image": "https://keenroudy.com/sports/data/cards/nba-props-2026-10-21.png"
+     },
+     "cancelledAt": "2026-10-21T13:19:17Z",
+     "cancelReason": "NBA research review or current-price/availability hold",
+     "verifiedAbsentAt": "2026-10-21T13:35:00Z",
+     "reason": "API returned not-found; complete actual day list has no matching sent or queued copy"
+    }
+   ]
   }
  ]
 }
