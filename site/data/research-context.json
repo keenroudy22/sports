@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T21:48:36Z",
+  "updatedAt": "2026-10-21T22:01:08Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-21T21:34Z",
+              "reportedAt": "2026-10-21T21:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -4607,6 +4607,24 @@
           "name": "Minnesota Vikings",
           "players": [
             {
+              "id": "4036133",
+              "name": "T.J. Hockenson",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-21T21:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4036133/tj-hockenson"
+            },
+            {
+              "id": "4360569",
+              "name": "Jordan Mason",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Thumb",
+              "reportedAt": "2026-10-21T21:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360569/jordan-mason"
+            },
+            {
               "id": "4262921",
               "name": "Justin Jefferson",
               "position": "WR",
@@ -4650,24 +4668,6 @@
               "injury": null,
               "reportedAt": "2026-10-21T21:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429205/jordan-addison"
-            },
-            {
-              "id": "4036133",
-              "name": "T.J. Hockenson",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-21T18:39Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4036133/tj-hockenson"
-            },
-            {
-              "id": "4360569",
-              "name": "Jordan Mason",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Thumb",
-              "reportedAt": "2026-10-21T18:32Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360569/jordan-mason"
             },
             {
               "id": "4361985",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-21T21:34Z",
+              "reportedAt": "2026-10-21T21:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6044,7 +6044,7 @@
               "id": "3045373",
               "name": "Jalen Ramsey",
               "position": "CB",
-              "status": "Active",
+              "status": "Questionable",
               "injury": "Wrist",
               "reportedAt": "2026-10-21T02:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/3045373/jalen-ramsey"
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "27",
-          "name": "Zyon McCollum",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-21T19:26:09Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4250392/zyon-mccollum"
-        },
-        {
-          "teamId": "27",
           "name": "Bucky Irving",
           "from": "Active",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-21T21:48:36Z",
           "source": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle"
+        },
+        {
+          "teamId": "23",
+          "name": "Jalen Ramsey",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-21T22:01:08Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3045373/jalen-ramsey"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-21T21:48:36Z",
-      "lastAttemptAt": "2026-10-21T21:48:36Z",
+      "checkedAt": "2026-10-21T22:01:08Z",
+      "lastAttemptAt": "2026-10-21T22:01:08Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-21T21:48:36Z",
-      "lastAttemptAt": "2026-10-21T21:48:36Z",
+      "checkedAt": "2026-10-21T22:01:08Z",
+      "lastAttemptAt": "2026-10-21T22:01:08Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
