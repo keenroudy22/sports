@@ -3872,7 +3872,16 @@
    "tweetId": "2112545716836921534",
    "link": "https://x.com/1753110091912413184/status/2112545716836921534",
    "confirmedAt": "2026-10-20T14:20:38Z",
-   "receiptSource": "Buffer dashboard Sent list; creation time decoded from the linked Snowflake ID"
+   "receiptSource": "Buffer dashboard Sent list; creation time decoded from the linked Snowflake ID",
+   "metrics": {
+    "reactions": 0,
+    "comments": 0,
+    "engagementRate": 1.14,
+    "reposts": 0,
+    "impressions": 176,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-21T14:07:59Z"
   },
   {
    "id": "community:personal-ticket:2026-10-19-mnf-q1-cashed",
@@ -4294,11 +4303,16 @@
    "card": true,
    "cardTheme": "ticket",
    "discord": {
-    "state": "pending",
+    "state": "sent",
     "text": "NBA · Last 10 games, last season\nAtlanta Hawks: 120 scored / 113.6 given up per game\nOrlando Magic: 116.4 scored / 117.5 given up per game\nScoring context, not a forecast. New rosters can change it.\nFull board: keenroudy.com/sports/#today?sport=NBA\n#NBA",
     "destination": "research",
-    "image": "https://keenroudy.com/sports/data/cards/nba-trends-2026-10-21.png"
-   }
+    "image": "https://keenroudy.com/sports/data/cards/nba-trends-2026-10-21.png",
+    "sentAt": "2026-10-21T14:07:59Z",
+    "beforeX": false
+   },
+   "sentAt": "2026-10-21T14:06:03.248Z",
+   "link": "https://x.com/1753110091912413184/status/2112908273128984714",
+   "tweetId": "2112908273128984714"
   },
   {
    "id": "research:end-zone:2026-10-21",
