@@ -1,5 +1,22 @@
 # October 5 product implementation tracker
 
+## October21 — NBA lotto fully delivered and pending label repaired
+
+X2112946271765897374 sent16:37:02.827Z; dedicated wins Discord16:37:09Z.
+Containing hosted39636518238 succeeded and Today/Fun expose the exact four-leg
+ticket with50%boost. Verification found a display defect: the personal-category
+entryNote was treated as a moved-price closure. Source03b539ed/dc830eb5,
+rebased54418d1f, hosted39640652113SUCCESS now keeps an unsettled posted community
+ticket labeled Posted ticket/not settled. Real results, withdrawal and in-play
+states retain precedence; accounting and all original publications are unchanged.
+First attempt caught the old core77 cache-version assertion; updated explicitly
+to78, then repeated normal/clean1578Python(two skips)/269Node. Build/record111,
+NBA0,publicguard586,assets and offline1145/58krhkpg passed. Existing soft payload
+warnings remain. Live app194 checked375/1440 without overflow or console errors;
+Fun shows one pending lotto, not a win or loss. Phone proof in
+/tmp/kookn-nba-lotto-record-phone.png. Morning automation remains implemented/live,
+with the next natural6:45/8:30 delivery tracked as observation rather than claimed.
+
 ## October21 — morning release installed; NBA lotto delivery in progress
 
 Source913f93a0, hosted39634056611 SUCCESS. Normal and clean copies each passed
