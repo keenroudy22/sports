@@ -42,6 +42,7 @@ test('the real app shared interface renders every lazy view with fixture data', 
   });
   const today = { games: [], picks: [], freshness: {}, health: [], generatedAt: '2026-10-08T18:00:00Z' };
   const routeFixture = { climbRoute: { run: 3, step: 2, saved: 42,
+    weekly: {weekStart:'2026-10-19',posted:1,maximum:3,remaining:2},
     image: 'data/cards/climb-route.png', rows: [
       { kind: 'cashed', step: 1, league: 'CFB', day: 'THU 10/8', clock: '7 PM',
         bet: 50, cashes: 81, bank: 16, legs: [{ title: 'Iowa +4.5', odds: -110,
@@ -51,6 +52,7 @@ test('the real app shared interface renders every lazy view with fixture data', 
     ] } };
   const team = { id: '1', name: 'Fixture Team', abbr: 'FIX', color: '#123456', games: [], defense: [] };
   const context = api.moreContext({
+    etDay: () => '2026-10-22',
     get: async path => path === 'app/record.json' ? routeFixture : today,
     maybe: async path => path === 'app/teams/CFB/1.json' ? team
       : path === 'app/players/CFB.json' ? { season: 2026, players: [] }
@@ -95,4 +97,9 @@ test('the real app shared interface renders every lazy view with fixture data', 
   assert.match(climbHtml, /next pick is not selected/);
   assert.doesNotMatch(climbHtml, /Plan · typical −160/);
   assert.match(climbHtml, /standalone Thursday and Monday/);
+  assert.match(climbHtml, /1-3 legs at one book/);
+  assert.match(climbHtml, /This week: 1 of 3 steps used across all restarts/);
+  assert.match(climbHtml, /NBA is research-only for the Climb/);
+  routeFixture.climbRoute.weekly.weekStart = '2026-10-12';
+  assert.doesNotMatch(await views.record({tab:'climb'}), /This week: 1 of 3/);
 });

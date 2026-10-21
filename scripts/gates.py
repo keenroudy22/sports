@@ -1330,6 +1330,40 @@ def ladder_one_rung(candidate, ctx):
     return Decision(True, 'ladder_one_rung', 'no rung is open')
 
 
+def ladder_selective(candidate, ctx):
+    """Prospective shape/cadence boundary, including manually supplied tickets."""
+    import ladder
+    if eastern_date(ctx.now) < ladder.SELECTIVE_FROM:
+        return Decision(True, 'ladder_selective', 'before selective-policy cutover')
+    legs = candidate.get('legs') or []
+    if not isinstance(legs, list) or not 1 <= len(legs) <= ladder.MAX_LEGS:
+        return Decision(False, 'ladder_selective', 'a Climb ticket needs one to three legs')
+    if any(not isinstance(leg, dict) for leg in legs):
+        return Decision(False, 'ladder_selective', 'invalid Climb leg')
+    game_ids = [leg.get('gameId') for leg in legs]
+    if not all(game_ids) or len(set(game_ids)) != len(legs):
+        return Decision(False, 'ladder_selective', 'a Climb ticket uses one leg per game')
+    if set(game_ids) != set(candidate.get('gameIds') or []):
+        return Decision(False, 'ladder_selective', 'Climb games do not match its legs')
+    if candidate.get('book') not in ladder.SLUGS or any(leg.get('book') != candidate['book'] for leg in legs):
+        return Decision(False, 'ladder_selective', 'all Climb legs need the same supported book')
+    leagues = {((getattr(ctx, 'games', {}) or {}).get(gid) or {}).get('league') for gid in game_ids}
+    if len(leagues) != 1 or not leagues <= {'NFL', 'CFB'}:
+        return Decision(False, 'ladder_selective', 'Climb uses one eligible football league; NBA ticket readiness is not established')
+    week = ladder.weekly_status(ctx.first, ctx.now, exclude=candidate.get('id'))
+    if week['posted'] >= ladder.MAX_WEEKLY_STEPS:
+        return Decision(False, 'ladder_selective', f"weekly Climb limit reached: {week['posted']}/{ladder.MAX_WEEKLY_STEPS}; restarts do not reset it", week)
+    return Decision(True, 'ladder_selective', f"{len(legs)} legs; step {week['posted']+1}/{ladder.MAX_WEEKLY_STEPS} this Eastern week", week)
+
+
+def ladder_supported(candidate, ctx):
+    import ladder
+    if eastern_date(ctx.now) < ladder.SELECTIVE_FROM:
+        return Decision(True, 'ladder_supported', 'before selective-policy cutover')
+    reason = ladder.support_refusal(candidate, ctx)
+    return Decision(not reason, 'ladder_supported', reason or 'all legs retain conservative price and proven-segment support')
+
+
 FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy')))
 
 
@@ -1362,7 +1396,7 @@ RULES = {
     'favorite': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'longshot': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
-    'ladder': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, player_overlap),
+    'ladder': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, ladder_selective, ladder_supported, player_overlap),
     'revision': (revision_frozen,),
 }
 

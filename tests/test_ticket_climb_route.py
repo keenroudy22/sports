@@ -207,7 +207,7 @@ class RouteTests(unittest.TestCase):
         card = route.climb_route(state, NOW, self.games)
         self.assertEqual(kit.qa(card, 'ten-row-route'), [])
         self.assertIn('OPEN · POSTED AT −218 · NOT SETTLED YET', card.svg())
-        self.assertIn('NO STEP IS FORCED. 1−2 LEGS · ONE BOOK.', card.svg())
+        self.assertIn('NO STEP IS FORCED. 1−3 LEGS · ONE BOOK.', card.svg())
 
     def test_png_and_all_three_explicit_fixture_cards(self):
         with TemporaryDirectory() as folder:

@@ -696,8 +696,8 @@ def ladder_svg(pick, avatar=None):
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = str(pick.get('book') or '')
     leg_blocks = []
-    for index, leg in enumerate(legs[:2]):
-        y = 744 + index * 132
+    for index, leg in enumerate(legs[:3]):
+        y = 714 + index * 112
         leg_blocks.append(f'<rect x="74" y="{y}" width="932" height="108" rx="20" fill="#102330" stroke="#2c4c5b" stroke-width="2"/>'
                           f'<text x="108" y="{y + 67}" fill="{CREAM}" font-size="33" font-weight="850">{esc(fit(leg, 48))}</text>')
     chef_art = (f'<image href="{chef}" x="918" y="55" width="100" height="100" preserveAspectRatio="xMidYMid meet"/>') if chef else ''

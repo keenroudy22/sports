@@ -351,9 +351,10 @@ def climb_card(p):
     inner += card.text(COL_X, panel_bottom - 30, sub, 46, CHALK, tracking=1)
     # legs
     top = panel_bottom + 24
-    rows, _ = leg_rows(card, p['legs'], top, 84, settled=p.get('leg_results'))
+    pitch = 64 if len(p['legs']) == 3 else 84
+    rows, _ = leg_rows(card, p['legs'], top, pitch, compact=len(p['legs']) == 3, settled=p.get('leg_results'))
     inner += rows
-    y = top + 84 * len(p['legs']) + 20
+    y = top + pitch * len(p['legs']) + 20
     inner += kit.dashed(X1, X2, y)
     y += 70
     result = p.get('result')

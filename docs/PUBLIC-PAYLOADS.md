@@ -1,5 +1,9 @@
 # Public website boundary
 
+`app/record.json` Climb route includes a public weekly summary (Eastern week dates,
+posted count, remaining allowance, maximum steps and legs). It omits private reservation
+IDs. This is a cadence limit, not a promise of future tickets or a new file family.
+
 The Pages upload is the complete `site/` folder. Hiding a field or tab is not access control.
 `scripts/publication_guard.py` now checks that exact folder after generation and before upload; it performs no
 network calls and changes nothing. New file families require a reviewed allowlist update and fixtures.

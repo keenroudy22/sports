@@ -1,5 +1,55 @@
 # October 5 product implementation tracker
 
+## October21 — selective Climb decision, implementation pending
+
+Implementation in dev: one-to-three-leg enumeration; current Eastern week maximum
+three across restarts and private reservations; supported joint chance ranks first,
+then fewer legs; one-book/distinct-game/NBA readiness boundaries at admission and
+release. Added captured main spread/total comparison and both directions on vetted
+prop ladders, without new feed calls. Public route/glossary show the policy and weekly
+allowance; third ticket leg fits the current graphic. Shared NFL/CFB opening now6:45AM
+fromOct21; existing lead/freshness/caps remain. Full release evidence still pending.
+
+Last-ticket review: Oct20 FIU-5.5 atFD-210 was a one-off discretionary operator ticket,
+not the automatic proven-segment builder. Its saved0.702 was the raw margin estimate,
+not calibrated certainty; one leg did not make it low risk. The ticket lost$81 while
+$35 already banked remained protected. The posted result is unchanged. New supported
+admission/release gate rejects that unsupported discretionary pattern; no model weights
+or thresholds lowered. A focused regression covers it. Initial full suite1571 had
+one expected old1–2 footer assertion; updated to the new1–3 contract, not bypassed.
+
+Earlier unfinished morning lean/optional-priority implementation is preserved in
+git stash `Preserve unfinished O-20261021-MORNING optional priority and lean UI for
+follow-through`; only the shared early opening is included in this Climb release.
+Remaining work and its tests are still O-20261021-MORNING, not silently dropped.
+
+Restart announcement accepted by Buffer6ad8cc507b5905295c2b11f0 at14:29Z,
+scheduled15:13Z (11:13ET), keyclimb-checkin:2026-10-21-restart. Text-only,
+owner-authorized, within existing queue/day spacing and caps. It leads$50→$1,000,
+describes preparation/target cadence, and does not claim a selected ticket. Research
+Discord is pending confirmed X delivery via the existing mirror; do not call it sent.
+
+Restart preparation plan (owner requested publication October21): start from the
+ledger's $50, with no open ticket. Review Thursday October22 NFL Patriots–Bears and
+the three stored CFB games (JMU–App State, Liberty–Kennesaw State, ECU–Memphis), then
+Friday CFB and the larger Saturday/Sunday slates. These are review opportunities,
+not selected steps or a route-map promise. Check fresh quotes, role/news and ticket
+risk on each existing morning/Climb scan. Announce the search now; publish the first
+actual ticket only once qualified, with normal Discord lead and durable ticket art.
+Tuesday's posted loss counts toward this Monday–Sunday week's three-step ceiling;
+a new climb does not reset the weekly counter. No catch-up quota. NBA remains an
+additional research pool until its ticket readiness is demonstrated. Current stored
+October21 screen found zero supported football legs; no restart ticket is selected.
+
+Owner now requests1–3 legs and a target of1–3 steps per week rather than a
+minimum of two. Prefer fewer legs, no forced cadence or recovery stake. NFL/CFB
+sides and supported real alternates remain candidate sources; NBA must independently
+clear applicable readiness before joining the Climb. Research publication is not
+ticket approval. O-20261021-CLIMBSELECTIVE tracks last-ticket review, enumeration,
+weekly cap, risk regression and full deployment evidence. No new behavior shipped yet.
+O-20261021-MORNING retains the unfinished morning-release changes already in dev;
+they must not be described as deployed or silently dropped for this new priority.
+
 ## October21 — reviewed NBA props delivered early
 
 Source39dd3f0e, containing df22dad2; hosted39606598089 SUCCESS. Invalid never-queued

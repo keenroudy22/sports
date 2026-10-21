@@ -214,7 +214,7 @@ class BuildTests(unittest.TestCase):
         self.assertTrue(ladder.TARGET[0] <= ticket['odds'] <= ladder.TARGET[1])
         none, why = ladder.build(legs[:1])
         self.assertIsNone(none)
-        self.assertIn('one or two supported legs', why)
+        self.assertIn('one to three supported legs', why)
 
     def test_one_supported_leg_in_the_target_band_can_be_the_rung(self):
         leg = {'id': 'one', 'title': 'Patriots moneyline', 'gameId': 'g1', 'book': 'DraftKings',

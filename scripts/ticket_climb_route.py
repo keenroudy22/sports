@@ -164,7 +164,7 @@ def from_stores(stores, now):
                    and int(rung.get('run') or 0) == state['run'] - 1), None)
     return {'run': int(state['run']), 'step': int(state['step']), 'stake': int(state['stake']),
             'banked': int(state['banked']), 'saved': int(state['saved']), 'cashed': cashed,
-            'open': opened, 'missed': missed}, load_games(stores.slate)
+            'open': opened, 'missed': missed, 'weekly': ladder.weekly_status(ctx.first, now)}, load_games(stores.slate)
 
 
 def plan_from(step, stake, banked):
@@ -215,7 +215,8 @@ def public_route(state, now, games):
                      'plannedAt': 'typical -160' if kind in ('next', 'plan') else None})
     return {'run': state['run'], 'step': state['step'], 'saved': state['saved'],
             'banked': state['banked'], 'stake': state['stake'],
-            'goal': GOAL, 'rows': rows, 'image': 'data/cards/climb-route.png'}
+            'goal': GOAL, 'rows': rows, 'image': 'data/cards/climb-route.png',
+            'weekly': {k:v for k,v in (state.get('weekly') or {}).items() if k != 'ids'}}
 
 
 DISC_CX, DISC_R = X1 + 22, 22
@@ -333,7 +334,7 @@ def climb_route(state, now, games, fixture=False):
     inner += card.text(X2, fy, summary, fit(summary, 40, room, 'd', 600),
                        INK_SOFT, 'd', 600, anchor='end')
     perf = fy + 30
-    rule = f'NO STEP IS FORCED. 1{MINUS}2 LEGS · ONE BOOK.'
+    rule = f'NO STEP IS FORCED. 1{MINUS}3 LEGS · ONE BOOK.'
     inner += card.text(X1, perf + 100, rule, fit(rule, 40, X2 - X1, tracking=1),
                        INK_SOFT, tracking=1)
     ticket_cards.frame(card, HOUSE, CHALK, perf, perf + 124, inner)

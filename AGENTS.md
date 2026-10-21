@@ -205,6 +205,24 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Selective Climb cadence (owner, October21):** target one to three qualified steps per
+  Eastern Monday–Sunday week, with one to three legs per ticket. This replaces the earlier
+  minimum-two-step expectation; it is not a quota or permission to force a restart. Prefer
+  fewer legs when they achieve the same useful payout, and never add a leg solely to fill
+  the ticket. Compare supported NFL/CFB sides and props, including real priced alternates;
+  NBA is an additional candidate source only after its applicable readiness and ticket-risk
+  checks are implemented and verified. Research-only NBA projections are not automatically
+  eligible. Keep one open step, the existing 80/20 banking, price/news/role checks, early
+  delivery and separate dollar record. No guaranteed progress, recovery staking or claims
+  that a heavily favored ticket is safe. Implementation and last-ticket review are tracked
+  under O-20261021-CLIMBSELECTIVE; this decision alone is not proof of deployment.
+  All new automatic, manual and operator-reviewed tickets must retain the same supported
+  price/proven-segment checks at admission and release; the October20 discretionary FIU
+  exception does not carry forward. Rank supported tickets by conservative joint chance,
+  prefer fewer legs on a tie, then price edge. No model weights or thresholds are lowered.
+  From October21, NFL/CFB game-day release targets the6:45AM check instead of waiting9:30AM;
+  retain Discord-first lead, art readiness, quote freshness, queue spacing and all caps.
+
 - **Repair follow-through (owner, October21):** a failed test stops promotion, not the repair.
   Diagnose and repair the bounded cause, rerun affected checks and every required release gate;
   never weaken a test or safety rule to pass. Scheduled Codex runs allow up to three reasoned

@@ -1,7 +1,7 @@
 """Shared, owner-approved X windows. Pure time math, no posting or feeds."""
 import hashlib
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 EASTERN = ZoneInfo('America/New_York')
@@ -12,6 +12,7 @@ DISCORD_PLAY_LEAD = timedelta(minutes=15)
 DISCORD_DELIVERY_CADENCE = timedelta(minutes=5)
 LATE_CARD_X_DELAY = timedelta(minutes=10)
 LATE_CARD_LEAD = timedelta(minutes=15)
+EARLY_FROM = date(2026, 10, 21)
 
 
 def instant(value):
@@ -26,6 +27,8 @@ def international(league, kickoff):
 def opens(league, kickoff):
     local = instant(kickoff).astimezone(EASTERN)
     hour, minute = (8, 30) if international(league, kickoff) else (9, 30)
+    if league in ('NFL', 'CFB') and local.date() >= EARLY_FROM:
+        hour, minute = 6, 45
     return local.replace(hour=hour, minute=minute, second=0, microsecond=0).astimezone(timezone.utc)
 
 

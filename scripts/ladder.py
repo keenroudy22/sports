@@ -30,9 +30,10 @@ college player numbers, as for college props. A rung is built only from prices r
 """
 import argparse
 import json
+import math
 import os
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from itertools import combinations
 from pathlib import Path
 
@@ -71,6 +72,85 @@ RELEASE_QUOTE_FRESH = timedelta(hours=2)  # the morning Discord release must sti
 STAKE = parlay.STAKE                # the ticket's size in the desk's own terms; the ladder itself counts dollars
 SOURCE = 'https://sharpapi.io/'
 SHADOW_NAME = 'ladder-shadow-2026.jsonl'
+SELECTIVE_FROM = date(2026, 10, 21)
+MAX_LEGS = 3
+MAX_WEEKLY_STEPS = 3
+
+
+def weekly_status(first, now, exclude=None):
+    """Count admissions/publications once, across restarts, in the Eastern Monday-Sunday week.
+
+    Private reservations merged by release_queue also count while pending. They disappear
+    when an unreleased admission expires; already public rows never disappear with a loss.
+    """
+    today = eastern_date(now)
+    start = today - timedelta(days=today.weekday())
+    end = start + timedelta(days=7)
+    ids = []
+    for key, pick in first.items():
+        if key == exclude or pick.get('parlayType') != 'ladder':
+            continue
+        try:
+            published = gates.when(pick['publishedAt'])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if published <= now and start <= eastern_date(published) < end:
+            ids.append(key)
+    return {'weekStart': start.isoformat(), 'weekEnd': (end-timedelta(days=1)).isoformat(),
+            'posted': len(ids), 'remaining': max(0, MAX_WEEKLY_STEPS-len(ids)),
+            'maximum': MAX_WEEKLY_STEPS, 'maxLegs': MAX_LEGS, 'ids': sorted(ids)}
+
+
+def weekly_refusal(ctx, now):
+    if eastern_date(now) < SELECTIVE_FROM:
+        return None
+    week = weekly_status(ctx.first, now)
+    if week['posted'] >= MAX_WEEKLY_STEPS:
+        return f"weekly Climb limit reached: {week['posted']}/{MAX_WEEKLY_STEPS} steps since {week['weekStart']}; restarts do not reset it"
+    return None
+
+
+def ticket_rank(chance, edge, chosen, price):
+    """Prefer conservative joint chance, then fewer legs; never alter a model or price gate."""
+    return (round(chance, 4), -len(chosen), round(edge, 4), price)
+
+
+def support_refusal(ticket, ctx):
+    """Recheck saved conservative support at admission/release; operator tickets cannot bypass it."""
+    def number(value):
+        return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    legs = ticket.get('legs')
+    if not isinstance(legs, list) or not 1 <= len(legs) <= MAX_LEGS or any(not isinstance(leg, dict) for leg in legs):
+        return 'Climb ticket needs one to three valid legs'
+    product, dec = 1.0, 1.0
+    for leg in legs:
+        price, raw, chance = leg.get('odds'), leg.get('rawChance'), leg.get('chance')
+        if not all(number(value) for value in (price, raw, chance)) or not LEG_PRICES[0] <= price <= LEG_PRICES[1] or not 0 < raw < 1 or not 0 < chance < 1:
+            return 'Climb leg needs a supported price and valid saved probability inputs'
+        implied = pricing.break_even(price)
+        market = leg.get('marketType') or leg.get('market')
+        league = ((getattr(ctx, 'games', {}) or {}).get(leg.get('gameId')) or {}).get('league')
+        if market == 'moneyline':
+            fair = leg.get('fairChance')
+            if not number(fair) or not 0 < fair < 1 or raw < MONEYLINE_MIN_CHANCE or not MONEYLINE_MIN_GAP-.0005 <= raw-fair <= MAX_GAP+.0005:
+                return 'Climb moneyline needs its saved two-sided fair chance and model support'
+            allowed = used_chance(raw, fair, moneyline=True)
+        else:
+            floor = RAW_MIN_CHANCE if leg.get('athleteId') else MANUAL_RAW_CHANCE
+            rate = segment_hit_rate(ctx, league, market, leg.get('book'), int(price))
+            allowed = used_chance(raw, implied, rate)
+            if raw < floor or allowed is None:
+                return 'Climb leg lacks the required model support or open proven segment; discretionary tickets cannot bypass this'
+        if chance > allowed+.0005 or chance <= implied:
+            return 'Climb leg does not beat its price within its conservative probability cap'
+        product *= chance
+        dec *= parlay.decimal(price)
+    odds = ticket.get('odds')
+    if not number(odds) or not TARGET[0] <= odds <= TARGET[1] or abs(parlay.american(dec)-odds)>1:
+        return 'Climb ticket price must match its captured same-book legs and target band'
+    if product <= pricing.break_even(odds):
+        return 'Climb ticket does not beat its price after conservative joint support'
+    return None
 
 
 def v3_enabled():
@@ -321,14 +401,17 @@ def legs_for_game(game, record, ctx, now, confirmed=None, proven=False):
                 if sd <= 0 or not isinstance(main, (int, float)) or not MAIN_RATIO[0] <= main / max(mean, 1.0) <= MAIN_RATIO[1]:
                     continue
                 # Only the main line's own ladder: the feed files some period ladders under the full-game market.
-                offers = [(main, quote.get('over'))] + [(a['line'], a['over']) for a in sharp_odds.consistent(quote)]
-                for point, price in offers:
+                rungs = [quote] + sharp_odds.consistent(quote)
+                offers = [(rung['line'], rung.get(direction), direction) for rung in rungs
+                          for direction in ('over', 'under')]
+                for point, price, direction in offers:
                     if not isinstance(point, (int, float)) or not isinstance(price, (int, float)):
                         continue
                     price = int(price)
                     if not LEG_PRICES[0] <= price <= LEG_PRICES[1] or float(point) != int(point) + 0.5:
                         continue            # a half point, so the leg can not push
-                    raw, _, _ = pricing.chances(mean, sd, float(point))
+                    above, _, below = pricing.chances(mean, sd, float(point))
+                    raw = above if direction == 'over' else below
                     implied = pricing.break_even(price)
                     if raw < RAW_MIN_CHANCE or not MIN_GAP <= raw - implied <= MAX_GAP:
                         continue
@@ -337,14 +420,62 @@ def legs_for_game(game, record, ctx, now, confirmed=None, proven=False):
                     if chance is None or chance <= implied:
                         continue
                     shown = ctx.names.get(athlete) or name
-                    out.append({'id': f"ladder-{game['id']}-{athlete}-{stat}-{float(point):g}",
-                                'title': f"{shown} {int(point + 0.5)}+ {pricing.WORDS[stat]}",
-                                'gameId': game['id'], 'athleteId': athlete, 'player': shown, 'market': stat, 'direction': 'over',
+                    title = (f"{shown} {int(point + 0.5)}+ {pricing.WORDS[stat]}" if direction == 'over'
+                             else f"{shown} under {float(point):g} {pricing.WORDS[stat]}")
+                    out.append({'id': f"ladder-{game['id']}-{athlete}-{stat}-{float(point):g}" + ('-under' if direction == 'under' else ''),
+                                'title': title,
+                                'gameId': game['id'], 'athleteId': athlete, 'player': shown, 'market': stat, 'direction': direction,
                                 'line': float(point), 'book': BOOKS[book_key], 'odds': price,
                                 'chance': round(chance, 3), 'rawChance': round(raw, 3),
                                 'implied': round(implied, 3), 'projection': round(mean, 1), 'kickoff': game['kickoff'],
                                 'observedAt': seen, 'marketWindow': 'Full game',
                                 'alternate': float(point) != float(main)})
+    return out
+
+
+def game_line_legs(game, ctx, now):
+    """Exact captured main spreads/totals. No invented game alternates or extra feed requests."""
+    record = (getattr(ctx, 'odds', {}) or {}).get(game['id']) or {}
+    snapshot = ctx.snapshot(game['id'])
+    if not record or not snapshot:
+        return []
+    out = []
+    for key, book in (record.get('books') or {}).items():
+        if key not in BOOKS:
+            continue
+        observed = book.get('updatedAt') or record.get('retrievedAt')
+        try:
+            if not timedelta(0) <= now - gates.when(observed) <= GAME_FRESH:
+                continue
+        except (TypeError, ValueError):
+            continue
+        spread, total = book.get('spread') or {}, book.get('total') or {}
+        options = [('spread', 'home', spread.get('home'), spread.get('homePrice')),
+                   ('spread', 'away', -spread['home'] if isinstance(spread.get('home'), (int, float)) else None, spread.get('awayPrice')),
+                   ('total', 'over', total.get('line'), total.get('over')),
+                   ('total', 'under', total.get('line'), total.get('under'))]
+        for market, side, line, price in options:
+            if not isinstance(line, (int, float)) or not isinstance(price, (int, float)) or isinstance(line, bool) or isinstance(price, bool):
+                continue
+            if line % 1 != .5 or not LEG_PRICES[0] <= price <= LEG_PRICES[1]:
+                continue
+            try:
+                desk = pricing.price(snapshot, market, side, line, int(price))
+            except (KeyError, TypeError, ValueError):
+                continue
+            rate = segment_hit_rate(ctx, game['league'], market, BOOKS[key], int(price))
+            chance = used_chance(desk['rawChance'], desk['breakEven'], rate)
+            if desk['rawChance'] < MANUAL_RAW_CHANCE or chance is None or chance <= desk['breakEven']:
+                continue
+            label = (f"{game[side]['short']} {pricing.signed(line)}" if market == 'spread' else
+                     f"{game['away']['short']} at {game['home']['short']} {side} {line:g}")
+            out.append({'id': f"ladder-{game['id']}-{market}-{side}-{line:g}", 'title': label,
+                        'gameId': game['id'], 'marketType': market, 'direction': side, 'line': line,
+                        'book': BOOKS[key], 'odds': int(price), 'chance': round(chance, 3),
+                        'rawChance': round(desk['rawChance'], 3), 'segmentHitRate': rate,
+                        'implied': desk['breakEven'], 'projection': desk['projection'],
+                        'kickoff': game['kickoff'], 'observedAt': observed,
+                        'marketWindow': 'Full game', 'alternate': False})
     return out
 
 
@@ -425,12 +556,19 @@ def pairs(legs):
 
 
 def tickets(legs):
-    """Every eligible one- or two-leg rung in the owner's current price band."""
-    for leg in legs:
-        if TARGET[0] <= leg['odds'] <= TARGET[1]:
-            yield leg['book'], (leg,), parlay.decimal(leg['odds']), leg['odds']
-    for book, a, b, dec, price in pairs(legs):
-        yield book, (a, b), dec, price
+    """One to three supported legs, one book, one leg per game, inside TARGET."""
+    for book in sorted({leg['book'] for leg in legs}):
+        mine = [leg for leg in legs if leg['book'] == book]
+        for count in range(1, MAX_LEGS+1):
+            for chosen in combinations(mine, count):
+                if len({leg['gameId'] for leg in chosen}) != count:
+                    continue
+                dec = 1.0
+                for leg in chosen:
+                    dec *= parlay.decimal(leg['odds'])
+                price = parlay.american(dec)
+                if TARGET[0] <= price <= TARGET[1]:
+                    yield book, chosen, dec, price
 
 
 def near_misses(legs, limit=3):
@@ -440,6 +578,7 @@ def near_misses(legs, limit=3):
         mine = [leg for leg in legs if leg['book'] == book]
         shapes = [(leg,) for leg in mine]
         shapes += [(a, b) for a, b in combinations(mine, 2) if a['gameId'] != b['gameId']]
+        shapes += [chosen for chosen in combinations(mine, 3) if len({leg['gameId'] for leg in chosen}) == 3]
         for chosen in shapes:
             dec = 1.0
             chance = 1.0
@@ -466,10 +605,10 @@ def near_miss(legs):
 
 
 def build(legs):
-    """The safest supported one- or two-leg rung inside TARGET.
+    """The highest conservative joint chance among supported one-to-three-leg tickets.
 
-    Safety is the conservative joint chance above the ticket's price, then the joint chance itself.  This keeps a
-    merely shorter one-leg price from automatically beating a stronger two-game combination.
+    Rank by conservative joint chance, then fewer legs and price edge. A positive joint
+    edge is still required; neither a larger raw model gap nor more legs is a safety claim.
     """
     if not legs:
         return None, 'zero supported legs cleared the role, price and proven-segment gates'
@@ -482,7 +621,7 @@ def build(legs):
         edge = round(chance - pricing.break_even(price), 4)
         if edge <= 0:
             continue
-        key = (edge, chance, price)
+        key = ticket_rank(chance, edge, chosen, price)
         if best is None or key > best[0]:
             selected = sorted(chosen, key=lambda l: (l['kickoff'], l['title']))
             best = (key, {'book': book, 'legs': selected, 'odds': price, 'decimal': round(dec, 3),
@@ -494,7 +633,7 @@ def build(legs):
         detail = ('; near misses ' + ' | '.join(
             f"{row['book']} {row['odds']:+d} ({', '.join(row['legs'])}), "
             f"{100 * row['edge']:.1f} points above its price" for row in near)) if near else ''
-        return None, f'no book has one or two supported legs that pay {TARGET[0]:+d} to {TARGET[1]:+d}{detail}'
+        return None, f'no book has one to three supported legs that pay {TARGET[0]:+d} to {TARGET[1]:+d}{detail}'
     return best[1], None
 
 
@@ -549,8 +688,11 @@ def manual_candidate(ctx, games, now, spec):
     where = state(ctx.first, ctx.latest)
     if where['open']:
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"
-    if not isinstance(spec, dict) or len(spec.get('legs') or []) not in (1, 2):
-        return None, 'a manual rung needs one or two quoted legs'
+    blocked = weekly_refusal(ctx, now)
+    if blocked:
+        return None, blocked
+    if not isinstance(spec, dict) or not isinstance(spec.get('legs'), list) or not 1 <= len(spec['legs']) <= MAX_LEGS:
+        return None, 'a manual rung needs one to three quoted legs'
     book = build_site.BOOKS.get(spec.get('book'), spec.get('book'))
     if book not in SLUGS:
         return None, 'the manual rung needs one supported book'
@@ -568,6 +710,10 @@ def manual_candidate(ctx, games, now, spec):
             return None, f"{row.get('gameId')} is missing, started, or too close to kickoff"
         if game['id'] in game_ids:
             return None, 'a rung uses one leg per game'
+        if game.get('league') not in ('NFL', 'CFB'):
+            return None, 'NBA Climb legs are not ready; NBA research is not ticket approval'
+        if eastern_date(gates.when(game['kickoff'])) != eastern_date(now):
+            return None, 'a rung uses games on the current Eastern game day'
         market, side = row.get('marketType'), row.get('direction')
         line, price = row.get('line'), row.get('odds')
         allowed = ('home', 'away') if market == 'spread' else ('over', 'under')
@@ -639,6 +785,9 @@ def candidate(ctx, games, now, exclude=()):
     where = state(ctx.first, ctx.latest)
     if where['open']:
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"
+    blocked = weekly_refusal(ctx, now)
+    if blocked:
+        return None, blocked
     import direction
     # Two climbs in a row lost at step 1 or 2: the next climb takes the stricter pool (owner, 2026-10-07): no leg from
     # a segment that is paused or has a raised edge bar, with the same leg chance, leg prices and TARGET.
@@ -657,7 +806,7 @@ def candidate(ctx, games, now, exclude=()):
         if not calibrated:
             reasons.append(f'{league}: player alternates wait for their own calibration; game moneylines still checked')
         for day_pool in kickoff_windows(today):
-            legs = [leg for game in day_pool for leg in moneyline_legs(game, ctx, now)]
+            legs = [leg for game in day_pool for leg in moneyline_legs(game, ctx, now) + game_line_legs(game, ctx, now)]
             if calibrated:
                 legs += [leg for game in day_pool
                          for leg in legs_for_game(game, ctx.prop_odds.get(game['id']), ctx, now, seen, proven=True)]
@@ -668,8 +817,8 @@ def candidate(ctx, games, now, exclude=()):
             if not ticket:
                 reasons.append(f'{league} {label}: {reason}' + ('; the stricter Climb pool is on' if strict else ''))
                 continue
-            score = (round(ticket['chance'] - pricing.break_even(ticket['odds']), 4),
-                     ticket['chance'], ticket['odds'])
+            score = ticket_rank(ticket['chance'], ticket['chance'] - pricing.break_even(ticket['odds']),
+                                ticket['legs'], ticket['odds'])
             supported.append((score, ticket, league))
     if supported:
         _, ticket, league = max(supported, key=lambda row: row[0])

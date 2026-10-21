@@ -3075,6 +3075,11 @@ def private_release_refusal(row, ctx, now):
     policy = gates.totals_policy(pick, ctx)
     if not policy.ok:
         return policy.reason
+    if pick.get('parlayType') == 'ladder':
+        for rule in (gates.ladder_selective, gates.ladder_supported):
+            policy = rule(pick, ctx)
+            if not policy.ok:
+                return policy.reason
     if pick.get('selectionPolicy') == gates.TIER_POLICY:
         expected = {'best_bet': 1, 'chef_pick': 2}.get(pick.get('lane'))
         if expected is None or pick.get('riskUnits') != expected:
