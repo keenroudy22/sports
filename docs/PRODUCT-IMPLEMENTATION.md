@@ -1,5 +1,39 @@
 # October 5 product implementation tracker
 
+## October21 — morning release installed; NBA lotto delivery in progress
+
+Source913f93a0, hosted39634056611 SUCCESS. Normal and clean copies each passed
+1578Python(two skips)/268Node. Build450pages; record111/NBA0 audits clear; public
+guard593; assets current; no hard payload issue. Offline1145hnl1flda outcomeok,
+zero outside writes/private reads. Existing soft More/Today/NBA payload warnings remain.
+Live app193 verified375/1440, no sideways overflow, load errors or console errors;
+proof /tmp/kookn-morning-live-phone.png and desktop.png. Loaded Mac schedule has
+healthy6:45/8:30 checks; selection scope confirms6:45 evaluates the game-day card.
+Morning fallback uses fresh sourced rows and a real hold, keeps analyst minutes
+explicit, retries through immutable dated snapshots, and suppresses when an official
+play qualifies. Unsent routine receipt/book slots can yield to a qualified play;
+sent posts, time-sensitive research, caps and Discord lead remain unchanged.
+Next natural morning delivery is an observation, not claimed already demonstrated.
+
+The earlier selective-Climb source0f09aaab is included. Its own pending run39627942820
+was superseded; containing run39631288383 succeeded. Live Climb375/1440 now shows
+1–3 legs, weekly1of3 across restarts, current50available/0banked, no future promises;
+phone proof /tmp/kookn-selective-climb-live-phone.png. Thursday's stored screen has
+four review opportunities, not selected steps: JMU–AppState, Liberty–KennesawState,
+ECU–Memphis and Patriots–Bears. Refresh current news/quotes in existing morning runs.
+The retired FIU discretionary pattern is rejected prospectively; old result unchanged.
+
+Owner NBA lotto screenshot saved exactly: Johnson15+pts, Banchero8+reb, Buzelis6+reb,
+Barnes6+ast. FanDuel+668 with50%boost, base+446,25stake,0.75protectionfee,
+25.75charged,192.12possible totalreturn. No settlement or win is claimed.
+Buffer6ad8e9b0207438cdf5f5fce4 sent16:37:02.827Z as X2112946271765897374;
+wins Discord sent16:37:09Z with the original image. Website image is live; the
+Today/Fun listing awaits the next build containing the confirmed X receipt.
+Community key community:personal-ticket:2026-10-21-nba-lotto, dedicated wins Discord.
+Previous hosted39633006288 failed only at deployment when artifact lookup returned0;
+the artifact subsequently appeared. Fresh run39634056611 succeeded without weakening
+checks. Preserve that failure as evidence; it was not a failed source test.
+
 ## October21 — selective Climb decision, implementation pending
 
 Implementation in dev: one-to-three-leg enumeration; current Eastern week maximum
