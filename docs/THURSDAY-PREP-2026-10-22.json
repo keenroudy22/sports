@@ -1,0 +1,59 @@
+{
+  "targetDay": "2026-10-22",
+  "preparedAt": "2026-10-21T17:26:13Z",
+  "status": "private preparation; no admission or scheduled play",
+  "refreshPlan": {
+    "tonight": "Existing17:30/21:00/23:30 Eastern runs refresh stored prices and news. Existing00:45 overnight agent reads this packet and product queue; verify final NFL/NBA reports and revise the shortlist from current evidence.",
+    "morning": "Existing06:45 then08:30 Eastern runs evaluate fresh game-day main lines, props and supported Climb alternatives. Release qualifying plays through normal website/art, Discord-first and Buffer paths. Do not ask the owner again.",
+    "quoteRule": "All prices below are observations from October21, never a frozen October22 offer. Reprice the exact line and opposite side before admission/release; a failed condition remains held.",
+    "fallback": "If no official play qualifies, use the existing sourced morning-lean slot with the exact remaining blocker. No speculative Best Bet or Climb ticket."
+  },
+  "football": [
+    {
+      "gameId": "NFL-401873010",
+      "matchup": "New England Patriots at Chicago Bears",
+      "kickoff": "2026-10-23T00:15:00Z",
+      "priorityStraight": {"title": "Patriots moneyline", "book": "DraftKings", "odds": 130, "oppositeOdds": -155, "quotedAt": "2026-10-21T17:19:44Z", "sourceType": "ESPN relayed DraftKings pair", "source": "https://www.espn.com/nfl/game/_/gameId/401873010", "modelScore": {"NE": 22.6, "CHI": 21.5}, "rawChance": 0.534, "anchoredChance": 0.458, "priceNeed": 0.435, "edgePoints": 2.3, "reviewPrice": "+130 or better, with current opposite-side quote and full recalculation", "state": "research candidate; not admitted"},
+      "supportToVerify": ["Current official preview lists NE defense at300.8 yards allowed per game and18.8 points allowed.", "NE did not allow a sack against the Jets despite offensive-line injuries. This does not remove the injury risk."],
+      "risks": ["Official report lists Ben Brown and Alijah Vera-Tucker as nonparticipants; Morgan Moses limited. Confirm the final starting offensive line and whether the forecast reflects it.", "A.J. Brown limited with ankle issue; Romeo Doubs moved to injured reserve. Do not promote A.J. Brown under67.5 from the27.5 projection without resolving role/availability.", "Final Wednesday game designations were not yet available in the retrieved Tuesday participation table.", "Canonical current-time pre-admission screen refuses the single-book exception before game day; strong current supporting reason also still required."],
+      "otherMarkets": ["Under50.5 -105DK vs44.1 model total is a priced research lean, but NFL/total is currently paused and cannot be promoted by this packet.", "Maye under20.5 completions -102DK vs19.3 model, quoted17:01:34Z: only0.4 adjusted points over price, below the5-point underperforming-prop requirement.", "NFL stable-role/own-ladder comparison found no eligible Climb prop among264 consistent alternate rungs."],
+      "sources": ["https://www.patriots.com/news/week-7-injury-report-patriots-at-bears", "https://www.patriots.com/news/game-preview-patriots-at-bears-nfl-week-7", "https://www.patriots.com/news/patriots-gameplan-maye-off-play-action-johnson-s-staples-and-key-matchups-in-thursday-night-football-vs-the-bears", "https://www.patriots.com/news/patriots-place-wr-romeo-doubs-on-injured-reserve-sign-db-elliott-davison-to-the-53-man-roster-from-the-practice-squad-announce-additional-practice-squad-moves"]
+    },
+    {
+      "gameId": "CFB-401869845", "matchup": "James Madison at App State", "kickoff": "2026-10-22T23:00:00Z",
+      "climbWatch": {"title": "JMU moneyline", "book": "DraftKings", "odds": -425, "oppositeOdds": 330, "quotedAt": "2026-10-21T17:10:51Z", "rawChance": 0.824, "usedChance": 0.824, "fairChance": 0.777, "state": "supported individual Climb leg only; standalone price outside-220 to-130 ticket range"},
+      "modelScore": {"JMU": 35.1, "APP": 20.0},
+      "straightReview": "JMU-10.5 -110DK has negative adjusted value at the current pair; no Best Bet. Reprice all sides rather than converting the15.2-point model margin into certainty.",
+      "roleAndNews": "Official previews confirm JMU7-0/4-0 and App4-2/1-1, short week and App home field. App rallied from10 down to beat Coastal35-32. Availability still needs game-specific checking.",
+      "alternateScreen": {"consistentRungs": 168, "stableRawEligible": 0, "fullySupported": 0},
+      "sources": ["https://jmusports.com/news/2026/10/20/football-dukes-brace-for-thursday-night-trip-to-app-state", "https://appstatesports.com/news/2026/10/21/football-game-day-preview-app-state-hosts-unbeaten-jmu-on-thursday-night.aspx"]
+    },
+    {
+      "gameId": "CFB-401871056", "matchup": "Liberty at Kennesaw State", "kickoff": "2026-10-22T23:00:00Z",
+      "modelScore": {"LIB": 28.2, "KENN": 20.9},
+      "review": "Liberty ML-395/+310 opposite is not model-supported for Climb. Kennesaw+10/+10.5 is a side watch only; the captured spreads do not clear adjusted value. Kennesaw ML+310 is outside the official+250 moneyline ceiling.",
+      "propReview": "Kam Davis under87.5 rush -114FD vs66.8 is negative adjusted value, despite the raw gap. Purdie under173.5 pass -114FD vs145.3 also negative. Neither is an official candidate at those prices.",
+      "roleAndNews": "Official KSU preview reports three straight losses by3 or fewer,23.5 points allowed per game, Collins completing60% with20+ attempts in each of six games and Dylan Gary10 catches/135 yards last game. Check current role identities before using the stored prop projections.",
+      "alternateScreen": {"consistentRungs": 263, "stableRawEligible": 0, "fullySupported": 0},
+      "source": "https://ksuowls.com/news/2026/10/19/football-owls-return-home-to-host-longtime-foe-liberty-on-thursday.aspx"
+    },
+    {
+      "gameId": "CFB-401862807", "matchup": "East Carolina at Memphis", "kickoff": "2026-10-22T23:30:00Z",
+      "modelScore": {"ECU": 20.3, "MEM": 33.1},
+      "climbReview": "Memphis ML-395/+310 opposite: raw0.785 versus fair0.766, below the required0.03 model-over-fair support and below the selected price need. It cannot be paired with JMU merely to reach the payout band. Recheck a genuinely improved two-sided price and all news before considering it.",
+      "propReview": "Engleman under84.5 rush -114FD vs70.4 remains negative adjusted value; no official straight. Other priced player comparisons also fail the price test.",
+      "alternateScreen": {"consistentRungs": 247, "stableRawEligible": 0, "fullySupported": 0},
+      "source": "https://www.espn.com/college-football/game/_/gameId/401862807",
+      "missing": "Retrieve current team-specific availability/depth reporting; earlier search results were mostly last-season previews and were rejected."
+    }
+  ],
+  "nba": {
+    "state": "trial/research options only; not football Best Bets or Climb",
+    "priorityGame": {"gameId": "NBA-401909093", "matchup": "Cleveland Cavaliers at Philadelphia76ers", "kickoff": "2026-10-22T23:00:00Z", "book": "DraftKings", "quotedAt": "2026-10-21T16:05:41Z", "projection": {"CLE": 115.1, "PHI": 111.8, "total": 226.9}, "options": ["Cleveland+2.5 -110 (opposite Philadelphia-2.5 -110)", "Under234.5 -108 (opposite over-112)"], "support": "Existing trial helper confirms CLE covered+2.5 in4 of last5 stored regular-season games. Last-season scoring histories support the under, but these are background and current rosters/availability must be reviewed."},
+    "secondGame": {"gameId": "NBA-401909094", "matchup": "Denver Nuggets at Oklahoma City Thunder", "kickoff": "2026-10-23T01:30:00Z", "book": "DraftKings", "quotedAt": "2026-10-21T16:05:42Z", "projection": {"DEN": 111.6, "OKC": 118.7, "total": 230.3}, "review": "Under235.5 -105 does not receive supporting scoring-history reasons from the existing trial helper. OKC-7.5 -115 is beyond the7.1 model margin; do not promote either from the score alone."},
+    "playerProps": {"freshNextDayRows": 0, "checkedAt": "2026-10-21T17:26:13Z", "action": "Review existing evening capture for fresh Cleveland/Philadelphia/Denver/OKC main props. Check starters, current news and estimated minutes before choosing favorites. No invented prop/alternate price; do not freeze morning research art on tonight's quote."},
+    "injuryReport": {"source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-10-21_01_00PM.pdf", "state": "All four Thursday teams NOT YET SUBMITTED at1PM Eastern. Check submitted evening reports and fresh morning availability before trial admission."}
+  },
+  "climbState": {"run": 4, "nextStep": 1, "stakeDollars": 50, "bankedCurrentRun": 0, "openTicket": null, "weeklyUsed": 1, "weeklyRemaining": 2, "candidateTicket": null, "policy": "One to three legs, same book and league, distinct games, conservative supported ticket, no forced step. Current JMU watch is not a posted route or approved wager."},
+  "deliveryDrafts": {"football": "CONDITIONAL ONLY: Patriots MONEYLINE (+130,DraftKings). Add the final verified supporting reason; reprice and pass every gate before using. No queued post exists.", "climb": "UNSELECTED: $50 → $1,000 · Step1. Fill only actual admitted legs/book/price/stake/return/bank/ride after qualification. Never use assumed prices or claim safety.", "nba": "CONDITIONAL TRIAL: Cleveland+2.5 -110DK or CLE/PHIunder234.5 -108DK. Choose at most the one current best qualifying Trial market after availability and quote checks."}
+}

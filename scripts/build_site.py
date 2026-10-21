@@ -2755,7 +2755,9 @@ def game_market_lines(slate, now, captures=None):
         record = (captures or {}).get(game['id'])
         if record and now - features.when(record['retrievedAt']) <= ODDS_FRESH:
             out += book_rows(game, record)
-            continue
+            # Multi-book captures contain spreads/totals, not moneylines. Keep
+            # the independent actual two-sided feed pair in the morning pool.
+            m = dict(m, spread=None, total=None)
         home, away = game['home']['abbreviation'], game['away']['abbreviation']
         rows = []
         if m['spread'] is not None:

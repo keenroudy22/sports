@@ -1,5 +1,31 @@
 # October 5 product implementation tracker
 
+## October21 — Thursday preparation and moneyline pool repair
+
+Owner requested advance Best Bet/Climb work without another reminder. Private packet
+docs/THURSDAY-PREP-2026-10-22.json covers Thursday's4 football and2 NBA games using
+actual October21 observations; no future clock, fabricated quote or public admission.
+Patriots ML+130/-155DK is a positive-price research case, but final offensive-line/
+receiver availability and a strong current supporting reason remain. Official reports
+show Brown/Vera-Tucker nonparticipants, Moses/A.J.Brown limited and Doubs on IR.
+The tempting A.J.Brown under projection is held rather than promoted from a raw gap.
+
+JMU ML-425 is the one supported individual Climb leg; the standalone price is outside
+the ticket band. Memphis-395 is not supported at its actual opposite+310 pair, and
+Liberty-395 is not supported.942 consistent player ladder rungs across4 games yielded
+zero stable eligible legs even before the proven-segment guard. No Climb is selected.
+NBA CLE+2.5 -110 and under234.5 -108DK are review options; raw early-season forecasts
+are not calibrated Best Bets. At1PM all four Thursday NBA teams had not submitted
+reports; complete current prop builder showed0 fresh Thursday rows. Existing evening
+captures,00:45 queue review and6:45/8:30 checks own the next action. Never freeze
+tomorrow's post on tonight's prices or call this preparation a scheduled publication.
+
+Found a bounded morning-pool omission: game_market_lines returned immediately after
+multi-book spread/total rows, skipping the independent two-sided ESPN/DK moneyline
+pair. Dev retains the pair while avoiding duplicate spread/total rows; the regression
+checks exact pair/timestamp, no duplicates and missing-opposite refusal. No request,
+threshold, model, record or publication rule is changed. Release evidence pending.
+
 ## October21 — NBA lotto fully delivered and pending label repaired
 
 X2112946271765897374 sent16:37:02.827Z; dedicated wins Discord16:37:09Z.
