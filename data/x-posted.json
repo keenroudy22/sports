@@ -4502,7 +4502,13 @@
     "sentAt": "2026-10-21T15:39:22Z",
     "beforeX": true,
     "text": "Best Bet: New Mexico State at Sam Houston over 44.5 (-110, theScore Bet)\nBook says 44.5. I have it at 49, so I'm on the over.\nSam Houston has allowed 200.3 rushing yards per game.\n@Playbook #CFB",
-    "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W8-nmsu-shsu-over-44-5-espnbet.png"
+    "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W8-nmsu-shsu-over-44-5-espnbet.png",
+    "result": {
+     "state": "sent",
+     "text": "✅ FINAL · HIT: New Mexico State/Sam Houston over 44.5\nNew Mexico St 30, Sam Houston 24",
+     "settledAt": "2026-10-22T03:41:47Z",
+     "sentAt": "2026-10-22T03:58:04Z"
+    }
    },
    "sentAt": "2026-10-21T15:54:31.503Z",
    "link": "https://x.com/1753110091912413184/status/2112935570800328704",
@@ -4589,6 +4595,64 @@
     "destination": "research",
     "image": "https://keenroudy.com/sports/data/cards/nba-trends-2026-10-22.png"
    }
+  },
+  {
+   "id": "cashed:CFB-2026-W8-nmsu-shsu-over-44-5-espnbet",
+   "postedAt": "2026-10-22T03:58:04Z",
+   "dueAt": "2026-10-22T04:14:16Z",
+   "bufferPostId": "6ad98cab282deeeeb2ca9bbb",
+   "textHash": "6324b5758e1cb3b0",
+   "kind": "buffer:cashed",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "✅ New Mexico State/Sam Houston over 44.5. Went 30-24.\n#CFB\nhttps://x.com/keenkooks/status/2112935570800328704",
+    "image": "https://keenroudy.com/sports/data/cards/cooked-CFB-2026-W8-nmsu-shsu-over-44-5-espnbet.png"
+   },
+   "cardKey": "cooked-CFB-2026-W8-nmsu-shsu-over-44-5-espnbet"
+  },
+  {
+   "id": "receipt:day:2026-10-21",
+   "postedAt": "2026-10-22T03:58:04Z",
+   "dueAt": "2026-10-22T13:06:00Z",
+   "bufferPostId": "6ad98cacdeacf5d2532bf459",
+   "textHash": "8c530443d6f8a31f",
+   "kind": "buffer:receipt",
+   "card": true,
+   "cardTheme": "ticket",
+   "cardKey": "receipt-day-2026-10-21"
+  },
+  {
+   "id": "research:end-zone:2026-10-22",
+   "postedAt": "2026-10-22T03:58:04Z",
+   "dueAt": "2026-10-22T14:31:00Z",
+   "bufferPostId": "6ad98cadb086d40f5731ab93",
+   "textHash": "b0aac70fd45fca1e",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nMy TD lean: D'Andre Swift\n28 red-zone opportunities · 20 inside the 10\n#NFL",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-10-22.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "D'Andre Swift",
+      "athleteId": "4259545",
+      "gameId": "NFL-401873010",
+      "league": "NFL",
+      "kickoff": "2026-10-23T00:15Z",
+      "anytime": true,
+      "firstTd": true
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-10-22"
   }
  ]
 }
