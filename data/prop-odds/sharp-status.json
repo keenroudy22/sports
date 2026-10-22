@@ -1,43 +1,33 @@
 {
- "at": "2026-10-22T05:34:46Z",
+ "at": "2026-10-22T05:44:59Z",
  "confirmed": {
-  "CFB-401858271": "2026-10-22T05:34:46Z",
-  "CFB-401858272": "2026-10-22T05:34:46Z",
-  "CFB-401861965": "2026-10-22T05:34:46Z",
-  "CFB-401862807": "2026-10-22T05:34:46Z",
-  "CFB-401862808": "2026-10-22T05:34:46Z",
-  "CFB-401864525": "2026-10-22T05:34:46Z",
-  "CFB-401869845": "2026-10-22T05:34:46Z",
-  "CFB-401871056": "2026-10-22T05:34:46Z",
-  "NFL-401873010": "2026-10-22T05:07:16Z"
+  "CFB-401858271": "2026-10-22T05:44:59Z",
+  "CFB-401858272": "2026-10-22T05:44:59Z",
+  "CFB-401861965": "2026-10-22T05:44:59Z",
+  "CFB-401862807": "2026-10-22T05:44:59Z",
+  "CFB-401862808": "2026-10-22T05:44:59Z",
+  "CFB-401864525": "2026-10-22T05:44:59Z",
+  "CFB-401869845": "2026-10-22T05:44:59Z",
+  "CFB-401871056": "2026-10-22T05:44:59Z",
+  "NFL-401873010": "2026-10-22T05:44:59Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1073,
-    "fanduel": 1126
+    "fanduel": 1130
    },
    "eventsListed": 119,
    "eventsMatched": 8,
    "games": 8,
    "marketTypes": {
-    "player_field_goals_made": 1,
-    "player_kicking_points": 1,
-    "player_longest_passing_completion": 8,
-    "player_longest_reception": 22,
-    "player_longest_rush": 13,
-    "player_passing_+_rushing_yards": 63,
-    "player_passing_attempts": 6,
-    "player_passing_completions": 13,
-    "player_passing_touchdowns": 86,
-    "player_passing_yards": 302,
-    "player_receiving_yards": 955,
-    "player_receptions": 29,
-    "player_rushing_attempts": 6,
-    "player_rushing_yards": 694
+    "player_passing_touchdowns": 63,
+    "player_passing_yards": 175,
+    "player_receiving_yards": 499,
+    "player_receptions": 2,
+    "player_rushing_yards": 391
    },
-   "requestsLeft": 0,
-   "rows": 2199,
+   "requestsLeft": 5,
+   "rows": 1130,
    "slateGames": [
     "James Madison Dukes at App State Mountaineers 2026-10-22T23:00Z",
     "Liberty Flames at Kennesaw State Owls 2026-10-22T23:00Z",
@@ -91,7 +81,7 @@
       "draftkings": "34869474",
       "fanduel": "36208879",
       "fliff": "420751_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT23YALEPENN",
+      "kalshi": "KXNCAAFTOTAL-26OCT23YALEPENN",
       "novig": "01a141d1-8bc7-7661-a893-0cfc77077d8d",
       "onexbet": "763706342",
       "paddypower": "36208879",
@@ -200,6 +190,7 @@
        "both_teams_to_score",
        "draw_no_bet",
        "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -345,6 +336,7 @@
        "anytime_touchdown_scorer",
        "draw_no_bet",
        "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -385,7 +377,7 @@
      "away": "New Haven College",
      "external": {
       "fanduel": "36208871",
-      "kalshi": "KXNCAAF1H-26OCT24NHCCCSU",
+      "kalshi": "KXNCAAFSPREAD-26OCT24NHCCCSU",
       "novig": "01a14577-514c-7003-b6cd-973b150714ef",
       "onexbet": "763706346",
       "paddypower": "36208871",
@@ -498,7 +490,6 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passing_+_rushing_yards",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_receiving_yards",
@@ -512,7 +503,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -635,9 +625,7 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -650,7 +638,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -738,6 +725,7 @@
        "both_teams_to_score",
        "draw_no_bet",
        "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -810,13 +798,19 @@
    ]
   },
   "NFL": {
-   "books": {},
+   "books": {
+    "fanduel": 200
+   },
    "eventsListed": 29,
    "eventsMatched": 1,
    "games": 1,
-   "marketTypes": {},
-   "requestsLeft": -1,
-   "rows": 0,
+   "marketTypes": {
+    "player_passing_touchdowns": 10,
+    "player_passing_yards": 23,
+    "player_receiving_yards": 167
+   },
+   "requestsLeft": 3,
+   "rows": 200,
    "slateGames": [
     "New England Patriots at Chicago Bears 2026-10-23T00:15Z"
    ],
@@ -950,6 +944,7 @@
        "player_rushing_+_receiving_yards",
        "player_rushing_attempts",
        "player_rushing_yards",
+       "player_total_receptions",
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
@@ -986,7 +981,7 @@
       "fliff": "fobj__conflict_event__408410",
       "gemini": "NFL-2610251700-SF-ATL-T",
       "hardrock": "450222213367464351",
-      "kalshi": "KXNFL2QSPREAD-26OCT25SFATL",
+      "kalshi": "KXNFL1H-26OCT25SFATL",
       "ladbrokes": "cbff4bee-d00f-4e31-b67d-c4e55281ae35",
       "novig": "01a136e2-eac0-7dd3-9129-aa16dd49076a",
       "paddypower": "36188996",
@@ -1096,6 +1091,7 @@
        "player_rushing_+_receiving_yards",
        "player_rushing_attempts",
        "player_rushing_yards",
+       "player_total_receptions",
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
@@ -1420,7 +1416,7 @@
       "fliff": "fobj__conflict_event__407878",
       "gemini": "NFL-2610251700-TB-CAR-T",
       "hardrock": "8831632226136490404",
-      "kalshi": "KXNFL4QSPREAD-26OCT25TBCAR",
+      "kalshi": "KXNFL2QSPREAD-26OCT25TBCAR",
       "ladbrokes": "867215bb-4f9d-48e8-b67f-43a5b58f92f0",
       "novig": "01a136e2-ea35-7911-9fe2-43f84a337c27",
       "paddypower": "36188995",
@@ -1528,6 +1524,7 @@
        "player_rushing_+_receiving_yards",
        "player_rushing_attempts",
        "player_rushing_yards",
+       "player_total_receptions",
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
@@ -2139,7 +2136,7 @@
       "fliff": "fobj__conflict_event__407880",
       "gemini": "NFL-2610252025-GB-DET-S",
       "hardrock": "7899387103270797721",
-      "kalshi": "KXNFL1HTOTAL-26OCT25GBDET",
+      "kalshi": "KXNFL1QSPREAD-26OCT25GBDET",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "novig": "01a136e2-eecd-78b0-ad17-c6ca310ae109",
       "paddypower": "36189005",
