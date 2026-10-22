@@ -195,6 +195,10 @@ ladder, receipts and house cards. Cream `#f6f1e6` and ink `#141414` for text. Im
 chef. `KEENROUDY_CARD_ART=0` turns photos and logos off. No straight-play units on cards; a receipt may show a fun
 ticket's 0.25u stake.
 
+Standalone Thursday/Monday sheets and captions say **TNF/MNF PROJECTIONS**, not the full NFL week.
+One-matchup graphics use the full card width; full-slate grids remain unchanged. Preserve sent captions/artwork;
+corrections are prospective or separately dated, never silent replacements of an old attachment.
+
 The **Save this projection sheet** (`scripts/sheet.py`): a header (`SAVE THIS`, `WEEK 3 NFL PROJECTIONS`, the date), two
 columns of compact game cards (logos, our projected score to a tenth, win chances as bars in the teams' colours, and
 spread and total comparisons with the exact captured line, odds and book), and the foot. NFL shows the full slate;

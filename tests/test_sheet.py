@@ -1,5 +1,7 @@
 import sys
 import unittest
+import tempfile
+from unittest.mock import patch
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -125,12 +127,13 @@ class PostTests(unittest.TestCase):
         monday_games = {'mnf': {'id': 'mnf', 'league': 'NFL', 'week': 4,
                                 'kickoff': '2026-09-29T00:15:00Z'}}
         monday = sheet.post(monday_games, datetime(2026, 9, 28, 12, 0, tzinfo=timezone.utc))
-        self.assertEqual(monday['text'], "📌 Tonight's NFL projection.\n"
+        self.assertEqual(monday['text'], "📌 Tonight's MNF projection.\n"
                          'My number next to Vegas, plus the line I like most.\n📌 Save this one\n#NFL')
         thursday_games = {'tnf': {'id': 'tnf', 'league': 'NFL', 'week': 4,
                                   'kickoff': '2026-10-02T00:15:00Z'}}
         thursday = sheet.post(thursday_games, datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc))
         self.assertIsNotNone(thursday)
+        self.assertIn("Tonight's TNF projection", thursday['text'])
         few = dict(list(self.GAMES.items())[:3])
         self.assertIsNone(sheet.post(few, early), 'a thin slate gets no sheet')
 
@@ -148,6 +151,31 @@ class PostTests(unittest.TestCase):
         self.assertEqual([(league, day, len(games)) for league, day, games in due], [('NFL', monday, 1)])
         sparse_sunday = [card(f'g{i}', '2026-09-27T17:00:00Z') for i in range(3)]
         self.assertEqual(sheet.due(datetime(2026, 9, 27, 12, 0, tzinfo=timezone.utc), sparse_sunday), [])
+
+    def test_tnf_title_and_preview_caption_do_not_claim_a_full_week(self):
+        day=date(2026,10,22)
+        game=card('tnf','2026-10-23T00:15:00Z',week=7)
+        text=sheet.svg([game],'NFL',day,7,now=RENDERED_AT)
+        self.assertIn('TNF PROJECTIONS',text)
+        self.assertNotIn('WEEK 7 NFL PROJECTIONS',text)
+        self.assertIn('data-layout="single-matchup"',text)
+        with patch.object(sheet.pick_card,'felt_enabled',return_value=True):
+            felt=sheet.svg([game],'NFL',day,7,now=RENDERED_AT)
+        self.assertIn('TNF PROJECTIONS',felt)
+        self.assertNotIn('WEEK 7 NFL PROJECTIONS',felt)
+        self.assertIn('width="952"',felt)
+        post=sheet.post({'tnf':game},datetime(2026,10,21,23,tzinfo=timezone.utc))
+        self.assertIn("Tomorrow night's TNF projection",post['text'])
+        self.assertEqual(sheet.title_for([game,card('sun','2026-10-25T17:00Z')],'NFL',day,7),'WEEK 7 NFL PROJECTIONS')
+
+    def test_a_sent_sheet_is_preserved_not_redrawn_under_new_label(self):
+        day=date(2026,10,22);now=datetime(2026,10,22,11,tzinfo=timezone.utc)
+        game=card('tnf','2026-10-23T00:15:00Z',week=7)
+        with tempfile.TemporaryDirectory() as folder, patch.object(sheet.pick_card,'render',side_effect=AssertionError('never redraw sent art')):
+            path=Path(folder)/f'{sheet.key("NFL",day)}.png';path.write_bytes(b'original posted pixels')
+            result=sheet.render_due(now,folder,cards=[game],posted_keys={sheet.key('NFL',day)},fetch=lambda *_:None)
+            self.assertEqual(path.read_bytes(),b'original posted pixels')
+            self.assertEqual(result[sheet.key('NFL',day)],path)
 
 
 if __name__ == '__main__':

@@ -415,7 +415,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
         # The HTML steps and image must be one snapshot even if a scan begins between build_site and feed.
         ticket_climb_route.render(Path(cards_folder) / 'climb-route.png', route_snapshot_time(now), stores)
         import sheet          # the weekly projections sheet on its league's day, from the page payloads just built
-        cards.update(sheet.render_due(now, cards_folder, log=log))
+        cards.update(sheet.render_due(now, cards_folder, log=log,
+                                     posted_keys=posted_card_keys(post_log), restore=restore_posted_cards))
         import research_posts # at most one evidence-first research card for the current slate
         cards.update(research_posts.render_due(now, cards_folder, log=log))
         import sports_posts

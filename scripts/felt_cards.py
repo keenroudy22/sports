@@ -554,13 +554,14 @@ def sheet_row_geometry(card_h, caution=False):
 def projection_sheet(games, league, day, week=None, logos=None, watches=None):
     """Phone-readable felt projection sheet; same 1080x1350 filename and data contract."""
     logos, watches = logos or {}, watches or {}
-    title = f"WEEK {week} {'COLLEGE' if league == 'CFB' else league} PROJECTIONS" if week else f"{'COLLEGE' if league == 'CFB' else league} PROJECTIONS"
+    import sheet
+    title = sheet.title_for(games, league, day, week)
     rows = max(1, (len(games) + 1) // 2)
     top, bottom = 250, 1198
     gap = 4 if rows >= 7 else 12
     pitch = (bottom - top) / rows
     card_h = pitch - gap
-    card_w = 466
+    card_w = 952 if len(games) == 1 else 466
     team_size = 40 if rows <= 6 else 32
     info_size = 30 if rows <= 6 else 23
 

@@ -41,6 +41,20 @@ def key(league, day):
     return f'sheet-{league.lower()}-{day.isoformat()}'
 
 
+def scope_name(league, day, games):
+    """Name the actual primetime slate, not the whole NFL week."""
+    if league == 'NFL' and games and day.weekday() in (0, 3):
+        if all(not game.get('kickoff') or eastern_date(gates.when(game['kickoff'])) == day for game in games):
+            return 'TNF' if day.weekday() == 3 else 'MNF'
+    return None
+
+
+def title_for(games, league, day, week=None):
+    scope = scope_name(league, day, games)
+    return (f'{scope} PROJECTIONS' if scope else
+            f'WEEK {week} {WORDS[league]} PROJECTIONS' if week else f'{WORDS[league]} PROJECTIONS')
+
+
 def sheet_day(league, day):
     return day.weekday() in POST_DAYS[league]
 
@@ -279,7 +293,7 @@ def svg(games, league, day, week=None, logos=None, now=None):
     pitch = (HEIGHT - top - foot) / max(rows, 1)
     h = min(480, pitch - gap)
     w = (WIDTH - 72 - 20) // 2
-    title = f"WEEK {week} {WORDS[league]} PROJECTIONS" if week else f"{WORDS[league]} PROJECTIONS"
+    title = title_for(games, league, day, week)
     when = f"{day:%A, %B} {day.day}"
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" '
              f'font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
@@ -294,7 +308,12 @@ def svg(games, league, day, week=None, logos=None, now=None):
         col, row = i % 2, i // 2
         drawer = compact_card_svg if len(games) > 4 else card_svg
         selected = watch.get(card['id'])
-        parts += drawer(card, 36 + col * (w + 20), round(top + row * pitch), w, round(h), logos, selected)
+        if len(games) == 1:
+            parts.append(f'<g data-layout="single-matchup" transform="translate(36 {top}) scale(2)">')
+            parts += drawer(card, 0, 0, (WIDTH - 72)//2, round((HEIGHT-top-foot-gap)/2), logos, selected)
+            parts.append('</g>')
+        else:
+            parts += drawer(card, 36 + col * (w + 20), round(top + row * pitch), w, round(h), logos, selected)
         if selected and selected[3].get('collegeGapCaution'):
             gap = selected[3]['collegeGapCaution']
             parts.append(f'<text x="{36 + col * (w + 20) + 18}" y="{round(top + row * pitch + h - 48)}" '
@@ -328,13 +347,20 @@ def due(now, cards):
     return out
 
 
-def render_due(now, folder, cards=None, fetch=None, log=print):
+def render_due(now, folder, cards=None, fetch=None, log=print, posted_keys=(), restore=None):
     """Draw today's sheets into the cards folder (the hosted build). Returns {key: path}."""
     cards = load_cards() if cards is None else cards
     out = {}
     for league, day, games in due(now, cards):
-        logos = {(c['id'], side): logo_uri(c, side, fetch) for c in games for side in ('away', 'home')}
         path = Path(folder) / f'{key(league, day)}.png'
+        if key(league, day) in posted_keys:
+            if restore:
+                restore(folder, {key(league, day)})
+            if not path.exists():
+                raise RuntimeError(f'posted projection sheet has no original artwork: {key(league, day)}')
+            out[key(league, day)] = path
+            continue
+        logos = {(c['id'], side): logo_uri(c, side, fetch) for c in games for side in ('away', 'home')}
         try:
             pick_card.render(svg(games, league, day, games[0].get('week'), logos, now), path, size=(WIDTH, HEIGHT))
             out[key(league, day)] = path
@@ -365,7 +391,7 @@ def post(games, now):
             todays = [g for g in games.values() if g.get('league') == league and eastern_date(gates.when(g['kickoff'])) == day]
             if len(todays) < minimum_games(league, day):
                 continue
-            name = 'college' if league == 'CFB' else 'NFL'
+            name = scope_name(league, day, todays) or ('college' if league == 'CFB' else 'NFL')
             if len(todays) == 1:
                 lead = f"📌 {'Tomorrow night' if preview else 'Tonight'}'s {name} projection."
             else:
