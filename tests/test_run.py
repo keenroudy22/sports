@@ -1421,10 +1421,11 @@ class LockedUnitsTests(unittest.TestCase):
         rung = run.write_prose(dict(top, book='FanDuel'), ctx, [])
         self.assertIn('$675 rides with $150 banked', rung['why'])
         self.assertIn('bank $170 and ride $680', rung['why'])
-        self.assertIn('Both legs have to hit', rung['risk'])
+        self.assertIn('Every leg has to hit', rung['risk'])
         self.assertIn('cannot take money already banked', rung['risk'])
-        game_rung = run.write_prose(dict(top, book='FanDuel', quoteType='sportsbook'), ctx, [])
-        self.assertIn('two easier game lines', game_rung['why'])
+        game_rung = run.write_prose(dict(top, book='FanDuel', quoteType='capture',
+                                       legs=[{'marketType':'spread'}, {'athleteId':'p'}, {'marketType':'spread'}]), ctx, [])
+        self.assertIn('3 alternate lines', game_rung['why'])
         self.assertIn('not calibrated price edges', game_rung['risk'])
         self.assertNotIn('player who does not take the field', game_rung['risk'])
 
