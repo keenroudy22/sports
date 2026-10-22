@@ -141,7 +141,14 @@ def fetch(path, key, opener=urllib.request.urlopen, sleep=time.sleep, **params):
     for attempt in (1, 2):
         try:
             if opener is urllib.request.urlopen:
-                quota.count_request('sharp')
+                for wait_attempt in range(13):
+                    try:
+                        quota.count_request('sharp')
+                        break
+                    except quota.QuotaBlocked as error:
+                        if '12-per-minute' not in str(error) or wait_attempt == 12:
+                            raise
+                        sleep(GAP)
             with opener(request, timeout=60) as response:
                 return json.load(response)
         except urllib.error.HTTPError as error:
@@ -331,6 +338,7 @@ def merge(previous, fresh_books, now):
 
 
 def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=print, probe=False, requests=RUN_REQUESTS):
+    started = time.monotonic()
     games = [g for g in slate.get('games', []) if g.get('league') in LEAGUES and g.get('state') == 'pre'
              and now < features.when(g['kickoff']) <= now + WINDOW]
     if not games:
@@ -393,13 +401,14 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
             continue
         by_game = quotes_from(matched)
         import game_alternates
-        game_quotes = game_alternates.parse(matched, now)
+        captured_at = now + timedelta(seconds=max(0, time.monotonic()-started))
+        game_quotes = game_alternates.parse(matched, captured_at)
         for game in mine:
             fresh_books = by_game.get(game['id']) or {}
             sides = game_quotes.get(game['id']) or {}
             if not fresh_books and not sides:
                 continue
-            confirmed[game['id']] = boxscores.stamp(now)
+            confirmed[game['id']] = boxscores.stamp(captured_at)
             previous = latest.get(game['id'])
             books = merge(previous, fresh_books, now)
             for book, markets in sides.items():
@@ -407,7 +416,7 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
             if previous and previous.get('books') == books:
                 continue
             record = {'league': league, 'gameId': game['id'], 'season': game.get('season'), 'kickoff': game['kickoff'],
-                      'retrievedAt': boxscores.stamp(now), 'source': f'{BASE}/odds (key withheld)', 'books': books}
+                      'retrievedAt': boxscores.stamp(captured_at), 'source': f'{BASE}/odds (key withheld)', 'books': books}
             record['hash'] = boxscores.content_hash(record)
             boxscores.append(boxscores.store_path(league, game['season'], root), [record])
             latest[game['id']] = record

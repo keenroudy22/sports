@@ -1,4 +1,6 @@
 import copy
+import json
+import tempfile
 import sys
 import unittest
 from pathlib import Path
@@ -10,6 +12,7 @@ import game_alternates as a
 import climb_validation as v
 import ladder
 import climb_prep
+import sharp_odds
 
 NOW=datetime(2026,10,22,18,tzinfo=timezone.utc)
 GAME=dict(id='CFB-1', league='CFB', season=2026, kickoff='2026-10-22T23:00:00Z',
@@ -33,6 +36,33 @@ def record():
 
 
 class GameAlternateTests(unittest.TestCase):
+    def test_capture_uses_completion_time_for_later_live_quotes(self):
+        game=dict(GAME,state='pre')
+        data=[dict(r,timestamp='2026-10-22T18:00:30Z') for _,r in rows()]
+        def fetch(path,key,**params):
+            if path=='/events':
+                return {'data':[dict(id='event1',home_team='Home Team',away_team='Away Team',event_start_time=game['kickoff'])]}
+            self.assertEqual(params['market'],'props,point_spread')
+            return {'data':data}
+        with tempfile.TemporaryDirectory() as folder, patch.object(sharp_odds.time,'monotonic',side_effect=[0,65]):
+            root=Path(folder)
+            self.assertEqual(sharp_odds.capture({'games':[game]},NOW,'test',fetch=fetch,sleep=lambda _:None,root=root,log=lambda _:None),1)
+            capture=json.loads((root/'cfb-2026.jsonl').read_text().splitlines()[0])
+            self.assertEqual(capture['retrievedAt'],'2026-10-22T18:01:05Z')
+            self.assertEqual(len(list(a.quotes(capture))),2)
+
+    def test_rate_collision_waits_without_bypassing_reservation(self):
+        from unittest.mock import MagicMock
+        response=MagicMock()
+        response.__enter__.return_value.read.return_value='{"data": []}'
+        with patch.object(sharp_odds.urllib.request,'urlopen',return_value=response) as opener, \
+                patch.object(sharp_odds.quota,'count_request',side_effect=[sharp_odds.quota.QuotaBlocked('SharpAPI 12-per-minute free-plan cap reached'),None]) as count:
+            waits=[]
+            self.assertEqual(sharp_odds.fetch('/odds','test',opener=opener,sleep=waits.append),{'data':[]})
+            self.assertEqual(count.call_count,2)
+            self.assertEqual(opener.call_count,1)
+            self.assertEqual(waits,[sharp_odds.GAP])
+
     def test_next_day_packet_is_planning_only_with_exact_holds(self):
         game=copy.deepcopy(GAME)
         game['kickoff']='2026-10-23T23:00:00Z'
