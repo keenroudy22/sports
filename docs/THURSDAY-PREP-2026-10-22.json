@@ -1,7 +1,7 @@
 {
   "targetDay": "2026-10-22",
   "preparedAt": "2026-10-21T17:26:13Z",
-  "status": "private preparation; no admission or scheduled play",
+  "status": "Overnight preparation refreshed; future game-day admission/delivery remains unverified",
   "latestClimbReview": {
     "checkedAt": "2026-10-22T00:13:09Z",
     "targetEasternDay": "2026-10-22",
@@ -12,26 +12,77 @@
       "sourceHead": "1c43a3e551404889209e8c5118ca9a200a7c730d",
       "policyHead": "fa8731f976e8375a4bfc1141db48ff00203ac728",
       "writer": "scripts/climb_validation.py via learn.weekly; one locked repair backfill applied tonight",
-      "offered": 27511, "graded": 23879, "unknown": 3632, "segments": 256, "open": 0,
+      "offered": 27511,
+      "graded": 23879,
+      "unknown": 3632,
+      "segments": 256,
+      "open": 0,
       "idempotentReplayAdded": 0,
       "meaning": "The original missing-writer finding below is repaired and hosted/live verified, not a reason to wait for 150 new games. Exact side/book/price-band proof currently opens no alternate segment. Unknown outcomes lower the opening-rate bound; no guessed zeros or wins. No prospective Climb qualifies just because technical tests pass.",
       "tests": "Normal/clean1593Python(2skip)/269Node; record111/NBA0; guard588/assets/budgets clear; actual2100/u6k5tvvq offline ok,zero outside/private. Hosted39707490860SUCCESS; live Today/Climb375/1440 no overflow/load/console errors, route cache20261022T015505Z. Screenshots /tmp/kookn-validation-live-today-phone.png and /tmp/kookn-validation-live-climb-phone.png.",
       "morningRepair": "Exact catalog-ID/line/book matches canonical versus abbreviated lean names. Climb/fun admissions do not suppress a lean when there is no straight Best Bet. Existing6:45/8:30 jobs and5-minute Discord job loaded; no new schedule or owner reconfirmation."
     },
     "captures": [
-      {"gameId": "CFB-401869845", "quotedAt": "2026-10-21T23:33:46Z", "consistentRungs": 412, "rawRoleEligible": 0, "supported": 0},
-      {"gameId": "CFB-401871056", "quotedAt": "2026-10-21T23:33:46Z", "consistentRungs": 281, "rawRoleEligible": 0, "supported": 0},
-      {"gameId": "CFB-401862807", "quotedAt": "2026-10-22T00:07:09Z", "consistentRungs": 113, "rawRoleEligible": 0, "supported": 0},
-      {"gameId": "NFL-401873010", "quotedAt": "2026-10-22T00:07:09Z", "consistentRungs": 62, "rawRoleEligible": 0, "supported": 0}
+      {
+        "gameId": "CFB-401869845",
+        "quotedAt": "2026-10-21T23:33:46Z",
+        "consistentRungs": 412,
+        "rawRoleEligible": 0,
+        "supported": 0
+      },
+      {
+        "gameId": "CFB-401871056",
+        "quotedAt": "2026-10-21T23:33:46Z",
+        "consistentRungs": 281,
+        "rawRoleEligible": 0,
+        "supported": 0
+      },
+      {
+        "gameId": "CFB-401862807",
+        "quotedAt": "2026-10-22T00:07:09Z",
+        "consistentRungs": 113,
+        "rawRoleEligible": 0,
+        "supported": 0
+      },
+      {
+        "gameId": "NFL-401873010",
+        "quotedAt": "2026-10-22T00:07:09Z",
+        "consistentRungs": 62,
+        "rawRoleEligible": 0,
+        "supported": 0
+      }
     ],
     "heldResearchOptions": [
-      {"title": "Braeden Wisloski over4.5 receiving yards", "book": "FanDuel", "odds": -420, "quotedAt": "2026-10-21T23:33:46Z", "hold": "Projected4.2 targets versus7.3 over last3 full games fails current-role consistency. Research only, not a supported Climb leg."},
-      {"title": "Stonka Burnside over9.5 receiving yards", "book": "FanDuel", "odds": -900, "quotedAt": "2026-10-22T00:07:09Z", "hold": "Projected4.7 targets versus7.0 over last3 full games; raw gap also fails sanity band. Not a supported leg; do not add for payout."}
+      {
+        "title": "Braeden Wisloski over4.5 receiving yards",
+        "book": "FanDuel",
+        "odds": -420,
+        "quotedAt": "2026-10-21T23:33:46Z",
+        "hold": "Projected4.2 targets versus7.3 over last3 full games fails current-role consistency. Research only, not a supported Climb leg."
+      },
+      {
+        "title": "Stonka Burnside over9.5 receiving yards",
+        "book": "FanDuel",
+        "odds": -900,
+        "quotedAt": "2026-10-22T00:07:09Z",
+        "hold": "Projected4.7 targets versus7.0 over last3 full games; raw gap also fails sanity band. Not a supported leg; do not add for payout."
+      }
     ],
-    "validationGap": {"openNonMoneylineSegments": 0, "shadowRows": 407, "withTicket": 83, "graded": 0, "finding": "Policy has no validated alternate segments; no grading/promotion writer found for ladderSegments. A-20261010-3 owns the missing technical evidence path. Shadow counts are a separate diagnostic, not the sample of graded offers. Do not invent grades or loosen support.", "approvedCriterion": "Weekly league/market/side/book/price-band segments from stored pregame captures and official box scores. Open at150+ genuine graded offers hitting2+ percentage points above the quoted-price need; close if last100 fall below price. Preserve as-of/no-lookahead/dedup safeguards. This does not add a requirement for150 newly collected games."},
+    "validationGap": {
+      "openNonMoneylineSegments": 0,
+      "shadowRows": 407,
+      "withTicket": 83,
+      "graded": 0,
+      "finding": "Policy has no validated alternate segments; no grading/promotion writer found for ladderSegments. A-20261010-3 owns the missing technical evidence path. Shadow counts are a separate diagnostic, not the sample of graded offers. Do not invent grades or loosen support.",
+      "approvedCriterion": "Weekly league/market/side/book/price-band segments from stored pregame captures and official box scores. Open at150+ genuine graded offers hitting2+ percentage points above the quoted-price need; close if last100 fall below price. Preserve as-of/no-lookahead/dedup safeguards. This does not add a requirement for150 newly collected games."
+    },
     "supersededWatches": "The original JMU moneyline observation below remains historical context, not an eligible alternate under the latest shape. NBA remains research-only for Climb. A standalone TNF game cannot supply two distinct-game legs under the existing ticket rules.",
     "next": "Existing21:00/23:30 evening captures and00:45 review refresh actual alt quotes, current roles and validation status. Existing06:45/08:30 game-day checks release the first fully supported ticket through website, Plays & Results and Buffer/X, without another owner prompt. Preserve exact holds if none qualifies. Do not freeze a stale quoted ticket overnight.",
-    "news": {"source": "https://www.patriots.com/news/week-7-injury-report-patriots-at-bears", "publishedAtLocal": "2026-10-21T16:00:00-04:00", "review": "Final report now lists Ben Brown and Alijah Vera-Tucker out, Morgan Moses questionable; A.J.Brown full/no game status. Bears Kyle Monangai out and T.J.Edwards doubtful. Reconcile any chosen role with the current forecast before release."}
+    "news": {
+      "source": "https://www.patriots.com/news/week-7-injury-report-patriots-at-bears",
+      "publishedAtLocal": "2026-10-21T16:00:00-04:00",
+      "review": "Final report now lists Ben Brown and Alijah Vera-Tucker out, Morgan Moses questionable; A.J.Brown full/no game status. Bears Kyle Monangai out and T.J.Edwards doubtful. Reconcile any chosen role with the current forecast before release."
+    }
   },
   "refreshPlan": {
     "tonight": "Existing17:30/21:00/23:30 Eastern runs refresh stored prices and news. Existing00:45 overnight agent reads this packet and product queue; verify final NFL/NBA reports and revise the shortlist from current evidence.",
@@ -44,47 +95,2531 @@
       "gameId": "NFL-401873010",
       "matchup": "New England Patriots at Chicago Bears",
       "kickoff": "2026-10-23T00:15:00Z",
-      "priorityStraight": {"title": "Patriots moneyline", "book": "DraftKings", "odds": 130, "oppositeOdds": -155, "quotedAt": "2026-10-21T17:19:44Z", "sourceType": "ESPN relayed DraftKings pair", "source": "https://www.espn.com/nfl/game/_/gameId/401873010", "modelScore": {"NE": 22.6, "CHI": 21.5}, "rawChance": 0.534, "anchoredChance": 0.458, "priceNeed": 0.435, "edgePoints": 2.3, "reviewPrice": "+130 or better, with current opposite-side quote and full recalculation", "state": "research candidate; not admitted"},
-      "supportToVerify": ["Current official preview lists NE defense at300.8 yards allowed per game and18.8 points allowed.", "NE did not allow a sack against the Jets despite offensive-line injuries. This does not remove the injury risk."],
-      "risks": ["Official report lists Ben Brown and Alijah Vera-Tucker as nonparticipants; Morgan Moses limited. Confirm the final starting offensive line and whether the forecast reflects it.", "A.J. Brown limited with ankle issue; Romeo Doubs moved to injured reserve. Do not promote A.J. Brown under67.5 from the27.5 projection without resolving role/availability.", "Final Wednesday game designations were not yet available in the retrieved Tuesday participation table.", "Canonical current-time pre-admission screen refuses the single-book exception before game day; strong current supporting reason also still required."],
-      "otherMarkets": ["Under50.5 -105DK vs44.1 model total is a priced research lean, but NFL/total is currently paused and cannot be promoted by this packet.", "Maye under20.5 completions -102DK vs19.3 model, quoted17:01:34Z: only0.4 adjusted points over price, below the5-point underperforming-prop requirement.", "NFL stable-role/own-ladder comparison found no eligible Climb prop among264 consistent alternate rungs."],
-      "sources": ["https://www.patriots.com/news/week-7-injury-report-patriots-at-bears", "https://www.patriots.com/news/game-preview-patriots-at-bears-nfl-week-7", "https://www.patriots.com/news/patriots-gameplan-maye-off-play-action-johnson-s-staples-and-key-matchups-in-thursday-night-football-vs-the-bears", "https://www.patriots.com/news/patriots-place-wr-romeo-doubs-on-injured-reserve-sign-db-elliott-davison-to-the-53-man-roster-from-the-practice-squad-announce-additional-practice-squad-moves"]
+      "priorityStraight": {
+        "title": "Patriots moneyline",
+        "book": "DraftKings",
+        "odds": 130,
+        "oppositeOdds": -155,
+        "quotedAt": "2026-10-21T17:19:44Z",
+        "sourceType": "ESPN relayed DraftKings pair",
+        "source": "https://www.espn.com/nfl/game/_/gameId/401873010",
+        "modelScore": {
+          "NE": 22.6,
+          "CHI": 21.5
+        },
+        "rawChance": 0.534,
+        "anchoredChance": 0.458,
+        "priceNeed": 0.435,
+        "edgePoints": 2.3,
+        "reviewPrice": "+130 or better, with current opposite-side quote and full recalculation",
+        "state": "research candidate; not admitted"
+      },
+      "supportToVerify": [
+        "Current official preview lists NE defense at300.8 yards allowed per game and18.8 points allowed.",
+        "NE did not allow a sack against the Jets despite offensive-line injuries. This does not remove the injury risk."
+      ],
+      "risks": [
+        "Official report lists Ben Brown and Alijah Vera-Tucker as nonparticipants; Morgan Moses limited. Confirm the final starting offensive line and whether the forecast reflects it.",
+        "A.J. Brown limited with ankle issue; Romeo Doubs moved to injured reserve. Do not promote A.J. Brown under67.5 from the27.5 projection without resolving role/availability.",
+        "Final Wednesday game designations were not yet available in the retrieved Tuesday participation table.",
+        "Canonical current-time pre-admission screen refuses the single-book exception before game day; strong current supporting reason also still required."
+      ],
+      "otherMarkets": [
+        "Under50.5 -105DK vs44.1 model total is a priced research lean, but NFL/total is currently paused and cannot be promoted by this packet.",
+        "Maye under20.5 completions -102DK vs19.3 model, quoted17:01:34Z: only0.4 adjusted points over price, below the5-point underperforming-prop requirement.",
+        "NFL stable-role/own-ladder comparison found no eligible Climb prop among264 consistent alternate rungs."
+      ],
+      "sources": [
+        "https://www.patriots.com/news/week-7-injury-report-patriots-at-bears",
+        "https://www.patriots.com/news/game-preview-patriots-at-bears-nfl-week-7",
+        "https://www.patriots.com/news/patriots-gameplan-maye-off-play-action-johnson-s-staples-and-key-matchups-in-thursday-night-football-vs-the-bears",
+        "https://www.patriots.com/news/patriots-place-wr-romeo-doubs-on-injured-reserve-sign-db-elliott-davison-to-the-53-man-roster-from-the-practice-squad-announce-additional-practice-squad-moves"
+      ]
     },
     {
-      "gameId": "CFB-401869845", "matchup": "James Madison at App State", "kickoff": "2026-10-22T23:00:00Z",
-      "climbWatch": {"title": "JMU moneyline", "book": "DraftKings", "odds": -425, "oppositeOdds": 330, "quotedAt": "2026-10-21T17:10:51Z", "rawChance": 0.824, "usedChance": 0.824, "fairChance": 0.777, "state": "supported individual Climb leg only; standalone price outside-220 to-130 ticket range"},
-      "modelScore": {"JMU": 35.1, "APP": 20.0},
+      "gameId": "CFB-401869845",
+      "matchup": "James Madison at App State",
+      "kickoff": "2026-10-22T23:00:00Z",
+      "climbWatch": {
+        "title": "JMU moneyline",
+        "book": "DraftKings",
+        "odds": -425,
+        "oppositeOdds": 330,
+        "quotedAt": "2026-10-21T17:10:51Z",
+        "rawChance": 0.824,
+        "usedChance": 0.824,
+        "fairChance": 0.777,
+        "state": "supported individual Climb leg only; standalone price outside-220 to-130 ticket range"
+      },
+      "modelScore": {
+        "JMU": 35.1,
+        "APP": 20.0
+      },
       "straightReview": "JMU-10.5 -110DK has negative adjusted value at the current pair; no Best Bet. Reprice all sides rather than converting the15.2-point model margin into certainty.",
       "roleAndNews": "Official previews confirm JMU7-0/4-0 and App4-2/1-1, short week and App home field. App rallied from10 down to beat Coastal35-32. Availability still needs game-specific checking.",
-      "alternateScreen": {"consistentRungs": 168, "stableRawEligible": 0, "fullySupported": 0},
-      "sources": ["https://jmusports.com/news/2026/10/20/football-dukes-brace-for-thursday-night-trip-to-app-state", "https://appstatesports.com/news/2026/10/21/football-game-day-preview-app-state-hosts-unbeaten-jmu-on-thursday-night.aspx"]
+      "alternateScreen": {
+        "consistentRungs": 168,
+        "stableRawEligible": 0,
+        "fullySupported": 0
+      },
+      "sources": [
+        "https://jmusports.com/news/2026/10/20/football-dukes-brace-for-thursday-night-trip-to-app-state",
+        "https://appstatesports.com/news/2026/10/21/football-game-day-preview-app-state-hosts-unbeaten-jmu-on-thursday-night.aspx"
+      ]
     },
     {
-      "gameId": "CFB-401871056", "matchup": "Liberty at Kennesaw State", "kickoff": "2026-10-22T23:00:00Z",
-      "modelScore": {"LIB": 28.2, "KENN": 20.9},
+      "gameId": "CFB-401871056",
+      "matchup": "Liberty at Kennesaw State",
+      "kickoff": "2026-10-22T23:00:00Z",
+      "modelScore": {
+        "LIB": 28.2,
+        "KENN": 20.9
+      },
       "review": "Liberty ML-395/+310 opposite is not model-supported for Climb. Kennesaw+10/+10.5 is a side watch only; the captured spreads do not clear adjusted value. Kennesaw ML+310 is outside the official+250 moneyline ceiling.",
       "propReview": "Kam Davis under87.5 rush -114FD vs66.8 is negative adjusted value, despite the raw gap. Purdie under173.5 pass -114FD vs145.3 also negative. Neither is an official candidate at those prices.",
       "roleAndNews": "Official KSU preview reports three straight losses by3 or fewer,23.5 points allowed per game, Collins completing60% with20+ attempts in each of six games and Dylan Gary10 catches/135 yards last game. Check current role identities before using the stored prop projections.",
-      "alternateScreen": {"consistentRungs": 263, "stableRawEligible": 0, "fullySupported": 0},
+      "alternateScreen": {
+        "consistentRungs": 263,
+        "stableRawEligible": 0,
+        "fullySupported": 0
+      },
       "source": "https://ksuowls.com/news/2026/10/19/football-owls-return-home-to-host-longtime-foe-liberty-on-thursday.aspx"
     },
     {
-      "gameId": "CFB-401862807", "matchup": "East Carolina at Memphis", "kickoff": "2026-10-22T23:30:00Z",
-      "modelScore": {"ECU": 20.3, "MEM": 33.1},
+      "gameId": "CFB-401862807",
+      "matchup": "East Carolina at Memphis",
+      "kickoff": "2026-10-22T23:30:00Z",
+      "modelScore": {
+        "ECU": 20.3,
+        "MEM": 33.1
+      },
       "climbReview": "Memphis ML-395/+310 opposite: raw0.785 versus fair0.766, below the required0.03 model-over-fair support and below the selected price need. It cannot be paired with JMU merely to reach the payout band. Recheck a genuinely improved two-sided price and all news before considering it.",
       "propReview": "Engleman under84.5 rush -114FD vs70.4 remains negative adjusted value; no official straight. Other priced player comparisons also fail the price test.",
-      "alternateScreen": {"consistentRungs": 247, "stableRawEligible": 0, "fullySupported": 0},
+      "alternateScreen": {
+        "consistentRungs": 247,
+        "stableRawEligible": 0,
+        "fullySupported": 0
+      },
       "source": "https://www.espn.com/college-football/game/_/gameId/401862807",
       "missing": "Retrieve current team-specific availability/depth reporting; earlier search results were mostly last-season previews and were rejected."
     }
   ],
   "nba": {
     "state": "trial/research options only; not football Best Bets or Climb",
-    "priorityGame": {"gameId": "NBA-401909093", "matchup": "Cleveland Cavaliers at Philadelphia76ers", "kickoff": "2026-10-22T23:00:00Z", "book": "DraftKings", "quotedAt": "2026-10-21T16:05:41Z", "projection": {"CLE": 115.1, "PHI": 111.8, "total": 226.9}, "options": ["Cleveland+2.5 -110 (opposite Philadelphia-2.5 -110)", "Under234.5 -108 (opposite over-112)"], "support": "Existing trial helper confirms CLE covered+2.5 in4 of last5 stored regular-season games. Last-season scoring histories support the under, but these are background and current rosters/availability must be reviewed."},
-    "secondGame": {"gameId": "NBA-401909094", "matchup": "Denver Nuggets at Oklahoma City Thunder", "kickoff": "2026-10-23T01:30:00Z", "book": "DraftKings", "quotedAt": "2026-10-21T16:05:42Z", "projection": {"DEN": 111.6, "OKC": 118.7, "total": 230.3}, "review": "Under235.5 -105 does not receive supporting scoring-history reasons from the existing trial helper. OKC-7.5 -115 is beyond the7.1 model margin; do not promote either from the score alone."},
-    "playerProps": {"freshNextDayRows": 0, "checkedAt": "2026-10-21T17:26:13Z", "action": "Review existing evening capture for fresh Cleveland/Philadelphia/Denver/OKC main props. Check starters, current news and estimated minutes before choosing favorites. No invented prop/alternate price; do not freeze morning research art on tonight's quote."},
-    "injuryReport": {"source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-10-21_01_00PM.pdf", "state": "All four Thursday teams NOT YET SUBMITTED at1PM Eastern. Check submitted evening reports and fresh morning availability before trial admission."}
+    "priorityGame": {
+      "gameId": "NBA-401909093",
+      "matchup": "Cleveland Cavaliers at Philadelphia76ers",
+      "kickoff": "2026-10-22T23:00:00Z",
+      "book": "DraftKings",
+      "quotedAt": "2026-10-21T16:05:41Z",
+      "projection": {
+        "CLE": 115.1,
+        "PHI": 111.8,
+        "total": 226.9
+      },
+      "options": [
+        "Cleveland+2.5 -110 (opposite Philadelphia-2.5 -110)",
+        "Under234.5 -108 (opposite over-112)"
+      ],
+      "support": "Existing trial helper confirms CLE covered+2.5 in4 of last5 stored regular-season games. Last-season scoring histories support the under, but these are background and current rosters/availability must be reviewed."
+    },
+    "secondGame": {
+      "gameId": "NBA-401909094",
+      "matchup": "Denver Nuggets at Oklahoma City Thunder",
+      "kickoff": "2026-10-23T01:30:00Z",
+      "book": "DraftKings",
+      "quotedAt": "2026-10-21T16:05:42Z",
+      "projection": {
+        "DEN": 111.6,
+        "OKC": 118.7,
+        "total": 230.3
+      },
+      "review": "Under235.5 -105 does not receive supporting scoring-history reasons from the existing trial helper. OKC-7.5 -115 is beyond the7.1 model margin; do not promote either from the score alone."
+    },
+    "playerProps": {
+      "freshNextDayRows": 0,
+      "checkedAt": "2026-10-21T17:26:13Z",
+      "action": "Review existing evening capture for fresh Cleveland/Philadelphia/Denver/OKC main props. Check starters, current news and estimated minutes before choosing favorites. No invented prop/alternate price; do not freeze morning research art on tonight's quote."
+    },
+    "injuryReport": {
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-10-21_01_00PM.pdf",
+      "state": "All four Thursday teams NOT YET SUBMITTED at1PM Eastern. Check submitted evening reports and fresh morning availability before trial admission."
+    }
   },
-  "climbState": {"run": 4, "nextStep": 1, "stakeDollars": 50, "bankedCurrentRun": 0, "openTicket": null, "weeklyUsed": 1, "weeklyRemaining": 2, "candidateTicket": null, "policy": "Two to three alternate-line legs, two preferred, combined-200 to-150, same book/league and distinct games. No forced step. Latest evening review supersedes the earlier JMU moneyline watch."},
-  "deliveryDrafts": {"football": "CONDITIONAL ONLY: Patriots MONEYLINE (+130,DraftKings). Add the final verified supporting reason; reprice and pass every gate before using. No queued post exists.", "climb": "UNSELECTED: $50 → $1,000 · Step1. Fill only actual admitted legs/book/price/stake/return/bank/ride after qualification. Never use assumed prices or claim safety.", "nba": "CONDITIONAL TRIAL: Cleveland+2.5 -110DK or CLE/PHIunder234.5 -108DK. Choose at most the one current best qualifying Trial market after availability and quote checks."}
+  "climbState": {
+    "run": 4,
+    "nextStep": 1,
+    "stakeDollars": 50,
+    "bankedCurrentRun": 0,
+    "openTicket": null,
+    "weeklyUsed": 1,
+    "weeklyRemaining": 2,
+    "candidateTicket": null,
+    "policy": "Two to three alternate-line legs, two preferred, combined-200 to-150, same book/league and distinct games. No forced step. Latest evening review supersedes the earlier JMU moneyline watch."
+  },
+  "deliveryDrafts": {
+    "football": "CONDITIONAL ONLY: Patriots MONEYLINE (+130,DraftKings). Add the final verified supporting reason; reprice and pass every gate before using. No queued post exists.",
+    "climb": "UNSELECTED: $50 → $1,000 · Step1. Fill only actual admitted legs/book/price/stake/return/bank/ride after qualification. Never use assumed prices or claim safety.",
+    "nba": "CONDITIONAL TRIAL: Cleveland+2.5 -110DK or CLE/PHIunder234.5 -108DK. Choose at most the one current best qualifying Trial market after availability and quote checks."
+  },
+  "overnightReview": {
+    "checkedAt": "2026-10-22T04:52:51Z",
+    "state": "Preparation refreshed; no ticket selected/admitted/scheduled by this review",
+    "sourceQuoteRule": "Stored normal captures only; all observed prices must refresh at6:45/8:30. No sportsbook scraping or new metered quote call.",
+    "football": [
+      {
+        "gameId": "NFL-401873010",
+        "kickoff": "2026-10-23T00:15Z",
+        "mainCapture": {
+          "books": {
+            "betmgm": {
+              "spread": {
+                "awayPrice": -112,
+                "home": -3.0,
+                "homePrice": -105
+              },
+              "title": "BetMGM",
+              "total": {
+                "line": 50.5,
+                "over": -110,
+                "under": -108
+              },
+              "updatedAt": "2026-10-22T04:05:19Z"
+            },
+            "betrivers": {
+              "spread": {
+                "awayPrice": -112,
+                "home": -3.0,
+                "homePrice": -109
+              },
+              "title": "BetRivers",
+              "total": {
+                "line": 50.5,
+                "over": -109,
+                "under": -112
+              },
+              "updatedAt": "2026-10-22T04:04:53Z"
+            },
+            "draftkings": {
+              "spread": {
+                "awayPrice": -118,
+                "home": -3.0,
+                "homePrice": -102
+              },
+              "title": "DraftKings",
+              "total": {
+                "line": 50.5,
+                "over": -115,
+                "under": -105
+              },
+              "updatedAt": "2026-10-22T04:05:38Z"
+            },
+            "espnbet": {
+              "spread": {
+                "awayPrice": -105,
+                "home": -3.0,
+                "homePrice": -115
+              },
+              "title": "theScore Bet",
+              "total": {
+                "line": 50.5,
+                "over": -110,
+                "under": -110
+              },
+              "updatedAt": "2026-10-22T04:05:18Z"
+            },
+            "fanduel": {
+              "spread": {
+                "awayPrice": -115,
+                "home": -3.0,
+                "homePrice": -105
+              },
+              "title": "FanDuel",
+              "total": {
+                "line": 50.5,
+                "over": -110,
+                "under": -110
+              },
+              "updatedAt": "2026-10-22T04:05:16Z"
+            },
+            "hardrockbet": {
+              "spread": {
+                "awayPrice": -110,
+                "home": -3.0,
+                "homePrice": -110
+              },
+              "title": "Hard Rock Bet",
+              "total": {
+                "line": 51.0,
+                "over": -110,
+                "under": -110
+              },
+              "updatedAt": "2026-10-22T04:04:51Z"
+            }
+          },
+          "eventId": "401873010",
+          "gameId": "NFL-401873010",
+          "hash": "7667768e0e8a8acac516",
+          "kickoff": "2026-10-23T00:15Z",
+          "league": "NFL",
+          "oddsApiId": "ffebea881c1d7b2dfb85b3e590c35985",
+          "retrievedAt": "2026-10-22T04:05:57Z",
+          "season": 2026,
+          "source": "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds (key withheld)"
+        },
+        "propCaptureAt": "2026-10-22T02:50:07Z",
+        "propSource": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+        "consistentAltRungs": 285,
+        "roleEligibleRawLegs": [],
+        "supportedLegs": [],
+        "mainAndPropComparisons": [
+          {
+            "id": "NFL-2026-W7-ne-chi-under-50-5-dk",
+            "title": "Patriots at Bears under 50.5",
+            "marketType": "total",
+            "market": null,
+            "line": 50.5,
+            "direction": "under",
+            "book": "DraftKings",
+            "odds": -105,
+            "projection": 44.1,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-NFL-401873010-under",
+            "numbers": {
+              "chance": 0.575,
+              "breakEven": 0.512,
+              "edgePoints": 6.3,
+              "evPerUnit": 0.122,
+              "marketGap": 8.6,
+              "fairChance": 0.489,
+              "calibration": 0.42,
+              "calibrated": true,
+              "rawChance": 0.693,
+              "anchoredChance": 0.575,
+              "gap": 8.6,
+              "impliedSum": 1.0470788428814521,
+              "otherOdds": -115,
+              "calibrationFamily": "NFL/total"
+            },
+            "refusals": [
+              {
+                "rule": "learned_pause",
+                "reason": "NFL/total is paused as a best bet since 2026-10-08T18:00:00Z by the direction rules; it stays on the board as research"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "NFL totals are paused as public plays; they remain in shadow"
+              }
+            ]
+          },
+          {
+            "id": "NFL-2026-W7-ne-chi-ml-away-0-dk",
+            "title": "Patriots MONEYLINE",
+            "marketType": "moneyline",
+            "market": null,
+            "line": 0.0,
+            "direction": "away",
+            "book": "DraftKings",
+            "odds": 130,
+            "projection": 0.5,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-NFL-401873010-away-ml",
+            "numbers": {
+              "chance": 0.458,
+              "breakEven": 0.435,
+              "edgePoints": 2.3,
+              "evPerUnit": 0.053,
+              "marketGap": 4.1,
+              "fairChance": 0.417,
+              "calibration": 0.35,
+              "calibrated": true,
+              "rawChance": 0.534,
+              "anchoredChance": 0.458,
+              "gap": 4.1,
+              "impliedSum": 1.0426257459505544,
+              "otherOdds": -155,
+              "calibrationFamily": "NFL/moneyline"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "an NFL side needs a strong current reason before it can be a Full Send"
+              }
+            ]
+          },
+          {
+            "id": "NFL-2026-W7-henry-under-33-5-recyds-fd",
+            "title": "Hunter Henry UNDER 33.5 receiving yards",
+            "marketType": null,
+            "market": "recYds",
+            "line": 33.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -113,
+            "projection": 28.4,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-NFL-401873010-3046439-recYds",
+            "numbers": {
+              "chance": 0.51,
+              "breakEven": 0.531,
+              "edgePoints": -2.1,
+              "evPerUnit": -0.039,
+              "marketGap": 1.0,
+              "fairChance": 0.5,
+              "calibration": 0.11,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.587,
+              "anchoredChance": 0.51,
+              "gap": 1.0,
+              "impliedSum": 1.0610328638497653,
+              "otherOdds": -113,
+              "calibrationFamily": "NFL/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.0% does not beat the 53.1% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "NFL-2026-W7-maye-under-246-5-passyds-fd",
+            "title": "Drake Maye UNDER 246.5 passing yards",
+            "marketType": null,
+            "market": "passYds",
+            "line": 246.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -113,
+            "projection": 238.7,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-NFL-401873010-4431452-passYds",
+            "numbers": {
+              "chance": 0.504,
+              "breakEven": 0.531,
+              "edgePoints": -2.6,
+              "evPerUnit": -0.049,
+              "marketGap": 0.4,
+              "fairChance": 0.5,
+              "calibration": 0.11,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.54,
+              "anchoredChance": 0.504,
+              "gap": 0.4,
+              "impliedSum": 1.0610328638497653,
+              "otherOdds": -113,
+              "calibrationFamily": "NFL/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "best_quote_by_ev",
+                "reason": "DraftKings 247.5 at -112 is worth -0.044u against FanDuel 246.5 at -113 at -0.049u"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.4% does not beat the 53.1% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "NFL-2026-W7-douglas-under-37-5-recyds-fd",
+            "title": "DeMario Douglas UNDER 37.5 receiving yards",
+            "marketType": null,
+            "market": "recYds",
+            "line": 37.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -113,
+            "projection": 36.7,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-NFL-401873010-4427095-recYds",
+            "numbers": {
+              "chance": 0.501,
+              "breakEven": 0.531,
+              "edgePoints": -2.9,
+              "evPerUnit": -0.055,
+              "marketGap": 0.1,
+              "fairChance": 0.5,
+              "calibration": 0.11,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.512,
+              "anchoredChance": 0.501,
+              "gap": 0.1,
+              "impliedSum": 1.0610328638497653,
+              "otherOdds": -113,
+              "calibrationFamily": "NFL/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "best_quote_by_ev",
+                "reason": "DraftKings 38.5 at -111 is worth -0.044u against FanDuel 37.5 at -113 at -0.055u"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.1% does not beat the 53.1% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "NFL-2026-W7-ne-chi-ml-home-0-dk",
+            "title": "Bears MONEYLINE",
+            "marketType": "moneyline",
+            "market": null,
+            "line": 0.0,
+            "direction": "home",
+            "book": "DraftKings",
+            "odds": -155,
+            "projection": 0.5,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-NFL-401873010-home-ml",
+            "numbers": {
+              "chance": 0.542,
+              "breakEven": 0.608,
+              "edgePoints": -6.6,
+              "evPerUnit": -0.108,
+              "marketGap": -4.1,
+              "fairChance": 0.583,
+              "calibration": 0.35,
+              "calibrated": true,
+              "rawChance": 0.466,
+              "anchoredChance": 0.542,
+              "gap": -4.1,
+              "impliedSum": 1.0426257459505544,
+              "otherOdds": 130,
+              "calibrationFamily": "NFL/moneyline"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "an NFL side needs a strong current reason before it can be a Full Send"
+              }
+            ]
+          },
+          {
+            "id": "NFL-2026-W7-ne-chi-over-50-5-mgm",
+            "title": "Patriots at Bears over 50.5",
+            "marketType": "total",
+            "market": null,
+            "line": 50.5,
+            "direction": "over",
+            "book": "BetMGM",
+            "odds": -110,
+            "projection": 44.1,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-NFL-401873010-over",
+            "numbers": {
+              "chance": 0.42,
+              "breakEven": 0.524,
+              "edgePoints": -10.4,
+              "evPerUnit": -0.198,
+              "marketGap": -8.2,
+              "fairChance": 0.502,
+              "calibration": 0.42,
+              "calibrated": true,
+              "rawChance": 0.307,
+              "anchoredChance": 0.42,
+              "gap": -8.2,
+              "impliedSum": 1.0430402930402929,
+              "otherOdds": -108,
+              "calibrationFamily": "NFL/total"
+            },
+            "refusals": [
+              {
+                "rule": "learned_pause",
+                "reason": "NFL/total is paused as a best bet since 2026-10-08T18:00:00Z by the direction rules; it stays on the board as research"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "NFL totals are paused as public plays; they remain in shadow"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "gameId": "CFB-401869845",
+        "kickoff": "2026-10-22T23:00Z",
+        "mainCapture": {
+          "books": {
+            "betmgm": {
+              "spread": {
+                "awayPrice": -108,
+                "home": 11.5,
+                "homePrice": -110
+              },
+              "title": "BetMGM",
+              "total": {
+                "line": 56.5,
+                "over": -110,
+                "under": -108
+              },
+              "updatedAt": "2026-10-22T04:05:40Z"
+            },
+            "betrivers": {
+              "spread": {
+                "awayPrice": -109,
+                "home": 10.5,
+                "homePrice": -114
+              },
+              "title": "BetRivers",
+              "total": {
+                "line": 56.5,
+                "over": -109,
+                "under": -114
+              },
+              "updatedAt": "2026-10-22T04:05:39Z"
+            },
+            "draftkings": {
+              "spread": {
+                "awayPrice": -105,
+                "home": 11.5,
+                "homePrice": -115
+              },
+              "title": "DraftKings",
+              "total": {
+                "line": 56.5,
+                "over": -110,
+                "under": -110
+              },
+              "updatedAt": "2026-10-22T04:05:39Z"
+            },
+            "espnbet": {
+              "spread": {
+                "awayPrice": -110,
+                "home": 10.5,
+                "homePrice": -110
+              },
+              "title": "theScore Bet",
+              "total": {
+                "line": 56.5,
+                "over": -105,
+                "under": -115
+              },
+              "updatedAt": "2026-10-22T04:05:41Z"
+            },
+            "fanduel": {
+              "spread": {
+                "awayPrice": -112,
+                "home": 10.5,
+                "homePrice": -108
+              },
+              "title": "FanDuel",
+              "total": {
+                "line": 56.5,
+                "over": -108,
+                "under": -112
+              },
+              "updatedAt": "2026-10-22T04:05:18Z"
+            },
+            "hardrockbet": {
+              "spread": {
+                "awayPrice": -105,
+                "home": 10.5,
+                "homePrice": -110
+              },
+              "title": "Hard Rock Bet",
+              "total": {
+                "line": 56.5,
+                "over": -110,
+                "under": -110
+              },
+              "updatedAt": "2026-10-22T04:04:50Z"
+            }
+          },
+          "eventId": "401869845",
+          "gameId": "CFB-401869845",
+          "hash": "b1731d323b5859ca9afe",
+          "kickoff": "2026-10-22T23:00Z",
+          "league": "CFB",
+          "oddsApiId": "d476cb73381765342220f698035bc889",
+          "retrievedAt": "2026-10-22T04:05:57Z",
+          "season": 2026,
+          "source": "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/odds (key withheld)"
+        },
+        "propCaptureAt": "2026-10-22T04:05:58Z",
+        "propSource": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+        "consistentAltRungs": 416,
+        "roleEligibleRawLegs": [],
+        "supportedLegs": [],
+        "mainAndPropComparisons": [
+          {
+            "id": "CFB-2026-W8-jmu-app-under-56-5-mgm",
+            "title": "James Madison at App State under 56.5",
+            "marketType": "total",
+            "market": null,
+            "line": 56.5,
+            "direction": "under",
+            "book": "BetMGM",
+            "odds": -108,
+            "projection": 55.1,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401869845-under",
+            "numbers": {
+              "chance": 0.511,
+              "breakEven": 0.519,
+              "edgePoints": -0.8,
+              "evPerUnit": -0.015,
+              "marketGap": 1.3,
+              "fairChance": 0.498,
+              "calibration": 0.36,
+              "calibrated": true,
+              "rawChance": 0.535,
+              "anchoredChance": 0.511,
+              "gap": 1.3,
+              "impliedSum": 1.0430402930402929,
+              "otherOdds": -110,
+              "calibrationFamily": "CFB/total"
+            },
+            "refusals": [
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.1% does not beat the 51.9% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-pettaway-under-101-5-rushyds-fd",
+            "title": "George Pettaway UNDER 101.5 rushing yards",
+            "marketType": null,
+            "market": "rushYds",
+            "line": 101.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 80.4,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401869845-4685494-rushYds",
+            "numbers": {
+              "chance": 0.518,
+              "breakEven": 0.533,
+              "edgePoints": -1.4,
+              "evPerUnit": -0.027,
+              "marketGap": 1.8,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.623,
+              "anchoredChance": 0.518,
+              "gap": 1.8,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.8% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-jmu-app-ml-away-0-dk",
+            "title": "James Madison MONEYLINE",
+            "marketType": "moneyline",
+            "market": null,
+            "line": 0.0,
+            "direction": "away",
+            "book": "DraftKings",
+            "odds": -425,
+            "projection": 0.8,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401869845-away-ml",
+            "numbers": {
+              "chance": 0.793,
+              "breakEven": 0.81,
+              "edgePoints": -1.6,
+              "evPerUnit": -0.02,
+              "marketGap": 1.7,
+              "fairChance": 0.777,
+              "calibration": 0.35,
+              "calibrated": true,
+              "rawChance": 0.824,
+              "anchoredChance": 0.793,
+              "gap": 1.7,
+              "impliedSum": 1.0420819490586932,
+              "otherOdds": 330,
+              "calibrationFamily": "CFB/moneyline"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "price is outside the lane band"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-lewis-over-39-5-rushyds-fd",
+            "title": "Jaquari Lewis OVER 39.5 rushing yards",
+            "marketType": null,
+            "market": "rushYds",
+            "line": 39.5,
+            "direction": "over",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 48.5,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401869845-5156152-rushYds",
+            "numbers": {
+              "chance": 0.513,
+              "breakEven": 0.533,
+              "edgePoints": -2.0,
+              "evPerUnit": -0.037,
+              "marketGap": 1.3,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.587,
+              "anchoredChance": 0.513,
+              "gap": 1.3,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.3% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-jmu-app-ml-home-0-dk",
+            "title": "App State MONEYLINE",
+            "marketType": "moneyline",
+            "market": null,
+            "line": 0.0,
+            "direction": "home",
+            "book": "DraftKings",
+            "odds": 330,
+            "projection": 0.2,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401869845-home-ml",
+            "numbers": {
+              "chance": 0.207,
+              "breakEven": 0.233,
+              "edgePoints": -2.6,
+              "evPerUnit": -0.111,
+              "marketGap": -1.7,
+              "fairChance": 0.223,
+              "calibration": 0.35,
+              "calibrated": true,
+              "rawChance": 0.176,
+              "anchoredChance": 0.207,
+              "gap": -1.7,
+              "impliedSum": 1.0420819490586932,
+              "otherOdds": -425,
+              "calibrationFamily": "CFB/moneyline"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "price is outside the lane band"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-jmu-app-over-56-5-espnbet",
+            "title": "James Madison at App State over 56.5",
+            "marketType": "total",
+            "market": null,
+            "line": 56.5,
+            "direction": "over",
+            "book": "ESPN BET",
+            "odds": -105,
+            "projection": 55.1,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401869845-over",
+            "numbers": {
+              "chance": 0.48,
+              "breakEven": 0.512,
+              "edgePoints": -3.2,
+              "evPerUnit": -0.062,
+              "marketGap": -0.9,
+              "fairChance": 0.489,
+              "calibration": 0.36,
+              "calibrated": true,
+              "rawChance": 0.465,
+              "anchoredChance": 0.48,
+              "gap": -0.9,
+              "impliedSum": 1.0470788428814521,
+              "otherOdds": -115,
+              "calibrationFamily": "CFB/total"
+            },
+            "refusals": [
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 48.0% does not beat the 51.2% this price needs"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "gameId": "CFB-401871056",
+        "kickoff": "2026-10-22T23:00Z",
+        "mainCapture": {
+          "books": {
+            "betmgm": {
+              "spread": {
+                "awayPrice": -110,
+                "home": 9.5,
+                "homePrice": -108
+              },
+              "title": "BetMGM",
+              "total": {
+                "line": 50.5,
+                "over": -108,
+                "under": -110
+              },
+              "updatedAt": "2026-10-22T04:05:40Z"
+            },
+            "betrivers": {
+              "spread": {
+                "awayPrice": -113,
+                "home": 9.0,
+                "homePrice": -110
+              },
+              "title": "BetRivers",
+              "total": {
+                "line": 50.5,
+                "over": -112,
+                "under": -112
+              },
+              "updatedAt": "2026-10-22T04:05:39Z"
+            },
+            "draftkings": {
+              "spread": {
+                "awayPrice": -112,
+                "home": 9.5,
+                "homePrice": -108
+              },
+              "title": "DraftKings",
+              "total": {
+                "line": 50.5,
+                "over": -108,
+                "under": -112
+              },
+              "updatedAt": "2026-10-22T04:05:39Z"
+            },
+            "espnbet": {
+              "spread": {
+                "awayPrice": -115,
+                "home": 8.5,
+                "homePrice": -105
+              },
+              "title": "theScore Bet",
+              "total": {
+                "line": 50.5,
+                "over": -105,
+                "under": -115
+              },
+              "updatedAt": "2026-10-22T04:05:41Z"
+            },
+            "fanduel": {
+              "spread": {
+                "awayPrice": -112,
+                "home": 9.5,
+                "homePrice": -108
+              },
+              "title": "FanDuel",
+              "total": {
+                "line": 50.5,
+                "over": -105,
+                "under": -115
+              },
+              "updatedAt": "2026-10-22T04:05:18Z"
+            },
+            "hardrockbet": {
+              "spread": {
+                "awayPrice": -110,
+                "home": 9.5,
+                "homePrice": -110
+              },
+              "title": "Hard Rock Bet",
+              "total": {
+                "line": 50.5,
+                "over": -110,
+                "under": -110
+              },
+              "updatedAt": "2026-10-22T04:04:50Z"
+            }
+          },
+          "eventId": "401871056",
+          "gameId": "CFB-401871056",
+          "hash": "f7f02bd0ae66be15a421",
+          "kickoff": "2026-10-22T23:00Z",
+          "league": "CFB",
+          "oddsApiId": "1635891ddb79191dba2be031ad6dc762",
+          "retrievedAt": "2026-10-22T04:05:57Z",
+          "season": 2026,
+          "source": "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/odds (key withheld)"
+        },
+        "propCaptureAt": "2026-10-22T04:41:15Z",
+        "propSource": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+        "consistentAltRungs": 282,
+        "roleEligibleRawLegs": [],
+        "supportedLegs": [],
+        "mainAndPropComparisons": [
+          {
+            "id": "CFB-2026-W8-lib-kenn-ml-home-0-dk",
+            "title": "Kennesaw State MONEYLINE",
+            "marketType": "moneyline",
+            "market": null,
+            "line": 0.0,
+            "direction": "home",
+            "book": "DraftKings",
+            "odds": 310,
+            "projection": 0.3,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401871056-home-ml",
+            "numbers": {
+              "chance": 0.267,
+              "breakEven": 0.244,
+              "edgePoints": 2.3,
+              "evPerUnit": 0.095,
+              "marketGap": 3.3,
+              "fairChance": 0.234,
+              "calibration": 0.35,
+              "calibrated": true,
+              "rawChance": 0.328,
+              "anchoredChance": 0.267,
+              "gap": 3.3,
+              "impliedSum": 1.0418822370041882,
+              "otherOdds": -395,
+              "calibrationFamily": "CFB/moneyline"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "price is outside the lane band"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-davis-under-87-5-rushyds-fd",
+            "title": "Kam Davis UNDER 87.5 rushing yards",
+            "marketType": null,
+            "market": "rushYds",
+            "line": 87.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 66.8,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-5079364-rushYds",
+            "numbers": {
+              "chance": 0.522,
+              "breakEven": 0.533,
+              "edgePoints": -1.1,
+              "evPerUnit": -0.021,
+              "marketGap": 2.2,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.644,
+              "anchoredChance": 0.522,
+              "gap": 2.2,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 52.2% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-lib-kenn-under-50-5-mgm",
+            "title": "Liberty at Kennesaw State under 50.5",
+            "marketType": "total",
+            "market": null,
+            "line": 50.5,
+            "direction": "under",
+            "book": "BetMGM",
+            "odds": -110,
+            "projection": 49.1,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401871056-under",
+            "numbers": {
+              "chance": 0.513,
+              "breakEven": 0.524,
+              "edgePoints": -1.1,
+              "evPerUnit": -0.02,
+              "marketGap": 1.1,
+              "fairChance": 0.502,
+              "calibration": 0.36,
+              "calibrated": true,
+              "rawChance": 0.533,
+              "anchoredChance": 0.513,
+              "gap": 1.1,
+              "impliedSum": 1.0430402930402929,
+              "otherOdds": -108,
+              "calibrationFamily": "CFB/total"
+            },
+            "refusals": [
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.3% does not beat the 52.4% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-jackson-over-3-5-rec-fd",
+            "title": "Makai Jackson OVER 3.5 receptions",
+            "marketType": null,
+            "market": "rec",
+            "line": 3.5,
+            "direction": "over",
+            "book": "FanDuel",
+            "odds": -108,
+            "projection": 3.7,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-5088336-rec",
+            "numbers": {
+              "chance": 0.505,
+              "breakEven": 0.519,
+              "edgePoints": -1.4,
+              "evPerUnit": -0.027,
+              "marketGap": 1.9,
+              "fairChance": 0.486,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.534,
+              "anchoredChance": 0.505,
+              "gap": 1.9,
+              "impliedSum": 1.0687803187803186,
+              "otherOdds": -122,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.5% does not beat the 51.9% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-purdie-under-173-5-passyds-fd",
+            "title": "Deshawn Purdie UNDER 173.5 passing yards",
+            "marketType": null,
+            "market": "passYds",
+            "line": 173.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 145.3,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-5138131-passYds",
+            "numbers": {
+              "chance": 0.519,
+              "breakEven": 0.533,
+              "edgePoints": -1.4,
+              "evPerUnit": -0.025,
+              "marketGap": 1.9,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.628,
+              "anchoredChance": 0.519,
+              "gap": 1.9,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.9% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-collins-over-26-5-rushyds-fd",
+            "title": "Rickie Collins OVER 26.5 rushing yards",
+            "marketType": null,
+            "market": "rushYds",
+            "line": 26.5,
+            "direction": "over",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 31.2,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-4870645-rushYds",
+            "numbers": {
+              "chance": 0.51,
+              "breakEven": 0.533,
+              "edgePoints": -2.2,
+              "evPerUnit": -0.042,
+              "marketGap": 1.0,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.57,
+              "anchoredChance": 0.51,
+              "gap": 1.0,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.0% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-jackson-under-66-5-recyds-fd",
+            "title": "Makai Jackson UNDER 66.5 receiving yards",
+            "marketType": null,
+            "market": "recYds",
+            "line": 66.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 59.7,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-5088336-recYds",
+            "numbers": {
+              "chance": 0.51,
+              "breakEven": 0.533,
+              "edgePoints": -2.3,
+              "evPerUnit": -0.043,
+              "marketGap": 1.0,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.566,
+              "anchoredChance": 0.51,
+              "gap": 1.0,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.0% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-rogers-under-44-5-recyds-fd",
+            "title": "Javon Rogers UNDER 44.5 receiving yards",
+            "marketType": null,
+            "market": "recYds",
+            "line": 44.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 39.6,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-5147191-recYds",
+            "numbers": {
+              "chance": 0.51,
+              "breakEven": 0.533,
+              "edgePoints": -2.3,
+              "evPerUnit": -0.043,
+              "marketGap": 1.0,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.564,
+              "anchoredChance": 0.51,
+              "gap": 1.0,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.0% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-person-over-23-5-recyds-fd",
+            "title": "Jamari Person OVER 23.5 receiving yards",
+            "marketType": null,
+            "market": "recYds",
+            "line": 23.5,
+            "direction": "over",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 24.6,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-5117836-recYds",
+            "numbers": {
+              "chance": 0.503,
+              "breakEven": 0.533,
+              "edgePoints": -3.0,
+              "evPerUnit": -0.056,
+              "marketGap": 0.3,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.519,
+              "anchoredChance": 0.503,
+              "gap": 0.3,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.3% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-lib-kenn-over-50-5-fd",
+            "title": "Liberty at Kennesaw State over 50.5",
+            "marketType": "total",
+            "market": null,
+            "line": 50.5,
+            "direction": "over",
+            "book": "FanDuel",
+            "odds": -105,
+            "projection": 49.1,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401871056-over",
+            "numbers": {
+              "chance": 0.481,
+              "breakEven": 0.512,
+              "edgePoints": -3.1,
+              "evPerUnit": -0.061,
+              "marketGap": -0.8,
+              "fairChance": 0.489,
+              "calibration": 0.36,
+              "calibrated": true,
+              "rawChance": 0.467,
+              "anchoredChance": 0.481,
+              "gap": -0.8,
+              "impliedSum": 1.0470788428814521,
+              "otherOdds": -115,
+              "calibrationFamily": "CFB/total"
+            },
+            "refusals": [
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 48.1% does not beat the 51.2% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-jones-over-35-5-rushyds-fd",
+            "title": "Peyton Jones OVER 35.5 rushing yards",
+            "marketType": null,
+            "market": "rushYds",
+            "line": 35.5,
+            "direction": "over",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 36.5,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-4923298-rushYds",
+            "numbers": {
+              "chance": 0.502,
+              "breakEven": 0.533,
+              "edgePoints": -3.1,
+              "evPerUnit": -0.058,
+              "marketGap": 0.2,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.513,
+              "anchoredChance": 0.502,
+              "gap": 0.2,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.2% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-collins-under-213-5-passyds-fd",
+            "title": "Rickie Collins UNDER 213.5 passing yards",
+            "marketType": null,
+            "market": "passYds",
+            "line": 213.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 211.2,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401871056-4870645-passYds",
+            "numbers": {
+              "chance": 0.501,
+              "breakEven": 0.533,
+              "edgePoints": -3.2,
+              "evPerUnit": -0.059,
+              "marketGap": 0.1,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.507,
+              "anchoredChance": 0.501,
+              "gap": 0.1,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.1% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-lib-kenn-ml-away-0-dk",
+            "title": "Liberty MONEYLINE",
+            "marketType": "moneyline",
+            "market": null,
+            "line": 0.0,
+            "direction": "away",
+            "book": "DraftKings",
+            "odds": -395,
+            "projection": 0.7,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401871056-away-ml",
+            "numbers": {
+              "chance": 0.733,
+              "breakEven": 0.798,
+              "edgePoints": -6.5,
+              "evPerUnit": -0.081,
+              "marketGap": -3.3,
+              "fairChance": 0.766,
+              "calibration": 0.35,
+              "calibrated": true,
+              "rawChance": 0.672,
+              "anchoredChance": 0.733,
+              "gap": -3.3,
+              "impliedSum": 1.0418822370041882,
+              "otherOdds": 310,
+              "calibrationFamily": "CFB/moneyline"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "price is outside the lane band"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "gameId": "CFB-401862807",
+        "kickoff": "2026-10-22T23:30Z",
+        "mainCapture": {
+          "books": {
+            "betmgm": {
+              "spread": {
+                "awayPrice": -112,
+                "home": -10.5,
+                "homePrice": -105
+              },
+              "title": "BetMGM",
+              "total": {
+                "line": 54.5,
+                "over": -105,
+                "under": -112
+              },
+              "updatedAt": "2026-10-22T04:05:40Z"
+            },
+            "betrivers": {
+              "spread": {
+                "awayPrice": -109,
+                "home": -10.0,
+                "homePrice": -114
+              },
+              "title": "BetRivers",
+              "total": {
+                "line": 54.5,
+                "over": -109,
+                "under": -114
+              },
+              "updatedAt": "2026-10-22T04:05:39Z"
+            },
+            "draftkings": {
+              "spread": {
+                "awayPrice": -112,
+                "home": -10.5,
+                "homePrice": -108
+              },
+              "title": "DraftKings",
+              "total": {
+                "line": 54.5,
+                "over": -108,
+                "under": -112
+              },
+              "updatedAt": "2026-10-22T04:05:39Z"
+            },
+            "espnbet": {
+              "spread": {
+                "awayPrice": -115,
+                "home": -10.5,
+                "homePrice": -105
+              },
+              "title": "theScore Bet",
+              "total": {
+                "line": 53.5,
+                "over": -120,
+                "under": 100
+              },
+              "updatedAt": "2026-10-22T04:05:41Z"
+            },
+            "fanduel": {
+              "spread": {
+                "awayPrice": -112,
+                "home": -10.5,
+                "homePrice": -108
+              },
+              "title": "FanDuel",
+              "total": {
+                "line": 54.5,
+                "over": -105,
+                "under": -115
+              },
+              "updatedAt": "2026-10-22T04:05:18Z"
+            },
+            "hardrockbet": {
+              "spread": {
+                "awayPrice": -115,
+                "home": -10.5,
+                "homePrice": -105
+              },
+              "title": "Hard Rock Bet",
+              "total": {
+                "line": 54.5,
+                "over": -110,
+                "under": -110
+              },
+              "updatedAt": "2026-10-22T04:04:50Z"
+            }
+          },
+          "eventId": "401862807",
+          "gameId": "CFB-401862807",
+          "hash": "d8b168fd3ae74c82e3dc",
+          "kickoff": "2026-10-22T23:30Z",
+          "league": "CFB",
+          "oddsApiId": "5be63fd8c778b46afe084d3352e38a40",
+          "retrievedAt": "2026-10-22T04:05:57Z",
+          "season": 2026,
+          "source": "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/odds (key withheld)"
+        },
+        "propCaptureAt": "2026-10-22T04:41:15Z",
+        "propSource": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+        "consistentAltRungs": 284,
+        "roleEligibleRawLegs": [],
+        "supportedLegs": [],
+        "mainAndPropComparisons": [
+          {
+            "id": "CFB-2026-W8-ecu-mem-ml-away-0-dk",
+            "title": "East Carolina MONEYLINE",
+            "marketType": "moneyline",
+            "market": null,
+            "line": 0.0,
+            "direction": "away",
+            "book": "DraftKings",
+            "odds": 330,
+            "projection": 0.2,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401862807-away-ml",
+            "numbers": {
+              "chance": 0.22,
+              "breakEven": 0.233,
+              "edgePoints": -1.2,
+              "evPerUnit": -0.053,
+              "marketGap": -0.3,
+              "fairChance": 0.223,
+              "calibration": 0.35,
+              "calibrated": true,
+              "rawChance": 0.215,
+              "anchoredChance": 0.22,
+              "gap": -0.3,
+              "impliedSum": 1.0420819490586932,
+              "otherOdds": -425,
+              "calibrationFamily": "CFB/moneyline"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "price is outside the lane band"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-ecu-mem-under-53-5-espnbet",
+            "title": "East Carolina at Memphis under 53.5",
+            "marketType": "total",
+            "market": null,
+            "line": 53.5,
+            "direction": "under",
+            "book": "ESPN BET",
+            "odds": 100,
+            "projection": 53.4,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401862807-under",
+            "numbers": {
+              "chance": 0.487,
+              "breakEven": 0.5,
+              "edgePoints": -1.3,
+              "evPerUnit": -0.026,
+              "marketGap": 0.9,
+              "fairChance": 0.478,
+              "calibration": 0.36,
+              "calibrated": true,
+              "rawChance": 0.502,
+              "anchoredChance": 0.487,
+              "gap": 0.9,
+              "impliedSum": 1.0454545454545454,
+              "otherOdds": -120,
+              "calibrationFamily": "CFB/total"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 48.7% does not beat the 50.0% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-stokes-under-31-5-rushyds-fd",
+            "title": "Marcus Stokes UNDER 31.5 rushing yards",
+            "marketType": null,
+            "market": "rushYds",
+            "line": 31.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 26.0,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401862807-5165807-rushYds",
+            "numbers": {
+              "chance": 0.515,
+              "breakEven": 0.533,
+              "edgePoints": -1.8,
+              "evPerUnit": -0.034,
+              "marketGap": 1.5,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.598,
+              "anchoredChance": 0.515,
+              "gap": 1.5,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 51.5% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-jr-under-78-5-rushyds-fd",
+            "title": "TJ Engleman Jr. UNDER 78.5 rushing yards",
+            "marketType": null,
+            "market": "rushYds",
+            "line": 78.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 70.4,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401862807-5079419-rushYds",
+            "numbers": {
+              "chance": 0.508,
+              "breakEven": 0.533,
+              "edgePoints": -2.4,
+              "evPerUnit": -0.046,
+              "marketGap": 0.8,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.555,
+              "anchoredChance": 0.508,
+              "gap": 0.8,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.8% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-ecu-mem-over-54-5-mgm",
+            "title": "East Carolina at Memphis over 54.5",
+            "marketType": "total",
+            "market": null,
+            "line": 54.5,
+            "direction": "over",
+            "book": "BetMGM",
+            "odds": -105,
+            "projection": 53.4,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401862807-over",
+            "numbers": {
+              "chance": 0.485,
+              "breakEven": 0.512,
+              "edgePoints": -2.7,
+              "evPerUnit": -0.052,
+              "marketGap": -0.7,
+              "fairChance": 0.492,
+              "calibration": 0.36,
+              "calibrated": true,
+              "rawChance": 0.473,
+              "anchoredChance": 0.485,
+              "gap": -0.7,
+              "impliedSum": 1.0404970087436722,
+              "otherOdds": -112,
+              "calibrationFamily": "CFB/total"
+            },
+            "refusals": [
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 48.5% does not beat the 51.2% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-ecu-mem-ml-home-0-dk",
+            "title": "Memphis MONEYLINE",
+            "marketType": "moneyline",
+            "market": null,
+            "line": 0.0,
+            "direction": "home",
+            "book": "DraftKings",
+            "odds": -425,
+            "projection": 0.8,
+            "quotedAt": "2026-10-22T01:34:05Z",
+            "catalogId": "game-CFB-401862807-home-ml",
+            "numbers": {
+              "chance": 0.78,
+              "breakEven": 0.81,
+              "edgePoints": -3.0,
+              "evPerUnit": -0.037,
+              "marketGap": 0.3,
+              "fairChance": 0.777,
+              "calibration": 0.35,
+              "calibrated": true,
+              "rawChance": 0.785,
+              "anchoredChance": 0.78,
+              "gap": 0.3,
+              "impliedSum": 1.0420819490586932,
+              "otherOdds": 330,
+              "calibrationFamily": "CFB/moneyline"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "price is outside the lane band"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-williams-under-180-5-passyds-fd",
+            "title": "Emory Williams UNDER 180.5 passing yards",
+            "marketType": null,
+            "market": "passYds",
+            "line": 180.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 175.8,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401862807-5075800-passYds",
+            "numbers": {
+              "chance": 0.503,
+              "breakEven": 0.533,
+              "edgePoints": -3.0,
+              "evPerUnit": -0.056,
+              "marketGap": 0.3,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.518,
+              "anchoredChance": 0.503,
+              "gap": 0.3,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.3% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-carter-under-90-5-rushyds-fd",
+            "title": "Jaylin Carter UNDER 90.5 rushing yards",
+            "marketType": null,
+            "market": "rushYds",
+            "line": 90.5,
+            "direction": "under",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 88.0,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401862807-5222671-rushYds",
+            "numbers": {
+              "chance": 0.502,
+              "breakEven": 0.533,
+              "edgePoints": -3.1,
+              "evPerUnit": -0.057,
+              "marketGap": 0.2,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.514,
+              "anchoredChance": 0.502,
+              "gap": 0.2,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.2% does not beat the 53.3% this price needs"
+              }
+            ]
+          },
+          {
+            "id": "CFB-2026-W8-stokes-over-227-5-passyds-fd",
+            "title": "Marcus Stokes OVER 227.5 passing yards",
+            "marketType": null,
+            "market": "passYds",
+            "line": 227.5,
+            "direction": "over",
+            "book": "FanDuel",
+            "odds": -114,
+            "projection": 228.5,
+            "quotedAt": "2026-10-22T01:34:54Z",
+            "catalogId": "prop-CFB-401862807-5165807-passYds",
+            "numbers": {
+              "chance": 0.5,
+              "breakEven": 0.533,
+              "edgePoints": -3.2,
+              "evPerUnit": -0.061,
+              "marketGap": 0.0,
+              "fairChance": 0.5,
+              "calibration": 0.15,
+              "calibrated": true,
+              "calibrationMethod": "neutral-centered-held-out",
+              "rawChance": 0.503,
+              "anchoredChance": 0.5,
+              "gap": 0.0,
+              "impliedSum": 1.0654205607476634,
+              "otherOdds": -114,
+              "calibrationFamily": "CFB/prop"
+            },
+            "refusals": [
+              {
+                "rule": "one_book",
+                "reason": "single-book exception failed: quote no older than two hours"
+              },
+              {
+                "rule": "plan_selection",
+                "reason": "anchored chance 50.0% does not beat the 53.3% this price needs"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "NBA": {
+      "quotes": {
+        "401909093": {
+          "book": "DraftKings",
+          "current": {
+            "away": {
+              "moneyline": 136,
+              "spreadLine": 2.5,
+              "spreadPrice": 100
+            },
+            "home": {
+              "moneyline": -162,
+              "spreadLine": -2.5,
+              "spreadPrice": -120
+            },
+            "total": {
+              "line": 235.5,
+              "over": -112,
+              "under": -108
+            }
+          },
+          "eventId": "401909093",
+          "kickoff": "2026-10-22T23:00:00Z",
+          "league": "NBA",
+          "retrievedAt": "2026-10-22T04:34:42Z",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "source": "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401909093/competitions/401909093/odds"
+        },
+        "401909094": {
+          "book": "DraftKings",
+          "current": {
+            "away": {
+              "moneyline": 250,
+              "spreadLine": 7.5,
+              "spreadPrice": -105
+            },
+            "home": {
+              "moneyline": -298,
+              "spreadLine": -7.5,
+              "spreadPrice": -115
+            },
+            "total": {
+              "line": 235.5,
+              "over": -110,
+              "under": -110
+            }
+          },
+          "eventId": "401909094",
+          "kickoff": "2026-10-23T01:30:00Z",
+          "league": "NBA",
+          "retrievedAt": "2026-10-22T04:34:43Z",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "source": "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401909094/competitions/401909094/odds"
+        }
+      },
+      "freshMainPropComparisons": 288,
+      "availabilityCaptureAt": "2026-10-22T04:34:42Z",
+      "officialReport": {
+        "checkedAt": "2026-10-22T04:52:51Z",
+        "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-10-22_12_15AM.pdf",
+        "reportAt": "2026-10-22T04:15:00Z",
+        "submittedTeams": [
+          "CLE",
+          "PHI",
+          "DEN",
+          "OKC"
+        ],
+        "CLE": {
+          "questionable": [
+            "Jarrett Allen"
+          ],
+          "out": [
+            "Khalifa Diop",
+            "Nae’Qwan Tomlin"
+          ]
+        },
+        "PHI": {
+          "questionable": [
+            "Dean Wade"
+          ],
+          "out": [
+            "Dominick Barlow",
+            "Tacko Fall",
+            "Ariel Hukporti"
+          ]
+        },
+        "DEN": {
+          "questionable": [
+            "Spencer Jones"
+          ],
+          "out": [
+            "Julian Strawther"
+          ]
+        },
+        "OKC": {
+          "out": [
+            "Otega Oweh",
+            "Thomas Sorber",
+            "Nikola Topic"
+          ]
+        },
+        "releaseCondition": "Refresh current official report within the normal Trial availability window and re-evaluate every affected role. Submitted does not mean all players are available."
+      },
+      "currentRoleReview": [
+        {
+          "team": "PHI",
+          "source": "https://www.nba.com/news/2026-27-season-preview-phi",
+          "review": "Philadelphia added high-usage stars; hold Edgecombe’s old40-minute workload.",
+          "hold": "No verified opening-night40-minute assignment. Do not reuse old scoring/assist rates as roster-adjusted forecasts.",
+          "checkedAt": "2026-10-22T04:52:51Z",
+          "publishedAtDisplayed": "2026-09-22 17:57:00 (source timezone unspecified)"
+        },
+        {
+          "team": "CLE",
+          "source": "https://www.nba.com/news/2026-27-season-preview-cle",
+          "review": "Cleveland retains its core and adds Watson; Allen availability remains uncertain.",
+          "hold": "Allen props hold; review Mobley rebound/minute role after Allen decision. Harden/Mitchell rates need current shared-usage review.",
+          "checkedAt": "2026-10-22T04:52:51Z",
+          "publishedAtDisplayed": "2026-09-18 05:27:00 (source timezone unspecified)"
+        },
+        {
+          "team": "DEN",
+          "source": "https://www.nba.com/news/2026-27-season-preview-den",
+          "review": "Denver retains its core with a changed supporting cast; review Braun’s workload.",
+          "hold": "Braun33/Jokic36 minutes are historical baselines, not confirmed opening allocations; do not invent redistribution.",
+          "checkedAt": "2026-10-22T04:52:51Z",
+          "publishedAtDisplayed": "2026-09-22 17:58:00 (source timezone unspecified)"
+        },
+        {
+          "team": "OKC",
+          "source": "https://www.nba.com/news/2026-27-season-preview-okc",
+          "review": "OKC’s core remains; perimeter departures create rotation uncertainty.",
+          "hold": "Cason Wallace’s old22-minute under needs current rotation evidence; do not assume unchanged role.",
+          "checkedAt": "2026-10-22T04:52:51Z",
+          "publishedAtDisplayed": "2026-09-22 17:58:00 (source timezone unspecified)"
+        }
+      ],
+      "shortlist": [
+        {
+          "eventId": "401909093",
+          "athleteId": "5124612",
+          "name": "VJ Edgecombe",
+          "stat": "pts",
+          "line": 10.5,
+          "side": "over",
+          "book": "FanDuel",
+          "odds": -108,
+          "over": -108,
+          "under": -122,
+          "sourceAt": "2026-10-22T03:57:07.149825625Z",
+          "projection": {
+            "value": 18.0,
+            "minutes": 40,
+            "rate": 0.4511,
+            "model": "nba-minutes-rate-v1",
+            "season": 2026,
+            "sample": 10,
+            "historyGames": 36,
+            "window": "Last season",
+            "low": 8.6,
+            "high": 29.3,
+            "first": "2026-03-25T23:00Z",
+            "last": "2026-04-12T22:00Z"
+          },
+          "last10": {
+            "hits": 8,
+            "games": 10,
+            "push": 0,
+            "values": [
+              22,
+              13,
+              13,
+              23,
+              8,
+              19,
+              14,
+              20,
+              16,
+              9
+            ]
+          },
+          "hold": null,
+          "releaseCondition": "Research watch only. Reprice same exact two-sided line at6:45/8:30; current injury/roster/expected role must support the minutes baseline. No NBA prop Best Bet or Climb admission."
+        },
+        {
+          "eventId": "401909093",
+          "athleteId": "3059318",
+          "name": "Joel Embiid",
+          "stat": "pts",
+          "line": 22.5,
+          "side": "over",
+          "book": "DraftKings",
+          "odds": -114,
+          "over": -114,
+          "under": -112,
+          "sourceAt": "2026-10-22T03:57:02.158644705Z",
+          "projection": {
+            "value": 29.5,
+            "minutes": 34,
+            "rate": 0.8675,
+            "model": "nba-minutes-rate-v1",
+            "season": 2026,
+            "sample": 10,
+            "historyGames": 14,
+            "window": "Last season",
+            "low": 19.0,
+            "high": 42.5,
+            "first": "2026-02-03T03:00Z",
+            "last": "2026-04-07T00:00Z"
+          },
+          "last10": {
+            "hits": 9,
+            "games": 10,
+            "push": 0,
+            "values": [
+              24,
+              35,
+              33,
+              27,
+              26,
+              35,
+              29,
+              26,
+              19,
+              34
+            ]
+          },
+          "hold": null,
+          "releaseCondition": "Research watch only. Reprice same exact two-sided line at6:45/8:30; current injury/roster/expected role must support the minutes baseline. No NBA prop Best Bet or Climb admission."
+        },
+        {
+          "eventId": "401909094",
+          "athleteId": "4431767",
+          "name": "Christian Braun",
+          "stat": "pts",
+          "line": 10.5,
+          "side": "over",
+          "book": "FanDuel",
+          "odds": 102,
+          "over": 102,
+          "under": -136,
+          "sourceAt": "2026-10-22T03:35:49.524189578Z",
+          "projection": {
+            "value": 13.8,
+            "minutes": 33,
+            "rate": 0.418,
+            "model": "nba-minutes-rate-v1",
+            "season": 2026,
+            "sample": 10,
+            "historyGames": 29,
+            "window": "Last season",
+            "low": 6.6,
+            "high": 19.2,
+            "first": "2026-03-21T01:00Z",
+            "last": "2026-04-09T01:00Z"
+          },
+          "last10": {
+            "hits": 8,
+            "games": 10,
+            "push": 0,
+            "values": [
+              11,
+              15,
+              13,
+              11,
+              7,
+              12,
+              18,
+              21,
+              8,
+              14
+            ]
+          },
+          "hold": null,
+          "releaseCondition": "Research watch only. Reprice same exact two-sided line at6:45/8:30; current injury/roster/expected role must support the minutes baseline. No NBA prop Best Bet or Climb admission."
+        },
+        {
+          "eventId": "401909094",
+          "athleteId": "3112335",
+          "name": "Nikola Jokic",
+          "stat": "ast",
+          "line": 10.5,
+          "side": "over",
+          "book": "FanDuel",
+          "odds": 112,
+          "over": 112,
+          "under": -148,
+          "sourceAt": "2026-10-22T03:57:07.149825625Z",
+          "projection": {
+            "value": 12.7,
+            "minutes": 36,
+            "rate": 0.3533,
+            "model": "nba-minutes-rate-v1",
+            "season": 2026,
+            "sample": 9,
+            "historyGames": 32,
+            "window": "Last season",
+            "low": 8.0,
+            "high": 18.0,
+            "first": "2026-03-22T21:00Z",
+            "last": "2026-04-09T01:00Z"
+          },
+          "last10": {
+            "hits": 7,
+            "games": 10,
+            "push": 0,
+            "values": [
+              14,
+              17,
+              19,
+              12,
+              8,
+              12,
+              13,
+              13,
+              10,
+              1
+            ]
+          },
+          "hold": null,
+          "releaseCondition": "Research watch only. Reprice same exact two-sided line at6:45/8:30; current injury/roster/expected role must support the minutes baseline. No NBA prop Best Bet or Climb admission."
+        }
+      ],
+      "teamMarketPriority": "CLE+2.5 +100DK / PHI-2.5 -120; total235.5 under-108/over-112 at04:34:42Z. Prior model226.9 is baseline; hold pending Allen/Wade and roster relevance. DEN+7.5 -105/OKC-7.5 -115; total235.5 -110 both at04:34:43Z; no verified supporting scoring-history reason for under. At most one1u Trial only if every gate clears."
+    },
+    "Patriots": {
+      "state": "Conditional leading straight watch; not admitted",
+      "quote": "+130 DraftKings, Bears-155 opposite at2026-10-22T04:23:49Z",
+      "adjustedChance": 0.458,
+      "priceNeed": 0.435,
+      "edgePoints": 2.3,
+      "newsSource": "https://www.patriots.com/news/week-7-injury-report-patriots-at-bears",
+      "newsPublishedAt": "2026-10-21T16:00:00-04:00",
+      "newsCheckedAt": "2026-10-22T04:52:51Z",
+      "news": "Brown and Vera-Tucker out; Moses questionable. Maye/A.J.Brown full/no game designation. Monangai/Sanborn out and Edwards doubtful for Chicago. News does not establish final starting lineup.",
+      "holds": "Full-game Best Bet still needs current independent supporting reason, final OL/secondary reconciliation, source review and fresh exact two-sided quote. No absence of low-level gate refusals is full admission. NFL total remains paused.",
+      "conditionalCopy": "Best Bet: Patriots MONEYLINE (+130, DraftKings). Only use after fresh reprice, verified supporting reason and all gates. Replace this placeholder with the actual supported numeric reason; do not queue now."
+    },
+    "JMU": "-425/+330DK asof04:23:49Z. Individual main-ML watch is superseded by actual-alternate-only shape; adjusted79.3% below81.0% need for straight. Never use as Climb fallback.",
+    "Climb": {
+      "shape": "2–3 actual alternate legs,2 preferred,combined-200..-150,samebook/league,distinct games",
+      "rungs": 1267,
+      "rawRoleEligible": 0,
+      "supported": 0,
+      "openSegments": 0,
+      "state": "No supported legs or exact qualifying pair/triple; candidateTicket null",
+      "validation": "A-20261010-3 shipped/fa8731f9/39707490860success; genuine graded23879/unknown3632/256segments/0open. Do not reuse exploratory arithmetic as promotion or wait for150newgames.",
+      "copy": "UNSELECTED: $50 → $1,000 · Step1. Fill actual legs/book/price and calculated balance only after qualification.",
+      "heldActualAlternateExamples": [
+        {
+          "gameId": "NFL-401873010",
+          "name": "TreVeyon Henderson",
+          "market": "rushYds",
+          "book": "fanduel",
+          "source": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+          "quotedAt": "2026-10-22T02:50:07Z",
+          "main": {
+            "line": 24.5,
+            "over": -113,
+            "under": -113
+          },
+          "actualAlternateOffers": [
+            {
+              "line": 9.5,
+              "over": -550
+            },
+            {
+              "line": 14.5,
+              "over": -275
+            }
+          ],
+          "hold": "Current-role/sanity and exact proven-segment checks fail; research observation only. Not an eligible leg or a queued ticket."
+        },
+        {
+          "gameId": "CFB-401869845",
+          "name": "Braeden Wisloski",
+          "market": "recYds",
+          "book": "draftkings",
+          "source": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+          "quotedAt": "2026-10-22T04:05:58Z",
+          "main": {
+            "line": 23.5,
+            "over": -117
+          },
+          "actualAlternateOffers": [
+            {
+              "line": 9.5,
+              "over": -420
+            },
+            {
+              "line": 14.5,
+              "over": -250
+            }
+          ],
+          "hold": "Current-role/sanity and exact proven-segment checks fail; research observation only. Not an eligible leg or a queued ticket."
+        },
+        {
+          "gameId": "CFB-401869845",
+          "name": "Braeden Wisloski",
+          "market": "recYds",
+          "book": "fanduel",
+          "source": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+          "quotedAt": "2026-10-22T04:05:58Z",
+          "main": {
+            "line": 23.5,
+            "over": -114,
+            "under": -114
+          },
+          "actualAlternateOffers": [
+            {
+              "line": 4.5,
+              "over": -420
+            },
+            {
+              "line": 9.5,
+              "over": -275
+            },
+            {
+              "line": 14.5,
+              "over": -198
+            }
+          ],
+          "hold": "Current-role/sanity and exact proven-segment checks fail; research observation only. Not an eligible leg or a queued ticket."
+        },
+        {
+          "gameId": "CFB-401871056",
+          "name": "Kam Davis",
+          "market": "rushYds",
+          "book": "draftkings",
+          "source": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+          "quotedAt": "2026-10-22T04:41:15Z",
+          "main": {
+            "line": 82.5,
+            "over": -117
+          },
+          "actualAlternateOffers": [
+            {
+              "line": 49.5,
+              "over": -495
+            },
+            {
+              "line": 59.5,
+              "over": -290
+            },
+            {
+              "line": 69.5,
+              "over": -190
+            }
+          ],
+          "hold": "Current-role/sanity and exact proven-segment checks fail; research observation only. Not an eligible leg or a queued ticket."
+        },
+        {
+          "gameId": "CFB-401871056",
+          "name": "Kam Davis",
+          "market": "rushYds",
+          "book": "fanduel",
+          "source": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+          "quotedAt": "2026-10-22T04:41:15Z",
+          "main": {
+            "line": 87.5,
+            "over": -114,
+            "under": -114
+          },
+          "actualAlternateOffers": [
+            {
+              "line": 49.5,
+              "over": -500
+            },
+            {
+              "line": 59.5,
+              "over": -320
+            },
+            {
+              "line": 69.5,
+              "over": -215
+            }
+          ],
+          "hold": "Current-role/sanity and exact proven-segment checks fail; research observation only. Not an eligible leg or a queued ticket."
+        },
+        {
+          "gameId": "CFB-401862807",
+          "name": "Stonka Burnside",
+          "market": "recYds",
+          "book": "draftkings",
+          "source": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+          "quotedAt": "2026-10-22T04:41:15Z",
+          "main": {
+            "line": 40.5,
+            "over": -128
+          },
+          "actualAlternateOffers": [
+            {
+              "line": 19.5,
+              "over": -620
+            },
+            {
+              "line": 24.5,
+              "over": -385
+            },
+            {
+              "line": 29.5,
+              "over": -260
+            }
+          ],
+          "hold": "Current-role/sanity and exact proven-segment checks fail; research observation only. Not an eligible leg or a queued ticket."
+        },
+        {
+          "gameId": "CFB-401862807",
+          "name": "Stonka Burnside",
+          "market": "recYds",
+          "book": "fanduel",
+          "source": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+          "quotedAt": "2026-10-22T04:41:15Z",
+          "main": {
+            "line": 37.5,
+            "over": -114,
+            "under": -114
+          },
+          "actualAlternateOffers": [
+            {
+              "line": 9.5,
+              "over": -900
+            },
+            {
+              "line": 14.5,
+              "over": -500
+            },
+            {
+              "line": 19.5,
+              "over": -330
+            },
+            {
+              "line": 24.5,
+              "over": -245
+            },
+            {
+              "line": 29.5,
+              "over": -180
+            }
+          ],
+          "hold": "Current-role/sanity and exact proven-segment checks fail; research observation only. Not an eligible leg or a queued ticket."
+        }
+      ]
+    },
+    "morningRepair": "Installed moneyline pooling and exact catalog identity matching confirmed; regression checks saved separately. No extra code repair pending.",
+    "releaseConditions": "Existing6:45/8:30 refreshes own admission. First fully qualifying game-day step releases website/Plays & Results/Buffer X with normal Discord-first lead, art, one-open-step, caps and80/20. Otherwise exact fresh hold and honest research lean; no owner reconfirmation.",
+    "remainingExternalEvidence": "No verified numeric new rotation allocations. College availability remains team-specific; ECU/Memphis current depth/availability not established by official event publicity. Check official team game notes before admission; do not infer healthy."
+  }
 }

@@ -2949,3 +2949,23 @@ DraftKings Patriots moneyline at -345, outside the approved -220 to -130 range.
 One bounded fix prepared in app-games.js: retain exact expired quote/price/sample refusal and prevent a negative-price direction inheriting positive-value favorites copy. Focused gate FAILED13/14: tests/ui-games.test.js:231 requires the posted-game reassurance “No additional current research line clears my price check. The posted ticket above stays on the record”; replacement blocker removed it. Stopped immediately; no full gates, commit, promotion or deployment. Preserve reassurance alongside blocker, then repeat every AGENTS gate under release/run locks and watched hosted/live375 verification.
 
 Compact health: chosenNotPosted0,officialUnscheduled0,no overdue/failedX/Discord.46 released rows match live result/settledAt/units. Marshallwin+0.909u andClimbloss graded/site/officialDiscord; overnight confirmed grade8.83/.28minutes and Discord24.17/21.62minutes. MorningFinal andClimbX still scheduled, actualsentAt absent. Existing Mac jobs own delivery. Today oneCFB gameNMSU-SHSU; eight candidates have exact college availability-web-check holds, no fully cleared official withheld. Expired07:43:44Z favorite leaves generic live refusal; tracked above. Climb35protected/no supported new leg. NBA10/14clean,2/50paper; trialopen,promotionevidencefalse,propsresearchonly. Local homepage actually updated3stories10:50:54Z; exact successful morning call count overwritten bysettle-onlystatus and not claimed. WeeklyOct20 verifiedlocal27B1call,0failures,161.19s,summaryAvailabletrue. Odds360/500projected434;SGO629/2500stop1800;no budget changes. LiveToday/Record/game375zerooverflow/load/consoleerrors. Prior31d21a9f healthreader fix is ancestor oforigin/main; latest completed hosted39592504740success, no fresh release claimed. Evidence work/daily-20261021-outcomes.json.
+
+### October22 overnight bounded result and preparation (2026-10-22T04:52:51Z)
+
+Official personal NBA lotto final verification finds two hits and two misses (Johnson20points, Banchero7rebounds, Buzelis6rebounds, Barnes5assists). O-20261022-RESULT appends a personal loss using the existing writer; no Best Bet counting rule or prior row changes. Cash return/protection treatment remains unknown;25stake and0.75fee stay in the original ticket. Full release gates and hosted/live receipt pending.
+
+Thursday packet overnightReview compares all six games against the latest normal quotes, resolves all four unsubmitted NBA reports, records288fresh NBA main-prop comparisons and current-role holds, and preserves0supported alternate legs/0open segments. Existing6:45/8:30 jobs own fresh qualification and Discord-first delivery. The already-shipped validator, morning pool and alias fix are verified separately, not reimplemented. Preparation is not future admission or delivery.
+
+#### Completed queue receipt archived to retain finite queue bounds
+
+{
+  "id": "O-20261013-4",
+  "title": "Keep night games in the Eastern-day Climb pool",
+  "status": "shipped",
+  "owner": "agent",
+  "next": "Observe the next multi-game Climb scan and preserve its leg-level refusal or candidate in the private shadow log.",
+  "doneWhen": "An8:15PM ET Monday kickoff remains eligible all Monday; unrelated straight refusals cannot erase its game; each rung leg keeps every Climb gate; release and live checks pass.",
+  "evidence": "Owner decision2026-10-13 after Oct12 logs reported NFL:0 games left. Historical slate proves NFL-401872994 kicked at2026-10-13T00:15Z; regressions cover Eastern date and unrelated refused straight. Release fe6affc04be4699f6f29371564492fd17eabd383 via head3e5ada936219bb9fcd28747b61f482a71d8256b1; hosted38419897111 success; Python1384(2skip),Node240,cleanexport,build502/139,record102/NBA0,feed83,guard603,rehearsal1000ok,live375/1440 clean."
+}
+
+This completed item is retained here with its stable ID and release receipt; no unfinished work was removed and its ID will not be reused. Queue validation was caught at161items (limit160) and an overlong preparation evidence field; shortened the evidence and archived only this completed receipt. Gates rerun without changing their limits.
