@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-22T10:59:21Z",
+  "updatedAt": "2026-10-22T11:09:54Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 143,
+    "lines": 144,
     "current": 0,
-    "references": 0
+    "references": 1
   },
   "lines": [
     {
@@ -8010,6 +8010,69 @@
           "source": "https://www.espn.com/nfl/game/_/gameId/401873008",
           "marketWindow": "Full game",
           "cutoff": "UNDER 14.5 at -104 or better; off the card at 14 or lower, or at -119 or worse at 14.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401873010",
+      "player": "Drake Maye",
+      "athleteId": "4431452",
+      "position": "QB",
+      "reportId": "NFL-2026-W7-maye-under-20-5-cmp-dk",
+      "identityVerified": true,
+      "direction": "UNDER",
+      "line": 20.5,
+      "market": "completions",
+      "book": "DraftKings",
+      "odds": 102,
+      "observedAt": "2026-10-22T09:44:09Z",
+      "expiresAt": "2026-10-22T12:30:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401873010",
+      "marketWindow": "Full game",
+      "cutoff": "UNDER 20.5 at +102 or better; off the card at 20 or lower, or at -113 or worse at 20.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-10-22T09:44:09Z",
+      "kickoff": "2026-10-23T00:15Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Drake Maye UNDER 20.5 completions",
+      "id": "line-42e5b3b27e5b4ce0a97b",
+      "observations": [
+        {
+          "line": 20.5,
+          "odds": 102,
+          "observedAt": "2026-10-22T09:44:09Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873010",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401873010",
+          "player": "Drake Maye",
+          "athleteId": "4431452",
+          "position": "QB",
+          "reportId": "NFL-2026-W7-maye-under-20-5-cmp-dk",
+          "identityVerified": true,
+          "direction": "UNDER",
+          "line": 20.5,
+          "market": "completions",
+          "book": "DraftKings",
+          "odds": 102,
+          "observedAt": "2026-10-22T09:44:09Z",
+          "expiresAt": "2026-10-22T12:30:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873010",
+          "marketWindow": "Full game",
+          "cutoff": "UNDER 20.5 at +102 or better; off the card at 20 or lower, or at -113 or worse at 20.5.",
           "quoteType": "source reference"
         }
       ]
