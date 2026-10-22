@@ -113,7 +113,13 @@ class ValidationTests(unittest.TestCase):
             self.assertEqual(json.loads(revised.decode().splitlines()[-1])['result'],'loss')
 
     def test_weekly_invokes_validation_writer(self):
-        source=Path(learn.__file__).read_text()
-        weekly=source[source.index('def weekly('):source.index('\ndef ',source.index('def weekly(')+1)]
-        self.assertIn('climb_validation.refresh(policy, now',weekly)
-        self.assertIn("'climbValidation': climb_validation_report",weekly)
+        game,capture=fixture()
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);store=root/'data/learning'
+            for name,rows in [('boxscores',[game]),('prop-odds',[capture])]:
+                path=root/'data'/name/'cfb-2026.jsonl';path.parent.mkdir(parents=True)
+                path.write_text(''.join(json.dumps(row)+'\n' for row in rows))
+            report=learn.weekly(NOW,root=store,log_book={'posts':[]},games={},record=({},{}))
+            self.assertEqual(report['climbValidation']['graded'],1)
+            self.assertTrue((store/'climb-offers-2026.jsonl').exists())
+            self.assertIn('Climb/alternate-offers',learn.markdown(report))

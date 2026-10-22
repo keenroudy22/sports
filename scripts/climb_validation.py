@@ -171,6 +171,9 @@ def refresh(policy, now, root=ROOT, store=learning.STORE, dry=False):
         previous = policy.get('ladderSegments') or {}
         if previous != segments:
             policy.setdefault('history', []).append(dict(at=learning.stamp(now), knob='ladderSegments',
+                segment='Climb/alternate-offers',
+                **{'from':sum(bool(r.get('open')) for r in previous.values()),
+                   'to':sum(bool(r.get('open')) for r in segments.values())},
                 why='weekly stored pregame alternate offers versus official final boxes',
                 fromOpen=sorted(k for k, r in previous.items() if r.get('open')),
                 toOpen=sorted(k for k, r in segments.items() if r.get('open')),
