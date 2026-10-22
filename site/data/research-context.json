@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T15:13:01Z",
+  "updatedAt": "2026-10-22T15:23:58Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -259,7 +259,7 @@
               "name": "Divine Deablo",
               "position": "LB",
               "status": "Questionable",
-              "injury": "Arm",
+              "injury": "Forearm",
               "reportedAt": "2026-10-22T00:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4037626/divine-deablo"
             },
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-22T15:05Z",
+              "reportedAt": "2026-10-22T15:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5067,6 +5067,15 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4428350",
+              "name": "Quincy Riley",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-22T15:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428350/quincy-riley"
+            },
+            {
               "id": "4433975",
               "name": "Kool-Aid McKinstry",
               "position": "CB",
@@ -5245,15 +5254,6 @@
               "injury": null,
               "reportedAt": "2026-10-19T00:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361370/chris-olave"
-            },
-            {
-              "id": "4428350",
-              "name": "Quincy Riley",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Neck",
-              "reportedAt": "2026-10-18T20:59Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4428350/quincy-riley"
             },
             {
               "id": "2575788",
@@ -5530,9 +5530,9 @@
               "id": "4700136",
               "name": "Kiko Mauigoa",
               "position": "LB",
-              "status": "Doubtful",
+              "status": "Questionable",
               "injury": "Quadriceps",
-              "reportedAt": "2026-10-22T01:26Z",
+              "reportedAt": "2026-10-22T15:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
             },
             {
@@ -6248,7 +6248,7 @@
               "name": "Nick Bosa",
               "position": "DE",
               "status": "Questionable",
-              "injury": "Calf",
+              "injury": "Knee",
               "reportedAt": "2026-10-21T23:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa"
             },
@@ -6689,7 +6689,7 @@
               "id": "4034790",
               "name": "Antoine Winfield Jr.",
               "position": "S",
-              "status": "Doubtful",
+              "status": "Questionable",
               "injury": "Ribs",
               "reportedAt": "2026-10-22T00:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
@@ -7367,30 +7367,6 @@
       "changes": [
         {
           "teamId": "15",
-          "name": "JuJu Brents",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-21T21:01:33Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360488/juju-brents"
-        },
-        {
-          "teamId": "15",
-          "name": "Justin Joly",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-21T21:01:33Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4912052/justin-joly"
-        },
-        {
-          "teamId": "15",
-          "name": "Michael Taaffe",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-21T21:01:33Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4880346/michael-taaffe"
-        },
-        {
-          "teamId": "15",
           "name": "Tucker Addington",
           "from": "Active",
           "to": "Questionable",
@@ -7764,11 +7740,35 @@
           "to": "Questionable",
           "observedAt": "2026-10-22T15:02:13Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685553/brenen-thompson"
+        },
+        {
+          "teamId": "18",
+          "name": "Quincy Riley",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-22T15:23:58Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4428350/quincy-riley"
+        },
+        {
+          "teamId": "20",
+          "name": "Kiko Mauigoa",
+          "from": "Doubtful",
+          "to": "Questionable",
+          "observedAt": "2026-10-22T15:23:58Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
+        },
+        {
+          "teamId": "27",
+          "name": "Antoine Winfield Jr.",
+          "from": "Doubtful",
+          "to": "Questionable",
+          "observedAt": "2026-10-22T15:23:58Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-22T15:13:01Z",
-      "lastAttemptAt": "2026-10-22T15:13:01Z",
+      "checkedAt": "2026-10-22T15:23:58Z",
+      "lastAttemptAt": "2026-10-22T15:23:58Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-22T15:13:01Z",
-      "lastAttemptAt": "2026-10-22T15:13:01Z",
+      "checkedAt": "2026-10-22T15:23:58Z",
+      "lastAttemptAt": "2026-10-22T15:23:58Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
