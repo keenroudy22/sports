@@ -1,21 +1,21 @@
 {
- "at": "2026-10-22T07:55:05Z",
+ "at": "2026-10-22T08:11:51Z",
  "confirmed": {
-  "CFB-401858271": "2026-10-22T07:55:05Z",
-  "CFB-401858272": "2026-10-22T07:55:05Z",
-  "CFB-401861965": "2026-10-22T07:55:05Z",
-  "CFB-401862807": "2026-10-22T07:55:05Z",
-  "CFB-401862808": "2026-10-22T07:55:05Z",
-  "CFB-401864525": "2026-10-22T07:03:03Z",
-  "CFB-401869845": "2026-10-22T07:55:05Z",
-  "CFB-401871056": "2026-10-22T07:55:05Z",
+  "CFB-401858271": "2026-10-22T08:11:51Z",
+  "CFB-401858272": "2026-10-22T08:11:51Z",
+  "CFB-401861965": "2026-10-22T08:11:51Z",
+  "CFB-401862807": "2026-10-22T08:11:51Z",
+  "CFB-401862808": "2026-10-22T08:11:51Z",
+  "CFB-401864525": "2026-10-22T08:11:51Z",
+  "CFB-401869845": "2026-10-22T08:11:51Z",
+  "CFB-401871056": "2026-10-22T08:11:51Z",
   "NFL-401873010": "2026-10-22T06:45:01Z"
  },
  "leagues": {
   "CFB": {
    "books": {
     "draftkings": 1073,
-    "fanduel": 1041
+    "fanduel": 1127
    },
    "eventsListed": 119,
    "eventsMatched": 8,
@@ -29,15 +29,15 @@
     "player_passing_+_rushing_yards": 63,
     "player_passing_attempts": 6,
     "player_passing_completions": 13,
-    "player_passing_touchdowns": 79,
-    "player_passing_yards": 284,
+    "player_passing_touchdowns": 86,
+    "player_passing_yards": 301,
     "player_receiving_yards": 955,
     "player_receptions": 29,
     "player_rushing_attempts": 6,
-    "player_rushing_yards": 634
+    "player_rushing_yards": 696
    },
    "requestsLeft": 0,
-   "rows": 2114,
+   "rows": 2200,
    "slateGames": [
     "James Madison Dukes at App State Mountaineers 2026-10-22T23:00Z",
     "Liberty Flames at Kennesaw State Owls 2026-10-22T23:00Z",
@@ -50,7 +50,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "North Carolina Central",
+     "away": "North Carolina Central Eagles",
      "external": {
       "betsson": "f-UTCRwXPxA0unO7vOhiwi1Q",
       "draftkings": "34869473",
@@ -66,10 +66,10 @@
       "smarkets": "45393665",
       "sportzino": "sz-18097097"
      },
-     "home": "Delaware State",
+     "home": "Delaware State Hornets",
      "sample": {
-      "away_team": "North Carolina Central",
-      "home_team": "Delaware State",
+      "away_team": "North Carolina Central Eagles",
+      "home_team": "Delaware State Hornets",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -242,7 +242,7 @@
      "type": "fixture"
     },
     {
-     "away": "Cornell",
+     "away": "Cornell Big Red",
      "external": {
       "fanduel": "36208883",
       "kalshi": "KXNCAAFGAME-26OCT24CORBRWN",
@@ -253,10 +253,10 @@
       "rebet": "sr:match:70924232",
       "smarkets": "45393707"
      },
-     "home": "Brown",
+     "home": "Brown Bears",
      "sample": {
-      "away_team": "Cornell",
-      "home_team": "Brown",
+      "away_team": "Cornell Big Red",
+      "home_team": "Brown Bears",
       "markets": [
        "draw_no_bet",
        "moneyline",
@@ -383,7 +383,7 @@
      "type": "fixture"
     },
     {
-     "away": "New Haven",
+     "away": "New Haven College",
      "external": {
       "fanduel": "36208871",
       "kalshi": "KXNCAAF1H-26OCT24NHCCCSU",
@@ -397,10 +397,11 @@
      },
      "home": "Central Connecticut",
      "sample": {
-      "away_team": "New Haven",
+      "away_team": "New Haven College",
       "home_team": "Central Connecticut",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -793,10 +794,10 @@
       "prophetx": "1702921624",
       "smarkets": "45391440"
      },
-     "home": "Long Island",
+     "home": "Long Island University",
      "sample": {
       "away_team": "Stonehill",
-      "home_team": "Long Island",
+      "home_team": "Long Island University",
       "markets": [
        "draw_no_bet",
        "moneyline",
@@ -1130,7 +1131,7 @@
       "fliff": "fobj__conflict_event__407875",
       "gemini": "NFL-2610251700-CIN-BAL-S",
       "hardrock": "6887203087019278759",
-      "kalshi": "KXNFL1H-26OCT25CINBAL",
+      "kalshi": "KXNFL1HTOTAL-26OCT25CINBAL",
       "ladbrokes": "c21b9632-07d2-49f6-9e0b-3b48ffae5444",
       "novig": "01a136e2-eb8c-7492-82a7-9b44bdc66cee",
       "paddypower": "36188997",
@@ -2131,7 +2132,7 @@
       "fliff": "fobj__conflict_event__407880",
       "gemini": "NFL-2610252025-GB-DET-S",
       "hardrock": "7899387103270797721",
-      "kalshi": "KXNFL1H-26OCT25GBDET",
+      "kalshi": "KXNFL1QTOTAL-26OCT25GBDET",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "novig": "01a136e2-eecd-78b0-ad17-c6ca310ae109",
       "paddypower": "36189005",
