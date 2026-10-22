@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T18:11:17Z",
+  "updatedAt": "2026-10-22T18:22:07Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-22T17:00Z",
+              "reportedAt": "2026-10-22T18:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-22T17:00Z",
+              "reportedAt": "2026-10-22T18:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6447,6 +6447,24 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "4678006",
+              "name": "Elijah Arroyo",
+              "position": "TE",
+              "status": "Injured Reserve",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-22T18:10Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4678006/elijah-arroyo"
+            },
+            {
+              "id": "4426385",
+              "name": "Zach Charbonnet",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Knee - ACL",
+              "reportedAt": "2026-10-22T18:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426385/zach-charbonnet"
+            },
+            {
               "id": "4428659",
               "name": "Drake Thomas",
               "position": "LB",
@@ -6501,15 +6519,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4686540/tyrice-knight"
             },
             {
-              "id": "4426385",
-              "name": "Zach Charbonnet",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Knee - ACL",
-              "reportedAt": "2026-10-21T23:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426385/zach-charbonnet"
-            },
-            {
               "id": "4037521",
               "name": "Chazz Surratt",
               "position": "LB",
@@ -6526,15 +6535,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-20T00:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429211/anthony-bradford"
-            },
-            {
-              "id": "4678006",
-              "name": "Elijah Arroyo",
-              "position": "TE",
-              "status": "Out",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-19T23:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4678006/elijah-arroyo"
             },
             {
               "id": "5151317",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "7",
-          "name": "Pat Surtain II",
-          "from": "Doubtful",
-          "to": "Questionable",
-          "observedAt": "2026-10-21T21:34:04Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4372012/pat-surtain-ii"
-        },
-        {
           "teamId": "34",
           "name": "Azeez Al-Shaair",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-22T18:11:17Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426385/zach-charbonnet"
+        },
+        {
+          "teamId": "26",
+          "name": "Elijah Arroyo",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-22T18:22:07Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4678006/elijah-arroyo"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-22T18:11:17Z",
-      "lastAttemptAt": "2026-10-22T18:11:17Z",
+      "checkedAt": "2026-10-22T18:22:07Z",
+      "lastAttemptAt": "2026-10-22T18:22:07Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-22T18:11:17Z",
-      "lastAttemptAt": "2026-10-22T18:11:17Z",
+      "checkedAt": "2026-10-22T18:22:07Z",
+      "lastAttemptAt": "2026-10-22T18:22:07Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
