@@ -164,7 +164,7 @@ def support_refusal(ticket, ctx):
             allowed = used_chance(raw, fair, moneyline=True)
         else:
             floor = RAW_MIN_CHANCE if leg.get('athleteId') else MANUAL_RAW_CHANCE
-            rate = segment_hit_rate(ctx, league, market, leg.get('book'), int(price))
+            rate = segment_hit_rate(ctx, league, market, leg.get('book'), int(price), leg.get('direction'))
             allowed = used_chance(raw, implied, rate)
             if raw < floor or allowed is None:
                 return 'Climb leg lacks the required model support or open proven segment; discretionary tickets cannot bypass this'
@@ -199,11 +199,27 @@ def used_chance(raw, fair, segment_hit=None, moneyline=False):
     return min(float(raw), float(segment_hit))
 
 
-def segment_hit_rate(ctx, league, market, book, price):
+def segment_hit_rate(ctx, league, market, book, price, side=None):
     """Read the weekly proven-segment result; this function never promotes a segment itself."""
     band = f'{abs(int(price)) // 50 * 50}-{abs(int(price)) // 50 * 50 + 49}'
     keys = (f'{league}/{market}/{book}/{band}', f'{league}/{market}/{book}', f'{league}/{market}')
     segments = ((getattr(ctx, 'policy', None) or {}).get('ladderSegments') or {})
+    now = getattr(ctx, 'now', None)
+    if now is None or eastern_date(now) >= date(2026, 10, 21):
+        import climb_validation
+        row = segments.get(climb_validation.segment_key(league, market, side, book, price))
+        if not isinstance(row, dict) or row.get('schemaVersion') != 2 or row.get('scope') != 'alternate-offers':
+            return None
+        try:
+            age = now-gates.when(row['checkedAt']) if now else timedelta(days=99)
+            if not timedelta(0) <= age <= timedelta(days=8):
+                return None
+            if row.get('open') is True and row['graded'] >= 150 and 0 < row['hitRate'] <= 1 \
+                    and row['hitRate']-row['priceNeeded'] >= .02-1e-12 and row['last100AbovePrice'] >= -1e-12:
+                return float(row['hitRate'])
+        except (KeyError, TypeError, ValueError):
+            return None
+        return None
     for key in keys:
         row = segments.get(key)
         if isinstance(row, dict) and row.get('open') is True and (row.get('graded') or 0) >= 150 \
@@ -442,7 +458,7 @@ def legs_for_game(game, record, ctx, now, confirmed=None, proven=False):
                     implied = pricing.break_even(price)
                     if raw < RAW_MIN_CHANCE or not MIN_GAP <= raw - implied <= MAX_GAP:
                         continue
-                    segment_rate = segment_hit_rate(ctx, game['league'], stat, BOOKS[book_key], price) if proven else None
+                    segment_rate = segment_hit_rate(ctx, game['league'], stat, BOOKS[book_key], price, direction) if proven else None
                     chance = used_chance(raw, implied, segment_rate) if proven else min(raw, implied + MODEL_LIFT_CAP)
                     if chance is None or chance <= implied:
                         continue
@@ -490,7 +506,7 @@ def game_line_legs(game, ctx, now):
                 desk = pricing.price(snapshot, market, side, line, int(price))
             except (KeyError, TypeError, ValueError):
                 continue
-            rate = segment_hit_rate(ctx, game['league'], market, BOOKS[key], int(price))
+            rate = segment_hit_rate(ctx, game['league'], market, BOOKS[key], int(price), side)
             chance = used_chance(desk['rawChance'], desk['breakEven'], rate)
             if desk['rawChance'] < MANUAL_RAW_CHANCE or chance is None or chance <= desk['breakEven']:
                 continue
@@ -762,7 +778,7 @@ def manual_candidate(ctx, games, now, spec):
             return None, f"the model cannot price {game['id']} {market}"
         if desk['rawChance'] < MANUAL_RAW_CHANCE:
             return None, f"the raw model only gives {100 * desk['rawChance']:.1f}% to {game['id']} {market}"
-        segment_rate = segment_hit_rate(ctx, game['league'], market, book, int(price))
+        segment_rate = segment_hit_rate(ctx, game['league'], market, book, int(price), side)
         chance = used_chance(desk['rawChance'], desk['breakEven'], segment_rate)
         if chance is None:
             return None, f'{game["league"]} {market} at {book} is not an open proven Climb segment'

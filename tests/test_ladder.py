@@ -48,6 +48,14 @@ def ctx(first=None, latest=None, prop_odds=None, injuries=None):
         'NFL/spread/FanDuel': {'open': True, 'graded': 180, 'hitRate': .84},
         'CFB/spread/FanDuel': {'open': True, 'graded': 180, 'hitRate': .84},
     }}
+    # Keep legacy dated replay fixtures, and provide exact current side/book/band evidence.
+    for key, row in list(policy['ladderSegments'].items()):
+        league, market, book = key.split('/')
+        row.update(schemaVersion=2, scope='alternate-offers', checkedAt='2026-10-22T10:40:00Z',
+                   priceNeeded=.70, last100AbovePrice=.02)
+        for side in ('home','away') if market == 'spread' else ('over','under'):
+            for band in range(150,950,50):
+                policy['ladderSegments'][f'{league}/{market}/{side}/{book}/{band}-{band+49}']=row
     return SimpleNamespace(now=NOW, snapshot=lambda gid: snapshot(gid) if gid in ('g1', 'g2') else None, names=names,
                            appearances=appearances, established=set(), injuries=injuries or {}, first=first or {},
                            latest=latest or {}, policy=policy, passers={}, root=Path('/tmp'),

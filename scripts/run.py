@@ -2387,6 +2387,7 @@ def _run(args, now, slot, kinds, status):
         if not ok:
             first = gates.refusals(decisions)[0]
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
+                             'lineId': (candidate.get('_row') or {}).get('id'), 'line': candidate.get('line'), 'book': candidate.get('book'),
                              'rule': first.rule, 'reason': first.reason})
             decided.append(decision_record(candidate, league, 'refused', [d.rule for d in gates.refusals(decisions)], first.reason, now, ctx))
             continue
@@ -2419,6 +2420,7 @@ def _run(args, now, slot, kinds, status):
         hold = hold or judge(candidate, relevant_facts(candidate, facts, ctx), use_llm, status)
         if hold:
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
+                             'lineId': (candidate.get('_row') or {}).get('id'), 'line': candidate.get('line'), 'book': candidate.get('book'),
                              'rule': 'held', 'reason': hold})
             decided.append(decision_record(candidate, league, 'held', ['held'], hold, now, ctx))
             continue
@@ -2450,6 +2452,7 @@ def _run(args, now, slot, kinds, status):
                 best_pool.append((league, candidate))
             else:
                 screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
+                                 'lineId': (candidate.get('_row') or {}).get('id'), 'line': candidate.get('line'), 'book': candidate.get('book'),
                                  'rule': best.rule, 'reason': best.reason})
                 decided.append(decision_record(candidate, league, 'refused', [best.rule], best.reason, now, ctx))
             continue
@@ -2462,6 +2465,7 @@ def _run(args, now, slot, kinds, status):
                 continue
             refusal = gut if best.reason.startswith('NFL sides remain in shadow') else best
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
+                             'lineId': (candidate.get('_row') or {}).get('id'), 'line': candidate.get('line'), 'book': candidate.get('book'),
                              'rule': refusal.rule, 'reason': refusal.reason})
             decided.append(decision_record(candidate, league, 'refused', [refusal.rule], refusal.reason, now, ctx))
             continue
@@ -2478,6 +2482,7 @@ def _run(args, now, slot, kinds, status):
         if not duplicate.ok or not cap.ok:
             refusal = duplicate if not duplicate.ok else cap
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
+                             'lineId': (candidate.get('_row') or {}).get('id'), 'line': candidate.get('line'), 'book': candidate.get('book'),
                              'rule': refusal.rule, 'reason': refusal.reason})
             decided.append(decision_record(candidate, league, 'refused', [refusal.rule], refusal.reason, now, ctx))
             continue

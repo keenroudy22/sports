@@ -18,6 +18,15 @@ def normal(value):return re.sub(r'[^a-z0-9]','',str(value).lower())
 def number(value):
     return isinstance(value,(int,float)) and not isinstance(value,bool) and math.isfinite(value)
 
+def same_line(row, screen):
+    if screen.get('gameId') != row.get('gameId'):
+        return False
+    if screen.get('lineId'):
+        return (screen['lineId'] == row.get('id') and screen.get('line') == row.get('line')
+                and screen.get('book') == row.get('book'))
+    # Legacy captured screens have no catalog identity; never fuzzy-match teams.
+    return normal(screen.get('title')) == normal(row.get('title'))
+
 def choose(now,lines,screened,nba,official=False):
     if official:return None
     options=[];day=eastern_date(now)
@@ -31,7 +40,7 @@ def choose(now,lines,screened,nba,official=False):
             kickoff=boxscores.instant(row['kickoff'])
             if eastern_date(kickoff)!=day or kickoff<=now+timedelta(minutes=45):continue
         except (KeyError,TypeError,ValueError):continue
-        hold=next((s for s in screened if s.get('gameId')==row.get('gameId') and normal(s.get('title'))==normal(row.get('title'))),None)
+        hold=next((s for s in screened if same_line(row,s)),None)
         if not hold:continue
         reason=hold.get('reason') or ''
         if any(word in reason.lower() for word in ('ruled out','injured reserve','inactive','suspended')):continue

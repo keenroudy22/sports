@@ -1,5 +1,27 @@
 # October 5 product implementation tracker
 
+## October21 night — validation writer and morning lean repair prepared
+
+Owner explicitly requests repair tonight, including Best Bets and leans. Added
+climb_validation.py: deterministic stored pregame alternate offers versus official
+final boxes, exact league/market/side/book/50-cent band,150 graded/+2points/last100
+closure; one last quote/rung per game-player-market-side-book-band. No result-based
+offer filtering; unknown/DNP/ambiguous stats lower the opening-rate bound, never
+become guessed zeros/wins. Future/live/wrong-period/suspended/foreign ladders hold.
+As-of box versions, capture/box hashes, append-only grade revisions, source-ledger
+checks, dry-run and weekly learn.weekly integration added. New reader does not
+borrow legacy/wider/opposite-side segments, checks proof and eight-day freshness.
+Old dated replay behavior remains unchanged. This is broad offered-stat evidence,
+not a claim that historical wagers were book-settled or current roles are verified;
+every prospective ticket retains model/role/news/reason checks.
+
+Dry run:27511 unique offers,23879 graded,3632 unknown,256 segments,0 open. This is
+not permission to lower the bar or promise tomorrow's step. Morning screens now
+retain exact catalog ID/line/book; canonical Patriots MONEYLINE can match NE
+moneyline without fuzzy team matching or mixing opposite sides/changed lines.
+Focused22Climb/31ladder/45direction/114run/30learn/7morning tests pass. Full release
+gates, locked writer application, hosted publish and live checks remain pending.
+
 ## October21 evening — alternate rules and route graphic verified live
 
 Source d760684b (descendant bc8fae2f) shipped in hosted39700774233 SUCCESS.

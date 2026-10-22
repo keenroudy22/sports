@@ -22,7 +22,7 @@ THU = datetime(2026, 10, 22, 10, 45, tzinfo=timezone.utc)
 def leg(n, price=-600, chance=.90, book='FanDuel'):
     return dict(id=f'l{n}', title=f'Team {n} +10.5', gameId=f'g{n}', book=book,
                 odds=price, chance=chance, rawChance=chance, fairChance=chance-.05, marketType='spread',
-                alternate=True,
+                alternate=True, direction='home',
                 kickoff='2026-10-22T23:00Z', observedAt='2026-10-22T10:40Z')
 
 
@@ -122,8 +122,10 @@ class SelectiveClimbTests(unittest.TestCase):
         pick=dict(id='new', parlayType='ladder', legs=[leg(i) for i in range(3)], gameIds=list(games),book='FanDuel',
                   odds=parlay.american((1+100/600)**3),quotedAt='2026-10-22T10:40Z',expiresAt='2026-10-22T12:00Z')
         world=SimpleNamespace(now=THU,first=past(2),games=games,
-                              policy={'ladderSegments': {'NFL/spread/FanDuel': {
-                                  'open':True,'graded':180,'hitRate':.92}}})
+                              policy={'ladderSegments': {'NFL/spread/home/FanDuel/600-649': {
+                                  'open':True,'graded':180,'hitRate':.92,'schemaVersion':2,
+                                  'scope':'alternate-offers','checkedAt':'2026-10-22T10:40Z',
+                                  'priceNeeded':.85,'last100AbovePrice':.02}}})
         self.assertTrue(gates.ladder_selective(pick,world).ok)
         self.assertIsNone(run.private_release_refusal(dict(pick=pick,league='NFL'),world,THU))
         world.first=past(3)

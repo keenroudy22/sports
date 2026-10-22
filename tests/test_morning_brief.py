@@ -26,6 +26,15 @@ class MorningBriefTests(unittest.TestCase):
             self.assertIsNone(m.current(self.now.replace(hour=16),root))
     def test_official_suppresses_lean(self):
         self.assertIsNone(m.choose(self.now,[],[],{},True))
+    def test_catalog_identity_matches_canonical_name_not_wrong_market_or_book(self):
+        row=dict(self.row,id='game-NFL-401873010-away-ml',gameId='NFL-401873010',league='NFL',
+                 title='NE moneyline',line=0,grade=dict(projection=3.0,calibrated=True,edge=3))
+        screen=dict(gameId=row['gameId'],title='New England Patriots MONEYLINE',lineId=row['id'],
+                    line=0,book=row['book'],rule='held',reason='availability')
+        self.assertIsNotNone(m.choose(self.now,[row],[screen],{}))
+        for changed in (dict(screen,lineId='game-NFL-401873010-home-ml'),dict(screen,line=3.5),
+                        dict(screen,book='DraftKings'),dict(screen,gameId='NFL-other')):
+            self.assertIsNone(m.choose(self.now,[row],[changed],{}))
     def test_unmatched_or_negative_football_not_promoted(self):
         row=dict(self.row,gameId='CFB-1',grade=dict(projection=45,calibrated=True,edge=2))
         self.assertIsNone(m.choose(self.now,[row],[],{}))

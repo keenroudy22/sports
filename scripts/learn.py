@@ -676,6 +676,8 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
         import x_post
         log_book = x_post.load_log()
     changes = []
+    import climb_validation
+    climb_validation_report = climb_validation.refresh(policy, now, root=Path(root).parent.parent, store=root, dry=dry)
     # Autopilot supersedes the old one-week segment mover. Keep its table for the report,
     # but two_way.step is the only segment/trust/gap/pause writer now.
     segments, _ = learn_segments(policy, rows, now, True, apply_r0=True)
@@ -718,7 +720,8 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
                   for segment in sorted({row.get('segment') for row in week_rows if row.get('segment')})}
     report = {'at': learning.stamp(now), 'candidates': len(rows), 'distinctCandidates': len(distinct(rows)),
               'graded': sum(1 for r in rows if r.get('result')),
-              'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
+              'segments': segments, 'climbValidation': climb_validation_report,
+              'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
               'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book),
               'cardThemes': post_themes(log_book), 'engagementScorecard': engagement_scorecard(log_book),
               'matchups': matchup_scorecard(rows),
