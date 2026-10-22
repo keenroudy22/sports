@@ -7,6 +7,17 @@
     "targetEasternDay": "2026-10-22",
     "policy": "Two to three actual alternate-line legs, two preferred, combined odds -200 to -150. Same book/league and distinct games; one open step, normal weekly cap and80/20 banking. No main-line/single-leg fallback under this revision.",
     "state": "No supported alternate pair or triple; no Climb admitted, scheduled or posted.",
+    "validationRepair": {
+      "appliedAt": "2026-10-22T01:45:06Z",
+      "sourceHead": "1c43a3e551404889209e8c5118ca9a200a7c730d",
+      "policyHead": "fa8731f976e8375a4bfc1141db48ff00203ac728",
+      "writer": "scripts/climb_validation.py via learn.weekly; one locked repair backfill applied tonight",
+      "offered": 27511, "graded": 23879, "unknown": 3632, "segments": 256, "open": 0,
+      "idempotentReplayAdded": 0,
+      "meaning": "The original missing-writer finding below is repaired and hosted/live verified, not a reason to wait for 150 new games. Exact side/book/price-band proof currently opens no alternate segment. Unknown outcomes lower the opening-rate bound; no guessed zeros or wins. No prospective Climb qualifies just because technical tests pass.",
+      "tests": "Normal/clean1593Python(2skip)/269Node; record111/NBA0; guard588/assets/budgets clear; actual2100/u6k5tvvq offline ok,zero outside/private. Hosted39707490860SUCCESS; live Today/Climb375/1440 no overflow/load/console errors, route cache20261022T015505Z. Screenshots /tmp/kookn-validation-live-today-phone.png and /tmp/kookn-validation-live-climb-phone.png.",
+      "morningRepair": "Exact catalog-ID/line/book matches canonical versus abbreviated lean names. Climb/fun admissions do not suppress a lean when there is no straight Best Bet. Existing6:45/8:30 jobs and5-minute Discord job loaded; no new schedule or owner reconfirmation."
+    },
     "captures": [
       {"gameId": "CFB-401869845", "quotedAt": "2026-10-21T23:33:46Z", "consistentRungs": 412, "rawRoleEligible": 0, "supported": 0},
       {"gameId": "CFB-401871056", "quotedAt": "2026-10-21T23:33:46Z", "consistentRungs": 281, "rawRoleEligible": 0, "supported": 0},

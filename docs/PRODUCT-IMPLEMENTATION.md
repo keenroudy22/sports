@@ -1,5 +1,55 @@
 # October 5 product implementation tracker
 
+## October21 night — validation and morning repairs verified shipped
+
+Hosted39707490860 SUCCESS onfa8731f9 includes tested source1c43a3e and the locked
+01:45:06Z writer backfill. This final release includes both canonical-catalog lean
+matching and the additional Climb/fun-versus-straight suppression fix. Earlier
+source-only queued publishes were superseded, not failed releases. Normal and
+clean1593Python(two skips)/269Node,443pages,record111/NBA0,guard588/assets/budgets
+clear; offline actual2100/u6k5tvvq outcomeok,zero outside writes/private reads.
+Live Today and Climb at375/1440 have matching viewport/document widths, no caught
+load state or console errors. New route cache20261022T015505Z visibly retains the
+correct2–3-alt/two-preferred/-200..-150-total policy and no invented future step.
+Evidence: /tmp/kookn-validation-live-today-phone.png,
+/tmp/kookn-validation-live-today-desktop.png and
+/tmp/kookn-validation-live-climb-phone.png. Viewport restored after checks.
+
+A-20261010-3 technical writer/reader gap is SHIPPED, not deferred to00:45. Historical
+offer grades are private, not new public bets:27511offered/23879graded/3632unknown,
+256segments/0open. Repeat adds0;10 public integrity tests pass. No money, public
+record, risk threshold, category, cap or schedule changed. O-MORNING and O-PREP
+remain OBSERVING solely for natural early selection/delivery or exact holds;
+existing23:30/00:45 and6:45/8:30 checks own that follow-through without owner
+reconfirmation. Current0-open evidence and role holds are real qualification
+conditions, not missing machinery and not permission to fabricate a step.
+
+## October21 night — final repair installed, hosted verification pending
+
+Final tested source1c43a3e and locked policy backfillfa8731f9 installed. Normal and
+clean1593Python(two skips)/269Node;443pages,record111/NBA0,guard588/assets/budgets
+clear (existing soft lazy-More/NBA size warnings only). Offline actual2100 run
+u6k5tvvq outcomeok,zero outside writes/private reads. First full gate stopped on
+one243-character tracker field; shortened and reran all gates. Review caught
+incomplete history/report fields before release; added standard segment/from/to
+fields and an actual weekly integration test verifying complete report rendering.
+
+Writer backfill at01:45:06Z:27511 unique captured offers,23879 graded,3632 unknown,
+256 exact segments,0 open. Repeat adds0 duplicate grades.10 public integrity tests
+pass; no public pick/stake/grade/result or risk threshold changed. Verified finals
+grade when stored, without an unnecessary eight-hour kickoff wait. Current role,
+news and final ticket checks remain independent of broad historical offer proof.
+
+Morning screens retain catalog ID/line/book, so canonical Patriots MONEYLINE can
+match NE moneyline without borrowing opposite-side/changed-line/other-book holds.
+An admitted Climb/fun ticket no longer suppresses a morning lean in the absence
+of a straight Best Bet. Fresh NBA role/minutes fallback replay passes; held NBA
+roles and actual official-play suppression remain.6:45/8:30 Mac jobs loaded,
+Discord cadence300seconds. No new schedule, changed caps or paid service.
+Hosted39706790545 passed the initial writer/reader/backfill. Final39707490860
+contains the additional morning/verified-final fix and is still in hosted checks;
+live verification is required before closing the technical work.
+
 ## October21 night — validation writer and morning lean repair prepared
 
 Owner explicitly requests repair tonight, including Best Bets and leans. Added
