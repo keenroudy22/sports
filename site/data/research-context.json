@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T13:51:44Z",
+  "updatedAt": "2026-10-22T14:14:23Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-22T13:00Z",
+              "reportedAt": "2026-10-22T14:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-22T13:00Z",
+              "reportedAt": "2026-10-22T14:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-22T13:00Z",
+              "reportedAt": "2026-10-22T14:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5757,6 +5757,15 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
+              "id": "3929630",
+              "name": "Saquon Barkley",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-22T13:45Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley"
+            },
+            {
               "id": "4682618",
               "name": "Cooper DeJean",
               "position": "CB",
@@ -5809,15 +5818,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-20T16:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt"
-            },
-            {
-              "id": "3929630",
-              "name": "Saquon Barkley",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley"
             },
             {
               "id": "4240456",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "19",
-          "name": "Darnell Mooney",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-21T20:37:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4040655/darnell-mooney"
-        },
-        {
           "teamId": "33",
           "name": "John Simpson",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-22T12:14:34Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-22T14:14:23Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-22T13:51:44Z",
-      "lastAttemptAt": "2026-10-22T13:51:44Z",
+      "checkedAt": "2026-10-22T14:14:23Z",
+      "lastAttemptAt": "2026-10-22T14:14:23Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-22T13:51:44Z",
-      "lastAttemptAt": "2026-10-22T13:51:44Z",
+      "checkedAt": "2026-10-22T14:14:23Z",
+      "lastAttemptAt": "2026-10-22T14:14:23Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
