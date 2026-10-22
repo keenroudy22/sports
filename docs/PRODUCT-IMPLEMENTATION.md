@@ -1,5 +1,37 @@
 # October 5 product implementation tracker
 
+## October22 alternate-spread implementation and Friday preparation
+
+Exact SharpAPI full-game spread capture now shares the existing request budget.
+Two-sided main/alternate pairing, team identity and monotone ladders reject
+period/live/suspended/stale/conflicting quotes. Automatic Climb legs and final
+game-score grading use the same proven-segment validator. No synthetic prices,
+invented historical samples or relaxed admission checks. Existing Climb checks
+write private work/climb-prep.json for the next Eastern day.
+
+Source38a47175 passed normal/clean1636Python(two skips)/273Node,606guarded
+files/161572243bytes,113record/NBA0 and offline1330/3qcd_wmp ok. Real capture
+exposed shared12/min collisions and start-time rejection of later quotes.
+Source5e065507 repairs both with bounded reservation-preserving waits and elapsed
+capture timestamps. Normal/clean1638Python(two skips)/273Node, all build/audit/
+guard/budget gates and offline1330/_rj68sz5 passed with zero outside/private access.
+Installed through locked release; final containing hosted proof still pending.
+
+Fresh FridayOct23 capture18:18–18:19Z:5/5CFB games,229 eligible-price alternate
+sides (Duke/Virginia44,UMass/UConn43,Army/Tulsa51,AirForce/Wyoming46,
+NCState/Stanford45),64 player lines; no skipped-game/rate failure on rerun.
+Owner copy: friday-climb-prep-2026-10-23.json. All supported-leg counts remain0:
+real results do not establish an open segment. Validator retains27747offers,
+24089graded,3658unknown,256segments,0open. Newly captured game-side offers must
+settle before they produce evidence. Coverage repaired; qualification not invented.
+Existing evening and6:45/8:30 checks refresh news/quotes and normal website/Plays/
+Buffer qualification/release. No added schedule, feed cost or weakened threshold.
+
+Earlier website39826599749SUCCESS verified375/1440: Braun visible, currentClimb4/
+step1/$50, zero overflow/load/console error. Previous Climb2 was the initial partial
+view; the fully loaded ledger agrees. Three community image references now use
+MY CARD; sent originals remain unchanged. Proof /tmp/kookn-website-release-phone.png.
+
 ### October22 follow-through receipt, 17:45Z
 
 Morning-credit and expired-result recovery fixes installed from632d3510 after
