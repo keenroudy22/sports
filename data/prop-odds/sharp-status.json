@@ -1,21 +1,21 @@
 {
- "at": "2026-10-22T07:03:03Z",
+ "at": "2026-10-22T07:19:50Z",
  "confirmed": {
-  "CFB-401858271": "2026-10-22T07:03:03Z",
-  "CFB-401858272": "2026-10-22T07:03:03Z",
-  "CFB-401861965": "2026-10-22T07:03:03Z",
-  "CFB-401862807": "2026-10-22T07:03:03Z",
-  "CFB-401862808": "2026-10-22T07:03:03Z",
+  "CFB-401858271": "2026-10-22T07:19:50Z",
+  "CFB-401858272": "2026-10-22T07:19:50Z",
+  "CFB-401861965": "2026-10-22T07:19:50Z",
+  "CFB-401862807": "2026-10-22T07:19:50Z",
+  "CFB-401862808": "2026-10-22T07:19:50Z",
   "CFB-401864525": "2026-10-22T07:03:03Z",
-  "CFB-401869845": "2026-10-22T07:03:03Z",
-  "CFB-401871056": "2026-10-22T07:03:03Z",
+  "CFB-401869845": "2026-10-22T07:19:50Z",
+  "CFB-401871056": "2026-10-22T07:19:50Z",
   "NFL-401873010": "2026-10-22T06:45:01Z"
  },
  "leagues": {
   "CFB": {
    "books": {
     "draftkings": 1073,
-    "fanduel": 1127
+    "fanduel": 1041
    },
    "eventsListed": 119,
    "eventsMatched": 8,
@@ -29,15 +29,15 @@
     "player_passing_+_rushing_yards": 63,
     "player_passing_attempts": 6,
     "player_passing_completions": 13,
-    "player_passing_touchdowns": 86,
-    "player_passing_yards": 301,
+    "player_passing_touchdowns": 79,
+    "player_passing_yards": 284,
     "player_receiving_yards": 955,
     "player_receptions": 29,
     "player_rushing_attempts": 6,
-    "player_rushing_yards": 696
+    "player_rushing_yards": 634
    },
    "requestsLeft": 0,
-   "rows": 2200,
+   "rows": 2114,
    "slateGames": [
     "James Madison Dukes at App State Mountaineers 2026-10-22T23:00Z",
     "Liberty Flames at Kennesaw State Owls 2026-10-22T23:00Z",
@@ -50,7 +50,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "North Carolina Central",
+     "away": "North Carolina Central Eagles",
      "external": {
       "betsson": "f-UTCRwXPxA0unO7vOhiwi1Q",
       "draftkings": "34869473",
@@ -66,10 +66,10 @@
       "smarkets": "45393665",
       "sportzino": "sz-18097097"
      },
-     "home": "Delaware State",
+     "home": "Delaware State Hornets",
      "sample": {
-      "away_team": "North Carolina Central",
-      "home_team": "Delaware State",
+      "away_team": "North Carolina Central Eagles",
+      "home_team": "Delaware State Hornets",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -136,7 +136,7 @@
       "fliff": "fobj__conflict_event__419768",
       "gemini": "NCAAF-2610241600-LSU-AUB-T",
       "hardrock": "5241498543209972123",
-      "kalshi": "KXNCAAF1H-26OCT24LSUAUB",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT24LSUAUB",
       "ladbrokes": "5e974911-b2dc-4fc0-bc98-091198dd5b5e",
       "novig": "01a14577-5683-72f0-9e5b-6a3d76f11e78",
       "onexbet": "762919555",
@@ -242,11 +242,10 @@
      "type": "fixture"
     },
     {
-     "away": "Cornell",
+     "away": "Cornell Big Red",
      "external": {
       "fanduel": "36208883",
-      "kalshi": "KXNCAAFGAME-26OCT24CORBRWN",
-      "novig": "01a14577-57e9-75e1-b43c-2ba1f96bd6dc",
+      "kalshi": "KXNCAAFTOTAL-26OCT24CORBRWN",
       "onexbet": "763708059",
       "paddypower": "36208883",
       "polymarket": "nfl_brown_cornell_2026-10-24_b2",
@@ -254,10 +253,10 @@
       "rebet": "sr:match:70924232",
       "smarkets": "45393707"
      },
-     "home": "Brown",
+     "home": "Brown Bears",
      "sample": {
-      "away_team": "Cornell",
-      "home_team": "Brown",
+      "away_team": "Cornell Big Red",
+      "home_team": "Brown Bears",
       "markets": [
        "draw_no_bet",
        "moneyline",
@@ -285,7 +284,7 @@
       "fliff": "fobj__conflict_event__419847",
       "gemini": "NCAAF-2610242000-CAL-SMU-M",
       "hardrock": "2423019232661995925",
-      "kalshi": "KXNCAAF4QSPREAD-26OCT24CALSMU",
+      "kalshi": "KXNCAAF3QTOTAL-26OCT24CALSMU",
       "ladbrokes": "650a7ca8-0b34-4fe0-8ae4-d0cded12014d",
       "novig": "01a14577-5036-7032-b901-ba2b0fafc547",
       "onexbet": "762874857",
@@ -384,7 +383,7 @@
      "type": "fixture"
     },
     {
-     "away": "New Haven",
+     "away": "New Haven Chargers",
      "external": {
       "fanduel": "36208871",
       "kalshi": "KXNCAAF1H-26OCT24NHCCCSU",
@@ -396,10 +395,10 @@
       "rebet": "sr:match:70995400",
       "smarkets": "45393709"
      },
-     "home": "Central Connecticut",
+     "home": "Central Connecticut Blue Devils",
      "sample": {
-      "away_team": "New Haven",
-      "home_team": "Central Connecticut",
+      "away_team": "New Haven Chargers",
+      "home_team": "Central Connecticut Blue Devils",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -420,7 +419,6 @@
       "betparx": "1027553189",
       "betrivers": "1027553189",
       "bwin": "6:47555",
-      "caesars": "16613bb3-9cd4-434e-8165-0b396cda4399",
       "circa": "227774",
       "draftkings": "34827201",
       "fanatics": "5392485",
@@ -428,7 +426,7 @@
       "fliff": "419764_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-TTU-CIN-M",
       "hardrock": "8632146112666534303",
-      "kalshi": "KXNCAAF1H-26OCT23TTUCIN",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT24TTUCIN",
       "ladbrokes": "06590fc1-6658-420a-ad2e-396a567de5e5",
       "novig": "01a142e4-240a-7910-af28-0ada2ad9d4b0",
       "onexbet": "762932200",
@@ -523,7 +521,7 @@
      "away": "San Diego",
      "external": {
       "fanduel": "36208865",
-      "kalshi": "KXNCAAF1H-26OCT24USDDAY",
+      "kalshi": "KXNCAAFTOTAL-26OCT24USDDAY",
       "novig": "01a14577-5919-7011-b0e0-b3a85b5b3f7f",
       "onexbet": "763706345",
       "paddypower": "36208865",
@@ -587,7 +585,7 @@
       "fliff": "419829_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-RIC-FAU-M",
       "hardrock": "4082595695348023687",
-      "kalshi": "KXNCAAF1H-26OCT23RICEFAU",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT24RICEFAU",
       "ladbrokes": "bb956278-59ab-43c4-ba6a-48b783e0c2a5",
       "novig": "01a14577-5a6d-76c3-8e64-250053e86e1f",
       "onexbet": "762932198",
@@ -676,7 +674,7 @@
       "fliff": "fobj__conflict_event__419698",
       "gemini": "NCAAF-2610242000-IND-MIC-T",
       "hardrock": "2353213438437753223",
-      "kalshi": "KXNCAAF1H-26OCT24INDMICH",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT24INDMICH",
       "ladbrokes": "8533c88a-4817-4b55-8d12-9ebdce3fb1d6",
       "novig": "01a14577-573c-7c63-a178-c2cee0bd8fe8",
       "onexbet": "762818645",
@@ -841,7 +839,7 @@
       "fliff": "fobj__conflict_event__391741",
       "gemini": "NFL-2610251330-PIT-NO-T",
       "hardrock": "3910323733327380887",
-      "kalshi": "KXNFLRECYDS-26OCT25PITNO-NOCOLAVE12-110",
+      "kalshi": "KXNFLTD-26OCT25PITNO-PITGBERNARD17-3",
       "ladbrokes": "d8aae200-aa0c-4de2-843f-902d91183141",
       "novig": "01a136e2-e717-7c30-807e-7952b04dee72",
       "paddypower": "35605985",
@@ -859,8 +857,7 @@
       "stake": "7096f4d2-a169-4fab-b58a-5b2bc5cb5bc8",
       "thescorebet": "StandardEvent:2a3d42b4-265b-4e64-9add-e7b57e49f3c3",
       "underdog": "underdog_178618",
-      "underdog_multipliers": "underdog_178618",
-      "underdog_predictions": "underdog_178618"
+      "underdog_multipliers": "underdog_178618"
      },
      "home": "New Orleans Saints",
      "sample": {
@@ -956,8 +953,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -974,7 +969,7 @@
     {
      "away": "San Francisco 49ers",
      "external": {
-      "bet365": "202868662",
+      "bet365": "202868614",
       "betmgm": "6:43671",
       "betonline": "491153656",
       "betparx": "1028823696",
@@ -1006,8 +1001,7 @@
       "stake": "510393ff-d8e6-4a62-a245-1c1172f0e440",
       "thescorebet": "StandardEvent:fa2f1c92-ea4d-4227-9ed9-ac5fd8ab4e25",
       "underdog": "underdog_179018",
-      "underdog_multipliers": "underdog_179018",
-      "underdog_predictions": "underdog_179018"
+      "underdog_multipliers": "underdog_179018"
      },
      "home": "Atlanta Falcons",
      "sample": {
@@ -1103,8 +1097,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -1121,7 +1113,7 @@
     {
      "away": "Cincinnati Bengals",
      "external": {
-      "bet365": "202868662",
+      "bet365": "202868623",
       "betmgm": "6:43675",
       "betonline": "491153660",
       "betparx": "1028823698",
@@ -1152,8 +1144,7 @@
       "stake": "9a37c9d7-b6f7-44ae-a3ad-5fe287430e84",
       "thescorebet": "StandardEvent:949c49e1-c5a9-4426-8c96-065e0676fa3b",
       "underdog": "underdog_179015",
-      "underdog_multipliers": "underdog_179015",
-      "underdog_predictions": "underdog_179015"
+      "underdog_multipliers": "underdog_179015"
      },
      "home": "Baltimore Ravens",
      "sample": {
@@ -1248,8 +1239,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -1298,8 +1287,7 @@
       "stake": "167527db-8b7e-4499-b2db-86faa0f4a118",
       "thescorebet": "StandardEvent:81119f68-2e92-4353-be3b-0601ba3bc303",
       "underdog": "underdog_179016",
-      "underdog_multipliers": "underdog_179016",
-      "underdog_predictions": "underdog_179016"
+      "underdog_multipliers": "underdog_179016"
      },
      "home": "Tennessee Titans",
      "sample": {
@@ -1390,8 +1378,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -1423,7 +1409,7 @@
       "fliff": "fobj__conflict_event__407878",
       "gemini": "NFL-2610251700-TB-CAR-T",
       "hardrock": "8831632226136490404",
-      "kalshi": "KXNFL2HSPREAD-26OCT25TBCAR",
+      "kalshi": "KXNFL1H-26OCT25TBCAR",
       "ladbrokes": "867215bb-4f9d-48e8-b67f-43a5b58f92f0",
       "novig": "01a136e2-ea35-7911-9fe2-43f84a337c27",
       "paddypower": "36188995",
@@ -1440,8 +1426,7 @@
       "stake": "8691f843-9a10-4f50-b194-a2ff241aef02",
       "thescorebet": "StandardEvent:fd76320b-886d-4060-859d-b51de1769e4c",
       "underdog": "underdog_179017",
-      "underdog_multipliers": "underdog_179017",
-      "underdog_predictions": "underdog_179017"
+      "underdog_multipliers": "underdog_179017"
      },
      "home": "Carolina Panthers",
      "sample": {
@@ -1535,8 +1520,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -1584,8 +1567,7 @@
       "stake": "0e351e22-0de2-464e-a7ba-2c8ef13b9469",
       "thescorebet": "StandardEvent:7f6a29c1-4659-40bc-84e3-f18cedda6cc0",
       "underdog": "underdog_179013",
-      "underdog_multipliers": "underdog_179013",
-      "underdog_predictions": "underdog_179013"
+      "underdog_multipliers": "underdog_179013"
      },
      "home": "Minnesota Vikings",
      "sample": {
@@ -1679,8 +1661,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -1729,8 +1709,7 @@
       "stake": "a54b3daa-45d8-4dab-9ee6-988e1c428d2f",
       "thescorebet": "StandardEvent:6f6a9be7-5ebc-4af6-a8ab-612f908d005d",
       "underdog": "underdog_179014",
-      "underdog_multipliers": "underdog_179014",
-      "underdog_predictions": "underdog_179014"
+      "underdog_multipliers": "underdog_179014"
      },
      "home": "New York Jets",
      "sample": {
@@ -1821,8 +1800,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -1871,8 +1848,7 @@
       "stake": "549228e3-bf08-451c-87de-c2a9bb1de6c0",
       "thescorebet": "StandardEvent:529ee6fb-e2ee-4984-ad20-4487a1c6f222",
       "underdog": "underdog_179019",
-      "underdog_multipliers": "underdog_179019",
-      "underdog_predictions": "underdog_179019"
+      "underdog_multipliers": "underdog_179019"
      },
      "home": "Houston Texans",
      "sample": {
@@ -1971,8 +1947,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -2021,8 +1995,7 @@
       "stake": "00322416-51f7-4591-b138-15a248d3490b",
       "thescorebet": "StandardEvent:397ec829-a8bb-4ca0-83fb-8144cb797ddb",
       "underdog": "underdog_179020",
-      "underdog_multipliers": "underdog_179020",
-      "underdog_predictions": "underdog_179020"
+      "underdog_multipliers": "underdog_179020"
      },
      "home": "Arizona Cardinals",
      "sample": {
@@ -2111,8 +2084,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -2143,7 +2114,7 @@
       "fliff": "fobj__conflict_event__407880",
       "gemini": "NFL-2610252025-GB-DET-S",
       "hardrock": "7899387103270797721",
-      "kalshi": "KXNFLTD-26OCT25GBDET-DETSVAKI33-2",
+      "kalshi": "KXNFL1HSPREAD-26OCT25GBDET",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "novig": "01a136e2-eecd-78b0-ad17-c6ca310ae109",
       "paddypower": "36189005",
@@ -2160,8 +2131,7 @@
       "stake": "59c3991a-d7f8-4666-bf03-eb5dd11dc83f",
       "thescorebet": "StandardEvent:8d9df12b-7015-43f2-951e-06ef3fa5708c",
       "underdog": "underdog_179022",
-      "underdog_multipliers": "underdog_179022",
-      "underdog_predictions": "underdog_179022"
+      "underdog_multipliers": "underdog_179022"
      },
      "home": "Detroit Lions",
      "sample": {
@@ -2258,8 +2228,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -2291,7 +2259,7 @@
       "fliff": "fobj__conflict_event__407881",
       "gemini": "NFL-2610252025-LAR-LV-T",
       "hardrock": "1958013294862270870",
-      "kalshi": "KXNFL2QTOTAL-26OCT25LARLV",
+      "kalshi": "KXNFL1H-26OCT25LARLV",
       "ladbrokes": "9e70c69e-0cb8-4a79-b602-8859ec8f54be",
       "novig": "01a136e2-ee10-7373-841a-15273c9c9ea9",
       "paddypower": "36189003",
@@ -2308,8 +2276,7 @@
       "stake": "4e91ed4c-ee1f-44f0-9334-990141bd9b37",
       "thescorebet": "StandardEvent:3258f2bb-4e0f-4ea6-92ac-ad4b84dea8e1",
       "underdog": "underdog_179021",
-      "underdog_multipliers": "underdog_179021",
-      "underdog_predictions": "underdog_179021"
+      "underdog_multipliers": "underdog_179021"
      },
      "home": "Las Vegas Raiders",
      "sample": {
@@ -2403,8 +2370,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -2452,8 +2417,7 @@
       "stake": "f1cc441b-459c-432d-a086-f05919d26673",
       "thescorebet": "StandardEvent:4a5ca5df-9448-4ccb-9b62-5232f538c49f",
       "underdog": "underdog_179023",
-      "underdog_multipliers": "underdog_179023",
-      "underdog_predictions": "underdog_179023"
+      "underdog_multipliers": "underdog_179023"
      },
      "home": "Seattle Seahawks",
      "sample": {
@@ -2548,8 +2512,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
