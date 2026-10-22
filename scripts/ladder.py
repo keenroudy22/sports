@@ -1,5 +1,8 @@
 """The Kook'n 80/20 Climb: a $50-to-$1,000 bankroll ladder, one rung at a time. Stdlib only.
 
+Current policy (2026-10-21): two to three supported alternate-line legs, preferably two, with combined
+ticket odds -200 through -150. Main-line and single-leg examples below describe earlier policies only.
+
 The owner's call (2026-09-26): "50 -> 1000 on 1-2 leg safe bets", with alternate lines. On October 10 the owner
 set the rung band to -300 through -200 and asked the automatic builder to consider one or two exact main
 moneylines as well as safer player alternates. Every leg still needs model agreement, fresh two-sided pricing and
@@ -60,7 +63,8 @@ MODEL_LIFT_CAP = 0.06               # an alternate-line model cannot claim more 
 MIN_GAP = 0.04                      # safety comes from the price; our number still has to agree
 MAX_GAP = 0.18                      # and no further: a book that far off an easy line is a data or role problem, not a gift
 MAIN_RATIO = (0.6, 1.6)             # the book's main line against our projection: outside this, the market is another one
-TARGET = (-220, -130)               # realistic v3 rung band (owner, 2026-10-11)
+TARGET = (-200, -150)               # combined ticket, not each leg (owner, 2026-10-21)
+LEGACY_TARGET = (-220, -130)        # explicit historical replays only
 MANUAL_RAW_CHANCE = 0.72             # exact game alternates: the unshrunk model must still agree comfortably
 MONEYLINE_MIN_CHANCE = 0.70         # strong-favorite floor; the exact two-sided market still anchors the check
 MONEYLINE_MIN_GAP = 0.03            # our win estimate must clear the book's fair chance by three points
@@ -73,8 +77,30 @@ STAKE = parlay.STAKE                # the ticket's size in the desk's own terms;
 SOURCE = 'https://sharpapi.io/'
 SHADOW_NAME = 'ladder-shadow-2026.jsonl'
 SELECTIVE_FROM = date(2026, 10, 21)
+ALT_SHAPE_FROM = date(2026, 10, 21)
+MIN_LEGS = 2
 MAX_LEGS = 3
 MAX_WEEKLY_STEPS = 3
+
+
+def shape_policy(now=None):
+    """Current admission shape; explicit historical replays retain their old envelope."""
+    current = eastern_date(now or datetime.now(timezone.utc)) >= ALT_SHAPE_FROM
+    return (MIN_LEGS if current else 1, TARGET if current else LEGACY_TARGET, current)
+
+
+def shape_refusal(ticket, now=None):
+    minimum, target, alternates = shape_policy(now)
+    legs = ticket.get('legs')
+    words = 'two to three alternate' if alternates else 'one to three'
+    if not isinstance(legs, list) or not minimum <= len(legs) <= MAX_LEGS or any(not isinstance(l, dict) for l in legs):
+        return f'Climb ticket needs {words} valid legs'
+    if alternates and any(l.get('alternate') is not True for l in legs):
+        return 'Climb needs actual alternate lines, not a main line relabeled as an alternate'
+    price = ticket.get('odds')
+    if not isinstance(price, (int, float)) or isinstance(price, bool) or not math.isfinite(price) or not target[0] <= price <= target[1]:
+        return f'Climb combined ticket must be priced {target[0]:+d} to {target[1]:+d}'
+    return None
 
 
 def weekly_status(first, now, exclude=None):
@@ -120,8 +146,9 @@ def support_refusal(ticket, ctx):
     def number(value):
         return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
     legs = ticket.get('legs')
-    if not isinstance(legs, list) or not 1 <= len(legs) <= MAX_LEGS or any(not isinstance(leg, dict) for leg in legs):
-        return 'Climb ticket needs one to three valid legs'
+    refusal = shape_refusal(ticket, getattr(ctx, 'now', None))
+    if refusal:
+        return refusal
     product, dec = 1.0, 1.0
     for leg in legs:
         price, raw, chance = leg.get('odds'), leg.get('rawChance'), leg.get('chance')
@@ -146,7 +173,7 @@ def support_refusal(ticket, ctx):
         product *= chance
         dec *= parlay.decimal(price)
     odds = ticket.get('odds')
-    if not number(odds) or not TARGET[0] <= odds <= TARGET[1] or abs(parlay.american(dec)-odds)>1:
+    if not number(odds) or abs(parlay.american(dec)-odds)>1:
         return 'Climb ticket price must match its captured same-book legs and target band'
     if product <= pricing.break_even(odds):
         return 'Climb ticket does not beat its price after conservative joint support'
@@ -541,25 +568,20 @@ def strict_legs(legs, policy, now, league):
     return [leg for leg in legs if not direction.flagged(policy, direction.leg_segment(leg, league), now)]
 
 
-def pairs(legs):
+def pairs(legs, now=None):
     """Every eligible rung: (book, leg, leg, decimal, price) for two legs from different games at one book whose
     price multiplies inside TARGET."""
-    for book in sorted({leg['book'] for leg in legs}):
-        mine = [l for l in legs if l['book'] == book]
-        for a, b in combinations(mine, 2):
-            if a['gameId'] == b['gameId']:
-                continue
-            dec = parlay.decimal(a['odds']) * parlay.decimal(b['odds'])
-            price = parlay.american(dec)
-            if TARGET[0] <= price <= TARGET[1]:
-                yield book, a, b, dec, price
+    for book, chosen, dec, price in tickets(legs, now):
+        if len(chosen) == 2:
+            yield book, chosen[0], chosen[1], dec, price
 
 
-def tickets(legs):
-    """One to three supported legs, one book, one leg per game, inside TARGET."""
+def tickets(legs, now=None):
+    """Two to three actual alternates, one book, one leg per game, at the combined target."""
+    minimum, target, alternates = shape_policy(now)
     for book in sorted({leg['book'] for leg in legs}):
-        mine = [leg for leg in legs if leg['book'] == book]
-        for count in range(1, MAX_LEGS+1):
+        mine = [leg for leg in legs if leg['book'] == book and (not alternates or leg.get('alternate') is True)]
+        for count in range(minimum, MAX_LEGS+1):
             for chosen in combinations(mine, count):
                 if len({leg['gameId'] for leg in chosen}) != count:
                     continue
@@ -567,16 +589,17 @@ def tickets(legs):
                 for leg in chosen:
                     dec *= parlay.decimal(leg['odds'])
                 price = parlay.american(dec)
-                if TARGET[0] <= price <= TARGET[1]:
+                if target[0] <= price <= target[1]:
                     yield book, chosen, dec, price
 
 
-def near_misses(legs, limit=3):
+def near_misses(legs, limit=3, now=None):
     """Closest positive-edge tickets outside the rung band, for private/run diagnostics only."""
     rows = []
+    minimum, target, alternates = shape_policy(now)
     for book in sorted({leg['book'] for leg in legs}):
-        mine = [leg for leg in legs if leg['book'] == book]
-        shapes = [(leg,) for leg in mine]
+        mine = [leg for leg in legs if leg['book'] == book and (not alternates or leg.get('alternate') is True)]
+        shapes = [(leg,) for leg in mine] if minimum == 1 else []
         shapes += [(a, b) for a, b in combinations(mine, 2) if a['gameId'] != b['gameId']]
         shapes += [chosen for chosen in combinations(mine, 3) if len({leg['gameId'] for leg in chosen}) == 3]
         for chosen in shapes:
@@ -587,9 +610,9 @@ def near_misses(legs, limit=3):
                 chance *= leg['chance']
             price = parlay.american(dec)
             edge = chance - pricing.break_even(price)
-            if edge <= 0 or TARGET[0] <= price <= TARGET[1]:
+            if edge <= 0 or target[0] <= price <= target[1]:
                 continue
-            distance = TARGET[0] - price if price < TARGET[0] else price - TARGET[1]
+            distance = target[0] - price if price < target[0] else price - target[1]
             rows.append((distance, -edge, -chance, book, price, round(chance, 4), chosen))
     out = []
     for _, neg_edge, _, book, price, chance, chosen in sorted(rows, key=lambda row: row[:3])[:limit]:
@@ -604,8 +627,8 @@ def near_miss(legs):
     return rows[0] if rows else None
 
 
-def build(legs):
-    """The highest conservative joint chance among supported one-to-three-leg tickets.
+def build(legs, now=None):
+    """The highest conservative joint chance among supported alternate tickets.
 
     Rank by conservative joint chance, then fewer legs and price edge. A positive joint
     edge is still required; neither a larger raw model gap nor more legs is a safety claim.
@@ -613,7 +636,7 @@ def build(legs):
     if not legs:
         return None, 'zero supported legs cleared the role, price and proven-segment gates'
     best = None
-    for book, chosen, dec, price in tickets(legs):
+    for book, chosen, dec, price in tickets(legs, now):
         chance = 1.0
         for leg in chosen:
             chance *= leg['chance']
@@ -629,11 +652,13 @@ def build(legs):
                           'quotedAt': min(l['observedAt'] for l in selected),
                           'firstKickoff': min(l['kickoff'] for l in selected), 'chance': chance})
     if not best:
-        near = near_misses(legs)
+        near = near_misses(legs, now=now)
         detail = ('; near misses ' + ' | '.join(
             f"{row['book']} {row['odds']:+d} ({', '.join(row['legs'])}), "
             f"{100 * row['edge']:.1f} points above its price" for row in near)) if near else ''
-        return None, f'no book has one to three supported legs that pay {TARGET[0]:+d} to {TARGET[1]:+d}{detail}'
+        minimum, target, alternates = shape_policy(now)
+        words = 'two to three supported alternate legs' if alternates else 'one to three supported legs'
+        return None, f'no book has {words} that pay {target[0]:+d} to {target[1]:+d}{detail}'
     return best[1], None
 
 
@@ -691,8 +716,9 @@ def manual_candidate(ctx, games, now, spec):
     blocked = weekly_refusal(ctx, now)
     if blocked:
         return None, blocked
-    if not isinstance(spec, dict) or not isinstance(spec.get('legs'), list) or not 1 <= len(spec['legs']) <= MAX_LEGS:
-        return None, 'a manual rung needs one to three quoted legs'
+    minimum, target, alternates = shape_policy(now)
+    if not isinstance(spec, dict) or not isinstance(spec.get('legs'), list) or not minimum <= len(spec['legs']) <= MAX_LEGS:
+        return None, 'a manual rung needs ' + ('two to three' if alternates else 'one to three') + ' quoted legs'
     book = build_site.BOOKS.get(spec.get('book'), spec.get('book'))
     if book not in SLUGS:
         return None, 'the manual rung needs one supported book'
@@ -763,8 +789,8 @@ def manual_candidate(ctx, games, now, spec):
     for leg in legs:
         dec *= parlay.decimal(leg['odds'])
     price = parlay.american(dec)
-    if not TARGET[0] <= price <= TARGET[1]:
-        return None, f'the quoted ticket is {price:+d}; the climb targets {TARGET[0]:+d} to {TARGET[1]:+d}'
+    if not target[0] <= price <= target[1]:
+        return None, f'the quoted ticket is {price:+d}; the climb targets {target[0]:+d} to {target[1]:+d}'
     chance = 1.0
     for leg in legs:
         chance *= leg['chance']
@@ -812,7 +838,7 @@ def candidate(ctx, games, now, exclude=()):
                          for leg in legs_for_game(game, ctx.prop_odds.get(game['id']), ctx, now, seen, proven=True)]
             if strict:
                 legs = strict_legs(legs, policy, now, league)
-            ticket, reason = build(gates.without_straight_players(legs, ctx))
+            ticket, reason = build(gates.without_straight_players(legs, ctx), now)
             label = gates.when(day_pool[0]['kickoff']).astimezone(gates.EASTERN).strftime('%b %-d game day')
             if not ticket:
                 reasons.append(f'{league} {label}: {reason}' + ('; the stricter Climb pool is on' if strict else ''))

@@ -404,7 +404,8 @@ class ClimbTests(unittest.TestCase):
         self.assertIsNone(reason, 'nothing is paused or raised: the stricter pool still builds the same rung')
         self.assertEqual((pick['odds'], [leg['id'] for leg in pick['legs']]),
                          (baseline['odds'], [leg['id'] for leg in baseline['legs']]))
-        self.assertTrue(ladder.TARGET[0] <= pick['odds'] <= ladder.TARGET[1])
+        _, target, _ = ladder.shape_policy(SUNDAY)
+        self.assertTrue(target[0] <= pick['odds'] <= target[1])
         self.assertTrue(all(leg['chance'] >= ladder.MIN_CHANCE for leg in pick['legs']))
         held = {'direction pause': {'direction': dict(copy.deepcopy(strict), segments={'NFL/prop:recYds': {
                     'paused': True, 'pauseSince': '2026-09-20T00:00:00Z'}})},
@@ -431,7 +432,7 @@ class ClimbTests(unittest.TestCase):
 
     def test_the_stricter_pool_never_changes_the_ladder_rules_it_reads(self):
         self.assertEqual(direction.CLIMB_MARKETS, ladder.MARKETS)
-        self.assertEqual((ladder.MIN_CHANCE, ladder.TARGET), (0.83, (-220, -130)))
+        self.assertEqual((ladder.MIN_CHANCE, ladder.TARGET), (0.83, (-200, -150)))
         legs = [{'id': 'a', 'athleteId': '1', 'market': 'recYds'}, {'id': 'b', 'athleteId': '2', 'market': 'rushYds'}]
         policy = {'direction': {'segments': {'NFL/prop:recYds': {'raise': 2.0}}}}
         self.assertEqual([leg['id'] for leg in ladder.strict_legs(legs, policy, NOW, 'NFL')], ['b'])

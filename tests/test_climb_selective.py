@@ -20,8 +20,9 @@ THU = datetime(2026, 10, 22, 10, 45, tzinfo=timezone.utc)
 
 
 def leg(n, price=-600, chance=.90, book='FanDuel'):
-    return dict(id=f'l{n}', title=f'Team {n} moneyline', gameId=f'g{n}', book=book,
-                odds=price, chance=chance, rawChance=chance, fairChance=chance-.05, marketType='moneyline',
+    return dict(id=f'l{n}', title=f'Team {n} +10.5', gameId=f'g{n}', book=book,
+                odds=price, chance=chance, rawChance=chance, fairChance=chance-.05, marketType='spread',
+                alternate=True,
                 kickoff='2026-10-22T23:00Z', observedAt='2026-10-22T10:40Z')
 
 
@@ -34,14 +35,56 @@ def past(count):
 class SelectiveClimbTests(unittest.TestCase):
     def test_three_supported_legs_make_ticket_without_cross_book_or_same_game(self):
         legs = [leg(i) for i in range(3)]
-        ticket, reason = ladder.build(legs)
+        ticket, reason = ladder.build(legs, THU)
         self.assertIsNone(reason)
         self.assertEqual(len(ticket['legs']), 3)
         self.assertEqual(ticket['odds'], parlay.american((1+100/600)**3))
-        self.assertIsNone(ladder.build(legs[:2])[0])
-        self.assertIsNone(ladder.build([legs[0], legs[0], legs[1]])[0])
-        self.assertIsNone(ladder.build([*legs[:2], dict(legs[2], book='DraftKings')])[0])
-        self.assertTrue(all(len(chosen)<=3 for _,chosen,_,_ in ladder.tickets([leg(i) for i in range(5)])))
+        self.assertIsNone(ladder.build(legs[:2], THU)[0])
+        self.assertIsNone(ladder.build([legs[0], legs[0], legs[1]], THU)[0])
+        self.assertIsNone(ladder.build([*legs[:2], dict(legs[2], book='DraftKings')], THU)[0])
+        self.assertTrue(all(2<=len(chosen)<=3 for _,chosen,_,_ in ladder.tickets([leg(i) for i in range(5)], THU)))
+
+    def test_new_shape_refuses_single_main_lines_and_outside_combined_band(self):
+        world=SimpleNamespace(now=THU,first={},games={f'g{i}':dict(league='NFL') for i in range(3)})
+        pair=[leg(0,-425,.86),leg(1,-425,.86)]
+        ticket,reason=ladder.build(pair,THU)
+        self.assertIsNone(reason)
+        self.assertEqual(len(ticket['legs']),2)
+        self.assertTrue(-200<=ticket['odds']<=-150)
+        pick=dict(ticket,id='new',parlayType='ladder')
+        self.assertTrue(gates.ladder_selective(pick,world).ok)
+        for bad in (dict(pick,legs=pair[:1]),dict(pick,odds=-201),dict(pick,odds=-149),
+                    dict(pick,legs=[dict(pair[0],alternate=False),pair[1]])):
+            self.assertIsNotNone(ladder.shape_refusal(bad,THU))
+            self.assertFalse(gates.ladder_selective(bad,world).ok)
+            self.assertIsNotNone(run.private_release_refusal(dict(pick=bad,league='NFL'),world,THU))
+        self.assertIsNone(ladder.build([leg(0,-175,.80)],THU)[0])
+        self.assertIsNone(ladder.build([dict(l,alternate=False) for l in pair],THU)[0])
+
+    def test_exact_combined_boundaries_and_two_leg_preference(self):
+        pair=[leg(0,-425,.86),leg(1,-425,.86)]
+        for price in (-200,-150):
+            self.assertIsNone(ladder.shape_refusal(dict(legs=pair,odds=price),THU))
+        self.assertGreater(ladder.ticket_rank(.75,.03,pair,-175),
+                           ladder.ticket_rank(.75,.03,[*pair,leg(2)],-175))
+
+    def test_current_manual_path_accepts_supported_two_alts_not_a_single_or_old_price(self):
+        games={k:game(k,'Away','Home','2026-10-22T23:00Z',league='CFB') for k in ('g1','g2')}
+        world=ctx();world.now=THU;world.games=games;world.snapshot=lambda gid:snapshot('g1')
+        world.policy['ladderSegments']['CFB/spread/FanDuel']['hitRate']=.92
+        spec=dict(book='FanDuel',quotedAt='2026-10-22T10:40Z',source='https://sportsbook.fanduel.com/',
+                  legs=[dict(gameId=k,marketType='spread',direction='home',line=-1.5,odds=-425) for k in games])
+        with patch.object(ladder.pricing,'price',return_value=dict(rawChance=.90,breakEven=425/525,projection=-8)):
+            pick,reason=ladder.manual_candidate(world,games,THU,spec)
+            self.assertIsNone(reason)
+            self.assertTrue(-200<=pick['odds']<=-150)
+            self.assertIsNone(ladder.support_refusal(pick,world))
+            self.assertTrue(all(l['alternate'] for l in pick['legs']))
+            single=copy.deepcopy(spec);single['legs']=single['legs'][:1]
+            self.assertIn('two to three',ladder.manual_candidate(world,games,THU,single)[1])
+            old=copy.deepcopy(spec)
+            for l in old['legs']:l['odds']=-450
+            self.assertIn('targets -200 to -150',ladder.manual_candidate(world,games,THU,old)[1])
 
     def test_joint_chance_first_fewer_legs_for_tie_and_positive_price_edge_required(self):
         self.assertGreater(ladder.ticket_rank(.75,.03,[leg(0)],-175),
@@ -78,7 +121,9 @@ class SelectiveClimbTests(unittest.TestCase):
         games={f'g{i}':game(f'g{i}','Away','Home','2026-10-22T23:00Z') for i in range(3)}
         pick=dict(id='new', parlayType='ladder', legs=[leg(i) for i in range(3)], gameIds=list(games),book='FanDuel',
                   odds=parlay.american((1+100/600)**3),quotedAt='2026-10-22T10:40Z',expiresAt='2026-10-22T12:00Z')
-        world=SimpleNamespace(now=THU,first=past(2),games=games)
+        world=SimpleNamespace(now=THU,first=past(2),games=games,
+                              policy={'ladderSegments': {'NFL/spread/FanDuel': {
+                                  'open':True,'graded':180,'hitRate':.92}}})
         self.assertTrue(gates.ladder_selective(pick,world).ok)
         self.assertIsNone(run.private_release_refusal(dict(pick=pick,league='NFL'),world,THU))
         world.first=past(3)
@@ -91,8 +136,9 @@ class SelectiveClimbTests(unittest.TestCase):
         self.assertIn('NBA',gates.ladder_selective(pick,world).reason)
 
     def test_discretionary_last_rung_pattern_cannot_bypass_proven_support(self):
-        world=SimpleNamespace(now=THU,policy={},games={'g0':dict(league='CFB')})
-        ticket=dict(odds=-210,legs=[dict(leg(0,-210,.702),marketType='spread',fairChance=None)])
+        world=SimpleNamespace(now=THU,policy={},games={'g0':dict(league='CFB'),'g1':dict(league='CFB')})
+        ticket=dict(odds=parlay.american((1+100/425)**2),
+                    legs=[dict(leg(i,-425,.84),marketType='spread',fairChance=None) for i in range(2)])
         self.assertIn('cannot bypass',ladder.support_refusal(ticket,world))
         self.assertFalse(gates.ladder_supported(ticket,world).ok)
         self.assertIn(gates.ladder_supported,gates.RULES['ladder'])

@@ -97,7 +97,8 @@ test('the real app shared interface renders every lazy view with fixture data', 
   assert.match(climbHtml, /next pick is not selected/);
   assert.doesNotMatch(climbHtml, /Plan · typical −160/);
   assert.match(climbHtml, /standalone Thursday and Monday/);
-  assert.match(climbHtml, /1-3 legs at one book/);
+  assert.match(climbHtml, /2-3 alternate-line legs at one book; two preferred/);
+  assert.match(climbHtml, /Target combined odds: -200 to -150/);
   assert.match(climbHtml, /This week: 1 of 3 steps used across all restarts/);
   assert.match(climbHtml, /NBA is research-only for the Climb/);
   routeFixture.climbRoute.weekly.weekStart = '2026-10-12';

@@ -406,7 +406,7 @@
         <img class="climb-route-art" src="${esc(climbRoute.image)}?v=${esc(String((today || {}).generatedAt || '').replace(/\W/g, ''))}" alt="Current 80/20 Climb: posted steps and actual balances" loading="lazy">
         <h2>Climb #${esc(climbRoute.run)} · the route</h2>
         <p class="small muted">Posted steps only. The next pick is not selected: NFL and college sides or player props are eligible, including standalone Thursday and Monday games. No future date, price or payout is promised.</p>
-        <p class="small">1-3 legs at one book. Target: 1-3 qualifying steps per week, never a quota. Fewer legs preferred. NBA is research-only for the Climb until its ticket checks are ready.</p>
+        <p class="small">2-3 alternate-line legs at one book; two preferred. Target combined odds: -200 to -150. Target: 1-3 qualifying steps per week, never a quota. NBA is research-only for the Climb until its ticket checks are ready.</p>
         ${climbRoute.weekly && climbRoute.weekly.weekStart === (() => { const day = new Date(etDay() + 'T12:00:00Z'); day.setUTCDate(day.getUTCDate() - (day.getUTCDay() + 6) % 7); return day.toISOString().slice(0, 10); })() ? `<p class="small muted">This week: ${esc(climbRoute.weekly.posted)} of ${esc(climbRoute.weekly.maximum)} steps used across all restarts. Up to ${esc(climbRoute.weekly.remaining)} more, only if they qualify. Monday-Sunday, Eastern time.</p>` : ''}
         <div class="climb-route-steps">${(climbRoute.rows || []).filter(row => row.kind === 'cashed' || row.kind === 'open').map(row => {
           const real = row.kind === 'cashed' || row.kind === 'open';
@@ -539,7 +539,7 @@
       <dt>Closing line</dt><dd>The final number before kickoff. Beating it more often than not is the best early sign of real skill.</dd>
       <dt>Old price</dt><dd>The price we posted is older than our freshness limit. The play still counts at the posted price; check your book for today's.</dd>
       <dt>Fun ticket</dt><dd>A longshot parlay at a smaller stake, tracked separately from the record.</dd>
-      <dt>The 80/20 Climb</dt><dd>A $50 to $1,000 challenge using one to three qualifying legs at one book, one leg per game. Target one to three steps per Eastern Monday-Sunday week, with a maximum of three across restarts and only one step open. No step is forced. A winning return is split 20% banked and 80% carried to the next step. A losing step loses only its active stake; money already banked stays banked, and a new $50 climb starts. A new step is never guaranteed.</dd>
+      <dt>The 80/20 Climb</dt><dd>A $50 to $1,000 challenge using two to three qualifying alternate-line legs at one book, one leg per game. Two legs preferred, with combined odds around -200 to -150. Target one to three steps per Eastern Monday-Sunday week, with a maximum of three across restarts and only one step open. No step is forced or guaranteed safe. A winning return is split 20% banked and 80% carried to the next step. A losing step loses only its active stake; money already banked stays banked, and a new $50 climb starts. A new step is never guaranteed.</dd>
       <dt>Trial</dt><dd>A new sport collecting evidence on paper. Not a best bet until the trial earns it.</dd></dl>`)}
     <p class="small">Times are Eastern.</p>
     <p class="small">Analytics: Cloudflare's cookie-free counter. Nothing personal is collected.</p>

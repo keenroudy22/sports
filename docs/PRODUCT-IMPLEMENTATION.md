@@ -1,5 +1,31 @@
 # October 5 product implementation tracker
 
+## October21 evening — real alternate-shape implementation and Thursday review
+
+Dev now enforces2–3 actual alternate legs at combined-200..-150 in construction,
+manual admission, support and private send checks. Conservative joint chance still
+ranks first; fewer legs wins equal support. Exact older-date replays retain their
+old1–3/-220..-130 envelope without rewriting any published ticket. Public current
+Climb copy agrees; app195 and lazy fingerprint updated. Focused31ladder/15selective
+tests pass, including real release refusal for single/main/out-of-band tickets,
+manual supported pair, odds boundaries and two-leg tie preference. Full-suite first
+run caught two obsolete target assertions in historical direction tests; fixed
+their explicit historical/current expectations without changing the strict-pool rule.
+Normal/clean/rehearsal/hosted/live release still pending.
+
+Thursday evening packet refreshed from actual00:13Z(20:13Eastern) stores:868
+consistent alternate rungs across three CFB games and TNF;0 role-eligible/supported.
+Wisloski over4.5 recyd-420FD and Burnside over9.5-900FD are explicitly held raw
+research options, not picks: current-role inconsistency (and Burnside sanity gap).
+New policy excludes the old JMU main-moneyline watch. No ticket admitted/scheduled.
+Also verified non-moneyline validation is not ready: ladderSegments empty, private
+shadow407rows/83tickets/0grades, no grading/promotion writer found. Existing
+A-20261010-3 remains owner of the missing evidence path; do not confuse source-test
+success with a proven alternate market or manufacture150grades. No thresholds lowered.
+Current final official Patriots report is now available, including OL/role changes;
+recheck prospective players against the forecast. Existing evening and morning
+checks plus dated overnight handoff own refresh/release or exact holds.
+
 ## October21 — owner refines the next Climb's ticket shape
 
 Owner wants conservative alternate lines, preferably two legs and at most three,

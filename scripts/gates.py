@@ -1336,8 +1336,9 @@ def ladder_selective(candidate, ctx):
     if eastern_date(ctx.now) < ladder.SELECTIVE_FROM:
         return Decision(True, 'ladder_selective', 'before selective-policy cutover')
     legs = candidate.get('legs') or []
-    if not isinstance(legs, list) or not 1 <= len(legs) <= ladder.MAX_LEGS:
-        return Decision(False, 'ladder_selective', 'a Climb ticket needs one to three legs')
+    refusal = ladder.shape_refusal(candidate, ctx.now)
+    if refusal:
+        return Decision(False, 'ladder_selective', refusal)
     if any(not isinstance(leg, dict) for leg in legs):
         return Decision(False, 'ladder_selective', 'invalid Climb leg')
     game_ids = [leg.get('gameId') for leg in legs]

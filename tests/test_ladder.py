@@ -202,25 +202,25 @@ class BuildTests(unittest.TestCase):
         leg = {'id': 'thin', 'title': 'Thin leg', 'gameId': 'g1', 'book': 'DraftKings',
                'odds': -175, 'chance': .60, 'kickoff': GAMES['g1']['kickoff'],
                'observedAt': '2026-09-27T12:10:00Z'}
-        ticket, reason = ladder.build([leg])
+        ticket, reason = ladder.build([leg], NOW)
         self.assertIsNone(ticket)
         self.assertIn('supported legs', reason)
 
     def test_two_games_one_book_make_a_favored_ticket(self):
         legs = [leg for gid in ('g1', 'g2') for leg in ladder.legs_for_game(GAMES[gid], record(gid), ctx(), NOW)]
-        ticket, reason = ladder.build(legs)
+        ticket, reason = ladder.build(legs, NOW)
         self.assertIsNone(reason)
         self.assertEqual((ticket['book'], ticket['odds'], sorted(ticket['gameIds'])), ('DraftKings', -202, ['g1', 'g2']))
-        self.assertTrue(ladder.TARGET[0] <= ticket['odds'] <= ladder.TARGET[1])
-        none, why = ladder.build(legs[:1])
+        self.assertTrue(ladder.LEGACY_TARGET[0] <= ticket['odds'] <= ladder.LEGACY_TARGET[1])
+        none, why = ladder.build(legs[:1], NOW)
         self.assertIsNone(none)
         self.assertIn('one to three supported legs', why)
 
-    def test_one_supported_leg_in_the_target_band_can_be_the_rung(self):
+    def test_historical_replay_retains_old_single_leg_shape(self):
         leg = {'id': 'one', 'title': 'Patriots moneyline', 'gameId': 'g1', 'book': 'DraftKings',
                'odds': -175, 'chance': .68, 'kickoff': GAMES['g1']['kickoff'],
                'observedAt': '2026-09-27T12:10:00Z'}
-        ticket, reason = ladder.build([leg])
+        ticket, reason = ladder.build([leg], NOW)
         self.assertIsNone(reason)
         self.assertEqual((ticket['odds'], len(ticket['legs']), ticket['gameIds']), (-175, 1, ['g1']))
 
@@ -293,7 +293,7 @@ class BuildTests(unittest.TestCase):
         windows = ladder.kickoff_windows(games.values())
         self.assertEqual([[g['id'] for g in window] for window in windows],
                          [['early-one', 'early-two', 'night']])
-        self.assertIsNotNone(ladder.build(legs)[0], 'the game-day pool may pair eligible early and night legs')
+        self.assertIsNotNone(ladder.build(legs, NOW)[0], 'the game-day pool may pair eligible early and night legs')
 
     def test_an_815_pm_monday_game_stays_on_mondays_eastern_climb_pool(self):
         monday_morning = datetime(2026, 10, 12, 10, 45, tzinfo=timezone.utc)  # 6:45 AM ET
@@ -354,9 +354,10 @@ class BuildTests(unittest.TestCase):
              'chance': chance, 'kickoff': '2026-09-27T17:00Z', 'observedAt': '2026-09-27T12:10:00Z'}
             for i, (odds, chance) in enumerate(((-260, .76), (-250, .75), (-240, .74), (-230, .72)), 1)
         ]
-        misses = ladder.near_misses(legs)
+        misses = ladder.near_misses(legs, now=NOW)
         self.assertLessEqual(len(misses), 3)
-        self.assertTrue(all(row['odds'] < ladder.TARGET[0] or row['odds'] > ladder.TARGET[1] for row in misses))
+        self.assertTrue(misses)
+        self.assertTrue(all(row['odds'] < ladder.LEGACY_TARGET[0] or row['odds'] > ladder.LEGACY_TARGET[1] for row in misses))
 
     def test_college_legs_wait_for_college_calibration(self):
         college = {gid: dict(g, league='CFB') for gid, g in GAMES.items()}

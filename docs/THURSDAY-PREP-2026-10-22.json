@@ -2,6 +2,26 @@
   "targetDay": "2026-10-22",
   "preparedAt": "2026-10-21T17:26:13Z",
   "status": "private preparation; no admission or scheduled play",
+  "latestClimbReview": {
+    "checkedAt": "2026-10-22T00:13:09Z",
+    "targetEasternDay": "2026-10-22",
+    "policy": "Two to three actual alternate-line legs, two preferred, combined odds -200 to -150. Same book/league and distinct games; one open step, normal weekly cap and80/20 banking. No main-line/single-leg fallback under this revision.",
+    "state": "No supported alternate pair or triple; no Climb admitted, scheduled or posted.",
+    "captures": [
+      {"gameId": "CFB-401869845", "quotedAt": "2026-10-21T23:33:46Z", "consistentRungs": 412, "rawRoleEligible": 0, "supported": 0},
+      {"gameId": "CFB-401871056", "quotedAt": "2026-10-21T23:33:46Z", "consistentRungs": 281, "rawRoleEligible": 0, "supported": 0},
+      {"gameId": "CFB-401862807", "quotedAt": "2026-10-22T00:07:09Z", "consistentRungs": 113, "rawRoleEligible": 0, "supported": 0},
+      {"gameId": "NFL-401873010", "quotedAt": "2026-10-22T00:07:09Z", "consistentRungs": 62, "rawRoleEligible": 0, "supported": 0}
+    ],
+    "heldResearchOptions": [
+      {"title": "Braeden Wisloski over4.5 receiving yards", "book": "FanDuel", "odds": -420, "quotedAt": "2026-10-21T23:33:46Z", "hold": "Projected4.2 targets versus7.3 over last3 full games fails current-role consistency. Research only, not a supported Climb leg."},
+      {"title": "Stonka Burnside over9.5 receiving yards", "book": "FanDuel", "odds": -900, "quotedAt": "2026-10-22T00:07:09Z", "hold": "Projected4.7 targets versus7.0 over last3 full games; raw gap also fails sanity band. Not a supported leg; do not add for payout."}
+    ],
+    "validationGap": {"openNonMoneylineSegments": 0, "shadowRows": 407, "withTicket": 83, "graded": 0, "finding": "Policy has no validated alternate segments; no grading/promotion writer found for ladderSegments. A-20261010-3 owns the missing technical evidence path. Do not invent150 grades or loosen the existing support requirement."},
+    "supersededWatches": "The original JMU moneyline observation below remains historical context, not an eligible alternate under the latest shape. NBA remains research-only for Climb. A standalone TNF game cannot supply two distinct-game legs under the existing ticket rules.",
+    "next": "Existing21:00/23:30 evening captures and00:45 review refresh actual alt quotes, current roles and validation status. Existing06:45/08:30 game-day checks release the first fully supported ticket through website, Plays & Results and Buffer/X, without another owner prompt. Preserve exact holds if none qualifies. Do not freeze a stale quoted ticket overnight.",
+    "news": {"source": "https://www.patriots.com/news/week-7-injury-report-patriots-at-bears", "publishedAtLocal": "2026-10-21T16:00:00-04:00", "review": "Final report now lists Ben Brown and Alijah Vera-Tucker out, Morgan Moses questionable; A.J.Brown full/no game status. Bears Kyle Monangai out and T.J.Edwards doubtful. Reconcile any chosen role with the current forecast before release."}
+  },
   "refreshPlan": {
     "tonight": "Existing17:30/21:00/23:30 Eastern runs refresh stored prices and news. Existing00:45 overnight agent reads this packet and product queue; verify final NFL/NBA reports and revise the shortlist from current evidence.",
     "morning": "Existing06:45 then08:30 Eastern runs evaluate fresh game-day main lines, props and supported Climb alternatives. Release qualifying plays through normal website/art, Discord-first and Buffer paths. Do not ask the owner again.",
@@ -54,6 +74,6 @@
     "playerProps": {"freshNextDayRows": 0, "checkedAt": "2026-10-21T17:26:13Z", "action": "Review existing evening capture for fresh Cleveland/Philadelphia/Denver/OKC main props. Check starters, current news and estimated minutes before choosing favorites. No invented prop/alternate price; do not freeze morning research art on tonight's quote."},
     "injuryReport": {"source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-10-21_01_00PM.pdf", "state": "All four Thursday teams NOT YET SUBMITTED at1PM Eastern. Check submitted evening reports and fresh morning availability before trial admission."}
   },
-  "climbState": {"run": 4, "nextStep": 1, "stakeDollars": 50, "bankedCurrentRun": 0, "openTicket": null, "weeklyUsed": 1, "weeklyRemaining": 2, "candidateTicket": null, "policy": "One to three legs, same book and league, distinct games, conservative supported ticket, no forced step. Current JMU watch is not a posted route or approved wager."},
+  "climbState": {"run": 4, "nextStep": 1, "stakeDollars": 50, "bankedCurrentRun": 0, "openTicket": null, "weeklyUsed": 1, "weeklyRemaining": 2, "candidateTicket": null, "policy": "Two to three alternate-line legs, two preferred, combined-200 to-150, same book/league and distinct games. No forced step. Latest evening review supersedes the earlier JMU moneyline watch."},
   "deliveryDrafts": {"football": "CONDITIONAL ONLY: Patriots MONEYLINE (+130,DraftKings). Add the final verified supporting reason; reprice and pass every gate before using. No queued post exists.", "climb": "UNSELECTED: $50 → $1,000 · Step1. Fill only actual admitted legs/book/price/stake/return/bank/ride after qualification. Never use assumed prices or claim safety.", "nba": "CONDITIONAL TRIAL: Cleveland+2.5 -110DK or CLE/PHIunder234.5 -108DK. Choose at most the one current best qualifying Trial market after availability and quote checks."}
 }
