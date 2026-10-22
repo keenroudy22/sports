@@ -1229,11 +1229,11 @@
     {
       "id": "A-20261009-1",
       "title": "League-safe injuries with listed starter and depth roles",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release/test owner-requested starter, depth and unconfirmed injury groups on game/news pages. Verify all-position ESPN roles and live mobile display; preserve league isolation and no guessed absent-player roles.",
-      "doneWhen": "Live college game payloads never inherit NFL injuries or depth charts from overlapping ESPN IDs; NFL context remains intact; full release gates, hosted success and live 375/1440 evidence are recorded.",
-      "evidence": "7ba788fb; hosted38054258809 success. Full release gates passed:1278Python/232Node, clean export, build/feed, budget/audits/guard/assets, isolated0830 rehearsal. Live12routes375/1440 clean; Harbor24px has18px gap above teams; SJSU no NFL context; NFL depth intact. Full receipt:docs/PRODUCT-IMPLEMENTATION.md; owner layout-fix-2026-10-10/release.json."
+      "next": "Observe regular NFL injury/depth refreshes; keep listed starters separate from depth and unconfirmed roles, preserving league isolation. Missing/old/failed chart evidence never implies backup or a confirmed tonight starter.",
+      "doneWhen": "NFL game/news injury lists agree on fresh exact-ID roles; unknowns stay unknown; CFB isolation and skill-only next-up behavior persist; full gates, hosted success and live phone/desktop checks pass.",
+      "evidence": "Prior7ba788fb/38054258809 isolation receipts retained in implementation doc. Owner role groups source631a7efa included6ca43de3/39778434918SUCCESS;1597Python(2skip)/270Node normal+clean,build/audits/guard/rehearsal clear.28fresh team charts. Live game375/1440 no overflow/errors; news Patriots7listed starters/4depth agree. Screenshots /tmp/kookn-injury-live-phone.png and desktop/news variants. No betting/model/record change."
     },
     {
       "id": "A-20261010-1",

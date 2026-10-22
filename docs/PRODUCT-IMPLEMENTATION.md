@@ -1,5 +1,27 @@
 # October 5 product implementation tracker
 
+## October22 owner — listed injury roles verified live
+
+Tested source631a7efa (feature940e4553) is included in deployed6ca43de3,
+hosted39778434918SUCCESS. Earlier631a publish was superseded by the ordinary
+delivery-receipt commit, not a code/test failure. Normal and clean-export gates
+passed1597Python(2skips)/270Node;443pages/78games, record112/NBA0, publication
+593files/149137749bytes, assets/budgets clear except existing soft warnings.
+Offline0645 rehearsalyxmfonmu passed with zero outside writes/private reads.
+Live NFL-401873010 at375/1440 has no overflow/loading/error state or console
+errors; screenshots /tmp/kookn-injury-live-phone.png and
+/tmp/kookn-injury-live-desktop.png. Research/news Patriots panel agrees:
+7listed starters and4depth players (counts include questionable, not7ruled out).
+Checked /tmp/kookn-injury-live-news-desktop.png. Phone local research panel also
+375wide, no overflow. Temporary viewport reset. A-20261009-1 shipped.
+Fresh all-position chart capture succeeded for28upcoming NFL teams. CFB coverage,
+model probabilities, already-posted picks, social categories and records unchanged.
+Role labels are source-listed order, not a coach-confirmed tonight lineup; absent,
+stale, failed or future roles stay unknown. Injury facts can inform independently
+verified research, never an automatic bet or invented numerical adjustment.
+Daily mirror repair and its final provenance notes remain preserved separately;
+restore after this metadata receipt without claiming that repair deployed.
+
 ## October22 owner — starter/depth injury groups in progress
 
 A-20261009-1 reopened for the owner's latest request. Game and research injury
