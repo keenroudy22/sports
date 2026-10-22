@@ -1618,6 +1618,17 @@ class BufferPostsTests(unittest.TestCase):
 
 
 class DiscordMirrorTests(unittest.TestCase):
+    def test_expired_result_remains_a_health_miss_without_endless_recovery(self):
+        import desk_health,x_post
+        now=datetime(2026,10,22,17,tzinfo=timezone.utc)
+        data={'picks':[{'id':'old','posted':True,'result':'win','settledAt':'2026-10-21T03:03:48Z'}]}
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);path=root/'site/data/app/record.json';path.parent.mkdir(parents=True)
+            path.write_text(json.dumps(data))
+            with mock.patch.object(x_post,'load_log',return_value={'posts':[]}):
+                self.assertEqual(run.result_recovery_needed(now,root,root/'private'),0)
+            self.assertEqual(desk_health.result_timeliness(data,[],now)['missing'],1)
+
     def test_missing_result_recovery_is_bounded_and_ignores_a_future_queue(self):
         now = datetime(2026, 10, 18, 13, 15, tzinfo=timezone.utc)
         with tempfile.TemporaryDirectory() as folder:

@@ -1,5 +1,48 @@
 # October 5 product implementation tracker
 
+## October22 full-scope follow-through and one Kook'n identity
+
+Owner is Kook'n. My Card is a category, never a different person. Braun over10.5
++132 with50%boost/base-114 actually sent X2113317464985497735 at17:12:02Z,
+then Plays&Results17:22:19Z. JMU and Maye also sent; preserve those originals.
+Three still-private parlays are being revised to MY CARD without separating-brand
+footer. New source936c6fc5 passed normal/clean1628Python(2skip)/273Node,
+606guardedfiles/161556981bytes,113record/NBA0 and offline1145/v9_nmyac ok,
+zero outside/private. Provider-confirmed final art and hosted proof still required.
+Earlier batch-auth fix hosted39820256635SUCCESS; historical-single classification
+source477d5d73 also installed and preserves old personal-dart types.
+
+Full operating review found real gaps rather than assuming loaded jobs mean success:
+- Two multi-book calls per league consumed all8 weekday credits by03:37ET.
+  Morning passes then had stale spreads. Prospective repair preserves credits
+  until06:30ET, except a game within4hours; unchanged8/6 daily and monthly reserve.
+- A38-hour-old win was outside the3-hour individual-result writer window but
+  kept waking the full recovery run every15minutes. Repair aligns recovery with
+  existing3h/24h eligibility; health retains the missed delivery as a miss.
+- Today's three CFB games were all checked: zero raw-role prop alternatives,
+  zero proven props; JMU ML-470 was the sole supported moneyline but is not an
+  alternate and does not satisfy the requested ticket shape. No Climb admitted.
+- Alternate-spread capture/validation is incomplete. The manual path requires
+  a proven spread segment, but the validator only produces player-prop segments.
+  All256 current prop segments are closed. P48 now owns this concrete gap, not
+  a repeated generic no-ticket answer. No rule is loosened or price invented.
+- Current stored slate:5CFB gamesFridayOct23,44SaturdayOct24,12NFLSundayOct25.
+  Friday is a planning target, not a confirmed step. Review tonight and at the
+  existing morning checks; communicate selection only when supported.
+- NBA forward outcomes:1053 priced forecasts across88distinct player-games,
+  504hits/549misses. Correlated market/book rows are not independent validation
+  and this mixed count is not profitability. Current-role research continues.
+- Oct15–22 measured reach:47posts/10949views;8ticketposts6517views,
+  9BestBetposts1626,16research1991. Keep useful ticket formats; no claim of
+  measured follower conversion or proof that a layout alone caused the reach.
+- Health reports0officialunscheduled, but one historical missing result and
+  another32.7minute result delay. Soft payload warnings remain tracked; jobs
+  loaded with nonzero historical exits are not labeled all healthy.
+
+Existing finite queue retained. No paid feed, extra automation, official tier,
+published stake/result or public original changed. Source fixes still require
+full release and hosted/live evidence; morning timing needs real next-day proof.
+
 ## October22 personal card release and final batch-audit correction
 
 Source092d5335 installed under both locks after normal/clean1626Python

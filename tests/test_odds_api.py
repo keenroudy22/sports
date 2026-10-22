@@ -92,6 +92,18 @@ class ParseTests(unittest.TestCase):
 
 
 class BudgetTests(unittest.TestCase):
+    def test_overnight_cannot_consume_next_morning_allowance(self):
+        games=[game('c','CFB','2026-10-23T23:00:00Z','Home','Away'),
+               game('n','NFL','2026-10-25T17:00:00Z','Home','Away')]
+        for hour in (4,7,10):
+            at=datetime(2026,10,23,hour,tzinfo=timezone.utc)
+            self.assertIn('morning',odds_api.due('CFB',games,{},at))
+        self.assertIsNone(odds_api.due('CFB',games,{},datetime(2026,10,23,10,45,tzinfo=timezone.utc)))
+        early=[game('c','CFB','2026-10-23T09:00:00Z','Home','Away')]
+        self.assertIsNone(odds_api.due('CFB',early,{},datetime(2026,10,23,7,tzinfo=timezone.utc)))
+        self.assertEqual(odds_api.DAILY_CREDITS,8)
+        self.assertEqual(odds_api.WEEKEND_CREDITS,6)
+
     def test_month_projection_uses_remaining_daily_caps_and_protected_reserve(self):
         now = datetime(2026, 10, 7, 17, 0, tzinfo=timezone.utc)
         status = {'usage': {'at': now.isoformat(), 'used': 196, 'remaining': 304},

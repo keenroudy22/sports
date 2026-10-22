@@ -2984,8 +2984,18 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
     import desk_health
     import x_post
     log_book = x_post.load_log()
+    record = load_json(Path(root) / 'site/data/app/record.json', {})
+    # The health report retains historical delivery misses. Recovery must only
+    # wake for results that receipts.cashed can still publish, otherwise one
+    # expired result rebuilds the whole desk every fifteen minutes forever.
+    import receipts
+    if isinstance(record, dict) and isinstance(record.get('picks'), list):
+        record = dict(record, picks=[p for p in record['picks']
+            if isinstance(p, dict) and desk_health.moment(p.get('settledAt')) and
+            now - (receipts.LADDER_CASHED_FRESH if p.get('ladder') or p.get('kind') == 'ladder'
+                   else receipts.CASHED_FRESH) < desk_health.moment(p['settledAt']) <= now])
     result = desk_health.result_timeliness(
-        load_json(Path(root) / 'site/data/app/record.json', {}),
+        record,
         log_book.get('posts', []) if isinstance(log_book, dict) else [], now)
     if result.get('state') != 'available' or not result.get('missing'):
         return 0

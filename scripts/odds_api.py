@@ -196,6 +196,13 @@ def due(league, games, status, now):
     early = [g for g in upcoming if features.when(g['kickoff']) <= now + EARLY.get(league, WINDOW)]
     if not early:
         return 'no game inside two days' if league not in EARLY else 'no game inside a week'
+    local = now.astimezone(ZoneInfo('America/New_York'))
+    # Overnight preparation already has the previous evening's captures. Do not
+    # spend a new day's entire shared allowance before the morning selection.
+    # An unusually early kickoff retains a real pregame refresh.
+    if local.date().isoformat() >= '2026-10-23' and local.hour * 60 + local.minute < 390 \
+            and not any(features.when(g['kickoff']) <= now + timedelta(hours=4) for g in early):
+        return 'preserving game-day credits for the morning price check'
     usage = quota.current_month_usage(status.get('usage'), now)
     if usage.get('remaining') is not None and usage['remaining'] - COST < RESERVE:
         return f"only {usage['remaining']} credits left; keeping the reserve"
