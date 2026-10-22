@@ -205,6 +205,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Parlay caption layout (owner, October22):** X and Discord ticket captions
+  place each leg on its own line, with a blank line after the heading. Build
+  owner-ticket text from structured legs, not a comma-separated operator summary.
+  Preserve thresholds, periods, market names and boosted/base-price disclosures.
+  Never merge or silently omit legs to fit X; an oversized complete caption waits
+  for a reviewed shorter version. Preserve sent originals and record categories.
+
 - **One Kook'n identity (owner, October22):** the owner is Kook'n. Their supplied
   tickets use first-person `My card`, never `Separate from Kook'n`. Best Bet,
   research and fun-ticket labels distinguish categories, not people. Keep actual

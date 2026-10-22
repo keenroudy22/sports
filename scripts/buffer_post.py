@@ -39,6 +39,7 @@ import post_windows
 import receipts
 import x_post
 import social_style
+import parlay_caption
 from social_copy import without_playbook
 from sports_refresh import eastern_date
 
@@ -636,6 +637,16 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         if kind != 'play':
             text = without_playbook(text)
+        item = (items or {}).get(guid, {})
+        if kind == 'community' and guid.startswith('community:personal-ticket:') and len(item.get('legs') or []) > 1:
+            try:
+                text = parlay_caption.owner_ticket(item)
+            except (KeyError, TypeError, ValueError):
+                log(f'buffer: {guid} held: incomplete structured parlay caption')
+                continue
+            if x_post.tweet_length(text) > x_post.LIMIT:
+                log(f'buffer: {guid} held: all parlay legs do not fit X; never omit or merge legs')
+                continue
         problems = x_post.x_style(text)
         if social_style.active(now):
             problems += social_style.issues(text)

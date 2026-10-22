@@ -422,7 +422,8 @@ def safer_text(pick, legs, league):
     for leg in pick.get('legs') or []:
         facts.extend(str(value).strip() for value in leg.get('reasons') or [] if str(value).strip())
     fact = _short_reason(facts[0]) if facts else ''
-    return '\n'.join(part for part in (head, *legs, fact, '@Playbook #' + str(league)) if part)
+    import parlay_caption
+    return parlay_caption.layout(head, legs, '\n'.join(part for part in (fact, '@Playbook #' + str(league)) if part))
 
 
 def _caption_day(pick, game):
@@ -586,7 +587,8 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
             pass
     if kind == 'ladder':
         head, money, bank = ladder_text(pick)
-        top = '\n'.join(x for x in (head, money, bank, *legs) if x)
+        import parlay_caption
+        top = parlay_caption.layout('\n'.join(x for x in (head, money, bank) if x), legs)
         options = ([top, f'{LADDER_ASK}\n{tail}'], [top, tail])
     elif kind == 'parlay':
         if pick.get('parlayType') == 'comfort' or pick.get('lane') == 'safer_combo':
@@ -599,7 +601,8 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
             return '\n\n'.join(options[-1])
         odds = int(pick['odds'])
         payout = 10 * (1 + odds / 100) if odds > 0 else 10 * (1 + 100 / abs(odds))
-        top = '\n'.join([parlay_head(pick, league), *legs, f"$10 → {pick_card.dollars(payout)}"])
+        import parlay_caption
+        top = parlay_caption.layout(parlay_head(pick, league), legs, f"$10 → {pick_card.dollars(payout)}")
         options = ([top, f'{ASK}\n{tail}'], [top, tail])
     else:
         prefix = _play_prefix(pick, game, featured)
