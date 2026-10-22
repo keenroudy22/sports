@@ -1,5 +1,28 @@
 # October 5 product implementation tracker
 
+### October22 follow-through receipt, 17:45Z
+
+Morning-credit and expired-result recovery fixes installed from632d3510 after
+1630Python(two skips)/273Node in normal and clean runs;606guarded files,
+161557382bytes; offline1145/f4xukxvi ok with zero outside/private access.
+Production read confirms expired-result recovery now zero, while the historical
+miss remains visible. Containing hosted39824273909 was superseded, not successful;
+39825115222 is pending behind39823235934. KA-R1 retains hosted/live verification.
+
+Buffer confirmed all three private parlay edits with MY CARD art pinned to936c6fc5;
+scheduled17:42:59/17:52:59/18:02:59Z, not yet credited as delivered here.
+O-20261021-NBALOTTO must also reconcile the three community.json website card
+references, which still point at original personal-card art; preserve sent originals.
+P59 must inspect Today Climb number2 versus full-ledger run4 before declaring a
+record error or changing history. These are concrete remaining checks, not complete.
+
+FridayOct23 Climb target announcement sent Plays&Results17:37Z and scheduled X
+18:22:59Z, Buffer6ada49bbca69a1b7d3cd0f26. Planning only, no picked ticket or
+record entry. Existing daily07:45 and overnight00:45 automations updated in place
+to own KA-R1 verification then P48 alternate-side coverage and fresh preparation;
+same three automations, same schedules/budgets. Actual next-morning timing remains
+O-20261021-MORNING observing. Nothing further needed from owner for these repairs.
+
 ## October22 full-scope follow-through and one Kook'n identity
 
 Owner is Kook'n. My Card is a category, never a different person. Braun over10.5
