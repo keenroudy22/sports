@@ -1,21 +1,21 @@
 {
- "at": "2026-10-22T04:57:51Z",
+ "at": "2026-10-22T05:07:16Z",
  "confirmed": {
-  "CFB-401858271": "2026-10-22T04:57:51Z",
-  "CFB-401858272": "2026-10-22T04:57:51Z",
-  "CFB-401861965": "2026-10-22T04:57:51Z",
-  "CFB-401862807": "2026-10-22T04:57:51Z",
-  "CFB-401862808": "2026-10-22T04:57:51Z",
-  "CFB-401864525": "2026-10-22T04:41:15Z",
-  "CFB-401869845": "2026-10-22T04:57:51Z",
-  "CFB-401871056": "2026-10-22T04:57:51Z",
-  "NFL-401873010": "2026-10-22T02:50:07Z"
+  "CFB-401858271": "2026-10-22T05:07:16Z",
+  "CFB-401858272": "2026-10-22T05:07:16Z",
+  "CFB-401861965": "2026-10-22T05:07:16Z",
+  "CFB-401862807": "2026-10-22T05:07:16Z",
+  "CFB-401862808": "2026-10-22T05:07:16Z",
+  "CFB-401864525": "2026-10-22T05:07:16Z",
+  "CFB-401869845": "2026-10-22T05:07:16Z",
+  "CFB-401871056": "2026-10-22T05:07:16Z",
+  "NFL-401873010": "2026-10-22T05:07:16Z"
  },
  "leagues": {
   "CFB": {
    "books": {
     "draftkings": 1073,
-    "fanduel": 1042
+    "fanduel": 1149
    },
    "eventsListed": 119,
    "eventsMatched": 8,
@@ -29,15 +29,15 @@
     "player_passing_+_rushing_yards": 63,
     "player_passing_attempts": 6,
     "player_passing_completions": 13,
-    "player_passing_touchdowns": 79,
-    "player_passing_yards": 285,
+    "player_passing_touchdowns": 86,
+    "player_passing_yards": 301,
     "player_receiving_yards": 955,
     "player_receptions": 29,
     "player_rushing_attempts": 6,
-    "player_rushing_yards": 634
+    "player_rushing_yards": 718
    },
-   "requestsLeft": 0,
-   "rows": 2115,
+   "requestsLeft": 44,
+   "rows": 2222,
    "slateGames": [
     "James Madison Dukes at App State Mountaineers 2026-10-22T23:00Z",
     "Liberty Flames at Kennesaw State Owls 2026-10-22T23:00Z",
@@ -50,7 +50,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "North Carolina Central",
+     "away": "North Carolina Central Eagles",
      "external": {
       "betsson": "f-UTCRwXPxA0unO7vOhiwi1Q",
       "draftkings": "34869473",
@@ -66,10 +66,10 @@
       "smarkets": "45393665",
       "sportzino": "sz-18097097"
      },
-     "home": "Delaware State",
+     "home": "Delaware State Hornets",
      "sample": {
-      "away_team": "North Carolina Central",
-      "home_team": "Delaware State",
+      "away_team": "North Carolina Central Eagles",
+      "home_team": "Delaware State Hornets",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -122,7 +122,6 @@
      "away": "LSU Tigers",
      "external": {
       "bet365": "203038612",
-      "betfair": "20261024BE718900",
       "betmgm": "6:47497",
       "betonline": "491158055",
       "betparx": "1027553188",
@@ -273,7 +272,6 @@
      "away": "California Golden Bears",
      "external": {
       "bet365": "203051125",
-      "betfair": "20261023ED82F416",
       "betmgm": "6:47541",
       "betonline": "491158040",
       "betparx": "1027553201",
@@ -417,7 +415,6 @@
      "away": "Texas Tech Red Raiders",
      "external": {
       "bet365": "203038599",
-      "betfair": "202610249833047D",
       "betmgm": "6:47555",
       "betonline": "491157923",
       "betparx": "1027553189",
@@ -580,7 +577,6 @@
     {
      "away": "Rice",
      "external": {
-      "betfair": "20261024EEBDA65E",
       "betmgm": "6:47539",
       "betonline": "491157931",
       "betparx": "1027553198",
@@ -668,8 +664,6 @@
      "away": "Indiana Hoosiers",
      "external": {
       "bet365": "203038610",
-      "betfair": "20261024C2103DC0",
-      "betmgm": "6:47459",
       "betonline": "491157926",
       "betparx": "1027553204",
       "betrivers": "1027553204",
@@ -819,13 +813,39 @@
    ]
   },
   "NFL": {
-   "books": {},
+   "books": {
+    "draftkings": 634,
+    "fanduel": 412
+   },
    "eventsListed": 29,
    "eventsMatched": 1,
    "games": 1,
-   "marketTypes": {},
-   "requestsLeft": -1,
-   "rows": 0,
+   "marketTypes": {
+    "player_assists": 12,
+    "player_extra_points_made": 4,
+    "player_fantasy_score": 16,
+    "player_field_goals_made": 4,
+    "player_interceptions": 4,
+    "player_kicking_points": 4,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 26,
+    "player_longest_rush": 10,
+    "player_passing_+_rushing_yards": 4,
+    "player_passing_attempts": 4,
+    "player_passing_completions": 4,
+    "player_passing_touchdowns": 14,
+    "player_passing_yards": 75,
+    "player_receiving_yards": 400,
+    "player_receptions": 209,
+    "player_rushing_+_receiving_yards": 16,
+    "player_rushing_attempts": 12,
+    "player_rushing_yards": 179,
+    "player_sacks": 21,
+    "player_tackles": 12,
+    "player_tackles_+_assists": 12
+   },
+   "requestsLeft": 37,
+   "rows": 1046,
    "slateGames": [
     "New England Patriots at Chicago Bears 2026-10-23T00:15Z"
    ],
@@ -834,7 +854,6 @@
      "away": "Pittsburgh Steelers",
      "external": {
       "bet365": "202868599",
-      "betfair": "20261025A949B13F",
       "betmgm": "6:43669",
       "betonline": "491153650",
       "betparx": "1028823697",
@@ -981,7 +1000,6 @@
      "away": "San Francisco 49ers",
      "external": {
       "bet365": "202868662",
-      "betfair": "202610257E5F9A3C",
       "betmgm": "6:43671",
       "betonline": "491153656",
       "betparx": "1028823696",
@@ -1128,7 +1146,6 @@
      "away": "Cincinnati Bengals",
      "external": {
       "bet365": "202868662",
-      "betfair": "20261025BEF389F8",
       "betmgm": "6:43675",
       "betonline": "491153660",
       "betparx": "1028823698",
@@ -1274,7 +1291,6 @@
      "away": "Cleveland Browns",
      "external": {
       "bet365": "202868608",
-      "betfair": "2026102515D90B76",
       "betmgm": "6:43672",
       "betonline": "491153657",
       "betparx": "1028823700",
@@ -1416,7 +1432,6 @@
      "away": "Tampa Bay Buccaneers",
      "external": {
       "bet365": "202868602",
-      "betfair": "2026102570457145",
       "betmgm": "6:43674",
       "betonline": "491153655",
       "betparx": "1028823703",
@@ -1430,7 +1445,7 @@
       "fliff": "fobj__conflict_event__407878",
       "gemini": "NFL-2610251700-TB-CAR-T",
       "hardrock": "8831632226136490404",
-      "kalshi": "KXNFL2H-26OCT25TBCAR",
+      "kalshi": "KXNFL1H-26OCT25TBCAR",
       "ladbrokes": "867215bb-4f9d-48e8-b67f-43a5b58f92f0",
       "novig": "01a136e2-ea35-7911-9fe2-43f84a337c27",
       "paddypower": "36188995",
@@ -1560,7 +1575,6 @@
      "away": "Indianapolis Colts",
      "external": {
       "bet365": "202868620",
-      "betfair": "20261025096B3D6A",
       "betmgm": "6:43670",
       "betonline": "491153658",
       "betparx": "1028823709",
@@ -1574,7 +1588,7 @@
       "fliff": "fobj__conflict_event__408407",
       "gemini": "NFL-2610251700-IND-MIN-S",
       "hardrock": "3863950730914300297",
-      "kalshi": "KXNFL2H-26OCT25INDMIN",
+      "kalshi": "KXNFL1H-26OCT25INDMIN",
       "ladbrokes": "04d0c20e-dcc5-4f5e-8cb1-d59db206f7f4",
       "novig": "01a136e2-e7cb-7032-9e39-2298f48a892c",
       "paddypower": "36189002",
@@ -1704,7 +1718,6 @@
      "away": "Miami Dolphins",
      "external": {
       "bet365": "202868605",
-      "betfair": "202610253360B008",
       "betmgm": "6:43676",
       "betonline": "491153652",
       "betparx": "1028823699",
@@ -1847,7 +1860,6 @@
      "away": "New York Giants",
      "external": {
       "bet365": "202868611",
-      "betfair": "20261025FD8FC840",
       "betmgm": "6:43673",
       "betonline": "491153659",
       "betparx": "1028823706",
@@ -1861,7 +1873,7 @@
       "fliff": "fobj__conflict_event__407874",
       "gemini": "NFL-2610251700-NYG-HOU-PPTD",
       "hardrock": "4521687382742925721",
-      "kalshi": "KXNFLRSHYDS-26OCT25NYGHOU-HOUWMARKS4-110",
+      "kalshi": "KXNFLRSHYDS-26OCT25NYGHOU-HOUWMARKS4-90",
       "ladbrokes": "0410f659-3c98-4f9a-9aac-cf2495cadd5d",
       "novig": "01a136e2-ec23-7960-b23f-da745ab8e6d1",
       "paddypower": "36188999",
@@ -1996,7 +2008,6 @@
      "away": "Denver Broncos",
      "external": {
       "bet365": "202868626",
-      "betfair": "20261025E266E425",
       "betmgm": "6:43677",
       "betonline": "491153653",
       "betparx": "1028823701",
@@ -2136,7 +2147,6 @@
      "away": "Green Bay Packers",
      "external": {
       "bet365": "202868629",
-      "betfair": "202610257AEC5E93",
       "betmgm": "6:43679",
       "betonline": "491153651",
       "betparx": "1028823708",
@@ -2150,7 +2160,7 @@
       "fliff": "fobj__conflict_event__407880",
       "gemini": "NFL-2610252025-GB-DET-S",
       "hardrock": "7899387103270797721",
-      "kalshi": "KXNFL4QTOTAL-26OCT25GBDET",
+      "kalshi": "KXNFL1HTOTAL-26OCT25GBDET",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "novig": "01a136e2-eecd-78b0-ad17-c6ca310ae109",
       "paddypower": "36189005",
@@ -2283,7 +2293,6 @@
      "away": "Los Angeles Rams",
      "external": {
       "bet365": "202868632",
-      "betfair": "2026102556E2086A",
       "betmgm": "6:43678",
       "betonline": "491153654",
       "betparx": "1028823705",
@@ -2298,7 +2307,7 @@
       "fliff": "fobj__conflict_event__407881",
       "gemini": "NFL-2610252025-LAR-LV-T",
       "hardrock": "1958013294862270870",
-      "kalshi": "KXNFL2H-26OCT25LARLV",
+      "kalshi": "KXNFL1H-26OCT25LARLV",
       "ladbrokes": "9e70c69e-0cb8-4a79-b602-8859ec8f54be",
       "novig": "01a136e2-ee10-7373-841a-15273c9c9ea9",
       "paddypower": "36189003",
@@ -2428,7 +2437,6 @@
      "away": "Kansas City Chiefs",
      "external": {
       "bet365": "202868635",
-      "betfair": "20261026DD51BBCD",
       "betmgm": "6:43680",
       "betonline": "491153661",
       "betparx": "1028823702",
@@ -2442,7 +2450,7 @@
       "fliff": "407882_c_p_202_prematch",
       "gemini": "NFL-2610260020-KC-SEA-T",
       "hardrock": "3269686686333927830",
-      "kalshi": "KXNFL2H-26OCT25KCSEA",
+      "kalshi": "KXNFL1H-26OCT25KCSEA",
       "ladbrokes": "3f6d93bc-a0b1-4467-b356-5bc63a799cf9",
       "novig": "01a136e2-ef4c-7161-96b7-9bf8d0615c3e",
       "paddypower": "36189006",
