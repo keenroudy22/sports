@@ -287,7 +287,7 @@ def _market_drivers(kind, game, card, snapshot, team_logs, ratings, injuries, ro
 
     # 4. Roster: a quarterback role hold already computed for this game; NFL top-position players listed out.
     if any(r.get('roleHold') == 'qb' for r in rows if r.get('gameId') == card['id']):
-        add('Recent quarterback changes put receiving roles in this game under review.', -1, 2, [], 'qb_change')
+        add('Quarterback-role changes leave some receiving estimates unavailable.', -1, 2, [], 'qb_change')
     coverage = str(((snapshot or {}).get('inputs') or {}).get('injuryCoverage') or '')
     if game.get('league') == 'CFB' and 'not covered' in coverage.lower():
         add('College injury reports are not covered by this feed; recheck quarterbacks and starting roles before using the projection.',

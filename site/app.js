@@ -71,7 +71,7 @@
   /* One short line for the Today ticket. */
   const HELD_WORDS = /\bproject|\bchance\b|\bedge\b|\bmodel\b|\bfair\b|\d%|^Role: /i;
   const heldShort = hold => hold.kind === 'price' ? 'Price unavailable.' : 'Projection unavailable.';
-  const afterPostingWords = hold => hold.kind === 'qb' ? "His team's quarterback picture changed since I posted, so I'm checking his role."
+  const afterPostingWords = hold => hold.kind === 'qb' ? "His team's quarterback picture changed since I posted; no current projection is shown."
     : hold.kind === 'price' ? 'That price moved further than I like since I posted.'
       : 'His recent workload looks lighter than my number assumed since I posted.';
   const heldQuote = (pick, rows, now = Date.now()) => {
