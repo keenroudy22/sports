@@ -44,3 +44,19 @@ class CommunityRecordTests(unittest.TestCase):
     def test_incomplete_settlement_rejected(self):
         with self.assertRaises(ValueError):
             record.append({'id': 'x', 'result': 'win'})
+
+    def test_personal_straight_keeps_market_and_no_stake_is_inferred(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); (root / 'data').mkdir()
+            ticket = {'id': 'personal-side', 'title': 'James Madison -11.5', 'league': 'CFB',
+                      'kind': 'spreads', 'odds': -115, 'personalTicket': True,
+                      'kickoff': '2026-10-22T23:00:00Z', 'legs': ['James Madison -11.5']}
+            (root / 'data/community.json').write_text(json.dumps({'tickets': [ticket]}))
+            post = {'id': ticket['id'], 'sentAt': '2026-10-22T17:00:00Z', 'link': 'https://x.com/a/status/2'}
+            (root / 'data/x-posted.json').write_text(json.dumps({'posts': [post]}))
+            row = record.build(root)[0]
+            self.assertEqual(row['kind'], 'spreads')
+            self.assertEqual(row['lane'], 'personal')
+            self.assertIsNone(row['riskUnits'])
+            self.assertIsNone(row['units'])
+            self.assertNotIn('stakeDollars', row)

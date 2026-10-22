@@ -1,6 +1,58 @@
 {
  "tickets": [
   {
+   "id": "community:personal-ticket:2026-10-22-jmu-straight",
+   "league": "CFB", "kind": "spreads", "personalTicket": true,
+   "displayTitle": "My James Madison -11.5 · -115", "title": "James Madison -11.5 at FanDuel",
+   "odds": -115, "book": "FanDuel", "kickoff": "2026-10-22T23:00:00Z", "status": "active",
+   "card": "img/tickets/personal-jmu-straight-2026-10-22.png",
+   "legs": ["James Madison -11.5 spread"]
+  },
+  {
+   "id": "community:personal-ticket:2026-10-22-braun-straight",
+   "league": "NBA", "kind": "props", "personalTicket": true,
+   "displayTitle": "My Christian Braun over 10.5 points · +132 with 50% boost",
+   "title": "Christian Braun over 10.5 points at FanDuel · boosted",
+   "odds": 132, "baseOdds": -114, "priceBoosted": true, "book": "FanDuel",
+   "kickoff": "2026-10-23T01:40:00Z", "status": "active",
+   "card": "img/tickets/personal-braun-straight-2026-10-22.png",
+   "legs": ["Christian Braun over 10.5 points"]
+  },
+  {
+   "id": "community:personal-ticket:2026-10-22-maye-straight",
+   "league": "NFL", "kind": "props", "personalTicket": true,
+   "displayTitle": "My Drake Maye under 20.5 completions · -125",
+   "title": "Drake Maye under 20.5 completions at FanDuel",
+   "odds": -125, "book": "FanDuel", "kickoff": "2026-10-23T00:16:00Z", "status": "active",
+   "card": "img/tickets/personal-maye-straight-2026-10-22.png",
+   "legs": ["Drake Maye under 20.5 pass completions"]
+  },
+  {
+   "id": "community:personal-ticket:2026-10-22-cfb-four",
+   "league": "CFB", "kind": "parlays", "parlayType": "community", "personalTicket": true,
+   "displayTitle": "My 4-leg college parlay · +381", "title": "4-leg college personal parlay at FanDuel",
+   "odds": 381, "book": "FanDuel", "kickoff": "2026-10-22T23:00:00Z", "status": "active",
+   "card": "img/tickets/personal-cfb-four-2026-10-22.png",
+   "legs": ["Memphis -6.5 alternate spread", "Jaylin Carter 80+ rushing yards", "James Madison -6.5 alternate spread", "Liberty -5.5 alternate spread"]
+  },
+  {
+   "id": "community:personal-ticket:2026-10-22-tnf-ten",
+   "league": "NFL", "kind": "parlays", "parlayType": "community", "personalTicket": true,
+   "displayTitle": "My 10-leg TNF lotto · +2013 with 30% boost", "title": "10-leg TNF personal lotto at FanDuel · boosted",
+   "odds": 2013, "baseOdds": 1548, "priceBoosted": true, "book": "FanDuel",
+   "kickoff": "2026-10-23T00:16:00Z", "status": "active",
+   "card": "img/tickets/personal-tnf-ten-2026-10-22.png",
+   "legs": ["Rhamondre Stevenson 30+ rushing yards", "Rome Odunze 30+ receiving yards", "TreVeyon Henderson 15+ rushing yards", "Drake Maye 200+ passing yards", "Caleb Williams 225+ passing yards", "Luther Burden III 4+ receptions", "Rome Odunze 3+ receptions", "Hunter Henry 3+ receptions", "DeMario Douglas 3+ receptions", "Kalif Raymond 2+ receptions"]
+  },
+  {
+   "id": "community:personal-ticket:2026-10-22-tnf-seven",
+   "league": "NFL", "kind": "parlays", "parlayType": "community", "personalTicket": true,
+   "displayTitle": "My 7-leg TNF parlay · +902", "title": "7-leg TNF personal parlay at FanDuel",
+   "odds": 902, "book": "FanDuel", "kickoff": "2026-10-23T00:16:00Z", "status": "active",
+   "card": "img/tickets/personal-tnf-seven-2026-10-22.png",
+   "legs": ["D'Andre Swift 50+ rushing yards", "A.J. Brown 40+ receiving yards", "Colston Loveland 40+ receiving yards", "DeMario Douglas 25+ receiving yards", "Caleb Williams 200+ passing yards", "Chicago Bears moneyline", "Luther Burden III 40+ receiving yards"]
+  },
+  {
    "id": "community:personal-ticket:2026-10-22-tnf-q1",
    "league": "NFL", "kind": "parlays", "parlayType": "community",
    "displayTitle": "TNF first-quarter receiving fun ticket · +1399",

@@ -1,5 +1,34 @@
 # October 5 product implementation tracker
 
+## October22 owner personal card — privacy-safe pregame proof
+
+Owner supplied seven placed FanDuel tickets and authorized social publication
+with stakes and bet IDs hidden. The four-leg first-quarter ticket already has
+pregame X/Plays delivery; retain it once. Register six new personal tickets:
+JMU-11.5/-115, Braun over10.5/+132 (50%boost,base-114), Maye under20.5
+completions/-125, college four-leg+381, TNF ten-leg+2013 (30%boost,base+1548),
+and TNF seven-leg+902. The seven-leg is distinct from the already-posted five-leg.
+All lines/prices come from the supplied slips, not a claim of current availability.
+Six native Kitchen Ticket cards were visually checked. They omit stake, payout,
+cashout and bet IDs and explicitly identify personal bets; no Best Bet promotion.
+No monetary fields are added to the public personal registry. Actual pregame
+X delivery is still required before the existing personal record includes them;
+settlement remains pending until sourced results, including every loss.
+Preserve a personal straight's actual market category instead of calling all
+one-leg tickets props. Regression verifies spread type, personal lane and no
+inferred units. Full release, hosted images and social receipts pending.
+
+Prior task carry-forward: moneyline source c6fba3c1 is installed, with normal
+and clean1625Python/273Node checks and offline1145 rehearsal3favsnah passing;
+113 audited public rows, NBA0,597 guarded files. Backend repair hosted
+39812894607SUCCESS. Final UI hosted descendant still pending at this handoff.
+Patriots+130DK/1u actually delivered: Discord16:04:37Z, X2113303201222983823
+at16:15:21.408Z. Original report stamp15:57:19Z is not actual send time.
+First private X attempt was canceled by our new guard using the wrong image
+source; exact original archived art retry succeeded. Failure return shape and
+actual attachment checks are repaired; no public deletion or rewritten pick.
+Finish live phone/desktop verification and final queue receipts in this release.
+
 ## October22 live release diagnosis — persisted moneyline pair recovery
 
 The Patriots private withdrawal exposed a separate missing handoff, not proof
