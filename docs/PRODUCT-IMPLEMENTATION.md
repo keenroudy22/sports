@@ -1,5 +1,20 @@
 # October 5 product implementation tracker
 
+## October22 one-leg-per-line caption release
+
+Source46d369da installed as973eb1a9 after locked release. Shared parlay layout
+puts a blank line after the heading and every leg on its own line. Regular
+parlays, safer combos and Climbs use it; Buffer reconstructs owner ticket captions
+from structured legs before creating both X text and Discord mirror text.
+Boosted/base prices, periods and exact thresholds remain; oversized owner tickets
+are held rather than dropping legs or reverting to paragraphs. Sent posts stay
+unchanged. Six new regressions cover actual scheduled X/Discord equality,
+oversize refusal, boost/period preservation, valid layout and malformed legs.
+Three old exact-caption expectations were updated for the approved blank lines.
+Normal and clean-export1644Python(two skips)/274Node passed;606file publication
+guard and113pick record audit passed. Offline1330/80jvea51 passed. Production
+formatter output verified; hosted39835933258 pending at this receipt.
+
 ## October22 final public release verification
 
 Hosted39831068749 completed SUCCESS at18:36:37Z. Public app.js?v=199
