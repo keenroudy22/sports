@@ -1,5 +1,23 @@
 # October 5 product implementation tracker
 
+## October22 owner — TNF scope labels and one-matchup layout prepared
+
+Owner screenshot shows the Oct21 night-before sheet for Patriots/Bears labeled
+WEEK7NFLPROJECTIONS despite containing only TNF. Shared title/caption scope now
+says TNF (MNF for Monday), preserving week titles for non-primetime/full-slate
+grids. Legacy one-game card scales to fill the portrait and felt single-game card
+uses full width; multi-game grids/prices/ring qualification remain unchanged.
+feed now passes confirmed posted-card keys into sheet renderer; original sent
+art restores/persists instead of being silently regenerated under the new label.
+No deletion, duplicate repost, new slot, invented full-week coverage or price.
+Preview /tmp/kookn-tnf-projections-preview.png visually checked from current stored
+public data;14 sheet and23 felt tests pass, including TNF/MNF caption/title,
+mixed-date full-week title, both skins and frozen-art no-redraw regression.
+Full source release/hosted/live remains pending. O-20261014-1 retains first-natural
+primetime/weekend delivery observations; prior5-play honest-target evidence stays
+in the earlier receipts. Concurrent daily NBA repair is preserved separately in
+the named stash and will be restored immediately after this release.
+
 ## October21 night — validation and morning repairs verified shipped
 
 Hosted39707490860 SUCCESS onfa8731f9 includes tested source1c43a3e and the locked
