@@ -1,5 +1,24 @@
 # October 5 product implementation tracker
 
+## October22 owner — TNF scope/layout verified shipped
+
+Owner approved the native full-width preview: "This is so much better."
+Source d7453a6e14a9a22d535fa93b01524aebc34fe7e7 deployed successfully in hosted
+run39774714345. Normal and clean-export gates passed1595Python(2skips)/269Node;
+443pages/78games, record112/NBA0, publication593files/148539222bytes, assets and
+budgets passed (existing soft warnings only). Offline0645 rehearsal0fcfb337 passed
+with zero outside writes/private reads. Live Today loads without overflow or
+console errors at the observed1221px width; screenshot
+/tmp/kookn-tnf-scope-live-default.png. Requested viewport overrides did not change
+the observed browser width, so no new375/1440 live claim is made.
+Original public sheet SHA256 remains
+6099258f7aeb134ab4b64950b8e4d4a735764e35d457ae32b206105e0df98993 before/after
+deployment. New labels/layout apply prospectively, not a replacement of the
+already-sent tweet. No extra social post or record/category/cap/schedule change.
+O-20261014-1 remains observing for natural new primetime/weekend delivery and the
+honest five-straight target. Concurrent daily NBA mirror repair remains separate;
+restore exact stash1bf8f41129d34a7878b95d3bcff6d711a67f942d after these receipts.
+
 ## October22 owner — TNF scope labels and one-matchup layout prepared
 
 Owner screenshot shows the Oct21 night-before sheet for Patriots/Bears labeled
