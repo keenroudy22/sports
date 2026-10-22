@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T23:00:21Z",
+  "updatedAt": "2026-10-22T23:10:14Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-22T22:44Z",
+              "reportedAt": "2026-10-22T22:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1241,8 +1241,8 @@
               "id": "4426374",
               "name": "Tyrique Stevenson Sr.",
               "position": "CB",
-              "status": "Questionable",
-              "injury": "Hip",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-21T23:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426374/tyrique-stevenson-sr"
             },
@@ -4867,8 +4867,8 @@
               "id": "16771",
               "name": "Morgan Moses",
               "position": "OT",
-              "status": "Questionable",
-              "injury": "Foot",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-22T01:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-22T22:44Z",
+              "reportedAt": "2026-10-22T22:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "34",
-          "name": "David Montgomery",
-          "from": "Questionable",
-          "to": "Doubtful",
-          "observedAt": "2026-10-22T19:23:37Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery"
-        },
-        {
-          "teamId": "18",
-          "name": "CJ Donaldson",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T19:57:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5081999/cj-donaldson"
-        },
-        {
           "teamId": "23",
           "name": "Brandin Echols",
           "from": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-10-22T23:00:21Z",
           "source": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith"
+        },
+        {
+          "teamId": "3",
+          "name": "Tyrique Stevenson Sr.",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-22T23:10:14Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426374/tyrique-stevenson-sr"
+        },
+        {
+          "teamId": "17",
+          "name": "Morgan Moses",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-22T23:10:14Z",
+          "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-22T23:00:21Z",
-      "lastAttemptAt": "2026-10-22T23:00:21Z",
+      "checkedAt": "2026-10-22T23:10:14Z",
+      "lastAttemptAt": "2026-10-22T23:10:14Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-22T23:00:21Z",
-      "lastAttemptAt": "2026-10-22T23:00:21Z",
+      "checkedAt": "2026-10-22T23:10:14Z",
+      "lastAttemptAt": "2026-10-22T23:10:14Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
