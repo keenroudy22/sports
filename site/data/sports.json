@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-22T02:22:22Z",
+  "updatedAt": "2026-10-22T02:32:09Z",
   "timeZone": "America/Indianapolis",
   "leagues": {
     "NBA": {
@@ -13,15 +13,15 @@
         "picks": false
       },
       "coverageNote": "NBA Today has research team projections, player logs and a separate NBA Trial record.",
-      "lastAttemptAt": "2026-10-22T02:22:22Z",
+      "lastAttemptAt": "2026-10-22T02:32:09Z",
       "requestedWindow": {
         "from": "2026-10-21",
         "through": "2026-10-23",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-22T02:22:22Z",
-      "lastSuccessfulAt": "2026-10-22T02:22:22Z",
+      "checkedAt": "2026-10-22T02:32:09Z",
+      "lastSuccessfulAt": "2026-10-22T02:32:09Z",
       "error": null,
       "window": {
         "from": "2026-10-21",
@@ -76,7 +76,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909834/hawks-magic"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909835",
@@ -116,7 +116,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909835/bucks-wizards"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909091",
@@ -156,7 +156,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909091/timberwolves-heat"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909836",
@@ -196,7 +196,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909836/hornets-nets"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909837",
@@ -208,10 +208,10 @@
           "date": "2026-10-21",
           "kickoff": "2026-10-21T23:30:00Z",
           "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "44.3 - 4th",
+          "status": "final",
+          "statusDetail": "Final",
           "period": 4,
-          "clock": "44.3",
+          "clock": "0.0",
           "teams": {
             "home": {
               "id": "28",
@@ -230,13 +230,13 @@
           },
           "scores": {
             "home": 135,
-            "away": 91
+            "away": 92
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/nba/game?gameId=401909837"
+            "url": "https://www.espn.com/nba/game/_/gameId/401909837/bulls-raptors"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909838",
@@ -249,9 +249,9 @@
           "kickoff": "2026-10-22T00:00:00Z",
           "timeConfirmed": true,
           "status": "in_progress",
-          "statusDetail": "5:26 - 4th",
+          "statusDetail": "2:53 - 4th",
           "period": 4,
-          "clock": "5:26",
+          "clock": "2:53",
           "teams": {
             "home": {
               "id": "29",
@@ -269,14 +269,14 @@
             }
           },
           "scores": {
-            "home": 114,
-            "away": 94
+            "home": 118,
+            "away": 101
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game?gameId=401909838"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909839",
@@ -289,9 +289,9 @@
           "kickoff": "2026-10-22T00:00:00Z",
           "timeConfirmed": true,
           "status": "in_progress",
-          "statusDetail": "4:48 - 4th",
+          "statusDetail": "45.7 - 4th",
           "period": 4,
-          "clock": "4:48",
+          "clock": "45.7",
           "teams": {
             "home": {
               "id": "3",
@@ -309,14 +309,14 @@
             }
           },
           "scores": {
-            "home": 106,
-            "away": 108
+            "home": 120,
+            "away": 122
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game?gameId=401909839"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909840",
@@ -329,9 +329,9 @@
           "kickoff": "2026-10-22T00:30:00Z",
           "timeConfirmed": true,
           "status": "in_progress",
-          "statusDetail": "2:17 - 3rd",
-          "period": 3,
-          "clock": "2:17",
+          "statusDetail": "11:37 - 4th",
+          "period": 4,
+          "clock": "11:37",
           "teams": {
             "home": {
               "id": "10",
@@ -349,14 +349,14 @@
             }
           },
           "scores": {
-            "home": 95,
-            "away": 65
+            "home": 100,
+            "away": 76
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game?gameId=401909840"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909092",
@@ -369,9 +369,9 @@
           "kickoff": "2026-10-22T02:00:00Z",
           "timeConfirmed": true,
           "status": "in_progress",
-          "statusDetail": "8:08 - 1st",
+          "statusDetail": "4:24 - 1st",
           "period": 1,
-          "clock": "8:08",
+          "clock": "4:24",
           "teams": {
             "home": {
               "id": "13",
@@ -389,14 +389,14 @@
             }
           },
           "scores": {
-            "home": 10,
-            "away": 10
+            "home": 19,
+            "away": 21
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game?gameId=401909092"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909841",
@@ -409,9 +409,9 @@
           "kickoff": "2026-10-22T02:00:00Z",
           "timeConfirmed": true,
           "status": "in_progress",
-          "statusDetail": "8:19 - 1st",
+          "statusDetail": "5:07 - 1st",
           "period": 1,
-          "clock": "8:19",
+          "clock": "5:07",
           "teams": {
             "home": {
               "id": "22",
@@ -429,14 +429,14 @@
             }
           },
           "scores": {
-            "home": 14,
-            "away": 0
+            "home": 25,
+            "away": 3
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game?gameId=401909841"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909842",
@@ -476,7 +476,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909842/kings-clippers"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909093",
@@ -516,7 +516,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909093/cavaliers-76ers"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909094",
@@ -556,7 +556,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909094/nuggets-thunder"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909848",
@@ -596,7 +596,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909848/bulls-bucks"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909095",
@@ -636,7 +636,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909095/knicks-celtics"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909843",
@@ -676,7 +676,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909843/hawks-hornets"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909844",
@@ -716,7 +716,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909844/mavericks-pacers"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909845",
@@ -756,7 +756,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909845/timberwolves-magic"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909846",
@@ -796,7 +796,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909846/raptors-wizards"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909847",
@@ -836,7 +836,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909847/pistons-heat"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909096",
@@ -876,7 +876,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909096/rockets-spurs"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909849",
@@ -916,7 +916,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909849/pelicans-jazz"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909850",
@@ -956,7 +956,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909850/grizzlies-warriors"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909851",
@@ -996,7 +996,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909851/clippers-lakers"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NBA-401909852",
@@ -1036,7 +1036,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909852/trail-blazers-kings"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         }
       ]
     },
@@ -1050,15 +1050,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-22T02:22:22Z",
+      "lastAttemptAt": "2026-10-22T02:32:09Z",
       "requestedWindow": {
         "from": "2026-10-21",
         "through": "2026-10-23",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-22T02:22:22Z",
-      "lastSuccessfulAt": "2026-10-22T02:22:22Z",
+      "checkedAt": "2026-10-22T02:32:09Z",
+      "lastSuccessfulAt": "2026-10-22T02:32:09Z",
       "error": null,
       "window": {
         "from": "2026-10-21",
@@ -1113,7 +1113,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/wnba/game/_/gameId/401918307/valkyries-dream"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         }
       ]
     },
@@ -1127,15 +1127,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-22T02:22:22Z",
+      "lastAttemptAt": "2026-10-22T02:32:09Z",
       "requestedWindow": {
         "from": "2026-10-21",
         "through": "2026-10-23",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-22T02:22:22Z",
-      "lastSuccessfulAt": "2026-10-22T02:22:22Z",
+      "checkedAt": "2026-10-22T02:32:09Z",
+      "lastSuccessfulAt": "2026-10-22T02:32:09Z",
       "error": null,
       "window": {
         "from": "2026-10-21",
@@ -1163,15 +1163,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-22T02:22:22Z",
+      "lastAttemptAt": "2026-10-22T02:32:09Z",
       "requestedWindow": {
         "from": "2026-10-21",
         "through": "2026-10-23",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-22T02:22:22Z",
-      "lastSuccessfulAt": "2026-10-22T02:22:22Z",
+      "checkedAt": "2026-10-22T02:32:09Z",
+      "lastSuccessfulAt": "2026-10-22T02:32:09Z",
       "error": null,
       "window": {
         "from": "2026-10-21",
@@ -1226,7 +1226,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401908042/rays-brewers"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         }
       ]
     },
@@ -1240,15 +1240,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-22T02:22:22Z",
+      "lastAttemptAt": "2026-10-22T02:32:09Z",
       "requestedWindow": {
         "from": "2026-10-21",
         "through": "2026-10-23",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-22T02:22:22Z",
-      "lastSuccessfulAt": "2026-10-22T02:22:22Z",
+      "checkedAt": "2026-10-22T02:32:09Z",
+      "lastSuccessfulAt": "2026-10-22T02:32:09Z",
       "error": null,
       "window": {
         "from": "2026-10-21",
@@ -1303,7 +1303,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892550/flyers-sabres"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892551",
@@ -1315,10 +1315,10 @@
           "date": "2026-10-21",
           "kickoff": "2026-10-21T23:30:00Z",
           "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "1:14 - 3rd",
+          "status": "final",
+          "statusDetail": "Final",
           "period": 3,
-          "clock": "1:14",
+          "clock": "0:00",
           "teams": {
             "home": {
               "id": "14",
@@ -1341,9 +1341,9 @@
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/nhl/game/_/gameId/401892551"
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892551/panthers-senators"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892552",
@@ -1383,7 +1383,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892552/predators-bruins"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892553",
@@ -1423,7 +1423,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892553/rangers-maple-leafs"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892554",
@@ -1463,7 +1463,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892554/sharks-senators"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892555",
@@ -1503,7 +1503,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892555/ducks-devils"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892556",
@@ -1543,7 +1543,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892556/panthers-penguins"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892557",
@@ -1583,7 +1583,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892557/kings-islanders"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892558",
@@ -1623,7 +1623,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892558/golden-knights-blues"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892559",
@@ -1663,7 +1663,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892559/jets-stars"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892560",
@@ -1703,7 +1703,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892560/wild-flames"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892561",
@@ -1743,7 +1743,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892561/hurricanes-oilers"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892562",
@@ -1783,7 +1783,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892562/mammoth-kraken"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892563",
@@ -1823,7 +1823,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892563/red-wings-canucks"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892564",
@@ -1863,7 +1863,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892564/canadiens-blackhawks"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         },
         {
           "id": "NHL-401892565",
@@ -1903,7 +1903,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892565/lightning-avalanche"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         }
       ]
     },
@@ -1917,15 +1917,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-22T02:22:22Z",
+      "lastAttemptAt": "2026-10-22T02:32:09Z",
       "requestedWindow": {
         "from": "2026-10-21",
         "through": "2026-10-23",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-22T02:22:22Z",
-      "lastSuccessfulAt": "2026-10-22T02:22:22Z",
+      "checkedAt": "2026-10-22T02:32:09Z",
+      "lastSuccessfulAt": "2026-10-22T02:32:09Z",
       "error": null,
       "window": {
         "from": "2026-10-21",
@@ -1980,7 +1980,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401879253/nottingham-forest-ipswich-town"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         }
       ]
     },
@@ -1994,15 +1994,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-22T02:22:22Z",
+      "lastAttemptAt": "2026-10-22T02:32:09Z",
       "requestedWindow": {
         "from": "2026-10-21",
         "through": "2026-10-23",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-22T02:22:22Z",
-      "lastSuccessfulAt": "2026-10-22T02:22:22Z",
+      "checkedAt": "2026-10-22T02:32:09Z",
+      "lastSuccessfulAt": "2026-10-22T02:32:09Z",
       "error": null,
       "window": {
         "from": "2026-10-21",
@@ -2057,7 +2057,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761773/dc-united-fc-cincinnati"
           },
-          "updatedAt": "2026-10-22T02:22:22Z"
+          "updatedAt": "2026-10-22T02:32:09Z"
         }
       ]
     }
