@@ -397,7 +397,7 @@ def prep_svg(prep, *, fetch=None):
         raise ValueError('Prep List has no checked rows')
     day = date.fromisoformat(prep['day'])
     card = ticket_cards.prep_card({'day': f'{day:%a %b} {day.day}', 'rows': rows,
-                                   'stub': 'RESEARCH · NOT A BEST BET'})
+                                   'stub': 'RESEARCH · NOT A BET'})
     problems = ticket_kit.qa(card, 'prep-list')
     if problems:
         raise ValueError('; '.join(problems))
@@ -456,7 +456,7 @@ def research_list_svg(choice, *, art=None):
                      'art': art.get(index), 'team_color': source.get('teamColor') or '#2A2F33'})
     card = ticket_cards.research_list_card({'title': choice.get('title'), 'kicker': choice.get('kicker'),
                                             'right_label': right_label, 'rows': rows,
-                                            'stub': 'RESEARCH · NOT A BEST BET'})
+                                            'stub': 'RESEARCH · NOT A BET'})
     problems = ticket_kit.qa(card, f"research-{kind or 'list'}")
     if problems:
         raise ValueError('; '.join(problems))

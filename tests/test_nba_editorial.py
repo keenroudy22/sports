@@ -59,7 +59,7 @@ class NBAEditorialTests(unittest.TestCase):
         data,h=fixture();r=n.choices(data,NOW,h)[1]
         self.assertEqual(r['right_label'],'AVG POINTS')
         self.assertIn('Scoring context, not a forecast.',r['text'])
-        self.assertIn('New rosters can change it.',r['text'])
+        self.assertIn('Research, not a bet.',r['text'])
         for row in r['rows']:
             self.assertEqual(row['right'],str(row['history']['points']).removesuffix('.0'))
             self.assertEqual(row['detail'],'Last 10 games · last season')
@@ -160,3 +160,28 @@ class NBAEditorialTests(unittest.TestCase):
                 self.assertEqual(len(n.render_due(NOW,root,root,fetch=lambda _:None)),2)
             self.assertTrue(all('RESEARCH' in svg and 'NBA' in svg for svg in captured))
             self.assertEqual(n.render_due(NOW+timedelta(days=9),root,root),{})
+
+    def test_new_research_is_plain_link_free_and_preserves_factual_windows(self):
+        data,history=fixture()
+        for row in n.choices(data,NOW,history):
+            self.assertIn('Research, not a bet.',row['text'])
+            self.assertNotIn('keenroudy.com',row['text'])
+            self.assertNotIn('Early estimate',json.dumps(row))
+            self.assertEqual(x_post.x_style(row['text']),[])
+        self.assertIn('last season',n.choices(data,NOW,history)[1]['text'])
+
+    def test_posted_nba_art_is_never_redrawn_after_copy_changes(self):
+        data,history=fixture()
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);n.prepare(NOW,root,data,history)
+            keys={r['key'] for r in n.stored(root)}
+            for key in keys:
+                (root/f'{key}.png').write_bytes(b'original sent art')
+            with patch.object(n.pick_card,'render') as render:
+                n.render_due(NOW,root,root,posted_keys=keys)
+            render.assert_not_called()
+            self.assertTrue(all((root/f'{key}.png').read_bytes()==b'original sent art' for key in keys))
+            for key in keys:
+                (root/f'{key}.png').unlink()
+            with self.assertRaisesRegex(ValueError,'Original posted NBA art missing'):
+                n.render_due(NOW,root,root,posted_keys=keys)

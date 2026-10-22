@@ -498,7 +498,7 @@ class ResearchPostTests(unittest.TestCase):
             import ticket_card
             card = ticket_card.research_list_svg(choice)
             self.assertIn('UNDERDOG WATCH', card)
-            self.assertIn('RESEARCH · NOT A BEST BET', card)
+            self.assertIn('RESEARCH · NOT A BET', card)
             self.assertNotIn('SLATE RESEARCH', card)
             for ugly in ('#8b4513', '#a0522d', '#cd853f'):
                 self.assertNotIn(ugly, card.lower())

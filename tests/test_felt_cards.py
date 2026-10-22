@@ -95,7 +95,7 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn('Barlow Condensed', text)
         self.assertIn('DM Sans', text)
         self.assertIn(felt_cards.FELT_NIGHT, text)
-        self.assertIn('21+ · Entertainment only', text)
+        self.assertNotIn('21+ · Entertainment only', text)
 
     def test_cutover_uses_publication_time_and_has_a_preview_override(self):
         with mock.patch.object(pick_card, 'FELT_FROM', '2026-10-07T04:00:00Z'):

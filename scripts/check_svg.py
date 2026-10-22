@@ -27,8 +27,6 @@ def issues(svg):
         # An older receipt's standalone result glyph is a mark, not a dash used as prose.
         spoken = re.sub(r'^–\s+(PUSH|VOID)$', r'\1', node)
         found.extend(f'{problem}: {node}' for problem in voice.card_lint(spoken))
-    if not any(FOOTER in node for node in nodes):
-        found.append('missing 21+ card footer')
     if not any(SITE in node for node in nodes):
         found.append('missing site URL')
     return found

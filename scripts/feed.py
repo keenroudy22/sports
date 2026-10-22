@@ -70,6 +70,14 @@ def posted_card_keys(log_book, since=None):
     return keys
 
 
+def frozen_research_keys(log_book):
+    """Queued/sent research words and their already-reviewed image stay paired."""
+    return {entry.get('cardKey') or entry['id'] for entry in log_book.get('posts') or []
+            if entry.get('card') and entry.get('id') and
+            (entry.get('bufferPostId') or entry.get('sentAt') or (entry.get('discord') or {}).get('sentAt'))
+            and re.fullmatch(r'[A-Za-z0-9_.:-]+', str(entry.get('cardKey') or entry['id']))}
+
+
 def restore_posted_cards(folder, keys, fetch=None, archive=None):
     """Never regenerate a confirmed attachment under a newer theme after an Actions cache miss."""
     folder = Path(folder)
@@ -418,11 +426,13 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
         cards.update(sheet.render_due(now, cards_folder, log=log,
                                      posted_keys=posted_card_keys(post_log), restore=restore_posted_cards))
         import research_posts # at most one evidence-first research card for the current slate
-        cards.update(research_posts.render_due(now, cards_folder, log=log))
+        cards.update(research_posts.render_due(now, cards_folder, log=log,
+                     posted_keys=frozen_research_keys(post_log), restore=restore_posted_cards))
         import sports_posts
         cards.update(sports_posts.render_due(now, cards_folder, log=log))
         import nba_editorial
-        cards.update(nba_editorial.render_due(now, cards_folder, log=log))
+        cards.update(nba_editorial.render_due(now, cards_folder, log=log,
+                     posted_keys=frozen_research_keys(post_log), restore=restore_posted_cards))
         import nba_trial_runtime
         nba_trial_runtime.render_due(now, cards_folder, log=log)
     Path(out).parent.mkdir(parents=True, exist_ok=True)

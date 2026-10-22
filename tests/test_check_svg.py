@@ -40,6 +40,7 @@ class CardCopyTests(unittest.TestCase):
         with patch.object(pick_card, 'fetch_data_uri', return_value=None):
             svg = ticket_card.straight_svg(pick, game)
         self.assertEqual(check_svg.issues(svg), [])
+        self.assertNotIn('21+ · Entertainment only',svg)
         final = ticket_card.final_svg([dict(pick, result='win', actual='Iowa 24, Washington 22', units=0.91)], '2026-10-09')
         self.assertEqual(check_svg.issues(final), [])
 
@@ -72,6 +73,7 @@ class CardCopyTests(unittest.TestCase):
         for index, svg in enumerate(cards):
             with self.subTest(family=index):
                 self.assertEqual(check_svg.issues(svg), [])
+                self.assertNotIn('21+ · Entertainment only',svg)
         prep_svg = cards[-1]
         self.assertIn('DEF #9/130', prep_svg)
         self.assertIn('FCS EXCL. 1/1', prep_svg)

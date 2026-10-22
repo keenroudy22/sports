@@ -25,7 +25,7 @@ PROP_REVIEW = REVIEW.with_name('nba-props-review.json')
 
 def prop_text(rows, book, window):
     return '\n'.join([f'NBA prop looks · {book}', *[r['caption'] for r in rows],
-                      f'{window} · last 10 recorded games.', '#NBA'])
+                      f'{window} · last 10 recorded games.', 'Research, not a bet.', '#NBA'])
 
 
 def prop_choice(data,now,preview=False):
@@ -138,12 +138,12 @@ def choices(data, now, history=None):
         p=g['projection'];a=g['teams']['away'];h=g['teams']['home']
         projected.append({'subject':f"{a['abbreviation']} at {h['abbreviation']}",
                           'line':f"My score {p['away']:g} - {p['home']:g}", 'right':f"{p['total']:g}",
-                          'detail':'Early estimate · new season', 'logo':a.get('logo'),
+                          'detail':'', 'logo':a.get('logo'),
                           'caption':f"{names(g)}: {p['away']:g}-{p['home']:g}"})
     if len(games)==1:
         g=games[0]
         projected=[{'subject':g['teams'][s]['abbreviation'],'line':'My projected points',
-                    'right':f"{g['projection'][s]:g}",'detail':'Early estimate · new season',
+                    'right':f"{g['projection'][s]:g}",'detail':'',
                     'logo':g['teams'][s].get('logo'),
                     'caption':f"{g['teams'][s].get('name') or g['teams'][s].get('displayName') or g['teams'][s]['abbreviation']}: {g['projection'][s]:g}"}
                    for s in ('away','home')]
@@ -165,13 +165,12 @@ def choices(data, now, history=None):
         import x_post
         prefix=(f"NBA {target:%b %-d}: my scores" if family=='projections' else
                 f"NBA · Last {chosen[0]['games']} games, {chosen[0]['window'].lower()}")
-        note=('Early score estimates. New rosters can change them.' if family=='projections' else
-              ('Scoring context, not a forecast. New rosters can change it.'
-               if chosen[0]['window']=='LAST SEASON' else 'Scoring context, not a forecast.'))
+        note=('Research, not a bet.' if family=='projections' else
+              'Scoring context, not a forecast. Research, not a bet.')
         # All rows on the graphic also appear in the caption; shorten the card,
         # never use +N more or silently drop a displayed team from the words.
         while len(rows)>=2:
-            text='\n'.join([prefix,*[r['caption'] for r in rows],note,'Full board: keenroudy.com/sports/#today?sport=NBA','#NBA'])
+            text='\n'.join([prefix,*[r['caption'] for r in rows],note,'#NBA'])
             if x_post.tweet_length(text)<=x_post.LIMIT:
                 break
             rows=rows[:-1]
@@ -266,11 +265,19 @@ def veto_pending(entry, now=None):
     return not review_ready(due)
 
 
-def render_due(now, folder, root=STORE, fetch=None, log=print):
+def render_due(now, folder, root=STORE, fetch=None, log=print, posted_keys=(), restore=None):
     import ticket_cards,ticket_kit,check_svg
     out={};fetch=fetch or pick_card.fetch_data_uri
     for row in stored(root):
         if not timedelta(0)<=now-boxscores.instant(row['capturedAt'])<=timedelta(days=8):
+            continue
+        path=Path(folder)/f"{row['key']}.png"
+        if row['key'] in posted_keys:
+            if restore:
+                restore(folder, [row['key']])
+            if not path.is_file():
+                raise ValueError(f"Original posted NBA art missing: {row['key']}")
+            out[row['key']]=path
             continue
         rows=[]
         for item in row['rows']:
@@ -281,7 +288,7 @@ def render_due(now, folder, root=STORE, fetch=None, log=print):
                 except (OSError,ValueError):
                     pass
             rows.append(dict(item,art=art))
-        card=ticket_cards.research_list_card(dict(row,rows=rows,stub='RESEARCH · NOT A BEST BET'))
+        card=ticket_cards.research_list_card(dict(row,rows=rows,stub='RESEARCH · NOT A BET'))
         problems=ticket_kit.qa(card,row['key'])+check_svg.issues(card.svg())
         if problems:
             raise ValueError('; '.join(problems))

@@ -1,5 +1,19 @@
 # October 5 product implementation tracker
 
+## October22 owner — confident, non-spammy post policy in progress
+
+O-20261020-NBAPLAIN reopened for the latest owner correction. Future NBA captions
+drop routine full-board links and generic early-estimate/new-season filler;
+season/history windows and analyst-estimated minutes remain factual. Research
+uses the exact short label "Research, not a bet." (bounded voice allowance).
+All new Kitchen Ticket graphics drop the age/entertainment footer, retaining
+brand/site/handle. Legacy/felt renderers aligned. Website footer unchanged.
+Research and NBA renderers now preserve queued/sent originals rather than redraw
+them with the new policy. No old tweet deletion, reschedule, changed research
+number, best-bet promotion, record/category/cap/schedule or spending change.
+Focused/full release and real preview pending. Unrelated daily mirror repair
+preserved in stash7d288652830aa5dd01cd644b3aada4cc96d50f1a; restore after receipts.
+
 ## October22 owner — listed injury roles verified live
 
 Tested source631a7efa (feature940e4553) is included in deployed6ca43de3,

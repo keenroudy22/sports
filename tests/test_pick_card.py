@@ -21,7 +21,7 @@ class CardTests(unittest.TestCase):
         text = pick_card.svg(PICK, GAME, {'wins': 3, 'losses': 1, 'units': 1.98})
         for needle in ('>Iowa at Michigan<', '>under 38.5<', '-105', 'FanDuel', 'We project 31.2 total points', 'FAVORITE', 'KOOK’N',
                        'BEST BET', 'Book', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1',
-                       'keenroudy.com/sports', 'Graded in public', '21+ · Entertainment only'):
+                       'keenroudy.com/sports', 'Graded in public', 'keenroudy.com/sports'):
             self.assertIn(needle, text, needle)
         self.assertNotIn(' unit', text, 'no units on X, the post or the card')
         self.assertNotIn('1.98', text, 'a record on a card is wins and losses, never units')

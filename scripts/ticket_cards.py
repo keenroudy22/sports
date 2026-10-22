@@ -628,7 +628,7 @@ def research_list_card(p):
             inner += card.text(tx, y + 88, line, fit(line, 40, X2 - tx, floor=40), INK_SOFT)
         if detail:
             inner += card.text(tx, y + 120, detail, fit(detail, 40, X2 - tx, floor=40), INK_SOFT)
-    stub = str(p.get('stub') or 'RESEARCH · NOT A BEST BET')
+    stub = str(p.get('stub') or 'RESEARCH · NOT A BET')
     inner += card.text(X1, perf + 60, stub, kit.fit(stub, 40, X2 - X1, tracking=1), INK_SOFT, tracking=1)
     frame(card, HOUSE, CHALK, perf, bottom, inner)
     return card
@@ -672,7 +672,7 @@ def end_zone_card(p):
         inner += card.text(X2, y + 54, count, 56, INK, anchor='end')
         detail = f"{r['redZone']} red-zone opportunities"
         inner += card.text(tx, y + 92, detail, fit(detail, 40, X2 - tx, floor=40), INK_SOFT)
-    note = 'RESEARCH · NOT A BEST BET'
+    note = 'RESEARCH · NOT A BET'
     inner += card.text(X1, perf + 68, note, 40, INK_SOFT)
     frame(card, HOUSE, CHALK, perf, bottom, inner)
     return card

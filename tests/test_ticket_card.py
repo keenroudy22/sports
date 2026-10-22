@@ -74,7 +74,7 @@ class TicketCardTests(unittest.TestCase):
         svg = ticket_card.end_zone_svg(choice, fetch=photo)
         for exact in ('END-ZONE WORK', 'BUCS AT COWBOYS', 'Javonte Williams',
                       '21 red-zone opportunities', 'INSIDE THE 10',
-                      'RESEARCH · NOT A BEST BET', '21+ · Entertainment only'):
+                      'RESEARCH · NOT A BET', 'keenroudy.com/sports'):
             self.assertIn(exact, svg)
         self.assertIn('width="1080" height="1350"', svg)
         self.assertIn('>12</text>', svg)
@@ -98,8 +98,8 @@ class TicketCardTests(unittest.TestCase):
         for kind in ('season', 'matchup', 'upset', 'spread-dog', 'end-zone'):
             with self.subTest(kind=kind):
                 svg = ticket_card.research_list_svg(dict(base, kind=kind), art={0: self.image})
-                for exact in ('RESEARCH', 'TRENDS', 'RESEARCH · NOT A BEST BET',
-                              '21+ · Entertainment only', 'width="1080" height="1350"'):
+                for exact in ('RESEARCH', 'TRENDS', 'RESEARCH · NOT A BET',
+                              'keenroudy.com/sports', 'width="1080" height="1350"'):
                     self.assertIn(exact, svg)
                 self.assertNotIn('SLATE RESEARCH', svg)
                 self.assertNotIn('>BEST BET<', svg)
@@ -173,7 +173,7 @@ class TicketCardTests(unittest.TestCase):
         self.assertEqual(data['photo'], self.image)
         svg = ticket_card.straight_svg(PROP, GAME, player_side='away',
                                        art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
-        for exact in ('OVER 49.5', 'DRAFTKINGS', 'BOOK SAYS', 'I HAVE IT AT', '1u', '21+ · Entertainment only',
+        for exact in ('OVER 49.5', 'DRAFTKINGS', 'BOOK SAYS', 'I HAVE IT AT', '1u', 'keenroudy.com/sports',
                       'ORDER UP'):
             self.assertIn(exact, svg)
         self.assertNotIn('53.7%', svg)
@@ -298,7 +298,7 @@ class TicketCardTests(unittest.TestCase):
         missed = dict(PROP, result='loss', actualValue=48, units=-1.0)
         svg = ticket_card.burnt_svg(missed, game, art={'kind': 'photo', 'uri': self.image},
                                     fetch=lambda _: self.logo)
-        for text in ('BURNT', 'MISSED BY 1.5', '−1.00u', '21+ · Entertainment only'):
+        for text in ('BURNT', 'MISSED BY 1.5', '−1.00u', 'keenroudy.com/sports'):
             self.assertIn(text, svg)
         self.assertNotIn('SEASON', svg)
 

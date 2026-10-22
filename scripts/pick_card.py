@@ -645,7 +645,7 @@ def ticket_svg(pick, game=None, avatar=None, art=None, style=None):
 <text x="44" y="{y + 30}" fill="#f5faff" font-size="29" font-weight="750">{len(legs)} LEGS. ONE TICKET.</text>
 <text x="44" y="{y + 72}" fill="#a7c1cf" font-size="26">Graded in public, win or lose.</text>
 <text x="44" y="{y + 110}" fill="{accent}" font-size="25" font-weight="650">keenroudy.com/sports</text>
-<text x="1036" y="{y + 110}" text-anchor="end" fill="#a7c1cf" font-size="22">21+ · Entertainment only</text>
+<text x="1036" y="{y + 110}" text-anchor="end" fill="#a7c1cf" font-size="22"></text>
 </svg>'''
 
 
@@ -716,7 +716,7 @@ def ladder_svg(pick, avatar=None):
 <text x="84" y="660" fill="{CREAM}" font-size="78" font-weight="950">{esc(dollars(stake))} → {esc(dollars(returned))}</text>
 {''.join(leg_blocks)}
 <text x="84" y="1084" fill="#5eeaa4" font-size="29" font-weight="900">WIN: {esc(dollars(bank_this))} TO BANK · {esc(dollars(next_stake))} RIDES</text>
-<text x="56" y="1280" fill="#5eeaa4" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1280" fill="#9eb8c7" font-size="17" text-anchor="end">21+ · Entertainment only</text>
+<text x="56" y="1280" fill="#5eeaa4" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1280" fill="#9eb8c7" font-size="17" text-anchor="end"></text>
 </svg>'''
 
 
@@ -809,7 +809,7 @@ def ladder_result_svg(pick, avatar=None):
 {''.join(leg_blocks)}
 {''.join(tile_blocks)}
 <line x1="56" y1="1240" x2="1024" y2="1240" stroke="{accent}" stroke-opacity=".24" stroke-width="2"/>
-<text x="56" y="1292" fill="{accent}" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1292" text-anchor="end" fill="#9eb8c7" font-size="17">21+ · Entertainment only</text>
+<text x="56" y="1292" fill="{accent}" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1292" text-anchor="end" fill="#9eb8c7" font-size="17"></text>
 </svg>'''
 
 
@@ -889,7 +889,7 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan></text>',
         f'<text x="80" y="530" fill="{ink}" font-size="32">{esc(ours)}</text>']),
         f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
-        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end">21+ · Entertainment only</text>',
+        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end"></text>',
         f'<text x="{WIDTH - 80}" y="{HEIGHT - 94}" fill="{soft}" font-size="22" text-anchor="end">{esc(record_line)}</text>' if record_line else '',
         '</svg>']
     return '\n'.join(parts)
@@ -960,7 +960,7 @@ def modern_svg(pick, game=None, record=None, when=None, player_side=None, identi
 {lines(number_line(pick) or 'No projection shown',562,984,426,31,ink,max_lines=3)}
 <text x="56" y="1202" fill="{ink}" font-size="28" font-weight="750">Every play graded in public.</text>
 <text x="56" y="1252" fill="{accent}" font-size="27" font-weight="700">keenroudy.com/sports</text>
-<text x="56" y="1304" fill="{dim}" font-size="19">21+ · Entertainment only</text>
+<text x="56" y="1304" fill="{dim}" font-size="19"></text>
 </svg>'''
 
 
@@ -1064,7 +1064,7 @@ def receipt_svg(receipt, avatar=None):
         f'<line x1="56" y1="1227" x2="1024" y2="1227" stroke="{accent}" stroke-opacity=".23" stroke-width="2"/>',
         f'<text x="56" y="1270" fill="{ink}" font-size="24" font-weight="800">KOOK’N RESULTS</text>',
         f'<text x="56" y="1300" fill="{soft}" font-size="20">Full record + details at keenroudy.com/sports</text>',
-        f'<text x="1024" y="1300" fill="{soft}" font-size="17" text-anchor="end">21+ · Entertainment only</text>',
+        f'<text x="1024" y="1300" fill="{soft}" font-size="17" text-anchor="end"></text>',
         '</svg>']
     return '\n'.join(parts)
 

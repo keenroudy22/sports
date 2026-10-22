@@ -797,7 +797,7 @@ def recap(day, first, latest, games, now):
     while True:
         omitted = [outcomes[i][0] for i in range(len(outcomes)) if i not in kept]
         more = f"+{omitted.count('win')} wins, {omitted.count('loss')} misses on the site" if omitted else ''
-        text = '\n'.join(x for x in (head, *(outcomes[i][1] for i in kept), more) if x) + f'\n\n{SITE}#record'
+        text = '\n'.join(x for x in (head, *(outcomes[i][1] for i in kept), more) if x)
         if tweet_length(text) <= LIMIT or not kept:
             return text
         wins = [i for i in kept if outcomes[i][0] == 'win']
@@ -819,10 +819,10 @@ def scoreboard_text(scoreboard, model='v2.0'):
         graded = s.get('games') if s.get('games') is not None else closer[0] + closer[1]    # a number the scoreboard itself holds
         lines.append(f"{name}: sides {record(side)}, totals {record(ou)}. Closer on {closer[0]} of {graded} totals, "
                      f"miss {s.get('totalMiss')} vs {s.get('closeTotalMiss')}.")
-    text = '\n'.join(lines) + f'\n\n{SITE}#model'
+    text = '\n'.join(lines)
     if tweet_length(text) > LIMIT:
         lines = lines[:-1]
-        text = '\n'.join(lines) + f'\n\n{SITE}#model'
+        text = '\n'.join(lines)
     return text
 
 

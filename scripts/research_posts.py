@@ -462,7 +462,7 @@ def season_candidate(games, details, now):
             'accent': CYAN, 'rows': shown,
             'text': '\n'.join([f'📈 KOOK\'N {bucket_label} TREND BOARD',
                                *[caption_row(r) for r in unique],
-                               'keenroudy.com/sports/#trends', tags(unique)])}
+                               tags(unique)])}
 
 
 def numbers_candidate(games, now):
@@ -836,7 +836,8 @@ def legacy_svg(choice, art=None):
 </svg>'''
 
 
-def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, fetch=None, log=print):
+def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, fetch=None, log=print,
+               posted_keys=(), restore=None):
     data = load(data_path, {'games': []})
     import tnf_early_look
     early_cards = {}
@@ -844,9 +845,18 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
         early = tnf_early_look.select(data, load_lines(lines_path), now)
         if early:
             try:
-                path = tnf_early_look.render(early, folder, fetch=fetch)
+                path = Path(folder) / f"tnf-early-look-{early['researchDay'].isoformat()}.png"
+                if path.stem in posted_keys:
+                    if restore:
+                        restore(folder, [path.stem])
+                    if not path.is_file():
+                        raise ValueError('Original frozen TNF research art missing')
+                else:
+                    path = tnf_early_look.render(early, folder, fetch=fetch)
                 early_cards[path.stem] = path
             except Exception as error:
+                if Path(folder, f"tnf-early-look-{early['researchDay'].isoformat()}.png").stem in posted_keys:
+                    raise
                 log(f"TNF Early Look card not drawn: {error}")
     cards = data.get('games') or []
     choice = select(data, details_for(cards, detail_root), now,
@@ -857,6 +867,12 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
         return early_cards
     fetch = fetch or pick_card.fetch_data_uri
     path = Path(folder) / f"{choice['key']}.png"
+    if choice['key'] in posted_keys:
+        if restore:
+            restore(folder, [choice['key']])
+        if not path.is_file():
+            raise ValueError('Original frozen research art missing: ' + choice['key'])
+        return {**early_cards, choice['key']: path}
     try:
         if choice['kind'] == 'prep':
             import ticket_card

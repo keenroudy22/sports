@@ -1,5 +1,17 @@
 # Posts and graphics: everything that goes to X and how it looks
 
+## October22 owner — direct, confident, non-spammy
+
+New routine captions have no promotional site URL. Leave it out by default;
+"Full board in bio" is optional, not a repeated CTA. Keep original-post links
+when they provide result proof. New graphics retain the brand/site/handle but
+omit the age/entertainment footer. Website footer unchanged. New research says
+"Research, not a bet." without generic "early estimate" filler. Name the real
+numbers and useful reason; factual last-season windows and analyst-estimated
+minutes remain explicit. Confidence never means invented certainty or a renamed
+Best Bet. Results remain complete and factual. Sent words/images and frozen
+attempts are never redrawn or silently rewritten under this new policy.
+
 The desk posts to X as **@keenkooks** through **Buffer** (free plan), never by clicking around X. Every post is text
 plus, for plays and house posts, an image card. This page is the complete spec: each post's text, its card, when it
 goes out, and the code that makes it. Examples of the cards are in `docs/examples/`. What the accounts we follow post

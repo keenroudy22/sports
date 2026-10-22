@@ -50,7 +50,7 @@ def choose(data, now):
     for g in rows:
         kickoff=gates.when(g['kickoff']).astimezone(gates.EASTERN)
         text.append(f"{g['league']}: {g['teams']['away']['abbreviation']} at {g['teams']['home']['abbreviation']} · {kickoff.strftime('%-I:%M %p')} ET")
-    text+=['','What are you watching?','Scores: keenroudy.com/sports/#scores']
+    text+=['','What are you watching?']
     import x_post
     if x_post.tweet_length('\n'.join(text)) > x_post.LIMIT: return None
     return {'key':key,'capturedAt':gates.stamp(now),'due':gates.stamp(due),

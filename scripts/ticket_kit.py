@@ -368,8 +368,7 @@ def paper(card, perf, bottom):
 
 def footer(card):
     y1, y2 = card.h - (H - FOOT_1), card.h - (H - FOOT_2)
-    card.add(card.text(56, y1, '21+ · Entertainment only', 24, DIM, 'd', 500, role='footer'),
-             card.text(56, y2, 'keenroudy.com/sports', 24, GREEN, 'd', 700, role='footer'),
+    card.add(card.text(56, y2, 'keenroudy.com/sports', 24, GREEN, 'd', 700, role='footer'),
              card.text(W - 56, y2, '@keenkooks', 24, DIM, 'd', 600, 'end', role='footer'))
 
 

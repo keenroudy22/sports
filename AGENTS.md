@@ -205,6 +205,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Plain confident social copy (owner, October22):** new routine captions omit
+  promotional website URLs; the bio carries the full-board destination. Keep
+  original-post proof links where needed for results. New graphics omit the
+  `21+ · Entertainment only` line; the website footer stays unchanged. Replace
+  generic `early estimate` filler with direct sourced numbers and what is being
+  watched. Research stays explicitly `Research, not a bet.`; retain material
+  history-season, estimated-minutes and availability facts, exact prices and all
+  honest wins/losses. No guarantees or stronger betting tier by copy alone.
+  Preserve sent words/art and frozen attempts; apply prospectively across sports.
+
 - **Climb ticket shape (owner, October21 follow-up):** target two alternate-line
   legs, with three only when independently justified, at roughly -150 to -200 for
   the combined ticket, not each leg. Favor conservative supported lines while

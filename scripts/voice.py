@@ -51,6 +51,9 @@ def lint(text):
         r"(?i)\ALate, but here's (?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\.\s*",
         '', clean,
     )
+    # Owner's Oct22 research boundary: permit this exact short label without
+    # reopening the retired generic disclaimer phrases.
+    voice_clean = re.sub(r'(?i)\bResearch, not a bet\.', '', voice_clean)
     problems = []
     if bare_athlete_id(clean):
         problems.append('bare athlete id in public copy')
