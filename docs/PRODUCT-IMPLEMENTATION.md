@@ -1,5 +1,21 @@
 # October 5 product implementation tracker
 
+## October22 owner — hide unusable projection placeholders
+
+O-20261019-ALT reopened. Game tables across NFL/CFB now display only finite,
+unheld three-value estimates; filter empty players, columns, teams and sections.
+Mixed usable/held rows retain available stats and a dash for absent cells; zero
+is a real value. Research charts omit unavailable averages and comparisons;
+removed the board's synthetic under-review list. Direct player/posted-play pages
+retain factual unavailability and original records, never claim someone is checking.
+All model/price/role guards and immutable forecast/result data remain unchanged.
+Stored TNF evidence: Chicago Caleb and seven teammates inherit a quarterback-role
+hold; New England Corey Kiner has a low-workload hold. This is an automatic
+exclusion, not active human review. Root refit remains the separately tracked P57
+forward/2025 evaluation, not a fabricated live coefficient or relaxed threshold.
+Full gates, local/live375/1440 and hosted release pending. Daily mirror repair
+preserved in exact stash225d176b330d768fe56e9fe8a354dc042863bf40; restore afterward.
+
 ## October22 owner — prospective social voice tested and installed
 
 Source dd44054f is installed in the locked production publisher and pushed.

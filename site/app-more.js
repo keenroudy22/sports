@@ -225,7 +225,7 @@
     const shareHref = `#player/${league}/${encodeURIComponent(route.id)}?stat=${encodeURIComponent(stat)}${scope !== 'current' ? `&season=${encodeURIComponent(scope)}` : ''}${win !== 'all' ? `&sample=${win}` : ''}`;
 
     /* The player page in the Kitchen Ticket look: the team panel with the two-pass photo, text stat tabs, Tonight's
-       line on paper, one big figure, the matchup sentence and the game log in chalk on the felt. Under review
+       line on paper, one big figure, the matchup sentence and the game log in chalk on the felt. Unavailable
        (decision 9): no projection, chance or edge anywhere; only the real recent volumes the build saved. */
     const heldRow = pricedRows.find(r => r.roleSuspect || r.priceSuspect) || null;
     const held = projectionReview || Boolean(heldRow);
@@ -248,7 +248,7 @@
     /* Best price per side at the shown line, never from a row whose price failed the sanity check. */
     const sides = ['over', 'under'].map(d => pricedRows.filter(r => !r.priceSuspect && Number(r.line) === line && String(r.direction).toLowerCase() === d && isNum(r.odds) && r.state === 'open')
       .sort((a, b) => b.odds - a.odds)[0]).map((r, i) => r && { dir: i ? 'under' : 'over', odds: r.odds, book: bookLabel(r.book) });
-    /* Under review, one side's price alone would read as a lean: print both sides at one price, else the line only. */
+    /* Unavailable, one side's price alone would read as a lean: print both sides at one price, else the line only. */
     const quoteBook = bookLabel((quote || {}).book) || (sides.find(Boolean) || {}).book;
     const pricesText = sides[0] && sides[1] && sides[0].odds === sides[1].odds && sides[0].book === sides[1].book ? `Both sides <b class="num">${esc(odd(sides[0].odds))}</b> at ${esc(sides[0].book)}.`
       : held ? (line != null ? `Main line <b class="num">${esc(valueText(line))}</b>${quoteBook ? ` at ${esc(quoteBook)}` : ''}.` : '')
@@ -264,7 +264,7 @@
       <figcaption class="kt-cap">${h && h.n ? `<b>${h[dir]} of ${h.n} ${dir} ${esc(valueText(line))}.</b> ` : ''}${recent.length > shown.length ? `The last ${shown.length} of ${recent.length} games shown.` : ''}</figcaption></figure>` : '<p class="kt-cap">No stored games in this selection.</p>';
     const sheet = `<section class="kt-sheet" aria-labelledby="line-h"><div class="kt-order"><div class="kt-shade"><div class="kt-paper">
       <p class="kt-k" id="line-h">${next ? (lineStatus && lineStatus.current ? 'Tonight\'s line' : line != null ? 'Reference line' : 'No line yet') : 'Recent games'}</p>
-      ${line != null ? `<div class="kt-betrow"><p class="kt-bet num" style="--bet-size:58px">${esc(valueText(line))}<span class="kt-unit">${unitFor.map(esc).join('<br>')}</span></p>${held ? `<span class="kt-stamp hold" role="img" aria-label="Under review">${MARK.hold}UNDER REVIEW</span>` : ''}</div>` : ''}
+      ${line != null ? `<div class="kt-betrow"><p class="kt-bet num" style="--bet-size:58px">${esc(valueText(line))}<span class="kt-unit">${unitFor.map(esc).join('<br>')}</span></p>${held ? `<span class="kt-stamp hold" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span>` : ''}</div>` : ''}
       ${pricesText ? `<p class="kt-prices">${pricesText}</p>` : ''}
       ${held ? `<p class="kt-held">${esc(heldText)}</p>`
         : `${priced && priced.calibrated && priced.chance != null ? `<p class="kt-lead kt-chance" style="margin-top:8px"><span>I have ${esc(priced.direction || dir)} at<b class="num">${pctOne(priced.chance)}</b></span><i></i><span>the price needs<b class="num">${pctOne(priced.needs)}</b></span></p>${hasValue(priced) ? '<p class="kt-prices">✓ clears my price</p>' : ''}` : ''}

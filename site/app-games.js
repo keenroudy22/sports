@@ -499,25 +499,28 @@
 
     /* Player projections with the captured line and our gap. */
     const lines = (detail.props || {}).lines || {};
+    const usableProjection = (p, k) => !(p.underReview || []).includes(k)
+      && Array.isArray(p[k]) && p[k].length === 3 && p[k].every(isNum);
+    const projectionPlayers = side => (((((detail.forecast || {}).players || {})[side]) || {}).players || [])
+      .filter(p => PROJ_COLS.some(([k]) => usableProjection(p, k)));
     const projTable = side => {
       const block = (((detail.forecast || {}).players || {})[side]) || {};
-      const list = block.players || [];
-      if (!list.length) return `<p class="muted small">${esc(g[side].abbr)}: not enough recent games for projections.</p>`;
-      const cols = PROJ_COLS.filter(([k]) => list.some(p => p[k]));
+      const list = projectionPlayers(side);
+      if (!list.length) return '';
+      const cols = PROJ_COLS.filter(([k]) => list.some(p => usableProjection(p, k)));
       const vol = block.volume || {};
       return `<div class="table-wrap"><table class="t"><caption class="small muted" style="text-align:left;padding-bottom:6px">${esc(g[side].abbr)}${isNum(vol.plays) ? ` · ${C.fixed(vol.plays, 0)} plays, ${Math.round(100 * (vol.passRate || 0))}% pass` : ''}</caption>
         <thead><tr><th>Player</th>${cols.map(([, l]) => `<th class="n">${esc(l)}</th>`).join('')}</tr></thead><tbody>${list.map(p => `<tr><td><span class="with-art">${headshot(g.league, p.id, 'sm')}<span><a href="#player/${esc(g.league)}/${esc(p.id)}">${esc(p.name)}</a> <span class="muted tiny">${esc(p.pos)}</span></span></span></td>${cols.map(([k]) => {
           const v = p[k];
-          if ((p.underReview || []).includes(k)) return `<td class="n muted"><details><summary>Projection under review</summary><p class="small">${esc((p.reviewReasons || {})[k] || 'Recent quarterback or workload changes need checking before this number is usable.')}</p></details></td>`;
-          if (!Array.isArray(v)) return '<td class="n muted">–</td>';
+          if (!usableProjection(p, k)) return '<td class="n muted">–</td>';
           const market = (lines[p.id] || {})[C.PROJECTION_MARKET[k]];
           const gapV = market ? v[0] - market[0] : null;
           return `<td class="n" title="Model range estimate, not a guaranteed interval">${esc(C.fixed(v[0]))}<br><span class="tiny muted">Range ${esc(C.fixed(v[1], 0))}–${esc(C.fixed(v[2], 0))}</span>${market ? `<br><span class="tiny muted">line ${esc(market[0])} ${gapV > 0 ? '▲' : gapV < 0 ? '▼' : ''}${esc(C.signed(gapV))}</span>` : ''}</td>`;
         }).join('')}</tr>`).join('')}</tbody></table></div>`;
     };
-    const projHtml = (detail.forecast || {}).players ? section('Player projections', `<div style="display:grid;gap:16px;grid-template-columns:minmax(0,1fr)">${['away', 'home'].map(side => { const n = ((((detail.forecast || {}).players || {})[side] || {}).players || []).length;
-      return n ? `<details class="more-box" style="min-width:0" data-box="proj:${side}"${typeof matchMedia === 'function' && matchMedia('(min-width: 760px)').matches ? ' open' : ''}><summary>${esc(g[side].abbr)} player projections · ${n} players</summary>${projTable(side)}</details>` : projTable(side); }).join('')}</div>`, '', `Research estimates, not Best Bets. The first number is my projected average; the range shows the model's uncertainty, not a guarantee. A big gap from the line is not proof of betting value: the price and the model's past accuracy still matter. ${detail.props && detail.props.capturedAt ? `Comparison lines checked ${esc(ago(detail.props.capturedAt))}; ▲ means I am above the line and ▼ below.` : 'No comparison lines recorded yet.'}${g.garbageTime ? ` <b class="red">${GARBAGE}</b> The spread is 21 points or more, so starters may sit early.` : ''}`)
-      : pregame ? section('Player projections', '<p class="muted small">Player projections are not available for this game yet.</p>') : '';
+    const projHtml = ['away', 'home'].some(side => projectionPlayers(side).length) ? section('Player projections', `<div style="display:grid;gap:16px;grid-template-columns:minmax(0,1fr)">${['away', 'home'].map(side => { const n = projectionPlayers(side).length;
+      return n ? `<details class="more-box" style="min-width:0" data-box="proj:${side}"${typeof matchMedia === 'function' && matchMedia('(min-width: 760px)').matches ? ' open' : ''}><summary>${esc(g[side].abbr)} player projections · ${n} players</summary>${projTable(side)}</details>` : ''; }).join('')}</div>`, '', `Research estimates, not Best Bets. Only available projections are shown. The first number is my projected average; the range shows the model's uncertainty, not a guarantee. A big gap from the line is not proof of betting value: the price and the model's past accuracy still matter. ${detail.props && detail.props.capturedAt ? `Comparison lines checked ${esc(ago(detail.props.capturedAt))}; ▲ means I am above the line and ▼ below.` : 'No comparison lines recorded yet.'}${g.garbageTime ? ` <b class="red">${GARBAGE}</b> The spread is 21 points or more, so starters may sit early.` : ''}`)
+      : '';
 
     const alternateRows = pregame ? (detail.alternateLines || []).filter(r => C.quoteStatus({ ...r, state: 'open' }, g.kickoff, now).current) : [];
     const alternatePlayers = [...new Set(alternateRows.map(r => r.player))];

@@ -64,13 +64,13 @@
   const listWords = xs => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : String(xs[0] || '');
   /* The plain held sentence (NOTES 4.4). Only real recent full-game volumes are quoted; never the held projection. */
   const heldWords = hold => !hold ? ''
-    : hold.kind === 'workload' && (hold.recentFull || []).length === 3 ? `My workload number for him is far below his last three full games (${listWords(hold.recentFull)} ${VOLUME_WORD[hold.volume] || ''}), so I'm checking his role first.`.replace(' )', ')')
-      : hold.kind === 'qb' ? "His team's quarterback picture changed, so I'm checking his role first."
-        : hold.kind === 'price' ? "That price failed my sanity check, so I'm checking it first."
-          : "My workload number for him doesn't match his recent full games, so I'm checking his role first.";
+    : hold.kind === 'workload' && (hold.recentFull || []).length === 3 ? `No usable projection: the workload estimate is far below his last three full games (${listWords(hold.recentFull)} ${VOLUME_WORD[hold.volume] || ''}).`.replace(' )', ')')
+      : hold.kind === 'qb' ? "No usable projection: the quarterback role is not established in the model."
+        : hold.kind === 'price' ? "That price failed our checks. No current price comparison is shown."
+          : "No usable projection: the workload estimate doesn't match his recent full games.";
   /* One short line for the Today ticket. */
   const HELD_WORDS = /\bproject|\bchance\b|\bedge\b|\bmodel\b|\bfair\b|\d%|^Role: /i;
-  const heldShort = hold => hold.kind === 'price' ? 'Under review · checking that price first.' : 'Under review · checking his role first.';
+  const heldShort = hold => hold.kind === 'price' ? 'Price unavailable.' : 'Projection unavailable.';
   const afterPostingWords = hold => hold.kind === 'qb' ? "His team's quarterback picture changed since I posted, so I'm checking his role."
     : hold.kind === 'price' ? 'That price moved further than I like since I posted.'
       : 'His recent workload looks lighter than my number assumed since I posted.';
@@ -890,7 +890,7 @@
     }
     /* The now line: the latest same-book quote and how far the posted price may go. An expired or moved quote never
        reads as open: closed plays show their state words instead. */
-    /* Under review (decision 9; the A-22/A-23 hold): no now line, no chance and no ORDER UP, only the plain words. */
+    /* Unavailable (decision 9; the A-22/A-23 hold): no now line, no chance and no ORDER UP, only the plain words. */
     const rows = opts.lines || todayExtras?.lines?.lines;
     const hold = best && !pick.result ? pickHold(pick, rows) : null;
     const latest = !pick.result && !climb && !fun && !hold ? latestPickQuote(pick, rows) : null;
@@ -924,7 +924,7 @@
       : climb ? `<p class="kt-season">Banked this climb<b class="num">${money(info.banked)}</b></p>` : '<p class="kt-season">Tracked apart from best bets</p>';
     /* ORDER UP needs a live price. */
     const orderUp = best && !pick.result && !hold && tense ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : '';
-    const label = `${chip}: ${vm.title}, ${oddsText(vm.odds)}${vm.book ? ` at ${vm.book}` : ''}${pick.result ? `. ${RESULT_WORD[pick.result] || ''}` : hold && !afterHold ? '. Under review' : ''}`;
+    const label = `${chip}: ${vm.title}, ${oddsText(vm.odds)}${vm.book ? ` at ${vm.book}` : ''}${pick.result ? `. ${RESULT_WORD[pick.result] || ''}` : hold && !afterHold ? '. Unavailable' : ''}`;
     return `<article class="kt-order${opts.compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}${hold ? ' is-held' : ''}" style="${style}" aria-label="${esc(label)}">
       <div class="kt-shade"><div class="kt-paper">${panel}${bet}<div class="kt-cut"></div>
         <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
@@ -1330,7 +1330,7 @@
     const back = '<a class="kt-back" href="#today">‹ Today</a>';
     if (!pick) return head('', 'Play not found', 'This play is not in the current window. Every published play stays on the <a href="#record">record</a>.', back);
     const vm = pickVM(pick);
-    /* Under review (decision 9): no fair price, edge, chance or projection while the play's market is held. The posted
+    /* Unavailable (decision 9): no fair price, edge, chance or projection while the play's market is held. The posted
        price, the grading words and the delivery history stay. */
     const hold = vm.kind === 'best' ? pickHold(pick, catalog?.lines) : null;
     const how = hold ? [] : howWeGotIt(pick);
@@ -1358,7 +1358,7 @@
     const started = Date.parse(pick.kickoff) <= Date.now();
     const sentAt = pick.delivery?.xAt || pick.delivery?.discordAt;
     const held = hold?.afterPosting ? tape('Since I posted', `<p class="kt-held-felt">I posted this at ${esc(clock(sentAt))} at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}. ${esc(afterPostingWords(hold))} It still counts at that price.</p>`)
-      : hold ? tape('The hold', `<div class="kt-figs"><span class="kt-stamp hold kt-inline" role="img" aria-label="Under review">${MARK.hold}UNDER REVIEW</span></div>
+      : hold ? tape('The hold', `<div class="kt-figs"><span class="kt-stamp hold kt-inline" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span></div>
       <p class="kt-held-felt">${C.dayOf(pick.kickoff) === etDay() ? 'No grade from me tonight. ' : ''}${esc(heldWords(hold))}</p><p class="small muted" style="margin-top:6px">It stays on the card and is graded at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}, the price we posted.</p>`) : '';
     /* A Climb step or fun ticket keeps its saved words with its real stake and return, settled or not. */
     const saved = [pick.reason, pick.why].find(x => typeof x === 'string' && x.trim());
@@ -1490,9 +1490,7 @@
     /* By kickoff, rows sit under their game. */
     const grouped = b.sort === 'kickoff' ? shown.map((vm, i) => `${i === 0 || shown[i - 1].gameId !== vm.gameId ? `<div class="board-group">${vm.matchup ? `${esc(vm.matchup)} · ` : ''}${esc(whenShort(vm.kickoff))}</div>` : ''}${boardRow(vm)}`).join('') : shown.map(vm => boardRow(vm)).join('');
     /* Player lines the book has posted without a price we captured: research only, listed apart, never ranked. */
-    const unpriced = b.show === 'value' || b.type === 'games' ? [] : (lines.lines || []).filter(r => r.state === 'unpriced' && (r.athleteId || r.player) && isNum(Number(r.line)) && r.line !== null && Date.parse(r.kickoff) > now && inLeague(r)
-      && (!state.q || C.researchMatches(state.q, r.title, r.player, r.market, r.league)));
-    const underReview = (lines.lines || []).filter(r => (r.roleSuspect || r.priceSuspect) && Date.parse(r.kickoff) > now && inLeague(r)
+    const unpriced = b.show === 'value' || b.type === 'games' ? [] : (lines.lines || []).filter(r => !r.roleSuspect && !r.priceSuspect && r.state === 'unpriced' && (r.athleteId || r.player) && isNum(Number(r.line)) && r.line !== null && Date.parse(r.kickoff) > now && inLeague(r)
       && (!state.q || C.researchMatches(state.q, r.title, r.player, r.market, r.league)));
     const list = shown.length ? `<div class="board"><div class="board-head"><span>Line</span><span>Best price</span><span>Our chance vs needed</span><span>Chance gap</span><span>Our price</span></div>${grouped}</div>
       ${rows.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-more-rows>Show ${Math.min(40, rows.length - shown.length)} more</button></p>` : ''}`
@@ -1506,7 +1504,7 @@
       ${list}
       ${b.show === 'value' && rows.length < 5 && nAll > rows.length ? `<p class="small" style="margin-top:10px"><button type="button" class="linkish" data-set="show:all">See all ${nAll} current lines →</button></p>` : ''}
       ${unpriced.length ? `<details class="more-box" data-box="unpriced" style="margin-top:12px"><summary>Player lines with no price yet · ${unpriced.length}</summary><div class="receipts">${unpriced.slice(0, 60).map(r => `<div class="receipt" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${r.athleteId ? `<a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a>` : esc(niceTitle(r.title))}</b><span>${esc(marketLabel(r))} · ${esc(whenShort(r.kickoff))}${isNum((r.grade || {}).projection) ? ` · our middle estimate ${esc(C.fixed(r.grade.projection))}` : ''}</span></div><span class="small muted">No price yet</span></div>`).join('')}</div><p class="small muted" style="margin-top:8px">The book lists these lines, but we have not seen a price, so we cannot compare our chance with what the price needs.</p></details>` : ''}
-      ${underReview.length ? `<details class="more-box" data-box="under-review" style="margin-top:12px"><summary>Lines under review · ${underReview.length}</summary><div class="receipts">${underReview.slice(0, 60).map(r => `<div class="receipt"><b><a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a></b><span>${esc(r.gradeNote || 'Projection under review')} · no grade or ranking</span></div>`).join('')}</div></details>` : ''}`;
+      `;
   };
 
   /* Bars against the line. Every game in the selection is drawn (the strip scrolls sideways on a phone), negative
@@ -1708,11 +1706,11 @@
           const line = cur && isNum(cur.line) ? cur.line : null;
           const dir = cur && cur.direction === 'under' ? 'under' : 'over';
           const status = C.quoteStatus(cur, g.kickoff);
-          const proj = (pl.projection || {})[key], review = (pl.underReview || []).includes(key);
+          const review = (pl.underReview || []).includes(key), proj = review ? null : (pl.projection || {})[key];
           const matched = priceMatch({ gameId: g.id, athleteId: pl.id, stat: key, direction: dir, line, odds: cur?.odds, book: cur?.book }, catalog?.lines);
           const gap = averageGap(proj, values);
           return `<a class="card" style="color:inherit;display:block" href="#player/${esc(league)}/${esc(pl.id)}?stat=${esc(key)}"><div class="with-art">${headshot(league, pl.id, 'sm', null, pl.pos)}<div><b>${esc(pl.name)}</b> <span class="muted small">${esc(pl.pos || '')}</span></div></div>
-            <p class="small" style="margin:8px 0 4px">${status.current ? 'Line' : 'Reference line'} <b>${line == null ? '–' : esc(C.statValue(line, key))} ${esc(dir)}</b> · Our average <b>${review ? 'Projection under review' : esc(C.statValue(proj, key))}</b> · Hits <b>${line == null ? '–' : `${values.filter(v => C.thresholdResult(v, line, dir) === 'hit').length}/${values.length}`}</b> (${values.length} games)</p>
+            <p class="small" style="margin:8px 0 4px">${status.current ? 'Line' : 'Reference line'} <b>${line == null ? '–' : esc(C.statValue(line, key))} ${esc(dir)}</b>${isNum(proj) ? ` · Our average <b>${esc(C.statValue(proj, key))}</b>` : ''} · Hits <b>${line == null ? '–' : `${values.filter(v => C.thresholdResult(v, line, dir) === 'hit').length}/${values.length}`}</b> (${values.length} games)</p>
             <p class="tiny muted">${esc(status.label)}${cur && cur.book ? ` · ${esc(bookLabel(cur.book) || cur.book)}` : ''}${cur && isNum(cur.odds) ? ` ${esc(oddsText(cur.odds))}` : ''}${cur && cur.observedAt ? ` · ${esc(ago(cur.observedAt))}` : ''}</p>
             <p class="small">${esc(researchPrice(matched || {}))}</p>${gap ? `<p class="small red">${esc(gap)}</p>` : ''}
             ${matched?.qbNews ? `<p class=caution>QB news: ${esc(matched.qbNews)}</p>` : ''}
@@ -1940,8 +1938,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-43e5c9aa69e5';
-  const GAMES_ASSET = 'app-games.js?v=sha256-091779a50bef';
+  const MORE_ASSET = 'app-more.js?v=sha256-3c9ccac9984d';
+  const GAMES_ASSET = 'app-games.js?v=sha256-c1e652f0a4d6';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

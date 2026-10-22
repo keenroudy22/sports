@@ -205,6 +205,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Available projections only (owner, October22):** game projection tables show
+  only finite usable estimates, with held cells blank, empty players/columns/teams
+  omitted and no empty projection section. Never describe an automatic exclusion
+  as active human review. Research history may remain without a projected average;
+  already-posted plays retain their original record and an honest unavailable
+  current-estimate status. Preserve all role/price guards and stored forecasts;
+  missing projections never become invented numbers or guessed zeros.
+
 - **Plain confident social copy (owner, October22):** new routine captions omit
   promotional website URLs; the bio carries the full-board destination. Keep
   original-post proof links where needed for results. New graphics omit the

@@ -105,8 +105,9 @@ const playerPage = async (held, change = null) => {
 
 test('Under review shows no projection, chance or edge, and quotes only the saved recent volumes', async () => {
   const page = await playerPage(true);
-  assert.match(page, /UNDER REVIEW/);
-  assert.match(page, /No grade from me tonight\. My workload number for him is far below his last three full games \(50, 36 and 43 pass attempts\), so I&#39;m checking his role first\./);
+  assert.match(page, /UNAVAILABLE/);
+  assert.doesNotMatch(page, /under review|checking.*first/i);
+  assert.match(page, /No usable projection: the workload estimate is far below his last three full games \(50, 36 and 43 pass attempts\)/);
   for (const banned of ['23.7', '167.1', '270.1', 'My average', 'I have', '57.0%', '53.3%', 'clears my price']) assert.ok(!page.includes(banned), banned);
   assert.match(page, /Both sides <b class="num">−114<\/b> at FanDuel\./);
   assert.match(page, /class="kt-hero kt-order"/);
@@ -141,12 +142,12 @@ test('Under review carries no directional verdict and never one side\'s price al
 });
 
 test('held words are shared by the Today ticket, the play page and the player page', () => {
-  assert.equal(M.heldWords({ kind: 'qb' }), "His team's quarterback picture changed, so I'm checking his role first.");
+  assert.equal(M.heldWords({ kind: 'qb' }), 'No usable projection: the quarterback role is not established in the model.');
   assert.equal(M.heldWords({ kind: 'workload', recentFull: [9, 7, 8], volume: 'targets' }),
-    'My workload number for him is far below his last three full games (9, 7 and 8 targets), so I\'m checking his role first.');
-  assert.equal(M.heldWords({ kind: 'price' }), "That price failed my sanity check, so I'm checking it first.");
+    'No usable projection: the workload estimate is far below his last three full games (9, 7 and 8 targets).');
+  assert.equal(M.heldWords({ kind: 'price' }), 'That price failed our checks. No current price comparison is shown.');
   assert.match(M.heldWords({ kind: 'role' }), /doesn't match his recent full games/);
-  assert.equal(M.heldShort({ kind: 'qb' }), 'Under review · checking his role first.');
+  assert.equal(M.heldShort({ kind: 'qb' }), 'Projection unavailable.');
   assert.deepEqual(M.holdOf([{ roleSuspect: true, priceSuspect: true, roleHold: 'qb' }]), { kind: 'qb' });
   assert.deepEqual(M.holdOf([{ priceSuspect: true }]), { kind: 'price' });
   assert.equal(M.holdOf([{ odds: -110 }]), null);

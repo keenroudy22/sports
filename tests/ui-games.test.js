@@ -200,7 +200,7 @@ test('the game page prints every driver under #why, a note only when a flag fire
   for (const html of [blowout, total, stale]) for (const word of ['desk', 'scan', 'automated', 'pipeline', 'calibration']) assert.ok(!new RegExp(`\\b${word}\\b`, 'i').test(html), word);
 });
 
-test('game alternates show exact odds, my number, history and an explained projection hold', async () => {
+test('game alternates keep real prices while unusable projections are absent', async () => {
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];
   const detail = { ...g, picks: [], teams: { home: { injuries: [], form: [] }, away: { injuries: [], form: [] } },
@@ -212,7 +212,31 @@ test('game alternates show exact odds, my number, history and an explained proje
       observedAt: new Date().toISOString(), history: { last: { hits: 7, games: 10 } }, reasons: ['A verified workload reason.'] }] };
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
   const html = unesc(await factory(ctx).game({ id: g.id }));
-  for (const value of ['Alternate lines vs my numbers', 'Other Player', '-240', 'My average: 60.0', 'Book line: 39.5', '7 of 10', 'A verified workload reason.', 'The starting quarterback changed.']) assert.ok(html.includes(value), value);
+  for (const value of ['Alternate lines vs my numbers', 'Other Player', '-240', 'My average: 60.0', 'Book line: 39.5', '7 of 10', 'A verified workload reason.']) assert.ok(html.includes(value), value);
+  assert.doesNotMatch(html, /Real Player|Projection under review|The starting quarterback changed|player projections ·|<h2>Player projections/);
+});
+
+test('all games show only usable projection rows and columns, including zero estimates', async () => {
+  const { api, factory } = loadBrowserApi();
+  for (const league of ['NFL', 'CFB']) {
+    const g = { ...slate()[1], league };
+    const players = [
+      { id: '1', name: 'Held Only', recYds: [999, 900, 1000], underReview: ['recYds'] },
+      { id: '2', name: 'Partial Player', targets: [0, 0, 0], recYds: [999, 900, 1000], underReview: ['recYds'] },
+      { id: '3', name: 'Usable Runner', carries: [15, 10, 20], rushYds: [68, 20, 117] },
+      { id: '4', name: 'Malformed', receptions: [5, null, 7] },
+    ];
+    const detail = { ...g, picks: [], teams: {}, props: { lines: { '2': { recYds: [99.5] } } },
+      forecast: { players: { home: { players }, away: { players: [players[0]] } } } };
+    const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
+    const html = unesc(await factory(ctx).game({ id: g.id }));
+    assert.match(html, /player projections · 2 players/);
+    assert.match(html, /Partial Player/);
+    assert.match(html, /Usable Runner/);
+    assert.match(html, /0\.0<br>/);
+    assert.match(html, /68\.0/);
+    assert.doesNotMatch(html, /Held Only|Malformed|999|99\.5|under review|>Rec yds<|>Rec<|not enough recent games/i);
+  }
 });
 
 test('a comparison line never replaces the visible projection uncertainty range', async () => {
