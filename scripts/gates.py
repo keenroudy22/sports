@@ -245,6 +245,10 @@ def quotes_for(candidate, ctx, priced_only=False):
                                                                    candidate.get('line')):
                 rows.append((BOOK_NAMES.get(book, book), line, over if side == 'over' else under))
         else:
+            if market == 'moneyline':
+                pair = feed_moneyline_pair(candidate, ctx)
+                if pair:
+                    rows.append((pair['book'], 0, pair['side']))
             record = ctx.odds.get(game_id) or {}
             for book, entry in (record.get('books') or {}).items():
                 if market == 'spread' and entry.get('spread'):
@@ -265,6 +269,37 @@ def official_quote_book(book):
     return key not in {role_sanity.book_key(name) for name in build_site.COMPARISON_ONLY_BOOKS}
 
 
+def feed_moneyline_pair(candidate, ctx):
+    """Rebuild a saved moneyline's pair from the actual fresh game feed.
+
+    The multi-book store has spreads/totals only. Private saves deliberately
+    strip ephemeral _pair, so release must reload both sides, not trust the
+    admission's old probability or silently reject every persisted moneyline.
+    """
+    if market_key(candidate) != 'moneyline' or candidate.get('line') != 0:
+        return None
+    game = game_of(candidate, ctx) or {}
+    if not (game.get('market') or {}).get('provider'):
+        return None
+    try:
+        age = ctx.now - when(game.get('marketRetrievedAt'))
+    except (TypeError, ValueError):
+        return None
+    if not timedelta(0) <= age <= timedelta(hours=2):
+        return None
+    quote = build_site.market(game) or {}
+    book, side = quote.get('book'), side_of(candidate)
+    if not book or not official_quote_book(book) or side not in ('home', 'away'):
+        return None
+    selected, other = ((quote.get('homeML'), quote.get('awayML')) if side == 'home'
+                       else (quote.get('awayML'), quote.get('homeML')))
+    if not all(isinstance(v, (int, float)) and abs(v) >= 100 for v in (selected, other)):
+        return None
+    return {'book': book, 'side': int(selected), 'other': int(other),
+            'impliedSum': pricing.break_even(selected) + pricing.break_even(other),
+            'fairChance': pricing.fair_chance(selected, other)}
+
+
 def exact_price_pairs(candidate, ctx):
     """Exact-line two-sided prices, normalized to the candidate's side."""
     game_id = (candidate.get('gameIds') or [None])[0]
@@ -279,6 +314,9 @@ def exact_price_pairs(candidate, ctx):
             rows.append({'book': candidate.get('book'), 'side': int(selected), 'other': int(other),
                          'impliedSum': implied_sum, 'fairChance': pricing.fair_chance(selected, other)})
         return rows
+    if market == 'moneyline':
+        pair = feed_moneyline_pair(candidate, ctx)
+        return [pair] if pair else []
     if candidate.get('athleteId'):
         record = ctx.prop_odds.get(game_id)
         for book, quoted_line, over, under in build_site.price_quotes(

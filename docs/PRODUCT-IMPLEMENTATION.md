@@ -1,5 +1,48 @@
 # October 5 product implementation tracker
 
+## October22 live release diagnosis — persisted moneyline pair recovery
+
+The Patriots private withdrawal exposed a separate missing handoff, not proof
+that the actual book pair disappeared. The catalog's ESPN/DraftKings feed carries
+both moneyline sides, but enqueue deliberately strips ephemeral_pair; release's
+exact_price_pairs only reloaded spreads/totals from the separate multi-book
+store. Read-only15:37 replay had a real raw chance but zero reconstructed pairs
+both at15:10 and current time. Source now reloads the actual game-feed pair only
+with a named approved provider, both prices and a nonfuture observation no older
+than two hours. Changed price, wrong book/side, missing/stale/future data still
+refuse. No saved admission chance or opposite price becomes current evidence.
+Normal private-save/release regression covers this round trip; full safe release
+and fresh selection remain required before any public Best Bet claim.
+
+## October22 final release receipts — hosted verification pending
+
+Combined source c7e4f645, tested/rebased120899e3 and installed b2775050,
+passed normal and clean-export1619Python tests(two skipped),271Node tests,
+443-page/78-game build,112-row football record audit, zero NBA Trial rows,
+596-file/150690683byte publication guard, assets and hard payload gates.
+Offline actual10:00 slot rehearsal gp2wgrm5 completed outcomeok, zero outside
+writes/private reads. Sent artifacts/records remain original. First social guard
+already has hosted39799969146SUCCESS with checkout1b636788; final combined
+hosted39805145508 is running, not yet called complete. Redundant pending
+39804402171 was canceled after confirming private queued state; its captured
+data remains in Git and the final containing release replaces the redundant build.
+
+Actual complete Buffer scheduled listing15:28Z has zero posts,hasNextPagefalse.
+1Q X2113282043463311578 sent14:51:16.991Z, Plays&Results14:55:09Z;
+lotto X2113287075818524956 sent15:11:16.750Z, Plays&Results15:15:24Z.
+Both are live in Today/Fun tickets at375px with matching viewport/document
+width and no browser/load errors; personal/boost labels and original images
+are preserved. No public posts were deleted and no official record/stake changed.
+
+The extra67-candidate/four-football-game selection finished without a public
+admission: PatriotsML+130DK entered the private1u queue, then normal release
+withdrew it15:23:53Z because the current tier check lacked raw chance/exact
+two-sided fair price. The owner was explicitly told of the withdrawal. It is
+not a posted Best Bet. JMU-11.5/-106 is negative after the price adjustment;
+Braun remains research-only and the owner's+132 is account-specific. No price
+or promotion guard bypassed to create volume. Existing11:45 and future6:45/8:30
+checks own the next fresh selection; the weekday ceiling is2, not a1-play quota.
+
 ## October22 delivery follow-through — waiting-clock repair brought forward
 
 Owner asked that another running task not stall plays. At15:20Z a waiting mirror
