@@ -1,43 +1,33 @@
 {
- "at": "2026-10-22T13:32:48Z",
+ "at": "2026-10-22T13:42:03Z",
  "confirmed": {
-  "CFB-401858271": "2026-10-22T13:32:48Z",
-  "CFB-401858272": "2026-10-22T13:32:48Z",
-  "CFB-401861965": "2026-10-22T13:32:48Z",
-  "CFB-401862807": "2026-10-22T13:32:48Z",
-  "CFB-401862808": "2026-10-22T13:32:48Z",
-  "CFB-401864525": "2026-10-22T13:32:48Z",
-  "CFB-401869845": "2026-10-22T13:32:48Z",
-  "CFB-401871056": "2026-10-22T13:32:48Z",
-  "NFL-401873010": "2026-10-22T13:14:10Z"
+  "CFB-401858271": "2026-10-22T13:42:03Z",
+  "CFB-401858272": "2026-10-22T13:42:03Z",
+  "CFB-401861965": "2026-10-22T13:42:03Z",
+  "CFB-401862807": "2026-10-22T13:42:03Z",
+  "CFB-401862808": "2026-10-22T13:42:03Z",
+  "CFB-401864525": "2026-10-22T13:42:03Z",
+  "CFB-401869845": "2026-10-22T13:42:03Z",
+  "CFB-401871056": "2026-10-22T13:42:03Z",
+  "NFL-401873010": "2026-10-22T13:42:03Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1070,
-    "fanduel": 1147
+    "fanduel": 1151
    },
    "eventsListed": 119,
    "eventsMatched": 8,
    "games": 8,
    "marketTypes": {
-    "player_field_goals_made": 1,
-    "player_kicking_points": 1,
-    "player_longest_passing_completion": 8,
-    "player_longest_reception": 22,
-    "player_longest_rush": 13,
-    "player_passing_+_rushing_yards": 62,
-    "player_passing_attempts": 6,
-    "player_passing_completions": 13,
-    "player_passing_touchdowns": 86,
-    "player_passing_yards": 302,
-    "player_receiving_yards": 956,
-    "player_receptions": 48,
-    "player_rushing_attempts": 6,
-    "player_rushing_yards": 693
+    "player_passing_touchdowns": 63,
+    "player_passing_yards": 175,
+    "player_receiving_yards": 501,
+    "player_receptions": 22,
+    "player_rushing_yards": 390
    },
-   "requestsLeft": 0,
-   "rows": 2217,
+   "requestsLeft": 5,
+   "rows": 1151,
    "slateGames": [
     "James Madison Dukes at App State Mountaineers 2026-10-22T23:00Z",
     "Liberty Flames at Kennesaw State Owls 2026-10-22T23:00Z",
@@ -98,7 +88,7 @@
       "fanduel": "36208879",
       "fliff": "420751_c_p_209_prematch",
       "hardrock": "4831075996323152278",
-      "kalshi": "KXNCAAF1H-26OCT23YALEPENN",
+      "kalshi": "KXNCAAFSPREAD-26OCT23YALEPENN",
       "novig": "01a141d1-8bc7-7661-a893-0cfc77077d8d",
       "onexbet": "763706342",
       "paddypower": "36208879",
@@ -292,7 +282,7 @@
       "fliff": "fobj__conflict_event__419847",
       "gemini": "NCAAF-2610242000-CAL-SMU-M",
       "hardrock": "2423019232661995925",
-      "kalshi": "KXNCAAF1H-26OCT23CALSMU",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT24CALSMU",
       "ladbrokes": "650a7ca8-0b34-4fe0-8ae4-d0cded12014d",
       "novig": "01a14577-5036-7032-b901-ba2b0fafc547",
       "onexbet": "762874857",
@@ -507,7 +497,6 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passing_+_rushing_yards",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_receiving_yards",
@@ -521,7 +510,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -560,7 +548,7 @@
      "away": "Wagner",
      "external": {
       "fanduel": "36208863",
-      "kalshi": "KXNCAAFGAME-26OCT24WAGDUQ",
+      "kalshi": "KXNCAAFTOTAL-26OCT24WAGDUQ",
       "novig": "01a14577-549d-78c2-b54d-1c7ec0a33ddc",
       "onexbet": "763706344",
       "paddypower": "36208863",
@@ -645,9 +633,7 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -658,7 +644,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -819,13 +804,19 @@
    ]
   },
   "NFL": {
-   "books": {},
+   "books": {
+    "fanduel": 200
+   },
    "eventsListed": 29,
    "eventsMatched": 1,
    "games": 1,
-   "marketTypes": {},
-   "requestsLeft": -1,
-   "rows": 0,
+   "marketTypes": {
+    "player_passing_touchdowns": 10,
+    "player_passing_yards": 23,
+    "player_receiving_yards": 167
+   },
+   "requestsLeft": 3,
+   "rows": 200,
    "slateGames": [
     "New England Patriots at Chicago Bears 2026-10-23T00:15Z"
    ],
@@ -966,6 +957,7 @@
        "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
+       "total_field_goals",
        "total_points",
        "total_points_band",
        "total_points_odd_even",
@@ -1429,7 +1421,7 @@
       "fliff": "fobj__conflict_event__407878",
       "gemini": "NFL-2610251700-TB-CAR-T",
       "hardrock": "8831632226136490404",
-      "kalshi": "KXNFL1HTOTAL-26OCT25TBCAR",
+      "kalshi": "KXNFL2H-26OCT25TBCAR",
       "ladbrokes": "867215bb-4f9d-48e8-b67f-43a5b58f92f0",
       "novig": "01a136e2-ea35-7911-9fe2-43f84a337c27",
       "paddypower": "36188995",
@@ -2151,7 +2143,7 @@
       "fliff": "fobj__conflict_event__407880",
       "gemini": "NFL-2610252025-GB-DET-S",
       "hardrock": "7899387103270797721",
-      "kalshi": "KXNFLRECYDS-26OCT25GBDET-GBMGOLDEN0-140",
+      "kalshi": "KXNFLRSHYDS-26OCT25GBDET-DETSVAKI33-40",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "novig": "01a136e2-eecd-78b0-ad17-c6ca310ae109",
       "paddypower": "36189005",
@@ -2299,7 +2291,7 @@
       "fliff": "fobj__conflict_event__407881",
       "gemini": "NFL-2610252025-LAR-LV-T",
       "hardrock": "1958013294862270870",
-      "kalshi": "KXNFLRECYDS-26OCT25LARLV-LVTTUCKER1-70",
+      "kalshi": "KXNFLRECYDS-26OCT25LARLV-LVTTUCKER1-15",
       "ladbrokes": "9e70c69e-0cb8-4a79-b602-8859ec8f54be",
       "novig": "01a136e2-ee10-7373-841a-15273c9c9ea9",
       "paddypower": "36189003",
@@ -2444,7 +2436,7 @@
       "fliff": "407882_c_p_202_prematch",
       "gemini": "NFL-2610260020-KC-SEA-T",
       "hardrock": "3269686686333927830",
-      "kalshi": "KXNFLRECYDS-26OCT25KCSEA-KCNGRAY83-60",
+      "kalshi": "KXNFLRECYDS-26OCT25KCSEA-KCNGRAY83-10",
       "ladbrokes": "3f6d93bc-a0b1-4467-b356-5bc63a799cf9",
       "novig": "01a136e2-ef4c-7161-96b7-9bf8d0615c3e",
       "paddypower": "36189006",
