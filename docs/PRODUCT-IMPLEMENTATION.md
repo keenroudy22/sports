@@ -1,5 +1,18 @@
 # October 5 product implementation tracker
 
+## October22 Playbook ticket routing installed
+
+Installed ec0d4a5f (tested source c6b9ab27): all new X plays, selected Climbs and
+registered owner tickets receive exactly one `Copy the bet 👇 @Playbook` footer.
+The community category no longer strips the owner's ticket tag. Discord removes
+the whole footer; research, teasers and results stay untagged. Complete overlength
+captions hold rather than silently losing legs or the tag. Sent posts unchanged.
+Buffer confirmed0scheduled and production log0unresolved before release.
+Normal/clean1653Python(two skips)/274Node passed;607file guard,113pick record audit,
+NBA audit and offline1600/2yrfptyp passed. Production imports verified all three
+ticket paths and Discord removal. Posting-service install complete; no claim that
+Playbook has already replied or that the separate hosted website job completed.
+
 ## October22 casual social voice installed
 
 Source2167ab1a installed in production after normal/clean1650Python(two skips)/
