@@ -59,7 +59,10 @@ class QueueStyleTests(unittest.TestCase):
         e['discord']['text']=original
         send,calls=self.provider(text=original)
         failed=bp.audit_pending_style({'posts':[e]},NOW,key='t',send=send,art_check=lambda _:True,items={},log=lambda *_:None)
-        self.assertEqual(failed,[e]);self.assertIn('cancelledAt',e)
+        self.assertEqual(failed[0]['id'],e['id'])
+        self.assertEqual(failed[0]['error'],e['cancelReason'])
+        self.assertNotIn('error',e)
+        self.assertIn('cancelledAt',e)
         self.assertEqual(e['discord']['text'],original)
         self.assertEqual(e['bufferPostId'],'old')
         self.assertTrue(e['socialStyleAudit']['needsRevision'])
@@ -81,7 +84,9 @@ class QueueStyleTests(unittest.TestCase):
     def test_unknown_state_and_provider_failure_never_delete(self):
         for status,fail in [('publishing',False),('scheduled',True)]:
             e=self.entry();send,calls=self.provider(status,fail=fail)
-            bp.audit_pending_style({'posts':[e]},NOW,key='t',send=send,items={},log=lambda *_:None)
+            failed=bp.audit_pending_style({'posts':[e]},NOW,key='t',send=send,items={},log=lambda *_:None)
+            self.assertIn('error',failed[0])
+            self.assertNotIn('error',e,'a transient audit failure must remain retryable')
             self.assertEqual(e['socialStyleAudit']['state'],'unverified')
             self.assertNotIn('cancelledAt',e)
             self.assertFalse(any('deletePost' in c['query'] for c in calls))

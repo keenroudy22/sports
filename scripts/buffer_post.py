@@ -886,7 +886,7 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'cancelled-private', 'issues': problems, 'needsRevision': True}
                 # Preserve the original text, card and provider id as evidence, not a silent rewrite.
                 log(f"buffer: {entry['id']} private draft cancelled: {'; '.join(problems)}; fresh revision required")
-                failed.append(entry)
+                failed.append({**entry, 'error': entry['cancelReason']})
             else:
                 entry['socialStyleVersion'] = social_style.VERSION
                 entry['queuedText'] = text
@@ -895,7 +895,7 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
             previous = (entry.get('socialStyleAudit') or {}).get('error')
             entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'unverified', 'error': str(error)}
             if previous != str(error):
-                failed.append(entry)
+                failed.append({**entry, 'error': str(error)})
             log(f"buffer: {entry['id']} style audit unavailable; no deletion: {error}")
     return failed
 
