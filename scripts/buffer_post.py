@@ -41,6 +41,7 @@ import x_post
 import social_style
 import parlay_caption
 import social_voice
+import social_learning
 from social_copy import without_playbook, x_ticket_copy
 from sports_refresh import eastern_date
 
@@ -57,7 +58,7 @@ BUFFER_QUEUE = 10
 BUFFER_NORMAL_LIMIT = 9              # keep the tenth place free for relabels and reschedules
 BUFFER_RESERVED = 3                  # preserve the final places for plays, relabels/reschedules and receipts
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
-BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed'))
+BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed', 'community'))
 DISCORD_PLAY_LEAD = post_windows.DISCORD_PLAY_LEAD  # one admission and scheduling window
 DISCORD_DELIVERY_CADENCE = post_windows.DISCORD_DELIVERY_CADENCE
 def card_url(card_key):
@@ -627,8 +628,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     plans = [(guid, 'community' if guid.startswith('community:') else kind, text, due, card_key)
              for guid, kind, text, due, card_key in plans]
     pending = pending_scheduled(log_book, now)
-    if pending + len(plans) >= BUFFER_OPTIONAL_AT:
-        plans = sorted(plans, key=lambda plan: (plan[1] not in BUFFER_ESSENTIAL, plan[3], plan[0]))
+    # Tickets and result follow-ups get queue capacity before optional updates,
+    # even before pressure reaches the reserve threshold. Due times stay intact.
+    plans = sorted(plans, key=lambda plan: (plan[1] not in BUFFER_ESSENTIAL, plan[3], plan[0]))
     for guid, kind, text, due, card_key in plans:
         if pending >= BUFFER_NORMAL_LIMIT or (pending >= BUFFER_OPTIONAL_AT and kind not in BUFFER_ESSENTIAL):
             if kind == 'play' and missed_target(guid, due, now, items):
@@ -819,14 +821,24 @@ SETTLE_METRICS = timedelta(hours=24)     # owner Autopilot: first read at 24h, w
 
 
 def collect_metrics(log_book, now, key=None, send=http_send, log=print):
-    """Read each sent post's engagement once, one day after it went out, into the log for learning. Needs the
-    key's insights:read permission; without it this says so once and leaves everything as it was."""
+    """Track 24h/72h/7d snapshots under existing quota, prioritizing first reads."""
     read = 0
-    for entry in log_book.get('posts', []):
-        if not entry.get('bufferPostId') or not entry.get('sentAt') or entry.get('metricsAt') or entry.get('deletedAt'):
+    candidates = [(entry, social_learning.checkpoint(entry, now)) for entry in log_book.get('posts', [])]
+    candidates = [(entry, point) for entry, point in candidates if point is not None]
+    candidates.sort(key=lambda pair:(bool(pair[0].get('metricsAt')),pair[0]['sentAt']))
+    # Extra refreshes have their own small ceiling; never expand the provider budget.
+    followups = sum(1 for entry in log_book.get('posts', []) for at in entry.get('metricsRefreshAttempts', [])
+                    if str(at)[:10] == gates.stamp(now)[:10])
+    attempts = 0
+    for entry, point in candidates:
+        if entry.get('metricsAt') and followups >= 8:
             continue
-        if gates.when(entry['sentAt']) > now - SETTLE_METRICS:
-            continue
+        if attempts >= 12:
+            break
+        attempts += 1
+        if entry.get('metricsAt'):
+            entry.setdefault('metricsRefreshAttempts', []).append(gates.stamp(now))
+            followups += 1
         try:
             post = graphql(METRICS, {'id': entry['bufferPostId']}, key=key, send=send).get('post') or {}
         except BufferError as error:
@@ -835,7 +847,17 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
                 return read
             log(f"buffer: engagement for {entry['id']} not read: {error}")
             continue
-        entry['metrics'] = {m['type']: m['value'] for m in post.get('metrics') or [] if isinstance(m.get('value'), (int, float))}
+        metrics = {m['type']: m['value'] for m in post.get('metrics') or [] if isinstance(m.get('value'), (int, float))}
+        if not metrics or not any(k in metrics for k in ('impressions','views')):
+            log(f"buffer: {entry['id']} metrics unavailable; prior observation retained")
+            continue
+        history = entry.setdefault('metricsHistory', [])
+        prior = bool(entry.get('metricsAt'))
+        if prior and not history:
+            history.append(dict(at=entry['metricsAt'],metrics=dict(entry.get('metrics') or {}),legacy=True))
+        history.append(dict(at=gates.stamp(now),checkpointHours=point,metrics=metrics,
+                            providerUpdatedAt=post.get('metricsUpdatedAt'),followup=prior))
+        entry['metrics'] = metrics
         entry['metricsAt'] = gates.stamp(now)
         read += 1
     return read

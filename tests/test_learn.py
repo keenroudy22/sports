@@ -416,7 +416,7 @@ class PostTests(unittest.TestCase):
         calls = []
         def send(url, body, headers):
             calls.append(body['variables']['id'])
-            return 200, json.dumps({'data': {'post': {'metrics': [{'type': 'likes', 'value': 3}]}}}).encode()
+            return 200, json.dumps({'data': {'post': {'metrics': [{'type': 'likes', 'value': 3}, {'type': 'impressions', 'value': 100}]}}}).encode()
         self.assertEqual(buffer_post.collect_metrics(book, NOW, key='t', send=send, log=lambda *_: None), 1)
         self.assertEqual(calls, ['b1'])
         self.assertEqual(book['posts'][0]['metricsAt'], learning.stamp(NOW))

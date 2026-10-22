@@ -597,7 +597,7 @@ def bounded_caption(choice):
     return '\n'.join(lines)
 
 
-def select(data, details, now, lines=None, teams=None, order=None, log=None):
+def select(data, details, now, lines=None, teams=None, order=None, log=None, log_book=None):
     today_games = slate_games(data, now)
     games = today_games or next_slate_games(data, now)
     if not games:
@@ -630,9 +630,8 @@ def select(data, details, now, lines=None, teams=None, order=None, log=None):
         if log:
             log('research fallback: disabled; prep ' + ('eligible' if chosen else 'held: no eligible card'))
     else:
-        # One deterministic football-day chain. A mature category may move
-        # only through the two-week-confirmed learner; sparse categories keep
-        # this written order. Spread dogs remain inside Upset Watch.
+        # Owner Oct22: comparable-age attention may reorder mature eligible
+        # families. Sparse families retain their slots; no betting gate changes.
         factories = {
             'prep': lambda: prepared,
             'season': lambda: usable(season_candidate(games, details, now)),
@@ -642,6 +641,13 @@ def select(data, details, now, lines=None, teams=None, order=None, log=None):
         }
         wanted = [kind for kind in (order or factories) if kind in factories]
         wanted += [kind for kind in factories if kind not in wanted]
+        import social_learning
+        if log_book is None:
+            import x_post
+            log_book = x_post.load_log()
+        wanted, evidence = social_learning.research_order(wanted, log_book, now)
+        if log and evidence:
+            log(f'research attention order: {wanted}; comparable first-day views: {evidence}')
         for kind in wanted if not chosen else ():
             choice = factories[kind]()
             if log:

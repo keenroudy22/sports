@@ -205,6 +205,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Act on attention, keep tracking (owner, October22):** preserve24h/72h/7d
+  analytics observations with actual read times; do not invent missed checkpoints.
+  Additional reads stay inside the existing Buffer2700/month hard ceiling, max8
+  follow-up attempts/day and12metric attempts/pass; first reads have priority.
+  Tickets and verified result follow-ups reserve queue space before optional
+  updates. Eligible research families may reorder from comparable24–48h median
+  views with at least8posts per compared family; sparse categories retain slots.
+  Log the evidence/order. This changes content priority, never odds, stakes,
+  admission, records or loss visibility. No extra schedules or forced tickets.
+
 - **Playbook on X tickets (owner, October22):** new Best Bets, selected Climb
   tickets and registered owner tickets end with `Copy the bet 👇 @Playbook`.
   Include exactly one tag; do not assert that a reply/link exists before it does.
