@@ -12,6 +12,21 @@ from fakegames import game
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class InjuryRoleTests(unittest.TestCase):
+    def test_exact_ids_and_listed_order_never_guess_absent_players(self):
+        now = datetime(2026, 10, 22, 12, tzinfo=timezone.utc)
+        chart = {'status': 'ok', 'checkedAt': '2026-10-22T11:00:00Z', 'source': 'ESPN',
+                 'rolePositions': [{'key': 'lg', 'players': [{'id': '1', 'order': 1}, {'id': '2', 'order': 2}]}]}
+        players = [{'id': '1', 'name': 'Guard'}, {'id': '2', 'name': 'Backup'}, {'id': '3', 'name': 'Guard'}]
+        rows = build_site.injury_roles(players, chart, now)
+        self.assertEqual([r['depthRole'] for r in rows], ['starter', 'depth', 'unknown'])
+        self.assertNotIn('depthRole', players[0])
+        for change in ({'status': 'failed'}, {'checkedAt': '2026-10-19T11:00:00Z'},
+                       {'checkedAt': '2026-10-23T11:00:00Z'}, {'checkedAt': None}):
+            self.assertEqual({r['depthRole'] for r in build_site.injury_roles(players, {**chart, **change}, now)}, {'unknown'})
+        self.assertEqual(build_site.injury_roles(players, None, now)[0]['depthRole'], 'unknown')
+
+
 class ReaderWordsTests(unittest.TestCase):
     def test_public_copy_hides_old_private_clock_and_renames_climb_without_touching_numbers(self):
         saved = {'title': 'Ladder step 2: two legs at FanDuel',

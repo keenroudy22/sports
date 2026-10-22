@@ -1796,9 +1796,13 @@
     const gameName = id => { const g = (today.games || []).find(x => x.id === id); return g ? `${g.away.abbr} at ${g.home.abbr}` : id; };
     const text = item => typeof item === 'string' ? item : item.text || item.summary || '';
     const chip = status => `<span class="badge ${/out|reserve|doubtful/i.test(status) ? 'warn' : 'research'}">${esc(status)}</span>`;
+    const injuryRows = players => [['Listed starters', 'starter'], ['Depth / rotation', 'depth'], ['Role unconfirmed', 'unknown']].map(([label, role]) => {
+      const rows = players.filter(p => (['starter', 'depth'].includes(p.depthRole) ? p.depthRole : 'unknown') === role);
+      return rows.length ? `<h3>${label} · ${rows.length}</h3>${rows.map(p => `<p class="small" style="padding:3px 0">${chip(p.status)} <b>${esc(p.name)}</b> ${esc(p.position || '')} · ${esc(p.injury || 'injury not listed')}${p.reportedAt ? ` · reported ${esc(ago(p.reportedAt))}` : ''}${p.roleCheckedAt ? ` · role checked ${esc(ago(p.roleCheckedAt))}` : ''}</p>`).join('')}` : '';
+    }).join('');
     return `${section('Status changes', changes.length ? `<div class="board">${changes.map(c => `<div class="row-main" style="grid-template-columns:minmax(0,2fr) minmax(0,1fr)"><div class="row-title"><b>${esc(c.name)}</b><span>${esc(c.league)}${(((data.injuries || {})[c.league] || {}).teams || {})[c.teamId] ? ` · ${esc(data.injuries[c.league].teams[c.teamId].name)}` : ''} · ${esc(ago(c.observedAt))}</span></div><div><span class="muted">${esc(c.from)}</span> → <b>${esc(c.to)}</b></div></div>`).join('')}</div>` : '<p class="muted">No recent changes.</p>', '', 'Newest first. Provider-listed injuries only. Not confirmed starters.')}
       ${league === 'CFB' ? section('College injuries', '<p class="muted small">College injury reports are limited in the feed. Verify with team reports before relying on a projection.</p>')
-        : section('NFL injury report', teams.length ? `<div class="grid two">${teams.map(([, t]) => `<details class="more-box"><summary>${esc(t.name)} · ${t.players.length} listed</summary><div>${t.players.map(p => `<p class="small" style="padding:3px 0">${chip(p.status)} <b>${esc(p.name)}</b> ${esc(p.position || '')} · ${esc(p.injury || 'injury not listed')}${p.reportedAt ? ` · reported ${esc(ago(p.reportedAt))}` : ''}</p>`).join('')}</div></details>`).join('')}</div>` : empty('Nobody listed', 'No recent injury updates.', 'research'), '', inj.checkedAt ? `Updated ${esc(ago(inj.checkedAt))}. A missing listing is not proof of health.` : 'A missing listing is not proof of health.')}
+        : section('NFL injury report', teams.length ? `<div class="grid two">${teams.map(([, t]) => `<details class="more-box"><summary>${esc(t.name)} · ${t.players.length} listed</summary><div>${injuryRows(t.players)}</div></details>`).join('')}</div>` : empty('Nobody listed', 'No recent injury updates.', 'research'), '', `${inj.checkedAt ? `Updated ${esc(ago(inj.checkedAt))}. ` : ''}Listed starters lead their position on ESPN’s depth chart, not confirmed tonight. Depth players are listed behind them; unmatched or old roles stay unconfirmed. A missing listing is not proof of health.`)}
       ${section('Notes', notes.length ? notes.map(n => `<div class="card" style="margin-bottom:10px"><p class="eyebrow">${esc(LEAGUE_NAME[n.league] || n.league)} · ${esc(when(n.publishedAt))}</p>
           ${(n.takeaways || []).length ? `<ul class="fa" style="margin-top:6px">${n.takeaways.map(t => `<li class="for">${esc(text(t))}</li>`).join('')}</ul>` : ''}
           ${(n.weeklyReview || []).length ? `<p class="eyebrow" style="margin-top:10px">Review</p><ul class="fa">${n.weeklyReview.map(t => `<li>${esc(text(t))}</li>`).join('')}</ul>` : ''}
@@ -1937,7 +1941,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-43e5c9aa69e5';
-  const GAMES_ASSET = 'app-games.js?v=sha256-386e201a693e';
+  const GAMES_ASSET = 'app-games.js?v=sha256-091779a50bef';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

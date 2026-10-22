@@ -41,10 +41,20 @@ def roster():
 
 
 class DepthChartTests(unittest.TestCase):
-    def test_only_upcoming_teams_with_hard_skill_injuries_are_fetched(self):
+    def test_upcoming_injuries_include_linemen_defense_and_questionable_roles(self):
         self.assertEqual(set(module.targets(context(), slate(), NOW)), {'23'})
-        self.assertEqual(module.targets(context('Questionable'), slate(), NOW), {})
-        self.assertEqual(module.targets(context(position='G'), slate(), NOW), {})
+        self.assertEqual(set(module.targets(context('Questionable'), slate(), NOW)), {'23'})
+        self.assertEqual(set(module.targets(context(position='G'), slate(), NOW)), {'23'})
+        self.assertEqual(set(module.targets(context(position='CB'), slate(), NOW)), {'23'})
+        self.assertEqual(module.targets(context('Active'), slate(), NOW), {})
+
+    def test_all_position_roles_do_not_leak_into_skill_next_up(self):
+        data = payload()
+        data['depthchart'][0]['positions']['lg'] = {'athletes': [{'id': '99', 'displayName': 'Guard'}]}
+        data['depthchart'].append({'positions': {'cb': {'athletes': [{'id': '98', 'displayName': 'Corner'}]}}})
+        row = module.normalize(data, '2026-10-01T16:00:00Z', 'source')
+        self.assertTrue({'lg', 'cb'} <= {p['key'] for p in row['rolePositions']})
+        self.assertFalse({'lg', 'cb'} & {p['key'] for p in row['positions']})
 
     def test_provider_order_is_preserved_for_the_next_player_up(self):
         row = module.normalize(payload(), '2026-10-01T16:00:00Z', 'source', roster())

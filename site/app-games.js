@@ -552,9 +552,13 @@
     const injBlock = side => {
       const list = (((detail.teams || {})[side]) || {}).injuries || [];
       if (!list.length) return `<p class="small muted">${esc(g[side].abbr)}: nobody listed. A missing listing is not proof of health.</p>`;
-      return `<div class="card"><p class="eyebrow" style="margin-bottom:6px">${esc(g[side].abbr)}</p>${list.map(p => `<p class="small" style="padding:3px 0"><span class="badge ${/out|reserve|doubtful/i.test(p.status) ? 'warn' : 'research'}" style="margin:0 6px 0 0">${esc(p.status)}</span><b>${esc(p.name)}</b> ${esc(p.position || '')} · ${esc(p.injury || 'injury not listed')}${p.reportedAt ? ` · reported ${esc(ago(p.reportedAt))}` : ''}</p>`).join('')}</div>`;
+      const groups = [['Listed starters', 'starter'], ['Depth / rotation', 'depth'], ['Role unconfirmed', 'unknown']];
+      return `<div class="card"><p class="eyebrow" style="margin-bottom:6px">${esc(g[side].abbr)}</p>${groups.map(([label, role]) => {
+        const rows = list.filter(p => (['starter', 'depth'].includes(p.depthRole) ? p.depthRole : 'unknown') === role);
+        return rows.length ? `<h3>${label} · ${rows.length}</h3>${rows.map(p => `<p class="small" style="padding:3px 0"><span class="badge ${/out|reserve|doubtful/i.test(p.status) ? 'warn' : 'research'}" style="margin:0 6px 0 0">${esc(p.status)}</span><b>${esc(p.name)}</b> ${esc(p.position || '')} · ${esc(p.injury || 'injury not listed')}${p.reportedAt ? ` · reported ${esc(ago(p.reportedAt))}` : ''}${p.roleCheckedAt ? ` · role checked ${esc(ago(p.roleCheckedAt))}` : ''}</p>`).join('')}` : '';
+      }).join('')}</div>`;
     };
-    const injuryHtml = g.league === 'NFL' ? section('Injury report', `<div class="grid two">${injBlock('away')}${injBlock('home')}</div>`, '', 'ESPN injury list. Check the latest before you lean on a projection.')
+    const injuryHtml = g.league === 'NFL' ? section('Injury report', `<div class="grid two">${injBlock('away')}${injBlock('home')}</div>`, '', 'Listed starters lead their position on ESPN’s depth chart, not confirmed tonight. Depth players are listed behind them; unmatched or old roles stay unconfirmed. Losing several players at one position can hurt depth, but does not automatically make a bet.')
       : section('Injuries', '<p class="small muted">College injury reports are not covered by the feed. Check team sources before relying on a projection.</p>');
 
     /* Touchdown watch: recent role snapshots only, before kickoff. */

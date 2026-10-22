@@ -1228,10 +1228,10 @@
     },
     {
       "id": "A-20261009-1",
-      "title": "Isolate football injury and depth context by league",
-      "status": "shipped",
+      "title": "League-safe injuries with listed starter and depth roles",
+      "status": "ready",
       "owner": "agent",
-      "next": "Preserve league-scoped injury context and NFL-only depth charts; observe normal desk runs.",
+      "next": "Release/test owner-requested starter, depth and unconfirmed injury groups on game/news pages. Verify all-position ESPN roles and live mobile display; preserve league isolation and no guessed absent-player roles.",
       "doneWhen": "Live college game payloads never inherit NFL injuries or depth charts from overlapping ESPN IDs; NFL context remains intact; full release gates, hosted success and live 375/1440 evidence are recorded.",
       "evidence": "7ba788fb; hosted38054258809 success. Full release gates passed:1278Python/232Node, clean export, build/feed, budget/audits/guard/assets, isolated0830 rehearsal. Live12routes375/1440 clean; Harbor24px has18px gap above teams; SJSU no NFL context; NFL depth intact. Full receipt:docs/PRODUCT-IMPLEMENTATION.md; owner layout-fix-2026-10-10/release.json."
     },

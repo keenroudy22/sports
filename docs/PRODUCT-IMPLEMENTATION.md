@@ -1,5 +1,19 @@
 # October 5 product implementation tracker
 
+## October22 owner — starter/depth injury groups in progress
+
+A-20261009-1 reopened for the owner's latest request. Game and research injury
+lists now separate listed starters, depth/rotation and role unconfirmed. Exact
+athlete IDs join fresh (48h), successful ESPN depth charts; absence, stale, failed
+or future checks never label someone a backup. All-position role ordering is
+captured separately from the existing skill-only next-up chart; linemen/defensive
+injuries and questionable statuses now qualify upcoming NFL teams for the existing
+free depth/roster capture. No paid request, model weight, bet admission or record
+change. CFB is still not claimed covered. Social reasoning must independently
+verify news/role and a fresh price; injury counts alone are not a trend or bet.
+Source tests/hosted/live proof pending; daily mirror repair preserved in exact
+stash30dfb61e8bb7bc7339cc68c68243da12f29a904a until release receipts finish.
+
 ## October22 owner — TNF scope/layout verified shipped
 
 Owner approved the native full-width preview: "This is so much better."

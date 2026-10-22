@@ -574,6 +574,25 @@ def league_injuries(context):
     return out
 
 
+def injury_roles(players, chart, now):
+    """Exact athlete-ID join only; absence from a chart never means backup."""
+    roles = {}
+    try:
+        fresh = chart and chart.get('status') == 'ok' and timedelta(0) <= now - features.when(chart['checkedAt']) <= timedelta(hours=48)
+    except (KeyError, TypeError, ValueError):
+        fresh = False
+    if fresh:
+        for slot in chart.get('rolePositions', chart.get('positions', [])):
+            for p in slot.get('players') or []:
+                if p.get('id') and isinstance(p.get('order'), int) and p['order'] > 0:
+                    key = str(p['id'])
+                    roles[key] = min(roles.get(key, p['order']), p['order'])
+    return [{**p, 'depthRole': ('starter' if roles[str(p.get('id'))] == 1 else 'depth')
+             if str(p.get('id')) in roles else 'unknown',
+             'roleCheckedAt': chart.get('checkedAt') if fresh else None,
+             'roleSource': chart.get('source') if fresh else None} for p in players]
+
+
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
                 records, snap_players, now, grading, favorites=None, trends=None, reads=None, alternates=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
@@ -632,7 +651,7 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
                             usage[str(player.get('id'))] = summary
         detail['teams'][side] = {'form': recent_form(team, league, team_logs, kickoff),
                                  'defense': defense.get(team), 'opponentDefense': defense.get(opponent),
-                                 'injuries': injuries.get(team, []), 'depthChart': chart,
+                                 'injuries': injury_roles(injuries.get(team, []), chart, now), 'depthChart': chart,
                                  'depthUsage': usage}
     detail['lines'] = [l for l in lines if l.get('gameId') == card['id'] and not l.get('gameMarket')]
     detail['picks'] = [p for p in picks if p.get('gameId') == card['id']]
@@ -1616,7 +1635,7 @@ def annotate_quotes(picks, lines, games, now):
 
 # ------------------------------------------------------------------ research
 
-def build_research(context, reports, now):
+def build_research(context, reports, now, depth_charts=None):
     out = {'injuries': {}, 'changes': [], 'notes': []}
     for league in ('NFL', 'CFB'):
         block = (context.get('leagues') or {}).get(league) or {}
@@ -1633,7 +1652,8 @@ def build_research(context, reports, now):
                 if fresh:
                     listed.append({k: p.get(k) for k in ('id', 'name', 'position', 'status', 'injury', 'reportedAt', 'source')})
             if listed:
-                teams[team] = {'name': data.get('name'), 'players': listed}
+                chart = (depth_charts or {}).get(str(team)) if league == 'NFL' else None
+                teams[team] = {'name': data.get('name'), 'players': injury_roles(listed, chart, now)}
         out['injuries'][league] = {'teams': teams, 'checkedAt': block.get('checkedAt'), 'status': block.get('status'),
                                    'coverage': block.get('coverage')}
         out['changes'] += [{'league': league, **c} for c in (block.get('changes') or [])][-40:]
@@ -1936,7 +1956,7 @@ def build(now=None):
         write(OUT / 'teams' / f'{league}.json', directory)
         for team, payload in files.items():
             write(OUT / 'teams' / league / f'{team}.json', payload)
-    write(OUT / 'research.json', {'generatedAt': stamp(now), **build_research(context, reports, now)})
+    write(OUT / 'research.json', {'generatedAt': stamp(now), **build_research(context, reports, now, depth_charts)})
     write(OUT / 'sport-research.json', sport_research.build(now))
     import nba_today
     write(OUT / 'nba.json', dict(nba_today.build(now),morningBrief=morning_brief.current(now)))

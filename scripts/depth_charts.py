@@ -1,7 +1,7 @@
-"""Capture ESPN offensive depth charts only where a current injury makes them useful.
+"""Capture ESPN depth charts where an upcoming NFL team's injuries make them useful.
 
 The injury report remains the authority for availability.  This file adds the
-provider's ordering for QB/RB/FB/WR/TE so a game page can say who is next up
+provider's ordering for all-position injury roles and QB/RB/FB/WR/TE next up
 without guessing from a projection or an old box score.  It uses ESPN's public
 team endpoint and makes no metered requests.
 
@@ -28,7 +28,7 @@ def when(value):
 
 
 def targets(context, slate, now):
-    """Upcoming NFL teams with a hard offensive injury, keyed by team id."""
+    """Upcoming NFL teams with listed injuries, keyed by team id."""
     upcoming = set()
     for game in slate.get('games', []):
         if game.get('league') != 'NFL' or game.get('state') == 'post':
@@ -41,7 +41,7 @@ def targets(context, slate, now):
             upcoming.update(str(game.get(side, {}).get('id')) for side in ('home', 'away'))
     teams = ((context.get('leagues') or {}).get('NFL') or {}).get('teams') or {}
     return {team: data for team, data in teams.items() if str(team) in upcoming and any(
-        str(p.get('status', '')).lower() in HARD and str(p.get('position', '')).upper() in SKILL
+        str(p.get('status', '')).lower() not in {'', 'active'}
         for p in data.get('players', []))}
 
 
@@ -89,9 +89,18 @@ def normalize(payload, now, source, roster=None):
     if not positions:
         raise ValueError('Provider depth chart had no offensive skill positions')
     positions.sort(key=lambda row: POSITION_ORDER[row['key']])
+    # Keep all-position roles separate from the skill-only next-up reader.
+    role_positions = []
+    for unit in payload['depthchart']:
+        for key, block in (unit.get('positions') or {}).items():
+            players = [{'id': str(p['id']), 'order': order}
+                       for order, p in enumerate(block.get('athletes') or [], 1) if p.get('id')]
+            if players:
+                role_positions.append({'key': key, 'players': players})
     team = payload['team']
     return {'name': team.get('displayName'), 'abbr': team.get('abbreviation'), 'status': 'ok',
-            'checkedAt': now, 'lastAttemptAt': now, 'source': source, 'positions': positions}
+            'checkedAt': now, 'lastAttemptAt': now, 'source': source, 'positions': positions,
+            'rolePositions': role_positions}
 
 
 def refresh(previous, context, slate, fetch, now):
@@ -111,7 +120,7 @@ def refresh(previous, context, slate, fetch, now):
             prior = old.get(str(team), {})
             out[str(team)] = {**prior, 'status': 'failed', 'lastAttemptAt': stamp,
                               'error': type(error).__name__, 'positions': prior.get('positions', [])}
-    return {'updatedAt': stamp, 'coverage': 'ESPN offensive depth charts for upcoming teams with a hard skill-position injury.',
+    return {'updatedAt': stamp, 'coverage': 'ESPN listed roles for upcoming NFL teams with injuries; not confirmed game starters.',
             'teams': out}
 
 

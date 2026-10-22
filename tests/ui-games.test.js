@@ -265,6 +265,22 @@ test('a game page excludes a fun ticket that contains games from the rest of the
   assert.match(html, /No official bet in this game/);
 });
 
+test('injuries group listed starters, depth and unknown roles without guessing from status', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = {...slate()[4], league:'NFL'};
+  const list = [{name:'Starting Guard',position:'G',status:'Out',depthRole:'starter'},
+    {name:'Rotation Guard',position:'G',status:'Out',depthRole:'depth'},
+    {name:'Unknown Guard',position:'G',status:'Out'}];
+  const detail = {...g,picks:[],favoriteLines:[],modelReads:[],seasonTrends:[],props:{lines:{}},
+    teams:{home:{injuries:list,form:[]},away:{injuries:[],form:[]}}};
+  const ctx = contextFor(api,[g],{get:async path => path === 'app/today.json' ? {games:[g],picks:[],freshness:{}} : detail});
+  const html = unesc(await factory(ctx).game({id:g.id}));
+  assert.match(html,/Listed starters · 1<\/h3>[\s\S]*Starting Guard/);
+  assert.match(html,/Depth \/ rotation · 1<\/h3>[\s\S]*Rotation Guard/);
+  assert.match(html,/Role unconfirmed · 1<\/h3>[\s\S]*Unknown Guard/);
+  assert.match(html,/not confirmed tonight/);
+});
+
 test('an injured-reserve player left on a depth chart is never promoted as next up', async () => {
   const { api, factory } = loadBrowserApi();
   const g = { ...slate()[4], home: team('26', 'SEA', 'Seattle Seahawks', 10, 10), away: team('7', 'DEN', 'Denver Broncos', 10, 10) };
