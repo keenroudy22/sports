@@ -1,5 +1,32 @@
 # October 5 product implementation tracker
 
+## October22 owner — queued social-style enforcement reopened
+
+The generator-only release did not protect already-frozen overnight drafts.
+NBA trends and End-Zone subsequently sent old copy/art; those public originals
+remain untouched. New source checks routine captions before Buffer creation,
+attests only freshly rendered clean native PNGs, and uses the existing five-minute
+mirror to inspect private queued posts, including future dates. Near release it
+rechecks actual provider text. It cancels only a provider-confirmed scheduled
+private draft, retaining original attempt evidence and an explicit needsRevision
+flag. Unknown/provider-error and already-public states never delete. Registered
+owner screenshots retain original bytes. No new schedule, category, cap or budget.
+
+Twelve focused regressions pass; normal suite1612(2skips, before two extra tests)
+and271Node pass. Full clean-export/locked release and hosted/live checks remain
+pending. Complete Buffer scheduled listing at14:58Z has one clean owner lotto,
+hasNextPage=false; first-quarter ticket actually sent14:51:16.991Z at
+https://x.com/1753110091912413184/status/2113282043463311578.
+
+Owner's JMU-11.5/-106 screenshot evaluated14:59:30Z through the shared selection
+formula: model JMU by15.2, anchored chance50.6% versus51.5% required, -0.9points
+and -0.017 expected units per unit. It also misses the six-point college-side
+cushion; not an admitted Best Bet. Official App State preview confirms Singleton
+questionable and split quarterback usage, not a made-up confirmed starter.
+Braun10.5 remains an NBA research lean, model13.8 with33estimated minutes, not a
+validated official prop. Owner +132 is a personal50%boost over-114, not a public
+market quote. No extra official play or personal wager placed by the agent.
+
 ## October22 owner — TNF personal tickets registered and accepted in X queue
 
 Owner approved first-quarter ticket plus our choice of either lotto. Selected

@@ -221,7 +221,12 @@ Handy commands (from `~/Projects/sports`):
   watched. Research stays explicitly `Research, not a bet.`; retain material
   history-season, estimated-minutes and availability facts, exact prices and all
   honest wins/losses. No guarantees or stronger betting tier by copy alone.
-  Preserve sent words/art and frozen attempts; apply prospectively across sports.
+  Preserve sent words/art and original attempt evidence. Before scheduling and
+  again in the existing five-minute mirror, check private queued captions and
+  native graphics against this policy, including overnight drafts. Confirm the
+  provider still says scheduled before cancelling a stale private attempt; never
+  delete a sent or unknown-state post. Record a required fresh revision rather
+  than silently dropping it. Exact registered owner screenshots remain original.
 
 - **Climb ticket shape (owner, October21 follow-up):** target two alternate-line
   legs, with three only when independently justified, at roughly -150 to -200 for

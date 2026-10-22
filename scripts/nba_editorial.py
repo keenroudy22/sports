@@ -180,7 +180,7 @@ def choices(data, now, history=None):
                     'capturedAt':boxscores.stamp(now),'sourceAt':data['sourceAt'],
                     'due':boxscores.stamp(due),'stale':boxscores.stamp(cutoff),'rows':rows,'text':text,
                     'title':title,'kicker':(f"{target:%b %-d} · TEAM RESEARCH" if family=='projections' else
-                        ('LAST SEASON · NEW ROSTERS MAY DIFFER' if chosen[0]['window']=='LAST SEASON' else
+                        ('LAST SEASON · REGULAR SEASON' if chosen[0]['window']=='LAST SEASON' else
                          'THIS SEASON · SCORING CONTEXT')),
                     'right_label':'MY TOTAL' if family=='projections' else 'AVG POINTS'})
     return out

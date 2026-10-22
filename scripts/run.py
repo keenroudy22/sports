@@ -2922,7 +2922,10 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
 def mirror_due(log_book, now):
     """Is there an X result or Discord-first delivery the lightweight job should handle?"""
     import nba_editorial
+    import buffer_post
     for entry in log_book.get('posts', []):
+        if buffer_post.style_audit_due(entry, now):
+            return True
         if nba_editorial.veto_pending(entry,now):
             return True
         if entry.get('cancelledAt') or entry.get('deletedAt'):

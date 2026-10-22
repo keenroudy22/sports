@@ -38,6 +38,7 @@ import quota
 import post_windows
 import receipts
 import x_post
+import social_style
 from social_copy import without_playbook
 from sports_refresh import eastern_date
 
@@ -302,6 +303,17 @@ def ticket_art_live(url, timeout=15):
         with urllib.request.urlopen(request, timeout=timeout) as response:
             prefix = response.read(256)
         return prefix.startswith(b'\x89PNG\r\n\x1a\n') and b'KooknTheme\x00ticket' in prefix
+    except (urllib.error.URLError, OSError, ValueError):
+        return False
+
+
+def plain_art_live(url, timeout=15):
+    """Read the native renderer's policy attestation, never guess from file date."""
+    try:
+        request = urllib.request.Request(url, headers={'User-Agent': 'KeenRoudySports/1.0', 'Range': 'bytes=0-255'})
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            prefix = response.read(256)
+        return prefix.startswith(b'\x89PNG\r\n\x1a\n') and social_style.MARKER in prefix
     except (urllib.error.URLError, OSError, ValueError):
         return False
 
@@ -625,6 +637,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if kind != 'play':
             text = without_playbook(text)
         problems = x_post.x_style(text)
+        if social_style.active(now):
+            problems += social_style.issues(text)
         if problems:
             if kind == 'play' and missed_target(guid, due, now, items):
                 stats['officialNotScheduled'] += 1
@@ -650,6 +664,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # Resolve every fallible field before Buffer accepts the post. Otherwise a
         # local labeling error after createPost could leave an unlogged post that a
         # later run schedules again. Text-only posts do not enter card comparisons.
+        if image and social_style.active(now) and not owner_slip_image(guid, kind, card_key, items) and not plain_art_live(image):
+            log(f'buffer: {guid} waits: image has no verified current social-style marker')
+            if kind == 'play':
+                stats['officialNotScheduled'] += 1
+            continue
         if image:
             try:
                 card_theme = ('owner-screenshot' if owner_slip_image(guid, kind, card_key, items)
@@ -676,6 +695,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
+        if social_style.active(now):
+            entry.update(queuedText=text, socialStyleVersion=social_style.VERSION)
         # Official plays and their settled win updates stay together in Plays
         # & Results. Pregame personal tickets belong there too, while remaining
         # community content and separate from the official Best Bet record.
@@ -774,7 +795,7 @@ def cancel_closed(closed_ids, log_book, now, key=None, send=http_send, log=print
     return log_book
 
 
-STATUS = 'query($id: PostId!) { post(input: {id: $id}) { id status sentAt externalLink error { message } } }'
+STATUS = 'query($id: PostId!) { post(input: {id: $id}) { id status text sentAt externalLink error { message } } }'
 METRICS = 'query($id: PostId!) { post(input: {id: $id}) { id metricsUpdatedAt metrics { type value } } }'
 SETTLE_METRICS = timedelta(hours=24)     # owner Autopilot: first read at 24h, within 30h
 
@@ -802,10 +823,70 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
     return read
 
 
+def style_audit_due(entry, now):
+    if not social_style.active(now) or not entry.get('bufferPostId') or any(entry.get(k) for k in ('sentAt', 'cancelledAt', 'deletedAt', 'error')):
+        return False
+    audit = entry.get('socialStyleAudit') or {}
+    if audit.get('checkedAt') and now - gates.when(audit['checkedAt']) < timedelta(minutes=5):
+        return False
+    return entry.get('socialStyleVersion') != social_style.VERSION or not entry.get('dueAt') or gates.when(entry['dueAt']) <= now + timedelta(minutes=30)
+
+
+def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_check=None, items=None):
+    """Audit private queue against the current policy. Never delete a sent/unknown-state post."""
+    failed = []
+    art_check = art_check or plain_art_live
+    if items is None:
+        try:
+            items = {r['id']: r for r in json.loads((ROOT / 'data/community.json').read_text()).get('tickets', [])}
+        except (OSError, ValueError, KeyError):
+            items = {}
+    for entry in log_book.get('posts', []):
+        if not style_audit_due(entry, now):
+            continue
+        try:
+            post = graphql(STATUS, {'id': entry['bufferPostId']}, key=key, send=send).get('post') or {}
+            if post.get('status') == 'sent' or post.get('sentAt'):
+                entry['sentAt'] = post.get('sentAt') or gates.stamp(now)
+                entry['link'] = post.get('externalLink') or None
+                entry['tweetId'] = (entry['link'] or '').rstrip('/').rsplit('/', 1)[-1] if '/status/' in (entry['link'] or '') else None
+                entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'already-public'}
+                continue
+            if post.get('status') != 'scheduled':
+                raise BufferError('queued style check cannot confirm a private scheduled provider state')
+            text = post.get('text') or entry.get('queuedText') or (entry.get('discord') or {}).get('text')
+            problems = social_style.issues(text) if text else ['caption unavailable for verification']
+            card = entry.get('cardKey')
+            image = (entry.get('discord') or {}).get('image') or (card_url(card) if card else None)
+            owner = owner_slip_image(entry['id'], 'community' if str(entry.get('kind')) == 'buffer:community' else '', card, items)
+            if entry.get('card') and not owner:
+                if not image or not art_check(image):
+                    problems.append('house graphic lacks verified current social-style marker')
+            if problems:
+                delete_post(entry['bufferPostId'], key=key, send=send)
+                entry['cancelledAt'] = gates.stamp(now)
+                entry['cancelReason'] = 'Owner social-style correction: ' + '; '.join(problems)
+                entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'cancelled-private', 'issues': problems, 'needsRevision': True}
+                # Preserve the original text, card and provider id as evidence, not a silent rewrite.
+                log(f"buffer: {entry['id']} private draft cancelled: {'; '.join(problems)}; fresh revision required")
+                failed.append(entry)
+            else:
+                entry['socialStyleVersion'] = social_style.VERSION
+                entry['queuedText'] = text
+                entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'clear'}
+        except BufferError as error:
+            previous = (entry.get('socialStyleAudit') or {}).get('error')
+            entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'unverified', 'error': str(error)}
+            if previous != str(error):
+                failed.append(entry)
+            log(f"buffer: {entry['id']} style audit unavailable; no deletion: {error}")
+    return failed
+
+
 def reconcile(log_book, now, key=None, send=http_send, log=print):
     """Ask Buffer what became of each post whose time has passed, once: the X link when it went out, the
     message when it failed. Returns the entries that failed, for the run to raise."""
-    failed = []
+    failed = audit_pending_style(log_book, now, key=key, send=send, log=log)
     for entry in log_book.get('posts', []):
         import nba_editorial
         if nba_editorial.veto_pending(entry,now):

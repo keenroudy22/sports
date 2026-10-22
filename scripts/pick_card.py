@@ -1186,6 +1186,8 @@ def render(svg_text, out, chrome=None, timeout=45, size=None):
         raise RuntimeError('browser render failed: no screenshot was written')
     if 'data-kookn-theme="ticket"' in svg_text:
         mark_png_theme(out)
+    import social_style
+    social_style.mark(out, svg_text)
     return out
 
 
