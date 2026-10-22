@@ -2726,7 +2726,8 @@ def _run(args, now, slot, kinds, status):
                 and any(g in games and eastern_date(gates.when(games[g]['kickoff']))==eastern_date(now)
                         for g in p.get('gameIds',[])) for k,p in ctx.first.items())
             status['morningBriefPrepared']=morning_brief.prepare(
-                now if args.dry_run else datetime.now(timezone.utc),screened,official=bool(admitted or public_today))
+                now if args.dry_run else datetime.now(timezone.utc),screened,
+                official=bool(morning_brief.has_official_straight(admitted) or public_today))
         except Exception as error:
             status['errors'].append(f'morning brief: {type(error).__name__}: {error}')
         # The lane is fixed at admission, but the public feature store cannot

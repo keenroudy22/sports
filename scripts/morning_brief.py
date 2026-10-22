@@ -27,6 +27,9 @@ def same_line(row, screen):
     # Legacy captured screens have no catalog identity; never fuzzy-match teams.
     return normal(screen.get('title')) == normal(row.get('title'))
 
+def has_official_straight(admitted):
+    return any(not pick.get('parlayType') and not pick.get('legs') for _,_,pick in admitted)
+
 def choose(now,lines,screened,nba,official=False):
     if official:return None
     options=[];day=eastern_date(now)

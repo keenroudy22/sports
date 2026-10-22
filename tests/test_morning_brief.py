@@ -26,6 +26,11 @@ class MorningBriefTests(unittest.TestCase):
             self.assertIsNone(m.current(self.now.replace(hour=16),root))
     def test_official_suppresses_lean(self):
         self.assertIsNone(m.choose(self.now,[],[],{},True))
+    def test_climb_and_fun_tickets_do_not_suppress_a_morning_lean(self):
+        ticket=('CFB','parlays',dict(parlayType='ladder',legs=[{},{}]))
+        self.assertFalse(m.has_official_straight([ticket]))
+        self.assertFalse(m.has_official_straight([('NBA','parlays',dict(legs=[{},{}]))]))
+        self.assertTrue(m.has_official_straight([ticket,('NFL','picks',dict(id='best'))]))
     def test_catalog_identity_matches_canonical_name_not_wrong_market_or_book(self):
         row=dict(self.row,id='game-NFL-401873010-away-ml',gameId='NFL-401873010',league='NFL',
                  title='NE moneyline',line=0,grade=dict(projection=3.0,calibrated=True,edge=3))

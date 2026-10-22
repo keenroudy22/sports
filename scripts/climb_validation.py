@@ -104,7 +104,7 @@ def grade(rows, games, now):
         game = games[offer['gameId']]
         # Box-score store accepts only official finals. Respect its retrieval time;
         # never let a later correction leak into an earlier replay.
-        if features.when(game['retrievedAt']) > now or features.when(game['kickoff'])+timedelta(hours=8) > now:
+        if features.when(game['retrievedAt']) > now or not features.when(game['kickoff']) < features.when(game['retrievedAt']):
             continue
         matches = [p for p in game.get('players', [])
                    if easy_parlay.name_key(p.get('name')) == offer['player']]
