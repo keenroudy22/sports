@@ -2620,6 +2620,157 @@
     },
     "morningRepair": "Installed moneyline pooling and exact catalog identity matching confirmed; regression checks saved separately. No extra code repair pending.",
     "releaseConditions": "Existing6:45/8:30 refreshes own admission. First fully qualifying game-day step releases website/Plays & Results/Buffer X with normal Discord-first lead, art, one-open-step, caps and80/20. Otherwise exact fresh hold and honest research lean; no owner reconfirmation.",
-    "remainingExternalEvidence": "No verified numeric new rotation allocations. College availability remains team-specific; ECU/Memphis current depth/availability not established by official event publicity. Check official team game notes before admission; do not infer healthy."
+    "remainingExternalEvidence": "No verified numeric new rotation allocations. College availability remains team-specific; ECU/Memphis current depth/availability not established by official event publicity. Check official team game notes before admission; do not infer healthy.",
+    "postPublishObservation": {
+      "checkedAt": "2026-10-22T05:30:53Z",
+      "liveGeneratedAt": "2026-10-22T05:25:42Z",
+      "comparisons": [
+        {
+          "id": "game-CFB-401871056-home-ml",
+          "gameId": "CFB-401871056",
+          "player": null,
+          "title": "KENN moneyline",
+          "line": 0,
+          "direction": null,
+          "odds": 310,
+          "book": "DraftKings",
+          "observedAt": "2026-10-22T05:23:02Z",
+          "source": null,
+          "grade": {
+            "calibrated": false,
+            "chance": 0.328,
+            "chanceDisplay": null,
+            "edge": 8.4,
+            "ev": 0.345,
+            "fairOdds": null,
+            "model": "v2.1",
+            "needs": 0.244,
+            "projection": 0.3,
+            "push": 0.0,
+            "range80": [
+              0.328,
+              0.328
+            ],
+            "raw": 0.328,
+            "snapshotAt": "2026-10-15T03:31:01Z",
+            "thin": false,
+            "tier": "strong"
+          },
+          "gradeNote": null,
+          "freshness": "fresh",
+          "state": "open"
+        },
+        {
+          "id": "prop-CFB-401869845-5146664-passYds",
+          "gameId": "CFB-401869845",
+          "player": "Henry Hasselbeck",
+          "title": "Henry Hasselbeck under 183.5 passing yards",
+          "line": 183.5,
+          "direction": "under",
+          "odds": -114,
+          "book": "FanDuel",
+          "observedAt": "2026-10-22T05:24:15Z",
+          "source": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+          "grade": {
+            "calibrated": true,
+            "chance": 0.575,
+            "chanceDisplay": 0.575,
+            "edge": 4.2,
+            "ev": 0.079,
+            "fairOdds": -135,
+            "games": 6,
+            "limited": false,
+            "model": "v2.1",
+            "needs": 0.533,
+            "projection": 60.4,
+            "push": 0.0,
+            "range80": [
+              14.3,
+              106.6
+            ],
+            "raw": 1.0,
+            "rawTier": "lean",
+            "snapshotAt": "2026-10-17T19:42:30Z",
+            "thin": false,
+            "tier": "lean",
+            "view": "lean"
+          },
+          "gradeNote": null,
+          "freshness": "fresh",
+          "state": "open"
+        },
+        {
+          "id": "game-CFB-401869845-away-ml",
+          "gameId": "CFB-401869845",
+          "player": null,
+          "title": "JMU moneyline",
+          "line": 0,
+          "direction": null,
+          "odds": -425,
+          "book": "DraftKings",
+          "observedAt": "2026-10-22T05:23:02Z",
+          "source": null,
+          "grade": {
+            "calibrated": false,
+            "chance": 0.824,
+            "chanceDisplay": null,
+            "edge": 1.4,
+            "ev": 0.018,
+            "fairOdds": null,
+            "model": "v2.1",
+            "needs": 0.81,
+            "projection": 0.8,
+            "push": 0.0,
+            "range80": [
+              0.8240000000000001,
+              0.8240000000000001
+            ],
+            "raw": 0.824,
+            "snapshotAt": "2026-10-17T19:42:30Z",
+            "thin": false,
+            "tier": "pass"
+          },
+          "gradeNote": null,
+          "freshness": "fresh",
+          "state": "open"
+        },
+        {
+          "id": "game-CFB-401869845-away",
+          "gameId": "CFB-401869845",
+          "player": null,
+          "title": "JMU -10.5",
+          "line": -10.5,
+          "direction": null,
+          "odds": -109,
+          "book": "BetRivers",
+          "observedAt": "2026-10-22T04:05:57Z",
+          "source": null,
+          "grade": {
+            "calibrated": true,
+            "chance": 0.517,
+            "chanceDisplay": 0.517,
+            "edge": -0.5,
+            "ev": -0.009,
+            "fairOdds": -107,
+            "model": "v2.1",
+            "needs": 0.522,
+            "projection": -15.2,
+            "push": 0.0,
+            "range80": [
+              -36.1,
+              5.7
+            ],
+            "raw": 0.612,
+            "snapshotAt": "2026-10-17T19:42:30Z",
+            "thin": false,
+            "tier": "pass"
+          },
+          "gradeNote": null,
+          "freshness": "aging",
+          "state": "open"
+        }
+      ],
+      "hold": "Henry Hasselbeck under183.5 -114FanDuel is now a live research lean at05:24:15Z. Stored projection60.4 versus183.5 is a large discrepancy: verify expected starting QB/current role and every price/sanity/current supporting-reason check before any official use. Do not turn displayed57.5% into an admission or freeze tonight’s quote. Kennesaw+310 remains outside+250 cap; JMU mainML remains ineligible for actual-alt-only Climb. Existing6:45/8:30 reruns own current qualification."
+    }
   }
 }
