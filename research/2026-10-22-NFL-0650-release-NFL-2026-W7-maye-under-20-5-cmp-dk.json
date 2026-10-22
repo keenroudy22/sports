@@ -1,0 +1,447 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-22T10:50:34Z",
+  "summary": "Released 1: Drake Maye UNDER 20.5 completions +102 at DraftKings.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": true,
+      "modelLean": true,
+      "position": "QB",
+      "athleteId": "4431452",
+      "market": "cmp",
+      "line": 20.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401873010"
+      ],
+      "book": "DraftKings",
+      "odds": 102,
+      "projection": 19.3,
+      "edge": "Price-checked chance 50.8% against the exact two-sided price; 49.5% needed at +102: +1.3 percentage points.",
+      "cutoff": "UNDER 20.5 at +102 or better; off the card at 20 or lower, or at -113 or worse at 20.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-21T19:35:14Z",
+      "quotedAt": "2026-10-22T09:44:09Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 5:44 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-22T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "chef_pick",
+      "riskUnits": 2,
+      "probabilityAtPublication": {
+        "rawChance": 0.577,
+        "chance": 0.508,
+        "calibrated": true,
+        "calibration": 0.11,
+        "calibrationN": 2285,
+        "push": 0.0,
+        "breakEven": 0.495,
+        "edgePoints": 1.3,
+        "evPerUnit": 0.027,
+        "snapshotAt": "2026-10-21T19:35:14Z",
+        "evaluatedAt": "2026-10-22T10:45:05Z",
+        "fairChance": 0.467,
+        "anchoredChance": 0.508,
+        "gap": 4.2,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "New England Patriots at Chicago Bears",
+      "title": "Drake Maye UNDER 20.5 completions",
+      "id": "NFL-2026-W7-maye-under-20-5-cmp-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873010",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+        "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-five-players-for-thursday-night-football-vs-the-bears",
+        "https://www.chicagobears.com/news/bears-looking-to-stack-strong-performances-on-short-week"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 6 of 10 under 20.5.",
+        "context": [
+          "Role: projected for 28.8 att a game.",
+          "Defense: CHI allows 17 completions a game to QBs, 2nd-stingiest of 32 this season."
+        ],
+        "cautions": [
+          "Patriots receiver A.J. Brown was a full participant with an ankle injury and received no game-status designation.",
+          "The Bears will play without starting defensive ends Montez Sweat, who was suspended for two games, and Dayo Odeyingbo, who was placed on injured reserve with a quadriceps injury.",
+          "Bears linebacker T.J. Edwards was doubtful with a hamstring injury, and defensive back Tyrique Stevenson Sr. was questionable with a hip injury."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 19.3 against 20.5. The under reads 50.8% after adjustment from the raw 57.7%; 49.5% is needed at +102. Last 10 games: 6 of 10 under 20.5. Role: projected for 28.8 att a game. Defense: CHI allows 17 completions a game to QBs, 2nd-stingiest of 32 this season.",
+      "risk": "Patriots receiver A.J. Brown was a full participant with an ankle injury and received no game-status designation. The Bears will play without starting defensive ends Montez Sweat, who was suspended for two games, and Dayo Odeyingbo, who was placed on injured reserve with a quadriceps injury. Bears linebacker T.J. Edwards was doubtful with a hamstring injury, and defensive back Tyrique Stevenson Sr. was questionable with a hip injury. An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Under 20.5 in 6 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Book says 20.5. I say 19.3.",
+            "numbers": {
+              "projection": 19.3,
+              "line": 20.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-21T19:35:14Z"
+          },
+          {
+            "text": "3 of his last 5 games finished under 20.5 completions.",
+            "numbers": {
+              "values": [
+                14,
+                14,
+                22,
+                26,
+                18
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 20.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-18T17:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Patriots receiver A.J. Brown was a full participant with an ankle injury and received no game-status designation.",
+            "numbers": {},
+            "source": "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "The Bears will play without starting defensive ends Montez Sweat, who was suspended for two games, and Dayo Odeyingbo, who was placed on injured reserve with a quadriceps injury.",
+            "numbers": {},
+            "source": "https://www.chicagobears.com/news/bears-looking-to-stack-strong-performances-on-short-week",
+            "time": "2026-10-22T10:45:05Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "The Patriots ruled out guards Alijah Vera-Tucker and Ben Brown, while tackle Morgan Moses was questionable with a foot injury.",
+            "numbers": {},
+            "source": "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Patriots coach Mike Vrabel confirmed Walter Rouse and Matt Pryor will start at guard against the Bears.",
+            "numbers": {},
+            "source": "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-five-players-for-thursday-night-football-vs-the-bears",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Starting Patriots receiver Romeo Doubs was placed on injured reserve with a shoulder injury, and receiver Mack Hollins was also on injured reserve.",
+            "numbers": {},
+            "source": "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-five-players-for-thursday-night-football-vs-the-bears",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Patriots receiver A.J. Brown was a full participant with an ankle injury and received no game-status designation.",
+            "numbers": {},
+            "source": "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "The Bears will play without starting defensive ends Montez Sweat, who was suspended for two games, and Dayo Odeyingbo, who was placed on injured reserve with a quadriceps injury.",
+            "numbers": {},
+            "source": "https://www.chicagobears.com/news/bears-looking-to-stack-strong-performances-on-short-week",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Bears linebacker T.J. Edwards was doubtful with a hamstring injury, and defensive back Tyrique Stevenson Sr. was questionable with a hip injury.",
+            "numbers": {},
+            "source": "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "The Patriots ruled out guards Alijah Vera-Tucker and Ben Brown, while tackle Morgan Moses was questionable with a foot injury.",
+            "numbers": {},
+            "source": "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Patriots coach Mike Vrabel confirmed Walter Rouse and Matt Pryor will start at guard against the Bears.",
+            "numbers": {},
+            "source": "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-five-players-for-thursday-night-football-vs-the-bears",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Starting Patriots receiver Romeo Doubs was placed on injured reserve with a shoulder injury, and receiver Mack Hollins was also on injured reserve.",
+            "numbers": {},
+            "source": "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-five-players-for-thursday-night-football-vs-the-bears",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Patriots receiver A.J. Brown was a full participant with an ankle injury and received no game-status designation.",
+            "numbers": {},
+            "source": "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "The Bears will play without starting defensive ends Montez Sweat, who was suspended for two games, and Dayo Odeyingbo, who was placed on injured reserve with a quadriceps injury.",
+            "numbers": {},
+            "source": "https://www.chicagobears.com/news/bears-looking-to-stack-strong-performances-on-short-week",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Bears linebacker T.J. Edwards was doubtful with a hamstring injury, and defensive back Tyrique Stevenson Sr. was questionable with a hip injury.",
+            "numbers": {},
+            "source": "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "text": "Jack Sanborn (CHI) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4372576/jack-sanborn",
+            "time": "2026-10-22T01:31Z"
+          },
+          {
+            "text": "Tyrique Stevenson Sr. (CHI) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426374/tyrique-stevenson-sr",
+            "time": "2026-10-21T23:40Z"
+          },
+          {
+            "text": "T.J. Edwards (CHI) is listed Doubtful.",
+            "numbers": {
+              "status": "Doubtful"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3121544/tj-edwards",
+            "time": "2026-10-21T23:34Z"
+          },
+          {
+            "text": "Kyle Monangai (CHI) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai",
+            "time": "2026-10-21T19:18Z"
+          },
+          {
+            "text": "Morgan Moses (NE) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses",
+            "time": "2026-10-22T01:41Z"
+          },
+          {
+            "text": "Channing Canada (NE) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4688779/channing-canada",
+            "time": "2026-10-22T01:41Z"
+          },
+          {
+            "text": "Karon Prunty (NE) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4606666/karon-prunty",
+            "time": "2026-10-22T01:37Z"
+          },
+          {
+            "text": "Ben Brown (NE) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4362890/ben-brown",
+            "time": "2026-10-22T01:33Z"
+          },
+          {
+            "text": "Alijah Vera-Tucker (NE) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4259646/alijah-vera-tucker",
+            "time": "2026-10-22T01:30Z"
+          },
+          {
+            "text": "Christian Elliss (NE) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4245273/christian-elliss",
+            "time": "2026-10-21T23:46Z"
+          },
+          {
+            "text": "Kevin Byard (NE) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2574056/kevin-byard",
+            "time": "2026-10-21T23:45Z"
+          },
+          {
+            "text": "Craig Woodson (NE) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4428930/craig-woodson",
+            "time": "2026-10-21T23:36Z"
+          },
+          {
+            "text": "Carlton Davis III (NE) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3916923/carlton-davis-iii",
+            "time": "2026-10-21T23:27Z"
+          }
+        ],
+        "weather": {
+          "tempF": 60,
+          "windMph": 5,
+          "windDirection": "ENE",
+          "precipProb": 0,
+          "periodStart": "2026-10-22T19:00:00-05:00",
+          "issuedAt": "2026-10-22T06:21:02+00:00",
+          "source": "https://api.weather.gov/gridpoints/LOT/75,72/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 20.5,
+                "price": -102,
+                "time": "2026-10-21T04:58:56Z"
+              },
+              "now": {
+                "line": 20.5,
+                "price": 102,
+                "time": "2026-10-22T09:44:09Z"
+              }
+            },
+            "FanDuel": null
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 20.5,
+            "price": 102,
+            "time": "2026-10-22T09:44:09Z"
+          }
+        },
+        "ours": {
+          "projection": 19.3,
+          "line": 20.5,
+          "market": "cmp",
+          "text": "Under 20.5 in 6 of his last 10 games.",
+          "snapshotAt": "2026-10-21T19:35:14Z"
+        },
+        "history": "Last 10 games: 6 of 10 under 20.5.",
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://www.patriots.com/game-day/2026/reg-week7/patriots-at-bears/injuries",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "label": "role",
+            "url": "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-five-players-for-thursday-night-football-vs-the-bears",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "label": "injury",
+            "url": "https://www.chicagobears.com/news/bears-looking-to-stack-strong-performances-on-short-week",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4372576/jack-sanborn",
+            "time": "2026-10-22T01:31Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426374/tyrique-stevenson-sr",
+            "time": "2026-10-21T23:40Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3121544/tj-edwards",
+            "time": "2026-10-21T23:34Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai",
+            "time": "2026-10-21T19:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses",
+            "time": "2026-10-22T01:41Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4688779/channing-canada",
+            "time": "2026-10-22T01:41Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4606666/karon-prunty",
+            "time": "2026-10-22T01:37Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4362890/ben-brown",
+            "time": "2026-10-22T01:33Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4259646/alijah-vera-tucker",
+            "time": "2026-10-22T01:30Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4245273/christian-elliss",
+            "time": "2026-10-21T23:46Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2574056/kevin-byard",
+            "time": "2026-10-21T23:45Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4428930/craig-woodson",
+            "time": "2026-10-21T23:36Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3916923/carlton-davis-iii",
+            "time": "2026-10-21T23:27Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/LOT/75,72/forecast/hourly",
+            "time": "2026-10-22T06:21:02+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873010",
+            "time": "2026-10-22T10:45:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-22T10:45:05Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-22T10:50:34Z"
+    }
+  ]
+}
