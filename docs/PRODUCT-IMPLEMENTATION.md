@@ -1,5 +1,23 @@
 # October 5 product implementation tracker
 
+## October22 owner — available-only projections tested and installed; hosted pending
+
+Tested source b5091658 installed under release/run locks and pushed. Normal and
+clean-export 1602Python(2skips)/271Node pass; build443pages/78games, record112/NBA0,
+publication594files/150199139bytes, assets/hard budgets pass (existing soft warnings).
+Offline0830 tfe5t27q outcomeOK/exit0, outsideWrite0/privateRead0. Local regenerated
+TNF375/1440 no overflow/load/console errors, no false-review wording; both teams
+retain11 usable player rows. Preview /tmp/kookn-projections-local-desktop.png and
+phone counterpart. All78 built game files inspected: CFB991/992 and NFL385/389
+players retain usable displayed stats; held cells remain suppressed, not changed.
+First full Python pass exposed3old Node wording assertions; updated only those
+expected strings while keeping every held-value/quote/record safety assertion.
+Hosted39788883109 is PENDING behind39787358531 queued for a runner. This is NOT
+verified live yet. O-20261019-ALT stays ready: confirm this run or a successful
+descendant containing b5091658, then live NFL/CFB375/1440 and research/profile checks.
+No source tests failed after the complete rerun, no new data/model calls or bets,
+no forecast/result/selection changes. Root model evaluation remains separate P57.
+
 ## October22 owner — hide unusable projection placeholders
 
 O-20261019-ALT reopened. Game tables across NFL/CFB now display only finite,
