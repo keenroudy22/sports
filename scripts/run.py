@@ -1748,11 +1748,11 @@ def write_prose(candidate, ctx, records):
     if candidate.get('legs'):       # a parlay has no single line or side: its words come first, before any are read
         if candidate.get('parlayType') == 'ladder':
             info = candidate['ladder']
-            game_lines = candidate.get('quoteType') == 'sportsbook'
-            candidate['why'] = (f"Ladder step {info['step']}: two easier {'game lines' if game_lines else 'player lines'} at {candidate['book']}, one per game, each one our projection "
+            game_lines = any(leg.get('marketType') in ('spread', 'total', 'moneyline') and not leg.get('athleteId') for leg in candidate['legs'])
+            candidate['why'] = (f"Ladder step {info['step']}: {len(candidate['legs'])} alternate lines at {candidate['book']}, one per game, each one our projection "
                                 f"clears comfortably. ${info['stake']} rides with ${info['banked']} banked. A win returns ${info['payout']}: "
                                 f"bank ${info['bankThisWin']} and ride ${info['nextStake']} on the next step. Kept apart from the record, in dollars.")
-            candidate['risk'] = ('Both legs have to hit; one miss ends the climb, but it cannot take money already banked. '
+            candidate['risk'] = ('Every leg has to hit; one miss ends the climb, but it cannot take money already banked. '
                                  + ('College score models are uncertain and their raw alternate-spread chances are not calibrated price edges. '
                                     if game_lines else 'Our player chances are tuned for main lines, so these legs are not value. ')
                                  + "This is the fun of the climb; the book's official settlement controls, and a person settles the rung.")
