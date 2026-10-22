@@ -1,42 +1,32 @@
 {
- "at": "2026-10-22T01:34:54Z",
+ "at": "2026-10-22T01:44:51Z",
  "confirmed": {
-  "CFB-401858271": "2026-10-22T01:34:54Z",
-  "CFB-401861965": "2026-10-22T01:34:54Z",
-  "CFB-401862807": "2026-10-22T01:34:54Z",
-  "CFB-401862808": "2026-10-22T01:34:54Z",
-  "CFB-401864525": "2026-10-22T01:25:32Z",
-  "CFB-401869845": "2026-10-22T01:34:54Z",
-  "CFB-401871056": "2026-10-22T01:34:54Z",
-  "NFL-401873010": "2026-10-22T01:34:54Z"
+  "CFB-401858271": "2026-10-22T01:44:51Z",
+  "CFB-401861965": "2026-10-22T01:44:51Z",
+  "CFB-401862807": "2026-10-22T01:44:51Z",
+  "CFB-401862808": "2026-10-22T01:44:51Z",
+  "CFB-401864525": "2026-10-22T01:44:51Z",
+  "CFB-401869845": "2026-10-22T01:44:51Z",
+  "CFB-401871056": "2026-10-22T01:44:51Z",
+  "NFL-401873010": "2026-10-22T01:44:51Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 847,
-    "fanduel": 859
+    "fanduel": 966
    },
    "eventsListed": 119,
    "eventsMatched": 7,
    "games": 7,
    "marketTypes": {
-    "player_field_goals_made": 1,
-    "player_kicking_points": 1,
-    "player_longest_passing_completion": 6,
-    "player_longest_reception": 14,
-    "player_longest_rush": 10,
-    "player_passing_+_rushing_yards": 63,
-    "player_passing_attempts": 6,
-    "player_passing_completions": 12,
-    "player_passing_touchdowns": 67,
-    "player_passing_yards": 235,
-    "player_receiving_yards": 711,
-    "player_receptions": 27,
-    "player_rushing_attempts": 6,
-    "player_rushing_yards": 547
+    "player_passing_touchdowns": 54,
+    "player_passing_yards": 147,
+    "player_receiving_yards": 385,
+    "player_receptions": 2,
+    "player_rushing_yards": 378
    },
-   "requestsLeft": 3,
-   "rows": 1706,
+   "requestsLeft": 6,
+   "rows": 966,
    "slateGames": [
     "James Madison Dukes at App State Mountaineers 2026-10-22T23:00Z",
     "Liberty Flames at Kennesaw State Owls 2026-10-22T23:00Z",
@@ -48,7 +38,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "North Carolina Central",
+     "away": "North Carolina Central Eagles",
      "external": {
       "betsson": "f-UTCRwXPxA0unO7vOhiwi1Q",
       "draftkings": "34869473",
@@ -64,10 +54,10 @@
       "smarkets": "45393665",
       "sportzino": "sz-18097097"
      },
-     "home": "Delaware State",
+     "home": "Delaware State Hornets",
      "sample": {
-      "away_team": "North Carolina Central",
-      "home_team": "Delaware State",
+      "away_team": "North Carolina Central Eagles",
+      "home_team": "Delaware State Hornets",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -117,10 +107,9 @@
      "type": "fixture"
     },
     {
-     "away": "NC State",
+     "away": "North Carolina State Wolfpack",
      "external": {
       "betfair": "20261023B7EBA499",
-      "betmgm": "6:47426",
       "betonline": "491157839",
       "betparx": "1027553119",
       "betrivers": "1027553119",
@@ -152,10 +141,10 @@
       "underdog": "underdog_183146",
       "underdog_multipliers": "underdog_183146"
      },
-     "home": "Stanford",
+     "home": "Stanford Cardinal",
      "sample": {
-      "away_team": "NC State",
-      "home_team": "Stanford",
+      "away_team": "North Carolina State Wolfpack",
+      "home_team": "Stanford Cardinal",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -595,6 +584,7 @@
        "anytime_touchdown_scorer",
        "draw_no_bet",
        "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -767,7 +757,6 @@
      "external": {
       "bet365": "203038495",
       "betfair": "20261024C2103DC0",
-      "betmgm": "6:47459",
       "betonline": "491157926",
       "betparx": "1027553204",
       "betrivers": "1027553204",
@@ -891,31 +880,22 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 400
+    "fanduel": 394
    },
    "eventsListed": 29,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {
-    "player_assists": 12,
-    "player_extra_points_made": 4,
-    "player_fantasy_score": 16,
-    "player_field_goals_made": 4,
-    "player_interceptions": 4,
-    "player_kicking_points": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 26,
-    "player_longest_rush": 10,
-    "player_passing_+_rushing_yards": 4,
-    "player_passing_attempts": 4,
-    "player_passing_completions": 4,
-    "player_passing_touchdowns": 4,
-    "player_passing_yards": 52,
-    "player_receiving_yards": 221,
-    "player_receptions": 27
+    "player_passing_touchdowns": 10,
+    "player_passing_yards": 23,
+    "player_receiving_yards": 171,
+    "player_receptions": 97,
+    "player_rushing_+_receiving_yards": 8,
+    "player_rushing_yards": 72,
+    "player_sacks": 13
    },
-   "requestsLeft": 0,
-   "rows": 400,
+   "requestsLeft": 3,
+   "rows": 394,
    "slateGames": [
     "New England Patriots at Chicago Bears 2026-10-23T00:15Z"
    ],
@@ -1795,7 +1775,6 @@
      "external": {
       "bet365": "202868605",
       "betfair": "202610253360B008",
-      "betmgm": "6:43676",
       "betonline": "491153652",
       "betparx": "1028823699",
       "betrivers": "1028823699",
@@ -2240,7 +2219,7 @@
       "fliff": "fobj__conflict_event__407880",
       "gemini": "NFL-2610252025-GB-DET-S",
       "hardrock": "7899387103270797721",
-      "kalshi": "KXNFLTD-26OCT25GBDET-GBJLOVE10-2",
+      "kalshi": "KXNFL1HTOTAL-26OCT25GBDET",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "novig": "01a136e2-eecd-78b0-ad17-c6ca310ae109",
       "paddypower": "36189005",
@@ -2374,7 +2353,6 @@
      "external": {
       "bet365": "202868632",
       "betfair": "2026102556E2086A",
-      "betmgm": "6:43678",
       "betonline": "491153654",
       "betparx": "1028823705",
       "betrivers": "1028823705",
@@ -2519,7 +2497,6 @@
      "external": {
       "bet365": "202868635",
       "betfair": "20261026DD51BBCD",
-      "betmgm": "6:43680",
       "betonline": "491153661",
       "betparx": "1028823702",
       "betrivers": "1028823702",
