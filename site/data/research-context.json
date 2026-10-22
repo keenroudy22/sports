@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T16:57:49Z",
+  "updatedAt": "2026-10-22T17:08:00Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -3457,6 +3457,15 @@
           "name": "Kansas City Chiefs",
           "players": [
             {
+              "id": "4569659",
+              "name": "Josh Simmons",
+              "position": "OT",
+              "status": "Out",
+              "injury": "Back",
+              "reportedAt": "2026-10-22T16:52Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4569659/josh-simmons"
+            },
+            {
               "id": "15847",
               "name": "Travis Kelce",
               "position": "TE",
@@ -3518,15 +3527,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-21T00:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4567826/cooper-mcdonald"
-            },
-            {
-              "id": "4569659",
-              "name": "Josh Simmons",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Back",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4569659/josh-simmons"
             },
             {
               "id": "3055899",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "4",
-          "name": "Colbie Young",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-21T21:21:06Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
-        },
-        {
           "teamId": "14",
           "name": "Nate Landman",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-22T16:15:43Z",
           "source": "https://www.espn.com/nfl/player/_/id/3047495/sebastian-joseph-day"
+        },
+        {
+          "teamId": "12",
+          "name": "Josh Simmons",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-22T17:08:00Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4569659/josh-simmons"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-22T16:57:49Z",
-      "lastAttemptAt": "2026-10-22T16:57:49Z",
+      "checkedAt": "2026-10-22T17:08:00Z",
+      "lastAttemptAt": "2026-10-22T17:08:00Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-22T16:57:49Z",
-      "lastAttemptAt": "2026-10-22T16:57:49Z",
+      "checkedAt": "2026-10-22T17:08:00Z",
+      "lastAttemptAt": "2026-10-22T17:08:00Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
