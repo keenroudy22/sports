@@ -1,5 +1,5 @@
 {
- "asOf": "2026-10-11T14:00:02Z",
+ "asOf": "2026-10-22T20:38:56Z",
  "byKind": {
   "announcement": {
    "impressions": 21,
@@ -16,18 +16,18 @@
    "smallSample": true
   },
   "cashed": {
-   "impressions": 580,
-   "interactions": 7,
-   "perThousand": 12.07,
-   "posts": 8,
+   "impressions": 1065,
+   "interactions": 10,
+   "perThousand": 9.39,
+   "posts": 18,
    "smallSample": false
   },
   "community": {
-   "impressions": 223,
-   "interactions": 3,
-   "perThousand": 13.45,
-   "posts": 2,
-   "smallSample": true
+   "impressions": 6806,
+   "interactions": 12,
+   "perThousand": 1.76,
+   "posts": 10,
+   "smallSample": false
   },
   "conversation": {
    "impressions": 190,
@@ -43,32 +43,39 @@
    "posts": 4,
    "smallSample": true
   },
+  "news": {
+   "impressions": 315,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 1,
+   "smallSample": true
+  },
   "play": {
-   "impressions": 6493,
-   "interactions": 34,
-   "perThousand": 5.24,
-   "posts": 30,
+   "impressions": 9347,
+   "interactions": 48,
+   "perThousand": 5.14,
+   "posts": 45,
    "smallSample": false
   },
   "receipt": {
-   "impressions": 892,
-   "interactions": 6,
-   "perThousand": 6.73,
-   "posts": 14,
+   "impressions": 1357,
+   "interactions": 9,
+   "perThousand": 6.63,
+   "posts": 23,
    "smallSample": false
   },
   "research": {
-   "impressions": 797,
-   "interactions": 5,
-   "perThousand": 6.27,
-   "posts": 7,
-   "smallSample": true
+   "impressions": 4111,
+   "interactions": 12,
+   "perThousand": 2.92,
+   "posts": 28,
+   "smallSample": false
   },
   "sheet": {
-   "impressions": 114,
+   "impressions": 155,
    "interactions": 1,
-   "perThousand": 8.77,
-   "posts": 3,
+   "perThousand": 6.45,
+   "posts": 5,
    "smallSample": true
   }
  },
@@ -102,12 +109,21 @@
   },
   {
    "category": "cashed",
-   "impressions": 438,
-   "interactions": 4,
-   "perThousand": 9.13,
-   "posts": 6,
-   "smallSample": true,
+   "impressions": 618,
+   "interactions": 6,
+   "perThousand": 9.71,
+   "posts": 9,
+   "smallSample": false,
    "theme": "none"
+  },
+  {
+   "category": "cashed",
+   "impressions": 305,
+   "interactions": 1,
+   "perThousand": 3.28,
+   "posts": 7,
+   "smallSample": true,
+   "theme": "ticket"
   },
   {
    "category": "community",
@@ -117,6 +133,33 @@
    "posts": 2,
    "smallSample": true,
    "theme": "legacy"
+  },
+  {
+   "category": "community",
+   "impressions": 2333,
+   "interactions": 5,
+   "perThousand": 2.14,
+   "posts": 4,
+   "smallSample": true,
+   "theme": "none"
+  },
+  {
+   "category": "community",
+   "impressions": 4016,
+   "interactions": 3,
+   "perThousand": 0.75,
+   "posts": 3,
+   "smallSample": true,
+   "theme": "owner-screenshot"
+  },
+  {
+   "category": "community",
+   "impressions": 234,
+   "interactions": 1,
+   "perThousand": 4.27,
+   "posts": 1,
+   "smallSample": true,
+   "theme": "ticket"
   },
   {
    "category": "conversation",
@@ -137,6 +180,15 @@
    "theme": "legacy"
   },
   {
+   "category": "news",
+   "impressions": 315,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 1,
+   "smallSample": true,
+   "theme": "none"
+  },
+  {
    "category": "play",
    "impressions": 6175,
    "interactions": 30,
@@ -147,11 +199,11 @@
   },
   {
    "category": "play",
-   "impressions": 318,
-   "interactions": 4,
-   "perThousand": 12.58,
-   "posts": 1,
-   "smallSample": true,
+   "impressions": 3172,
+   "interactions": 18,
+   "perThousand": 5.67,
+   "posts": 16,
+   "smallSample": false,
    "theme": "ticket"
   },
   {
@@ -165,12 +217,21 @@
   },
   {
    "category": "receipt",
-   "impressions": 36,
+   "impressions": 75,
    "interactions": 0,
    "perThousand": 0.0,
-   "posts": 1,
+   "posts": 2,
    "smallSample": true,
    "theme": "none"
+  },
+  {
+   "category": "receipt",
+   "impressions": 426,
+   "interactions": 3,
+   "perThousand": 7.04,
+   "posts": 8,
+   "smallSample": false,
+   "theme": "ticket"
   },
   {
    "category": "research",
@@ -183,11 +244,20 @@
   },
   {
    "category": "research",
-   "impressions": 242,
-   "interactions": 4,
-   "perThousand": 16.53,
-   "posts": 2,
+   "impressions": 118,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 4,
    "smallSample": true,
+   "theme": "none"
+  },
+  {
+   "category": "research",
+   "impressions": 3438,
+   "interactions": 11,
+   "perThousand": 3.2,
+   "posts": 19,
+   "smallSample": false,
    "theme": "ticket"
   },
   {
@@ -198,15 +268,24 @@
    "posts": 3,
    "smallSample": true,
    "theme": "legacy"
+  },
+  {
+   "category": "sheet",
+   "impressions": 41,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 2,
+   "smallSample": true,
+   "theme": "ticket"
   }
  ],
  "formula": "(likes + reposts + quotes + human replies + clicks) per 1,000 impressions",
- "measuredPosts": 74,
+ "measuredPosts": 140,
  "overall": {
-  "impressions": 9650,
-  "interactions": 61,
-  "perThousand": 6.32,
-  "posts": 74,
+  "impressions": 23707,
+  "interactions": 97,
+  "perThousand": 4.09,
+  "posts": 140,
   "smallSample": false
  }
 }
