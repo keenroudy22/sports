@@ -33,6 +33,8 @@ def release_issues(text, path):
 def issues(text, graphic=False):
     text = html.unescape(re.sub(r'<[^>]+>', ' ', str(text or '')))
     found = []
+    if re.search(r'separate from kook[’\x27]?n', text, re.I):
+        found.append('owner identity split: use My card, not a separate Kookn identity')
     if not graphic and re.search(r'(?:https?://)?(?:www\.)?keenroudy\.com/sports\b', text, re.I):
         found.append('routine website link')
     if re.search(r'early (?:score )?estimates?|new rosters (?:can change|may differ)', text, re.I):

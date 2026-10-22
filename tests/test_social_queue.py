@@ -17,6 +17,12 @@ NOW = datetime(2026, 10, 22, 15, tzinfo=timezone.utc)
 
 
 class QueueStyleTests(unittest.TestCase):
+    def test_owner_card_never_splits_owner_from_brand(self):
+        for text in ["Separate from Kook’n Best Bets", "Separate from Kook'n"]:
+            self.assertTrue(style.issues(text, graphic=True))
+        self.assertFalse(style.issues('MY CARD'))
+        self.assertFalse(style.issues('Best Bet'))
+
     def entry(self, **changes):
         return dict(id='nba-trends-2026-10-22', bufferPostId='old', kind='buffer:research',
                     postedAt='2026-10-22T00:37:11Z', dueAt='2026-10-22T16:00:00Z',

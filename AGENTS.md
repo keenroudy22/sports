@@ -205,6 +205,17 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **One Kook'n identity (owner, October22):** the owner is Kook'n. Their supplied
+  tickets use first-person `My card`, never `Separate from Kook'n`. Best Bet,
+  research and fun-ticket labels distinguish categories, not people. Keep actual
+  lines, boost disclosures, privacy and existing record accounting unchanged.
+  Preserve sent originals; correct provider-confirmed private queued art.
+- **Proactive Climb planning (owner, October22):** prepare upcoming NFL/CFB slates
+  without prompting and communicate a target day as a target, never a confirmed
+  pick or promised step. Resolve alternate-side coverage and validation gaps;
+  a generic no-ticket message is not completion. Keep two preferred alternate
+  legs, roughly -150 to -200 combined, one open step and one to three steps weekly.
+
 - **Available projections only (owner, October22):** game projection tables show
   only finite usable estimates, with held cells blank, empty players/columns/teams
   omitted and no empty projection section. Never describe an automatic exclusion
