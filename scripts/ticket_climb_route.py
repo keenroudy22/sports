@@ -334,8 +334,11 @@ def climb_route(state, now, games, fixture=False):
     inner += card.text(X2, fy, summary, fit(summary, 40, room, 'd', 600),
                        INK_SOFT, 'd', 600, anchor='end')
     perf = fy + 30
-    rule = f'NO STEP IS FORCED. 1{MINUS}3 LEGS · ONE BOOK.'
-    inner += card.text(X1, perf + 100, rule, fit(rule, 40, X2 - X1, tracking=1),
+    rule = f'2{MINUS}3 ALT LEGS · ONE BOOK · {MINUS}200 TO {MINUS}150 TOTAL'
+    inner += card.text(X1, perf + 58, rule, fit(rule, 38, X2 - X1, tracking=1),
+                       INK_SOFT, tracking=1)
+    preference = 'TWO LEGS PREFERRED. NO STEP IS FORCED.'
+    inner += card.text(X1, perf + 108, preference, fit(preference, 38, X2 - X1, tracking=1),
                        INK_SOFT, tracking=1)
     ticket_cards.frame(card, HOUSE, CHALK, perf, perf + 124, inner)
     if fixture:

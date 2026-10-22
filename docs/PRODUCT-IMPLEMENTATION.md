@@ -1,5 +1,20 @@
 # October 5 product implementation tracker
 
+## October21 evening — live image QA found a remaining old route footer
+
+First shape sourcebb2ed4ba/ef10ed2e rebased8565fd6f is contained in successful
+hosted39698889660. Normal/clean1584Python(two skips)/269Node,443pages,record111/
+NBA0,guard586,assets clear and offline2000/ap1kwbxb outcomeok/zero outside-private.
+Live375/1440 confirms current HTML says2–3 actual alts/two preferred/-200..-150,
+no overflow/errors. Visual screenshot /tmp/kookn-climb-alt-shape-live-phone.png
+caught the generated current route PNG's old1–3 footer. This is not fully aligned
+yet: fixing renderer/current-card regression and repeating full release gates.
+New footer shows2–3 ALT LEGS/ONE BOOK/-200..-150 TOTAL plus TWO LEGS PREFERRED/
+NO STEP IS FORCED, without changing any real step, payout or frozen old attachment.
+Also clarified A-20261010-3's existing150-offer weekly stored-capture rule; no new
+150-forward-game waiting condition. Same00:45 task has explicit dated repair/review
+priority and normal6:45/8:30 release follow-through; still exactly3 Kook'n schedules.
+
 ## October21 evening — real alternate-shape implementation and Thursday review
 
 Dev now enforces2–3 actual alternate legs at combined-200..-150 in construction,
