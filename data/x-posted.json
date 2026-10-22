@@ -4606,11 +4606,16 @@
    "card": true,
    "cardTheme": "ticket",
    "discord": {
-    "state": "pending",
+    "state": "sent",
     "text": "✅ New Mexico State/Sam Houston over 44.5. Went 30-24.\n#CFB\nhttps://x.com/keenkooks/status/2112935570800328704",
-    "image": "https://keenroudy.com/sports/data/cards/cooked-CFB-2026-W8-nmsu-shsu-over-44-5-espnbet.png"
+    "image": "https://keenroudy.com/sports/data/cards/cooked-CFB-2026-W8-nmsu-shsu-over-44-5-espnbet.png",
+    "sentAt": "2026-10-22T04:17:19Z",
+    "beforeX": false
    },
-   "cardKey": "cooked-CFB-2026-W8-nmsu-shsu-over-44-5-espnbet"
+   "cardKey": "cooked-CFB-2026-W8-nmsu-shsu-over-44-5-espnbet",
+   "sentAt": "2026-10-22T04:14:31.214Z",
+   "link": "https://x.com/1753110091912413184/status/2113121796685771063",
+   "tweetId": "2113121796685771063"
   },
   {
    "id": "receipt:day:2026-10-21",
@@ -4653,6 +4658,21 @@
     ]
    },
    "cardKey": "research-end-zone-2026-10-22"
+  },
+  {
+   "id": "research:td-hit:research:end-zone:2026-10-21",
+   "postedAt": "2026-10-22T04:17:19Z",
+   "dueAt": "2026-10-22T04:34:16Z",
+   "bufferPostId": "6ad98e55282deeeeb2cae4bf",
+   "textHash": "3936e519231c20a7",
+   "kind": "buffer:research",
+   "card": false,
+   "cardTheme": "none",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 James Jones found the end zone.\nThat was my anytime TD lean this morning.\n#CFB",
+    "destination": "research"
+   }
   }
  ]
 }
