@@ -99,7 +99,7 @@ class QueueStyleTests(unittest.TestCase):
 
     def test_current_post_rechecks_actual_provider_caption_near_release(self):
         e=self.entry(socialStyleVersion=style.VERSION,queuedText='Clean text')
-        e['dueAt']='2026-10-22T15:20:00Z'
+        e['dueAt']='2026-10-22T15:04:00Z'
         send,_=self.provider(text='Full board: keenroudy.com/sports')
         bp.audit_pending_style({'posts':[e]},NOW,key='t',send=send,art_check=lambda _:True,items={},log=lambda *_:None)
         self.assertIn('cancelledAt',e)
@@ -109,6 +109,15 @@ class QueueStyleTests(unittest.TestCase):
         e=self.entry(socialStyleVersion=style.VERSION)
         e['socialStyleAudit']={'checkedAt':bp.gates.stamp(NOW),'state':'clear'}
         self.assertFalse(bp.style_audit_due(e,NOW))
+
+    def test_verified_queue_gets_one_final_read_and_rechecks_if_rescheduled(self):
+        e=self.entry(socialStyleVersion=style.VERSION)
+        e['dueAt']='2026-10-22T15:04:00Z'
+        self.assertTrue(bp.style_audit_due(e,NOW))
+        e['socialStyleAudit']={'checkedAt':bp.gates.stamp(NOW),'state':'clear'}
+        self.assertFalse(bp.style_audit_due(e,NOW+timedelta(minutes=6)))
+        e['dueAt']='2026-10-22T15:24:00Z'
+        self.assertTrue(bp.style_audit_due(e,NOW+timedelta(minutes=20)))
 
     def test_new_schedule_refuses_old_copy_before_provider_creation(self):
         calls=[]

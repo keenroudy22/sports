@@ -829,7 +829,15 @@ def style_audit_due(entry, now):
     audit = entry.get('socialStyleAudit') or {}
     if audit.get('checkedAt') and now - gates.when(audit['checkedAt']) < timedelta(minutes=5):
         return False
-    return entry.get('socialStyleVersion') != social_style.VERSION or not entry.get('dueAt') or gates.when(entry['dueAt']) <= now + timedelta(minutes=30)
+    if entry.get('socialStyleVersion') != social_style.VERSION or not entry.get('dueAt'):
+        return True
+    # One final check in the existing five-minute job, not six extra provider
+    # reads per post. A moved due time naturally invalidates an earlier check.
+    release_window = gates.when(entry['dueAt']) - timedelta(minutes=5)
+    if now < release_window:
+        return False
+    return not (audit.get('state') == 'clear' and audit.get('checkedAt')
+                and gates.when(audit['checkedAt']) >= release_window)
 
 
 def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_check=None, items=None):
