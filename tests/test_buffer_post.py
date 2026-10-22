@@ -371,8 +371,8 @@ class ScheduleTests(unittest.TestCase):
                  for kind in ('play', 'receipt', 'research', 'cashed', 'menu', 'conversation')]
         result = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=fake, log=lambda *_: None)
         texts = [c['variables']['input']['text'] for c in fake.calls if 'createPost' in c['query']]
-        self.assertIn('@Playbook', texts[0])
-        self.assertTrue(all('@Playbook' not in t for t in texts[1:]))
+        self.assertTrue(any(t.startswith('play\n') and '@Playbook' in t for t in texts))
+        self.assertTrue(all('@Playbook' not in t for t in texts if not t.startswith('play\n')))
         self.assertTrue(all('@Playbook' not in p['discord']['text'] for p in result['posts'] if 'discord' in p))
         self.assertTrue(all('discord' not in p for p in result['posts']
                             if p['kind'] not in ('buffer:play', 'buffer:research')))
@@ -436,6 +436,10 @@ class ScheduleTests(unittest.TestCase):
                  ('community:owner', 'play', 'Owner ticket', due + 4 * bp.SPACING, None)]
         rows = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None,
                            items={'community:owner': {'personalTicket': True}})['posts']
+        self.assertLess(next(i for i,r in enumerate(rows) if r['id']=='community:owner'),
+                        next(i for i,r in enumerate(rows) if r['id']=='r'))
+        by_id = {r['id']:r for r in rows}
+        rows = [by_id[key] for key, *_ in plans]
         self.assertEqual(rows[0]['discord'].get('destination'), None)
         self.assertNotIn('destination', rows[1]['discord'])
         self.assertNotIn('discord', rows[2])
