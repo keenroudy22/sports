@@ -205,6 +205,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Playbook on X tickets (owner, October22):** new Best Bets, selected Climb
+  tickets and registered owner tickets end with `Copy the bet 👇 @Playbook`.
+  Include exactly one tag; do not assert that a reply/link exists before it does.
+  Strip the entire X-only prompt from Discord. Research, target-day teasers and
+  results never tag Playbook. Preserve every leg and price; overlong captions
+  require a shorter reviewed version, never silently drop the tag or a leg.
+
 - **Casual confident voice across posts (owner, October22):** speak as Kook'n:
   short, first-person, relaxed and energetic. Lead with the play, goal or actual
   result, not an operational progress report. Use natural hype such as "Who's

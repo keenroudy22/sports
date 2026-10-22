@@ -18,7 +18,7 @@ class SocialVoiceTests(unittest.TestCase):
             log = buffer_post.schedule([('test', 'play', old, now + timedelta(hours=1), None)],
                                       'x', {'posts': []}, now, log=lambda *_: None)
         expected = social_voice.finish(old)
-        self.assertEqual(send.call_args.args[0], expected)
+        self.assertEqual(send.call_args.args[0], expected + '\n\nCopy the bet 👇 @Playbook')
         self.assertEqual(log['posts'][0]['discord']['text'], expected)
 
     def test_old_queued_caption_rechecked_sent_post_preserved(self):

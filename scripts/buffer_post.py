@@ -41,7 +41,7 @@ import x_post
 import social_style
 import parlay_caption
 import social_voice
-from social_copy import without_playbook
+from social_copy import without_playbook, x_ticket_copy
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -649,6 +649,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} held: all parlay legs do not fit X; never omit or merge legs')
                 continue
         text = social_voice.finish(text)
+        text = x_ticket_copy(text, kind, guid, item)
+        if x_post.tweet_length(text) > x_post.LIMIT:
+            log(f'buffer: {guid} held: complete caption and Playbook tag exceed X limit')
+            continue
         problems = x_post.x_style(text)
         if social_style.active(now):
             problems += social_style.issues(text)

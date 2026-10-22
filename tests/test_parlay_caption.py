@@ -19,7 +19,7 @@ class ParlayCaptionTests(unittest.TestCase):
         with patch.object(buffer_post, 'create_post', return_value='test-id') as send:
             log = buffer_post.schedule([(key, 'community', 'A 20+, B 6+', now + timedelta(hours=1), None)],
                                       'channel', {'posts': []}, now, items={key: item}, log=lambda *_: None)
-        self.assertEqual(send.call_args.args[0], expected)
+        self.assertEqual(send.call_args.args[0], expected + '\n\nCopy the bet 👇 @Playbook')
         self.assertEqual(log['posts'][0]['discord']['text'], expected)
         self.assertEqual(log['posts'][0]['discord']['destination'], 'plays')
 
