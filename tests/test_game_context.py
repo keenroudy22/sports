@@ -91,7 +91,7 @@ class WhyDifferTests(unittest.TestCase):
                                          [row('receiving yards', 'over', 49.5, '5', roleHold='qb')], NOW)
         self.assertEqual(result['kind'], 'total')
         self.assertIn('38, 38, 38', result['text'])
-        self.assertEqual(result['caution'], 'Recent quarterback changes put receiving roles in this game under review.')
+        self.assertEqual(result['caution'], 'Quarterback-role changes leave some receiving estimates unavailable.')
         stale = {**card, 'market': {**card['market'], 'retrievedAt': '2026-10-06T15:00Z'}}
         self.assertEqual(game_context.why_differ(GAME, stale, None, {}, {}, {}, [], NOW),
                          {'stale': True, 'text': 'The book line is older than four hours; check a current price.',
