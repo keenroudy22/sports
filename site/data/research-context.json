@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-22T16:06:16Z",
+  "updatedAt": "2026-10-22T16:15:43Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4870808",
+              "name": "Jeremiyah Love",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-22T15:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
+            },
             {
               "id": "3127287",
               "name": "Budda Baker",
@@ -59,15 +68,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-21T23:47Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685503/walter-nolen-iii"
-            },
-            {
-              "id": "4870808",
-              "name": "Jeremiyah Love",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-21T19:11Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
             },
             {
               "id": "4692835",
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-22T15:45Z",
+              "reportedAt": "2026-10-22T16:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-22T15:45Z",
+              "reportedAt": "2026-10-22T16:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-22T15:45Z",
+              "reportedAt": "2026-10-22T16:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "3047495",
+              "name": "Sebastian Joseph-Day",
+              "position": "DT",
+              "status": "Injured Reserve",
+              "injury": "Triceps",
+              "reportedAt": "2026-10-22T16:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3047495/sebastian-joseph-day"
+            },
+            {
               "id": "3929846",
               "name": "DeShon Elliott",
               "position": "S",
@@ -6012,15 +6021,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-21T21:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle"
-            },
-            {
-              "id": "3047495",
-              "name": "Sebastian Joseph-Day",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Triceps",
-              "reportedAt": "2026-10-21T21:34Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3047495/sebastian-joseph-day"
             },
             {
               "id": "4037333",
@@ -6677,6 +6677,24 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "4596448",
+              "name": "Bucky Irving",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Illness",
+              "reportedAt": "2026-10-22T16:03Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
+            },
+            {
+              "id": "4567750",
+              "name": "Emeka Egbuka",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-22T16:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
+            },
+            {
               "id": "4250392",
               "name": "Zyon McCollum",
               "position": "CB",
@@ -6720,24 +6738,6 @@
               "injury": "Thumb",
               "reportedAt": "2026-10-21T19:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
-            },
-            {
-              "id": "4596448",
-              "name": "Bucky Irving",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Illness",
-              "reportedAt": "2026-10-21T19:30Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
-            },
-            {
-              "id": "4567750",
-              "name": "Emeka Egbuka",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-21T19:26Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
             },
             {
               "id": "4427673",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "15",
-          "name": "Tucker Addington",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-21T21:01:33Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4034729/tucker-addington"
-        },
-        {
           "teamId": "4",
           "name": "Colbie Young",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-22T15:23:58Z",
           "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
+        },
+        {
+          "teamId": "23",
+          "name": "Sebastian Joseph-Day",
+          "from": "Questionable",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-22T16:15:43Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3047495/sebastian-joseph-day"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-22T16:06:16Z",
-      "lastAttemptAt": "2026-10-22T16:06:16Z",
+      "checkedAt": "2026-10-22T16:15:43Z",
+      "lastAttemptAt": "2026-10-22T16:15:43Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-22T16:06:16Z",
-      "lastAttemptAt": "2026-10-22T16:06:16Z",
+      "checkedAt": "2026-10-22T16:15:43Z",
+      "lastAttemptAt": "2026-10-22T16:15:43Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
