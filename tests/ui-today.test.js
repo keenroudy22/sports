@@ -93,6 +93,22 @@ const loadApp = (hash, held = {}, { hero = HERO, today = TODAY, stored = {}, ext
 };
 const settle = async () => { for (let i = 0; i < 20; i++) await new Promise(r => setTimeout(r, 0)); };
 const wait = ms => new Promise(r => setTimeout(r, ms));
+
+test('a moneyline ticket shows the real price without treating win probability as a points projection', async () => {
+  const ml={...prop,id:'NFL-ml',kind:'gamePicks',athleteId:null,position:null,market:null,
+    marketType:'moneyline',direction:'away',side:'away',line:0,projection:.5,odds:130,
+    displayTitle:'Fixture Away MONEYLINE',cutoffOdds:116,cutoffLine:0,cutoffBoundary:-.5,
+    selectionPolicy:'2026-10-19-1u-2u',lane:'best_bet',riskUnits:1,hitStrip:null,
+    ticketWhy:'The opposing defense has two starters out.',ticketBut:null,
+    probabilityAtPublication:{chance:.458,breakEven:.435,edgePoints:2.3,calibrated:true},
+    quote:{line:0,odds:130,observedAt:'2026-10-10T13:59:00Z'}};
+  const hero={...HERO,bets:[{...ml,teams:{away:GAMES[0].away,home:GAMES[0].home}}]};
+  const page=await loadApp('#record',{}, {hero,today:{...TODAY,picks:[ml]}}).api.views.today({view:'today'});
+  assert.match(page,/Still good to \+116\./);
+  assert.doesNotMatch(page,/Past my \+116/);
+  assert.doesNotMatch(page,/Book (?:says|said)<b class="num">0(?:\.0)?<\/b>/);
+  assert.doesNotMatch(page,/I (?:have|had) it at<b class="num">0\.5<\/b>/);
+});
 /* The top of Today: the chef's line, the first ticket and the Climb stub, up to the stub's aside. */
 const top = page => page.slice(page.indexOf('<section class="kt-lede'), page.indexOf('<p class="kt-aside">'));
 const mondayNfl = { ...prop, id: 'NFL-2026-W6-monday-total-dk', kind: 'gamePicks', athleteId: null, market: null, marketType: 'total',

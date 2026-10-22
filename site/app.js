@@ -905,7 +905,8 @@
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.inside ? good : `Past my ${odd(pick.cutoffOdds)} limit.`}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
     const tense = !afterHold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
-    const number = best && (!hold || afterHold) && isNum(pick.projection) && isNum(pick.line)
+    const number = best && pick.marketType !== 'moneyline' && pick.market !== 'moneyline'
+      && (!hold || afterHold) && isNum(pick.projection) && isNum(pick.line)
       ? `<p class="kt-lead kt-chance"><span>Book ${tense ? 'says' : 'said'}<b class="num">${esc(C.fixed(pick.line))}</b></span><i></i><span>I ${tense ? 'have' : 'had'} it at<b class="num">${esc(C.fixed(pick.projection))}</b></span></p>` : '';
     /* The build already chose held-safe words (build_site.held_words); when the hold comes only from the board rows,
        a saved line that quotes a projection, chance or edge is left off, never reworded. */
