@@ -160,6 +160,25 @@ class QueueStyleTests(unittest.TestCase):
             art_check=lambda url:url=='https://cdn.example.com/actual.png',items={},log=lambda *_:None)
         self.assertEqual(e['socialStyleAudit']['state'],'clear')
 
+    def test_batch_audit_preserves_auth_for_next_status_and_private_cancellation(self):
+        first = self.entry()
+        second = self.entry()
+        second.update(id='second-card', bufferPostId='second', cardKey='second-card')
+        second['discord']['image'] = 'https://example.com/stale.png'
+        calls = []
+        def send(url, body, headers):
+            self.assertEqual(headers['Authorization'], 'Bearer test-token')
+            calls.append(body)
+            if 'deletePost' in body['query']:
+                return 200, json.dumps({'data': {'deletePost': {'id': 'second'}}}).encode()
+            return 200, json.dumps({'data': {'post': {'status': 'scheduled', 'text': 'Research, not a bet.'}}}).encode()
+        bp.audit_pending_style({'posts': [first, second]}, NOW, key='test-token', send=send,
+            art_check=lambda url: url != 'https://example.com/stale.png', items={}, log=lambda *_: None)
+        self.assertEqual(first['socialStyleAudit']['state'], 'clear')
+        self.assertNotIn('cancelledAt', first)
+        self.assertIn('cancelledAt', second)
+        self.assertEqual(len(calls), 3)
+
     def test_new_schedule_refuses_stale_house_art_before_provider_creation(self):
         calls=[]
         with patch.object(bp, 'live_card_url', return_value='https://example.com/card.png'), \

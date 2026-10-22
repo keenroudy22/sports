@@ -871,12 +871,12 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 # Discord-first official releases archive the exact attachment
                 # before pushing their report. Pages may still be deploying;
                 # that lag is not evidence that the actual Buffer art is stale.
-                key = str(entry.get('id') or '')
+                archive_id = str(entry.get('id') or '')
                 released_archive = (entry.get('kind') == 'buffer:play'
                     and (entry.get('discord') or {}).get('beforeX')
                     and (entry.get('discord') or {}).get('state') == 'sent'
-                    and re.fullmatch(r'[A-Za-z0-9-]{1,150}', key)
-                    and social_style.current_png(ROOT / 'data' / 'release-cards' / f'{key}.png'))
+                    and re.fullmatch(r'[A-Za-z0-9-]{1,150}', archive_id)
+                    and social_style.current_png(ROOT / 'data' / 'release-cards' / f'{archive_id}.png'))
                 if not released_archive and (not image or not art_check(image)):
                     problems.append('house graphic lacks verified current social-style marker')
             if problems:

@@ -1,5 +1,32 @@
 # October 5 product implementation tracker
 
+## October22 personal card release and final batch-audit correction
+
+Source092d5335 installed under both locks after normal/clean1626Python
+(2skips)/273Node,443pages,113record rows/NBA0,603guarded files/157871246bytes,
+assets/hard budgets and offline1145/qfru3zbi outcomeok,zero outside/private.
+Six privacy-safe cards passed visual QA and source markers. Original supplied
+slips are retained only in the private owner-proof folder, never public assets.
+Buffer accepted six native-image posts at17:01:53,17:11:53,17:21:53,17:31:53,
+17:41:53 and17:51:53Z, all routing to Plays&Results after confirmed X.
+IDs end jmu-straight,braun-straight,maye-straight,cfb-four,tnf-seven,tnf-ten.
+This is scheduled, not actual delivery. Existing1Q retains its original proof.
+Pinned committed-image URLs keep social delivery independent of Pages latency.
+
+Final batch review caught an authentication-variable collision inside the new
+art audit: its local archive ID reused the API-key parameter. A single clean
+post could pass, but another status read/private cancellation in the same batch
+would use the wrong value. Renamed only the local archive variable. A regression
+audits two cards, retains the clean one and cancels only the provider-confirmed
+private stale one, asserting correct authentication on all three calls. Sixteen
+focused queue tests pass; full release remains required. No sent post touched.
+
+Live app198 verified375/1440: two official plays, Patriots+130 correctly still
+good to+116, no fabricated0/0.5 point comparison, no overflow/load/console error.
+Proof /tmp/kookn-moneyline-final-live-phone.png and desktop counterpart. Final
+containing hosted receipt is still being watched; existing morning checks stay
+observing for actual next-morning delivery, not credited with today's noon recovery.
+
 ## October22 owner personal card — privacy-safe pregame proof
 
 Owner supplied seven placed FanDuel tickets and authorized social publication
