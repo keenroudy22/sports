@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T00:55:01Z",
+  "updatedAt": "2026-10-22T01:04:32Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -237,6 +237,15 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "3917914",
+              "name": "Olamide Zaccheaus",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-22T00:53Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3917914/olamide-zaccheaus"
+            },
+            {
               "id": "4241474",
               "name": "Brian Robinson Jr.",
               "position": "RB",
@@ -271,15 +280,6 @@
               "injury": "Groin",
               "reportedAt": "2026-10-21T23:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4239995/aj-terrell-jr"
-            },
-            {
-              "id": "3917914",
-              "name": "Olamide Zaccheaus",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-21T22:59Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3917914/olamide-zaccheaus"
             },
             {
               "id": "3043168",
@@ -5067,6 +5067,24 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4433975",
+              "name": "Kool-Aid McKinstry",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-22T00:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4433975/kool-aid-mckinstry"
+            },
+            {
+              "id": "3124890",
+              "name": "Kaden Elliss",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-22T00:45Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3124890/kaden-elliss"
+            },
+            {
               "id": "4076951",
               "name": "Nathan Shepherd",
               "position": "DT",
@@ -5094,15 +5112,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3054850/alvin-kamara"
             },
             {
-              "id": "4433975",
-              "name": "Kool-Aid McKinstry",
-              "position": "CB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-21T21:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4433975/kool-aid-mckinstry"
-            },
-            {
               "id": "4880281",
               "name": "Jordyn Tyson",
               "position": "WR",
@@ -5128,15 +5137,6 @@
               "injury": null,
               "reportedAt": "2026-10-21T02:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429568/martin-emerson-jr"
-            },
-            {
-              "id": "3124890",
-              "name": "Kaden Elliss",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Calf",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3124890/kaden-elliss"
             },
             {
               "id": "3925350",
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "3924327",
+              "name": "Drew Lock",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Elbow",
+              "reportedAt": "2026-10-22T00:50Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3924327/drew-lock"
+            },
+            {
               "id": "4032473",
               "name": "Rashid Shaheed",
               "position": "WR",
@@ -6481,15 +6490,6 @@
               "injury": "Oblique",
               "reportedAt": "2026-10-21T23:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/4686540/tyrice-knight"
-            },
-            {
-              "id": "3924327",
-              "name": "Drew Lock",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Elbow",
-              "reportedAt": "2026-10-21T23:06Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3924327/drew-lock"
             },
             {
               "id": "4426385",
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4602667",
+              "name": "Jaylin Lane",
+              "position": "WR",
+              "status": "Injured Reserve",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-22T00:47Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4602667/jaylin-lane"
+            },
+            {
               "id": "5081807",
               "name": "Sonny Styles",
               "position": "LB",
@@ -7351,15 +7360,6 @@
               "injury": null,
               "reportedAt": "2026-10-19T23:07Z",
               "source": "https://www.espn.com/nfl/player/_/id/4574689/trey-amos"
-            },
-            {
-              "id": "2576736",
-              "name": "Lucas Patrick",
-              "position": "G",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-19T22:52Z",
-              "source": "https://www.espn.com/nfl/player/_/id/2576736/lucas-patrick"
             }
           ]
         }
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-22T00:55:01Z",
-      "lastAttemptAt": "2026-10-22T00:55:01Z",
+      "checkedAt": "2026-10-22T01:04:32Z",
+      "lastAttemptAt": "2026-10-22T01:04:32Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-22T00:55:01Z",
-      "lastAttemptAt": "2026-10-22T00:55:01Z",
+      "checkedAt": "2026-10-22T01:04:32Z",
+      "lastAttemptAt": "2026-10-22T01:04:32Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
