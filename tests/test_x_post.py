@@ -279,7 +279,7 @@ class FunPostTests(unittest.TestCase):
 
     def test_a_ladder_rung_leads_with_its_step_and_the_money_riding(self):
         text = x_post.draft(self.RUNG, {'league': 'NFL'})
-        self.assertEqual(text, "$50 → $1,000 · 80/20 CLIMB · STEP 2\n$75 → $146 (+95, FanDuel)\nStep 1 cashed. $19 in the bank.\nDrake London 40+ rec yds\n"
+        self.assertEqual(text, "$50 → $1,000 · 80/20 CLIMB · STEP 2\n$75 → $146 (+95, FanDuel)\nStep 1 cashed. $19 in the bank.\n\nDrake London 40+ rec yds\n"
                                "Bijan Robinson 50+ rush yds\n\nStill climbing? ❤️\n@Playbook #NFL")
         self.assertEqual(x_post.guard(text, self.RUNG), [], 'every dollar and percentage is the rung\'s own number')
         second = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], run=2, step=1, stake=50, payout=98, banked=0,
@@ -299,7 +299,7 @@ class FunPostTests(unittest.TestCase):
                       {'title': 'Rams moneyline', 'reasons': ['Rams won 7 of their last 9.']}],
                   'riskUnits': 1}
         text = x_post.draft(ticket, {'league': 'NFL'})
-        self.assertEqual(text, '🛡️ Safer combo (-150, DraftKings)\nBills moneyline\nRams moneyline\n'
+        self.assertEqual(text, '🛡️ Safer combo (-150, DraftKings)\n\nBills moneyline\nRams moneyline\n\n'
                                'Bills won 8 of their last 10.\n@Playbook #NFL')
         self.assertEqual(x_post.guard(text, ticket), [])
 
@@ -473,7 +473,7 @@ class ReasonTests(unittest.TestCase):
                   'parlayType': 'longshot', 'riskUnits': 0.25, 'book': 'DraftKings', 'odds': 650,
                   'why': 'Longshot from the board: 3 legs at DraftKings, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.'}
         text = x_post.draft(ticket, {'league': 'NFL'})
-        self.assertEqual(text, "🎰 +650 Chef's Special (DraftKings)\nBills/Lions over 44.5\nJets +3\nPlayer Seven over 4.5 catches\n$10 → $75"
+        self.assertEqual(text, "🎰 +650 Chef's Special (DraftKings)\n\nBills/Lions over 44.5\nJets +3\nPlayer Seven over 4.5 catches\n\n$10 → $75"
                                "\n\n❤️ if you're tailing\n@Playbook #NFL")
         self.assertLessEqual(x_post.tweet_length(text), 280)
         self.assertEqual(x_post.guard(text, ticket), [], text)
