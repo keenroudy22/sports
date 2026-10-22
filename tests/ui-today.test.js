@@ -264,6 +264,12 @@ test('an uncalibrated chance, an expired quote and a moved line never read as an
   assert.doesNotMatch(aged, /Still good to|I have it at/);
 });
 
+test('partial Today history never replaces the complete hero Climb balance', async () => {
+  const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [prop, rungs[2]] } }).api.views.today({ view: 'today' });
+  assert.match(page, /80\/20 Climb #2[\s\S]*Step 3/);
+  assert.doesNotMatch(page, /80\/20 Climb number 1,/);
+});
+
 test('a hero that lands after today.json never paints over the full card', async () => {
   let release;
   const gate = new Promise(r => { release = r; });
@@ -858,7 +864,7 @@ test('an owner community ticket is unmistakably personal and separate from best 
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, personal] } }).api.views.today({ view: 'today' });
   assert.match(page, /Personal fun ticket/);
   assert.doesNotMatch(page, /Personal Fun Lotto · 0\.25u/);
-  assert.match(page, /The chef's own ticket · just for fun · not a Kook'n best bet/);
+  assert.match(page, /My card · tracked separately from Best Bets/);
   assert.doesNotMatch(page.slice(page.indexOf('Personal fun ticket')), /Hot Plate \(POTD\)/);
 });
 

@@ -965,7 +965,7 @@
     const price = `${odd(p.odds)} ${vm.book || ''}${p.community ? ' · original quote' : ''}`.trim();
     const resultName = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ` : '';
     const detail = p.result ? `${resultName}${resultLine(p)} ${price}.` : opts.waiting ? `${price}.` : `${price}. ${vm.statusShort || (vm.mode === 'open' && vm.calibrated && vm.chance != null ? `I have it at ${pctOne(vm.chance)}.` : '')}`;
-    const personal = p.community ? `<p class="kt-slip-personal">The chef's own ticket · just for fun · not a Kook'n best bet${p.entryNote ? `. ${esc(p.entryNote)}` : ''}</p>` : '';
+    const personal = p.community ? `<p class="kt-slip-personal">My card · tracked separately from Best Bets${p.result && p.entryNote ? `. ${esc(p.entryNote)}` : ''}</p>` : '';
     const body = `<a class="kt-slip${p.community ? ' is-community' : ''}" href="${esc(vm.href)}" aria-label="${esc(`${p.result ? `${RESULT_WORD[p.result]}: ` : ''}${vm.title}, ${oddsText(p.odds)}${vm.book ? ` at ${vm.book}` : ''}`)}"><p class="kt-slip-k">${esc(kicker)}</p><p class="kt-slip-t">${slipTitle(p, g)}</p><p class="kt-slip-d">${esc(detail.trim())}</p>${personal}${opts.waiting ? '<span class="kt-waiting">WAITING ON THE FINAL</span>' : ''}</a>`;
     return opts.spike ? `<div class="kt-spiked"><span class="kt-spike" aria-hidden="true"></span>${body}${stampFor(p.result)}</div>` : body;
   };
@@ -1221,7 +1221,7 @@
     const rows = todays;
     const ladder = C.theLadder(all);
     const rungHere = ladder.open && (state.league === 'ALL' || ladder.open.league === state.league) ? [ladder.open] : [];
-    const climb = { run: ladder.run, step: ladder.step, riding: ladder.open ? Number((ladder.open.ladder || {}).stake) || ladder.stake : ladder.stake,
+    const climb = !Array.isArray(todayExtras && todayExtras.every) && heroLoaded && heroLoaded.climb ? heroLoaded.climb : { run: ladder.run, step: ladder.step, riding: ladder.open ? Number((ladder.open.ladder || {}).stake) || ladder.stake : ladder.stake,
       open: ladder.open && { step: (ladder.open.ladder || {}).step }, settled: ladder.history.length, saved: ladder.saved, net: ladder.accounting.net,
       last: ladder.history.length ? { result: ladder.history[ladder.history.length - 1].result, step: (ladder.history[ladder.history.length - 1].ladder || {}).step } : null };
     const games = (today.games || []).filter(inLeague);
