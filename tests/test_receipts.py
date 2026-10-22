@@ -179,7 +179,7 @@ class ReceiptTests(unittest.TestCase):
         card = pick_card.receipt_svg(receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)[0], avatar='data:image/png;base64,AAAA')
         for needle in ('FINAL REPORT', 'KOOK’N', 'FINAL', 'Sunday, Sep 27', '>2-1<', '>W<', '>L<',
                        'Player Seven over 4.5 catches', 'missed by one leg', 'FUN TICKETS · 0.25U',
-                       'clip-path="url(#receiptChef)"', 'KOOK’N RESULTS', '21+ · Entertainment only'):
+                       'clip-path="url(#receiptChef)"', 'KOOK’N RESULTS', 'keenroudy.com/sports'):
             self.assertIn(needle, card, needle)
         self.assertNotIn('Confidence', card)
 

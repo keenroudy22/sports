@@ -51,11 +51,12 @@ class VoiceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             pick_card.render('<svg><text>4869443: 0 receiving yards</text></svg>', '/tmp/never-render.png')
 
-    def test_new_legacy_card_footers_have_the_age_requirement(self):
+    def test_new_legacy_card_footers_follow_owner_oct22_policy(self):
         # Each legacy template carries its own footer. Existing immutable art is separate.
         source = (Path(__file__).resolve().parents[1] / 'scripts/pick_card.py').read_text()
         self.assertNotIn('Entertainment only. Not advice.', source)
-        self.assertGreaterEqual(source.count('21+ · Entertainment only'), 6)
+        self.assertNotIn('21+ · Entertainment only', source)
+        self.assertIn('keenroudy.com/sports', source)
 
 
 if __name__ == '__main__':
