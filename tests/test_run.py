@@ -1749,3 +1749,65 @@ class CardRankTests(unittest.TestCase):
         order = [c['id'] for c in run.rank_card(wanted, ctx)]
         self.assertEqual(order, ['plus', 'yards', 'rec', 'nfl-total', 'cfb-total'],
                          'positive-EV plus-money props stay eligible through +200 and the strongest reads lead')
+
+
+class MirrorClockTests(unittest.TestCase):
+    def exercise(self, explicit=False, veto=False):
+        import chef_wins, discord_post, nba_editorial, x_post
+        start = datetime(2026, 10, 21, 13, 19, 17, tzinfo=timezone.utc)
+        after_recovery = start + timedelta(minutes=3)
+        after_sync = start + timedelta(minutes=4)
+        entry = {'id': 'nba-props-2026-10-21', 'bufferPostId': 'replacement',
+                 'postedAt': run.stamp(after_recovery),
+                 'dueAt': run.stamp(start + timedelta(hours=2))}
+        book = {'posts': [entry]}
+        args = SimpleNamespace(now=run.stamp(start) if explicit else None,
+                               dry_run=False, no_push=True, slot=None,
+                               no_llm=False, publish_kinds=None, record_screens=True)
+        clock = mock.Mock()
+        wall = [start]
+        clock.now.side_effect = lambda *a, **kw: wall[0]
+        seen = []
+        def current(snapshot, now):
+            seen.append(now)
+            # The recovery/sync captures are valid at send time but newer than
+            # the worker's original clock, as in the Oct 21 cancellation.
+            return now >= after_sync and not veto
+        with mock.patch.dict(os.environ, {'KEENROUDY_LIVE_SHADOW': '0', 'BUFFER_TOKEN': 'test'}), \
+                mock.patch.object(run, 'datetime', clock), \
+                mock.patch.object(run, 'result_recovery_needed', return_value=1), \
+                mock.patch.object(run, 'mark_result_recovery'), \
+                mock.patch.object(run, 'run', side_effect=lambda *_: wall.__setitem__(0, after_recovery) or 0), \
+                mock.patch.object(run, 'Lock'), \
+                mock.patch.object(run, 'sync', side_effect=lambda: wall.__setitem__(0, after_sync)), \
+                mock.patch.object(run, 'commit_log'), mock.patch.object(run, 'alert'), \
+                mock.patch.object(chef_wins, 'pending', return_value=[]), \
+                mock.patch.object(discord_post, 'webhook', return_value='test'), \
+                mock.patch.object(discord_post, 'mirror_sent', return_value=[]), \
+                mock.patch.object(x_post, 'load_log', return_value=book), \
+                mock.patch.object(x_post, 'save_log'), \
+                mock.patch.object(run, 'private_release_ready', return_value=True), \
+                mock.patch.object(run, 'release_private_isolated'), \
+                mock.patch.object(nba_editorial, 'stored', return_value=[{'key': entry['id']}]), \
+                mock.patch.object(nba_editorial, 'review_ready', return_value=True), \
+                mock.patch.object(nba_editorial, 'props_current', side_effect=current), \
+                mock.patch.object(buffer_post, 'delete_post') as delete:
+            self.assertEqual(run.mirror(args), 0)
+        return entry, seen, delete, clock
+
+    def test_recovery_and_sync_refresh_clock_before_replacement_veto(self):
+        entry, seen, delete, clock = self.exercise()
+        self.assertNotIn('cancelledAt', entry)
+        delete.assert_not_called()
+        self.assertEqual(seen[-1], datetime(2026, 10, 21, 13, 23, 17, tzinfo=timezone.utc))
+
+    def test_current_clock_still_cancels_a_real_price_or_role_hold(self):
+        entry, _, delete, _ = self.exercise(veto=True)
+        delete.assert_called_once_with('replacement', key=None, send=buffer_post.http_send)
+        self.assertEqual(entry['cancelledAt'], '2026-10-21T13:23:17Z')
+
+    def test_explicit_replay_clock_remains_fixed(self):
+        entry, seen, delete, clock = self.exercise(explicit=True)
+        self.assertTrue(all(t == datetime(2026, 10, 21, 13, 19, 17, tzinfo=timezone.utc) for t in seen))
+        delete.assert_called_once()
+        self.assertEqual(entry['cancelledAt'], '2026-10-21T13:19:17Z')

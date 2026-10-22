@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-22T05:28:47Z",
+  "updatedAt": "2026-10-22T12:16:13.820572Z",
   "items": [
     {
       "id": "O-20261022-RESULT",
@@ -61,9 +61,9 @@
       "title": "Audit cancellation provenance across NBA replacement attempts",
       "status": "ready",
       "owner": "agent",
-      "next": "Trace the13:19 cancellation and13:21 replacement writers; test attempt-bound terminal state and duplicate prevention. Today is delivered; preserve its receipt and all earlier-attempt evidence.",
-      "doneWhen": "The writer responsible is identified and replacement-attempt regression proves an older cancellation cannot suppress or erase a newer scheduled/sent attempt; any source repair passes normal release gates.",
-      "evidence": "Observed replacement6ad8bc690811076dd03d1b5a had postedAt13:21:31Z but cancelledAt13:19:17Z; Buffer returned not-found and complete actual-day API listing had no matching sent/queued text. Normal operator recovery preserved old attempt in deliveryHistory, scheduled6ad8bf87b535ec9954c28651 and verified X/Discord. Recurrence cause not yet proven."
+      "next": "Next overnight: repair restored after owner injury release. Preserve newer edits and metadata12eb9a0a; repeat full gates, locked release, hosted/live375. Backup work/daily-20261022-mirror-clock.patch; never apply twice.",
+      "doneWhen": "Mirror uses current time after recovery/sync; valid replacements survive, true price/role vetoes still cancel and explicit replays stay fixed. Every release gate and hosted/live375 pass; prior attempt and delivery receipts remain unchanged.",
+      "evidence": "Oct22 replay d1bff931:13:19:17 clock rejects13:21:20 slate/injuries, both exact props pass13:22:07. Writer04e11df6 is real cancellation, not inherited state. Normal/clean1598Python(2skip)/269Node pass; build stopped stale app-games fingerprint while owner feature changed/stashed our4files. Yielded>15min; unshipped. Source backup work/daily-20261022-mirror-clock.patch; stash30dfb61e retained."
     },
     {
       "id": "D-20261021-FAVORITE",

@@ -15,6 +15,24 @@ GAME = {'id': 'NFL-1', 'league': 'NFL', 'season': 2026, 'kickoff': '2026-10-08T0
 
 
 class DossierTests(unittest.TestCase):
+    def test_moneyline_case_describes_win_chance_not_zero_point_line(self):
+        import run
+        c={'id':'ml','title':'Away moneyline','gameIds':[GAME['id']], 'marketType':'moneyline',
+           'direction':'away','line':0,'odds':130,'book':'DraftKings','projection':.5,
+           '_desk':{'projection':.5,'chance':.458,'breakEven':.435},
+           'probabilityAtPublication':{'chance':.458,'breakEven':.435}}
+        run.write_prose(c,self.context(),[])
+        self.assertIn('45.8%',c['why'])
+        self.assertNotIn('total at',c['why'])
+        c['favorite']=True
+        c['_desk']['calibrated']=True
+        run.write_prose(c,self.context(),[])
+        self.assertIn('45.8%',c['why'])
+        self.assertNotIn('Our number is 0.5',c['why'])
+        case=dossier.build(c,GAME,self.context(),[],NOW)
+        self.assertIn('45.8%',case['reasons'][0]['text'])
+        self.assertFalse(any(r['text'].startswith('Book says 0') for r in case['reasons']))
+
     def context(self):
         return gates.Context(now=NOW, games={GAME['id']: GAME}, injuries={
             'NFL-2': {'9': {'name': 'Away receiver', 'status': 'out', 'source': 'https://espn.example/injury',

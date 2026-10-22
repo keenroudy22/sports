@@ -1,5 +1,23 @@
 # October 5 product implementation tracker
 
+## October22 delivery follow-through — waiting-clock repair brought forward
+
+Owner asked that another running task not stall plays. At15:20Z a waiting mirror
+resumed its recovery using the11:10ET start time, reproducing the real clock
+hazard described by D-20261021-NBADELIVERYSTATE. Restored exact preserved
+stash61a72636 source/test changes, retaining every prior receipt and the stash.
+The mirror refreshes real time after recovery and synchronization, while explicit
+historical replays remain fixed; valid replacements survive and genuine role/price
+vetoes still cancel. Full safe release and hosted/live evidence remain required.
+
+The fresh67-candidate/four-game scan admitted PatriotsML+130DK privately at1u,
+not JMU or Braun. Additional copy check found a moneyline WHY/dossier describing
+its probability as a points total. Prospective templates now use exact-price win
+chance45.8% versus43.5% needed; no price, stake, chance or injury fact changes.
+Private release helper preserves original text before correcting this wording;
+if already public it refuses to rewrite. No queued or public receipt is claimed
+complete until actual delivery. All public originals and history remain intact.
+
 ## October22 owner — queued social-style enforcement reopened
 
 The generator-only release did not protect already-frozen overnight drafts.
@@ -26,6 +44,22 @@ questionable and split quarterback usage, not a made-up confirmed starter.
 Braun10.5 remains an NBA research lean, model13.8 with33estimated minutes, not a
 validated official prop. Owner +132 is a personal50%boost over-114, not a public
 market quote. No extra official play or personal wager placed by the agent.
+
+## October22 owner — social-style rollout missed the existing queue
+
+Owner correctly reported NBA trends still used forbidden copy. Evidence:
+nba-trends-2026-10-22 queued00:37:11Z, published14:05:45Z as X2113270586302464380,
+research Discord14:07:18Z. Frozen text still contains Full board URL and generic
+new-roster boilerplate. The generator change did not migrate the existing queue;
+preserving queued art/words was the wrong rollout choice for this owner correction.
+Remaining queue inspected: personal1Q/lotto captions and supplied screenshots are
+clean. Overnight End-Zone image also retained its old graphic footer; direct Buffer
+status confirms it already sent14:31:06Z/X2113276967382368515 before this audit could
+intercept it. No published post deleted or rewritten. No new duplicate post sent.
+O-20261020-NBAPLAIN reopened READY: implement a release-time caption/art-version
+check for unsent house posts, preserve original attempts, cancel/requeue stale private
+ones only with confirmed provider state, and regression-test this exact overnight
+queue scenario. Fresh generators are fixed; complete rollout is NOT verified.
 
 ## October22 owner — TNF personal tickets registered and accepted in X queue
 
@@ -3179,3 +3213,30 @@ Thursday preparation updated separately from future delivery:1267consistent actu
 Private evidence:work/overnight-20261022-outcomes.json,live/audit.json and corresponding gate logs. This final metadata receipt stays on dev for the next regular safe release; no duplicate deployment.
 
 2026-10-22T05:30:53Z · FINAL RENDERED CHECK: initial phone capture showed the loading screen; superseded with6actual-rendered375/1440 pages,zeroissues/errors,phone Today visually reviewed. Proof:work/overnight-20261022-live-rendered/audit.json. Hosted39726672052SUCCESS (87a9dfff contains5d120ba9). Latest05:25:42Z payload adds Henry Hasselbeck under183.5 -114FD research watch quoted05:24:15Z;60.4 projection has a large gap and current QB/role/reason/sanity holds, never an admitted play. Packet postPublishObservation saves exact facts/holds for6:45/8:30. No further implementation scope or frozen quote.
+
+
+### October22 daily — NBA cancellation provenance reproduced
+
+D-20261021-NBADELIVERYSTATE: git d1bff931 scheduled replacement6ad8bc690811076dd03d1b5a at13:21:31Z;04e11df6 cancelled it at wall13:22:07 with saved13:19:17Z. The mirror had run a result recovery and sync without refreshing its clock. A read-only export of d1bff931 reproduces Buzelis absent/Barnes Schedule update needed at13:19:17; both exact rows are unheld favorites with matching frozen projections at13:22:07. Slate and availability retrieved13:21:20 explain the future-data refusal. This was a real cancellation of the new attempt, not inherited state from the older Buffer identity.
+
+Bounded fix refreshes real mirror time after recovery and sync while preserving explicit --now replays. Regressions cover valid replacement retention, actual price/role veto cancellation and fixed replay time. Initial focused fixture exhausted its fake clock because logging also reads time; repaired the fixture with a mutable wall clock. No safety rule changed. Full release and live evidence pending.
+
+### 2026-10-22T12:16:13.820572Z — Daily mirror-clock repair retained after concurrent owner work
+
+D-20261021-NBADELIVERYSTATE remains ready, owner agent, NOT shipped. Historical d1bff931 replay proves the13:19:17 mirror clock rejected valid slate/availability retrieved13:21:20; at wall13:22:07 both exact Buzelis/Barnes rows match their frozen projections with no hold.04e11df6 was a real cancellation by buffer_post.reconcile, not state inherited from an earlier Buffer ID. The bounded patch refreshes mirror time after result recovery and sync; true vetoes and explicit --now replay remain guarded.
+
+Focused regressions and first1596Python(two skips)/269Node passed. Owner TNF work began concurrently; daily relinquished its lease and waited in bounded intervals. Owner task shipped TNF and restored daily's4files at12:11Z. The restarted normal and clean-export gates passed1598Python(two skips)/269Node, but a new owner injury-role feature stashed the repair again and changed build/site sources mid-gate. Build failed closed on stale app-games.js fingerprint (scripts/asset_versions.py:42); no test or guard was weakened. Do not repair or promote that other active task's intermediate files. More than15minutes were spent yielding to legitimate owner release work. No daily commit, production edit or deployment occurred.
+
+Source-only backup work/daily-20261022-mirror-clock.patch and stash30dfb61e8bb7bc7339cc68c68243da12f29a904a retain the patch. Next existing overnight run must wait for the owner injury-role release to finish, check/apply only the source patch preserving newer edits, then repeat every gate, locked promotion, watched hosted success and live375 checks. Prior delivered NBA replacement remains untouched.
+
+Compact proof work/daily-20261022-outcomes.json:47 released rows agree with live grade/time/units; chosenNotPosted/officialUnscheduled0; no overdue/failed X/Discord. All4 active football pages have fresh research or exact price blocker and375document width/no load or console errors; no fully cleared official withheld. Climb restart50/no open rung/0 supported legs; historical banking retained. NBA11clean/6paper,trialopen,promotionfalse. Actual local homepage selection succeeded10:51:37Z/3stories; exact morning call count unavailable. Weekly1local27Bcall/0failures/161.19s/summarytrue and recap X14:53:01Z Oct21 confirmed. Odds368/500projected434,SGO659/2500stop1800. MorningFinal13:06Z still future at check; historical32.85minute result miss retained. Prior completed same daily chat archived; latest/running/owner-action chats retained.
+
+Owner injury-role follow-through: source631a7efa actually deployed in6ca43de3/
+39778434918SUCCESS and live375/1440 verified. Metadata-only receipt12eb9a0a
+committed on dev, not yet promoted because the normal08:30 desk run holds the
+production run lock. Stopped only the owner's own waiting metadata helper; no
+production writer interrupted. Next existing overnight repair release must carry
+that receipt after its full gates. Applied exact30dfb61e stash cleanly; merged final
+87bf9297 daily provenance above without replacing the earlier note.82d951a7's
+alternate next-action wording is retained in its stash; same overnight action is
+now explicit in the queue. All stash backups retained. Daily code still unshipped.

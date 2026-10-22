@@ -119,7 +119,14 @@ def build(candidate, game, ctx, records, now, *, captures=(), weather_row=None, 
     line = candidate.get('line')
     projection = candidate.get('projection')
     snap = ctx.snapshot(game['id'])
-    if projection is not None and line is not None:
+    if market == 'moneyline':
+        numbers = candidate.get('probabilityAtPublication') or gates.desk_for(candidate, ctx) or {}
+        chance, needed = numbers.get('chance'), numbers.get('breakEven')
+        if isinstance(chance, (int, float)) and isinstance(needed, (int, float)) and 0 < chance < 1 and 0 < needed < 1:
+            reasons.append(_item(f"Price-checked win chance {chance:.1%}; this price needs {needed:.1%}.",
+                                 {'chance': chance, 'breakEven': needed}, "Kook'n exact-price check",
+                                 candidate.get('quotedAt')))
+    elif projection is not None and line is not None:
         units = pricing.WORDS.get(market, 'points')
         # This dossier line can feed a public caption. Keep the plain owner-approved
         # shape and never expose the retired "My <stat> is ...; the book's line is ..."

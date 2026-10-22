@@ -1777,8 +1777,11 @@ def write_prose(candidate, ctx, records):
     if candidate.get('favorite'):
         claims = ' '.join(f['claim'].rstrip('.') + '.' for f in candidate.get('_support') or [])
         chance = f"{100 * p['chance']:.1f}%" if p.get('calibrated') else f"{100 * p['rawChance']:.1f}% on the raw curve"
-        candidate['why'] = (f"Researched pick. {claims} Our number is {p['projection']:g} against {pricing.fmt(line)}, {chance} for the "
-                            f"{side}, {p['edgePoints']:+.1f} points clear of the {100 * p['breakEven']:.1f}% that {odds:+d} needs. "
+        comparison = (f"Price-checked win chance {p['chance']:.1%}; {odds:+d} needs {p['breakEven']:.1%}. "
+                      if gates.market_key(candidate) == 'moneyline' else
+                      f"Our number is {p['projection']:g} against {pricing.fmt(line)}, {chance} for the "
+                      f"{side}, {p['edgePoints']:+.1f} points clear of the {100 * p['breakEven']:.1f}% that {odds:+d} needs. ")
+        candidate['why'] = (f"Researched pick. {claims} " + comparison +
                             f"The sourced reason and the number point the same way.")
         candidate['risk'] = (f"A report can change before kickoff, and a listed player can dress. {sparse}The number still rests on a model the "
                              f"closing line beats on average.")
@@ -1810,8 +1813,11 @@ def write_prose(candidate, ctx, records):
         opposing_stats = [f for f in verified_opposition(candidate) if f.get('kind') == 'stats' and f.get('claim')]
         caution = (' Verified statistical reporting also points against this side; see the counterpoints below.') if opposing_stats else ''
         number_label = 'home margin' if gates.market_key(candidate) == 'spread' else 'total'
-        candidate['why'] = (f"Model lean, our number only. We have the {number_label} at {p['projection']:g}; the book is at {pricing.fmt(line)}. "
-                            f"That makes the {side} {100 * p['chance']:.1f}%, and {odds:+d} needs {100 * p['breakEven']:.1f}%."
+        comparison = (f"Price-checked win chance {p['chance']:.1%}; {odds:+d} needs {p['breakEven']:.1%}."
+                      if gates.market_key(candidate) == 'moneyline' else
+                      f"Model lean, our number only. We have the {number_label} at {p['projection']:g}; the book is at {pricing.fmt(line)}. "
+                      f"That makes the {side} {100 * p['chance']:.1f}%, and {odds:+d} needs {100 * p['breakEven']:.1f}%.")
+        candidate['why'] = (comparison
                             + caution
                             + ''.join(f" Checked before publishing: {first_sentence(f['claim'])}" for f in checked)
                             + (f" The market: {market_words}" if market_words else ''))
@@ -3381,6 +3387,10 @@ def mirror(args):
         result = run(settlement_args)
         if result:
             return result
+    # Recovery can refresh inputs minutes after this worker started. Use the
+    # current clock so those valid captures are not mistaken for future data.
+    if not args.now:
+        now = datetime.now(timezone.utc)
     chef_waiting = bool(chef_wins.pending())
     social_ready = bool(os.environ.get('BUFFER_TOKEN', '').strip() and
                         (discord_post.webhook() or discord_post.wins_webhook()))
@@ -3401,6 +3411,8 @@ def mirror(args):
                 return 1 if failed else 0
             if not args.dry_run:
                 sync()
+            if not args.now:
+                now = datetime.now(timezone.utc)
             log_book = x_post.load_log()
             if private_release_ready(now):
                 release_private_isolated(now)
