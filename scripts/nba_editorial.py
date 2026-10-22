@@ -163,8 +163,8 @@ def choices(data, now, history=None):
         if now>=cutoff:
             continue
         import x_post
-        prefix=(f"NBA {target:%b %-d}: my scores" if family=='projections' else
-                f"NBA · Last {chosen[0]['games']} games, {chosen[0]['window'].lower()}")
+        prefix=(f"NBA {target:%b %-d} 🍳 My numbers:" if family=='projections' else
+                f"NBA on my radar 👀 Last {chosen[0]['games']} games, {chosen[0]['window'].lower()}")
         note=('Research, not a bet.' if family=='projections' else
               'Scoring context, not a forecast. Research, not a bet.')
         # All rows on the graphic also appear in the caption; shorten the card,

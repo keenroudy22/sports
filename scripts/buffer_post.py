@@ -40,6 +40,7 @@ import receipts
 import x_post
 import social_style
 import parlay_caption
+import social_voice
 from social_copy import without_playbook
 from sports_refresh import eastern_date
 
@@ -647,6 +648,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             if x_post.tweet_length(text) > x_post.LIMIT:
                 log(f'buffer: {guid} held: all parlay legs do not fit X; never omit or merge legs')
                 continue
+        text = social_voice.finish(text)
         problems = x_post.x_style(text)
         if social_style.active(now):
             problems += social_style.issues(text)
@@ -707,7 +709,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
         if social_style.active(now):
-            entry.update(queuedText=text, socialStyleVersion=social_style.VERSION)
+            entry.update(queuedText=text, socialStyleVersion=social_style.VERSION,
+                         socialVoiceVersion=social_voice.VERSION)
         # Official plays and their settled win updates stay together in Plays
         # & Results. Pregame personal tickets belong there too, while remaining
         # community content and separate from the official Best Bet record.
@@ -842,6 +845,8 @@ def style_audit_due(entry, now):
         return False
     if entry.get('socialStyleVersion') != social_style.VERSION or not entry.get('dueAt'):
         return True
+    if entry.get('queuedText') and social_voice.finish(entry['queuedText']) != entry['queuedText']:
+        return True
     # One final check in the existing five-minute job, not six extra provider
     # reads per post. A moved due time naturally invalidates an earlier check.
     release_window = gates.when(entry['dueAt']) - timedelta(minutes=5)
@@ -875,6 +880,8 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 raise BufferError('queued style check cannot confirm a private scheduled provider state')
             text = post.get('text') or entry.get('queuedText') or (entry.get('discord') or {}).get('text')
             problems = social_style.issues(text) if text else ['caption unavailable for verification']
+            if text and social_voice.finish(text) != text:
+                problems.append('retired caption voice; fresh casual revision required')
             card = entry.get('cardKey')
             image = entry.get('bufferImage') or (entry.get('discord') or {}).get('image') or (card_url(card) if card else None)
             owner = owner_slip_image(entry['id'], 'community' if str(entry.get('kind')) == 'buffer:community' else '', card, items)

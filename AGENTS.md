@@ -205,6 +205,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Casual confident voice across posts (owner, October22):** speak as Kook'n:
+  short, first-person, relaxed and energetic. Lead with the play, goal or actual
+  result, not an operational progress report. Use natural hype such as "Who's
+  riding with me?"; keep selection checks private. Planning copy says "Got my
+  eye on Friday" rather than promising an unselected step. Keep research labels,
+  exact odds/boosts, season context and losses truthful. No guarantees, recovery
+  claims or manufactured wins. Review private queued copy; never erase sent posts.
+
 - **Parlay caption layout (owner, October22):** X and Discord ticket captions
   place each leg on its own line, with a blank line after the heading. Build
   owner-ticket text from structured legs, not a comma-separated operator summary.

@@ -538,7 +538,7 @@ def win_reaction(pick, games=None):
         return f'Not close. ✅ {play}. He had {stat}.'
     if margin is not None and line and margin / abs(float(line)) <= .10:
         return f'Sweated that one. ✅ {play}. Finished with {stat}.'
-    opener = ('Cashed.', 'Got there.')[int(hashlib.sha1(str(pick.get('id')).encode()).hexdigest(), 16) % 2]
+    opener = ('CASH IT.', 'There we go.')[int(hashlib.sha1(str(pick.get('id')).encode()).hexdigest(), 16) % 2]
     return f'{opener} ✅ {play}. He had {stat}.'
 
 

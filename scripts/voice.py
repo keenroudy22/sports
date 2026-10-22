@@ -18,7 +18,7 @@ PHRASE_BANS = (
     'current screen', 'checked before grading', 'at the posted', 'next run', 'this run', 'desk run', 'the desk',
     'scan time', 'our edge', 'edge:', "That's why we bank", "One miss can't", 'free money', 'Plated.',
     'Best bets drop', 'We have it at', 'From Claude', "Here's", 'dive in', 'buckle up', 'trust the process',
-    "let's ride", "let's go", 'graded in public', 'even the burnt',
+    'graded in public', 'even the burnt',
 )
 WORD_BANS = re.compile(r'(?i)(?<![\w-])(?:' + '|'.join(re.escape(word) for word in WHOLE_WORD_BANS) + r')(?![\w-])')
 MODEL_PERCENT = re.compile(r'(?i)\bmodel\s+\d+(?:\.\d+)?%')
