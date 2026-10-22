@@ -1,5 +1,36 @@
 # October 5 product implementation tracker
 
+## October22 multi-day analytics and ticket-first publishing installed
+
+Production source041d25fd/a4b41ee1 adds actual24h/72h/7d analytics snapshots,
+preserving legacy first reads rather than overwriting them. Missing provider
+metrics retain prior evidence. First reads take priority; additional reads are
+capped at8attempts/UTCday and12metric attempts/pass inside the unchanged2700/month
+Buffer ceiling. Existing normal runs own collection; no new scheduler.
+
+Tickets and verified result follow-ups receive queue capacity ahead of optional
+research. Comparable24–48h median views can reorder eligible research families
+after8posts each in56days; sparse families retain exploration slots. This changes
+content selection, not bet gates, stakes, model weights, record categories or loss
+visibility. Current real evidence has no mature compared family, so no automatic
+research reorder is claimed yet. Ticket/result admission priority is active.
+
+Full normal/clean1660Python(two skips)/274Node,607file publication guard,
+113pick record audit, NBA audit and offline1600/m5sxev1i passed with zero outside
+writes/private reads. Initial full test stopped on two obsolete queue-order
+assertions; fixed identity-based routing assertions and repeated every gate.
+Production live read5b2daaa6 refreshed8older posts:557to1190total recorded views,
+633additional observed views, all first snapshots preserved. The scorecard was
+regenerated from current metrics. No performance improvement or follower
+conversion is inferred from this catch-up. Hosted39850610798 SUCCESS verifies
+a4b41ee1. Live rendered375px Today has375px scroll width, no load-error state
+and no console errors after deployment. Initial three-second locator wait expired
+during loading; the subsequent fully rendered check passed.
+
+Existing desk runs own the remaining due checkpoints under the budget cap; the
+next Tuesday review reads the current log and reports actual category evidence.
+The broader result-timing/other-lane work remainsKA-R1, not silently completed.
+
 ## October22 Playbook ticket routing installed
 
 Installed ec0d4a5f (tested source c6b9ab27): all new X plays, selected Climbs and
