@@ -61,7 +61,7 @@ class DraftTests(unittest.TestCase):
         self.assertIn("Book says 38.5. I have it at 31, so I'm on the under.", hot)
         self.assertIn('Over 38.5 in 4 of his last 5 games.', hot)
         self.assertTrue(any(hot.endswith(f'{ask}\n@Playbook #NFL') for ask in
-                            ("❤️ if you're tailing", "❤️ if you're on it", "❤️ if you're riding with me")))
+                            ("Who's on it with me? 🍳", "I'm on this one. 🍳", "Who's riding? ❤️")))
 
     def test_every_post_is_the_play_the_price_and_our_number_in_a_few_words(self):
         with mock.patch.object(x_post, 'load_reasons', return_value={}):
