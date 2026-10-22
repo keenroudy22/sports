@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22T02:03:05Z",
+  "updatedAt": "2026-10-22T02:12:50Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -12,7 +12,7 @@
               "position": "S",
               "status": "Questionable",
               "injury": "Groin",
-              "reportedAt": "2026-10-22T01:00Z",
+              "reportedAt": "2026-10-22T02:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/3127287/budda-baker"
             },
             {
@@ -697,6 +697,24 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "4034953",
+              "name": "C.J. Gardner-Johnson",
+              "position": "S",
+              "status": "Suspension",
+              "injury": "Suspension",
+              "reportedAt": "2026-10-22T02:00Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
+            },
+            {
+              "id": "4568624",
+              "name": "Dorian Williams",
+              "position": "LB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-22T01:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4568624/dorian-williams"
+            },
+            {
               "id": "4832035",
               "name": "Davison Igbinosun",
               "position": "CB",
@@ -704,15 +722,6 @@
               "injury": null,
               "reportedAt": "2026-10-22T01:37Z",
               "source": "https://www.espn.com/nfl/player/_/id/4832035/davison-igbinosun"
-            },
-            {
-              "id": "4034953",
-              "name": "C.J. Gardner-Johnson",
-              "position": "S",
-              "status": "Suspension",
-              "injury": "Suspension",
-              "reportedAt": "2026-10-22T01:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
               "id": "4044133",
@@ -911,21 +920,21 @@
               "injury": null,
               "reportedAt": "2026-10-10T19:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4379778/christian-benford"
-            },
-            {
-              "id": "4683153",
-              "name": "Skyler Bell",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-10T18:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4683153/skyler-bell"
             }
           ]
         },
         "29": {
           "name": "Carolina Panthers",
           "players": [
+            {
+              "id": "4243256",
+              "name": "Devin Lloyd",
+              "position": "LB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-22T02:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4243256/devin-lloyd"
+            },
             {
               "id": "3117253",
               "name": "Bobby Okereke",
@@ -1141,21 +1150,21 @@
               "injury": "Shoulder",
               "reportedAt": "2026-10-14T01:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4687513/cam-jackson"
-            },
-            {
-              "id": "4243256",
-              "name": "Devin Lloyd",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-07T02:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4243256/devin-lloyd"
             }
           ]
         },
         "3": {
           "name": "Chicago Bears",
           "players": [
+            {
+              "id": "4361748",
+              "name": "Anthony Johnson Jr.",
+              "position": "S",
+              "status": "Injured Reserve",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-22T02:00Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
             {
               "id": "3930040",
               "name": "Jonah Jackson",
@@ -1173,15 +1182,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-22T01:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4372576/jack-sanborn"
-            },
-            {
-              "id": "4361748",
-              "name": "Anthony Johnson Jr.",
-              "position": "S",
-              "status": "Injured Reserve",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-22T01:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4426374",
@@ -3227,6 +3227,15 @@
           "name": "Jacksonville Jaguars",
           "players": [
             {
+              "id": "3050073",
+              "name": "Foyesade Oluokun",
+              "position": "LB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-22T02:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3050073/foyesade-oluokun"
+            },
+            {
               "id": "3928931",
               "name": "Ross Matiscik",
               "position": "LS",
@@ -3441,15 +3450,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T18:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/3045207/jourdan-lewis"
-            },
-            {
-              "id": "4692525",
-              "name": "Anton Harrison",
-              "position": "OT",
-              "status": "Injured Reserve",
-              "injury": "Knee",
-              "reportedAt": "2026-10-13T19:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4692525/anton-harrison"
             }
           ]
         },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-22T01:01Z",
+              "reportedAt": "2026-10-22T02:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-22T02:03:05Z",
-      "lastAttemptAt": "2026-10-22T02:03:05Z",
+      "checkedAt": "2026-10-22T02:12:50Z",
+      "lastAttemptAt": "2026-10-22T02:12:50Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-22T02:03:05Z",
-      "lastAttemptAt": "2026-10-22T02:03:05Z",
+      "checkedAt": "2026-10-22T02:12:50Z",
+      "lastAttemptAt": "2026-10-22T02:12:50Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
