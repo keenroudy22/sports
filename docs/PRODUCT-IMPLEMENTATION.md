@@ -1,5 +1,32 @@
 # October 5 product implementation tracker
 
+## October21 evening — alternate rules and route graphic verified live
+
+Source d760684b (descendant bc8fae2f) shipped in hosted39700774233 SUCCESS.
+The directly triggered39700587415 was superseded/cancelled, not a failed release;
+the successful descendant contains the tested fix. Normal and clean-export gates
+both pass1584Python(two skips)/269Node,443pages,record111/NBA0,guard586,
+assets and budgets. Offline actual2000 rehearsal5l_tbnhi outcomeok,zero outside
+writes/private reads. Live375/1440 has no overflow/load/console errors. Image
+cache version20261022T004607Z visibly shows2–3 ALT LEGS/ONE BOOK/-200 TO -150
+TOTAL and TWO LEGS PREFERRED/NO STEP IS FORCED. Evidence:
+/tmp/kookn-climb-final-live-phone.png and /tmp/kookn-climb-final-live-desktop.png.
+Current route has50available/0banked/no fabricated future steps. No historical
+ticket, published result, bankroll or social attachment was rewritten.
+
+Thursday packet is prepared, not a qualified ticket:868 actual alternate rungs,
+zero role-eligible/supported. The separate missing weekly alternate grader/writer
+and side-aware reader remain A-20261010-3 READY, explicitly not shipped by this
+shape change. Existing00:45 overnight task now has finite continuing ownership
+until the technical path ships or needs a genuine external decision; it cannot
+silently disappear when the dated Thursday instructions expire. Exploratory
+/tmp/kookn-climb-offer-audit.py found14349 matched offers/244 groups,26with150+;
+this lacks as-of role/provider/book-settlement checks and is NOT validation or
+permission to open any segment. Existing150-offer/+2pt/last100 rule unchanged.
+Existing6:45/8:30 checks own fresh qualification and normal website/Plays and
+Results/Buffer X release without another owner prompt. Exactly3 Kook'n schedules;
+no claimed future delivery, frozen price, forced step or threshold waiver.
+
 ## October21 evening — live image QA found a remaining old route footer
 
 First shape sourcebb2ed4ba/ef10ed2e rebased8565fd6f is contained in successful
