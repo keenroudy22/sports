@@ -1,5 +1,26 @@
 # October 5 product implementation tracker
 
+## October22 final public release verification
+
+Hosted39831068749 completed SUCCESS at18:36:37Z. Public app.js?v=199
+matches dev byte-for-byte (SHA256 ecb092a67b661cb7e6b67b267b6a2065b8633ae9426dd3393f3cda39d2c6e925).
+Source972818f29f38b6de471d8bf1f6d9c1978a9c3da5 passed normal/clean
+1638Python(two skips)/274Node, all build/audit/guard gates and offline1330/
+ya93enmg with zero outside/private access. Final public desktop confirms
+currentClimb4/step1/$50, all three MY CARD links, revised My card category copy,
+zero overflow and zero console errors. Local375 regression also passed.
+Proof: /tmp/kookn-final-website-desktop.png. The first-load partial-history
+Climb mismatch is now fixed, not merely explained by eventual loading.
+The redundant39832186104 job remains queued; it is not counted as successful.
+
+Friday prep is implemented and captured: all five games,229 alternate sides,
+64player lines. Existing evening/6:45/8:30 checks refresh and publish qualifiers.
+No segment currently qualifies; real future settlement evidence remains required.
+Friday target announcement confirmed X18:23:02.498Z:
+https://x.com/1753110091912413184/status/2113335334561857548
+Discord target17:37Z; all three corrected parlay mirrors delivered17:48/17:53/
+18:24Z. No duplicate posts or fabricated qualification.
+
 ## October22 alternate-spread implementation and Friday preparation
 
 Exact SharpAPI full-game spread capture now shares the existing request budget.
