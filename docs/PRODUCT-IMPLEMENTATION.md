@@ -1,5 +1,36 @@
 # October 5 product implementation tracker
 
+## October22 owner — TNF personal tickets registered and accepted in X queue
+
+Owner approved first-quarter ticket plus our choice of either lotto. Selected
+original four-leg1Q+1399 and five-leg+579 with30%boost/+446base, not ten-leg+2013.
+Source9627d7d7 installed/pushed after normal/clean1602Python(2skip)/271Node,
+443pages/78games, record112/NBA0, publication596files/150275877bytes,
+assets/hard budgets and offline1000n6k1y_maOK/zero outside-private checks.
+Original screenshot hashes d6040c6e(1Q)/cf41eddb(lotto) match copied assets.
+No assumed stake/unit, no new Best Bet, forecast or result mutation.
+
+Existing Buffer schedule API verified both live image URLs before accepting:
+community:personal-ticket:2026-10-22-tnf-q1, Buffer6ada1d401cc831fdc3c18d39,
+due2026-10-22T14:51:11Z; community:personal-ticket:2026-10-22-tnf-lotto,
+Buffer6ada1d41bf6d801ac6f107a3, due15:11:11Z. Both pending Discord ticket/plays,
+never wins. Daily cap/queue reserve, spacing, voice and duplicate checks retained.
+This is scheduled, NOT confirmed X/Discord delivery. Existing five-minute mirror
+owns reconciliation/durable Plays&Results attachments after X. Website community
+record/Today rows follow confirmed pregame X under the existing builder; image
+URLs are live, but current Today does not yet show these pending tickets.
+Hosted39793610095 is still in progress; verify its result or successful descendant.
+O-20261021-NBALOTTO carries the broader personal-ticket delivery followthrough.
+
+Owner straight shortlist: Patriots–Bears under50.5 -105FD, baseline44.1, strongest;
+Braun over10.5pts -114FD, model13.8/estimated33min, smaller research lean, not an
+official NBA Best Bet. Official NBA10AM report does not list Braun. Maye under is
+not a new buy at FD-125 versus originally posted DK+102; original stake unchanged.
+No CFB straight forced. Private evidence work/owner-straights-20261022.json.
+Prior projection-source hosted39788883109 is now SUCCESS; live game/research
+verification and queue closure remain O-20261019-ALT, not silently declared done.
+Daily mirror repair retained in stash8f5ecdad3744c9063f5a13cc1ba957e812e9adab.
+
 ## October22 owner — available-only projections tested and installed; hosted pending
 
 Tested source b5091658 installed under release/run locks and pushed. Normal and
