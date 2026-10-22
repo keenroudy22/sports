@@ -865,10 +865,19 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
             text = post.get('text') or entry.get('queuedText') or (entry.get('discord') or {}).get('text')
             problems = social_style.issues(text) if text else ['caption unavailable for verification']
             card = entry.get('cardKey')
-            image = (entry.get('discord') or {}).get('image') or (card_url(card) if card else None)
+            image = entry.get('bufferImage') or (entry.get('discord') or {}).get('image') or (card_url(card) if card else None)
             owner = owner_slip_image(entry['id'], 'community' if str(entry.get('kind')) == 'buffer:community' else '', card, items)
             if entry.get('card') and not owner:
-                if not image or not art_check(image):
+                # Discord-first official releases archive the exact attachment
+                # before pushing their report. Pages may still be deploying;
+                # that lag is not evidence that the actual Buffer art is stale.
+                key = str(entry.get('id') or '')
+                released_archive = (entry.get('kind') == 'buffer:play'
+                    and (entry.get('discord') or {}).get('beforeX')
+                    and (entry.get('discord') or {}).get('state') == 'sent'
+                    and re.fullmatch(r'[A-Za-z0-9-]{1,150}', key)
+                    and social_style.current_png(ROOT / 'data' / 'release-cards' / f'{key}.png'))
+                if not released_archive and (not image or not art_check(image)):
                     problems.append('house graphic lacks verified current social-style marker')
             if problems:
                 delete_post(entry['bufferPostId'], key=key, send=send)

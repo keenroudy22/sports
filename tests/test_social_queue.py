@@ -132,6 +132,29 @@ class QueueStyleTests(unittest.TestCase):
             with patch.object(bp.urllib.request, 'urlopen', return_value=io.BytesIO(raw)):
                 self.assertEqual(bp.plain_art_live('https://example.com/new.png'), expected)
 
+    def test_discord_first_exact_archive_is_valid_while_pages_image_is_deploying(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);art=root/'data/release-cards';art.mkdir(parents=True)
+            e=self.entry();e.update(id='NFL-new',kind='buffer:play')
+            e['discord'].update(state='sent',beforeX=True)
+            path=art/'NFL-new.png';path.write_bytes(b'\x89PNG\r\n\x1a\n'+style.MARKER)
+            send,calls=self.provider()
+            with patch.object(bp,'ROOT',root):
+                bp.audit_pending_style({'posts':[e]},NOW,key='t',send=send,
+                    art_check=lambda _:False,items={},log=lambda *_:None)
+            self.assertEqual(e['socialStyleAudit']['state'],'clear')
+            self.assertFalse(any('deletePost' in c['query'] for c in calls))
+            self.assertFalse(style.release_issues('Research, not a bet.',path))
+            self.assertTrue(style.release_issues('Full board: keenroudy.com/sports',path))
+            path.write_bytes(b'\x89PNG\r\n\x1a\nold art')
+            self.assertTrue(style.release_issues('Research, not a bet.',path))
+
+    def test_audit_uses_actual_buffer_image_not_a_pending_website_copy(self):
+        e=self.entry(bufferImage='https://cdn.example.com/actual.png');send,_=self.provider()
+        bp.audit_pending_style({'posts':[e]},NOW,key='t',send=send,
+            art_check=lambda url:url=='https://cdn.example.com/actual.png',items={},log=lambda *_:None)
+        self.assertEqual(e['socialStyleAudit']['state'],'clear')
+
     def test_new_schedule_refuses_stale_house_art_before_provider_creation(self):
         calls=[]
         with patch.object(bp, 'live_card_url', return_value='https://example.com/card.png'), \

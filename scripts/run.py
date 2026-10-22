@@ -3044,6 +3044,7 @@ def recover_private_release_artifacts(row, ctx, games, now):
     """Rebuild a queued play's missing private caption/card before any public send."""
     import release_queue
     import x_post
+    import social_style
 
     key = row.get('id')
     pick = dict(row.get('pick') or {})
@@ -3053,7 +3054,8 @@ def recover_private_release_artifacts(row, ctx, games, now):
     changes = {}
     try:
         caption = str(row.get('caption') or '').strip()
-        if not caption:
+        unpublished = not row.get('discordSentAt') and not row.get('publicPath')
+        if not caption or (unpublished and social_style.active(now) and social_style.issues(caption)):
             first = dict(ctx.first)
             latest = dict(ctx.latest)
             first[key] = dict(pick)
@@ -3065,6 +3067,8 @@ def recover_private_release_artifacts(row, ctx, games, now):
             changes['caption'] = caption
         card = Path(row.get('card') or (release_queue.cards(CONF) / f'{key}.png'))
         valid_card = card.is_file() and card.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n'
+        if unpublished and social_style.active(now):
+            valid_card = valid_card and social_style.current_png(card)
         if not valid_card:
             card.parent.mkdir(parents=True, exist_ok=True)
             render_private_play_card(key, pick, game, games, ctx, now, card)
@@ -3219,6 +3223,11 @@ def release_private(now, log=log, only=None):
         # Prove the exact public row before the first external send.  A bad row
         # stays private and the isolated wrapper moves on to every other row.
         validate({'private-release.json': report}, stores.reports, ctx.games)
+        import social_style
+        if social_style.active(now):
+            style_problems = social_style.release_issues(text, Path(row['card']))
+            if style_problems:
+                raise ReleaseArtifactError('; '.join(style_problems))
         run_tests()
 
         if not row.get('discordSentAt'):
@@ -3283,6 +3292,9 @@ def release_private(now, log=log, only=None):
                      'copyVariant': x_post.copy_variant(text),
                      'discord': {'state': 'sent', 'sentAt': sent_at, 'beforeX': True, 'text': text,
                                  'image': buffer_post.card_url(key)}}
+            entry.update(bufferImage=row.get('bufferImage'), cardKey=key)
+            if social_style.active(now):
+                entry.update(queuedText=text, socialStyleVersion=social_style.VERSION)
             log_book.setdefault('posts', []).append(entry)
             x_post.save_log(log_book)
             commit_log(now, push=True)

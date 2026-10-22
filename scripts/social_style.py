@@ -14,6 +14,22 @@ def active(now):
     return now >= EFFECTIVE
 
 
+def current_png(path):
+    try:
+        with path.open('rb') as source:
+            raw = source.read(256)
+        return raw.startswith(b'\x89PNG\r\n\x1a\n') and MARKER in raw
+    except OSError:
+        return False
+
+
+def release_issues(text, path):
+    found = issues(text)
+    if not current_png(path):
+        found.append('private house card lacks current source-render attestation')
+    return found
+
+
 def issues(text, graphic=False):
     text = html.unescape(re.sub(r'<[^>]+>', ' ', str(text or '')))
     found = []
