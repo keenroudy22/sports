@@ -494,7 +494,8 @@ test('the held Hot Plate reads Under review on the first paint and the full card
   await settle();
   const again = firstTicket(await api.views.today({ view: 'today' }));     // after the board rows land
   for (const t of [first, firstTicket(full), again]) {
-    assert.match(t, /<p class="kt-now">Under review · checking his role first\.<\/p>/);
+    assert.match(t, /<p class="kt-now">Projection unavailable\.<\/p>/);
+    assert.doesNotMatch(t, /under review|checking.*role/i);
     assert.match(t, /class="kt-order[^"]*is-held/);
     for (const banned of ['Still good', 'I have it', 'I had it', 'kt-chance', 'kt-orderup', 'Now −', '56.0%', 'I project', '7.3 targets']) assert.ok(!t.includes(banned), banned);
     assert.match(t, /<span class="kt-tag">BUT<\/span><span>HOM&#39;s WR defense points against the over\.<\/span>/, 'a counterpoint with no projection stays');
@@ -511,7 +512,7 @@ test('a play held only by its board rows drops a projection WHY on Today and the
   await settle();
   const pages = [firstTicket(await api.views.today({ view: 'today' })), await api.views.pick({ id: prop.id })];
   for (const page of pages) {
-    assert.match(page, /Under review · checking his role first\./);
+    assert.match(page, /Projection unavailable\./);
     assert.ok(!page.includes('I project'), 'no held projection in WHY');
     assert.ok(!page.includes('7.3 targets'));
   }
@@ -592,8 +593,8 @@ test('the play page under review shows no fair price, edge, chance or projection
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [king, ...rungs] }, extra: linesFor([kingRow]) });
   const page = await api.views.pick({ id: king.id });
   assert.match(page, /<h2 class="kt-tape">The hold<\/h2>/);
-  assert.match(page, /UNDER REVIEW/);
-  assert.match(page, /His team&#39;s quarterback picture changed, so I&#39;m checking his role first\./);
+  assert.match(page, /UNAVAILABLE/);
+  assert.match(page, /No usable projection: the quarterback role is not established in the model\./);
   assert.match(page, /graded at −110 at FanDuel, the price we posted/);
   for (const banned of ['My price', 'How we got', 'projects', 'I project', '7.3 targets', '68.2', '53.7%', '65.9%', '+3.2', '−116', 'Still good', 'Still a bet down to', 'I have it', 'Price we would still play', 'Our notes when we posted'])
     assert.ok(!page.includes(banned), banned);
