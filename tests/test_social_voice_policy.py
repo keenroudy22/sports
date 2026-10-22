@@ -20,8 +20,10 @@ class OwnerSocialVoiceTests(unittest.TestCase):
     def test_queued_card_is_frozen_but_unqueued_draft_is_not(self):
         log = {'posts': [{'id': 'nba-projections-2026-10-22', 'card': 'url', 'bufferPostId': 'queued'},
                          {'id': 'research-draft', 'card': 'url'},
-                         {'id': 'research-sent', 'card': 'url', 'sentAt': '2026-10-22T12:00Z'}]}
-        self.assertEqual(feed.frozen_research_keys(log), {'nba-projections-2026-10-22', 'research-sent'})
+                         {'id': 'research-sent', 'card': 'url', 'sentAt': '2026-10-22T12:00Z'},
+                         {'id': 'cancelled-private', 'card': 'url', 'bufferPostId': 'old', 'cancelledAt': '2026-10-22T12:00Z'},
+                         {'id': 'public-then-pulled', 'card': 'url', 'sentAt': '2026-10-22T12:00Z', 'cancelledAt': '2026-10-22T12:01Z'}]}
+        self.assertEqual(feed.frozen_research_keys(log), {'nba-projections-2026-10-22', 'research-sent', 'public-then-pulled'})
 
     def test_research_preserves_frozen_art_and_missing_original_fails_closed(self):
         now = datetime(2026, 10, 22, 13, tzinfo=timezone.utc)

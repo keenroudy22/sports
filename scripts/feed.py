@@ -75,6 +75,8 @@ def frozen_research_keys(log_book):
     return {entry.get('cardKey') or entry['id'] for entry in log_book.get('posts') or []
             if entry.get('card') and entry.get('id') and
             (entry.get('bufferPostId') or entry.get('sentAt') or (entry.get('discord') or {}).get('sentAt'))
+            and (not (entry.get('cancelledAt') or entry.get('deletedAt')) or entry.get('sentAt')
+                 or (entry.get('discord') or {}).get('sentAt'))
             and re.fullmatch(r'[A-Za-z0-9_.:-]+', str(entry.get('cardKey') or entry['id']))}
 
 
