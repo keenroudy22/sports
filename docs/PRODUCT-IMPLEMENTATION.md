@@ -1,5 +1,22 @@
 # October 5 product implementation tracker
 
+## October22 owner — prospective social voice tested and installed
+
+Source dd44054f is installed in the locked production publisher and pushed.
+Normal and clean-export checks passed 1602 Python tests (2 skips), 270 Node
+tests; build443 pages/78games, record112/NBA0, publication594files, assets
+and hard budgets clear. Offline0830 rehearsal usxi7rpb passed with zero
+outside writes/private reads. Native preview /tmp/kookn-social-plain-preview.png
+passes SVG/PNG QA: direct numbers, RESEARCH · NOT A BET, no graphic age footer.
+Phone375/desktop1440 Today checks show no overflow/loading/error or console
+errors; website entertainment footer remains. Hosted39785582849 SUCCESS contains
+dd44054f (hosted head935797a7); source publication verified.
+Existing morning NBA image baseline SHA256 is
+8a21f84a390bfa0a260af6d775e324cc9e5eb09f2f45b545005333febb571cc0.
+Original image downloaded after deployment matches the baseline byte-for-byte.
+Next natural research post is the observation check; no duplicate post is forced.
+No post sent, queued/sent words rewritten, record or selection/stake changes.
+
 ## October22 owner — confident, non-spammy post policy in progress
 
 O-20261020-NBAPLAIN reopened for the latest owner correction. Future NBA captions
