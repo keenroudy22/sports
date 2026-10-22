@@ -26,6 +26,16 @@ test('Good-to prices and current quotes retain the published cutoff', () => {
   assert.match(source,/Now \$\{odd\(latest\.current\.odds\)\} at \$\{clock\(latest\.current\.observedAt\)\}/);
 });
 
+test('moneyline prices ignore legacy zero-point line boundaries but retain the odds limit', () => {
+  const now=Date.parse('2026-10-22T16:00:00Z');
+  const pick={gameId:'NFL-1',market:'moneyline',marketType:'moneyline',direction:'away',line:0,
+    odds:130,book:'DraftKings',cutoffOdds:116,cutoffLine:0,cutoffBoundary:-.5,
+    kickoff:'2026-10-23T00:15:00Z'};
+  const row={...pick,state:'open',observedAt:'2026-10-22T15:55:00Z'};
+  assert.equal(M.latestPickQuote(pick,[row],now).inside,true);
+  assert.equal(M.latestPickQuote(pick,[{...row,odds:115}],now).inside,false);
+});
+
 test('history and defense cannot manufacture Model support below the price bar', () => {
   const hurst = { chance: .52, needs: .533, edge: -1.3, clearsPrice: false };
   assert.equal(M.matchupSignals(hurst, true, true), 2);

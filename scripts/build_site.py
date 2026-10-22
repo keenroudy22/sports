@@ -974,6 +974,10 @@ def cutoff_fields(pick):
         cents = max(cents, pricing.cents(pick['odds']))
     fields = {'cutoffOdds': cents - 100 if cents < 0 else cents + 100,
             'cutoffLine': float(price[2]), 'cutoffBoundary': float(boundary[1]) if boundary else None}
+    if (pick.get('marketType') or pick.get('market')) == 'moneyline':
+        # Zero is the internal moneyline placeholder, not a point spread.
+        # Keep the published price limit but never close it on a +/-0.5 line.
+        fields['cutoffBoundary'] = None
     if checked_quote_only:
         fields['cutoff'] = (f"Price check applies at {pick['odds']:+g} or better at {float(price[2]):g}. "
                             "A worse price or a different line needs a new check; the original generic tolerance "

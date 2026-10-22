@@ -91,7 +91,8 @@
     if (!current) return null;
     const cents = n => n < 0 ? n + 100 : n - 100;
     const pastPrice = current.line === pick.line && isNum(pick.cutoffOdds) && cents(current.odds) < cents(pick.cutoffOdds);
-    const pastLine = isNum(pick.cutoffBoundary) && (pick.direction === 'under' ? current.line <= pick.cutoffBoundary : current.line >= pick.cutoffBoundary);
+    const moneyline = pick.marketType === 'moneyline' || pick.market === 'moneyline';
+    const pastLine = !moneyline && isNum(pick.cutoffBoundary) && (pick.direction === 'under' ? current.line <= pick.cutoffBoundary : current.line >= pick.cutoffBoundary);
     return { current, inside: isNum(pick.cutoffOdds) && !pastPrice && !pastLine };
   };
   /* The Climb's status words, from the full rung ledger or today-hero.json's summary of it. */

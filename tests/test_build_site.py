@@ -884,5 +884,13 @@ class PayloadSplitTests(unittest.TestCase):
         self.assertEqual([row['id'] for row in build_site.recent_picks(rows, now)], ['open', 'recent'])
 
 
+class MoneylineCutoffDisplayTests(unittest.TestCase):
+    def test_zero_moneyline_placeholder_is_not_a_point_spread_cutoff(self):
+        fields=build_site.cutoff_fields({'marketType':'moneyline','odds':130,
+            'cutoff':'AWAY 0 at +130 or better; off the card at -0.5 or lower, or at +115 or worse at 0.'})
+        self.assertEqual(fields['cutoffOdds'],116)
+        self.assertIsNone(fields['cutoffBoundary'])
+
+
 if __name__ == '__main__':
     unittest.main()
