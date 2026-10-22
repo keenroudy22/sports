@@ -80,7 +80,8 @@ def build(root=ROOT):
         result = results.get(key, {})
         out.append({**ticket, 'community': True, 'publishedAt': post['sentAt'], 'posted': True,
                     'season': kickoff.year, 'seasonType': 2, 'lane': 'personal',
-                    'kind': 'parlays' if len(ticket.get('legs', [])) > 1 else ticket.get('kind', 'props'),
+                    'kind': ('parlays' if len(ticket.get('legs', [])) > 1 else
+                             ticket['kind'] if ticket.get('kind') in ('spreads', 'totals', 'moneyline') else 'props'),
                     'parlayType': 'community' if len(ticket.get('legs', [])) > 1 else None,
                     'title': ticket.get('displayTitle') or ticket['title'],
                     'legs': [{'title': leg} for leg in ticket.get('legs', [])] if len(ticket.get('legs', [])) > 1 else [],

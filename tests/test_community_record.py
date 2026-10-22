@@ -60,3 +60,8 @@ class CommunityRecordTests(unittest.TestCase):
             self.assertIsNone(row['riskUnits'])
             self.assertIsNone(row['units'])
             self.assertNotIn('stakeDollars', row)
+            # Older one-leg personal darts were stored in the parlay namespace;
+            # retain their original prop classification when adding new sides.
+            ticket['kind'] = 'parlays'
+            (root / 'data/community.json').write_text(json.dumps({'tickets': [ticket]}))
+            self.assertEqual(record.build(root)[0]['kind'], 'props')
