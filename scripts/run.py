@@ -2034,6 +2034,12 @@ def ladder_step(ctx, games, now, records, published, decided, screened, manual=N
     """
     import ladder
     try:
+        import climb_prep
+        prep = climb_prep.prepare(ctx, now)
+        boxscores.write_json(Path(getattr(ctx, 'root', ROOT)) / 'work' / 'climb-prep.json', prep)
+    except Exception as error:
+        log(f'next-day Climb prep failed ({type(error).__name__}); current-day selection continues')
+    try:
         ticket, reason = (ladder.manual_candidate(ctx, games, now, manual) if manual
                           else ladder.candidate(ctx, games, now))
     except Exception as error:

@@ -163,7 +163,7 @@ def pages(league, key, fetch=fetch, sleep=time.sleep, log=print, budget=None, ev
     cursor, count = None, 0
     while count < MAX_PAGES and (budget is None or budget[0] > 0):
         try:
-            payload = fetch('/odds', key, league=league, market='props', sportsbook=','.join(BOOKS), is_live='false',
+            payload = fetch('/odds', key, league=league, market='props,point_spread', sportsbook=','.join(BOOKS), is_live='false',
                             event_id=event_id, limit=PAGE, cursor=cursor)
         except Exception as error:      # the key never reaches the log
             log(f'sharp: request failed for {league} ({type(error).__name__})')
@@ -392,13 +392,18 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
                 + ', '.join(f'{k} x{v}' for k, v in sorted(types.items(), key=lambda kv: -kv[1])[:30]))
             continue
         by_game = quotes_from(matched)
+        import game_alternates
+        game_quotes = game_alternates.parse(matched, now)
         for game in mine:
-            fresh_books = by_game.get(game['id'])
-            if not fresh_books:
+            fresh_books = by_game.get(game['id']) or {}
+            sides = game_quotes.get(game['id']) or {}
+            if not fresh_books and not sides:
                 continue
             confirmed[game['id']] = boxscores.stamp(now)
             previous = latest.get(game['id'])
             books = merge(previous, fresh_books, now)
+            for book, markets in sides.items():
+                books.setdefault(book, {'title': {'draftkings': 'DraftKings', 'fanduel': 'FanDuel'}[book], 'markets': {}})['gameMarkets'] = markets
             if previous and previous.get('books') == books:
                 continue
             record = {'league': league, 'gameId': game['id'], 'season': game.get('season'), 'kickoff': game['kickoff'],

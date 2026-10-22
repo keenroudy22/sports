@@ -18,6 +18,7 @@ import features
 import learning
 import pricing
 import sharp_odds
+import game_alternates
 
 ROOT = Path(__file__).resolve().parents[1]
 BOOKS = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel'}
@@ -59,6 +60,24 @@ def offers(captures, games, now):
                 or capture.get('marketWindow', 'Full game') != 'Full game':
             continue
         capture_hash = digest(capture)
+        for book, side, point, price, observed, main in game_alternates.quotes(capture):
+            if book not in BOOKS:
+                continue
+            try:
+                quote_at = features.when(observed)
+                if not timedelta(0) <= at-quote_at <= timedelta(minutes=15):
+                    continue
+            except (TypeError, ValueError):
+                continue
+            segment = segment_key(game['league'], 'spread', side, BOOKS[book], price)
+            key = (capture['gameId'], 'team', segment)
+            rank = (quote_at, -abs((point if side == 'home' else -point)-main), -point, -price)
+            if key not in chosen or chosen[key][0] < rank:
+                row = dict(gameId=capture['gameId'], market='spread', side=side,
+                           book=BOOKS[book], line=point, odds=price, segment=segment,
+                           observedAt=observed, kickoff=game['kickoff'], season=game['season'],
+                           id=digest(key), captureHash=capture_hash)
+                chosen[key] = (rank, row)
         for book_key, book in (capture.get('books') or {}).items():
             if book_key not in BOOKS or book.get('suspended') or book.get('state', 'open') != 'open':
                 continue
@@ -106,13 +125,19 @@ def grade(rows, games, now):
         # never let a later correction leak into an earlier replay.
         if features.when(game['retrievedAt']) > now or not features.when(game['kickoff']) < features.when(game['retrievedAt']):
             continue
-        matches = [p for p in game.get('players', [])
-                   if easy_parlay.name_key(p.get('name')) == offer['player']]
-        actual = matches[0].get(offer['market']) if len(matches) == 1 else None
+        if offer['market'] == 'spread':
+            home, away = (game.get('home') or {}).get('score'), (game.get('away') or {}).get('score')
+            actual = (home-away)*(1 if offer['side'] == 'home' else -1) if number(home) and number(away) else None
+        else:
+            matches = [p for p in game.get('players', [])
+                       if easy_parlay.name_key(p.get('name')) == offer['player']]
+            actual = matches[0].get(offer['market']) if len(matches) == 1 else None
         actual = actual if number(actual) else None
         # Unavailable/DNP/ambiguous stats are unknown, not a book-settled win.
         result = (('win' if (actual > offer['line'] if offer['side'] == 'over'
                             else actual < offer['line']) else 'loss') if actual is not None else None)
+        if offer['market'] == 'spread' and actual is not None:
+            result = 'win' if actual+offer['line'] > 0 else 'loss'
         if offer['gameId'] not in hashes:
             hashes[offer['gameId']] = digest(game)
         row = dict(offer, actual=actual, result=result, boxHash=hashes[offer['gameId']],

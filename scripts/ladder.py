@@ -522,6 +522,36 @@ def game_line_legs(game, ctx, now):
     return out
 
 
+def alternate_spread_legs(game, ctx, now):
+    """Captured full-game two-sided alternates; same support gates as manual legs."""
+    import game_alternates
+    record = (getattr(ctx, 'prop_odds', {}) or {}).get(game['id']) or {}
+    snapshot = ctx.snapshot(game['id'])
+    if not snapshot:
+        return []
+    out = []
+    for key, side, line, price, observed, _ in game_alternates.quotes(record):
+        if key not in BOOKS or not LEG_PRICES[0] <= price <= LEG_PRICES[1]:
+            continue
+        try:
+            if not timedelta(0) <= now-gates.when(observed) <= GAME_FRESH:
+                continue
+            desk = pricing.price(snapshot, 'spread', side, line, price)
+        except (KeyError, TypeError, ValueError):
+            continue
+        rate = segment_hit_rate(ctx, game['league'], 'spread', BOOKS[key], price, side)
+        chance = used_chance(desk['rawChance'], desk['breakEven'], rate)
+        if desk['rawChance'] < MANUAL_RAW_CHANCE or chance is None or chance <= desk['breakEven']:
+            continue
+        out.append(dict(id=f"ladder-{game['id']}-spread-{side}-{line:g}",
+            title=f"{game[side]['short']} {pricing.signed(line)}", gameId=game['id'],
+            marketType='spread', direction=side, line=line, book=BOOKS[key], odds=price,
+            chance=round(chance,3), rawChance=round(desk['rawChance'],3), segmentHitRate=rate,
+            implied=desk['breakEven'], projection=desk['projection'], kickoff=game['kickoff'],
+            observedAt=observed, marketWindow='Full game', alternate=True))
+    return out
+
+
 def moneyline_legs(game, ctx, now):
     """A fresh exact favorite moneyline whose two-sided price and our winner estimate agree.
 
@@ -848,7 +878,7 @@ def candidate(ctx, games, now, exclude=()):
         if not calibrated:
             reasons.append(f'{league}: player alternates wait for their own calibration; game moneylines still checked')
         for day_pool in kickoff_windows(today):
-            legs = [leg for game in day_pool for leg in moneyline_legs(game, ctx, now) + game_line_legs(game, ctx, now)]
+            legs = [leg for game in day_pool for leg in moneyline_legs(game, ctx, now) + game_line_legs(game, ctx, now) + alternate_spread_legs(game, ctx, now)]
             if calibrated:
                 legs += [leg for game in day_pool
                          for leg in legs_for_game(game, ctx.prop_odds.get(game['id']), ctx, now, seen, proven=True)]
