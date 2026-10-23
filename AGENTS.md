@@ -1,5 +1,16 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## Social age line and evening coverage — October23 owner follow-up
+
+Every new X and Discord caption ends with `21+ only`, once. This supersedes
+older caption omissions, not the graphics policy: do not restore the longer
+entertainment footer or add it to art. Preserve ticket legs, exact prices,
+Playbook tagging on X, routing, categories and already-sent originals. Recheck
+private queued posts against confirmed provider state; never delete sent or
+unknown-state posts. The existing17:30/18:50 selection windows also cover
+unstarted same-day evening CFB games, not only NFL. No new jobs, request caps,
+evidence relaxation or forced play quota.
+
 ## Current-game research relevance — October23 owner follow-up
 
 Season history is supporting context, not a standalone social hook. Lead research

@@ -103,7 +103,7 @@ class SlotTests(unittest.TestCase):
     def test_forced_slot(self):
         self.assertEqual(run.slot_for(datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc), '1145').strftime('%H%M'), '1145')
 
-    def test_530_rechecks_only_a_still_dark_primetime_nfl_game(self):
+    def test_530_rechecks_evening_nfl_and_college_including_a_served_game(self):
         now = datetime(2026, 10, 11, 21, 30, tzinfo=timezone.utc)
         slot = now.astimezone(run.EASTERN)
         games = {
@@ -112,12 +112,23 @@ class SlotTests(unittest.TestCase):
             'CFB-night': {'id': 'CFB-night', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-12T00:00:00Z'},
         }
         ctx = SimpleNamespace(first={}, latest={})
-        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-dark'})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-dark', 'CFB-night'})
         ctx.first['posted'] = {'gameIds': ['NFL-dark'], 'status': 'active', 'lane': 'best_bet'}
-        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-dark'},
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-dark', 'CFB-night'},
                          'a second non-contradictory play from the same game remains eligible')
         morning = datetime(2026, 10, 11, 6, 45, tzinfo=run.EASTERN)
         self.assertIsNone(run.official_selection_scope(morning, games, ctx, now))
+
+    def test_friday_college_gets_existing_evening_check_without_opening_future_or_live_games(self):
+        now = datetime(2026, 10, 23, 17, 30, tzinfo=run.EASTERN)
+        game = {'id': 'CFB-night', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-23T23:00:00Z'}
+        games = {'CFB-night': game, 'live': dict(game, id='live', state='in'),
+                 'past': dict(game, id='past', kickoff='2026-10-22T23:00:00Z'),
+                 'tomorrow': dict(game, id='tomorrow', kickoff='2026-10-24T23:00:00Z'),
+                 'nba': dict(game, id='nba', league='NBA')}
+        self.assertEqual(run.official_selection_scope(now, games, SimpleNamespace(first={}, latest={}), now), {'CFB-night'})
+        with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_PRIMETIME': '0'}):
+            self.assertEqual(run.official_selection_scope(now, games, SimpleNamespace(first={}, latest={}), now), set())
 
     def test_650_rechecks_the_same_still_dark_primetime_game(self):
         now = datetime(2026, 10, 12, 22, 50, tzinfo=timezone.utc)

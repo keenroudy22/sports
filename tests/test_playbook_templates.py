@@ -33,7 +33,7 @@ class PlaybookTemplateTests(unittest.TestCase):
         with patch.object(buffer_post, 'create_post', return_value='test') as send:
             result = buffer_post.schedule([(guid,'community','old',now+timedelta(hours=1),None)],
                                           'channel',{'posts':[]},now,items={guid:item},log=lambda *_:None)
-        self.assertTrue(send.call_args.args[0].endswith(social_copy.PLAYBOOK_CTA))
+        self.assertTrue(send.call_args.args[0].endswith(social_copy.PLAYBOOK_CTA + '\n\n21+ only'))
         mirror = result['posts'][0]['discord']['text']
         self.assertNotIn('@Playbook',mirror)
         self.assertNotIn('Copy the bet',mirror)

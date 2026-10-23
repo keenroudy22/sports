@@ -66,7 +66,7 @@ class DiscordPostTests(unittest.TestCase):
         sent = []
         send = lambda url, body, headers: (sent.append(body) or (204, b''))
         discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send, log=lambda *_: None)
-        self.assertEqual(sent[0]['content'], 'Player over 4.5 (-110)\n\n#NFL')
+        self.assertEqual(sent[0]['content'], 'Player over 4.5 (-110)\n\n#NFL\n\n21+ only')
         self.assertEqual(entry['discord']['text'], text, 'do not rewrite the stored original')
 
     def test_playbook_cleanup_keeps_other_tags_and_links(self):
@@ -138,7 +138,7 @@ class DiscordPostTests(unittest.TestCase):
         ]}
         send = lambda url, body, headers: (sent.append(body) or (204, b''))
         discord_post.mirror_sent(log_book, NOW, url='secret', send=send, log=lambda *_: None)
-        self.assertEqual([body['content'] for body in sent], ['The play'])
+        self.assertEqual([body['content'] for body in sent], ['The play\n\n21+ only'])
         self.assertTrue(log_book['posts'][0]['discord']['beforeX'])
         self.assertEqual(log_book['posts'][2]['discord']['state'], 'skipped', 'old house copy never mirrors')
 
@@ -149,7 +149,7 @@ class DiscordPostTests(unittest.TestCase):
         send = lambda url, body, headers: (sent.append(body) or (204, b''))
         discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send, log=lambda *_: None)
         discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send, log=lambda *_: None)
-        self.assertEqual([body['content'] for body in sent], ['Pulled after confirmed news'])
+        self.assertEqual([body['content'] for body in sent], ['Pulled after confirmed news\n\n21+ only'])
         self.assertEqual(entry['discord']['followup']['state'], 'sent')
 
     def test_settled_official_plays_get_one_factual_result_update(self):
@@ -219,7 +219,7 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(len(sent), 2)
         self.assertEqual(sent[0][0], 'discord-secret')
         self.assertEqual(sent[0][1]['username'], "Kook'n Arb Radar")
-        self.assertEqual(sent[0][1]['content'], 'MOVE FAST')
+        self.assertEqual(sent[0][1]['content'], 'MOVE FAST\n\n21+ only')
 
     def test_arb_webhook_can_have_its_own_channel_and_falls_back_to_plays(self):
         self.assertEqual(discord_post.arb_webhook({'DISCORD_ARB_WEBHOOK_URL': 'arb',
@@ -235,7 +235,7 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', wins_url='wins',
                                                   send=send, log=lambda *_: None), [])
         self.assertEqual(sent[0][0], 'wins')
-        self.assertEqual(sent[0][1]['content'], 'MODEL COOKED')
+        self.assertEqual(sent[0][1]['content'], 'MODEL COOKED\n\n21+ only')
 
         held = {'id': 'community:held', 'kind': 'buffer:community', 'sentAt': '2026-09-28T15:59:00Z',
                 'discord': {'state': 'pending', 'destination': 'wins', 'communityType': 'result', 'text': 'WIN'}}
@@ -294,7 +294,7 @@ class DiscordPostTests(unittest.TestCase):
         discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', research_url='research',
                                  send=send, log=lambda *_: None)
         self.assertEqual(sent, [('research', 'MATCHUP TRENDS\n\nRESEARCH · NOT A BEST BET\n'
-                                             'https://x.com/keenkooks/status/123')])
+                                         'https://x.com/keenkooks/status/123\n\n21+ only')])
 
         waiting = {'id': 'research:waiting', 'kind': 'buffer:research',
                    'discord': {'state': 'pending', 'destination': 'research', 'text': 'WAIT'}}
@@ -327,7 +327,7 @@ class DiscordPostTests(unittest.TestCase):
         send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
         discord_post.mirror_sent({'posts': rows}, NOW, url='plays', wins_url='wins', research_url='',
                                  send=send, log=lambda *_: None)
-        self.assertEqual(sent, [('plays', 'The play'), ('plays', 'Cooked')])
+        self.assertEqual(sent, [('plays', 'The play\n\n21+ only'), ('plays', 'Cooked\n\n21+ only')])
         self.assertTrue(all(row['discord']['state'] == 'skipped' for row in rows[2:]))
 
     def test_official_cooked_result_does_not_need_the_community_webhook(self):
@@ -337,7 +337,7 @@ class DiscordPostTests(unittest.TestCase):
         send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
         self.assertEqual(discord_post.mirror_sent({'posts': [row]}, NOW, url='plays', wins_url='',
                                                   send=send, log=lambda *_: None), [])
-        self.assertEqual(sent, [('plays', 'Cooked')])
+        self.assertEqual(sent, [('plays', 'Cooked\n\n21+ only')])
         self.assertEqual(row['discord']['state'], 'sent')
 
     def test_official_burnt_result_also_reaches_plays_and_results(self):
@@ -347,7 +347,7 @@ class DiscordPostTests(unittest.TestCase):
         send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
         self.assertEqual(discord_post.mirror_sent({'posts': [row]}, NOW, url='plays', wins_url='',
                                                   send=send, log=lambda *_: None), [])
-        self.assertEqual(sent, [('plays', 'Overtime got it. Pain.')])
+        self.assertEqual(sent, [('plays', 'Overtime got it. Pain.\n\n21+ only')])
 
 
 if __name__ == '__main__':

@@ -1,7 +1,16 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-23T21:13:00Z",
+  "updatedAt": "2026-10-23T21:22:00Z",
   "items": [
+    {
+      "id": "O-20261023-AGE-EVENING",
+      "title": "Restore caption-only age notice and evening CFB selection coverage",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Test and deploy shared 21+ only send boundaries and existing evening CFB selection. Recheck today's still-playable board; verify provider receipts without forced admissions or historical edits.",
+      "doneWhen": "X/Discord categories and queue safety pass tests. Existing evening windows include unstarted CFB. Full release gates and hosted/live check succeed; current queue and real selection outcome recorded.",
+      "evidence": "At21:20Z production log had zero unresolved Buffer posts. Evening selection was NFL-only, excluding Friday CFB after11:45. New code keeps graphics, records, routing,8-check research limit and staking gates unchanged. Verification pending."
+    },
     {
       "id": "O-20261023-BOARDFRESH",
       "title": "Stop stale multi-book snapshots hiding fresh football research prices",

@@ -1,3 +1,4 @@
+import json
 import sys
 import tempfile
 import unittest
@@ -32,7 +33,8 @@ class ChefWinsTests(unittest.TestCase):
             first = chef_wins.run(NOW, root, state, url='wins', send=send, log=lambda *_: None)
             self.assertEqual(first, {'posted': 3, 'held': 1})
             self.assertEqual(len(sent), 3)
-            self.assertTrue(all(chef_wins.TEXT.encode() in body for _, body, _ in sent))
+            self.assertTrue(all(json.dumps(chef_wins.TEXT, ensure_ascii=False)[1:-1].encode() in body
+                                for _, body, _ in sent))
             # A renamed duplicate is already seen; the fourth unique image can post tomorrow.
             (root / 'copy.png').write_bytes((root / 'a.png').read_bytes())
             later = datetime(2026, 10, 15, 15, tzinfo=timezone.utc)

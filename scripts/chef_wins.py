@@ -11,10 +11,11 @@ from pathlib import Path
 
 import discord_post
 import gates
+from social_copy import with_age_notice
 
 INBOX = Path('/Users/keen/Documents/ChatGPT/Kook\'n/chef-wins')
 STATE = Path.home() / '.config' / 'keenroudy' / 'work' / 'chef-wins-seen.json'
-TEXT = "🧑‍🍳 The chef's own ticket cashed ✅ Personal ticket, not a Kook'n best bet. 21+"
+TEXT = with_age_notice("🧑‍🍳 The chef's own ticket cashed ✅ Personal ticket, not a Kook'n best bet.")
 MAX_DAY = 3
 MIME = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
         '.webp': 'image/webp', '.gif': 'image/gif'}

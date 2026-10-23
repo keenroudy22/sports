@@ -1,5 +1,22 @@
 # October 5 product implementation tracker
 
+## October23 caption age line and evening CFB coverage — in verification
+
+Owner restored `21+ only` to every new social post. Shared X/Discord send paths
+append it once, retain exact legs and X ticket tagging, and check final platform
+length without truncation. Graphics retain the October22 policy. Queue audits
+check the actual provider caption and cancel only confirmed private scheduled
+posts needing revision; already-sent and unknown-state posts remain untouched.
+The21:20Z production log had no unresolved Buffer posts to revise.
+
+The existing17:30/18:50 selection scope was NFL-only, excluding Friday college
+games after the11:45 check. It now includes unstarted same-day evening CFB,
+without new scheduled jobs, research budgets, relaxed admission gates or quotas.
+Today's11:45 screen considered52 candidates and privately admitted one; the
+other51 were screened, many lacking verified availability. That is not proof
+that all51 were bad bets. New current-price/news evaluation and release evidence
+remain due under O-20261023-AGE-EVENING. Full audit is still unfinished.
+
 ## October23 final role/parity/cadence receipt — verified 21:13 UTC
 
 Hosted40023680885SUCCESS verifiede9c24b31, containing scheduling22d8855f and

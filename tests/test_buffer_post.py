@@ -398,7 +398,7 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(log_book['posts'][0]['kind'], 'buffer:play')
         self.assertEqual(log_book['posts'][0]['cardTheme'], 'legacy')
         self.assertEqual(log_book['posts'][0]['discord'], {
-            'state': 'pending', 'text': 'text a', 'readyAt': '2026-09-26T13:15:00Z',
+            'state': 'pending', 'text': 'text a\n\n21+ only', 'readyAt': '2026-09-26T13:15:00Z',
             'image': 'https://keenroudy.com/sports/data/cards/a.png'})
         inputs = [c['variables']['input'] for c in fake.calls if 'createPost' in c['query']]
         self.assertEqual(len(inputs), 1)
@@ -554,7 +554,7 @@ class ScheduleTests(unittest.TestCase):
                              items={'community:model-slip': {'communityResult': True, 'result': 'win',
                                                              'settledAt': NOW.isoformat()}})
         self.assertEqual(result['posts'][0]['discord'], {
-            'state': 'pending', 'text': 'MODEL COOKED', 'destination': 'wins', 'communityType': 'result'})
+            'state': 'pending', 'text': 'MODEL COOKED\n\n21+ only', 'destination': 'wins', 'communityType': 'result'})
 
     def test_owner_ticket_cannot_be_mislabeled_as_an_official_play(self):
         result = bp.schedule([('community:boosted-mnf:2026-10-05-atl-no', 'play', 'Owner ticket',

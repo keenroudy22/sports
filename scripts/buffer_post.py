@@ -42,7 +42,8 @@ import social_style
 import parlay_caption
 import social_voice
 import social_learning
-from social_copy import without_playbook, x_ticket_copy
+from social_copy import (without_playbook, x_ticket_copy, with_age_notice,
+                         age_notice_current, AGE_VERSION, AGE_EFFECTIVE)
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -264,6 +265,9 @@ def stamp(moment):
 
 def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_send):
     """Schedule one post for an exact time. Returns Buffer's post id."""
+    text = with_age_notice(text)
+    if x_post.tweet_length(text) > x_post.LIMIT:
+        raise BufferError('complete caption including age notice exceeds X limit')
     if x_post.x_style(text):
         raise BufferError('outgoing copy fails the public voice check')
     payload = {'text': text, 'channelId': channel_id, 'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': stamp(due_at),
@@ -716,7 +720,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                  'cardTheme': card_theme}
         if social_style.active(now):
             entry.update(queuedText=text, socialStyleVersion=social_style.VERSION,
-                         socialVoiceVersion=social_voice.VERSION)
+                         socialVoiceVersion=social_voice.VERSION, socialAgeVersion=AGE_VERSION)
         # Official plays and their settled win updates stay together in Plays
         # & Results. Pregame personal tickets belong there too, while remaining
         # community content and separate from the official Best Bet record.
@@ -889,6 +893,8 @@ def style_audit_due(entry, now):
     audit = entry.get('socialStyleAudit') or {}
     if audit.get('checkedAt') and now - gates.when(audit['checkedAt']) < timedelta(minutes=5):
         return False
+    if now >= AGE_EFFECTIVE and entry.get('socialAgeVersion') != AGE_VERSION:
+        return True
     if queued_relevance_issues(entry, now):
         return True
     if entry.get('socialStyleVersion') != social_style.VERSION or not entry.get('dueAt'):
@@ -928,6 +934,8 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 raise BufferError('queued style check cannot confirm a private scheduled provider state')
             text = post.get('text') or entry.get('queuedText') or (entry.get('discord') or {}).get('text')
             problems = social_style.issues(text) if text else ['caption unavailable for verification']
+            if now >= AGE_EFFECTIVE and not age_notice_current(text):
+                problems.append('caption needs the owner-approved 21+ only line')
             problems += queued_relevance_issues(entry, now)
             if text and social_voice.finish(text) != text:
                 problems.append('retired caption voice; fresh casual revision required')
@@ -956,6 +964,8 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 failed.append({**entry, 'error': entry['cancelReason']})
             else:
                 entry['socialStyleVersion'] = social_style.VERSION
+                if now >= AGE_EFFECTIVE:
+                    entry['socialAgeVersion'] = AGE_VERSION
                 entry['queuedText'] = text
                 entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'clear'}
         except BufferError as error:

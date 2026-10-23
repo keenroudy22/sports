@@ -1,5 +1,13 @@
 # Kook'n voice
 
+## Latest owner correction — October23
+
+End every new X and Discord caption with `21+ only`, once on its own line.
+This is caption-only; keep the October22 graphic-footer removal. Preserve sent
+posts. The common send paths enforce it, including tickets, research and results.
+Keep all parlay legs on separate lines and @Playbook on X wager captions.
+Check the final platform length including the age line; never cut wager details.
+
 ## Current authority (owner, 2026-10-09)
 
 `docs/KOOKN-PLAN.md` supersedes every older example below where they differ. Public captions use only the exact

@@ -1,7 +1,22 @@
 """Platform-specific copy without changing the wager or its saved X draft."""
 import re
+from datetime import datetime, timezone
 
 PLAYBOOK_CTA = 'Copy the bet 👇 @Playbook'
+AGE_NOTICE = '21+ only'
+AGE_VERSION = 'age-20261023'
+AGE_EFFECTIVE = datetime(2026, 10, 23, 21, 15, tzinfo=timezone.utc)
+
+
+def with_age_notice(text):
+    """One caption-only age line; never rewrite graphics or historical records."""
+    clean = re.sub(r'(?im)^[ \t]*21\+(?:[ \t]+only)?[.!]?[ \t]*$', '', str(text or ''))
+    clean = re.sub(r'\n{3,}', '\n\n', clean).strip()
+    return clean + '\n\n' + AGE_NOTICE if clean else AGE_NOTICE
+
+
+def age_notice_current(text):
+    return str(text or '') == with_age_notice(text)
 
 
 def x_ticket_copy(text, kind, guid='', item=None):
@@ -11,7 +26,7 @@ def x_ticket_copy(text, kind, guid='', item=None):
                 (kind == 'community' and guid.startswith('community:personal-ticket:')
                  and item.get('personalTicket') is True))
     clean = without_playbook(text)
-    return clean + '\n\n' + PLAYBOOK_CTA if eligible else clean
+    return with_age_notice(clean + '\n\n' + PLAYBOOK_CTA if eligible else clean)
 
 
 def without_playbook(text):

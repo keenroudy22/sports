@@ -300,7 +300,7 @@ def reason_kind(sentence):
 
 def reason_in(text):
     """The factual reason line in any owner-approved caption shape."""
-    skip = ('@Playbook', '#', '❤️', 'Book says ', 'Now ', "I'm at ", "I've got ", "My number's ",
+    skip = ('@Playbook', 'Copy the bet 👇 @Playbook', '21+ only', '#', '❤️', 'Book says ', 'Now ', "I'm at ", "I've got ", "My number's ",
             'I have ', 'Book has them losing.', '🍳 ', '🐕 ', '👨‍🍳 ', 'TNF: ', 'MNF: ', 'Saturday night: ')
     lines = [line.strip() for line in str(text or '').splitlines() if line.strip()]
     for index, line in enumerate(lines):
@@ -696,11 +696,16 @@ def guard(text, pick, reason=None, now_quote=None):
         extra.append({'exampleStake': 10, 'exampleReturn': pick_card.dollars(example)})
     if isinstance(pick.get('projection'), (int, float)):     # "We have it at 47": the projection as the post rounds it
         extra.append({'said': [pick_card.plain_number(abs(pick['projection'])), str(int(round(abs(pick['projection']))))]})
-    ok, strays = llm.numbers_ok(text, pick, extra)
+    # The exact standalone age notice is policy, not a wager statistic. Other
+    # 21s (including a player's threshold) still need ordinary number evidence.
+    wager_text = re.sub(r'(?m)^21\+ only$', '', text)
+    ok, strays = llm.numbers_ok(wager_text, pick, extra)
     if not ok:
         problems.append(f"numbers not in the pick: {', '.join(strays)}")
-    if tweet_length(text) > LIMIT:
-        problems.append(f'{tweet_length(text)} characters')
+    from social_copy import x_ticket_copy
+    final_length = tweet_length(x_ticket_copy(text, 'play', pick.get('id', ''), pick))
+    if final_length > LIMIT:
+        problems.append(f'{final_length} characters including ticket tag and age notice')
     lane = pick.get('lane')
     if lane in ('best_bet', 'chef_pick', 'hot_plate', 'gut_call', 'upset') and not reason:
         problems.append('play has no supporting reason')

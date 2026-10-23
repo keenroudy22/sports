@@ -1974,7 +1974,7 @@ def official_selection_scope(slot, games, ctx, now, select_now=False):
     ``None`` means the ordinary 6:45 game-day board.  The 7:30 run gives early
     international games a second fresh-price look before their 8:30 post target.
     The 8:30 and 11:45 runs get the post-capture board for every noon-or-later game that has not
-    started; the 5:30/6:50 runs get the primetime NFL board after fresh prop
+    started; the 5:30/6:50 runs get the primetime NFL/CFB board after fresh prop
     capture.  A game that already has one straight stays eligible because the
     owner allows multiple non-contradictory plays from one game.  Duplicate,
     contradiction and daily-card gates still bound every release.
@@ -2006,8 +2006,9 @@ def official_selection_scope(slot, games, ctx, now, select_now=False):
     if (slot.hour, slot.minute) not in ((17, 30), (18, 50)):
         return set()
     return {game['id'] for game in games.values()
-            if game.get('league') == 'NFL' and game.get('state') == 'pre'
+            if game.get('league') in ('NFL', 'CFB') and game.get('state') == 'pre'
             and eastern_date(gates.when(game['kickoff'])) == today
+            and gates.when(game['kickoff']) > now
             and gates.when(game['kickoff']).astimezone(EASTERN).hour >= 19}
 
 
@@ -3294,7 +3295,8 @@ def release_private(now, log=log, only=None):
                 continue
             release_queue.update(CONF, key, precheckedAt=stamp(now))
 
-        text = str(row.get('caption') or '').strip()
+        from social_copy import x_ticket_copy, AGE_VERSION
+        text = x_ticket_copy(str(row.get('caption') or '').strip(), 'play', key, pick)
         if x_post.guard(text, pick, x_post.reason_in(text)):
             release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason='caption guard')
             log(f'release: {key} held: caption guard failed')
@@ -3379,7 +3381,7 @@ def release_private(now, log=log, only=None):
                                  'image': buffer_post.card_url(key)}}
             entry.update(bufferImage=row.get('bufferImage'), cardKey=key)
             if social_style.active(now):
-                entry.update(queuedText=text, socialStyleVersion=social_style.VERSION)
+                entry.update(queuedText=text, socialStyleVersion=social_style.VERSION, socialAgeVersion=AGE_VERSION)
             log_book.setdefault('posts', []).append(entry)
             x_post.save_log(log_book)
             commit_log(now, push=True)
