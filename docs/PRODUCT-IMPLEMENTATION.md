@@ -1,5 +1,20 @@
 # October 5 product implementation tracker
 
+## October23 overnight My Card settlement repair
+
+Six published October22 My Card tickets remained open after verified finals.
+The existing append writer now records losses for JMU-11.5, Braun over10.5,
+Maye under20.5, the four-leg CFB ticket, ten-leg TNF ticket and first-quarter
+ticket. Official ESPN final summaries and quarter play-by-play are saved in
+work/overnight-20261023-espn-*.json. All six are ordinary losses: CFB has two
+misses, TNF ten has three, Q1 has four. The seven-leg TNF near miss was already
+delivered X03:49:01.897Z/Discord03:49:16Z; no duplicate result was created.
+Personal totals2W/5L/1neutral/6open become2W/11L/1neutral/0open using unchanged
+counting. Original prices/boosts and the verified neutral cash-out remain.
+Unknown cash returns stay unknown; no units inferred. Official Best Bet record
+and historical delivery misses are preserved. Release gates/hosted/live proof
+are pending; this is not a completed installation receipt.
+
 ## October22 multi-day analytics and ticket-first publishing installed
 
 Production source041d25fd/a4b41ee1 adds actual24h/72h/7d analytics snapshots,
