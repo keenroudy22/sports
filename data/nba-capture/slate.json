@@ -1,7 +1,7 @@
 {
  "games": [
   {
-   "clock": "7:08",
+   "clock": "0.0",
    "date": "2026-10-22",
    "id": "NBA-401909093",
    "kickoff": "2026-10-22T23:00:00Z",
@@ -9,18 +9,18 @@
    "period": 4,
    "providerId": "401909093",
    "scores": {
-    "away": 95,
-    "home": 94
+    "away": 106,
+    "home": 114
    },
    "season": 2027,
    "seasonType": "regular-season",
    "source": {
     "name": "ESPN",
-    "url": "https://www.espn.com/nba/game?gameId=401909093"
+    "url": "https://www.espn.com/nba/game/_/gameId/401909093/cavaliers-76ers"
    },
    "sport": "basketball",
-   "status": "in_progress",
-   "statusDetail": "7:08 - 4th",
+   "status": "final",
+   "statusDetail": "Final",
    "teams": {
     "away": {
      "abbreviation": "CLE",
@@ -38,29 +38,29 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
-   "clock": "0.0",
+   "clock": "7:29",
    "date": "2026-10-22",
    "id": "NBA-401909094",
    "kickoff": "2026-10-23T01:30:00Z",
    "league": "NBA",
-   "period": 0,
+   "period": 1,
    "providerId": "401909094",
    "scores": {
-    "away": null,
-    "home": null
+    "away": 15,
+    "home": 9
    },
    "season": 2027,
    "seasonType": "regular-season",
    "source": {
     "name": "ESPN",
-    "url": "https://www.espn.com/nba/game/_/gameId/401909094/nuggets-thunder"
+    "url": "https://www.espn.com/nba/game?gameId=401909094"
    },
    "sport": "basketball",
-   "status": "scheduled",
-   "statusDetail": "10/22 - 9:30 PM EDT",
+   "status": "in_progress",
+   "statusDetail": "7:29 - 1st",
    "teams": {
     "away": {
      "abbreviation": "DEN",
@@ -78,7 +78,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -118,7 +118,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -158,7 +158,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -198,7 +198,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -238,7 +238,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -278,7 +278,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -318,7 +318,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -358,7 +358,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -398,7 +398,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -438,7 +438,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -478,7 +478,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -518,7 +518,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   },
   {
    "clock": "0.0",
@@ -558,11 +558,11 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-23T01:25:05Z"
+   "updatedAt": "2026-10-23T01:55:05Z"
   }
  ],
  "league": "NBA",
- "retrievedAt": "2026-10-23T01:27:18Z",
+ "retrievedAt": "2026-10-23T01:57:20Z",
  "sources": [
   "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261022&limit=100",
   "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261023&limit=100"
