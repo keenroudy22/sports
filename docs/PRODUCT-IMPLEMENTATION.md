@@ -1,6 +1,6 @@
 # October 5 product implementation tracker
 
-## October23 morning throughput repair — verification underway
+## October23 morning throughput repair — verified live
 
 The8:30 log shows15minutes waiting for hosted NBA prop art while holding the
 same lock the private-play worker needs. Replace the polling wait with one
@@ -37,6 +37,26 @@ heartbeat's nonzero exit reflects real warnings, not a missing scheduled job.
 Owner-only October24 packet at22:40Z:44CFB games,356fresh priced rows across all44,
 eight NBA fixtures but no stored tomorrow prices,916alternate rows and zero
 supported Climb legs. These are planning inputs, not qualifying admissions.
+
+Source631c1ced is installed; hosted40035849761SUCCESS published verified
+8392660243a99e81013193cba89c9422fea4c4ad at23:00Z. Source ancestry confirmed;
+no upstream changes required repeated hosted checks. Normal/clean/locked and
+hosted suites passed1743Python(two skips)/278Node. Locked17:30 rehearsal
+sx65d2rg:outcomeok,zero outside writes/private reads. Hosted record114/NBA0;
+publication guard648files/zeroissues. Live Today andNBA at375px checked23:01–02Z:
+width375,no horizontal overflow,load-error state or console errors.
+The actual18:55 results worker finished22:56:52Z,outcomeok,errors empty,
+with the new selection clock. That is a runtime smoke check,not tomorrow's
+morning selection/delivery receipt. Private release queue and unresolved Buffer
+queue were empty; no provider backoff. At22:45Z Buffer had2405 rolling/monthly
+requests,295 left before the unchanged2700 cutoff; optional analytics reserve
+was protected. No new plays were admitted by this repair and history is unchanged.
+O-20261023-MORNINGFLOW is shipped. KA-R1 retains actual October24 morning
+coverage/admission/delivery observation and evidence-based cap evaluation.
+The full audit is not complete: NBA model/prop promotion,automatic quarter
+markets,remaining P31/P46 site work and prospective learning outcomes remain.
+These receipt-only notes stay on dev for the next normal promotion; the
+functional repair above is already installed and publicly verified.
 
 ## October23 age notice and evening CFB repair — verified live
 
