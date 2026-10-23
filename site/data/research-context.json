@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T17:21:31Z",
+  "updatedAt": "2026-10-23T17:32:29Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -268,7 +268,7 @@
               "name": "Cameron Thomas",
               "position": "DE",
               "status": "Questionable",
-              "injury": "Ankle",
+              "injury": null,
               "reportedAt": "2026-10-22T21:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361510/cameron-thomas"
             },
@@ -506,7 +506,7 @@
               "id": "4690179",
               "name": "Tavius Robinson",
               "position": "LB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Pectoral",
               "reportedAt": "2026-10-22T23:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/4690179/tavius-robinson"
@@ -6677,6 +6677,33 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "4034790",
+              "name": "Antoine Winfield Jr.",
+              "position": "S",
+              "status": "Out",
+              "injury": "Ribs",
+              "reportedAt": "2026-10-23T17:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
+            },
+            {
+              "id": "4380507",
+              "name": "Luke Goedeke",
+              "position": "OT",
+              "status": "Out",
+              "injury": "Calf",
+              "reportedAt": "2026-10-23T17:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4380507/luke-goedeke"
+            },
+            {
+              "id": "4250392",
+              "name": "Zyon McCollum",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T17:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4250392/zyon-mccollum"
+            },
+            {
               "id": "4596448",
               "name": "Bucky Irving",
               "position": "RB",
@@ -6713,15 +6740,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3909013/christian-rozeboom"
             },
             {
-              "id": "4380507",
-              "name": "Luke Goedeke",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Calf",
-              "reportedAt": "2026-10-23T01:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4380507/luke-goedeke"
-            },
-            {
               "id": "3871102",
               "name": "David Sills V",
               "position": "WR",
@@ -6731,15 +6749,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3871102/david-sills-v"
             },
             {
-              "id": "4250392",
-              "name": "Zyon McCollum",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": null,
-              "reportedAt": "2026-10-23T00:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4250392/zyon-mccollum"
-            },
-            {
               "id": "4427673",
               "name": "Calijah Kancey",
               "position": "DT",
@@ -6747,15 +6756,6 @@
               "injury": null,
               "reportedAt": "2026-10-22T19:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/4427673/calijah-kancey"
-            },
-            {
-              "id": "4034790",
-              "name": "Antoine Winfield Jr.",
-              "position": "S",
-              "status": "Questionable",
-              "injury": "Ribs",
-              "reportedAt": "2026-10-22T00:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
             },
             {
               "id": "4430871",
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "3",
-          "name": "Case Keenum",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-22T23:00:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/15168/case-keenum"
-        },
-        {
-          "teamId": "3",
-          "name": "Jayden Loving",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-22T23:00:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4877376/jayden-loving"
-        },
-        {
-          "teamId": "3",
-          "name": "Jordan McFadden",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-22T23:00:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360319/jordan-mcfadden"
-        },
-        {
-          "teamId": "3",
-          "name": "T.J. Edwards",
-          "from": "Doubtful",
-          "to": "Out",
-          "observedAt": "2026-10-22T23:00:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3121544/tj-edwards"
-        },
-        {
           "teamId": "14",
           "name": "Puka Nacua",
           "from": "Active",
@@ -7764,11 +7732,43 @@
           "to": "Out",
           "observedAt": "2026-10-23T17:21:31Z",
           "source": "https://www.espn.com/nfl/player/_/id/4241474/brian-robinson-jr"
+        },
+        {
+          "teamId": "33",
+          "name": "Tavius Robinson",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T17:32:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4690179/tavius-robinson"
+        },
+        {
+          "teamId": "27",
+          "name": "Antoine Winfield Jr.",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T17:32:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
+        },
+        {
+          "teamId": "27",
+          "name": "Luke Goedeke",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T17:32:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4380507/luke-goedeke"
+        },
+        {
+          "teamId": "27",
+          "name": "Zyon McCollum",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T17:32:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4250392/zyon-mccollum"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T17:21:31Z",
-      "lastAttemptAt": "2026-10-23T17:21:31Z",
+      "checkedAt": "2026-10-23T17:32:29Z",
+      "lastAttemptAt": "2026-10-23T17:32:29Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T17:21:31Z",
-      "lastAttemptAt": "2026-10-23T17:21:31Z",
+      "checkedAt": "2026-10-23T17:32:29Z",
+      "lastAttemptAt": "2026-10-23T17:32:29Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
