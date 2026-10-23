@@ -1,5 +1,36 @@
 # October 5 product implementation tracker
 
+## October23 NBA and CFB repair verified live — 20:16 UTC
+
+Hosted40015968340SUCCESS uploaded verified12262b1c after detecting10 changed
+upstream files and repeating8 checks, including a rebuild. It includes the NBA
+comparison cards, afternoon free-game capture reallocation (aff8b2e6) and the
+four-hour football quote-source repair (2411e3a8). Normal/clean/locked checks:
+1719Python(two skips),277Node;478pages,114official records/NBA0,public guard645.
+Isolated16:00 rehearsal q0sqap0n returnedok with0outsideWrite/0privateRead.
+
+One bounded actual NBA verification used the installed collector under both
+locks, not a hand-edited store:22free requests,11quotes,5injury changes,0errors,
+retrieved20:03:21Z,scheduled=false,captureb371a39b. No prop request or admission.
+The earlier local verification attempt stopped before capture because a rebase
+changed the source commit identity; the rerun checked installed code markers.
+The intermediate local cadence-only release was stopped before push to include
+the newly discovered football freshness repair in the final tested release.
+
+Live375px NBA and CFB were checked20:15Z: NBA displays4:03PM NY-BOS prices for
+spread/total/ML alongside the model; CFB exposes61current spread prices and10
+qualifying totals, with spread comparisons below the cutoff. Neither page had
+horizontal overflow, a load-error state or console errors. Local1440px was also
+checked. Owner screenshots: kookn-nba-comparisons-live-2026-10-23.png and
+kookn-cfb-spreads-live-2026-10-23.png. Published prices/results were not rewritten.
+
+BOARDFRESH and NBAMATCHUP are shipped. NBAFRESH is observing October24's real
+13:30 run; the manual refresh is not proof of that future schedule. MODELPARITY
+remains unfinished: Research neutral-centered calibration differs from game
+selection's market anchor, and current-role NBA adjustments/validated rankings
+and win chances are not supplied by these display fixes. Receipt-only notes are
+kept on dev for the next normal promotion; all functional changes above are live.
+
 ## October23 stale multi-book quote suppressed fresh CFB research — in verification
 
 The live Research UI hid quotes older than four hours, while game_market_lines

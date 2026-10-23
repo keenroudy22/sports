@@ -1,33 +1,33 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-23T19:31:00Z",
+  "updatedAt": "2026-10-23T20:16:00Z",
   "items": [
     {
       "id": "O-20261023-BOARDFRESH",
       "title": "Stop stale multi-book snapshots hiding fresh football research prices",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Pass full/clean checks, rebuild and release. Verify CFB research uses actual fresh fallback prices and times while stale multi-book prices remain unpromoted. No model or qualification change.",
+      "next": "Complete. Retain four-hour source selection and original quote times. Probability alignment remains O-20261023-MODELPARITY; no new bet qualification was inferred from visibility.",
       "doneWhen": "Board builder and browser agree on four-hour freshness. Stale/future/malformed multi-book captures permit sourced fallback without inventing away prices. Regression, full gates and live CFB comparison pass.",
-      "evidence": "Oct23 IU stored board quote14:25 versus fresh game market19:36. Builder used12hours, browser4hours, hiding the chosen row. New board-only4hour source cutoff; legacy history window and source records unchanged."
+      "evidence": "2411e3a8;40015968340SUCCESS/final12262b1c,8post-rebase checks.1719Python(2skip)/277Node normal+clean,record114/NBA0,guard645,offline1600ok/no outside-write or private-read. Live375 at20:15Z:61 current spreads/10 qualifying totals,expanded comparisons,no overflow/load/console errors. Owner proof kookn-cfb-spreads-live-2026-10-23.png."
     },
     {
       "id": "O-20261023-NBAFRESH",
       "title": "Reuse a late NBA pregame capture to cover the afternoon",
-      "status": "ready",
+      "status": "observing",
       "owner": "agent",
-      "next": "Test and release the same six free game-capture windows, moving23:30 to13:30. Verify next real afternoon capture; do not describe future delivery as observed. Prop/paper jobs and all budgets remain unchanged.",
+      "next": "Verify October24's existing13:30 worker actually records fresh NBA quotes. Code is deployed; the October23 manual verification is not a scheduled-run receipt. Prop/paper cadence and budgets stay unchanged.",
       "doneWhen": "Six planned captures remain; morning windows retained and daytime gaps at most four hours. Single capture path, failure isolation and stale guards pass full tests/rehearsal. Locked release and hosted/live verification succeed.",
-      "evidence": "Existing game captures at6:45,8:30,11:45,17:30,21:00,23:30 left an afternoon gap beyond quote freshness.13:30 worker already exists. New free-game cadence6:45,8:30,11:45,13:30,17:30,21:00; no new job or prop call."
+      "evidence": "aff8b2e6 verified in40015968340SUCCESS/final12262b1c with1719Python(2skip)/277Node/full gates. Six planned windows retained;23:30 free-game capture moved to13:30. One manual verification20:03:21Z used22 bounded free requests,11 quotes,5 injury changes,0errors; scheduled=false,commitb371a39b. Actual next13:30 observation remains due."
     },
     {
       "id": "O-20261023-NBAMATCHUP",
       "title": "NBA spread/total/ML comparison cards and visible CFB spread research",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Finish tests, render, locked release and live NBA/CFB checks. O-20261023-MODELPARITY owns the remaining evaluated model support; never invent missing data.",
+      "next": "Complete. Keep exact spread/total/ML prices and stale/start suppression. O-20261023-MODELPARITY owns current-role projections, validated ranks/win chances and consistent research probabilities.",
       "doneWhen": "Stored validated NBA spread/ML pairs reach cards with model/market comparisons, stale/start suppression and no fabricated picks. CFB spread comparisons remain visible below the strict research bar. Full gates and live release verified.",
-      "evidence": "Oct23 screenshots exposed totals-only NBA builder and opaque totals-only qualifying CFB filter. Verified123 open stored spread rows; strongest stored adjusted edge1.3 versus2point research threshold. Existing game selection anchors to exact book, research uses neutral calibration. No weight/gate change."
+      "evidence": "Initial40014499375SUCCESS/finaldd6c00d6; final40015968340SUCCESS/12262b1c includes fresh captureb371a39b. Live375 verified20:15Z:NY-BOS spread/total/ML with4:03PM quote,zero overflow/load/console errors. Desktop1440 also checked locally. Full1719Python(2skip)/277Node gates. Owner proof kookn-nba-comparisons-live-2026-10-23.png."
     },
     {
       "id": "O-20261023-MODELPARITY",
