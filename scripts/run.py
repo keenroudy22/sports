@@ -1446,12 +1446,18 @@ PAPER_SLOTS = (11, 17, 21, 23)  # silent expansion trials include West Coast and
 
 
 def nba_game_capture_due(slot):
-    """Six existing daily capture opportunities, with late-night pregame work moved to lunch.
+    """Six planned game/prop capture opportunities; late pregame work moves to lunch.
 
     Keep morning/late-slate coverage and the same free-feed request/time caps.
-    The 13:30 Climb worker already runs; no new job, prop call or paper slot.
+    The 13:30 Climb worker already runs; no added daily window or paper slot.
+    Prop and trial grading still run in the late-night worker.
     """
     return slot.hour in (11, 13, 17, 21) or (slot.hour, slot.minute) in ((6, 45), (8, 30))
+
+
+def nba_trial_needs_capture(slot, status):
+    """Keep existing admission retries, but do not recreate the moved 23:30 capture."""
+    return slot.hour != 23 and 'nbaCapture' not in status
 
 
 def paper_trials(now, slot, status):
@@ -2731,7 +2737,7 @@ def _run(args, now, slot, kinds, status):
             except Exception as error:
                 status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
                 log(f'NBA capture: {type(error).__name__}: {error}')
-        if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and (slot.hour in PAPER_SLOTS or (slot.hour,slot.minute) in ((6,45),(8,30))):
+        if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):
             try:
                 import nba_player_props
                 status['nbaPlayerProps']=nba_player_props.capture(now if args.dry_run else datetime.now(timezone.utc))
@@ -2753,7 +2759,7 @@ def _run(args, now, slot, kinds, status):
             import nba_player_props
             status['nbaPlayerPropGraded'] = nba_player_props.grade(now)
             if args.command == 'run':
-                status['nbaTrial'] = nba_trial_runtime.admission(now, capture='nbaCapture' not in status)
+                status['nbaTrial'] = nba_trial_runtime.admission(now, capture=nba_trial_needs_capture(slot, status))
         except Exception as error:
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
         try:

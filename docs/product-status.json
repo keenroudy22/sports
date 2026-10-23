@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-23T20:34:00Z",
+  "updatedAt": "2026-10-23T20:54:00Z",
   "items": [
     {
       "id": "O-20261023-BOARDFRESH",
@@ -16,7 +16,7 @@
       "title": "Reuse a late NBA pregame capture to cover the afternoon",
       "status": "observing",
       "owner": "agent",
-      "next": "Verify October24's existing13:30 worker actually records fresh NBA quotes. Code is deployed; the October23 manual verification is not a scheduled-run receipt. Prop/paper cadence and budgets stay unchanged.",
+      "next": "Deploy tested prop reallocation23:30 to13:30 alongside game capture; retain late grading and existing budgets. Verify October24's13:30 worker records fresh game and prop quotes. Manual captures are not scheduled-run receipts.",
       "doneWhen": "Six planned captures remain; morning windows retained and daytime gaps at most four hours. Single capture path, failure isolation and stale guards pass full tests/rehearsal. Locked release and hosted/live verification succeed.",
       "evidence": "aff8b2e6 verified in40015968340SUCCESS/final12262b1c with1719Python(2skip)/277Node/full gates. Six planned windows retained;23:30 free-game capture moved to13:30. One manual verification20:03:21Z used22 bounded free requests,11 quotes,5 injury changes,0errors; scheduled=false,commitb371a39b. Actual next13:30 observation remains due."
     },
@@ -34,9 +34,9 @@
       "title": "Validate research probability alignment and deeper NBA matchup context",
       "status": "ready",
       "owner": "agent",
-      "next": "Deploy tested football formula parity and NBA roster/role controls. Automatic minutes replacement failed evaluation; retain sourced reviews. Validate roster-aware team/rotation alternatives on independent dated evidence before promotion.",
+      "next": "Formula/role controls are live. Keep failed minutes replacement offline and retain sourced reviews. Evaluate roster-aware team/rotation alternatives independently; current team scores are not roster-adjusted.",
       "doneWhen": "Held-out evidence and regressions support probability alignment; current-role NBA inputs have source/as-of labels and missing-data behavior. No invented rankings, historical regrading, new paid feeds or automatic gate changes.",
-      "evidence": "Oct23 evaluation in docs/model-parity-evaluation-2026-10-23.json:7350 NBA comparisons/stat, replacement minutes MAE5.122 to5.2619; no promotion. Football parity uses existing fitted family, not new weights; 2026 diagnostics mixed. Current role/source UI and changed-role/DNP/roster controls tested; release pending. Team scores remain historical model; full audit not done."
+      "evidence": "4a528572/capture774602a4;40021300958SUCCESS/final6bc42663.1723Python(2skip)/278Node normal+clean+locked;480pages,record114/NBA0,guard650,offline1600ok. Live375 at20:54Z:current workload/source/roster labels,no overflow/load/console errors.399paired props,16 changed-role rows held. Evaluation7350/stat:minutes error5.122→5.2619; automatic replacement rejected. Full audit/team model unfinished."
     },
     {
       "id": "O-20261023-REPORTINDEX",

@@ -15,7 +15,7 @@ import buffer_post
 
 
 class SlotTests(unittest.TestCase):
-    def test_nba_game_capture_reuses_six_windows_without_an_afternoon_freshness_hole(self):
+    def test_nba_game_and_prop_capture_reuse_six_windows_without_an_afternoon_freshness_hole(self):
         windows = [(6,45),(8,30),(10,0),(11,45),(13,30),(16,0),(17,30),(20,0),(21,0),(23,30)]
         selected = [datetime(2026,10,23,h,m,tzinfo=run.EASTERN) for h,m in windows
                     if run.nba_game_capture_due(datetime(2026,10,23,h,m,tzinfo=run.EASTERN))]
@@ -25,7 +25,19 @@ class SlotTests(unittest.TestCase):
         self.assertIn(23,run.PAPER_SLOTS,'late paper grading is not removed')
         source=Path(run.__file__).read_text()
         self.assertEqual(source.count('nba_capture.step(now, scheduled=True)'),1,'only one NBA game capture path')
-        self.assertIn("slot.hour in PAPER_SLOTS or (slot.hour,slot.minute) in ((6,45),(8,30))",source,'prop cadence unchanged')
+        self.assertEqual(source.count("if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):"),2,
+                         'game and prop collectors must share the six planned windows')
+        self.assertEqual(source.count("status['nbaPlayerProps']=nba_player_props.capture("),1,'one prop capture path')
+        self.assertIn("status['nbaPlayerPropGraded'] = nba_player_props.grade(now)",source,'late prop grading is retained')
+        self.assertNotIn("slot.hour in PAPER_SLOTS or (slot.hour,slot.minute) in ((6,45),(8,30))",source)
+
+    def test_nba_trial_fallback_cannot_recreate_moved_late_night_capture(self):
+        at=lambda h,m:datetime(2026,10,23,h,m,tzinfo=run.EASTERN)
+        self.assertFalse(run.nba_trial_needs_capture(at(23,30),{}))
+        self.assertFalse(run.nba_trial_needs_capture(at(17,30),{'nbaCapture':{'requests':20}}))
+        self.assertTrue(run.nba_trial_needs_capture(at(17,30),{}),'failed daytime capture may retry within existing trial budget')
+        self.assertTrue(run.nba_trial_needs_capture(at(16,0),{}),'existing daytime admission refresh is retained')
+        self.assertIn('nba_trial_runtime.admission(now, capture=nba_trial_needs_capture(slot, status))',Path(run.__file__).read_text())
 
     def test_buffer_cooldown_is_delivery_delay_not_permanent_validation_hold(self):
         import release_queue

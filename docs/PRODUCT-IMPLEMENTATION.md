@@ -1,6 +1,27 @@
 # October 5 product implementation tracker
 
-## October23 formula parity and NBA role controls — in verification
+## October23 NBA prop afternoon coverage — in verification
+
+Extend the already-tested six planned game-capture windows to the existing NBA
+prop collector:6:45,8:30,11:45,13:30,17:30,21:00. Move its23:30 collection to the
+existing13:30 worker, rather than add a seventh collection. Late-night paper,
+trial and prop grading remain. Request/time caps, stale suppression, provider
+pagination limits and selection gates are unchanged. Tests assert a single prop
+capture path, shared windows, maximum four-hour planned gap and retained grading.
+The Trial fallback cannot silently recreate the removed23:30 collection; existing
+daytime admission refresh/retry and due-post revalidation stay intact.
+The next actual13:30 run still needs observation; tests are not that receipt.
+
+The preceding locked release installed4a528572 and capture774602a4:12bounded
+free Sharp reads,29free ESPN reads,399paired props,54new immutable forecasts,
+zero request errors. Coverage was partial within the existing pagination cap;
+this is not a claim of a complete market. Hosted40021300958SUCCESS verified
+6bc42663; live375px current-workload/source/roster labels checked20:54Z with no
+overflow, load-error state or console errors. Phone proof is
+kookn-nba-role-checks-live-2026-10-23.png. The cadence patch above is separate
+and remains in verification. Normal1724Python(two skips)/278Node tests pass.
+
+## October23 formula parity and NBA role controls — verified live
 
 Research and selection now share the fitted neutral-centered formula for NFL/CFB
 spreads and totals, including learned coefficient overrides and push-aware EV.
@@ -28,7 +49,13 @@ model-parity-evaluation-2026-10-23.json; replay:model_parity_audit.py.
 The full audit remains unfinished: automated Q1/Q2 source/model/settlement,
 validated NBA team/rotation adjustments, prospective NBA/Climb promotion and
 observed delivery/analytics improvements are not converted into shipped claims.
-Current code release and live receipts are still pending.
+This batch is deployed:4a528572 and capture774602a4; hosted40021300958SUCCESS,
+verified6bc42663, live375px at20:54Z. Normal/clean/locked1723Python(two skips),
+278Node checks,480pages/650public files,114official records/NBA0 and isolated
+16:00 rehearsal all passed. No record-counting changes. At the fresh-capture
+check,399 comparisons had current workload context;272 historical projections
+remained,98 thin-history/13 recent-minutes-drop/16 changed-starting-role rows
+were held. These are market rows, not independent players or admitted bets.
 
 ## October23 NBA and CFB repair verified live — 20:16 UTC
 
