@@ -19,8 +19,12 @@ The existing five-minute worker owns recovery after18:52:15Z; no extra schedule.
 Historical October19 tier receipts now confirmed: CMC X2112284659472089502 at
 20:48:02.143Z and policy X2112289689306624019 at21:08:01.231Z. The policy Discord
 notice was sent20:36Z/pinned20:38Z. Preserve original1u/2u posts; new stakes are
-.5u/1u. The old pinned guide requires owner-confirmed update under the existing
-guide-edit rule; it is not silently rewritten or represented as current guidance.
+.5u/1u. Owner explicitly approved the pinned-guide edit at18:42Z. The existing
+notice in Discord #start-here now says UPDATED OCTOBER23,2026, Best Bets0.5u,
+Chef1u and combined3u/5u daily ceilings, no reset after wins/cash-outs. Verified
+saved text in Pinned Messages, screenshot kookn-discord-staking-guide-2026-10-23.png
+in owner folder. No historical ticket, result or X post changed. This supersedes
+the earlier guide-approval-needed note, not the original October19 delivery receipt.
 The growing Climb remains subject to shared3u/5u exposure: a future rung over125
 dollars exceeds even the big-slate ceiling at the private25dollar unit.
 
