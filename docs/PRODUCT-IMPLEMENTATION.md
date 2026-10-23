@@ -4,8 +4,8 @@
 
 Six existing planned free NBA game-capture windows are retained. Move the23:30
 pregame capture to the existing13:30 Climb worker, leaving6:45,8:30,11:45,17:30
-and21:00 unchanged. This reduces the old11:45→17:30 gap below the four-hour
-quote window on the normal schedule. Actual run/provider delays can still make
+and21:00 unchanged. This reduces the old11:45→17:30 gap to intervals at most four
+hours on the normal schedule. Actual run/provider delays can still make
 quotes stale; timestamps and four-hour suppression remain authoritative.
 Paper/final work and player-prop capture keep their original cadence. No new
 launchd job, paid request allowance, feed source, per-capture40request/150second
