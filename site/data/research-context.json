@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T19:36:17Z",
+  "updatedAt": "2026-10-23T19:55:05Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -467,6 +467,15 @@
           "name": "Baltimore Ravens",
           "players": [
             {
+              "id": "4361178",
+              "name": "Cam Jurgens",
+              "position": "C",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T19:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361178/cam-jurgens"
+            },
+            {
               "id": "3916387",
               "name": "Lamar Jackson",
               "position": "QB",
@@ -488,7 +497,7 @@
               "id": "3858276",
               "name": "Jaylinn Hawkins",
               "position": "S",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Knee",
               "reportedAt": "2026-10-23T00:07Z",
               "source": "https://www.espn.com/nfl/player/_/id/3858276/jaylinn-hawkins"
@@ -537,15 +546,6 @@
               "injury": null,
               "reportedAt": "2026-10-22T20:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035479/john-simpson"
-            },
-            {
-              "id": "4361178",
-              "name": "Cam Jurgens",
-              "position": "C",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-22T01:47Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361178/cam-jurgens"
             },
             {
               "id": "4575483",
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-23T19:33Z",
+              "reportedAt": "2026-10-23T19:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-23T19:32Z",
+              "reportedAt": "2026-10-23T19:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3457,6 +3457,33 @@
           "name": "Kansas City Chiefs",
           "players": [
             {
+              "id": "15847",
+              "name": "Travis Kelce",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T19:44Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15847/travis-kelce"
+            },
+            {
+              "id": "4596602",
+              "name": "Brashard Smith",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-23T19:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4596602/brashard-smith"
+            },
+            {
+              "id": "4043041",
+              "name": "Jaylon Moore",
+              "position": "OT",
+              "status": "Out",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-23T19:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore"
+            },
+            {
               "id": "4428331",
               "name": "Rashee Rice",
               "position": "WR",
@@ -3464,24 +3491,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-23T18:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428331/rashee-rice"
-            },
-            {
-              "id": "4596602",
-              "name": "Brashard Smith",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-23T17:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4596602/brashard-smith"
-            },
-            {
-              "id": "15847",
-              "name": "Travis Kelce",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-22T20:56Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15847/travis-kelce"
             },
             {
               "id": "4569659",
@@ -3653,15 +3662,6 @@
               "injury": null,
               "reportedAt": "2026-10-19T00:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4567048/kenneth-walker-iii"
-            },
-            {
-              "id": "4043041",
-              "name": "Jaylon Moore",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-18T22:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore"
             },
             {
               "id": "4871063",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-23T19:33Z",
+              "reportedAt": "2026-10-23T19:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4428557",
+              "name": "Tyjae Spears",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-23T19:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
+            },
+            {
               "id": "3925357",
               "name": "Calvin Ridley",
               "position": "WR",
@@ -6932,15 +6941,6 @@
               "injury": "Quadriceps",
               "reportedAt": "2026-10-21T23:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685617/kevin-winston-jr"
-            },
-            {
-              "id": "4428557",
-              "name": "Tyjae Spears",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-21T19:54Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
             },
             {
               "id": "4035369",
@@ -7366,54 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "23",
-          "name": "Alex Highsmith",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-23T13:45:04Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4037333/alex-highsmith"
-        },
-        {
-          "teamId": "23",
-          "name": "Jalen Ramsey",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-23T13:45:04Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3045373/jalen-ramsey"
-        },
-        {
-          "teamId": "23",
-          "name": "T.J. Watt",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-23T13:45:04Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3045282/tj-watt"
-        },
-        {
-          "teamId": "18",
-          "name": "Anfernee Jennings",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-23T13:54:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3925350/anfernee-jennings"
-        },
-        {
-          "teamId": "18",
-          "name": "Kaden Elliss",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-23T13:54:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3124890/kaden-elliss"
-        },
-        {
-          "teamId": "18",
-          "name": "Nathan Shepherd",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-23T13:54:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4076951/nathan-shepherd"
-        },
-        {
           "teamId": "20",
           "name": "Joseph Ossai",
           "from": "Doubtful",
@@ -7764,11 +7716,59 @@
           "to": "Active",
           "observedAt": "2026-10-23T19:36:17Z",
           "source": "https://www.espn.com/nfl/player/_/id/4061956/ashton-dulin"
+        },
+        {
+          "teamId": "33",
+          "name": "Cam Jurgens",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T19:55:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361178/cam-jurgens"
+        },
+        {
+          "teamId": "33",
+          "name": "Jaylinn Hawkins",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T19:55:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3858276/jaylinn-hawkins"
+        },
+        {
+          "teamId": "12",
+          "name": "Travis Kelce",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T19:55:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/15847/travis-kelce"
+        },
+        {
+          "teamId": "12",
+          "name": "Brashard Smith",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T19:55:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4596602/brashard-smith"
+        },
+        {
+          "teamId": "12",
+          "name": "Jaylon Moore",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T19:55:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore"
+        },
+        {
+          "teamId": "10",
+          "name": "Tyjae Spears",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-23T19:55:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T19:36:17Z",
-      "lastAttemptAt": "2026-10-23T19:36:17Z",
+      "checkedAt": "2026-10-23T19:55:05Z",
+      "lastAttemptAt": "2026-10-23T19:55:05Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T19:36:17Z",
-      "lastAttemptAt": "2026-10-23T19:36:17Z",
+      "checkedAt": "2026-10-23T19:55:05Z",
+      "lastAttemptAt": "2026-10-23T19:55:05Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }

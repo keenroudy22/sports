@@ -1,18 +1,18 @@
 {
- "at": "2026-10-23T19:37:01Z",
+ "at": "2026-10-23T19:56:05Z",
  "confirmed": {
   "CFB-401856727": "2026-10-23T15:40:01Z",
-  "CFB-401856728": "2026-10-23T19:38:28Z",
+  "CFB-401856728": "2026-10-23T19:57:30Z",
   "CFB-401856730": "2026-10-23T15:40:01Z",
   "CFB-401856731": "2026-10-23T15:40:01Z",
   "CFB-401856834": "2026-10-23T15:40:01Z",
   "CFB-401856835": "2026-10-23T01:07:27Z",
   "CFB-401856839": "2026-10-23T01:07:27Z",
-  "CFB-401856840": "2026-10-23T18:57:22Z",
+  "CFB-401856840": "2026-10-23T19:57:30Z",
   "CFB-401856841": "2026-10-23T15:40:01Z",
   "CFB-401858270": "2026-10-23T15:40:01Z",
-  "CFB-401858271": "2026-10-23T19:38:28Z",
-  "CFB-401858272": "2026-10-23T19:38:28Z",
+  "CFB-401858271": "2026-10-23T19:57:30Z",
+  "CFB-401858272": "2026-10-23T19:57:30Z",
   "CFB-401858273": "2026-10-23T01:07:27Z",
   "CFB-401858274": "2026-10-23T15:40:01Z",
   "CFB-401858495": "2026-10-23T15:40:01Z",
@@ -20,11 +20,11 @@
   "CFB-401858497": "2026-10-23T01:07:27Z",
   "CFB-401858498": "2026-10-23T15:40:01Z",
   "CFB-401858499": "2026-10-23T01:07:27Z",
-  "CFB-401861965": "2026-10-23T19:38:28Z",
-  "CFB-401862808": "2026-10-23T19:38:28Z",
+  "CFB-401861965": "2026-10-23T19:57:30Z",
+  "CFB-401862808": "2026-10-23T19:57:30Z",
   "CFB-401862809": "2026-10-23T15:40:01Z",
   "CFB-401862810": "2026-10-23T01:07:27Z",
-  "CFB-401864525": "2026-10-23T19:38:28Z",
+  "CFB-401864525": "2026-10-23T19:57:30Z",
   "CFB-401864526": "2026-10-23T01:07:27Z",
   "CFB-401866446": "2026-10-23T15:40:01Z",
   "CFB-401866447": "2026-10-23T01:07:27Z",
@@ -37,31 +37,31 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1283,
-    "fanduel": 1094
+    "draftkings": 1929,
+    "fanduel": 107
    },
-   "eventsListed": 122,
+   "eventsListed": 123,
    "eventsMatched": 48,
    "games": 49,
    "marketTypes": {
     "player_field_goals_made": 3,
     "player_kicking_points": 3,
-    "player_longest_passing_completion": 6,
-    "player_longest_reception": 25,
-    "player_longest_rush": 10,
-    "player_passing_+_rushing_yards": 91,
-    "player_passing_attempts": 31,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 34,
+    "player_longest_rush": 13,
+    "player_passing_+_rushing_yards": 112,
+    "player_passing_attempts": 28,
     "player_passing_completions": 25,
-    "player_passing_touchdowns": 56,
-    "player_passing_yards": 212,
-    "player_receiving_yards": 582,
-    "player_receptions": 42,
-    "player_rushing_attempts": 24,
-    "player_rushing_yards": 363,
-    "point_spread": 904
+    "player_passing_touchdowns": 26,
+    "player_passing_yards": 160,
+    "player_receiving_yards": 513,
+    "player_receptions": 82,
+    "player_rushing_attempts": 48,
+    "player_rushing_yards": 308,
+    "point_spread": 673
    },
    "requestsLeft": 0,
-   "rows": 2377,
+   "rows": 2036,
    "slateGames": [
     "Duke Blue Devils at Virginia Cavaliers 2026-10-23T23:00Z",
     "Massachusetts Minutemen at UConn Huskies 2026-10-23T23:00Z",
@@ -115,7 +115,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "North Carolina Central Eagles",
+     "away": "North Carolina Central",
      "external": {
       "betmgm": "6:47425",
       "betonline": "491158056",
@@ -128,7 +128,7 @@
       "fanduel": "36208896",
       "fliff": "420755_c_p_209_prematch",
       "hardrock": "4554767573211808170",
-      "kalshi": "KXNCAAFSPREAD-26OCT23NCCUDSU",
+      "kalshi": "KXNCAAF1H-26OCT23NCCUDSU",
       "ladbrokes": "227cdb0d-b18e-4c90-8b16-7f7b82f4fcb9",
       "novig": "01a14163-8de4-7ca2-ae38-de0f3c6409c9",
       "onexbet": "763907580",
@@ -144,21 +144,16 @@
       "stake": "56b1853c-8f82-401c-aba4-29f94d88a5c8",
       "thescorebet": "StandardEvent:b4f8db3e-ea20-49fc-8263-d4c2e8d87f9c"
      },
-     "home": "Delaware State Hornets",
+     "home": "Delaware State",
      "sample": {
-      "away_team": "North Carolina Central Eagles",
-      "home_team": "Delaware State Hornets",
+      "away_team": "North Carolina Central",
+      "home_team": "Delaware State",
       "markets": [
        "1st_half_moneyline",
        "double_result",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points"
       ]
      },
      "start": "2026-10-23T21:00:00Z",
@@ -179,7 +174,7 @@
       "fanduel": "36208879",
       "fliff": "420751_c_p_209_prematch",
       "hardrock": "4831075996323152278",
-      "kalshi": "KXNCAAFTOTAL-26OCT23YALEPENN",
+      "kalshi": "KXNCAAF1H-26OCT23YALEPENN",
       "ladbrokes": "419dd683-ab1c-45d8-a094-1dd3355ddde5",
       "novig": "01a141d1-8bc7-7661-a893-0cfc77077d8d",
       "onexbet": "763907581",
@@ -201,14 +196,30 @@
       "home_team": "Pennsylvania",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
        "total_points"
       ]
      },
      "start": "2026-10-23T23:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Albany NY",
+     "external": {
+      "draftkings": "34869943"
+     },
+     "home": "Rhode Island",
+     "sample": {
+      "away_team": "Albany NY",
+      "home_team": "Rhode Island",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-24T16:00:00Z",
      "type": "fixture"
     },
     {
@@ -220,7 +231,7 @@
       "fanduel": "36208883",
       "fliff": "420759_c_p_209_prematch",
       "hardrock": "1063576107846074762",
-      "kalshi": "KXNCAAFGAME-26OCT24CORBRWN",
+      "kalshi": "KXNCAAF1H-26OCT24CORBRWN",
       "novig": "01a14577-57e9-75e1-b43c-2ba1f96bd6dc",
       "onexbet": "764138542",
       "paddypower": "36208883",
@@ -238,13 +249,9 @@
       "home_team": "Brown",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -278,13 +285,9 @@
       "home_team": "Central Connecticut",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -297,7 +300,7 @@
       "fanduel": "36208865",
       "fliff": "420752_c_p_209_prematch",
       "hardrock": "1158597414546964891",
-      "kalshi": "KXNCAAFGAME-26OCT24USDDAY",
+      "kalshi": "KXNCAAF1H-26OCT24USDDAY",
       "novig": "01a14577-5919-7011-b0e0-b3a85b5b3f7f",
       "onexbet": "763706345",
       "paddypower": "36208865",
@@ -315,13 +318,9 @@
       "home_team": "Dayton",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -336,7 +335,7 @@
       "fanduel": "36208863",
       "fliff": "420754_c_p_209_prematch",
       "hardrock": "1485815489472102809",
-      "kalshi": "KXNCAAFGAME-26OCT24WAGDUQ",
+      "kalshi": "KXNCAAF1H-26OCT24WAGDUQ",
       "novig": "01a14577-549d-78c2-b54d-1c7ec0a33ddc",
       "onexbet": "764138544",
       "paddypower": "36208863",
@@ -354,13 +353,9 @@
       "home_team": "Duquesne",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -392,7 +387,6 @@
       "home_team": "Long Island University",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -428,7 +422,6 @@
       "home_team": "Marist",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -464,13 +457,9 @@
       "home_team": "Merrimack",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -485,7 +474,7 @@
       "fanduel": "36208876",
       "fliff": "420758_c_p_209_prematch",
       "hardrock": "3257549547009868178",
-      "kalshi": "KXNCAAFSPREAD-26OCT24ALBYURI",
+      "kalshi": "KXNCAAF1H-26OCT24ALBYURI",
       "novig": "01a14577-5294-7570-9226-b39f4f90044a",
       "onexbet": "764138541",
       "paddypower": "36208876",
@@ -503,13 +492,9 @@
       "home_team": "Rhode Island",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -524,7 +509,7 @@
       "fanduel": "36208911",
       "fliff": "420767_c_p_209_prematch",
       "hardrock": "6490339682310816177",
-      "kalshi": "KXNCAAFGAME-26OCT24JKSTCOOK",
+      "kalshi": "KXNCAAF1H-26OCT24JKSTCOOK",
       "novig": "01a145ae-56fe-79e3-b694-cfc2aa09f539",
       "onexbet": "763711864",
       "paddypower": "36208911",
@@ -541,42 +526,6 @@
       "home_team": "Bethune-Cookman",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-24T17:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Bucknell",
-     "external": {
-      "betparx": "1029240556",
-      "betrivers": "1029240556",
-      "draftkings": "34869786",
-      "fanduel": "36208902",
-      "fliff": "420768_c_p_209_prematch",
-      "hardrock": "3637007240436777376",
-      "kalshi": "KXNCAAFSPREAD-26OCT24BUCKHC",
-      "novig": "01a145ae-5270-73e1-b9f8-e384ef1638fb",
-      "onexbet": "764138545",
-      "paddypower": "36208902",
-      "polymarket": "nfl_bucknell_holycross_2026-10-24_b2",
-      "prophetx": "1703111173",
-      "smarkets": "45391432",
-      "sport888_it": "1029240556",
-      "sportzino": "sz-18079305",
-      "stake": "5642b202-4cc3-4c82-91b7-6af2fbba9cc9"
-     },
-     "home": "Holy Cross",
-     "sample": {
-      "away_team": "Bucknell",
-      "home_team": "Holy Cross",
-      "markets": [
-       "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -619,7 +568,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-23T19:25:00Z",
+     "start": "2026-10-23T19:52:00Z",
      "type": "outright"
     },
     {
@@ -649,14 +598,14 @@
       "betsson": "f-O8wepyA_S0WYdXpblBqtFw",
       "bwin": "6:43677",
       "caesars": "61fad2d0-cf01-f53c-3528-85bde1e31fc9",
-      "circa": "230101",
+      "circa": "229763",
       "draftkings": "34118123",
       "fanatics": "5624041",
       "fanduel": "36189004",
       "fliff": "fobj__conflict_event__407879",
       "gemini": "NFL-2610252005-DEN-ARI-S",
       "hardrock": "8903689820174418335",
-      "kalshi": "KXNFLREC-26OCT25DENARI-ARITMCBRIDE85-11",
+      "kalshi": "KXNFLRECYDS-26OCT25DENARI-DENEENGRAM1-50",
       "ladbrokes": "b32e8da1-f0c5-4ec6-a8f0-fb7f2f6f88bd",
       "novig": "01a136e2-ed41-7f12-9786-25d6715adc49",
       "paddypower": "36189004",
@@ -743,6 +692,7 @@
        "longest_touchdown_yards",
        "moneyline",
        "most_points_player",
+       "outright",
        "player_assists",
        "player_defensive_interceptions",
        "player_extra_points_made",
@@ -777,8 +727,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -804,14 +752,14 @@
       "betsson": "f-b8io6yh2qUOlne5PrnKlMQ",
       "bwin": "6:43679",
       "caesars": "6deb965b-4aff-2bb2-376e-1ab442fdb795",
-      "circa": "230102",
+      "circa": "229988",
       "draftkings": "34118203",
       "fanatics": "5624095",
       "fanduel": "36189005",
       "fliff": "fobj__conflict_event__407880",
       "gemini": "NFL-2610252025-GB-DET-S",
       "hardrock": "7899387103270797721",
-      "kalshi": "KXNFLRECYDS-26OCT25GBDET-GBCWATSON9-120",
+      "kalshi": "KXNFL3QTOTAL-26OCT25GBDET",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "novig": "01a136e2-eecd-78b0-ad17-c6ca310ae109",
       "paddypower": "36189005",
@@ -935,8 +883,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -962,15 +908,14 @@
       "betrivers": "1028823705",
       "betsson": "f-HhsEil35y0yFJoIlTZwbSw",
       "bwin": "6:43678",
-      "caesars": "0140713b-a522-cb1b-b173-6bc2dc50feaa",
-      "circa": "230103",
+      "circa": "229771",
       "draftkings": "34118247",
       "fanatics": "5624101",
       "fanduel": "36189003",
       "fliff": "fobj__conflict_event__407881",
       "gemini": "NFL-2610252025-LAR-LV-S",
       "hardrock": "1958013294862270870",
-      "kalshi": "KXNFLRSHYDS-26OCT25LARLV-LARBCORUM24-25",
+      "kalshi": "KXNFL4QTOTAL-26OCT25LARLV",
       "ladbrokes": "9e70c69e-0cb8-4a79-b602-8859ec8f54be",
       "novig": "01a136e2-ee10-7373-841a-15273c9c9ea9",
       "paddypower": "36189003",
@@ -1094,9 +1039,6 @@
        "player_total_rush_attempts",
        "player_touchdowns",
        "point_spread",
-       "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -1122,15 +1064,14 @@
       "betrivers": "1028823702",
       "betsson": "f-5JlSHhxSEECMp-tTRJ2bEg",
       "bwin": "6:43680",
-      "caesars": "d20f250b-f25c-e9ff-9a40-cdff8c4a9f72",
-      "circa": "229112",
+      "circa": "229162",
       "draftkings": "34118035",
       "fanatics": "5625054",
       "fanduel": "36189006",
       "fliff": "fobj__conflict_event__407882",
       "gemini": "NFL-2610260020-KC-SEA-T",
       "hardrock": "3269686686333927830",
-      "kalshi": "KXNFLRECYDS-26OCT25KCSEA-SEAJSMITHNJIGBA11-150",
+      "kalshi": "KXNFL4QTOTAL-26OCT25KCSEA",
       "ladbrokes": "3f6d93bc-a0b1-4467-b356-5bc63a799cf9",
       "novig": "01a136e2-ef4c-7161-96b7-9bf8d0615c3e",
       "paddypower": "36189006",
@@ -1221,6 +1162,7 @@
        "longest_touchdown_yards",
        "moneyline",
        "most_points_player",
+       "outright",
        "player_assists",
        "player_extra_points_made",
        "player_fantasy_score",
@@ -1253,9 +1195,6 @@
        "player_total_rush_attempts",
        "player_touchdowns",
        "point_spread",
-       "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -1281,7 +1220,6 @@
       "betrivers": "1028823704",
       "betsson": "f-LgsvAdcE5Ua8dRA7_h3wCQ",
       "bwin": "6:43685",
-      "caesars": "22a5cab3-95bc-37ba-b9c9-d53de9c469df",
       "circa": "229183",
       "draftkings": "34118071",
       "fanatics": "5634675",
@@ -1405,9 +1343,6 @@
        "player_total_rush_attempts",
        "player_touchdowns",
        "point_spread",
-       "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -1432,7 +1367,7 @@
       "draftkings": "34118182",
       "fanduel": "36215311",
       "fliff": "407884_c_p_202_prematch",
-      "kalshi": "KXNFLSPREAD-26OCT29CARGB",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT29CARGB",
       "novig": "01a15b22-a64b-7541-845a-31981c5747f3",
       "paddypower": "36215311",
       "polymarket": "nfl_packers_panthers_2026-10-29_b3",
