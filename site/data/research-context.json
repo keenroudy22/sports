@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T00:03:09Z",
+  "updatedAt": "2026-10-23T00:13:41Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -467,6 +467,15 @@
           "name": "Baltimore Ravens",
           "players": [
             {
+              "id": "4690179",
+              "name": "Tavius Robinson",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Pectoral",
+              "reportedAt": "2026-10-22T23:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4690179/tavius-robinson"
+            },
+            {
               "id": "4360939",
               "name": "Rashod Bateman",
               "position": "WR",
@@ -537,15 +546,6 @@
               "injury": null,
               "reportedAt": "2026-10-22T00:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4432260/matt-hibner"
-            },
-            {
-              "id": "4690179",
-              "name": "Tavius Robinson",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Pectoral",
-              "reportedAt": "2026-10-21T20:38Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4690179/tavius-robinson"
             },
             {
               "id": "3858276",
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-22T23:26Z",
+              "reportedAt": "2026-10-23T00:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1392,7 +1392,7 @@
               "position": "S",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-10-22T00:27Z",
+              "reportedAt": "2026-10-22T23:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger"
             },
             {
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "27",
-          "name": "Calijah Kancey",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T20:07:49Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4427673/calijah-kancey"
-        },
-        {
           "teamId": "11",
           "name": "Austin Ajiake",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-22T23:33:03Z",
           "source": "https://www.espn.com/nfl/player/_/id/4032473/rashid-shaheed"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-23T00:13:41Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T00:03:09Z",
-      "lastAttemptAt": "2026-10-23T00:03:09Z",
+      "checkedAt": "2026-10-23T00:13:41Z",
+      "lastAttemptAt": "2026-10-23T00:13:41Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T00:03:09Z",
-      "lastAttemptAt": "2026-10-23T00:03:09Z",
+      "checkedAt": "2026-10-23T00:13:41Z",
+      "lastAttemptAt": "2026-10-23T00:13:41Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
