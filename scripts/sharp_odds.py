@@ -368,6 +368,8 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
     # college Saturday is priced before Sunday's NFL slate and a Sunday before Monday.
     soonest = lambda league: min((g['kickoff'] for g in games if g['league'] == league), default='9999')
     for league, code in sorted(LEAGUES.items(), key=lambda kv: soonest(kv[0])):
+        if budget[0] <= 0:
+            break
         mine = sorted((g for g in games if g['league'] == league), key=lambda g: (g['kickoff'], g['id']))
         if not mine:
             continue

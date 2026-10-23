@@ -105,11 +105,18 @@ def side_support(game,which,line,chance,history,now,market):
  return [f"My score model gives {team['abbreviation']} a {100*chance:.1f}% chance here.",history_reason]
 
 
-def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=None,lead_minutes=60):
+def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=None,lead_minutes=60,diagnostics=None):
+ summary=diagnostics if diagnostics is not None else {}
+ summary.update(games=0,eligibleGames=0,offers=0,holds={})
+ def held(reason):summary['holds'][reason]=summary['holds'].get(reason,0)+1
  try:
   slate=json.loads((root/'slate.json').read_text());inj=json.loads((root/'injuries-current.json').read_text())
- except (OSError,ValueError):return []
- if not 0<=(now-boxscores.instant(inj['retrievedAt'])).total_seconds()<=60*60:return []
+ except (OSError,ValueError):
+  held('missing slate or injury snapshot');return []
+ summary['games']=len(slate.get('games',[]))
+ summary['injuriesCheckedAt']=inj.get('retrievedAt')
+ if not 0<=(now-boxscores.instant(inj['retrievedAt'])).total_seconds()<=60*60:
+  held('injury snapshot outside sixty-minute window');return []
  holds={r['team'] for r in inj.get('rows',[]) if r.get('status')}
  quotes={}
  for p in (root/'quotes').glob('*.jsonl'):
@@ -119,14 +126,19 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
  for g in slate.get('games',[]):
   if (g['status']!='scheduled' or g['seasonType']!='regular-season' or not g.get('timeConfirmed',True)
       or boxscores.instant(g['kickoff']).astimezone(nba_trial.EASTERN).date()!=now.astimezone(nba_trial.EASTERN).date()
-      or boxscores.instant(g['kickoff'])<=now+timedelta(minutes=lead_minutes)
-      or inj.get('season')!=g['season']
-      or any(t['id'] in holds for t in g['teams'].values())):continue
+      or boxscores.instant(g['kickoff'])<=now+timedelta(minutes=lead_minutes)):
+   held('not an eligible upcoming game today');continue
+  if inj.get('season')!=g['season']:
+   held('injury snapshot season mismatch');continue
+  if any(t['id'] in holds for t in g['teams'].values()):
+   held('unresolved team injury status');continue
+  summary['eligibleGames']+=1
   if g['season'] not in models:models[g['season']]=model_factory('NBA',g['season'],now.timestamp())
   prediction=models[g['season']].predict(g['teams']['home']['id'],g['teams']['away']['id'])
   for book in ('DraftKings',):
    q=quotes.get((g['providerId'],book))
-   if not q:continue
+   if not q:
+    held('no stored DraftKings quote');continue
    try:
     total=q['current']['total'];line=total['line'];side='under' if prediction['total']<line else 'over'
     chance=total_chance(prediction['total'],prediction['sdTotal'],line,side)
@@ -172,6 +184,7 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
                   'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
                   'projection':round(prediction['margin'],1),'model':'hoops-v1'})
    except (KeyError,TypeError,ValueError):pass
+ summary['offers']=len(out)
  return sorted(out,key=lambda r:(-(r['rawChance']-__import__('espn_props').implied(r['odds'])),r['kickoff'],r['id']))
 
 
@@ -191,15 +204,20 @@ def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True):
   nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
  now=max(now,datetime.now(timezone.utc))
  if review is None:review=json.loads(REVIEW.read_text())
- for offer in candidates(now):
+ coverage={};refusals={}
+ for offer in candidates(now,diagnostics=coverage):
   nba_trial.staking.apply(offer,now)
-  if nba_trial.evaluate(offer,stored,now,preview_sent=review['sentAt']):continue
+  problems=nba_trial.evaluate(offer,stored,now,preview_sent=review['sentAt'])
+  if problems:
+   for reason in problems:refusals[reason]=refusals.get(reason,0)+1
+   continue
   try:nba_trial.record_publish(offer,now,root,preview_sent=review['sentAt'])
   except ValueError as error:
    if str(error).startswith('shared exposure:'):return {'state':'held','reason':str(error)}
    raise
-  return {'state':'admitted','id':offer['id']}
- return {'state':'no-play','reason':'no fresh, supported, role-clear total passes every gate'}
+  return {'state':'admitted','id':offer['id'],'coverage':coverage,'refusals':refusals}
+ return {'state':'no-play','reason':'no fresh, supported, role-clear NBA market passes every gate',
+         'coverage':coverage,'refusals':refusals}
 
 
 def public_rows(root=nba_trial.STORE):

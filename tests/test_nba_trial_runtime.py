@@ -56,7 +56,10 @@ class TrialRuntimeTests(unittest.TestCase):
   self.assertEqual(len(result),1);self.assertFalse(nt.evaluate(result[0],[],NOW,preview_sent='2026-10-09T22:00:00Z'))
   snapshot['rows']=[{'team':'1','status':'Out'}]
   (root/'injuries-current.json').write_text(json.dumps(snapshot))
-  self.assertEqual(rt.candidates(NOW,root,lambda *a:Model(),history),[])
+  coverage={}
+  self.assertEqual(rt.candidates(NOW,root,lambda *a:Model(),history,diagnostics=coverage),[])
+  self.assertEqual(coverage['holds'],{'unresolved team injury status':1})
+  self.assertEqual((coverage['games'],coverage['eligibleGames'],coverage['offers']),(1,0,0))
  def test_candidates_include_draftkings_moneyline_and_spread_but_no_fanduel_or_props(self):
   root=self.root/'capture';root.mkdir()
   game={'id':'NBA-1','providerId':'1','league':'NBA','season':2027,'seasonType':'regular-season','kickoff':'2026-10-20T23:00:00Z','status':'scheduled','timeConfirmed':True,'teams':{'home':{'id':'1','abbreviation':'A'},'away':{'id':'2','abbreviation':'B'}}}

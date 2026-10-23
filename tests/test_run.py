@@ -24,9 +24,8 @@ class SlotTests(unittest.TestCase):
         self.assertLessEqual(max(b-a for a,b in zip(selected,selected[1:])),timedelta(hours=4))
         self.assertIn(23,run.PAPER_SLOTS,'late paper grading is not removed')
         source=Path(run.__file__).read_text()
-        self.assertEqual(source.count('nba_capture.step(now, scheduled=True)'),1,'only one NBA game capture path')
-        self.assertEqual(source.count("if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):"),2,
-                         'game and prop collectors must share the six planned windows')
+        self.assertIn("and 'nbaCapture' not in status and args.command != 'run'", source,
+                      'non-run capture fallback cannot duplicate the early run capture')
         self.assertEqual(source.count("status['nbaPlayerProps']=nba_player_props.capture("),1,'one prop capture path')
         self.assertIn("status['nbaPlayerPropGraded'] = nba_player_props.grade(now)",source,'late prop grading is retained')
         self.assertNotIn("slot.hour in PAPER_SLOTS or (slot.hour,slot.minute) in ((6,45),(8,30))",source)
@@ -161,7 +160,7 @@ class SlotTests(unittest.TestCase):
                 run.capture(slot, python='python-test')
             scripts = [Path(call.args[0][1]).name for call in invoke.call_args_list]
             self.assertEqual(scripts, ['odds_api.py', 'prop_odds.py', 'sharp_odds.py'])
-            self.assertEqual(invoke.call_args_list[-1].kwargs['env']['SHARP_REQUESTS'], '15')
+            self.assertEqual(invoke.call_args_list[-1].kwargs['env']['SHARP_REQUESTS'], '10' if hour == 17 else '15')
 
     def test_830_pass_refreshes_sharpapi_before_selection(self):
         slot = datetime(2026, 10, 18, 8, 30, tzinfo=run.EASTERN)
@@ -170,7 +169,7 @@ class SlotTests(unittest.TestCase):
             run.capture(slot, python='python-test')
         scripts = [Path(call.args[0][1]).name for call in invoke.call_args_list]
         self.assertEqual(scripts, ['odds_api.py', 'prop_odds.py', 'sharp_odds.py'])
-        self.assertEqual(invoke.call_args_list[-1].kwargs['env']['SHARP_REQUESTS'], '15')
+        self.assertEqual(invoke.call_args_list[-1].kwargs['env']['SHARP_REQUESTS'], '10')
 
     def test_730_pass_refreshes_prices_and_rechecks_early_games(self):
         now = datetime(2026, 10, 18, 11, 30, tzinfo=timezone.utc)  # 7:30 AM ET
@@ -1543,7 +1542,7 @@ class AbsorbTests(unittest.TestCase):
 
 
 class BufferPostsTests(unittest.TestCase):
-    """After a push the run waits for the new cards to go live, then plans again and schedules."""
+    """Hosted art is checked without blocking the shared release lock."""
 
     def assert_optional_line_catalog_does_not_block_play(self, prepare):
         import buffer_post
@@ -1590,14 +1589,14 @@ class BufferPostsTests(unittest.TestCase):
 
         self.assert_optional_line_catalog_does_not_block_play(broken)
 
-    def test_waits_for_the_deployed_cards_then_schedules(self):
+    def test_missing_deployed_card_does_not_hold_the_posting_lock(self):
         import buffer_post
         import x_post
         from unittest import mock
         now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
         ctx = type('Ctx', (), {'first': {}, 'latest': {}, 'player_team': {}})()
         plans = [('a', 'play', 'text', now, 'a')]
-        answers = iter([False, False, True])
+        answers = iter([False])
         slept, calls = [], []
         status = {'errors': [], 'x': {}}
         with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
@@ -1609,8 +1608,9 @@ class BufferPostsTests(unittest.TestCase):
                 mock.patch.object(buffer_post, 'reachable', side_effect=lambda url: next(answers)), \
                 mock.patch.object(buffer_post, 'schedule') as schedule:
             run.buffer_posts(now, ctx, {}, [], status, deploying=True, sleep=slept.append, clock=lambda: 0)
-        self.assertEqual(len(slept), 2, 'polled until the card answered')
-        self.assertEqual(len(calls), 2, 'planned again after the wait, so due times are not in the past')
+        self.assertEqual(slept, [], 'a hosted graphics wait must not block Discord/private releases')
+        self.assertEqual(status['x']['cardsAwaitingDeploy'], 1)
+        self.assertEqual(len(calls), 2, 'fresh due times still reach the guarded scheduler')
         schedule.assert_called_once()
         self.assertEqual(schedule.call_args[0][0], plans)
         self.assertEqual(status['errors'], [])

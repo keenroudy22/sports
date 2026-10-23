@@ -1,5 +1,17 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## Morning throughput repair — October23 follow-up
+
+The existing6:45/8:30/17:30 workers split the same30 Sharp reads into10 each;
+the existing7:30/18:50 extras retain15. First-pass web research reserves5 props,
+2 sides and1 total, then unused slots may be reassigned after every family gets
+its turn, still at most8 lookups. Never change admission or staking to fill volume.
+Live selection uses the post-capture clock; explicit replays keep their clock.
+NBA game capture/Trial screening precede football news work, with the same gates
+and no duplicate scheduled capture. Qualified private plays release through the
+existing transactional checks before background learning/analytics. Hosted-art
+absence retries on the next existing pass without a15-minute shared-lock wait.
+
 ## Social age line and evening coverage — October23 owner follow-up
 
 Every new X and Discord caption ends with `21+ only`, once. This supersedes

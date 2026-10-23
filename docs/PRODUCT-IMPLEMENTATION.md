@@ -1,5 +1,43 @@
 # October 5 product implementation tracker
 
+## October23 morning throughput repair — verification underway
+
+The8:30 log shows15minutes waiting for hosted NBA prop art while holding the
+same lock the private-play worker needs. Replace the polling wait with one
+readiness check; the scheduler retains required-card checks and existing runs
+retry. Newly admitted private football plays now enter the unchanged transactional
+Discord/public/Buffer release path before background shadows, paper trials,
+NBA player research and optional analytics. Dry-run/no-push never release.
+
+Football as-of selection previously retained run-start time after capture;
+`latest_before` therefore excluded legitimate quotes retrieved during that run.
+Refresh the live selection clock after capture/lock work, retaining explicit
+replay clocks and future/stale rejection. NBA admission already refreshed its
+clock internally; do not falsely call that an NBA clock fix. Move its existing
+game capture and trial screening before football news, with no duplicate capture.
+NBA no-play status now records injury, schedule and quote/policy holds.
+
+Reuse the same30 ordinary daily Sharp reads as10 at6:45,10 at8:30 and10 at17:30,
+instead of15 at8:30 and15 at17:30. Existing7:30/18:50 extras remain15. The event
+listing itself now respects exhausted shared capacity. Hosted allowances, free
+provider pacing, NBA request budgets and paid feed credits remain unchanged.
+Web research first reserves5prop/2side/1total; only after that first pass may
+deferred candidates use remaining capacity, still at most8. Bad prices, missing
+availability and all family/admission/exposure rules still hold.
+
+The objective is3–5 qualifying early straights, not a bet quota. The full audit
+also contains genuine observation and model-validation gates that one release
+cannot complete. O-20261023-MORNINGFLOW records this implementation and release.
+Local normal/clean verification passed1743Python(two skips)/278Node. Build481
+pages/114games; record114/NBA0,public guard651files/zeroissues, unchanged payload
+warnings. Isolated17:30 rehearsalq08qt8xw passed with zero outside/private reads
+or writes. A documentation timestamp was corrected after its validator rejected
+a future timestamp; no guard was weakened. All seven Mac workers are loaded;
+heartbeat's nonzero exit reflects real warnings, not a missing scheduled job.
+Owner-only October24 packet at22:40Z:44CFB games,356fresh priced rows across all44,
+eight NBA fixtures but no stored tomorrow prices,916alternate rows and zero
+supported Climb legs. These are planning inputs, not qualifying admissions.
+
 ## October23 age notice and evening CFB repair — verified live
 
 Source c9c7e39d is installed. Hosted40026998368SUCCESS pulled the new source,

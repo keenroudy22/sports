@@ -216,6 +216,18 @@ class QuoteTests(unittest.TestCase):
                                sleep=lambda s: None, root=Path(folder), log=lambda *a: None)
         self.assertEqual(listed, ['ncaaf', 'nfl'], "Saturday's college games before Sunday's NFL")
 
+    def test_event_lists_also_respect_exhausted_shared_request_budget(self):
+        slate = [game('NFL-9', '2026-09-27T17:00Z', 'Buffalo Bills', 'Los Angeles Chargers'),
+                 game('CFB-9', '2026-09-26T19:30Z', 'Georgia Bulldogs', 'Oklahoma Sooners', 'CFB')]
+        calls = []
+        def fetch(path, key, **params):
+            calls.append((path, params['league']))
+            return {'data': []}
+        with tempfile.TemporaryDirectory() as folder:
+            sharp_odds.capture({'games': slate}, datetime(2026,9,26,15,tzinfo=timezone.utc), 'fixture',
+                               fetch=fetch, sleep=lambda _:None, root=Path(folder), log=lambda *a:None, requests=1)
+        self.assertEqual(calls, [('/events','ncaaf')])
+
 
 if __name__ == '__main__':
     unittest.main()

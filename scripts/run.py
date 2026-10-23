@@ -209,16 +209,28 @@ def rebase_onto_remote(runner=git, cwd=ROOT, attempts=6):
     raise RunError('rebase onto origin/main did not finish')
 
 
+def sharp_capture_allowance(slot):
+    """Split the same daily 30 reads across early, follow-up and evening checks.
+
+    Existing Sunday early-game and primetime extras keep their own 15 reads.
+    No new worker, paid request or larger daily allowance is introduced.
+    """
+    window = (slot.hour, slot.minute) if slot else None
+    if window in ((6, 45), (8, 30), (17, 30)):
+        return 10
+    return 15 if window in ((7, 30), (18, 50)) else 0
+
+
 def capture(slot=None, python=sys.executable):
     """Step 1, continued: price captures when their budget allows. They print why they skip."""
     notes = []
     scripts = ['odds_api.py', 'prop_odds.py']
-    if slot is not None and (slot.hour, slot.minute) in ((7, 30), (8, 30), (17, 30), (18, 50)):
+    if sharp_capture_allowance(slot):
         scripts.append('sharp_odds.py')
     for script in scripts:
         env = None
         if script == 'sharp_odds.py':
-            env = dict(os.environ, SHARP_REQUESTS='15')
+            env = dict(os.environ, SHARP_REQUESTS=str(sharp_capture_allowance(slot)))
         result = subprocess.run([python, str(ROOT / 'scripts' / script)], cwd=ROOT, capture_output=True, text=True,
                                 env=env)
         text = (result.stdout + result.stderr).strip()
@@ -1460,6 +1472,47 @@ def nba_trial_needs_capture(slot, status):
     return slot.hour != 23 and 'nbaCapture' not in status
 
 
+def early_nba_selection(args, now, slot, status):
+    """Use the existing game capture before lengthy football news checks.
+
+    Player research and grading stay later. This moves work, not feed budgets,
+    trial limits or evidence gates; admission itself uses the post-capture clock.
+    """
+    if args.dry_run or args.command != 'run' or not nba_game_capture_due(slot):
+        return
+    if os.environ.get('KEENROUDY_SPORTS_CAPTURE', '1') == '0':
+        return
+    try:
+        import nba_capture
+        status['nbaCapture'] = nba_capture.step(now, scheduled=True)
+        log(f"NBA capture: {status['nbaCapture']}")
+    except Exception as error:
+        status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
+    try:
+        import nba_trial_runtime
+        status['nbaTrial'] = nba_trial_runtime.admission(now, capture=nba_trial_needs_capture(slot, status))
+        log(f"NBA Trial: {status['nbaTrial']}")
+    except Exception as error:
+        status['nbaTrial'] = {'state': 'error', 'reason': type(error).__name__}
+        status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
+
+
+def current_run_time(args, started):
+    """Refresh live eligibility after lock/feed delays; keep explicit replay clocks."""
+    if args.dry_run or getattr(args, 'now', None):
+        return started
+    return max(started, datetime.now(timezone.utc))
+
+
+def release_before_background(args, status):
+    """Release through the same transactional gates while the caller holds the lock."""
+    if args.dry_run or args.no_push:
+        return
+    now = datetime.now(timezone.utc)
+    if private_release_ready(now):
+        status['releasedBeforeBackground'] = release_private_isolated(now)
+
+
 def paper_trials(now, slot, status):
     """Silent expansion work: basketball paper picks plus MLB/NHL market evidence. Publish nothing."""
     if slot.hour not in PAPER_SLOTS:
@@ -1551,7 +1604,7 @@ def research_family(candidate):
     return 'total' if gates.market_key(candidate) == 'total' else 'side'
 
 
-def research_slot_refusal(candidate, research_status):
+def research_slot_refusal(candidate, research_status, reclaim=False):
     """Keep the small web budget on positive-value rows and spread it across the board.
 
     A large college slate used to spend every lookup on the first eight props,
@@ -1567,9 +1620,17 @@ def research_slot_refusal(candidate, research_status):
         return 'the current estimated chance does not beat the price; no news lookup was spent'
     family = research_family(candidate)
     used = (research_status.get('families') or {}).get(family, 0)
-    if used >= RESEARCH_FAMILY_LIMITS[family]:
+    if not reclaim and used >= RESEARCH_FAMILY_LIMITS[family]:
         return f'the {family} research allocation is used; availability was not checked'
     return None
+
+
+def research_passes(wanted, deferred):
+    """Reserve each family's first pass, then reuse only unspent lookup capacity."""
+    for rank, candidate in enumerate(wanted):
+        yield rank, candidate, False
+    for rank, candidate in deferred:
+        yield rank, candidate, True
 
 
 def research_slot_available(candidate, research_status):
@@ -2280,6 +2341,9 @@ def _run(args, now, slot, kinds, status):
         captures = ['dry run: no capture']
     for note in captures:
         log(note)
+    now = current_run_time(args, now)
+    if not settle_only:
+        early_nba_selection(args, now, slot, status)
     try:
         opportunities = arbs.scan(ROOT, now)
     except Exception as error:  # an optional private alert can never stop grading or publishing
@@ -2325,6 +2389,8 @@ def _run(args, now, slot, kinds, status):
         watched = live_watch.final_records()
         live_watch.overlay_finals(games, watched)
         settlement_records = live_watch.settlement_records(records, watched)
+    now = current_run_time(args, now)
+    status['selectionAsOf'] = stamp(now)
     stores = gates.Stores(records=records)
     ctx = stores.as_of(now)
     ctx.games = games
@@ -2390,7 +2456,8 @@ def _run(args, now, slot, kinds, status):
     best_pool = []        # fully checked rows; ranked by the logged Kitchen score before publication
     gut_pool = []         # fully checked fallbacks; chosen only after every Best bet has been considered
     safer_pool = []       # fully honest moneyline legs; combined only when a day has no Best bet
-    for candidate_rank, candidate in enumerate(wanted):
+    deferred_research = []
+    for candidate_rank, candidate, reclaim_research in research_passes(wanted, deferred_research):
         want = 'prop' if candidate.get('athleteId') else 'lean'
         if want not in kinds:
             continue
@@ -2428,8 +2495,12 @@ def _run(args, now, slot, kinds, status):
         gap = (candidate.get('_selection') or {}).get('gap', 0)
         class_a = any(row.get('class') == 'A' and row.get('direction') == 'for' for row in pre_reasons)
         needs_market_check = should_research_candidate(candidate, candidate_rank, gap, class_a)
-        research_block = (research_slot_refusal(candidate, status['research']) if research_on
+        research_block = (research_slot_refusal(candidate, status['research'], reclaim=reclaim_research) if research_on
                           else 'the news researcher is unavailable in this run')
+        if (needs_market_check and not reclaim_research and research_block
+                and 'research allocation is used' in research_block):
+            deferred_research.append((candidate_rank, candidate))
+            continue
         if research_on and needs_market_check and research_block is None:
             game = ctx.games[candidate['gameIds'][0]]
             kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now,
@@ -2438,6 +2509,8 @@ def _run(args, now, slot, kinds, status):
             candidate['_research'] = [dict(f, verified=True) for f in kept] + [dict(f, verified=False) for f in dropped]
             status['research']['asked'] += 1
             note_research_slot(candidate, status['research'])
+            if reclaim_research:
+                status['research']['reallocated'] = status['research'].get('reallocated', 0) + 1
             status['research']['verified'] += len(kept)
             status['research']['dropped'] += len(dropped)
             facts += kept
@@ -2707,6 +2780,11 @@ def _run(args, now, slot, kinds, status):
             status['checks'].append('tests green')
     drafts(slot, now, ctx, games, settled, status, admitted=admitted, reasons=reasons)
     if not args.dry_run:
+        admitted_ids = release_queue.enqueue(CONF, admitted, reasons, decided, CONF / 'x-drafts', now,
+                                             games=games, log=log)
+        if admitted_ids:
+            log('private admissions:', ', '.join(admitted_ids))
+        release_before_background(args, status)
         try:
             shadow = reasoned_edges.step(decided, ctx, now)
             status['reasonedEdges'] = shadow
@@ -2722,15 +2800,12 @@ def _run(args, now, slot, kinds, status):
         except Exception as error:
             status['errors'].append(f'projection shadows: {type(error).__name__}: {error}')
             log(f'projection shadows unavailable ({type(error).__name__}); the desk continues')
-        admitted_ids = release_queue.enqueue(CONF, admitted, reasons, decided, CONF / 'x-drafts', now,
-                                             games=games, log=log)
-        if admitted_ids:
-            log('private admissions:', ', '.join(admitted_ids))
         admission_keys = {candidate.get('id') for _, _, candidate in admitted}
         public_decisions = [row for row in decided if row.get('id') not in admission_keys]
         remember(public_decisions, now, slot, status)
         paper_trials(now, slot, status)
-        if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):
+        if (os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot)
+                and 'nbaCapture' not in status and args.command != 'run'):
             try:
                 import nba_capture
                 status['nbaCapture'] = nba_capture.step(now, scheduled=True)
@@ -2759,7 +2834,7 @@ def _run(args, now, slot, kinds, status):
             status['nbaTrialGraded'] = nba_trial_runtime.grade(now)
             import nba_player_props
             status['nbaPlayerPropGraded'] = nba_player_props.grade(now)
-            if args.command == 'run':
+            if args.command == 'run' and 'nbaTrial' not in status:
                 status['nbaTrial'] = nba_trial_runtime.admission(now, capture=nba_trial_needs_capture(slot, status))
         except Exception as error:
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
@@ -2869,15 +2944,11 @@ def draft_postable(pick):
 
 # ------------------------------------------------------------------ posting through Buffer
 
-CARD_WAIT = 15 * 60          # seconds to wait for a push's deploy to put the new cards live
-CARD_POLL = 30
-
-
 def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sleep, clock=time.monotonic):
     """Schedule today's plays through Buffer (scripts/buffer_post.py), record what became of past posts and
-    cancel any whose pick closed. Off without a token. When this run just pushed, the deploy that carries the
-    new cards takes a few minutes, so the run waits for them (up to 15 minutes) before scheduling; a play whose
-    card is still not live waits for the next run."""
+    cancel any whose pick closed. Off without a token. Missing hosted cards retry
+    on the next existing pass; never hold the shared posting lock waiting for a
+    deployment. The scheduler still refuses every unavailable required card."""
     import buffer_post
     import discord_post
     import x_post
@@ -2919,14 +2990,11 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         plans += nba_trial_runtime.social_plans(now, log_book, reserved=plans)
         upgrades = pending_ladder_result_cards(log_book, ctx, now)
         if deploying and (plans or upgrades):
-            waiting = [card for *_, card in plans if card] + list(upgrades.values())
-            started = clock()
-            while waiting and clock() - started < CARD_WAIT:
-                waiting = [card for card in waiting if not buffer_post.reachable(buffer_post.card_url(card))]
-                if waiting:
-                    sleep(CARD_POLL)
+            cards = [card for *_, card in plans if card] + list(upgrades.values())
+            waiting = [card for card in cards if not buffer_post.reachable(buffer_post.card_url(card))]
             if waiting:
-                log(f'buffer: {len(waiting)} card(s) still not live after the wait; those plays wait for the next run')
+                status['x']['cardsAwaitingDeploy'] = len(waiting)
+                log(f'buffer: {len(waiting)} card(s) await deployment; next existing pass retries without blocking delivery')
             later = datetime.now(timezone.utc)
             plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team,
                                      quotes=quotes, news=news, log=log)
