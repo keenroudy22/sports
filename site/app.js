@@ -986,8 +986,8 @@
       return `<p class="small"><b>${esc(label)}: ${s.wins}–${s.losses}${s.pushes ? `–${s.pushes}` : ''}</b>${cashouts.length ? ` · ${cashouts.length} cashed out` : ''}${esc(net)}</p>`;
     }).join('');
     return `<section class="kt-sec kt-left" aria-labelledby="left-h"><h2 class="kt-head" id="left-h">${esc(head)}</h2>
-      <p class="small muted">Every posted ticket below. Results and net stay in their own categories. Climb tracked separately.</p>${summaries}
-      ${waiting.map(p => slip(p, { spike: true, waiting: true })).join('')}<div class="receipts">${settled.map(p => receipt(p, new Map())).join('')}</div>
+      <p class="small muted">Results by category. Climb tracked separately.</p>${summaries}
+      ${waiting.map(p => slip(p, { spike: true, waiting: true })).join('')}${settled.length ? `<details class="plain-fold" data-box="previous-results"><summary>See all ${settled.length} tickets</summary><div class="receipts">${settled.map(p => receipt(p, new Map())).join('')}</div></details>` : ''}
       <a class="kt-quiet" href="#record">The full record ›</a></section>`;
   };
   const STAT_SHORT = { recYds: 'rec yds', rushYds: 'rush yds', passYds: 'pass yds', rec: 'catches', car: 'carries', cmp: 'completions', att: 'pass attempts', passTD: 'pass TDs' };

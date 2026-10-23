@@ -158,7 +158,7 @@ test('the first paint and the full card draw the same top, so nothing moves when
   await settle();
 });
 
-test('Today runs the first screen, then every section visible with no fold; Off the card never hangs on the rail', async () => {
+test('Today keeps current sections visible and past tickets expandable; Off the card never hangs on the rail', async () => {
   const todayOff = { ...total, id: 'CFB-today-off-fd', displayTitle: 'Moved Line Today under 56.5', status: 'expired',
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
@@ -171,7 +171,7 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> tonight NFL -> future bets -> Leftovers -> Prep List -> research -> games -> off -> Discord -> sports');
   for (const gone of ['today-more', 'kt-fold', 'class="onboard"', 'today-status']) assert.ok(!page.includes(gone), gone);
   const folds = [...page.matchAll(/<details[^>]*data-box="([^"]+)"/g)].map(m => m[1]);
-  assert.deepEqual(folds, ['climb-past'], 'only the Climb\'s past steps stay a fold (upset cards keep their small why fold)');
+  assert.deepEqual(folds, ['climb-past', 'previous-results'], 'past Climb steps and previous results stay expandable');
   const rails = page.slice(0, at('class="kt-sec kt-left"'));
   assert.doesNotMatch(rails, /Moved Line at Elsewhere/, 'Off the card stays outside the rail');
   assert.match(page.slice(at('kt-off-card"')), /Off the card · 1<\/h2>[\s\S]*Moved Line Today/);
@@ -413,7 +413,9 @@ test('the compact prior-day recap lists every win and loss without truncation', 
   const page = await api.views.today({ view: 'today' });
   const left = page.slice(page.indexOf('class="kt-sec kt-left"'), page.indexOf('class="kt-sec kt-prep"'));
   assert.equal((left.match(/r-mark miss/g) || []).length, 2, 'both misses stay');
-  assert.equal((left.match(/class="receipt"/g) || []).length, 7, 'all seven posted tickets stay visible');
+  assert.equal((left.match(/class="receipt"/g) || []).length, 7, 'all seven posted tickets remain available');
+  assert.match(left, /<details class="plain-fold" data-box="previous-results"><summary>See all 7 tickets<\/summary>/);
+  assert.doesNotMatch(left, /<details[^>]*\bopen\b/, 'past tickets start collapsed');
   assert.doesNotMatch(left, /more on the record/);
   assert.match(left, /Best Bets: 5–2/);
 });
