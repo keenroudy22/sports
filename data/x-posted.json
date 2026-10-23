@@ -5902,8 +5902,8 @@
   {
    "id": "receipt:day:2026-10-22",
    "postedAt": "2026-10-23T04:59:31Z",
-   "dueAt": "2026-10-23T13:03:00Z",
-   "bufferPostId": "6adae9bbcc1b7cdc08cfabd4",
+   "dueAt": "2026-10-23T13:29:50Z",
+   "bufferPostId": "6adb59247c3aac797e80bc29",
    "textHash": "6d4f7d5f93e38344",
    "kind": "buffer:receipt",
    "card": true,
@@ -5911,7 +5911,16 @@
    "queuedText": "Thursday: 0-2.\n❌ Drake Maye under 20.5 completions · 24 of 31, 321 yards · missed by 3.5\n❌ Patriots MONEYLINE · Final: Patriots 24, Bears 30\n\n#NFL",
    "socialStyleVersion": "plain-20261022",
    "socialVoiceVersion": "casual-20261022",
-   "cardKey": "receipt-day-2026-10-22"
+   "cardKey": "receipt-day-2026-10-22",
+   "deliveryHistory": [
+    {
+     "bufferPostId": "6adae9bbcc1b7cdc08cfabd4",
+     "dueAt": "2026-10-23T13:03:00Z",
+     "rescheduledAt": "2026-10-23T12:54:50Z",
+     "reason": "Fresh official play takes priority"
+    }
+   ],
+   "rescheduledAt": "2026-10-23T12:54:50Z"
   },
   {
    "id": "research:td-hit:research:end-zone:2026-10-22",
