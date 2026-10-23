@@ -878,6 +878,8 @@ def queued_relevance_issues(entry, now):
     issues=nba_editorial.relevance_issues(snapshot,now)
     if not issues and not nba_editorial.watch_current(snapshot,now):
         issues.append('NBA matchup research no longer matches the latest book quote')
+    if not issues and snapshot.get('family') == 'props' and not nba_editorial.props_current(snapshot,now):
+        issues.append('NBA player research no longer matches current price, projection or role')
     return issues
 
 

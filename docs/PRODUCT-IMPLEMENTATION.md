@@ -1,5 +1,19 @@
 # October 5 product implementation tracker
 
+## October23 delayed Discord research gap — reproduced, repair in verification
+
+At18:54Z provider recovery confirmed NBA trends sent on X14:05:43.988Z and props
+14:51:03.271Z. Preserving those X posts was correct, but their still-pending Discord
+copies incorrectly mirrored after the new relevance cutoff. These two new Discord
+deliveries are a real miss, not credited as successful policy enforcement. Neither
+already-sent message is deleted or rewritten. New pending research now applies the
+same current evidence check at Discord send time, even when X is already public;
+stale/unsupported copies become skipped with an exact reason. Latest prop price,
+projection and role must still match. Three regressions cover refusal/replay,
+valid current delivery and immutable sent history. Full release gates pending.
+The pending UMass–UConn over50.5/-108 was separately rechecked, released to Discord
+at0.5u, record pushed, and X scheduled19:07:31Z. Scheduled is not sent.
+
 ### October23 current-relevance release verified — 18:50 UTC
 
 Hosted40004097390SUCCESS uploaded verified88b2f20c, which contains02179098.

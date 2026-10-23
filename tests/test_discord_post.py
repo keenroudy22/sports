@@ -14,6 +14,51 @@ NOW = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
 
 
 class DiscordPostTests(unittest.TestCase):
+    def test_old_nba_x_post_cannot_bypass_current_discord_relevance(self):
+        import nba_editorial
+        now = datetime(2026, 10, 23, 19, tzinfo=timezone.utc)
+        for family in ('trends', 'props'):
+            entry = {'id': f'nba-{family}-2026-10-23', 'kind': 'buffer:research',
+                     'sentAt': '2026-10-23T14:00:00Z', 'link': 'https://x.com/keenkooks/status/123',
+                     'discord': {'state': 'pending', 'destination': 'research', 'text': 'Old research'}}
+            snapshot = {'key': entry['id'], 'family': family, 'rows': [], 'evidence': []}
+            with patch.object(nba_editorial, 'stored', return_value=[snapshot]), \
+                 patch.object(discord_post, 'send_message') as send:
+                discord_post.mirror_sent({'posts': [entry]}, now, research_url='research', log=lambda *_: None)
+                discord_post.mirror_sent({'posts': [entry]}, now, research_url='research', log=lambda *_: None)
+                send.assert_not_called()
+            self.assertEqual(entry['discord']['state'], 'skipped')
+            self.assertIn('Current research policy', entry['discord']['reason'])
+            self.assertEqual(entry['sentAt'], '2026-10-23T14:00:00Z')
+            self.assertEqual(entry['discord']['text'], 'Old research')
+
+    def test_current_nba_research_mirrors_once_but_sent_history_is_untouched(self):
+        import buffer_post
+        now = datetime(2026, 10, 23, 19, tzinfo=timezone.utc)
+        entry = {'id': 'nba-trends-2026-10-23', 'kind': 'buffer:research',
+                 'sentAt': '2026-10-23T18:59:00Z',
+                 'discord': {'state': 'pending', 'destination': 'research', 'text': 'Current comparison'}}
+        with patch.object(buffer_post, 'queued_relevance_issues', return_value=[]) as review, \
+             patch.object(discord_post, 'send_message') as send:
+            discord_post.mirror_sent({'posts': [entry]}, now, research_url='research', log=lambda *_: None)
+            self.assertEqual(entry['discord']['state'], 'sent')
+            review.return_value = ['now stale']
+            discord_post.mirror_sent({'posts': [entry]}, now, research_url='research', log=lambda *_: None)
+            self.assertEqual(send.call_count, 1)
+            self.assertEqual(review.call_count, 1)
+            self.assertEqual(entry['discord']['state'], 'sent')
+
+    def test_nba_prop_mirror_rechecks_latest_projection_and_role(self):
+        import buffer_post, nba_editorial
+        now = datetime(2026, 10, 23, 19, tzinfo=timezone.utc)
+        entry = {'id': 'nba-props-2026-10-23'}
+        snapshot = {'key': entry['id'], 'family': 'props'}
+        with patch.object(nba_editorial, 'stored', return_value=[snapshot]), \
+             patch.object(nba_editorial, 'relevance_issues', return_value=[]), \
+             patch.object(nba_editorial, 'watch_current', return_value=True), \
+             patch.object(nba_editorial, 'props_current', return_value=False):
+            self.assertIn('current price, projection or role', buffer_post.queued_relevance_issues(entry, now)[0])
+
     def test_playbook_is_removed_at_delivery_even_for_an_old_pending_mirror(self):
         text = 'Player over 4.5 (-110)\n\n@Playbook #NFL'
         entry = {'id': 'play', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z',

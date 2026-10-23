@@ -274,6 +274,17 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \
                 or entry.get('cancelledAt') or entry.get('deletedAt'):
             continue
+        if kind == 'buffer:research' and destination == 'research':
+            # A sent X post is history, but its delayed Discord copy is still a
+            # new publication. Apply current evidence rules before that send.
+            import buffer_post
+            issues = buffer_post.queued_relevance_issues(entry, now)
+            if issues:
+                mirror.update(state='skipped', checkedAt=gates.stamp(now),
+                              reason='Current research policy: ' + '; '.join(issues))
+                entry['discord'] = mirror
+                log(f"discord: {entry['id']} not mirrored: {mirror['reason']}")
+                continue
         target = (wins_url if destination == 'wins' else
                   research_url if destination == 'research' else url)
         if not target:
