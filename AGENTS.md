@@ -205,6 +205,17 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **October23 full-process audit:** target3–5 independently qualifying daily straights
+  as a coverage/delivery objective, not a forced bet quota. Public stakes remain in
+  units; personal dollar equivalents differ and never rescale historical records.
+  Aggregate exposure expansion awaits an explicit daily unit ceiling. Reuse existing
+  evening/morning checks and private seven-day fixture planning; score-only sports
+  remain gated. Buffer analytics run after delivery, retry at most every6hours per
+  post and stop after8days; retain24h/72h/7d snapshots. Protect300 of the unchanged
+  2700-request local allowance from analytics, enforce calendar and rolling30-day
+  windows, and retain provider backoff. Private admissions delayed before publication
+  must appear in health reports separately from public unscheduled plays.
+
 - **October23 posting reset:** prioritize early qualifying straights; daily screening is
   not a daily bet quota. Future full-game fun lottos use4–8legs, roughly+400..+1000,
   inside existing exposure, price, budget and risk-policy limits. Larger slates may

@@ -67,7 +67,20 @@ class SocialLearningTests(unittest.TestCase):
         self.assertEqual(len(calls),9)
         calls.clear()
         b.collect_metrics(book,NOW,key='t',send=failed,log=lambda *_:None)
-        self.assertEqual(calls,['first'])
+        self.assertEqual(calls,[], 'failed first reads have the same retry cooldown')
+
+    def test_unmeasured_old_posts_do_not_retry_forever(self):
+        self.assertIsNone(s.checkpoint(dict(bufferPostId='old',sentAt=gates.stamp(NOW-timedelta(days=30))),NOW))
+
+    def test_failed_first_read_retries_after_cooldown(self):
+        entry=dict(id='fresh',bufferPostId='fresh',sentAt=gates.stamp(NOW-timedelta(hours=25)))
+        calls=[]
+        def send(*args):
+            calls.append(1)
+            return 500,b'temporary error'
+        for at in (NOW,NOW+timedelta(hours=1),NOW+timedelta(hours=6)):
+            b.collect_metrics({'posts':[entry]},at,key='t',send=send,log=lambda *_:None)
+        self.assertEqual(len(calls),2)
 
     def test_tickets_and_results_reserve_queue_before_optional_updates(self):
         self.assertIn('community',b.BUFFER_ESSENTIAL)

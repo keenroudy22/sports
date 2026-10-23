@@ -13,6 +13,28 @@ NOW = datetime(2026, 10, 5, 14, 0, tzinfo=timezone.utc)
 
 
 class DeskHealthTests(unittest.TestCase):
+    def test_seven_day_plan_is_eastern_deduplicated_and_not_a_pick(self):
+        game={'id':'a','league':'CFB','kickoff':'2026-10-06T01:00:00Z'}
+        plan=H.opportunity_plan({'games':[game,game,dict(game,id='b')]},
+                                {'leagues':{'NBA':{'games':[dict(game,id='nba')]}}},NOW)
+        self.assertEqual(len(plan),7)
+        self.assertEqual(plan[0]['day'],'2026-10-05')
+        self.assertEqual(plan[0]['storedUpcomingGames'],{'CFB':2,'NBA':1})
+        self.assertTrue(plan[0]['climbResearchWindow'])
+        self.assertEqual(plan[-1]['storedUpcomingGames'],{})
+
+    def test_private_delayed_admission_is_not_reported_as_zero_delivery_work(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);self.fixture(root)
+            self.write(root,'private/pending/play-releases.json',{'plays':[
+                {'id':'held','admittedAt':(NOW-timedelta(hours=1)).isoformat(),'bufferRetryAt':(NOW+timedelta(hours=1)).isoformat()},
+                {'id':'public','publicPath':'research/x.json','admittedAt':(NOW-timedelta(hours=1)).isoformat()}]})
+            result=H.summary(root,root/'private',root,NOW)
+            self.assertEqual(result['privateReleases']['waiting'],1)
+            self.assertEqual(result['privateReleases']['delayed'],1)
+            self.assertIn('private-release-delayed',{r['code'] for r in result['issues']})
+            self.assertIn('These are not published bets',H.markdown(result))
+
     def test_full_season_slate_above_private_limit_keeps_nearby_price_checks(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

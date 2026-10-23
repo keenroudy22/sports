@@ -10,7 +10,7 @@ def checkpoint(entry, now):
     if not entry.get('bufferPostId') or not entry.get('sentAt') or entry.get('deletedAt'):
         return None
     age = (now - gates.when(entry['sentAt'])).total_seconds()/3600
-    if age < 24:
+    if age < 24 or age > 192:
         return None
     if not entry.get('metricsAt'):
         return max(h for h in CHECKPOINTS if h <= age)

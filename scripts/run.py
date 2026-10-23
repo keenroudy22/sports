@@ -2869,7 +2869,6 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         for entry in discord_post.mirror_sent(log_book, now, log=log):
             status['errors'].append(f"discord: {entry['id']} failed to mirror: {entry['error']}")
             alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
-        buffer_post.collect_metrics(log_book, now, log=log)
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
@@ -2929,6 +2928,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             alert(title, message, click=f'https://x.com/{receipts_handle()}', delay='5m')
         feature_scheduled(log_book, ctx, games, now)
         upgrade_ladder_result_cards(log_book, ctx, now, channel=channel)
+        # Publishing and result repairs get the allowance before optional stats.
+        buffer_post.collect_metrics(log_book, now, log=log)
     except (buffer_post.BufferError, buffer_post.MissingToken) as error:
         log(f'buffer: {error}')
         status['errors'].append(f'buffer: {error}')

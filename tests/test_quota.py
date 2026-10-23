@@ -3,7 +3,7 @@ import json
 import sys
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -17,6 +17,21 @@ class Response(io.StringIO):
 
 
 class QuotaTests(unittest.TestCase):
+    def test_buffer_rolling_window_and_delivery_reserve(self):
+        now=datetime(2026,11,1,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as root:
+            journal=Path(root)/'buffer.jsonl'
+            previous=now-timedelta(days=1)
+            row=json.dumps(dict(at=previous.isoformat(),month='2026-10',provider='buffer',count=1))+'\n'
+            journal.write_text(row*(quota.BUFFER_STOP-quota.BUFFER_DELIVERY_RESERVE))
+            with self.assertRaisesRegex(quota.QuotaBlocked,'delivery reserve'):
+                quota.count_request('buffer',root,now,optional=True)
+            quota.count_request('buffer',root,now)
+            journal.write_text(row*quota.BUFFER_STOP)
+            with self.assertRaisesRegex(quota.QuotaBlocked,'rolling 30-day'):
+                quota.count_request('buffer',root,now)
+            quota.count_request('buffer',root,now+timedelta(days=30))
+
     def test_month_rollover_discards_old_reserve_and_counters_store_counts_only(self):
         now = datetime(2026, 11, 1, tzinfo=timezone.utc)
         self.assertEqual(quota.current_month_usage({'at': '2026-10-31T23:00:00Z', 'remaining': 24}, now), {})

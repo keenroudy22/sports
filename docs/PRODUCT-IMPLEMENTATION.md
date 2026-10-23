@@ -1,5 +1,32 @@
 # October 5 product implementation tracker
 
+## October23 owner-requested full-process audit — release verification pending
+
+Bounded fixes: optional analytics now follows publishing; first-read failures have
+a6-hour retry cooldown; first reads older than192hours age out;300requests remain
+reserved from analytics inside unchanged2700 calendar/rolling30-day ceilings.
+Private delayed admissions are visible in desk health even before public records
+exist. The existing health/weekly report derives7Eastern-day research windows
+from cached deduplicated fixtures; no promised tickets or extra scheduler.
+
+Audit16:08Z: all7installed Mac plists match tracked copies;113official record rows
+reconcile;NBA0publications reconcile. Buffer provider backoff until18:52:15Z holds
+one private CFB play;4Xentries are overdue/unconfirmed, not confirmed failures.
+Seven-day X cohort68/72confirmed; Discord56/59known eligible confirmed,13unknown
+eligibility excluded. Latest result32.7minutes after first final observation.
+NBA12clean days/14required,10paper grades/50required;1845player forecast rows from
+19games and1491outcomes from13games,735hit/756miss. Correlated book/stat rows are
+not independent evidence. No NBA Best Bet promotion or forecast-weight changes.
+Comparable24–48hour medians:personal tickets257.5views(n8),plays167.5(n16),
+research88(n23),wins54(n11),recaps38.5(n10).16follow-up observations exist; no
+causal-growth or conversion claim. Weekly local reviewOct20 recorded without failures.
+
+Continue KA-R1 for provider recovery/actual delivery and output funnel coverage;
+O-20261019-NBAPROPFORWARD for player-game evaluation; P48 for zero supported
+alternate segments; P40/P11 for soccer readiness; O-20261023-POSTINGRESET-QUARTERS
+for exact-period collection/grading. Daily exposure ceiling remains an owner input.
+The audit is not permission to bypass evidence, spend money or manufacture posts.
+
 ## October23 posting reset and recap scope repair — verified release
 
 Today cleanup source f2db4a0b keeps the category summary visible and all ten

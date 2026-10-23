@@ -18,6 +18,7 @@ STATE = ROOT / 'work' / 'quota'
 CEILING = 500
 RESERVE = 24
 BUFFER_STOP = 2700
+BUFFER_DELIVERY_RESERVE = 300
 SHARP_PER_MINUTE = 12
 
 
@@ -44,7 +45,7 @@ def current_month_usage(value, now=None):
     return value if observed.astimezone(timezone.utc).strftime('%Y-%m') == now.astimezone(timezone.utc).strftime('%Y-%m') else {}
 
 
-def count_request(provider, root=STATE, now=None):
+def count_request(provider, root=STATE, now=None, optional=False):
     """Reserve one free-plan request before sending it; fail closed at local caps."""
     if provider not in ('sharp', 'buffer'):
         raise ValueError('unknown free-plan request counter')
@@ -62,6 +63,17 @@ def count_request(provider, root=STATE, now=None):
             month = now.astimezone(timezone.utc).strftime('%Y-%m')
             if provider == 'buffer' and sum(row['count'] for row in rows if row.get('month') == month) >= BUFFER_STOP:
                 raise QuotaBlocked('Buffer local free-plan request cap reached')
+            if provider == 'buffer':
+                # The provider also enforces a rolling window. Calendar rollover
+                # must not reset the local protection or spend delivery reserves
+                # on optional analytics. Historical journals remain unchanged.
+                rolling = sum(row['count'] for row in rows
+                              if 0 <= (now - datetime.fromisoformat(row['at'])).total_seconds() < 30 * 86400)
+                monthly = sum(row['count'] for row in rows if row.get('month') == month)
+                if rolling >= BUFFER_STOP:
+                    raise QuotaBlocked('Buffer local free-plan rolling 30-day cap reached')
+                if optional and max(rolling, monthly) >= BUFFER_STOP - BUFFER_DELIVERY_RESERVE:
+                    raise QuotaBlocked('Buffer delivery reserve protected; optional analytics deferred')
             if provider == 'sharp':
                 recent = [row for row in rows if 0 <= (now - datetime.fromisoformat(row['at'])).total_seconds() < 60]
                 if len(recent) >= SHARP_PER_MINUTE:

@@ -159,7 +159,7 @@ def graphql(query, variables=None, key=None, send=http_send):
         if blocked:
             raise blocked
         try:
-            quota.count_request('buffer')
+            quota.count_request('buffer', optional=query == METRICS)
         except quota.QuotaBlocked as error:
             raise BufferError(str(error)) from None
     response = send(API, {'query': query, 'variables': variables or {}}, {'Authorization': f'Bearer {key}'})
@@ -831,11 +831,15 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
                     if str(at)[:10] == gates.stamp(now)[:10])
     attempts = 0
     for entry, point in candidates:
+        attempted = entry.get('metricsAttemptAt')
+        if attempted and now - gates.when(attempted) < timedelta(hours=6):
+            continue
         if entry.get('metricsAt') and followups >= 8:
             continue
         if attempts >= 12:
             break
         attempts += 1
+        entry['metricsAttemptAt'] = gates.stamp(now)
         if entry.get('metricsAt'):
             entry.setdefault('metricsRefreshAttempts', []).append(gates.stamp(now))
             followups += 1
@@ -846,6 +850,8 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
                 log('buffer: engagement not read: the key lacks the insights:read permission')
                 return read
             log(f"buffer: engagement for {entry['id']} not read: {error}")
+            if isinstance(error, BufferRateLimited) or 'reserve' in str(error).lower() or 'cap reached' in str(error).lower():
+                break
             continue
         metrics = {m['type']: m['value'] for m in post.get('metrics') or [] if isinstance(m.get('value'), (int, float))}
         if not metrics or not any(k in metrics for k in ('impressions','views')):

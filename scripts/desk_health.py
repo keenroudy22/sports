@@ -453,6 +453,31 @@ def delivery_cohorts(book, now):
             'invalidRows': invalid_rows, 'unknownDueIdentities': unknown_due, 'cohorts': cohorts}
 
 
+def opportunity_plan(slate, sports, now):
+    """Seven actual Eastern dates, cached fixtures only, never selected bets."""
+    start = now.astimezone(gates.EASTERN).date()
+    dates = {(start + timedelta(days=i)).isoformat(): {} for i in range(7)}
+    seen = set()
+    rows = [(g.get('league'), g) for g in slate.get('games') or []]
+    rows += [(league, g) for league, block in (sports.get('leagues') or {}).items()
+             for g in block.get('games') or []]
+    for league, game in rows:
+        kickoff = moment(game.get('kickoff'))
+        identity = (league, game.get('id'))
+        if not league or not game.get('id') or identity in seen or not kickoff or kickoff <= now:
+            continue
+        day = kickoff.astimezone(gates.EASTERN).date().isoformat()
+        if day not in dates or game.get('state') == 'post':
+            continue
+        seen.add(identity)
+        dates[day][league] = dates[day].get(league, 0) + 1
+    return [{'day': day, 'storedUpcomingGames': counts,
+             'footballScreen': any(counts.get(league, 0) for league in ('NFL', 'CFB')),
+             'nbaTrialScreen': bool(counts.get('NBA')),
+             'climbResearchWindow': any(counts.get(league, 0) >= 2 for league in ('NFL', 'CFB'))}
+            for day, counts in dates.items()]
+
+
 def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     now = now or datetime.now(timezone.utc)
     root, conf = Path(root), Path(conf)
@@ -555,6 +580,16 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     chosen_not_posted = int((state.get('x') or {}).get('chosenNotPosted') or 0)
     if chosen_not_posted:
         issue('chosen-not-posted', f'{chosen_not_posted} chosen plays have no scheduled delivery receipt.')
+    private = read(conf / 'pending/play-releases.json')
+    waiting = [r for r in private.get('plays', []) if isinstance(r, dict)
+               and not any(r.get(k) for k in ('releasedAt', 'discordSentAt', 'publicPath'))]
+    delayed = [r for r in waiting if r.get('deliveryDelay') or
+               (moment(r.get('admittedAt')) and now - moment(r['admittedAt']) >= timedelta(minutes=30))]
+    if delayed:
+        issue('private-release-delayed', f'{len(delayed)} privately admitted plays await delivery; not public plays or a no-selection day.')
+    private_release = {'waiting': len(waiting), 'delayed': len(delayed),
+                       'providerRetryAt': min((stamp(r['bufferRetryAt']) for r in waiting
+                                               if moment(r.get('bufferRetryAt'))), default=None)}
     if (root / 'site/data/app').is_dir():
         try:
             payload = payload_budget.check(root / 'site')
@@ -611,6 +646,8 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'resultTimeliness': result_speed,
             'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
             'chosenNotPosted': chosen_not_posted,
+            'privateReleases': private_release,
+            'opportunityPlan': opportunity_plan(slate, sports, now),
             'sgoEvaluation': {'usedBefore': sgo_used, 'limit': sgo_usage.get('maximum') if sgo_usage.get('maximum') == 2500 else None,
                               'localStop': 1800, 'observedAt': stamp(sgo_state.get('lastAt')),
                               'teamTotals': sgo_team_totals},
@@ -634,6 +671,14 @@ def markdown(data):
     if not data['issues']:
         lines.append('No actionable issue found in the available cached checks; this is not a live service guarantee.')
     lines.append(f"Last completed desk run: {data['desk']['finishedAt'] or 'unknown'}.")
+    pending = data.get('privateReleases') or {}
+    lines.append(f"Private admissions awaiting delivery: {pending.get('waiting', 0)}; delayed {pending.get('delayed', 0)}; "
+                 f"provider retry time {pending.get('providerRetryAt') or 'not recorded'}. These are not published bets.")
+    lines.append('Seven-day preparation windows (stored fixtures only; not promised bets or complete league coverage):')
+    for day in data.get('opportunityPlan') or []:
+        fixtures = ', '.join(f'{league} {count}' for league, count in sorted(day['storedUpcomingGames'].items())) or 'no upcoming fixtures stored'
+        lines.append(f"{day['day']}: {fixtures}; football screen {day['footballScreen']}; NBA trial screen {day['nbaTrialScreen']}; "
+                     f"multi-game Climb research {day['climbResearchWindow']}.")
     for row in data['sources']:
         lines.append(f"{row['name']}: {row['state']}; last successful observation {row['observedAt'] or 'unknown'}.")
     counts = data['deliveriesLast48h']
