@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T20:07:50Z",
+  "updatedAt": "2026-10-23T20:20:42Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-23T20:00Z",
+              "reportedAt": "2026-10-23T20:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4701936",
+              "name": "Matthew Golden",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T20:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4701936/matthew-golden"
+            },
+            {
               "id": "4047365",
               "name": "Josh Jacobs",
               "position": "RB",
@@ -2600,20 +2609,11 @@
               "source": "https://www.espn.com/nfl/player/_/id/4428085/luke-musgrave"
             },
             {
-              "id": "4701936",
-              "name": "Matthew Golden",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-22T20:37Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4701936/matthew-golden"
-            },
-            {
               "id": "4248528",
               "name": "Christian Watson",
               "position": "WR",
-              "status": "Questionable",
-              "injury": "Ankle",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-22T20:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4248528/christian-watson"
             },
@@ -4628,8 +4628,8 @@
               "id": "4036133",
               "name": "T.J. Hockenson",
               "position": "TE",
-              "status": "Questionable",
-              "injury": "Concussion",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-22T22:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4036133/tj-hockenson"
             },
@@ -5531,7 +5531,7 @@
               "name": "Adonai Mitchell",
               "position": "WR",
               "status": "Questionable",
-              "injury": "Finger",
+              "injury": null,
               "reportedAt": "2026-10-23T15:09Z",
               "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
             },
@@ -5594,7 +5594,7 @@
               "name": "T'Vondre Sweat",
               "position": "DT",
               "status": "Questionable",
-              "injury": "Elbow",
+              "injury": null,
               "reportedAt": "2026-10-21T20:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428617/tvondre-sweat"
             },
@@ -5603,7 +5603,7 @@
               "name": "Will McDonald IV",
               "position": "DE",
               "status": "Questionable",
-              "injury": "Toe",
+              "injury": null,
               "reportedAt": "2026-10-21T20:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361767/will-mcdonald-iv"
             },
@@ -6713,15 +6713,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
             },
             {
-              "id": "3052587",
-              "name": "Baker Mayfield",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Thumb",
-              "reportedAt": "2026-10-23T17:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
-            },
-            {
               "id": "4567750",
               "name": "Emeka Egbuka",
               "position": "WR",
@@ -6729,6 +6720,15 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-23T16:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
+            },
+            {
+              "id": "3052587",
+              "name": "Baker Mayfield",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Thumb",
+              "reportedAt": "2026-10-23T16:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
             },
             {
               "id": "3909013",
@@ -7366,30 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "20",
-          "name": "Joseph Ossai",
-          "from": "Doubtful",
-          "to": "Out",
-          "observedAt": "2026-10-23T15:13:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai"
-        },
-        {
-          "teamId": "20",
-          "name": "Kiko Mauigoa",
-          "from": "Doubtful",
-          "to": "Out",
-          "observedAt": "2026-10-23T15:13:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
-        },
-        {
-          "teamId": "20",
-          "name": "Max Mitchell",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-23T15:13:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4373656/max-mitchell"
-        },
-        {
           "teamId": "9",
           "name": "Zaire Franklin",
           "from": "Questionable",
@@ -7764,11 +7740,35 @@
           "to": "Questionable",
           "observedAt": "2026-10-23T19:55:05Z",
           "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
+        },
+        {
+          "teamId": "9",
+          "name": "Matthew Golden",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T20:20:42Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4701936/matthew-golden"
+        },
+        {
+          "teamId": "9",
+          "name": "Christian Watson",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T20:20:42Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4248528/christian-watson"
+        },
+        {
+          "teamId": "16",
+          "name": "T.J. Hockenson",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T20:20:42Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4036133/tj-hockenson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T20:07:50Z",
-      "lastAttemptAt": "2026-10-23T20:07:50Z",
+      "checkedAt": "2026-10-23T20:20:42Z",
+      "lastAttemptAt": "2026-10-23T20:20:42Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T20:07:50Z",
-      "lastAttemptAt": "2026-10-23T20:07:50Z",
+      "checkedAt": "2026-10-23T20:20:42Z",
+      "lastAttemptAt": "2026-10-23T20:20:42Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
