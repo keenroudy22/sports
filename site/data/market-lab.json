@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 31,
    "gamesQuoted": 33,
-   "moneylineSnapshots": 142,
+   "moneylineSnapshots": 143,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 142,
+   "snapshots": 143,
    "status": "capturing",
-   "totalSnapshots": 142
+   "totalSnapshots": 143
   },
   "NHL": {
-   "gamesGraded": 158,
-   "gamesQuoted": 163,
-   "moneylineSnapshots": 672,
+   "gamesGraded": 161,
+   "gamesQuoted": 166,
+   "moneylineSnapshots": 676,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,70 @@
      "season": 2027
     },
     {
-     "gamesGraded": 119,
-     "gamesQuoted": 122,
+     "gamesGraded": 122,
+     "gamesQuoted": 125,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 672,
+   "snapshots": 676,
    "status": "capturing",
-   "totalSnapshots": 672
+   "totalSnapshots": 676
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "UTA",
+    "id": "129764",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/uta.png",
+    "name": "Utah Mammoth",
+    "shortName": "Mammoth"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401892562",
+   "gradedAt": "2026-10-23T15:25:05Z",
+   "home": {
+    "abbreviation": "SEA",
+    "id": "124292",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/sea.png",
+    "name": "Seattle Kraken",
+    "shortName": "Kraken"
+   },
+   "homeScore": 5,
+   "kickoff": "2026-10-23T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "DET",
+    "id": "5",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png",
+    "name": "Detroit Red Wings",
+    "shortName": "Red Wings"
+   },
+   "awayScore": 5,
+   "gameId": "NHL-401892563",
+   "gradedAt": "2026-10-23T15:25:05Z",
+   "home": {
+    "abbreviation": "VAN",
+    "id": "22",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
+    "name": "Vancouver Canucks",
+    "shortName": "Canucks"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-10-23T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "MIN",
@@ -70,6 +122,32 @@
    "season": 2027,
    "seasonType": "regular-season",
    "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "CAR",
+    "id": "7",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/car.png",
+    "name": "Carolina Hurricanes",
+    "shortName": "Hurricanes"
+   },
+   "awayScore": 5,
+   "gameId": "NHL-401892561",
+   "gradedAt": "2026-10-23T15:25:05Z",
+   "home": {
+    "abbreviation": "EDM",
+    "id": "6",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/edm.png",
+    "name": "Edmonton Oilers",
+    "shortName": "Oilers"
+   },
+   "homeScore": 6,
+   "kickoff": "2026-10-23T01:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final/SO",
    "type": "grade"
   },
   {
@@ -2567,85 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final/SO",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "CAR",
-    "id": "7",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/car.png",
-    "name": "Carolina Hurricanes",
-    "shortName": "Hurricanes"
-   },
-   "awayScore": 5,
-   "gameId": "NHL-401892476",
-   "gradedAt": "2026-10-11T03:30:06Z",
-   "home": {
-    "abbreviation": "CHI",
-    "id": "4",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/chi.png",
-    "name": "Chicago Blackhawks",
-    "shortName": "Blackhawks"
-   },
-   "homeScore": 2,
-   "kickoff": "2026-10-10T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "CBJ",
-    "id": "29",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/cbj.png",
-    "name": "Columbus Blue Jackets",
-    "shortName": "Blue Jackets"
-   },
-   "awayScore": 3,
-   "gameId": "NHL-401892477",
-   "gradedAt": "2026-10-11T03:30:06Z",
-   "home": {
-    "abbreviation": "STL",
-    "id": "19",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/stl.png",
-    "name": "St. Louis Blues",
-    "shortName": "Blues"
-   },
-   "homeScore": 5,
-   "kickoff": "2026-10-10T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "TOR",
-    "id": "21",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tor.png",
-    "name": "Toronto Maple Leafs",
-    "shortName": "Maple Leafs"
-   },
-   "awayScore": 6,
-   "gameId": "NHL-401892478",
-   "gradedAt": "2026-10-11T03:30:06Z",
-   "home": {
-    "abbreviation": "COL",
-    "id": "17",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/col.png",
-    "name": "Colorado Avalanche",
-    "shortName": "Avalanche"
-   },
-   "homeScore": 3,
-   "kickoff": "2026-10-10T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-23T15:24:29Z"
+ "updatedAt": "2026-10-23T15:28:35Z"
 }
