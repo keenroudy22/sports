@@ -1,0 +1,160 @@
+{
+  "key": "nba-props-2026-10-23",
+  "family": "props",
+  "day": "2026-10-23",
+  "capturedAt": "2026-10-23T12:37:51Z",
+  "sourceAt": "2026-10-23T12:36:22Z",
+  "due": "2026-10-23T13:15:00Z",
+  "stale": "2026-10-23T16:36:37Z",
+  "rows": [
+    {
+      "subject": "Leonard Miller",
+      "line": "Over 5.5 rebounds +111",
+      "right": "8.8",
+      "logo": "https://a.espncdn.com/i/headshots/nba/players/full/5044385.png",
+      "detail": "CHI · DraftKings · 9/10 last season",
+      "caption": "Leonard Miller · Chicago Bulls\nOver 5.5 rebounds +111 · I have 8.8 · 9/10"
+    },
+    {
+      "subject": "Ryan Rollins",
+      "line": "Over 4.5 assists -139",
+      "right": "5.8",
+      "logo": "https://a.espncdn.com/i/headshots/nba/players/full/4591725.png",
+      "detail": "MIL · DraftKings · 6/10 last season",
+      "caption": "Ryan Rollins · Milwaukee Bucks\nOver 4.5 assists -139 · I have 5.8 · 6/10"
+    }
+  ],
+  "evidence": [
+    {
+      "eventId": "401909848",
+      "athleteId": "5044385",
+      "name": "Leonard Miller",
+      "team": "4",
+      "teamName": "Chicago Bulls",
+      "teamAbbr": "CHI",
+      "photo": "https://a.espncdn.com/i/headshots/nba/players/full/5044385.png",
+      "kickoff": "2026-10-23T20:00:00Z",
+      "stat": "reb",
+      "line": 5.5,
+      "book": "DraftKings",
+      "over": 111,
+      "under": -146,
+      "sourceAt": "2026-10-23T12:36:37.828181889Z",
+      "statName": "rebounds",
+      "projection": {
+        "value": 8.8,
+        "minutes": 35,
+        "rate": 0.25,
+        "model": "nba-minutes-rate-v1",
+        "season": 2026,
+        "sample": 9,
+        "historyGames": 19,
+        "window": "Last season",
+        "low": 6.3,
+        "high": 11.2,
+        "first": "2026-03-28T00:00Z",
+        "last": "2026-04-13T00:30Z"
+      },
+      "hold": null,
+      "side": "over",
+      "odds": 111,
+      "gap": 3.3,
+      "last5": {
+        "hits": 5,
+        "games": 5,
+        "push": 0
+      },
+      "last10": {
+        "hits": 9,
+        "games": 10,
+        "push": 0,
+        "values": [
+          7,
+          4,
+          6,
+          6,
+          6,
+          10,
+          8,
+          11,
+          7,
+          7
+        ]
+      },
+      "seasonHistory": {
+        "hits": 15,
+        "games": 19,
+        "push": 0
+      },
+      "favorite": true
+    },
+    {
+      "eventId": "401909848",
+      "athleteId": "4591725",
+      "name": "Ryan Rollins",
+      "team": "15",
+      "teamName": "Milwaukee Bucks",
+      "teamAbbr": "MIL",
+      "photo": "https://a.espncdn.com/i/headshots/nba/players/full/4591725.png",
+      "kickoff": "2026-10-23T20:00:00Z",
+      "stat": "ast",
+      "line": 4.5,
+      "book": "DraftKings",
+      "over": -139,
+      "under": 106,
+      "sourceAt": "2026-10-23T12:36:37.828181889Z",
+      "statName": "assists",
+      "projection": {
+        "value": 5.8,
+        "minutes": 32,
+        "rate": 0.1801,
+        "model": "nba-minutes-rate-v1",
+        "season": 2026,
+        "sample": 10,
+        "historyGames": 28,
+        "window": "Last season",
+        "low": 3.0,
+        "high": 8.3,
+        "first": "2026-03-15T19:30Z",
+        "last": "2026-04-08T23:00Z"
+      },
+      "hold": null,
+      "side": "over",
+      "odds": -139,
+      "gap": 1.3,
+      "last5": {
+        "hits": 2,
+        "games": 5,
+        "push": 0
+      },
+      "last10": {
+        "hits": 6,
+        "games": 10,
+        "push": 0,
+        "values": [
+          7,
+          4,
+          5,
+          7,
+          7,
+          4,
+          4,
+          9,
+          3,
+          6
+        ]
+      },
+      "seasonHistory": {
+        "hits": 16,
+        "games": 28,
+        "push": 0
+      },
+      "favorite": true
+    }
+  ],
+  "text": "NBA prop looks · DraftKings\nLeonard Miller · Chicago Bulls\nOver 5.5 rebounds +111 · I have 8.8 · 9/10\nRyan Rollins · Milwaukee Bucks\nOver 4.5 assists -139 · I have 5.8 · 6/10\nLast season · last 10 recorded games.\nResearch, not a bet.\n#NBA",
+  "title": "NBA PROP LOOKS",
+  "preview": false,
+  "kicker": "Oct 23 · PLAYER RESEARCH",
+  "right_label": "MY NUMBER"
+}
