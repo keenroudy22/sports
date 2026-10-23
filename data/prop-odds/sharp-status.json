@@ -1,8 +1,8 @@
 {
- "at": "2026-10-23T02:04:53Z",
+ "at": "2026-10-23T04:35:14Z",
  "confirmed": {
   "CFB-401856727": "2026-10-23T01:07:27Z",
-  "CFB-401856728": "2026-10-23T02:06:16Z",
+  "CFB-401856728": "2026-10-23T04:36:42Z",
   "CFB-401856730": "2026-10-23T01:07:27Z",
   "CFB-401856731": "2026-10-23T01:07:27Z",
   "CFB-401856834": "2026-10-23T01:07:27Z",
@@ -11,8 +11,8 @@
   "CFB-401856840": "2026-10-23T02:06:16Z",
   "CFB-401856841": "2026-10-23T02:06:16Z",
   "CFB-401858270": "2026-10-23T01:07:27Z",
-  "CFB-401858271": "2026-10-23T02:06:16Z",
-  "CFB-401858272": "2026-10-23T02:06:16Z",
+  "CFB-401858271": "2026-10-23T04:36:42Z",
+  "CFB-401858272": "2026-10-23T04:36:42Z",
   "CFB-401858273": "2026-10-23T01:07:27Z",
   "CFB-401858274": "2026-10-23T01:07:27Z",
   "CFB-401858495": "2026-10-23T01:07:27Z",
@@ -20,11 +20,11 @@
   "CFB-401858497": "2026-10-23T01:07:27Z",
   "CFB-401858498": "2026-10-23T01:07:27Z",
   "CFB-401858499": "2026-10-23T01:07:27Z",
-  "CFB-401861965": "2026-10-23T02:06:16Z",
-  "CFB-401862808": "2026-10-23T02:06:16Z",
+  "CFB-401861965": "2026-10-23T04:36:42Z",
+  "CFB-401862808": "2026-10-23T04:36:42Z",
   "CFB-401862809": "2026-10-23T01:07:27Z",
   "CFB-401862810": "2026-10-23T01:07:27Z",
-  "CFB-401864525": "2026-10-23T02:06:16Z",
+  "CFB-401864525": "2026-10-23T04:36:42Z",
   "CFB-401864526": "2026-10-23T01:07:27Z",
   "CFB-401866446": "2026-10-23T01:07:27Z",
   "CFB-401866447": "2026-10-23T01:07:27Z",
@@ -37,29 +37,31 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1847,
-    "fanduel": 108
+    "draftkings": 1217,
+    "fanduel": 1077
    },
    "eventsListed": 122,
-   "eventsMatched": 47,
-   "games": 48,
+   "eventsMatched": 48,
+   "games": 49,
    "marketTypes": {
-    "player_field_goals_made": 4,
-    "player_kicking_points": 4,
-    "player_longest_passing_completion": 9,
-    "player_longest_reception": 35,
-    "player_longest_rush": 11,
-    "player_passing_+_rushing_yards": 86,
-    "player_passing_touchdowns": 29,
-    "player_passing_yards": 178,
-    "player_receiving_yards": 485,
-    "player_receptions": 53,
-    "player_rushing_attempts": 20,
-    "player_rushing_yards": 306,
-    "point_spread": 735
+    "player_field_goals_made": 3,
+    "player_kicking_points": 3,
+    "player_longest_passing_completion": 6,
+    "player_longest_reception": 23,
+    "player_longest_rush": 8,
+    "player_passing_+_rushing_yards": 66,
+    "player_passing_attempts": 8,
+    "player_passing_completions": 7,
+    "player_passing_touchdowns": 52,
+    "player_passing_yards": 185,
+    "player_receiving_yards": 546,
+    "player_receptions": 22,
+    "player_rushing_attempts": 12,
+    "player_rushing_yards": 388,
+    "point_spread": 965
    },
    "requestsLeft": 0,
-   "rows": 1955,
+   "rows": 2294,
    "slateGames": [
     "Duke Blue Devils at Virginia Cavaliers 2026-10-23T23:00Z",
     "Massachusetts Minutemen at UConn Huskies 2026-10-23T23:00Z",
@@ -108,7 +110,8 @@
     "USC Trojans at Wisconsin Badgers 2026-10-24T23:30Z",
     "Utah State Aggies at Texas State Bobcats 2026-10-24T23:30Z",
     "UTSA Roadrunners at Tulane Green Wave 2026-10-25T00:00Z",
-    "North Dakota State Bison at New Mexico Lobos 2026-10-25T02:00Z"
+    "North Dakota State Bison at New Mexico Lobos 2026-10-25T02:00Z",
+    "Houston Cougars at Utah Utes 2026-10-25T02:15Z"
    ],
    "unmatchedEvents": [
     {
@@ -143,7 +146,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-23T21:00:00Z",
@@ -162,7 +168,7 @@
       "hardrock": "4831075996323152278",
       "kalshi": "KXNCAAFSPREAD-26OCT23YALEPENN",
       "novig": "01a141d1-8bc7-7661-a893-0cfc77077d8d",
-      "onexbet": "763907581",
+      "onexbet": "763706342",
       "paddypower": "36208879",
       "polymarket": "nfl_penn_yale_2026-10-23_b3",
       "prophetx": "1702921621",
@@ -183,7 +189,9 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-23T23:00:00Z",
@@ -199,7 +207,7 @@
       "hardrock": "1063576107846074762",
       "kalshi": "KXNCAAFSPREAD-26OCT24CORBRWN",
       "novig": "01a14577-57e9-75e1-b43c-2ba1f96bd6dc",
-      "onexbet": "763708059",
+      "onexbet": "764138542",
       "paddypower": "36208883",
       "polymarket": "nfl_brown_cornell_2026-10-24_b2",
       "prophetx": "1702921620",
@@ -215,7 +223,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -248,7 +259,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -260,12 +274,13 @@
       "fanduel": "36208865",
       "fliff": "420752_c_p_209_prematch",
       "hardrock": "1158597414546964891",
-      "kalshi": "KXNCAAF1H-26OCT24USDDAY",
+      "kalshi": "KXNCAAFTOTAL-26OCT24USDDAY",
       "novig": "01a14577-5919-7011-b0e0-b3a85b5b3f7f",
       "onexbet": "763706345",
       "paddypower": "36208865",
       "polymarket": "nfl_dayton_sandiego_2026-10-24_b2",
       "prophetx": "1702921626",
+      "rebet": "sr:match:70924264",
       "smarkets": "45393708",
       "sport888_it": "1029240552"
      },
@@ -278,7 +293,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -294,10 +312,11 @@
       "hardrock": "1485815489472102809",
       "kalshi": "KXNCAAFSPREAD-26OCT24WAGDUQ",
       "novig": "01a14577-549d-78c2-b54d-1c7ec0a33ddc",
-      "onexbet": "763706344",
+      "onexbet": "764138544",
       "paddypower": "36208863",
       "polymarket": "nfl_duquesne_wagner_2026-10-24_b2",
       "prophetx": "1702921628",
+      "rebet": "sr:match:70924246",
       "smarkets": "45391434",
       "sport888_it": "1029240545"
      },
@@ -310,7 +329,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -389,7 +411,7 @@
       "hardrock": "6057250195387842966",
       "kalshi": "KXNCAAFSPREAD-26OCT24UNHMRMK",
       "novig": "01a14577-53ff-76e1-94ad-652b570e1489",
-      "onexbet": "763708062",
+      "onexbet": "764138543",
       "paddypower": "36208880",
       "polymarket": "nfl_merrimack_newhampshire_2026-10-24_b2",
       "prophetx": "1702921622",
@@ -406,7 +428,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -422,7 +447,7 @@
       "hardrock": "3257549547009868178",
       "kalshi": "KXNCAAFSPREAD-26OCT24ALBYURI",
       "novig": "01a14577-5294-7570-9226-b39f4f90044a",
-      "onexbet": "763708060",
+      "onexbet": "764138541",
       "paddypower": "36208876",
       "polymarket": "nfl_rhodeisland_universityatalbany_2026-10-24_b2",
       "prophetx": "1702921625",
@@ -439,7 +464,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -455,7 +483,7 @@
       "hardrock": "6490339682310816177",
       "kalshi": "KXNCAAFSPREAD-26OCT24JKSTCOOK",
       "novig": "01a145ae-56fe-79e3-b694-cfc2aa09f539",
-      "onexbet": "763711864",
+      "onexbet": "764138548",
       "paddypower": "36208911",
       "polymarket": "nfl_bethunecookman_jacksonstate_2026-10-24_b2",
       "prophetx": "1703111174",
@@ -485,9 +513,9 @@
       "fanduel": "36208902",
       "fliff": "420768_c_p_209_prematch",
       "hardrock": "3637007240436777376",
-      "kalshi": "KXNCAAFSPREAD-26OCT24BUCKHC",
+      "kalshi": "KXNCAAF1H-26OCT24BUCKHC",
       "novig": "01a145ae-5270-73e1-b9f8-e384ef1638fb",
-      "onexbet": "763710607",
+      "onexbet": "764138545",
       "paddypower": "36208902",
       "polymarket": "nfl_bucknell_holycross_2026-10-24_b2",
       "prophetx": "1703111173",
