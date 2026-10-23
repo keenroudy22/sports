@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T16:39:58Z",
+  "updatedAt": "2026-10-23T16:51:04Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-23T16:01Z",
+              "reportedAt": "2026-10-23T16:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,8 +1162,17 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-23T16:01Z",
+              "reportedAt": "2026-10-23T16:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
+              "id": "4258595",
+              "name": "Cole Kmet",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-23T16:35Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4258595/cole-kmet"
             },
             {
               "id": "4431299",
@@ -1218,15 +1227,6 @@
               "injury": null,
               "reportedAt": "2026-10-23T03:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
-            },
-            {
-              "id": "4258595",
-              "name": "Cole Kmet",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-23T03:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4258595/cole-kmet"
             },
             {
               "id": "4870953",
@@ -2997,6 +2997,15 @@
           "name": "Indianapolis Colts",
           "players": [
             {
+              "id": "4429084",
+              "name": "Anthony Richardson Sr.",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T16:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429084/anthony-richardson-sr"
+            },
+            {
               "id": "4431459",
               "name": "Tyler Warren",
               "position": "TE",
@@ -3211,15 +3220,6 @@
               "injury": null,
               "reportedAt": "2026-10-18T23:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4242335/jonathan-taylor"
-            },
-            {
-              "id": "3914922",
-              "name": "Rigoberto Sanchez",
-              "position": "P",
-              "status": "Questionable",
-              "injury": "Foot",
-              "reportedAt": "2026-10-18T19:42Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3914922/rigoberto-sanchez"
             }
           ]
         },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-23T16:01Z",
+              "reportedAt": "2026-10-23T16:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6677,12 +6677,21 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "4567750",
+              "name": "Emeka Egbuka",
+              "position": "WR",
+              "status": "Doubtful",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-23T16:43Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
+            },
+            {
               "id": "3052587",
               "name": "Baker Mayfield",
               "position": "QB",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-10-23T16:37Z",
+              "reportedAt": "2026-10-23T16:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
             },
             {
@@ -6693,15 +6702,6 @@
               "injury": "Illness",
               "reportedAt": "2026-10-23T15:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
-            },
-            {
-              "id": "4567750",
-              "name": "Emeka Egbuka",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-23T15:18Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
             },
             {
               "id": "3909013",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "34",
-          "name": "Jadeveon Clowney",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T21:04:48Z",
-          "source": "https://www.espn.com/nfl/player/_/id/16734/jadeveon-clowney"
-        },
-        {
-          "teamId": "34",
           "name": "Trent Brown",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-23T16:39:58Z",
           "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
+        },
+        {
+          "teamId": "27",
+          "name": "Emeka Egbuka",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-23T16:51:04Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T16:39:58Z",
-      "lastAttemptAt": "2026-10-23T16:39:58Z",
+      "checkedAt": "2026-10-23T16:51:04Z",
+      "lastAttemptAt": "2026-10-23T16:51:04Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T16:39:58Z",
-      "lastAttemptAt": "2026-10-23T16:39:58Z",
+      "checkedAt": "2026-10-23T16:51:04Z",
+      "lastAttemptAt": "2026-10-23T16:51:04Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
