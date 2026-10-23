@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T01:00:42Z",
+  "updatedAt": "2026-10-23T01:16:00Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-23T00:00Z",
+              "reportedAt": "2026-10-23T01:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-23T00:00Z",
+              "reportedAt": "2026-10-23T01:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1847,6 +1847,24 @@
           "name": "Dallas Cowboys",
           "players": [
             {
+              "id": "4384549",
+              "name": "Cobie Durant",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-23T00:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4384549/cobie-durant"
+            },
+            {
+              "id": "3676833",
+              "name": "KaVontae Turpin",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Ribs",
+              "reportedAt": "2026-10-23T00:47Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin"
+            },
+            {
               "id": "4362088",
               "name": "DeMarvion Overshown",
               "position": "LB",
@@ -1901,15 +1919,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton"
             },
             {
-              "id": "4384549",
-              "name": "Cobie Durant",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-20T16:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4384549/cobie-durant"
-            },
-            {
               "id": "3953687",
               "name": "Brandon Aubrey",
               "position": "PK",
@@ -1917,15 +1926,6 @@
               "injury": null,
               "reportedAt": "2026-10-20T01:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/3953687/brandon-aubrey"
-            },
-            {
-              "id": "3676833",
-              "name": "KaVontae Turpin",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Ribs",
-              "reportedAt": "2026-10-20T00:07Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin"
             },
             {
               "id": "4428914",
@@ -5297,6 +5297,15 @@
           "name": "New York Giants",
           "players": [
             {
+              "id": "3115303",
+              "name": "Jermaine Eluemunor",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-23T01:00Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
+            },
+            {
               "id": "4921249",
               "name": "Colton Hood",
               "position": "CB",
@@ -5322,15 +5331,6 @@
               "injury": "Neck",
               "reportedAt": "2026-10-23T00:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429148/theo-johnson"
-            },
-            {
-              "id": "3115303",
-              "name": "Jermaine Eluemunor",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Calf",
-              "reportedAt": "2026-10-23T00:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
               "id": "4260224",
@@ -5757,6 +5757,15 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
+              "id": "4241374",
+              "name": "Grant Calcaterra",
+              "position": "TE",
+              "status": "Injured Reserve",
+              "injury": "Back",
+              "reportedAt": "2026-10-23T01:06Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4241374/grant-calcaterra"
+            },
+            {
               "id": "3121023",
               "name": "Dallas Goedert",
               "position": "TE",
@@ -5971,15 +5980,6 @@
               "injury": null,
               "reportedAt": "2026-10-18T16:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4879250/cole-payton"
-            },
-            {
-              "id": "15797",
-              "name": "Lane Johnson",
-              "position": "OT",
-              "status": "Out",
-              "injury": "Personal",
-              "reportedAt": "2026-10-18T15:34Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15797/lane-johnson"
             }
           ]
         },
@@ -6217,6 +6217,15 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "4040605",
+              "name": "Nick Bosa",
+              "position": "DE",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-23T00:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa"
+            },
+            {
               "id": "3895856",
               "name": "Christian Kirk",
               "position": "WR",
@@ -6260,15 +6269,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-22T01:05Z",
               "source": "https://www.espn.com/nfl/player/_/id/4693337/marques-sigle"
-            },
-            {
-              "id": "4040605",
-              "name": "Nick Bosa",
-              "position": "DE",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-21T23:55Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa"
             },
             {
               "id": "3858271",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "11",
-          "name": "Austin Ajiake",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T20:22:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4374171/austin-ajiake"
-        },
-        {
           "teamId": "19",
           "name": "Jordan Stout",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-23T00:13:41Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-23T01:16:00Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T01:00:42Z",
-      "lastAttemptAt": "2026-10-23T01:00:42Z",
+      "checkedAt": "2026-10-23T01:16:00Z",
+      "lastAttemptAt": "2026-10-23T01:16:00Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T01:00:42Z",
-      "lastAttemptAt": "2026-10-23T01:00:42Z",
+      "checkedAt": "2026-10-23T01:16:00Z",
+      "lastAttemptAt": "2026-10-23T01:16:00Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
