@@ -1,6 +1,17 @@
 # October 5 product implementation tracker
 
-## October23 posting reset and recap scope repair — release pending
+## October23 posting reset and recap scope repair — verified release
+
+Today cleanup source f2db4a0b keeps the category summary visible and all ten
+previous-day receipts in a default-collapsed disclosure. No outcomes were erased.
+Normal and clean-export gates passed:1673Python(two skips),275Node;446pages,
+113record rows,NBA0,publication/assets checks and isolated0830 rehearsal passed.
+Hosted39963538061 SUCCESS rebased onto containing cb2a1fa3 before building and
+deploying. Live375px check confirms collapsed summary,10receipts on expansion,
+explicit cash-out,375px document width and no console errors. Screenshot:
+owner folder today-recap-clean-2026-10-23.png. Later queued runs superseded the
+dedicated source run; live verification, not queue status, confirms delivery.
+Owner requested the audit prompt and then a stop; no broader audit started.
 
 Owner requests early straights, Q1/Q2 tickets,4–8leg lottos and distinct big-slate
 options. Today recap now partitions Best Bets, other straights, fun tickets and
