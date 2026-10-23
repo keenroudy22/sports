@@ -1497,6 +1497,10 @@
     const older = collapse(rows).length - collapse(current).length;
     const isValue = vm => hasValue(vm) || vm.official;
     const nAll = collapse(current).length, nValue = collapse(current.filter(isValue)).length;
+    const spreadRows = collapse(current.filter(vm => !vm.isProp && /spread/i.test(vm.market))).sort(SORTS.edge);
+    const spreadPass = spreadRows.filter(hasValue).length;
+    const modeledSpreads = spreadRows.filter(vm => isNum(vm.chance) && isNum(vm.edge));
+    const spreadResearch = spreadRows.length && b.show === 'value' ? `<details class="more-box"><summary>Spread comparisons · ${spreadRows.length} current · ${spreadPass} pass the price check</summary><p class="small muted">Spreads are evaluated too. This research filter requires at least a 2-percentage-point advantage over what the price needs, after adjustment for past model accuracy. A projected winner is not automatically a good spread bet. These are comparisons, not extra Best Bets.</p>${modeledSpreads.length ? `<div class="board">${modeledSpreads.slice(0,3).map(vm => boardRow(vm)).join('')}</div>` : '<p class="small">No current spread has both a fresh price and a model estimate to compare.</p>'}${modeledSpreads.length < spreadRows.length ? `<p class="small muted">${spreadRows.length-modeledSpreads.length} current spread prices have no model estimate; they remain under Every current line.</p>` : ''}<button type="button" class="linkish" data-set="show:all">See every current line, including spreads →</button></details>` : '';
     rows = collapse(b.show === 'value' ? current.filter(isValue) : current).sort(SORTS[b.sort] || SORTS.edge);
     const shown = rows.slice(0, b.limit);
     /* By kickoff, rows sit under their game. */
@@ -1513,7 +1517,7 @@
         <div class="grow"><label class="sr" for="q">Search</label><input id="q" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off"></div></div></div>
       <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} lines${older ? ` · ${older} older prices hidden` : ''} · ✓ passes our price check · ${shareLink('lines', route)}</p>
       ${nbaResearch}${nbaResearch ? '<h2>Football lines</h2><p class="small muted">The price-check counts and ranking above apply to these football lines. NBA research keeps its own samples and comparisons.</p>' : ''}
-      ${list}
+      ${spreadResearch}${list}
       ${b.show === 'value' && rows.length < 5 && nAll > rows.length ? `<p class="small" style="margin-top:10px"><button type="button" class="linkish" data-set="show:all">See all ${nAll} current lines →</button></p>` : ''}
       ${unpriced.length ? `<details class="more-box" data-box="unpriced" style="margin-top:12px"><summary>Player lines with no price yet · ${unpriced.length}</summary><div class="receipts">${unpriced.slice(0, 60).map(r => `<div class="receipt" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${r.athleteId ? `<a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a>` : esc(niceTitle(r.title))}</b><span>${esc(marketLabel(r))} · ${esc(whenShort(r.kickoff))}${isNum((r.grade || {}).projection) ? ` · our middle estimate ${esc(C.fixed(r.grade.projection))}` : ''}</span></div><span class="small muted">No price yet</span></div>`).join('')}</div><p class="small muted" style="margin-top:8px">The book lists these lines, but we have not seen a price, so we cannot compare our chance with what the price needs.</p></details>` : ''}
       `;
@@ -1951,7 +1955,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-aa811df24274';
-  const GAMES_ASSET = 'app-games.js?v=sha256-c90e7d8f1339';
+  const GAMES_ASSET = 'app-games.js?v=sha256-283c013d8292';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

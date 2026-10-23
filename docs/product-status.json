@@ -3,6 +3,24 @@
   "updatedAt": "2026-10-23T19:31:00Z",
   "items": [
     {
+      "id": "O-20261023-NBAMATCHUP",
+      "title": "NBA spread/total/ML comparison cards and visible CFB spread research",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Finish tests, render, locked release and live NBA/CFB checks. O-20261023-MODELPARITY owns the remaining evaluated model support; never invent missing data.",
+      "doneWhen": "Stored validated NBA spread/ML pairs reach cards with model/market comparisons, stale/start suppression and no fabricated picks. CFB spread comparisons remain visible below the strict research bar. Full gates and live release verified.",
+      "evidence": "Oct23 screenshots exposed totals-only NBA builder and opaque totals-only qualifying CFB filter. Verified123 open stored spread rows; strongest stored adjusted edge1.3 versus2point research threshold. Existing game selection anchors to exact book, research uses neutral calibration. No weight/gate change."
+    },
+    {
+      "id": "O-20261023-MODELPARITY",
+      "title": "Validate research probability alignment and deeper NBA matchup context",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Compare stored exact-pair research and selection probabilities offline; test a shared calculation without rewriting history. Inventory current NBA roster, minutes, pace and efficiency inputs before adding supported ranks or win chances.",
+      "doneWhen": "Documented held-out evidence and regressions support any probability alignment; current-role NBA inputs have source/as-of labels and missing-data behavior. No invented rankings, historical regrading, new paid feeds or automatic gate changes.",
+      "evidence": "Oct23: research grades shrink toward .5 while game selection anchors to exact-book fair probability. NBA matchup display now consumes existing prices, but scores remain the existing historical model; current-role depth and calibrated win chances are not shipped."
+    },
+    {
       "id": "O-20261023-REPORTINDEX",
       "title": "Include late released reports in the same hosted artifact",
       "status": "shipped",

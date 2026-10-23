@@ -10,6 +10,21 @@ import nba_capture,nba_today,boxscores
 from test_espn_props import game,board,NOW
 
 class NBAEvidenceTests(unittest.TestCase):
+ def test_matchup_pairs_validate_independently_without_new_requests(self):
+  q={'book':'DraftKings','retrievedAt':boxscores.stamp(NOW),'current':{
+   'home':{'spreadLine':-3.5,'spreadPrice':-110,'moneyline':-150},
+   'away':{'spreadLine':3.5,'spreadPrice':-110,'moneyline':130}}}
+  pairs=nba_today.matchup_quotes(q,NOW)
+  self.assertEqual(pairs['spreadQuote']['homeLine'],-3.5)
+  self.assertEqual(pairs['moneylineQuote']['away'],130)
+  self.assertEqual(pairs['spreadQuote']['retrievedAt'],q['retrievedAt'])
+  q['current']['away']['spreadLine']=4.5
+  self.assertNotIn('spreadQuote',nba_today.matchup_quotes(q,NOW))
+  self.assertIn('moneylineQuote',nba_today.matchup_quotes(q,NOW))
+  del q['current']['away']['moneyline']
+  self.assertEqual(nba_today.matchup_quotes(q,NOW),{})
+  self.assertEqual(nba_today.matchup_quotes(q,NOW+timedelta(hours=5)),{})
+  self.assertEqual(nba_today.matchup_quotes(q,NOW-timedelta(minutes=1)),{})
  def test_opening_day_site_copy_does_not_depend_on_host_private_preview_file(self):
   moment=datetime(2026,10,20,13,tzinfo=timezone.utc)
   with tempfile.TemporaryDirectory() as folder, patch.object(nba_today.nba_trial_runtime,'review_ready',return_value=False):
@@ -54,6 +69,7 @@ class NBAEvidenceTests(unittest.TestCase):
    def predict(self,*args):return {'margin':4,'total':224,'sparse':True}
   data=nba_today.build(NOW,root=self.root,boxes=[],model_factory=lambda *args:Model())
   self.assertEqual(data['games'][0]['projection']['home'],114);self.assertEqual(data['games'][0]['totalQuote']['under'],-110)
+  self.assertEqual(data['games'][0]['projection']['margin'],4)
   later=nba_today.build(NOW+timedelta(hours=5),root=self.root,boxes=[],model_factory=lambda *args:Model())
   self.assertNotIn('totalQuote',later['games'][0])
  def test_changed_store_and_ledger_refuse_tampering(self):

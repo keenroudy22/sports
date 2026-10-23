@@ -7,6 +7,19 @@ const { model: M } = require('../site/app.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
 const gamesSource = fs.readFileSync('site/app-games.js', 'utf8');
 
+test('positive spread comparisons remain research when below the two-point filter', () => {
+  const row={id:'spread',title:'IU -7.5',gameId:'CFB-1',league:'CFB',market:'point spread',side:'away',line:-7.5,odds:-102,book:'DraftKings',state:'open',kickoff:'2099-01-01T00:00:00Z',observedAt:new Date().toISOString(),grade:{chance:.518,needs:.505,edge:1.3,tier:'pass',calibrated:true,thin:false}};
+  const line=M.lineVM(row);
+  assert.equal(M.hasValue(line),false);
+  assert.equal(M.onBoard(line),true);
+  assert.match(source,/spreadRows = collapse\(current\.filter/);
+  assert.match(source,/Spread comparisons/);
+  assert.match(source,/not extra Best Bets/);
+  assert.match(source,/modeledSpreads = spreadRows\.filter\(vm => isNum\(vm.chance\) && isNum\(vm.edge\)\)/);
+  assert.match(source,/modeledSpreads\.slice\(0,3\)\.map/);
+  assert.match(source,/No current spread has both a fresh price and a model estimate to compare/);
+});
+
 test('model-only support requires a saved for-direction fact', () => {
   const pick={modelLean:true,reason:'Defensive starters are out.',why:'Defensive starters are out.'};
   assert.deepEqual(M.whyLines(pick),[]);

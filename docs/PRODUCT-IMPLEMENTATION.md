@@ -1,5 +1,21 @@
 # October 5 product implementation tracker
 
+## October23 NBA comparison parity and CFB spread visibility — in verification
+
+NBA stored same-snapshot DraftKings spreads/moneylines were omitted by the public
+builder. Expose verified opposing spread and ML pairs alongside existing totals;
+retain four-hour freshness and hide at kickoff. Same football card frame now
+compares projected spread/total with book numbers and exact two-sided prices.
+Differences are not picks/probabilities; no invented offense/defense ranks or
+model win chances. No feeds, forecasts, weights, admissions or records changed.
+CFB spreads are evaluated: stored best comparison IU-7.5/-102 has1.3point adjusted
+advantage, below Research's2point filter. New spread fold surfaces the strongest
+current comparisons even when none pass, with scope/threshold explicit.
+Research grades use neutral-centered pricing; official game selection uses exact
+book anchoring and separate checks. This pre-existing methodological difference
+is not silently changed by this display repair. Needs separately evaluated parity
+work; the public research fold does not certify a bet. O-20261023-NBAMATCHUP.
+
 ## October23 final audit repair release verified — 19:31 UTC
 
 Hosted40009946258SUCCESS uploaded final verifiedf217bcfe with report-index fix

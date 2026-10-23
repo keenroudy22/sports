@@ -630,11 +630,22 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
   }
   const nbaProjectionContext = games => games.some(g => g.projection?.sparse && g.status !== 'final') ? '<p class="small muted nba-history">Early-season projections draw on last season’s team ratings while this season’s results build.</p>' : '';
   const nbaGameCard = g => {
-    const quote = g.totalQuote;
-    const fresh = quote && Date.now() < Date.parse(g.kickoff) && Date.now()-Date.parse(quote.retrievedAt) >= 0 && Date.now()-Date.parse(quote.retrievedAt) <= 14400000;
-    const extra = fresh ? `<p class="pc-why">Book total ${esc(quote.line)} · over ${esc(oddsText(quote.over))} / under ${esc(oddsText(quote.under))} · ${esc(bookLabel(quote.book))}<br><small>Prices seen ${esc(whenShort(quote.retrievedAt))}</small></p>` : '';
+    const fresh = q => q && g.status === 'scheduled' && Date.now() < Date.parse(g.kickoff) && Date.now()-Date.parse(q.retrievedAt) >= 0 && Date.now()-Date.parse(q.retrievedAt) <= 14400000;
+    const quote = fresh(g.totalQuote) ? g.totalQuote : null, spread = fresh(g.spreadQuote) ? g.spreadQuote : null, ml = fresh(g.moneylineQuote) ? g.moneylineQuote : null;
+    const p = g.projection || {}, home = g.teams.home.abbreviation, away = g.teams.away.abbreviation;
+    const margin = isNum(p.margin) ? p.margin : isNum(p.home) && isNum(p.away) ? Math.round((p.home-p.away)*10)/10 : null;
+    const gap = n => Math.abs(n) < .05 ? 'Same number' : `${C.fixed(Math.abs(n),1)} ${n > 0 ? 'higher' : 'lower'}`;
+    const comparison = g.status !== 'scheduled' ? '' : `<div class="pc-lines nba-comparison"><span class="h"></span><span class="h">Mine</span><span class="h">Book</span><span class="h">Difference</span>
+      <span class="k">Spread</span><span>${margin == null ? '—' : esc(C.modelSpread(home,away,margin))}</span><span>${spread ? esc(C.modelSpread(home,away,-spread.homeLine)) : 'Unavailable'}</span><span>${spread && margin != null ? Math.abs(margin+spread.homeLine) < .05 ? 'Same number' : `${esc(C.fixed(Math.abs(margin+spread.homeLine),1))} toward ${esc(margin+spread.homeLine > 0 ? home : away)}` : '—'}</span>
+      <span class="k">Total</span><span>${isNum(p.total) ? esc(C.fixed(p.total,1)) : '—'}</span><span>${quote ? esc(quote.line) : 'Unavailable'}</span><span>${quote && isNum(p.total) ? esc(gap(p.total-quote.line)) : '—'}</span></div>`;
+    const prices = [spread ? `${home} ${C.signed(spread.homeLine)} (${oddsText(spread.home)}) · ${away} ${C.signed(spread.awayLine)} (${oddsText(spread.away)}) · ${bookLabel(spread.book)} · ${whenShort(spread.retrievedAt)}` : '',
+      quote ? `Book total ${quote.line} · over ${oddsText(quote.over)} / under ${oddsText(quote.under)} · ${bookLabel(quote.book)} · ${whenShort(quote.retrievedAt)}` : '',
+      ml ? `Moneyline: ${home} ${oddsText(ml.home)} · ${away} ${oddsText(ml.away)} · ${bookLabel(ml.book)} · ${whenShort(ml.retrievedAt)}` : ''].filter(Boolean);
+    const extra = comparison + (prices.length ? `<p class="pc-why small">${prices.map(esc).join('<br>')}<br>Prices seen at the times above.</p>` : '') + (g.status === 'scheduled' ? '<p class="small muted">Projection differences, not picks or win probabilities. Missing or older-than-four-hour prices are not shown.</p>' : '');
     const team = side => ({...g.teams[side], abbr:g.teams[side].abbreviation, score:g.scores?.[side]});
-    return projCard({id:g.id,league:'NBA',kickoff:g.kickoff,home:team('home'),away:team('away'),state:g.status === 'in_progress' ? 'in' : 'pre',completed:g.status === 'final',v2:g.projection || {}},{link:false,ranks:false,extra});
+    // Keep the shared score layout, without football's probability/lean table.
+    const v2 = {...p}; delete v2.margin;
+    return projCard({id:g.id,league:'NBA',kickoff:g.kickoff,home:team('home'),away:team('away'),state:g.status === 'in_progress' ? 'in' : 'pre',completed:g.status === 'final',v2},{link:false,ranks:false,extra});
   };
   views.nbaSummary = data => {
     const games = (data.games || []).filter(g => C.dayOf(g.kickoff) === etDay());

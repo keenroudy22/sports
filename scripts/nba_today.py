@@ -33,6 +33,31 @@ def fresh(value, now, hours=4):
         return False
 
 
+def matchup_quotes(quote, now):
+    """Expose only verified same-snapshot pairs; no new feed or model inference."""
+    if not fresh(quote.get('retrievedAt'), now):
+        return {}
+    current = quote.get('current') or {}
+    out = {}
+    for market in ('spread', 'moneyline'):
+        try:
+            home, away = current['home'], current['away']
+            key = 'spreadPrice' if market == 'spread' else 'moneyline'
+            hp, ap = espn_props.price(home[key]), espn_props.price(away[key])
+            if not .99 <= espn_props.implied(hp) + espn_props.implied(ap) <= 1.15:
+                continue
+            pair = {'home': hp, 'away': ap, 'book': quote['book'], 'retrievedAt': quote['retrievedAt']}
+            if market == 'spread':
+                hl, al = espn_props.number(home['spreadLine']), espn_props.number(away['spreadLine'])
+                if abs(hl + al) > .001:
+                    continue
+                pair.update(homeLine=hl, awayLine=al)
+            out[market + 'Quote'] = pair
+        except (KeyError, TypeError, ValueError):
+            continue
+    return out
+
+
 def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
     now=now or datetime.now(timezone.utc); root=Path(root)
     slate=read_json(root/'slate.json',{})
@@ -55,6 +80,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
                 if all(isinstance(projection.get(k),(float,int)) and math.isfinite(projection[k]) for k in ('margin','total')):
                     row['projection']={'home':round((projection['total']+projection['margin'])/2,1),
                                        'away':round((projection['total']-projection['margin'])/2,1),
+                                       'margin':round(projection['margin'],1),
                                        'total':round(projection['total'],1),'sparse':bool(projection.get('sparse')),
                                        'label':'Research projection'}
             except (OSError, ValueError, KeyError, TypeError):
@@ -62,6 +88,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
         if game.get('status')=='scheduled' and boxscores.instant(game['kickoff'])>now:
             for book in ('DraftKings',):
                 quote=latest.get((str(game['providerId']),book),{})
+                row.update(matchup_quotes(quote, now))
                 total=(quote.get('current') or {}).get('total') or {}
                 if not fresh(quote.get('retrievedAt'),now): continue
                 try:
