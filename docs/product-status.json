@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-23T20:54:00Z",
+  "updatedAt": "2026-10-23T21:13:00Z",
   "items": [
     {
       "id": "O-20261023-BOARDFRESH",
@@ -16,9 +16,9 @@
       "title": "Reuse a late NBA pregame capture to cover the afternoon",
       "status": "observing",
       "owner": "agent",
-      "next": "Deploy tested prop reallocation23:30 to13:30 alongside game capture; retain late grading and existing budgets. Verify October24's13:30 worker records fresh game and prop quotes. Manual captures are not scheduled-run receipts.",
+      "next": "Verify October24's13:30 worker records fresh game and prop quotes. Both reallocations are live; late grading/daytime retries and budgets remain. Manual capture and tests are not actual scheduled-run receipts.",
       "doneWhen": "Six planned captures remain; morning windows retained and daytime gaps at most four hours. Single capture path, failure isolation and stale guards pass full tests/rehearsal. Locked release and hosted/live verification succeed.",
-      "evidence": "aff8b2e6 verified in40015968340SUCCESS/final12262b1c with1719Python(2skip)/277Node/full gates. Six planned windows retained;23:30 free-game capture moved to13:30. One manual verification20:03:21Z used22 bounded free requests,11 quotes,5 injury changes,0errors; scheduled=false,commitb371a39b. Actual next13:30 observation remains due."
+      "evidence": "Gameaff8b2e6; prop22d8855f;40023680885SUCCESS/finale9c24b31.1724Python(2skip)/278Node normal+clean+locked; late fallback blocked, grading retained. Six planned windows remain. Manual774602a4:12Sharp/29ESPN reads,399paired props,54forecasts,0errors; partial coverage. Live375 at21:13Z no overflow/load/console errors. October24 scheduled13:30 observation still due."
     },
     {
       "id": "O-20261023-NBAMATCHUP",
@@ -772,9 +772,9 @@
       "title": "Results-led direction and 10-second Today",
       "status": "ready",
       "owner": "agent",
-      "next": "Measure a cold phone visit against the documented 10-second speed budget and observe the next weekly direction packet; keep bounded moves off until their logged evidence meets the existing rules.",
+      "next": "Measure cold-phone speed against10 seconds; reduce oversized NBA/Today payloads without dropping coverage. Observe the next weekly direction packet; keep bounded moves off until logged evidence meets existing rules.",
       "doneWhen": "Trigger and undo fixtures pass, no gate loosens below the October 7 baseline, every move logs evidence, the Monday packet explains changes and reversals, and a cold phone visit meets the documented 10-second budget.",
-      "evidence": "Direction and Today code is live in release 48e57391, run 37700211419, app133/CSS82. At 375/1440 Today showed TK King and the Climb stub without overflow or browser errors. Cold-phone speed and the first weekly direction packet are not yet observed, so this stays open."
+      "evidence": "Direction48e57391/37700211419 retained. Oct23 hosted40023680885SUCCESS: NBA95,271B/65,536B,Today336,037B/327,680B warnings; shell87,663gzip below hard cap. Live375 NBA/CFB and local1440 NBA no overflow/load/console errors. This is not a cold-phone network benchmark or verified weekly learning outcome; those remain open."
     },
     {
       "id": "P47",

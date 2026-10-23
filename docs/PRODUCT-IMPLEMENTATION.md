@@ -1,5 +1,33 @@
 # October 5 product implementation tracker
 
+## October23 final role/parity/cadence receipt — verified 21:13 UTC
+
+Hosted40023680885SUCCESS verifiede9c24b31, containing scheduling22d8855f and
+the earlier role/formula release4a528572. Normal, clean-export and locked checks:
+1724Python(two skips)/278Node;480pages,114official records/NBA0; hosted public
+guard647files/zero issues. Final locked16:00 rehearsal5pkbiisk returnedok with
+zero outside writes/private reads. Earlier local documentation timestamp/length
+validation failures were corrected; guards were not weakened.
+
+Reloaded live NBA at375px21:13Z: current-season workload, source and roster times
+visible; document375px, no load error or console errors. CFB375px was also checked
+after formula release; local NBA1440px clean. Updated owner proof:
+kookn-nba-role-checks-live-2026-10-23.png. A supplemental non-browser JSON read
+returned403; browser verification succeeded without bypassing that response.
+
+Six planned game/prop collection windows now include13:30 instead of23:30.
+Late grading and existing daytime admission refreshes remain; no late fallback
+recreates the moved collection. Actual October24 scheduled13:30 observation is
+still due. Current free-feed pagination remains partial, never full-market proof.
+
+Payload warnings remain visible: hostedNBA95,271B/65,536B andToday336,037B/327,680B;
+shell87,663gzip bytes stays below its hard limit. P46 retains phone performance
+follow-through without trimming coverage or raising budgets. Full audit is NOT
+complete: automatic minutes replacement failed, team/rotation validation,
+quarter-market automation and prospective delivery/learning checks remain.
+These receipt-only notes stay on dev for the next normal safe promotion; every
+functional change in this batch is already deployed and verified.
+
 ## October23 NBA prop afternoon coverage — in verification
 
 Extend the already-tested six planned game-capture windows to the existing NBA
