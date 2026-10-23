@@ -86,6 +86,7 @@ def build(root=ROOT):
                     'title': ticket.get('displayTitle') or ticket['title'],
                     'legs': [{'title': leg} for leg in ticket.get('legs', [])] if len(ticket.get('legs', [])) > 1 else [],
                     'result': result.get('result'), 'settledAt': result.get('settledAt'),
+                    'cashout': result.get('cashout') is True,
                     'entryNote': result.get('note') or 'Personal ticket; separate from Best Bets.',
                     'resultSource': result.get('source'), **accounting(result),
                     'delivery': {'xAt': post['sentAt'], 'link': post['link']}})

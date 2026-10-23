@@ -185,7 +185,7 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   assert.match(bets, /Book says<b class="num">51\.5<\/b>[\s\S]*I have it at<b class="num">61\.2<\/b>/,
     'and its useful model number against the book line');
   assert.doesNotMatch(bets, /kt-clip/, 'one chef, on the first rail only');
-  assert.match(page, /<h2 class="kt-head" id="left-h">Friday went 1-0 · \+0\.95u<\/h2>/, 'Leftovers carry the day\'s units');
+  assert.match(page, /Best Bets: 1–0<\/b> · \+0\.95u/, 'Same-category results carry their units');
   assert.match(page, /r-mark hit/);
   assert.match(page, /result Visitors 24, Hosts 21/);
   assert.match(page, /Past steps · 3/, 'every completed rung stays one tap away');
@@ -415,7 +415,7 @@ test('the compact prior-day recap lists every win and loss without truncation', 
   assert.equal((left.match(/r-mark miss/g) || []).length, 2, 'both misses stay');
   assert.equal((left.match(/class="receipt"/g) || []).length, 7, 'all seven posted tickets stay visible');
   assert.doesNotMatch(left, /more on the record/);
-  assert.match(left, /Friday went 5-2/);
+  assert.match(left, /Best Bets: 5–2/);
 });
 
 test('Today reconciles its last-slate headline and slips to released plays only', async () => {
@@ -430,7 +430,8 @@ test('Today reconciles its last-slate headline and slips to released plays only'
     picks: [prop, released, gut, hidden('Arizona at West Virginia'), hidden('SDSU at Oregon State'), ...rungs],
     lastSlate: { ALL: { day: '2026-10-10', wins: 0, losses: 1, pushes: 0, units: -1 } } } }).api.views.today({ view: 'today' });
   const left = page.slice(page.indexOf('class="kt-sec kt-left"'), page.indexOf('class="kt-sec kt-prep"'));
-  assert.match(left, /Friday went 1-1 · −0\.50u/);
+  assert.match(left, /Best Bets: 0–1<\/b> · −1\.00u/);
+  assert.match(left, /Other straights: 1–0<\/b> · \+0\.50u/);
   assert.match(left, /Nevada\/UTEP over 49\.5/);
   assert.match(left, /Released Gut call hit/);
   assert.doesNotMatch(left, /Arizona at West Virginia|SDSU at Oregon State/);
@@ -708,7 +709,9 @@ test('Today merges settled personal tickets once and reconciles all five prior-d
   await api.views.today({view:'today'});await settle();
   const page=await api.views.today({view:'today'});
   const left=page.slice(page.indexOf('class="kt-sec kt-left"'),page.indexOf('class="kt-sec kt-prep"'));
-  assert.match(left,/Friday went 2-3 · \+2\.76u/);
+  assert.match(left,/Best Bets: 0–1<\/b> · −1\.00u/);
+  assert.match(left,/Other straights: 0–1<\/b> · −0\.50u/);
+  assert.match(left,/My Card: 2–1<\/b> · \+4\.26u/);
   assert.equal((left.match(/class="receipt"/g)||[]).length,5);
   for(const p of community)assert.ok(left.includes(p.displayTitle));
   assert.match(left,/\+2\.99u/);assert.match(left,/\+1\.37u/);assert.match(left,/−0\.10u/);
@@ -868,6 +871,18 @@ test('an owner community ticket is unmistakably personal and separate from best 
   assert.doesNotMatch(page.slice(page.indexOf('Personal fun ticket')), /Hot Plate \(POTD\)/);
 });
 
+
+test('Today results keep personal losses and cash-outs separate from Best Bet units', async () => {
+  const official = {...yesterday, result:'loss', units:-1};
+  const personal = {...yesterday, id:'personal-loss', community:true, lane:'personal', result:'loss', units:null, accountingUnknown:true};
+  const cashout = {...personal, id:'personal-cashout', result:'push', cashout:true, units:0, accountingUnknown:false};
+  const page = await loadApp('#record', {}, {today:{...TODAY,picks:[official,personal,cashout]}}).api.views.today({view:'today'});
+  assert.match(page, /Friday results/);
+  assert.match(page, /Best Bets: 0–1/);
+  assert.match(page, /My Card: 0–1<\/b> · 1 cashed out · net unavailable/);
+  assert.match(page, /Cashed out · not a sportsbook push/);
+  assert.doesNotMatch(page, /Friday went 0-2-1|All posted plays · Best Bets/);
+});
 
 test('Today pulled strip shares public delivery eligibility with Record', async () => {
   const withdrawn = { ...total, id: 'CFB-2026-W6-never-posted', status: 'withdrawn',

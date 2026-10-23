@@ -38,6 +38,11 @@ class CommunityRecordTests(unittest.TestCase):
             record.append(loss, journal)
             self.assertEqual(record.build(root)[0]['result'], 'loss')
             self.assertEqual(len(journal.read_text().splitlines()), 2)
+            record.append(dict(win, result='push', cashout=True, settledAt='2026-10-20T14:00:00Z',
+                               stakeDollars=10, returnDollars=10, unitDollars=50), journal)
+            cashout = record.build(root)[0]
+            self.assertTrue(cashout['cashout'])
+            self.assertEqual(cashout['units'], 0)
             (root/'data/x-posted.json').write_text(json.dumps({'posts': [dict(post, sentAt='2026-10-20T03:00:00Z')]}))
             self.assertEqual(record.build(root), [])
 

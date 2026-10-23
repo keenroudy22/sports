@@ -205,6 +205,17 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **October23 posting reset:** prioritize early qualifying straights; daily screening is
+  not a daily bet quota. Future full-game fun lottos use4–8legs, roughly+400..+1000,
+  inside existing exposure, price, budget and risk-policy limits. Larger slates may
+  support distinct ticket categories, never duplicate player exposure to fill volume.
+  Retain one open Climb, two preferred alternate legs and existing weekly limits.
+  Q1/Q2 props require exact period prices, period-specific evidence and tested grading;
+  owner-ticket posting does not prove an automatic quarter selector exists. Score-only
+  sports remain score-only until their readiness gates pass. Keep result categories
+  and net scopes aligned; label cash-outs explicitly without rewriting settlements.
+  Implementation evidence and remaining quarter coverage are in PRODUCT-IMPLEMENTATION.
+
 - **Act on attention, keep tracking (owner, October22):** preserve24h/72h/7d
   analytics observations with actual read times; do not invent missed checkpoints.
   Additional reads stay inside the existing Buffer2700/month hard ceiling, max8

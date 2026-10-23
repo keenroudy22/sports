@@ -30,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 LINES = ROOT / 'site' / 'data' / 'app' / 'lines.json'
 MIN_CHANCE = 0.52          # a game line's calibrated chance: the side our number takes, with a little room
 MIN_LEGS, MAX_LEGS = 3, 5
+EXPANDED_MAX_LEGS = 8
 LEAD = timedelta(minutes=30)
 STAKE = 0.25
 ALT_GAME_POOL = 10          # bound the alternate search on a large college slate
@@ -95,7 +96,7 @@ def priced_ticket(book, legs):
 
 
 def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(), max_legs=MAX_LEGS,
-          price_range=None, max_totals=None):
+          price_range=None, max_totals=None, min_legs=MIN_LEGS):
     """The best ticket on the board for the day: None with a reason when there is none.
 
     exclude: game ids the research run has a sourced reason to leave off, such as weather.
@@ -103,7 +104,10 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
     has one book and at most one leg from any game.
     max_legs, price_range: a narrower shape (the direction rules' shorter fun tickets); never wider than the default.
     """
-    max_legs = min(max(int(max_legs), MIN_LEGS), MAX_LEGS)
+    min_legs = max(MIN_LEGS, int(min_legs))
+    max_legs = min(int(max_legs), EXPANDED_MAX_LEGS)
+    if max_legs < min_legs:
+        return None, 'ticket shape conflicts with the active risk limit'
     day = day or eastern_date(now).isoformat()
     picks = [r for r in rows if eligible(r, now, day, league) and r['gameId'] not in set(exclude)]
     best_per_game = {}
@@ -112,8 +116,8 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
     candidates = list(best_per_game.values())
     extras = [dict(leg) for leg in extra_legs if extra_eligible(leg, now, day, exclude)]
     available_games = {r['gameId'] for r in candidates} | {l['gameId'] for l in extras}
-    if len(available_games) < MIN_LEGS:
-        return None, f'only {len(available_games)} games with a line our number likes on {day}; a ticket needs {MIN_LEGS}'
+    if len(available_games) < min_legs:
+        return None, f'only {len(available_games)} games with a line our number likes on {day}; a ticket needs {min_legs}'
     tickets = []
     books = ({q['book'] for row in candidates for q in row.get('books') or []} | {row['book'] for row in candidates}
              | {leg['book'] for leg in extras})
@@ -129,8 +133,10 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
                               'kickoff': row['kickoff'], 'observedAt': row.get('observedAt'), 'marketWindow': 'Full game',
                               'alternate': False})
         board.sort(key=lambda l: -l['chance'])
+        if max_legs > MAX_LEGS:
+            board = board[:ALT_GAME_POOL]  # Bound the expanded search on large slates.
         # Preserve the board-only candidates exactly; alternates are additional choices, not a new requirement.
-        for count in range(MIN_LEGS, min(max_legs, len(board)) + 1):
+        for count in range(min_legs, min(max_legs, len(board)) + 1):
             choices = combinations(board, count) if max_totals is not None else (tuple(board[:count]),)
             for chosen in choices:
                 if max_totals is None or sum(leg.get('market') == 'total points' for leg in chosen) <= int(max_totals):
@@ -149,13 +155,13 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
             if old is None or (edge, leg['chance']) > (old_edge, old['chance']):
                 choices['alternate'] = leg
         groups = sorted(by_game.values(), key=lambda choices: -max(l['chance'] for l in choices.values()))[:ALT_GAME_POOL]
-        for count in range(MIN_LEGS, min(max_legs, len(groups)) + 1):
+        for count in range(min_legs, min(max_legs, len(groups)) + 1):
             for selected in combinations(groups, count):
                 for chosen in product(*(tuple(group.values()) for group in selected)):
                     if any(l.get('alternate') for l in chosen):
                         tickets.append(priced_ticket(book, chosen))
     if not tickets:
-        return None, 'no book carries three of those lines at the graded numbers'
+        return None, f'no book carries {min_legs} of those lines at the graded numbers'
     if max_totals is not None:
         tickets = [ticket for ticket in tickets
                    if sum(leg.get('market') == 'total points' for leg in ticket['legs']) <= int(max_totals)]
@@ -164,7 +170,7 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
     if price_range:
         tickets = [t for t in tickets if price_range[0] <= t['odds'] <= price_range[1]]
         if not tickets:
-            return None, f'no {MIN_LEGS}-{max_legs} leg ticket prices {price_range[0]:+d} to {price_range[1]:+d}'
+            return None, f'no {min_legs}-{max_legs} leg ticket prices {price_range[0]:+d} to {price_range[1]:+d}'
     reaching = [t for t in tickets if t['odds'] >= target]
     pool = reaching or tickets
     # The best expected value at the fewest legs that reach the target; failing the target, the longest price.

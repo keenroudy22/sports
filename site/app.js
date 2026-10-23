@@ -972,11 +972,22 @@
   /* Full posted-day recap. Compact rows include every ticket, win or loss; Climb dollars stay separate. */
   const leftovers = (settled, waiting, last) => {
     if (!settled.length && !waiting.length) return '';
-    const t = settled.length ? { day: C.dayOf(settled[0].kickoff), ...C.summaryOf(settled) } : last;
-    const u = t && C.summaryOf(settled.filter(p => !p.priceAssumed && !C.isUnpricedImport(p))).units;
-    const head = t ? `${weekday(`${t.day}T16:00:00Z`)} went ${t.wins}-${t.losses}${t.pushes ? `-${t.pushes}` : ''}${isNum(u) ? ` · ${units(u)}` : '.'}` : 'Waiting on the final.';
+    const day = settled.length ? C.dayOf(settled[0].kickoff) : last?.day;
+    const head = day ? `${weekday(`${day}T16:00:00Z`)} results` : 'Waiting on the final.';
+    const groups = [
+      ['Best Bets', settled.filter(p => !p.community && !C.isParlay(p) && C.isHeadline(p))],
+      ['Other straights', settled.filter(p => !p.community && !C.isParlay(p) && !C.isHeadline(p))],
+      ['Fun tickets', settled.filter(p => !p.community && C.isParlay(p))],
+      ['My Card', settled.filter(p => p.community)],
+    ];
+    const summaries = groups.filter(([, rows]) => rows.length).map(([label, rows]) => {
+      const cashouts = rows.filter(p => p.cashout), graded = rows.filter(p => !p.cashout), s = C.summaryOf(graded);
+      const fullyPriced = rows.every(p => !p.priceAssumed && !C.isUnpricedImport(p) && isNum(C.unitsFor(p)));
+      const net = fullyPriced ? ` · ${units(rows.reduce((sum, p) => sum + C.unitsFor(p), 0))}` : ' · net unavailable: some returns unconfirmed';
+      return `<p class="small"><b>${esc(label)}: ${s.wins}–${s.losses}${s.pushes ? `–${s.pushes}` : ''}</b>${cashouts.length ? ` · ${cashouts.length} cashed out` : ''}${esc(net)}</p>`;
+    }).join('');
     return `<section class="kt-sec kt-left" aria-labelledby="left-h"><h2 class="kt-head" id="left-h">${esc(head)}</h2>
-      <p class="small muted">All posted plays · Best Bets, Full Sends and fun tickets. Climb tracked separately.</p>
+      <p class="small muted">Every posted ticket below. Results and net stay in their own categories. Climb tracked separately.</p>${summaries}
       ${waiting.map(p => slip(p, { spike: true, waiting: true })).join('')}<div class="receipts">${settled.map(p => receipt(p, new Map())).join('')}</div>
       <a class="kt-quiet" href="#record">The full record ›</a></section>`;
   };
@@ -1854,14 +1865,14 @@
   const clvWords = clv => !isNum(clv) ? '' : clv > 0 ? `line moved our way by ${C.fixed(clv, 1)}` : clv < 0 ? `line moved against us by ${C.fixed(Math.abs(clv), 1)}` : 'closed at our number';
   const receipt = (p, clvById) => {
     const vm = pickVM(p);
-    const mark = p.result === 'win' ? ['hit', '✓', 'Hit'] : p.result === 'loss' ? ['miss', '✗', 'Miss'] : p.result === 'push' ? ['push', '–', 'Push'] : p.result === 'void' ? ['push', '–', 'Void'] : ['open', '•', 'Pending'];
+    const mark = p.cashout ? ['push', '–', 'Cashed out'] : p.result === 'win' ? ['hit', '✓', 'Hit'] : p.result === 'loss' ? ['miss', '✗', 'Miss'] : p.result === 'push' ? ['push', '–', 'Push'] : p.result === 'void' ? ['push', '–', 'Void'] : ['open', '•', 'Pending'];
     const u = C.unitsFor(p);
     const assumed = Boolean(p.priceAssumed || C.isUnpricedImport(p));
     const clv = clvById.get(p.id);
     const price = p.odds == null ? 'no price recorded' : assumed ? `${oddsText(p.odds)} assumed · no price recorded` : `${oddsText(p.odds)} ${bookLabel(p.book) || ''}`;
     const actual = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${p.resultDetail}` : p.actual != null ? String(typeof p.actual === 'object' ? Object.entries(p.actual).map(([k, v]) => `${k} ${v}`).join(', ') : p.actual).split(/[.;]\s/)[0] : '';
     const lane = p.community ? 'Personal fun ticket' : p.lane === 'gut_call' ? 'Full Send' : C.isParlay(p) ? 'Fun ticket' : 'Best Bet';
-    const meta = [lane, price + (p.community ? ' original quote' : ''), whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? `early-exit credit (counts −${C.stakeOf(p)}u in the headline)` : ''].filter(Boolean).join(' · ');
+    const meta = [lane, p.cashout ? 'Cashed out · not a sportsbook push' : '', price + (p.community ? ' original quote' : ''), whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? `early-exit credit (counts −${C.stakeOf(p)}u in the headline)` : ''].filter(Boolean).join(' · ');
     const right = p.result ? (u == null ? '' : assumed ? `<span class="u muted" title="${esc(p.priceNote || 'No price was recorded, so this counts at an assumed −115.')}">(${esc(units(u))})</span>` : `<span class="u ${u > 0 ? 'green' : u < 0 ? 'red' : 'muted'}">${esc(units(u))}</span>`)
       : '<span class="u muted small">Pending</span>';
     return `<div class="receipt"><span class="r-mark ${mark[0]}" aria-hidden="true">${mark[1]}</span><div><b><span class="sr">${esc(mark[2])}: </span><a href="${esc(vm.href)}" class="plain-link">${esc(niceTitle(p.displayTitle || p.title))}</a></b><span>${esc(meta)}</span></div>${right}</div>`;

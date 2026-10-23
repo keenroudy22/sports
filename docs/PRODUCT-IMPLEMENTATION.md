@@ -1,5 +1,31 @@
 # October 5 product implementation tracker
 
+## October23 posting reset and recap scope repair — release pending
+
+Owner requests early straights, Q1/Q2 tickets,4–8leg lottos and distinct big-slate
+options. Today recap now partitions Best Bets, other straights, fun tickets and
+My Card; a lane net appears only when every included return is known. Thursday
+previous combined0–9–1/-3u becomes Best Bets0–2/-3u and My Card0–7/one cash-out,
+personal net unknown. Original ledger W/L/push values remain unchanged; explicit
+cashout metadata distinguishes the neutral settlement from a sportsbook push.
+
+Prospective full-game lotto construction and admission/release use4–8legs and
++400..+1000, with bounded search and unchanged one-book/different-game, overlap,
+reason, budget and active direction limits. Historical replay keeps old shape.
+No new stake, parallel Climb or daily forced ticket. Existing category caps remain.
+
+Remaining O-20261023-POSTINGRESET-QUARTERS: no verified automatic period-specific
+price/evidence/grading path found in current football/NBA collectors. Next action
+is a free-source coverage inventory, then fixture-tested period capture/grading
+and prospective evaluation before selection. Owner-supplied Q1 tickets remain
+supported separately. Other score-only sports are not promoted by this change.
+This is an actual data/validation blocker, not a fabricated pick under review.
+
+Morning observation:12:57Z Climb scan reports zero supported Friday CFB legs;
+NFL has no games today.13:11Z onward Buffer records30d backoff until18:52:15Z.
+Existing API guard prevents repeated network requests during backoff; no quota
+increase or bypass. Verify actual release receipts, not queue membership.
+
 ## October23 bounded End-Zone caption repair
 
 The daily compact check verified48released rows against live113-row Record,

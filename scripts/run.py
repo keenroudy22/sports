@@ -810,8 +810,12 @@ def longshot_candidate(lines, games, now, league, exclude=(), ctx=None):
     policy = getattr(ctx, 'policy', None)
     shape = direction.fun_shape(policy, now) if ctx is not None else None
     target, options = 500, {'max_legs': 4, 'price_range': (500, 1500), 'max_totals': 1}
+    # Prospective owner reset; historical replays retain their original shape.
+    if eastern_date(now).isoformat() >= '2026-10-23':
+        target = 400
+        options.update(min_legs=4, max_legs=8, price_range=(400, 1000))
     if shape:
-        options['max_legs'] = min(4, shape['legs'][1])
+        options['max_legs'] = min(options['max_legs'], shape['legs'][1])
         lines = direction.fun_legs(policy, lines, now, league)
     ticket, reason = parlay.build(lines, now, None, target, league, exclude, **options)
     if not ticket and ctx is not None and gates.alternate_parlay_frequency({'league': league, 'parlayType': 'easyProps'}, ctx).ok:
@@ -3119,6 +3123,10 @@ def private_release_refusal(row, ctx, now):
     policy = gates.totals_policy(pick, ctx)
     if not policy.ok:
         return policy.reason
+    if pick.get('legs') and pick.get('parlayType') in (None, 'longshot'):
+        policy = gates.longshot_shape(pick, ctx)
+        if not policy.ok:
+            return policy.reason
     if pick.get('parlayType') == 'ladder':
         for rule in (gates.ladder_selective, gates.ladder_supported):
             policy = rule(pick, ctx)
