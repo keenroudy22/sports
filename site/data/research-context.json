@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-23T23:32:44Z",
+  "updatedAt": "2026-10-23T23:44:30Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4685503",
+              "name": "Walter Nolen III",
+              "position": "DT",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-23T23:19Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685503/walter-nolen-iii"
+            },
             {
               "id": "5099542",
               "name": "Wydett Williams Jr.",
@@ -41,15 +50,6 @@
               "injury": null,
               "reportedAt": "2026-10-23T21:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/4373626/tyler-allgeier"
-            },
-            {
-              "id": "4685503",
-              "name": "Walter Nolen III",
-              "position": "DT",
-              "status": "Out",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-23T17:43Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685503/walter-nolen-iii"
             },
             {
               "id": "4367199",
@@ -237,6 +237,33 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "4431194",
+              "name": "Billy Bowman Jr.",
+              "position": "CB",
+              "status": "Out",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-23T23:26Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431194/billy-bowman-jr"
+            },
+            {
+              "id": "3043168",
+              "name": "Za'Darius Smith",
+              "position": "DE",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-23T23:21Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3043168/zadarius-smith"
+            },
+            {
+              "id": "4595343",
+              "name": "Kendal Daniels",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-23T23:18Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4595343/kendal-daniels"
+            },
+            {
               "id": "4239995",
               "name": "A.J. Terrell Jr.",
               "position": "CB",
@@ -309,15 +336,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4361510/cameron-thomas"
             },
             {
-              "id": "4431194",
-              "name": "Billy Bowman Jr.",
-              "position": "CB",
-              "status": "Out",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-23T17:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431194/billy-bowman-jr"
-            },
-            {
               "id": "4241474",
               "name": "Brian Robinson Jr.",
               "position": "RB",
@@ -345,15 +363,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4429014/gervon-dexter-sr"
             },
             {
-              "id": "4595343",
-              "name": "Kendal Daniels",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Neck",
-              "reportedAt": "2026-10-22T21:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4595343/kendal-daniels"
-            },
-            {
               "id": "14012",
               "name": "Andy Dalton",
               "position": "QB",
@@ -363,20 +372,11 @@
               "source": "https://www.espn.com/nfl/player/_/id/14012/andy-dalton"
             },
             {
-              "id": "3043168",
-              "name": "Za'Darius Smith",
-              "position": "DE",
-              "status": "Questionable",
-              "injury": "Neck",
-              "reportedAt": "2026-10-21T22:59Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3043168/zadarius-smith"
-            },
-            {
               "id": "4870988",
               "name": "Avieon Terrell",
               "position": "CB",
               "status": "Questionable",
-              "injury": "Hamstring",
+              "injury": "Back",
               "reportedAt": "2026-10-21T22:59Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870988/avieon-terrell"
             },
@@ -466,6 +466,15 @@
         "33": {
           "name": "Baltimore Ravens",
           "players": [
+            {
+              "id": "4035671",
+              "name": "Tyler Huntley",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T23:25Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035671/tyler-huntley"
+            },
             {
               "id": "3858276",
               "name": "Jaylinn Hawkins",
@@ -638,15 +647,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4870847/jakobi-lane"
             },
             {
-              "id": "4035671",
-              "name": "Tyler Huntley",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-19T08:05Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035671/tyler-huntley"
-            },
-            {
               "id": "4429615",
               "name": "Zay Flowers",
               "position": "WR",
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-23T23:15Z",
+              "reportedAt": "2026-10-23T23:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -4147,6 +4147,15 @@
           "name": "Los Angeles Rams",
           "players": [
             {
+              "id": "4243181",
+              "name": "Nate Landman",
+              "position": "LB",
+              "status": "Out",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-23T23:34Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
+            },
+            {
               "id": "3122132",
               "name": "Myles Garrett",
               "position": "DE",
@@ -4154,15 +4163,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-23T18:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/3122132/myles-garrett"
-            },
-            {
-              "id": "4243181",
-              "name": "Nate Landman",
-              "position": "LB",
-              "status": "Out",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-23T18:29Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
             },
             {
               "id": "4426515",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-23T23:15Z",
+              "reportedAt": "2026-10-23T23:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T23:32:44Z",
-      "lastAttemptAt": "2026-10-23T23:32:44Z",
+      "checkedAt": "2026-10-23T23:44:30Z",
+      "lastAttemptAt": "2026-10-23T23:44:30Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T23:32:44Z",
-      "lastAttemptAt": "2026-10-23T23:32:44Z",
+      "checkedAt": "2026-10-23T23:44:30Z",
+      "lastAttemptAt": "2026-10-23T23:44:30Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
