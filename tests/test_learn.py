@@ -450,7 +450,7 @@ class PostTests(unittest.TestCase):
         self.assertEqual(buffer_post.collect_metrics(log_book, NOW, key='t', send=send, log=lambda *_: None), 0, 'read once')
         said = []
         denied = lambda *a: (200, json.dumps({'errors': [{'message': 'Insufficient scope. Required: insights:read.'}]}).encode())
-        fresh = {'posts': [dict(p, metricsAt=None) for p in log_book['posts']]}
+        fresh = {'posts': [dict(p, metricsAt=None, metricsAttemptAt=None) for p in log_book['posts']]}
         self.assertEqual(buffer_post.collect_metrics(fresh, NOW, key='t', send=denied, log=said.append), 0)
         self.assertEqual(len(said), 1)
 
