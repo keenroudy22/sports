@@ -8,7 +8,8 @@ test('All sports Games merges NBA into day counts, search and finals without col
  const s=load(),api=s.module.exports,stamp=new Date(Date.now()+3600000).toISOString();
  const n={id:'NBA-join',status:'scheduled',kickoff:stamp,teams:{away:{name:'Boston Celtics',abbreviation:'BOS'},home:{name:'Detroit Pistons',abbreviation:'DET'}},projection:{away:110,home:114,total:224,sparse:true}};
  const f={id:'CFB-join',league:'CFB',kickoff:stamp,home:{name:'Home College',abbr:'HC'},away:{name:'Away College',abbr:'AC'},v2:{home:30,away:20,total:50},tier:'mismatch',window:'night'};
- const data={games:[n,{...n,id:'NBA-next',kickoff:new Date(Date.now()+86400000).toISOString()}]},ctx=api.gamesContext({get:async()=>({games:[f]}),maybe:async path=>path==='app/nba.json'?data:null,withLive:games=>({games,refreshed:{}})});
+ // Keep distinct Eastern dates even when the suite runs just before midnight or across DST.
+ const data={games:[n,{...n,id:'NBA-next',kickoff:new Date(Date.parse(stamp)+172800000).toISOString()}]},ctx=api.gamesContext({get:async()=>({games:[f]}),maybe:async path=>path==='app/nba.json'?data:null,withLive:games=>({games,refreshed:{}})});
  ctx.state.league='ALL';ctx.state.games.upDay='all';ctx.state.games.nav={window:'noon',close:true,conf:'all'};
  const views=s.KRGames(ctx);let html=await views.games({});assert.match(html,/Boston Celtics/);assert.match(html,/All · 3/);assert.doesNotMatch(html,/No game matches these filters/);
  ctx.state.games.q='Detroit';html=await views.games({});assert.match(html,/Boston Celtics/);assert.doesNotMatch(html,/Home College/);

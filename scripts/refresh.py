@@ -1,15 +1,35 @@
 """Public schedule/result refresh and immutable pregame baseline forecasts. Stdlib only."""
 import json
 import math
+import time
+import ssl
+from http.client import RemoteDisconnected, IncompleteRead
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from urllib.request import urlopen, Request
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'site' / 'data'
 MODEL = 'elo-total-v1'
 FBS_GROUPS = (80, 1, 4, 5, 8, 9, 12, 15, 17, 18, 37, 151)
+
+def scoreboard_json(url):
+    """Retry transient free-feed transport failures; never bypass TLS or validation."""
+    for attempt in range(3):
+        try:
+            with urlopen(url, timeout=45) as response:
+                return json.load(response)
+        except HTTPError as error:
+            if error.code not in (429, 500, 502, 503, 504) or attempt == 2:
+                raise
+            error.close()
+        except (URLError, TimeoutError, ConnectionError, ssl.SSLError,
+                RemoteDisconnected, IncompleteRead) as error:
+            reason = getattr(error, 'reason', error)
+            if isinstance(reason, ssl.SSLCertVerificationError) or attempt == 2:
+                raise
+        time.sleep(2 ** attempt)
 
 def stamp(dt):
     return dt.isoformat(timespec='seconds').replace('+00:00', 'Z')
@@ -32,8 +52,7 @@ def fetch(league, start, end):
         url = f'https://site.api.espn.com/apis/site/v2/sports/football/{slug}/scoreboard?dates={cursor:%Y%m%d}-{through:%Y%m%d}&limit=1000'
         if league == 'CFB':
             url += '&groups=80'
-        with urlopen(url, timeout=45) as response:
-            data = json.load(response)
+        data = scoreboard_json(url)
         page = data.get('events')
         if not isinstance(page, list):
             raise ValueError(f'{league}: invalid provider response')
@@ -58,8 +77,7 @@ def prior_season(league, year):
     events = {}
     capped = False
     for url in urls:
-        with urlopen(url, timeout=45) as response:
-            payload = json.load(response)
+        payload = scoreboard_json(url)
         page = payload.get('events')
         if not isinstance(page, list):
             raise ValueError(f'{league}: invalid prior-season response')
@@ -107,8 +125,7 @@ def fetch_by_week(league, season, games, now, end):
             url = f'https://site.api.espn.com/apis/site/v2/sports/football/{slug}/scoreboard?dates={season}&seasontype=2&week={week}&limit=1000'
             if group is not None:
                 url += f'&groups={group}'
-            with urlopen(url, timeout=45) as response:
-                payload = json.load(response)
+            payload = scoreboard_json(url)
             page = payload.get('events')
             if not isinstance(page, list):
                 raise ValueError(f'{league}: invalid week {week} group {group} response')
