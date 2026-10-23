@@ -1,6 +1,21 @@
 # October 5 product implementation tracker
 
-## October23 owner-requested full-process audit — release verification pending
+## October23 owner-requested full-process audit — bounded repairs verified
+
+Source6550b9f3 promoted under release/run locks. Normal and clean-export suites
+passed1678Python(two skips)/275Node;456page build,feed,budget(warnings only),
+113row record,NBA0,625file publication guard,assets and isolated1145 rehearsal
+passed(outsideWrite0/privateRead0). Local375/1440 no overflow or console errors.
+An inherited permission test reused the newly protected analytics cooldown;
+its fixture now clears the prior attempt. All gates reran after that repair.
+Hosted39985788913 was superseded by a later data push. Containing run39985859542
+(headffc41f2a includes6550b9f3) SUCCESS; live375px loaded with375px document,
+no caught load error or console errors. Screenshot in owner folder:
+kookn-audit-live-2026-10-23.png. Production health confirms waiting1/delayed1
+and provider retry18:52:15Z. This verifies the repair, not subsequent delivery.
+Full owner report: kookn-audit-2026-10-23.txt. Personal unit25; public units and
+historical results unchanged. Proposed3u ordinary/5u big-slate combined ceiling
+is NOT owner-approved; their latest reply asks for a recommendation.
 
 Bounded fixes: optional analytics now follows publishing; first-read failures have
 a6-hour retry cooldown; first reads older than192hours age out;300requests remain
