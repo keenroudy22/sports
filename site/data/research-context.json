@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T18:16:22Z",
+  "updatedAt": "2026-10-23T18:27:39Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-23T18:01Z",
+              "reportedAt": "2026-10-23T18:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,16 +1162,16 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-23T18:01Z",
+              "reportedAt": "2026-10-23T18:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4258595",
               "name": "Cole Kmet",
               "position": "TE",
-              "status": "Questionable",
+              "status": "Injured Reserve",
               "injury": "Knee",
-              "reportedAt": "2026-10-23T16:35Z",
+              "reportedAt": "2026-10-23T18:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4258595/cole-kmet"
             },
             {
@@ -3469,7 +3469,7 @@
               "id": "4428331",
               "name": "Rashee Rice",
               "position": "WR",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Hamstring",
               "reportedAt": "2026-10-23T17:04Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428331/rashee-rice"
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-23T18:01Z",
+              "reportedAt": "2026-10-23T18:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "26",
-          "name": "Tyrice Knight",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T23:33:03Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4686540/tyrice-knight"
-        },
-        {
-          "teamId": "26",
-          "name": "Rashid Shaheed",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T23:33:03Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4032473/rashid-shaheed"
-        },
-        {
           "teamId": "3",
           "name": "Anthony Johnson Jr.",
           "from": "Injured Reserve",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-10-23T18:04:10Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685702/quinshon-judkins"
+        },
+        {
+          "teamId": "3",
+          "name": "Cole Kmet",
+          "from": "Questionable",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-23T18:27:39Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4258595/cole-kmet"
+        },
+        {
+          "teamId": "12",
+          "name": "Rashee Rice",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T18:27:39Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4428331/rashee-rice"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T18:16:22Z",
-      "lastAttemptAt": "2026-10-23T18:16:22Z",
+      "checkedAt": "2026-10-23T18:27:39Z",
+      "lastAttemptAt": "2026-10-23T18:27:39Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T18:16:22Z",
-      "lastAttemptAt": "2026-10-23T18:16:22Z",
+      "checkedAt": "2026-10-23T18:27:39Z",
+      "lastAttemptAt": "2026-10-23T18:27:39Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
