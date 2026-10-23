@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T16:51:04Z",
+  "updatedAt": "2026-10-23T17:01:50Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -930,7 +930,7 @@
               "id": "4242975",
               "name": "Jaelan Phillips",
               "position": "LB",
-              "status": "Doubtful",
+              "status": "Out",
               "injury": "Hamstring",
               "reportedAt": "2026-10-22T21:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips"
@@ -958,7 +958,7 @@
               "name": "Monroe Freeling",
               "position": "OT",
               "status": "Active",
-              "injury": null,
+              "injury": "Knee",
               "reportedAt": "2026-10-22T01:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
             },
@@ -3009,7 +3009,7 @@
               "id": "4431459",
               "name": "Tyler Warren",
               "position": "TE",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Groin",
               "reportedAt": "2026-10-23T16:09Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431459/tyler-warren"
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "34",
-          "name": "Trent Brown",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T21:04:48Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3043109/trent-brown"
-        },
-        {
-          "teamId": "27",
-          "name": "Christian Rozeboom",
-          "from": "Questionable",
-          "to": "Injured Reserve",
-          "observedAt": "2026-10-22T21:04:48Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3909013/christian-rozeboom"
-        },
-        {
           "teamId": "3",
           "name": "Anthony Johnson Jr.",
           "from": "Injured Reserve",
@@ -7764,11 +7748,27 @@
           "to": "Doubtful",
           "observedAt": "2026-10-23T16:51:04Z",
           "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
+        },
+        {
+          "teamId": "29",
+          "name": "Jaelan Phillips",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-10-23T17:01:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips"
+        },
+        {
+          "teamId": "11",
+          "name": "Tyler Warren",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T17:01:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431459/tyler-warren"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T16:51:04Z",
-      "lastAttemptAt": "2026-10-23T16:51:04Z",
+      "checkedAt": "2026-10-23T17:01:50Z",
+      "lastAttemptAt": "2026-10-23T17:01:50Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T16:51:04Z",
-      "lastAttemptAt": "2026-10-23T16:51:04Z",
+      "checkedAt": "2026-10-23T17:01:50Z",
+      "lastAttemptAt": "2026-10-23T17:01:50Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
