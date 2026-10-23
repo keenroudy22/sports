@@ -1,5 +1,23 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## Owner-approved staking update — October 23, 17:40 UTC
+
+Prospective ordinary straights use 0.5u; the stricter Chef's Pick tier uses 1u.
+All new admissions share a 3u ordinary-day / 5u big-slate-day exposure ceiling,
+including NBA Trial, private reservations, Climb and fun tickets. Big slate means
+Saturday/Sunday or at least eight NFL/CFB/NBA fixtures on the Eastern game day.
+Settlements, wins and cash-outs do not replenish that day's allowance. Climb
+exposure uses its actual dollar stake divided by the owner's current private $25
+unit; public straight posts remain in units, not personal dollars. Missing personal
+ticket stakes hold additional same-day exposure instead of inventing units.
+Target 3–5 qualifying straights, with capacity for up to eight on big slates; never
+lower evidence standards or force tickets to fill a quota. Existing narrower lane,
+trial, correlation and learned safety limits still apply. Do not rescale public
+history or already-delivered tickets. This supersedes older 1u/2u stake defaults.
+The existing five-minute worker owns delayed Buffer releases: recheck current
+exact price, eligibility, exposure and hard news before publishing; retain actual
+Discord/public/X receipts. Provider backoff is not permission to bypass Buffer.
+
 Codex (or any coding agent) reads this first. It is the whole job in one place: what the desk is, the rules that
 never bend, where everything lives, how to change and deploy it, and the owner's current decisions. The long
 history and every mechanism in detail are in `DESK.md`; the research rules in `RESEARCH.md` and `PROMPT.md`.

@@ -1,5 +1,26 @@
 # October 5 product implementation tracker
 
+## October23 approved staking and delayed-release follow-through — in verification
+
+Owner approved the recommended prospective0.5u ordinary/1u Chef stakes and shared
+3u ordinary/5u big-slate ceiling. This supersedes the approval-needed statements
+below, not historical public stakes. All lanes/private reservations share exposure;
+Climb uses actual stake/private25unit. Wins and cash-outs never reset daily usage.
+New source tests include historical preservation, Eastern dates, NBA/football/private
+aggregation, Climb dollars, unknown stakes and latest exact-price release checks.
+Pending CFB admission remains provider-delayed until18:52:15Z; existing worker must
+recheck price/news and regenerate only unpublished art before Discord/public/X.
+No delivered receipt is claimed here. Finish full/clean suites, locked release,
+hosted success and live verification, then append evidence. Prior113official/NBA0
+record baseline remains unchanged. The broader audit continues underKA-R1.
+
+Pre-release verification:1689Python(two skips)/275Node passed both normal and
+clean export;459pages built;feed/budget(no hard issues),113record/NBA0,628file
+publication guard and asset checks passed. Isolated1330 rehearsal la0zait5:
+exit0/outcomeok, outsideWrite0/privateRead0. Local375/1440 no overflow or console
+errors; Today/NBA copy shows new stakes and saved historical stakes. Stored-input
+recheck17:54Z passes pending UMass–UConn over50.5/-108 at0.5u; not a live receipt.
+
 ## October23 owner-requested full-process audit — bounded repairs verified
 
 Source6550b9f3 promoted under release/run locks. Normal and clean-export suites

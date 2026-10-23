@@ -446,7 +446,7 @@ test('the browser shell requests the core build that exports the shared headline
 });
 
 test('new tiers show1u and2u consistently while legacy Full Sends retain their stake', async () => {
-  for (const [lane, riskUnits, label] of [['best_bet',1,'Best Bet · 1u'],['chef_pick',2,"Chef&#39;s Pick · 2u"],['gut_call',.5,'Full Send']]) {
+  for (const [lane, riskUnits, label] of [['best_bet',1,'Best Bet · 1u'],['chef_pick',2,"Chef&#39;s Pick · 2u"],['best_bet',.5,'Best Bet · 0.5u'],['chef_pick',1,"Chef&#39;s Pick · 1u"],['gut_call',.5,'Full Send']]) {
     const pick={...prop,lane,riskUnits,featured:true,
       ...(lane==='gut_call'?{}:{selectionPolicy:'2026-10-19-1u-2u'})};
     if(lane==='gut_call') pick.featured=false;

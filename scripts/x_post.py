@@ -712,7 +712,7 @@ def guard(text, pick, reason=None, now_quote=None):
         elif chance <= needed:
             problems.append(f'play chance {chance:.1%} does not beat the price need {needed:.1%}')
     if pick.get('selectionPolicy') == gates.TIER_POLICY or lane == 'chef_pick':
-        expected = {'best_bet': 1, 'chef_pick': 2}.get(lane)
+        expected = gates.staking.expected(pick) if lane in ('best_bet', 'chef_pick') else None
         if expected is None or pick.get('riskUnits') != expected or pick.get('selectionPolicy') != gates.TIER_POLICY:
             problems.append('play tier and published stake do not match')
     return problems

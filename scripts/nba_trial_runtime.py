@@ -192,8 +192,12 @@ def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True):
  now=max(now,datetime.now(timezone.utc))
  if review is None:review=json.loads(REVIEW.read_text())
  for offer in candidates(now):
+  nba_trial.staking.apply(offer,now)
   if nba_trial.evaluate(offer,stored,now,preview_sent=review['sentAt']):continue
-  nba_trial.record_publish(offer,now,root,preview_sent=review['sentAt'])
+  try:nba_trial.record_publish(offer,now,root,preview_sent=review['sentAt'])
+  except ValueError as error:
+   if str(error).startswith('shared exposure:'):return {'state':'held','reason':str(error)}
+   raise
   return {'state':'admitted','id':offer['id']}
  return {'state':'no-play','reason':'no fresh, supported, role-clear total passes every gate'}
 
@@ -293,12 +297,13 @@ def render_due(now,folder,log=print,root=nba_trial.STORE):
   quote={'book':play['book'],'retrievedAt':play['retrievedAt'],'current':current}
   # Same reviewed layout; actual play label and real supporting reason replace preview wording.
   svg=nba_trial.preview_svg(play['game'],quote,preview=False,direction=play['direction'],reason=play['reasons'][0],
-                            market=play.get('marketType','total'),line=play['line'],odds=play['odds'])
+                            market=play.get('marketType','total'),line=play['line'],odds=play['odds'],units=play.get('riskUnits',1))
   pick_card.render(svg,path)
 
 
 def current_match(play,now):
  for candidate in candidates(now,lead_minutes=0):
+  nba_trial.staking.apply(candidate,now)
   if candidate['id']==play['id'] and all(candidate[k]==play[k] for k in ('book','line','odds','direction')):
    try:review=json.loads(REVIEW.read_text())
    except (OSError,ValueError):return False

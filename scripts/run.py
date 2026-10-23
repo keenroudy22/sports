@@ -876,10 +876,12 @@ def choose_straight_tier(candidate, ctx):
     chef = gates.selection_verdict(candidate, ctx, 'chef_pick')
     if chef.ok:
         candidate.update(lane='chef_pick', riskUnits=2)
+        gates.staking.apply(candidate, ctx.now)
         return chef
     regular = gates.selection_verdict(candidate, ctx, 'best_bet')
     if regular.ok:
         candidate.update(lane='best_bet', riskUnits=1)
+        gates.staking.apply(candidate, ctx.now)
     return regular
 
 
@@ -956,6 +958,7 @@ def price(candidate, ctx, now):
     # original lane and stake; the policy is never retrofitted onto the record.
     if not candidate.get('publishedAt') and game.get('league') in ('NFL', 'CFB'):
         candidate.update(selectionPolicy=gates.TIER_POLICY, lane='best_bet', riskUnits=1)
+        gates.staking.apply(candidate, now)
     p = dict(p, **{key: selection[key] for key in
                    ('chance', 'breakEven', 'edgePoints', 'evPerUnit', 'calibration', 'calibrated')})
     candidate['_desk'] = p
@@ -2509,6 +2512,7 @@ def _run(args, now, slot, kinds, status):
             candidate['lane'] = 'hot_plate' if day not in hot_days else 'best_bet'
             candidate['favorite'] = candidate['lane'] == 'hot_plate'
             candidate['riskUnits'] = 1
+            gates.staking.apply(candidate, now)
         hot_days.add(day)
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
         ctx.first[candidate['id']] = dict(candidate, league=league, publishedAt=stamp(now), kind=kind)
@@ -2586,6 +2590,10 @@ def _run(args, now, slot, kinds, status):
                        'riskUnits': 1, 'quoteType': 'capture', 'publishedAt': stamp(now),
                        'expiresAt': stamp(min(gates.when(games[g]['kickoff']) for g in ticket['gameIds'])),
                        'sources': sorted({games[g]['source'] for g in ticket['gameIds'] if games[g].get('source')})})
+        risk = gates.daily_exposure(ticket, ctx)
+        if not risk.ok:
+            log(f"Safer combo: {risk.reason}")
+            continue
         ctx.first[ticket['id']] = dict(ticket, kind='parlays', league=first_game['league'])
         ctx.latest[ticket['id']] = dict(ticket)
         published.append((first_game['league'], 'parlays', ticket))
@@ -3106,6 +3114,23 @@ def recover_private_release_artifacts(row, ctx, games, now):
     return row
 
 
+def normalize_private_stake(row, ctx, now):
+    """Version only never-public admissions and force fresh, unposted art."""
+    if row.get('discordSentAt') or row.get('publicPath') or not gates.staking.active(now):
+        return row
+    import release_queue
+    pick = dict(row.get('pick') or {})
+    revised = gates.staking.apply(dict(pick), now)
+    if revised == pick:
+        return row
+    key = row['id']
+    row = release_queue.update(CONF, key, pick=revised, caption=None,
+        card=str(release_queue.cards(CONF) / f'{key}-staking-v1.png'), precheckedAt=None)
+    ctx.first[key] = dict(revised, _pendingRelease=True)
+    ctx.latest[key] = dict(ctx.first[key])
+    return row
+
+
 def private_release_refusal(row, ctx, now):
     """Return the release-time reason a private admission must be withdrawn.
 
@@ -3121,6 +3146,17 @@ def private_release_refusal(row, ctx, now):
         return 'its saved quote has no valid release window'
     if not quoted <= now < expires:
         return f"its saved quote expired at {expires.astimezone(EASTERN):%-I:%M %p} ET"
+    if gates.staking.active(now) and not row.get('discordSentAt') and not row.get('publicPath'):
+        risk = gates.daily_exposure(pick, ctx)
+        if not risk.ok:
+            return risk.reason
+        if not pick.get('legs') and not pick.get('parlayType'):
+            fresh = gates.fresh_quote(pick, ctx)
+            if not fresh.ok:
+                return fresh.reason
+            if not any(pair.get('book') == pick.get('book') and pair.get('side') == pick.get('odds')
+                       for pair in gates.exact_price_pairs(pick, ctx)):
+                return 'its exact book/line/price no longer matches the latest capture; fresh selection required'
     policy = gates.totals_policy(pick, ctx)
     if not policy.ok:
         return policy.reason
@@ -3134,7 +3170,7 @@ def private_release_refusal(row, ctx, now):
             if not policy.ok:
                 return policy.reason
     if pick.get('selectionPolicy') == gates.TIER_POLICY:
-        expected = {'best_bet': 1, 'chef_pick': 2}.get(pick.get('lane'))
+        expected = gates.staking.expected(pick) if pick.get('lane') in ('best_bet', 'chef_pick') else None
         if expected is None or pick.get('riskUnits') != expected:
             return 'its selected tier and stake do not match'
         probe = dict(pick, _planReasons=(row.get('decision') or {}).get('planReasons') or [])
@@ -3165,6 +3201,7 @@ def release_private(now, log=log, only=None):
     stores = gates.Stores(records=features.load())
     ctx = stores.as_of(now)
     slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
+    release_queue.merge_context(ctx, CONF)
     ctx.games = live_games(now, {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')})
     log_book = x_post.load_log()
     channel = buffer_post.x_channel(wanted='keenkooks')
@@ -3179,9 +3216,14 @@ def release_private(now, log=log, only=None):
         starts = sorted(gates.when(ctx.games[g]['kickoff']) for g in pick.get('gameIds') or [] if g in ctx.games)
         if not key or not starts or row.get('held'):
             continue
+        row = normalize_private_stake(row, ctx, now)
+        pick = dict(row.get('pick') or {})
         refusal = private_release_refusal(row, ctx, now)
         if refusal:
             release_queue.remove(CONF, key)
+            if not row.get('discordSentAt') and not row.get('publicPath'):
+                ctx.first.pop(key, None)
+                ctx.latest.pop(key, None)
             log(f'release: {key} withdrawn before public release: {refusal}')
             alert("Kook'n play withdrawn before release", f'{key}: {refusal}')
             continue
@@ -3215,7 +3257,7 @@ def release_private(now, log=log, only=None):
 
         # Deterministic hard-news precheck.  A model concern never withdraws
         # an admitted play, but typed out/doubtful/inactive news still does.
-        if not row.get('precheckedAt'):
+        if not row.get('precheckedAt') or now - gates.when(row['precheckedAt']) > timedelta(minutes=15):
             context_file = live_context(stores.context_file, now)
             check_status = {'llm': {'judged': 0},
                             'research': {'asked': 0, 'verified': 0, 'dropped': 0}}

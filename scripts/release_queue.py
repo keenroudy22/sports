@@ -62,6 +62,10 @@ def merge_context(ctx, conf):
         key = pick.get('id')
         if not key or row.get('releasedAt') or key in ctx.first:
             continue
+        if row.get('held') and not (row.get('discordSentAt') or row.get('publicPath')):
+            continue
+        if not (row.get('discordSentAt') or row.get('publicPath')):
+            gates.staking.apply(pick, ctx.now)
         pick['_pendingRelease'] = True
         pick['admittedAt'] = row.get('admittedAt')
         # Existing gates order and cap public rows by publishedAt.  This copy is

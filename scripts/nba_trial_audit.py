@@ -13,7 +13,7 @@ def audit(payload,root=nba_trial.STORE):
   day=boxscores.instant(p['kickoff']).astimezone(nba_trial.EASTERN).date()
   if p['id'] in ids:issues.append('published ID rewritten')
   if day in days:issues.append('more than one NBA Trial on a game day')
-  if p.get('riskUnits')!=1 or p.get('league')!='NBA':issues.append('stake/league mismatch')
+  if p.get('riskUnits')!=nba_trial.staking.expected(p) or p.get('league')!='NBA':issues.append('stake/league mismatch')
   ids.add(p['id']);days.add(day)
  focus=runtime.current_plays(root);focusids={p['id'] for p in focus}
  expected=nba_trial.snapshot([r for r in saved if r.get('id') in focusids])

@@ -294,14 +294,14 @@
     if (state.league === 'NBA' && tab === 'official') {
       const data = await get('app/nba.json'), trial = data.trial || {}, r = trial.record || {};
       const plays = (trial.plays || []).slice().reverse();
-      return `${head('NBA record', 'NBA Trial record', 'Posted NBA plays only. This 1u Trial stays separate from football and from paper projections.')}
+      return `${head('NBA record', 'NBA Trial record', 'Posted NBA plays at their saved stakes. This Trial stays separate from football and from paper projections.')}
         <div class="kpis"><div class="kpi"><small>NBA Trial</small><b class="num">${esc(r.win || 0)}–${esc(r.loss || 0)}</b><span>${esc(r.graded || 0)} graded</span></div><div class="kpi"><small>Net</small><b class="num">${esc(units(Number(r.units || 0)))}</b><span>at the posted stakes and prices</span></div></div>
         ${plays.length ? `<div class="receipts">${plays.map(p => {
           const teams = p.teams || {}, side = p.direction;
           const team = teams[side]?.displayName || teams[side]?.name || teams[side]?.abbreviation || '';
           const line = p.marketType === 'total' ? `${side} ${p.line}` : p.marketType === 'moneyline' ? `${team} moneyline` : `${team} ${C.signed(p.line)}`;
           const matchup = `${teams.away?.displayName || teams.away?.name || teams.away?.abbreviation || ''} at ${teams.home?.displayName || teams.home?.name || teams.home?.abbreviation || ''}`;
-          return `<article class="receipt"><div><b>${esc(matchup)} · ${esc(line)}</b><span>${esc(oddsText(p.odds))} ${esc(bookLabel(p.book))} · 1u · ${esc(whenShort(p.kickoff))}</span><span>${p.result ? `${esc(p.result)} · final ${esc(p.actual)}` : 'Not graded yet'}</span></div>${p.card ? `<a href="${esc(p.card)}">Ticket ↗</a>` : ''}</article>`;
+          return `<article class="receipt"><div><b>${esc(matchup)} · ${esc(line)}</b><span>${esc(oddsText(p.odds))} ${esc(bookLabel(p.book))} · ${C.stakeOf(p)}u · ${esc(whenShort(p.kickoff))}</span><span>${p.result ? `${esc(p.result)} · final ${esc(p.actual)}` : 'Not graded yet'}</span></div>${p.card ? `<a href="${esc(p.card)}">Ticket ↗</a>` : ''}</article>`;
         }).join('')}</div>` : '<p class="muted small">No NBA Trial play has been posted yet. Research projections and historical hit counts are not betting results.</p>'}
         <p class="btn-row"><a class="btn small" href="#today?sport=NBA">NBA Today ›</a><a class="btn small" href="#record/trials">Paper-trial evidence ›</a></p>`;
     }
@@ -528,8 +528,8 @@
       <div class="card"><p class="eyebrow green">Do your own research</p><h3 style="margin-top:4px">The research board</h3><p class="small" style="margin-top:4px">Sort lines by how far our chance is above what the price needs. Compare past results, matchups and defenses. Save players or lines for later.</p><p style="margin-top:8px"><a class="btn small" href="#research/lines">Open Research →</a></p></div></div>`)}
     ${section('Inside the free Discord', `<div class="card"><p><b>Plays & Results:</b> posted plays only. Best bets usually land here 10–15 minutes before X.</p><p style="margin-top:6px"><b>General chat:</b> games, questions and feedback. <b>Wins & Bad Beats:</b> wins and close misses.</p><p class="small muted" style="margin-top:6px">Research is not a best bet. A historical hit rate is not a promise. Check the exact line and price yourself.</p><p style="margin-top:10px"><a class="btn primary small" href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener">Join the Discord ↗</a></p></div>`)}
     ${section('Glossary', `<dl class="glossary card">
-      <dt>Best Bet · 1u</dt><dd>A price-checked play with positive estimated value and a supporting reason. Injury, role and current-price checks still apply.</dd>
-      <dt>Chef's Pick · 2u</dt><dd>The rarer, stronger tier. It must also clear the stricter value and observed-performance checks. Higher conviction is not a guarantee. New plays use the posted stake; earlier results stay unchanged.</dd>
+      <dt>Best Bet · 0.5u</dt><dd>A price-checked play with positive estimated value and a supporting reason. Injury, role and current-price checks still apply.</dd>
+      <dt>Chef's Pick · 1u</dt><dd>The rarer, stronger tier. It must also clear the stricter value and observed-performance checks. Higher conviction is not a guarantee. New plays use the posted stake; earlier results stay unchanged.</dd>
       <dt>Pick of the Day</dt><dd>The one best bet we feature each day. Its record is shown on the Record page.</dd>
       <dt>Research</dt><dd>Lines we track and grade but did not post. Useful context, not picks.</dd>
       <dt>Unit (u)</dt><dd>One standard stake. +1.00u means you won one stake; −1.00u means you lost one.</dd>

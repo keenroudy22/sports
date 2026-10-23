@@ -22,6 +22,7 @@ Usage: python scripts/gates.py CANDIDATE.json      evaluate one candidate agains
 Stdlib only.
 """
 import argparse
+import staking
 import json
 import re
 import sys
@@ -116,6 +117,8 @@ class Context:
     flags: dict = field(default_factory=lambda: dict(FLAGS))
     policy: dict = field(default_factory=learning.default_policy)   # learned thresholds; the defaults are the written rules
     root: Path = ROOT                              # private run evidence stays inside this checkout/rehearsal copy
+    risk_external: dict = field(default_factory=dict)
+    risk_games: dict = field(default_factory=dict)
 
     def snapshot(self, game_id):
         game = self.games.get(game_id)
@@ -897,6 +900,8 @@ def card_cap(candidate, ctx):
         return Decision(False, 'card_cap', 'game not in the slate')
     weekend = day.weekday() in (5, 6)
     size = CARD['weekend'] if weekend else CARD['weekday']
+    if staking.active(ctx.now):
+        size = 8 if staking.limit(day, {**ctx.games, **ctx.risk_games}) == 5 else 5
     league = candidate.get('league')
     games_that_day = sum(1 for game in ctx.games.values()
                          if game.get('league') == league
@@ -904,7 +909,7 @@ def card_cap(candidate, ctx):
                          and game.get('state') != 'post')
     large_slate = games_that_day >= CARD['largeGames']
     if large_slate:
-        size = CARD['large']
+        size = 8 if staking.active(ctx.now) else CARD['large']
     if weekend and not large_slate:
         size = direction.weekend_cap(ctx.policy, ctx.now, size)
     plays = []
@@ -938,7 +943,13 @@ def card_cap(candidate, ctx):
         recent_totals = sum(market_key(pick) == 'total' for pick in recent)
         if recent and (recent_totals + 1) / (len(recent) + 1) > .40:
             return Decision(False, 'card_cap', 'a total would put the rolling seven-day card above 40% totals')
-    return Decision(True, 'card_cap', f"{len(plays)} of {size} on the {day} card")
+    risk = daily_exposure(candidate, ctx)
+    return risk if not risk.ok else Decision(True, 'card_cap', f"{len(plays)} of {size} on the {day} card")
+
+
+def daily_exposure(candidate, ctx):
+    reason = staking.check(candidate, ctx)
+    return Decision(not reason, 'daily_exposure', reason or 'inside shared daily exposure ceiling')
 
 
 def lean_daily_cap(candidate, ctx):
@@ -1412,7 +1423,7 @@ def ladder_supported(candidate, ctx):
     return Decision(not reason, 'ladder_supported', reason or 'all legs retain conservative price and proven-segment support')
 
 
-FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy')))
+FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy', 'stakingPolicy')))
 
 
 def revision_frozen(candidate, ctx):
@@ -1452,7 +1463,8 @@ RULES = {
 def evaluate(candidate, ctx, kind=None):
     """Every applicable rule's decision, in order. Nothing short-circuits, so a report can name every problem."""
     kind = kind or kind_of(candidate)
-    return [rule(candidate, ctx) for rule in RULES[kind]]
+    rules = RULES[kind] + ((daily_exposure,) if kind != 'revision' else ())
+    return [rule(candidate, ctx) for rule in rules]
 
 
 def admit(candidate, ctx, kind=None):
@@ -1549,6 +1561,7 @@ def context(now, stores, flags=None):
     reports = [r for r in stores.reports if r.get('publishedAt') and when(r['publishedAt']) <= now]
     first, latest = build_site.first_publications(reports)
     appearances, established, names, player_team, starters, passers = roster_facts(stores.records, now)
+    risk_external, risk_games = staking.external(stores.root, now) if staking.active(now) else ({}, {})
     return Context(now=now, games=games,
                    odds={g: r for g, rows in stores.odds.items() if (r := latest_before(rows, now))},
                    odds_history=stores.odds,
@@ -1558,7 +1571,7 @@ def context(now, stores, flags=None):
                    scoreboard=stores.scoreboard, first=first, latest=latest, appearances=appearances,
                    established=established, names=names, player_team=player_team, starters=starters, passers=passers,
                    player_logs=features.player_logs(stores.records, before=now),
-                   records=stores.records, root=stores.root,
+                   records=stores.records, root=stores.root, risk_external=risk_external, risk_games=risk_games,
                    flags=dict(FLAGS, **(flags or {})), policy=learning.load_policy(stores.root / 'data' / 'learning' / 'policy.json'))
 
 

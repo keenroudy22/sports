@@ -57,7 +57,7 @@ class ReleaseQueueTests(unittest.TestCase):
             self.assertNotIn('publishedAt', stored['pick'])
             self.assertEqual(stored['kickoffs'], ['2026-10-11T17:00:00Z'])
             self.assertTrue(Path(stored['card']).exists())
-            ctx = SimpleNamespace(first={}, latest={})
+            ctx = SimpleNamespace(first={}, latest={}, now=NOW)
             release_queue.merge_context(ctx, root)
             self.assertTrue(ctx.first['play']['_pendingRelease'])
             self.assertEqual(ctx.first['play']['publishedAt'], '2026-10-11T12:00:00Z')

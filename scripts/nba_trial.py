@@ -4,12 +4,14 @@ This module makes no feed or social call. Football's publication and record path
 never read this ledger. Opening-night posting integration remains a separate gate.
 """
 import math
+import os
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 import boxscores
 import espn_props
 import nba_capture
+import staking
 
 STORE=Path(__file__).resolve().parents[1]/'data'/'nba-trial'
 OPENING=date(2026,10,20)
@@ -26,7 +28,7 @@ def snapshot(rows):
         result=final['result']
         wins+=result=='win';losses+=result=='loss';pushes+=result=='push'
         odds=play['odds']
-        net += (100/-odds if odds<0 else odds/100) if result=='win' else -1 if result=='loss' else 0
+        net += play.get('riskUnits',1)*((100/-odds if odds<0 else odds/100) if result=='win' else -1 if result=='loss' else 0)
     net=round(net,6)
     graded=wins+losses+pushes
     return {'label':'NBA Trial','win':wins,'loss':losses,'push':pushes,'graded':graded,
@@ -52,7 +54,8 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if not .99<=espn_props.implied(odds)+espn_props.implied(opposite)<=1.15:problems.append('price-pair hold')
         if offer.get('sideVerified') is not True or offer.get('exactLineVerified') is not True:problems.append('exact-side hold')
         if offer.get('roleChecked') is not True or offer.get('roleHold') or offer.get('priceHold') or offer.get('injuryHold'):problems.append('role/price hold')
-        if isinstance(offer.get('riskUnits'),bool) or offer.get('riskUnits')!=1:problems.append('1u only')
+        if isinstance(offer.get('riskUnits'),bool) or offer.get('riskUnits')!=staking.expected(offer):problems.append('stake policy mismatch')
+        if staking.active(now) and offer.get('stakingPolicy')!=staking.VERSION:problems.append('current stake policy required')
         calibrated=calibration_verified is True and offer.get('calibrated') is True
         chance=offer['chance'] if calibrated else offer['rawChance']
         if isinstance(chance,bool) or not isinstance(chance,(float,int)) or not math.isfinite(chance) or not 0<=chance<=1:
@@ -74,16 +77,23 @@ def record_publish(offer,now,root=STORE,preview_sent=None,calibration_verified=F
     rows=[r for p in root.glob('*.jsonl') for r in boxscores.read_store(p)]
     problems=evaluate(offer,rows,now,preview_sent,calibration_verified)
     if problems:raise ValueError('; '.join(problems))
+    if staking.active(now):
+        import gates, release_queue
+        ctx=gates.Stores(root=root.parent.parent).as_of(now)
+        conf = Path(os.environ.get('KEENROUDY_CONF', str(Path.home()/'.config/keenroudy'))) if root == STORE else root.parent.parent/'work'
+        release_queue.merge_context(ctx, conf)
+        refusal=staking.check(offer,ctx)
+        if refusal:raise ValueError(refusal)
     required=('id','league','season','seasonType','kickoff','marketType','line','odds','oppositeOdds','book',
               'retrievedAt','rawChance','riskUnits','source')
     row={key:offer[key] for key in required}
-    for key in ('eventId','game','reasons','projection','model','direction'):
+    for key in ('eventId','game','reasons','projection','model','direction','stakingPolicy'):
         if key in offer:row[key]=offer[key]
     row.update(type='publish',series='NBA Trial',publishedAt=boxscores.stamp(now))
     return nba_capture.append_changed([row],root,lambda r:(r['type'],r['id']))
 
 
-def preview_svg(game, quote, *, preview=True, direction='under', reason=None, market='total', line=None, odds=None):
+def preview_svg(game, quote, *, preview=True, direction='under', reason=None, market='total', line=None, odds=None, units=1):
     """Real stored total quote, clearly labeled layout preview; no admission or invented chance."""
     import ticket_cards
     import ticket_kit
@@ -111,7 +121,7 @@ def preview_svg(game, quote, *, preview=True, direction='under', reason=None, ma
           'market':market,'line':f"{chosen_line:g}",'odds':chosen_odds,'book':quote['book'],
           'chance':None,'needs':None,'calibrated':False,
           'reason':('Layout preview only. No play posted. Price seen '+quote['retrievedAt'][:10]+'.') if preview else reason,
-          'units':1.,'photo':None,'team_logo':None,
+          'units':units,'photo':None,'team_logo':None,
           'team_colors':{home['abbreviation']:('#17241f','#eef4ec'),away['abbreviation']:('#17241f','#eef4ec')},
           'side':side}
     card=ticket_cards.play_card(data)
