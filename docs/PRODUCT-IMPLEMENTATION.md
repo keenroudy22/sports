@@ -1,5 +1,16 @@
 # October 5 product implementation tracker
 
+## October23 NBA afternoon freshness coverage — in verification
+
+Six existing planned free NBA game-capture windows are retained. Move the23:30
+pregame capture to the existing13:30 Climb worker, leaving6:45,8:30,11:45,17:30
+and21:00 unchanged. This reduces the old11:45→17:30 gap below the four-hour
+quote window on the normal schedule. Actual run/provider delays can still make
+quotes stale; timestamps and four-hour suppression remain authoritative.
+Paper/final work and player-prop capture keep their original cadence. No new
+launchd job, paid request allowance, feed source, per-capture40request/150second
+budget or public post is added. O-20261023-NBAFRESH tracks tests and deployment.
+
 ## October23 NBA comparison parity and CFB spread visibility — in verification
 
 NBA stored same-snapshot DraftKings spreads/moneylines were omitted by the public

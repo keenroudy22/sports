@@ -15,6 +15,18 @@ import buffer_post
 
 
 class SlotTests(unittest.TestCase):
+    def test_nba_game_capture_reuses_six_windows_without_an_afternoon_freshness_hole(self):
+        windows = [(6,45),(8,30),(10,0),(11,45),(13,30),(16,0),(17,30),(20,0),(21,0),(23,30)]
+        selected = [datetime(2026,10,23,h,m,tzinfo=run.EASTERN) for h,m in windows
+                    if run.nba_game_capture_due(datetime(2026,10,23,h,m,tzinfo=run.EASTERN))]
+        self.assertEqual([(t.hour,t.minute) for t in selected],[(6,45),(8,30),(11,45),(13,30),(17,30),(21,0)])
+        self.assertEqual(len(selected),6)
+        self.assertLessEqual(max(b-a for a,b in zip(selected,selected[1:])),timedelta(hours=4))
+        self.assertIn(23,run.PAPER_SLOTS,'late paper grading is not removed')
+        source=Path(run.__file__).read_text()
+        self.assertEqual(source.count('nba_capture.step(now, scheduled=True)'),1,'only one NBA game capture path')
+        self.assertIn("slot.hour in PAPER_SLOTS or (slot.hour,slot.minute) in ((6,45),(8,30))",source,'prop cadence unchanged')
+
     def test_buffer_cooldown_is_delivery_delay_not_permanent_validation_hold(self):
         import release_queue
         now=datetime(2026,10,20,14,tzinfo=timezone.utc)

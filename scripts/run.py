@@ -1445,6 +1445,15 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
 PAPER_SLOTS = (11, 17, 21, 23)  # silent expansion trials include West Coast and overnight finals
 
 
+def nba_game_capture_due(slot):
+    """Six existing daily capture opportunities, with late-night pregame work moved to lunch.
+
+    Keep morning/late-slate coverage and the same free-feed request/time caps.
+    The 13:30 Climb worker already runs; no new job, prop call or paper slot.
+    """
+    return slot.hour in (11, 13, 17, 21) or (slot.hour, slot.minute) in ((6, 45), (8, 30))
+
+
 def paper_trials(now, slot, status):
     """Silent expansion work: basketball paper picks plus MLB/NHL market evidence. Publish nothing."""
     if slot.hour not in PAPER_SLOTS:
@@ -1469,16 +1478,6 @@ def paper_trials(now, slot, status):
     except Exception as error:
         status['errors'].append(f'market lab: {type(error).__name__}: {error}')
         log(f'market lab: {type(error).__name__}: {error}')
-
-
-    if os.environ.get('KEENROUDY_SPORTS_CAPTURE', '1') != '0':
-        try:
-            import nba_capture
-            status['nbaCapture'] = nba_capture.step(now, scheduled=True)
-            log(f"NBA capture: {status['nbaCapture']}")
-        except Exception as error:
-            status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
-            log(f'NBA capture: {type(error).__name__}: {error}')
 
 
 def remember(decided, now, slot, status):
@@ -2724,11 +2723,17 @@ def _run(args, now, slot, kinds, status):
         public_decisions = [row for row in decided if row.get('id') not in admission_keys]
         remember(public_decisions, now, slot, status)
         paper_trials(now, slot, status)
+        if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):
+            try:
+                import nba_capture
+                status['nbaCapture'] = nba_capture.step(now, scheduled=True)
+                log(f"NBA capture: {status['nbaCapture']}")
+            except Exception as error:
+                status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
+                log(f'NBA capture: {type(error).__name__}: {error}')
         if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and (slot.hour in PAPER_SLOTS or (slot.hour,slot.minute) in ((6,45),(8,30))):
             try:
-                import nba_capture,nba_player_props
-                if 'nbaCapture' not in status:
-                    status['nbaCapture']=nba_capture.step(now,scheduled=True)
+                import nba_player_props
                 status['nbaPlayerProps']=nba_player_props.capture(now if args.dry_run else datetime.now(timezone.utc))
                 log(f"NBA player props: {status['nbaPlayerProps']}")
             except Exception as error:
