@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T21:51:57Z",
+  "updatedAt": "2026-10-23T22:04:30Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1157,6 +1157,15 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4361748",
+              "name": "Anthony Johnson Jr.",
+              "position": "S",
+              "status": "Injured Reserve",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-23T22:00Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
               "id": "4258595",
               "name": "Cole Kmet",
               "position": "TE",
@@ -1164,15 +1173,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-23T21:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4258595/cole-kmet"
-            },
-            {
-              "id": "4361748",
-              "name": "Anthony Johnson Jr.",
-              "position": "S",
-              "status": "Injured Reserve",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-23T21:31Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "3134690",
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4431487",
+              "name": "Savion Williams",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T21:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams"
+            },
+            {
               "id": "5076652",
               "name": "Brandon Cisse",
               "position": "CB",
@@ -2553,15 +2562,6 @@
               "injury": null,
               "reportedAt": "2026-10-23T20:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4887255/anthony-campbell"
-            },
-            {
-              "id": "4431487",
-              "name": "Savion Williams",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-23T20:25Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams"
             },
             {
               "id": "4701936",
@@ -6217,6 +6217,24 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "4685623",
+              "name": "Mykel Williams",
+              "position": "DE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T21:45Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685623/mykel-williams"
+            },
+            {
+              "id": "5086161",
+              "name": "Jaden Dugger",
+              "position": "LB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-23T21:45Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5086161/jaden-dugger"
+            },
+            {
               "id": "3858271",
               "name": "Ashtyn Davis",
               "position": "S",
@@ -6278,24 +6296,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-23T00:54Z",
               "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa"
-            },
-            {
-              "id": "5086161",
-              "name": "Jaden Dugger",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": null,
-              "reportedAt": "2026-10-22T01:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5086161/jaden-dugger"
-            },
-            {
-              "id": "4685623",
-              "name": "Mykel Williams",
-              "position": "DE",
-              "status": "Questionable",
-              "injury": null,
-              "reportedAt": "2026-10-22T01:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685623/mykel-williams"
             },
             {
               "id": "3057524",
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "4678006",
+              "name": "Elijah Arroyo",
+              "position": "TE",
+              "status": "Injured Reserve",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-23T21:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4678006/elijah-arroyo"
+            },
+            {
               "id": "4037521",
               "name": "Chazz Surratt",
               "position": "LB",
@@ -6535,15 +6544,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-22T23:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/16802/demarcus-lawrence"
-            },
-            {
-              "id": "4678006",
-              "name": "Elijah Arroyo",
-              "position": "TE",
-              "status": "Injured Reserve",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-22T18:42Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4678006/elijah-arroyo"
             },
             {
               "id": "4605491",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "6",
-          "name": "George Pickens",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-23T20:48:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426354/george-pickens"
-        },
-        {
-          "teamId": "6",
-          "name": "Cobie Durant",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-23T20:48:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4384549/cobie-durant"
-        },
-        {
           "teamId": "8",
           "name": "Rock Ya-Sin",
           "from": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-10-23T21:51:57Z",
           "source": "https://www.espn.com/nfl/player/_/id/3858271/ashtyn-davis"
+        },
+        {
+          "teamId": "25",
+          "name": "Mykel Williams",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T22:04:30Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4685623/mykel-williams"
+        },
+        {
+          "teamId": "25",
+          "name": "Jaden Dugger",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T22:04:30Z",
+          "source": "https://www.espn.com/nfl/player/_/id/5086161/jaden-dugger"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T21:51:57Z",
-      "lastAttemptAt": "2026-10-23T21:51:57Z",
+      "checkedAt": "2026-10-23T22:04:30Z",
+      "lastAttemptAt": "2026-10-23T22:04:30Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T21:51:57Z",
-      "lastAttemptAt": "2026-10-23T21:51:57Z",
+      "checkedAt": "2026-10-23T22:04:30Z",
+      "lastAttemptAt": "2026-10-23T22:04:30Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
