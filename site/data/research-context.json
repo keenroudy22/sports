@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T15:03:03Z",
+  "updatedAt": "2026-10-23T15:13:23Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-23T14:01Z",
+              "reportedAt": "2026-10-23T15:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-23T14:01Z",
+              "reportedAt": "2026-10-23T15:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5527,10 +5527,28 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4362094",
+              "name": "Joseph Ossai",
+              "position": "DE",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-23T14:53Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai"
+            },
+            {
+              "id": "4700136",
+              "name": "Kiko Mauigoa",
+              "position": "LB",
+              "status": "Out",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-23T14:53Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
+            },
+            {
               "id": "4373656",
               "name": "Max Mitchell",
               "position": "OT",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Concussion",
               "reportedAt": "2026-10-23T01:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4373656/max-mitchell"
@@ -5563,15 +5581,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
             },
             {
-              "id": "4700136",
-              "name": "Kiko Mauigoa",
-              "position": "LB",
-              "status": "Doubtful",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-22T01:26Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
-            },
-            {
               "id": "4243375",
               "name": "Dylan Parham",
               "position": "G",
@@ -5579,15 +5588,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-22T01:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham"
-            },
-            {
-              "id": "4362094",
-              "name": "Joseph Ossai",
-              "position": "DE",
-              "status": "Doubtful",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-21T23:18Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai"
             },
             {
               "id": "4428617",
@@ -7366,30 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "4",
-          "name": "Kyle Dugger",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T20:55:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger"
-        },
-        {
-          "teamId": "6",
-          "name": "DeMarvion Overshown",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T20:55:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362088/demarvion-overshown"
-        },
-        {
-          "teamId": "6",
-          "name": "George Pickens",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-22T20:55:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426354/george-pickens"
-        },
-        {
           "teamId": "6",
           "name": "Tyler Guyton",
           "from": "Active",
@@ -7764,11 +7740,35 @@
           "to": "Questionable",
           "observedAt": "2026-10-23T13:54:42Z",
           "source": "https://www.espn.com/nfl/player/_/id/4076951/nathan-shepherd"
+        },
+        {
+          "teamId": "20",
+          "name": "Joseph Ossai",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-10-23T15:13:23Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai"
+        },
+        {
+          "teamId": "20",
+          "name": "Kiko Mauigoa",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-10-23T15:13:23Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
+        },
+        {
+          "teamId": "20",
+          "name": "Max Mitchell",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T15:13:23Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4373656/max-mitchell"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T15:03:03Z",
-      "lastAttemptAt": "2026-10-23T15:03:03Z",
+      "checkedAt": "2026-10-23T15:13:23Z",
+      "lastAttemptAt": "2026-10-23T15:13:23Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T15:03:03Z",
-      "lastAttemptAt": "2026-10-23T15:03:03Z",
+      "checkedAt": "2026-10-23T15:13:23Z",
+      "lastAttemptAt": "2026-10-23T15:13:23Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
