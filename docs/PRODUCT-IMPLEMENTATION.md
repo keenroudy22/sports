@@ -1,5 +1,45 @@
 # October 5 product implementation tracker
 
+## October23 age notice and evening CFB repair — verified live
+
+Source c9c7e39d is installed. Hosted40026998368SUCCESS pulled the new source,
+repeated10 required checks and uploaded verified35486e8d; ancestry to c9c7e39d
+was confirmed. The separate pending source-triggered run40027614772 was cancelled
+when a newer normal data push replaced it; that cancellation is not a failing
+test and is not the deployment receipt. Normal/clean/locked suites passed,
+with1733Python(two skips)/278Node at final verification. Record114/NBA0;
+hosted publication guard647files/zeroissues. Locked17:30 rehearsalwxqiad0w:
+outcomeok,zero outside writes/private reads. Live Today375px at21:46Z:
+width375,no load-error state or console errors. Graphics unchanged.
+
+All prospective X/Discord delivery boundaries now append exactly `21+ only`,
+including the direct Best Bet release and owner-winning-slip uploader. X ticket
+tagging and complete leg lines remain. Final length includes both CTA and notice.
+No unresolved Buffer posts existed at the21:20/21:47 queue checks; no sent posts
+were rewritten. Existing17:30/18:50 checks now include evening CFB. The already
+running17:30 worker had loaded old scope before install and completed normally
+at21:46:07 with zero admissions; a separate current-time pass then used new scope.
+
+The fresh pass considered55 candidates across5 CFB games. Its38 newly recorded
+decisions were18 X-window holds,12 nonpositive-price holds,6 one-CFB-total daily
+cap holds,1 missing supporting reason and1 QB/history hold. Brady Anderson's
+receiving-over review returned4 verified facts but did not qualify. These are
+candidate rows, not38 independently researched bets. Zero new admissions were
+queued. Climb found no supported same-book2–3 alternate-leg ticket in the approved
+combined price range. Current-source checking did not manufacture a second bet.
+The existing one-total cap was NOT removed merely because the owner wants volume.
+The actual17:46 pass finished21:52:03Z: outcomeok,zero errors,zero admissions,
+zero publications. These receipt-only notes remain in development for the next
+normal promotion; the functional repairs above are already live.
+
+The full audit remains incomplete. KA-R1 retains real latency, spare research
+allocation and evidence-based category-cap evaluation. P31 still covers visible
+price clarity: Today can show a current price without its changed line, making
+`Past my -122 limit` misleading when the reason is a move50.5→53.5. Do not call
+that a price-cutoff failure or quietly rewrite the original ticket. The17:30 close
+preserves UMass–UConn over50.5/-108 and its later grading. These are receipts and
+remaining work, not evidence of better returns or a guaranteed daily bet count.
+
 ## October23 caption age line and evening CFB coverage — in verification
 
 Owner restored `21+ only` to every new social post. Shared X/Discord send paths
