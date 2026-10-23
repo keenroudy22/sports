@@ -3,6 +3,24 @@
   "updatedAt": "2026-10-23T12:28:09Z",
   "items": [
     {
+      "id": "O-20261023-PERIODGUARD",
+      "title": "Prevent quarter and half quotes entering full-game models",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Finish tested explicit-period rejection release across football props, NBA props and alternate spreads; verify hosted receipt. Preserve stored history. Quarter-market collection/model/grading remains a separate unfinished scope.",
+      "doneWhen": "Explicit quarter/half/unknown period quotes are rejected before full-game pairing; regression, full/clean, rehearsal and hosted checks pass. No claim that old unlabelled provider rows can be retroactively verified.",
+      "evidence": "Reproduced player_receiving_yards_1st_quarter becoming recYds; shared market_periods guard now rejects explicit period names/metadata. Focused football/NBA/alternate tests pass; deployment pending."
+    },
+    {
+      "id": "O-20261023-POSTINGRESET-QUARTERS",
+      "title": "Exact-period capture, evidence and settlement before automated quarter parlays",
+      "status": "gated",
+      "owner": "agent",
+      "next": "Inventory permitted free exact-period prices and official quarter stat sources; build fixture-tested collector/grader and forward evidence before public selection. O-20261023-PERIODGUARD closes full-game contamination, not this lane.",
+      "doneWhen": "Verified period/book/line identities, period workload evidence, correlated ticket quote and tested settlement exist; ordinary full-game estimates are never divided into quarters. Existing budgets and approval gates hold.",
+      "evidence": "Oct23 source inventory: Sharp football broad prop parser, NBA full-game allowlist, and full-game spread capture. No validated automatic Q1/Q2 prop forecasting or settlement pipeline. Personal supplied quarter tickets remain separate."
+    },
+    {
       "id": "O-20261022-RESULT",
       "title": "Settle verified personal NBA lotto loss on the site",
       "status": "shipped",

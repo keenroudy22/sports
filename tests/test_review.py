@@ -4,12 +4,23 @@ import tempfile
 import unittest
 from datetime import date, datetime, timezone
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import review
 
 
 class ReviewTests(unittest.TestCase):
+    def test_weekly_learning_packet_consumes_the_deduplicated_nba_review(self):
+        import nba_forward_review
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(nba_forward_review, 'from_stores', return_value={}) as read, \
+                mock.patch.object(nba_forward_review, 'markdown', return_value='FORWARD CHECK INCLUDED'):
+            root=Path(folder)
+            text=review.learning_packet(root/'data/learning/report.json',root/'data/learning')
+            self.assertIn('FORWARD CHECK INCLUDED',text)
+            read.assert_called_once_with(root/'data/nba-capture')
+
     def test_owner_delivery_uses_short_note_and_links_local_packet(self):
         with tempfile.TemporaryDirectory() as tmp:
             note = Path(tmp) / 'OWNER-NOTE.md'

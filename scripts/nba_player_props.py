@@ -19,6 +19,7 @@ import espn_props
 import nba_capture
 import nba_roles
 import sharp_odds
+import market_periods
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -73,6 +74,7 @@ def fold(rows, games, rosters, now):
                     or r.get('is_active') is not True or r.get('is_player_prop') is not True
                     or any(r.get(k) for k in ('is_stale_pregame_price','is_impossible_scoreline','is_alternate_line'))
                     or r.get('market_type') not in MARKETS or r.get('sportsbook') not in BOOKS
+                    or not market_periods.full_game(r)
                     or not fresh(r.get('timestamp'),now,.25)):
                 raise ValueError('unsupported')
             matches=[g for g in games if g.get('status')=='scheduled' and g.get('seasonType')=='regular-season'
@@ -351,9 +353,10 @@ def grade(now,root=STORE,boxes=None):
     if boxes is None:boxes=saved(ROOT/'data/sport-box')
     finals={str(b['eventId']).removeprefix('NBA-'):b for b in boxes
             if b.get('league')=='NBA' and b.get('seasonType')==2 and boxscores.instant(b['kickoff'])<now}
-    old={r['id'] for r in saved(root/'player-outcomes')};rows=[]
+    old={r['id']:r for r in saved(root/'player-outcomes')};rows=[]
     for r in saved(root/'player-forecasts'):
-        if r['id'] in old or r['eventId'] not in finals:continue
+        model=r.get('model',VERSION)
+        if (r['id'] in old and old[r['id']].get('model')==model) or r['eventId'] not in finals:continue
         final=finals[r['eventId']]
         if boxscores.instant(r['retrievedAt'])>=boxscores.instant(final['kickoff']):continue
         people=[p for p in final['players'] if p['id']==r['athleteId'] and p['team']==r['team']]
@@ -365,7 +368,7 @@ def grade(now,root=STORE,boxes=None):
         rows.append({'id':r['id'],'league':'NBA','season':r['season'],'actual':actual,'result':result,
                      'projection':r['projection']['value'],'line':r['line'],'side':r['side'],
                      'odds':r['odds'],'book':r['book'],'source':final.get('source'),
-                     'retrievedAt':boxscores.stamp(now),'forecastAt':r['retrievedAt'],'model':VERSION})
+                     'retrievedAt':boxscores.stamp(now),'forecastAt':r['retrievedAt'],'model':model})
     return nba_capture.append_changed(rows,root/'player-outcomes',lambda r:r['id'])
 
 

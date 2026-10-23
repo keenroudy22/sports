@@ -36,6 +36,7 @@ import boxscores
 import features
 import odds_api
 import quota
+import market_periods
 
 ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / 'data' / 'prop-odds'
@@ -53,6 +54,8 @@ FRESH = timedelta(hours=12)          # other books' quotes older than this are n
 def market_key(market_type):
     """SharpAPI's market type -> the projection key the desk prices, or None."""
     m = str(market_type or '').lower()
+    if not market_periods.full_game({'market_type': m}):
+        return None
     if not m.startswith('player_') or '+' in m or '_and_' in m or 'longest' in m:
         return None                 # combined stats and longest plays are other markets: "passing + rushing yards" is not passing yards
     if 'pass' in m and ('yard' in m or 'yds' in m):
@@ -206,6 +209,8 @@ def quotes_from(rows):
     implied = lambda odds: -odds / (100 - odds) if odds < 0 else 100 / (100 + odds)
     out = {}
     for game, row in rows:
+        if not market_periods.full_game(row):
+            continue
         key = market_key(row.get('market_type'))
         side = str(row.get('selection_type') or row.get('selection') or '').lower()
         name, point, price = row.get('player_name'), row.get('line'), row.get('odds_american')

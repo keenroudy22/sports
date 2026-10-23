@@ -273,6 +273,14 @@ class SlotTests(unittest.TestCase):
         self.assertTrue(run.research_slot_available(side, status))
         self.assertTrue(run.research_slot_available(total, status))
 
+    def test_research_holds_distinguish_bad_price_budget_and_missing_availability(self):
+        candidate = {'marketType': 'spread', '_selection': {'anchoredChance': .49, 'breakEven': .50}}
+        self.assertIn('does not beat the price', run.research_slot_refusal(candidate, {'asked': 0}))
+        candidate['_selection']['anchoredChance'] = .55
+        self.assertIn('eight-check', run.research_slot_refusal(candidate, {'asked': 8}))
+        self.assertIn('side research allocation', run.research_slot_refusal(candidate, {'asked': 2, 'families': {'side': 2}}))
+        self.assertIsNone(run.research_slot_refusal(candidate, {'asked': 0}))
+
     def test_large_weekend_slate_targets_five_honest_straights(self):
         saturday = datetime(2026, 10, 17).date()
         games = {str(i): {'league': 'CFB', 'kickoff': f'2026-10-17T{16 + i % 8:02d}:00:00Z'}

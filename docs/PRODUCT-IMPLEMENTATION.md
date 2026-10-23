@@ -1,5 +1,43 @@
 # October 5 product implementation tracker
 
+## October23 audit follow-up — period identity and usable NBA learning
+
+Reproduced explicit first-quarter/half football market names mapping to full-game
+stat keys. Added shared period-name/metadata refusal to football props, NBA props
+and alternate spreads. Missing metadata retains the existing feed contract;
+unlabelled provider errors cannot be disproven by this guard. No historical rows
+are rewritten or declared contaminated. Q1/Q2 capture/model/settlement remains
+O-20261023-POSTINGRESET-QUARTERS; protective fix is O-20261023-PERIODGUARD.
+
+Added read-only NBA forward comparison to the existing weekly learning packet:
+select earliest pregame quote per player/game/stat/model BEFORE outcome lookup,
+deduplicate books, require matching final source/model/line, keep stat units
+separate, show independent game counts and missing outcomes. No weights, live
+admission bar or promotion changed. Snapshot:881 usable comparisons/13games/
+126player-games;235 selected rows missing or unusable. Baseline error exceeds
+quoted-line error in all eight stat groups. This small sample is not profitability
+or a calibrated probability claim. Reviewed-minutes outcomes had incorrectly used
+the baseline model label; the normal append-only grader now corrects that label
+once with verified final evidence, preserving earlier lines and forecast rows.
+
+Research refusal messages now distinguish no positive price value, exhausted
+family allocation, exhausted eight-check budget and genuinely missing availability.
+No extra research requests or weakened value requirement. Prior generic “not come
+back” wording incorrectly implied a lookup had run for negative-value candidates.
+NBA policy metadata now matches the approved0.5u prospective stake.
+The queue had reached its160-item bound. Retained every existing item and allowed
+16 bounded follow-up entries; unchanged256KiB/text limits and over-limit rejection
+tests still apply. New quarter work now has a real queue entry, not only prose.
+Full verification/deployment still required; do not call this section shipped yet.
+
+Hosted publishing audit: the preserve-record step could rebase new source/data
+after building without rebuilding its generated page artifact. Added a bounded
+post-rebase verifier: no upstream differences means no repeat work; merged data
+means rebuild/feed/audits; changed source/policy also repeats Python/Node suites.
+It makes no quote/news capture or scheduling call. Failure stops upload instead
+of shipping unverified mixed inputs. Five regression tests cover ordering,
+source/data paths, no-op and fail-closed behavior; full release still pending.
+
 ## October23 approved staking and delayed-release follow-through — in verification
 
 Owner approved the recommended prospective0.5u ordinary/1u Chef stakes and shared

@@ -155,6 +155,7 @@ jobs:
           git add site/data tests/integrity-ledger.json data/sport-box data/boxscores data/nflverse data/forecasts data/props data/odds data/prop-odds data/model data/venues.json data/venues-review.json data/weather
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh schedules, finals and pregame forecasts'
+            artifact_base=$(git rev-parse HEAD)
             # The desk on the owner's machine pushes too. A rejected push is rebased, and a stop on the
             # price stores (both sides captured) is resolved by scripts/merge_store.py; never forced.
             pushed=
@@ -167,6 +168,9 @@ jobs:
               fi
             done
             [ -n "$pushed" ] || { echo 'push rejected three times'; exit 1; }
+            # A successful rebase can bring in new code/research after the first
+            # build. Rebuild from merged inputs, and repeat suites if source changed.
+            python scripts/hosted_rebase_verify.py "$artifact_base"
           fi
       - name: Verify the public artifact boundary
         run: python scripts/publication_guard.py

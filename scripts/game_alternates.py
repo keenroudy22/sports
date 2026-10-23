@@ -7,6 +7,7 @@ import math
 from datetime import timedelta
 import features
 import pricing
+import market_periods
 
 
 def number(value):
@@ -16,6 +17,8 @@ def number(value):
 def parse(rows, now):
     groups = {}
     for game, row in rows:
+        if not market_periods.full_game(row):
+            continue
         if row.get('market_type') != 'point_spread' or row.get('sportsbook') not in ('draftkings', 'fanduel'):
             continue
         if row.get('is_live') is not False or row.get('is_active') is not True:

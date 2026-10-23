@@ -1546,7 +1546,7 @@ def research_family(candidate):
     return 'total' if gates.market_key(candidate) == 'total' else 'side'
 
 
-def research_slot_available(candidate, research_status):
+def research_slot_refusal(candidate, research_status):
     """Keep the small web budget on positive-value rows and spread it across the board.
 
     A large college slate used to spend every lookup on the first eight props,
@@ -1554,15 +1554,21 @@ def research_slot_available(candidate, research_status):
     later sides fail the availability gate without ever being checked.
     """
     if research_status.get('asked', 0) >= RESEARCH_LIMIT:
-        return False
+        return 'the eight-check research budget is used; availability was not checked'
     numbers = candidate.get('_selection') or {}
     chance = numbers.get('anchoredChance')
     needed = numbers.get('breakEven')
     if isinstance(chance, (int, float)) and isinstance(needed, (int, float)) and chance <= needed:
-        return False
+        return 'the current estimated chance does not beat the price; no news lookup was spent'
     family = research_family(candidate)
     used = (research_status.get('families') or {}).get(family, 0)
-    return used < RESEARCH_FAMILY_LIMITS[family]
+    if used >= RESEARCH_FAMILY_LIMITS[family]:
+        return f'the {family} research allocation is used; availability was not checked'
+    return None
+
+
+def research_slot_available(candidate, research_status):
+    return research_slot_refusal(candidate, research_status) is None
 
 
 def note_research_slot(candidate, research_status):
@@ -2416,7 +2422,9 @@ def _run(args, now, slot, kinds, status):
         gap = (candidate.get('_selection') or {}).get('gap', 0)
         class_a = any(row.get('class') == 'A' and row.get('direction') == 'for' for row in pre_reasons)
         needs_market_check = should_research_candidate(candidate, candidate_rank, gap, class_a)
-        if research_on and needs_market_check and research_slot_available(candidate, status['research']):
+        research_block = (research_slot_refusal(candidate, status['research']) if research_on
+                          else 'the news researcher is unavailable in this run')
+        if research_on and needs_market_check and research_block is None:
             game = ctx.games[candidate['gameIds'][0]]
             kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now,
                                                 player=candidate.get('_player') or ctx.names.get(str(candidate.get('athleteId') or '')),
@@ -2434,8 +2442,7 @@ def _run(args, now, slot, kinds, status):
                 write_prose(candidate, ctx, records)
         hold = None
         if needs_research(candidate) and not researched:
-            hold = ("a college play needs the web check to confirm who is expected to play before it is published (there is "
-                    "no college injury feed), and it has not come back with that")
+            hold = research_block or 'the news check returned no verified player-availability evidence; college plays stay held'
         hold = hold or judge(candidate, relevant_facts(candidate, facts, ctx), use_llm, status)
         if hold:
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],

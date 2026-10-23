@@ -283,6 +283,12 @@ def learning_packet(report_path=None, shadow_root=None):
         lines.append(f"- latest silent shadow: {latest}; proposals {', '.join(proposals) or 'none'}; no public effects")
     else:
         lines.append('- no silent results shadow has completed yet')
+    import nba_forward_review
+    try:
+        lines.append(nba_forward_review.markdown(nba_forward_review.from_stores(
+            report_path.parent.parent / 'nba-capture')))
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        lines.append(f'- NBA forward comparison unavailable: {type(error).__name__}; no promotion implied.')
     return '\n'.join(lines) + '\n'
 
 

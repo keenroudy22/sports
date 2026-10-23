@@ -43,6 +43,7 @@ class NBAPlayerPropTests(unittest.TestCase):
     def test_ambiguous_wrong_event_stale_roster_and_bad_prices_block(self):
         g,r,rows,_=fixture()
         for field,value in [('league','nfl'),('is_live',True),('is_active',False),('line',float('nan')),
+                            ('period','Q1'),('quarter',2),('market_period','first_half'),
                             ('is_alternate_line',True),('is_impossible_scoreline',True),
                             ('is_stale_pregame_price',True),('odds_american',-800),
                             ('timestamp','2026-10-19T00:00:00Z'),('home_team','Other team'),
@@ -174,6 +175,25 @@ class NBAPlayerPropTests(unittest.TestCase):
         self.assertGreater(result['predictions'],0);self.assertEqual(result['meanAbsoluteError'],0)
         self.assertIn('no historical prices',result['scope'])
         self.assertEqual(n.evaluate(b[:5])['predictions'],0)
+
+    def test_reviewed_minutes_model_keeps_its_identity_and_label_repairs_append_once(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);b=self.write(root)
+            q=n.build(NOW,root,b)['rows'][0]
+            q['projection']['model']='nba-minutes-rate-reviewed-v1'
+            with patch.object(n,'build',return_value={'rows':[q]}):
+                n.record_forward(NOW,root,b)
+            final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,kickoff='2026-10-20T19:00:00Z')
+            self.assertEqual(n.grade(NOW+timedelta(hours=10),root,[final]),1)
+            correct=n.saved(root/'player-outcomes')[-1]
+            self.assertEqual(correct['model'],'nba-minutes-rate-reviewed-v1')
+            nba_capture.append_changed([dict(correct,model=n.VERSION)],root/'player-outcomes',lambda r:r['id'])
+            path=next((root/'player-outcomes').glob('*.jsonl'));before=path.read_bytes()
+            self.assertEqual(n.grade(NOW+timedelta(hours=11),root,[final]),1)
+            self.assertTrue(path.read_bytes().startswith(before))
+            self.assertEqual(n.saved(root/'player-outcomes')[-1]['model'],correct['model'])
+            self.assertEqual(n.grade(NOW+timedelta(hours=12),root,[final]),0)
+            self.assertEqual(boxscores.verify(root/'player-outcomes'),[])
     def test_prop_social_freezes_only_after_morning_refresh_and_lists_every_player(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);b=self.write(root);q=n.build(NOW,root,b)['rows'][0]

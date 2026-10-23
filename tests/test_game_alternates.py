@@ -80,6 +80,7 @@ class GameAlternateTests(unittest.TestCase):
 
     def test_period_suspended_stale_unmatched_and_ambiguous_main_hold(self):
         for change in [dict(is_live=True),dict(is_active=False),dict(market_type='1st_half_point_spread'),
+                       dict(period='Q1'),dict(period_number=2),dict(marketWindow='Second half'),
                        dict(timestamp='2026-10-22T15:00:00Z'),dict(selection='Unknown'),dict(is_main_line=False)]:
             source=[(g,dict(r,**change)) for g,r in rows()]
             self.assertEqual(a.parse(source,NOW),{},change)

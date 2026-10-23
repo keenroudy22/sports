@@ -32,6 +32,22 @@ class MappingTests(unittest.TestCase):
         for market, key in cases.items():
             self.assertEqual(sharp_odds.market_key(market), key, market)
 
+    def test_explicit_period_names_never_become_full_game_player_markets(self):
+        for market in ('player_receiving_yards_1st_quarter', 'player_rushing_yards_first_half',
+                       'player_passing_yards_q1', 'player_receptions_2q', 'player_pass_attempts_h1',
+                       'player_pass_completions_period_2', 'player_receiving_yards_overtime'):
+            self.assertIsNone(sharp_odds.market_key(market), market)
+
+    def test_period_metadata_cannot_override_an_unscoped_market_name(self):
+        g = game('NFL-1', '2026-09-20T20:05:00Z', 'LV Raiders', 'LAC Chargers')
+        pair = [(g, row('draftkings', 'player_receiving_yards', 'Receiver', side, 9.5, -110))
+                for side in ('over', 'under')]
+        self.assertTrue(sharp_odds.quotes_from(pair))
+        for key, value in [('period', 'Q1'), ('period_number', 1), ('market_period', 'second_half'),
+                           ('marketWindow', 'First quarter'), ('period', 'unknown')]:
+            self.assertEqual(sharp_odds.quotes_from([(g, dict(r, **{key: value})) for g, r in pair]), {})
+        self.assertTrue(sharp_odds.quotes_from([(g, dict(r, period='full_game')) for g, r in pair]))
+
     def test_college_teams_named_by_school_alone_find_their_game(self):
         games = [dict(game('CFB-1', '2026-09-26T19:30Z', 'Georgia Bulldogs', 'Oklahoma Sooners', 'CFB'),
                       home={'name': 'Georgia Bulldogs', 'school': 'Georgia'}, away={'name': 'Oklahoma Sooners', 'school': 'Oklahoma'}),
