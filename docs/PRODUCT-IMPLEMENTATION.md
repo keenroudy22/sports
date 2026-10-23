@@ -1,5 +1,22 @@
 # October 5 product implementation tracker
 
+## October23 late report-index lag — repair in verification
+
+40006250837SUCCESS/final4b65a6d3 contains the raw UMass–UConn release but the
+post-rebase build read the index produced before that report arrived. Live Today
+still said no official play at19:03. Added an offline materializer from all original
+research reports through existing report/ledger validators before post-rebase
+build. Atomic derived-index replacement happens only after validation; missing
+source directory never erases history. No source report, price, stake, model,
+network capture or schedule changes. Regression includes a newly active0.5u
+report reaching build_site.first_publications. O-20261023-REPORTINDEX remains
+ready until full gates and hosted/live proof. X actualsent19:07:46.249Z at
+https://x.com/1753110091912413184/status/2113708978429448491; Discord UI2:54PM.
+
+Discord delayed-research guard936ad1b5 installed/pushed after1713Python(two skips)/
+275Node normal/clean and locked gates,635guard,113historicalrecord/NBA0,assets,
+budget and isolateduzqikt80 passed. Its hosted/live verification remains pending.
+
 ## October23 delayed Discord research gap — reproduced, repair in verification
 
 At18:54Z provider recovery confirmed NBA trends sent on X14:05:43.988Z and props

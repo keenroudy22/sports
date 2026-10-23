@@ -3,6 +3,15 @@
   "updatedAt": "2026-10-23T18:41:00Z",
   "items": [
     {
+      "id": "O-20261023-REPORTINDEX",
+      "title": "Include late released reports in the same hosted artifact",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release offline report-index materializer before post-rebase page build. Verify hosted descendant and actual UMass–UConn website card, preserving original report/price/stake and all history.",
+      "doneWhen": "A report merged after initial refresh appears in the final public artifact; validation failures preserve the previous index and stop upload; no extra feed requests or original-report edits; full gates and hosted/live checks pass.",
+      "evidence": "40006250837SUCCESS/final4b65a6d3 contained the18:52 raw release but its18:59 derived research index omitted it; live Today still empty at19:03. Reproduced raw-versus-derived mismatch. Added offline validated materializer before post-rebase build, with active0.5u report/index integration, immutable-source, invalid-report and empty-source tests. X actualsent19:07:46.249Z/2113708978429448491; Discord verified2:54PM."
+    },
+    {
       "id": "O-20261023-RELEVANCE",
       "title": "Current matchup and role context before historical trend posts",
       "status": "observing",

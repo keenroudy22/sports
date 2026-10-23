@@ -14,7 +14,8 @@ class HostedRebaseTests(unittest.TestCase):
 
     def test_data_rebase_rebuilds_and_audits_without_new_capture_or_suites(self):
         plan = verify.commands(['research/new.json', 'data/odds/cfb.jsonl'], python='python')
-        self.assertEqual(plan[0], ['python', 'scripts/build_site.py'])
+        self.assertEqual(plan[:2], [['python', 'scripts/materialize_research.py'],
+                                   ['python', 'scripts/build_site.py']])
         self.assertIn(['python','scripts/record_audit.py','--today','site/data/app/record.json'], plan)
         self.assertEqual(plan[-1], ['python','scripts/publication_guard.py'])
         self.assertFalse(any('unittest' in c or 'scripts/odds_api.py' in c for c in plan))

@@ -23,7 +23,8 @@ def commands(changed, python=sys.executable, node_tests=()):
     if source:
         result.extend([[python, '-m', 'unittest', 'discover', '-s', 'tests'],
                        ['node', '--test', *node_tests]])
-    result.extend([[python, 'scripts/build_site.py'], [python, 'scripts/feed.py'],
+    result.extend([[python, 'scripts/materialize_research.py'],
+        [python, 'scripts/build_site.py'], [python, 'scripts/feed.py'],
         [python, 'scripts/payload_budget.py'],
         [python, 'scripts/record_audit.py', '--today', 'site/data/app/record.json'],
         [python, 'scripts/nba_trial_audit.py'], [python, 'scripts/asset_versions.py', '--check'],
