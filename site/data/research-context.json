@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-23T17:01:50Z",
+  "updatedAt": "2026-10-23T17:11:26Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-23T16:42Z",
+              "reportedAt": "2026-10-23T17:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -927,6 +927,24 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4870694",
+              "name": "Monroe Freeling",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-23T16:49Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
+            },
+            {
+              "id": "4714157",
+              "name": "Thomas Incoom",
+              "position": "LB",
+              "status": "Out",
+              "injury": "Calf",
+              "reportedAt": "2026-10-23T16:49Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4714157/thomas-incoom"
+            },
+            {
               "id": "4242975",
               "name": "Jaelan Phillips",
               "position": "LB",
@@ -952,15 +970,6 @@
               "injury": null,
               "reportedAt": "2026-10-22T01:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/3117253/bobby-okereke"
-            },
-            {
-              "id": "4870694",
-              "name": "Monroe Freeling",
-              "position": "OT",
-              "status": "Active",
-              "injury": "Knee",
-              "reportedAt": "2026-10-22T01:29Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
             },
             {
               "id": "4880613",
@@ -1089,15 +1098,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4372780/tommy-tremble"
             },
             {
-              "id": "4714157",
-              "name": "Thomas Incoom",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Calf",
-              "reportedAt": "2026-10-18T19:20Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4714157/thomas-incoom"
-            },
-            {
               "id": "4362647",
               "name": "Damien Lewis",
               "position": "G",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-23T16:42Z",
+              "reportedAt": "2026-10-23T16:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2997,6 +2997,15 @@
           "name": "Indianapolis Colts",
           "players": [
             {
+              "id": "4431459",
+              "name": "Tyler Warren",
+              "position": "TE",
+              "status": "Out",
+              "injury": "Groin",
+              "reportedAt": "2026-10-23T16:52Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431459/tyler-warren"
+            },
+            {
               "id": "4429084",
               "name": "Anthony Richardson Sr.",
               "position": "QB",
@@ -3004,15 +3013,6 @@
               "injury": null,
               "reportedAt": "2026-10-23T16:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429084/anthony-richardson-sr"
-            },
-            {
-              "id": "4431459",
-              "name": "Tyler Warren",
-              "position": "TE",
-              "status": "Out",
-              "injury": "Groin",
-              "reportedAt": "2026-10-23T16:09Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431459/tyler-warren"
             },
             {
               "id": "4601021",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-23T16:42Z",
+              "reportedAt": "2026-10-23T17:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6680,17 +6680,17 @@
               "id": "4567750",
               "name": "Emeka Egbuka",
               "position": "WR",
-              "status": "Doubtful",
+              "status": "Out",
               "injury": "Concussion",
-              "reportedAt": "2026-10-23T16:43Z",
+              "reportedAt": "2026-10-23T16:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
             },
             {
               "id": "3052587",
               "name": "Baker Mayfield",
               "position": "QB",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Thumb",
               "reportedAt": "2026-10-23T16:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
             },
@@ -6698,8 +6698,8 @@
               "id": "4596448",
               "name": "Bucky Irving",
               "position": "RB",
-              "status": "Questionable",
-              "injury": "Illness",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-23T15:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
             },
@@ -7366,46 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "3",
-          "name": "Anthony Johnson Jr.",
-          "from": "Injured Reserve",
-          "to": "Out",
-          "observedAt": "2026-10-22T21:34:48Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
-        },
-        {
-          "teamId": "1",
-          "name": "Kendal Daniels",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-22T21:45:18Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4595343/kendal-daniels"
-        },
-        {
-          "teamId": "22",
-          "name": "Jeremiyah Love",
-          "from": "Doubtful",
-          "to": "Questionable",
-          "observedAt": "2026-10-22T22:04:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
-        },
-        {
-          "teamId": "16",
-          "name": "Justin Jefferson",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T22:04:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4262921/justin-jefferson"
-        },
-        {
-          "teamId": "16",
-          "name": "James Pierre",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-22T22:04:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4259252/james-pierre"
-        },
-        {
           "teamId": "16",
           "name": "Brian O'Neill",
           "from": "Questionable",
@@ -7764,11 +7724,51 @@
           "to": "Out",
           "observedAt": "2026-10-23T17:01:50Z",
           "source": "https://www.espn.com/nfl/player/_/id/4431459/tyler-warren"
+        },
+        {
+          "teamId": "29",
+          "name": "Monroe Freeling",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-23T17:11:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
+        },
+        {
+          "teamId": "29",
+          "name": "Thomas Incoom",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-23T17:11:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4714157/thomas-incoom"
+        },
+        {
+          "teamId": "27",
+          "name": "Emeka Egbuka",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-10-23T17:11:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4567750/emeka-egbuka"
+        },
+        {
+          "teamId": "27",
+          "name": "Baker Mayfield",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-23T17:11:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
+        },
+        {
+          "teamId": "27",
+          "name": "Bucky Irving",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-23T17:11:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-23T17:01:50Z",
-      "lastAttemptAt": "2026-10-23T17:01:50Z",
+      "checkedAt": "2026-10-23T17:11:26Z",
+      "lastAttemptAt": "2026-10-23T17:11:26Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-23T17:01:50Z",
-      "lastAttemptAt": "2026-10-23T17:01:50Z",
+      "checkedAt": "2026-10-23T17:11:26Z",
+      "lastAttemptAt": "2026-10-23T17:11:26Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
