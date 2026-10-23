@@ -411,7 +411,9 @@ class GradeTests(unittest.TestCase):
         self.assertLess(grade['chance'], grade['raw'], 'the shown chance is the calibrated one')
         self.assertTrue(grade['calibrated'])
         self.assertEqual(grade['fairOdds'], build_site.fair_american(grade['chance']))
-        self.assertAlmostEqual(grade['ev'], grade['chance'] * (1 + 100 / 110) - 1, places=3)
+        import pricing
+        priced=pricing.calibrated_game(pricing.price(self.snapshot,'total','under',44.5,-110))
+        self.assertEqual(grade['ev'], priced['evPerUnit'])
         self.assertEqual(grade['chanceDisplay'], grade['chance'])
         self.assertEqual(grade['range80'], [25.6, 56.4])
 

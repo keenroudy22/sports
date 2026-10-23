@@ -1,0 +1,70 @@
+{
+  "nba": [
+    {
+      "season": 2026,
+      "stat": "ast",
+      "n": 7350,
+      "releasedMAE": 1.5254,
+      "candidateMAE": 1.5274
+    },
+    {
+      "season": 2026,
+      "stat": "min",
+      "n": 7350,
+      "releasedMAE": 5.122,
+      "candidateMAE": 5.2619
+    },
+    {
+      "season": 2026,
+      "stat": "pts",
+      "n": 7350,
+      "releasedMAE": 5.1623,
+      "candidateMAE": 5.1825
+    },
+    {
+      "season": 2026,
+      "stat": "reb",
+      "n": 7350,
+      "releasedMAE": 2.0695,
+      "candidateMAE": 2.0779
+    }
+  ],
+  "football": [
+    {
+      "league": "CFB",
+      "market": "spread",
+      "n": 71,
+      "neutralBrier": 0.252252,
+      "anchorBrier": 0.252288
+    },
+    {
+      "league": "CFB",
+      "market": "total",
+      "n": 86,
+      "neutralBrier": 0.251275,
+      "anchorBrier": 0.250032
+    },
+    {
+      "league": "NFL",
+      "market": "spread",
+      "n": 23,
+      "neutralBrier": 0.25,
+      "anchorBrier": 0.248781
+    },
+    {
+      "league": "NFL",
+      "market": "total",
+      "n": 20,
+      "neutralBrier": 0.267859,
+      "anchorBrier": 0.266345
+    }
+  ],
+  "inputDigests": {
+    "data/sport-box/nba-2026.jsonl": "e2a3be903c4e683a5b24e6cf13050d603ab83d84d034bde0976ec4515a91dfdb",
+    "data/sport-box/nba-2027.jsonl": "781980a315688b9b2435f156a4c2a1d64019a76c75a4d169aa236e23b93a3004",
+    "data/learning/candidates-2026.jsonl": "56435da46db24886f12cd9299c3290a48df9ec4ecf746d1ade33837721265ffd",
+    "data/learning/graded-2026.jsonl": "e097a3ffa56279aef7aa9811970015df1a137ab1acc494b15a02b78c97446b71"
+  },
+  "decision": "Reject automatic last-three-minutes replacement. Repair football formula consistency without refitting coefficients.",
+  "limits": "Retrospective diagnostics, not proof of improved returns. Football differences are small and mixed. No usable NBA October early-season holdout with two prior current-season games exists in these inputs. Current roster/role checks and sourced review adjustments are operational controls, not a new team score model."
+}

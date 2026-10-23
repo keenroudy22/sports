@@ -4,11 +4,56 @@ An analyst minutes estimate is explicitly not a coach-announced restriction.
 Existing price, roster, injury and historical-role holds always take precedence.
 """
 import math
+import statistics
 from datetime import timedelta
 from urllib.parse import urlsplit
 
 import boxscores
 import nba_capture
+
+
+def current_role(quote, boxes, now):
+    """Observed current-season rotation, not a claim about tonight's starters.
+
+    Include DNPs for role checks; only played minutes enter the displayed
+    workload. One appearance never becomes a confirmed expected-minutes number.
+    """
+    games = sorted({b['eventId']: b for b in boxes}.values(), key=lambda b: b['kickoff'])
+    current, prior = [], []
+    for b in games:
+        if b.get('league', 'NBA') != 'NBA' or b.get('seasonType') != 2 or boxscores.instant(b['kickoff']) >= now:
+            continue
+        people = [p for p in b.get('players', []) if p.get('id') == quote['athleteId']]
+        if len(people) != 1:
+            continue
+        p = people[0]
+        if b['season'] == quote['season']:
+            current.append(dict(p, date=b['kickoff'], source=b.get('source')))
+        elif b['season'] == quote['season']-1 and p.get('team') == quote['team'] and not p.get('dnp'):
+            prior.append(p)
+    if not current:
+        return {'games': 0, 'note': 'No current-season regular-season appearance recorded.'}, None
+    if current[-1]['team'] != quote['team']:
+        return {'games': 0, 'asOf': current[-1]['date']}, 'Current team changed; workload review needed'
+    own = [p for p in current if p['team'] == quote['team']]
+    recent = own[-3:]
+    played = [p for p in recent if not p.get('dnp') and isinstance(p.get('stats', {}).get('min'), (int, float))
+              and not isinstance(p['stats']['min'], bool) and math.isfinite(p['stats']['min'])
+              and 0 < p['stats']['min'] <= 60]
+    role = {'games': len(played), 'asOf': recent[-1]['date'], 'source': recent[-1].get('source'),
+            'minutes': [p['stats']['min'] for p in played],
+            'starts': sum(p['starter'] for p in played) if played and all(type(p.get('starter')) is bool for p in played) else None,
+            'note': 'Observed minutes and starts, not a confirmed lineup or minutes limit.'}
+    if played:
+        role['medianMinutes'] = round(statistics.median(p['stats']['min'] for p in played), 1)
+    if recent[-1].get('dnp'):
+        return role, 'Did not play in latest game; current workload review needed'
+    # A changed starting job is material even before five new appearances exist.
+    old = [p['starter'] for p in prior[-5:] if type(p.get('starter')) is bool]
+    new = [p['starter'] for p in played if type(p.get('starter')) is bool]
+    if len(old) >= 3 and new and (all(old) and not any(new) or not any(old) and all(new)):
+        return role, 'Starting role changed this season; current workload review needed'
+    return role, None
 
 
 def validate(row):

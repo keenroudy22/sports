@@ -70,6 +70,30 @@ def decision(rule, candidate, ctx):
 
 
 class TwoSidedPriceTests(unittest.TestCase):
+    def test_game_research_selection_and_shopping_use_one_fitted_chance(self):
+        for league in ('NFL', 'CFB'):
+            snapshot = dict(SNAPSHOT, league=league)
+            policy = {**gates.learning.default_policy(), 'calibration': {f'{league}/total': {'k': .27}}}
+            ctx = context(snapshots={'NFL-1': [snapshot]}, policy=policy)
+            for market, side, line in (('total', 'over', 44.5), ('total', 'under', 44),
+                                       ('spread', 'home', -3), ('spread', 'away', 3.5)):
+                candidate = total_lean(league=league, marketType=market, direction=side, line=line,
+                                       odds=-115, _pair=(-115, -109))
+                numbers = gates.selection_numbers(candidate, ctx)
+                row = dict(state='open', odds=-115, line=line, gameMarket=True,
+                           market='point spread' if market=='spread' else 'total points',
+                           side=side, direction=side)
+                grade = build_site.grade_line(row, snapshot, False, policy['calibration'])
+                desk = gates.desk_for(candidate, ctx)
+                self.assertEqual(numbers['chance'], grade['chance'])
+                self.assertEqual(numbers['edgePoints'], grade['edge'])
+                self.assertEqual(numbers['evPerUnit'], grade['ev'])
+                self.assertEqual(numbers['chance'], desk['chance'])
+                self.assertEqual(numbers['calibrationMethod'], 'neutral-centered-fitted')
+                unpaired=build_site.grade_line(dict(row,oppositeOdds=None),snapshot,False,policy['calibration'])
+                self.assertEqual(unpaired['tier'],'pass');self.assertIsNone(unpaired['chanceDisplay'])
+                self.assertFalse(unpaired['pricePaired'])
+
     def test_white_adjustment_uses_the_exact_family_the_learner_tested(self):
         ctx = context(policy={**gates.learning.default_policy(),
                               'calibration': {'NFL/prop': {'k': .11, 'n': 2285}}})
@@ -348,7 +372,8 @@ class ShoppingRuleTests(unittest.TestCase):
         self.assertTrue(gates.one_book(total_lean(), context()).ok)
 
     def test_best_quote_prefers_expected_value_over_the_number(self):
-        # The public market-anchored number values the extra half point enough to prefer BetRivers here.
+        # The fitted neutral-centered chance prefers the better price, not a
+        # differently anchored probability at each book. Whole-line push counts.
         snapshot = dict(SNAPSHOT, total=48.0)
         odds = {'gameId': 'NFL-1', 'retrievedAt': '2026-09-27T13:00:00Z',
                 'books': {'betrivers': {'total': {'line': 53, 'over': -107, 'under': -113}},
@@ -356,11 +381,11 @@ class ShoppingRuleTests(unittest.TestCase):
         ctx = context(odds={'NFL-1': odds}, snapshots={'NFL-1': [snapshot]})
         worse = total_lean(book='BetRivers', line=53, odds=-113, direction='under')
         decision = gates.best_quote_by_ev(worse, ctx)
-        self.assertTrue(decision.ok)
+        self.assertFalse(decision.ok)
+        self.assertEqual(decision.data['best']['book'], 'ESPN BET')
         better = total_lean(book='ESPN BET', line=52.5, odds=-105, direction='under')
         decision = gates.best_quote_by_ev(better, ctx)
-        self.assertFalse(decision.ok)
-        self.assertEqual(decision.data['best']['book'], 'BetRivers')
+        self.assertTrue(decision.ok)
 
     def test_best_quote_ignores_comparison_only_books_for_official_selection(self):
         snapshot = dict(SNAPSHOT, margin=-11.0)

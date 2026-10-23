@@ -19,6 +19,48 @@ def review():
 
 
 class RoleTests(unittest.TestCase):
+    def test_current_workload_uses_current_team_regular_season_not_preseason_or_future(self):
+        _,_,_,boxes=fixtures.fixture()
+        q=review()
+        for i,minutes in enumerate((28,32)):
+            boxes.append(dict(boxes[-1],eventId=f'new{i}',season=2027,
+                              kickoff=f'2026-10-{18+i}T00:00:00Z',
+                              players=[dict(boxes[-1]['players'][0],starter=True,stats={'pts':20,'min':minutes})]))
+        boxes += [dict(boxes[-1],eventId='pre',seasonType=1),
+                  dict(boxes[-1],eventId='future',kickoff='2026-10-21T00:00:00Z')]
+        role,hold=n.current_role(q,boxes,NOW)
+        self.assertIsNone(hold);self.assertEqual(role['minutes'],[28,32])
+        self.assertEqual((role['games'],role['starts'],role['medianMinutes']),(2,2,30))
+        self.assertNotIn('expectedMinutes',role)
+
+    def test_changed_starter_and_latest_dnp_hold_without_a_new_numeric_review(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);boxes=fixtures.NBAPlayerPropTests().write(root)
+            for b in boxes:b['players'][0]['starter']=False
+            boxes.append(dict(boxes[-1],eventId='new',season=2027,kickoff='2026-10-19T00:00:00Z',
+                              players=[dict(boxes[-1]['players'][0],starter=True)]))
+            held=props.build(NOW,root,boxes)['rows'][0]
+            self.assertIsNone(held['projection']);self.assertIn('Starting role changed',held['hold'])
+            self.assertEqual(held['currentRole']['starts'],1)
+            n.record(review(),NOW,root)
+            adjusted=props.build(NOW,root,boxes)['rows'][0]
+            self.assertEqual(adjusted['projection']['minutes'],20)
+            self.assertEqual(adjusted['projection']['model'],'nba-minutes-rate-reviewed-v1')
+            boxes[-1]['players'][0]['dnp']=True
+            self.assertIn('Did not play',n.current_role(review(),boxes,NOW)[1])
+
+    def test_quote_cannot_reuse_a_roster_for_a_different_team_or_rescheduled_game(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);boxes=fixtures.NBAPlayerPropTests().write(root)
+            import json
+            path=root/'rosters/8.json';roster=json.loads(path.read_text());roster['team']='999'
+            boxscores.write_json(path,roster)
+            self.assertIn('roster',props.build(NOW,root,boxes)['rows'][0]['hold'])
+            roster['team']='8';boxscores.write_json(path,roster)
+            path=root/'slate.json';slate=json.loads(path.read_text());slate['games'][0]['kickoff']='2026-10-20T20:00:00Z'
+            boxscores.write_json(path,slate)
+            self.assertIsNone(props.build(NOW,root,boxes)['rows'][0]['projection'])
+
     def test_reviewed_minutes_change_research_not_history_or_probability(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);boxes=fixtures.NBAPlayerPropTests().write(root)

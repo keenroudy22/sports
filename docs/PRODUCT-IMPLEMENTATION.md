@@ -1,5 +1,35 @@
 # October 5 product implementation tracker
 
+## October23 formula parity and NBA role controls — in verification
+
+Research and selection now share the fitted neutral-centered formula for NFL/CFB
+spreads and totals, including learned coefficient overrides and push-aware EV.
+Exact two-sided price gates remain; one-sided game-feed rows cannot qualify on
+Research. Moneyline's separate legacy market-anchored estimate is not promoted
+or called calibrated Research. No thresholds, forecast weights or old publications
+are changed. Regression checks compare both sides, whole/half lines, prices,
+shopping and board values. This repairs a formula mismatch, not evidence of ROI.
+
+NBA now checks roster team, season and event time against every prop, surfaces
+current-season observed minutes/starts with source and dates, and holds a changed
+starting role or latest DNP unless a newer numeric game-bound review explains it.
+Existing injury/history holds still win. Sourced reviewed minutes remain separate
+from historical per-minute production and immutable forward forecasts.
+
+The automatic last-three-minutes replacement FAILED evaluation:7350 comparable
+player appearances per stat, minutes MAE5.122→5.2619 and points5.1623→5.1825;
+rebounds/assists also slightly worse. Candidate code lives only in the offline
+evaluator. No automatic numeric replacement or roster-adjusted team score is
+promoted. Available NBA boxes start January2026, with no qualifying October
+rollover holdout yet. Football2026 candidate diagnostics are small/mixed, not
+proof that parity improves prediction quality. Full numbers/input hashes live in
+model-parity-evaluation-2026-10-23.json; replay:model_parity_audit.py.
+
+The full audit remains unfinished: automated Q1/Q2 source/model/settlement,
+validated NBA team/rotation adjustments, prospective NBA/Climb promotion and
+observed delivery/analytics improvements are not converted into shipped claims.
+Current code release and live receipts are still pending.
+
 ## October23 NBA and CFB repair verified live — 20:16 UTC
 
 Hosted40015968340SUCCESS uploaded verified12262b1c after detecting10 changed

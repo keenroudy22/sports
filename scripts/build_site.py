@@ -1757,6 +1757,8 @@ def build(now=None):
     cfb = league_data['CFB']
     fbs = model_v2.fbs_teams([g for g in cfb['records'] if g['season'] >= cfb['current'] - 1])
     paused = learned_pauses()
+    import learning
+    game_calibration = learning.load_policy().get('calibration') or {}
     for line in lines:
         game = by_id.get(line.get('gameId'))
         snapshot = (pregame(forecasts.get(game['id'], []), game['kickoff']) or [None])[-1] if game else None
@@ -1764,7 +1766,7 @@ def build(now=None):
         thin = bool(snapshot and snapshot.get('sparse')) \
             or bool(line.get('athleteId')) and appearances[str(line['athleteId'])] < 3
         # v2 compresses FBS-FCS blowouts badly enough that any chance it gives there would mislead.
-        line['grade'] = None if fcs else grade_line(line, snapshot, thin)
+        line['grade'] = None if fcs else grade_line(line, snapshot, thin, game_calibration)
         if line['grade'] and f"{game['league']}/{'spread' if line.get('market') == 'point spread' else 'total'}" in paused:
             line['grade']['performanceCaution'] = True
             line['grade']['performanceNeed'] = 3.0
@@ -2161,7 +2163,7 @@ def board_picks(first, latest, by_id, identities):
     return [reader_words(row) for row in rows]
 
 
-def grade_line(line, snapshot, thin):
+def grade_line(line, snapshot, thin, calibration=None):
     """v2's read on one open, priced line: its chance at the line, what the price needs, and a tier.
 
     The same arithmetic as the research desk (scripts/pricing.py). thin: the game or the player has
@@ -2182,14 +2184,24 @@ def grade_line(line, snapshot, thin):
             return None
     try:
         p = pricing.price(snapshot, market, side, float(line['line']), int(odds), athlete)
+        p = pricing.calibrated_game(p, (calibration or {}).get(f"{snapshot.get('league') or str(snapshot.get('gameId', '')).split('-')[0]}/{market}"))
     except ValueError:  # no projection for this player or market
         return None
-    chance_display = p['chance'] if p['calibrated'] and not thin and not line.get('limited') else None
+    # Keep one-sided feed prices visible as comparisons, never as qualifying
+    # research when selection would refuse the missing exact opposing quote.
+    paired = True
+    if line.get('gameMarket') and 'oppositeOdds' in line:
+        other = line['oppositeOdds']
+        paired = (isinstance(other, (int, float)) and not isinstance(other, bool)
+                  and math.isfinite(other) and 100 <= abs(other) < 1000
+                  and .99 <= pricing.break_even(odds)+pricing.break_even(other) <= 1.15)
+    chance_display = p['chance'] if p['calibrated'] and paired and not thin and not line.get('limited') else None
     return {'chance': p['chance'], 'raw': p['rawChance'], 'calibrated': p['calibrated'], 'push': p['push'],
             'needs': p['breakEven'], 'edge': p['edgePoints'],
-            'projection': p['projection'], 'thin': thin, 'tier': pricing.tier(p['edgePoints'], thin),
+            'projection': p['projection'], 'thin': thin, 'tier': pricing.tier(p['edgePoints'], thin) if paired else 'pass',
+            'pricePaired': paired,
             'model': p['model'], 'snapshotAt': p['snapshotAt'], 'fairOdds': fair_american(p['chance']) if p['calibrated'] else None,
-            'ev': round(p['chance'] * (1 + pricing.payout(int(odds))) - 1, 3), 'chanceDisplay': chance_display,
+            'ev': p['evPerUnit'], 'chanceDisplay': chance_display,
             'range80': p.get('range80')}
 
 
@@ -2741,6 +2753,8 @@ def book_rows(game, record):
         if not top:
             continue
         key, line, price = top
+        selected = record['books'][key][kind]
+        opposite = selected.get('awayPrice' if side == 'home' else 'homePrice') if kind == 'spread' else selected.get('under' if side == 'over' else 'over')
         quotes = []
         for book, entry in record['books'].items():
             block = entry.get(kind)
@@ -2756,6 +2770,7 @@ def book_rows(game, record):
                  else f"{away} @ {home} {side} {line:g}")
         rows.append({'id': f"game-{game['id']}-{side}", 'league': game['league'], 'gameId': game['id'],
                      'market': name, 'line': line, 'odds': price if price != -1000 else None,
+                     'oppositeOdds': opposite if opposite != -1000 else None,
                      'direction': side if kind == 'total' else None, 'side': side if kind == 'spread' else None,
                      'book': BOOK_NAMES.get(key, key),
                      'books': sorted(quotes, key=lambda q: q['book']), 'state': 'open', 'kickoff': game['kickoff'],
@@ -2800,7 +2815,8 @@ def game_market_lines(slate, now, captures=None):
                         'market': name, 'line': value, 'odds': odds,
                         'direction': direction if name != 'moneyline' else None,
                         'side': direction if name == 'moneyline' else None,
-                        'oppositeOdds': (m['awayML'] if direction == 'home' else m['homeML']) if name == 'moneyline' else None,
+                        'oppositeOdds': ((m['awayML'] if direction == 'home' else m['homeML']) if name == 'moneyline'
+                                         else (m['underOdds'] if direction == 'over' else m['overOdds']) if name == 'total points' else None),
                         'book': m['book'], 'state': 'open', 'kickoff': game['kickoff'],
                         'observedAt': game.get('marketRetrievedAt'), 'title': title, 'gameMarket': True,
                         'marketWindow': 'Full game', 'move': m['spreadMove'] if kind == 'spread' else None})

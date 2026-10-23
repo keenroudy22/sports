@@ -181,7 +181,7 @@ def history(boxes, athlete, now):
         if b['seasonType']!=2 or boxscores.instant(b['kickoff'])>=now:continue
         for p in b.get('players',[]):
             if p['id']==athlete and not p.get('dnp'):
-                out.append(dict(p,season=b['season'],date=b['kickoff'],eventId=b['eventId']))
+                out.append(dict(p,season=b['season'],date=b['kickoff'],eventId=b['eventId'],source=b.get('source')))
     return out
 
 
@@ -285,10 +285,11 @@ def build(now, root=STORE, boxes=None, limit=60):
         # availability gate; research does not change admission or publish odds.
         elif not fresh(injury.get('retrievedAt'),now,4):reason='Availability update needed'
         elif q['athleteId'] in holds:reason=f"Availability: {holds[q['athleteId']]}"
-        elif (not fresh(own.get('retrievedAt'),now,24) or own.get('season')!=q['season']
+        elif (not fresh(own.get('retrievedAt'),now,24) or own.get('season')!=q['season'] or own.get('team')!=q['team']
               or len(p)!=1 or not p[0]['active']
               or str(p[0].get('status','')).lower() in ('inactive','suspended','injured-reserve')
-              or q['team'] not in {str(t['id']) for t in g['teams'].values()}):
+              or q['team'] not in {str(t['id']) for t in g['teams'].values()}
+              or q['season']!=g['season'] or boxscores.instant(q['kickoff'])!=boxscores.instant(g['kickoff'])):
             reason='Current roster verification needed'
         fair=espn_props.implied(q['over'])/(espn_props.implied(q['over'])+espn_props.implied(q['under']))
         peers=[other for other in quotes.values() if other['book']!=q['book']
@@ -297,13 +298,22 @@ def build(now, root=STORE, boxes=None, limit=60):
         if any(abs(fair-espn_props.implied(o['over'])/(espn_props.implied(o['over'])+espn_props.implied(o['under'])))>=.15 for o in peers):
             reason='Books disagree sharply at this exact line; price needs review'
         logs=history(boxes,q['athleteId'],now)
+        current_role, current_hold = nba_roles.current_role(q, boxes, now)
         projection=None
         if not reason:projection,reason=forecast(logs,q['team'],q['season'],q['stat'])
         projection,role_review,role_hold=nba_roles.apply(projection,q,role_reviews.get((q['eventId'],q['athleteId'])),now)
         if not reason and role_hold:
             reason=role_hold;projection=None
+        # Only a valid numeric, game-specific review can explain a new rotation.
+        # It can never clear an injury/identity/history hold from above.
+        reviewed_after_role = (role_review and role_review['kind'] in ('analyst-estimate','reported-minutes')
+                               and boxscores.instant(role_review['checkedAt']) > boxscores.instant(current_role['asOf'])) if current_hold else False
+        if not reason and current_hold and not reviewed_after_role:
+            reason=current_hold;projection=None
         row={k:q[k] for k in ('eventId','athleteId','name','team','teamName','teamAbbr','photo','kickoff','stat','line','book','over','under','sourceAt')}
         if role_review:row['roleReview']=role_review
+        row['currentRole']=current_role
+        row['rosterAt']=own.get('retrievedAt')
         row['statName']=NAMES[q['stat']];row['projection']=projection;row['hold']=reason
         if projection:
             side='over' if projection['value']>q['line'] else 'under'

@@ -250,6 +250,29 @@ def calibrated_prop(value, calibration):
     return p
 
 
+def calibrated_game(value, calibration=None):
+    """Use the fitted neutral-centered family, shared by board and selection.
+
+    This is a formula-consistency repair, not a refit or a claim of better ROI.
+    Moneylines have no fitted coefficient here and remain explicitly uncalibrated.
+    """
+    if not value or value.get('market') not in ('spread', 'total'):
+        return value
+    k = (calibration or {}).get('k', value.get('calibration'))
+    if not isinstance(k, (int, float)) or isinstance(k, bool) or not math.isfinite(k) or not 0 <= k <= 1:
+        return value
+    p = dict(value)
+    chance = neutral_chance(p['rawChance'], k)
+    p.update(chance=round(chance, 3), calibration=k, calibrated=True,
+             calibrationMethod='neutral-centered-fitted',
+             edgePoints=round(100 * (chance-break_even(p['odds'])), 1),
+             evPerUnit=round(chance*payout(p['odds'])-max(0, 1-chance-p['push']), 3))
+    p['edge'] = (f"Projection {p['projection']:g} against {p['line']:g}. "
+                 f"Adjusted chance {chance:.1%}; {break_even(p['odds']):.1%} needed at {p['odds']:+d}: "
+                 f"{p['edgePoints']:+.1f} percentage points.")
+    return p
+
+
 def market_of(pick):
     key = pick.get('market')
     if key in WORDS:

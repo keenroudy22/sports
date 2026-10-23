@@ -360,7 +360,7 @@ def exact_price_pairs(candidate, ctx):
 
 
 def selection_numbers(candidate, ctx):
-    """Raw, exact-book fair and the one market-anchored chance used everywhere."""
+    """Exact-book price context with the same fitted chance as Research."""
     desk = desk_for(candidate, ctx)
     if not desk or not isinstance(desk.get('rawChance'), (int, float)):
         return None
@@ -379,6 +379,13 @@ def selection_numbers(candidate, ctx):
     if not isinstance(k, (int, float)) or not 0 <= k <= 1:
         k = .35
     anchored = pricing.market_anchored(raw, fair, k, int(candidate['odds']), float(desk.get('push') or 0))
+    if market in ('spread', 'total') and desk.get('calibrated'):
+        # calibrate.py fits around .5, not around the current book price.
+        # Do not reinterpret its coefficient when ranking a candidate.
+        chance = pricing.neutral_chance(raw, desk['calibration'])
+        anchored.update(chance=round(chance, 3), edgePoints=desk['edgePoints'],
+                        evPerUnit=desk['evPerUnit'], marketGap=round(100*(chance-fair), 1),
+                        calibration=desk['calibration'], calibrationMethod='neutral-centered-fitted')
     if candidate.get('athleteId') and isinstance(learned, (int, float)) and 0 <= learned <= 1:
         # This coefficient was fitted to 0.5 + k*(raw-0.5), not to a
         # market-centred residual. Use the tested family unchanged; the exact
@@ -439,7 +446,8 @@ def player_projection_sanity(candidate, ctx):
 
 def calibrated_desk(value, candidate, ctx):
     league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league') or str(candidate.get('id', '')).split('-')[0]
-    return pricing.calibrated_prop(value, (ctx.policy.get('calibration') or {}).get(f'{league}/prop') or {})
+    value = pricing.calibrated_prop(value, (ctx.policy.get('calibration') or {}).get(f'{league}/prop') or {})
+    return pricing.calibrated_game(value, (ctx.policy.get('calibration') or {}).get(f'{league}/{market_key(candidate)}') or {})
 
 
 def fresh_quote(candidate, ctx):
