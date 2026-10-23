@@ -1,8 +1,8 @@
 {
- "at": "2026-10-23T12:21:28Z",
+ "at": "2026-10-23T12:32:03Z",
  "confirmed": {
   "CFB-401856727": "2026-10-23T12:00:35Z",
-  "CFB-401856728": "2026-10-23T12:22:54Z",
+  "CFB-401856728": "2026-10-23T12:33:30Z",
   "CFB-401856730": "2026-10-23T12:00:35Z",
   "CFB-401856731": "2026-10-23T12:00:35Z",
   "CFB-401856834": "2026-10-23T12:00:35Z",
@@ -11,8 +11,8 @@
   "CFB-401856840": "2026-10-23T12:00:35Z",
   "CFB-401856841": "2026-10-23T12:00:35Z",
   "CFB-401858270": "2026-10-23T12:00:35Z",
-  "CFB-401858271": "2026-10-23T12:22:54Z",
-  "CFB-401858272": "2026-10-23T12:22:54Z",
+  "CFB-401858271": "2026-10-23T12:33:30Z",
+  "CFB-401858272": "2026-10-23T12:33:30Z",
   "CFB-401858273": "2026-10-23T01:07:27Z",
   "CFB-401858274": "2026-10-23T12:00:35Z",
   "CFB-401858495": "2026-10-23T12:00:35Z",
@@ -20,11 +20,11 @@
   "CFB-401858497": "2026-10-23T01:07:27Z",
   "CFB-401858498": "2026-10-23T12:00:35Z",
   "CFB-401858499": "2026-10-23T01:07:27Z",
-  "CFB-401861965": "2026-10-23T12:22:54Z",
-  "CFB-401862808": "2026-10-23T12:22:54Z",
+  "CFB-401861965": "2026-10-23T12:33:30Z",
+  "CFB-401862808": "2026-10-23T12:33:30Z",
   "CFB-401862809": "2026-10-23T12:00:35Z",
   "CFB-401862810": "2026-10-23T01:07:27Z",
-  "CFB-401864525": "2026-10-23T12:22:54Z",
+  "CFB-401864525": "2026-10-23T12:33:30Z",
   "CFB-401864526": "2026-10-23T01:07:27Z",
   "CFB-401866446": "2026-10-23T12:00:35Z",
   "CFB-401866447": "2026-10-23T01:07:27Z",
@@ -152,7 +152,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-23T21:00:00Z",
@@ -162,6 +165,7 @@
      "away": "Yale",
      "external": {
       "betfred": "37338572",
+      "betmgm": "6:47428",
       "betonline": "491158057",
       "betparx": "1029240564",
       "betrivers": "1029240564",
@@ -197,7 +201,9 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-23T23:00:00Z",
@@ -229,7 +235,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -262,7 +271,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -276,7 +288,7 @@
       "hardrock": "1158597414546964891",
       "kalshi": "KXNCAAFSPREAD-26OCT24USDDAY",
       "novig": "01a14577-5919-7011-b0e0-b3a85b5b3f7f",
-      "onexbet": "764120653",
+      "onexbet": "763706345",
       "paddypower": "36208865",
       "polymarket": "nfl_dayton_sandiego_2026-10-24_b2",
       "prophetx": "1702921626",
@@ -293,7 +305,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -326,7 +341,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -340,7 +358,7 @@
       "fanduel": "36208901",
       "fliff": "420761_c_p_209_prematch",
       "hardrock": "7050336085506916746",
-      "kalshi": "KXNCAAFGAME-26OCT24STNHLIU",
+      "kalshi": "KXNCAAFSPREAD-26OCT24STNHLIU",
       "novig": "01a142e4-1f4c-7343-a82a-dbee192f7b5d",
       "onexbet": "764120654",
       "paddypower": "36208901",
@@ -422,7 +440,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -455,7 +476,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -471,7 +495,7 @@
       "hardrock": "6490339682310816177",
       "kalshi": "KXNCAAFSPREAD-26OCT24JKSTCOOK",
       "novig": "01a145ae-56fe-79e3-b694-cfc2aa09f539",
-      "onexbet": "764138548",
+      "onexbet": "763711864",
       "paddypower": "36208911",
       "polymarket": "nfl_bethunecookman_jacksonstate_2026-10-24_b2",
       "prophetx": "1703111174",
@@ -501,7 +525,7 @@
       "fanduel": "36208902",
       "fliff": "420768_c_p_209_prematch",
       "hardrock": "3637007240436777376",
-      "kalshi": "KXNCAAFSPREAD-26OCT24BUCKHC",
+      "kalshi": "KXNCAAF1H-26OCT24BUCKHC",
       "novig": "01a145ae-5270-73e1-b9f8-e384ef1638fb",
       "onexbet": "763710607",
       "paddypower": "36208902",
