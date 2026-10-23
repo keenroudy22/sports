@@ -5349,7 +5349,32 @@
    },
    "sentAt": "2026-10-22T04:34:30.371Z",
    "link": "https://x.com/1753110091912413184/status/2113126827115847765",
-   "tweetId": "2113126827115847765"
+   "tweetId": "2113126827115847765",
+   "metricsHistory": [
+    {
+     "at": "2026-10-23T04:59:31Z",
+     "checkpointHours": 24,
+     "metrics": {
+      "reactions": 0,
+      "comments": 0,
+      "engagementRate": 0,
+      "reposts": 0,
+      "impressions": 57,
+      "clicks": 0
+     },
+     "providerUpdatedAt": "2026-10-22T12:29:01.425Z",
+     "followup": false
+    }
+   ],
+   "metrics": {
+    "reactions": 0,
+    "comments": 0,
+    "engagementRate": 0,
+    "reposts": 0,
+    "impressions": 57,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-23T04:59:31Z"
   },
   {
    "id": "NFL-2026-W7-maye-under-20-5-cmp-dk",
@@ -5814,6 +5839,81 @@
    "sentAt": "2026-10-23T03:49:01.897Z",
    "link": "https://x.com/1753110091912413184/status/2113477770017656883",
    "tweetId": "2113477770017656883"
+  },
+  {
+   "id": "receipt:day:2026-10-22",
+   "postedAt": "2026-10-23T04:59:31Z",
+   "dueAt": "2026-10-23T13:03:00Z",
+   "bufferPostId": "6adae9bbcc1b7cdc08cfabd4",
+   "textHash": "6d4f7d5f93e38344",
+   "kind": "buffer:receipt",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "Thursday: 0-2.\n❌ Drake Maye under 20.5 completions · 24 of 31, 321 yards · missed by 3.5\n❌ Patriots MONEYLINE · Final: Patriots 24, Bears 30\n\n#NFL",
+   "socialStyleVersion": "plain-20261022",
+   "socialVoiceVersion": "casual-20261022",
+   "cardKey": "receipt-day-2026-10-22"
+  },
+  {
+   "id": "research:td-hit:research:end-zone:2026-10-22",
+   "postedAt": "2026-10-23T04:59:31Z",
+   "dueAt": "2026-10-23T05:06:37Z",
+   "bufferPostId": "6adae9bbd447d56a6479a9ca",
+   "textHash": "6becf3b750ad7add",
+   "kind": "buffer:research",
+   "card": false,
+   "cardTheme": "none",
+   "queuedText": "🎯 D'Andre Swift found the end zone.\nThat was my anytime TD lean this morning.\n#NFL",
+   "socialStyleVersion": "plain-20261022",
+   "socialVoiceVersion": "casual-20261022",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 D'Andre Swift found the end zone.\nThat was my anytime TD lean this morning.\n#NFL",
+    "destination": "research"
+   }
+  },
+  {
+   "id": "research:end-zone:2026-10-23",
+   "postedAt": "2026-10-23T04:59:31Z",
+   "dueAt": "2026-10-23T14:31:00Z",
+   "bufferPostId": "6adae9bc8d2197cb2a1760f4",
+   "textHash": "495b67ff3f9f6f36",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "🎯 END-ZONE WORK\nMy TD lean: Liam Szarka\n24 red-zone opportunities · 14 inside the 10\n#CFB",
+   "socialStyleVersion": "plain-20261022",
+   "socialVoiceVersion": "casual-20261022",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nMy TD lean: Liam Szarka\n24 red-zone opportunities · 14 inside the 10\n#CFB",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-10-23.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "Liam Szarka",
+      "athleteId": "5238868",
+      "gameId": "CFB-401864525",
+      "league": "CFB",
+      "kickoff": "2026-10-24T01:00Z",
+      "anytime": false,
+      "firstTd": true
+     },
+     {
+      "player": "Cale Hellums",
+      "athleteId": "5150297",
+      "gameId": "CFB-401862808",
+      "league": "CFB",
+      "kickoff": "2026-10-24T00:30Z",
+      "anytime": true,
+      "firstTd": false
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-10-23"
   }
  ]
 }
