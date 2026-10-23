@@ -1,5 +1,36 @@
 # October 5 product implementation tracker
 
+## October23 current-game social relevance — in verification
+
+Owner asked for useful current projections/rankings/why, not standalone historical
+averages. Confirmed NBA team-trend social fallback used last season until five
+current-season games existed. Website history remains explicitly labeled, but
+new10AM social choices use fresh actual book totals versus model totals, ranked
+by absolute projection difference (not win chance or bet quality). Missing/stale
+quotes do not fall back to old averages. Player research now needs a sourced,
+game-specific current role review and leads with line/model/role; historical rate
+window and analyst-minute labels stay honest. No model weights or admission change.
+Existing provider-confirmed queue audit checks this policy before delivery;
+sent/unknown states are never deleted. Local log flags overdue Oct23 NBA trends
+and props, but Buffer state cannot be inferred until provider recovery. Five
+regressions cover relevance, stale quotes, roles, actual new captions and safe
+queued cancellation. Release/render/live checks pending; O-20261023-RELEVANCE.
+Additional checks reject a changed latest total quote and prevent an overnight
+price from being scheduled past its freshness window. Football trend copy now
+leads with the actual line/projection instead of a historical percentage headline;
+its price, role, injury and opponent-support rules remain unchanged. Seven new
+regressions total. Real stored NBA comparison preview rendered and visually
+checked in owner folder as kookn-current-research-preview-2026-10-23.png; preview
+only, not a published play. Pending provider states remain unknown.
+
+Audit source96c8e76d installed under locks after1703Python(two skips)/275Node,
+normal/clean,461pages,113record/NBA0,630file publication guard/assets and isolated
+1330 rehearsal4w4_byeb outcomeok/zero outside/private writes. Normal grader
+appended27 corrected reviewed-model outcomes at0506e4e3; all original file prefixes
+preserved, integrity passed and replay appended0. Forward comparison now901usable
+observations,215missing/unusable,13games; reviewed-model sample only1–2games/stat,
+not promotion evidence. Hosted/live final verification remains pending.
+
 ## October23 audit follow-up — period identity and usable NBA learning
 
 Reproduced explicit first-quarter/half football market names mapping to full-game

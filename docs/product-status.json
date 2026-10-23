@@ -3,6 +3,15 @@
   "updatedAt": "2026-10-23T12:28:09Z",
   "items": [
     {
+      "id": "O-20261023-RELEVANCE",
+      "title": "Current matchup and role context before historical trend posts",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release tested NBA matchup/line slot and current-role prop requirement; verify preview and hosted build. Recheck two overdue NBA attempts after Buffer recovery; cancel only provider-confirmed private drafts, never sent or unknown posts.",
+      "doneWhen": "New social research is current-matchup/price or role-led, not standalone old averages. History stays labeled on site; queued audits preserve sent posts. Full gates, render and live release pass; actual provider states recorded.",
+      "evidence": "Confirmed team_trends fell back to prior season below five current games. Replaced social-only slot with fresh model/line gaps; props require sourced game-specific role. Five regressions added. Local log has overdue Oct23 trends/props; provider state unknown during backoff."
+    },
+    {
       "id": "O-20261023-PERIODGUARD",
       "title": "Prevent quarter and half quotes entering full-game models",
       "status": "ready",

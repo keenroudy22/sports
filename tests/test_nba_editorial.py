@@ -26,6 +26,95 @@ def fixture():
 
 
 class NBAEditorialTests(unittest.TestCase):
+    def relevant_fixture(self):
+        now=datetime(2026,10,24,13,tzinfo=timezone.utc)
+        data,history=fixture()
+        data['sourceAt']=boxscores.stamp(now)
+        for i,g in enumerate(data['games']):
+            g['kickoff']=f'2026-10-24T{22+i}:00:00Z'
+            g['totalQuote']={'line':220+i,'over':-110,'under':-110,'book':'DraftKings','retrievedAt':boxscores.stamp(now)}
+        return now,data,history
+
+    def test_new_social_trends_use_ranked_current_matchups_not_prior_season_averages(self):
+        now,data,h=self.relevant_fixture()
+        rows=n.choices(data,now,h)
+        watch=next(r for r in rows if r['family']=='trends')
+        self.assertEqual(watch['title'],'NBA LINES I’M WATCHING')
+        self.assertEqual(watch['rows'][0]['gap'],5.3)
+        self.assertIn('5.3 more points',watch['text'])
+        self.assertIn('Research, not a bet.',watch['text'])
+        self.assertNotIn('last season',watch['text'])
+        self.assertNotIn('scored /',watch['text'])
+        self.assertEqual(n.relevance_issues(watch,now),[])
+        self.assertLessEqual(x_post.tweet_length(watch['text']),x_post.LIMIT)
+        self.assertTrue(n.team_trends(data['games'],now,h))  # website history remains available
+
+    def test_missing_stale_or_future_quotes_do_not_fall_back_to_history_social(self):
+        now,data,h=self.relevant_fixture()
+        for at in (None,boxscores.stamp(now-timedelta(hours=5)),boxscores.stamp(now+timedelta(minutes=1))):
+            for g in data['games']:g['totalQuote']['retrievedAt']=at
+            self.assertFalse(any(r['family']=='trends' for r in n.choices(data,now,h)))
+        self.assertTrue(n.relevance_issues({'family':'trends','rows':[]},now))
+
+    def test_player_research_requires_game_specific_sourced_current_role(self):
+        now,_,_=self.relevant_fixture()
+        row={'eventId':'1','athleteId':'2','team':'3','kickoff':'2026-10-24T23:00:00Z'}
+        snapshot={'family':'props','evidence':[row]}
+        self.assertTrue(n.relevance_issues(snapshot,now))
+        row['roleReview']={**row,'checkedAt':boxscores.stamp(now),'headline':'Starting role confirmed',
+                           'sources':[{'url':'https://www.nba.com/','label':'Team report'}]}
+        self.assertEqual(n.relevance_issues(snapshot,now),[])
+        for field,value in [('eventId','wrong'),('checkedAt',boxscores.stamp(now-timedelta(days=2))),('hold','Minutes uncertain')]:
+            changed=copy.deepcopy(snapshot);changed['evidence'][0]['roleReview'][field]=value
+            self.assertTrue(n.relevance_issues(changed,now))
+
+    def test_watch_rechecks_exact_quote_and_does_not_schedule_overnight_price(self):
+        now,data,h=self.relevant_fixture()
+        watch=next(r for r in n.choices(data,now,h) if r['family']=='trends')
+        quotes=[dict(eventId=g['id'],book='DraftKings',retrievedAt=boxscores.stamp(now),
+                     current={'total':{k:g['totalQuote'][k] for k in ('line','over','under')}}) for g in data['games']]
+        self.assertTrue(n.watch_current(watch,now,quotes))
+        quotes[0]['current']['total']['line']+=1
+        self.assertFalse(n.watch_current(watch,now,quotes))
+        tonight=now-timedelta(hours=14)
+        data['sourceAt']=boxscores.stamp(tonight)
+        for g in data['games']:g['totalQuote']['retrievedAt']=boxscores.stamp(tonight)
+        self.assertFalse(any(r['family']=='trends' for r in n.choices(data,tonight,h)))
+
+    def test_queued_history_is_cancelled_only_after_provider_confirms_private(self):
+        import buffer_post
+        now,_,_=self.relevant_fixture()
+        old={'key':'nba-trends-2026-10-24','family':'trends','rows':[]}
+        for status,deleted in [('scheduled',True),('sent',False),('unknown',False)]:
+            entry={'id':old['key'],'kind':'buffer:research','bufferPostId':'test',
+                   'dueAt':boxscores.stamp(now+timedelta(hours=1))}
+            with patch.object(n,'stored',return_value=[old]),patch.object(buffer_post,'graphql',return_value={'post':{'status':status,'text':'NBA research'}}),\
+                 patch.object(buffer_post,'delete_post') as delete:
+                buffer_post.audit_pending_style({'posts':[entry]},now,log=lambda *_:None,items={})
+                self.assertEqual(delete.called,deleted)
+            if deleted:self.assertTrue(entry['socialStyleAudit']['needsRevision'])
+            if status=='sent':self.assertIn('sentAt',entry)
+
+    def test_new_prop_caption_leads_with_line_number_and_current_role(self):
+        now,_,_=self.relevant_fixture()
+        players=[]
+        for i in (1,2):
+            row=dict(eventId='1',athleteId=str(i),team='3',kickoff='2026-10-24T23:00:00Z',
+                name=f'Player {i}',teamName='Team',teamAbbr='TM',favorite=True,stat='reb',statName='rebounds',
+                sourceAt=boxscores.stamp(now),book='DraftKings',side='over',line=5.5,odds=-110,
+                last10={'hits':7,'games':10},projection={'value':7,'window':'Last season','minutes':30,'minutesBasis':'analyst-estimate'})
+            row['roleReview']={k:row[k] for k in ('eventId','athleteId','team','kickoff')}
+            row['roleReview'].update(checkedAt=boxscores.stamp(now),headline='Starting tonight',sources=[{'url':'https://www.nba.com/'}])
+            players.append(row)
+        data={'sourceAt':boxscores.stamp(now),'playerProps':{'rows':players}}
+        post=n.prop_choice(data,now)
+        self.assertIsNotNone(post)
+        self.assertIn('Starting tonight',post['text'])
+        self.assertIn('estimated min',post['text'])
+        self.assertIn('Last season',post['text'])  # source window disclosed, not disguised
+        for row in players:row.pop('roleReview')
+        self.assertIsNone(n.prop_choice(data,now))
+
     def test_invalid_never_queued_prop_draft_gets_append_only_revision(self):
         now=datetime(2026,10,20,13,tzinfo=timezone.utc)
         old=dict(key='nba-props-2026-10-20',family='props',capturedAt=boxscores.stamp(now-timedelta(minutes=20)),

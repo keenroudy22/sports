@@ -133,6 +133,20 @@ class SeasonTrendsTests(unittest.TestCase):
                    opponentAdjustment={'against': True, 'supports': False})
         self.assertIsNone(R.season_candidate([g], {'NFL-1': {'seasonTrends': [row]}}, NOW))
 
+    def test_new_social_copy_leads_with_current_projection_not_historical_percentage(self):
+        g,info,q=self.fixture()
+        row=dict(next(r for r in T.build([g],info,[],{'NFL-1':q},NOW) if r['kind']=='alternate'),
+                 kind='main',projection=4.8,priceClears=True,observedAt='2026-10-24T13:00:00Z')
+        now=datetime(2026,10,24,14,tzinfo=timezone.utc)
+        card=R.season_candidate([g],{'NFL-1':{'seasonTrends':[row]}},now)
+        self.assertEqual(card['title'],'PROP LINES I’M WATCHING')
+        self.assertIn('My number 4.8',card['rows'][0]['metric'])
+        self.assertNotIn('100%',card['text'])
+        self.assertIn('5/5',card['text'])
+        self.assertIn('Research, not a bet.',card['text'])
+        row['priceClears']=False
+        self.assertIsNone(R.season_candidate([g],{'NFL-1':{'seasonTrends':[row]}},now))
+
     def test_one_editorial_per_day_across_families(self):
         self.assertTrue(R.already_posted({'posts': [{'id': 'research:upset:2026-10-04'}]}, NOW.date()))
         self.assertTrue(R.already_posted({'posts': {'research:upset:2026-10-04': {}}}, NOW.date()))

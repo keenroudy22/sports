@@ -869,12 +869,26 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
     return read
 
 
+def queued_relevance_issues(entry, now):
+    import nba_editorial
+    if now < nba_editorial.RELEVANCE_START or not re.fullmatch(r'nba-(?:trends|props)-\d{4}-\d{2}-\d{2}',str(entry.get('id') or '')):
+        return []
+    snapshot=next((r for r in nba_editorial.stored() if r['key']==entry['id']),None)
+    if not snapshot:return ['current NBA research evidence unavailable']
+    issues=nba_editorial.relevance_issues(snapshot,now)
+    if not issues and not nba_editorial.watch_current(snapshot,now):
+        issues.append('NBA matchup research no longer matches the latest book quote')
+    return issues
+
+
 def style_audit_due(entry, now):
     if not social_style.active(now) or not entry.get('bufferPostId') or any(entry.get(k) for k in ('sentAt', 'cancelledAt', 'deletedAt', 'error')):
         return False
     audit = entry.get('socialStyleAudit') or {}
     if audit.get('checkedAt') and now - gates.when(audit['checkedAt']) < timedelta(minutes=5):
         return False
+    if queued_relevance_issues(entry, now):
+        return True
     if entry.get('socialStyleVersion') != social_style.VERSION or not entry.get('dueAt'):
         return True
     if entry.get('queuedText') and social_voice.finish(entry['queuedText']) != entry['queuedText']:
@@ -912,6 +926,7 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 raise BufferError('queued style check cannot confirm a private scheduled provider state')
             text = post.get('text') or entry.get('queuedText') or (entry.get('discord') or {}).get('text')
             problems = social_style.issues(text) if text else ['caption unavailable for verification']
+            problems += queued_relevance_issues(entry, now)
             if text and social_voice.finish(text) != text:
                 problems.append('retired caption voice; fresh casual revision required')
             card = entry.get('cardKey')

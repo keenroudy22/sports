@@ -34,6 +34,7 @@ STAT_LABEL = {'passYds': 'pass yds', 'att': 'pass attempts', 'cmp': 'completions
               'rushYds': 'rush yds', 'car': 'carries', 'recYds': 'rec yds',
               'rec': 'receptions', 'targets': 'targets'}
 _PLANNED_METADATA = {}
+CURRENT_GAME_COPY = datetime(2026, 10, 23, 18, 21, tzinfo=timezone.utc)
 
 
 def when(value):
@@ -458,6 +459,14 @@ def season_candidate(games, details, now):
         fill = ' incl. 2025' if row.get('includesPriorSeason') else ''
         return (f"{row['player']}: {row['title']}. My number {row['projection']:g}, line {row['line']:g}; "
                 f"{row['hits']}/{row['games']};{defense}{fill}")
+    if now >= CURRENT_GAME_COPY:
+        for row in shown:
+            row['metric'] = f"My number {row['projection']:g} · line {row['line']:g}"
+            row['detail'] += f" · {row['hits']}/{row['games']} in the labeled history"
+        return {'kind':'season','title':'PROP LINES I’M WATCHING','kicker':'CURRENT LINES · MATCHUP RESEARCH',
+                'accent':CYAN,'rows':shown,
+                'text':'\n'.join(['These prop lines caught my eye 👀',*[caption_row(r) for r in unique],
+                                  'Research, not a bet.',tags(unique)])}
     return {'kind': 'season', 'title': f'{bucket_label} TREND BOARD', 'kicker': 'CURRENT MAIN LINES · FULL-SEASON HISTORY',
             'accent': CYAN, 'rows': shown,
             'text': '\n'.join([f'📈 KOOK\'N {bucket_label} TREND BOARD',

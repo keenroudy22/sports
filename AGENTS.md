@@ -1,5 +1,18 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## Current-game research relevance — October23 owner follow-up
+
+Season history is supporting context, not a standalone social hook. Lead research
+with the current matchup, a fresh relevant line/projection, and why it matters;
+rank projection gaps as gaps, never as win probabilities or official bets. The NBA
+10AM slot uses fresh matchup/total comparisons rather than last-season team
+scoring averages. Player research requires a sourced, current game-specific role
+review; disclose analyst minutes estimates and the historical rate window. Keep
+labeled history on research pages and preserve sent posts. Audit existing private
+queued research through the provider-confirmed scheduled-state guard; never
+delete an overdue/unknown-state post on an assumption. No new slot, feed budget,
+model promotion or forced bet follows from this editorial change.
+
 ## Owner-approved staking update — October 23, 17:40 UTC
 
 Prospective ordinary straights use 0.5u; the stricter Chef's Pick tier uses 1u.

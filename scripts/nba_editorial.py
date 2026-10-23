@@ -19,6 +19,8 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / 'data/nba-editorial'
 START = '2026-10-20'
+RELEVANCE_START = datetime(2026, 10, 23, 18, 21, tzinfo=timezone.utc)
+EDITORIAL_POLICY = 'current-matchup-20261023'
 REVIEW = Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')/'nba-editorial-review.json'
 PROP_REVIEW = REVIEW.with_name('nba-props-review.json')
 
@@ -41,6 +43,7 @@ def prop_choice(data,now,preview=False):
         if not r.get('favorite') or r.get('hold') or not r.get('projection') or r['athleteId'] in seen:
             continue
         if r.get('stat') not in ('pts','reb','ast','fg3m'):continue
+        if now >= RELEVANCE_START and not current_role(r, now):continue
         kickoff=boxscores.instant(r['kickoff']);target=eastern_date(kickoff)
         if (not preview and (target!=day or (now.astimezone(gates.EASTERN).hour,now.astimezone(gates.EASTERN).minute)<(8,30))) or kickoff<=now+timedelta(hours=2):
             continue
@@ -53,6 +56,10 @@ def prop_choice(data,now,preview=False):
               'caption':f"{r['name']} · {r['teamName']}\n{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d} · I have {p['value']:g}"+
                         (f" at {p['minutes']:g} estimated min" if p.get('minutesBasis')=='analyst-estimate' else '')+
                         f" · {h['hits']}/{h['games']}"}
+        if now >= RELEVANCE_START:
+            # History stays labeled on the graphic, but is not the social hook.
+            item['caption'] = item['caption'].rsplit(' · ', 1)[0] + '\n' + r['roleReview']['headline']
+            item['detail'] += ' · '+r['roleReview']['headline']
         if rows and (r['book']!=evidence[0]['book'] or p['window']!=evidence[0]['projection']['window']):continue
         proposed=rows+[item]
         proposed_text=prop_text(proposed,r['book'],p['window'])
@@ -70,7 +77,84 @@ def prop_choice(data,now,preview=False):
             'capturedAt':boxscores.stamp(now),'sourceAt':data['sourceAt'],'due':boxscores.stamp(due),
             'stale':boxscores.stamp(cutoff),'rows':rows,'evidence':evidence,'text':text,
             'title':'NBA PROP PREVIEW' if preview else 'NBA PROP LOOKS',
+            'editorialPolicy':EDITORIAL_POLICY if now >= RELEVANCE_START else None,
             'preview':bool(preview),'kicker':f"{eastern_date(now):%b %-d} · PREVIEW" if preview else f"{target:%b %-d} · PLAYER RESEARCH",'right_label':'MY NUMBER'}
+
+
+def current_role(row, now):
+    review = row.get('roleReview') or {}
+    try:
+        return (not review.get('hold') and bool(review.get('headline')) and bool(review.get('sources'))
+                and all(review.get(k) == row.get(k) for k in ('eventId','athleteId','team','kickoff'))
+                and timedelta(0) <= now-boxscores.instant(review['checkedAt']) <= timedelta(hours=24)
+                and now < boxscores.instant(row['kickoff']))
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
+def relevance_issues(snapshot, now):
+    if now < RELEVANCE_START or snapshot.get('family') == 'projections':
+        return []
+    if snapshot.get('family') == 'trends':
+        if snapshot.get('editorialPolicy') != EDITORIAL_POLICY or not snapshot.get('rows'):
+            return ['standalone historical scoring post; current matchup/line explanation required']
+        for row in snapshot['rows']:
+            quote = row.get('quote') or {}
+            try:
+                if not timedelta(0) <= now-boxscores.instant(quote['retrievedAt']) <= timedelta(hours=4):
+                    return ['matchup research quote needs refresh']
+            except (KeyError, TypeError, ValueError):
+                return ['matchup research quote unavailable']
+    if snapshot.get('family') == 'props' and (not snapshot.get('evidence')
+            or any(not current_role(r, now) for r in snapshot['evidence'])):
+        return ['player research needs current game-specific role/minutes context']
+    return []
+
+
+def market_watch_rows(games, now):
+    """Rank current model/line differences, not hit rates or win probabilities."""
+    rows = []
+    for game in games:
+        quote = game.get('totalQuote') or {}
+        projection = game.get('projection') or {}
+        try:
+            if not timedelta(0) <= now-boxscores.instant(quote['retrievedAt']) <= timedelta(hours=4):continue
+            line, value = quote['line'], projection['total']
+            if any(type(v) not in (int,float) or not math.isfinite(v) or v <= 0 for v in (line,value)):continue
+            if not quote.get('book') or abs(value-line)<.5:continue
+            # The source builder verifies the two-sided book quote. Keep both
+            # exact prices in the frozen evidence, never invent an actionable side.
+            if any(type(quote.get(k)) not in (int,float) or not math.isfinite(quote[k])
+                   or abs(quote[k]) < 100 for k in ('over','under')):continue
+            gap = round(value-line,1)
+            names = ' at '.join(game['teams'][s]['abbreviation'] for s in ('away','home'))
+            direction = 'more' if gap>0 else 'fewer'
+            rows.append({'subject':names, 'line':f"Book total {line:g} · {quote['book']}",
+                'right':f'{value:g}', 'detail':f"My number: {abs(gap):g} {direction} points than the line",
+                'logo':game['teams']['away'].get('logo'), 'quote':dict(quote), 'gap':gap,
+                'eventId':str(game.get('providerId') or game['id']),
+                'caption':f"{names}: book {line:g}, I have {value:g} — {abs(gap):g} {direction} points"})
+        except (KeyError, TypeError, ValueError):
+            continue
+    return sorted(rows,key=lambda r:(-abs(r['gap']),r['subject']))[:5]
+
+
+def watch_current(snapshot, now, quotes=None):
+    if now<RELEVANCE_START or snapshot.get('family')!='trends':return True
+    import espn_props
+    if quotes is None:
+        quotes=[r for p in sorted((ROOT/'data/nba-capture/quotes').glob('*.jsonl')) for r in boxscores.read_store(p)]
+    latest={(str(r['eventId']),r['book']):r for r in quotes}
+    for row in snapshot.get('rows',[]):
+        old=row.get('quote') or {}
+        new=latest.get((row.get('eventId'),old.get('book'))) or {}
+        total=(new.get('current') or {}).get('total') or {}
+        try:
+            if not timedelta(0)<=now-boxscores.instant(new['retrievedAt'])<=timedelta(hours=4):return False
+            if espn_props.number(total['line'])!=old['line']:return False
+            if any(espn_props.price(total[k])!=old[k] for k in ('over','under')):return False
+        except (KeyError,TypeError,ValueError):return False
+    return bool(snapshot.get('rows'))
 
 
 def props_current(snapshot,now):
@@ -79,6 +163,7 @@ def props_current(snapshot,now):
     for old in snapshot.get('evidence',[]):
         if not any(all(r.get(k)==old.get(k) for k in ('eventId','athleteId','stat','book','line','over','under'))
                    and r.get('projection')==old.get('projection')
+                   and (now<RELEVANCE_START or r.get('roleReview')==old.get('roleReview'))
                    and not r.get('hold') and r.get('favorite') for r in current):return False
     return bool(snapshot.get('evidence'))
 
@@ -154,19 +239,30 @@ def choices(data, now, history=None):
                  'right':f"{r['points']:g}", 'detail':f"Last {r['games']} games · {r['window'].lower()}", 'logo':r['team'].get('logo'),
                  'caption':f"{r['team'].get('name') or r['team'].get('displayName') or r['team']['abbreviation']}: {r['points']:g} scored / {r['allowed']:g} given up per game",
                  'history':r} for r in chosen]
+    relevant = now >= RELEVANCE_START
+    if relevant:
+        trend_rows = market_watch_rows(games, now)
     out=[]
     for family,rows,hour,title in [('projections',projected,8,'NBA PROJECTIONS'),('trends',trend_rows,10,'NBA TEAM TRENDS')]:
         if len(rows)<2:
             continue
         due=datetime(target.year,target.month,target.day,hour,tzinfo=gates.EASTERN).astimezone(timezone.utc)
         cutoff=min(due+timedelta(hours=2),boxscores.instant(games[0]['kickoff'])-timedelta(hours=2))
+        if relevant and family == 'trends':
+            cutoff=min(cutoff,*(boxscores.instant(r['quote']['retrievedAt'])+timedelta(hours=4) for r in rows))
+            if cutoff<=due:continue  # overnight prices cannot become tomorrow's morning post
         if now>=cutoff:
             continue
         import x_post
         prefix=(f"NBA {target:%b %-d} 🍳 My numbers:" if family=='projections' else
+                'NBA totals on my radar 👀' if relevant else
                 f"NBA on my radar 👀 Last {chosen[0]['games']} games, {chosen[0]['window'].lower()}")
         note=('Research, not a bet.' if family=='projections' else
               'Scoring context, not a forecast. Research, not a bet.')
+        if relevant and family == 'trends':
+            prefix='NBA totals on my radar 👀'
+            note='Model/line gaps, not ranked bets. Research, not a bet.'
+            title='NBA LINES I’M WATCHING'
         # All rows on the graphic also appear in the caption; shorten the card,
         # never use +N more or silently drop a displayed team from the words.
         while len(rows)>=2:
@@ -180,9 +276,10 @@ def choices(data, now, history=None):
                     'capturedAt':boxscores.stamp(now),'sourceAt':data['sourceAt'],
                     'due':boxscores.stamp(due),'stale':boxscores.stamp(cutoff),'rows':rows,'text':text,
                     'title':title,'kicker':(f"{target:%b %-d} · TEAM RESEARCH" if family=='projections' else
-                        ('LAST SEASON · REGULAR SEASON' if chosen[0]['window']=='LAST SEASON' else
+                        (f"{target:%b %-d} · MATCHUP RESEARCH" if relevant else 'LAST SEASON · REGULAR SEASON' if chosen[0]['window']=='LAST SEASON' else
                          'THIS SEASON · SCORING CONTEXT')),
-                    'right_label':'MY TOTAL' if family=='projections' else 'AVG POINTS'})
+                    'editorialPolicy':EDITORIAL_POLICY if relevant else None,
+                    'right_label':'MY TOTAL' if family=='projections' or relevant else 'AVG POINTS'})
     return out
 
 
@@ -198,7 +295,7 @@ def prepare(now, root=STORE, data=None, history=None):
     for row in choices(data,now,history)+([prop] if prop else []):
         old=previous.get(row['key'])
         if old:
-            current_draft=(old.get('family')!='props' or props_current(old,now))
+            current_draft=(not relevance_issues(old,now) and (old.get('family')!='props' or props_current(old,now)))
             # Never rewrite a frozen/queued publication. A never-queued invalid or expired
             # draft may get a new immutable revision under the same deduplicated post ID.
             if row['key'] in attempted or (current_draft and boxscores.instant(old['stale'])>now
@@ -244,6 +341,8 @@ def posts(now, root=STORE, review=None):
     return [dict(key=r['key'],kind='research',text=r['text'],due=boxscores.instant(r['due']),
                  stale=boxscores.instant(r['stale']),card=r['key']) for r in stored(root)
             if not r.get('preview') and now<boxscores.instant(r['stale']) and boxscores.instant(r['due'])-now<=timedelta(days=1)
+            and not relevance_issues(r,now)
+            and watch_current(r,now)
             and review_ready(boxscores.instant(r['due']),review,PROP_REVIEW if r.get('family')=='props' else REVIEW)
             and (r.get('family')!='props' or props_current(r,now))]
 
