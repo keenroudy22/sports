@@ -2492,6 +2492,7 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
 BOOK_NAMES = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel', 'betmgm': 'BetMGM', 'caesars': 'Caesars',
               'betrivers': 'BetRivers', 'espnbet': 'ESPN BET', 'fanatics': 'Fanatics'}
 ODDS_FRESH = timedelta(hours=12)   # an older multi-book capture is history, not a board row
+BOARD_QUOTES_FRESH = timedelta(hours=4)  # match the public board's actual quote cutoff
 
 def favorite_hit_rates(game, row, player_logs):
     """Recent and season-to-date results against this exact player line, before this game's kickoff."""
@@ -2777,7 +2778,8 @@ def game_market_lines(slate, now, captures=None):
         if not m or game.get('state') != 'pre' or features.when(game['kickoff']) <= now:
             continue
         record = (captures or {}).get(game['id'])
-        if record and now - features.when(record['retrievedAt']) <= ODDS_FRESH:
+        captured_at = instant(record.get('retrievedAt')) if record else None
+        if captured_at and timedelta(0) <= now - captured_at <= BOARD_QUOTES_FRESH:
             out += book_rows(game, record)
             # Multi-book captures contain spreads/totals, not moneylines. Keep
             # the independent actual two-sided feed pair in the morning pool.

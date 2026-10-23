@@ -3,6 +3,15 @@
   "updatedAt": "2026-10-23T19:31:00Z",
   "items": [
     {
+      "id": "O-20261023-BOARDFRESH",
+      "title": "Stop stale multi-book snapshots hiding fresh football research prices",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Pass full/clean checks, rebuild and release. Verify CFB research uses actual fresh fallback prices and times while stale multi-book prices remain unpromoted. No model or qualification change.",
+      "doneWhen": "Board builder and browser agree on four-hour freshness. Stale/future/malformed multi-book captures permit sourced fallback without inventing away prices. Regression, full gates and live CFB comparison pass.",
+      "evidence": "Oct23 IU stored board quote14:25 versus fresh game market19:36. Builder used12hours, browser4hours, hiding the chosen row. New board-only4hour source cutoff; legacy history window and source records unchanged."
+    },
+    {
       "id": "O-20261023-NBAFRESH",
       "title": "Reuse a late NBA pregame capture to cover the afternoon",
       "status": "ready",

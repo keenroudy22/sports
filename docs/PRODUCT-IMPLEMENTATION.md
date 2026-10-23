@@ -1,5 +1,16 @@
 # October 5 product implementation tracker
 
+## October23 stale multi-book quote suppressed fresh CFB research — in verification
+
+The live Research UI hid quotes older than four hours, while game_market_lines
+preferred a multi-book capture for twelve hours and suppressed the fresh ESPN
+fallback. Verified IU example:14:25 multi-book data hid19:36 feed data. Align only
+the live board's source-selection cutoff to four hours; future/malformed stamps
+also fall back. Retain original per-source times, exact odds and no invented away
+spread price. The older store/history, probabilities, betting gates, request
+budgets and records are unchanged. Boundary/future/malformed regressions cover
+the repair. O-20261023-BOARDFRESH.
+
 ## October23 NBA afternoon freshness coverage — in verification
 
 Six existing planned free NBA game-capture windows are retained. Move the23:30

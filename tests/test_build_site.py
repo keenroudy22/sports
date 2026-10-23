@@ -335,6 +335,25 @@ class GameLineTests(unittest.TestCase):
                  slate_game('NFL-3', '2026-09-20T17:00:00Z', spread=None, total=None)]
         self.assertEqual(build_site.game_market_lines({'games': games}, self.now), [])
 
+    def test_public_four_hour_cutoff_allows_fresh_feed_to_replace_stale_multibook(self):
+        game = slate_game('NFL-1', '2026-09-20T17:00:00Z')
+        game['marketRetrievedAt'] = '2026-09-19T11:55:00Z'
+        record = {'retrievedAt': '2026-09-19T08:00:00Z', 'books': {
+            'draftkings': {'spread': {'home': -2.5, 'homePrice': -110, 'awayPrice': -110},
+                          'total': {'line': 40.5, 'over': -110, 'under': -110}}}}
+        current = build_site.game_market_lines({'games':[game]}, self.now, {'NFL-1':record})
+        self.assertIn('game-NFL-1-away', {r['id'] for r in current}, 'exactly four hours remains eligible')
+        for timestamp in ('2026-09-19T07:59:59Z', '2026-09-19T13:00:00Z', 'bad timestamp', None):
+            with self.subTest(timestamp=timestamp):
+                rows = build_site.public_lines(build_site.game_market_lines({'games':[game]}, self.now,
+                    {'NFL-1':dict(record,retrievedAt=timestamp)}), self.now)
+                spread = next(r for r in rows if r['market']=='point spread')
+                self.assertEqual((spread['line'],spread['odds'],spread['observedAt']),
+                                 (-3.5,-112,game['marketRetrievedAt']))
+                self.assertEqual(spread['freshness'],'fresh')
+                self.assertNotIn('books',spread,'stale prices must not be relabeled with the feed timestamp')
+                self.assertFalse(any(r.get('side')=='away' for r in rows),'never invent the unquoted away price')
+
 
 class DepthRoleUsageTests(unittest.TestCase):
     def test_second_back_usage_comes_from_each_games_actual_snap_order(self):
