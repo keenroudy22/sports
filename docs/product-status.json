@@ -1,24 +1,24 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-23T18:41:00Z",
+  "updatedAt": "2026-10-23T19:31:00Z",
   "items": [
     {
       "id": "O-20261023-REPORTINDEX",
       "title": "Include late released reports in the same hosted artifact",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release offline report-index materializer before post-rebase page build. Verify hosted descendant and actual UMass–UConn website card, preserving original report/price/stake and all history.",
+      "next": "Complete. Retain validated offline materialization before post-rebase rendering and regression coverage; observe subsequent regular releases without extra feeds or schedules.",
       "doneWhen": "A report merged after initial refresh appears in the final public artifact; validation failures preserve the previous index and stop upload; no extra feed requests or original-report edits; full gates and hosted/live checks pass.",
-      "evidence": "40006250837SUCCESS/final4b65a6d3 contained the18:52 raw release but its18:59 derived research index omitted it; live Today still empty at19:03. Reproduced raw-versus-derived mismatch. Added offline validated materializer before post-rebase build, with active0.5u report/index integration, immutable-source, invalid-report and empty-source tests. X actualsent19:07:46.249Z/2113708978429448491; Discord verified2:54PM."
+      "evidence": "Sourcec640511d;40009946258SUCCESS/finalf217bcfe. Hosted materialized172 original validated reports with0network calls and repeated8post-rebase checks before upload.1716Python(2skip)/275Node normal/clean/locked gates,465pages,114official/NBA0,isolated rehearsal clean. Live375px verified19:31Z:0.5u UMass–UConn present,no overflow/load/console error; owner proof kookn-cfb-live-2026-10-23.png."
     },
     {
       "id": "O-20261023-RELEVANCE",
       "title": "Current matchup and role context before historical trend posts",
       "status": "observing",
       "owner": "agent",
-      "next": "Release and verify Discord send-time relevance guard after recovery copied two already-public old X posts. Preserve sent history. Observe next current matchup/role-led post; original relevance source is hosted/live verified.",
+      "next": "Observe the next current matchup/role-led research delivery under the verified X and Discord guards. Preserve sent history, including the two old research copies mirrored during recovery. Do not claim the historical NBA model is newly validated.",
       "doneWhen": "New social research is current-matchup/price or role-led, not standalone old averages. History stays labeled on site; queued audits preserve sent posts. Full gates, render and live release pass; actual provider states recorded.",
-      "evidence": "02179098/40004097390SUCCESS/final88b2f20c;1710Python(2skip)/275Node/allgates/live375 clean. Recovery confirmed trends X14:05:43.988Z and props14:51:03.271Z; correctly preserved, but both newly mirrored to Discord18:54Z despite current policy. Miss reproduced; Discord guard/latest-prop check adds3regressions.1713Python(2skip)/275Node normal+clean passed; release pending."
+      "evidence": "02179098/40004097390SUCCESS/final88b2f20c relevance release; Discord guard936ad1b5 verified40007479306SUCCESS/finale8200c04 with1713Python(2skip)/275Node/full gates/live375. Recovery wrongly mirrored two old X research posts to Discord18:54Z; sent history preserved. Three regressions now enforce current evidence for pending Discord copies even after X sends."
     },
     {
       "id": "O-20261023-PERIODGUARD",
@@ -1348,9 +1348,9 @@
       "title": "Kook'n Autopilot R1 delivery, research, results and daily operator",
       "status": "observing",
       "owner": "agent",
-      "next": "Confirm UMass–UConn over50.5/-108 X due19:07:31Z and live site after release. Discord0.5u verified2:54PM. Finish delayed Discord research guard; stakes .5u/1u and3u/5u live. Quarter/Climb/NBA evidence gates remain.",
+      "next": "Observe existing early checks and current research delivery; retain exact refusal reasons and shared exposure limits. UMass–UConn confirmed on all three destinations. Quarter/Climb/NBA evidence gates remain; no forced tickets or extra schedules.",
       "doneWhen": "Every approved lane can render and fire or logs its exact refusal; delivery is transactional; results settle on time; the outcome report ships a fix or names an external blocker each day.",
-      "evidence": "Prior receipts preserved in PRODUCT-IMPLEMENTATION. Staking5e4d83f8 and follow-up96c8e76d verified by40002353906SUCCESS/finalbd97867d/live375 app202.1703Python(2skip)/275Node/allgates;113official/NBA0 preserved. Delivery before analytics,300request reserve, period guard, actual refusal reasons and forward NBA comparisons installed. Private CFB admission/provider-restricted queue not claimed public."
+      "evidence": "Staking/audit40002353906SUCCESS; relevance40004097390SUCCESS; Discord guard40007479306SUCCESS. UMass–UConn over50.5/-108 DK0.5u: Discord UI2:54PM, X2113708978429448491 actual19:07:46.249Z, live Today375px verified19:20Z.114official includes one new play;113historical unchanged/NBA0. Owner-approved pinned guide updated Oct23. Full receipts and limitations in PRODUCT-IMPLEMENTATION."
     },
     {
       "id": "KA-R2",
