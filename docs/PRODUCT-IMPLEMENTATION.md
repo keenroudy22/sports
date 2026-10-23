@@ -1,5 +1,23 @@
 # October 5 product implementation tracker
 
+## October23 bounded End-Zone caption repair
+
+The daily compact check verified48released rows against live113-row Record,
+zero chosen/not-posted or unscheduled official plays, and no overdue delivery.
+Morning-credit preservation is observed through the real06:45capture; the expired
+recovery and mirror-clock repairs remain installed. P48 spread capture is shipped;
+no open proven segment is a real evidence hold. Friday target announcement was
+already delivered; no duplicate teaser or forced step.
+
+O-20261019-RESEARCHCOPY: prospective End-Zone captions now preserve the marked
+anytime lean and first-TD dart rather than calling the first sorted row the lean.
+Include every full player name and exact scoring-area count when they fit;
+shorten only fixed factual phrases before using a bounded whole-row fallback.
+Distinct calls survive an oversized list; original rows/cards/sent posts remain.
+Focused27tests pass. Full release verification is in progress, not shipped.
+Other research-family expansion remains tracked separately under the same item.
+
+
 ## October23 overnight My Card settlement repair
 
 Six published October22 My Card tickets remained open after verified finals.

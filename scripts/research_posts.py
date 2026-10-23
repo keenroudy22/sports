@@ -540,6 +540,37 @@ def bounded_caption(choice):
     headings = {'upset': '🐕 UNDERDOG WATCH', 'spread-dog': '🐕 SPREAD WATCH',
                 'matchup': '📊 MATCHUP TREND', 'season': '📈 TREND BOARD',
                 'end-zone': '🎯 END-ZONE WORK', 'numbers': '👀 MY NUMBER VS VEGAS'}
+    if kind == 'end-zone':
+        # Preserve the actual editorial calls, which may be different players.
+        # A row's sort position describes scoring-area work, not an anytime call.
+        def factual_row(item):
+            labels = [label for key, label in (('tdLean', 'anytime TD lean'),
+                                               ('firstTdDart', 'first TD dart')) if item.get(key)]
+            name = str(item.get('title') or '').strip()
+            if labels:
+                name += ' (' + ' + '.join(labels) + ')'
+            facts = ' · '.join(str(item.get(key) or '') for key in ('metric', 'price') if item.get(key))
+            return name + (': ' + facts if facts else '')
+
+        league_tags = tags(rows)
+        suffix = [league_tags] if league_tags else []
+        complete = '\n'.join([headings[kind], *map(factual_row, rows), *suffix])
+        if tweet_length(complete) <= LIMIT:
+            return complete
+        # Shorten only known factual phrases; keep each name and both counts.
+        compact = complete.replace(' red-zone opportunities', ' red-zone').replace(' inside the 10', ' inside 10')
+        if tweet_length(compact) <= LIMIT:
+            return compact
+        calls = [f"{label}: {item['title']}" for item in rows
+                 for key, label in (('tdLean', 'Anytime TD lean'), ('firstTdDart', 'First TD dart'))
+                 if item.get(key)]
+        lead = next((item for item in rows if item.get('tdLean')), rows[0])
+        lines = [headings[kind], *calls, factual_row(lead), *suffix]
+        if tweet_length('\n'.join(lines)) > LIMIT:
+            lines = [headings[kind], *calls, *suffix]
+        if not calls or tweet_length('\n'.join(lines)) > LIMIT:
+            lines = [headings[kind], 'Details on the card', *suffix]
+        return '\n'.join(lines)
     if kind == 'upset':
         # Name every dog plainly. A row count sounds like internal desk copy and
         # makes readers open the image just to learn which teams are being watched.

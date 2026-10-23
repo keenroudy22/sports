@@ -347,11 +347,52 @@ class ResearchPostTests(unittest.TestCase):
         choice = {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'text': 'x' * 352, 'rows': rows}
         text = R.bounded_caption(choice)
         self.assertLessEqual(x_post.tweet_length(text), 280)
-        self.assertIn('My TD lean: Bijan Robinson', text)
-        self.assertIn('8 red-zone opportunities · 3 inside the 10', text)
+        self.assertIn('Bijan Robinson: 8 red-zone', text)
+        for row in rows:
+            self.assertIn(row['title'], text)
+        self.assertIn('8 red-zone', text)
+        self.assertRegex(text, r'3 inside (?:the )?10')
         self.assertNotIn('not official', text.lower())
         self.assertNotIn('save this', text.lower())
         self.assertEqual(choice['rows'], original)
+        self.assertEqual(receipts.guard({'text': text}), [])
+
+    def test_end_zone_caption_preserves_distinct_calls_and_all_facts_when_they_fit(self):
+        from copy import deepcopy
+        import x_post
+        rows = [
+            {'title': 'First Scorer', 'metric': '12 red-zone opportunities', 'price': '8 inside the 10',
+             'firstTdDart': True, 'league': 'NFL'},
+            {'title': 'Anytime Player', 'metric': '9 red-zone opportunities', 'price': '4 inside the 10',
+             'tdLean': True, 'league': 'NFL'},
+            {'title': 'Other Player', 'metric': '7 red-zone opportunities', 'price': '2 inside the 10', 'league': 'NFL'}]
+        original = deepcopy(rows)
+        text = R.bounded_caption({'kind': 'end-zone', 'rows': rows, 'text': 'original'})
+        self.assertIn('First Scorer (first TD dart)', text)
+        self.assertIn('Anytime Player (anytime TD lean)', text)
+        self.assertNotIn('My TD lean: First Scorer', text)
+        for row in rows:
+            self.assertIn(row['title'], text)
+        self.assertIn('12 red-zone', text)
+        self.assertRegex(text, r'8 inside (?:the )?10')
+        self.assertEqual(rows, original)
+        self.assertLessEqual(x_post.tweet_length(text), 280)
+        self.assertEqual(receipts.guard({'text': text}), [])
+
+    def test_end_zone_long_caption_keeps_both_calls_without_inventing_a_call(self):
+        import x_post
+        rows = [
+            {'title': 'First Scorer', 'metric': '12 red-zone opportunities', 'price': '8 inside the 10',
+             'firstTdDart': True, 'league': 'NFL'},
+            {'title': 'Anytime Player', 'metric': '9 red-zone opportunities', 'price': '4 inside the 10',
+             'tdLean': True, 'league': 'NFL'},
+            *[{'title': 'Long Background Player Name ' + str(i), 'metric': '7 red-zone opportunities',
+               'price': '2 inside the 10', 'league': 'NFL'} for i in range(4)]]
+        text = R.bounded_caption({'kind': 'end-zone', 'rows': rows, 'text': 'original'})
+        self.assertIn('Anytime TD lean: Anytime Player', text)
+        self.assertIn('First TD dart: First Scorer', text)
+        self.assertNotIn('My TD lean: First Scorer', text)
+        self.assertLessEqual(x_post.tweet_length(text), 280)
         self.assertEqual(receipts.guard({'text': text}), [])
 
     def test_each_research_family_has_a_bounded_fallback_even_for_long_names(self):
