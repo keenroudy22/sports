@@ -197,12 +197,11 @@
   /* With a player photo hanging from the rail the breakout head sits beside the chef's line (NOTES 4.3: under about
      200 px at 32 px). Longer lines step the size down from a conservative width estimate; CSS caps the width too. */
   const ledeSize = title => title.length <= 16 ? null : Math.max(24, Math.floor(196 / (title.length * 0.4)));
-  /* "Wednesday, Oct 7. Monday went 0-1." The last game day's W-L comes from the build (lastSlate). */
+  /* Counts belong to the category recap, not a mixed-ticket date-line record. */
   const dateLine = (nowIso, last) => {
     const lastDay = last && last.day ? `${last.day}T16:00:00Z` : null;
     const gap = lastDay ? (Date.parse(C.dayOf(nowIso) + 'T16:00:00Z') - Date.parse(lastDay)) / 86400000 : 99;
-    const wl = last ? `${last.wins}-${last.losses}${last.pushes ? `-${last.pushes}` : ''}` : '';
-    return `${C.dayLabel(nowIso)}.${last ? ` ${gap <= 6 ? weekday(lastDay) : C.dayLabel(lastDay)} went ${wl}.` : ''}`;
+    return `${C.dayLabel(nowIso)}.${last ? ` ${gap <= 6 ? weekday(lastDay) : C.dayLabel(lastDay)} results below.` : ''}`;
   };
   /* A settled slip's detail: "Final 45-24, missed by 21." from the saved actual. The margin prints only when it agrees
      with the graded result (a book settlement can differ from the box score). */

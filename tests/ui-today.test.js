@@ -146,7 +146,7 @@ test('the first paint and the full card draw the same top, so nothing moves when
   await settle();
   const first = view.innerHTML;
   assert.match(first, /class="hero-first kt-today"/);
-  assert.match(first, /<p class="date">Saturday, Oct 10\. Friday went 1-0\.<\/p><h1>Two for today\.<\/h1>/);
+  assert.match(first, /<p class="date">Saturday, Oct 10\. Friday results below\.<\/p><h1>Two for today\.<\/h1>/);
   assert.match(first, /Hot Plate \(POTD\)/);
   assert.match(first, /−110<\/b><i><\/i><b class="kt-book">FanDuel/, 'price and book are on the first paint');
   assert.match(first, /Today 4:00 PM/, 'kickoff is on the first paint');
