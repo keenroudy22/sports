@@ -14,7 +14,8 @@ anytime lean and first-TD dart rather than calling the first sorted row the lean
 Include every full player name and exact scoring-area count when they fit;
 shorten only fixed factual phrases before using a bounded whole-row fallback.
 Distinct calls survive an oversized list; original rows/cards/sent posts remain.
-Focused27tests pass. Full release verification is in progress, not shipped.
+Focused27tests pass. Source da852e88 plus delivery correction6a1eaf7b are
+verified in containing1a2648cc; hosted39951973955 SUCCESS. Final receipt below.
 Other research-family expansion remains tracked separately under the same item.
 
 
@@ -3574,3 +3575,55 @@ that receipt after its full gates. Applied exact30dfb61e stash cleanly; merged f
 87bf9297 daily provenance above without replacing the earlier note.82d951a7's
 alternate next-action wording is retained in its stash; same overnight action is
 now explicit in the queue. All stash backups retained. Daily code still unshipped.
+
+
+### 2026-10-23T12:28:09Z — End-Zone caption repair verified live
+
+Source da852e88/6a1eaf7b shipped in1a2648cc; hosted39951973955 SUCCESS.
+Captions preserve the actual anytime lean and first-TD dart, plus all full names
+and exact counts when they fit. Today’s provider-confirmed private Buffer edit
+keeps6adae9bc8d2197cb2a1760f4,10:31ET and the original graphic. Hellums is the
+anytime lean; Szarka is the first-TD dart. All four rows/counts fit. Existing
+x_post.save_log saved matching pending research-Discord text on dev;
+captionRevisions retains the original caption/hash/mirror. No sent post changed.
+The post is scheduled, not delivered. Normal mirror confirmed the corrected
+production X/Discord payloads agree; no duplicate/replacement was scheduled.
+
+Normal/clean, locked repeats and the final merged-tree repeat passed1669Python
+(two skips)/274Node;446pages/82games,113record/NBA0,614file publication guard,
+assets/SVG/budget gates and offline0755/vjzgmqy8 outcomeok/outsideWrite0/
+privateRead0. First push rejected a concurrent hosted capture570c4f2c; preserved
+all15changed capture files in a dev merge and repeated every gate before retry.
+No force push, safety-rule or test weakening. Successful hosted run is the receipt.
+Six final live375/1440 pages passed actual-width/scroll/load/console checks.
+Visible Chrome’s416px minimum check was superseded, not credited as375.
+Public record generated12:22:56Z matches all48released grades/times/units;
+all113official rows remain. Production caption source byte-matches tested dev.
+
+Compact outcomes:chosenNotPosted0,officialUnscheduled0,no overdue/failed delivery
+at the morning check; historical32.85minute result miss retained. Prior morning
+credit/expired-recovery/mirror-clock repairs and P48 implementation are verified;
+never reapply the old patch. Real overnight credits held through10:25Z and
+06:45CFB capture succeeded10:45:06Z. All five active Friday game pages have a
+fresh priced research line or exact price blocker. No fully cleared official
+withheld. Climb4/step1/$50 has no open ticket;227current spread rungs/0supported,
+real segment evidence hold. Friday target already sent; no duplicate teaser.
+
+Private prep includes all5Friday games,12Sunday NFL games and six NBA candidates
+with exact prices/source times, baseline context and explicit current-role renewal
+holds. NBA392quote rows cover44player-games/255distinct markets;1319graded
+forecast rows cover113player-games/784distinct player-game markets. Correlated
+quotes/markets are not independent validation or promotion. Readiness12clean/
+9paper,Trialopen,promotionfalse at11:48Z. Actual local homepage selection updated
+3stories10:54:15Z; exact morning call count overwritten/unknown. WeeklyOct20
+verified1local27Bcall/0failures/161.19s/summaryavailable. NBA projections actually
+sent X12:04:25.493Z/Discord12:18:43Z; morning Final13:03Z and corrected End-Zone
+14:31Z remain scheduled, never credited as sent. Existing8:30/11:45 owns refresh,
+qualification and normal website/Plays/Buffer delivery. Broader caption families
+remain O-20261019-RESEARCHCOPY; broader R1 observation remains open.
+
+Odds370/500(projected434),SGO689/2500(stop1800),Buffer2346counted/2700localstop;
+Sharp1067counted with12/min cap. Journals may be partial; no invented account
+totals. No schedule, notification preference, budget, stake or counting changes.
+Evidence:work/daily-20261023-outcomes.json,friday-prep.json,live/audit.json and
+buffer-corrected.png under the same daily prefix.
