@@ -5902,8 +5902,8 @@
   {
    "id": "receipt:day:2026-10-22",
    "postedAt": "2026-10-23T04:59:31Z",
-   "dueAt": "2026-10-23T13:29:50Z",
-   "bufferPostId": "6adb59247c3aac797e80bc29",
+   "dueAt": "2026-10-23T13:35:13Z",
+   "bufferPostId": "6adb5a687c3aac797e8115de",
    "textHash": "6d4f7d5f93e38344",
    "kind": "buffer:receipt",
    "card": true,
@@ -5918,9 +5918,15 @@
      "dueAt": "2026-10-23T13:03:00Z",
      "rescheduledAt": "2026-10-23T12:54:50Z",
      "reason": "Fresh official play takes priority"
+    },
+    {
+     "bufferPostId": "6adb59247c3aac797e80bc29",
+     "dueAt": "2026-10-23T13:29:50Z",
+     "rescheduledAt": "2026-10-23T13:00:13Z",
+     "reason": "Fresh official play takes priority"
     }
    ],
-   "rescheduledAt": "2026-10-23T12:54:50Z"
+   "rescheduledAt": "2026-10-23T13:00:13Z"
   },
   {
    "id": "research:td-hit:research:end-zone:2026-10-22",
