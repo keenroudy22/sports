@@ -2,6 +2,19 @@
 
 ## October24 morning delivery repair — implementation pending verification
 
+Follow-through11:25Z:435ed474 installed and pushed after a store-preserving
+data race and repeated gates.1768Python(two expected skips)/281Node normal and
+clean-export,record115/NBA0,670-file guard and06:45 rehearsal nwjhxl99 passed.
+Becker X confirmed11:14:31Z at2113952268932329902. MarshDiscord11:24:20Z;
+X11:38 queued, not sent. Williams held on missing supporting caption; its private
+caption was corrected under the run lock, preserving prior text in
+captionRevisions and retaining exact prices/stakes/news checks. Tulane pending.
+Hosted40089029118 is still in the rate-limited whole-slate prop-capture stage;
+the website still lacks Becker at this check. This distinct publication bottleneck
+and live artifact verification remain O-20261024-RELEASELATENCY, not complete.
+Read-only current-day Climb scan11:23Z:44games,zero supported pairs; held
+alternate-spread watches lack fresh prices and an approved results segment.
+
 Observed06:59 private admissions waited until07:07 for the first Discord send
 because release_private ran the full Python suite while holding the desk lock.
 Becker reached Discord11:07Z, public report pushed11:07:23Z and Buffer accepted
