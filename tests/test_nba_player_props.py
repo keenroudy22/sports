@@ -172,7 +172,7 @@ class NBAPlayerPropTests(unittest.TestCase):
             root=Path(folder);b=self.write(root)
             self.assertEqual(n.record_forward(NOW,root,b),1)
             self.assertEqual(n.record_forward(NOW,root,b),0)
-            final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,kickoff='2026-10-20T19:00:00Z')
+            final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,kickoff='2026-10-20T19:00:00Z',retrievedAt='2026-10-20T22:00:00Z')
             self.assertEqual(n.grade(NOW,root,[final]),0)
             self.assertEqual(n.grade(NOW+timedelta(hours=10),root,[final]),1)
             self.assertEqual(n.grade(NOW+timedelta(hours=11),root,[final]),0)
@@ -186,6 +186,25 @@ class NBAPlayerPropTests(unittest.TestCase):
         self.assertIn('no historical prices',result['scope'])
         self.assertEqual(n.evaluate(b[:5])['predictions'],0)
 
+    def test_grade_uses_only_received_unambiguous_final_versions(self):
+        for mode in ('future', 'missing', 'conflict', 'correction'):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as folder:
+                root=Path(folder);b=self.write(root)
+                n.record_forward(NOW,root,b)
+                final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,
+                           kickoff='2026-10-20T19:00:00Z',retrievedAt='2026-10-20T22:00:00Z')
+                other=copy.deepcopy(final);other['players'][0]['stats']['pts']=5
+                if mode=='future':
+                    final['retrievedAt']='2026-10-21T00:00:00Z';boxes=[final]
+                elif mode=='missing':
+                    final.pop('retrievedAt');boxes=[final]
+                elif mode=='conflict':boxes=[final,other]
+                else:
+                    other['retrievedAt']='2026-10-21T00:00:00Z';boxes=[other,final]
+                self.assertEqual(n.grade(NOW+timedelta(hours=10),root,boxes),int(mode=='correction'))
+                if mode=='correction':
+                    self.assertEqual(n.saved(root/'player-outcomes')[0]['actual'],24)
+
     def test_reviewed_minutes_model_keeps_its_identity_and_label_repairs_append_once(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);b=self.write(root)
@@ -193,7 +212,7 @@ class NBAPlayerPropTests(unittest.TestCase):
             q['projection']['model']='nba-minutes-rate-reviewed-v1'
             with patch.object(n,'build',return_value={'rows':[q]}):
                 n.record_forward(NOW,root,b)
-            final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,kickoff='2026-10-20T19:00:00Z')
+            final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,kickoff='2026-10-20T19:00:00Z',retrievedAt='2026-10-20T22:00:00Z')
             self.assertEqual(n.grade(NOW+timedelta(hours=10),root,[final]),1)
             correct=n.saved(root/'player-outcomes')[-1]
             self.assertEqual(correct['model'],'nba-minutes-rate-reviewed-v1')

@@ -388,8 +388,8 @@ def grade(now,root=STORE,boxes=None):
     """Forward research outcomes only; never writes official NBA/football records."""
     root=Path(root)
     if boxes is None:boxes=saved(ROOT/'data/sport-box')
-    finals={str(b['eventId']).removeprefix('NBA-'):b for b in boxes
-            if b.get('league')=='NBA' and b.get('seasonType')==2 and boxscores.instant(b['kickoff'])<now}
+    finals={str(b['eventId']).removeprefix('NBA-'):b for b in nba_roles.available_boxes(boxes,now)
+            if b.get('league')=='NBA'}
     old={r['id']:r for r in saved(root/'player-outcomes')};rows=[]
     for r in saved(root/'player-forecasts'):
         model=r.get('model',VERSION)
