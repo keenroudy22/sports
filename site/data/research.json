@@ -32778,5 +32778,219 @@
         "units": 0.6
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-24T19:54:56Z",
+    "targetWeek": 8,
+    "summary": "Research update for Oct 24: Settled 1: J'Koby Williams UNDER 2.5 receptions loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "position": "RB",
+        "athleteId": "5086393",
+        "market": "rec",
+        "line": 2.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401856840"
+        ],
+        "book": "ESPN BET",
+        "odds": 135,
+        "projection": 2.3,
+        "edge": "Price-checked chance 50.7% against the exact two-sided price; 42.6% needed at +135: +8.1 percentage points.",
+        "cutoff": "UNDER 2.5 at +135 or better; off the card at 2 or lower, or at +120 or worse at 2.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-18T18:05:29Z",
+        "quotedAt": "2026-10-24T10:46:11Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:46 AM ET capture across 1 book; ESPN BET is the only book with this market so far. ESPN BET is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-24T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 0.5,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.546,
+          "chance": 0.507,
+          "calibrated": true,
+          "calibration": 0.15,
+          "calibrationN": 1312,
+          "push": 0.0,
+          "breakEven": 0.426,
+          "edgePoints": 8.1,
+          "evPerUnit": 0.191,
+          "snapshotAt": "2026-10-18T18:05:29Z",
+          "evaluatedAt": "2026-10-24T10:46:30Z",
+          "fairChance": 0.398,
+          "anchoredChance": 0.507,
+          "gap": 10.9,
+          "calibrationFamily": "CFB/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Texas Tech Red Raiders at Cincinnati Bearcats",
+        "title": "J'Koby Williams UNDER 2.5 receptions",
+        "id": "CFB-2026-W8-williams-under-2-5-rec-espnbet",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856840",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+          "https://gobearcats.com/news/2026/10/20/watch-head-coach-scott-satterfield-players-preview-texas-tech-game",
+          "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/10/19/2026_Texas_Tech_Game_Notes_-_GM7_-_Cincinnati.pdf"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 4 of 10 under 2.5.",
+          "context": [
+            "Role: projected for 2.8 targets a game.",
+            "Defense: CIN allows 3.33 receptions a game to RBs, 93rd-stingiest of 138 this season."
+          ],
+          "cautions": [
+            "Only 4 of the last 10 games cleared this side of the line; recent results oppose it.",
+            "Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 2.3 against 2.5. The under reads 50.7% after adjustment from the raw 54.6%; 42.6% is needed at +135. Last 10 games: 4 of 10 under 2.5. Role: projected for 2.8 targets a game. Defense: CIN allows 3.33 receptions a game to RBs, 93rd-stingiest of 138 this season.",
+        "risk": "Only 4 of the last 10 games cleared this side of the line; recent results oppose it. Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role. An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 2.5. I say 2.3.",
+              "numbers": {
+                "projection": 2.3,
+                "line": 2.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-18T18:05:29Z"
+            },
+            {
+              "text": "J'Koby Williams caught two passes for eight yards against Arizona State in Texas Tech's most recent game.",
+              "numbers": {},
+              "source": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/10/19/2026_Texas_Tech_Game_Notes_-_GM7_-_Cincinnati.pdf",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "text": "J'Koby Williams caught two passes for eight yards against Arizona State in Texas Tech's most recent game.",
+              "numbers": {},
+              "source": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/10/19/2026_Texas_Tech_Game_Notes_-_GM7_-_Cincinnati.pdf",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "2 of his last 5 games finished under 2.5 receptions.",
+              "numbers": {
+                "values": [
+                  2,
+                  3,
+                  3,
+                  3,
+                  2
+                ],
+                "hits": 2,
+                "games": 5,
+                "line": 2.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-17T19:30Z"
+            },
+            {
+              "text": "Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role.",
+              "numbers": {},
+              "source": "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role.",
+              "numbers": {},
+              "source": "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "text": "Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role.",
+              "numbers": {},
+              "source": "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "weather": {
+            "tempF": 62,
+            "windMph": 2,
+            "windDirection": "E",
+            "precipProb": 0,
+            "periodStart": "2026-10-24T12:00:00-04:00",
+            "issuedAt": "2026-10-24T08:00:26+00:00",
+            "source": "https://api.weather.gov/gridpoints/ILN/35,39/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": null,
+              "FanDuel": null
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 2.5,
+              "price": 135,
+              "time": "2026-10-24T10:46:11Z"
+            }
+          },
+          "ours": {
+            "projection": 2.3,
+            "line": 2.5,
+            "market": "rec",
+            "text": "Book says 2.5. I say 2.3.",
+            "snapshotAt": "2026-10-18T18:05:29Z"
+          },
+          "history": "Last 10 games: 4 of 10 under 2.5.",
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/10/19/2026_Texas_Tech_Game_Notes_-_GM7_-_Cincinnati.pdf",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/ILN/35,39/forecast/hourly",
+              "time": "2026-10-24T08:00:26+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856840",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://gobearcats.com/news/2026/10/20/watch-head-coach-scott-satterfield-players-preview-texas-tech-game",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-24T11:40:35Z",
+        "result": "loss",
+        "actual": "J'Koby Williams: 3 receptions",
+        "settledAt": "2026-10-24T19:54:56Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856840",
+        "actualValue": 3,
+        "units": -0.5
+      }
+    ]
   }
 ]
