@@ -27,7 +27,7 @@ def fixture():
           'timestamp':STAMP,'event_start_time':game['kickoff'],'home_team':'Detroit Pistons',
           'away_team':'Boston Celtics','player_name':'Real Player'}
     rows=[dict(base,selection_type='over',odds_american=-110),dict(base,selection_type='under',odds_american=-110)]
-    boxes=[{'eventId':str(i),'season':2026,'seasonType':2,'kickoff':f'2026-04-{i+1:02}T00:00:00Z',
+    boxes=[{'eventId':str(i),'season':2026,'seasonType':2,'retrievedAt':STAMP,'kickoff':f'2026-04-{i+1:02}T00:00:00Z',
             'players':[{'id':'123','name':'Real Player','team':'8','dnp':False,
                         'stats':{'pts':24,'min':30,'ast':5,'reb':6}}]} for i in range(10)]
     return game,rosters,rows,boxes

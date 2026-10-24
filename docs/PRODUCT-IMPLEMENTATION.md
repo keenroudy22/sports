@@ -1,5 +1,36 @@
 # October 5 product implementation tracker
 
+## October23 late audit continuation — implemented, release verification pending
+
+NBA history/role checks now filter receipt times before choosing corrections;
+missing clocks and conflicting versions hold. New current-role reviews must be
+at least as recent as the received rotation evidence. No prior frozen forecast,
+result or public record is regraded. Tests cover future corrections in either
+input order, absent timestamps, conflicting versions and future role evidence.
+
+The same hosted final-summary input reconstructs quarter minutes from five
+starters, period clocks and exact substitutions. Clock order handles corrected
+plays with late sequence numbers. Each player's minutes reconcile to the final
+box (whole-minute display tolerance only); OT remains separate. Three actual
+official summaries401909841/401909093/401909094 reconcile in read-only checks.
+No extra capture request/job or guessed full-game/4 allocation. This still is not
+quarter forecast validation or a book settlement/void policy. Current Indiana
+book-rule verification is unresolved (FD page403; DK page lacks rule content),
+so no jurisdiction rule is inferred from another state's rules.
+
+Existing21:00/23:30 workers now save a private next-day packet: separate football
+props/sides/totals watches, NBA coverage and role holds, with explicit6:45/8:30
+fresh checks. The existing Climb prep now builds bounded same-book/league,
+different-game two-leg watches at the approved band. Supported and evidence-held
+options stay separate; cross-game multiplied odds are labeled derived and all
+packets remain non-release-ready until real morning admission. Existing Mac run,
+Climb, precheck and five-minute delivery jobs are loaded, latest exit codes0.
+
+Full local/clean/locked tests, isolated rehearsal, deployment and live verification
+are still required. Quarter Q2/football prices, book participation rules, actual
+correlated ticket prices, validated NBA models and observed morning deliveries
+remain explicit unfinished audit items, not claimed complete by these repairs.
+
 ## October23 X straight-caption spacing — verified October24 at01:37Z
 
 Owner requested good spacing on X. All four straight-bet template shapes now

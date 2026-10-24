@@ -2838,6 +2838,21 @@ def _run(args, now, slot, kinds, status):
                 status['nbaTrial'] = nba_trial_runtime.admission(now, capture=nba_trial_needs_capture(slot, status))
         except Exception as error:
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
+        if slot.hour in (21,23):
+            try:
+                import next_day_prep
+                import nba_player_props
+                prep_now=datetime.now(timezone.utc)
+                slate_path=ROOT/'data'/'nba-capture'/'slate.json'
+                nba_slate=json.loads(slate_path.read_text()) if slate_path.exists() else {}
+                prep=next_day_prep.prepare(games,lines,nba_slate,nba_player_props.build(prep_now,limit=None),prep_now)
+                boxscores.write_json(ROOT/'work'/'next-day-prep.json',prep)
+                status['nextDayPrepared']={'targetDate':prep['targetDate'],'footballGames':prep['football']['games'],
+                                          'nbaGames':prep['nba']['games'],'nbaPropRows':prep['nba']['freshPropRows']}
+                log(f"next-day prep: {status['nextDayPrepared']}")
+            except Exception as error:
+                status['errors'].append(f'next-day prep: {type(error).__name__}: {error}')
+                log(f'next-day prep unavailable ({type(error).__name__}); delivery continues')
         try:
             import morning_brief
             public_today=any(not dict(p,**ctx.latest.get(k,{})).get('result') and not p.get('parlayType')

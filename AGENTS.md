@@ -1,5 +1,23 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## NBA evidence clocks and overnight preparation — October23 late follow-up
+
+NBA research history and observed role checks use only boxes received by the
+evaluation clock. Choose the latest available correction after filtering time;
+missing timestamps and conflicting same-time versions hold. A role review that
+clears a changed rotation must not predate receipt of that rotation evidence.
+The existing hosted final-summary request also reconstructs quarter minutes from
+five starters, exact substitutions and period clocks, retaining OT separately.
+Every player's minutes must reconcile to the box; partial/ambiguous data holds.
+This is observed workload, not expected minutes, a sportsbook void policy or an
+approved quarter forecast. Automatic quarter tickets remain gated.
+Existing21:00/23:30 runs save a private next-day coverage/watch packet with
+separate props/sides/totals and NBA role holds. Existing Climb prep lists bounded
+two-leg same-book/same-league cross-game options, distinguishing supported from
+evidence-held watches. Multiplied leg odds are explicitly derived, not a final
+book quote. Morning6:45/8:30 reprice/research/admission remain mandatory. No added
+job, feed allowance, forced volume, public preview promise or historical rewrite.
+
 ## X caption spacing — October23 owner follow-up
 
 Keep deliberate paragraph breaks in straight-bet templates: play/price together,

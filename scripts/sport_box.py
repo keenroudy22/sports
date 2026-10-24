@@ -1,4 +1,4 @@
-"""NBA final-summary extractor. Pure extraction; scheduled writer is not enabled.
+"""NBA final-summary extractor and bounded hosted scheduled writer.
 
 Season and stage are retained so preseason/postseason cannot masquerade as
 current regular-season history. Missing numbers stay absent; DNP is not zero.
@@ -83,7 +83,7 @@ def extract(payload, event_id, retrieved_at):
         raise ValueError('NBA box has no player evidence')
     result = {'league': 'NBA', 'season': int(season['year']), 'seasonType': int(season['type']),
             'eventId': f'NBA-{event_id}', 'kickoff': competition['date'], 'teams': teams,
-            'players': players, 'retrievedAt': retrieved_at, 'extractor': 1,
+            'players': players, 'retrievedAt': retrieved_at, 'extractor': 2,
             'source': f'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event={event_id}'}
     import nba_quarters
     quarters, hold = nba_quarters.points(payload, result)
@@ -92,6 +92,16 @@ def extract(payload, event_id, retrieved_at):
     for player in players:
         if player['id'] in quarters:
             player['quarters'] = quarters[player['id']]
+    import nba_quarter_workload
+    workload, workload_hold = nba_quarter_workload.extract(payload, result)
+    result['quarterWorkloadEvidence'] = {
+        'status': 'held' if workload_hold else 'reconciled', 'reason': workload_hold,
+        'method': 'play-by-play lineup reconstruction reconciled to final box minutes',
+        'scope': 'observed workload only; not expected minutes, a void policy or ticket settlement'}
+    for player in players:
+        if player['id'] in workload:
+            for quarter, values in workload[player['id']].items():
+                player.setdefault('quarters', {}).setdefault(quarter, {}).update(values)
     return result
 
 

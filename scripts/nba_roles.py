@@ -12,13 +12,38 @@ import boxscores
 import nba_capture
 
 
+def available_boxes(boxes, now):
+    """Latest unambiguous version actually received by the evaluation clock.
+
+    Filter before deduplicating: a later correction must not hide the earlier
+    version that was available then. Missing receipt times are not evidence.
+    """
+    latest, conflicting = {}, set()
+    for row in boxes:
+        try:
+            at = boxscores.instant(row['retrievedAt'])
+            if (row.get('league', 'NBA') != 'NBA' or row.get('seasonType') != 2
+                    or not boxscores.instant(row['kickoff']) < at <= now):
+                continue
+            key = row['eventId']
+        except (KeyError, TypeError, ValueError):
+            continue
+        if key not in latest or at > latest[key][0]:
+            latest[key] = (at, row)
+            conflicting.discard(key)
+        elif at == latest[key][0] and row != latest[key][1]:
+            conflicting.add(key)
+    return sorted((row for key, (_, row) in latest.items() if key not in conflicting),
+                  key=lambda row: (row['kickoff'], row['eventId']))
+
+
 def current_role(quote, boxes, now):
     """Observed current-season rotation, not a claim about tonight's starters.
 
     Include DNPs for role checks; only played minutes enter the displayed
     workload. One appearance never becomes a confirmed expected-minutes number.
     """
-    games = sorted({b['eventId']: b for b in boxes}.values(), key=lambda b: b['kickoff'])
+    games = available_boxes(boxes, now)
     current, prior = [], []
     for b in games:
         if b.get('league', 'NBA') != 'NBA' or b.get('seasonType') != 2 or boxscores.instant(b['kickoff']) >= now:
@@ -28,19 +53,20 @@ def current_role(quote, boxes, now):
             continue
         p = people[0]
         if b['season'] == quote['season']:
-            current.append(dict(p, date=b['kickoff'], source=b.get('source')))
+            current.append(dict(p, date=b['kickoff'], receivedAt=b['retrievedAt'], source=b.get('source')))
         elif b['season'] == quote['season']-1 and p.get('team') == quote['team'] and not p.get('dnp'):
             prior.append(p)
     if not current:
         return {'games': 0, 'note': 'No current-season regular-season appearance recorded.'}, None
     if current[-1]['team'] != quote['team']:
-        return {'games': 0, 'asOf': current[-1]['date']}, 'Current team changed; workload review needed'
+        return {'games': 0, 'asOf': current[-1]['date'], 'receivedAt': current[-1]['receivedAt']}, 'Current team changed; workload review needed'
     own = [p for p in current if p['team'] == quote['team']]
     recent = own[-3:]
     played = [p for p in recent if not p.get('dnp') and isinstance(p.get('stats', {}).get('min'), (int, float))
               and not isinstance(p['stats']['min'], bool) and math.isfinite(p['stats']['min'])
               and 0 < p['stats']['min'] <= 60]
-    role = {'games': len(played), 'asOf': recent[-1]['date'], 'source': recent[-1].get('source'),
+    role = {'games': len(played), 'asOf': recent[-1]['date'], 'receivedAt': recent[-1]['receivedAt'],
+            'source': recent[-1].get('source'),
             'minutes': [p['stats']['min'] for p in played],
             'starts': sum(p['starter'] for p in played) if played and all(type(p.get('starter')) is bool for p in played) else None,
             'note': 'Observed minutes and starts, not a confirmed lineup or minutes limit.'}

@@ -205,8 +205,7 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
 
 def history(boxes, athlete, now):
     out=[]
-    for b in sorted({b['eventId']:b for b in boxes}.values(),key=lambda b:b['kickoff']):
-        if b['seasonType']!=2 or boxscores.instant(b['kickoff'])>=now:continue
+    for b in nba_roles.available_boxes(boxes, now):
         for p in b.get('players',[]):
             if p['id']==athlete and not p.get('dnp'):
                 out.append(dict(p,season=b['season'],date=b['kickoff'],eventId=b['eventId'],source=b.get('source')))
@@ -335,7 +334,7 @@ def build(now, root=STORE, boxes=None, limit=60):
         # Only a valid numeric, game-specific review can explain a new rotation.
         # It can never clear an injury/identity/history hold from above.
         reviewed_after_role = (role_review and role_review['kind'] in ('analyst-estimate','reported-minutes')
-                               and boxscores.instant(role_review['checkedAt']) > boxscores.instant(current_role['asOf'])) if current_hold else False
+                               and boxscores.instant(role_review['checkedAt']) >= boxscores.instant(current_role['receivedAt'])) if current_hold else False
         if not reason and current_hold and not reviewed_after_role:
             reason=current_hold;projection=None
         row={k:q[k] for k in ('eventId','athleteId','name','team','teamName','teamAbbr','photo','kickoff','stat','line','book','over','under','sourceAt')}

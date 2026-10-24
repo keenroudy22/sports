@@ -19,6 +19,23 @@ def review():
 
 
 class RoleTests(unittest.TestCase):
+    def test_receipt_clock_excludes_later_corrections_missing_times_and_conflicts(self):
+        _,_,_,boxes=fixtures.fixture()
+        original=boxes[0]
+        correction=copy.deepcopy(original)
+        correction['retrievedAt']=boxscores.stamp(NOW+timedelta(seconds=1))
+        correction['players'][0]['stats']['pts']=999
+        for rows in (boxes+[correction], [correction]+boxes):
+            self.assertEqual(len(n.available_boxes(rows,NOW)),10)
+            self.assertEqual(props.history(rows,'123',NOW)[0]['stats']['pts'],24)
+        missing=dict(original);missing.pop('retrievedAt')
+        self.assertEqual(n.available_boxes([missing],NOW),[])
+        conflict=copy.deepcopy(original);conflict['players'][0]['stats']['pts']=0
+        self.assertEqual(n.available_boxes([original,conflict],NOW),[])
+        current=dict(original,eventId='new',season=2027,kickoff='2026-10-19T00:00:00Z',
+                     retrievedAt=correction['retrievedAt'])
+        self.assertEqual(n.current_role(review(),boxes+[current],NOW)[0]['games'],0)
+
     def test_current_workload_uses_current_team_regular_season_not_preseason_or_future(self):
         _,_,_,boxes=fixtures.fixture()
         q=review()

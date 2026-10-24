@@ -73,6 +73,24 @@ class GameAlternateTests(unittest.TestCase):
         self.assertTrue(report['planningOnly'])
         self.assertEqual(report['games'][0]['supportedSpreadLegs'],0)
         self.assertIn('No complete',report['games'][0]['coverageHold'])
+        self.assertFalse(report['releaseReady'])
+        self.assertEqual(report['twoLegOptions'],[])
+
+    def test_two_leg_prep_never_combines_same_game_book_or_league_or_claims_quote(self):
+        def leg(g,**changes):
+            return dict(dict(gameId=g,league='CFB',book='FanDuel',title=g,alternate=True,
+                             odds=-400,chance=.85,rawChance=.9,holds=['Segment not established']),**changes)
+        a,b=leg('one'),leg('two')
+        options=climb_prep.two_leg_options([a,b],NOW)
+        self.assertEqual(len(options),1)
+        self.assertEqual(options[0]['derivedOdds'],-178)
+        self.assertEqual(options[0]['status'],'evidence-held-watch')
+        self.assertNotIn('odds',options[0])
+        self.assertIn('final ticket',options[0]['priceBasis'])
+        self.assertTrue(options[0]['holds'])
+        for changes in ({'gameId':'one'},{'book':'DraftKings'},{'league':'NFL'},{'alternate':False},{'odds':-110}):
+            self.assertEqual(climb_prep.two_leg_options([a,dict(b,**changes)],NOW),[])
+        self.assertEqual(climb_prep.two_leg_options([dict(a,chance=.7),dict(b,chance=.7)],NOW,supported=True),[])
 
     def test_exact_two_sided_alternates_and_no_main_relabel(self):
         quotes=list(a.quotes(record()))
