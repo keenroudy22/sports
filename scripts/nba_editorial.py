@@ -221,8 +221,21 @@ def choices(data, now, history=None):
     names = lambda g: ' at '.join(g['teams'][s].get('name') or g['teams'][s].get('displayName') or g['teams'][s]['abbreviation'] for s in ('away','home'))
     for g in games[:5]:
         p=g['projection'];a=g['teams']['away'];h=g['teams']['home']
+        quote = g.get('totalQuote') or {}
+        book_total = None
+        try:
+            value = quote['line']
+            if (type(value) in (int, float) and math.isfinite(value) and value > 0
+                    and quote.get('book')
+                    and timedelta(0) <= now-boxscores.instant(quote['retrievedAt']) <= timedelta(hours=4)
+                    and all(type(quote.get(k)) in (int,float) and math.isfinite(quote[k])
+                            and abs(quote[k]) >= 100 for k in ('over','under'))):
+                book_total = value
+        except (KeyError, TypeError, ValueError):
+            pass
         projected.append({'subject':f"{a['abbreviation']} at {h['abbreviation']}",
-                          'line':f"My score {p['away']:g} - {p['home']:g}", 'right':f"{p['total']:g}",
+                          'line':f"My score {p['away']:g} - {p['home']:g}" + (f" | {quote['book']}" if book_total is not None else ''),
+                          'right':f"{p['total']:g} / {book_total:g}" if book_total is not None else f"{p['total']:g} / N/A",
                           'detail':'', 'logo':a.get('logo'),
                           'caption':f"{names(g)}: {p['away']:g}-{p['home']:g}"})
     if len(games)==1:
@@ -279,7 +292,7 @@ def choices(data, now, history=None):
                         (f"{target:%b %-d} · MATCHUP RESEARCH" if relevant else 'LAST SEASON · REGULAR SEASON' if chosen[0]['window']=='LAST SEASON' else
                          'THIS SEASON · SCORING CONTEXT')),
                     'editorialPolicy':EDITORIAL_POLICY if relevant else None,
-                    'right_label':'MY TOTAL' if family=='projections' or relevant else 'AVG POINTS'})
+                    'right_label':('MY / BOOK' if len(games)>1 else 'MY TOTAL') if family=='projections' else 'MY TOTAL' if relevant else 'AVG POINTS'})
     return out
 
 
