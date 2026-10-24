@@ -49,6 +49,41 @@ PROP = {'id': 'NFL-2026-W4-p7-over-4-5-rec-dk', 'title': 'Player Seven over 4.5 
 
 
 class DraftTests(unittest.TestCase):
+    def test_straight_shapes_keep_paragraphs_through_x_send_formatting(self):
+        from social_copy import x_ticket_copy
+        pick = dict(PICK, favorite=False, projection=31.2)
+        reason = 'Wind is forecast at 18 mph.'
+        play = 'Iowa/Michigan under 38.5 (-105, FanDuel)'
+        number = "Book says 38.5. I have it at 31, so I'm on the under."
+        for shape in ('A', 'B', 'C', 'D'):
+            with self.subTest(shape=shape), mock.patch.object(x_post.voice_pick, 'choose_shape', return_value=shape):
+                draft = x_post.draft(pick, GAME, reason=reason, history=[])
+                text = x_ticket_copy(draft, 'play')
+                self.assertIn(play + '\n\n' + number, text)
+                self.assertIn('\n\nCopy the bet 👇 @Playbook\n\n21+ only', text)
+                self.assertIn(reason, text)
+                self.assertNotIn('\n\n\n', text)
+                self.assertLessEqual(x_post.tweet_length(text), x_post.LIMIT)
+                self.assertEqual(x_post.guard(draft, pick, reason), [])
+                if shape == 'B':
+                    self.assertTrue(text.startswith(reason + '\n\n' + play), text)
+
+    def test_empty_optional_fields_do_not_leave_leading_or_repeated_breaks(self):
+        from social_copy import x_ticket_copy
+        pick = dict(PICK, marketType='moneyline', projection=None)
+        with mock.patch.object(x_post.voice_pick, 'choose_shape', return_value='B'):
+            text = x_ticket_copy(x_post.draft(pick, GAME, reason='', history=[]), 'play')
+        self.assertFalse(text.startswith('\n'))
+        self.assertNotIn('\n\n\n', text)
+        self.assertTrue(text.endswith('\n\n21+ only'))
+
+    def test_current_quote_stays_with_original_price_before_explanation(self):
+        pick = dict(PICK, favorite=False, projection=31.2)
+        with mock.patch.object(x_post.voice_pick, 'choose_shape', return_value='A'):
+            text = x_post.draft(pick, GAME, reason='Wind is forecast at 18 mph.', history=[],
+                                now_quote=('DraftKings', 39.5, -110))
+        self.assertIn('(-105, FanDuel)\nNow 39.5 (-110, DraftKings)\n\nBook says', text)
+
     def test_night_football_caption_names_the_window(self):
         saturday = dict(GAME, kickoff='2026-10-11T00:15:00Z')
         self.assertTrue(x_post.draft(PICK, saturday).startswith('Saturday night: '))

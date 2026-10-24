@@ -641,8 +641,11 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         shapes = [shape] if required else [shape, *[candidate for candidate in ('A', 'B', 'C', 'D') if candidate != shape]]
         options = []
         for candidate in shapes:
-            shape_lines = [part.format(**fields).strip() for part in voice_pick.pools()['playShapes'][candidate]]
-            top = '\n'.join(part for part in shape_lines if part)
+            # Empty template rows are deliberate paragraph breaks. Omit empty
+            # optional fields without flattening the owner's caption spacing.
+            shape_lines = [rendered for part in voice_pick.pools()['playShapes'][candidate]
+                           if (rendered := part.format(**fields).strip()) or part == '']
+            top = llm.re.sub(r'\n{3,}', '\n\n', '\n'.join(shape_lines)).strip()
             if now:
                 bits = top.splitlines()
                 price_at = next((i for i, bit in enumerate(bits) if llm.re.search(r'\([+-]\d+,\s*[^)]+\)$', bit)), 0)

@@ -1,5 +1,15 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## X caption spacing — October23 owner follow-up
+
+Keep deliberate paragraph breaks in straight-bet templates: play/price together,
+then a blank line before the explanation and before the closing prompt. A changed
+current quote stays beside the original price. Empty optional fields must not
+collapse these breaks or create oversized gaps. Existing parlay legs stay one per
+line with a blank line after the heading. Preserve exact wager details, Playbook,
+the single age line and the final weighted X limit; never truncate facts to fit.
+Sent posts and original receipt text are unchanged.
+
 ## NBA quarter inputs and lighter pages — October23 evening
 
 NBA prop collection keeps at most12 free Sharp reads: up to10 main-only reads,

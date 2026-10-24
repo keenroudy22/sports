@@ -1,10 +1,10 @@
 {
   "version": 1,
   "playShapes": {
-    "A": ["{play} ({odds}, {book})", "{number}", "{reason}", "{ask}", "@Playbook #{L}"],
-    "B": ["{reason}", "{play} ({odds}, {book})", "{number}", "{ask}", "@Playbook #{L}"],
-    "C": ["{play} ({odds}, {book})", "{number}", "{reason}", "{ask}", "@Playbook #{L}"],
-    "D": ["{play} ({odds}, {book})", "{number}", "{reason}", "@Playbook #{L}"]
+    "A": ["{play} ({odds}, {book})", "", "{number}", "{reason}", "", "{ask}", "@Playbook #{L}"],
+    "B": ["{reason}", "", "{play} ({odds}, {book})", "", "{number}", "", "{ask}", "@Playbook #{L}"],
+    "C": ["{play} ({odds}, {book})", "", "{number}", "{reason}", "", "{ask}", "@Playbook #{L}"],
+    "D": ["{play} ({odds}, {book})", "", "{number}", "{reason}", "", "@Playbook #{L}"]
   },
   "numberLines": {
     "totals": ["I'm at {n}.", "I've got {n} total points.", "My number's {n}.", "I have it at {n}."],

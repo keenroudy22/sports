@@ -1,5 +1,17 @@
 # October 5 product implementation tracker
 
+## October23 X straight-caption spacing — verification in progress
+
+Owner requested good spacing on X. All four straight-bet template shapes now
+carry deliberate paragraph breaks between the ticket/price, explanation and
+closing prompt. The renderer preserves those breaks while omitting empty
+optional fields; a current-price update stays with the original price. Parlay
+heading/one-leg-per-line layout and separate Playbook/age paragraphs remain.
+No wager detail, budget, stake, category or sent receipt changed. Focused61tests
+pass, including all four shapes through final X formatting, empty fields,
+current-price placement, parlay integrity, age notice and weighted-length holds.
+Full release gates and hosted verification must pass before this is shipped.
+
 ## October23 evening NBA/quarter/site release — verified live at00:53Z October24
 
 Main source d36db08f, exact Clippers alias e6a1ba92 and past-tip status repair
