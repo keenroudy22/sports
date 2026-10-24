@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-24T11:30:38Z",
+  "updatedAt": "2026-10-24T11:45:58Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 145,
+    "lines": 146,
     "current": 0,
-    "references": 1
+    "references": 2
   },
   "lines": [
     {
@@ -8136,6 +8136,69 @@
           "source": "https://www.espn.com/college-football/game/_/gameId/401858496",
           "marketWindow": "Full game",
           "cutoff": "OVER 5.5 at +106 or better; off the card at 6+, or at -109 or worse at 5.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "CFB",
+      "gameId": "CFB-401858496",
+      "player": "Nick Marsh",
+      "athleteId": "5079600",
+      "position": "WR",
+      "reportId": "CFB-2026-W8-marsh-under-4-5-rec-espnbet",
+      "identityVerified": true,
+      "direction": "UNDER",
+      "line": 4.5,
+      "market": "receptions",
+      "book": "ESPN BET",
+      "odds": 120,
+      "observedAt": "2026-10-24T10:25:08Z",
+      "expiresAt": "2026-10-24T12:30:00Z",
+      "source": "https://www.espn.com/college-football/game/_/gameId/401858496",
+      "marketWindow": "Full game",
+      "cutoff": "UNDER 4.5 at +120 or better; off the card at 4 or lower, or at +105 or worse at 4.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-10-24T10:25:08Z",
+      "kickoff": "2026-10-24T16:00Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Nick Marsh UNDER 4.5 receptions",
+      "id": "line-3845ec413b0179f5e927",
+      "observations": [
+        {
+          "line": 4.5,
+          "odds": 120,
+          "observedAt": "2026-10-24T10:25:08Z",
+          "source": "https://www.espn.com/college-football/game/_/gameId/401858496",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "CFB",
+          "gameId": "CFB-401858496",
+          "player": "Nick Marsh",
+          "athleteId": "5079600",
+          "position": "WR",
+          "reportId": "CFB-2026-W8-marsh-under-4-5-rec-espnbet",
+          "identityVerified": true,
+          "direction": "UNDER",
+          "line": 4.5,
+          "market": "receptions",
+          "book": "ESPN BET",
+          "odds": 120,
+          "observedAt": "2026-10-24T10:25:08Z",
+          "expiresAt": "2026-10-24T12:30:00Z",
+          "source": "https://www.espn.com/college-football/game/_/gameId/401858496",
+          "marketWindow": "Full game",
+          "cutoff": "UNDER 4.5 at +120 or better; off the card at 4 or lower, or at +105 or worse at 4.5.",
           "quoteType": "source reference"
         }
       ]
