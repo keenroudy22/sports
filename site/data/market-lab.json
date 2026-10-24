@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 32,
    "gamesQuoted": 34,
-   "moneylineSnapshots": 150,
+   "moneylineSnapshots": 151,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,12 +18,12 @@
      "season": 2026
     }
    ],
-   "snapshots": 150,
+   "snapshots": 151,
    "status": "capturing",
-   "totalSnapshots": 150
+   "totalSnapshots": 151
   },
   "NHL": {
-   "gamesGraded": 164,
+   "gamesGraded": 165,
    "gamesQuoted": 180,
    "moneylineSnapshots": 739,
    "seasons": [
@@ -34,7 +34,7 @@
      "season": 2027
     },
     {
-     "gamesGraded": 125,
+     "gamesGraded": 126,
      "gamesQuoted": 139,
      "phase": "regular",
      "season": 2027
@@ -46,6 +46,32 @@
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "LA",
+    "id": "8",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/la.png",
+    "name": "Los Angeles Kings",
+    "shortName": "Kings"
+   },
+   "awayScore": 1,
+   "gameId": "NHL-401892567",
+   "gradedAt": "2026-10-24T21:55:12Z",
+   "home": {
+    "abbreviation": "NJ",
+    "id": "11",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nj.png",
+    "name": "New Jersey Devils",
+    "shortName": "Devils"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-10-24T19:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "ANA",
@@ -2619,33 +2645,7 @@
    "seasonType": "post-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "TB",
-    "id": "20",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tb.png",
-    "name": "Tampa Bay Lightning",
-    "shortName": "Lightning"
-   },
-   "awayScore": 5,
-   "gameId": "NHL-401892479",
-   "gradedAt": "2026-10-11T03:30:06Z",
-   "home": {
-    "abbreviation": "NYI",
-    "id": "12",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nyi.png",
-    "name": "New York Islanders",
-    "shortName": "Islanders"
-   },
-   "homeScore": 3,
-   "kickoff": "2026-10-10T23:30:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-24T21:52:32Z"
+ "updatedAt": "2026-10-24T21:55:12Z"
 }
