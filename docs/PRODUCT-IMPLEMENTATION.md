@@ -1,5 +1,44 @@
 # October 5 product implementation tracker
 
+## October23 evening NBA/quarter/site release — verified live at00:53Z October24
+
+Main source d36db08f, exact Clippers alias e6a1ba92 and past-tip status repair
+0cd4b133 are deployed. Hosted40045096781 succeeded with verified artifact head
+d1811645bdf4369fb28aee54b2984ca8adf41045, which contains all three. Its upstream
+consistency guard detected seven changed files and repeated ten checks including
+the full suites and rebuild. Final tests:1753Python/two expected skips and281Node,
+normal and clean export locally and again in the hosted final-source checks.
+Official record audit114/NBA0 unchanged; hosted publication guard658files/zero
+issues. No new feed budget, job, stake, admission threshold or public pick.
+
+Final locked20:00 rehearsal hqs1gz1n passed with zero outside writes/private
+reads. A remote-data advance rejected the earlier alias push; the bounded
+retry preserved both writers, repeated all release gates, installed and pushed
+0cd4b133. This is resolved, not a failed production test or dropped capture.
+
+Live00:52–53Z app206/sha-a8671912261d: Today and NBA at375px, NBA at1280px,
+no sideways scroll, caught load state or browser error. All60 fresh displayed
+NBA comparisons expand, with current workload and original price/time labels.
+The all-sports Today correctly retains the released UMass–UConn0.5u ticket in
+play and keeps Best Bet results, personal tickets and cash-outs distinct.
+NBA source comparisons show real spread/total/moneyline quotes; a delayed
+scheduled status after tipoff gets an update notice instead of a cached score.
+Proof: `/Users/keen/Documents/ChatGPT/Kook'n/kookn-nba-quarter-cleanup-live-2026-10-23.png`.
+
+Fresh capture evidence:680paired main quotes,35separate Q1 quotes,407new frozen
+forecasts,0feed errors from12Sharp reads; pagination was partial across4games.
+The exact Clippers alias was separately verified against173raw rows/77pairs;
+the existing capture now owns persistence, not a hand-written store. Live details
+retain60comparisons (37historical projections,23held),59with current-season
+workload. These are research rows, not60different picks or guaranteed coverage.
+
+Matched-input sizes and original records are preserved as recorded below.
+Remaining work is explicit: validated NBA roster/team and prop models; period
+workload/participation/void rules, Q2/football pricing and real correlated ticket
+quotes for automatic quarter parlays; prospective morning delivery/learning;
+and the separate cold-phone10second benchmark. Existing scheduled captures and
+weekly review collect the new evidence. Full audit is NOT marked complete.
+
 ## October23 fresh-capture follow-through — Clippers identity repair
 
 Installed source d36db08f (rebased from146a4673) passed1752Python/two skips and
