@@ -31216,5 +31216,895 @@
         "publishedAt": "2026-10-24T11:23:09Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-24T11:40:35Z",
+    "summary": "Released 1: Tulane MONEYLINE +124 at DraftKings.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401862811"
+        ],
+        "book": "DraftKings",
+        "odds": 124,
+        "projection": 0.6,
+        "edge": "Price-checked chance 50.0% against the exact two-sided price; 44.6% needed at +124: +5.3 percentage points.",
+        "cutoff": "HOME 0 at +124 or better; off the card at -0.5 or lower, or at +109 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-18T03:43:37Z",
+        "quotedAt": "2026-10-24T10:34:06Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 6:34 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-24T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 0.5,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.633,
+          "chance": 0.5,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.446,
+          "edgePoints": 5.3,
+          "evPerUnit": 0.119,
+          "snapshotAt": "2026-10-18T03:43:37Z",
+          "evaluatedAt": "2026-10-24T10:46:30Z",
+          "fairChance": 0.428,
+          "anchoredChance": 0.5,
+          "gap": 7.2,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "UTSA Roadrunners at Tulane Green Wave",
+        "title": "Tulane MONEYLINE",
+        "id": "CFB-2026-W8-utsa-tuln-ml-home-0-dk",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862811",
+          "https://www.evanscutchmorepress.com/will-hall-sticks-with-freshman-trace-johnson-as-tulane-gets-its-shot-at-utsa/",
+          "https://goutsa.com/news/2026/10/22/utsa-set-for-saturday-night-matchup-at-tulane"
+        ],
+        "why": "Price-checked win chance 50.0%; +124 needs 44.6%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Tulane coach Will Hall confirmed that Trace Johnson will start against UTSA for the second straight game. Checked before publishing: Kadin Semonza did not play against Memphis, and Tulane's depth chart lists him behind Trace Johnson for the UTSA game. The market: The spread opened +4 and is +3 at DraftKings, a move of 1 toward the home. The total opened 50.5 and is 51.5 at DraftKings, 1 toward the over. 6 books span 2.5 to 3 on the spread; the middle is 2.5. 6 books span 51.5 to 52.5 on the total; the middle is 52. Our spread is 8.6 points off, bigger than 82% of our past gaps. Gaps this size went 324-314 against the close in 3584 games. Our total is 1 points off, bigger than 19% of our past gaps. Gaps this size went 1549-1377 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: UTSA enters the Tulane game 6-1 overall and 3-0 in conference play, while Tulane is 3-3 overall and 1-1 in conference play. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Tulane forced six turnovers and recorded seven sacks in its 31-17 win over Memphis."
+          ],
+          "cautions": [
+            "Owen McCown led UTSA's go-ahead touchdown drive against Navy on October 17.",
+            "UTSA enters the Tulane game 6-1 overall and 3-0 in conference play, while Tulane is 3-3 overall and 1-1 in conference play."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Price-checked win chance 50.0%; this price needs 44.6%.",
+              "numbers": {
+                "chance": 0.5,
+                "breakEven": 0.446
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-10-24T10:34:06Z"
+            },
+            {
+              "text": "Tulane forced six turnovers and recorded seven sacks in its 31-17 win over Memphis.",
+              "numbers": {},
+              "source": "https://www.evanscutchmorepress.com/will-hall-sticks-with-freshman-trace-johnson-as-tulane-gets-its-shot-at-utsa/",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "text": "Tulane forced six turnovers and recorded seven sacks in its 31-17 win over Memphis.",
+              "numbers": {},
+              "source": "https://www.evanscutchmorepress.com/will-hall-sticks-with-freshman-trace-johnson-as-tulane-gets-its-shot-at-utsa/",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Owen McCown led UTSA's go-ahead touchdown drive against Navy on October 17.",
+              "numbers": {},
+              "source": "https://goutsa.com/news/2026/10/22/utsa-set-for-saturday-night-matchup-at-tulane",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "text": "UTSA enters the Tulane game 6-1 overall and 3-0 in conference play, while Tulane is 3-3 overall and 1-1 in conference play.",
+              "numbers": {},
+              "source": "https://goutsa.com/news/2026/10/22/utsa-set-for-saturday-night-matchup-at-tulane",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Owen McCown led UTSA's go-ahead touchdown drive against Navy on October 17.",
+              "numbers": {},
+              "source": "https://goutsa.com/news/2026/10/22/utsa-set-for-saturday-night-matchup-at-tulane",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "text": "Owen McCown led UTSA's go-ahead touchdown drive against Navy on October 17.",
+              "numbers": {},
+              "source": "https://goutsa.com/news/2026/10/22/utsa-set-for-saturday-night-matchup-at-tulane",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "weather": {
+            "tempF": 68,
+            "windMph": 5,
+            "windDirection": "E",
+            "precipProb": 0,
+            "periodStart": "2026-10-24T19:00:00-05:00",
+            "issuedAt": "2026-10-24T07:21:59+00:00",
+            "source": "https://api.weather.gov/gridpoints/LIX/68,88/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": -105,
+                  "time": "2026-10-19T04:02:39Z"
+                },
+                "now": {
+                  "line": 3.0,
+                  "price": -118,
+                  "time": "2026-10-24T10:35:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": -105,
+                  "time": "2026-10-19T04:02:39Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": -104,
+                  "time": "2026-10-24T10:35:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": 124,
+              "time": "2026-10-24T10:34:06Z"
+            }
+          },
+          "ours": {
+            "projection": 0.6,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "Price-checked win chance 50.0%; this price needs 44.6%.",
+            "snapshotAt": "2026-10-18T03:43:37Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "role",
+              "url": "https://goutsa.com/news/2026/10/22/utsa-set-for-saturday-night-matchup-at-tulane",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://www.evanscutchmorepress.com/will-hall-sticks-with-freshman-trace-johnson-as-tulane-gets-its-shot-at-utsa/",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/LIX/68,88/forecast/hourly",
+              "time": "2026-10-24T07:21:59+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401862811",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-24T11:40:35Z"
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-24T11:40:35Z",
+    "summary": "Released 1: J'Koby Williams UNDER 2.5 receptions +135 at ESPN BET.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "RB",
+        "athleteId": "5086393",
+        "market": "rec",
+        "line": 2.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401856840"
+        ],
+        "book": "ESPN BET",
+        "odds": 135,
+        "projection": 2.3,
+        "edge": "Price-checked chance 50.7% against the exact two-sided price; 42.6% needed at +135: +8.1 percentage points.",
+        "cutoff": "UNDER 2.5 at +135 or better; off the card at 2 or lower, or at +120 or worse at 2.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-18T18:05:29Z",
+        "quotedAt": "2026-10-24T10:46:11Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:46 AM ET capture across 1 book; ESPN BET is the only book with this market so far. ESPN BET is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-24T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 0.5,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.546,
+          "chance": 0.507,
+          "calibrated": true,
+          "calibration": 0.15,
+          "calibrationN": 1312,
+          "push": 0.0,
+          "breakEven": 0.426,
+          "edgePoints": 8.1,
+          "evPerUnit": 0.191,
+          "snapshotAt": "2026-10-18T18:05:29Z",
+          "evaluatedAt": "2026-10-24T10:46:30Z",
+          "fairChance": 0.398,
+          "anchoredChance": 0.507,
+          "gap": 10.9,
+          "calibrationFamily": "CFB/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Texas Tech Red Raiders at Cincinnati Bearcats",
+        "title": "J'Koby Williams UNDER 2.5 receptions",
+        "id": "CFB-2026-W8-williams-under-2-5-rec-espnbet",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856840",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+          "https://gobearcats.com/news/2026/10/20/watch-head-coach-scott-satterfield-players-preview-texas-tech-game",
+          "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/10/19/2026_Texas_Tech_Game_Notes_-_GM7_-_Cincinnati.pdf"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 4 of 10 under 2.5.",
+          "context": [
+            "Role: projected for 2.8 targets a game.",
+            "Defense: CIN allows 3.33 receptions a game to RBs, 93rd-stingiest of 138 this season."
+          ],
+          "cautions": [
+            "Only 4 of the last 10 games cleared this side of the line; recent results oppose it.",
+            "Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 2.3 against 2.5. The under reads 50.7% after adjustment from the raw 54.6%; 42.6% is needed at +135. Last 10 games: 4 of 10 under 2.5. Role: projected for 2.8 targets a game. Defense: CIN allows 3.33 receptions a game to RBs, 93rd-stingiest of 138 this season.",
+        "risk": "Only 4 of the last 10 games cleared this side of the line; recent results oppose it. Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role. An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 2.5. I say 2.3.",
+              "numbers": {
+                "projection": 2.3,
+                "line": 2.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-18T18:05:29Z"
+            },
+            {
+              "text": "J'Koby Williams caught two passes for eight yards against Arizona State in Texas Tech's most recent game.",
+              "numbers": {},
+              "source": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/10/19/2026_Texas_Tech_Game_Notes_-_GM7_-_Cincinnati.pdf",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "text": "J'Koby Williams caught two passes for eight yards against Arizona State in Texas Tech's most recent game.",
+              "numbers": {},
+              "source": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/10/19/2026_Texas_Tech_Game_Notes_-_GM7_-_Cincinnati.pdf",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "2 of his last 5 games finished under 2.5 receptions.",
+              "numbers": {
+                "values": [
+                  2,
+                  3,
+                  3,
+                  3,
+                  2
+                ],
+                "hits": 2,
+                "games": 5,
+                "line": 2.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-17T19:30Z"
+            },
+            {
+              "text": "Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role.",
+              "numbers": {},
+              "source": "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role.",
+              "numbers": {},
+              "source": "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "text": "Cameron Dickey remains out with a high ankle sprain, and J'Koby Williams and Quinten Joyner will continue to fill his role.",
+              "numbers": {},
+              "source": "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "weather": {
+            "tempF": 62,
+            "windMph": 2,
+            "windDirection": "E",
+            "precipProb": 0,
+            "periodStart": "2026-10-24T12:00:00-04:00",
+            "issuedAt": "2026-10-24T08:00:26+00:00",
+            "source": "https://api.weather.gov/gridpoints/ILN/35,39/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": null,
+              "FanDuel": null
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 2.5,
+              "price": 135,
+              "time": "2026-10-24T10:46:11Z"
+            }
+          },
+          "ours": {
+            "projection": 2.3,
+            "line": 2.5,
+            "market": "rec",
+            "text": "Book says 2.5. I say 2.3.",
+            "snapshotAt": "2026-10-18T18:05:29Z"
+          },
+          "history": "Last 10 games: 4 of 10 under 2.5.",
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.fox34.com/2026/10/23/no-8-texas-tech-geared-up-saturdays-road-test-cincinnati/",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/10/19/2026_Texas_Tech_Game_Notes_-_GM7_-_Cincinnati.pdf",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/ILN/35,39/forecast/hourly",
+              "time": "2026-10-24T08:00:26+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856840",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-24T10:46:30Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://gobearcats.com/news/2026/10/20/watch-head-coach-scott-satterfield-players-preview-texas-tech-game",
+              "time": "2026-10-24T10:46:30Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-24T11:40:35Z"
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-24T11:50:42Z",
+    "summary": "Released 1: Iowa at Minnesota over 40.5 -110 at ESPN BET.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": true,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 40.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401858497"
+        ],
+        "book": "ESPN BET",
+        "odds": -110,
+        "projection": 47.8,
+        "edge": "Price-checked chance 56.3% against the exact two-sided price; 52.4% needed at -110: +3.9 percentage points.",
+        "cutoff": "OVER 40.5 at -110 or better; off the card at 42+, or at -125 or worse at 40.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-18T14:45:40Z",
+        "quotedAt": "2026-10-24T10:35:06Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:35 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-24T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "chef_pick",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.675,
+          "chance": 0.563,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.524,
+          "edgePoints": 3.9,
+          "evPerUnit": 0.075,
+          "snapshotAt": "2026-10-18T14:45:40Z",
+          "evaluatedAt": "2026-10-24T11:42:17Z",
+          "fairChance": 0.5,
+          "anchoredChance": 0.563,
+          "gap": 6.3,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Iowa Hawkeyes at Minnesota Golden Gophers",
+        "title": "Iowa at Minnesota over 40.5",
+        "id": "CFB-2026-W8-iowa-minn-over-40-5-espnbet",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858497",
+          "https://www.kwqc.com/2026/10/21/jeremy-hecklinski-named-iowas-starting-qb-against-minnesota/?outputType=amp",
+          "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html"
+        ],
+        "why": "Model lean, our number only. We have the total at 47.8; the book is at 40.5. That makes the over 56.3%, and -110 needs 52.4%. Checked before publishing: Iowa coach Kirk Ferentz said Jeremy Hecklinski will start against Minnesota, while Hank Brown is back to 100 percent healthy. Checked before publishing: The Wednesday Big Ten availability report listed Minnesota quarterback Michael Merdinger, running back Ryan Estrada and wide receiver Hayden Moore as out. The market: The spread opened +4.5 and is +7.5 at DraftKings, a move of 3 toward the away. The total opened 42.5 and is 40.5 at DraftKings, 2 toward the under. Our spread is 0.5 points off, bigger than 13% of our past gaps. Gaps this size went 1546-1557 against the close in 3584 games. Our total is 7.3 points off, bigger than 93% of our past gaps. Gaps this size went 163-101 against the close in 3602 games.",
+        "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "In his start against Washington, Jeremy Hecklinski completed 14 of 19 passes for 202 yards and three touchdowns in Iowa's 41-24 win."
+          ],
+          "cautions": [
+            "The Wednesday Big Ten availability report listed Iowa offensive lineman Trent Wilson and Minnesota offensive linemen Brett Carroll and Ashton Beers as out.",
+            "The Wednesday Big Ten availability report listed Minnesota tight end Pierce Walsh and offensive linemen Jaden Ball and Nick Spence as questionable."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 40.5. I say 47.8.",
+              "numbers": {
+                "projection": 47.8,
+                "line": 40.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-18T14:45:40Z"
+            },
+            {
+              "text": "In his start against Washington, Jeremy Hecklinski completed 14 of 19 passes for 202 yards and three touchdowns in Iowa's 41-24 win.",
+              "numbers": {},
+              "source": "https://www.kcci.com/article/iowa-football-starting-quarterback-hecklinski-or-brown/74195649",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "In his start against Washington, Jeremy Hecklinski completed 14 of 19 passes for 202 yards and three touchdowns in Iowa's 41-24 win.",
+              "numbers": {},
+              "source": "https://www.kcci.com/article/iowa-football-starting-quarterback-hecklinski-or-brown/74195649",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "The Wednesday Big Ten availability report listed Iowa offensive lineman Trent Wilson and Minnesota offensive linemen Brett Carroll and Ashton Beers as out.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "The Wednesday Big Ten availability report listed Minnesota tight end Pierce Walsh and offensive linemen Jaden Ball and Nick Spence as questionable.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "The Wednesday Big Ten availability report listed Iowa offensive lineman Trent Wilson and Minnesota offensive linemen Brett Carroll and Ashton Beers as out.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "The Wednesday Big Ten availability report listed Minnesota tight end Pierce Walsh and offensive linemen Jaden Ball and Nick Spence as questionable.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "The Wednesday Big Ten availability report listed Iowa offensive lineman Trent Wilson and Minnesota offensive linemen Brett Carroll and Ashton Beers as out.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "The Wednesday Big Ten availability report listed Minnesota tight end Pierce Walsh and offensive linemen Jaden Ball and Nick Spence as questionable.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "weather": {
+            "tempF": 73,
+            "windMph": 10,
+            "windDirection": "SW",
+            "precipProb": 17,
+            "periodStart": "2026-10-24T14:00:00-05:00",
+            "issuedAt": "2026-10-24T06:26:50+00:00",
+            "source": "https://api.weather.gov/gridpoints/MPX/108,72/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 42.5,
+                  "price": -110,
+                  "time": "2026-10-15T04:02:14Z"
+                },
+                "now": {
+                  "line": 40.5,
+                  "price": -112,
+                  "time": "2026-10-24T10:35:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 42.5,
+                  "price": -105,
+                  "time": "2026-10-15T04:02:14Z"
+                },
+                "now": {
+                  "line": 40.5,
+                  "price": -112,
+                  "time": "2026-10-24T10:35:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 40.5,
+              "price": -110,
+              "time": "2026-10-24T10:35:06Z"
+            }
+          },
+          "ours": {
+            "projection": 47.8,
+            "line": 40.5,
+            "market": "total",
+            "text": "Book says 40.5. I say 47.8.",
+            "snapshotAt": "2026-10-18T14:45:40Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://www.kcci.com/article/iowa-football-starting-quarterback-hecklinski-or-brown/74195649",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "injury",
+              "url": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/MPX/108,72/forecast/hourly",
+              "time": "2026-10-24T06:26:50+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401858497",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.kwqc.com/2026/10/21/jeremy-hecklinski-named-iowas-starting-qb-against-minnesota/?outputType=amp",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-24T11:50:42Z"
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-24T11:50:42Z",
+    "summary": "Released 1: Central Michigan MONEYLINE +140 at DraftKings.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401866476"
+        ],
+        "book": "DraftKings",
+        "odds": 140,
+        "projection": 0.5,
+        "edge": "Price-checked chance 44.9% against the exact two-sided price; 41.7% needed at +140: +3.2 percentage points.",
+        "cutoff": "HOME 0 at +140 or better; off the card at -0.5 or lower, or at +125 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-17T23:00:48Z",
+        "quotedAt": "2026-10-24T11:23:50Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 7:23 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-24T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 0.5,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.538,
+          "chance": 0.449,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.417,
+          "edgePoints": 3.2,
+          "evPerUnit": 0.076,
+          "snapshotAt": "2026-10-17T23:00:48Z",
+          "evaluatedAt": "2026-10-24T11:42:17Z",
+          "fairChance": 0.4,
+          "anchoredChance": 0.449,
+          "gap": 4.8,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "Miami (OH) RedHawks at Central Michigan Chippewas",
+        "title": "Central Michigan MONEYLINE",
+        "id": "CFB-2026-W8-m-oh-cmu-ml-home-0-dk",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401866476",
+          "https://cmuchippewas.com/news/2026/10/18/football-notebook-chippewas-find-motivation-in-loss",
+          "https://cmuchippewas.com/news/2026/10/23/football-preview-redhawks-pose-yet-another-stiff-test-for-chippewas-on-saturday"
+        ],
+        "why": "Price-checked win chance 44.9%; +140 needs 41.7%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Central Michigan played Western Michigan without running back Jayden Clerveaux, wide receiver Shawn Foster and three starting defensive linemen. Checked before publishing: Central Michigan center Losini Maka broke his thumb against Western Michigan but played through the injury. The market: The spread opened -1.5 and is +3.5 at DraftKings, a move of 5 toward the away. The total opened 42.5 and is 40.5 at DraftKings, 2 toward the under. 6 books span 3.5 to 4 on the spread; the middle is 3.5. 6 books span 39.5 to 40.5 on the total; the middle is 40.5. Our spread is 5 points off, bigger than 65% of our past gaps. Gaps this size went 640-622 against the close in 3584 games. Our total is 6.9 points off, bigger than 92% of our past gaps. Gaps this size went 184-122 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Jadyn Glasser has appeared in six of Central Michigan's seven games this season, completing 55.8 percent of his passes for 242 yards, one touchdown and three interceptions. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Central Michigan played Western Michigan without running back Jayden Clerveaux, wide receiver Shawn Foster and three starting defensive linemen."
+          ],
+          "cautions": [
+            "Caleb Heavner is Miami's starting quarterback and has completed 31-of-60 passes for 358 yards, two touchdowns and one interception in his first three Division I starts.",
+            "Miami quarterback David McComb is out for the rest of the season after an injury against UConn on Sept. 26.",
+            "Miami quarterback Thomas Gotkowski suffered a season-ending injury during fall camp.",
+            "Central Michigan says Jadyn Glasser will likely start if Angel Flores cannot play.",
+            "Jadyn Glasser has appeared in six of Central Michigan's seven games this season, completing 55.8 percent of his passes for 242 yards, one touchdown and three interceptions."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Central Michigan played Western Michigan without running back Jayden Clerveaux, wide receiver Shawn Foster and three starting defensive linemen.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Price-checked win chance 44.9%; this price needs 41.7%.",
+              "numbers": {
+                "chance": 0.449,
+                "breakEven": 0.417
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-10-24T11:23:50Z"
+            },
+            {
+              "text": "Central Michigan played Western Michigan without running back Jayden Clerveaux, wide receiver Shawn Foster and three starting defensive linemen.",
+              "numbers": {},
+              "source": "https://cmuchippewas.com/news/2026/10/18/football-notebook-chippewas-find-motivation-in-loss",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Caleb Heavner is Miami's starting quarterback and has completed 31-of-60 passes for 358 yards, two touchdowns and one interception in his first three Division I starts.",
+              "numbers": {},
+              "source": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Miami quarterback David McComb is out for the rest of the season after an injury against UConn on Sept. 26.",
+              "numbers": {},
+              "source": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Caleb Heavner is Miami's starting quarterback and has completed 31-of-60 passes for 358 yards, two touchdowns and one interception in his first three Division I starts.",
+              "numbers": {},
+              "source": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Miami quarterback David McComb is out for the rest of the season after an injury against UConn on Sept. 26.",
+              "numbers": {},
+              "source": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Miami quarterback Thomas Gotkowski suffered a season-ending injury during fall camp.",
+              "numbers": {},
+              "source": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Central Michigan says Jadyn Glasser will likely start if Angel Flores cannot play.",
+              "numbers": {},
+              "source": "https://cmuchippewas.com/news/2026/10/23/football-preview-redhawks-pose-yet-another-stiff-test-for-chippewas-on-saturday",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Central Michigan played Western Michigan without running back Jayden Clerveaux, wide receiver Shawn Foster and three starting defensive linemen.",
+              "numbers": {},
+              "source": "https://cmuchippewas.com/news/2026/10/18/football-notebook-chippewas-find-motivation-in-loss",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Caleb Heavner is Miami's starting quarterback and has completed 31-of-60 passes for 358 yards, two touchdowns and one interception in his first three Division I starts.",
+              "numbers": {},
+              "source": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Miami quarterback David McComb is out for the rest of the season after an injury against UConn on Sept. 26.",
+              "numbers": {},
+              "source": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Miami quarterback Thomas Gotkowski suffered a season-ending injury during fall camp.",
+              "numbers": {},
+              "source": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Central Michigan says Jadyn Glasser will likely start if Angel Flores cannot play.",
+              "numbers": {},
+              "source": "https://cmuchippewas.com/news/2026/10/23/football-preview-redhawks-pose-yet-another-stiff-test-for-chippewas-on-saturday",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "Central Michigan played Western Michigan without running back Jayden Clerveaux, wide receiver Shawn Foster and three starting defensive linemen.",
+              "numbers": {},
+              "source": "https://cmuchippewas.com/news/2026/10/18/football-notebook-chippewas-find-motivation-in-loss",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "weather": {
+            "tempF": 61,
+            "windMph": 6,
+            "windDirection": "SSE",
+            "precipProb": 0,
+            "periodStart": "2026-10-24T13:00:00-04:00",
+            "issuedAt": "2026-10-24T08:03:32+00:00",
+            "source": "https://api.weather.gov/gridpoints/GRR/69,78/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": -115,
+                  "time": "2026-10-19T04:02:39Z"
+                },
+                "now": {
+                  "line": 3.5,
+                  "price": -110,
+                  "time": "2026-10-24T10:35:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -1.5,
+                  "price": -102,
+                  "time": "2026-10-19T04:02:39Z"
+                },
+                "now": {
+                  "line": 3.5,
+                  "price": -108,
+                  "time": "2026-10-24T10:35:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": 140,
+              "time": "2026-10-24T11:23:50Z"
+            }
+          },
+          "ours": {
+            "projection": 0.5,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "Central Michigan played Western Michigan without running back Jayden Clerveaux, wide receiver Shawn Foster and three starting defensive linemen.",
+            "snapshotAt": "2026-10-17T23:00:48Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "role",
+              "url": "https://miamiredhawks.com/news/2026/10/20/football-redhawks-face-cmu-on-saturday-afternoon",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "role",
+              "url": "https://cmuchippewas.com/news/2026/10/23/football-preview-redhawks-pose-yet-another-stiff-test-for-chippewas-on-saturday",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "injury",
+              "url": "https://cmuchippewas.com/news/2026/10/18/football-notebook-chippewas-find-motivation-in-loss",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/GRR/69,78/forecast/hourly",
+              "time": "2026-10-24T08:03:32+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401866476",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-24T11:50:42Z"
+      }
+    ]
   }
 ]
