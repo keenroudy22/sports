@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-24T19:11:46Z",
+  "updatedAt": "2026-10-24T19:42:52Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -467,6 +467,15 @@
           "name": "Baltimore Ravens",
           "players": [
             {
+              "id": "3916387",
+              "name": "Lamar Jackson",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-24T19:35Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
+            },
+            {
               "id": "4361178",
               "name": "Cam Jurgens",
               "position": "C",
@@ -510,15 +519,6 @@
               "injury": "Pectoral",
               "reportedAt": "2026-10-23T22:46Z",
               "source": "https://www.espn.com/nfl/player/_/id/4690179/tavius-robinson"
-            },
-            {
-              "id": "3916387",
-              "name": "Lamar Jackson",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-23T19:49Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
             },
             {
               "id": "4243220",
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-24T19:02Z",
+              "reportedAt": "2026-10-24T19:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-24T19:02Z",
+              "reportedAt": "2026-10-24T19:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-24T19:02Z",
+              "reportedAt": "2026-10-24T19:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5532,7 +5532,7 @@
               "position": "LB",
               "status": "Injured Reserve",
               "injury": "Quadriceps",
-              "reportedAt": "2026-10-24T18:01Z",
+              "reportedAt": "2026-10-24T19:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
             },
             {
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4045701",
+              "name": "Timmy Horne",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-24T19:19Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4045701/timmy-horne"
+            },
+            {
               "id": "3916566",
               "name": "K.J. Osborn",
               "position": "WR",
@@ -7121,15 +7130,6 @@
               "injury": null,
               "reportedAt": "2026-10-14T23:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429607/cordale-flott"
-            },
-            {
-              "id": "4883647",
-              "name": "Elic Ayomanor",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-14T02:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4883647/elic-ayomanor"
             }
           ]
         },
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "15",
-          "name": "Jaylen Wright",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-23T20:48:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4682745/jaylen-wright"
-        },
         {
           "teamId": "15",
           "name": "Caleb Douglas",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-24T19:11:46Z",
           "source": "https://www.espn.com/nfl/player/_/id/4880273/kyle-louis"
+        },
+        {
+          "teamId": "33",
+          "name": "Lamar Jackson",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-24T19:42:52Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-24T19:11:46Z",
-      "lastAttemptAt": "2026-10-24T19:11:46Z",
+      "checkedAt": "2026-10-24T19:42:52Z",
+      "lastAttemptAt": "2026-10-24T19:42:52Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-24T19:11:46Z",
-      "lastAttemptAt": "2026-10-24T19:11:46Z",
+      "checkedAt": "2026-10-24T19:42:52Z",
+      "lastAttemptAt": "2026-10-24T19:42:52Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
