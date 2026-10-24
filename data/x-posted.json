@@ -6346,7 +6346,8 @@
    },
    "sentAt": "2026-10-23T05:06:45.312Z",
    "link": "https://x.com/1753110091912413184/status/2113497330666160275",
-   "tweetId": "2113497330666160275"
+   "tweetId": "2113497330666160275",
+   "metricsAttemptAt": "2026-10-24T05:27:38Z"
   },
   {
    "id": "research:end-zone:2026-10-23",
@@ -6580,6 +6581,69 @@
    "socialVoiceVersion": "casual-20261022",
    "socialAgeVersion": "age-20261023",
    "cardKey": "receipt-day-2026-10-23"
+  },
+  {
+   "id": "research:td-hit:research:end-zone:2026-10-23",
+   "postedAt": "2026-10-24T05:27:38Z",
+   "dueAt": "2026-10-24T05:30:44Z",
+   "bufferPostId": "6adc41d3bd33ce99c3090025",
+   "textHash": "b9e22da63766c4dd",
+   "kind": "buffer:research",
+   "card": false,
+   "cardTheme": "none",
+   "queuedText": "🎯 Cale Hellums found the end zone.\nThat was my anytime TD lean this morning.\n#CFB\n\n21+ only",
+   "socialStyleVersion": "plain-20261022",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 Cale Hellums found the end zone.\nThat was my anytime TD lean this morning.\n#CFB\n\n21+ only",
+    "destination": "research"
+   }
+  },
+  {
+   "id": "research:end-zone:2026-10-24",
+   "postedAt": "2026-10-24T05:27:38Z",
+   "dueAt": "2026-10-24T14:36:00Z",
+   "bufferPostId": "6adc41d4e4be8a4d86416034",
+   "textHash": "32ffc8a8228a5e42",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "🎯 END-ZONE WORK\nCaleb Hawkins (first TD dart): 35 red-zone · 22 inside 10\nLee Beebe Jr.: 37 red-zone · 25 inside 10\nScottre Humphrey (anytime TD lean): 29 red-zone · 20 inside 10\nCam Cook: 41 red-zone · 22 inside 10\n#CFB\n\n21+ only",
+   "socialStyleVersion": "plain-20261022",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nCaleb Hawkins (first TD dart): 35 red-zone · 22 inside 10\nLee Beebe Jr.: 37 red-zone · 25 inside 10\nScottre Humphrey (anytime TD lean): 29 red-zone · 20 inside 10\nCam Cook: 41 red-zone · 22 inside 10\n#CFB\n\n21+ only",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-10-24.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "Caleb Hawkins",
+      "athleteId": "5258016",
+      "gameId": "CFB-401856836",
+      "league": "CFB",
+      "kickoff": "2026-10-24T23:00Z",
+      "anytime": false,
+      "firstTd": true
+     },
+     {
+      "player": "Scottre Humphrey",
+      "athleteId": "5166161",
+      "gameId": "CFB-401864527",
+      "league": "CFB",
+      "kickoff": "2026-10-25T02:00Z",
+      "anytime": true,
+      "firstTd": false
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-10-24"
   }
  ]
 }
