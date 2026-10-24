@@ -9,9 +9,21 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import release_checks
 import run
+import post_windows
+from datetime import datetime,timedelta,timezone
 
 
 class ReleaseChecksTests(unittest.TestCase):
+    def test_public_release_does_not_wait_for_spaced_x_slot(self):
+        target=datetime(2026,10,24,10,45,tzinfo=timezone.utc)
+        self.assertFalse(post_windows.public_release_open(target-timedelta(minutes=16),target))
+        self.assertTrue(post_windows.public_release_open(target,target))
+        source=Path(run.__file__).read_text()
+        release=source.split('def release_private(')[1].split('def release_private_isolated')[0]
+        self.assertIn('post_windows.public_release_open(now, target)',release)
+        self.assertNotIn('if now < due - post_windows.DISCORD_PLAY_LEAD',release)
+        self.assertIn('buffer_post.free_slot',release)
+        self.assertIn('post_windows.deadline',release)
     def test_required_tests_cannot_silently_disappear(self):
         with tempfile.TemporaryDirectory() as folder:
             with self.assertRaisesRegex(RuntimeError, 'Missing mandatory'):

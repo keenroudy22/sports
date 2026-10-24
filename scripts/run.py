@@ -3360,7 +3360,7 @@ def release_private(now, log=log, only=None):
                                  holdReason='no Discord-first X slot before kickoff')
             log(f'release: {key} moved to the near-miss log: no Discord-first X slot before kickoff')
             continue
-        if now < due - post_windows.DISCORD_PLAY_LEAD:
+        if not post_windows.public_release_open(now, target):
             continue
 
         row = recover_private_release_artifacts(row, ctx, ctx.games, now)

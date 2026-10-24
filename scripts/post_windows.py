@@ -37,6 +37,11 @@ def target(league, kickoff):
     return opens(league, start)
 
 
+def public_release_open(now, target_time):
+    """Discord/site can release when the morning opens; X spacing is separate."""
+    return instant(now) >= instant(target_time) - DISCORD_PLAY_LEAD
+
+
 def jitter(post_id):
     """Stable zero-to-six-minute shift, so posts do not read like a clocked bot."""
     return timedelta(minutes=int(hashlib.sha1(str(post_id).encode('utf-8')).hexdigest(), 16) % 7)

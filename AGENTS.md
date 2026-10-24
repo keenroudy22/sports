@@ -1,5 +1,15 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## October24 publish-first website and queue
+
+Hosted push runs publish stored, admission-checked evidence without a new
+network capture/model-refresh cycle. Existing scheduled/manual refreshes retain
+their capture paths and budgets; no new job or higher request allowance. All
+deployment suites, record audits, rebuild-on-rebase and public-boundary checks
+remain. Once the morning release window opens, Discord/site release does not
+wait for the spaced X slot; X retains its lead, spacing and kickoff deadline.
+Never claim a queued Buffer post or pending Pages deployment is already live.
+
 ## October24 runtime release latency
 
 Routine report/release/precheck paths run the explicit release-boundary suite

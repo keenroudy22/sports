@@ -16,6 +16,17 @@ WORKFLOW = (ROOT / '.github' / 'workflows' / 'publish.yml').read_text(encoding='
 
 
 class WorkflowTests(unittest.TestCase):
+    def test_ticket_push_does_not_wait_for_new_capture(self):
+        capture = ('refresh', 'sports_refresh', 'boxscores', 'research_context',
+                   'depth_charts', 'forecast', 'venues', 'weather', 'prop_lines',
+                   'odds_api', 'prop_odds', 'sharp_odds')
+        for step in WORKFLOW.split('      - name: '):
+            if any(re.search(r'run: python scripts/' + name + r'\.py\b', step) for name in capture):
+                self.assertIn("if: github.event_name != 'push'", step)
+        self.assertIn('python -m unittest discover -s tests', WORKFLOW)
+        self.assertIn('python scripts/publication_guard.py', WORKFLOW)
+        self.assertIn('python scripts/hosted_rebase_verify.py', WORKFLOW)
+
     def test_every_python_step_exists_and_imports(self):
         scripts = re.findall(r'python scripts/(\w+)\.py', WORKFLOW)
         self.assertIn('build_site', scripts)

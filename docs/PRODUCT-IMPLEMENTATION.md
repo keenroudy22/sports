@@ -1,5 +1,16 @@
 # October 5 product implementation tracker
 
+## October24 publish-first continuation — testing
+
+Push builds no longer run another schedule/box/injury/depth/weather/model/odds
+capture cycle. Scheduled/manual refreshes keep existing allowances. Stored
+research is still rebuilt and audited; full suites and rebase verification stay.
+Discord/site eligibility now uses the morning-open window, independently of
+future spaced X slots. X spacing, minimum lead, cutoff and all per-play checks
+remain. Focused tests pass; full deployment/live receipts required before shipped.
+An already-running old scheduled workflow still finishes its capture; this change
+does not retroactively replace it or cancel an in-progress data writer.
+
 ## October24 morning delivery repair — implementation pending verification
 
 Follow-through11:25Z:435ed474 installed and pushed after a store-preserving

@@ -63,8 +63,10 @@ jobs:
           node --check site/app.js
           node --test tests/*.test.js
       - name: Refresh schedules and record original forecasts
+        if: github.event_name != 'push'
         run: python scripts/refresh.py
       - name: Refresh the multi-sport score center
+        if: github.event_name != 'push'
         run: python scripts/sports_refresh.py
       - name: Collect NBA final player boxes (free scheduled writer only)
         if: github.event_name == 'schedule'
@@ -72,6 +74,7 @@ jobs:
       - name: Build recorded multi-sport history
         run: python scripts/market_lab.py report
       - name: Store box scores, play-by-play and closing lines for new finals
+        if: github.event_name != 'push'
         run: python scripts/boxscores.py
       - name: Check whether player history needs rebuilding
         id: history
@@ -86,44 +89,54 @@ jobs:
               output.write('needed=' + str(needed).lower() + '\n')
           PY
       - name: Refresh verified player and position history
-        if: (github.event_name == 'push' && steps.history.outputs.needed == 'true') || github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
         run: python scripts/player_history.py
       - name: Refresh followed player identities and team colors
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
         run: python scripts/player_identity.py
       - name: Refresh followed opponent matchup history
-        if: (github.event_name == 'push' && steps.history.outputs.needed == 'true') || github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
         run: python scripts/opponent_history.py
       - name: Refresh injury context
+        if: github.event_name != 'push'
         run: python scripts/research_context.py
       - name: Refresh ESPN depth charts for offensive injuries
+        if: github.event_name != 'push'
         run: python scripts/depth_charts.py
       - name: Refresh NFL snap counts and game context from nflverse
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
         run: python scripts/nflverse.py
       - name: Publish model v2 forecasts and player projections
+        if: github.event_name != 'push'
         run: python scripts/forecast.py
       - name: Late snapshot for games inside the hour whose inactives changed (priced from, not graded)
+        if: github.event_name != 'push'
         run: python scripts/forecast.py --late
       - name: Venue table (roof and a point) for any venue the store or slate names that the table lacks
+        if: github.event_name != 'push'
         run: python scripts/venues.py
       - name: Kickoff forecasts for upcoming outdoor games (National Weather Service)
+        if: github.event_name != 'push'
         run: python scripts/weather.py
       - name: Capture DraftKings NFL prop lines from ESPN
+        if: github.event_name != 'push'
         run: python scripts/prop_lines.py
       - name: Capture spreads and totals across books (The Odds API, budgeted)
+        if: github.event_name != 'push'
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python scripts/odds_api.py
       - name: Price player props for the games nearest kickoff (budgeted)
+        if: github.event_name != 'push'
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python scripts/prop_odds.py
       - name: Price DraftKings and FanDuel props for the whole slate (SharpAPI, rate limited)
+        if: github.event_name != 'push'
         env:
           SHARP_API: ${{ secrets.SHARP_API }}
-          # a push is usually the desk waiting for its cards: a short read then, the full one on the schedule
-          SHARP_REQUESTS: ${{ github.event_name == 'push' && '15' || '60' }}
+          # Ticket pushes publish existing captured evidence; only refresh runs spend reads.
+          SHARP_REQUESTS: '60'
         run: python scripts/sharp_odds.py
       - name: Grade forecasts and picks against the close
         run: python scripts/scoreboard.py
