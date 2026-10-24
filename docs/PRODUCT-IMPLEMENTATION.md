@@ -1,5 +1,32 @@
 # October 5 product implementation tracker
 
+## October24 overnight forward-grading follow-through
+
+Source7fdb3081 is installed in the local production worker and pushed. Forward
+research grading now uses only unambiguous final boxes received by its evaluation
+clock, matching the history/role guard. Future corrections cannot leak into an
+earlier replay. Missing receipt times and conflicting equal-time versions hold.
+Existing public records and existing research outcomes were not rewritten.
+
+Verification:107NBA tests;1764Python(two expected skips)/281Node in development
+and clean export; build, budgets,114official/NBA0 audits,665-file publication
+guard and assets passed. Isolated23:30 rehearsal oy05kftr returned ok with zero
+outside writes/private reads. Hosted40059978513 is pending behind40058918324;
+website release is NOT yet marked verified. Next action: inspect successful
+hosted artifact ancestry and live375px page before closing this release receipt.
+
+Read-only model check:901 comparisons,13games,126player-games. Baseline error
+exceeds quoted-line error across eight stat groups; reviewed-minutes variants
+have only one or two games per group. Neither supports automatic promotion.
+Quarter price separation, points reconciliation and workload tests pass; quarter
+forecast/settlement adapters and actual correlated ticket quotes remain gated.
+
+Natural23:30 prep refreshed at03:32Z forOctober24:44football games,132sides,
+88totals,108props; eight evidence-held Climb pairs, zero supported pairs.
+Loaded run/ladder/precheck/Discord jobs report latest exit0. Installed daily
+6:45/8:30 checks retain publication kinds and refresh/admission requirements.
+This is verified readiness, not proof of future delivery or a promised ticket.
+
 ## October23 late audit continuation — verified October24 at02:49Z
 
 Source362d3005 (original237cd493) is installed in production and deployed.
