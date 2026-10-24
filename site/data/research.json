@@ -33258,5 +33258,233 @@
         "units": -0.5
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-24T23:02:14Z",
+    "targetWeek": 8,
+    "summary": "Research update for Oct 24: Settled 1: Iowa at Minnesota over 40.5 loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": true,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 40.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401858497"
+        ],
+        "book": "ESPN BET",
+        "odds": -110,
+        "projection": 47.8,
+        "edge": "Price-checked chance 56.3% against the exact two-sided price; 52.4% needed at -110: +3.9 percentage points.",
+        "cutoff": "OVER 40.5 at -110 or better; off the card at 42+, or at -125 or worse at 40.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-18T14:45:40Z",
+        "quotedAt": "2026-10-24T10:35:06Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:35 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-24T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "chef_pick",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.675,
+          "chance": 0.563,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.524,
+          "edgePoints": 3.9,
+          "evPerUnit": 0.075,
+          "snapshotAt": "2026-10-18T14:45:40Z",
+          "evaluatedAt": "2026-10-24T11:42:17Z",
+          "fairChance": 0.5,
+          "anchoredChance": 0.563,
+          "gap": 6.3,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Iowa Hawkeyes at Minnesota Golden Gophers",
+        "title": "Iowa at Minnesota over 40.5",
+        "id": "CFB-2026-W8-iowa-minn-over-40-5-espnbet",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858497",
+          "https://www.kwqc.com/2026/10/21/jeremy-hecklinski-named-iowas-starting-qb-against-minnesota/?outputType=amp",
+          "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html"
+        ],
+        "why": "Model lean, our number only. We have the total at 47.8; the book is at 40.5. That makes the over 56.3%, and -110 needs 52.4%. Checked before publishing: Iowa coach Kirk Ferentz said Jeremy Hecklinski will start against Minnesota, while Hank Brown is back to 100 percent healthy. Checked before publishing: The Wednesday Big Ten availability report listed Minnesota quarterback Michael Merdinger, running back Ryan Estrada and wide receiver Hayden Moore as out. The market: The spread opened +4.5 and is +7.5 at DraftKings, a move of 3 toward the away. The total opened 42.5 and is 40.5 at DraftKings, 2 toward the under. Our spread is 0.5 points off, bigger than 13% of our past gaps. Gaps this size went 1546-1557 against the close in 3584 games. Our total is 7.3 points off, bigger than 93% of our past gaps. Gaps this size went 163-101 against the close in 3602 games.",
+        "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "In his start against Washington, Jeremy Hecklinski completed 14 of 19 passes for 202 yards and three touchdowns in Iowa's 41-24 win."
+          ],
+          "cautions": [
+            "The Wednesday Big Ten availability report listed Iowa offensive lineman Trent Wilson and Minnesota offensive linemen Brett Carroll and Ashton Beers as out.",
+            "The Wednesday Big Ten availability report listed Minnesota tight end Pierce Walsh and offensive linemen Jaden Ball and Nick Spence as questionable."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 40.5. I say 47.8.",
+              "numbers": {
+                "projection": 47.8,
+                "line": 40.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-18T14:45:40Z"
+            },
+            {
+              "text": "In his start against Washington, Jeremy Hecklinski completed 14 of 19 passes for 202 yards and three touchdowns in Iowa's 41-24 win.",
+              "numbers": {},
+              "source": "https://www.kcci.com/article/iowa-football-starting-quarterback-hecklinski-or-brown/74195649",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "In his start against Washington, Jeremy Hecklinski completed 14 of 19 passes for 202 yards and three touchdowns in Iowa's 41-24 win.",
+              "numbers": {},
+              "source": "https://www.kcci.com/article/iowa-football-starting-quarterback-hecklinski-or-brown/74195649",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "The Wednesday Big Ten availability report listed Iowa offensive lineman Trent Wilson and Minnesota offensive linemen Brett Carroll and Ashton Beers as out.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "The Wednesday Big Ten availability report listed Minnesota tight end Pierce Walsh and offensive linemen Jaden Ball and Nick Spence as questionable.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "The Wednesday Big Ten availability report listed Iowa offensive lineman Trent Wilson and Minnesota offensive linemen Brett Carroll and Ashton Beers as out.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "The Wednesday Big Ten availability report listed Minnesota tight end Pierce Walsh and offensive linemen Jaden Ball and Nick Spence as questionable.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "The Wednesday Big Ten availability report listed Iowa offensive lineman Trent Wilson and Minnesota offensive linemen Brett Carroll and Ashton Beers as out.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "text": "The Wednesday Big Ten availability report listed Minnesota tight end Pierce Walsh and offensive linemen Jaden Ball and Nick Spence as questionable.",
+              "numbers": {},
+              "source": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "weather": {
+            "tempF": 73,
+            "windMph": 10,
+            "windDirection": "SW",
+            "precipProb": 17,
+            "periodStart": "2026-10-24T14:00:00-05:00",
+            "issuedAt": "2026-10-24T06:26:50+00:00",
+            "source": "https://api.weather.gov/gridpoints/MPX/108,72/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 42.5,
+                  "price": -110,
+                  "time": "2026-10-15T04:02:14Z"
+                },
+                "now": {
+                  "line": 40.5,
+                  "price": -112,
+                  "time": "2026-10-24T10:35:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 42.5,
+                  "price": -105,
+                  "time": "2026-10-15T04:02:14Z"
+                },
+                "now": {
+                  "line": 40.5,
+                  "price": -112,
+                  "time": "2026-10-24T10:35:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 40.5,
+              "price": -110,
+              "time": "2026-10-24T10:35:06Z"
+            }
+          },
+          "ours": {
+            "projection": 47.8,
+            "line": 40.5,
+            "market": "total",
+            "text": "Book says 40.5. I say 47.8.",
+            "snapshotAt": "2026-10-18T14:45:40Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://www.kcci.com/article/iowa-football-starting-quarterback-hecklinski-or-brown/74195649",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "injury",
+              "url": "https://sports.yahoo.com/articles/iowa-football-vs-minnesota-wednesdays-000657071.html",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/MPX/108,72/forecast/hourly",
+              "time": "2026-10-24T06:26:50+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401858497",
+              "time": "2026-10-24T11:42:17Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.kwqc.com/2026/10/21/jeremy-hecklinski-named-iowas-starting-qb-against-minnesota/?outputType=amp",
+              "time": "2026-10-24T11:42:17Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-24T11:50:42Z",
+        "result": "loss",
+        "actual": "Iowa 10, Minnesota 13",
+        "settledAt": "2026-10-24T23:02:14Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401858497",
+        "actualValue": 23,
+        "units": -1
+      }
+    ]
   }
 ]
