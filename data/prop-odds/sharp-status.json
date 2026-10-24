@@ -1,17 +1,17 @@
 {
- "at": "2026-10-24T01:43:54Z",
+ "at": "2026-10-24T02:05:26Z",
  "confirmed": {
   "CFB-401856727": "2026-10-24T00:05:23Z",
-  "CFB-401856728": "2026-10-24T01:45:20Z",
+  "CFB-401856728": "2026-10-24T02:06:53Z",
   "CFB-401856730": "2026-10-24T00:05:23Z",
   "CFB-401856731": "2026-10-24T00:05:23Z",
   "CFB-401856834": "2026-10-24T00:05:23Z",
   "CFB-401856835": "2026-10-24T00:05:23Z",
   "CFB-401856839": "2026-10-23T01:07:27Z",
-  "CFB-401856840": "2026-10-24T01:45:20Z",
-  "CFB-401856841": "2026-10-24T01:15:36Z",
-  "CFB-401858270": "2026-10-24T01:15:36Z",
-  "CFB-401858272": "2026-10-24T01:45:20Z",
+  "CFB-401856840": "2026-10-24T02:06:53Z",
+  "CFB-401856841": "2026-10-24T02:06:53Z",
+  "CFB-401858270": "2026-10-24T02:06:53Z",
+  "CFB-401858272": "2026-10-24T02:06:53Z",
   "CFB-401858273": "2026-10-24T00:05:23Z",
   "CFB-401858274": "2026-10-24T00:05:23Z",
   "CFB-401858495": "2026-10-24T00:05:23Z",
@@ -33,31 +33,31 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1281,
-    "fanduel": 1134
+    "draftkings": 1060,
+    "fanduel": 1552
    },
-   "eventsListed": 118,
+   "eventsListed": 117,
    "eventsMatched": 44,
    "games": 45,
    "marketTypes": {
-    "player_field_goals_made": 2,
-    "player_kicking_points": 2,
+    "player_field_goals_made": 3,
+    "player_kicking_points": 3,
     "player_longest_passing_completion": 6,
-    "player_longest_reception": 26,
-    "player_longest_rush": 11,
-    "player_passing_+_rushing_yards": 93,
-    "player_passing_attempts": 22,
-    "player_passing_completions": 18,
-    "player_passing_touchdowns": 49,
-    "player_passing_yards": 212,
-    "player_receiving_yards": 786,
-    "player_receptions": 222,
-    "player_rushing_attempts": 41,
-    "player_rushing_yards": 380,
-    "point_spread": 545
+    "player_longest_reception": 23,
+    "player_longest_rush": 10,
+    "player_passing_+_rushing_yards": 97,
+    "player_passing_attempts": 30,
+    "player_passing_completions": 25,
+    "player_passing_touchdowns": 70,
+    "player_passing_yards": 273,
+    "player_receiving_yards": 806,
+    "player_receptions": 254,
+    "player_rushing_attempts": 34,
+    "player_rushing_yards": 326,
+    "point_spread": 652
    },
    "requestsLeft": 0,
-   "rows": 2415,
+   "rows": 2612,
    "slateGames": [
     "NC State Wolfpack at Stanford Cardinal 2026-10-24T02:30Z",
     "LSU Tigers at Auburn Tigers 2026-10-24T16:00Z",
@@ -107,24 +107,6 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "Albany NY",
-     "external": {
-      "draftkings": "34869943"
-     },
-     "home": "Rhode Island",
-     "sample": {
-      "away_team": "Albany NY",
-      "home_team": "Rhode Island",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-24T16:00:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Cornell",
      "external": {
       "betparx": "1029240548",
@@ -173,7 +155,7 @@
       "fanduel": "36208871",
       "fliff": "420753_c_p_209_prematch",
       "hardrock": "213734433679868320",
-      "kalshi": "KXNCAAFGAME-26OCT24NHCCCSU",
+      "kalshi": "KXNCAAF1H-26OCT24NHCCCSU",
       "novig": "01a14577-514c-7003-b6cd-973b150714ef",
       "onexbet": "764409862",
       "paddypower": "36208871",
@@ -288,7 +270,7 @@
       "fanduel": "36208901",
       "fliff": "420761_c_p_209_prematch",
       "hardrock": "7050336085506916746",
-      "kalshi": "KXNCAAFTOTAL-26OCT24STNHLIU",
+      "kalshi": "KXNCAAFSPREAD-26OCT24STNHLIU",
       "novig": "01a142e4-1f4c-7343-a82a-dbee192f7b5d",
       "onexbet": "764120654",
       "paddypower": "36208901",
@@ -324,7 +306,7 @@
       "fanduel": "36208917",
       "fliff": "420760_c_p_209_prematch",
       "hardrock": "8043755995232600452",
-      "kalshi": "KXNCAAFSPREAD-26OCT24USTMRST",
+      "kalshi": "KXNCAAF1H-26OCT24USTMRST",
       "novig": "01a14577-5347-7762-bfce-c5bfb171f75f",
       "onexbet": "764171486",
       "paddypower": "36208917",
@@ -394,7 +376,7 @@
      "type": "fixture"
     },
     {
-     "away": "Albany Great Danes",
+     "away": "UAlbany",
      "external": {
       "betfred": "37350029",
       "betparx": "1029240541",
@@ -402,7 +384,7 @@
       "fanduel": "36208876",
       "fliff": "420758_c_p_209_prematch",
       "hardrock": "3257549547009868178",
-      "kalshi": "KXNCAAFTOTAL-26OCT24ALBYURI",
+      "kalshi": "KXNCAAF1H-26OCT24ALBYURI",
       "novig": "01a14577-5294-7570-9226-b39f4f90044a",
       "onexbet": "764138541",
       "paddypower": "36208876",
@@ -414,10 +396,10 @@
       "sportzino": "sz-18079296",
       "stake": "9c79b46d-26f9-418e-b105-1e65133f3c5f"
      },
-     "home": "Rhode Island Rams",
+     "home": "Rhode Island",
      "sample": {
-      "away_team": "Albany Great Danes",
-      "home_team": "Rhode Island Rams",
+      "away_team": "UAlbany",
+      "home_team": "Rhode Island",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -441,12 +423,13 @@
       "fanduel": "36208911",
       "fliff": "420767_c_p_209_prematch",
       "hardrock": "6490339682310816177",
-      "kalshi": "KXNCAAFSPREAD-26OCT24JKSTCOOK",
+      "kalshi": "KXNCAAFTOTAL-26OCT24JKSTCOOK",
       "novig": "01a145ae-56fe-79e3-b694-cfc2aa09f539",
       "onexbet": "763711864",
       "paddypower": "36208911",
       "polymarket": "nfl_bethunecookman_jacksonstate_2026-10-24_b2",
       "prophetx": "1703111174",
+      "saba": "136533461",
       "smarkets": "45393718",
       "sport888_it": "1029240537",
       "sportzino": "sz-18079301",
@@ -476,12 +459,13 @@
       "fanduel": "36208902",
       "fliff": "420768_c_p_209_prematch",
       "hardrock": "3637007240436777376",
-      "kalshi": "KXNCAAFSPREAD-26OCT24BUCKHC",
+      "kalshi": "KXNCAAF1H-26OCT24BUCKHC",
       "novig": "01a145ae-5270-73e1-b9f8-e384ef1638fb",
       "onexbet": "764138545",
       "paddypower": "36208902",
       "polymarket": "nfl_bucknell_holycross_2026-10-24_b2",
       "prophetx": "1703111173",
+      "saba": "136533462",
       "smarkets": "45391432",
       "sport888_it": "1029240556",
       "sportzino": "sz-18079305",
@@ -511,12 +495,13 @@
       "fanduel": "36208867",
       "fliff": "420764_c_p_209_prematch",
       "hardrock": "5704115354079461775",
-      "kalshi": "KXNCAAFGAME-26OCT24BUTDRKE",
+      "kalshi": "KXNCAAF1H-26OCT24BUTDRKE",
       "novig": "01a145ae-530a-7260-b682-9b5f5b7ce856",
       "onexbet": "764138546",
       "paddypower": "36208867",
       "polymarket": "nfl_butler_drake_2026-10-24_b2",
       "prophetx": "1702921617",
+      "saba": "136533455",
       "smarkets": "45381370",
       "sport888_it": "1029240550",
       "sportzino": "sz-18079300",
@@ -526,6 +511,42 @@
      "sample": {
       "away_team": "Butler",
       "home_team": "Drake",
+      "markets": [
+       "1st_half_moneyline",
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-24T17:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Campbell",
+     "external": {
+      "betparx": "1029240540",
+      "betrivers": "1029240540",
+      "draftkings": "34869789",
+      "fanduel": "36208899",
+      "fliff": "420766_c_p_209_prematch",
+      "hardrock": "92159337052635563",
+      "kalshi": "KXNCAAFTOTAL-26OCT24CAMPME",
+      "novig": "01a145ae-5531-7301-80fc-243ece970c6c",
+      "onexbet": "764147421",
+      "paddypower": "36208899",
+      "polymarket": "nfl_campbell_maine_2026-10-24_b2",
+      "prophetx": "1702921619",
+      "saba": "136533456",
+      "smarkets": "45393723",
+      "sport888_it": "1029240540",
+      "sportzino": "sz-18079299",
+      "stake": "f5f2be2d-9568-462f-9938-9bc2bf399f99"
+     },
+     "home": "Maine",
+     "sample": {
+      "away_team": "Campbell",
+      "home_team": "Maine",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
