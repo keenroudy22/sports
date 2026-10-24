@@ -1,6 +1,29 @@
 # October 5 product implementation tracker
 
-## October23 late audit continuation — implemented, release verification pending
+## October23 late audit continuation — verified October24 at02:49Z
+
+Source362d3005 (original237cd493) is installed in production and deployed.
+Normal and clean-export1763Python/two expected skips and281Node passed; both
+repeated under the release/run locks. Build/feed/budgets,114official/NBA0 record
+checks, publication boundary and asset checks passed. Existing lazy-game/more
+soft size warnings remain; no budget was raised. Current21:00 isolated rehearsal
+xqhaccc8 passed with zero outside writes/private reads. Release waited for the
+real settlement/mirror workers to finish, preserving their public result.
+
+Hosted40054654199SUCCESS verified7dc63eea315887d4bd6c17d14fdf3420fdb24b5c,
+which includes362d3005. Its24changed-file guard repeated10checks, including all
+1763Python/281Node tests and rebuilding; final660public files/zero guard issues.
+LiveNBA and Today375px, plus Today1280px, have no horizontal overflow or load/
+console error. Temporary browser tabs were closed and viewport restored.
+
+Locked production prep at02:41Z covers SaturdayOctober24:44football games,
+132sides/88totals/106props;8NBA games with0fresh tomorrow prop rows. There are
+658captured alternate-spread rows,0supported Climb legs and8evidence-held two-leg
+watches. These are not eight qualified bets. Private files are
+`work/next-day-prep.json` and `work/climb-prep.json`; existing6:45/8:30 morning
+workers must refresh exact prices/news and admit through unchanged gates.
+The nightly21:00/23:30 packet generation is installed, not a new scheduled job.
+Receipt-only updates below are retained on dev for the next safe source release.
 
 NBA history/role checks now filter receipt times before choosing corrections;
 missing clocks and conflicting versions hold. New current-role reviews must be
@@ -14,9 +37,23 @@ plays with late sequence numbers. Each player's minutes reconcile to the final
 box (whole-minute display tolerance only); OT remains separate. Three actual
 official summaries401909841/401909093/401909094 reconcile in read-only checks.
 No extra capture request/job or guessed full-game/4 allocation. This still is not
-quarter forecast validation or a book settlement/void policy. Current Indiana
-book-rule verification is unresolved (FD page403; DK page lacks rule content),
-so no jurisdiction rule is inferred from another state's rules.
+quarter forecast validation or a book settlement/void policy. The web reader
+initially received403 for FD and no rule content for DK; no other state's policy
+was inferred. Follow-through at02:43Z verified the actual FanDuel Indiana page
+in the browser, effectiveOctober15,2026:
+https://www.fanduel.com/fanduel-sportsbook-house-rules-in . NBA first-quarter
+points require court participation in Q1; basketball quick-duration props require
+participation within the named interval. Football quarter props generally retain
+action despite no snap in that quarter, with the stated injury/ejection exception
+for bets placed after the player's last snap. Preserve sport-specific settlement
+adapters and test them before automatic tickets; reconstruction alone is not a
+void ruling. At02:45Z the fully rendered DraftKings basketball rules also loaded
+in the Indiana experience (US-IN-SB / in-terms-of-use):
+https://sportsbook.draftkings.com/help/sport-rules/basketball . Its quarter-player
+points clause voids a player with no participation in that quarter and excludes
+OT for fourth-quarter player points. These terms are verified references, not an
+implemented settlement adapter. Do not generalize the rule to every quarter or
+half market. Other books and football adapters still need their own checks.
 
 Existing21:00/23:30 workers now save a private next-day packet: separate football
 props/sides/totals watches, NBA coverage and role holds, with explicit6:45/8:30
@@ -26,10 +63,10 @@ options stay separate; cross-game multiplied odds are labeled derived and all
 packets remain non-release-ready until real morning admission. Existing Mac run,
 Climb, precheck and five-minute delivery jobs are loaded, latest exit codes0.
 
-Full local/clean/locked tests, isolated rehearsal, deployment and live verification
-are still required. Quarter Q2/football prices, book participation rules, actual
-correlated ticket prices, validated NBA models and observed morning deliveries
-remain explicit unfinished audit items, not claimed complete by these repairs.
+Full release checks above passed. Quarter Q2/football prices, sport/book-specific
+settlement implementation, actual correlated ticket prices, validated NBA models
+and observed morning deliveries remain unfinished audit items. The whole audit
+and automatic quarter-parlay lane are NOT marked complete by these repairs.
 
 ## October23 X straight-caption spacing — verified October24 at01:37Z
 
