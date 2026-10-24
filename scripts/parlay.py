@@ -36,6 +36,19 @@ STAKE = 0.25
 ALT_GAME_POOL = 10          # bound the alternate search on a large college slate
 
 
+def expanded_pool(legs):
+    """Retain strong legs and price diversity in a bounded expanded search."""
+    strongest = sorted(legs, key=lambda l: (-l['chance'], l['gameId'], l['id']))
+    if len(strongest) <= 14:
+        return strongest
+    prices = sorted(strongest, key=lambda l: (decimal(l['odds']), l['gameId'], l['id']))
+    chosen = {l['id']: l for l in strongest[:7]}
+    for i in range(7):
+        leg = prices[round(i * (len(prices)-1) / 6)]
+        chosen[leg['id']] = leg
+    return sorted(chosen.values(), key=lambda l: (-l['chance'], l['gameId'], l['id']))
+
+
 def decimal(odds):
     return 1 + odds / 100 if odds > 0 else 1 + 100 / abs(odds)
 
@@ -134,7 +147,7 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
                               'alternate': False})
         board.sort(key=lambda l: -l['chance'])
         if max_legs > MAX_LEGS:
-            board = board[:ALT_GAME_POOL]  # Bound the expanded search on large slates.
+            board = expanded_pool(board)
         # Preserve the board-only candidates exactly; alternates are additional choices, not a new requirement.
         for count in range(min_legs, min(max_legs, len(board)) + 1):
             choices = combinations(board, count) if max_totals is not None else (tuple(board[:count]),)

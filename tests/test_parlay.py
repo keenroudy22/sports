@@ -22,6 +22,21 @@ DK, FD = 'DraftKings', 'FanDuel'
 
 
 class BuildTests(unittest.TestCase):
+    def test_expanded_search_retains_moderate_prices_below_top_ten(self):
+        rows = []
+        for i in range(18):
+            odds = -2000 if i < 10 else -150
+            row = line(f'NFL-{i}', f'Team {i} moneyline', 0, .96 if i < 10 else .65,
+                       [{'book': DK, 'line': 0, 'odds': odds}])
+            row['market'] = 'moneyline'
+            rows.append(row)
+        ticket, reason = parlay.build(rows, NOW, min_legs=4, max_legs=8,
+                                      price_range=(400, 1000), max_totals=1, target=400)
+        self.assertIsNone(reason)
+        self.assertTrue(any(l['odds'] == -150 for l in ticket['legs']))
+        self.assertLessEqual(len(parlay.expanded_pool([
+            dict(id=str(i), gameId=str(i), chance=.7, odds=-100-i) for i in range(100)])), 14)
+
     rows = [
         line('NFL-1', 'A @ B under 43.5', 43.5, 0.56, [{'book': DK, 'line': 43.5, 'odds': -110}, {'book': FD, 'line': 43.5, 'odds': -108}]),
         line('NFL-1', 'A @ B over 43.5', 43.5, 0.44, [{'book': DK, 'line': 43.5, 'odds': -110}]),      # the same game's other side
