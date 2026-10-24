@@ -34,6 +34,14 @@ def fixture():
 
 
 class NBAPlayerPropTests(unittest.TestCase):
+    def test_verified_clippers_alias_does_not_relax_player_or_other_team_identity(self):
+        game,rosters,rows,_=fixture()
+        game['teams']['home']['name']='LA Clippers'
+        rows=[dict(r,home_team='Los Angeles Clippers') for r in rows]
+        self.assertEqual(len(n.fold(rows,[game],rosters,NOW)[0]),1)
+        self.assertEqual(n.fold([dict(r,home_team='Los Angeles Lakers') for r in rows],[game],rosters,NOW)[0],[])
+        self.assertEqual(n.fold([dict(r,player_name='Unknown player') for r in rows],[game],rosters,NOW)[0],[])
+        self.assertNotEqual(n.normal('Los Angeles Clippers'),n.normal('LA Clippers'))
     def test_exact_pair_roster_and_price(self):
         g,r,rows,_=fixture();q,_=n.fold(rows,[g],r,NOW)
         self.assertEqual(len(q),1);self.assertEqual(q[0]['athleteId'],'123')

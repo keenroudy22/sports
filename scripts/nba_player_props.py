@@ -40,6 +40,14 @@ def normal(name):
     return ''.join(c for c in unicodedata.normalize('NFKD', str(name)).lower() if c.isalnum())
 
 
+def team_normal(name):
+    # Verified October23: ESPN team12 uses LA Clippers; Sharp's event listing
+    # uses Los Angeles Clippers. This is one exact alias, never fuzzy matching
+    # and never a change to player identity or current-roster validation.
+    value = normal(name)
+    return {'losangelesclippers': 'laclippers'}.get(value, value)
+
+
 def fresh(stamp, now, hours=4):
     try:
         return timedelta(0) <= now-boxscores.instant(stamp) <= timedelta(hours=hours)
@@ -81,8 +89,8 @@ def fold(rows, games, rosters, now):
             matches=[g for g in games if g.get('status')=='scheduled' and g.get('seasonType')=='regular-season'
                      and now < boxscores.instant(g['kickoff']) <= now+timedelta(days=2)
                      and abs(boxscores.instant(g['kickoff'])-boxscores.instant(r['event_start_time']))<=timedelta(minutes=10)
-                     and normal(g['teams']['home']['name'])==normal(r['home_team'])
-                     and normal(g['teams']['away']['name'])==normal(r['away_team'])]
+                     and team_normal(g['teams']['home']['name'])==team_normal(r['home_team'])
+                     and team_normal(g['teams']['away']['name'])==team_normal(r['away_team'])]
             if len(matches)!=1:raise ValueError('event')
             g=matches[0]; people=[]
             for t in g['teams'].values():

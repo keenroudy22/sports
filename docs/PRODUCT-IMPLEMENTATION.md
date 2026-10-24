@@ -1,5 +1,25 @@
 # October 5 product implementation tracker
 
+## October23 fresh-capture follow-through — Clippers identity repair
+
+Installed source d36db08f (rebased from146a4673) passed1752Python/two skips and
+280Node normal/clean/locked tests.12Sharp reads yielded680paired main quotes,
+35Q1quotes,407new frozen forecasts,0feed errors; coverage is partial. The
+display has60rows across4upcoming games. The missing fifth game was traced to
+Sharp's verified `Los Angeles Clippers` versus ESPN team12 `LA Clippers`.
+Add that one exact team alias; player identity, current roster, opponent and
+kickoff checks remain unchanged. Targeted live-feed and release tests follow.
+At00:34Z one read of the provider's verified Clippers–Lakers event returned173
+rows and77paired prices for ESPN401909851 through the repaired matcher. Nine
+unpaired/conflicting groups and10unsupported rows still held. No store or public
+record was manually altered; the existing capture will use the exact alias.
+
+The release verifier's own `strip()` removed a leading porcelain-status space
+and paused before push. No capture was deleted. The normal worker preserved
+all captures and quarter store, completed00:27:52Z, then pushed2610ba38. The
+resume check confirmed identical tested code and all store ledgers, plus10
+record-integrity checks. Hosted40045084684 remains in progress; not live proof.
+
 ## October23 evening NBA/quarter/site repair — in verification
 
 Main NBA props now request the provider's strict main-line cohort, avoiding
