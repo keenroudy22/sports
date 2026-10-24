@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 32,
    "gamesQuoted": 34,
-   "moneylineSnapshots": 146,
+   "moneylineSnapshots": 147,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 146,
+   "snapshots": 147,
    "status": "capturing",
-   "totalSnapshots": 146
+   "totalSnapshots": 147
   },
   "NHL": {
-   "gamesGraded": 162,
-   "gamesQuoted": 175,
-   "moneylineSnapshots": 705,
+   "gamesGraded": 163,
+   "gamesQuoted": 180,
+   "moneylineSnapshots": 720,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 123,
-     "gamesQuoted": 134,
+     "gamesGraded": 124,
+     "gamesQuoted": 139,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 705,
+   "snapshots": 720,
    "status": "capturing",
-   "totalSnapshots": 705
+   "totalSnapshots": 720
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "TB",
+    "id": "20",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tb.png",
+    "name": "Tampa Bay Lightning",
+    "shortName": "Lightning"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401892565",
+   "gradedAt": "2026-10-24T15:23:28Z",
+   "home": {
+    "abbreviation": "COL",
+    "id": "17",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/col.png",
+    "name": "Colorado Avalanche",
+    "shortName": "Avalanche"
+   },
+   "homeScore": 6,
+   "kickoff": "2026-10-24T01:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "TB",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "DET",
-    "id": "5",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png",
-    "name": "Detroit Red Wings",
-    "shortName": "Red Wings"
-   },
-   "awayScore": 0,
-   "gameId": "NHL-401892473",
-   "gradedAt": "2026-10-11T03:30:06Z",
-   "home": {
-    "abbreviation": "MTL",
-    "id": "10",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/mtl.png",
-    "name": "Montreal Canadiens",
-    "shortName": "Canadiens"
-   },
-   "homeScore": 1,
-   "kickoff": "2026-10-10T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final/SO",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-24T15:12:29Z"
+ "updatedAt": "2026-10-24T15:23:28Z"
 }
