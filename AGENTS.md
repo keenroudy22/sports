@@ -1,5 +1,15 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## October24 runtime release latency
+
+Routine report/release/precheck paths run the explicit release-boundary suite
+in scripts/release_checks.py (120-second limit) and frontend tests (60 seconds),
+not the entire software suite under the posting lock. Missing tests, failures
+and timeouts still block that send. Exact price, exposure, hard news, report,
+caption/art and append-only record checks remain mandatory on every release.
+Full Python/Node suites and clean-export suites remain mandatory for every code
+deployment and hosted verification. No evidence, staking or feed cap is relaxed.
+
 ## NBA evidence clocks and overnight preparation — October23 late follow-up
 
 NBA research history and observed role checks use only boxes received by the

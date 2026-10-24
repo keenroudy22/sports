@@ -1,5 +1,23 @@
 # October 5 product implementation tracker
 
+## October24 morning delivery repair — implementation pending verification
+
+Observed06:59 private admissions waited until07:07 for the first Discord send
+because release_private ran the full Python suite while holding the desk lock.
+Becker reached Discord11:07Z, public report pushed11:07:23Z and Buffer accepted
+07:14ET. Those are distinct receipts, not proof of site/X visibility.
+The repair uses explicit release regressions (167tests,3.457seconds locally)
+and all frontend tests on runtime report/send/precheck paths, bounded120/60s.
+Full suites remain deployment/CI gates. Missing checks/failure/timeout holds;
+per-ticket price/news/exposure/schema/art/record validations are unchanged.
+Remaining verification: full/clean suites, isolated rehearsal, locked install,
+hosted success/live phone check and actual queued-ticket release latency.
+
+First pass researched eight of363 candidates. Raymond over56.5, Johnson under3.5
+catches and Iowa–Minnesota over40.5 lacked aligned supporting evidence; CMU ML
+held on starting-QB availability. Other rows hit the existing eight-research cap;
+they were not all rejected on merit. The next scheduled pass owns fresh expansion.
+
 ## October24 overnight forward-grading follow-through
 
 Source7fdb3081 is installed in the local production worker and pushed. Forward

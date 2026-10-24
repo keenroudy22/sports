@@ -2003,10 +2003,19 @@ def validate(new_reports, all_reports, games):
 
 
 def run_tests(python=sys.executable):
-    py = subprocess.run([python, '-m', 'unittest', 'discover', '-s', 'tests'], cwd=ROOT, capture_output=True, text=True)
+    # Full software suites run on deployment/CI, not before every ticket send.
+    # Runtime still validates every exact report, price, stake, news and caption.
+    try:
+        py = subprocess.run([python, 'scripts/release_checks.py'], cwd=ROOT,
+                            capture_output=True, text=True, timeout=120)
+    except subprocess.TimeoutExpired as error:
+        raise RunError('release checks exceeded 120 seconds; retry on the next delivery pass') from error
     if py.returncode:
         raise RunError('unit tests failed:\n' + py.stderr[-1500:])
-    node = subprocess.run(['node', '--test', *sorted(str(p) for p in (ROOT / 'tests').glob('*.test.js'))], cwd=ROOT, capture_output=True, text=True)
+    try:
+        node = subprocess.run(['node', '--test', *sorted(str(p) for p in (ROOT / 'tests').glob('*.test.js'))], cwd=ROOT, capture_output=True, text=True, timeout=60)
+    except subprocess.TimeoutExpired as error:
+        raise RunError('release frontend checks exceeded 60 seconds; retry on the next delivery pass') from error
     if node.returncode:
         raise RunError('node tests failed:\n' + (node.stderr or node.stdout)[-1500:])
 
