@@ -2,6 +2,23 @@
 
 ## October24 publish-first continuation — testing
 
+Installed/pushed79abdb42 at11:40Z:1770Python(two expected skips) and281Node
+passed in normal and clean-export runs; build/feed/budgets,record115/NBA0,
+672-file public guard,assets and06:45 isolated rehearsal kaafa3wq passed.
+The first attempt correctly stopped on an overlong private queue next-action;
+the text was shortened and every release gate repeated, not bypassed.
+Actual new-path receipts:WilliamsDiscord11:41:08Z andTulaneDiscord11:41:48Z;
+their reports pushed and X accepted for08:26/09:22ET respectively. These X
+times are scheduled, not confirmed sends. MarshX11:38:16Z confirmed at
+2113958246054543453. Live375px page at11:44Z showsBecker/Marsh; Williams/Tulane
+await the hosted artifact. Old-definition40090039586 is still finishing;
+its succeeding rebase/build and live four-play check remain required.
+Owner-requested normal select-now pass started11:42Z across44games/368rows;
+normal capture-gap/free-budget and all research/admission checks remain.
+Separate read-only early/late ticket check:early has no4–8leg+400..+1000
+combination; late produces a derived+401DK seven-leg candidate but all seven
+supporting reasons are missing. This is not an admitted/public ticket.
+
 Push builds no longer run another schedule/box/injury/depth/weather/model/odds
 capture cycle. Scheduled/manual refreshes keep existing allowances. Stored
 research is still rebuilt and audited; full suites and rebase verification stay.
