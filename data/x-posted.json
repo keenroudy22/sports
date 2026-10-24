@@ -6579,8 +6579,8 @@
   {
    "id": "receipt:day:2026-10-23",
    "postedAt": "2026-10-24T04:27:45Z",
-   "dueAt": "2026-10-24T13:02:00Z",
-   "bufferPostId": "6adc33c6e4be8a4d863e99ab",
+   "dueAt": "2026-10-24T14:56:00Z",
+   "bufferPostId": "6adca44e0b5343d07081847b",
    "textHash": "a91e652400899f4b",
    "kind": "buffer:receipt",
    "card": true,
@@ -6589,7 +6589,16 @@
    "socialStyleVersion": "plain-20261022",
    "socialVoiceVersion": "casual-20261022",
    "socialAgeVersion": "age-20261023",
-   "cardKey": "receipt-day-2026-10-23"
+   "cardKey": "receipt-day-2026-10-23",
+   "deliveryHistory": [
+    {
+     "bufferPostId": "6adc33c6e4be8a4d863e99ab",
+     "dueAt": "2026-10-24T13:02:00Z",
+     "rescheduledAt": "2026-10-24T12:27:46Z",
+     "reason": "Fresh official play takes priority"
+    }
+   ],
+   "rescheduledAt": "2026-10-24T12:27:46Z"
   },
   {
    "id": "research:td-hit:research:end-zone:2026-10-23",
