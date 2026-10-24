@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 32,
    "gamesQuoted": 34,
-   "moneylineSnapshots": 148,
+   "moneylineSnapshots": 149,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 148,
+   "snapshots": 149,
    "status": "capturing",
-   "totalSnapshots": 148
+   "totalSnapshots": 149
   },
   "NHL": {
-   "gamesGraded": 163,
+   "gamesGraded": 164,
    "gamesQuoted": 180,
-   "moneylineSnapshots": 725,
+   "moneylineSnapshots": 738,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 124,
+     "gamesGraded": 125,
      "gamesQuoted": 139,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 725,
+   "snapshots": 738,
    "status": "capturing",
-   "totalSnapshots": 725
+   "totalSnapshots": 738
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "ANA",
+    "id": "25",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ana.png",
+    "name": "Anaheim Ducks",
+    "shortName": "Ducks"
+   },
+   "awayScore": 5,
+   "gameId": "NHL-401892566",
+   "gradedAt": "2026-10-24T21:16:41Z",
+   "home": {
+    "abbreviation": "PHI",
+    "id": "15",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/phi.png",
+    "name": "Philadelphia Flyers",
+    "shortName": "Flyers"
+   },
+   "homeScore": 4,
+   "kickoff": "2026-10-24T17:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "TB",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "UTA",
-    "id": "129764",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/uta.png",
-    "name": "Utah Mammoth",
-    "shortName": "Mammoth"
-   },
-   "awayScore": 4,
-   "gameId": "NHL-401892472",
-   "gradedAt": "2026-10-11T03:30:06Z",
-   "home": {
-    "abbreviation": "BUF",
-    "id": "2",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/buf.png",
-    "name": "Buffalo Sabres",
-    "shortName": "Sabres"
-   },
-   "homeScore": 1,
-   "kickoff": "2026-10-10T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-24T21:13:48Z"
+ "updatedAt": "2026-10-24T21:16:41Z"
 }
