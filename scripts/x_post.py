@@ -310,7 +310,7 @@ def reason_in(text):
             if len(sentences) > skip_count:
                 return ' '.join(sentences[skip_count:]).strip()
             continue
-        if line.startswith(skip) or llm.re.search(r'\([+-]\d+,\s*(?:DraftKings|FanDuel|DK|FD)\)$', line):
+        if line in voice_pick.pools()['asks'] or line.startswith(skip) or llm.re.search(r'\([+-]\d+,\s*(?:DraftKings|FanDuel|DK|FD)\)$', line):
             continue
         if index and lines[index - 1].startswith(('🍳 ', '🐕 ', '👨‍🍳 ')) and index + 1 < len(lines) \
                 and llm.re.match(r'^[+-]\d+', lines[index + 1]):

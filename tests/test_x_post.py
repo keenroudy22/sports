@@ -68,6 +68,14 @@ class DraftTests(unittest.TestCase):
                 if shape == 'B':
                     self.assertTrue(text.startswith(reason + '\n\n' + play), text)
 
+    def test_every_closing_prompt_is_excluded_from_supporting_evidence(self):
+        unsupported = dict(PROP, lane='gut_call', why='The projection is the only reason.', hitStrip={})
+        for ask in x_post.voice_pick.pools()['asks']:
+            with self.subTest(ask=ask):
+                text = 'Player Seven over 4.5 catches (-115, DraftKings)\n\n' + ask + '\n@Playbook #NFL\n21+ only'
+                self.assertIsNone(x_post.reason_in(text))
+                self.assertIn('play has no supporting reason', x_post.guard(text, unsupported, x_post.reason_in(text)))
+
     def test_empty_optional_fields_do_not_leave_leading_or_repeated_breaks(self):
         from social_copy import x_ticket_copy
         pick = dict(PICK, marketType='moneyline', projection=None)
@@ -115,7 +123,7 @@ class DraftTests(unittest.TestCase):
         for text, pick in ((team, dict(PICK, projection=31.2)), (prop, PROP), (potd, PICK)):
             self.assertLessEqual(x_post.tweet_length(text), 280)
             self.assertNotIn('http', text, 'no link: the card carries the site')
-            self.assertEqual('🍳' in text, text == potd)
+            self.assertEqual(text.startswith('🍳 Hot Plate (POTD):'), text == potd)
             self.assertEqual(x_post.guard(text, pick), [], text)
 
     def test_tweets_spell_out_player_and_team_names_for_search(self):

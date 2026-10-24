@@ -4390,3 +4390,21 @@ Sharp1067counted with12/min cap. Journals may be partial; no invented account
 totals. No schedule, notification preference, budget, stake or counting changes.
 Evidence:work/daily-20261023-outcomes.json,friday-prep.json,live/audit.json and
 buffer-corrected.png under the same daily prefix.
+
+
+### October24 overnight: closing prompts are not supporting evidence
+Hosted40060440760/40062437039 stopped in caption tests. Actual current post
+history selected a closing ask that reason_in mistook for evidence. Exclude
+every approved ask from extracted reasons; regression tests every ask with
+a reasonless gut-call and requires refusal. The POTD test now checks its actual
+Hot Plate prefix; a cooking emoji in an approved closing ask is not a POTD badge.
+No source evidence, admission threshold or sent post changes. Release pending
+full normal/clean/locked gates and hosted/live proof.
+Overnight UMass/UConn over50.5 won51/+0.463u; final02:25:14Z, grade1second,
+official Discord02:33:18Z(8.07m),X02:59:46.345Z(34.54m),mirror03:01:53Z.
+02:36:07Z log holds result for unavailable hosted card; next existing02:57:34Z
+pass accepted it. Preserve historical latency; no duplicate retrospective post.
+114live official rows/50delivery IDs checked, zero mismatches/ungraded.
+Morning Final due13:02Z is accepted, not delivered. Earlier Oct22 Final
+actually sent Oct23 13:40:46.435Z. P48/A-20261010-3 and named morning repairs
+already shipped; finite Friday preparation complete, no reopened product scope.
