@@ -138,6 +138,8 @@ jobs:
           # Ticket pushes publish existing captured evidence; only refresh runs spend reads.
           SHARP_REQUESTS: '60'
         run: python scripts/sharp_odds.py
+      - name: Rebuild the published report index without network calls
+        run: python scripts/materialize_research.py
       - name: Grade forecasts and picks against the close
         run: python scripts/scoreboard.py
       - name: Compile sourced line catalog

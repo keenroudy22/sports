@@ -27,6 +27,15 @@ class WorkflowTests(unittest.TestCase):
         self.assertIn('python scripts/publication_guard.py', WORKFLOW)
         self.assertIn('python scripts/hosted_rebase_verify.py', WORKFLOW)
 
+    def test_every_publish_materializes_reports_before_reading_them(self):
+        steps = WORKFLOW.split('      - name: ')
+        materialize = next(step for step in steps
+                           if 'run: python scripts/materialize_research.py' in step)
+        self.assertNotIn('if:', materialize)
+        index = WORKFLOW.index('run: python scripts/materialize_research.py')
+        for consumer in ('scoreboard', 'market_lines', 'build_site', 'feed'):
+            self.assertLess(index, WORKFLOW.index(f'run: python scripts/{consumer}.py'))
+
     def test_every_python_step_exists_and_imports(self):
         scripts = re.findall(r'python scripts/(\w+)\.py', WORKFLOW)
         self.assertIn('build_site', scripts)

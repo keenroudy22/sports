@@ -15,6 +15,18 @@ remain required before this change is shipped.
 
 ## October24 publish-first continuation — testing
 
+Follow-through11:54Z:hosted40090039586SUCCESS,post-rebase verified97ca2489
+includes79abdb42;16changed files/10rechecks,118record rows/zero issues,
+670public files/zero issues. Live375px showsWilliams/Tulane and four plays,
+no horizontal overflow,load error or console error. X remains scheduled.
+The later selection pass releasedIowa–Minnesota over40.5 at11:51:16Z and
+CMUML at11:52:26Z; X09:42/10:02ET queued. Harbor/Carter still caption-held.
+Before the next promotion, found push-only runs must unconditionally run the
+offline report-index materializer (not just after a rebase). Added it before
+scoreboard/catalog/site/feed consumers; six workflow and three materializer
+tests pass. Stopped the in-progress candidate-pool release before promotion
+to include this correction and repeat all gates. No network capture restored.
+
 Installed/pushed79abdb42 at11:40Z:1770Python(two expected skips) and281Node
 passed in normal and clean-export runs; build/feed/budgets,record115/NBA0,
 672-file public guard,assets and06:45 isolated rehearsal kaafa3wq passed.
