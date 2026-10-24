@@ -1,5 +1,13 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## October24 ticket pool isolation
+
+A straight held for an unused/unavailable news lookup, research allocation or
+insufficient price value does not exclude its entire game from fun-ticket
+construction. Sourced adverse evidence, typed injury/QB holds, closed legs and
+unknown holds still exclude. This is candidate-pool repair only: every proposed
+ticket retains per-leg reasons, admission, price/news/exposure and send checks.
+
 ## October24 publish-first website and queue
 
 Hosted push runs publish stored, admission-checked evidence without a new

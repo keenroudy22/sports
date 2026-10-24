@@ -1,5 +1,18 @@
 # October 5 product implementation tracker
 
+## October24 fun-ticket candidate isolation — testing
+
+Actual07:42 pass found368 straight rows but the ticket path reported zero games.
+`longshot_exclusions` treated research-budget/allocation/unavailable-check holds
+as sourced adverse evidence and excluded whole games. Known unchecked reasons
+now leave games in the candidate pool; actual adverse/typed injury/QB, closed
+legs and unknown holds remain excluded. Every proposed ticket still requires
+each saved reason and normal admission/release checks. No new lookup allowance,
+odds budget, exposure or publication follows from this pool fix.
+Regression covers seven unchecked reasons and preservation of adverse, unknown
+and typed-injury holds. Full normal/clean, rehearsal, locked and hosted checks
+remain required before this change is shipped.
+
 ## October24 publish-first continuation — testing
 
 Installed/pushed79abdb42 at11:40Z:1770Python(two expected skips) and281Node

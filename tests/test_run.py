@@ -1259,6 +1259,25 @@ class ParlayGuardTests(unittest.TestCase):
         self.assertFalse(run.replacement_has_last_look(replacement, games, datetime(2026, 10, 4, 15, 45, 5, tzinfo=timezone.utc)))
         self.assertTrue(run.replacement_has_last_look(replacement, games, datetime(2026, 10, 4, 15, 0, tzinfo=timezone.utc)))
 
+    def test_unchecked_straights_do_not_exclude_whole_games_from_tickets(self):
+        ctx, _, _, _ = self.world(closed=False)
+        reasons = [
+            'the eight-check research budget is used; availability was not checked',
+            *[f'the {family} research allocation is used; availability was not checked'
+              for family in ('prop', 'side', 'total')],
+            'the news researcher is unavailable in this run',
+            'the news check returned no verified player-availability evidence; college plays stay held',
+            'the current estimated chance does not beat the price; no news lookup was spent',
+        ]
+        rows = [{'gameId': f'game-{i}', 'rule': 'held', 'reason': reason}
+                for i, reason in enumerate(reasons)]
+        self.assertEqual(run.longshot_exclusions(ctx, rows), set())
+        rows += [{'gameId': 'adverse', 'rule': 'held',
+                  'reason': 'the evidence argues against it: starting quarterback out'},
+                 {'gameId': 'unknown-hold', 'rule': 'held', 'reason': 'unrecognized hold'},
+                 {'gameId': 'injury', 'rule': 'prop_injury_clear', 'reason': reasons[0]}]
+        self.assertEqual(run.longshot_exclusions(ctx, rows), {'adverse', 'unknown-hold', 'injury'})
+
     def test_the_last_look_checks_every_leg(self):
         ctx, _, ticket, _ = self.world(closed=False)
         looked = []

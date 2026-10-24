@@ -645,7 +645,20 @@ def longshot_exclusions(ctx, screened, closing=()):
         out.update(flagged_parlay_leg_games(revision))
     for row in screened:
         rule, reason = row.get('rule'), str(row.get('reason') or '')
-        if rule in AGAINST_RULES or (rule == 'held' and not reason.startswith(UNCONFIRMED)):
+        # A missing lookup is not adverse evidence about the whole game.
+        # Ticket construction still requires each leg's supporting reason and
+        # ordinary admission/release checks; this grants no research clearance.
+        unchecked = reason.startswith((
+            UNCONFIRMED,
+            'the eight-check research budget is used;',
+            'the prop research allocation is used;',
+            'the side research allocation is used;',
+            'the total research allocation is used;',
+            'the news researcher is unavailable in this run',
+            'the news check returned no verified player-availability evidence;',
+            'the current estimated chance does not beat the price; no news lookup was spent',
+        ))
+        if rule in AGAINST_RULES or (rule == 'held' and not unchecked):
             out.add(row.get('gameId'))
     return {g for g in out if g}
 
