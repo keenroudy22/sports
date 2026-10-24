@@ -9,7 +9,7 @@ display has60rows across4upcoming games. The missing fifth game was traced to
 Sharp's verified `Los Angeles Clippers` versus ESPN team12 `LA Clippers`.
 Add that one exact team alias; player identity, current roster, opponent and
 kickoff checks remain unchanged. Targeted live-feed and release tests follow.
-At00:34Z one read of the provider's verified Clippers–Lakers event returned173
+At00:33Z one read of the provider's verified Clippers–Lakers event returned173
 rows and77paired prices for ESPN401909851 through the repaired matcher. Nine
 unpaired/conflicting groups and10unsupported rows still held. No store or public
 record was manually altered; the existing capture will use the exact alias.
@@ -19,6 +19,17 @@ and paused before push. No capture was deleted. The normal worker preserved
 all captures and quarter store, completed00:27:52Z, then pushed2610ba38. The
 resume check confirmed identical tested code and all store ledgers, plus10
 record-integrity checks. Hosted40045084684 remains in progress; not live proof.
+
+Follow-through: hosted40045084684 succeeded. Alias source0aab6e9a passed1753Python
+(two skips)/280Node normal+clean, all builds/audits and isolated20:00 rehearsal
+n1xouzve (ok, zero outside writes/private reads). It installed locally, but the
+push correctly refused an upstream hosted-data advance; no force or data discard.
+The final release preserves both writers and repeats all gates after rebase.
+Phone verification also found a delayed schedule could retain a pregame NBA
+projection after tipoff. The card now says Update pending/Tip time passed with a
+Live & scores link, without inventing a score or altering stored projections.
+An added regression preserves genuine live/final cards. These follow-ups still
+require their own hosted/mobile receipt; the first success is not proof of them.
 
 ## October23 evening NBA/quarter/site repair — in verification
 

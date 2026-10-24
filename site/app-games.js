@@ -630,6 +630,12 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
   }
   const nbaProjectionContext = games => games.some(g => g.projection?.sparse && g.status !== 'final') ? '<p class="small muted nba-history">Early-season projections draw on last season’s team ratings while this season’s results build.</p>' : '';
   const nbaGameCard = g => {
+    // The schedule snapshot can lag tipoff. Never show a cached pregame
+    // projection as if the matchup were still upcoming, or invent a live score.
+    if (g.status === 'scheduled' && Date.parse(g.kickoff) <= Date.now()) {
+      const team = side => `<div class="pc-team">${teamMark(g.teams[side], 'md', 'NBA')}<b>${esc(g.teams[side].name || g.teams[side].abbreviation)}</b></div>`;
+      return `<div class="proj"><div class="pc-meta"><span>${esc(whenShort(g.kickoff))} · NBA</span></div><div class="pc-top">${team('away')}<div class="pc-mid"><small>Update pending</small><b class="num">–</b><span>Tip time passed</span></div>${team('home')}</div><p class="small muted">The stored schedule has not updated. <a href="#games/live?sport=NBA">Check Live & scores ›</a></p></div>`;
+    }
     const fresh = q => q && g.status === 'scheduled' && Date.now() < Date.parse(g.kickoff) && Date.now()-Date.parse(q.retrievedAt) >= 0 && Date.now()-Date.parse(q.retrievedAt) <= 14400000;
     const quote = fresh(g.totalQuote) ? g.totalQuote : null, spread = fresh(g.spreadQuote) ? g.spreadQuote : null, ml = fresh(g.moneylineQuote) ? g.moneylineQuote : null;
     const p = g.projection || {}, home = g.teams.home.abbreviation, away = g.teams.away.abbreviation;
