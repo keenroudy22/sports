@@ -144,6 +144,8 @@ class NBAPlayerPropTests(unittest.TestCase):
             result=n.capture(NOW,root,fetch=feed,sleep=waits.append,key='fixture')
             self.assertEqual(result['requests'],12);self.assertTrue(result['partial'])
             self.assertEqual([c['sportsbook'] for c in calls[:2]],['draftkings','fanduel'])
+            self.assertTrue(all(c.get('is_main_line')=='true' for c in calls if c['market']=='props'))
+            self.assertEqual(sum(c['market']=='1st_quarter_player_points' for c in calls),2)
             self.assertEqual(waits,[5.2]*12);self.assertEqual(result['paired'],2)
             self.assertEqual(boxscores.verify(root/'player-quotes'),[])
     def test_no_key_is_no_request(self):

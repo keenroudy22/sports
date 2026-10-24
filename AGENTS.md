@@ -1,5 +1,19 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## NBA quarter inputs and lighter pages — October23 evening
+
+NBA prop collection keeps at most12 free Sharp reads: up to10 main-only reads,
+then two exact first-quarter points reads. Quarter quotes are separate research
+inputs, never full-game forecasts or automatic tickets. Official final-summary
+play-by-play may supply Q1/Q2 points only after every player's full-game points
+and the final score reconcile; OT stays separate. Missing/ambiguous data holds.
+This is not a validated quarter workload model, bet-settlement/void policy or
+correlated parlay quote. Q2 prices and football quarter support remain gated.
+The weekly forward check shows frozen-side/price hypothetical outcomes by
+model/stat/season, with repeated books excluded; it never changes public records.
+NBA player details load separately from game-only views. Today cards keep source
+comparison summaries; complete comparisons remain on the game pages.
+
 ## Morning throughput repair — October23 follow-up
 
 The existing6:45/8:30/17:30 workers split the same30 Sharp reads into10 each;

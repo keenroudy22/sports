@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-23T23:02:06Z",
+  "updatedAt": "2026-10-24T00:13:50Z",
   "items": [
     {
       "id": "O-20261023-MORNINGFLOW",
@@ -88,9 +88,9 @@
       "title": "Exact-period capture, evidence and settlement before automated quarter parlays",
       "status": "gated",
       "owner": "agent",
-      "next": "Inventory permitted free exact-period prices and official quarter stat sources; build fixture-tested collector/grader and forward evidence before public selection. O-20261023-PERIODGUARD closes full-game contamination, not this lane.",
+      "next": "Release NBA Q1 capture and reconciled quarter points. Then validate period workload, participation/void rules, Q2/football prices and actual correlated ticket quotes before automation; existing runs and budget only.",
       "doneWhen": "Verified period/book/line identities, period workload evidence, correlated ticket quote and tested settlement exist; ordinary full-game estimates are never divided into quarters. Existing budgets and approval gates hold.",
-      "evidence": "Oct23 source inventory: Sharp football broad prop parser, NBA full-game allowlist, and full-game spread capture. No validated automatic Q1/Q2 prop forecasting or settlement pipeline. Personal supplied quarter tickets remain separate."
+      "evidence": "Oct23 evening in verification: actual free catalog/quote confirms Q1 NBA points; props alias excludes period-prefixed markets.12-read capture cap retained. ESPN401909834 reconciled19 players/all4quarters. Fixture-tested period/book/player identity and research grader; not a validated forecast or sportsbook settlement. Personal tickets stay separate."
     },
     {
       "id": "O-20261022-RESULT",
@@ -315,7 +315,7 @@
       "owner": "agent",
       "next": "Grade frozen first-price forecasts after real finals in normal NBA runs. Evaluate held-out dates by player-game, market and side; retain same-book prices and role context. Do not treat correlated book/stat rows as independent games.",
       "doneWhen": "A reproducible forward report compares model/history with prices and outcomes using independent samples and noise/role checks; it supports an NBA-specific Trial rule or rejects promotion. Existing NBA promotion rules remain.",
-      "evidence": "96c8e76d/40002353906SUCCESS installs deduplicated first-pregame model-versus-line comparison in weekly packet.0506e4e3 normal grader appended27 reviewed-model label corrections; originals preserved/replay0.901usable observations/13games; reviewed subset1–2games/stat. Baseline error worse than quoted line in8stat groups; small correlated sample, not profitability. No official-prop promotion."
+      "evidence": "96c8e76d/40002353906SUCCESS first-pregame dedupe;0506e4e3 appended27 model-label corrections. Oct23 evening in verification adds frozen-side/price shadow outcomes by model/stat/season.901comparisons/13games; reviewed variants1–2games/stat. All8baseline stat groups negative at recorded prices. Not placed bets/independent portfolio; no promotion."
     },
     {
       "id": "O-20261019-TIERS",
@@ -655,9 +655,9 @@
       "title": "P1 research price and tickets",
       "status": "observing",
       "owner": "agent",
-      "next": "Implement price checks, Good-to/latest quotes, after-slate heading and QB chips.",
+      "next": "Verify evening line-versus-price wording and prior-post empty-state repair in hosted release and live375px source comparison. Preserve original tickets and record counts.",
       "doneWhen": "Research price fixtures and live source comparisons pass.",
-      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+      "evidence": "Oct23 evening in verification: current quote now shows line and odds; line-boundary failure no longer claims price-cutoff failure. Published off-card tickets no longer trigger no-best-bet claim. Regression fixtures pass; hosted/live receipts pending."
     },
     {
       "id": "P32",
@@ -790,7 +790,7 @@
       "title": "Results-led direction and 10-second Today",
       "status": "ready",
       "owner": "agent",
-      "next": "Measure cold-phone speed against10 seconds; reduce oversized NBA/Today payloads without dropping coverage. Observe the next weekly direction packet; keep bounded moves off until logged evidence meets existing rules.",
+      "next": "Verify NBA player payload and Today summaries against identical inputs, then hosted/mobile checks. Cold-phone10second benchmark and next weekly direction observation remain distinct; keep bounded moves evidence-gated.",
       "doneWhen": "Trigger and undo fixtures pass, no gate loosens below the October 7 baseline, every move logs evidence, the Monday packet explains changes and reversals, and a cold phone visit meets the documented 10-second budget.",
       "evidence": "Direction48e57391/37700211419 retained. Oct23 hosted40023680885SUCCESS: NBA95,271B/65,536B,Today336,037B/327,680B warnings; shell87,663gzip below hard cap. Live375 NBA/CFB and local1440 NBA no overflow/load/console errors. This is not a cold-phone network benchmark or verified weekly learning outcome; those remain open."
     },

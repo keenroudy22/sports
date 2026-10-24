@@ -578,7 +578,7 @@ test('an expired saved quote with a fresh same-book price reads the same on both
   release();
   const full = firstTicket(await pending);
   await settle();
-  assert.match(first, /Now −115 at 9:20 AM\. Still good to −124\./);
+  assert.match(first, /Now 49.5 at −115 at 9:20 AM\. Still good to −124\./);
   assert.match(first, /I have it at/);
   assert.equal(first, full);
   const stale = { ...aged, quote: { ...aged.quote, observedAt: '2026-10-10T09:00:00Z' } };
@@ -596,6 +596,10 @@ test('an expired quote never wears ORDER UP unless a fresh same-book price is st
   assert.doesNotMatch(aged, /kt-orderup|ORDER UP/, 'an expired quote never reads as open');
   const moved = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -130, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } });
   assert.match(moved, /Past my −124 limit\./);
+  const changedLine = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', cutoffBoundary: 51.5, quote: { odds: -108, line: 53.5, observedAt: '2026-10-10T13:20:00Z' } });
+  assert.match(changedLine, /Now 53.5 at −108/);
+  assert.match(changedLine, /Line moved from 49.5; outside my posted range/);
+  assert.doesNotMatch(changedLine, /Past my|kt-orderup/);
   assert.doesNotMatch(moved, /kt-orderup/, 'a fresh price past the limit is not open either');
   const inside = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -115, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } });
   assert.match(inside, /Still good to −124\./);
@@ -610,6 +614,14 @@ test('a settled ticket never wears ORDER UP', async () => {
   assert.doesNotMatch(page, /kt-orderup|ORDER UP/);
   const open = await loadApp('#record').api.views.pick({ id: prop.id });
   assert.match(open, /ORDER UP/, 'an open best bet does');
+});
+
+test('an off-card published play never becomes a claim that nothing was posted', async () => {
+  const closed = { ...prop, entryNote: 'Closed to new entries at 9:00 AM ET: line moved.' };
+  const { api } = loadApp('#record', {}, { today: { ...TODAY, generatedAt:'2026-10-10T14:00:00Z', picks: [closed, ...rungs] } });
+  const page = await api.views.today({ view: 'today' });
+  assert.match(page, /Earlier posted plays and their original prices remain/);
+  assert.doesNotMatch(page, /No official best bet yet|No best bet today|Nothing cleared my bar today/);
 });
 
 test('the play page under review shows no fair price, edge, chance or projection, and keeps the posted price', async () => {

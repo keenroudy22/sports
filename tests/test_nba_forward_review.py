@@ -25,6 +25,20 @@ def outcome(row, actual=20, **extra):
 
 
 class ForwardReviewTests(unittest.TestCase):
+    def test_shadow_uses_frozen_price_side_and_never_assumes_missing_price(self):
+        a = forecast(odds=-200, side='under', season=2027)
+        b = forecast('b', athleteId='other', odds=150, side='over', season=2027)
+        c = forecast('c', athleteId='third')
+        report = review.summarize([a,b,c], [outcome(a, actual=20, result='hit', odds=-200, side='under'),
+            outcome(b, actual=25, result='hit', odds=150, side='over'), outcome(c)], NOW)
+        new = next(s for s in report['segments'] if s['season'] == 2027)['pricedShadow']
+        self.assertEqual(new['hits'], 2)
+        self.assertEqual(new['shadowNetUnits'], 2)
+        self.assertEqual(new['netPerUnitStaked'], 1)
+        for change in ({'odds':-110}, {'side':'over'}, {'result':'miss'}):
+            bad = outcome(a, actual=20, result='hit', odds=-200, side='under') | change
+            self.assertEqual(review.summarize([a], [bad], NOW)['segments'][0]['pricedShadow']['excluded'], 1)
+
     def test_book_duplicates_and_input_order_cannot_cherry_pick_the_result(self):
         first = forecast()
         later = forecast('later', book='FanDuel', retrievedAt='2026-10-22T13:00:00Z', projection={'value': 20})

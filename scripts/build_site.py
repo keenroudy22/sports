@@ -1891,7 +1891,10 @@ def build(now=None):
                                                      info['strength'], injuries, lines, now,
                                                      weather_rows.get(game['id']))
         # today.json carries the card's sentence; every driver and both markets live on the game page.
-        cards.append({**card, 'whyDiffer': game_context.card_summary(card['whyDiffer'])})
+        cards.append({**card, 'whyDiffer': game_context.card_summary(card['whyDiffer']),
+                      # Cards use only ourGap; complete evidence stays on the game page.
+                      'marketRead': {'ourGap': card['marketRead'].get('ourGap', {})}
+                      if card.get('marketRead') else None})
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
         write(OUT / 'games' / f"{game['id']}.json",
               game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
@@ -1965,7 +1968,9 @@ def build(now=None):
     write(OUT / 'research.json', {'generatedAt': stamp(now), **build_research(context, reports, now, depth_charts)})
     write(OUT / 'sport-research.json', sport_research.build(now))
     import nba_today
-    write(OUT / 'nba.json', dict(nba_today.build(now),morningBrief=morning_brief.current(now)))
+    nba_overview, nba_props = nba_today.public_payloads(dict(nba_today.build(now),morningBrief=morning_brief.current(now)))
+    write(OUT / 'nba.json', nba_overview)
+    write(OUT / 'nba-props.json', nba_props)
     import shutil as nba_copy
     nba_preview = ROOT / 'design/final/nba-trial-preview.png'
     if nba_preview.exists():

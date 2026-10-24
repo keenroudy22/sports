@@ -654,12 +654,21 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
     return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${open.length ? `${open.length} posted NBA Trial play${open.length === 1 ? '' : 's'}.` : 'No NBA Trial play posted yet.'} Team projections and player lines are research.</p>${nbaProjectionContext(games)}<div class="projs">${games.map(nbaGameCard).join('')}</div><a class="more" href="#today?sport=NBA">Open NBA Today ›</a></section>`;
   };
   views.nbaToday = async (opts = {}) => {
-    const data = opts.data || await get('app/nba.json');
+    let data = opts.data || await get('app/nba.json');
     const matches = (...values) => !opts.q || C.researchMatches(opts.q, ...values);
     const mode = opts.mode || 'lines';
     const showGames = !opts.embedded || mode === 'lines' && opts.type !== 'props';
     const showProps = !opts.embedded || mode === 'players' || mode === 'lines' && opts.type !== 'games';
     const showTrends = !opts.embedded || mode === 'trends';
+    if (showProps && data.playerPropsFile === 'nba-props.json' && !Array.isArray(data.playerProps?.rows)) {
+      try {
+        const props = await get('app/nba-props.json');
+        if (!Array.isArray(props.rows)) throw new Error('Missing prop rows');
+        data = { ...data, playerProps: props };
+      } catch (_) {
+        data = { ...data, playerProps: { ...data.playerProps, rows: [], note: 'Player comparisons could not be loaded. Refresh to retry; no missing estimate is shown.' } };
+      }
+    }
     const todayGames = (data.games || []).filter(g => C.dayOf(g.kickoff) === etDay());
     const focusDay = todayGames.length ? etDay() : (data.games || []).filter(g => Date.parse(g.kickoff) > Date.now()).map(g => C.dayOf(g.kickoff)).sort()[0];
     const focusGames = (data.games || []).filter(g => C.dayOf(g.kickoff) === focusDay);

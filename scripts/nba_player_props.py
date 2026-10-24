@@ -20,6 +20,7 @@ import nba_capture
 import nba_roles
 import sharp_odds
 import market_periods
+import nba_quarters
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -151,14 +152,18 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
         except (OSError,ValueError,KeyError,TypeError):errors.append('roster-unavailable')
     fetch=fetch or sharp_odds.fetch; count=0; rows=[]; cursors={b:None for b in BOOKS};done=set()
     deadline=time.monotonic()+150
-    for _ in range(6):
+    # Main props keep the first ten reads (five pages per book). The final two
+    # reads are exact-quarter inventory, not thousands of alternates mixed into
+    # the main-line pagination. Twelve total remains the hard ceiling.
+    for _ in range(5):
         for book in BOOKS:
             if book in done:continue
             if time.monotonic()+sharp_odds.GAP>=deadline:break
             sleep(sharp_odds.GAP)
             count+=1
             try:
-                payload=fetch('/odds',key,league='nba',market='props',sportsbook=book,is_live='false',limit=200,cursor=cursors[book])
+                payload=fetch('/odds',key,league='nba',market='props',sportsbook=book,is_live='false',
+                              is_main_line='true',limit=200,cursor=cursors[book])
                 rows.extend(payload.get('data') or [])
                 page=payload.get('pagination') or {};cursor=page.get('next_cursor')
                 if not page.get('has_more') or not cursor or cursor==cursors[book]:done.add(book)
@@ -166,12 +171,27 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
             except (OSError,ValueError,KeyError,TypeError):
                 errors.append('prop-feed-unavailable');done.add(book)
         if len(done)==len(BOOKS):break
+    quarter_rows=[]; quarter_partial=False
+    for book in BOOKS:
+        if count>=12 or time.monotonic()+sharp_odds.GAP>=deadline:
+            quarter_partial=True;break
+        sleep(sharp_odds.GAP);count+=1
+        try:
+            payload=fetch('/odds',key,league='nba',market=nba_quarters.REQUEST_MARKET,sportsbook=book,is_live='false',limit=200)
+            quarter_rows.extend(payload.get('data') or [])
+            quarter_partial |= bool((payload.get('pagination') or {}).get('has_more'))
+        except (OSError,ValueError,KeyError,TypeError):
+            errors.append('quarter-feed-unavailable');quarter_partial=True
     stamp=datetime.now(timezone.utc) if fetch is sharp_odds.fetch else now
     quotes,ignored=fold(rows,games,rosters,stamp)
     captured=nba_capture.append_changed(quotes,root/'player-quotes',lambda r:(r['eventId'],r['athleteId'],r['stat'],r['book']),keep_observations=True)
+    quarters=nba_quarters.fold(quarter_rows,games,rosters,stamp)
+    quarter_captured=nba_capture.append_changed(quarters,root/'quarter-quotes',
+        lambda r:(r['eventId'],r['athleteId'],r['quarter'],r['stat'],r['book'],r['line'],r['kind']),keep_observations=True)
     recorded=record_forward(stamp,root)
     graded=grade(stamp,root)
     return {'requests':count,'espnRequests':budget.requests,'captured':captured,'paired':len(quotes),
+            'quarterPaired':len(quarters),'quarterCaptured':quarter_captured,'quarterPartial':quarter_partial,
             'partial':len(done)<len(BOOKS),'ignored':ignored,'errors':errors,'forwardRecorded':recorded,'forwardGraded':graded}
 
 

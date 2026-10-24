@@ -2,6 +2,19 @@
 const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
 const C=require('../site/core.js'),L=require('../site/live.js'),P=require('../site/personal.js');
 function load(){const s={module:{exports:{}},exports:{},KRCore:C,KRLive:L,KRPersonal:P,document:{querySelector:()=>null},localStorage:{getItem:()=>null,setItem:()=>{}},console,URL,URLSearchParams,Intl,Date,Math,Map,Set,Promise,AbortController,TextEncoder,TextDecoder,setTimeout,clearTimeout,setInterval,clearInterval};s.window=s;s.self=s;s.globalThis=s;vm.runInNewContext(fs.readFileSync('site/app.js','utf8'),s);vm.runInNewContext(fs.readFileSync('site/app-games.js','utf8'),s);return s;}
+test('NBA games do not fetch player details; player views retain every row and handle detail failure',async()=>{
+ const s=load(),api=s.module.exports,seen=[],stamp=new Date().toISOString(),kickoff=new Date(Date.now()+3600000).toISOString();
+ const base={games:[],scheduleFresh:true,playerPropsFile:'nba-props.json',playerProps:{availabilityAt:stamp}};
+ const rows=Array.from({length:8},(_,i)=>({name:'Player '+i,teamName:'Home',kickoff,sourceAt:stamp,statName:'points',line:4.5,over:-110,under:-110,book:'DraftKings',hold:'Role not confirmed'}));
+ let fail=false;
+ const views=s.KRGames(api.gamesContext({get:async path=>{seen.push(path);if(fail)throw Error('offline');return {rows};}}));
+ await views.nbaToday({data:base,embedded:true,mode:'lines',type:'games'});assert.equal(seen.length,0);
+ const html=await views.nbaToday({data:base,embedded:true,mode:'players'});
+ assert.deepEqual(seen,['app/nba-props.json']);for(let i=0;i<8;i++)assert.ok(html.includes('Player '+i));
+ assert.ok(!base.playerProps.rows,'renderer does not mutate cached overview');
+ fail=true;const error=await views.nbaToday({data:base,embedded:true,mode:'players'});
+ assert.ok(error.includes('Player comparisons could not be loaded'));assert.ok(!error.includes('Player 0'));
+});
 test('NBA Today uses the actual lazy app interface and separates historical research from picks',async()=>{const s=load(),api=s.module.exports;const data={heading:'Opening night · October 20',scheduleFresh:true,games:[{seasonType:'regular-season',status:'scheduled',kickoff:'2026-10-20T23:00:00Z',teams:{home:{abbreviation:'NY'},away:{abbreviation:'SA'}},projection:{home:115,away:110,total:225,sparse:true},totalQuote:{line:221.5,over:-110,under:-110,book:'DraftKings',retrievedAt:'2026-10-09T21:00:00Z'}}],trends:[{window:'Last season · regular season',season:2026,name:'Real player',statName:'points',average:20,games:3,values:[18,20,22],dates:['2026-04-01','2026-04-03','2026-04-05']}],prep:[],prepNote:'Current-season games and fresh prices are required.',readiness:{stage:'log',cleanCaptureDays:1,cleanCaptureDaysRequired:14,paperGraded:0,paperGradesRequired:50},trial:{note:'No NBA Trial play has been posted.'}};const ctx=api.gamesContext({get:async path=>{assert.equal(path,'app/nba.json');return data;}});ctx.state.league='NBA';const views=s.KRGames(ctx);views.gamesLive=async()=>'<h2>NBA live scores</h2>';const html=await views.nbaToday();for(const text of ['NBA Today','October 20','Research projection','Last season','Prep List','NBA Trial','No NBA Trial play has been posted','NBA live scores','evidence counts toward promotion to Best bets, not the opening-night Trial'])assert.ok(html.includes(text),text);assert.doesNotMatch(html,/moves forward only when both evidence gates clear|NFL|College football|did not load/);});
 test('NBA-only renderer is selected before generic other-sport cards without touching NHL or MLB',()=>{const source=fs.readFileSync('site/app.js','utf8');assert.match(source,/if \(state\.league === 'NBA'\) return \(await ensureGames\(\)\)\.nbaToday\(\)/);});
 test('NBA current minutes remain distinct from confirmed workload and old production rates',async()=>{

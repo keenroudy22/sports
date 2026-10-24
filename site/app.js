@@ -93,7 +93,7 @@
     const pastPrice = current.line === pick.line && isNum(pick.cutoffOdds) && cents(current.odds) < cents(pick.cutoffOdds);
     const moneyline = pick.marketType === 'moneyline' || pick.market === 'moneyline';
     const pastLine = !moneyline && isNum(pick.cutoffBoundary) && (pick.direction === 'under' ? current.line <= pick.cutoffBoundary : current.line >= pick.cutoffBoundary);
-    return { current, inside: isNum(pick.cutoffOdds) && !pastPrice && !pastLine };
+    return { current, pastPrice, pastLine, inside: isNum(pick.cutoffOdds) && !pastPrice && !pastLine };
   };
   /* The Climb's status words, from the full rung ledger or today-hero.json's summary of it. */
   const climbWords = s => s.open ? `Step ${s.open.step || s.step} is live`
@@ -901,7 +901,7 @@
       ? `${afterPostingWords(hold)}${holdPrice ? ` Latest ${odd(holdPrice.odds)} at ${clock(holdPrice.observedAt)} at ${vm.book}.` : ''}`
       : hold ? heldShort(hold)
       : climb ? (isNum(Number(info.stake)) && isNum(Number(info.payout)) && info.payout ? `${money(info.stake)} → ${money(info.payout)} if it cashes.` : '')
-        : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.inside ? good : `Past my ${odd(pick.cutoffOdds)} limit.`}`
+        : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${isNum(latest.current.line) && pick.marketType !== 'moneyline' && pick.market !== 'moneyline' ? `${latest.current.line} at ` : ''}${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.pastLine ? `Line moved from ${pick.line}; outside my posted range.` : latest.pastPrice ? `Past my ${odd(pick.cutoffOdds)} limit.` : latest.inside ? good : 'Check the current line and price.'}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
     const tense = !afterHold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
     const number = best && pick.marketType !== 'moneyline' && pick.market !== 'moneyline'
@@ -1156,15 +1156,15 @@
   /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false }) => {
-    const title = nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false }) => {
+    const title = postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     const climbState = climb && climb.open ? `Step ${climb.open.step || climb.step} live` : climb ? `Step ${climb.step} next` : 'Route';
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
       <nav class="kt-today-jumps" aria-label="Today at a glance"><a href="#today-card"><span>Best bets</span><b>${rows.length ? `${rows.length} live` : favorite ? 'Strongest lean' : 'Checking'}</b></a><a href="#today-climb"><span>80/20 Climb</span><b>${esc(climbState)}</b></a></nav>
       <div class="kt-focus-head"><h2>Today’s best bets</h2><a href="#record">Every result ›</a></div>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card' }) : emptyRail(nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card' }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
       ${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
       ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
       ${rail(later, { season, lines, cards, more: true, label: 'Upcoming best bets' })}</section>` : ''}`;
@@ -1329,6 +1329,7 @@
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
     return `<p class="small muted" style="margin-bottom:12px"><b>Best Bets · 0.5u</b> · <b>Chef's Picks · 1u</b> · the rarer, stronger tier. Earlier plays keep their posted stakes.</p><div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
       climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
+      postedToday: picks.some(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay()),
       nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
   };
@@ -1955,7 +1956,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-aa811df24274';
-  const GAMES_ASSET = 'app-games.js?v=sha256-994167e61df4';
+  const GAMES_ASSET = 'app-games.js?v=sha256-c984a683178e';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

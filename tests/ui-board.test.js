@@ -36,7 +36,8 @@ test('Good-to prices and current quotes retain the published cutoff', () => {
   assert.equal(M.latestPickQuote(pick,[{...row,odds:-120}],now).inside,false);
   assert.equal(M.latestPickQuote(pick,[{...row,line:51.5}],now).inside,false);
   assert.equal(M.latestPickQuote(pick,[{...row,observedAt:'2026-10-06T00:00:00Z'}],now),null);
-  assert.match(source,/Now \$\{odd\(latest\.current\.odds\)\} at \$\{clock\(latest\.current\.observedAt\)\}/);
+  assert.equal(M.latestPickQuote(pick,[{...row,line:53.5}],now).pastLine,true);
+  assert.equal(M.latestPickQuote(pick,[{...row,odds:-120}],now).pastPrice,true);
 });
 
 test('moneyline prices ignore legacy zero-point line boundaries but retain the odds limit', () => {

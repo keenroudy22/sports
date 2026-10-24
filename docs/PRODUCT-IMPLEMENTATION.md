@@ -1,5 +1,49 @@
 # October 5 product implementation tracker
 
+## October23 evening NBA/quarter/site repair — in verification
+
+Main NBA props now request the provider's strict main-line cohort, avoiding
+alternate rungs exhausting pagination before later games. At most12 free reads
+remain:10 main-only, two exactQ1 player-points reads. The provider's documented
+`props` alias covers player-prefixed markets, not quarter-prefixed ones:
+https://docs.sharpapi.io/en/api-reference/odds/#market-category-aliases
+An actual catalog and free response confirmed `1st_quarter_player_points`;
+Q2 player prices are not assumed. Separate immutable quarter-quotes retain
+period/book/player/line and main/alternate identity, with pairing/roster/freshness
+checks. Nothing enters full-game forecasts or official records.
+
+The existing NBA final-summary fetch now also extracts period points without
+another request, only when all player totals and the final score reconcile.
+Duplicate/conflicting/missing plays, unknown participants and incomplete periods
+hold; OT stays separate. Pure exact-threshold research comparison checks event,
+team, season, period and pregame/final timestamps. This is NOT sportsbook
+settlement: quarter participation/void rules, workload forecasts, football
+coverage and actual correlated ticket prices remain required. Real ESPN final
+401909834 reconciled19 players across all four quarters at00:10Z October24.
+
+Forward review now adds exact frozen-side/price hypothetical1u outcomes by
+model/stat/season, keeping first-pregame dedupe and correlation warnings. The
+901 comparisons across13games remain insufficient for promotion: all eight
+baseline stat groups show negative hypothetical returns at their recorded odds;
+reviewed variants have only1–2games/stat. These are not placed bets or a portfolio.
+
+Today distinguishes moved thresholds from worse odds, shows both current line
+and odds, and no longer says nothing was posted when a released ticket closed.
+It keeps only card-sized source-comparison summaries; full evidence remains in
+game details. NBA game-only views no longer download the full player payload;
+all60 available comparisons and holds retain a separately checked lazy payload.
+Identical repeated team trends are deduplicated. No coverage or record is erased.
+At00:10Z local Today295,891B and NBA overview23,818B were under their budgets;
+zero current prop rows reflect expired/started stored coverage, not a claimed
+size saving. Matched-input before/after and live release verification remain due.
+
+Matched-input sizing at22:46Z research time preserved60/60 prop comparisons:
+NBA95,105B becomes28,188B overview plus64,300B lazy details. All-sport/game-only
+views avoid the detail download; the full NBA player view still retrieves it.
+Today340,781B becomes295,890B with121/121 games and complete per-game evidence
+retained. Neither budget was raised. Local375px NBA/Today had no overflow or
+console/load errors; this is not a throttled cold-phone10second benchmark.
+
 ## October23 morning throughput repair — verified live
 
 The8:30 log shows15minutes waiting for hosted NBA prop art while holding the

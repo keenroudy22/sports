@@ -1,5 +1,13 @@
 # Public website boundary
 
+NBA game-only views load `app/nba.json`; player views additionally load
+`app/nba-props.json` (64KiB warning). The latter carries the same up-to60
+comparisons, exact prices, history, role reviews, holds and source times formerly
+embedded in nba.json. No private capture journals are exposed. Failed detail
+loads show a retry message, never invented estimates. Today game cards retain
+the `marketRead.ourGap` summary; full source comparisons remain in game details.
+This separates downloads without removing any game or prop coverage.
+
 `app/record.json` Climb route includes a public weekly summary (Eastern week dates,
 posted count, remaining allowance, maximum steps and legs). It omits private reservation
 IDs. This is a cadence limit, not a promise of future tickets or a new file family.

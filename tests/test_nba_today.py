@@ -10,6 +10,17 @@ import nba_capture,nba_today,boxscores
 from test_espn_props import game,board,NOW
 
 class NBAEvidenceTests(unittest.TestCase):
+ def test_lazy_public_props_preserve_all_rows_without_mutating_editorial_input(self):
+  original={'generatedAt':'now','games':[{'id':'1'}], 'teamTrends':[{'team':'1'},{'team':'1'}],
+   'playerProps':{'rows':[{'name':'A','line':10.5,'currentRole':{'minutes':[30]}}], 'holds':[{'name':'B','reason':'Out'}], 'availabilityAt':'now'}}
+  saved=json.dumps(original,sort_keys=True)
+  overview,props=nba_today.public_payloads(original)
+  self.assertNotIn('rows',overview['playerProps'])
+  self.assertEqual(overview['playerPropsFile'],'nba-props.json')
+  self.assertEqual(props['rows'],original['playerProps']['rows'])
+  self.assertEqual(props['holds'],original['playerProps']['holds'])
+  self.assertEqual(len(overview['teamTrends']),1)
+  self.assertEqual(json.dumps(original,sort_keys=True),saved)
  def test_matchup_pairs_validate_independently_without_new_requests(self):
   q={'book':'DraftKings','retrievedAt':boxscores.stamp(NOW),'current':{
    'home':{'spreadLine':-3.5,'spreadPrice':-110,'moneyline':-150},

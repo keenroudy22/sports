@@ -11,6 +11,10 @@ import publication_guard as guard
 
 
 class PublicationGuardTests(unittest.TestCase):
+    def test_exact_lazy_nba_prop_payload_is_public_not_capture_journals(self):
+        self.assertTrue(guard.allowed_path(Path('data/app/nba-props.json')))
+        self.assertFalse(guard.allowed_path(Path('data/app/nba-quarter-quotes.json')))
+        self.assertFalse(guard.allowed_path(Path('data/nba/player-forecasts.json')))
     def test_reviewed_paths_and_old_public_evidence_remain_allowed(self):
         for path in ('.nojekyll', 'index.html', 'app-more.js', 'app-games.js', 'kookn-mark.png', 'data/research.json', 'data/forecasts.json', 'data/app/today.json', 'data/app/today-hero.json',
                      'data/app/record.json', 'data/app/lines.json', 'data/app/lines-NFL.json',

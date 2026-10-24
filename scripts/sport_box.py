@@ -81,10 +81,18 @@ def extract(payload, event_id, retrieved_at):
                                 'stats': stats})
     if not players:
         raise ValueError('NBA box has no player evidence')
-    return {'league': 'NBA', 'season': int(season['year']), 'seasonType': int(season['type']),
+    result = {'league': 'NBA', 'season': int(season['year']), 'seasonType': int(season['type']),
             'eventId': f'NBA-{event_id}', 'kickoff': competition['date'], 'teams': teams,
             'players': players, 'retrievedAt': retrieved_at, 'extractor': 1,
             'source': f'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event={event_id}'}
+    import nba_quarters
+    quarters, hold = nba_quarters.points(payload, result)
+    result['quarterEvidence'] = {'status': 'held' if hold else 'reconciled', 'reason': hold,
+                                 'scope': 'points only; no minutes or quarter participation/void rule'}
+    for player in players:
+        if player['id'] in quarters:
+            player['quarters'] = quarters[player['id']]
+    return result
 
 
 def refresh(root=None, fetch=None, now=None, limit=20):

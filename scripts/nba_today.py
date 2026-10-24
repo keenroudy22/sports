@@ -19,6 +19,16 @@ STAT_NAMES={'pts':'points','reb':'rebounds','ast':'assists','fg3m':'threes','pra
 FLOORS={'pts':15,'reb':5,'ast':4,'fg3m':2}
 
 
+def public_payloads(data):
+    """Keep game-only views light; preserve every comparison in a lazy payload."""
+    props = data.get('playerProps', {})
+    overview = {k: v for k, v in data.items() if k != 'playerProps'}
+    overview['playerPropsFile'] = 'nba-props.json'
+    overview['playerProps'] = {k: props[k] for k in ('availabilityAt', 'availableRows', 'note') if k in props}
+    overview['teamTrends'] = list({json.dumps(r, sort_keys=True): r for r in data.get('teamTrends', [])}.values())
+    return overview, {'generatedAt': data.get('generatedAt'), **props}
+
+
 def read_json(path, fallback):
     try:
         return json.loads(path.read_text())
