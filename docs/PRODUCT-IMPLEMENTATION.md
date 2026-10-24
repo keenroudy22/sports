@@ -1,6 +1,6 @@
 # October 5 product implementation tracker
 
-## October23 X straight-caption spacing — verification in progress
+## October23 X straight-caption spacing — verified October24 at01:37Z
 
 Owner requested good spacing on X. All four straight-bet template shapes now
 carry deliberate paragraph breaks between the ticket/price, explanation and
@@ -10,7 +10,24 @@ heading/one-leg-per-line layout and separate Playbook/age paragraphs remain.
 No wager detail, budget, stake, category or sent receipt changed. Focused61tests
 pass, including all four shapes through final X formatting, empty fields,
 current-price placement, parlay integrity, age notice and weighted-length holds.
-Full release gates and hosted verification must pass before this is shipped.
+
+Source bf8df20f (original5c17e2fc) is installed and deployed. Normal and clean
+export1756Python/two skips and281Node passed, plus build/feed/budget/record114/
+NBA0/publication/assets and isolated21:00 rehearsal6mzufamq (zero outside writes
+or private reads). A concurrent hosted capture rejected the first push; both
+writers were preserved and every gate repeated. Hosted40048525406SUCCESS
+verified0c951b95bf7a1b38696d283373cf2aff13584fde, including the fix and queued edit;
+24upstream files triggered10rechecks, including1756Python/281Node and rebuild.
+Live375px reload has no overflow, loading error or console warning/error.
+Existing payload soft warnings remain; this formatting change does not fix them.
+
+The only observed pending caption, NBA projections forOctober24 at08:06Eastern,
+was confirmed private/scheduled in Buffer and edited with blank lines after its
+heading and before its research label. Readback confirmed256weighted characters,
+identical words/numbers, image and time. No new post, sent-post edit or cancellation.
+The original caption/hash/mirror remain in captionRevisions; pending Discord text
+is unchanged because this request was X spacing. Normal log writer saved2f7cdca9.
+Receipt-only documentation is retained on dev for the next normal safe release.
 
 ## October23 evening NBA/quarter/site release — verified live at00:53Z October24
 
