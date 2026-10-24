@@ -1,62 +1,62 @@
 {
- "at": "2026-10-24T11:13:33Z",
+ "at": "2026-10-24T11:24:55Z",
  "confirmed": {
-  "CFB-401856727": "2026-10-24T08:37:43Z",
-  "CFB-401856728": "2026-10-24T11:14:56Z",
-  "CFB-401856730": "2026-10-24T08:37:43Z",
-  "CFB-401856731": "2026-10-24T08:37:43Z",
-  "CFB-401856834": "2026-10-24T08:37:43Z",
-  "CFB-401856835": "2026-10-24T08:37:43Z",
+  "CFB-401856727": "2026-10-24T11:30:36Z",
+  "CFB-401856728": "2026-10-24T11:30:36Z",
+  "CFB-401856730": "2026-10-24T11:30:36Z",
+  "CFB-401856731": "2026-10-24T11:30:36Z",
+  "CFB-401856834": "2026-10-24T11:30:36Z",
+  "CFB-401856835": "2026-10-24T11:30:36Z",
   "CFB-401856839": "2026-10-23T01:07:27Z",
-  "CFB-401856840": "2026-10-24T11:14:56Z",
-  "CFB-401856841": "2026-10-24T11:14:56Z",
-  "CFB-401858270": "2026-10-24T11:14:56Z",
-  "CFB-401858273": "2026-10-24T08:37:43Z",
-  "CFB-401858274": "2026-10-24T11:14:56Z",
-  "CFB-401858495": "2026-10-24T08:37:43Z",
-  "CFB-401858496": "2026-10-24T11:14:56Z",
-  "CFB-401858497": "2026-10-24T08:37:43Z",
-  "CFB-401858498": "2026-10-24T11:14:56Z",
+  "CFB-401856840": "2026-10-24T11:30:36Z",
+  "CFB-401856841": "2026-10-24T11:30:36Z",
+  "CFB-401858270": "2026-10-24T11:30:36Z",
+  "CFB-401858273": "2026-10-24T11:30:36Z",
+  "CFB-401858274": "2026-10-24T11:30:36Z",
+  "CFB-401858495": "2026-10-24T11:30:36Z",
+  "CFB-401858496": "2026-10-24T11:30:36Z",
+  "CFB-401858497": "2026-10-24T11:30:36Z",
+  "CFB-401858498": "2026-10-24T11:30:36Z",
   "CFB-401858499": "2026-10-24T00:05:23Z",
-  "CFB-401862809": "2026-10-24T08:37:43Z",
+  "CFB-401862809": "2026-10-24T11:30:36Z",
   "CFB-401862810": "2026-10-24T00:05:23Z",
   "CFB-401864526": "2026-10-23T01:07:27Z",
-  "CFB-401866446": "2026-10-24T08:37:43Z",
+  "CFB-401866446": "2026-10-24T11:30:36Z",
   "CFB-401866447": "2026-10-23T01:07:27Z",
   "CFB-401866448": "2026-10-23T01:07:27Z",
   "CFB-401866449": "2026-10-23T01:07:27Z",
-  "CFB-401866450": "2026-10-24T08:37:43Z",
-  "CFB-401866476": "2026-10-24T08:37:43Z",
+  "CFB-401866450": "2026-10-24T11:30:36Z",
+  "CFB-401866476": "2026-10-24T11:30:36Z",
   "CFB-401869967": "2026-10-23T01:07:27Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 2154,
-    "fanduel": 108
+    "draftkings": 5136,
+    "fanduel": 5159
    },
    "eventsListed": 117,
    "eventsMatched": 43,
    "games": 44,
    "marketTypes": {
-    "player_field_goals_made": 9,
-    "player_kicking_points": 9,
-    "player_longest_passing_completion": 13,
-    "player_longest_reception": 43,
-    "player_longest_rush": 24,
-    "player_passing_+_rushing_yards": 118,
-    "player_passing_attempts": 56,
-    "player_passing_completions": 55,
-    "player_passing_touchdowns": 44,
-    "player_passing_yards": 274,
-    "player_receiving_yards": 512,
-    "player_receptions": 124,
-    "player_rushing_attempts": 73,
-    "player_rushing_yards": 284,
-    "point_spread": 624
+    "player_field_goals_made": 17,
+    "player_kicking_points": 17,
+    "player_longest_passing_completion": 27,
+    "player_longest_reception": 103,
+    "player_longest_rush": 54,
+    "player_passing_+_rushing_yards": 290,
+    "player_passing_attempts": 108,
+    "player_passing_completions": 108,
+    "player_passing_touchdowns": 223,
+    "player_passing_yards": 918,
+    "player_receiving_yards": 2463,
+    "player_receptions": 883,
+    "player_rushing_attempts": 139,
+    "player_rushing_yards": 1565,
+    "point_spread": 3380
    },
    "requestsLeft": 0,
-   "rows": 2262,
+   "rows": 10295,
    "slateGames": [
     "LSU Tigers at Auburn Tigers 2026-10-24T16:00Z",
     "Texas Tech Red Raiders at Cincinnati Bearcats 2026-10-24T16:00Z",
@@ -152,9 +152,13 @@
       "home_team": "Brown",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -190,9 +194,13 @@
       "home_team": "Central Connecticut",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -205,7 +213,7 @@
       "fanduel": "36208865",
       "fliff": "420752_c_p_209_prematch",
       "hardrock": "1158597414546964891",
-      "kalshi": "KXNCAAFTOTAL-26OCT24USDDAY",
+      "kalshi": "KXNCAAFSPREAD-26OCT24USDDAY",
       "novig": "01a14577-5919-7011-b0e0-b3a85b5b3f7f",
       "onexbet": "763706345",
       "paddypower": "36208865",
@@ -226,9 +234,13 @@
       "home_team": "Dayton Flyers",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -264,9 +276,13 @@
       "home_team": "Duquesne",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -301,6 +317,7 @@
       "home_team": "Long Island University",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -340,9 +357,13 @@
       "home_team": "Marist",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -379,9 +400,14 @@
       "home_team": "Merrimack",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -417,9 +443,13 @@
       "home_team": "Rhode Island Rams",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-24T16:00:00Z",
@@ -454,6 +484,7 @@
       "home_team": "Bethune-Cookman",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -491,6 +522,7 @@
       "home_team": "Holy Cross",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -528,6 +560,7 @@
       "home_team": "Drake",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
