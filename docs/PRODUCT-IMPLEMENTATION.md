@@ -4398,8 +4398,10 @@ history selected a closing ask that reason_in mistook for evidence. Exclude
 every approved ask from extracted reasons; regression tests every ask with
 a reasonless gut-call and requires refusal. The POTD test now checks its actual
 Hot Plate prefix; a cooking emoji in an approved closing ask is not a POTD badge.
-No source evidence, admission threshold or sent post changes. Release pending
-full normal/clean/locked gates and hosted/live proof.
+No source evidence, admission threshold or sent post changes. Release3bb7ee1b/40064062209SUCCESS. Normal/clean/locked1765Python(2skip)/
+281Node,492pages/114record/NBA/guard/assets/SVG and offline rehearsals passed.
+Four local and four live375/1440rendered pages clean; initial loading capture
+superseded. Exact evidence work/overnight-20261024-outcomes.json.
 Overnight UMass/UConn over50.5 won51/+0.463u; final02:25:14Z, grade1second,
 official Discord02:33:18Z(8.07m),X02:59:46.345Z(34.54m),mirror03:01:53Z.
 02:36:07Z log holds result for unavailable hosted card; next existing02:57:34Z
