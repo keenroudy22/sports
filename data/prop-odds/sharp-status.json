@@ -1,10 +1,10 @@
 {
- "at": "2026-10-25T10:45:08Z",
+ "at": "2026-10-25T11:30:07Z",
  "confirmed": {
   "NFL-401873009": "2026-10-25T00:42:46Z",
-  "NFL-401873011": "2026-10-25T10:46:07Z",
-  "NFL-401873012": "2026-10-25T10:46:07Z",
-  "NFL-401873013": "2026-10-25T10:46:07Z",
+  "NFL-401873011": "2026-10-25T11:31:34Z",
+  "NFL-401873012": "2026-10-25T11:31:34Z",
+  "NFL-401873013": "2026-10-25T11:31:34Z",
   "NFL-401873014": "2026-10-25T08:56:34Z",
   "NFL-401873015": "2026-10-25T08:56:34Z",
   "NFL-401873016": "2026-10-25T08:56:34Z",
@@ -18,39 +18,39 @@
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 595,
-    "fanduel": 894
+    "draftkings": 1778,
+    "fanduel": 887
    },
-   "eventsListed": 30,
+   "eventsListed": 31,
    "eventsMatched": 13,
    "games": 13,
    "marketTypes": {
-    "player_assists": 14,
-    "player_extra_points_made": 4,
-    "player_fantasy_score": 12,
-    "player_field_goals_made": 4,
-    "player_interceptions": 4,
-    "player_kicking_points": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 22,
-    "player_longest_rush": 10,
-    "player_passing_+_rushing_yards": 4,
-    "player_passing_attempts": 4,
-    "player_passing_completions": 4,
-    "player_passing_touchdowns": 29,
-    "player_passing_yards": 91,
-    "player_receiving_yards": 456,
-    "player_receptions": 275,
-    "player_rushing_+_receiving_yards": 20,
-    "player_rushing_attempts": 4,
-    "player_rushing_yards": 192,
-    "player_sacks": 37,
-    "player_tackles": 14,
-    "player_tackles_+_assists": 14,
-    "point_spread": 267
+    "player_assists": 68,
+    "player_extra_points_made": 12,
+    "player_fantasy_score": 34,
+    "player_field_goals_made": 12,
+    "player_interceptions": 12,
+    "player_kicking_points": 12,
+    "player_longest_passing_completion": 12,
+    "player_longest_reception": 64,
+    "player_longest_rush": 32,
+    "player_passing_+_rushing_yards": 12,
+    "player_passing_attempts": 12,
+    "player_passing_completions": 12,
+    "player_passing_touchdowns": 30,
+    "player_passing_yards": 193,
+    "player_receiving_yards": 811,
+    "player_receptions": 482,
+    "player_rushing_+_receiving_yards": 34,
+    "player_rushing_attempts": 19,
+    "player_rushing_yards": 284,
+    "player_sacks": 51,
+    "player_tackles": 54,
+    "player_tackles_+_assists": 54,
+    "point_spread": 359
    },
    "requestsLeft": 0,
-   "rows": 1489,
+   "rows": 2665,
    "slateGames": [
     "Pittsburgh Steelers at New Orleans Saints 2026-10-25T13:30Z",
     "Cincinnati Bengals at Baltimore Ravens 2026-10-25T17:00Z",
@@ -80,7 +80,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-25T10:29:00Z",
+     "start": "2026-10-25T11:26:00Z",
      "type": "outright"
     },
     {
@@ -97,6 +97,24 @@
       ]
      },
      "start": "2026-10-25T13:30:00Z",
+     "type": "unknown"
+    },
+    {
+     "away": null,
+     "external": {
+      "draftkings": "a077d7cc-9519-422a-0549-08df2e84886a"
+     },
+     "home": "NFL 2026/27 - Week 7 Specials",
+     "sample": {
+      "away_team": "",
+      "home_team": "NFL 2026/27 - Week 7 Specials",
+      "markets": [
+       "both_teams_to_score",
+       "highest_scoring_half",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-25T17:00:00Z",
      "type": "unknown"
     },
     {
@@ -436,42 +454,6 @@
       ]
      },
      "start": "2026-11-01T18:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Los Angeles Chargers",
-     "external": {
-      "betonline": "491159691",
-      "betparx": "1028823876",
-      "betrivers": "1028823876",
-      "circa": "228689",
-      "draftkings": "34118097",
-      "fanduel": "36215316",
-      "fliff": "407894_c_p_202_prematch",
-      "kalshi": "KXNFLGAME-26NOV01LACLAR",
-      "novig": "01a15b07-880f-7ba2-b578-c362afcdfa12",
-      "paddypower": "36215316",
-      "polymarket": "nfl_chargers_rams_2026-11-01_b2",
-      "polymarket_us": "nfl-lac-lar-2026-11-01",
-      "robinhood": "40eef4ae-9adb-4be7-a97a-a8eac4e314d3",
-      "sport888_it": "1028823876",
-      "stake": "382c497c-4f6c-4588-b82e-f10b9ec044d4"
-     },
-     "home": "Los Angeles Rams",
-     "sample": {
-      "away_team": "Los Angeles Chargers",
-      "home_team": "Los Angeles Rams",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
-      ]
-     },
-     "start": "2026-11-01T21:05:00Z",
      "type": "fixture"
     }
    ]
