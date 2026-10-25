@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-10-25T17:04:14Z",
+  "selectedAt": "2026-10-25T18:45:19Z",
   "mode": "local",
   "rows": [
     {
@@ -12,15 +12,29 @@
       "kind": "trend",
       "label": "Season trend",
       "player": "Adam Trautman",
-      "stat": "recYds",
-      "title": "Adam Trautman \u00b7 Over 0.5 receiving yards",
-      "text": "9/10 recorded games this season. DraftKings +107 captured; history, not a prediction.",
-      "observedAt": "2026-10-25T13:54:48Z",
-      "expiresAt": "2026-10-25T17:54:48Z",
+      "stat": "rec",
+      "title": "Adam Trautman \u00b7 Over 0.5 receptions",
+      "text": "9/10 recorded games this season. DraftKings -103 captured; history, not a prediction.",
+      "observedAt": "2026-10-25T18:31:26Z",
+      "expiresAt": "2026-10-25T20:05:00Z",
       "rate": 0.9,
       "sample": 10,
-      "price": 107,
+      "price": -103,
       "id": "E0"
+    },
+    {
+      "gameId": "NBA-401909861",
+      "league": "NBA",
+      "kind": "schedule",
+      "label": "Next up",
+      "kickoff": "2026-10-25T21:00:00Z",
+      "matchup": "LAL at UTAH",
+      "title": "LAL at UTAH",
+      "text": "Sun 5:00 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-10-25T18:26:42Z",
+      "expiresAt": "2026-10-25T21:00:00Z",
+      "href": "#scores/NBA",
+      "id": "E10"
     },
     {
       "gameId": "NHL-401892578",
@@ -31,8 +45,8 @@
       "matchup": "FLA at CHI",
       "title": "FLA at CHI",
       "text": "Sun 3:00 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-10-25T13:48:20Z",
-      "expiresAt": "2026-10-25T17:48:20Z",
+      "observedAt": "2026-10-25T18:26:42Z",
+      "expiresAt": "2026-10-25T19:00:00Z",
       "href": "#scores/NHL",
       "id": "E13"
     }
