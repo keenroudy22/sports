@@ -33908,5 +33908,352 @@
         "units": -0.5
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-10-25T10:55:50Z",
+    "summary": "Released 1: Jacoby Brissett OVER 37.5 pass attempts -102 at DraftKings.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": true,
+        "modelLean": true,
+        "position": "QB",
+        "athleteId": "2578570",
+        "market": "att",
+        "line": 37.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401873019"
+        ],
+        "book": "DraftKings",
+        "odds": -102,
+        "projection": 40.9,
+        "edge": "Price-checked chance 51.6% against the exact two-sided price; 50.5% needed at -102: +1.1 percentage points.",
+        "cutoff": "OVER 37.5 at -102 or better; off the card at 38+, or at -117 or worse at 37.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-24T22:41:01Z",
+        "quotedAt": "2026-10-25T08:56:34Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 4:56 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-25T11:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "chef_pick",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.644,
+          "chance": 0.516,
+          "calibrated": true,
+          "calibration": 0.11,
+          "calibrationN": 2285,
+          "push": 0.0,
+          "breakEven": 0.505,
+          "edgePoints": 1.1,
+          "evPerUnit": 0.022,
+          "snapshotAt": "2026-10-24T22:41:01Z",
+          "evaluatedAt": "2026-10-25T10:46:32Z",
+          "fairChance": 0.476,
+          "anchoredChance": 0.516,
+          "gap": 4.0,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Denver Broncos at Arizona Cardinals",
+        "title": "Jacoby Brissett OVER 37.5 pass attempts",
+        "id": "NFL-2026-W7-brissett-over-37-5-att-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873019",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.denverbroncos.com/news/injuryreport/injury-report-cb-pat-surtain-ii-and-rb-jonah-coleman-questionable-for-week-7-vs-cardinals-3-broncos-ruled-out",
+          "https://www.azcardinals.com/news/tyler-allgeier-bam-knight-combo-ready-jeremiyah-love-out-broncos-game",
+          "https://www.azcardinals.com/news/injury-report-week-7-vs-broncos"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 3 of 10 over 37.5.",
+          "context": [
+            "Role: projected for 40.9 att a game.",
+            "Defense: DEN allows 36 pass attempts a game to QBs, 24th-stingiest of 32 this season."
+          ],
+          "cautions": [
+            "Only 3 of the last 10 games cleared this side of the line; recent results oppose it."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 40.9 against 37.5. The over reads 51.6% after adjustment from the raw 64.4%; 50.5% is needed at -102. Last 10 games: 3 of 10 over 37.5. Role: projected for 40.9 att a game. Defense: DEN allows 36 pass attempts a game to QBs, 24th-stingiest of 32 this season.",
+        "risk": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 37.5. I say 40.9.",
+              "numbers": {
+                "projection": 40.9,
+                "line": 37.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-24T22:41:01Z"
+            },
+            {
+              "text": "Denver ruled out safety Talanoa Hufanga with an ankle injury and listed cornerback Pat Surtain II as questionable with an ankle injury.",
+              "numbers": {},
+              "source": "https://www.denverbroncos.com/news/injuryreport/injury-report-cb-pat-surtain-ii-and-rb-jonah-coleman-questionable-for-week-7-vs-cardinals-3-broncos-ruled-out",
+              "time": "2026-10-25T10:46:32Z"
+            },
+            {
+              "text": "Denver ruled out safety Talanoa Hufanga with an ankle injury and listed cornerback Pat Surtain II as questionable with an ankle injury.",
+              "numbers": {},
+              "source": "https://www.denverbroncos.com/news/injuryreport/injury-report-cb-pat-surtain-ii-and-rb-jonah-coleman-questionable-for-week-7-vs-cardinals-3-broncos-ruled-out",
+              "time": "2026-10-25T10:46:32Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "2 of his last 5 games finished over 37.5 pass attempts.",
+              "numbers": {
+                "values": [
+                  28,
+                  52,
+                  35,
+                  47,
+                  35
+                ],
+                "hits": 2,
+                "games": 5,
+                "line": 37.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-18T20:05Z"
+            },
+            {
+              "text": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-10-25T10:46:32Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Denver ruled out safety Talanoa Hufanga with an ankle injury and listed cornerback Pat Surtain II as questionable with an ankle injury.",
+              "numbers": {},
+              "source": "https://www.denverbroncos.com/news/injuryreport/injury-report-cb-pat-surtain-ii-and-rb-jonah-coleman-questionable-for-week-7-vs-cardinals-3-broncos-ruled-out",
+              "time": "2026-10-25T10:46:32Z"
+            },
+            {
+              "text": "Denver ruled out safety Talanoa Hufanga with an ankle injury and listed cornerback Pat Surtain II as questionable with an ankle injury.",
+              "numbers": {},
+              "source": "https://www.denverbroncos.com/news/injuryreport/injury-report-cb-pat-surtain-ii-and-rb-jonah-coleman-questionable-for-week-7-vs-cardinals-3-broncos-ruled-out",
+              "time": "2026-10-25T10:46:32Z"
+            },
+            {
+              "text": "Jon Gaines II (ARI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4367199/jon-gaines-ii",
+              "time": "2026-10-24T01:43Z"
+            },
+            {
+              "text": "Andrew Wingard (ARI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3918331/andrew-wingard",
+              "time": "2026-10-24T00:57Z"
+            },
+            {
+              "text": "Max Melton (ARI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4698113/max-melton",
+              "time": "2026-10-24T00:55Z"
+            },
+            {
+              "text": "Budda Baker (ARI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3127287/budda-baker",
+              "time": "2026-10-24T00:52Z"
+            },
+            {
+              "text": "Carson Beck (ARI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4430841/carson-beck",
+              "time": "2026-10-24T00:50Z"
+            },
+            {
+              "text": "Walter Nolen III (ARI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4685503/walter-nolen-iii",
+              "time": "2026-10-23T23:19Z"
+            },
+            {
+              "text": "Jeremiyah Love (ARI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love",
+              "time": "2026-10-23T17:41Z"
+            },
+            {
+              "text": "Darius Robinson (ARI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4569480/darius-robinson",
+              "time": "2026-10-22T23:26Z"
+            },
+            {
+              "text": "Jonah Coleman (DEN) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4702555/jonah-coleman",
+              "time": "2026-10-24T20:48Z"
+            },
+            {
+              "text": "Talanoa Hufanga (DEN) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4360853/talanoa-hufanga",
+              "time": "2026-10-24T00:44Z"
+            },
+            {
+              "text": "Pat Surtain II (DEN) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4372012/pat-surtain-ii",
+              "time": "2026-10-22T23:47Z"
+            }
+          ],
+          "weather": null,
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 37.5,
+                  "price": -122,
+                  "time": "2026-10-25T00:42:46Z"
+                },
+                "now": {
+                  "line": 37.5,
+                  "price": -102,
+                  "time": "2026-10-25T08:56:34Z"
+                }
+              },
+              "FanDuel": null
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 37.5,
+              "price": -102,
+              "time": "2026-10-25T08:56:34Z"
+            }
+          },
+          "ours": {
+            "projection": 40.9,
+            "line": 37.5,
+            "market": "att",
+            "text": "Book says 37.5. I say 40.9.",
+            "snapshotAt": "2026-10-24T22:41:01Z"
+          },
+          "history": "Last 10 games: 3 of 10 over 37.5.",
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.denverbroncos.com/news/injuryreport/injury-report-cb-pat-surtain-ii-and-rb-jonah-coleman-questionable-for-week-7-vs-cardinals-3-broncos-ruled-out",
+              "time": "2026-10-25T10:46:32Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4367199/jon-gaines-ii",
+              "time": "2026-10-24T01:43Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3918331/andrew-wingard",
+              "time": "2026-10-24T00:57Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4698113/max-melton",
+              "time": "2026-10-24T00:55Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3127287/budda-baker",
+              "time": "2026-10-24T00:52Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4430841/carson-beck",
+              "time": "2026-10-24T00:50Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4685503/walter-nolen-iii",
+              "time": "2026-10-23T23:19Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love",
+              "time": "2026-10-23T17:41Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4569480/darius-robinson",
+              "time": "2026-10-22T23:26Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4702555/jonah-coleman",
+              "time": "2026-10-24T20:48Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4360853/talanoa-hufanga",
+              "time": "2026-10-24T00:44Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4372012/pat-surtain-ii",
+              "time": "2026-10-22T23:47Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873019",
+              "time": "2026-10-25T10:46:32Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-25T10:46:32Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.azcardinals.com/news/tyler-allgeier-bam-knight-combo-ready-jeremiyah-love-out-broncos-game",
+              "time": "2026-10-25T10:46:32Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.azcardinals.com/news/injury-report-week-7-vs-broncos",
+              "time": "2026-10-25T10:46:32Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-25T10:55:50Z"
+      }
+    ]
   }
 ]
