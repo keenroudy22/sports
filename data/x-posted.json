@@ -7099,8 +7099,8 @@
   {
    "id": "receipt:day:2026-10-24",
    "postedAt": "2026-10-25T04:27:39Z",
-   "dueAt": "2026-10-25T13:06:00Z",
-   "bufferPostId": "6add853f3d5b27036bb706cb",
+   "dueAt": "2026-10-25T13:12:10Z",
+   "bufferPostId": "6addf8028b3d437ddc093eb0",
    "textHash": "8363ce0f740fb676",
    "kind": "buffer:receipt",
    "card": true,
@@ -7109,7 +7109,16 @@
    "socialStyleVersion": "plain-20261022",
    "socialVoiceVersion": "casual-20261022",
    "socialAgeVersion": "age-20261023",
-   "cardKey": "receipt-day-2026-10-24"
+   "cardKey": "receipt-day-2026-10-24",
+   "deliveryHistory": [
+    {
+     "bufferPostId": "6add853f3d5b27036bb706cb",
+     "dueAt": "2026-10-25T13:06:00Z",
+     "rescheduledAt": "2026-10-25T12:37:10Z",
+     "reason": "Fresh official play takes priority"
+    }
+   ],
+   "rescheduledAt": "2026-10-25T12:37:10Z"
   },
   {
    "id": "NFL-2026-W7-brissett-over-37-5-att-dk",
