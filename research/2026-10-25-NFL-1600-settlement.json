@@ -1,0 +1,290 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-25T20:00:13Z",
+  "targetWeek": 7,
+  "summary": "Research update for Oct 25: Settled 1: Geno Smith UNDER 20.5 completions loss. Nothing to close. Nothing published. odds_api.py: CFB: skipped (6 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "QB",
+      "athleteId": "15864",
+      "market": "cmp",
+      "line": 20.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401873015"
+      ],
+      "book": "DraftKings",
+      "odds": 103,
+      "projection": 20.0,
+      "edge": "Price-checked chance 50.4% against the exact two-sided price; 49.3% needed at +103: +1.1 percentage points.",
+      "cutoff": "UNDER 20.5 at +103 or better; off the card at 20 or lower, or at -112 or worse at 20.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-24T19:11:56Z",
+      "quotedAt": "2026-10-25T08:56:34Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 4:56 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-25T11:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 0.5,
+      "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.532,
+        "chance": 0.504,
+        "calibrated": true,
+        "calibration": 0.11,
+        "calibrationN": 2285,
+        "push": 0.0,
+        "breakEven": 0.493,
+        "edgePoints": 1.1,
+        "evPerUnit": 0.022,
+        "snapshotAt": "2026-10-24T19:11:56Z",
+        "evaluatedAt": "2026-10-25T10:46:32Z",
+        "fairChance": 0.465,
+        "anchoredChance": 0.504,
+        "gap": 3.9,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Miami Dolphins at New York Jets",
+      "title": "Geno Smith UNDER 20.5 completions",
+      "id": "NFL-2026-W7-smith-under-20-5-cmp-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873015",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 8 of 10 under 20.5.",
+        "context": [
+          "Role: projected for 29.3 att a game.",
+          "Defense: MIA allows 22.2 completions a game to QBs, 21st-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 20 against 20.5. The under reads 50.4% after adjustment from the raw 53.2%; 49.3% is needed at +103. Last 10 games: 8 of 10 under 20.5. Role: projected for 29.3 att a game. Defense: MIA allows 22.2 completions a game to QBs, 21st-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Under 20.5 in 8 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-10-25T10:46:32Z"
+          },
+          {
+            "text": "Book says 20.5. I say 20.",
+            "numbers": {
+              "projection": 20.0,
+              "line": 20.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-24T19:11:56Z"
+          },
+          {
+            "text": "3 of his last 5 games finished under 20.5 completions.",
+            "numbers": {
+              "values": [
+                27,
+                31,
+                8,
+                17,
+                20
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 20.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-18T17:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-10-25T10:46:32Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Max Mitchell (NYJ) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4373656/max-mitchell",
+            "time": "2026-10-24T01:28Z"
+          },
+          {
+            "text": "Kene Nwangwu (NYJ) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4035537/kene-nwangwu",
+            "time": "2026-10-23T23:56Z"
+          },
+          {
+            "text": "Joseph Ossai (NYJ) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai",
+            "time": "2026-10-23T22:04Z"
+          },
+          {
+            "text": "Breece Hall (NYJ) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall",
+            "time": "2026-10-23T15:05Z"
+          },
+          {
+            "text": "Dylan Parham (NYJ) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham",
+            "time": "2026-10-22T01:11Z"
+          },
+          {
+            "text": "Reese Taylor (MIA) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4371946/reese-taylor",
+            "time": "2026-10-24T02:00Z"
+          },
+          {
+            "text": "Robert Beal Jr. (MIA) is listed Doubtful.",
+            "numbers": {
+              "status": "Doubtful"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4259558/robert-beal-jr",
+            "time": "2026-10-23T20:18Z"
+          },
+          {
+            "text": "Willie Gay Jr. (MIA) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4259804/willie-gay-jr",
+            "time": "2026-10-22T20:18Z"
+          }
+        ],
+        "weather": {
+          "tempF": 64,
+          "windMph": 2,
+          "windDirection": "W",
+          "precipProb": 0,
+          "periodStart": "2026-10-25T13:00:00-04:00",
+          "issuedAt": "2026-10-24T06:37:05+00:00",
+          "source": "https://api.weather.gov/gridpoints/OKX/29,47/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 21.5,
+                "price": -136,
+                "time": "2026-10-25T00:42:46Z"
+              },
+              "now": {
+                "line": 20.5,
+                "price": 103,
+                "time": "2026-10-25T08:56:34Z"
+              }
+            },
+            "FanDuel": null
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 20.5,
+            "price": 103,
+            "time": "2026-10-25T08:56:34Z"
+          }
+        },
+        "ours": {
+          "projection": 20.0,
+          "line": 20.5,
+          "market": "cmp",
+          "text": "Under 20.5 in 8 of his last 10 games.",
+          "snapshotAt": "2026-10-24T19:11:56Z"
+        },
+        "history": "Last 10 games: 8 of 10 under 20.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4373656/max-mitchell",
+            "time": "2026-10-24T01:28Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4035537/kene-nwangwu",
+            "time": "2026-10-23T23:56Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai",
+            "time": "2026-10-23T22:04Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall",
+            "time": "2026-10-23T15:05Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham",
+            "time": "2026-10-22T01:11Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4371946/reese-taylor",
+            "time": "2026-10-24T02:00Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4259558/robert-beal-jr",
+            "time": "2026-10-23T20:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4259804/willie-gay-jr",
+            "time": "2026-10-22T20:18Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/OKX/29,47/forecast/hourly",
+            "time": "2026-10-24T06:37:05+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873015",
+            "time": "2026-10-25T10:46:32Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-25T10:46:32Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-25T10:55:50Z",
+      "result": "loss",
+      "actual": "Geno Smith: 23 completions",
+      "settledAt": "2026-10-25T20:00:13Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873015",
+      "actualValue": 23,
+      "units": -0.5
+    }
+  ]
+}
