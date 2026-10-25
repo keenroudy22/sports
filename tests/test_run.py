@@ -489,6 +489,7 @@ class CandidateCatalogTests(unittest.TestCase):
                 run.researcher, 'research', return_value=([{'claim': 'fact'}], [])) as lookup, mock.patch.object(
                 run, 'plan_reasons', side_effect=[[], [reason], []]):
             self.assertEqual(run.attach_ticket_reasons(ticket, ctx, budget), [])
+            self.assertEqual(lookup.call_args.args[2], 'home')
             self.assertEqual(budget['asked'], run.RESEARCH_LIMIT)
             self.assertEqual(run.attach_ticket_reasons(ticket, ctx, budget), ['A'])
             self.assertEqual(lookup.call_count, 1)

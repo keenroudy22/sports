@@ -877,6 +877,7 @@ def attach_ticket_reasons(ticket, ctx, research_status=None):
     league = ticket.get('_league') or ticket.get('league')
     for leg in ticket.get('legs') or []:
         case = dict(leg, gameIds=[leg.get('gameId')], _league=league,
+                    direction=leg.get('direction') or leg.get('side'),
                     _team=(getattr(ctx, 'player_team', {}) or {}).get(str(leg.get('athleteId') or '')),
                     _player=leg.get('player'))
         try:
