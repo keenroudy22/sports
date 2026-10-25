@@ -398,8 +398,8 @@ def post(games, now):
                 when = "Tomorrow's " if preview else 'Full '
                 lead = (f"📌 {when}{name} projections for the slate." if league == 'NFL' else
                         f"📌 {when}{name} projections for the slate.")
-            middle = ("My number next to Vegas, plus the line I like most."
-                      if len(todays) == 1 else "My favorite 4 to 6 priced projections are numbered.")
+            middle = ("My number next to Vegas, plus the line I like most." if len(todays) == 1
+                      else "My scores next to the book. Numbered lines are the ones I’m watching.")
             text = lead + f"\n{middle}\n📌 Save this one\n#{league}"
             return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
                     'due': max(due_at, now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
