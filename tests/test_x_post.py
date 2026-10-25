@@ -49,6 +49,21 @@ PROP = {'id': 'NFL-2026-W4-p7-over-4-5-rec-dk', 'title': 'Player Seven over 4.5 
 
 
 class DraftTests(unittest.TestCase):
+    def test_long_searchable_ticket_keeps_wager_and_reason_with_final_tail(self):
+        from social_copy import x_ticket_copy
+        pick = dict(PROP, id='NFL-long-caption', title='Jaylen Warren over 28.5 receiving yards',
+                    line=28.5, projection=39.8, odds=105, book='ESPN BET', lane='gut_call')
+        game = {'league': 'NFL', 'away': {'name': 'Pittsburgh Steelers'},
+                'home': {'name': 'New Orleans Saints'}}
+        reason = '4 of his last 5 games finished over 28.5 receiving yards.'
+        text = x_post.draft(pick, game, reason=reason, history=[])
+        final = x_ticket_copy(text, 'play', pick['id'], pick)
+        self.assertLessEqual(x_post.tweet_length(final), 280)
+        for fact in ('Jaylen Warren', '28.5 rec yds', '+105', 'theScore Bet',
+                     'Pittsburgh Steelers at New Orleans Saints', reason, 'Copy the bet', '21+ only'):
+            self.assertIn(fact, final)
+        self.assertEqual(x_post.guard(text, pick, reason), [])
+
     def test_straight_shapes_keep_paragraphs_through_x_send_formatting(self):
         from social_copy import x_ticket_copy
         pick = dict(PICK, favorite=False, projection=31.2)

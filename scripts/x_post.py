@@ -651,6 +651,14 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
                 price_at = next((i for i, bit in enumerate(bits) if llm.re.search(r'\([+-]\d+,\s*[^)]+\)$', bit)), 0)
                 bits.insert(price_at + 1, now); top = '\n'.join(bits)
             options.append([top])
+        # Optional conversation copy must not strand an otherwise valid ticket.
+        # Preserve the full wager, matchup, current price and sourced reason;
+        # shorten only the repeated projection sentence and omit the extra ask.
+        compact_number = (f"I have it at {pick_card.plain_number(projection)}."
+                          if number else '')
+        if reason:
+            options.append(['\n\n'.join(part for part in (
+                play, now, '\n'.join(part for part in (compact_number, reason) if part), tail) if part)])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
         if tweet_length(text) <= LIMIT and not guard(text, pick, reason, now_quote):

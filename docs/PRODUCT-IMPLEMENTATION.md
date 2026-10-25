@@ -4494,3 +4494,15 @@ pass accepted it. Preserve historical latency; no duplicate retrospective post.
 Morning Final due13:02Z is accepted, not delivered. Earlier Oct22 Final
 actually sent Oct23 13:40:46.435Z. P48/A-20261010-3 and named morning repairs
 already shipped; finite Friday preparation complete, no reopened product scope.
+
+
+### October25 daily caption recovery — D-20261025-CAPTIONFIT
+
+Morning release held Warren at288characters after required closing text; Lance
+separately lacks a usable caption reason and remains held. Added a final compact
+straight option preserving full player/matchup/wager/book/price/current quote and
+complete sourced reason, shortening repeated projection prose and optional ask.
+Initial full1776 suite caught a reasonless TKKing shape change; promotion stopped.
+One bounded repair restricts fallback to a usable reason; focused caption/voice
+checks pass. Full repaired release gates and hosted/live evidence remain required.
+Unrelated untracked morning-research document preserved. No record/budget changes.
