@@ -1,0 +1,212 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-25T00:13:04Z",
+  "targetWeek": 8,
+  "summary": "Research update for Oct 24: Settled 1: Old Dominion at Louisiana Tech over 45.5 loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "settled",
+      "favorite": true,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 45.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401871093"
+      ],
+      "book": "FanDuel",
+      "odds": -104,
+      "projection": 49.4,
+      "edge": "Price-checked chance 53.4% against the exact two-sided price; 51.0% needed at -104: +2.4 percentage points.",
+      "cutoff": "OVER 45.5 at -104 or better; off the card at 47+, or at -119 or worse at 45.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-18T03:17:11Z",
+      "quotedAt": "2026-10-24T14:25:06Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 10:25 AM ET capture across 5 books, the best expected value on the board for this side. FanDuel is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-24T21:00:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "chef_pick",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.594,
+        "chance": 0.534,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.51,
+        "edgePoints": 2.4,
+        "evPerUnit": 0.047,
+        "snapshotAt": "2026-10-18T03:17:11Z",
+        "evaluatedAt": "2026-10-24T15:45:27Z",
+        "fairChance": 0.485,
+        "anchoredChance": 0.534,
+        "gap": 4.9,
+        "calibrationFamily": "CFB/total",
+        "calibrationMethod": "neutral-centered-fitted"
+      },
+      "matchup": "Old Dominion Monarchs at Louisiana Tech Bulldogs",
+      "title": "Old Dominion at Louisiana Tech over 45.5",
+      "id": "CFB-2026-W8-odu-lt-over-45-5-fd",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401871093",
+        "https://latechsports.com/news/2026/10/22/football-preview-la-tech-vs-old-dominion",
+        "https://odusports.com/news/2026/10/20/game-eight-preview-old-dominion-at-louisiana-tech"
+      ],
+      "why": "Model lean, our number only. We have the total at 49.4; the book is at 45.5. That makes the over 53.4%, and -104 needs 51.0%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Louisiana Tech identified Blake Baker as its quarterback in its October 22 preview of the Old Dominion game; the preview did not confirm his injury status or name a starter. The market: The spread opened -8.5 and is -13.5 at DraftKings, a move of 5 toward the home. 6 books span 44.5 to 45.5 on the total; the middle is 44.5. Our spread is 0.5 points off, bigger than 13% of our past gaps. Gaps this size went 1546-1557 against the close in 3584 games. Our total is 4.9 points off, bigger than 77% of our past gaps. Gaps this size went 455-371 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: Old Dominion had allowed 335.8 total yards per game entering the Louisiana Tech game. Statistical counterpoint: Old Dominion scored 15 points against Georgia Southern, and Louisiana Tech held ULM scoreless in its 24-0 win. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Louisiana Tech identified Blake Baker as its quarterback in its October 22 preview of the Old Dominion game; the preview did not confirm his injury status or name a starter.",
+          "Blake Baker had 497 passing yards, a 74.6% completion rate, six total touchdowns and no turnovers in conference play entering the Old Dominion game."
+        ],
+        "cautions": [
+          "Old Dominion had allowed 335.8 total yards per game entering the Louisiana Tech game.",
+          "Old Dominion scored 15 points against Georgia Southern, and Louisiana Tech held ULM scoreless in its 24-0 win."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Louisiana Tech identified Blake Baker as its quarterback in its October 22 preview of the Old Dominion game.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-10-24T15:45:27Z"
+          },
+          {
+            "text": "Book says 45.5. I say 49.4.",
+            "numbers": {
+              "projection": 49.4,
+              "line": 45.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-18T03:17:11Z"
+          },
+          {
+            "text": "Louisiana Tech identified Blake Baker as its quarterback in its October 22 preview of the Old Dominion game; the preview did not confirm his injury status or name a starter.",
+            "numbers": {},
+            "source": "https://latechsports.com/news/2026/10/22/football-preview-la-tech-vs-old-dominion",
+            "time": "2026-10-24T15:45:27Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Old Dominion had allowed 335.8 total yards per game entering the Louisiana Tech game.",
+            "numbers": {},
+            "source": "https://odusports.com/news/2026/10/20/game-eight-preview-old-dominion-at-louisiana-tech",
+            "time": "2026-10-24T15:45:27Z"
+          },
+          {
+            "text": "Old Dominion scored 15 points against Georgia Southern, and Louisiana Tech held ULM scoreless in its 24-0 win.",
+            "numbers": {},
+            "source": "https://odusports.com/news/2026/10/20/game-eight-preview-old-dominion-at-louisiana-tech",
+            "time": "2026-10-24T15:45:27Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Louisiana Tech identified Blake Baker as its quarterback in its October 22 preview of the Old Dominion game; the preview did not confirm his injury status or name a starter.",
+            "numbers": {},
+            "source": "https://latechsports.com/news/2026/10/22/football-preview-la-tech-vs-old-dominion",
+            "time": "2026-10-24T15:45:27Z"
+          },
+          {
+            "text": "Louisiana Tech identified Blake Baker as its quarterback in its October 22 preview of the Old Dominion game; the preview did not confirm his injury status or name a starter.",
+            "numbers": {},
+            "source": "https://latechsports.com/news/2026/10/22/football-preview-la-tech-vs-old-dominion",
+            "time": "2026-10-24T15:45:27Z"
+          }
+        ],
+        "weather": {
+          "tempF": 84,
+          "windMph": 5,
+          "windDirection": "E",
+          "precipProb": 0,
+          "periodStart": "2026-10-24T16:00:00-05:00",
+          "issuedAt": "2026-10-24T03:40:45+00:00",
+          "source": "https://api.weather.gov/gridpoints/SHV/115,69/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 45.5,
+                "price": -108,
+                "time": "2026-10-19T04:02:39Z"
+              },
+              "now": {
+                "line": 44.5,
+                "price": -112,
+                "time": "2026-10-24T14:25:06Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 46.5,
+                "price": -110,
+                "time": "2026-10-19T04:02:39Z"
+              },
+              "now": {
+                "line": 45.5,
+                "price": -104,
+                "time": "2026-10-24T14:25:06Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 45.5,
+            "price": -104,
+            "time": "2026-10-24T14:25:06Z"
+          }
+        },
+        "ours": {
+          "projection": 49.4,
+          "line": 45.5,
+          "market": "total",
+          "text": "Louisiana Tech identified Blake Baker as its quarterback in its October 22 preview of the Old Dominion game.",
+          "snapshotAt": "2026-10-18T03:17:11Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "role",
+            "url": "https://latechsports.com/news/2026/10/22/football-preview-la-tech-vs-old-dominion",
+            "time": "2026-10-24T15:45:27Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://odusports.com/news/2026/10/20/game-eight-preview-old-dominion-at-louisiana-tech",
+            "time": "2026-10-24T15:45:27Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/SHV/115,69/forecast/hourly",
+            "time": "2026-10-24T03:40:45+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401871093",
+            "time": "2026-10-24T15:45:27Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-24T15:55:08Z",
+      "result": "loss",
+      "actual": "Old Dominion 0, Louisiana Tech 26",
+      "settledAt": "2026-10-25T00:13:04Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401871093",
+      "actualValue": 26,
+      "units": -1
+    }
+  ]
+}
