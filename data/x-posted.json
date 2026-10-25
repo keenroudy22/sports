@@ -3270,7 +3270,8 @@
    },
    "metricsAt": "2026-10-22T20:38:56Z",
    "metricsRefreshAttempts": [
-    "2026-10-22T20:38:56Z"
+    "2026-10-22T20:38:56Z",
+    "2026-10-25T00:15:42Z"
    ],
    "metricsHistory": [
     {
@@ -3299,7 +3300,8 @@
      "providerUpdatedAt": "2026-10-22T12:29:01.427Z",
      "followup": true
     }
-   ]
+   ],
+   "metricsAttemptAt": "2026-10-25T00:15:42Z"
   },
   {
    "id": "receipt:day:2026-10-16",
@@ -6943,7 +6945,13 @@
     "sentAt": "2026-10-24T15:55:08Z",
     "beforeX": true,
     "text": "🍳 Chef's Pick: Old Dominion at Louisiana Tech over 45.5 (-104, FanDuel)\n\nBook says 45.5. I have it at 49, so I'm on the over.\nthe preview did not confirm his injury status or name a starter.\n\n#CFB\n\nCopy the bet 👇 @Playbook\n\n21+ only",
-    "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W8-odu-lt-over-45-5-fd.png"
+    "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W8-odu-lt-over-45-5-fd.png",
+    "result": {
+     "state": "sent",
+     "text": "❌ FINAL · MISS: Old Dominion/Louisiana Tech over 45.5\nOld Dominion 0, Louisiana Tech 26",
+     "settledAt": "2026-10-25T00:13:04Z",
+     "sentAt": "2026-10-25T00:15:42Z"
+    }
    },
    "bufferImage": "https://cdn.discordapp.com/attachments/1554299657432211558/1563581898905620540/kookn-card.png?ex=6ade269e&is=6adcd51e&hm=7975bd96bbabe676fe318eec676769f796004454e9cef9f79fbc8f6118a3d1d1&",
    "cardKey": "CFB-2026-W8-odu-lt-over-45-5-fd",
@@ -7037,6 +7045,26 @@
    "sentAt": "2026-10-24T23:13:31.313Z",
    "link": "https://x.com/1753110091912413184/status/2114133211835969738",
    "tweetId": "2114133211835969738"
+  },
+  {
+   "id": "nba-projections-2026-10-25",
+   "postedAt": "2026-10-25T00:15:42Z",
+   "dueAt": "2026-10-25T12:06:00Z",
+   "bufferPostId": "6add4a366887a2efc1df3386",
+   "textHash": "26489b7e98f63842",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "NBA Oct 25 🍳 My numbers:\nLos Angeles Lakers at Utah Jazz: 125-110.9\nIndiana Pacers at Brooklyn Nets: 114.1-109.9\nOrlando Magic at New York Knicks: 99.2-110.6\nToronto Raptors at Minnesota Timberwolves: 107.2-111.2\nResearch, not a bet.\n#NBA\n\n21+ only",
+   "socialStyleVersion": "plain-20261022",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "NBA Oct 25 🍳 My numbers:\nLos Angeles Lakers at Utah Jazz: 125-110.9\nIndiana Pacers at Brooklyn Nets: 114.1-109.9\nOrlando Magic at New York Knicks: 99.2-110.6\nToronto Raptors at Minnesota Timberwolves: 107.2-111.2\nResearch, not a bet.\n#NBA\n\n21+ only",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/nba-projections-2026-10-25.png"
+   }
   }
  ]
 }
