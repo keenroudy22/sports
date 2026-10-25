@@ -1,56 +1,239 @@
 {
- "at": "2026-10-25T19:51:47Z",
+ "at": "2026-10-25T21:30:08Z",
  "confirmed": {
-  "NFL-401873009": "2026-10-25T19:53:58Z",
-  "NFL-401873019": "2026-10-25T19:23:48Z",
-  "NFL-401873020": "2026-10-25T19:53:58Z",
-  "NFL-401873021": "2026-10-25T19:53:58Z",
-  "NFL-401873022": "2026-10-25T19:53:58Z"
+  "NFL-401873009": "2026-10-25T21:31:26Z",
+  "NFL-401873022": "2026-10-25T21:31:26Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 2392,
-    "fanduel": 1759
+    "draftkings": 678,
+    "fanduel": 357
    },
-   "eventsListed": 5,
-   "eventsMatched": 4,
-   "games": 5,
+   "eventsListed": 10,
+   "eventsMatched": 2,
+   "games": 2,
    "marketTypes": {
-    "player_assists": 58,
-    "player_extra_points_made": 14,
-    "player_fantasy_score": 42,
-    "player_field_goals_made": 14,
-    "player_interceptions": 35,
-    "player_kicking_points": 14,
-    "player_longest_passing_completion": 16,
-    "player_longest_reception": 82,
-    "player_longest_rush": 32,
-    "player_passing_+_rushing_yards": 12,
-    "player_passing_attempts": 16,
-    "player_passing_completions": 16,
-    "player_passing_touchdowns": 54,
-    "player_passing_yards": 285,
-    "player_receiving_yards": 1245,
-    "player_receptions": 751,
-    "player_rushing_+_receiving_yards": 40,
-    "player_rushing_attempts": 20,
-    "player_rushing_yards": 503,
-    "player_sacks": 67,
-    "player_tackles": 58,
-    "player_tackles_+_assists": 60,
-    "point_spread": 717
+    "player_assists": 18,
+    "player_extra_points_made": 8,
+    "player_fantasy_score": 14,
+    "player_field_goals_made": 8,
+    "player_interceptions": 8,
+    "player_kicking_points": 8,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 40,
+    "player_longest_rush": 14,
+    "player_passing_+_rushing_yards": 8,
+    "player_passing_attempts": 8,
+    "player_passing_completions": 8,
+    "player_passing_touchdowns": 17,
+    "player_passing_yards": 126,
+    "player_receiving_yards": 299,
+    "player_receptions": 156,
+    "player_rushing_+_receiving_yards": 8,
+    "player_rushing_attempts": 4,
+    "player_rushing_yards": 90,
+    "point_spread": 185
    },
-   "requestsLeft": 36,
-   "rows": 4151,
+   "requestsLeft": 3,
+   "rows": 1035,
    "slateGames": [
-    "Denver Broncos at Arizona Cardinals 2026-10-25T20:05Z",
-    "Green Bay Packers at Detroit Lions 2026-10-25T20:25Z",
-    "Los Angeles Rams at Las Vegas Raiders 2026-10-25T20:25Z",
     "Kansas City Chiefs at Seattle Seahawks 2026-10-26T00:20Z",
     "Dallas Cowboys at Philadelphia Eagles 2026-10-27T00:15Z"
    ],
    "unmatchedEvents": [
+    {
+     "away": "Tennessee Titans",
+     "external": {
+      "caesars": "dd4ed760-3e1c-1f71-6f13-3baef85d8004",
+      "draftkings": "34118130",
+      "fanatics": "5686668",
+      "fanatics_markets": "7403176",
+      "fliff": "407889_c_p_202_prematch",
+      "kalshi": "KXNFLGAME-26NOV01TENCIN",
+      "novig": "01a15b22-aa75-7dc3-a127-c8df26ae347e",
+      "polymarket": "nfl_bengals_titans_2026-11-01_b2",
+      "polymarket_us": "nfl-ten-cin-2026-11-01",
+      "prophetx": "1700008770",
+      "robinhood": "9f52e443-febf-4211-9fe9-e38d3b3541a4"
+     },
+     "home": "Cincinnati Bengals",
+     "sample": {
+      "away_team": "Tennessee Titans",
+      "home_team": "Cincinnati Bengals",
+      "markets": [
+       "game_prop",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-11-01T18:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Baltimore Ravens",
+     "external": {
+      "caesars": "8815b25a-8eba-87e0-2411-33cf294b83db",
+      "draftkings": "34118214",
+      "fanatics": "5686635",
+      "fanatics_markets": "7403166",
+      "fliff": "407886_c_p_202_prematch",
+      "kalshi": "KXNFLGAME-26NOV01BALBUF",
+      "novig": "01a15b22-ab38-7f60-a028-f6ca6c7a66dd",
+      "polymarket": "nfl_bills_ravens_2026-11-01_b2",
+      "polymarket_us": "nfl-bal-buf-2026-11-01",
+      "prophetx": "1700008791",
+      "robinhood": "770596a0-7bad-460e-af70-8e6b212b00b9"
+     },
+     "home": "Buffalo Bills",
+     "sample": {
+      "away_team": "Baltimore Ravens",
+      "home_team": "Buffalo Bills",
+      "markets": [
+       "game_prop",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-11-01T18:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Cleveland Browns",
+     "external": {
+      "caesars": "5a72d412-35c0-dc6a-4553-b8f69faecc89",
+      "draftkings": "34118052",
+      "fanatics_markets": "7403173",
+      "kalshi": "KXNFLGAME-26NOV01CLEPIT",
+      "novig": "01a15b22-a842-77f3-9c3e-b98e969d0348",
+      "polymarket": "nfl_browns_steelers_2026-11-01_b2",
+      "polymarket_us": "nfl-cle-pit-2026-11-01",
+      "prophetx": "1700008869",
+      "robinhood": "e77a76e8-9020-449f-9be2-4589d5e9d0e9"
+     },
+     "home": "Pittsburgh Steelers",
+     "sample": {
+      "away_team": "Cleveland Browns",
+      "home_team": "Pittsburgh Steelers",
+      "markets": [
+       "game_prop",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-11-01T18:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Atlanta Falcons",
+     "external": {
+      "caesars": "542e737d-b7af-7828-08e2-4360e36c9c82",
+      "draftkings": "34118133",
+      "fanatics_markets": "7403180",
+      "fliff": "407891_c_p_202_prematch",
+      "kalshi": "KXNFLGAME-26NOV01ATLTB",
+      "novig": "01a15b07-874c-7502-8070-5e1ef92fba2f",
+      "polymarket": "nfl_buccaneers_falcons_2026-11-01_b2",
+      "polymarket_us": "nfl-atl-tb-2026-11-01",
+      "prophetx": "1700008779",
+      "robinhood": "c7a9233d-d912-4e54-a22d-9dbe55beff9c"
+     },
+     "home": "Tampa Bay Buccaneers",
+     "sample": {
+      "away_team": "Atlanta Falcons",
+      "home_team": "Tampa Bay Buccaneers",
+      "markets": [
+       "game_prop",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-11-01T18:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Indianapolis Colts",
+     "external": {
+      "caesars": "0405f329-6b65-44ab-6df9-5814b54d7597",
+      "draftkings": "34118246",
+      "fanatics_markets": "7403172",
+      "fliff": "407893_c_p_202_prematch",
+      "kalshi": "KXNFLGAME-26NOV01INDJAC",
+      "novig": "01a15b22-a79f-76b0-82f3-c8508b5c918c",
+      "polymarket": "nfl_colts_jaguars_2026-11-01_b2",
+      "polymarket_us": "nfl-ind-jax-2026-11-01",
+      "prophetx": "1700008832",
+      "robinhood": "2f4fa294-906c-40a0-a6c6-6e1b72be5497"
+     },
+     "home": "Jacksonville Jaguars",
+     "sample": {
+      "away_team": "Indianapolis Colts",
+      "home_team": "Jacksonville Jaguars",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-11-01T18:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "New England Patriots",
+     "external": {
+      "caesars": "d3079032-d9c4-01af-e088-0992dac52f50",
+      "draftkings": "34118184",
+      "fanatics_markets": "7403177",
+      "fliff": "407897_c_p_202_prematch",
+      "kalshi": "KXNFLGAME-26NOV01NEMIA",
+      "novig": "01a15b07-889c-7420-9eec-5f43a66b45ff",
+      "polymarket": "nfl_dolphins_patriots_2026-11-01_b2",
+      "polymarket_us": "nfl-ne-mia-2026-11-01",
+      "robinhood": "cd080659-b0e5-44d7-88a6-b78a51d4f0a5"
+     },
+     "home": "Miami Dolphins",
+     "sample": {
+      "away_team": "New England Patriots",
+      "home_team": "Miami Dolphins",
+      "markets": [
+       "game_prop",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-11-01T21:25:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Chicago Bears",
+     "external": {
+      "caesars": "97782c6f-f0d5-9848-41bb-648b0825b01b",
+      "draftkings": "34118031",
+      "kalshi": "KXNFLGAME-26NOV02CHISEA",
+      "novig": "01a15b22-b253-75a2-a61d-86912468d179",
+      "polymarket": "nfl_bears_seahawks_2026-11-02_b3",
+      "polymarket_us": "nfl-chi-sea-2026-11-02",
+      "robinhood": "fad3979c-2fd8-42b3-b5ca-f7ac81f689f0"
+     },
+     "home": "Seattle Seahawks",
+     "sample": {
+      "away_team": "Chicago Bears",
+      "home_team": "Seattle Seahawks",
+      "markets": [
+       "game_prop",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-11-03T01:15:00Z",
+     "type": "fixture"
+    },
     {
      "away": null,
      "external": {
