@@ -4506,3 +4506,26 @@ Initial full1776 suite caught a reasonless TKKing shape change; promotion stoppe
 One bounded repair restricts fallback to a usable reason; focused caption/voice
 checks pass. Full repaired release gates and hosted/live evidence remain required.
 Unrelated untracked morning-research document preserved. No record/budget changes.
+
+
+2026-10-25T12:17:16.104071+00:00 — D-20261025-CAPTIONFIT CODE VERIFIED LIVE. Source a1ba244a
+contained in1fc45855; hosted40191546928SUCCESS. Original pending push40190862566
+and descendant40191132161 canceled by later ordinary record commits; never
+credited as success. Normal and lock-held1776Python(two skips)/281Node, clean
+exports, build/record125/NBA/publication/assets/SVG and offline0755 rehearsal
+363w4fw8 passed. Initial reasonless-shape regression repaired without changing
+tests; parallel suite caught prematurely future queue timestamp, then repeated
+full suite passed after actual clock. All six live375/1440 Today/Record/game
+checks passed with zero overflow/load/console errors. Live12:13:34Z record
+agrees with60released rows;125official rows retained. Warren recovered through
+normal worker: Discord11:57:17Z, live site verified; Buffer12:46Z scheduled,
+not sent. Lance remains held for missing usable reason; no gate loosened.
+NBA12/14clean and24/50paper, trialopen/promotionfalse.908comparison rows
+represent81player-games/483markets; private exact-price/source/role/hold prep
+saved.11active football payloads10fresh favorite/1exact blocker. Local actual
+2calls/0failures; Oct20 weekly1local27B/0failures/161.19s/summarytrue.
+Odds408/500 projected456, SGO749/2500; partial journals not account totals.
+Historical result misses retained; Marsh25.65m/Williams20.79m verified.
+No budget/schedule/preference/record change. Older completed daily01a16db8
+archived via app. Evidence work/daily-20261025-*; future X receipt stays
+observing under this stable item, owned by existing worker/next daily.
