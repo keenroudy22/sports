@@ -1,0 +1,257 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-25T16:37:44Z",
+  "targetWeek": 7,
+  "summary": "Research update for Oct 25: Settled 1: Jaylen Warren OVER 28.5 receiving yards win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": true,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "4569987",
+      "market": "recYds",
+      "line": 28.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873011"
+      ],
+      "book": "ESPN BET",
+      "odds": 105,
+      "projection": 39.8,
+      "edge": "Price-checked chance 51.7% against the exact two-sided price; 48.8% needed at +105: +2.9 percentage points.",
+      "cutoff": "OVER 28.5 at +105 or better; off the card at 29+, or at -110 or worse at 28.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-24T22:41:01Z",
+      "quotedAt": "2026-10-25T11:31:34Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 7:31 AM ET capture across 5 books, the best expected value on the board for this side. ESPN BET is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-25T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "chef_pick",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.657,
+        "chance": 0.517,
+        "calibrated": true,
+        "calibration": 0.11,
+        "calibrationN": 2285,
+        "push": 0.0,
+        "breakEven": 0.488,
+        "edgePoints": 2.9,
+        "evPerUnit": 0.06,
+        "snapshotAt": "2026-10-24T22:41:01Z",
+        "evaluatedAt": "2026-10-25T11:31:40Z",
+        "fairChance": 0.459,
+        "anchoredChance": 0.517,
+        "gap": 5.8,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Pittsburgh Steelers at New Orleans Saints",
+      "title": "Jaylen Warren OVER 28.5 receiving yards",
+      "id": "NFL-2026-W7-warren-over-28-5-recyds-espnbet",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873011",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 5 of 10 over 28.5.",
+        "context": [
+          "Role: projected for 5.7 targets a game.",
+          "Defense: NO allows 30.5 receiving yards a game to RBs, 12th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 39.8 against 28.5. The over reads 51.7% after adjustment from the raw 65.7%; 48.8% is needed at +105. Last 10 games: 5 of 10 over 28.5. Role: projected for 5.7 targets a game. Defense: NO allows 30.5 receiving yards a game to RBs, 12th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 28.5. I say 39.8.",
+            "numbers": {
+              "projection": 39.8,
+              "line": 28.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-24T22:41:01Z"
+          },
+          {
+            "text": "4 of his last 5 games finished over 28.5 receiving yards.",
+            "numbers": {
+              "values": [
+                34,
+                49,
+                33,
+                87,
+                28
+              ],
+              "hits": 4,
+              "games": 5,
+              "line": 28.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-18T17:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-10-25T11:31:40Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Cesar Ruiz (NO) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4258199/cesar-ruiz",
+            "time": "2026-10-24T01:29Z"
+          },
+          {
+            "text": "Nathan Shepherd (NO) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4076951/nathan-shepherd",
+            "time": "2026-10-23T22:00Z"
+          },
+          {
+            "text": "DeShon Elliott (PIT) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3929846/deshon-elliott",
+            "time": "2026-10-24T17:03Z"
+          },
+          {
+            "text": "Rico Dowdle (PIT) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle",
+            "time": "2026-10-23T20:25Z"
+          },
+          {
+            "text": "Brandin Echols (PIT) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4567979/brandin-echols",
+            "time": "2026-10-23T01:28Z"
+          },
+          {
+            "text": "Ben Skowronek (PIT) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4035656/ben-skowronek",
+            "time": "2026-10-22T21:48Z"
+          }
+        ],
+        "weather": null,
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 26.5,
+                "price": -111,
+                "time": "2026-10-24T22:47:04Z"
+              },
+              "now": {
+                "line": 26.5,
+                "price": -111,
+                "time": "2026-10-25T11:31:34Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 25.5,
+                "price": -113,
+                "time": "2026-10-24T19:49:02Z"
+              },
+              "now": {
+                "line": 25.5,
+                "price": -113,
+                "time": "2026-10-25T11:31:34Z"
+              }
+            }
+          },
+          "best": {
+            "book": "ESPN BET",
+            "line": 28.5,
+            "price": 105,
+            "time": "2026-10-25T11:31:34Z"
+          }
+        },
+        "ours": {
+          "projection": 39.8,
+          "line": 28.5,
+          "market": "recYds",
+          "text": "Book says 28.5. I say 39.8.",
+          "snapshotAt": "2026-10-24T22:41:01Z"
+        },
+        "history": "Last 10 games: 5 of 10 over 28.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4258199/cesar-ruiz",
+            "time": "2026-10-24T01:29Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4076951/nathan-shepherd",
+            "time": "2026-10-23T22:00Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3929846/deshon-elliott",
+            "time": "2026-10-24T17:03Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle",
+            "time": "2026-10-23T20:25Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4567979/brandin-echols",
+            "time": "2026-10-23T01:28Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4035656/ben-skowronek",
+            "time": "2026-10-22T21:48Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873011",
+            "time": "2026-10-25T11:31:40Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-25T11:31:40Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-25T11:57:17Z",
+      "result": "win",
+      "actual": "Jaylen Warren: 36 receiving yards",
+      "settledAt": "2026-10-25T16:37:44Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873011",
+      "actualValue": 36,
+      "units": 1.05
+    }
+  ]
+}
