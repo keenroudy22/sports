@@ -478,6 +478,21 @@ class CandidateCatalogTests(unittest.TestCase):
             self.assertEqual(run.load_candidate_lines(path, messages.append), [])
             self.assertIn('official selection skipped', messages[0])
 
+    def test_ticket_research_uses_remaining_budget_and_stops_at_limit(self):
+        ctx = SimpleNamespace(player_team={}, context_file={}, games={'g': {'id': 'g'}}, now=datetime.now(timezone.utc))
+        ticket = {'_league': 'NFL', 'legs': [{'id': 'a', 'title': 'A', 'gameId': 'g', 'market': 'moneyline', 'side': 'home'}]}
+        budget = {'on': True, 'asked': run.RESEARCH_LIMIT-1}
+        reason = {'type': 'news', 'direction': 'for', 'text': 'Verified matchup fact'}
+        with mock.patch.object(run, 'evidence', return_value=[]), mock.patch.object(
+                run.researcher, 'enabled', return_value=True), mock.patch.object(
+                run, 'quarterbacks', return_value={}), mock.patch.object(
+                run.researcher, 'research', return_value=([{'claim': 'fact'}], [])) as lookup, mock.patch.object(
+                run, 'plan_reasons', side_effect=[[], [reason], []]):
+            self.assertEqual(run.attach_ticket_reasons(ticket, ctx, budget), [])
+            self.assertEqual(budget['asked'], run.RESEARCH_LIMIT)
+            self.assertEqual(run.attach_ticket_reasons(ticket, ctx, budget), ['A'])
+            self.assertEqual(lookup.call_count, 1)
+
     def test_fun_ticket_needs_a_saved_reason_on_every_leg_and_can_forbid_replacement(self):
         ticket = {'_league': 'NFL', 'legs': [
             {'id': 'a', 'title': 'A +3', 'gameId': 'NFL-1', 'market': 'point spread', 'side': 'home'},

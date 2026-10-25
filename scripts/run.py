@@ -871,7 +871,7 @@ def longshot_candidate(lines, games, now, league, exclude=(), ctx=None):
                                | ({'https://sharpapi.io/'} if any(l.get('alternate') for l in ticket['legs']) else set())))}, None
 
 
-def attach_ticket_reasons(ticket, ctx):
+def attach_ticket_reasons(ticket, ctx, research_status=None):
     """Save one directional, sourced reason per fun-ticket leg; list legs that do not have one."""
     missing = []
     league = ticket.get('_league') or ticket.get('league')
@@ -884,6 +884,23 @@ def attach_ticket_reasons(ticket, ctx):
             saved = plan_reasons(case, ctx)
         except (KeyError, TypeError, ValueError, AttributeError):
             saved = []
+        if (not any(r.get('direction') == 'for' and r.get('text') for r in saved)
+                and research_status is not None and research_status.get('on')
+                and researcher.enabled() and research_status.get('asked', 0) < RESEARCH_LIMIT):
+            game = ctx.games.get(leg.get('gameId'))
+            if game:
+                research_status['asked'] = research_status.get('asked', 0) + 1
+                try:
+                    kept, dropped = researcher.research(
+                        game, gates.market_key(case), gates.side_of(case), now=ctx.now,
+                        player=case.get('_player'), quarterbacks=quarterbacks(game, ctx))
+                except (OSError, TypeError, ValueError, AttributeError):
+                    kept, dropped = [], []
+                case['_research'] = [dict(f, verified=True) for f in kept] + [dict(f, verified=False) for f in dropped]
+                research_status['verified'] = research_status.get('verified', 0) + len(kept)
+                research_status['dropped'] = research_status.get('dropped', 0) + len(dropped)
+                saved = plan_reasons(case, ctx)
+                log(f"researched parlay leg {leg.get('title')}: {len(kept)} verified facts, {len(dropped)} dropped")
         leg['reasons'] = saved
         leg['reason'] = next((row.get('text') for row in saved
                               if row.get('direction') == 'for' and row.get('text')), None)
@@ -2732,7 +2749,7 @@ def _run(args, now, slot, kinds, status):
                     continue
                 ticket['replacementOf'] = ticket['id']
                 ticket['id'] = gates.fresh_id(ticket['id'], ctx)       # the day's first was pulled before its post
-            missing = attach_ticket_reasons(ticket, ctx)
+            missing = attach_ticket_reasons(ticket, ctx, status.get('research'))
             if missing:
                 reason = 'no saved leg reason for ' + ', '.join(missing)
                 log(f'{league} longshot: {reason}')
