@@ -1,48 +1,48 @@
 {
- "at": "2026-10-25T00:37:17Z",
+ "at": "2026-10-25T01:28:23Z",
  "confirmed": {
-  "CFB-401856837": "2026-10-25T00:37:35Z",
+  "CFB-401856837": "2026-10-25T01:28:54Z",
   "CFB-401864527": "2026-10-24T22:43:17Z",
   "NFL-401873009": "2026-10-25T00:42:46Z",
-  "NFL-401873011": "2026-10-25T00:42:46Z",
-  "NFL-401873012": "2026-10-25T00:42:46Z",
-  "NFL-401873013": "2026-10-25T00:42:46Z",
-  "NFL-401873014": "2026-10-25T00:42:46Z",
-  "NFL-401873015": "2026-10-25T00:42:46Z",
-  "NFL-401873016": "2026-10-25T00:42:46Z",
-  "NFL-401873017": "2026-10-25T00:42:46Z",
-  "NFL-401873018": "2026-10-25T00:42:46Z",
-  "NFL-401873019": "2026-10-25T00:42:46Z",
-  "NFL-401873020": "2026-10-25T00:42:46Z",
+  "NFL-401873011": "2026-10-25T01:34:06Z",
+  "NFL-401873012": "2026-10-25T01:34:06Z",
+  "NFL-401873013": "2026-10-25T01:34:06Z",
+  "NFL-401873014": "2026-10-25T01:34:06Z",
+  "NFL-401873015": "2026-10-25T01:34:06Z",
+  "NFL-401873016": "2026-10-25T01:34:06Z",
+  "NFL-401873017": "2026-10-25T01:34:06Z",
+  "NFL-401873018": "2026-10-25T01:34:06Z",
+  "NFL-401873019": "2026-10-25T01:34:06Z",
+  "NFL-401873020": "2026-10-25T01:34:06Z",
   "NFL-401873021": "2026-10-25T00:42:46Z",
   "NFL-401873022": "2026-10-25T00:42:46Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 457,
-    "fanduel": 98
+    "draftkings": 456,
+    "fanduel": 463
    },
-   "eventsListed": 9,
+   "eventsListed": 12,
    "eventsMatched": 1,
    "games": 2,
    "marketTypes": {
     "player_longest_passing_completion": 2,
     "player_longest_reception": 9,
     "player_longest_rush": 5,
-    "player_passing_+_rushing_yards": 48,
+    "player_passing_+_rushing_yards": 49,
     "player_passing_attempts": 14,
     "player_passing_completions": 13,
-    "player_passing_touchdowns": 7,
-    "player_passing_yards": 43,
-    "player_receiving_yards": 108,
-    "player_receptions": 32,
-    "player_rushing_attempts": 22,
-    "player_rushing_yards": 68,
-    "point_spread": 184
+    "player_passing_touchdowns": 17,
+    "player_passing_yards": 72,
+    "player_receiving_yards": 256,
+    "player_receptions": 110,
+    "player_rushing_attempts": 21,
+    "player_rushing_yards": 166,
+    "point_spread": 185
    },
-   "requestsLeft": 56,
-   "rows": 555,
+   "requestsLeft": 54,
+   "rows": 919,
    "slateGames": [
     "North Dakota State Bison at New Mexico Lobos 2026-10-25T02:00Z",
     "Houston Cougars at Utah Utes 2026-10-25T02:15Z"
@@ -52,6 +52,7 @@
      "away": "Delaware",
      "external": {
       "betsson": "f-rKr15oy8PkaP3U4rKvjTIg",
+      "draftkings": "34876637",
       "fanduel": "36226260",
       "fliff": "421068_c_p_209_prematch",
       "gemini": "NCAAF-2610272300-DEL-WKU-M",
@@ -88,6 +89,7 @@
      "away": "Sam Houston State Bearkats",
      "external": {
       "betsson": "f-uuLfOglHX0icTqZr7jrsvw",
+      "draftkings": "34876638",
       "fanduel": "36226283",
       "fliff": "421069_c_p_209_prematch",
       "gemini": "NCAAF-2610280000-SHS-MOST-M",
@@ -194,13 +196,43 @@
      "type": "fixture"
     },
     {
+     "away": "Notre Dame Fighting Irish",
+     "external": {
+      "draftkings": "34876697",
+      "gemini": "NCAAF-2610311600-NDU-NAV-M",
+      "kalshi": "KXNCAAFGAME-26OCT31NDNAVY",
+      "novig": "01a1698b-ae4f-7f00-bc9d-be74388fd538",
+      "polymarket": "nfl_navy_notredamefightingirish_2026-10-31_b2",
+      "prophetx": "1704700503",
+      "rebet": "sr:match:70894860",
+      "robinhood": "28e86da7-dc8b-4971-873d-9e4a6182190c",
+      "smarkets": "45389331",
+      "sportzino": "sz-17956159"
+     },
+     "home": "Navy Midshipmen",
+     "sample": {
+      "away_team": "Notre Dame Fighting Irish",
+      "home_team": "Navy Midshipmen",
+      "markets": [
+       "1st_half_moneyline",
+       "1st_half_moneyline_3-way",
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-31T16:00:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "Florida",
      "external": {
       "draftkings": "34226169",
       "fanduel": "36222786",
       "fliff": "420835_c_p_209_prematch",
       "gemini": "NCAAF-2610311930-FLA-UGA-M",
-      "kalshi": "KXNCAAFTOTAL-26OCT31FLAUGA",
+      "kalshi": "KXNCAAFSPREAD-26OCT31FLAUGA",
       "novig": "01a16a4b-f371-7883-9e2c-fc5dc39a97da",
       "onexbet": "763736884",
       "paddypower": "36222786",
@@ -257,13 +289,16 @@
     {
      "away": "Washington",
      "external": {
+      "draftkings": "34876680",
       "fanduel": "36226804",
       "fliff": "421074_c_p_209_prematch",
       "kalshi": "KXNCAAFGAME-26OCT30WASHNEB",
       "onexbet": "764062354",
       "paddypower": "36226804",
       "polymarket": "nfl_nebraskacornhuskers_washington_2026-10-31_b3",
+      "prophetx": "1704700953",
       "robinhood": "cdb67c7c-7940-4932-94fd-d19b489d90d8",
+      "smarkets": "45389409",
       "sportzino": "sz-17956182"
      },
      "home": "Nebraska",
@@ -273,6 +308,7 @@
       "markets": [
        "1st_half_moneyline",
        "1st_half_moneyline_3-way",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -291,7 +327,8 @@
       "onexbet": "764062695",
       "paddypower": "36226805",
       "polymarket": "nfl_fresnostate_oregonstate_2026-10-31_b3",
-      "robinhood": "ca86744e-2dff-4c12-8dc4-d0a99fc120c2"
+      "robinhood": "ca86744e-2dff-4c12-8dc4-d0a99fc120c2",
+      "smarkets": "45389414"
      },
      "home": "Fresno State",
      "sample": {
@@ -300,6 +337,7 @@
       "markets": [
        "1st_half_moneyline",
        "1st_half_moneyline_3-way",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -307,44 +345,153 @@
      },
      "start": "2026-11-01T03:00:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "Louisiana Ragin' Cajuns",
+     "external": {
+      "bet365": "203388511",
+      "betfair": "202610249E254BB3",
+      "betfred": "37304173",
+      "betmgm": "6:47462",
+      "betparx": "1027553202",
+      "betrivers": "1027553202",
+      "betsson": "f-OKr7wGc3oEGYj7-wC9oAYw",
+      "bwin": "6:47462",
+      "caesars": "c77afd58-34a4-42b7-8374-189528280c6a",
+      "draftkings": "34827195",
+      "fanatics_markets": "6949815",
+      "fanduel": "36202570",
+      "fliff": "420234_c_p_309_inplay",
+      "gemini": "NCAAF-2610242000-UL-USM-M",
+      "hardrock": "7059475049039921568",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT24ULLUSM",
+      "novig": "01a1468a-22ef-7c23-a0d5-892ba16f8ca6",
+      "onexbet": "764736459",
+      "paddypower": "36202570",
+      "polymarket": "nfl_louisiana_southernmiss_2026-10-24_b2",
+      "prophetx": "1700104305",
+      "rebet": "sr:match:70898940",
+      "robinhood": "a7c63922-b88b-47a3-897f-c6c41bfdef7c",
+      "smarkets": "45375110",
+      "sportzino": "sz-18079338",
+      "stake": "f3af0aed-6bc1-4164-a762-b8f5b1bc92e8",
+      "thescorebet": "StandardEvent:cb837fdc-e726-4ed2-823b-fb4fba9ef450"
+     },
+     "home": "Southern Miss Golden Eagles",
+     "sample": {
+      "away_team": "Louisiana Ragin' Cajuns",
+      "home_team": "Southern Miss Golden Eagles",
+      "markets": [
+       "1st_half_moneyline_3-way",
+       "1st_half_point_spread",
+       "1st_half_total_points",
+       "1st_quarter_point_spread",
+       "1st_quarter_total_points",
+       "game_prop",
+       "point_spread",
+       "race_to_10_points",
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime",
+       "winning_margin"
+      ]
+     },
+     "start": "2026-10-24T21:05:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "San Jose State Spartans",
+     "external": {
+      "bet365": "203388535",
+      "betfair": "2026102401027F0D",
+      "betfred": "37304172",
+      "betmgm": "6:47590",
+      "betparx": "1027553208",
+      "betrivers": "1027553208",
+      "betsson": "f-Ux-uo0zNZ02VCeW7eDYjtg",
+      "bwin": "6:47590",
+      "caesars": "bd8e6605-28d4-43be-9b56-33403940ba2f",
+      "draftkings": "34827196",
+      "fanatics_markets": "6949793",
+      "fanduel": "36202564",
+      "fliff": "420074_c_p_309_inplay",
+      "gemini": "NCAAF-2610242100-SJS-NEV-S",
+      "hardrock": "8064903665850384813",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT24SJSUNEV",
+      "novig": "01a1468a-1f7b-7e93-8f74-f9d9fae8485c",
+      "onexbet": "764736460",
+      "paddypower": "36202564",
+      "polymarket": "nfl_nevada_sanjosestatespartans_2026-10-24_b2",
+      "prophetx": "1700104303",
+      "rebet": "sr:match:70898932",
+      "robinhood": "2bd31dda-043a-4400-b121-5e6e2536d5c7",
+      "sbobet": "10760664",
+      "smarkets": "45377471",
+      "sportzino": "sz-18079334",
+      "stake": "ea1bff26-6a1b-4605-901b-c527a0f92c0a",
+      "thescorebet": "StandardEvent:dc666f44-7bde-426b-9847-66ca06f62c9f"
+     },
+     "home": "Nevada Wolf Pack",
+     "sample": {
+      "away_team": "San Jose State Spartans",
+      "home_team": "Nevada Wolf Pack",
+      "markets": [
+       "1st_half_moneyline_3-way",
+       "1st_half_point_spread",
+       "1st_half_total_points",
+       "1st_quarter_point_spread",
+       "1st_quarter_total_points",
+       "game_prop",
+       "point_spread",
+       "race_to_10_points",
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime",
+       "winning_margin"
+      ]
+     },
+     "start": "2026-10-24T21:00:00Z",
+     "type": "fixture"
     }
    ]
   },
   "NFL": {
    "books": {
-    "draftkings": 7689,
-    "fanduel": 2153
+    "draftkings": 6164,
+    "fanduel": 3864
    },
    "eventsListed": 31,
    "eventsMatched": 13,
    "games": 13,
    "marketTypes": {
-    "player_assists": 220,
-    "player_extra_points_made": 50,
-    "player_fantasy_score": 148,
-    "player_field_goals_made": 50,
-    "player_interceptions": 52,
-    "player_kicking_points": 50,
-    "player_longest_passing_completion": 52,
-    "player_longest_reception": 266,
-    "player_longest_rush": 120,
-    "player_passing_+_rushing_yards": 48,
-    "player_passing_attempts": 52,
-    "player_passing_completions": 52,
-    "player_passing_touchdowns": 96,
-    "player_passing_yards": 795,
-    "player_receiving_yards": 2872,
-    "player_receptions": 1516,
-    "player_rushing_+_receiving_yards": 86,
-    "player_rushing_attempts": 72,
-    "player_rushing_yards": 1143,
-    "player_sacks": 160,
-    "player_tackles": 222,
-    "player_tackles_+_assists": 220,
-    "point_spread": 1500
+    "player_assists": 206,
+    "player_extra_points_made": 40,
+    "player_fantasy_score": 124,
+    "player_field_goals_made": 40,
+    "player_interceptions": 47,
+    "player_kicking_points": 40,
+    "player_longest_passing_completion": 40,
+    "player_longest_reception": 216,
+    "player_longest_rush": 102,
+    "player_passing_+_rushing_yards": 40,
+    "player_passing_attempts": 40,
+    "player_passing_completions": 40,
+    "player_passing_touchdowns": 121,
+    "player_passing_yards": 703,
+    "player_receiving_yards": 3051,
+    "player_receptions": 1691,
+    "player_rushing_+_receiving_yards": 92,
+    "player_rushing_attempts": 54,
+    "player_rushing_yards": 1195,
+    "player_sacks": 195,
+    "player_tackles": 186,
+    "player_tackles_+_assists": 186,
+    "point_spread": 1579
    },
    "requestsLeft": 0,
-   "rows": 9842,
+   "rows": 10028,
    "slateGames": [
     "Pittsburgh Steelers at New Orleans Saints 2026-10-25T13:30Z",
     "Cincinnati Bengals at Baltimore Ravens 2026-10-25T17:00Z",
@@ -374,7 +521,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-25T00:36:00Z",
+     "start": "2026-10-25T01:27:00Z",
      "type": "outright"
     },
     {
