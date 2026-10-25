@@ -35092,5 +35092,216 @@
         "publishedAt": "2026-10-25T11:57:17Z"
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-10-25T12:48:29Z",
+    "summary": "Released 1: 4-leg easy props at FanDuel +157 at FanDuel.",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "NFL-2026-W7-easy-1025-fd",
+        "title": "4-leg easy props at FanDuel",
+        "status": "active",
+        "favorite": false,
+        "parlayType": "easyProps",
+        "riskUnits": 0.25,
+        "legs": [
+          {
+            "id": "ladder-NFL-401873017-3117251-rec-3.5",
+            "title": "Christian McCaffrey 4+ receptions",
+            "gameId": "NFL-401873017",
+            "athleteId": "3117251",
+            "player": "Christian McCaffrey",
+            "market": "rec",
+            "direction": "over",
+            "line": 3.5,
+            "book": "FanDuel",
+            "odds": -400,
+            "chance": 0.86,
+            "rawChance": 0.878,
+            "implied": 0.8,
+            "projection": 7.5,
+            "kickoff": "2026-10-25T17:00Z",
+            "observedAt": "2026-10-25T11:57:29Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          },
+          {
+            "id": "ladder-NFL-401873014-3917792-passYds-149.5",
+            "title": "Daniel Jones 150+ passing yards",
+            "gameId": "NFL-401873014",
+            "athleteId": "3917792",
+            "player": "Daniel Jones",
+            "market": "passYds",
+            "direction": "over",
+            "line": 149.5,
+            "book": "FanDuel",
+            "odds": -350,
+            "chance": 0.838,
+            "rawChance": 0.868,
+            "implied": 0.778,
+            "projection": 237.3,
+            "kickoff": "2026-10-25T17:00Z",
+            "observedAt": "2026-10-25T11:57:29Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          },
+          {
+            "id": "ladder-NFL-401873018-4596448-rec-1.5",
+            "title": "Bucky Irving 2+ receptions",
+            "gameId": "NFL-401873018",
+            "athleteId": "4596448",
+            "player": "Bucky Irving",
+            "market": "rec",
+            "direction": "over",
+            "line": 1.5,
+            "book": "FanDuel",
+            "odds": -360,
+            "chance": 0.843,
+            "rawChance": 0.864,
+            "implied": 0.783,
+            "projection": 3.9,
+            "kickoff": "2026-10-25T17:00Z",
+            "observedAt": "2026-10-25T11:57:29Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          },
+          {
+            "id": "ladder-NFL-401873019-4360761-recYds-29.5",
+            "title": "Michael Wilson 30+ receiving yards",
+            "gameId": "NFL-401873019",
+            "athleteId": "4360761",
+            "player": "Michael Wilson",
+            "market": "recYds",
+            "direction": "over",
+            "line": 29.5,
+            "book": "FanDuel",
+            "odds": -400,
+            "chance": 0.859,
+            "rawChance": 0.859,
+            "implied": 0.8,
+            "projection": 77.1,
+            "kickoff": "2026-10-25T20:05Z",
+            "observedAt": "2026-10-25T11:57:29Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          }
+        ],
+        "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+        "gameIds": [
+          "NFL-401873017",
+          "NFL-401873014",
+          "NFL-401873018",
+          "NFL-401873019"
+        ],
+        "book": "FanDuel",
+        "odds": 157,
+        "quotedAt": "2026-10-25T11:57:29Z",
+        "priceEstimated": true,
+        "expiresAt": "2026-10-25T15:45:00Z",
+        "quoteType": "capture",
+        "confidence": 1,
+        "edge": "For fun, not value: each leg is an easier line our projection clears comfortably (84% or better on our numbers, which are tuned for main lines), priced at FanDuel's own alternate-line price and multiplied to +157. A quarter unit, kept with the longshots.",
+        "cutoff": "A fun parlay is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://sharpapi.io/",
+          "https://www.espn.com/nfl/game/_/gameId/401873014",
+          "https://www.espn.com/nfl/game/_/gameId/401873017",
+          "https://www.espn.com/nfl/game/_/gameId/401873018",
+          "https://www.espn.com/nfl/game/_/gameId/401873019"
+        ],
+        "why": "Easy props, for fun: 4 legs at FanDuel, one per game, each an easier line our projection clears comfortably. A quarter unit, tracked with the longshots, apart from the straight picks.",
+        "risk": "Every leg has to hit; one miss sinks the ticket. Our player chances are tuned for main lines, so these legs are not value, just fun. A player who does not take the field voids his leg; a verified book protection may also remove an injury leg, and the book's official settlement controls.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Easy props, for fun: 4 legs at FanDuel, one per game, each an easier line our projection clears comfortably. A quarter unit, tracked with the longshots, apart from the straight picks.",
+              "numbers": {},
+              "source": "Published ticket detail",
+              "time": "2026-10-25T12:47:56Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Every leg has to hit; one miss sinks the ticket. Our player chances are tuned for main lines, so these legs are not value, just fun. A player who does not take the field voids his leg; a verified book protection may also remove an injury leg, and the book's official settlement controls.",
+              "numbers": {},
+              "source": "Published ticket risk",
+              "time": "2026-10-25T12:47:56Z"
+            }
+          ],
+          "reports": [],
+          "weather": null,
+          "line": {
+            "legs": [
+              {
+                "gameId": "NFL-401873017",
+                "title": "Christian McCaffrey 4+ receptions",
+                "line": 3.5,
+                "price": -400,
+                "book": "FanDuel"
+              },
+              {
+                "gameId": "NFL-401873014",
+                "title": "Daniel Jones 150+ passing yards",
+                "line": 149.5,
+                "price": -350,
+                "book": "FanDuel"
+              },
+              {
+                "gameId": "NFL-401873018",
+                "title": "Bucky Irving 2+ receptions",
+                "line": 1.5,
+                "price": -360,
+                "book": "FanDuel"
+              },
+              {
+                "gameId": "NFL-401873019",
+                "title": "Michael Wilson 30+ receiving yards",
+                "line": 29.5,
+                "price": -400,
+                "book": "FanDuel"
+              }
+            ],
+            "best": {
+              "book": "FanDuel",
+              "price": 157,
+              "time": "2026-10-25T11:57:29Z"
+            }
+          },
+          "ours": null,
+          "history": null,
+          "sources": [
+            {
+              "label": "Published source",
+              "url": "https://sharpapi.io/",
+              "time": "2026-10-25T12:47:56Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873014",
+              "time": "2026-10-25T12:47:56Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873017",
+              "time": "2026-10-25T12:47:56Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873018",
+              "time": "2026-10-25T12:47:56Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873019",
+              "time": "2026-10-25T12:47:56Z"
+            }
+          ],
+          "partial": true
+        },
+        "publishedAt": "2026-10-25T12:48:29Z"
+      }
+    ]
   }
 ]
