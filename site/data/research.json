@@ -35303,5 +35303,382 @@
         "publishedAt": "2026-10-25T12:48:29Z"
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-10-25T15:54:41Z",
+    "summary": "Released 1: Kayshon Boutte OVER 1.5 receptions +149 at DraftKings.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": true,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "4429022",
+        "market": "rec",
+        "line": 1.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401873016"
+        ],
+        "book": "DraftKings",
+        "odds": 149,
+        "projection": 2.0,
+        "edge": "Price-checked chance 51.3% against the exact two-sided price; 40.2% needed at +149: +11.2 percentage points.",
+        "cutoff": "OVER 1.5 at +149 or better; off the card at 2+, or at +134 or worse at 1.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-24T22:41:01Z",
+        "quotedAt": "2026-10-25T13:54:48Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 9:54 AM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-25T17:00:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "chef_pick",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.62,
+          "chance": 0.513,
+          "calibrated": true,
+          "calibration": 0.11,
+          "calibrationN": 2285,
+          "push": 0.0,
+          "breakEven": 0.402,
+          "edgePoints": 11.2,
+          "evPerUnit": 0.278,
+          "snapshotAt": "2026-10-24T22:41:01Z",
+          "evaluatedAt": "2026-10-25T15:45:29Z",
+          "fairChance": 0.38,
+          "anchoredChance": 0.513,
+          "gap": 13.4,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "New York Giants at Houston Texans",
+        "title": "Kayshon Boutte OVER 1.5 receptions",
+        "id": "NFL-2026-W7-boutte-over-1-5-rec-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873016",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.giants.com/news/quotes-10-21-coach-john-harbaugh-qb-j-j-mccarthy-qb-jameis-winston",
+          "https://www.houstontexans.com/news/texans-vs-giants-by-the-numbers",
+          "https://www.houstontexans.com/news/press-room",
+          "https://www.houstontexans.com/news/week-7-injury-report-texans-vs-giants"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 7 of 10 over 1.5.",
+          "context": [
+            "Role: 3rd of 6 HOU WRs by projected targets, 3.1 a game.",
+            "Defense: NYG allows 10.83 receptions a game to WRs, 12th-stingiest of 32 this season."
+          ],
+          "cautions": [
+            "Houston activated Tank Dell for Week 7, and the team's preview says he is set to play in his first NFL game in 673 days."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 2 against 1.5. The over reads 51.3% after adjustment from the raw 62.0%; 40.2% is needed at +149. Last 10 games: 7 of 10 over 1.5. Role: 3rd of 6 HOU WRs by projected targets, 3.1 a game. Defense: NYG allows 10.83 receptions a game to WRs, 12th-stingiest of 32 this season.",
+        "risk": "Houston activated Tank Dell for Week 7, and the team's preview says he is set to play in his first NFL game in 673 days. An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Over 1.5 in 7 of his last 10 games.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "text": "Book says 1.5. I say 2.",
+              "numbers": {
+                "projection": 2.0,
+                "line": 1.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-24T22:41:01Z"
+            },
+            {
+              "text": "5 of his last 5 games finished over 1.5 receptions.",
+              "numbers": {
+                "values": [
+                  3,
+                  2,
+                  3,
+                  3,
+                  2
+                ],
+                "hits": 5,
+                "games": 5,
+                "line": 1.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-18T13:30Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Houston activated Tank Dell for Week 7, and the team's preview says he is set to play in his first NFL game in 673 days.",
+              "numbers": {},
+              "source": "https://www.houstontexans.com/news/press-room",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "text": "Houston activated Tank Dell for Week 7, and the team's preview says he is set to play in his first NFL game in 673 days.",
+              "numbers": {},
+              "source": "https://www.houstontexans.com/news/press-room",
+              "time": "2026-10-25T15:45:29Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Houston activated Tank Dell for Week 7, and the team's preview says he is set to play in his first NFL game in 673 days.",
+              "numbers": {},
+              "source": "https://www.houstontexans.com/news/press-room",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "text": "Giants defensive backs Greg Newsome is out, while Paulson Adebo, Jevon Holland and Tyler Nubin are questionable against Houston.",
+              "numbers": {},
+              "source": "https://www.houstontexans.com/news/week-7-injury-report-texans-vs-giants",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "text": "Houston activated Tank Dell for Week 7, and the team's preview says he is set to play in his first NFL game in 673 days.",
+              "numbers": {},
+              "source": "https://www.houstontexans.com/news/press-room",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "text": "Giants defensive backs Greg Newsome is out, while Paulson Adebo, Jevon Holland and Tyler Nubin are questionable against Houston.",
+              "numbers": {},
+              "source": "https://www.houstontexans.com/news/week-7-injury-report-texans-vs-giants",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "text": "Blake Fisher (HOU) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4432699/blake-fisher",
+              "time": "2026-10-24T02:01Z"
+            },
+            {
+              "text": "Jalen Pitre (HOU) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241223/jalen-pitre",
+              "time": "2026-10-24T00:23Z"
+            },
+            {
+              "text": "Reed Blankenship (HOU) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4243956/reed-blankenship",
+              "time": "2026-10-24T00:19Z"
+            },
+            {
+              "text": "David Montgomery (HOU) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery",
+              "time": "2026-10-23T20:32Z"
+            },
+            {
+              "text": "Jermaine Eluemunor (NYG) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor",
+              "time": "2026-10-25T13:42Z"
+            },
+            {
+              "text": "Paulson Adebo (NYG) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4242547/paulson-adebo",
+              "time": "2026-10-24T23:30Z"
+            },
+            {
+              "text": "Theo Johnson (NYG) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4429148/theo-johnson",
+              "time": "2026-10-24T17:37Z"
+            },
+            {
+              "text": "Jevon Holland (NYG) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4373809/jevon-holland",
+              "time": "2026-10-24T17:31Z"
+            },
+            {
+              "text": "Greg Newsome II (NYG) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4361266/greg-newsome-ii",
+              "time": "2026-10-24T00:25Z"
+            },
+            {
+              "text": "Marcus Mbow (NYG) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4686362/marcus-mbow",
+              "time": "2026-10-21T20:15Z"
+            },
+            {
+              "text": "Tyler Nubin (NYG) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4430261/tyler-nubin",
+              "time": "2026-10-20T16:10Z"
+            }
+          ],
+          "weather": null,
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": 130,
+                  "time": "2026-10-24T22:47:04Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": 149,
+                  "time": "2026-10-25T13:54:48Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": 144,
+                  "time": "2026-10-24T22:47:04Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": 146,
+                  "time": "2026-10-25T13:54:48Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 1.5,
+              "price": 149,
+              "time": "2026-10-25T13:54:48Z"
+            }
+          },
+          "ours": {
+            "projection": 2.0,
+            "line": 1.5,
+            "market": "rec",
+            "text": "Over 1.5 in 7 of his last 10 games.",
+            "snapshotAt": "2026-10-24T22:41:01Z"
+          },
+          "history": "Last 10 games: 7 of 10 over 1.5.",
+          "sources": [
+            {
+              "label": "role",
+              "url": "https://www.houstontexans.com/news/press-room",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "label": "injury",
+              "url": "https://www.houstontexans.com/news/week-7-injury-report-texans-vs-giants",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4432699/blake-fisher",
+              "time": "2026-10-24T02:01Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241223/jalen-pitre",
+              "time": "2026-10-24T00:23Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4243956/reed-blankenship",
+              "time": "2026-10-24T00:19Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery",
+              "time": "2026-10-23T20:32Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor",
+              "time": "2026-10-25T13:42Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4242547/paulson-adebo",
+              "time": "2026-10-24T23:30Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4429148/theo-johnson",
+              "time": "2026-10-24T17:37Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4373809/jevon-holland",
+              "time": "2026-10-24T17:31Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4361266/greg-newsome-ii",
+              "time": "2026-10-24T00:25Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4686362/marcus-mbow",
+              "time": "2026-10-21T20:15Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4430261/tyler-nubin",
+              "time": "2026-10-20T16:10Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873016",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.giants.com/news/quotes-10-21-coach-john-harbaugh-qb-j-j-mccarthy-qb-jameis-winston",
+              "time": "2026-10-25T15:45:29Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.houstontexans.com/news/texans-vs-giants-by-the-numbers",
+              "time": "2026-10-25T15:45:29Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-25T15:54:41Z"
+      }
+    ]
   }
 ]
