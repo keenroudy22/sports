@@ -749,11 +749,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             metadata = research_posts.planned_metadata(guid)
             if metadata:
                 entry['research'] = metadata
-        if kind == 'play':
+        if kind == 'play' and entry['discord'].get('state') != 'sent':
             # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs
             # every five minutes, so a 15-minute target gives members roughly 10-15 minutes before the X post.
             entry['discord']['readyAt'] = gates.stamp(max(now, due - DISCORD_PLAY_LEAD))
-        if image and 'discord' in entry:
+        if image and 'discord' in entry and entry['discord'].get('state') != 'sent':
             entry['discord']['image'] = image
         if image and card_key and card_key != guid:
             entry['cardKey'] = card_key            # a Pick of the Day's own card; a requote keeps it
