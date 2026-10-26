@@ -1,5 +1,30 @@
 # October 5 product implementation tracker
 
+### October26 owner-enabled upload — actual X receipt, next code testing
+
+Owner explicitly approved and manually enabled Chrome file URL access after
+the browser policy refused opening chrome://extensions. No alternate-surface
+workaround. Same reserved Sunday receipt resumed, exact native graphic uploaded;
+editor blank-paragraph FEFF placeholders were read as empty paragraph text and
+the visible caption matched the checked hash. One PublishNow click, then actual
+Buffer Sent207 entry, full caption, graphic, exact time13:37:48.997Z and Xlink
+https://x.com/1753110091912413184/status/2114713104718143549 observed. Existing
+reservation confirmed via buffer_web under run lock and committed/pushed normally.
+Original9:04target retained as a missed plan, not backdated delivery. Screenshot
+work/buffer-recap-sent-20261026.png. API2700 unchanged; this is attended Buffer
+web delivery, not restoration of the API or an unattended browser publisher.
+
+Testing next: quota-held already-public X retries skip redundant news/test/build
+work until transport clears; unknown attended attempts block API duplicates.
+Attended public-play reservation requires real Discord release and the actual
+release path's price/news/exposure/schema/art/caption/tests in review-only mode.
+No new admission or fabricated Buffer ID/sent receipt. NBA private team-context
+packet joins fresh verified rosters, dated injuries and received-before-clock
+boxes; prior/current seasons and observed starts/minutes stay separate. Missing
+box rows are unknown, only explicit DNP gives zero. Existing21:00/23:30 prep
+includes it, no new job/feed/model weight or NBA admission change.33focused
+tests passed; full/clean/rehearsal/hosted/live pending for this code.
+
 ### October26 expanded audit release VERIFIED LIVE
 
 8e7dd069b installed/pushed; hosted40324236356SUCCESS explicitly verified

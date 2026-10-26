@@ -2886,6 +2886,9 @@ def _run(args, now, slot, kinds, status):
                 slate_path=ROOT/'data'/'nba-capture'/'slate.json'
                 nba_slate=json.loads(slate_path.read_text()) if slate_path.exists() else {}
                 prep=next_day_prep.prepare(games,lines,nba_slate,nba_player_props.build(prep_now,limit=None),prep_now)
+                import nba_team_context
+                prep['nba']['teamRoleContext'] = nba_team_context.from_stores(
+                    prep_now, root=ROOT/'data'/'nba-capture', target_date=prep['targetDate'])
                 boxscores.write_json(ROOT/'work'/'next-day-prep.json',prep)
                 status['nextDayPrepared']={'targetDate':prep['targetDate'],'footballGames':prep['football']['games'],
                                           'nbaGames':prep['nba']['games'],'nbaPropRows':prep['nba']['freshPropRows']}
@@ -3327,7 +3330,7 @@ def private_release_refusal(row, ctx, now):
     return None
 
 
-def release_private(now, log=log, only=None):
+def release_private(now, log=log, only=None, review_only=False):
     """Release due admissions Discord → public record → Buffer/X.
 
     Each state transition is persisted outside Git first.  A retry therefore
@@ -3358,11 +3361,29 @@ def release_private(now, log=log, only=None):
         key = row.get('id')
         if only is not None and key not in only:
             continue
+        web_attempt = next((e for e in log_book.get('posts', [])
+                            if e.get('id') == key and e.get('webDelivery')), None)
+        if web_attempt and not review_only:
+            if web_attempt.get('sentAt'):
+                release_queue.remove(CONF, key)
+                released.append(key)
+            else:
+                log(f'buffer: {key} has an unresolved attended attempt; no API retry')
+            continue
         pick = dict(row.get('pick') or {})
         game = ctx.games.get((pick.get('gameIds') or [None])[0])
         starts = sorted(gates.when(ctx.games[g]['kickoff']) for g in pick.get('gameIds') or [] if g in ctx.games)
         if not key or not starts or row.get('held'):
             continue
+        if (not review_only and row.get('discordSentAt') and row.get('publicPath')
+                and not row.get('bufferPostId')):
+            # The public release is complete. An unchanged X transport hold
+            # must not rerun news/tests/builds under the posting lock every5min.
+            # All ordinary checks run again once an actual X send is possible.
+            blocked = buffer_post.rate_backoff(now) or buffer_post.quota.buffer_block_reason(now=now)
+            if blocked:
+                log(f'buffer: {key} already released on Discord/site; X transport held: {blocked}')
+                continue
         row = normalize_private_stake(row, ctx, now)
         pick = dict(row.get('pick') or {})
         refusal = private_release_refusal(row, ctx, now)
@@ -3377,7 +3398,7 @@ def release_private(now, log=log, only=None):
         kickoff = starts[0]
         target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
         due = max(target, now + post_windows.DISCORD_PLAY_LEAD)
-        if now >= target-post_windows.DISCORD_PLAY_LEAD and not row.get('bufferPostId'):
+        if not review_only and now >= target-post_windows.DISCORD_PLAY_LEAD and not row.get('bufferPostId'):
             try:
                 if channel_error:
                     raise buffer_post.BufferError(channel_error)
@@ -3448,6 +3469,13 @@ def release_private(now, log=log, only=None):
             if style_problems:
                 raise ReleaseArtifactError('; '.join(style_problems))
         run_tests()
+
+        if review_only:
+            if not row.get('discordSentAt') or not row.get('publicPath'):
+                raise RunError('Attended web review requires an already-public Discord release')
+            released.append(dict(id=key, text=text, card=row['card'], dueAt=stamp(due),
+                                 pick=pick, reviewedAt=stamp(now)))
+            continue
 
         if not row.get('discordSentAt'):
             receipt = discord_post.send_message(

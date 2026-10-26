@@ -49,6 +49,14 @@ receipt is recorded, the web transport remains unverified. Unattended API
 publishing remains subject to the existing allowance. Keep website/Discord
 working while the external hold is explicit. Do not describe testing as a send.
 
+Owner manually enabled upload October26. Sunday recap actually sent13:37:48Z,
+X2114713104718143549, matched full caption/graphic observed in Buffer Sent and
+confirmed against the existing reservation. Original morning delay stays visible.
+This verifies attended receipts, not an autonomous fallback or renewed API room.
+Public-play extension requires a real already-public Discord release and the
+normal release validator's current checks; private admissions and unknown/previous
+X attempts hold. API retries never duplicate an unresolved attended reservation.
+
 ## Remaining work
 
 October26 audit adds a shared12/day ceiling for all optional analytics attempts,

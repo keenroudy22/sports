@@ -54,6 +54,9 @@ class PrivateReleaseBufferHoldTests(unittest.TestCase):
                     stack.enter_context(mock.patch(target, return_value=value))
             channel = stack.enter_context(mock.patch('buffer_post.x_channel',
                 side_effect=buffer_post.BufferError('Buffer local free-plan request cap reached')))
+            blocked = stack.enter_context(mock.patch('buffer_post.quota.buffer_block_reason',
+                return_value='Buffer local free-plan request cap reached'))
+            stack.enter_context(mock.patch('buffer_post.rate_backoff', return_value=None))
             send = stack.enter_context(mock.patch('discord_post.send_message',
                 return_value={'id': 'message', 'image': 'https://example.com/card.png'}))
             create = stack.enter_context(mock.patch('buffer_post.create_post', return_value='buffer-id'))
@@ -65,15 +68,28 @@ class PrivateReleaseBufferHoldTests(unittest.TestCase):
             self.assertNotIn('bufferPostId', saved)
             send.assert_called_once()
             create.assert_not_called()
-            self.assertEqual(channel.call_count, 2)
+            self.assertEqual(channel.call_count, 1, 'already-public X hold must not rediscover the channel')
             self.assertEqual(len(delivery_book['posts']), 1)
             entry = delivery_book['posts'][0]
             self.assertEqual(entry['discord']['state'], 'sent')
             self.assertNotIn('bufferPostId', entry)
             self.assertNotIn('dueAt', entry)
+            # Attended review runs the same guards without provider discovery,
+            # another Discord send, or another public report.
+            checked = run.release_private(now, log=lambda *_: None, review_only=True)
+            self.assertEqual([r['id'] for r in checked], [key])
+            self.assertEqual(checked[0]['text'], 'Exact caption')
+            self.assertEqual(channel.call_count, 1)
+            send.assert_called_once()
+            create.assert_not_called()
+            entry['webDelivery'] = {'state': 'reserved'}
+            self.assertEqual(run.release_private(now, log=lambda *_: None), [])
+            self.assertEqual(channel.call_count, 1, 'unknown attended attempt blocks API duplicate')
+            entry.pop('webDelivery')
             # Actual recovery resumes X only; the already-public play is not sent twice.
             channel.side_effect = None
             channel.return_value = {'id': 'channel'}
+            blocked.return_value = None
             self.assertEqual(run.release_private(now, log=lambda *_: None), [key])
             send.assert_called_once()
             create.assert_called_once()

@@ -13,6 +13,42 @@ import buffer_post as bp
 class WebReceiptTests(unittest.TestCase):
     now = datetime(2026, 10, 26, 13, tzinfo=timezone.utc)
 
+    def test_public_play_web_reservation_requires_real_discord_and_current_review(self):
+        text = 'Player over 2.5 catches -110 FanDuel\n\n21+ only'
+        entry = dict(id='NFL-public', kind='buffer:play', textHash=web.x_post.text_hash(text),
+                     discord={'state': 'sent'})
+        review = dict(id=entry['id'], text=text, card='/checked/card.png',
+                      reviewedAt=bp.stamp(self.now), dueAt=bp.stamp(self.now+timedelta(minutes=15)))
+        with patch.object(bp, 'rate_backoff', return_value=None), patch.object(bp, 'graphql') as api:
+            book = {'posts': [entry]}
+            result = web.reserve_public_play(entry['id'], book, self.now, reviewer=lambda: [review])
+            self.assertIs(result, entry)
+            self.assertEqual(len(book['posts']), 1)
+            self.assertNotIn('bufferPostId', entry)
+            self.assertNotIn('sentAt', entry)
+            api.assert_not_called()
+            with self.assertRaises(web.WebHold):
+                web.reserve_public_play(entry['id'], book, self.now, reviewer=lambda: [review])
+
+    def test_public_play_web_refuses_private_failed_ambiguous_or_changed_copy(self):
+        text = 'Checked caption'
+        base = dict(id='NFL-public', kind='buffer:play', textHash=web.x_post.text_hash(text),
+                    discord={'state': 'sent'})
+        review = dict(id=base['id'], text=text, card='/checked/card.png',
+                      reviewedAt=bp.stamp(self.now), dueAt=bp.stamp(self.now+timedelta(minutes=15)))
+        with patch.object(bp, 'rate_backoff', return_value=None):
+            for changes in ({'discord': {'state': 'pending'}}, {'bufferPostId': 'p'},
+                            {'sentAt': bp.stamp(self.now)}, {'webDelivery': {'state': 'reserved'}},
+                            {'kind': 'buffer:community'}, {'error': 'unknown outcome'}):
+                with self.assertRaises(web.WebHold):
+                    web.reserve_public_play(base['id'], {'posts': [dict(base, **changes)]},
+                        self.now, reviewer=lambda: [review])
+            for changed in ([], [dict(review, text='Changed')],
+                            [dict(review, reviewedAt=bp.stamp(self.now-timedelta(minutes=1)))]):
+                with self.assertRaises(web.WebHold):
+                    web.reserve_public_play(base['id'], {'posts': [dict(base)]},
+                        self.now, reviewer=lambda: changed)
+
     def reserve(self, book, kind='receipt', text='Sunday: 2-3. -0.5u.\n\n21+ only'):
         plan = [('receipt:day:2026-10-25', kind, text, self.now+timedelta(minutes=3), None)]
         with patch.object(bp, 'rate_backoff', return_value=None), \
