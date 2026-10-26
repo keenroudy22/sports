@@ -1,5 +1,26 @@
 # October 5 product implementation tracker
 
+## October26 owner recovery — testing, not fully restored
+
+Owner audit resumed from O-20261025-OWNERFOLLOW, not restarted. Fresh evidence:
+current official straight headline43-51/onevoid; recorded-price subset29-40,
+-9.269u; since October23 17:40UTC4-9/-3.407u. No counts or stakes changed.
+Latest v2.1 NFL spread14-15,total13-16;CFB spread53-63-2,total57-61.
+NBA forward research2196 correlated player/stat comparisons from38games;
+baseline average absolute error exceeds quoted-line error in all8stat groups.
+Reviewed-minute version only2games; no promotion or profitable-edge claim.
+
+Buffer Chrome verified Free/login/zero upcoming; lone failedOctober3 post left
+untouched. Local2700 stop retained. Added non-spending preflight so X quota or
+provider backoff does not trigger whole-desk result rebuilds; stored official
+Discord result delivery remains independent. New API reservations label purpose,
+without rewriting old journals. Fixed NBA matchup-caption punctuation rejected
+by the real send guard; immutable never-queued drafts may renew normally.
+Added narrow attended Buffer-web receipt reservation/observed-queue/sent checks;
+not unattended ticket publishing or permission to evade provider restrictions.
+No actual UI publication claimed. Full release/hosted/mobile receipts pending.
+See BUFFER-OPERATING-LIMITS.md. Remaining units-only/daily-card/release work stays open.
+
 ## October24 fun-ticket candidate isolation — testing
 
 Actual07:42 pass found368 straight rows but the ticket path reported zero games.

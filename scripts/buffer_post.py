@@ -160,7 +160,11 @@ def graphql(query, variables=None, key=None, send=http_send):
         if blocked:
             raise blocked
         try:
-            quota.count_request('buffer', optional=query == METRICS)
+            operation = ('analytics' if query == METRICS else 'publish' if query == CREATE
+                         else 'status' if query == STATUS else 'cancel' if query == DELETE
+                         else 'limits' if 'dailyPostingLimits' in query else 'channels'
+                         if 'organizations' in query or 'channels(input:' in query else 'other')
+            quota.count_request('buffer', optional=query == METRICS, operation=operation)
         except quota.QuotaBlocked as error:
             raise BufferError(str(error)) from None
     response = send(API, {'query': query, 'variables': variables or {}}, {'Authorization': f'Bearer {key}'})

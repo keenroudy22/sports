@@ -17,6 +17,24 @@ class Response(io.StringIO):
 
 
 class QuotaTests(unittest.TestCase):
+    def test_preflight_does_not_spend_and_keeps_historical_journal(self):
+        now = datetime(2026, 10, 26, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as root:
+            self.assertIsNone(quota.buffer_block_reason(root, now))
+            path = Path(root) / 'buffer.jsonl'
+            self.assertFalse(path.exists())
+            quota.count_request('buffer', root, now, operation='status')
+            original = path.read_bytes()
+            self.assertIsNone(quota.buffer_block_reason(root, now))
+            self.assertEqual(path.read_bytes(), original)
+            self.assertEqual(json.loads(original)['operation'], 'status')
+            path.write_bytes(original * quota.BUFFER_STOP)
+            original = path.read_bytes()
+            self.assertIn('cap reached', quota.buffer_block_reason(root, now))
+            self.assertEqual(path.read_bytes(), original)
+            path.write_text('broken journal')
+            self.assertIn('unavailable', quota.buffer_block_reason(root, now))
+
     def test_buffer_rolling_window_and_delivery_reserve(self):
         now=datetime(2026,11,1,tzinfo=timezone.utc)
         with tempfile.TemporaryDirectory() as root:

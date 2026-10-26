@@ -1771,6 +1771,7 @@ class DiscordMirrorTests(unittest.TestCase):
         with mock.patch.dict(sys.modules, {'live_watch': watcher, 'live_progress': progress}), \
                 mock.patch.dict(os.environ, {'KEENROUDY_LIVE_SHADOW': '1', 'BUFFER_TOKEN': ''}, clear=False), \
                 mock.patch.object(run, 'result_recovery_needed', return_value=1), \
+                mock.patch.object(run, 'result_transport_block', return_value=None), \
                 mock.patch.object(run, 'mark_result_recovery') as marked, \
                 mock.patch.object(run, 'run', return_value=0) as official:
             self.assertEqual(run.mirror(args), 0)
@@ -1866,6 +1867,7 @@ class MirrorClockTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {'KEENROUDY_LIVE_SHADOW': '0', 'BUFFER_TOKEN': 'test'}), \
                 mock.patch.object(run, 'datetime', clock), \
                 mock.patch.object(run, 'result_recovery_needed', return_value=1), \
+                mock.patch.object(run, 'result_transport_block', return_value=None), \
                 mock.patch.object(run, 'mark_result_recovery'), \
                 mock.patch.object(run, 'run', side_effect=lambda *_: wall.__setitem__(0, after_recovery) or 0), \
                 mock.patch.object(run, 'Lock'), \

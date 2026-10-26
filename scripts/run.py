@@ -3559,6 +3559,12 @@ def release_private_isolated(now, log=log, runner=None):
     return released
 
 
+def result_transport_block(now):
+    import quota
+    import buffer_post
+    return quota.buffer_block_reason(now=now) or buffer_post.rate_backoff(now)
+
+
 def mirror(args):
     """Every five minutes, observe public plays, send due Discord-first plays and mirror the rest from Buffer."""
     import buffer_post
@@ -3596,7 +3602,10 @@ def mirror(args):
         if result:
             return result
     missing_results = result_recovery_needed(now)
-    if missing_results and not args.dry_run:
+    result_transport_hold = result_transport_block(now) if missing_results else None
+    if missing_results and result_transport_hold:
+        log(f'result recovery: X held without a desk rebuild: {result_transport_hold}; Discord remains independent')
+    if missing_results and not result_transport_hold and not args.dry_run:
         # The result is already in the append-only public record; this pass
         # rebuilds and recreates only the missing result delivery.  It spends
         # no odds credits and uses no model call.
@@ -3621,7 +3630,7 @@ def mirror(args):
                         (discord_post.webhook() or discord_post.wins_webhook()))
     if not social_ready and not chef_waiting:
         return 0
-    if not chef_waiting and not mirror_due(x_post.load_log(), now) and not private_release_ready(now):
+    if not chef_waiting and not result_transport_hold and not mirror_due(x_post.load_log(), now) and not private_release_ready(now):
         return 0
     if args.dry_run:
         log('discord mirror: work is due; dry run sends nothing')
@@ -3639,12 +3648,21 @@ def mirror(args):
             if not args.now:
                 now = datetime.now(timezone.utc)
             log_book = x_post.load_log()
+            if result_transport_hold:
+                # These grades are already public. Read stored evidence only;
+                # do not re-capture, re-grade, rebuild or call Buffer to deliver
+                # an independent official Discord result.
+                ctx = gates.Stores().as_of(now)
+                slate = load_json(ROOT / 'site/data/slate.json', {'games': []})
+                games = {g['id']: g for g in slate.get('games', [])}
+                discord_post.queue_results(log_book, ctx.first, ctx.latest, games, now)
+                x_post.save_log(log_book)
             if private_release_ready(now):
                 release_private_isolated(now)
                 log_book = x_post.load_log()
             if not mirror_due(log_book, now):
                 return 0
-            for entry in buffer_post.reconcile(log_book, now, log=log):
+            for entry in ([] if result_transport_hold else buffer_post.reconcile(log_book, now, log=log)):
                 failed.append(f"X: {entry['id']}: {entry['error']}")
                 alert("Kook'n post did not go out", f"{entry['id']}: {entry['error']}")
             for entry in discord_post.mirror_sent(log_book, now, log=log):

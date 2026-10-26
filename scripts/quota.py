@@ -45,10 +45,12 @@ def current_month_usage(value, now=None):
     return value if observed.astimezone(timezone.utc).strftime('%Y-%m') == now.astimezone(timezone.utc).strftime('%Y-%m') else {}
 
 
-def count_request(provider, root=STATE, now=None, optional=False):
+def count_request(provider, root=STATE, now=None, optional=False, reserve=True, operation=None):
     """Reserve one free-plan request before sending it; fail closed at local caps."""
     if provider not in ('sharp', 'buffer'):
         raise ValueError('unknown free-plan request counter')
+    if operation not in (None, 'publish', 'status', 'analytics', 'channels', 'limits', 'cancel', 'other'):
+        raise ValueError('unknown request operation')
     now = now or datetime.now(timezone.utc)
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
@@ -80,12 +82,30 @@ def count_request(provider, root=STATE, now=None, optional=False):
                     raise QuotaBlocked('SharpAPI 12-per-minute free-plan cap reached')
         except (OSError, ValueError, TypeError, KeyError):
             raise QuotaBlocked('free-plan request journal unavailable') from None
-        with (root / f'{provider}.jsonl').open('a', encoding='utf-8') as handle:
-            handle.write(json.dumps({'month': now.astimezone(timezone.utc).strftime('%Y-%m'),
+        if not reserve:
+            return
+        row = {'month': now.astimezone(timezone.utc).strftime('%Y-%m'),
                                      'at': now.astimezone(timezone.utc).isoformat(),
-                                     'provider': provider, 'count': 1}, sort_keys=True) + '\n')
+                                     'provider': provider, 'count': 1}
+        if operation is not None:
+            row['operation'] = operation
+        with (root / f'{provider}.jsonl').open('a', encoding='utf-8') as handle:
+            handle.write(json.dumps(row, sort_keys=True) + '\n')
             handle.flush()
             os.fsync(handle.fileno())
+
+
+def buffer_block_reason(root=STATE, now=None, optional=False):
+    """Local read-only preflight; never a reservation or provider balance claim.
+
+    The send path still reserves atomically. This prevents an exhausted transport
+    from waking an expensive whole-desk result rebuild on every retry.
+    """
+    try:
+        count_request('buffer', root, now, optional=optional, reserve=False)
+    except QuotaBlocked as error:
+        return str(error)
+    return None
 
 
 def monthly_counts(root=STATE, now=None):

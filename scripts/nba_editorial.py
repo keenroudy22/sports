@@ -133,7 +133,7 @@ def market_watch_rows(games, now):
                 'right':f'{value:g}', 'detail':f"My number: {abs(gap):g} {direction} points than the line",
                 'logo':game['teams']['away'].get('logo'), 'quote':dict(quote), 'gap':gap,
                 'eventId':str(game.get('providerId') or game['id']),
-                'caption':f"{names}: book {line:g}, I have {value:g} — {abs(gap):g} {direction} points"})
+                'caption':f"{names}: book {line:g}, I have {value:g}. {abs(gap):g} {direction} points"})
         except (KeyError, TypeError, ValueError):
             continue
     return sorted(rows,key=lambda r:(-abs(r['gap']),r['subject']))[:5]

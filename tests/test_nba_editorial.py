@@ -45,6 +45,7 @@ class NBAEditorialTests(unittest.TestCase):
         self.assertIn('Research, not a bet.',watch['text'])
         self.assertNotIn('last season',watch['text'])
         self.assertNotIn('scored /',watch['text'])
+        self.assertEqual(x_post.x_style(watch['text']), [])
         self.assertEqual(n.relevance_issues(watch,now),[])
         self.assertLessEqual(x_post.tweet_length(watch['text']),x_post.LIMIT)
         self.assertTrue(n.team_trends(data['games'],now,h))  # website history remains available
