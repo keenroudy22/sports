@@ -5,6 +5,7 @@ otherwise accepted sentence supports a bet. Original published copy is retained.
 """
 import re
 from datetime import datetime, timezone
+import pricing
 
 START = datetime(2026, 10, 26, 14, 35, tzinfo=timezone.utc)
 RECEIVING = r'\b(?:receiv\w*|receptions?|catches|targets?|routes?|checkdowns?|check-downs?)\b'
@@ -26,7 +27,9 @@ def prospective(pick, now=None):
 def mismatch(pick, text):
     if not pick.get('athleteId'):
         return None
-    stat = pick.get('market') or pick.get('stat')
+    stat = pricing.market_of(pick) or pick.get('stat')
+    if not stat and re.search(r'\b(?:catches|receptions?)\b', str(pick.get('title') or '').lower()):
+        stat = 'rec'
     text = str(text or '').lower()
     receiving, rushing, passing = (bool(re.search(pattern, text)) for pattern in (RECEIVING, RUSHING, PASSING))
     if stat in ('rec', 'recYds') and rushing and not receiving:

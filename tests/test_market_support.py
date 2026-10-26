@@ -22,6 +22,7 @@ class MarketSupportTests(unittest.TestCase):
         self.assertFalse(ms.allowed(self.pick(), WRONG))
         self.assertFalse(ms.allowed(dict(athleteId='p', market='rec'), WRONG))
         self.assertFalse(ms.allowed(dict(athleteId='p', market='rec', publishedAt='bad'), WRONG))
+        self.assertFalse(ms.allowed(dict(athleteId='p', title='Javonte Williams over 2.5 catches'), WRONG))
         for market in ('rec', 'recYds'):
             self.assertIsNotNone(ms.mismatch(dict(athleteId='p', market=market), 'More rushing attempts are expected.'))
 
