@@ -71,3 +71,12 @@ class WebReceiptTests(unittest.TestCase):
         web.confirm_scheduled(entry, observed_text=entry['queuedText'], due_at=entry['dueAt'], now=self.now)
         self.assertEqual(entry['webDelivery']['state'], 'scheduled')
         self.assertNotIn('sentAt', entry)
+
+    def test_web_sent_receipt_does_not_enter_api_metrics_without_provider_id(self):
+        entry = self.reserve({'posts': []})
+        web.confirm_sent(entry, observed_text=entry['queuedText'],
+                         link='https://x.com/keenkooks/status/123',
+                         sent_at=bp.stamp(self.now), now=self.now)
+        with patch.object(bp, 'graphql') as api:
+            self.assertEqual(bp.collect_metrics({'posts': [entry]}, self.now+timedelta(days=1)), 0)
+            api.assert_not_called()

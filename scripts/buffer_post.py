@@ -841,7 +841,10 @@ SETTLE_METRICS = timedelta(hours=24)     # owner Autopilot: first read at 24h, w
 def collect_metrics(log_book, now, key=None, send=http_send, log=print):
     """Track 24h/72h/7d snapshots under existing quota, prioritizing first reads."""
     read = 0
-    candidates = [(entry, social_learning.checkpoint(entry, now)) for entry in log_book.get('posts', [])]
+    # Attended web receipts have real X proof but need no invented developer
+    # post ID. Their metrics are unavailable to this API path, not a fatal error.
+    candidates = [(entry, social_learning.checkpoint(entry, now)) for entry in log_book.get('posts', [])
+                  if entry.get('bufferPostId')]
     candidates = [(entry, point) for entry, point in candidates if point is not None]
     candidates.sort(key=lambda pair:(bool(pair[0].get('metricsAt')),pair[0]['sentAt']))
     # Extra refreshes have their own small ceiling; never expand the provider budget.
