@@ -3349,7 +3349,9 @@ def release_private(now, log=log, only=None):
     release_queue.merge_context(ctx, CONF)
     ctx.games = live_games(now, {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')})
     log_book = x_post.load_log()
-    channel = buffer_post.x_channel(wanted='keenkooks')
+    # X discovery is transport work, never a prerequisite for Discord/site.
+    channel = None
+    channel_error = None
     released = []
     busy = buffer_post.taken(log_book, now)
     for row in list(book['plays']):
@@ -3377,9 +3379,13 @@ def release_private(now, log=log, only=None):
         due = max(target, now + post_windows.DISCORD_PLAY_LEAD)
         if now >= target-post_windows.DISCORD_PLAY_LEAD and not row.get('bufferPostId'):
             try:
+                if channel_error:
+                    raise buffer_post.BufferError(channel_error)
+                channel = channel or buffer_post.x_channel(wanted='keenkooks')
                 moved=buffer_post.yield_optional(log_book,due,now,channel['id'])
                 if moved:log(f'release: routine posts moved behind fresh play: {moved}')
-            except buffer_post.BufferError as error:
+            except (buffer_post.BufferError, buffer_post.MissingToken) as error:
+                channel_error = str(error)
                 log(f'release: optional queue move failed; keeping official release active: {error}')
             finally:
                 # Persist even a restored replacement identity after an API refusal.
@@ -3450,6 +3456,23 @@ def release_private(now, log=log, only=None):
             row = release_queue.update(CONF, key, discordSentAt=published_at, discordReceipt=receipt or {})
             log(f'discord: {key} released before X')
 
+        # Public delivery is real even when Buffer cannot accept a post. Save
+        # that receipt before the public report, without inventing an X schedule.
+        entry = next((e for e in log_book.get('posts', []) if e.get('id') == key), None)
+        if entry is None:
+            sent_at = row['discordSentAt']
+            entry = {'id': key, 'postedAt': sent_at,
+                     'textHash': x_post.text_hash(text), 'kind': 'buffer:play', 'card': True,
+                     'cardTheme': 'ticket', 'reasonKind': x_post.reason_kind(x_post.reason_in(text)),
+                     'copyVariant': x_post.copy_variant(text),
+                     'discord': {'state': 'sent', 'sentAt': sent_at, 'beforeX': True, 'text': text,
+                                 'image': buffer_post.card_url(key)}}
+            entry.update(cardKey=key)
+            if social_style.active(now):
+                entry.update(queuedText=text, socialStyleVersion=social_style.VERSION, socialAgeVersion=AGE_VERSION)
+            log_book.setdefault('posts', []).append(entry)
+            x_post.save_log(log_book)
+
         if not row.get('publicPath'):
             safe = re.sub(r'[^A-Za-z0-9-]+', '-', key).strip('-')[:72]
             name = f"{eastern_date(now).isoformat()}-{row['league']}-{now.astimezone(EASTERN):%H%M}-release-{safe}.json"
@@ -3488,6 +3511,16 @@ def release_private(now, log=log, only=None):
                                        publicPushedAt=stamp(datetime.now(timezone.utc)))
 
         if not row.get('bufferPostId'):
+            if channel_error:
+                log(f'buffer: {key} released on Discord/site; X waits: {channel_error}')
+                continue
+            if channel is None:
+                try:
+                    channel = buffer_post.x_channel(wanted='keenkooks')
+                except (buffer_post.BufferError, buffer_post.MissingToken) as error:
+                    channel_error = str(error)
+                    log(f'buffer: {key} released on Discord/site; X waits: {error}')
+                    continue
             image = (row.get('discordReceipt') or {}).get('image')
             if not image:
                 image = buffer_post.card_url(key)
@@ -3497,20 +3530,9 @@ def release_private(now, log=log, only=None):
             post_id = buffer_post.create_post(text, channel['id'], due, image)
             row = release_queue.update(CONF, key, bufferPostId=post_id, dueAt=stamp(due), bufferImage=image)
 
-        if not any(entry.get('id') == key for entry in log_book.get('posts', [])):
-            sent_at = row['discordSentAt']
-            entry = {'id': key, 'postedAt': sent_at, 'dueAt': row['dueAt'], 'bufferPostId': row['bufferPostId'],
-                     'textHash': x_post.text_hash(text), 'kind': 'buffer:play', 'card': True,
-                     'cardTheme': 'ticket', 'reasonKind': x_post.reason_kind(x_post.reason_in(text)),
-                     'copyVariant': x_post.copy_variant(text),
-                     'discord': {'state': 'sent', 'sentAt': sent_at, 'beforeX': True, 'text': text,
-                                 'image': buffer_post.card_url(key)}}
-            entry.update(bufferImage=row.get('bufferImage'), cardKey=key)
-            if social_style.active(now):
-                entry.update(queuedText=text, socialStyleVersion=social_style.VERSION, socialAgeVersion=AGE_VERSION)
-            log_book.setdefault('posts', []).append(entry)
-            x_post.save_log(log_book)
-            commit_log(now, push=True)
+        entry.update(dueAt=row['dueAt'], bufferPostId=row['bufferPostId'], bufferImage=row.get('bufferImage'))
+        x_post.save_log(log_book)
+        commit_log(now, push=True)
         release_queue.remove(CONF, key)
         released.append(key)
         busy.append(due)

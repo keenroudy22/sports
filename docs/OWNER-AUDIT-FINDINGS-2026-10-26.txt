@@ -75,6 +75,16 @@ The Sunday receipt is reserved, not scheduled/sent; Chrome file upload is blocke
 No UI retry, duplicate, scheduling click or claim of restored automatic posting.
 
 CONFIRMED REPAIR
+The actual08:30 worker also exposed a separate private-admission defect:
+release_private discovered the X channel before any Discord send/report. Three
+new private plays failed there on the2700cap. Discovery is now lazy and caught;
+all ordinary release validation still precedes Discord. Real Discord evidence is
+saved in the common delivery log before the public report, without a fictitious
+X due time or provider ID. A later recovery updates that same entry. Regression
+runs the actual release twice under quota failure, verifies one Discord send and
+one public report, then restores X and verifies one provider send/no duplicate.
+This is distinct from the earlier general-social/result transport repairs.
+
 Unavailable first analytics reads previously retried every6hours per post while
 only successful-first-read follow-ups shared an8/day ceiling. Now every first
 or later attempt shares12/day, including failed/missing replies, across passes.

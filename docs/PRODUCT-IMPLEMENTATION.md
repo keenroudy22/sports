@@ -14,6 +14,14 @@ passes with an independent atomic quota-journal guard; essential sends unaffecte
 Focused25tests pass; full/clean/rehearsal/hosted/mobile pending.2700stop retained;
 receipt remains reserved/unsent and full audit open.
 
+08:30live run exposed another path: release_private discovered Buffer before
+Discord/report, isolating3new private admissions on the2700hold. Lazy/caught
+discovery now preserves checked Discord/site release; real Discord evidence is
+logged before public report, no invented X due/ID. Actual-path regression runs
+two failed-X passes then successful-X recovery with one Discord send, one report
+and one provider creation.16release regressions pass. First release attempt
+stopped cleanly on dev edits; no partial promotion. Full gates repeat on commit.
+
 ### October26 recovery release verified; Buffer upload needs owner action
 
 Release167b89d88, hosted40320634251SUCCESS; hosted verifiedHeadfade79398
