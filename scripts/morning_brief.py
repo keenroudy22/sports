@@ -68,9 +68,8 @@ def choose(now,lines,screened,nba,official=False):
     return None
 
 def text(row):
-    minutes=f" in {row['minutes']:g} estimated minutes" if row.get('minutes') else ''
     return (f"Morning lean · not a Best Bet\n{row['title']} ({row['odds']:+d}, {row['book']})\n"
-            f"My number: {row['projection']:g}{minutes}.\nMissing: {row['missing']}\n#{row['league']}")
+            f"Missing: {row['missing']}\n#{row['league']}")
 
 def prepare(now,screened,official=False,root=STORE):
     local=now.astimezone(gates.EASTERN)

@@ -51,10 +51,10 @@ def prop_choice(data,now,preview=False):
         if not timedelta(0)<=now-boxscores.instant(r['sourceAt'])<=timedelta(hours=4):continue
         p=r['projection'];h=r['last10'];side=r['side']
         item={'subject':r['name'],'line':f"{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d}",
-              'right':f"{p['value']:g}",'logo':r.get('photo'),
+              'right':'ROLE REVIEW','logo':r.get('photo'),
               'detail':f"{r['teamAbbr']} · {r['book']} · {h['hits']}/{h['games']} {p['window'].lower()}",
-              'caption':f"{r['name']} · {r['teamName']}\n{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d} · I have {p['value']:g}"+
-                        (f" at {p['minutes']:g} estimated min" if p.get('minutesBasis')=='analyst-estimate' else '')+
+              'caption':f"{r['name']} · {r['teamName']}\n{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d}"+
+                        (f" · about {round(p['minutes'])} estimated min" if p.get('minutesBasis')=='analyst-estimate' else '')+
                         f" · {h['hits']}/{h['games']}"}
         if now >= RELEVANCE_START:
             # History stays labeled on the graphic, but is not the social hook.
@@ -130,10 +130,10 @@ def market_watch_rows(games, now):
             names = ' at '.join(game['teams'][s]['abbreviation'] for s in ('away','home'))
             direction = 'more' if gap>0 else 'fewer'
             rows.append({'subject':names, 'line':f"Book total {line:g} · {quote['book']}",
-                'right':f'{value:g}', 'detail':f"My number: {abs(gap):g} {direction} points than the line",
+                'right':f'≈{round(value)}', 'detail':f"My total is {direction} than the book",
                 'logo':game['teams']['away'].get('logo'), 'quote':dict(quote), 'gap':gap,
                 'eventId':str(game.get('providerId') or game['id']),
-                'caption':f"{names}: book {line:g}, I have {value:g}. {abs(gap):g} {direction} points"})
+                'caption':f"{names}: book {line:g}, my total about {round(value)}."})
         except (KeyError, TypeError, ValueError):
             continue
     return sorted(rows,key=lambda r:(-abs(r['gap']),r['subject']))[:5]
@@ -234,16 +234,16 @@ def choices(data, now, history=None):
         except (KeyError, TypeError, ValueError):
             pass
         projected.append({'subject':f"{a['abbreviation']} at {h['abbreviation']}",
-                          'line':f"My score {p['away']:g} - {p['home']:g}" + (f" | {quote['book']}" if book_total is not None else ''),
-                          'right':f"{p['total']:g} / {book_total:g}" if book_total is not None else f"{p['total']:g} / N/A",
+                          'line':f"My rounded score {round(p['away'])} - {round(p['home'])}" + (f" | {quote['book']}" if book_total is not None else ''),
+                          'right':f"≈{round(p['total'])} / {book_total:g}" if book_total is not None else f"≈{round(p['total'])} / N/A",
                           'detail':'', 'logo':a.get('logo'),
-                          'caption':f"{names(g)}: {p['away']:g}-{p['home']:g}"})
+                          'caption':f"{names(g)}: about {round(p['away'])}-{round(p['home'])}"})
     if len(games)==1:
         g=games[0]
         projected=[{'subject':g['teams'][s]['abbreviation'],'line':'My projected points',
-                    'right':f"{g['projection'][s]:g}",'detail':'',
+                    'right':f"≈{round(g['projection'][s])}",'detail':'',
                     'logo':g['teams'][s].get('logo'),
-                    'caption':f"{g['teams'][s].get('name') or g['teams'][s].get('displayName') or g['teams'][s]['abbreviation']}: {g['projection'][s]:g}"}
+                    'caption':f"{g['teams'][s].get('name') or g['teams'][s].get('displayName') or g['teams'][s]['abbreviation']}: about {round(g['projection'][s])}"}
                    for s in ('away','home')]
     trends = team_trends(games,now,history)
     # Keep one window per card. Never blend last season with this season.

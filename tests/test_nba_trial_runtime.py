@@ -122,6 +122,6 @@ class TrialRuntimeTests(unittest.TestCase):
    self.assertEqual(rt.social_plans(NOW,{'posts':[]},root=self.root),[])
   self.assertEqual(plans[0][1],'nba-trial');self.assertGreaterEqual(plans[0][3],NOW+timedelta(minutes=25))
   self.assertIn('NBA Trial',plans[0][2]);self.assertNotIn('1u',plans[0][2])
-  self.assertIn('I have the total at 210.',plans[0][2]);self.assertNotIn('1u',plans[0][2])
+  self.assertNotIn('I have the total at',plans[0][2]);self.assertIn('UNDER 221.5',plans[0][2]);self.assertNotIn('1u',plans[0][2])
 
 if __name__=='__main__':unittest.main()

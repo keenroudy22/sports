@@ -630,7 +630,7 @@ document.fonts.ready.then(() => {
         self.valid(card)
         self.assertIn('Saturday, October 10', card)
         self.assertIn('LIKE #1  FIU -3.5 +100 theScore Bet', card)
-        self.assertIn('20.1–27.3', card)
+        self.assertIn('≈20–27', card)
         self.assertIn('rings name the lines we like · watches, not picks', card)
         self.assertIn('theScore Bet', card)
         self.assertNotIn('ESPN', card)
@@ -666,7 +666,7 @@ document.fonts.ready.then(() => {
         self.assertIn('LIKE #1  PITT -3.5 −105 theScore Bet', card)
         self.assertIn('11.1-PT GAP · CAUTION', card)
         self.assertIn(f'fill="{felt_cards.KOOKD}"', card)
-        self.assertIn(f'>19.2–31.1</text>', card)
+        self.assertIn(f'>≈19–31</text>', card)
         self.assertNotIn('>SCORE<', card)
         self.assertNotIn('>BR<', card)
         self.assertLessEqual(felt_cards.fit_size('SPREAD  OUR PITT −11.9  ·  MARKET PITT -3.5 −105 theScore Bet',

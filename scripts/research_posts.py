@@ -177,7 +177,7 @@ def prep_candidate(data, now):
         dvp = row.get('dvp') or {}
         opponent = f" · defense #{dvp['rank']} of {dvp['of']}" if dvp.get('rank') and dvp.get('of') else ''
         fill = ' · incl. 2025' if row.get('includesPriorSeason') else ''
-        lines.append(f"{play} {price(row['odds'])} {book_short(row['book'])} · my number {row['projection']:g}, line {float(row['line']):g}"
+        lines.append(f"{play} {price(row['odds'])} {book_short(row['book'])}"
                      f" · {row['hits']}/{row['games']}{opponent}{fill}")
     save = voice_pick.choose_slot('save', f'prep:{day}:{league}', day, series='prep', history=[])
     caption = '\n'.join(part for part in ['Lines that keep clearing today:', *lines, save, f'#{league}'] if part)
@@ -214,7 +214,7 @@ def upset_candidate(games, now):
         team = game.get(side) or {}
         opponent = game.get('away' if side == 'home' else 'home') or {}
         projected_for, projected_against = watch.get('projectedFor'), watch.get('projectedAgainst')
-        score = f"Our score {team.get('abbr') or team.get('name')} {projected_for:g}–{projected_against:g} {opponent.get('abbr') or opponent.get('name')}" \
+        score = f"Our rounded score {team.get('abbr') or team.get('name')} {round(projected_for)}–{round(projected_against)} {opponent.get('abbr') or opponent.get('name')}" \
             if isinstance(projected_for, (int, float)) and isinstance(projected_against, (int, float)) else \
             f"We give them {round(100 * watch['modelChance'])}%. The price says {round(100 * watch['marketChanceNoVig'])}%."
         gap = watch.get('spreadGap')
@@ -259,7 +259,7 @@ def spread_dog_candidate(games, lines, now):
         model_line = -projection if side == 'home' and isinstance(projection, (int, float)) else projection
         detail = f"vs {opponent.get('name') or opponent.get('abbr')}"
         if isinstance(model_line, (int, float)):
-            detail += f" | our spread {team.get('abbr') or team.get('name')} {model_line:+g}"
+            detail += f" | our rounded spread {team.get('abbr') or team.get('name')} {round(model_line):+d}"
         rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
                      'title': team.get('name') or team.get('abbr'), 'team': team, 'opponent': opponent,
                      'price': f"{line['line']:+g} ({price(line.get('odds'))})",
@@ -346,7 +346,7 @@ def matchup_candidate(games, details, now, teams=None):
             stat = STAT_LABEL.get(matchup['stat'], str(line.get('market') or matchup['stat']).lower())
             detail_text = f"{opponent} allows {matchup['value']:g} {stat}/game to {matchup['pos']}s · #{matchup['rank']} of {matchup['of']}"
             if script_risk:
-                detail_text += f" · {line.get('teamAbbr') or 'team'} projected {abs(margin):g}-pt dog"
+                detail_text += f" · {line.get('teamAbbr') or 'team'} projected about {round(abs(margin))}-pt dog"
             away, home = game.get('away') or {}, game.get('home') or {}
             matchup_label = (f"{away.get('abbr') or away.get('abbreviation') or away.get('short') or '?'} at "
                                f"{home.get('abbr') or home.get('abbreviation') or home.get('short') or '?'}")
@@ -448,20 +448,20 @@ def season_candidate(games, details, now):
     bucket_label = '100%' if bucket == 100 else f'{bucket}%+'
     shown = [{**r, 'title': r['player'], 'price': r['title'],
               'metric': f"{r['hits']}/{r['games']} this season · {r['rate']:g}% historical",
-              'detail': (f"My number {r['projection']:g} · {price(r['odds'])} {r['book']} · defense "
+              'detail': (f"{price(r['odds'])} {r['book']} · defense "
                          f"#{(r.get('dvp') or {}).get('rank')} of {(r.get('dvp') or {}).get('of')}"
                          f"{' · incl. 2025' if r.get('includesPriorSeason') else ''}")
               if (r.get('dvp') or {}).get('rank') else
-              f"My number {r['projection']:g} · {price(r['odds'])} {r['book']} · {r['season']} regular season"} for r in unique]
+              f"{price(r['odds'])} {r['book']} · {r['season']} regular season"} for r in unique]
     def caption_row(row):
         dvp = row.get('dvp') or {}
         defense = f" defense #{dvp['rank']} of {dvp['of']}" if dvp.get('rank') and dvp.get('of') else ''
         fill = ' incl. 2025' if row.get('includesPriorSeason') else ''
-        return (f"{row['player']}: {row['title']}. My number {row['projection']:g}, line {row['line']:g}; "
+        return (f"{row['player']}: {row['title']}; "
                 f"{row['hits']}/{row['games']};{defense}{fill}")
     if now >= CURRENT_GAME_COPY:
         for row in shown:
-            row['metric'] = f"My number {row['projection']:g} · line {row['line']:g}"
+            row['metric'] = f"Line {row['line']:g} · {row['hits']}/{row['games']} in labeled history"
             row['detail'] += f" · {row['hits']}/{row['games']} in the labeled history"
         return {'kind':'season','title':'PROP LINES I’M WATCHING','kicker':'CURRENT LINES · MATCHUP RESEARCH',
                 'accent':CYAN,'rows':shown,
@@ -490,16 +490,16 @@ def numbers_candidate(games, now):
         fresh = current(seen, now, timedelta(hours=12))
         vegas = market.get('total') if fresh else None
         has_vegas = isinstance(vegas, (int, float))
-        price_text = f"Vegas total {vegas:g}" if has_vegas else f"My score {model['away']:g}–{model['home']:g}"
+        price_text = f"Vegas total {vegas:g}" if has_vegas else f"My rounded score {round(model['away'])}–{round(model['home'])}"
         gap = model['total'] - vegas if has_vegas else None
-        detail = f"My total {model['total']:g}"
+        detail = f"My total about {round(model['total'])}"
         if isinstance(gap, (int, float)):
-            detail += f" · {'+' if gap >= 0 else ''}{gap:.1f} vs Vegas"
+            detail += ' · above Vegas' if gap > 0 else ' · below Vegas'
         rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
                      'title': f'{away_name} at {home_name}', 'team': home,
                      'price': price_text,
                      'book': (market.get('displayBook') or market.get('book')) if has_vegas else None,
-                     'metric': f"Mine {model['total']:g}", 'detail': detail,
+                     'metric': f"Mine about {round(model['total'])}", 'detail': detail,
                      'observedAt': seen if has_vegas else None, 'hasVegas': has_vegas,
                      'score': abs(gap) if isinstance(gap, (int, float)) else 0})
     if not rows:

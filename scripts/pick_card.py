@@ -401,20 +401,8 @@ def plain_number(value):
 
 
 def our_number(pick, game=None):
-    """The posted model number in the owner's first-person voice; empty without a projection."""
-    projection = pick.get('projection')
-    if not isinstance(projection, (int, float)) or pick.get('legs'):
-        return ''
-    direction = str(pick.get('direction') or '').lower()
-    if pick.get('marketType') == 'spread' and not (pick.get('athleteId') or pick.get('market')) and game and direction in ('home', 'away'):
-        league = game.get('league') or str(pick.get('id', '')).split('-')[0]
-        side = game.get(direction) or {}
-        other = game.get('away' if direction == 'home' else 'home') or {}
-        if abs(projection) < 0.5:
-            return 'I have it even.'
-        team = side if projection < 0 else other          # the side's own number: -14 is that side by 14
-        return f"I have {team_label(team, league)} by {int(round(abs(projection)))}."
-    return f'I have it at {plain_number(projection)}.'
+    """Bet art omits numerical forecasts; website research retains precision."""
+    return ''  # Detailed forecasts stay on the research website.
 
 
 FRACTIONS = {0.25: '¼', 0.5: '½', 0.75: '¾'}
@@ -437,19 +425,8 @@ def units_label(pick):
 
 
 def number_line(pick):
-    """What we project, in plain words, the same on the card and in the post: "We project 47.1 total points" for a
-    game total, "We project 4.6 receptions" for a player. A side keeps "Our number -14 vs the -10"."""
-    projection, line = pick.get('projection'), pick.get('line')
-    if not isinstance(projection, (int, float)) or not isinstance(line, (int, float)):
-        return ''
-    value = pricing.fmt(float(projection))
-    if pick.get('athleteId') or pick.get('market'):
-        words = pricing.WORDS.get(pricing.market_of(pick))
-        if words:
-            return f"We project {value} {words}"
-    elif pick.get('marketType') == 'total' or str(pick.get('direction') or '').lower() in ('over', 'under'):
-        return f"We project {value} total points"
-    return f"Our number {value} vs the {pricing.fmt(float(line))}"
+    """Numerical forecasts are intentionally absent from social bet cards."""
+    return ''
 
 
 KINDS = {'player': 'PLAYER PROP', 'parlay': 'FUN PARLAY', 'ladder': 'LADDER'}
@@ -956,8 +933,8 @@ def modern_svg(pick, game=None, record=None, when=None, player_side=None, identi
 <text x="82" y="927" fill="{dim}" font-size="20" letter-spacing="3">POSTED PRICE</text><text x="82" y="1007" fill="{ink}" font-size="72" font-weight="850">{esc(price)}</text>
 {lines(pick.get('book') or '',82,1060,410,28,dim,max_lines=1)}
 <rect x="536" y="886" width="488" height="215" rx="20" fill="{theme['row']}" stroke="{theme['edge']}"/>
-<text x="562" y="927" fill="{dim}" font-size="20" letter-spacing="3">OUR NUMBER</text>
-{lines(number_line(pick) or 'No projection shown',562,984,426,31,ink,max_lines=3)}
+<text x="562" y="927" fill="{dim}" font-size="20" letter-spacing="3">RISK</text>
+{lines(units_label(pick),562,984,426,31,ink,max_lines=3)}
 <text x="56" y="1202" fill="{ink}" font-size="28" font-weight="750">Every play graded in public.</text>
 <text x="56" y="1252" fill="{accent}" font-size="27" font-weight="700">keenroudy.com/sports</text>
 <text x="56" y="1304" fill="{dim}" font-size="19"></text>

@@ -41,7 +41,7 @@ class NBAEditorialTests(unittest.TestCase):
         watch=next(r for r in rows if r['family']=='trends')
         self.assertEqual(watch['title'],'NBA LINES I’M WATCHING')
         self.assertEqual(watch['rows'][0]['gap'],5.3)
-        self.assertIn('5.3 more points',watch['text'])
+        self.assertIn('my total about 225',watch['text'])
         self.assertIn('Research, not a bet.',watch['text'])
         self.assertNotIn('last season',watch['text'])
         self.assertNotIn('scored /',watch['text'])

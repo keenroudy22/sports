@@ -74,7 +74,9 @@ class DraftTests(unittest.TestCase):
             with self.subTest(shape=shape), mock.patch.object(x_post.voice_pick, 'choose_shape', return_value=shape):
                 draft = x_post.draft(pick, GAME, reason=reason, history=[])
                 text = x_ticket_copy(draft, 'play')
-                self.assertIn(play + '\n\n' + number, text)
+                self.assertIn(play, text)
+                self.assertNotIn(number, text)
+                self.assertIn('\n\n' + reason if shape != 'B' else reason + '\n\n', text)
                 self.assertIn('\n\nCopy the bet 👇 @Playbook\n\n21+ only', text)
                 self.assertIn(reason, text)
                 self.assertNotIn('\n\n\n', text)
@@ -105,7 +107,7 @@ class DraftTests(unittest.TestCase):
         with mock.patch.object(x_post.voice_pick, 'choose_shape', return_value='A'):
             text = x_post.draft(pick, GAME, reason='Wind is forecast at 18 mph.', history=[],
                                 now_quote=('DraftKings', 39.5, -110))
-        self.assertIn('(-105, FanDuel)\nNow 39.5 (-110, DraftKings)\n\nBook says', text)
+        self.assertIn('(-105, FanDuel)\nNow 39.5 (-110, DraftKings)\n\nWind', text)
 
     def test_night_football_caption_names_the_window(self):
         saturday = dict(GAME, kickoff='2026-10-11T00:15:00Z')
@@ -116,7 +118,7 @@ class DraftTests(unittest.TestCase):
         hot = x_post.draft(dict(PICK, id='NFL-hot', projection=31.2), thursday, featured=True,
                            reason='Over 38.5 in 4 of his last 5 games.')
         self.assertTrue(hot.startswith('🍳 Hot Plate (POTD): '), hot)
-        self.assertIn("Book says 38.5. I have it at 31, so I'm on the under.", hot)
+        self.assertNotIn("Book says 38.5. I have it at 31, so I'm on the under.", hot)
         self.assertIn('Over 38.5 in 4 of his last 5 games.', hot)
         self.assertTrue(any(hot.endswith(f'{ask}\n@Playbook #NFL') for ask in
                             ("Who's on it with me? 🍳", "I'm on this one. 🍳", "Who's riding? ❤️")))
@@ -125,11 +127,11 @@ class DraftTests(unittest.TestCase):
         with mock.patch.object(x_post, 'load_reasons', return_value={}):
             team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
         self.assertIn("Iowa/Michigan under 38.5 (-105, FanDuel)", team)
-        self.assertIn("Book says 38.5. I have it at 31, so I'm on the under.", team)
+        self.assertNotIn("Book says 38.5. I have it at 31, so I'm on the under.", team)
         self.assertTrue(team.endswith('@Playbook #CFB'))
         prop = x_post.draft(PROP, {'league': 'NFL'}, reason='He has caught 6 in each of his last 2 games.')
         self.assertIn('Player Seven over 4.5 catches (-115, DraftKings)', prop)
-        self.assertIn("Book says 4.5. I have it at 5.8, so I'm on the over.", prop)
+        self.assertNotIn("Book says 4.5. I have it at 5.8, so I'm on the over.", prop)
         self.assertIn('He has caught 6 in each of his last 2 games.', prop)
         self.assertTrue(x_post.reason_in(prop).endswith('He has caught 6 in each of his last 2 games.'))
         with mock.patch.object(x_post, 'load_reasons', return_value={}):
@@ -155,10 +157,10 @@ class DraftTests(unittest.TestCase):
         side = dict(PICK, marketType='spread', direction='home', line=-3.0, title='Iowa at Michigan -3', projection=-7.4)
         game = dict(GAME, home={'abbreviation': 'MICH', 'school': 'Michigan'}, away={'abbreviation': 'IOWA', 'school': 'Iowa'})
         text = x_post.draft(side, game)
-        self.assertIn("Book says -3. I have it at -7.4, so I'm on this side.", text)
+        self.assertNotIn("Book says -3. I have it at -7.4, so I'm on this side.", text)
         self.assertEqual(x_post.guard(text, side), [])
         opposite = x_post.draft(dict(side, projection=2.6), game)
-        self.assertIn("Book says -3. I have it at 2.6, so I'm on this side.", opposite,
+        self.assertNotIn("Book says -3. I have it at 2.6, so I'm on this side.", opposite,
                       'the number plainly shows when our side crosses zero')
 
     def test_moneyline_never_prints_zero_as_a_book_line_or_a_dangling_reason(self):
@@ -206,7 +208,7 @@ class DraftTests(unittest.TestCase):
             {'text': 'He cleared this line in 4 of his last 5 full games.'},
         ]})
         text = x_post.draft(pick, {'league': 'NFL'}, reason='Book says 4.5. I say 5.8.')
-        self.assertEqual(text.count('Book says '), 1)
+        self.assertEqual(text.count('Book says '), 0)
         self.assertIn('He cleared this line in 4 of his last 5 full games.', text)
         self.assertEqual(x_post.guard(text, pick, x_post.reason_in(text)), [])
 
@@ -315,7 +317,7 @@ class DraftTests(unittest.TestCase):
         self.assertIsNone(x_post.reason_for(arithmetic), 'no stat talk in the timeline')
         text = x_post.draft(dict(arithmetic, projection=31.2), GAME)
         self.assertNotIn('percentile', text)
-        self.assertIn("Book says 38.5. I have it at 31, so I'm on the under.", text)
+        self.assertNotIn("Book says 38.5. I have it at 31, so I'm on the under.", text)
         self.assertTrue(text.endswith('@Playbook #CFB'))
 
     def test_url_counts_as_twenty_three(self):

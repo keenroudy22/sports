@@ -5,7 +5,7 @@ import struct
 import zlib
 from datetime import datetime, timezone
 
-VERSION = 'plain-20261022'
+VERSION = 'no-decimal-projections-20261026'
 EFFECTIVE = datetime(2026, 10, 22, tzinfo=timezone.utc)
 MARKER = b'KooknSocial\x00' + VERSION.encode()
 
@@ -33,6 +33,9 @@ def release_issues(text, path):
 def issues(text, graphic=False):
     text = html.unescape(re.sub(r'<[^>]+>', ' ', str(text or '')))
     found = []
+    from social_copy import decimal_projection
+    if decimal_projection(text):
+        found.append('decimal projection: keep forecasts off bet copy and preserve exact wager lines')
     if not graphic and re.search(r'next climb target|when it qualifies|reviewing the (?:college )?slate|ticket isn.t picked yet', text, re.I):
         found.append('operational status-report voice: rewrite as a casual target-day update')
     if re.search(r'separate from kook[’\x27]?n', text, re.I):

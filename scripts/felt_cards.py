@@ -301,7 +301,7 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
                          CHALK, BODY, 700, 'middle', minimum=18)
                  + '</g>')
     else:
-        body += t(104, top + 170, str(pick.get('_number') or ''), 42, TICKET_INK, BODY, 600)
+        pass  # No numerical forecast in the fallback social bet card either.
     return frame('Pick of the day' if featured else 'Best bet', body)
 
 
@@ -622,10 +622,11 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
         team_width = max(100, x + card_w - 86 - team_x)
         body += fit_t(team_x, y + 45, matchup, team_size, team_width, CHALK, DISPLAY, 700, minimum=22)
         v2 = card.get('v2') or {}
-        score = f"{num(v2.get('away'))}–{num(v2.get('home'))}"
+        rounded = lambda value: str(round(value)) if isinstance(value, (int, float)) else '–'
+        score = f"≈{rounded(v2.get('away'))}–{rounded(v2.get('home'))}"
         body += t(x + card_w - 18, y + 43, score, info_size + 2, CHALK, DISPLAY, 700, 'end')
-        ours_spread = spread(card, v2.get('margin'))
-        ours_total = num(v2.get('total'))
+        ours_spread = spread(card, round(v2['margin'])) if isinstance(v2.get('margin'), (int,float)) else '–'
+        ours_total = '≈' + rounded(v2.get('total'))
         caution = watch and watch[3].get('collegeGapCaution')
         geometry = sheet_row_geometry(card_h, bool(caution))
         sy, ty = y + geometry['spread'], y + geometry['total']

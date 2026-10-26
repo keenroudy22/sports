@@ -4834,3 +4834,17 @@ Remaining owner agent / next: quota-held result recovery still needs a tested no
 
 
 2026-10-26T04:59:10.877441+00:00 — October26 scope/date repair VERIFIED LIVE:717619043 / hosted40271117293 SUCCESS. Normal/repeated/clean1783Python(2expected skips)/281Node; build498pages/record127/NBA0/guard703/assets/feed passed. Temporary helper wrongly selected0645 rehearsal after midnight; superseded with actual0025/qghcs0re:exit0/outcomeok/outsideWrite0/privateRead0. Four fully rendered liveToday/Record375/1440 checks:zerooverflow/loading/errors,phone visually inspected.127live grade/time/unit rows agree;60released allgraded. Monday preparation1NFL/9NBA/0freshNBAprops;Climb1game/0supported/0crossgameoptions,not selected bets. Remaining owner audit items stay ready; no full-audit completion. Receipt metadata retained ondev for ordinary next release.
+
+
+### October26 no-decimal social forecasts — release pending
+
+Owner requires actual wager lines unchanged and no decimal forecasts on X or
+Discord. Bet templates omit numeric forecast comparisons rather than round thin
+player edges; research score sheets use labeled rounded whole numbers. Shared
+caption/graphic checks and Discord pre-send guard reject decimal forecast claims.
+New graphic marker forces private queued art to be reverified. Buffer Queue0 and
+Drafts0; publication log unresolved0, private play releases0 and local X drafts0.
+Historical pending reports and sent captions/attachments preserved. Regression
+checks cover exact2.5 wager, omitted2.6/3.4 projections, unmodified stored pick,
+Discord rejection before network and confirmed-private-only queue cancellation.
+Private production-ticket preview visually checked; full release receipt pending.

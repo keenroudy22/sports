@@ -116,9 +116,9 @@ def play_card(p):
     # Moneylines do not have a book line to compare with the projected score
     # margin.  Treating their sentinel line=0 as a real number printed the
     # nonsensical "BOOK SAYS 0" row.
-    has_number = (p.get('market') != 'moneyline'
-                  and isinstance(p.get('projection'), (int, float))
-                  and p.get('line') not in (None, ''))
+    has_number = False
+    from social_copy import projection_free_reason
+    p = dict(p, reason=projection_free_reason(p.get('reason')))
     tag_w = width('WHY', 40, tracking=2) + 26
     why = reason_lines(p.get('reason'), X2 - X1 - tag_w - 18) if p.get('reason') else None
     if not why:
@@ -184,19 +184,6 @@ def play_card(p):
     pr, book = kit.price(p['odds']), p['book'].upper()
     inner += (card.text(X1 - 2, y, pr, 116, INK) + card.text(X2, y, book, 62, INK, anchor='end')
               + kit.dots(X1 + width(pr, 116) + 22, X2 - width(book, 62) - 22, y - 4))
-    if has_number:
-        y += 74
-        def plain_number(value):
-            return str(int(round(value))) if abs(value) >= 10 else f'{round(value, 1):g}'
-        line = plain_number(float(p['line']))
-        projection = plain_number(float(p['projection']))
-        lw1, vw1 = width('BOOK SAYS', 42, 'd', 600), width(line, 56)
-        right_label = 'I HAVE IT AT'
-        lw2, vw2 = width(right_label, 42, 'd', 600), width(projection, 56)
-        x2l = X2 - vw2 - 12 - lw2
-        inner += (card.text(X1, y, 'BOOK SAYS', 42, INK_SOFT, 'd', 600) + card.text(X1 + lw1 + 12, y, line, 56, INK)
-                  + kit.dots(X1 + lw1 + 12 + vw1 + 18, x2l - 18, y - 6)
-                  + card.text(x2l, y, right_label, 42, INK_SOFT, 'd', 600) + card.text(X2, y, projection, 56, INK, anchor='end'))
     if why:
         y += 74
         wb, n = why_block(card, y, p['reason'])

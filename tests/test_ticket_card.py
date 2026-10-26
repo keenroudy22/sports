@@ -173,7 +173,7 @@ class TicketCardTests(unittest.TestCase):
         self.assertEqual(data['photo'], self.image)
         svg = ticket_card.straight_svg(PROP, GAME, player_side='away',
                                        art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
-        for exact in ('OVER 49.5', 'DRAFTKINGS', 'BOOK SAYS', 'I HAVE IT AT', '1u', 'keenroudy.com/sports',
+        for exact in ('OVER 49.5', 'DRAFTKINGS', '1u', 'keenroudy.com/sports',
                       'ORDER UP'):
             self.assertIn(exact, svg)
         self.assertNotIn('53.7%', svg)
@@ -229,10 +229,10 @@ class TicketCardTests(unittest.TestCase):
                     probabilityAtPublication={'chance': .41, 'breakEven': .357, 'calibrated': True})
         svg = ticket_card.straight_svg(plus, GAME, player_side='away',
                                        art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
-        self.assertIn('BOOK SAYS', svg)
+        self.assertNotIn('BOOK SAYS', svg)
         self.assertIn('49.5', svg)
-        self.assertIn('I HAVE IT AT', svg)
-        self.assertIn('61', svg)
+        self.assertNotIn('I HAVE IT AT', svg)
+        self.assertNotIn('>61</text>', svg)
         self.assertNotIn('41.0%', svg)
         self.assertNotIn('35.7%', svg)
 

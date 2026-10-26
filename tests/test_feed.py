@@ -53,7 +53,7 @@ class FeedTests(unittest.TestCase):
         lean = next(i for i in items if i['guid'] == 'lean')
         self.assertTrue(lean['title'].startswith('Game total: '), lean['title'])
         self.assertIn('#pick/lean', lean['link'])
-        self.assertIn("Book says 44.5. I have it at 48, so I'm on the over.", lean['text'])
+        self.assertNotIn("Book says 44.5. I have it at 48, so I'm on the over.", lean['text'])
         early = next(i for i in items if i['guid'] == 'early')
         self.assertEqual(early['pubDate'].isoformat(), '2026-09-29T13:30:00+00:00', 'dated when its window opened, not when it was published')
 

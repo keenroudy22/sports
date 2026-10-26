@@ -15,7 +15,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import gates
-from social_copy import without_playbook, with_age_notice
+from social_copy import without_playbook, with_age_notice, decimal_projection
 
 
 class DiscordError(RuntimeError):
@@ -123,6 +123,8 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
     import x_post
     # The owner-approved live pilot has one exact cheering exception.
     final_text = with_age_notice(without_playbook(text))
+    if decimal_projection(final_text):
+        raise DiscordError('Decimal forecast in social caption; revise without changing the wager')
     if len(final_text) > 2000:
         raise DiscordError('complete caption including age notice exceeds Discord limit')
     checked = str(final_text or '').replace('Come on!', 'Come on.')

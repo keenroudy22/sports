@@ -139,7 +139,7 @@ class ResearchPostTests(unittest.TestCase):
         self.assertEqual(choice['kind'], 'numbers')
         self.assertTrue(choice['offDay'])
         self.assertEqual(choice['firstKickoff'].isoformat(), '2026-10-04T17:00:00+00:00')
-        self.assertIn('my total 44.5, Vegas 41.5', choice['text'])
+        self.assertIn('my total about 44, Vegas 41.5', choice['text'])
         self.assertIn('Not picks yet.', choice['text'])
         self.assertNotIn('AI', choice['text'])
         self.assertTrue(any(line == 'research fallback: numbers eligible: 1 rows' for line in logs))
@@ -150,7 +150,7 @@ class ResearchPostTests(unittest.TestCase):
         self.assertFalse(choice['usesPrice'])
         self.assertEqual(choice['title'], 'NEXT SLATE')
         self.assertNotIn('Vegas', choice['text'])
-        self.assertIn('my score 24.5–20', choice['text'])
+        self.assertIn('my rounded score 24–20', choice['text'])
 
     def test_numbers_card_uses_plain_total_label_and_keeps_the_gap(self):
         import ticket_card
@@ -160,9 +160,9 @@ class ResearchPostTests(unittest.TestCase):
         ], NOW)
         svg = ticket_card.research_list_svg(choice)
         self.assertIn('MY TOTAL', svg)
-        self.assertIn('44.5', svg)
+        self.assertIn('about 44', svg)
         self.assertIn('Vegas total 41.5', svg)
-        self.assertIn('+3.0 vs Vegas', svg)
+        self.assertIn('above Vegas', svg)
 
     def test_off_day_post_uses_the_daily_slot_and_future_kickoff_deadline(self):
         import json
@@ -299,7 +299,7 @@ class ResearchPostTests(unittest.TestCase):
         data = {'games': [game()], 'prep': {'CFB': {'day': '2026-10-03', 'rows': rows}}}
         choice = R.select(data, {'CFB-1': {}}, now)
         self.assertEqual(choice['kind'], 'prep')
-        self.assertIn('Player 0 over 49.5 rec yds -115 FD · my number 57.2, line 49.5 · 6/6', choice['text'])
+        self.assertIn('Player 0 over 49.5 rec yds -115 FD · 6/6', choice['text'])
         self.assertIn('Lines that keep clearing today:', choice['text'])
         self.assertLessEqual(len(choice['text']), 280)
         self.assertEqual(receipts.guard({'text': choice['text']}), [])
@@ -423,7 +423,7 @@ class ResearchPostTests(unittest.TestCase):
         self.assertIn('Possible outright dogs:', choice['text'])
         self.assertNotIn('more on the card', choice['text'])
         self.assertNotIn('not official', choice['text'].lower())
-        self.assertEqual(choice['rows'][0]['metric'], 'Our score DOG 27–23 FAV')
+        self.assertEqual(choice['rows'][0]['metric'], 'Our rounded score DOG 27–23 FAV')
         self.assertIn('7.5-pt gap vs spread', choice['rows'][0]['detail'])
         self.assertIn("offense rates 2.1 points above average", choice['rows'][0]['reason'])
         post = {'text': choice['text']}
@@ -499,7 +499,7 @@ class ResearchPostTests(unittest.TestCase):
                          ['Safe over 55.5 rushing yards', 'Risk over 55.5 rushing yards'])
         self.assertTrue(choice['rows'][1]['scriptRisk'])
         self.assertEqual((choice['rows'][0]['seasonHits'], choice['rows'][0]['seasonGames']), (3, 4))
-        self.assertIn('FAV projected 25-pt dog', choice['rows'][1]['detail'])
+        self.assertIn('FAV projected about 25-pt dog', choice['rows'][1]['detail'])
         self.assertIn('CFB big-underdog usage is ranked down', choice['text'])
 
     def test_spread_dogs_are_cover_watches_not_upset_calls(self):

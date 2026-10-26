@@ -465,7 +465,8 @@ def _choose_reason(pick, supplied, history, day):
         if shortened and plain(shortened):
             structured.append(shortened)
     choices = [supplied, strip_reason(pick), *structured]
-    choices = list(dict.fromkeys(_short_reason(choice) for choice in choices if choice))
+    from social_copy import projection_free_reason
+    choices = list(dict.fromkeys(projection_free_reason(_short_reason(choice)) for choice in choices if choice))
     # The fixed model-vs-book sentence is already its own caption line.  It is
     # not the required factual reason and repeating it makes reason_in() (and
     # readers) see a number-only post.
@@ -488,20 +489,7 @@ def _choose_reason(pick, supplied, history, day):
 
 
 def _number_line(pick, game, day, history, salt=0):
-    projection = pick.get('projection')
-    if not isinstance(projection, (int, float)):
-        return ''
-    pool = voice_pick.pools()['numberLines']
-    key = f"{pick.get('id')}:{day}:number:{salt}"
-    if pick.get('lane') == 'upset':
-        side = str(pick.get('direction') or 'home').lower()
-        team = pick_card.team_label(((game or {}).get(side) or {}), (game or {}).get('league'))
-        return voice_pick.pick(pool['upset'], key).format(team=team, m=pick_card.plain_number(abs(projection)))
-    market = 'spreads' if pick.get('marketType') == 'spread' and not (pick.get('athleteId') or pick.get('market')) \
-        else 'totals' if pick.get('marketType') == 'total' else 'props'
-    if market == 'spreads':
-        return pick_card.our_number(pick, game)
-    return voice_pick.pick(pool[market], key).format(n=pick_card.plain_number(projection))
+    return ''  # Social bets lead with the exact wager and factual support, not a forecast.
 
 
 def _play_prefix(pick, game, featured):
@@ -612,12 +600,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         play = f"{play_text} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})"
         now = now_line(pick, now_quote)
         projection, line = pick.get('projection'), pick.get('line')
-        side_word = str(pick.get('direction') or '').lower()
-        side_phrase = f'the {side_word}' if side_word in ('over', 'under') else 'this side'
-        number = ('' if pick.get('marketType') == 'moneyline' else
-                  f"Book says {pricing.fmt(float(line))}. I have it at "
-                  f"{pick_card.plain_number(projection)}, so I'm on {side_phrase}."
-                  if isinstance(projection, (int, float)) and isinstance(line, (int, float)) else '')
+        number = ''
         saved_reason = reason if reason is not None else load_reasons().get(pick.get('id'))
         reason = _choose_reason(pick, saved_reason, history, day)
         for salt in range(1, 5):
@@ -639,7 +622,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         fields = {'play': play_text, 'odds': f"{int(pick['odds']):+d}", 'book': public_book(pick.get('book')),
                   'number': number, 'reason': reason or '', 'ask': ask, 'L': league,
                   'line': pricing.fmt(float(line)) if isinstance(line, (int, float)) else '',
-                  'proj': pick_card.plain_number(projection) if isinstance(projection, (int, float)) else ''}
+                  'proj': ''}
         shapes = [shape] if required else [shape, *[candidate for candidate in ('A', 'B', 'C', 'D') if candidate != shape]]
         options = []
         for candidate in shapes:
@@ -656,8 +639,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         # Optional conversation copy must not strand an otherwise valid ticket.
         # Preserve the full wager, matchup, current price and sourced reason;
         # shorten only the repeated projection sentence and omit the extra ask.
-        compact_number = (f"I have it at {pick_card.plain_number(projection)}."
-                          if number else '')
+        compact_number = ''
         if reason:
             options.append(['\n\n'.join(part for part in (
                 play, now, '\n'.join(part for part in (compact_number, reason) if part), tail) if part)])

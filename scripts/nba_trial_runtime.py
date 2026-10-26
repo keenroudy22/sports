@@ -279,12 +279,12 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
   else:
    team=name(play['direction'])
    selection=f"{team} MONEYLINE" if play['marketType']=='moneyline' else f"{team} {play['line']:+g}"
-  if play.get('marketType')=='total': projection=f"I have the total at {play['projection']:g}."
-  else:
-   margin=play['projection'];favorite='home' if margin>=0 else 'away'
-   projection=f"I have {name(favorite)} by {abs(margin):g}."
+  projection=''
   text=None
   for reason in play['reasons']:
+   from social_copy import projection_free_reason
+   reason=projection_free_reason(reason)
+   if not reason:continue
    candidate=f"🏀 NBA Trial\n{title}\n{selection} ({play['odds']:+d}, {play['book']})\n{projection}\n{reason}\n#NBA"
    if x_post.tweet_length(candidate)<=x_post.LIMIT and not x_post.x_style(candidate):
     text=candidate;break

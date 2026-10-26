@@ -53,7 +53,7 @@ class DrawTests(unittest.TestCase):
         games = [card('a', '2026-09-27T17:00Z', gap=2.4), card('b', '2026-09-27T20:25Z')]
         text = sheet.svg(games, 'NFL', SUNDAY, 3, {('a', 'away'): 'data:image/png;base64,x'}, RENDERED_AT)
         for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'rings name the lines we like', 'Aa', 'Ha',
-                       '20.4', '24.0', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -3.6', 'LIKE: Ha -2.5 -105 FD', '44.4', 'OVER 41.5 -110 MGM',
+                       '≈20', '≈24', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -4', 'LIKE: Ha -2.5 -105 FD', '≈44', 'OVER 41.5 -110 MGM',
                        'Left: model · Right: market', 'data:image/png;base64,x', 'Green names the line we like.'):
             self.assertIn(needle, text, needle)
         self.assertIn(sheet.ACCENT + '" font-size="23" font-weight="800" text-anchor="end">LIKE: Ha -2.5 -105 FD', text,

@@ -1,5 +1,14 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## October26 social forecast presentation
+
+New X/Discord captions and house graphics omit decimal projections. Keep exact
+sportsbook thresholds, odds and stakes unchanged. Bet cards omit numeric forecast
+comparisons rather than rounding a thin player edge into a stronger claim.
+Research score sheets may show explicitly rounded whole-number forecasts; website
+research data retains its full precision. Verify private queued posts and art;
+preserve already-sent originals and archived attachments.
+
 ## October26 owner Climb sizing clarification
 
 The owner clarified that Climbs remain fixed $50-to-$1,000 challenges; units

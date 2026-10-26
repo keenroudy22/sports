@@ -8,6 +8,17 @@ AGE_VERSION = 'age-20261023'
 AGE_EFFECTIVE = datetime(2026, 10, 23, 21, 15, tzinfo=timezone.utc)
 
 
+def decimal_projection(text):
+    """Identify decimal forecast claims, never a sportsbook threshold alone."""
+    return bool(re.search(r'(?:I (?:have|project|say)|we (?:project|make)|projected|projection|our (?:number|total)|my (?:number|score|total))[^0-9\n!?]{0,65}\d+\.\d+', str(text or ''), re.I))
+
+
+def projection_free_reason(text):
+    # Omit the entire forecast sentence; rounding a thin edge invents confidence.
+    sentences = re.split(r'(?<=[.!?])\s+(?=[A-Z])|\n+', str(text or ''))
+    return ' '.join(s for s in sentences if not decimal_projection(s)).strip()
+
+
 def canonical_caption(text):
     """Visible caption semantics after Buffer's editor paragraph placeholders.
 

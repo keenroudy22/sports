@@ -249,3 +249,14 @@ Player lines also show exact-line last-ten and season hit rates when the stored 
 history rather than a prediction. Readers may choose alternates at their book, but alternates do not replace the main
 value line in this list. The reads stay separate from official plays, and the section may honestly be empty when no
 price qualifies.
+
+## October 26: social projections
+
+New X and Discord captions and graphics do not show decimal forecasts. Exact
+betting thresholds (over 2.5 catches, -3.5 spread), prices, stakes and results
+remain exact. Straight captions and bet graphics omit the numeric model-versus-
+book comparison; do not round a thin player projection up to imply conviction.
+Use sourced factual support. NBA/football research score sheets display rounded
+whole-number forecasts with an approximation label; website research retains
+the stored precision. Private queued copy/art must pass the updated style marker
+and forecast check. Never rewrite sent posts or archived original graphics.

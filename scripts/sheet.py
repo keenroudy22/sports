@@ -201,7 +201,7 @@ def card_svg(card, x, y, w, h, logos, watch=None):
         rows.append(f'<text x="{x + 78}" y="{top + 37}" fill="{TEXT}" font-size="33" font-weight="800">{esc(team.get("abbr") or "")}</text>')
         points = v2.get(side)
         rows.append(f'<text x="{x + 254}" y="{top + 38}" fill="{TEXT}" font-size="40" font-weight="800" text-anchor="end">'
-                    f'{esc(f"{points:.1f}" if isinstance(points, (int, float)) else "-")}</text>')
+                    f'{esc(f"≈{round(points)}" if isinstance(points, (int, float)) else "-")}</text>')
         if chance is not None:
             bar = max(4, round(125 * chance))
             rows.append(f'<rect x="{x + 276}" y="{top + 15}" width="125" height="20" rx="10" fill="{LINE}"/>')
@@ -211,7 +211,8 @@ def card_svg(card, x, y, w, h, logos, watch=None):
     watch_market = watch[1] if watch else None
     spread_tone = ACCENT if watch_market == 'spread' else TEXT
     total_tone = ACCENT if watch_market == 'total' else TEXT
-    ours_spread, line_spread = spread_text(card, v2.get('margin')), spread_text(card, -market['spread'] if market.get('spread') is not None else None)
+    ours_spread = spread_text(card, round(v2['margin'])) if isinstance(v2.get('margin'), (int,float)) else '-'
+    line_spread = spread_text(card, -market['spread'] if market.get('spread') is not None else None)
     rows.append(f'<line x1="{x + 16}" y1="{y + 158}" x2="{x + w - 16}" y2="{y + 158}" stroke="{LINE}" stroke-width="2"/>')
     rows.append(f'<text x="{x + 18}" y="{y + 205}" fill="{ACCENT}" font-size="19" font-weight="800" letter-spacing="3">OUR NUMBER / MARKET</text>')
     rows.append(f'<text x="{x + 18}" y="{y + 266}" fill="{DIM}" font-size="21">SPREAD</text>')
@@ -223,7 +224,7 @@ def card_svg(card, x, y, w, h, logos, watch=None):
     total = v2.get('total')
     rows.append(f'<text x="{x + 18}" y="{y + 365}" fill="{DIM}" font-size="21">TOTAL</text>')
     rows.append(f'<text x="{x + 18}" y="{y + 406}" fill="{TEXT}" font-size="31" font-weight="800">'
-                f'{esc(f"{total:.1f}" if isinstance(total, (int, float)) else "-")}</text>')
+                f'{esc(f"≈{round(total)}" if isinstance(total, (int, float)) else "-")}</text>')
     total_price = priced_text(card, 'total')
     total_price = ('LIKE: ' if watch_market == 'total' else '') + total_price
     rows.append(f'<text x="{x + w - 18}" y="{y + 406}" fill="{total_tone}" font-size="23" font-weight="800" text-anchor="end">'
@@ -253,15 +254,15 @@ def compact_card_svg(card, x, y, w, h, logos, watch=None):
         rows.append(f'<text x="{x + 51}" y="{top + 23}" fill="{TEXT}" font-size="23" font-weight="800">{esc(team.get("abbr") or "")}</text>')
         points = v2.get(side)
         rows.append(f'<text x="{x + 218}" y="{top + 24}" fill="{TEXT}" font-size="26" font-weight="800" text-anchor="end">'
-                    f'{esc(f"{points:.1f}" if isinstance(points, (int, float)) else "-")}</text>')
+                    f'{esc(f"≈{round(points)}" if isinstance(points, (int, float)) else "-")}</text>')
         if chance is not None:
             bar = max(3, round(104 * chance))
             rows.append(f'<rect x="{x + 232}" y="{top + 7}" width="104" height="15" rx="8" fill="{LINE}"/>')
             rows.append(f'<rect x="{x + 232}" y="{top + 7}" width="{bar}" height="15" rx="8" fill="{readable(team)}"/>')
             rows.append(f'<text x="{x + w - (46 if watch else 14)}" y="{top + 21}" fill="{TEXT}" font-size="17" font-weight="750" text-anchor="end">{round(100 * chance)}%</text>')
-    ours_spread = spread_text(card, v2.get('margin'))
+    ours_spread = spread_text(card, round(v2['margin'])) if isinstance(v2.get('margin'), (int,float)) else '-'
     total = v2.get('total')
-    total_text = f'{total:.1f}' if isinstance(total, (int, float)) else '-'
+    total_text = f'≈{round(total)}' if isinstance(total, (int, float)) else '-'
     watch_market = watch[1] if watch else None
     spread_tone = ACCENT if watch_market == 'spread' else DIM
     total_tone = ACCENT if watch_market == 'total' else DIM
