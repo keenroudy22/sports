@@ -7,6 +7,20 @@ import next_day_prep as prep
 
 
 class PrepTests(unittest.TestCase):
+    def test_optional_nba_context_failure_keeps_preparation_and_true_target(self):
+        now=datetime(2026,10,26,4,45,tzinfo=timezone.utc)
+        packet=prep.prepare({},[],{}, {},now,target_date='2026-10-26')
+        calls=[]
+        def unavailable(clock, **kwargs):
+            calls.append((clock,kwargs))
+            raise ValueError('malformed optional store')
+        self.assertIs(prep.attach_team_context(packet,now,Path('/isolated'),unavailable),packet)
+        self.assertEqual(packet['targetDate'],'2026-10-26')
+        self.assertIn('football',packet)
+        self.assertEqual(packet['nba']['teamRoleContext']['state'],'unavailable')
+        self.assertFalse(packet['nba']['teamRoleContext']['admissionReady'])
+        self.assertEqual(calls,[(now,dict(root=Path('/isolated'),target_date='2026-10-26'))])
+
     def test_eastern_tomorrow_balances_families_without_admitting_or_hiding_holds(self):
         now=datetime(2026,10,24,2,tzinfo=timezone.utc)
         games={'CFB-1':{'league':'CFB','state':'pre','kickoff':'2026-10-24T16:00:00Z'}}

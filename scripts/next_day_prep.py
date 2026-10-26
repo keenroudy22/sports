@@ -6,6 +6,20 @@ import math
 import gates
 
 
+def attach_team_context(packet, now, root, builder=None):
+    """An unavailable NBA evidence reader must not erase ordinary preparation."""
+    if builder is None:
+        import nba_team_context
+        builder = nba_team_context.from_stores
+    try:
+        context = builder(now, root=root, target_date=packet['targetDate'])
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as error:
+        context = dict(state='unavailable', reason=type(error).__name__,
+                       analysisOnly=True, admissionReady=False)
+    packet['nba']['teamRoleContext'] = context
+    return packet
+
+
 def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None):
     target=date.fromisoformat(target_date) if isinstance(target_date,str) else target_date
     if target is None:target=gates.eastern_date(now)+timedelta(days=1)
@@ -69,6 +83,7 @@ if __name__=='__main__':
     slate=json.loads(slate_path.read_text()) if slate_path.exists() else {}
     report=prepare(ctx.games,line_payload.load(build_site.OUT/'lines.json'),slate,
                    nba_player_props.build(now,limit=None),now,target_date=args.target_date)
+    attach_team_context(report, now, nba_player_props.STORE)
     boxscores.write_json(Path(args.output),report)
     print(json.dumps(dict(path=args.output,targetDate=report['targetDate'],
         footballGames=report['football']['games'],footballPrices=report['football']['pricedRowsByFamily'],

@@ -2886,9 +2886,7 @@ def _run(args, now, slot, kinds, status):
                 slate_path=ROOT/'data'/'nba-capture'/'slate.json'
                 nba_slate=json.loads(slate_path.read_text()) if slate_path.exists() else {}
                 prep=next_day_prep.prepare(games,lines,nba_slate,nba_player_props.build(prep_now,limit=None),prep_now)
-                import nba_team_context
-                prep['nba']['teamRoleContext'] = nba_team_context.from_stores(
-                    prep_now, root=ROOT/'data'/'nba-capture', target_date=prep['targetDate'])
+                next_day_prep.attach_team_context(prep, prep_now, ROOT/'data'/'nba-capture')
                 boxscores.write_json(ROOT/'work'/'next-day-prep.json',prep)
                 status['nextDayPrepared']={'targetDate':prep['targetDate'],'footballGames':prep['football']['games'],
                                           'nbaGames':prep['nba']['games'],'nbaPropRows':prep['nba']['freshPropRows']}
