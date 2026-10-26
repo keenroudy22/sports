@@ -1,5 +1,32 @@
 # October 5 product implementation tracker
 
+### October26 attended fallback, bounded API recovery and NBA context VERIFIED
+
+Source b0e5befc4 released normally; hosted40336184343SUCCESS verified
+41a2f61b91c837e19c7bde79a15dedfce960d3e5, ancestry checked.1804Python
+(2expected skips)/281Node normal and clean export passed.0955offline66ksi6u5
+exit0/outcomeok, outsideWrite0/privateRead0;130record and712public guard files,
+zeroissues. Hosted repeated8checks after concurrent posting receipts merged.
+LiveToday/Record375/1440 loaded; no horizontal overflow or console errors.
+Screenshot work/attended-nba-live-today-375-20261026.png.
+
+Owner-approved temporary allowance is live:2900 essential delivery stop,
+optional analytics paused until November6 13:05UTC, then normal2700 returns.
+No provider/journal reset, new key/account, paid plan, or backoff bypass.
+Actual existing mirror rechecked and Buffer accepted exactly3already-public
+football plays with original graphics:Flournoy10:19:39ET,Spann-Ford10:39:39ET,
+Williams10:59:39ET. Five counted API requests total (two channel discovery,
+three essential publishes), journal2705. Buffer web Queue3 visually confirmed
+all graphics, full exact caption, paragraph spacing, Playbook and age line.
+These are SCHEDULED, not actual X sent receipts; existing five-minute mirror
+owns due-time reconciliation. Proof work/buffer-three-plays-queued-20261026.png.
+Sunday recap is separately CONFIRMED SENT13:37:48.997Z as recorded below.
+
+Private NBA roster/injury/observed-role evidence packet and existing nightly
+integration shipped; it does not clear team injury holds, adjust a team score,
+or validate props/quarters. Full owner audit remains open under OWNERFOLLOW
+and MODELPARITY; do not describe this release as completion of that scope.
+
 October26 follow-up: owner explicitly approved temporary essential delivery
 allowance2700→2900; bounded expiry November6 13:05UTC, analytics paused,
 nonessential publishing excluded from extra200. Implementing/testing; not yet
