@@ -3012,7 +3012,6 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         return
     log_book = x_post.load_log()
     try:
-        channel = buffer_post.x_channel(wanted='keenkooks')
         for entry in buffer_post.reconcile(log_book, now, log=log):
             status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
             alert('KeenRoudy post did not go out', f"{entry['id']}: {entry['error']}")
@@ -3054,7 +3053,10 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team,
                                      quotes=quotes, news=news, log=log)
             plans += nba_trial_runtime.social_plans(max(now, later), log_book, reserved=plans)
-        limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
+        # A Buffer discovery/limit outage must not prevent already-authorized
+        # Discord delivery above. Empty plans need neither metered lookup.
+        channel = buffer_post.x_channel(wanted='keenkooks') if plans or upgrades else None
+        limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat()) if plans else None
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
             log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")
             plans = buffer_post.fit_limit(plans, limit['remaining'])
@@ -3065,7 +3067,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             starts = [games[gid]['kickoff'] for gid in item.get('gameIds') or [] if gid in games]
             if starts:
                 item['kickoff'] = min(starts)
-        buffer_post.schedule(plans, channel['id'], log_book, now, log=log, stats=schedule_stats, items=theme_items)
+        if plans:
+            buffer_post.schedule(plans, channel['id'], log_book, now, log=log, stats=schedule_stats, items=theme_items)
         status['x']['posted'] = len(log_book.get('posts', [])) - before
         status['x']['officialUnscheduled'] = schedule_stats.get('officialNotScheduled', 0) + len({key for key, problems in refused if 'has no X window' in problems})
         missing = buffer_post.chosen_not_posted(ctx.first, ctx.latest, games, log_book, now)
