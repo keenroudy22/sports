@@ -1,5 +1,34 @@
 # October 5 product implementation tracker
 
+### October26 recovery release verified; Buffer upload needs owner action
+
+Release167b89d88, hosted40320634251SUCCESS; hosted verifiedHeadfade79398
+contains the tested source by checked ancestry. Full/repeated/clean1791Python
+(two expected skips)/281Node;127record rows,704local/708hosted public files,
+assets/budgets/feed and actual0755rehearsals clear, outsideWrite/privateRead0.
+Concurrent remote writer preserved and every gate repeated before push.
+LiveToday375 andRecord375/1440 fully rendered, no overflow/load/console errors.
+Hosted proof is separate from social delivery. No new Discord or X send claimed.
+
+Owner reconfirmed0.5u ordinary/1uChef and existing3u/5u shared limits; no change.
+Buffer receipt:day:2026-10-25 passed normal plan, text and live-native-art checks
+and was reserved through buffer_web under the run lock, committed normally.
+The caption is in the open Chrome composer; no Schedule action was taken.
+Uploading the exact hosted1,161,669-byte PNG failed because the ChatGPT Chrome
+extension lacks Allow access to file URLs. No permission was changed or bypassed.
+Actual art hash979d929655f1dac2fc1c47515dd90ddd149de223d0f5aab6edf8858579531fbb;
+all5straight grades/units visually verified. Text uses one line per result,
+one21+notice,noPlaybook/no personalmoney. Existing9:04ET target is not an
+accepted schedule. Do not reserve/retry another copy: resume the existing
+reserved entry after owner enables upload or attaches the graphic, recheck
+the current valid window and exact UI caption/time, then record real evidence.
+If the window expires, retain the miss rather than backdate or claim success.
+Screenshot work/buffer-recap-upload-held-20261026.png; composer marked handoff.
+
+API local2700 cap and provider backoff remain. No new key, reset, higher budget,
+paid plan, direct-X scripting or unattended web worker. Website/Discord repair
+is deployed; unattended X and full owner audit are not declared restored.
+
 ## October26 owner recovery — testing, not fully restored
 
 Owner audit resumed from O-20261025-OWNERFOLLOW, not restarted. Fresh evidence:
