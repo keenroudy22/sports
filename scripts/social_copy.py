@@ -10,7 +10,7 @@ AGE_EFFECTIVE = datetime(2026, 10, 23, 21, 15, tzinfo=timezone.utc)
 
 def decimal_projection(text):
     """Identify decimal forecast claims, never a sportsbook threshold alone."""
-    return bool(re.search(r'(?:I (?:have|project|say)|we (?:project|make)|projected|projection|our (?:number|total)|my (?:number|score|total))[^0-9\n!?]{0,65}\d+\.\d+', str(text or ''), re.I))
+    return bool(re.search(r"(?:I (?:have|project|say)|I['’]m at|I['’]ve got|we (?:project|make)|projected|projection|forecast|expected|estimated|our (?:number|total|spread|score)|my (?:number|score|total))[^0-9\n!?]{0,65}\d+\.\d+", str(text or ''), re.I))
 
 
 def projection_free_reason(text):

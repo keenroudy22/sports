@@ -22,7 +22,8 @@ class SocialProjectionPolicyTests(unittest.TestCase):
                      'My rounded score 109 - 119 | book 228.5'):
             self.assertFalse(social_copy.decimal_projection(text), text)
         for text in ('I have it at 2.6.', 'I project 3.4 targets.',
-                     'My number 2.6 · line 2.5', 'We project 44.1 points'):
+                     'My number 2.6 · line 2.5', 'We project 44.1 points',
+                     "I'm at 2.6.", 'Expected 3.4 targets', 'Our spread -3.6'):
             self.assertTrue(social_copy.decimal_projection(text), text)
             self.assertTrue(social_style.issues(text))
 
