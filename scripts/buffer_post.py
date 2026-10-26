@@ -437,7 +437,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     import learning
     weights = learning.load_policy().get('reasonWeights')
     # Legacy merged receipt/menu ids remain recognized, but no new menu is made.
-    posted = {part for p in log_book.get('posts', []) for part in str(p['id']).split('+')}
+    posted = {part for p in log_book.get('posts', []) if not x_post.cancelled_private_draft(p)
+              for part in str(p['id']).split('+')}
     today = eastern_date(now)
     import featured as featured_store
     potd = featured_store.of_day(today.isoformat())     # the day's Pick of the Day: first, its own card
@@ -562,7 +563,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
 
 def chosen_not_posted(first, latest, games, log_book, now):
     """IDs selected for today's slate that still have no delivery-log row."""
-    posted = {part for row in log_book.get('posts', []) for part in str(row.get('id') or '').split('+')}
+    posted = {part for row in log_book.get('posts', []) if not x_post.cancelled_private_draft(row)
+              for part in str(row.get('id') or '').split('+')}
     today = eastern_date(now)
     missing = []
     for key, original in first.items():
@@ -727,6 +729,14 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # Approved research follows its X post into the dedicated research feed.
         if kind in ('play', 'community', 'research') or (kind == 'cashed' and guid.startswith(('cashed:', 'burnt:'))):
             entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
+            # Replacing a private X draft is not a second Discord release. Carry
+            # its confirmed public receipt forward, leaving the original intact.
+            prior = next((p for p in reversed(log_book.get('posts', []))
+                          if p.get('id') == guid and x_post.cancelled_private_draft(p)), None)
+            if prior:
+                entry['replacesBufferPostId'] = prior['bufferPostId']
+                if (prior.get('discord') or {}).get('state') == 'sent':
+                    entry['discord'] = dict(prior['discord'])
         if kind == 'community':
             import discord_post
             phase = discord_post.community_type(guid, items)

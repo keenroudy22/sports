@@ -734,6 +734,20 @@ def guard(text, pick, reason=None, now_quote=None):
     return problems
 
 
+def cancelled_private_draft(entry):
+    """Only a successfully removed, provider-verified private style draft is retryable.
+
+    The queue auditor records this state after confirming scheduled status and
+    successful deletion. Generic cancellations, unknown states and public receipts
+    remain duplicate-protected. Keep the original row as delivery history.
+    """
+    audit = entry.get('socialStyleAudit') or {}
+    return bool(entry.get('bufferPostId') and entry.get('cancelledAt')
+                and audit.get('state') == 'cancelled-private'
+                and audit.get('needsRevision') is True and audit.get('checkedAt')
+                and not any(entry.get(k) for k in ('sentAt', 'tweetId', 'link')))
+
+
 def refuse(pick, game, log, now, text=None):
     """The reason this pick must not be posted now, or None."""
     if pick.get('favorite') is not True and not pick.get('modelLean') and not (pick.get('legs') or pick.get('parlayType')):
@@ -748,10 +762,11 @@ def refuse(pick, game, log, now, text=None):
         raise Refused(f"the game kicked off at {game['kickoff']}")
     if pick.get('expiresAt') and gates.when(pick['expiresAt']) <= now:
         raise Refused(f"the quote expired at {pick['expiresAt']}")
-    posted = {p['id'] for p in log['posts']}
+    protected = [p for p in log['posts'] if not cancelled_private_draft(p)]
+    posted = {p['id'] for p in protected}
     if pick['id'] in posted:
         raise Refused('already posted')
-    if text and text_hash(text) in {p.get('textHash') for p in log['posts']}:
+    if text and text_hash(text) in {p.get('textHash') for p in protected}:
         raise Refused('this exact text was already posted')
     return None
 

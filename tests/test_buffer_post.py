@@ -64,6 +64,20 @@ class FakeBuffer:
 
 
 class ClientTests(unittest.TestCase):
+    def test_private_x_replacement_preserves_discord_receipt_and_history(self):
+        row = dict(id='retry', bufferPostId='old-private', cancelledAt='2026-09-26T12:00:00Z',
+                   socialStyleAudit={'state': 'cancelled-private', 'needsRevision': True,
+                                     'checkedAt': '2026-09-26T12:00:00Z'},
+                   discord={'state': 'sent', 'messageId': 'original', 'text': 'Original caption'})
+        book = {'posts': [row]}
+        with mock.patch.object(bp, 'create_post', return_value='new-private'):
+            bp.schedule([('retry', 'play', 'Iowa over 38.5 (-105, ESPN BET)',
+                          NOW + timedelta(hours=1), None)], 'x', book, NOW, log=lambda *_: None)
+        self.assertEqual(len(book['posts']), 2)
+        self.assertEqual(book['posts'][0], row)
+        self.assertEqual(book['posts'][1]['replacesBufferPostId'], 'old-private')
+        self.assertEqual(book['posts'][1]['discord'], row['discord'])
+
     def test_owner_screenshot_exception_is_exact_and_never_an_official_play(self):
         key = 'community:personal-ticket:2026-10-19-mnf'
         path = 'img/tickets/personal-mnf-2026-10-19.png'

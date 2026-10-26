@@ -363,6 +363,24 @@ class FunPostTests(unittest.TestCase):
 
 
 class RefusalTests(unittest.TestCase):
+    def test_only_verified_private_style_cancellation_can_retry(self):
+        row = dict(id=PICK['id'], bufferPostId='cancelled-draft',
+                   cancelledAt='2026-09-26T13:00:00Z',
+                   textHash=x_post.text_hash('replacement'),
+                   socialStyleAudit={'state': 'cancelled-private',
+                                     'needsRevision': True, 'checkedAt': '2026-09-26T13:00:00Z'})
+        self.assertIsNone(x_post.refuse(PICK, GAME, {'posts': [row]}, NOW, text='replacement'))
+        for change in ({'sentAt': '2026-09-26T12:00:00Z'}, {'tweetId': '123'},
+                       {'link': 'https://x.com/keenkooks/status/123'},
+                       {'cancelledAt': None}, {'bufferPostId': None},
+                       {'socialStyleAudit': {'state': 'unknown'}},
+                       {'socialStyleAudit': {'state': 'cancelled-private'}}):
+            with self.subTest(change=change), self.assertRaises(x_post.Refused):
+                x_post.refuse(PICK, GAME, {'posts': [dict(row, **change)]}, NOW)
+        # A later accepted replacement still blocks another send.
+        with self.assertRaises(x_post.Refused):
+            x_post.refuse(PICK, GAME, {'posts': [row, {'id': PICK['id']}]}, NOW)
+
     def setUp(self):
         self.log = {'posts': [{'id': 'posted-before', 'textHash': x_post.text_hash('same words'), 'kind': 'pick'}]}
 
