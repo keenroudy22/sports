@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 33,
    "gamesQuoted": 35,
-   "moneylineSnapshots": 158,
+   "moneylineSnapshots": 159,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 158,
+   "snapshots": 159,
    "status": "capturing",
-   "totalSnapshots": 158
+   "totalSnapshots": 159
   },
   "NHL": {
-   "gamesGraded": 179,
-   "gamesQuoted": 183,
-   "moneylineSnapshots": 771,
+   "gamesGraded": 180,
+   "gamesQuoted": 194,
+   "moneylineSnapshots": 785,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 140,
-     "gamesQuoted": 142,
+     "gamesGraded": 141,
+     "gamesQuoted": 153,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 771,
+   "snapshots": 785,
    "status": "capturing",
-   "totalSnapshots": 771
+   "totalSnapshots": 785
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "MIN",
+    "id": "30",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/min.png",
+    "name": "Minnesota Wild",
+    "shortName": "Wild"
+   },
+   "awayScore": 4,
+   "gameId": "NHL-401892581",
+   "gradedAt": "2026-10-26T15:25:12Z",
+   "home": {
+    "abbreviation": "VAN",
+    "id": "22",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
+    "name": "Vancouver Canucks",
+    "shortName": "Canucks"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-10-26T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "COL",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final/SO",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "WSH",
-    "id": "23",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/wsh.png",
-    "name": "Washington Capitals",
-    "shortName": "Capitals"
-   },
-   "awayScore": 2,
-   "gameId": "NHL-401892491",
-   "gradedAt": "2026-10-14T03:30:04Z",
-   "home": {
-    "abbreviation": "CAR",
-    "id": "7",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/car.png",
-    "name": "Carolina Hurricanes",
-    "shortName": "Hurricanes"
-   },
-   "homeScore": 4,
-   "kickoff": "2026-10-13T22:45:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-26T15:24:27Z"
+ "updatedAt": "2026-10-26T15:29:40Z"
 }
