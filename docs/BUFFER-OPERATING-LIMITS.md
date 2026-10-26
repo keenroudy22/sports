@@ -51,6 +51,15 @@ working while the external hold is explicit. Do not describe testing as a send.
 
 ## Remaining work
 
+October26 audit adds a shared12/day ceiling for all optional analytics attempts,
+including unavailable first reads. The atomic request journal enforces it too.
+Existing8/day followup cap and6hour retry gap remain; publishing keeps priority.
+This reduces future requests, not past consumption. New request-purpose labels
+are needed to measure actual savings; hypothetical monthly arithmetic is not
+proof of restored delivery. See OWNER-AUDIT-FINDINGS-2026-10-26.txt for the
+current official-source comparison: Buffer Free supports hosted graphics,
+Publer/Metricool do not include free X, direct X uses paid credits.
+
 Continue O-20261025-OWNERFOLLOW: units-only all future social art/copy,
 combined daily straight card with linked complete grading, durable deployment
 entry point, and actual delivery/coverage observations. Existing NBA prop and

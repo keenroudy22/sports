@@ -850,6 +850,13 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
     # Extra refreshes have their own small ceiling; never expand the provider budget.
     followups = sum(1 for entry in log_book.get('posts', []) for at in entry.get('metricsRefreshAttempts', [])
                     if str(at)[:10] == gates.stamp(now)[:10])
+    # First reads used to evade the follow-up ceiling when metrics never arrived.
+    # Count every attempt across passes, including failures and unavailable metrics.
+    # Keep legacy observations intact and avoid counting the same attempt twice.
+    daily_attempts = sum(1 for entry in log_book.get('posts', [])
+        for at in set(entry.get('metricsAttempts', []) + entry.get('metricsRefreshAttempts', [])
+                      + ([entry['metricsAttemptAt']] if entry.get('metricsAttemptAt') else []))
+        if str(at)[:10] == gates.stamp(now)[:10])
     attempts = 0
     for entry, point in candidates:
         attempted = entry.get('metricsAttemptAt')
@@ -857,10 +864,12 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
             continue
         if entry.get('metricsAt') and followups >= 8:
             continue
-        if attempts >= 12:
+        if attempts >= 12 or daily_attempts >= quota.BUFFER_ANALYTICS_PER_DAY:
             break
         attempts += 1
+        daily_attempts += 1
         entry['metricsAttemptAt'] = gates.stamp(now)
+        entry.setdefault('metricsAttempts', []).append(gates.stamp(now))
         if entry.get('metricsAt'):
             entry.setdefault('metricsRefreshAttempts', []).append(gates.stamp(now))
             followups += 1

@@ -1,0 +1,173 @@
+Audit and improve Kook’n as a disciplined sports-research and publishing operation. Execute safe, authorized fixes and test them—not just recommendations.
+
+The goal is reliable research, honest records, timely publishing and better measured decisions. Do not promise profitability, assume we beat sportsbooks, chase losses or force bets to meet a posting quota.
+
+CONTINUITY
+
+Start with /Users/keen/Projects/sports-dev/AGENTS.md, docs/PRODUCT-IMPLEMENTATION.md, docs/product-status.json and the existing owner-audit documents. Continue unfinished work rather than restarting completed audits. Work in the development checkout; never edit production by hand.
+
+Preserve original tickets, prices, stakes, timestamps, delivery receipts and historical results. Never hide losses or reset the season record.
+
+1. ESTABLISH THE REAL BASELINE
+
+Reconcile the website, immutable published history and actual delivery logs.
+
+The October 26 recorded-price official straight baseline was 29–40, −11.8869u. Verify the current numbers rather than assuming they remain unchanged.
+
+Separate:
+- Official straights at recorded prices.
+- Assumed-price or unpriced historical imports.
+- Climb.
+- Fun parlays.
+- Personal tickets.
+- NBA Trial and paper research.
+- Cash-outs, promotional refunds and credits.
+
+Report units risked, net units, return on stakes and sample size for each relevant category. Explain every discrepancy. Never combine a win-loss record from one group with profit from another.
+
+Make official straights the clearest primary performance view. Keep other categories accessible and honestly labeled. Any change to which bets count requires an explicit before-and-after explanation and owner approval.
+
+2. FIND WHAT IS ACTUALLY FAILING
+
+Distinguish:
+- Weak predictions or probability estimates.
+- Bad prices or lines that moved before publication.
+- Missing injury, lineup, minutes or role information.
+- Correlated exposure.
+- Small samples and ordinary variance.
+- Research, selection, publication or grading failures.
+
+Evaluate all screened candidates where stored evidence permits—not only winners or published picks. Avoid hindsight, information received after selection and repeated observations counted as independent bets.
+
+Compare forecasts with simple baselines and sportsbook lines. Report uncertainty and cases where the market performs better.
+
+3. IDENTIFY THE DATA WE NEED
+
+Inventory each current source: coverage, freshness, historical availability, reliability, permissions, request limits and failure behavior.
+
+Assess the value of:
+- Exact line, odds, sportsbook and observation time.
+- Opening prices, subsequent movement and closing prices.
+- Multiple books and prices accessible in Indiana.
+- Both sides of markets to estimate probabilities after removing bookmaker margin.
+- Official injuries, active status, starters and confirmed lineups.
+- NBA expected minutes, rotation changes, usage and teammate availability.
+- Football offensive-line availability, QB changes, routes, snaps, targets, carries and red-zone roles.
+- Opponent adjustments, pace, rest, travel and material weather.
+- Period-specific prices, workload and grading for quarter props.
+- Same-game dependence and actual quoted parlay prices.
+
+For every missing input, state:
+1. Which decision it would improve.
+2. A legitimate source.
+3. Whether existing free access covers it.
+4. How freshness and correctness would be checked.
+5. How we would test whether it adds value.
+
+Prioritize a small number of high-value inputs. Do not collect data merely because it exists. Do not buy access, scrape prohibited sources or increase request budgets without approval.
+
+4. DEFINE AND VALIDATE EDGE
+
+A projection gap is not automatically an edge. A high hit rate is not automatically profitable.
+
+For each supported market:
+- Estimate the chance of winning using information available at selection.
+- Compare that chance with the exact offered price.
+- Account for bookmaker margin, uncertainty and market rules.
+- Assess expected return and realistic availability.
+- Check whether estimated probabilities match actual outcomes over time.
+- Track whether the selected price beats the closing price as supporting evidence, not proof of profit.
+
+Use chronological forward testing and untouched evaluation periods. Report sample size, uncertainty, model versions and correlated observations. Do not select a model because it happened to win a small recent sample.
+
+Keep unvalidated sports, models and quarter markets in research or paper mode until their existing readiness gates pass.
+
+5. MAKE SELECTION INDEPENDENT AND DISCIPLINED
+
+Take responsibility for screening the supported slate without waiting for the owner to suggest bets.
+
+Aim for broad, early coverage across props, spreads, totals and moneylines. Three to five qualifying straights is a coverage objective—not a requirement to manufacture plays.
+
+Rank candidates by defensible expected value, evidence quality, uncertainty, current price and portfolio exposure—not hype or payout.
+
+Ordinary straights remain 0.5u; Chef’s Picks remain 1u under their stricter requirements. Preserve the shared 3u ordinary-day / 5u big-slate-day limits and all narrower restrictions. Never increase stakes to recover losses. No wagers may be placed.
+
+Climb and fun tickets must not displace stronger straights or consume exposure just to maintain activity. Keep Climb’s preferred two alternate legs, approximately −150 to −200 combined, with a real book quote and existing safeguards. Unsupported steps may be skipped.
+
+6. RESTORE RELIABLE PUBLISHING
+
+Determine separately whether the website, Discord and X are healthy. A Buffer problem must not unnecessarily block the website or approved Discord delivery.
+
+Audit Buffer request consumption, repeated status checks, analytics retries, queue handling, duplicate protection and actual delivery confirmation. Preserve provider restrictions and existing budgets. Do not reset request journals, rotate accounts or keys, or bypass rate limits.
+
+Prefer fewer useful API checks and grouped content where appropriate. Preserve individual play evidence and complete grading. Distinguish draft, reserved, scheduled, sent and failed states.
+
+Never publish a stale pregame bet after kickoff. Recheck eligibility, exact price and material news before delayed publication.
+
+Test research → selection → release → website/Discord/X receipt → final stats → grading → record reconciliation. Use isolated tests where possible; do not send test spam.
+
+7. SIMPLIFY THE WEBSITE AND CONTENT
+
+Evaluate whether the website clearly answers:
+- What are today’s official plays?
+- What line, price, book and stake were originally posted?
+- Why was each selected?
+- What is research rather than a bet?
+- What is pending, won, lost, void or cashed out?
+- How is the official strategy actually performing?
+
+Remove misleading placeholders, stale claims and unnecessary clutter without deleting historical evidence.
+
+Use casual, confident Kook’n copy without guarantees or artificial hype. Public stakes use units, never personal dollars or bet IDs. Put every parlay leg on its own line. Preserve required research labels, X Playbook tagging where appropriate and the current “21+ only” caption rule.
+
+Measure attention separately from betting performance. Engagement may improve presentation and timing; it must not weaken selection standards or hide losses.
+
+8. IMPLEMENT, TEST AND VERIFY
+
+Fix the highest-impact authorized issues first. Add regressions for confirmed causes. Follow all existing deployment, clean-export, record, public-data and live-site verification requirements.
+
+Do not call queued publishing “sent,” passing tests “deployed,” or a tracked task “finished.”
+
+For work requiring owner approval, paid data, third-party permissions or real observation time, state the exact blocker and next action. Preserve unfinished work in the existing finite queue.
+
+9. MONTH-END REVIEW
+
+Use the existing scheduled review; do not add overlapping jobs.
+
+At October month-end:
+- Reconcile the full season and the forward period after the October 26 baseline.
+- Leave unfinished games pending until verified finals arrive.
+- Compare results by sport, market, tier and model version.
+- Review price quality, forecast accuracy, exposure and delivery timeliness.
+- Recommend what to retain, pause or test next.
+
+A refresh means a clearer, better-tested operation—not wiping the record.
+
+DELIVERABLE
+
+Lead with:
+1. The verified current record and operational status.
+2. The strongest evidence explaining underperformance.
+3. Fixes actually implemented, tested and deployed.
+4. The highest-priority missing data and why it matters.
+5. What remains unproven or blocked.
+6. Exactly what you need from me, including any cost or permission.
+
+Be candid if the evidence does not establish a profitable edge. The objective is to earn confidence through measurable improvement, not manufacture confidence through more picks.
+
+10. FREE X GRAPHICS AND AUTOMATION RECOVERY
+
+Diagnose every publishing stage separately: artwork generation, durable public image hosting, exact caption validation, provider acceptance, scheduled state and confirmed X delivery. Preserve duplicate protection, original receipts, kickoff deadlines and website/Discord independence.
+
+Measure requests per delivered post and purpose: publishing, status, channels, limits, cancellation and analytics. Count failed attempts conservatively. Model the expected rolling 30-day demand at current output, reserve essential delivery capacity and bound all optional retries. Never assume a calendar-month reset restores a rolling allowance or raise the approved local ceiling.
+
+Verify Buffer Free's current official API, image, queue and rate limits. Test that graphics can be retrieved from existing public site URLs without local browser upload. Prefer the supported API for unattended operation. A browser draft is not an automated publishing solution or proof of delivery.
+
+Research legitimate free alternatives using current primary documentation. Compare X availability, actual image publishing, supported automation/API access, posting/queue limits, recurring costs, account permissions, reliability, delivery receipts and policy compliance. Check direct X API pricing too; do not call a trial, expiring credit or paid X add-on a permanent free option. Automation platforms and self-hosted schedulers do not remove the underlying X/provider access costs.
+
+Do not create accounts, accept terms, broaden permissions, purchase access, migrate credentials, enable direct-X automation or route around provider restrictions without the required explicit approval. Do not automate the X website. Present concrete alternatives and identify decisions rather than silently switching the live publisher.
+
+Implement and test bounded authorized efficiency fixes. Show realistic monthly request arithmetic, failure cases and what remains blocked today. For a viable new provider, propose a reversible adapter with one delivery ledger, idempotency, secret handling, media verification, retry/backoff and a controlled real-post pilot; activate only after the required permission and tests.
+
+The outcome must distinguish a verified sustainable free route, a temporary attended fallback and a blocked or paid option. Do not claim everything is restored before an actual authorized graphic post has a confirmed public receipt.
+

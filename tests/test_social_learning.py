@@ -10,6 +10,21 @@ NOW=datetime(2026,10,22,20,tzinfo=timezone.utc)
 
 
 class SocialLearningTests(unittest.TestCase):
+    def test_missing_first_metrics_are_bounded_across_passes_and_failures(self):
+        morning = NOW.replace(hour=8)
+        entries = [dict(id=str(i), bufferPostId=str(i),
+                   sentAt=gates.stamp(morning-timedelta(hours=25))) for i in range(20)]
+        calls = []
+        def unavailable(url, body, headers):
+            calls.append(body['variables']['id'])
+            return 200, b'{"data":{"post":{"metrics":[]}}}'
+        book = {'posts': entries}
+        for at in (morning, morning+timedelta(minutes=5), morning+timedelta(hours=6)):
+            b.collect_metrics(book, at, key='t', send=unavailable, log=lambda *_: None)
+        self.assertEqual(len(calls), b.quota.BUFFER_ANALYTICS_PER_DAY)
+        self.assertFalse(any(e.get('metricsAt') for e in entries))
+        self.assertEqual(sum(len(e.get('metricsAttempts', [])) for e in entries), len(calls))
+
     def test_checkpoints_and_no_old_fake_backfill(self):
         e=dict(bufferPostId='p',sentAt=gates.stamp(NOW-timedelta(hours=73)),metricsAt=gates.stamp(NOW-timedelta(hours=49)))
         self.assertEqual(s.checkpoint(e,NOW),72)

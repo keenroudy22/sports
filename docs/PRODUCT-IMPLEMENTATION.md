@@ -1,5 +1,19 @@
 # October 5 product implementation tracker
 
+### October26 expanded free-X audit — focused tests passed, release pending
+
+Owner supplied audit expanded in OWNER-AUDIT-2026-10-26.txt; executed findings
+in OWNER-AUDIT-FINDINGS-2026-10-26.txt. Canonical recorded-price straights29-40,
+-11.886923u/66.5u risked,127history rows audit clean. Prior raw-saved -9.269u
+was not this headline; no history/counting change. NBA baseline still loses to
+line-error benchmark in8stat families; reviewed version only2games, no promotion.
+Buffer Free supports public-URL graphics; Publer/Metricool exclude free X and
+direct X uses paid credits. No account/payment/access migration. First analytics
+reads could bypass the followup ceiling: now all attempts share12/day across
+passes with an independent atomic quota-journal guard; essential sends unaffected.
+Focused25tests pass; full/clean/rehearsal/hosted/mobile pending.2700stop retained;
+receipt remains reserved/unsent and full audit open.
+
 ### October26 recovery release verified; Buffer upload needs owner action
 
 Release167b89d88, hosted40320634251SUCCESS; hosted verifiedHeadfade79398

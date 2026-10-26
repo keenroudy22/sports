@@ -17,6 +17,20 @@ class Response(io.StringIO):
 
 
 class QuotaTests(unittest.TestCase):
+    def test_daily_analytics_ceiling_preserves_delivery_and_next_day(self):
+        now = datetime(2026, 10, 26, 12, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as root:
+            for _ in range(quota.BUFFER_ANALYTICS_PER_DAY):
+                quota.count_request('buffer', root, now, optional=True)
+            journal = Path(root) / 'buffer.jsonl'
+            original = journal.read_bytes()
+            with self.assertRaisesRegex(quota.QuotaBlocked, 'daily analytics'):
+                quota.count_request('buffer', root, now, optional=True)
+            self.assertEqual(journal.read_bytes(), original)
+            quota.count_request('buffer', root, now, operation='publish')
+            quota.count_request('buffer', root, now + timedelta(days=1), optional=True)
+            self.assertEqual(len(journal.read_text().splitlines()), quota.BUFFER_ANALYTICS_PER_DAY + 2)
+
     def test_preflight_does_not_spend_and_keeps_historical_journal(self):
         now = datetime(2026, 10, 26, tzinfo=timezone.utc)
         with tempfile.TemporaryDirectory() as root:

@@ -19,6 +19,7 @@ CEILING = 500
 RESERVE = 24
 BUFFER_STOP = 2700
 BUFFER_DELIVERY_RESERVE = 300
+BUFFER_ANALYTICS_PER_DAY = 12
 SHARP_PER_MINUTE = 12
 
 
@@ -76,6 +77,11 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
                     raise QuotaBlocked('Buffer local free-plan rolling 30-day cap reached')
                 if optional and max(rolling, monthly) >= BUFFER_STOP - BUFFER_DELIVERY_RESERVE:
                     raise QuotaBlocked('Buffer delivery reserve protected; optional analytics deferred')
+                if optional and sum(row['count'] for row in rows
+                        if row.get('operation') == 'analytics'
+                        and datetime.fromisoformat(row['at']).astimezone(timezone.utc).date()
+                        == now.astimezone(timezone.utc).date()) >= BUFFER_ANALYTICS_PER_DAY:
+                    raise QuotaBlocked('Buffer daily analytics reserve protected; optional analytics deferred')
             if provider == 'sharp':
                 recent = [row for row in rows if 0 <= (now - datetime.fromisoformat(row['at'])).total_seconds() < 60]
                 if len(recent) >= SHARP_PER_MINUTE:
@@ -87,7 +93,9 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
         row = {'month': now.astimezone(timezone.utc).strftime('%Y-%m'),
                                      'at': now.astimezone(timezone.utc).isoformat(),
                                      'provider': provider, 'count': 1}
-        if operation is not None:
+        if provider == 'buffer' and optional:
+            row['operation'] = 'analytics'
+        elif operation is not None:
             row['operation'] = operation
         with (root / f'{provider}.jsonl').open('a', encoding='utf-8') as handle:
             handle.write(json.dumps(row, sort_keys=True) + '\n')
