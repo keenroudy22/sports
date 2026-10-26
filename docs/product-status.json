@@ -7,8 +7,8 @@
       "title": "Complete owner-authorized delivery, units-only and daily-card follow-through",
       "status": "ready",
       "owner": "agent",
-      "next": "Follow docs/OWNER-AUDIT-2026-10-25.md. Finish testing/deploying selected-parlay-side research and safe private-cancelled X recovery, then implement units-only future social output and the combined daily straight card with linked complete grading. Existing overnight and daily automations now carry this finite scope; prepare October26 with current evidence, not stale October22 targets.",
-      "doneWhen": "Required code and full release gates pass; successful hosted/live receipts and actual eligible delivery receipts recorded; units-only output and daily-card grading have regression coverage; remaining genuine model/quarter evidence gates remain explicit.",
+      "next": "Follow OWNER-AUDIT-2026-10-25.md: deploy side research/private-X recovery, implement units-only output and linked daily-card grading, then prepare October26. Existing overnight/daily jobs carry this scope.",
+      "doneWhen": "Code/full release gates pass; hosted/live and actual eligible delivery receipts recorded; units-only output and linked daily grading have regressions. Genuine model/quarter evidence holds stay explicit.",
       "evidence": "October25 evening: repaired interrupted development rebase by regenerating validated research index; selected-side fix now15a3c44ea. Private-cancelled retry regression47 X tests pass; remaining suites/release pending. Existing00:45 overnight and07:45 daily automation updates confirmed ACTIVE, no schedule or budget increase."
     },
     {
