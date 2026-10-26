@@ -25,6 +25,40 @@ def outcome(row, actual=20, **extra):
 
 
 class ForwardReviewTests(unittest.TestCase):
+    def test_reviewed_minutes_compare_frozen_baseline_without_reconstructing_prices(self):
+        a = forecast(model='nba-minutes-rate-reviewed-v1', season=2027,
+            projection=dict(value=18, baselineValue=25, baselineMinutes=30))
+        result = review.summarize([a], [outcome(a)], NOW)
+        row = result['reviewedMinutes'][0]
+        self.assertEqual((row['baselineMAE'],row['reviewedMAE'],row['games']), (5,2,1))
+        self.assertNotIn('shadowNetUnits',row)
+        self.assertNotIn('odds',row)
+        a['projection'].pop('baselineValue')
+        self.assertEqual(review.summarize([a], [outcome(a)], NOW)['reviewedMinutes'], [])
+
+    def test_matched_models_use_same_inputs_without_selecting_winning_sides(self):
+        a = forecast(model='baseline', side='over', odds=-110, season=2027)
+        b = forecast('reviewed', model='reviewed', side='under', odds=-105, season=2027, projection={'value': 18})
+        report = review.summarize([a,b], [outcome(a, side='over', odds=-110),
+            outcome(b, side='under', odds=-105, result='hit')], NOW)
+        pair = report['pairedModels'][0]
+        self.assertEqual((pair['modelAMAE'], pair['modelBMAE'], pair['comparisons'], pair['games']), (5,2,1,1))
+        self.assertEqual(report, review.summarize([b,a], [outcome(b, side='under', odds=-105, result='hit'),
+            outcome(a, side='over', odds=-110)], NOW))
+
+    def test_different_capture_or_book_or_line_is_not_a_matched_comparison(self):
+        a = forecast(model='a')
+        for change in (dict(retrievedAt='2026-10-22T13:00:00Z'), dict(book='FanDuel'), dict(line=21.5)):
+            b = forecast('b', model='b', **change)
+            result = review.summarize([a,b], [outcome(a),outcome(b)], NOW)
+            self.assertEqual(result['graded'], 2)
+            self.assertEqual(result['pairedModels'], [])
+
+    def test_disagreeing_results_do_not_produce_a_model_comparison(self):
+        a, b = forecast(model='a'), forecast('b', model='b')
+        result = review.summarize([a,b], [outcome(a),outcome(b, actual=19)], NOW)
+        self.assertEqual(result['pairedModels'], [])
+
     def test_shadow_uses_frozen_price_side_and_never_assumes_missing_price(self):
         a = forecast(odds=-200, side='under', season=2027)
         b = forecast('b', athleteId='other', odds=150, side='over', season=2027)

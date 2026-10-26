@@ -457,6 +457,7 @@ def _choose_reason(pick, supplied, history, day):
     # verified supporting sentence already stored on the pick. If neither is
     # usable, the caller's guard holds the post; a reason is never stripped and
     # sent blank.
+    import market_support
     structured = []
     for row in [*((pick.get('dossier') or {}).get('reasons') or []), *(pick.get('reasons') or [])]:
         value = row.get('text') if isinstance(row, dict) else row
@@ -471,6 +472,7 @@ def _choose_reason(pick, supplied, history, day):
     player = pick_card.play_kind(pick) == 'player'
     choices = [choice for choice in choices if plain(choice) and choice.split()
                and not choice.startswith('Book says ')
+               and market_support.allowed(pick, choice)
                and (player or choice.split()[0].lower() not in DANGLING)]
     recent = [row for row in history or [] if (row.get('series') or row.get('kind')) in ('play', 'buffer:play')]
     recent_kinds = [row.get('reasonKind') for row in recent if row.get('reasonKind') not in (None, 'none')]

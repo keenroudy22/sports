@@ -1009,6 +1009,8 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     market = market_key(candidate)
     league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
     reasons = plan_reasons(candidate)
+    import market_support
+    reasons = [row for row in reasons if market_support.allowed(candidate, row['text'], ctx.now)]
     if market == 'total':
         reasons = [row for row in reasons if row.get('type') in TOTAL_REASONS]
     reasons = [row for row in reasons if row.get('type') not in ('hit_strip', 'usage_trend') or gap <= 12]

@@ -1,5 +1,33 @@
 # October 5 product implementation tracker
 
+### October26 pick-quality and NBA validation follow-up — TESTING
+
+Owner requested honest review of today's card, NBA readiness, grading and Climb.
+Found a real cross-stat reasoning error: Williams receptions caption used a plan
+for more rushing. Narrow prospective market_support guard refuses explicit
+rushing-only support for receiving/passing props and receiving-only support for
+rushing props in new admission reasons and captions. Original dated publications
+retain their original copy/stakes/categories. Research prompt now distinguishes
+availability facts from sourced redistribution. This is not a universal causal
+reasoning validator, model refit or increased numeric edge/staking threshold.
+
+NBA forward review now compares identical-capture model cohorts and separately
+compares the baselineValue already frozen inside reviewed-minutes forecasts
+against that same forecast's revised minutes. No reconstructed baseline odds or
+returns, no outcome-based cohort selection. Real store:2196comparisons/38games;
+reviewed variant only2games,4of8 stat errors improve and4worsen on matched
+saved baselines. No promotion. Existing weekly reviewer consumes these results,
+with no added feed, job or request allowance.
+
+Manual official NBA10:15AM report review found a current discrepancy: Flagg is
+Questionable in the league PDF while08:30ESPN capture saysOut; MIN,IND,OKC,MEM,
+UTA include not-yet-submitted team reports. PDF source:
+https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-10-26_10_15AM.pdf
+Do not treat existing missing/old injury data as a clean bill of health.
+DraftKings NBA main and alt menus inspected manually; no wagers or user-slip
+edits. Current Climb scanner returns0supported NFL legs/0CFBgames; NBA ticket
+support remains gated. No qualified Climb has been published by this review.
+
 ### October26 attended fallback, bounded API recovery and NBA context VERIFIED
 
 Automatic delivery observation: Flournoy sent14:19:46.348Z, actual Xlink

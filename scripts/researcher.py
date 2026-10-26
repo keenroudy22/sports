@@ -47,6 +47,12 @@ role this week. Then anything else a reasonable person would say bears on this m
 not publish injury reports, so the local beat reporting and the teams' own depth charts and press conferences
 matter most there.
 
+Tie any directional claim to this exact wager's stat. More carries or a plan to
+run the ball is not support for a receptions/receiving-yards over. A teammate's
+injury alone is availability context, not proof this player inherits targets or
+minutes: keep it neutral unless sourced reporting establishes that connection.
+Do not invent that connection from positions, depth order, or an injury list.
+
 Look only at: official team or league injury and availability reports, the teams' own sites, and established
 beat reporting (major outlets or the local paper that covers the team). Prefer reporting from the last four days.
 You have room for about eight searches or page reads. Answer with what you have found by then; an answer with

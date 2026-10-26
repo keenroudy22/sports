@@ -1087,10 +1087,13 @@ def evidence(candidate, ctx, context_file):
 
 def plan_reasons(candidate, ctx):
     """Directional reasons in the exact owner-plan shape, from stored facts only."""
+    import market_support
     now = stamp(ctx.now)
     reasons = []
     for fact in [*(candidate.get('_evidence') or []), *(candidate.get('_research') or [])]:
         if fact.get('direction') != 'for' or not (fact.get('claim') or fact.get('text')):
+            continue
+        if not market_support.allowed(candidate, fact.get('text') or fact.get('claim'), ctx.now):
             continue
         kind = fact.get('kind') or fact.get('type')
         reason_type = 'news' if researcher.from_web(fact) else {

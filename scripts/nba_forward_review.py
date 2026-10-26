@@ -6,6 +6,7 @@ Report each stat separately; different stats for one player remain correlated.
 """
 import math
 from collections import defaultdict
+from itertools import combinations
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import mean
@@ -15,6 +16,60 @@ import boxscores
 
 def number(value):
     return type(value) in (int, float) and math.isfinite(value)
+
+
+def paired_models(graded):
+    """Compare model errors on identical pregame capture cohorts, not separate samples.
+
+    Sides and wins never select the cohort. Missing pairs, different quote clocks,
+    and disagreeing actuals are excluded; no significance or promotion is inferred.
+    """
+    subjects = defaultdict(dict)
+    for row, outcome in graded:
+        key = (row['eventId'], row['athleteId'], row['stat'], row.get('season', 0))
+        subjects[key][row['model']] = (row, outcome)
+    groups = defaultdict(list)
+    for key, models in subjects.items():
+        for a, b in combinations(sorted(models), 2):
+            left, right = models[a], models[b]
+            fields = ('retrievedAt', 'kickoff', 'book', 'line')
+            if any(left[0].get(f) != right[0].get(f) for f in fields):
+                continue
+            if left[1]['actual'] != right[1]['actual']:
+                continue
+            groups[(a, b, key[2], key[3])].append((left, right))
+    result = []
+    for (a, b, stat, season), pairs in sorted(groups.items()):
+        error = lambda item: abs(item[1]['actual'] - item[0]['projection']['value'])
+        result.append(dict(modelA=a, modelB=b, stat=stat, season=season,
+            comparisons=len(pairs), games=len({p[0][0]['eventId'] for p in pairs}),
+            playerGames=len({(p[0][0]['eventId'], p[0][0]['athleteId']) for p in pairs}),
+            modelAMAE=round(mean(error(p[0]) for p in pairs), 3),
+            modelBMAE=round(mean(error(p[1]) for p in pairs), 3)))
+    return result
+
+
+def reviewed_minutes(graded):
+    """The reviewed forecast already freezes its unchanged baseline at that clock.
+
+    Compare those exact saved values; never reconstruct an earlier baseline using
+    today's boxes or invent the baseline's side/price/return.
+    """
+    groups = defaultdict(list)
+    for row, outcome in graded:
+        p = row['projection']
+        if row['model'] != 'nba-minutes-rate-reviewed-v1' or not number(p.get('baselineValue')):
+            continue
+        if not number(p.get('baselineMinutes')) or not 0 < p['baselineMinutes'] <= 60:
+            continue
+        groups[(row['stat'], row.get('season', 0))].append((row, outcome))
+    out = []
+    for (stat, season), pairs in sorted(groups.items()):
+        out.append(dict(stat=stat, season=season, comparisons=len(pairs),
+            games=len({r['eventId'] for r, _ in pairs}),
+            baselineMAE=round(mean(abs(o['actual']-r['projection']['baselineValue']) for r,o in pairs), 3),
+            reviewedMAE=round(mean(abs(o['actual']-r['projection']['value']) for r,o in pairs), 3)))
+    return out
 
 
 def priced_check(pairs):
@@ -99,7 +154,8 @@ def summarize(forecasts, outcomes, now=None):
     return dict(selected=len(chosen), graded=len(graded), missingOrUnusable=missing,
         rejected=rejected, games=len({r['eventId'] for r, _ in graded}),
         playerGames=len({(r['eventId'], r['athleteId']) for r, _ in graded}),
-        segments=segments, decision='Research only; no automatic promotion or weight change.')
+        segments=segments, pairedModels=paired_models(graded), reviewedMinutes=reviewed_minutes(graded),
+        decision='Research only; no automatic promotion or weight change.')
 
 
 def from_stores(root, now=None):
@@ -117,5 +173,11 @@ def markdown(report):
         lines.append(f"- {row['stat']} ({row['model']}): {row['observations']} comparisons / {row['games']} games; model error {row['modelMAE']:g}, quoted-line error {row['lineMAE']:g}.")
         price = row['pricedShadow']
         lines.append(f"  Season {row['season'] or 'unknown'} · frozen-side shadow {price['hits']}-{price['misses']}-{price['pushes']}, {price['shadowNetUnits']:+g} hypothetical units at 1u each; {price['excluded']} lack consistent side/price evidence. Not placed bets; overlapping player exposure is not a staking portfolio.")
+    for row in report.get('pairedModels', []):
+        lines.append(f"- Matched {row['stat']} / season {row['season']}: {row['modelA']} error {row['modelAMAE']:g} vs {row['modelB']} {row['modelBMAE']:g}; {row['comparisons']} comparisons across {row['games']} games. Same pregame capture time, book and line; sides/results did not select the cohort. Small and correlated samples do not establish improvement.")
+    if not report.get('pairedModels'):
+        lines.append('- No identical-capture model pairs available; separate model samples do not establish improvement.')
+    for row in report.get('reviewedMinutes', []):
+        lines.append(f"- Frozen minutes comparison {row['stat']} / season {row['season']}: unchanged baseline error {row['baselineMAE']:g}, reviewed minutes error {row['reviewedMAE']:g}; {row['comparisons']} comparisons / {row['games']} games. Both values saved inside the same pregame forecast; no reconstructed baseline price or returns. Not promotion evidence by itself.")
     lines.append('- '+report['decision'])
     return '\n'.join(lines)+'\n'
