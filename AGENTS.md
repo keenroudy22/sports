@@ -1,5 +1,14 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## October26 owner Climb sizing clarification
+
+The owner clarified that Climbs remain fixed $50-to-$1,000 challenges; units
+do not define their starting stake. This supersedes the briefly approved 1u
+restart suggestion in the same conversation. Keep START50/GOAL1000 and the
+20%-bank/80%-roll progression, preserving existing rungs and their original
+stakes/results. Straight-bet units remain separate. This is not an exemption
+from existing exposure, weekly frequency, one-open-rung, price or evidence gates.
+
 ## October24 ticket pool isolation
 
 A straight held for an unused/unavailable news lookup, research allocation or

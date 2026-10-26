@@ -2,6 +2,22 @@
 
 ### October26 pick-quality and NBA validation follow-up — TESTING
 
+Sizing choice resolved: owner first accepted a1u start, then clarified all
+Climbs are fixed50→1000 and units are not relevant to their challenge sizing.
+START50/GOAL1000 retained; no runtime stake, progression, history or exposure
+exception introduced. Ordinary straight stakes remain0.5u/Chef1u.
+
+Actual queued copy repair: Williams original graphic has no rushing rationale.
+Only the unsent X caption was edited in Buffer, replacing the wrong rushing
+sentence with "I project3.4targets, most among Dallas running backs." This is
+the original publication's target estimate, explicitly a projection, not newly
+reported fact. Exact visible text, image and10:59time confirmed; normal API
+STATUS confirmed same original Buffer ID still scheduled. Common posting log
+preserves prior text/hash in captionCorrections; original Discord/report intact.
+Separate factual Discord correction sent14:46:21Z,message1564289084619231245,
+deduplicated by a saved attempted state before sending. No new bet or stake.
+Proof work/williams-caption-corrected-20261026.png and confirmation logs.
+
 Owner requested honest review of today's card, NBA readiness, grading and Climb.
 Found a real cross-stat reasoning error: Williams receptions caption used a plan
 for more rushing. Narrow prospective market_support guard refuses explicit
