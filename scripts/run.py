@@ -2844,7 +2844,7 @@ def _run(args, now, slot, kinds, status):
         public_decisions = [row for row in decided if row.get('id') not in admission_keys]
         remember(public_decisions, now, slot, status)
         paper_trials(now, slot, status)
-        if (os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot)
+        if (not settle_only and os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot)
                 and 'nbaCapture' not in status and args.command != 'run'):
             try:
                 import nba_capture
@@ -2853,7 +2853,7 @@ def _run(args, now, slot, kinds, status):
             except Exception as error:
                 status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
                 log(f'NBA capture: {type(error).__name__}: {error}')
-        if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):
+        if not settle_only and os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):
             try:
                 import nba_player_props
                 status['nbaPlayerProps']=nba_player_props.capture(now if args.dry_run else datetime.now(timezone.utc))
@@ -2874,7 +2874,7 @@ def _run(args, now, slot, kinds, status):
             status['nbaTrialGraded'] = nba_trial_runtime.grade(now)
             import nba_player_props
             status['nbaPlayerPropGraded'] = nba_player_props.grade(now)
-            if args.command == 'run' and 'nbaTrial' not in status:
+            if args.command == 'run' and 'nbaTrial' not in status and not settle_only:
                 status['nbaTrial'] = nba_trial_runtime.admission(now, capture=nba_trial_needs_capture(slot, status))
         except Exception as error:
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')

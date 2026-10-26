@@ -1,15 +1,17 @@
 """Private overnight coverage/watch packet; no future-clock admission or posting."""
 from collections import Counter, defaultdict
-from datetime import timedelta
+from datetime import date, timedelta
 import math
 
 import gates
 
 
-def prepare(games, lines, nba_slate, nba_props, now):
-    target=gates.eastern_date(now)+timedelta(days=1)
+def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None):
+    target=date.fromisoformat(target_date) if isinstance(target_date,str) else target_date
+    if target is None:target=gates.eastern_date(now)+timedelta(days=1)
+    if target < gates.eastern_date(now):raise ValueError("Preparation target is in the past")
     def tomorrow(at):
-        try:return gates.eastern_date(gates.when(at))==target
+        try:return gates.when(at)>now and gates.eastern_date(gates.when(at))==target
         except (TypeError,ValueError):return False
     football={key:g for key,g in games.items() if g.get('league') in ('NFL','CFB')
               and g.get('state')=='pre' and tomorrow(g['kickoff'])}
@@ -59,13 +61,14 @@ if __name__=='__main__':
     import boxscores,build_site,line_payload,nba_player_props
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',default='work/next-day-prep.json')
+    parser.add_argument('--target-date',type=date.fromisoformat)
     args=parser.parse_args()
     now=datetime.now(timezone.utc)
     ctx=gates.Stores().as_of(now)
     slate_path=nba_player_props.STORE/'slate.json'
     slate=json.loads(slate_path.read_text()) if slate_path.exists() else {}
     report=prepare(ctx.games,line_payload.load(build_site.OUT/'lines.json'),slate,
-                   nba_player_props.build(now,limit=None),now)
+                   nba_player_props.build(now,limit=None),now,target_date=args.target_date)
     boxscores.write_json(Path(args.output),report)
     print(json.dumps(dict(path=args.output,targetDate=report['targetDate'],
         footballGames=report['football']['games'],footballPrices=report['football']['pricedRowsByFamily'],

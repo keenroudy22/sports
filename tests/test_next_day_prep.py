@@ -35,3 +35,20 @@ class PrepTests(unittest.TestCase):
         self.assertEqual(report['football']['watchByFamily'],{})
         self.assertEqual(report['nba']['watch'],[])
 
+
+    def test_explicit_monday_target_preserves_true_clock_on_both_sides_of_midnight(self):
+        games={'future':{'league':'NFL','state':'pre','kickoff':'2026-10-27T00:15:00Z'},
+               'started':{'league':'NFL','state':'pre','kickoff':'2026-10-26T04:10:00Z'}}
+        for clock, expected in [('2026-10-26T03:30:00Z',2),('2026-10-26T04:45:00Z',1)]:
+            now=prep.gates.when(clock)
+            nba={'games':[{'status':'scheduled','kickoff':g['kickoff']} for g in games.values()]}
+            props={'rows':[{'kickoff':g['kickoff']} for g in games.values()]}
+            report=prep.prepare(games,[],nba,props,now,target_date='2026-10-26')
+            self.assertEqual(report['targetDate'],'2026-10-26')
+            self.assertEqual(report['asOf'],clock)
+            self.assertEqual(report['football']['games'],expected)
+            self.assertEqual(report['nba']['games'],expected)
+            self.assertEqual(report['nba']['freshPropRows'],expected)
+            self.assertFalse(report['releaseReady'])
+        with self.assertRaises(ValueError):
+            prep.prepare({},[],{},{},now,target_date='2026-10-25')

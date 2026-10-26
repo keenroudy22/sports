@@ -4570,3 +4570,10 @@ Monday packet saved:1NFL/9NBA, no fresh next-day NBA props;44alternate spreads,
 zero supported Climb legs. Fresh price/news/admission remain required. NBA role/
 quarter evidence and other genuine observation gates remain open. Full audit is
 not marked shipped. Detailed receipts and observations are under work/owner-*.
+
+
+### October26 overnight — bounded recovery and midnight target repair
+
+Settlement-only background NBA paths now omit pregame game/prop capture and new Trial admission; official Trial/prop grading remains. Regression executes the actual background branches at21:30 with both settlement and normal scope. Existing early capture was already settlement-gated; no redundant repair there. Explicit next_day_prep --target-date retains the real as-of clock and excludes started fixtures in football/NBA/prop watches; Sunday23:30 and Monday00:45 both target Monday in regression. Refreshed private Monday packets without a feed or model call. Full deployment and hosted/live receipts pending; this is not a full owner-audit completion.
+
+Remaining owner agent / next: quota-held result recovery still needs a tested no-rebuild path that preserves independent Discord results; then units-only future social output, linked daily straight-card grading and durable deployment entry point. doneWhen: every specified regression/full release gate, hosted success and live mobile proof, plus actual eligible delivery receipts. Buffer remains2700 counted requests; local rolling room2026-11-06T13:04:27.916218Z, not November1 reset or provider balance proof. Buffer web Free/login and zero future posts observed again; admission/duplicate/receipt integration remains unverified, so no fallback send or test spam. Evidence work/overnight-20261026-* and work/owner-next-day-20261026.json / owner-climb-20261026.json.
