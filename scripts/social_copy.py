@@ -8,6 +8,17 @@ AGE_VERSION = 'age-20261023'
 AGE_EFFECTIVE = datetime(2026, 10, 23, 21, 15, tzinfo=timezone.utc)
 
 
+def canonical_caption(text):
+    """Visible caption semantics after Buffer's editor paragraph placeholders.
+
+    Only whitespace-only FEFF paragraphs and trailing horizontal whitespace are
+    normalized. Never remove invisible characters embedded in actual words.
+    """
+    lines = str(text or '').replace('\r\n', '\n').replace('\r', '\n').split('\n')
+    lines = ['' if not line.strip(' \t\ufeff') else line.rstrip(' \t') for line in lines]
+    return re.sub(r'\n{3,}', '\n\n', '\n'.join(lines)).strip()
+
+
 def with_age_notice(text):
     """One caption-only age line; never rewrite graphics or historical records."""
     clean = re.sub(r'(?im)^[ \t]*21\+(?:[ \t]+only)?[.!]?[ \t]*$', '', str(text or ''))
@@ -16,7 +27,8 @@ def with_age_notice(text):
 
 
 def age_notice_current(text):
-    return str(text or '') == with_age_notice(text)
+    clean = canonical_caption(text)
+    return clean == with_age_notice(clean)
 
 
 def x_ticket_copy(text, kind, guid='', item=None):

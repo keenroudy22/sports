@@ -43,7 +43,7 @@ import parlay_caption
 import social_voice
 import social_learning
 from social_copy import (without_playbook, x_ticket_copy, with_age_notice,
-                         age_notice_current, AGE_VERSION, AGE_EFFECTIVE)
+                         age_notice_current, AGE_VERSION, AGE_EFFECTIVE, canonical_caption)
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -642,6 +642,13 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     # even before pressure reaches the reserve threshold. Due times stay intact.
     plans = sorted(plans, key=lambda plan: (plan[1] not in BUFFER_ESSENTIAL, plan[3], plan[0]))
     for guid, kind, text, due, card_key in plans:
+        prior = next((p for p in reversed(log_book.get('posts', []))
+                      if p.get('id') == guid and x_post.cancelled_private_draft(p)), None)
+        corrections = (prior or {}).get('captionCorrections') or []
+        if (kind == 'play' and prior and (prior.get('discord') or {}).get('state') == 'sent'
+                and corrections and corrections[-1].get('observedText') == prior.get('queuedText')
+                and x_post.text_hash(prior['queuedText']) == prior.get('textHash')):
+            text = prior['queuedText']
         if pending >= BUFFER_NORMAL_LIMIT or (pending >= BUFFER_OPTIONAL_AT and kind not in BUFFER_ESSENTIAL):
             if kind == 'play' and missed_target(guid, due, now, items):
                 stats['officialNotScheduled'] += 1
@@ -731,6 +738,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if social_style.active(now):
             entry.update(queuedText=text, socialStyleVersion=social_style.VERSION,
                          socialVoiceVersion=social_voice.VERSION, socialAgeVersion=AGE_VERSION)
+        if corrections and text == prior.get('queuedText'):
+            entry['captionCorrections'] = list(corrections)
         # Official plays and their settled win updates stay together in Plays
         # & Results. Pregame personal tickets belong there too, while remaining
         # community content and separate from the official Best Bet record.
@@ -962,7 +971,7 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 continue
             if post.get('status') != 'scheduled':
                 raise BufferError('queued style check cannot confirm a private scheduled provider state')
-            text = post.get('text') or entry.get('queuedText') or (entry.get('discord') or {}).get('text')
+            text = canonical_caption(post.get('text') or entry.get('queuedText') or (entry.get('discord') or {}).get('text'))
             problems = social_style.issues(text) if text else ['caption unavailable for verification']
             if now >= AGE_EFFECTIVE and not age_notice_current(text):
                 problems.append('caption needs the owner-approved 21+ only line')

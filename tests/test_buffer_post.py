@@ -64,6 +64,22 @@ class FakeBuffer:
 
 
 class ClientTests(unittest.TestCase):
+    def test_private_replacement_keeps_verified_caption_correction(self):
+        text = ("Best Bet: Javonte Williams over 2.5 catches (+106, FanDuel)\n\n"
+                "I project 3.4 targets.\n\n#NFL\n\nCopy the bet 👇 @Playbook\n\n21+ only")
+        row = dict(id='retry',bufferPostId='old-private',cancelledAt='2026-09-26T12:00:00Z',
+                   socialStyleAudit={'state':'cancelled-private','needsRevision':True,'checkedAt':'2026-09-26T12:00:00Z'},
+                   discord={'state':'sent','text':'Original Discord'},queuedText=text,
+                   textHash=bp.x_post.text_hash(text),
+                   captionCorrections=[dict(observedText=text,previousText='Wrong rushing reason')])
+        book={'posts':[row]}
+        with mock.patch.object(bp,'create_post',return_value='new-private') as create:
+            bp.schedule([('retry','play','Wrong rushing reason',NOW+timedelta(hours=1),None)],
+                        'x',book,NOW,log=lambda *_:None)
+        self.assertEqual(create.call_args.args[0],text)
+        self.assertEqual(book['posts'][-1]['captionCorrections'],row['captionCorrections'])
+        self.assertEqual(row['discord']['text'],'Original Discord')
+
     def test_private_x_replacement_preserves_discord_receipt_and_history(self):
         row = dict(id='retry', bufferPostId='old-private', cancelledAt='2026-09-26T12:00:00Z',
                    socialStyleAudit={'state': 'cancelled-private', 'needsRevision': True,

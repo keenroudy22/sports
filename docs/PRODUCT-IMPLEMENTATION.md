@@ -2,6 +2,20 @@
 
 ### October26 pick-quality and NBA validation follow-up — TESTING
 
+Observed follow-up defect:14:57final queue audit cancelled corrected Williams
+because Buffer editor FEFF blank paragraphs/trailing spaces failed strict
+age-line byte equality, despite a visibly correct single age line. Recovery then
+rebuilt the old rushing caption from original publication. Old post never sent;
+replacement scheduled15:20UTC. Fix: canonicalize only whitespace-only FEFF
+paragraphs, line endings and trailing spaces for provider audit; embedded
+invisible text, missing and duplicate age lines still fail. Verified caption
+corrections with matching saved hash survive provider-verified private-draft
+replacements and retain original Discord delivery.69focused tests pass, including
+real normalization and replacement regression. Production caption restored via
+normal confirmed-scheduled API replacement, create-first/delete-old with rollback;
+actual acceptance/status and original provider identities retained in posting log.
+This is not yet proof of the replacement's actual X send.
+
 Sizing choice resolved: owner first accepted a1u start, then clarified all
 Climbs are fixed50→1000 and units are not relevant to their challenge sizing.
 START50/GOAL1000 retained; no runtime stake, progression, history or exposure

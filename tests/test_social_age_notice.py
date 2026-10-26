@@ -15,6 +15,25 @@ NOW = datetime(2026, 10, 23, 22, tzinfo=timezone.utc)
 
 
 class SocialAgeNoticeTests(unittest.TestCase):
+    def test_buffer_editor_placeholders_are_not_a_missing_age_line(self):
+        clean = 'Player over 21.5 points\n\nCopy the bet 👇 @Playbook\n\n21+ only'
+        editor = 'Player over 21.5 points\r\n\ufeff\r\n\r\nCopy the bet 👇 @Playbook\r\n\ufeff\r\n\r\n21+ only '
+        self.assertEqual(copy.canonical_caption(editor),clean)
+        self.assertTrue(copy.age_notice_current(editor))
+        for bad in ('Player over 21.5 points',clean+'\n21+ only',clean.replace('21+ only','2\ufeff1+ only')):
+            self.assertFalse(copy.age_notice_current(bad))
+
+    def test_pending_editor_caption_is_not_cancelled_for_whitespace(self):
+        clean = 'NFL tonight.\n\n21+ only'
+        row = dict(id='research:test',kind='buffer:research',bufferPostId='scheduled',
+                   dueAt='2026-10-24T01:00:00Z',socialAgeVersion='old')
+        with patch.object(bp,'graphql',return_value={'post':{'status':'scheduled','text':'NFL tonight.\n\ufeff\n\n21+ only '}}), \
+             patch.object(bp,'delete_post') as delete:
+            self.assertEqual(bp.audit_pending_style({'posts':[row]},NOW),[])
+        delete.assert_not_called()
+        self.assertEqual(row['queuedText'],clean)
+        self.assertEqual(row['socialStyleAudit']['state'],'clear')
+
     def test_one_age_line_preserves_legs_prices_and_stat_thresholds(self):
         original = 'My card +500 FanDuel\n\nA 21+ points\nB 6+ rebounds'
         for tail in ('', '\n\n21+', '\n\n21+ only\n\n21+ only'):
