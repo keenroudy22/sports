@@ -4529,3 +4529,44 @@ Historical result misses retained; Marsh25.65m/Williams20.79m verified.
 No budget/schedule/preference/record change. Older completed daily01a16db8
 archived via app. Evidence work/daily-20261025-*; future X receipt stays
 observing under this stable item, owned by existing worker/next daily.
+
+### October25 evening owner audit — bounded fixes verified, audit still open
+
+O-20261025-OWNERFOLLOW carries the current owner scope in
+OWNER-AUDIT-2026-10-25.md. Repaired the interrupted development rebase by
+regenerating the validated public report index; no immutable report discarded.
+Selected-parlay-side research fix a5d3c1995 and verified-private X cancellation
+recovery28db0f574 included4fb879aff/85c5279eb. Hosted40254673675SUCCESS,
+verified85c5279eb, ten post-rebase checks. Retry requires confirmed private style
+cancellation, keeps original history, and preserves a sent Discord receipt;
+generic cancellation, unknown, pending or sent states remain duplicate-protected.
+Expired tickets are not revived. Focused47X/43Buffer regressions pass.
+
+Follow-up11b540d23 moves eligible Discord delivery before Buffer discovery and
+skips channel/daily-limit reads for an empty plan. Two outage/idle regressions;
+1781Python(two expected skips)/281Node normal+clean,127record/702public-file
+guard/assets and isolated rehearsal1iaqhihn passed. Concurrent desk/remote data
+updates were preserved and full gates repeated before promotion93ba80bfb.
+Hosted40255073427SUCCESS explicitly verified0c3547022, which contains11b540d23;
+ten post-rebase checks repeated. Both live375 checks passed; final check was
+fully loaded, document375, no load/console errors. Actual normal-worker Discord
+results for Boutte and the four-leg ticket sent01:49:54Z despite the Buffer cap.
+Their historical delays remain recorded, not credited as timely delivery.
+
+Material hold: Buffer local journal reached2700 counted requests; no future
+scheduled posts in the ledger. The web Queue1 badge is an October3 failed private
+post, not tomorrow's ticket; never retried. No limit increase, journal reset,
+paid plan, direct-X automation, wager or public-history rewrite. Existing Buffer
+web access is available but a free web delivery fallback is not yet verified.
+
+Existing00:45overnight/07:45daily/Tuesday11:00weekly automations updated through
+the app and confirmed ACTIVE, same schedules/models/budgets. Overnight reads
+work/owner-release-20261025.md and the exact budget/social observations before
+resuming. Next priorities: settlement-only NBA capture/admission scope, midnight
+target-date correctness, units-only future social art/copy, linked daily straight
+card and complete grading, and a durable tested deployment entry point rather
+than treating the temporary short-lock executor as permanent completion.
+Monday packet saved:1NFL/9NBA, no fresh next-day NBA props;44alternate spreads,
+zero supported Climb legs. Fresh price/news/admission remain required. NBA role/
+quarter evidence and other genuine observation gates remain open. Full audit is
+not marked shipped. Detailed receipts and observations are under work/owner-*.
