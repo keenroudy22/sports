@@ -71,7 +71,7 @@ class ClientTests(unittest.TestCase):
                    discord={'state': 'sent', 'messageId': 'original', 'text': 'Original caption'})
         book = {'posts': [row]}
         with mock.patch.object(bp, 'create_post', return_value='new-private'):
-            bp.schedule([('retry', 'play', 'Iowa over 38.5 (-105, ESPN BET)',
+            bp.schedule([('retry', 'play', 'Iowa over 38.5 (-105, FanDuel)',
                           NOW + timedelta(hours=1), None)], 'x', book, NOW, log=lambda *_: None)
         self.assertEqual(len(book['posts']), 2)
         self.assertEqual(book['posts'][0], row)
