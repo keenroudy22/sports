@@ -18,6 +18,9 @@ STATE = ROOT / 'work' / 'quota'
 CEILING = 500
 RESERVE = 24
 BUFFER_STOP = 2700
+BUFFER_TEMP_STOP = 2900
+BUFFER_TEMP_START = datetime(2026, 10, 26, 13, 55, tzinfo=timezone.utc)
+BUFFER_TEMP_END = datetime(2026, 11, 6, 13, 5, tzinfo=timezone.utc)
 BUFFER_DELIVERY_RESERVE = 300
 BUFFER_ANALYTICS_PER_DAY = 12
 SHARP_PER_MINUTE = 12
@@ -46,7 +49,11 @@ def current_month_usage(value, now=None):
     return value if observed.astimezone(timezone.utc).strftime('%Y-%m') == now.astimezone(timezone.utc).strftime('%Y-%m') else {}
 
 
-def count_request(provider, root=STATE, now=None, optional=False, reserve=True, operation=None):
+def temporary_buffer_allowance(now):
+    return BUFFER_TEMP_START <= now < BUFFER_TEMP_END
+
+
+def count_request(provider, root=STATE, now=None, optional=False, reserve=True, operation=None, essential=False):
     """Reserve one free-plan request before sending it; fail closed at local caps."""
     if provider not in ('sharp', 'buffer'):
         raise ValueError('unknown free-plan request counter')
@@ -64,7 +71,11 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
                        isinstance(row.get('count'), int) and row['count'] == 1 and row.get('at') for row in rows):
                 raise ValueError('invalid journal')
             month = now.astimezone(timezone.utc).strftime('%Y-%m')
-            if provider == 'buffer' and sum(row['count'] for row in rows if row.get('month') == month) >= BUFFER_STOP:
+            temporary = provider == 'buffer' and temporary_buffer_allowance(now)
+            stop = BUFFER_TEMP_STOP if temporary and (essential or operation in ('status', 'channels', 'limits', 'cancel')) else BUFFER_STOP
+            if temporary and (optional or operation == 'analytics'):
+                raise QuotaBlocked('Buffer optional analytics paused during temporary delivery allowance')
+            if provider == 'buffer' and sum(row['count'] for row in rows if row.get('month') == month) >= stop:
                 raise QuotaBlocked('Buffer local free-plan request cap reached')
             if provider == 'buffer':
                 # The provider also enforces a rolling window. Calendar rollover
@@ -73,7 +84,7 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
                 rolling = sum(row['count'] for row in rows
                               if 0 <= (now - datetime.fromisoformat(row['at'])).total_seconds() < 30 * 86400)
                 monthly = sum(row['count'] for row in rows if row.get('month') == month)
-                if rolling >= BUFFER_STOP:
+                if rolling >= stop:
                     raise QuotaBlocked('Buffer local free-plan rolling 30-day cap reached')
                 if optional and max(rolling, monthly) >= BUFFER_STOP - BUFFER_DELIVERY_RESERVE:
                     raise QuotaBlocked('Buffer delivery reserve protected; optional analytics deferred')
@@ -97,20 +108,22 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
             row['operation'] = 'analytics'
         elif operation is not None:
             row['operation'] = operation
+        if provider == 'buffer' and temporary and essential:
+            row['essentialDelivery'] = True
         with (root / f'{provider}.jsonl').open('a', encoding='utf-8') as handle:
             handle.write(json.dumps(row, sort_keys=True) + '\n')
             handle.flush()
             os.fsync(handle.fileno())
 
 
-def buffer_block_reason(root=STATE, now=None, optional=False):
+def buffer_block_reason(root=STATE, now=None, optional=False, essential=False):
     """Local read-only preflight; never a reservation or provider balance claim.
 
     The send path still reserves atomically. This prevents an exhausted transport
     from waking an expensive whole-desk result rebuild on every retry.
     """
     try:
-        count_request('buffer', root, now, optional=optional, reserve=False)
+        count_request('buffer', root, now, optional=optional, reserve=False, essential=essential)
     except QuotaBlocked as error:
         return str(error)
     return None

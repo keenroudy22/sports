@@ -74,3 +74,14 @@ entry point, and actual delivery/coverage observations. Existing NBA prop and
 quarter evidence gates remain; neither attention nor owner pressure changes
 stakes or promotes a model. The owner is reconsidering personal betting;
 pending clarification retain approved exposure ceilings, never recovery staking.
+# Owner-approved temporary delivery allowance — October26
+
+Owner explicitly approved 2,900 instead of the normal 2,700 local request stop.
+Effective October26 13:55UTC through November6 13:05UTC, then automatic return
+to 2,700. Only checked plays and result publications may consume extra publishing
+requests; channel discovery, limits, status and cancellation remain available to
+complete safe delivery. All optional analytics pause throughout this interval.
+Both calendar and rolling30-day counters remain enforced, journals unchanged,
+and Buffer provider backoff/limits remain authoritative. No paid plan or reset.
+Code deployment and actual accepted/sent receipts must be verified separately.
+

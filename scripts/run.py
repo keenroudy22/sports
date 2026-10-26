@@ -3378,7 +3378,7 @@ def release_private(now, log=log, only=None, review_only=False):
             # The public release is complete. An unchanged X transport hold
             # must not rerun news/tests/builds under the posting lock every5min.
             # All ordinary checks run again once an actual X send is possible.
-            blocked = buffer_post.rate_backoff(now) or buffer_post.quota.buffer_block_reason(now=now)
+            blocked = buffer_post.rate_backoff(now) or buffer_post.quota.buffer_block_reason(now=now, essential=True)
             if blocked:
                 log(f'buffer: {key} already released on Discord/site; X transport held: {blocked}')
                 continue
@@ -3553,7 +3553,7 @@ def release_private(now, log=log, only=None, review_only=False):
                 if not buffer_post.reachable(image):
                     log(f'buffer: {key} waits for its released site card')
                     continue
-            post_id = buffer_post.create_post(text, channel['id'], due, image)
+            post_id = buffer_post.create_post(text, channel['id'], due, image, essential=True)
             row = release_queue.update(CONF, key, bufferPostId=post_id, dueAt=stamp(due), bufferImage=image)
 
         entry.update(dueAt=row['dueAt'], bufferPostId=row['bufferPostId'], bufferImage=row.get('bufferImage'))
@@ -3610,7 +3610,7 @@ def release_private_isolated(now, log=log, runner=None):
 def result_transport_block(now):
     import quota
     import buffer_post
-    return quota.buffer_block_reason(now=now) or buffer_post.rate_backoff(now)
+    return quota.buffer_block_reason(now=now, essential=True) or buffer_post.rate_backoff(now)
 
 
 def mirror(args):

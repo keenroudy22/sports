@@ -1,5 +1,10 @@
 # October 5 product implementation tracker
 
+October26 follow-up: owner explicitly approved temporary essential delivery
+allowance2700→2900; bounded expiry November6 13:05UTC, analytics paused,
+nonessential publishing excluded from extra200. Implementing/testing; not yet
+evidence that API delivery resumed. Existing journal/provider backoff retained.
+
 ### October26 owner-enabled upload — actual X receipt, next code testing
 
 Owner explicitly approved and manually enabled Chrome file URL access after

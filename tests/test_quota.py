@@ -17,8 +17,29 @@ class Response(io.StringIO):
 
 
 class QuotaTests(unittest.TestCase):
+    def test_owner_temporary_allowance_is_bounded_and_delivery_only(self):
+        now = quota.BUFFER_TEMP_START
+        with tempfile.TemporaryDirectory() as root:
+            path = Path(root) / 'buffer.jsonl'
+            row = json.dumps(dict(at=now.isoformat(), month='2026-10', provider='buffer', count=1)) + '\n'
+            path.write_text(row * quota.BUFFER_STOP)
+            original = path.read_bytes()
+            for kwargs in ({'operation': 'publish'}, {'optional': True}, {'operation': 'analytics'}):
+                with self.assertRaises(quota.QuotaBlocked):
+                    quota.count_request('buffer', root, now, **kwargs)
+            self.assertEqual(path.read_bytes(), original)
+            quota.count_request('buffer', root, now, operation='publish', essential=True)
+            self.assertTrue(json.loads(path.read_text().splitlines()[-1])['essentialDelivery'])
+            quota.count_request('buffer', root, now, operation='status')
+            path.write_text(row * quota.BUFFER_TEMP_STOP)
+            with self.assertRaises(quota.QuotaBlocked):
+                quota.count_request('buffer', root, now, operation='publish', essential=True)
+            path.write_text(row * quota.BUFFER_STOP)
+            with self.assertRaises(quota.QuotaBlocked):
+                quota.count_request('buffer', root, quota.BUFFER_TEMP_END, essential=True)
+
     def test_daily_analytics_ceiling_preserves_delivery_and_next_day(self):
-        now = datetime(2026, 10, 26, 12, tzinfo=timezone.utc)
+        now = datetime(2026, 11, 26, 12, tzinfo=timezone.utc)
         with tempfile.TemporaryDirectory() as root:
             for _ in range(quota.BUFFER_ANALYTICS_PER_DAY):
                 quota.count_request('buffer', root, now, optional=True)
@@ -50,11 +71,11 @@ class QuotaTests(unittest.TestCase):
             self.assertIn('unavailable', quota.buffer_block_reason(root, now))
 
     def test_buffer_rolling_window_and_delivery_reserve(self):
-        now=datetime(2026,11,1,tzinfo=timezone.utc)
+        now=datetime(2026,12,1,tzinfo=timezone.utc)
         with tempfile.TemporaryDirectory() as root:
             journal=Path(root)/'buffer.jsonl'
             previous=now-timedelta(days=1)
-            row=json.dumps(dict(at=previous.isoformat(),month='2026-10',provider='buffer',count=1))+'\n'
+            row=json.dumps(dict(at=previous.isoformat(),month='2026-11',provider='buffer',count=1))+'\n'
             journal.write_text(row*(quota.BUFFER_STOP-quota.BUFFER_DELIVERY_RESERVE))
             with self.assertRaisesRegex(quota.QuotaBlocked,'delivery reserve'):
                 quota.count_request('buffer',root,now,optional=True)

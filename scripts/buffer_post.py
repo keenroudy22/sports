@@ -152,7 +152,7 @@ def http_send(url, body, headers):
         return error.code, error.read(), dict(error.headers)
 
 
-def graphql(query, variables=None, key=None, send=http_send):
+def graphql(query, variables=None, key=None, send=http_send, essential=False):
     """One GraphQL call. Raises BufferError on transport or GraphQL errors; returns the data object."""
     key = key or token()
     if send is http_send:
@@ -164,7 +164,7 @@ def graphql(query, variables=None, key=None, send=http_send):
                          else 'status' if query == STATUS else 'cancel' if query == DELETE
                          else 'limits' if 'dailyPostingLimits' in query else 'channels'
                          if 'organizations' in query or 'channels(input:' in query else 'other')
-            quota.count_request('buffer', optional=query == METRICS, operation=operation)
+            quota.count_request('buffer', optional=query == METRICS, operation=operation, essential=essential)
         except quota.QuotaBlocked as error:
             raise BufferError(str(error)) from None
     response = send(API, {'query': query, 'variables': variables or {}}, {'Authorization': f'Bearer {key}'})
@@ -267,7 +267,7 @@ def stamp(moment):
     return moment.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
 
-def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_send):
+def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_send, essential=False):
     """Schedule one post for an exact time. Returns Buffer's post id."""
     text = with_age_notice(text)
     if x_post.tweet_length(text) > x_post.LIMIT:
@@ -276,7 +276,7 @@ def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_se
         raise BufferError('outgoing copy fails the public voice check')
     payload = {'text': text, 'channelId': channel_id, 'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': stamp(due_at),
                'needsApproval': False, 'tagIds': [], 'assets': [{'image': {'url': image_url}}] if image_url else []}
-    data = graphql(CREATE, {'input': payload}, key=key, send=send)
+    data = graphql(CREATE, {'input': payload}, key=key, send=send, essential=essential)
     result = data.get('createPost') or {}
     if result.get('message'):
         raise BufferError(f"createPost refused: {result['message']}")
@@ -713,7 +713,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} held: NBA delivery already attempted; reconcile before retry')
                 continue
         try:
-            post_id = create_post(text, channel_id, due, image, key=key, send=send)
+            if quota.temporary_buffer_allowance(now):
+                post_id = create_post(text, channel_id, due, image, key=key, send=send,
+                                      essential=kind in ('play', 'nba-trial', 'receipt', 'cashed'))
+            else:
+                post_id = create_post(text, channel_id, due, image, key=key, send=send)
         except BufferError as error:
             if kind == 'nba-trial':
                 nba_trial_runtime.delivery_failed(guid, now)
