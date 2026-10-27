@@ -1315,7 +1315,7 @@
         { link: ktLink(otherGames.length > shown.length ? '#games' : '#games/live', otherGames.length > shown.length ? `All ${todayGames.length} games today` : 'Live scores') }) : '',
       fun.length ? ktSec('fun', 'Fun tickets', slips(fun), { kind: 'Smaller stake, apart from best bets' }) : '',
       gone.length ? ktSec('pulled', `Pulled before kickoff · ${gone.length}`, slips(gone), { kind: 'Pulled over news; each still counts' }) : '',
-      off.length ? ktSec('off-card', `Off the card · ${off.length}`, slips(off), { kind: 'The line moved; each still counts at the price we posted' }) : '',
+      off.length ? ktSec('off-card', `Off the card · ${off.length}`, slips(off), { kind: 'Closed to new entries; each still counts at its posted price' }) : '',
       COMMUNITY,
       state.league === 'ALL' ? ktSec('sports', 'More sports', `<div class="pill-row">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
         return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) || !sports ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''].join('');
