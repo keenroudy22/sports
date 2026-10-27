@@ -5243,3 +5243,8 @@ Bet/Chef/HotPlate ML. Cached selection cannot bypass; quoted underdogs that are
 model favorites still eligible through every price/evidence gate. Spread/total/
 fun and past gates unchanged. Remaining active ML WesternKentucky:margin+3.3,
 homewin58%, aligns. Full release/hosted/live verification still required.
+
+The provisional O-20261027-MLAGREEMENT follow-up is consolidated under existing
+O-20261023-MODELPARITY (same selection/research alignment work), retaining all
+176 prior stable IDs and the bounded schema. No original item was dropped and
+no completed release is claimed by consolidation.
