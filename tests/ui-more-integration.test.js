@@ -120,3 +120,14 @@ test('official record always renders the separate Chef record without changing o
   assert.match(html,/beat the closing line on 1 of 1/);
   assert.equal(C.recordBreakdown(picks).all.losses,1);
 });
+
+
+test('the Chef record survives a rolling release with an older cached core', async () => {
+  const {api,factory}=loadBrowserApi();
+  const ctx=api.moreContext({allPicks:async()=>[],get:async()=>({}),maybe:async()=>null});
+  ctx.C={...C,chefRecord:undefined};
+  Object.assign(ctx.state,{league:'CFB',record:{season:'current',phase:'current',q:''}});
+  const html=await factory(ctx).record({tab:'official'});
+  assert.match(html,/id="chef-record"/);
+  assert.match(html,/No Chef/);
+});

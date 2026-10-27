@@ -1,3 +1,13 @@
+# October27 live verification follow-through
+
+Content fingerprints cover core.js as well as the app and lazy bundles; a new
+view must tolerate the previous cached core during rollout. Chef's live admission
+quote must be at most2hours old, not merely within the broader research window.
+A moved-market annotation can update only provider-confirmed future private X
+copy while retaining original wager, image, Discord text and record. Unknown/sent
+provider states stay untouched; keep replacement/rollback receipts and caps.
+Explicit replay clocks cannot write authoritative NBA forward observations.
+
 # October27 final-check coverage repair
 
 Final football checks include all still-future Buffer plays due within45minutes,

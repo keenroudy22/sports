@@ -358,7 +358,12 @@
         const ordered = [...items].sort((a, b) => String(b.kickoff || b.settledAt).localeCompare(String(a.kickoff || a.settledAt)));
         return section(`${name} · ${wl(stats)} · ${units(stats.units)}`, `<div class="receipts">${ordered.map(p => receipt(p, clvById)).join('')}</div>`);
       }).join('');
-      const chef = C.chefRecord(rows);
+      // Rolling releases can briefly pair the new view with a cached older core.
+      const chefRows = rows.filter(p => p.lane === 'chef_pick' && !C.isParlay(p) && C.countsPublic(p) && !C.isUnpricedImport(p));
+      const chef = typeof C.chefRecord === 'function' ? C.chefRecord(rows) : {
+        rows: chefRows, ...{ all: C.recordBreakdown(chefRows).all, captured: C.recordBreakdown(chefRows).captured },
+        forward: C.recordBreakdown(chefRows.filter(p => p.chefEvidence?.policy === 'chef-forward-ev-v1')).captured,
+      };
       const chefClose = clvSummary(chef.rows.map(p => ({ clv: clvById.get(p.id) })));
       const chefPrices = chef.rows.map(p => p.chefPriceComparison).filter(p => isNum(p?.edgePoints));
       const chefPanel = section("Chef's Picks", `<div class="card" id="chef-record"><p><b>${esc(wl(chef.all))}</b> · ${esc(units(chef.captured.units))} at recorded prices · ${esc(chef.all.pending)} open</p>

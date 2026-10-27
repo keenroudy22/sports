@@ -55,6 +55,9 @@ def evidence(candidate, ctx, numbers, candidates=None, grades=None):
     """Point-in-time, deduplicated forward cohort near this estimated chance."""
     if candidate.get('league') not in ('NFL','CFB'):
         return dict(ok=False,reason='This sport remains in its separate trial',n=0,policy=VERSION)
+    quoted=instant(candidate.get('quotedAt'))
+    if not quoted or not timedelta(0)<=ctx.now-quoted<=timedelta(hours=2):
+        return dict(ok=False,reason='Chef needs an actual quote captured within two hours',n=0,policy=VERSION)
     token = specification(candidate, ctx)
     if not token:
         return dict(ok=False,reason='Chef probability specification unavailable',n=0,policy=VERSION)
@@ -191,5 +194,6 @@ def publication_issues(pick):
            and proof['conservativeChance']>pricing.break_even(pick['odds'])
            and finite(proof.get('modelBrier')) and finite(proof.get('marketBrier'))
            and proof['modelBrier']<proof['marketBrier']
-           and instant(proof.get('evaluatedAt')) and clock and instant(proof['evaluatedAt'])<=clock)
+           and instant(proof.get('evaluatedAt')) and clock and instant(proof['evaluatedAt'])<=clock
+           and instant(pick.get('quotedAt')) and timedelta(0)<=clock-instant(pick['quotedAt'])<=timedelta(hours=2))
     return [] if valid else ['Chef forward probability evidence is missing or does not support this price']

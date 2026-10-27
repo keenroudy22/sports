@@ -1516,7 +1516,7 @@ def nba_trial_needs_capture(slot, status):
 
 def record_nba_roster_capture(args,status):
     # Same existing capture, zero extra feed requests; shadow never admits plays.
-    if getattr(args,'no_push',True):return
+    if getattr(args,'no_push',True) or getattr(args,'dry_run',False) or getattr(args,'now',None):return
     import nba_roster_runtime
     try:
         status['nbaRosterContextAdded']=nba_roster_runtime.extend_context(datetime.now(timezone.utc),root=ROOT/'data/nba-roster-research',capture_root=ROOT/'data/nba-capture')
@@ -3947,8 +3947,8 @@ def requote(entry, pick, game, ctx, now, log=log):
     import buffer_post
     import x_post
     if (entry.get('discord') or {}).get('state') == 'sent':
-        log(f"precheck: {entry['id']} is already public in Discord; X keeps the same posted number")
-        return False
+        import queued_market_context
+        return queued_market_context.update(entry,pick,gates.best_now(pick,ctx),now)
     text = x_post.draft(pick, game, learning_weights(), now_quote=gates.best_now(pick, ctx), featured=bool(entry.get('featured')))
     if x_post.text_hash(text) == entry.get('textHash'):
         return False

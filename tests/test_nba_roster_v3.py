@@ -55,3 +55,11 @@ class ConfirmationTests(unittest.TestCase):
             new=dict(old,retrievedAt='2026-10-27T19:00Z',teams=teams)
             result=runtime.absence_evidence([new,old],'1','2')
             self.assertEqual(result['verifiedOut'],[]);self.assertFalse(result['absenceVerified'])
+
+    def test_replay_clock_cannot_write_authoritative_forward_rows(self):
+        import run
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        with patch.object(run.nba_trial_runtime if hasattr(run,'nba_trial_runtime') else runtime,'record_forward',create=True) as unused:
+            run.record_nba_roster_capture(SimpleNamespace(no_push=False,now='2026-10-27T17:30Z'),{'errors':[]})
+            unused.assert_not_called()

@@ -47,16 +47,22 @@ def sync(site=SITE, check=False):
     index = site / 'index.html'
     if index.is_file():
         html = index.read_text(encoding='utf-8')
-        pattern = re.compile(r'src="app\.js\?v=[^"]+"')
-        wanted = f'src="app.js?v=sha256-{fingerprint(app)}"'
-        matches = pattern.findall(html)
-        if len(matches) != 1:
-            raise ValueError(f'{index}: expected one versioned app.js script')
-        if matches[0] != wanted:
-            if check:
-                raise ValueError(f'{index}: app.js content fingerprint is stale')
-            index.write_text(pattern.sub(wanted, html), encoding='utf-8', newline='\n')
-            changed.append('app.js')
+        for name in ('app.js','core.js'):
+            asset=site/name
+            if not asset.is_file():continue
+            pattern = re.compile(r'src="'+re.escape(name)+r'\?v=[^"]+"')
+            wanted = f'src="{name}?v=sha256-{fingerprint(asset)}"'
+            matches = pattern.findall(html)
+            if len(matches) != 1:
+                raise ValueError(f'{index}: expected one versioned {name} script')
+            if matches[0] != wanted:
+                if check:
+                    raise ValueError(f'{index}: {name} content fingerprint is stale')
+                html=pattern.sub(wanted, html)
+                changed.append(name)
+        if html != index.read_text(encoding='utf-8'):
+            index.write_text(html, encoding='utf-8', newline='\n')
+
     return changed
 
 

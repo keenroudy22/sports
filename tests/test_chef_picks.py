@@ -14,7 +14,7 @@ class ChefEvidenceTests(unittest.TestCase):
     def setUp(self):
         self.ctx=gates.Context(datetime(2026,12,10,tzinfo=timezone.utc))
         self.pick={'id':'new','league':'CFB','market':'rec','athleteId':'1','modelVersion':'v2.0',
-                   'direction':'over','odds':-110,'gameIds':['new']}
+                   'direction':'over','odds':-110,'gameIds':['new'],'quotedAt':self.ctx.now.isoformat()}
         self.rows=[];self.grades=[]
         spec=chef.specification(self.pick,self.ctx)
         for i in range(40):
@@ -104,3 +104,7 @@ class ChefEvidenceTests(unittest.TestCase):
         p['chefEvidence']=self.evidence();self.assertEqual(chef.publication_issues(p),[])
         p['odds']=-200;self.assertTrue(chef.publication_issues(p))
         p['publishedAt']='2026-10-20T00:00Z';p.pop('chefEvidence');self.assertEqual(chef.publication_issues(p),[])
+
+    def test_live_chef_cannot_use_an_old_quote_even_with_good_forward_history(self):
+        self.pick['quotedAt']=(self.ctx.now-timedelta(hours=3)).isoformat()
+        self.assertIn('two hours',self.evidence()['reason'])

@@ -59,6 +59,18 @@ class AssetVersionTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'expected one GAMES_ASSET declaration'):
                 asset_versions.sync(site)
 
+    def test_core_bundle_is_invalidated_when_its_exported_api_changes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            site=Path(folder)
+            (site/'app.js').write_text('app')
+            (site/'core.js').write_text('core')
+            (site/'index.html').write_text('<script src="core.js?v=78"></script><script src="app.js?v=old"></script>')
+            self.assertEqual(asset_versions.sync(site),['app.js','core.js'])
+            (site/'core.js').write_text('core exports changed')
+            with self.assertRaisesRegex(ValueError,'core.js content fingerprint is stale'):
+                asset_versions.sync(site,check=True)
+            self.assertEqual(asset_versions.sync(site),['core.js'])
+            self.assertIn('core.js?v=sha256-'+asset_versions.fingerprint(site/'core.js'),(site/'index.html').read_text())
 
 if __name__ == '__main__':
     unittest.main()

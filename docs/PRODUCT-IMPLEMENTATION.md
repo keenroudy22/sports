@@ -5354,3 +5354,20 @@ protection unchanged; no new job, feed budget or price/news gate relaxation.
 Current post gets the real existing last-look/requote producer, preserving posted
 record and immutable artwork. An original-public play is not erased because the
 market moved. Further actual receipt and release verification remain required.
+
+Live browser check caught core.js?v=78 cached alongside the new record bundle;
+Record failed with C.chefRecord not a function. This is a release bug, not proof
+of completion. Fix: byte-fingerprint core.js in the HTML manifest and let the new
+lazy record view use existing shared record math when paired with the prior core.
+Regression covers both cached-core view and changing core export invalidation.
+Provider-confirmed private X context was corrected20:13:20Z through existing
+production APIs: original51.5(-102)0.5u retained, Now52.5(-105), Original play only.
+Same4:16:21PM slot, original Discord/card/record intact, old Buffer receipt kept.
+Permanent helper requires matching provider copy, private scheduled status before
+and after replacement creation, safe time margin, caption guard, rollback and
+alert on failed rollback. No public X deletion, extra job or raised budget.
+Chef additionally requires a live quote within2h; stale proof cannot bypass final
+caption guard. The AST replay fixture accidentally invoked the new forward hook
+and wrote one untracked test-origin shadow row. Exact row/ledger quarantined in
+work/nba-test-origin-forward-20261027, excluded from authoritative evidence;
+explicit --now/rehearsal hooks now skip forward writes. No public play changed.
