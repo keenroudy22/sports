@@ -1,0 +1,204 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-27T17:37:52Z",
+  "summary": "Research update for Oct 27: Nothing to settle. Closed 1: Sam Houston MONEYLINE. Nothing published.",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "expired",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "moneyline",
+      "line": 0.0,
+      "direction": "away",
+      "gameIds": [
+        "CFB-401871072"
+      ],
+      "book": "DraftKings",
+      "odds": 180,
+      "projection": 0.4,
+      "edge": "Price-checked chance 36.3% against the exact two-sided price; 35.7% needed at +180: +0.6 percentage points.",
+      "cutoff": "AWAY 0 at +180 or better; off the card at -0.5 or lower, or at +165 or worse at 0.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-24T22:41:01Z",
+      "quotedAt": "2026-10-27T15:27:31Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 11:27 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-27T21:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 0.5,
+      "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.401,
+        "chance": 0.363,
+        "calibrated": true,
+        "calibration": 0.35,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.357,
+        "edgePoints": 0.6,
+        "evPerUnit": 0.016,
+        "snapshotAt": "2026-10-24T22:41:01Z",
+        "evaluatedAt": "2026-10-27T15:45:28Z",
+        "fairChance": 0.343,
+        "anchoredChance": 0.363,
+        "gap": 2.0,
+        "calibrationFamily": "CFB/moneyline"
+      },
+      "matchup": "Sam Houston Bearkats at Missouri State Bears",
+      "title": "Sam Houston MONEYLINE",
+      "id": "CFB-2026-W9-shsu-most-ml-away-0-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401871072",
+        "https://gobearkats.com/news/2026/10/25/football-game-8-preview-at-missouri-state",
+        "https://missouristatebears.com/news/2026/10/23/football-bears-back-home-tuesday-to-host-sam-houston",
+        "https://www.ky3.com/2026/10/27/missouri-state-squares-off-against-sam-houston-cusa-play/"
+      ],
+      "why": "Price-checked win chance 36.3%; +180 needs 35.7%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Sam Houston's October 25 game preview identifies Landyn Locke as its quarterback and says he threw for 235 yards against New Mexico State. Checked before publishing: Missouri State's game preview says Henry Belin IV started the Bears' previous two games, completing 54 of 74 passes for 637 yards and 4 touchdowns. The market: The spread opened -6 and is -5.5 at DraftKings, a move of 0.5 toward the away. 6 books span -5.5 to -4.5 on the spread; the middle is -5.25. 6 books span 50.5 to 51.5 on the total; the middle is 51.5. Our spread is 1.4 points off, bigger than 21% of our past gaps. Gaps this size went 1418-1407 against the close in 3584 games. Our total is 1.8 points off, bigger than 34% of our past gaps. Gaps this size went 1245-1115 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: Missouri State has allowed 438.1 yards and 34.9 points per game this season. Statistical counterpoint: Sam Houston has averaged 20.1 points per game this season. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Sam Houston has allowed opponents 341.7 yards per game through seven games and 5.3 yards per pass attempt."
+        ],
+        "cautions": [
+          "Missouri State has allowed 438.1 yards and 34.9 points per game this season.",
+          "Sam Houston has averaged 20.1 points per game this season."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Price-checked win chance 36.3%; this price needs 35.7%.",
+            "numbers": {
+              "chance": 0.363,
+              "breakEven": 0.357
+            },
+            "source": "Kook'n exact-price check",
+            "time": "2026-10-27T15:27:31Z"
+          },
+          {
+            "text": "Sam Houston has allowed opponents 341.7 yards per game through seven games and 5.3 yards per pass attempt.",
+            "numbers": {},
+            "source": "https://gobearkats.com/news/2026/10/25/football-game-8-preview-at-missouri-state",
+            "time": "2026-10-27T15:45:28Z"
+          },
+          {
+            "text": "Sam Houston has allowed opponents 341.7 yards per game through seven games and 5.3 yards per pass attempt.",
+            "numbers": {},
+            "source": "https://gobearkats.com/news/2026/10/25/football-game-8-preview-at-missouri-state",
+            "time": "2026-10-27T15:45:28Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Missouri State has allowed 438.1 yards and 34.9 points per game this season.",
+            "numbers": {},
+            "source": "https://www.ky3.com/2026/10/27/missouri-state-squares-off-against-sam-houston-cusa-play/",
+            "time": "2026-10-27T15:45:28Z"
+          },
+          {
+            "text": "Sam Houston has averaged 20.1 points per game this season.",
+            "numbers": {},
+            "source": "https://www.ky3.com/2026/10/27/missouri-state-squares-off-against-sam-houston-cusa-play/",
+            "time": "2026-10-27T15:45:28Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 68,
+          "windMph": 5,
+          "windDirection": "S",
+          "precipProb": 1,
+          "periodStart": "2026-10-27T19:00:00-05:00",
+          "issuedAt": "2026-10-27T06:26:04+00:00",
+          "source": "https://api.weather.gov/gridpoints/SGF/67,35/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 6.5,
+                "price": -110,
+                "time": "2026-10-25T10:45:06Z"
+              },
+              "now": {
+                "line": 5.5,
+                "price": -115,
+                "time": "2026-10-27T15:29:16Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 6.5,
+                "price": -120,
+                "time": "2026-10-23T10:45:06Z"
+              },
+              "now": {
+                "line": 5.5,
+                "price": -108,
+                "time": "2026-10-27T15:29:16Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 0.0,
+            "price": 180,
+            "time": "2026-10-27T15:27:31Z"
+          }
+        },
+        "ours": {
+          "projection": 0.4,
+          "line": 0.0,
+          "market": "moneyline",
+          "text": "Price-checked win chance 36.3%; this price needs 35.7%.",
+          "snapshotAt": "2026-10-24T22:41:01Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://gobearkats.com/news/2026/10/25/football-game-8-preview-at-missouri-state",
+            "time": "2026-10-27T15:45:28Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://www.ky3.com/2026/10/27/missouri-state-squares-off-against-sam-houston-cusa-play/",
+            "time": "2026-10-27T15:45:28Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/SGF/67,35/forecast/hourly",
+            "time": "2026-10-27T06:26:04+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401871072",
+            "time": "2026-10-27T15:45:28Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://missouristatebears.com/news/2026/10/23/football-bears-back-home-tuesday-to-host-sam-houston",
+            "time": "2026-10-27T15:45:28Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-27T15:49:24Z",
+      "entryNote": "Off the card: we withdrew this recommendation after review. Our model favors Missouri State. No new entries. The original Sam Houston moneyline at +180 and 0.5u stays in the record and will be graded as posted, win or lose."
+    }
+  ]
+}
