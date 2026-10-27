@@ -20,7 +20,7 @@ class ChefEvidenceTests(unittest.TestCase):
         for i in range(40):
             kickoff=chef.FROM+timedelta(days=i+1)
             self.rows.append(dict(self.pick,id=str(i),gameIds=[str(i)],chance=.60,fairChance=.50,
-                decidedAt=(kickoff-timedelta(hours=1)).isoformat(),quotedAt=(kickoff-timedelta(hours=1,minutes=5)).isoformat(),
+                decidedAt=(kickoff-timedelta(hours=1)).isoformat(),recordedAt=(kickoff-timedelta(minutes=59)).isoformat(),quotedAt=(kickoff-timedelta(hours=1,minutes=5)).isoformat(),
                 kickoff=kickoff.isoformat(),probabilitySpec=spec))
             self.grades.append(dict(id=str(i),result='loss' if i%4==0 else 'win',gradedAt=(kickoff+timedelta(hours=4)).isoformat()))
     def evidence(self,**kw):
@@ -108,3 +108,16 @@ class ChefEvidenceTests(unittest.TestCase):
     def test_live_chef_cannot_use_an_old_quote_even_with_good_forward_history(self):
         self.pick['quotedAt']=(self.ctx.now-timedelta(hours=3)).isoformat()
         self.assertIn('two hours',self.evidence()['reason'])
+
+    def test_backdated_replay_is_not_forward_evidence(self):
+        rows=copy.deepcopy(self.rows)
+        for row in rows:row['recordedAt']=self.ctx.now.isoformat()
+        self.assertEqual(self.evidence(rows=rows)['n'],0)
+        for row in rows:row.pop('recordedAt')
+        self.assertEqual(self.evidence(rows=rows)['n'],0)
+    def test_private_admission_cannot_claim_historical_grandfathering(self):
+        fixture=test_play_tiers.PlayTierTests();fixture.setUp();fixture.ctx.now=self.ctx.now
+        pick=fixture.pick(chance=.60,gap=6,modelVersion='v2.0')
+        fixture.ctx.first[pick['id']]=dict(pick,publishedAt='2026-10-20T00:00Z',_pendingRelease=True)
+        with patch.object(gates.spot,'for_candidate',return_value={'spotHit':.6,'n':40}),patch.object(chef,'evidence',return_value={'ok':False,'reason':'needs proof'}):
+            self.assertFalse(gates.selection_verdict(pick,fixture.ctx,'chef_pick').ok)

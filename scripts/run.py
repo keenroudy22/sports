@@ -1485,6 +1485,7 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
             'planReasons': selection.get('reasons') or candidate.get('_planReasons'),
             'reasons': selection.get('reasons') or candidate.get('_planReasons') or [],
             'decision': decision, 'rules': list(rules), 'reason': reason, 'decidedAt': stamp(now),
+            'recordedAt': stamp(datetime.now(timezone.utc)),
             'quotedAt': candidate.get('quotedAt'),
             'facts': {'for': sum(1 for f in facts if f.get('direction') == 'for'),
                       'against': sum(1 for f in facts if f.get('direction') == 'against'),

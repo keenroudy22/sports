@@ -81,10 +81,12 @@ def evidence(candidate, ctx, numbers, candidates=None, grades=None):
     for row in candidates:
         decided, kickoff = instant(row.get('decidedAt')), instant(row.get('kickoff'))
         quoted = instant(row.get('quotedAt'))
+        recorded = instant(row.get('recordedAt'))
         grade = latest_grades.get(row.get('id'))
         probability, fair = row.get('chance'), row.get('fairChance')
         if (row.get('probabilitySpec') != token or not candidate.get('modelVersion')
-                or not decided or not kickoff or not quoted or not FROM <= decided < kickoff < ctx.now
+                or not decided or not kickoff or not quoted or not recorded
+                or not FROM <= decided <= recorded < kickoff < ctx.now
                 or not quoted <= decided or decided-quoted > timedelta(hours=2)
                 or not grade or instant(grade['gradedAt']) < kickoff
                 or not finite(probability) or not 0 < probability < 1

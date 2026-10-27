@@ -5371,3 +5371,10 @@ caption guard. The AST replay fixture accidentally invoked the new forward hook
 and wrote one untracked test-origin shadow row. Exact row/ledger quarantined in
 work/nba-test-origin-forward-20261027, excluded from authoritative evidence;
 explicit --now/rehearsal hooks now skip forward writes. No public play changed.
+
+Final Chef proof review adds physical recordedAt alongside decision time: future
+eligibility requires decision<=actual write<kickoff, so a backdated replay or a
+legacy row with no write receipt cannot masquerade as a forward observation.
+Private _pendingRelease reservations also cannot use old publication timestamps
+to claim the trusted-public grandfather exception. Both have explicit regression
+cases. Current official prices/stakes/results remain unchanged; no Chef posted.

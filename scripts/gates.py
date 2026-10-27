@@ -1105,7 +1105,7 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
         import chef_picks
         original = ctx.first.get(candidate.get('id')) or {}
         published = chef_picks.instant(original.get('publishedAt'))
-        if ctx.now >= chef_picks.FROM and not (published and published < chef_picks.FROM):
+        if ctx.now >= chef_picks.FROM and not (published and published < chef_picks.FROM and not original.get('_pendingRelease')):
             # Never trust private cached approval on a later release attempt.
             try:
                 chef_evidence = chef_picks.evidence(candidate, ctx, numbers)
