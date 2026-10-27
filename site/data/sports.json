@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-27T01:43:46Z",
+  "updatedAt": "2026-10-27T09:28:28Z",
   "timeZone": "America/Indianapolis",
   "leagues": {
     "NBA": {
@@ -13,391 +13,31 @@
         "picks": false
       },
       "coverageNote": "NBA Today has research team projections, player logs and a separate NBA Trial record.",
-      "lastAttemptAt": "2026-10-27T01:43:46Z",
+      "lastAttemptAt": "2026-10-27T09:28:28Z",
       "requestedWindow": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-27T01:43:46Z",
-      "lastSuccessfulAt": "2026-10-27T01:43:46Z",
+      "checkedAt": "2026-10-27T09:28:28Z",
+      "lastSuccessfulAt": "2026-10-27T09:28:28Z",
       "error": null,
       "window": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261026&limit=100",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261027&limit=100",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261026&limit=100",
           "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261027&limit=100",
-          "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261028&limit=100"
+          "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261028&limit=100",
+          "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261029&limit=100"
         ]
       },
       "games": [
-        {
-          "id": "NBA-401909868",
-          "providerId": "401909868",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-26T23:00:00Z",
-          "timeConfirmed": true,
-          "status": "final",
-          "statusDetail": "Final",
-          "period": 4,
-          "clock": "0.0",
-          "teams": {
-            "home": {
-              "id": "30",
-              "name": "Charlotte Hornets",
-              "shortName": "Hornets",
-              "abbreviation": "CHA",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/cha.png"
-            },
-            "away": {
-              "id": "27",
-              "name": "Washington Wizards",
-              "shortName": "Wizards",
-              "abbreviation": "WSH",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/wsh.png"
-            }
-          },
-          "scores": {
-            "home": 110,
-            "away": 103
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game/_/gameId/401909868/wizards-hornets"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NBA-401909869",
-          "providerId": "401909869",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-26T23:00:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "2:58 - OT",
-          "period": 5,
-          "clock": "2:58",
-          "teams": {
-            "home": {
-              "id": "5",
-              "name": "Cleveland Cavaliers",
-              "shortName": "Cavaliers",
-              "abbreviation": "CLE",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/cle.png"
-            },
-            "away": {
-              "id": "16",
-              "name": "Minnesota Timberwolves",
-              "shortName": "Timberwolves",
-              "abbreviation": "MIN",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/min.png"
-            }
-          },
-          "scores": {
-            "home": 117,
-            "away": 113
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game?gameId=401909869"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NBA-401909870",
-          "providerId": "401909870",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-26T23:30:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "5:48 - 4th",
-          "period": 4,
-          "clock": "5:48",
-          "teams": {
-            "home": {
-              "id": "2",
-              "name": "Boston Celtics",
-              "shortName": "Celtics",
-              "abbreviation": "BOS",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/bos.png"
-            },
-            "away": {
-              "id": "4",
-              "name": "Chicago Bulls",
-              "shortName": "Bulls",
-              "abbreviation": "CHI",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/chi.png"
-            }
-          },
-          "scores": {
-            "home": 122,
-            "away": 87
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game?gameId=401909870"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NBA-401909871",
-          "providerId": "401909871",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-26T23:30:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "6:34 - 4th",
-          "period": 4,
-          "clock": "6:34",
-          "teams": {
-            "home": {
-              "id": "14",
-              "name": "Miami Heat",
-              "shortName": "Heat",
-              "abbreviation": "MIA",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/mia.png"
-            },
-            "away": {
-              "id": "6",
-              "name": "Dallas Mavericks",
-              "shortName": "Mavericks",
-              "abbreviation": "DAL",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/dal.png"
-            }
-          },
-          "scores": {
-            "home": 95,
-            "away": 95
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game?gameId=401909871"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NBA-401909872",
-          "providerId": "401909872",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T00:00:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "1:50 - 3rd",
-          "period": 3,
-          "clock": "1:50",
-          "teams": {
-            "home": {
-              "id": "15",
-              "name": "Milwaukee Bucks",
-              "shortName": "Bucks",
-              "abbreviation": "MIL",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/mil.png"
-            },
-            "away": {
-              "id": "11",
-              "name": "Indiana Pacers",
-              "shortName": "Pacers",
-              "abbreviation": "IND",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/ind.png"
-            }
-          },
-          "scores": {
-            "home": 77,
-            "away": 82
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game?gameId=401909872"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NBA-401909873",
-          "providerId": "401909873",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T00:00:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "2:11 - 3rd",
-          "period": 3,
-          "clock": "2:11",
-          "teams": {
-            "home": {
-              "id": "25",
-              "name": "Oklahoma City Thunder",
-              "shortName": "Thunder",
-              "abbreviation": "OKC",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/okc.png"
-            },
-            "away": {
-              "id": "21",
-              "name": "Phoenix Suns",
-              "shortName": "Suns",
-              "abbreviation": "PHX",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/phx.png"
-            }
-          },
-          "scores": {
-            "home": 89,
-            "away": 76
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game?gameId=401909873"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NBA-401909874",
-          "providerId": "401909874",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T00:30:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Halftime",
-          "period": 2,
-          "clock": "0.0",
-          "teams": {
-            "home": {
-              "id": "10",
-              "name": "Houston Rockets",
-              "shortName": "Rockets",
-              "abbreviation": "HOU",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/hou.png"
-            },
-            "away": {
-              "id": "1",
-              "name": "Atlanta Hawks",
-              "shortName": "Hawks",
-              "abbreviation": "ATL",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/atl.png"
-            }
-          },
-          "scores": {
-            "home": 63,
-            "away": 66
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game?gameId=401909874"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NBA-401909875",
-          "providerId": "401909875",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T01:00:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "11:34 - 2nd",
-          "period": 2,
-          "clock": "11:34",
-          "teams": {
-            "home": {
-              "id": "26",
-              "name": "Utah Jazz",
-              "shortName": "Jazz",
-              "abbreviation": "UTAH",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/utah.png"
-            },
-            "away": {
-              "id": "29",
-              "name": "Memphis Grizzlies",
-              "shortName": "Grizzlies",
-              "abbreviation": "MEM",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/mem.png"
-            }
-          },
-          "scores": {
-            "home": 24,
-            "away": 32
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game?gameId=401909875"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NBA-401909876",
-          "providerId": "401909876",
-          "league": "NBA",
-          "sport": "basketball",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T02:00:00Z",
-          "timeConfirmed": true,
-          "status": "scheduled",
-          "statusDetail": "10/26 - 10:00 PM EDT",
-          "period": 0,
-          "clock": "0.0",
-          "teams": {
-            "home": {
-              "id": "7",
-              "name": "Denver Nuggets",
-              "shortName": "Nuggets",
-              "abbreviation": "DEN",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/den.png"
-            },
-            "away": {
-              "id": "9",
-              "name": "Golden State Warriors",
-              "shortName": "Warriors",
-              "abbreviation": "GS",
-              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/gs.png"
-            }
-          },
-          "scores": {
-            "home": null,
-            "away": null
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nba/game/_/gameId/401909876/warriors-nuggets"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
         {
           "id": "NBA-401909877",
           "providerId": "401909877",
@@ -436,7 +76,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909877/nets-celtics"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909878",
@@ -476,7 +116,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909878/pistons-knicks"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909879",
@@ -516,7 +156,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909879/kings-spurs"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909880",
@@ -556,7 +196,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909880/trail-blazers-lakers"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909881",
@@ -596,7 +236,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909881/heat-hawks"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909882",
@@ -636,7 +276,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909882/wizards-cavaliers"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909883",
@@ -676,7 +316,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909883/hornets-pistons"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909884",
@@ -716,7 +356,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909884/76ers-pacers"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909885",
@@ -756,7 +396,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909885/magic-raptors"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909886",
@@ -796,7 +436,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909886/knicks-bulls"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909887",
@@ -836,7 +476,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909887/rockets-bucks"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909888",
@@ -876,7 +516,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909888/warriors-timberwolves"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909889",
@@ -916,7 +556,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909889/nuggets-pelicans"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909890",
@@ -956,7 +596,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909890/spurs-jazz"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909891",
@@ -996,7 +636,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909891/thunder-mavericks"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NBA-401909892",
@@ -1036,7 +676,127 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909892/lakers-clippers"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NBA-401909893",
+          "providerId": "401909893",
+          "league": "NBA",
+          "sport": "basketball",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T00:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 8:00 PM EDT",
+          "period": 0,
+          "clock": "0.0",
+          "teams": {
+            "home": {
+              "id": "1",
+              "name": "Atlanta Hawks",
+              "shortName": "Hawks",
+              "abbreviation": "ATL",
+              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/atl.png"
+            },
+            "away": {
+              "id": "5",
+              "name": "Cleveland Cavaliers",
+              "shortName": "Cavaliers",
+              "abbreviation": "CLE",
+              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/cle.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nba/game/_/gameId/401909893/cavaliers-hawks"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NBA-401909894",
+          "providerId": "401909894",
+          "league": "NBA",
+          "sport": "basketball",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T00:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 8:00 PM EDT",
+          "period": 0,
+          "clock": "0.0",
+          "teams": {
+            "home": {
+              "id": "3",
+              "name": "New Orleans Pelicans",
+              "shortName": "Pelicans",
+              "abbreviation": "NO",
+              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/no.png"
+            },
+            "away": {
+              "id": "23",
+              "name": "Sacramento Kings",
+              "shortName": "Kings",
+              "abbreviation": "SAC",
+              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/sac.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nba/game/_/gameId/401909894/kings-pelicans"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NBA-401909895",
+          "providerId": "401909895",
+          "league": "NBA",
+          "sport": "basketball",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T02:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 10:00 PM EDT",
+          "period": 0,
+          "clock": "0.0",
+          "teams": {
+            "home": {
+              "id": "22",
+              "name": "Portland Trail Blazers",
+              "shortName": "Trail Blazers",
+              "abbreviation": "POR",
+              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/por.png"
+            },
+            "away": {
+              "id": "29",
+              "name": "Memphis Grizzlies",
+              "shortName": "Grizzlies",
+              "abbreviation": "MEM",
+              "logo": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/mem.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nba/game/_/gameId/401909895/grizzlies-trail-blazers"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
         }
       ]
     },
@@ -1050,70 +810,70 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-27T01:43:46Z",
+      "lastAttemptAt": "2026-10-27T09:28:28Z",
       "requestedWindow": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-27T01:43:46Z",
-      "lastSuccessfulAt": "2026-10-27T01:43:46Z",
+      "checkedAt": "2026-10-27T09:28:28Z",
+      "lastSuccessfulAt": "2026-10-27T09:28:28Z",
       "error": null,
       "window": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20261026&limit=100",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20261027&limit=100",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20261026&limit=100",
           "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20261027&limit=100",
-          "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20261028&limit=100"
+          "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20261028&limit=100",
+          "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates=20261029&limit=100"
         ]
       },
       "games": [
         {
-          "id": "WNBA-401918309",
-          "providerId": "401918309",
+          "id": "WNBA-401918310",
+          "providerId": "401918310",
           "league": "WNBA",
           "sport": "basketball",
           "season": 2026,
           "seasonType": "post-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T00:00:00Z",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-29T16:30:00Z",
           "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "10.3 - 3rd",
-          "period": 3,
-          "clock": "10.3",
+          "status": "scheduled",
+          "statusDetail": "10/29 - 12:30 PM EDT",
+          "period": 0,
+          "clock": "0.0",
           "teams": {
             "home": {
-              "id": "129689",
-              "name": "Golden State Valkyries",
-              "shortName": "Valkyries",
-              "abbreviation": "GS",
-              "logo": "https://a.espncdn.com/i/teamlogos/wnba/500/scoreboard/gs.png"
-            },
-            "away": {
               "id": "20",
               "name": "Atlanta Dream",
               "shortName": "Dream",
               "abbreviation": "ATL",
               "logo": "https://a.espncdn.com/i/teamlogos/wnba/500/atl.png"
+            },
+            "away": {
+              "id": "129689",
+              "name": "Golden State Valkyries",
+              "shortName": "Valkyries",
+              "abbreviation": "GS",
+              "logo": "https://a.espncdn.com/i/teamlogos/wnba/500/scoreboard/gs.png"
             }
           },
           "scores": {
-            "home": 44,
-            "away": 40
+            "home": null,
+            "away": null
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/wnba/game?gameId=401918309"
+            "url": "https://www.espn.com/wnba/game/_/gameId/401918310/valkyries-dream"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         }
       ]
     },
@@ -1127,28 +887,28 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-27T01:43:46Z",
+      "lastAttemptAt": "2026-10-27T09:28:28Z",
       "requestedWindow": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-27T01:43:46Z",
-      "lastSuccessfulAt": "2026-10-27T01:43:46Z",
+      "checkedAt": "2026-10-27T09:28:28Z",
+      "lastSuccessfulAt": "2026-10-27T09:28:28Z",
       "error": null,
       "window": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20261026&groups=50&limit=1000",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20261027&groups=50&limit=1000",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20261026&groups=50&limit=1000",
           "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20261027&groups=50&limit=1000",
-          "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20261028&groups=50&limit=1000"
+          "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20261028&groups=50&limit=1000",
+          "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20261029&groups=50&limit=1000"
         ]
       },
       "games": []
@@ -1163,71 +923,31 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-27T01:43:46Z",
+      "lastAttemptAt": "2026-10-27T09:28:28Z",
       "requestedWindow": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-27T01:43:46Z",
-      "lastSuccessfulAt": "2026-10-27T01:43:46Z",
+      "checkedAt": "2026-10-27T09:28:28Z",
+      "lastSuccessfulAt": "2026-10-27T09:28:28Z",
       "error": null,
       "window": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20261026&limit=100",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20261027&limit=100",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20261026&limit=100",
           "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20261027&limit=100",
-          "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20261028&limit=100"
+          "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20261028&limit=100",
+          "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20261029&limit=100"
         ]
       },
       "games": [
-        {
-          "id": "MLB-401908044",
-          "providerId": "401908044",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "post-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T00:00:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Mid 5th",
-          "period": 5,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "30",
-              "name": "Tampa Bay Rays",
-              "shortName": "Rays",
-              "abbreviation": "TB",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tb.png"
-            },
-            "away": {
-              "id": "8",
-              "name": "Milwaukee Brewers",
-              "shortName": "Brewers",
-              "abbreviation": "MIL",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/mil.png"
-            }
-          },
-          "scores": {
-            "home": 0,
-            "away": 9
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/mlb/game/_/gameId/401908044"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
         {
           "id": "MLB-401908045",
           "providerId": "401908045",
@@ -1266,7 +986,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401908045/brewers-rays"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLB-401908046",
@@ -1306,7 +1026,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401908046/brewers-rays"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         }
       ]
     },
@@ -1320,151 +1040,31 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-27T01:43:46Z",
+      "lastAttemptAt": "2026-10-27T09:28:28Z",
       "requestedWindow": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-27T01:43:46Z",
-      "lastSuccessfulAt": "2026-10-27T01:43:46Z",
+      "checkedAt": "2026-10-27T09:28:28Z",
+      "lastSuccessfulAt": "2026-10-27T09:28:28Z",
       "error": null,
       "window": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20261026&limit=100",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20261027&limit=100",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20261026&limit=100",
           "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20261027&limit=100",
-          "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20261028&limit=100"
+          "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20261028&limit=100",
+          "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=20261029&limit=100"
         ]
       },
       "games": [
-        {
-          "id": "NHL-401892582",
-          "providerId": "401892582",
-          "league": "NHL",
-          "sport": "hockey",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-26T23:00:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "3:29 - 3rd",
-          "period": 3,
-          "clock": "3:29",
-          "teams": {
-            "home": {
-              "id": "13",
-              "name": "New York Rangers",
-              "shortName": "Rangers",
-              "abbreviation": "NYR",
-              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nyr.png"
-            },
-            "away": {
-              "id": "8",
-              "name": "Los Angeles Kings",
-              "shortName": "Kings",
-              "abbreviation": "LA",
-              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/la.png"
-            }
-          },
-          "scores": {
-            "home": 3,
-            "away": 5
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nhl/game/_/gameId/401892582"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NHL-401892583",
-          "providerId": "401892583",
-          "league": "NHL",
-          "sport": "hockey",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T00:30:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "19:35 - 2nd",
-          "period": 2,
-          "clock": "19:35",
-          "teams": {
-            "home": {
-              "id": "3",
-              "name": "Calgary Flames",
-              "shortName": "Flames",
-              "abbreviation": "CGY",
-              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/cgy.png"
-            },
-            "away": {
-              "id": "21",
-              "name": "Toronto Maple Leafs",
-              "shortName": "Maple Leafs",
-              "abbreviation": "TOR",
-              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tor.png"
-            }
-          },
-          "scores": {
-            "home": 3,
-            "away": 0
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nhl/game/_/gameId/401892583"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
-        {
-          "id": "NHL-401892584",
-          "providerId": "401892584",
-          "league": "NHL",
-          "sport": "hockey",
-          "season": 2027,
-          "seasonType": "regular-season",
-          "date": "2026-10-26",
-          "kickoff": "2026-10-27T01:30:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "16:24 - 1st",
-          "period": 1,
-          "clock": "16:24",
-          "teams": {
-            "home": {
-              "id": "6",
-              "name": "Edmonton Oilers",
-              "shortName": "Oilers",
-              "abbreviation": "EDM",
-              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/edm.png"
-            },
-            "away": {
-              "id": "5",
-              "name": "Detroit Red Wings",
-              "shortName": "Red Wings",
-              "abbreviation": "DET",
-              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png"
-            }
-          },
-          "scores": {
-            "home": 0,
-            "away": 0
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/nhl/game/_/gameId/401892584"
-          },
-          "updatedAt": "2026-10-27T01:43:46Z"
-        },
         {
           "id": "NHL-401892585",
           "providerId": "401892585",
@@ -1503,7 +1103,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892585/blue-jackets-flyers"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892586",
@@ -1543,7 +1143,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892586/bruins-hurricanes"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892587",
@@ -1583,7 +1183,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892587/kings-blackhawks"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892588",
@@ -1623,7 +1223,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892588/canadiens-blues"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892589",
@@ -1663,7 +1263,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892589/islanders-predators"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892590",
@@ -1703,7 +1303,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892590/devils-stars"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892591",
@@ -1743,7 +1343,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892591/panthers-jets"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892592",
@@ -1783,7 +1383,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892592/wild-mammoth"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892593",
@@ -1823,7 +1423,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892593/senators-golden-knights"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892594",
@@ -1863,7 +1463,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892594/canucks-ducks"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892595",
@@ -1903,7 +1503,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892595/sabres-sharks"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892596",
@@ -1943,7 +1543,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892596/flyers-capitals"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892597",
@@ -1983,7 +1583,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892597/flames-oilers"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892598",
@@ -2023,7 +1623,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892598/devils-avalanche"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "NHL-401892599",
@@ -2063,7 +1663,447 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892599/maple-leafs-kraken"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892601",
+          "providerId": "401892601",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-29T23:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 7:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "20",
+              "name": "Tampa Bay Lightning",
+              "shortName": "Lightning",
+              "abbreviation": "TB",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tb.png"
+            },
+            "away": {
+              "id": "28",
+              "name": "Winnipeg Jets",
+              "shortName": "Jets",
+              "abbreviation": "WPG",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/wpg.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892601/jets-lightning"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892602",
+          "providerId": "401892602",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-29T23:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 7:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "16",
+              "name": "Pittsburgh Penguins",
+              "shortName": "Penguins",
+              "abbreviation": "PIT",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/pit.png"
+            },
+            "away": {
+              "id": "129764",
+              "name": "Utah Mammoth",
+              "shortName": "Mammoth",
+              "abbreviation": "UTA",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/uta.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892602/mammoth-penguins"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892603",
+          "providerId": "401892603",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-29T23:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 7:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "7",
+              "name": "Carolina Hurricanes",
+              "shortName": "Hurricanes",
+              "abbreviation": "CAR",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/car.png"
+            },
+            "away": {
+              "id": "29",
+              "name": "Columbus Blue Jackets",
+              "shortName": "Blue Jackets",
+              "abbreviation": "CBJ",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/cbj.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892603/blue-jackets-hurricanes"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892600",
+          "providerId": "401892600",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-29T23:30:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 7:30 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "5",
+              "name": "Detroit Red Wings",
+              "shortName": "Red Wings",
+              "abbreviation": "DET",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png"
+            },
+            "away": {
+              "id": "4",
+              "name": "Chicago Blackhawks",
+              "shortName": "Blackhawks",
+              "abbreviation": "CHI",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/chi.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892600/blackhawks-red-wings"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892604",
+          "providerId": "401892604",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T00:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 8:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "19",
+              "name": "St. Louis Blues",
+              "shortName": "Blues",
+              "abbreviation": "STL",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/stl.png"
+            },
+            "away": {
+              "id": "1",
+              "name": "Boston Bruins",
+              "shortName": "Bruins",
+              "abbreviation": "BOS",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/bos.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892604/bruins-blues"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892605",
+          "providerId": "401892605",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T00:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 8:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "27",
+              "name": "Nashville Predators",
+              "shortName": "Predators",
+              "abbreviation": "NSH",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nsh.png"
+            },
+            "away": {
+              "id": "23",
+              "name": "Washington Capitals",
+              "shortName": "Capitals",
+              "abbreviation": "WSH",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/wsh.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892605/capitals-predators"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892606",
+          "providerId": "401892606",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T00:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 8:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "9",
+              "name": "Dallas Stars",
+              "shortName": "Stars",
+              "abbreviation": "DAL",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/dal.png"
+            },
+            "away": {
+              "id": "10",
+              "name": "Montreal Canadiens",
+              "shortName": "Canadiens",
+              "abbreviation": "MTL",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/mtl.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892606/canadiens-stars"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892607",
+          "providerId": "401892607",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T00:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 8:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "30",
+              "name": "Minnesota Wild",
+              "shortName": "Wild",
+              "abbreviation": "MIN",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/min.png"
+            },
+            "away": {
+              "id": "12",
+              "name": "New York Islanders",
+              "shortName": "Islanders",
+              "abbreviation": "NYI",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nyi.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892607/islanders-wild"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892608",
+          "providerId": "401892608",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T02:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 10:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "25",
+              "name": "Anaheim Ducks",
+              "shortName": "Ducks",
+              "abbreviation": "ANA",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ana.png"
+            },
+            "away": {
+              "id": "2",
+              "name": "Buffalo Sabres",
+              "shortName": "Sabres",
+              "abbreviation": "BUF",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/buf.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892608/sabres-ducks"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892609",
+          "providerId": "401892609",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T02:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 10:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "8",
+              "name": "Los Angeles Kings",
+              "shortName": "Kings",
+              "abbreviation": "LA",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/la.png"
+            },
+            "away": {
+              "id": "14",
+              "name": "Ottawa Senators",
+              "shortName": "Senators",
+              "abbreviation": "OTT",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ott.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892609/senators-kings"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
+        },
+        {
+          "id": "NHL-401892610",
+          "providerId": "401892610",
+          "league": "NHL",
+          "sport": "hockey",
+          "season": 2027,
+          "seasonType": "regular-season",
+          "date": "2026-10-29",
+          "kickoff": "2026-10-30T02:00:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "10/29 - 10:00 PM EDT",
+          "period": 0,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "18",
+              "name": "San Jose Sharks",
+              "shortName": "Sharks",
+              "abbreviation": "SJ",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/sj.png"
+            },
+            "away": {
+              "id": "22",
+              "name": "Vancouver Canucks",
+              "shortName": "Canucks",
+              "abbreviation": "VAN",
+              "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892610/canucks-sharks"
+          },
+          "updatedAt": "2026-10-27T09:28:28Z"
         }
       ]
     },
@@ -2077,28 +2117,28 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-27T01:43:46Z",
+      "lastAttemptAt": "2026-10-27T09:28:28Z",
       "requestedWindow": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-27T01:43:46Z",
-      "lastSuccessfulAt": "2026-10-27T01:43:46Z",
+      "checkedAt": "2026-10-27T09:28:28Z",
+      "lastSuccessfulAt": "2026-10-27T09:28:28Z",
       "error": null,
       "window": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20261026&limit=100",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20261027&limit=100",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20261026&limit=100",
           "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20261027&limit=100",
-          "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20261028&limit=100"
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20261028&limit=100",
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20261029&limit=100"
         ]
       },
       "games": []
@@ -2113,28 +2153,28 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-10-27T01:43:46Z",
+      "lastAttemptAt": "2026-10-27T09:28:28Z",
       "requestedWindow": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-10-27T01:43:46Z",
-      "lastSuccessfulAt": "2026-10-27T01:43:46Z",
+      "checkedAt": "2026-10-27T09:28:28Z",
+      "lastSuccessfulAt": "2026-10-27T09:28:28Z",
       "error": null,
       "window": {
-        "from": "2026-10-26",
-        "through": "2026-10-28",
+        "from": "2026-10-27",
+        "through": "2026-10-29",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20261026&limit=100",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20261027&limit=100",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20261026&limit=100",
           "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20261027&limit=100",
-          "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20261028&limit=100"
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20261028&limit=100",
+          "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=20261029&limit=100"
         ]
       },
       "games": [
@@ -2176,7 +2216,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761905/atlanta-united-fc-new-york-city-fc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761906",
@@ -2216,7 +2256,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761906/dc-united-toronto-fc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761907",
@@ -2256,7 +2296,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761907/cf-montreal-charlotte-fc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761908",
@@ -2296,7 +2336,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761908/fc-cincinnati-inter-miami-cf"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761909",
@@ -2336,7 +2376,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761909/red-bull-new-york-new-england-revolution"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761910",
@@ -2376,7 +2416,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761910/real-salt-lake-austin-fc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761911",
@@ -2416,7 +2456,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761911/orlando-city-sc-chicago-fire-fc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761912",
@@ -2456,7 +2496,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761912/columbus-crew-fc-dallas"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761913",
@@ -2496,7 +2536,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761913/sporting-kansas-city-minnesota-united-fc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761914",
@@ -2536,7 +2576,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761914/philadelphia-union-nashville-sc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761915",
@@ -2576,7 +2616,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761915/portland-timbers-st-louis-city-sc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761916",
@@ -2616,7 +2656,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761916/houston-dynamo-fc-seattle-sounders-fc"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761917",
@@ -2656,7 +2696,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761917/colorado-rapids-san-jose-earthquakes"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         },
         {
           "id": "MLS-761918",
@@ -2696,7 +2736,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/761918/san-diego-fc-vancouver-whitecaps"
           },
-          "updatedAt": "2026-10-27T01:43:46Z"
+          "updatedAt": "2026-10-27T09:28:28Z"
         }
       ]
     }
