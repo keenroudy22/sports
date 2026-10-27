@@ -441,7 +441,9 @@ test('Today reconciles its last-slate headline and slips to released plays only'
 
 test('the browser shell requests the core build that exports the shared headline counter', () => {
   const index = fs.readFileSync('site/index.html', 'utf8');
-  assert.match(index, /core\.js\?v=78/);
+  const hash = require('node:crypto').createHash('sha256').update(fs.readFileSync('site/core.js')).digest('hex').slice(0,12);
+  assert.ok(index.includes(`core.js?v=sha256-${hash}`));
+  assert.equal(typeof C.chefRecord, 'function');
   assert.equal(typeof C.isHeadline, 'function');
 });
 
