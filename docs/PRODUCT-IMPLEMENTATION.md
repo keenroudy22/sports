@@ -4957,3 +4957,26 @@ Local homepage actually selected3stories10:56:13Z; latest settlement status
 overwrites call counts,so exact morning count unknown. Latest weekly remains
 Oct20local27B1call/0fail161.19s/summaryavailable; today's10:30ETreview still future.
 Evidence work/daily-20261027-outcomes.json,coverage.json,prep.json,climb-today.json.
+
+
+October27 daily results isolation VERIFIED LIVE at 2026-10-27T12:01:47.284573+00:00:
+source268195a6b/hosted40499396035SUCCESS,verifiedHeade6fc371c8e6f22f15eff24060d3e806d40712b68
+contains source by checked ancestry.1833Python(two expected skips)/281Node normal
+and clean-export passed before commit and again through scripts/deploy.py.
+First-attempt lease/short-lock promotion;build495pages,131record/NBA0,712local/
+716hostedpublicfiles,noissues;existing soft payload warnings retained. True0725
+f1odmsi2offline outcomeok,zerooutside/private. Four fullyloaded liveToday/Record
+375/1440checks:zerooverflow/load/consoleerrors;phone visuallyreviewed. Initial
+Chrome416minimum superseded by actual375in-app viewport,not claimed as375proof.
+Natural0755results logged no odds/prop requests11:55:05Z,graded11:55:17Z,retained
+stored-priceClimb,finishedok11:57:21Z. No forced selections or new schedules.
+Final liveRecord 2026-10-27T11:57:23Z has131rows/65released comparisons,
+zero grade/time/unitmismatches;onlyungradedWKUtodayunstarted. MondayX37.51/47.51m
+historical misses retained;09:01Final remains scheduled,notsent.
+Results capture repair shipped within OWNERFOLLOW;broaderitemremainsready:units-onlyfuture
+social including fixed privateClimb sizing,thenlinkedcombineddailycardgrading.
+SamHoustonMLandDEL-WKUunder57.5privatecaptionholds retain numeric-only unusable
+reasons;fresh evidence/admission needed,never weaken sendguard. D-CAPTIONFIT
+WarrenactualXreceipt closes that older item. Metadata remainsdevfornextordinary
+release;no seconddeployment. Archivedonlyoldercompletedsamedaily01a1780b.
+Full evidence work/daily-20261027-outcomes.json,release.log,hosted.log andprep files.
