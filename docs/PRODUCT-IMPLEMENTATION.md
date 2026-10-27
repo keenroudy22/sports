@@ -5203,8 +5203,8 @@ core-Out comparisons need explicit DNP or independently recorded pregame Out.
 Five >=90% overlapping rotations required, shrink10, fixedridge10, corrections
 bounded to training ranges/12points and uncertainty never reduced. Fixed first32
 schedule/box-coverage-selected dates, Feb19-Apr3, split16/16. Source collection
-used85 free primary PDF requests across three separately bounded passes
-(31+32+22); first reused Feb20 file retains original save clock. No paid/metered
+used85 free primary PDF requests including the initial source read and three bounded collection passes;
+reused Feb20 bytes retain their original save clock. No paid/metered
 allowance, scheduler, gate, stake or record changed. Preserved rawhash PDFs,
 append-only parses/identity corrections, source receipts and immutable plan.
 First outcome evaluation has ZERO supported train/test games (125 scheduled
@@ -5225,3 +5225,21 @@ all four tonight held, zero offers. BOS not submitted; DET/POR unresolved;
 SAC recent workload accounting incomplete. work/nba-roster-tonight-review.json,
 work/nba-roster-validation-first.log preserve exact results. Release/full gates,
 hosted and live verification remain required before calling the changes shipped.
+
+October27 owner moneyline correction (verification pending):
+Owner objected to Sam Houston ML while the score model favored Missouri State,
+then reported deleting its X and Discord posts. It had been released15:49:24Z,
+X confirmed16:07:57.927Z; +180/0.5u original retained. Anchored chance.363 vs
+break-even.357, edge0.6pp: previously permitted ordinary positive-value rule,
+not evidence that Sam Houston was the projected winner. Do not explain that
+price-angle as strong model conviction or retroactively erase the publication.
+Official producer under run.lock appended2026-10-27-CFB-1305-closes.json,
+validated ledger/release tests, recorded ownerRemovalReportedAt and platforms
+while preserving sent receipts, and pusheda3048ed6f. Status expired closes new
+entry; original counts/settlement remain. No deletedAt cap refund or repost.
+New prospective moneyline_projection_agreement reads the same current snapshot
+as the website, requires probability>50% AND correctly signed margin for Best
+Bet/Chef/HotPlate ML. Cached selection cannot bypass; quoted underdogs that are
+model favorites still eligible through every price/evidence gate. Spread/total/
+fun and past gates unchanged. Remaining active ML WesternKentucky:margin+3.3,
+homewin58%, aligns. Full release/hosted/live verification still required.

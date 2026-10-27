@@ -24,6 +24,7 @@ Stdlib only.
 import argparse
 import staking
 import json
+import math
 import re
 import sys
 from collections import defaultdict
@@ -995,8 +996,36 @@ def plan_reasons(candidate):
     return [row for row in rows if row.get('direction') == 'for' and row.get('text')]
 
 
+MONEYLINE_ALIGNMENT_FROM = datetime(2026,10,27,17,tzinfo=timezone.utc)
+
+
+def moneyline_projection_agreement(candidate, ctx, lane='best_bet'):
+    """Owner Oct27: new official ML recommendations must pick the model winner.
+
+    A cheaper losing side can be positive EV mathematically, but is research
+    rather than a new Best Bet under this owner rule. Never rewrite history.
+    Read the current shared snapshot, not a cached selection or caption claim.
+    """
+    if (ctx.now < MONEYLINE_ALIGNMENT_FROM or market_key(candidate) != 'moneyline'
+            or lane not in ('best_bet','chef_pick','hot_plate')):
+        return Decision(True,'moneyline_projection_agreement','not a new official moneyline')
+    snapshot=ctx.snapshot((candidate.get('gameIds') or [None])[0]) or {}
+    side=side_of(candidate);margin=snapshot.get('margin')
+    home=snapshot.get('homeWinProb', (snapshot.get('home') or {}).get('winProb'))
+    valid=lambda n:type(n) in (int,float) and math.isfinite(n)
+    if side not in ('home','away') or not valid(margin) or not valid(home) or not 0<=home<=1:
+        return Decision(False,'moneyline_projection_agreement','current model winner is unavailable')
+    chance=home if side=='home' else 1-home
+    signed=margin if side=='home' else -margin
+    if signed<=0 or chance<=.5:
+        return Decision(False,'moneyline_projection_agreement','moneyline side is not the current projected winner')
+    return Decision(True,'moneyline_projection_agreement','moneyline agrees with current model winner')
+
+
 def selection_verdict(candidate, ctx, lane='best_bet'):
     """Owner-plan tier decision using the shared market-anchored chance."""
+    agreement=moneyline_projection_agreement(candidate,ctx,lane)
+    if not agreement.ok:return agreement
     numbers = candidate.get('_selection') or selection_numbers(candidate, ctx)
     if not numbers:
         return Decision(False, 'plan_selection', 'no raw chance and exact two-sided fair price')

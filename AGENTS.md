@@ -1,3 +1,17 @@
+# October27 owner correction: moneyline/model agreement
+
+New football Best Bet, Chef's Pick and Hot Plate moneylines must select the
+current shared model's outright winner: selected-side win probability above50%
+and score margin pointing the same way. Unknown, tied, inconsistent and model-
+losing sides hold even if the price has positive estimated value. Cached private
+selection claims cannot override the current snapshot. Existing two-sided price,
+value, evidence, exposure and stake checks still apply; a projected winner is
+never automatic approval. This narrows the October19 positive-value rule for
+these moneylines only; do not force replacement plays. Preserve posted history.
+The owner removed Sam Houston +180 from X/Discord after publication; its dated
+close report withdraws new entry, keeps original receipts/stake and grades it as
+posted. Do not repost or silently remove it from the record.
+
 # October27 roster experiment — no model promotion
 
 `nba-roster-residual-v1` preserves a fixed chronological archive experiment and
