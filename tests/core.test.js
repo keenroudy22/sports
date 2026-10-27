@@ -678,4 +678,6 @@ test('Chef records are separate subsets of official results with original stakes
   assert.equal(record.all.pending,1);
   assert.equal(C.recordBreakdown(rows.slice(0,3)).all.wins,1);
   assert.equal(C.recordBreakdown(rows.slice(0,3)).lanes.chef_pick.losses,1);
+  assert.equal(C.recordBreakdown(rows).lanes.chef_pick.wins,1,'private and parlay rows cannot inflate Chef record');
+  assert.equal(C.recordBreakdown(rows).lanes.chef_pick.units,1,'promo credits stay outside Chef units');
 });

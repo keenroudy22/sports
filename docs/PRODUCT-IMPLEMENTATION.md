@@ -5339,3 +5339,8 @@ These are labeled captured comparisons, never asserted as verified market closes
 No added request or retrospective regrading. Early release attempt stopped at
 build while this correction was being added; it did not promote. Undefined local
 clock caught and fixed with explicit board clock and build regression test.
+
+Final separate-record regression also excludes private/unreleased drafts and
+parlays from every Chef lane summary and removes promo credits from those units.
+285Node tests pass. Restarted our own local release verification to include this
+last fix; no production worker or hosted schedule was stopped.
