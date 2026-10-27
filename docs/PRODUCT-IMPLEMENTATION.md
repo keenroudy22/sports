@@ -5248,3 +5248,40 @@ The provisional O-20261027-MLAGREEMENT follow-up is consolidated under existing
 O-20261023-MODELPARITY (same selection/research alignment work), retaining all
 176 prior stable IDs and the bounded schema. No original item was dropped and
 no completed release is claimed by consolidation.
+
+October27 VERIFIED NBA research / moneyline correction release:
+Combined testedsource fb4c17793f6d1ce33e37673f797db2ece45100a0; hosted
+40550715741SUCCESS, verifiedHead370e8a3e101079b1d29d8b3b996b98cd4a28b4d6
+contains source, NBA595215024 and finalwithdrawala81ec2486 by checked ancestry.
+1875Python(twoexpectedskips)/283Node normal+clean;132official/NBA0,705hosted
+publicfiles/zeroissues. Offline1255 rehearsal:zero outside writes/private
+reads. Exact local final promotion succeeded once after correcting the bounded
+queue/index and completing all UI edits; earlier failed/stopped checks preserved
+in work/moneyline-agreement-release.log and never promoted. Redundant push-only
+40547291131 canceled during its first test after prior40547152254 had already
+published NBA/withdrawal; no scheduled capture or source observations canceled.
+Final hosted rebase retained19 upstream data/research changes and repeated8gates.
+All6liveToday/Record/NBAToday375/1440views loaded without overflow or console
+warnings/errors. Normal reload serves app26de4707cd0a:ML never prints0.4against0
+or graded-at0 badge; original prices/projections/source art stay unchanged.
+Neutral off-card copy no longer invents a line move. Sam withdrawn from active
+Today; final1337close says WE withdrew, model favors MissouriState, no new
+entries, +180/0.5u still grades winorlose. Owner removal of X/Discord recorded
+as owner-reported, original sent receipts preserved; no repost/cap refund.
+Current model gate rejects Sam ML and passes WKU winner agreement; private
+queue0. The complete price/evidence gates remain mandatory even on model winners.
+Natural13:30 worker captured20free reads/zeroerrors, availability17:32:08Z.
+Production admission rechecked actual refreshed inputs and returned0offers:
+3games unresolved participation, SAC incomplete accounting. No NBA bet posted.
+NBA adjustment remains UNVALIDATED:0supportedtrain/test, no qualifiedfamily;
+this component is unfinished, not a shipped predictive improvement. Separate
+source diagnosis found23/1204team boxes fail only because explicit numericzero
+minutes are rejected;12contain genuinely missing minutes. Do not weaken the
+frozen v1 or turn missing rows into zero. Next fix explicit-zero parsing in a
+new model version and preregister a disjoint validation cohort; preserve roles,
+source clocks, unknown workload and quarter/player/Climb holds. All176 stable
+queue IDs retained. Full receipt work/nba-roster-and-moneyline-verified-20261027.json.
+Owner proofs:kookn-sam-houston-withdrawn-live-2026-10-27.png and
+kookn-nba-roster-desktop-2026-10-27.png. Viewport reset; website tab retained.
+Verification metadata staysdev for the next ordinary release; no second
+deployment merely to publish this receipt.
