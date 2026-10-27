@@ -75,3 +75,32 @@ class ChefEvidenceTests(unittest.TestCase):
         self.assertEqual(row['probabilityPolicy'],chef.VERSION)
         self.assertEqual(row['probabilitySpec'],chef.specification(pick,fixture.ctx))
         self.assertEqual(row['chance'],.60)
+
+    def test_price_comparison_requires_same_book_exact_line_near_kickoff(self):
+        p=dict(self.pick,kickoff='2026-12-01T23:00Z',quotedAt='2026-12-01T18:00Z',book='FanDuel',line=2.5,odds=110)
+        q=dict(book='fanduel',line=2.5,direction='over',odds=-110,otherOdds=-110,retrievedAt='2026-12-01T22:45Z',source='https://source.test')
+        r=chef.price_comparison(p,[q],self.ctx.now)
+        self.assertGreater(r['edgePoints'],0);self.assertEqual(r['minutesBeforeKickoff'],15)
+        for key,value in [('book','DraftKings'),('line',3.5),('retrievedAt','2026-12-01T23:05Z'),('retrievedAt','2026-12-01T20:00Z'),('direction','under')]:
+            self.assertIsNone(chef.price_comparison(p,[dict(q,**{key:value})],self.ctx.now))
+        self.assertIsNone(chef.price_comparison(p,[q,dict(q,odds=100)],self.ctx.now))
+        self.assertIsNone(chef.price_comparison(p,[q],chef.instant('2026-12-01T22:59Z')))
+
+    def test_build_record_exports_the_policy_and_price_comparison(self):
+        import build_site
+        p=dict(self.pick,lane='chef_pick',season=2026,quotedAt='2026-10-28T18:00Z',
+               title='Player OVER 2.5 catches',line=2.5,book='FanDuel',chefEvidence={'policy':chef.VERSION,'n':40})
+        with patch.object(chef,'stored_price_comparison',return_value={'odds':-110,'edgePoints':2.0}) as check:
+            row=build_site.board_picks({'new':p},{},{'new':{'season':2026,'kickoff':'2026-10-28T23:00Z'}},{},self.ctx.now)[0]
+        self.assertEqual(row['chefEvidence']['policy'],chef.VERSION)
+        self.assertEqual(row['chefPriceComparison']['odds'],-110)
+        self.assertEqual(check.call_args.args[1],self.ctx.now)
+
+    def test_caption_guard_requires_the_frozen_proof_at_this_price(self):
+        import x_post
+        p=dict(self.pick,lane='chef_pick',riskUnits=1,selectionPolicy=gates.TIER_POLICY,
+            publishedAt=self.ctx.now.isoformat(),probabilityAtPublication={'chance':.6,'breakEven':.524,'probabilitySpec':chef.specification(self.pick,self.ctx)})
+        self.assertTrue(chef.publication_issues(p))
+        p['chefEvidence']=self.evidence();self.assertEqual(chef.publication_issues(p),[])
+        p['odds']=-200;self.assertTrue(chef.publication_issues(p))
+        p['publishedAt']='2026-10-20T00:00Z';p.pop('chefEvidence');self.assertEqual(chef.publication_issues(p),[])

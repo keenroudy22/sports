@@ -5328,3 +5328,14 @@ holds. NBA remains separate0.5u/max1daily Trial; props/quarter/Climb stay gated.
 Normal1894Python(twoexpectedskips)/285Node and176bounded-release tests passed.
 A later unknown-report supersession regression also passes; deploy reruns exact
 final source in normal/clean exports. Hosted/live verification still pending.
+
+Follow-up before promotion: final caption guard also requires the frozen Chef
+proof at its actual price. Keep closing-line movement separate from exact-line
+price comparisons. The record derives a same-book, exact-line, same-side last
+stored two-sided quote within60minutes of kickoff using existing native stores,
+with capture clock/source and positive/tied/negative price advantage. Future,
+stale, different-book/line/side and same-time conflicting quotes remain unmeasured.
+These are labeled captured comparisons, never asserted as verified market closes.
+No added request or retrospective regrading. Early release attempt stopped at
+build while this correction was being added; it did not promote. Undefined local
+clock caught and fixed with explicit board clock and build regression test.

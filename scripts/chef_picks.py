@@ -33,6 +33,7 @@ def finite(value):
 
 def specification(candidate, ctx):
     import gates
+    import inspect
     if candidate.get('legs') or not isinstance(getattr(ctx,'policy',None),dict):
         return None
     league = candidate.get('league') or candidate.get('_league') or (gates.game_of(candidate, ctx) or {}).get('league')
@@ -42,9 +43,11 @@ def specification(candidate, ctx):
     definition = dict(policy=VERSION, league=league, market=market,
                       model=candidate.get('modelVersion'), learnedK=fitted.get('k'),
                       fixedK=pricing.CALIBRATION.get((league, market)),
-                      # Changes to selection/pricing require fresh forward proof.
+                      # Fingerprint probability definitions, not unrelated admission/UI edits.
+                      selection=hashlib.sha256(''.join(inspect.getsource(f) for f in
+                          (gates.selection_numbers,gates.calibrated_desk,gates.desk_for)).encode()).hexdigest(),
                       code={name: hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest()
-                            for name in ('gates.py', 'pricing.py', 'model_v2.py', 'features.py', 'continuity.py')})
+                            for name in ('pricing.py', 'model_v2.py', 'features.py', 'continuity.py', 'starters.py')})
     return hashlib.sha256(json.dumps(definition, sort_keys=True).encode()).hexdigest()
 
 
@@ -110,3 +113,83 @@ def evidence(candidate, ctx, numbers, candidates=None, grades=None):
     result['reason'] = ('Chef forward probability and buffered price checks passed' if result['ok']
                         else 'Chef forward probability or buffered price check failed')
     return result
+
+
+def price_comparison(pick, quotes, now):
+    """Latest stored exact-line, same-book price near tip; never invent a close."""
+    import role_sanity
+    kickoff=instant(pick.get('kickoff'));posted=instant(pick.get('quotedAt') or pick.get('publishedAt'))
+    if not kickoff or now<kickoff or not posted or not pick.get('book') or not finite(pick.get('odds')) or abs(pick['odds'])<100:return None
+    valid=[]
+    for q in quotes:
+        clock=instant(q.get('retrievedAt'))
+        if (not clock or not posted<=clock<kickoff or kickoff-clock>timedelta(hours=1)
+            or role_sanity.book_key(q.get('book'))!=role_sanity.book_key(pick.get('book'))
+            or q.get('line')!=pick.get('line') or q.get('direction')!=pick.get('direction')
+            or not finite(q.get('odds')) or abs(q['odds'])<100
+            or not finite(q.get('otherOdds')) or abs(q['otherOdds'])<100):continue
+        if not .99<=pricing.break_even(q['odds'])+pricing.break_even(q['otherOdds'])<=1.15:continue
+        valid.append(q)
+    if not valid:return None
+    clock=max(instant(q['retrievedAt']) for q in valid)
+    latest=[q for q in valid if instant(q['retrievedAt'])==clock]
+    if len({q['odds'] for q in latest})!=1:return None
+    q=latest[0]
+    return dict(odds=q['odds'],book=pick['book'],retrievedAt=q['retrievedAt'],source=q.get('source'),
+        minutesBeforeKickoff=round((kickoff-clock).total_seconds()/60),
+        edgePoints=round(100*(pricing.break_even(q['odds'])-pricing.break_even(pick['odds'])),3),
+        scope='Latest stored same-book exact-line price within60minutes of tip; not a verified market close')
+
+
+def stored_price_comparison(pick, now, root=learning.ROOT):
+    """Reuse free/native stored quotes. No requests and no settlement changes."""
+    import build_site
+    import boxscores
+    league,season=pick.get('league'),pick.get('season')
+    kind='prop-odds' if pick.get('athleteId') else 'odds'
+    folder=Path(root)/'data'/kind
+    if boxscores.verify(folder):return None
+    path=folder/f'{league}-{season}.jsonl'
+    quotes=[]
+    for row in boxscores.read_store(path):
+        if row.get('gameId') not in (pick.get('gameIds') or []):continue
+        side=pick.get('direction');market=pick.get('market') or pick.get('marketType')
+        if pick.get('athleteId'):
+            import re
+            name=pick.get('player') or re.split(r'\s+(?:OVER|UNDER)\b',pick.get('title',''),flags=re.I)[0]
+            for book,line,over,under in build_site.price_quotes(row,market,name,pick.get('line')):
+                odds,other=(over,under) if side=='over' else (under,over)
+                quotes.append(dict(book=book,line=line,direction=side,odds=odds,otherOdds=other,
+                    retrievedAt=row.get('retrievedAt'),source=row.get('source')))
+        else:
+            for book,b in (row.get('books') or {}).items():
+                q=b.get(market) or {}
+                if market=='total':
+                    line=q.get('line');odds=q.get(side);other=q.get('under' if side=='over' else 'over')
+                elif market=='spread' and finite(q.get('home')):
+                    line=q['home'] if side=='home' else -q['home']
+                    odds=q.get(side+'Price');other=q.get(('away' if side=='home' else 'home')+'Price')
+                elif market=='moneyline':
+                    line=0;odds=q.get(side);other=q.get('away' if side=='home' else 'home')
+                else:continue
+                quotes.append(dict(book=book,line=line,direction=side,odds=odds,otherOdds=other,
+                    retrievedAt=row.get('retrievedAt'),source=row.get('source')))
+    return price_comparison(pick,quotes,now)
+
+
+def publication_issues(pick):
+    """Final caption guard complements the live selection/release recheck."""
+    if pick.get('lane')!='chef_pick':return []
+    probability=pick.get('probabilityAtPublication') or {}
+    clock=instant(pick.get('publishedAt')) or instant(probability.get('evaluatedAt')) or instant(pick.get('quotedAt'))
+    if clock and clock<FROM:return []
+    proof=pick.get('chefEvidence') or {}
+    valid=(proof.get('policy')==VERSION and proof.get('ok') is True
+           and finite(proof.get('n')) and proof['n']>=MINIMUM
+           and proof.get('probabilitySpec') and proof.get('probabilitySpec')==probability.get('probabilitySpec')
+           and finite(proof.get('conservativeChance')) and finite(pick.get('odds')) and abs(pick['odds'])>=100
+           and proof['conservativeChance']>pricing.break_even(pick['odds'])
+           and finite(proof.get('modelBrier')) and finite(proof.get('marketBrier'))
+           and proof['modelBrier']<proof['marketBrier']
+           and instant(proof.get('evaluatedAt')) and clock and instant(proof['evaluatedAt'])<=clock)
+    return [] if valid else ['Chef forward probability evidence is missing or does not support this price']

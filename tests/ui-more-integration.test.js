@@ -117,6 +117,6 @@ test('official record always renders the separate Chef record without changing o
   assert.match(html,/id="chef-record"/);
   assert.match(html,/Forward EV policy/);
   assert.match(html,/Included in the overall best-bet record/);
-  assert.match(html,/beat the close on 1 of 1/);
+  assert.match(html,/beat the closing line on 1 of 1/);
   assert.equal(C.recordBreakdown(picks).all.losses,1);
 });

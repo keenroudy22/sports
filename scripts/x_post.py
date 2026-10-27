@@ -722,6 +722,8 @@ def guard(text, pick, reason=None, now_quote=None):
             problems.append('play has no shared market-anchored chance')
         elif chance <= needed:
             problems.append(f'play chance {chance:.1%} does not beat the price need {needed:.1%}')
+    import chef_picks
+    problems += chef_picks.publication_issues(pick)
     if pick.get('selectionPolicy') == gates.TIER_POLICY or lane == 'chef_pick':
         expected = gates.staking.expected(pick) if lane in ('best_bet', 'chef_pick') else None
         if expected is None or pick.get('riskUnits') != expected or pick.get('selectionPolicy') != gates.TIER_POLICY:

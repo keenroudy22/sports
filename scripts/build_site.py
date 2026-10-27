@@ -1705,7 +1705,7 @@ def build(now=None):
     by_id = {key: {**game, 'id': key} for key, game in stored.items()}
     by_id.update({g['id']: g for g in slate.get('games', [])})
     first, latest = first_publications(reports)
-    picks = [p for p in board_picks(first, latest, by_id, identities)]
+    picks = [p for p in board_picks(first, latest, by_id, identities, now)]
     import result_display
     for row in picks:
         if not row.get('result'):
@@ -2061,13 +2061,14 @@ def pick_market_type(pick, recent):
     return None
 
 
-def board_picks(first, latest, by_id, identities):
+def board_picks(first, latest, by_id, identities, now=None):
     """The board's pick rows (first publication plus latest settlement), newest first.
 
     A pick is a favorite if it was one when first published; a later report cannot promote or demote it.
     """
     import featured as featured_store
     import pick_card
+    now=now or datetime.now(timezone.utc)
     try:
         reasons = json.loads((ROOT / 'data' / 'x-reasons.json').read_text(encoding='utf-8'))
     except (OSError, ValueError):
@@ -2135,6 +2136,10 @@ def board_picks(first, latest, by_id, identities):
                      'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,
                      'priceEstimated': pick.get('priceEstimated') is True,
                      'probabilityAtPublication': probability or None,
+                     'chefPriceComparison': (__import__('chef_picks').stored_price_comparison(
+                         dict(pick,league=pick.get('league'),season=season,
+                              kickoff=(game or {}).get('kickoff') or pick.get('kickoff')),now)
+                         if pick.get('lane')=='chef_pick' else None),
                      'chefEvidence': ({key: pick['chefEvidence'].get(key) for key in
                                       ('policy','n','evaluatedAt','errorAllowance','conservativeChance')}
                                       if isinstance(pick.get('chefEvidence'),dict) else None),

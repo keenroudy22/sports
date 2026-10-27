@@ -360,10 +360,12 @@
       }).join('');
       const chef = C.chefRecord(rows);
       const chefClose = clvSummary(chef.rows.map(p => ({ clv: clvById.get(p.id) })));
+      const chefPrices = chef.rows.map(p => p.chefPriceComparison).filter(p => isNum(p?.edgePoints));
       const chefPanel = section("Chef's Picks", `<div class="card" id="chef-record"><p><b>${esc(wl(chef.all))}</b> · ${esc(units(chef.captured.units))} at recorded prices · ${esc(chef.all.pending)} open</p>
         <p class="small muted">Included in the overall best-bet record. New picks use 1u; earlier stakes stay as posted. Promo credits are excluded from these units.</p>
         <p class="small">Forward EV policy: ${esc(wl(chef.forward))} · ${esc(units(chef.forward.units))} · ${esc(chef.forward.pending)} open.</p>
-        <p class="small muted">${chefClose.measured ? `Posted price beat the close on ${chefClose.beat} of ${chefClose.measured} measured plays; ${chefClose.tied} tied.` : 'Closing-price comparison: no measured plays yet.'} Passing on a day is allowed.</p>
+        <p class="small muted">${chefClose.measured ? `Posted line beat the closing line on ${chefClose.beat} of ${chefClose.measured} measured plays; ${chefClose.tied} tied.` : 'Closing-line comparison: no measured plays yet.'} Passing on a day is allowed.</p>
+        <p class="small muted">Exact-line price check: ${chefPrices.length ? `${chefPrices.filter(p => p.edgePoints > 0).length} of ${chefPrices.length} posted prices better than the latest stored same-book quote within an hour of kickoff. Captured comparison, not a verified closing price.` : 'no comparable near-kickoff prices recorded yet.'}</p>
         ${chef.rows.length ? `<div class="receipts">${[...chef.rows].sort((a,b) => String(b.kickoff).localeCompare(String(a.kickoff))).map(p => receipt(p, clvById)).join('')}</div>` : '<p class="small muted">No Chef’s Picks in this view yet.</p>'}</div>`);
       const rec = C.recordBreakdown(straight);
       rec.captured.roi = OWNER_FLAGS.roi ? roiOf(rec.captured) : null;
