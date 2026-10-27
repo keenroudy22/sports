@@ -1,3 +1,12 @@
+# October27 final-check coverage repair
+
+Final football checks include all still-future Buffer plays due within45minutes,
+including the short15minute Discord lead. A saved precheck still prevents repeat
+checks; already-sent/canceled/deleted and overdue unknown-state posts stay out.
+Same existing worker/check budget; no new scheduler or relaxed admission/news
+rule. A moved price updates queued copy as current context without rewriting
+original public terms or silently withdrawing a published play. Preserve receipts.
+
 # October27 Chef forward-EV policy and separate record
 
 Prospective Chef's Picks from2026-10-27T19:40Z require the existing strict

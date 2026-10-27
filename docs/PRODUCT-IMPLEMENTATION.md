@@ -5344,3 +5344,13 @@ Final separate-record regression also excludes private/unreleased drafts and
 parlays from every Chef lane summary and removes promo credits from those units.
 285Node tests pass. Restarted our own local release verification to include this
 last fix; no production worker or hosted schedule was stopped.
+
+October27 live-pass follow-up: ordinary SHSU–MOST over51.5(-102)0.5u reached
+Discord20:01:21Z and Buffer accepted20:16:21Z. Fresh20:02:15Z odds capture now
+shows52.5(-105); never silently replace original terms. Live last-look found
+precheck_due's old15minute lower bound could exclude the short Discord lead.
+Expanded future window to0–45minutes with one-check/idempotency and unknown-state
+protection unchanged; no new job, feed budget or price/news gate relaxation.
+Current post gets the real existing last-look/requote producer, preserving posted
+record and immutable artwork. An original-public play is not erased because the
+market moved. Further actual receipt and release verification remain required.

@@ -4140,7 +4140,7 @@ def show_status(args):
 
 # ------------------------------------------------------------------ the check before a post goes out
 
-PRECHECK_WINDOW = (timedelta(minutes=15), timedelta(minutes=45))    # closer to Discord release; same one-check budget
+PRECHECK_WINDOW = (timedelta(0), timedelta(minutes=45))    # include short Discord leads; same one-check budget
 PRECHECK_LAST = timedelta(minutes=45)      # inside this, an unconfirmed college play is withheld rather than retried
 
 

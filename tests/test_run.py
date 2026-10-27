@@ -1008,7 +1008,9 @@ class PrecheckTests(unittest.TestCase):
                               post('old-window', 150), post('far', 60), post('sent', 30, sentAt='x'),
                               post('gone', 30, cancelledAt='x'), post('done', 30, precheck={'result': 'clear'}),
                               dict(post('receipt', 30), kind='buffer:receipt')]}
-        self.assertEqual([e['id'] for e in run.precheck_due(log_book, now)], ['in', 'edge', 'lower'])
+        self.assertEqual([e['id'] for e in run.precheck_due(log_book, now)], ['soon', 'in', 'edge', 'lower'])
+        log_book['posts'] += [post('past', -1), post('short', 1), post('checked-short', 1, precheck={'result':'clear'})]
+        self.assertEqual([e['id'] for e in run.precheck_due(log_book, now)], ['soon','in','edge','lower','short'])
 
     def test_quiet_when_nothing_is_due(self):
         from types import SimpleNamespace
