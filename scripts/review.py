@@ -289,6 +289,11 @@ def learning_packet(report_path=None, shadow_root=None):
             report_path.parent.parent / 'nba-capture')))
     except (OSError, ValueError, KeyError, TypeError) as error:
         lines.append(f'- NBA forward comparison unavailable: {type(error).__name__}; no promotion implied.')
+    try:
+        import nba_roster_runtime
+        lines.append('- NBA roster forward research: '+json.dumps(nba_roster_runtime.summary(report_path.parent.parent/'nba-roster-research'),sort_keys=True))
+    except (OSError,ValueError,KeyError,TypeError) as error:
+        lines.append(f'- NBA roster forward research unavailable: {type(error).__name__}; no promotion implied.')
     return '\n'.join(lines) + '\n'
 
 

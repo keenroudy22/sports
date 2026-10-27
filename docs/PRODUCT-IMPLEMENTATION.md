@@ -5192,3 +5192,36 @@ closed. Ownerproof kookn-nba-win-bars-live-2026-10-27.png; full receipt
 work/nba-bars-verified-20261027.json. No price/stake/record or model promotion;
 MODELPARITY remains unfinished. Verification metadata staysdev for next ordinary
 release; no second deployment just to publish its receipt.
+
+October27 NBA roster experiment implementation (release not yet verified):
+Built nba-roster-residual-v1 from estimated observed-role rotations and
+opponent-adjusted historical residuals; no invented player point penalties.
+Current rosters/official availability have actual receipt/source clocks; archive
+identity-only reports are explicitly retrospective and cannot clear live games.
+Unknown minutes are not zero-filled, all team minutes/points must reconcile,
+core-Out comparisons need explicit DNP or independently recorded pregame Out.
+Five >=90% overlapping rotations required, shrink10, fixedridge10, corrections
+bounded to training ranges/12points and uncertainty never reduced. Fixed first32
+schedule/box-coverage-selected dates, Feb19-Apr3, split16/16. Source collection
+used85 free primary PDF requests across three separately bounded passes
+(31+32+22); first reused Feb20 file retains original save clock. No paid/metered
+allowance, scheduler, gate, stake or record changed. Preserved rawhash PDFs,
+append-only parses/identity corrections, source receipts and immutable plan.
+First outcome evaluation has ZERO supported train/test games (125 scheduled
+test fixtures); both families fail. This is insufficient coverage, not evidence
+of better predictions. That result is frozen; do not loosen/re-tune the exposed
+cohort into a pass. Missing/rounded-to-zero minute evidence, unknown returning
+roles and scarce comparable absences remain named holds. Next technical work:
+verify exact workload sources, then preregister a genuinely new study/cohort.
+Existing frozen role shadow remains distinct and continues on existing passes.
+New runtime shares validated-family forecasts between site and Trial candidates,
+preserves baseline when unvalidated, blocks known Out from using an unsupported
+baseline, and keeps unresolved statuses held. Research context/future errors are
+separate from official ledgers; malformed evidence cannot crash normal capture
+or admission. Existing review shows forward comparison counts/errors. No profit
+claim, retroactive regrading, player/quarter/Climb promotion or volume promise.
+Fresh12:54ET source pass:20 free reads/zeroerrors/five quotes including tomorrow;
+all four tonight held, zero offers. BOS not submitted; DET/POR unresolved;
+SAC recent workload accounting incomplete. work/nba-roster-tonight-review.json,
+work/nba-roster-validation-first.log preserve exact results. Release/full gates,
+hosted and live verification remain required before calling the changes shipped.

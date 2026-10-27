@@ -151,6 +151,13 @@ test('NBA projection bars use stored model chances and hide unknown, invalid and
   assert.match(html,/width:27\.0%;background:#003087/);assert.match(html,/width:73\.0%;background:#ce1141/);
   assert.match(html,/not injury-adjusted or a bet/);
  }
+ g.rosterContext={adjustedMarkets:[],note:'Baseline score model.',holds:['Unknown <rotation>']};
+ assert.match(await views.nbaToday(),/Unknown &lt;rotation&gt;/);
+ g.rosterContext={adjustedMarkets:['total'],note:'Roster-adjusted total.',holds:[]};
+ assert.match(await views.nbaToday(),/not injury-adjusted or a bet/);
+ g.rosterContext.adjustedMarkets.push('margin');
+ assert.match(await views.nbaToday(),/validated roster adjustment applied; not a bet/);
+ delete g.rosterContext;
  for (const chance of [undefined,null,-.1,1.1,NaN,true]) {
   g.projection.winProb=chance;
   assert.doesNotMatch(await views.nbaToday(),/class="pc-bar"/);

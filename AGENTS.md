@@ -1,3 +1,18 @@
+# October27 roster experiment — no model promotion
+
+`nba-roster-residual-v1` preserves a fixed chronological archive experiment and
+separate forward ledger. It estimates minutes from observed roles, checks exact
+240-minute/point accounting, and requires comparable rotations with verified
+core absences. Unknown participation, workload, source identity and receipt
+conflicts hold. Archived identity maps cannot clear live availability. Website
+and Trial selection share per-market validated forecasts; failed validation
+leaves the baseline explicitly labeled and cannot clear known Out players.
+The first fixed study has zero supported train/test games; neither market is
+validated. Do not tune that exposed cohort into a pass or claim NBA is ready.
+Capture/grade existing free evidence on existing passes only; shadow errors
+never alter public records. Fix source workload coverage and preregister a new
+study before another model test; keep player/quarter/Climb gates unchanged.
+
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
 ## October27 official NBA participation evidence

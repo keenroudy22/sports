@@ -64,7 +64,7 @@ PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('data/morning-brief/', 'data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
+             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -150,7 +150,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/',
+LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-trial/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
@@ -1520,6 +1520,13 @@ def early_nba_selection(args, now, slot, status):
         import nba_capture
         status['nbaCapture'] = nba_capture.step(now, scheduled=True)
         log(f"NBA capture: {status['nbaCapture']}")
+        if not getattr(args,'no_push',True):
+            import nba_roster_runtime
+            try:
+                status['nbaRosterContextAdded']=nba_roster_runtime.extend_context(datetime.now(timezone.utc),root=ROOT/'data/nba-roster-research',capture_root=ROOT/'data/nba-capture')
+                status['nbaRosterForward']=nba_roster_runtime.record_forward(datetime.now(timezone.utc),root=ROOT/'data/nba-roster-research',capture_root=ROOT/'data/nba-capture')
+            except Exception as error:
+                status['errors'].append(f'NBA roster research: {type(error).__name__}: {error}')
     except Exception as error:
         status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
     try:
@@ -2879,6 +2886,12 @@ def _run(args, now, slot, kinds, status):
             status['nbaTrialGraded'] = nba_trial_runtime.grade(now)
             import nba_player_props
             status['nbaPlayerPropGraded'] = nba_player_props.grade(now)
+            if not args.dry_run and not getattr(args,'no_push',True):
+                import nba_roster_runtime
+                try:
+                    status['nbaRosterGraded']=nba_roster_runtime.grade(now,root=ROOT/'data/nba-roster-research',boxes=[r for p in (ROOT/'data/sport-box').glob('nba-*.jsonl') for r in __import__('boxscores').read_store(p)])
+                except Exception as error:
+                    status['errors'].append(f'NBA roster research grade: {type(error).__name__}: {error}')
             if args.command == 'run' and 'nbaTrial' not in status and not settle_only:
                 status['nbaTrial'] = nba_trial_runtime.admission(now, capture=nba_trial_needs_capture(slot, status))
         except Exception as error:

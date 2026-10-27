@@ -15,6 +15,7 @@ import nba_trial
 import paper
 import hoops_store
 import nba_readiness
+import nba_roster_runtime
 
 ROOT=Path(__file__).resolve().parents[1]
 CONF=Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')
@@ -134,16 +135,25 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
    for reason in set(team_holds.values()):held(reason)
    continue
   holds={r['team'] for r in game_rows if nba_capture.blocks_availability(r.get('status'))}
-  if any(t['id'] in holds for t in g['teams'].values()):
+  affected=any(t['id'] in holds for t in g['teams'].values())
+  unresolved=any(nba_capture.blocks_availability(r.get('status')) and r.get('status')!='Out' for r in game_rows)
+  if affected and (unresolved or now.date()<datetime(2026,10,27).date()):
    held('unresolved team injury status');continue
   summary['eligibleGames']+=1
   if g['season'] not in models:models[g['season']]=model_factory('NBA',g['season'],now.timestamp())
-  prediction=models[g['season']].predict(g['teams']['home']['id'],g['teams']['away']['id'])
+  baseline=models[g['season']].predict(g['teams']['home']['id'],g['teams']['away']['id'])
+  result=nba_roster_runtime.current(g,baseline,now,root) if now.date()>=datetime(2026,10,27).date() else {}
+  prediction,families=nba_roster_runtime.apply_validated(baseline,result)
+  if affected and not families:
+   for reason in result.get('holds') or ['No validated roster adjustment for known absences']:held(reason)
+   continue
+  allowed=set(families) if affected else {'total','margin'}
   for book in ('DraftKings',):
    q=quotes.get((g['providerId'],book))
    if not q:
     held('no stored DraftKings quote');continue
    try:
+    if 'total' not in allowed:raise ValueError('Roster total adjustment not validated')
     total=q['current']['total'];line=total['line'];side='under' if prediction['total']<line else 'over'
     chance=total_chance(prediction['total'],prediction['sdTotal'],line,side)
     if any(abs(total[k])>400 for k in ('over','under')):raise ValueError('extreme total price')
@@ -154,9 +164,10 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
                 'oppositeOdds':total['over' if side=='under' else 'under'],'book':book,
                 'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':chance,
                 'riskUnits':1,'roleChecked':True,'sideVerified':True,'exactLineVerified':True,
-                'game':g,'reasons':reasons,'projection':round(prediction['total'],1),'model':'hoops-v1'})
+                'game':g,'reasons':reasons,'projection':round(prediction['total'],1),'model':nba_roster_runtime.model.VERSION if 'total' in families else 'hoops-v1'})
    except (KeyError,TypeError,ValueError):pass
    try:
+    if 'margin' not in allowed:raise ValueError('Roster margin adjustment not validated')
     pair=price_pair(q['current'],'moneyline')
     chance=prediction.get('homeWinProb')
     if pair and isinstance(chance,(int,float)):
@@ -169,9 +180,10 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
                   'marketType':'moneyline','direction':which,'line':0,'odds':odds,'oppositeOdds':other,'book':book,
                   'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':raw,'riskUnits':1,
                   'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
-                  'projection':round(prediction['margin'],1),'model':'hoops-v1'})
+                  'projection':round(prediction['margin'],1),'model':nba_roster_runtime.model.VERSION if 'margin' in families else 'hoops-v1'})
    except (KeyError,TypeError,ValueError):pass
    try:
+    if 'margin' not in allowed:raise ValueError('Roster margin adjustment not validated')
     pair=price_pair(q['current'],'spreadPrice')
     home=q['current']['home'];away=q['current']['away']
     if pair and home.get('spreadLine') is not None and away.get('spreadLine') is not None:
@@ -186,7 +198,7 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
                   'marketType':'spread','direction':which,'line':line,'odds':odds,'oppositeOdds':other,'book':book,
                   'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':raw,'riskUnits':1,
                   'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
-                  'projection':round(prediction['margin'],1),'model':'hoops-v1'})
+                  'projection':round(prediction['margin'],1),'model':nba_roster_runtime.model.VERSION if 'margin' in families else 'hoops-v1'})
    except (KeyError,TypeError,ValueError):pass
  summary['offers']=len(out)
  return sorted(out,key=lambda r:(-(r['rawChance']-__import__('espn_props').implied(r['odds'])),r['kickoff'],r['id']))

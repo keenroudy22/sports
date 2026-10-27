@@ -12,6 +12,7 @@ import paper
 import nba_trial
 import nba_trial_runtime
 import nba_readiness
+import nba_roster_runtime
 
 ROOT = Path(__file__).resolve().parents[1]
 BOX = ROOT/'data'/'sport-box'
@@ -86,6 +87,10 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
                 if game['season'] not in models:
                     models[game['season']] = (model_factory or paper.model_for)('NBA',game['season'],now.timestamp())
                 projection=models[game['season']].predict(game['teams']['home']['id'],game['teams']['away']['id'])
+                if now.date()>=datetime(2026,10,27).date():
+                    result=nba_roster_runtime.current(game,projection,now,root,boxes=boxes)
+                    projection,families=nba_roster_runtime.apply_validated(projection,result)
+                    row['rosterContext']=nba_roster_runtime.public_context(result,families)
                 if all(isinstance(projection.get(k),(float,int)) and math.isfinite(projection[k]) for k in ('margin','total')):
                     row['projection']={'home':round((projection['total']+projection['margin'])/2,1),
                                        'away':round((projection['total']-projection['margin'])/2,1),

@@ -128,6 +128,8 @@ def availability_for_game(snapshot, game, now, max_hours=4):
     unknown={str(t['id']):'Official NBA availability unavailable' for t in game.get('teams',{}).values()}
     try:
         report=snapshot['official']
+        if report.get('archive') or report.get('analysisOnly'):
+            return snapshot.get('rows',[]),unknown
         if report.get('state')=='unavailable' or not timedelta(0)<=now-boxscores.instant(report['reportedAt'])<=timedelta(hours=max_hours):
             return snapshot.get('rows',[]),unknown
         expected_source='https://ak-static.cms.nba.com/referee/injury/Injury-Report_'+boxscores.instant(report['reportedAt']).astimezone(official.EASTERN).strftime('%Y-%m-%d_%I_%M%p')+'.pdf'

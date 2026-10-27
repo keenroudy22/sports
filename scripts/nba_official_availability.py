@@ -45,12 +45,13 @@ def extract(pdf):
     return result.stdout.decode('utf-8')
 
 
-def parse(text, games, rosters, expected_at, observed_at, source):
+def parse(text, games, rosters, expected_at, observed_at, source, *, archive=False):
     expected_source='https://ak-static.cms.nba.com/referee/injury/Injury-Report_'+expected_at.astimezone(EASTERN).strftime('%Y-%m-%d_%I_%M%p')+'.pdf'
     if source!=expected_source:raise ValueError('Official source URL/report clock mismatch')
     headers=re.findall(r'Injury Report:\s*(\d{2}/\d{2}/\d{2}\s+\d{2}:\d{2}\s+[AP]M)',text)
     moments={datetime.strptime(h,'%m/%d/%y %I:%M %p').replace(tzinfo=EASTERN).astimezone(timezone.utc) for h in headers}
-    if moments!={expected_at} or not timedelta(0)<=observed_at-expected_at<=timedelta(minutes=90):
+    if (moments!={expected_at} or observed_at<expected_at
+            or not archive and observed_at-expected_at>timedelta(minutes=90)):
         raise ValueError('Official report clock unavailable, mismatched or stale')
     if 'Player Name' not in text or 'Current Status' not in text:
         raise ValueError('Official report columns unavailable')
@@ -79,13 +80,15 @@ def parse(text, games, rosters, expected_at, observed_at, source):
             if game:
                 local=boxscores.instant(game['kickoff']).astimezone(EASTERN)
                 if game_time not in (local.strftime('%I:%M'),local.strftime('%H:%M')):
+                    if archive:
+                        game=None;continue  # No historical clearance for this fixture.
                     raise ValueError('Official matchup kickoff differs from stored schedule')
         if not game or not parts:continue
         provider=str(game['providerId'])
         found=names.get((provider,normal(parts[0])))
         if found:
             team_id=found;parts.pop(0)
-            rows.setdefault((provider,team_id),dict(eventId=provider,team=team_id,kickoff=game['kickoff'],submitted=None,rows=[],unmapped=[]))
+            rows.setdefault((provider,team_id),dict(eventId=provider,team=team_id,kickoff=game['kickoff'],submitted=None,rows=[],unmapped=[],unmappedRows=[]))
         if not team_id:
             raise ValueError('Official team identity unavailable')
         record=rows[(provider,team_id)]
@@ -98,16 +101,20 @@ def parse(text, games, rosters, expected_at, observed_at, source):
         player=re.match(r'^(.+?,\s*.+?)\s+('+'|'.join(STATUSES)+r')\b',body)
         if not player:
             if ',' in body or any(re.search(r'\b'+s+r'\b',body) for s in STATUSES):
+                if archive:
+                    record['unmapped'].append('Unrecognized status row');continue
                 raise ValueError('Unrecognized official player/status row')
             continue  # Wrapped reason only, never a participation claim.
         last,first=player[1].split(',',1);identity=normal(first+' '+last)
         record['submitted']=True
         roster=rosters.get(team_id,{})
         roster_ok=(roster.get('team')==team_id and roster.get('season')==game['season']
-                   and timedelta(0)<=observed_at-boxscores.instant(roster['retrievedAt'])<=timedelta(hours=24)) if roster.get('retrievedAt') else False
+                   and (roster.get('identityOnly') is True if archive else
+                        roster.get('identityOnly') is not True and roster.get('retrievedAt')
+                        and timedelta(0)<=observed_at-boxscores.instant(roster['retrievedAt'])<=timedelta(hours=24)))
         matches=[p for p in roster.get('players',[]) if normal(p.get('name'))==identity] if roster_ok else []
         if len(matches)!=1:
-            record['unmapped'].append(player[1]);continue
+            record['unmapped'].append(player[1]);record['unmappedRows'].append(dict(name=player[1],status=player[2]));continue
         record['rows'].append(dict(league='NBA',season=game['season'],team=team_id,
             athleteId=matches[0]['id'],name=matches[0]['name'],status=player[2],
             source=source,date=boxscores.stamp(expected_at),retrievedAt=boxscores.stamp(observed_at)))
@@ -115,8 +122,11 @@ def parse(text, games, rosters, expected_at, observed_at, source):
         ids=[r['athleteId'] for r in record['rows']]
         if len(ids)!=len(set(ids)) or (not record['submitted'] and record['rows']):
             raise ValueError('Conflicting official team/player entries')
-    return dict(reportedAt=boxscores.stamp(expected_at),retrievedAt=boxscores.stamp(observed_at),
+    result=dict(reportedAt=boxscores.stamp(expected_at),retrievedAt=boxscores.stamp(observed_at),
                 source=source,teams=list(rows.values()),scope='Official participation statuses, not expected minutes or a model adjustment')
+    if archive:
+        result.update(archive=True,analysisOnly=True,scope='Retrospectively retrieved official report; identity mapping only, not an original capture or current roster clearance')
+    return result
 
 
 def merge(provider_rows, report, games):
