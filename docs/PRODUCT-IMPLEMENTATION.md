@@ -5132,3 +5132,12 @@ next/evidence to existing240/500 limits;33affected checks pass,limits unchanged.
 Actual Monday Final confirmed X13:05:28.823Z,2115067356493803926;stored private
 Buffer pending0. No recovery mutation or new provider request. Native previews
 are source-generated test fixtures,not new tickets. Hosted/live release still due.
+
+
+October27 bar live-check found main bundle cache gap:HTML still requested app.js?v=206,
+so normal reload could retain the old renderer and lazy manifest. The version guard
+now fingerprints main app.js in index.html after updating lazy fingerprints; missing
+or duplicate main declarations and stale hashes fail release checks. A real-browser
+reload must show Model win chance and the unadjusted-model note. Main/lazy byte-change
+and stale-check regressions pass. Cache fix release/live proof pending; preserve the
+parallel approved units-only source commit and all existing records.

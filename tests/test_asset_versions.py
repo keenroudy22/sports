@@ -8,6 +8,25 @@ import asset_versions
 
 
 class AssetVersionTests(unittest.TestCase):
+    def test_html_invalidates_main_bundle_and_its_lazy_manifest_together(self):
+        with tempfile.TemporaryDirectory() as folder:
+            site=Path(folder)
+            (site/'app-games.js').write_text('games')
+            (site/'app.js').write_text("const GAMES_ASSET = 'app-games.js?v=old';\n")
+            (site/'index.html').write_text('<script src="app.js?v=206" defer></script>')
+            self.assertEqual(asset_versions.sync(site),['app-games.js','app.js'])
+            html=(site/'index.html').read_text()
+            self.assertIn('sha256-'+asset_versions.fingerprint(site/'app.js'),html)
+            self.assertEqual(asset_versions.sync(site,check=True),[])
+            for filename in ('app.js','app-games.js'):
+                with (site/filename).open('a') as f:f.write('// changed')
+                with self.assertRaisesRegex(ValueError,'fingerprint is stale'):asset_versions.sync(site,check=True)
+                asset_versions.sync(site)
+                self.assertNotEqual((site/'index.html').read_text(),html)
+                html=(site/'index.html').read_text()
+            (site/'index.html').write_text('<html></html>')
+            with self.assertRaisesRegex(ValueError,'expected one versioned app.js'):asset_versions.sync(site)
+
     def test_lazy_bundle_version_is_derived_from_its_content(self):
         with tempfile.TemporaryDirectory() as folder:
             site = Path(folder)

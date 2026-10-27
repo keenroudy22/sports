@@ -1,4 +1,4 @@
-"""Keep lazy browser assets keyed to their bytes, not a hand-maintained number."""
+"""Keep browser assets keyed to their bytes, not a hand-maintained number."""
 import argparse
 import hashlib
 import re
@@ -44,6 +44,19 @@ def sync(site=SITE, check=False):
         changed.append(name)
     if changed:
         app.write_text(source, encoding='utf-8', newline='\n')
+    index = site / 'index.html'
+    if index.is_file():
+        html = index.read_text(encoding='utf-8')
+        pattern = re.compile(r'src="app\.js\?v=[^"]+"')
+        wanted = f'src="app.js?v=sha256-{fingerprint(app)}"'
+        matches = pattern.findall(html)
+        if len(matches) != 1:
+            raise ValueError(f'{index}: expected one versioned app.js script')
+        if matches[0] != wanted:
+            if check:
+                raise ValueError(f'{index}: app.js content fingerprint is stale')
+            index.write_text(pattern.sub(wanted, html), encoding='utf-8', newline='\n')
+            changed.append('app.js')
     return changed
 
 
