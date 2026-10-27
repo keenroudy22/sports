@@ -4928,3 +4928,32 @@ privacy (fixed private Climb sizing unchanged), linked daily-card grading and
 MODELPARITY remain open. Archived only prior completed same-automation01a17685;
 current retained. Receipt metadata stays ondev for next ordinary safe release.
 Full evidence:work/overnight-20261027-outcomes.json and associated run artifacts.
+
+
+### October27 daily — results capture isolation, release pending
+
+O-20261025-OWNERFOLLOW resumes the overnight actual-command defect. The results
+command keeps settle,ladder but now enters settlement-only scope: no ordinary
+odds/props, SGO sample, NBA game/prop capture or new NBA Trial admission. Retains
+free final collection/watcher overlay, official/Trial/prop grading and the existing
+stored-price Climb scan. Ordinary ladder13:30 and scheduled capture windows remain.
+Regression replays actual main results dispatch at00:25/17:25/17:55, executes the
+real pre-build path and background/Climb branches with all effects mocked, and
+checks the normal13:30 ladder capture.35focused checks passed. Full release, hosted
+and mobile proof pending; not shipped. No budget/schedule/record policy changes.
+
+Compact morning evidence: WKU moneyline-105 DraftKings0.5u actually reached
+Discord10:51:40Z/X11:06:46.458Z(tweet2115037483243057556),live site131rows.
+All released grade/time/unit comparisons agree; the one ungraded play is today's
+unstarted WKU game. Both activeCFB pages have fresh priced research;99current
+alternate spread quotes,zero supported Climb options. NBA398quote rows represent
+51player-games/312distinct player-game markets, not398independent trials;12/14
+clean days,35/50paper,promotionfalse. Private current-day prep has2CFB/4NBA,
+exact quotes/times/role holds. MorningFinal13:01Z remains scheduled, notsent.
+Buffer2790counted at health snapshot; approved temporary2900essential stop and
+normal2700hold unchanged,analytics paused. NonessentialNBAresearch held; end-zone
+caption overlength is an exact remaining refusal,not permission to drop details.
+Local homepage actually selected3stories10:56:13Z; latest settlement status
+overwrites call counts,so exact morning count unknown. Latest weekly remains
+Oct20local27B1call/0fail161.19s/summaryavailable; today's10:30ETreview still future.
+Evidence work/daily-20261027-outcomes.json,coverage.json,prep.json,climb-today.json.

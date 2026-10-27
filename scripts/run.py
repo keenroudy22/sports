@@ -2375,7 +2375,9 @@ def run(args):
 
 def _run(args, now, slot, kinds, status):
     log(f"run for the {slot.strftime('%-I:%M %p')} ET slot at {et(now)}" + (' (dry run)' if args.dry_run else ''))
-    settle_only = kinds == {'settle'}
+    # Results also keeps the stored-price Climb scan. That extra kind must not
+    # turn a free settlement pass into a new pregame capture/admission window.
+    settle_only = args.command == 'results' or kinds == {'settle'}
     if not args.dry_run:
         sync()
         status['checks'].append('synced')
