@@ -64,7 +64,7 @@ PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('data/morning-brief/', 'data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
+             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -150,7 +150,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-trial/',
+LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
@@ -918,9 +918,12 @@ def choose_straight_tier(candidate, ctx):
     """Prospective owner hierarchy; ordinary safety and card-cap gates still apply."""
     chef = gates.selection_verdict(candidate, ctx, 'chef_pick')
     if chef.ok:
+        if chef.data.get('chefEvidence'):
+            candidate['chefEvidence'] = chef.data['chefEvidence']
         candidate.update(lane='chef_pick', riskUnits=2)
         gates.staking.apply(candidate, ctx.now)
         return chef
+    candidate.pop('chefEvidence', None)
     regular = gates.selection_verdict(candidate, ctx, 'best_bet')
     if regular.ok:
         candidate.update(lane='best_bet', riskUnits=1)
@@ -1008,6 +1011,8 @@ def price(candidate, ctx, now):
     candidate['edge'] = p['edge']
     candidate['probabilityAtPublication'] = {key: p.get(key) for key in
         ('rawChance', 'chance', 'calibrated', 'calibration', 'calibrationN', 'push', 'breakEven', 'edgePoints', 'evPerUnit', 'snapshotAt')}
+    import chef_picks
+    candidate['probabilityAtPublication']['probabilitySpec'] = chef_picks.specification(candidate, ctx)
     candidate['probabilityAtPublication']['evaluatedAt'] = stamp(now)
     candidate['probabilityAtPublication'].update(fairChance=round(selection['fairChance'], 3),
                                                  anchoredChance=selection['anchoredChance'],
@@ -1461,6 +1466,7 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
     verdict = candidate.get('_verdict') or {}
     row = dict(candidate, league=league)
     selection = candidate.get('_selectionDecision') or candidate.get('_selection') or {}
+    import chef_picks
     return {'id': candidate.get('id'), 'league': league, 'season': game.get('season') or now.year,
             'segment': learning.segment_of(row), 'kind': pick_card.play_kind(row), 'title': candidate.get('title'),
             'marketType': candidate.get('marketType'), 'market': candidate.get('market'), 'athleteId': candidate.get('athleteId'),
@@ -1473,6 +1479,8 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
             'evPerUnit': selection.get('evPerUnit', desk.get('evPerUnit')),
             'confidence': candidate.get('confidence'), 'favorite': candidate.get('favorite') is True,
             'lane': candidate.get('lane'), 'fairChance': selection.get('fairChance'),
+            'probabilitySpec': chef_picks.specification(row, ctx),
+            'probabilityPolicy': chef_picks.VERSION, 'modelVersion': candidate.get('modelVersion'),
             'gap': selection.get('gap'), 'kitchenScore': candidate.get('_kitchenScore'),
             'planReasons': selection.get('reasons') or candidate.get('_planReasons'),
             'reasons': selection.get('reasons') or candidate.get('_planReasons') or [],
@@ -1506,6 +1514,17 @@ def nba_trial_needs_capture(slot, status):
     return slot.hour != 23 and 'nbaCapture' not in status
 
 
+def record_nba_roster_capture(args,status):
+    # Same existing capture, zero extra feed requests; shadow never admits plays.
+    if getattr(args,'no_push',True):return
+    import nba_roster_runtime
+    try:
+        status['nbaRosterContextAdded']=nba_roster_runtime.extend_context(datetime.now(timezone.utc),root=ROOT/'data/nba-roster-research',capture_root=ROOT/'data/nba-capture')
+        status['nbaRosterForward']=nba_roster_runtime.record_forward(datetime.now(timezone.utc),root=ROOT/'data/nba-roster-research',capture_root=ROOT/'data/nba-capture')
+    except Exception as error:
+        status['errors'].append(f'NBA roster research: {type(error).__name__}: {error}')
+
+
 def early_nba_selection(args, now, slot, status):
     """Use the existing game capture before lengthy football news checks.
 
@@ -1520,13 +1539,7 @@ def early_nba_selection(args, now, slot, status):
         import nba_capture
         status['nbaCapture'] = nba_capture.step(now, scheduled=True)
         log(f"NBA capture: {status['nbaCapture']}")
-        if not getattr(args,'no_push',True):
-            import nba_roster_runtime
-            try:
-                status['nbaRosterContextAdded']=nba_roster_runtime.extend_context(datetime.now(timezone.utc),root=ROOT/'data/nba-roster-research',capture_root=ROOT/'data/nba-capture')
-                status['nbaRosterForward']=nba_roster_runtime.record_forward(datetime.now(timezone.utc),root=ROOT/'data/nba-roster-research',capture_root=ROOT/'data/nba-capture')
-            except Exception as error:
-                status['errors'].append(f'NBA roster research: {type(error).__name__}: {error}')
+        record_nba_roster_capture(args,status)
     except Exception as error:
         status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
     try:
@@ -2862,6 +2875,7 @@ def _run(args, now, slot, kinds, status):
                 import nba_capture
                 status['nbaCapture'] = nba_capture.step(now, scheduled=True)
                 log(f"NBA capture: {status['nbaCapture']}")
+                record_nba_roster_capture(args,status)
             except Exception as error:
                 status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
                 log(f'NBA capture: {type(error).__name__}: {error}')

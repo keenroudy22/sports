@@ -1,3 +1,28 @@
+# October27 Chef forward-EV policy and separate record
+
+Prospective Chef's Picks from2026-10-27T19:40Z require the existing strict
+selection gates plus30 distinct, already-graded games whose matching probability
+specification was recorded before kickoff. No retrospective/imported grades,
+postgame decisions, duplicated books/players from one game, future corrections
+or changed probability specification can supply proof. Compare probability error
+with the same observations' fair market; require improvement and a conservative
+price check after at least2percentage-points allowance plus measured cohort error.
+This is an uncertainty allowance, not a confidence guarantee for one game. No
+quota, new feed or stake increase: Chef1u, ordinary0.5u; existing caps remain.
+A held Chef may still qualify as ordinary through all ordinary gates. Release
+rechecks the proof; trusted already-published originals keep their labels/stakes.
+Freeze the policy/specification with future decision rows and Chef evidence with
+new qualified publications. Record shows Chef results and forward-policy subset
+separately while retaining them in combined official totals; promo refunds stay
+outside captured-price units. NBA remains in its separate Trial, not Chef.
+
+NBA roster v2/v3 research is separate from frozen v1. Formal disjoint v2 study
+produced5 resolved test games; fixed-coefficient later-source confirmation with
+v3 input coverage correction produced7/131, insufficient. Neither family passed.
+Do not tune exposed cases or hand-enable readiness. New v3 forward shadow runs
+on existing captures; preserve old grading, baseline/public gate and all source,
+role, quarter/player/Climb holds. Source receipt and report clocks remain distinct.
+
 # October27 owner correction: moneyline/model agreement
 
 New football Best Bet, Chef's Pick and Hot Plate moneylines must select the

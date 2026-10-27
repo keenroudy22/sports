@@ -2135,6 +2135,9 @@ def board_picks(first, latest, by_id, identities):
                      'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,
                      'priceEstimated': pick.get('priceEstimated') is True,
                      'probabilityAtPublication': probability or None,
+                     'chefEvidence': ({key: pick['chefEvidence'].get(key) for key in
+                                      ('policy','n','evaluatedAt','errorAllowance','conservativeChance')}
+                                      if isinstance(pick.get('chefEvidence'),dict) else None),
                      'reasoning': pick.get('reasoning'),
                      'reasons': public_sentences(reasons.get(key) if isinstance(reasons, dict) else None,
                                                  reasoning.get('context'), pick.get('why'), limit=4),

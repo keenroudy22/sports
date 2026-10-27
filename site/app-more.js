@@ -351,13 +351,20 @@
     if (tab === 'official') {
       const straight = rows.filter(p => !C.isParlay(p) && C.isHeadline(p));
       const notPosted = rows.filter(p => !C.countsPublic(p));
-      const laneResults = Object.entries({ chef_pick: "Chef's Picks", gut_call: 'Full Sends', safer_combo: 'Safer combos', upset: 'Upset picks' }).map(([lane, name]) => {
+      const laneResults = Object.entries({ gut_call: 'Full Sends', safer_combo: 'Safer combos', upset: 'Upset picks' }).map(([lane, name]) => {
         const items = rows.filter(p => p.lane === lane && C.countsPublic(p) && !C.isUnpricedImport(p));
         if (!items.length) return '';
         const stats = C.summaryOf(items, 10);
         const ordered = [...items].sort((a, b) => String(b.kickoff || b.settledAt).localeCompare(String(a.kickoff || a.settledAt)));
         return section(`${name} · ${wl(stats)} · ${units(stats.units)}`, `<div class="receipts">${ordered.map(p => receipt(p, clvById)).join('')}</div>`);
       }).join('');
+      const chef = C.chefRecord(rows);
+      const chefClose = clvSummary(chef.rows.map(p => ({ clv: clvById.get(p.id) })));
+      const chefPanel = section("Chef's Picks", `<div class="card" id="chef-record"><p><b>${esc(wl(chef.all))}</b> · ${esc(units(chef.captured.units))} at recorded prices · ${esc(chef.all.pending)} open</p>
+        <p class="small muted">Included in the overall best-bet record. New picks use 1u; earlier stakes stay as posted. Promo credits are excluded from these units.</p>
+        <p class="small">Forward EV policy: ${esc(wl(chef.forward))} · ${esc(units(chef.forward.units))} · ${esc(chef.forward.pending)} open.</p>
+        <p class="small muted">${chefClose.measured ? `Posted price beat the close on ${chefClose.beat} of ${chefClose.measured} measured plays; ${chefClose.tied} tied.` : 'Closing-price comparison: no measured plays yet.'} Passing on a day is allowed.</p>
+        ${chef.rows.length ? `<div class="receipts">${[...chef.rows].sort((a,b) => String(b.kickoff).localeCompare(String(a.kickoff))).map(p => receipt(p, clvById)).join('')}</div>` : '<p class="small muted">No Chef’s Picks in this view yet.</p>'}</div>`);
       const rec = C.recordBreakdown(straight);
       rec.captured.roi = OWNER_FLAGS.roi ? roiOf(rec.captured) : null;
       const points = cumulativeUnits(straight, cal.headlineUnits);
@@ -373,7 +380,7 @@
       const compact = items => { const t = C.summaryOf(items); return items.length ? `${wl(t)}${t.pending ? ` · ${t.pending} pending` : ''}` : '—'; };
       const archiveRows = [...archiveGroups].sort((a, b) => b[0].localeCompare(a[0])).map(([key, items]) => { const [lg, season, phase] = key.split('|');
         return [`${lg} ${season} · ${phase === 'playoffs' ? 'Playoffs' : 'Regular season'}`, compact(items.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p) && C.isHeadline(p))), compact(items.filter(p => C.isParlay(p) && !C.isLadder(p) && !C.isUnpricedImport(p) && C.countsPublic(p))), compact(items.filter(p => C.isLadder(p) && C.countsPublic(p)))]; });
-      return `${top}${tabs}${pickers}${calendar(every, clvById)}${k.html}
+      return `${top}${tabs}${pickers}${calendar(every, clvById)}${k.html}${chefPanel}
         ${section('Units over the season', `<div class="card">${unitsChart(points) || '<p class="muted small">Not enough graded plays yet.</p>'}<p class="chart-cap">${esc(wl(rec.captured))} at posted prices · ${esc(units(rec.captured.units))}${rec.captured.roi != null ? ` · ROI ${rec.captured.roi > 0 ? '+' : ''}${rec.captured.roi.toFixed(1)}%` : ''}. ${rec.assumed.wins + rec.assumed.losses ? `${esc(wl(rec.assumed))} more from before prices were recorded, counted at an assumed −115 and kept out of the units line.` : ''}${rec.credits ? ` Promo credits of ${rec.credits}u are not counted as winnings.` : ''}</p></div>`)}
         ${open.length ? section('Not graded yet', `<div class="receipts">${open.map(p => receipt(p, clvById)).join('')}</div>`, '', 'Graded at the price we posted, even if the price has moved since.') : ''}
         ${notPosted.length ? section('Not posted', `<div class="receipts">${notPosted.map(p => `<p><a href="#pick/${esc(p.id)}">${esc(niceTitle(p.displayTitle || p.title))}</a> · Not posted; excluded from the record.</p>`).join('')}</div>`) : ''}

@@ -1100,9 +1100,23 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     if sample['spotHit'] < pricing.break_even(odds) - .01:
         return Decision(False, 'plan_selection', 'the observed spot record is below the price gate',
                         {**numbers, 'spot': sample})
+    chef_evidence = None
+    if lane == 'chef_pick':
+        import chef_picks
+        original = ctx.first.get(candidate.get('id')) or {}
+        published = chef_picks.instant(original.get('publishedAt'))
+        if ctx.now >= chef_picks.FROM and not (published and published < chef_picks.FROM):
+            # Never trust private cached approval on a later release attempt.
+            try:
+                chef_evidence = chef_picks.evidence(candidate, ctx, numbers)
+            except (OSError, ValueError, TypeError, KeyError):
+                chef_evidence = dict(ok=False,reason='Chef forward evidence unavailable',policy=chef_picks.VERSION)
+            if not chef_evidence['ok']:
+                return Decision(False, 'chef_forward_ev', chef_evidence['reason'], chef_evidence)
     tier = 'chef_pick' if lane == 'chef_pick' else 'big_gap' if gap >= 20 else 'best_bet'
     return Decision(True, 'plan_selection', f'{tier}: anchored {chance:.1%}, gap {gap:.1f}, spot {sample["spotHit"]:.1%}',
-                    {**numbers, 'tier': tier, 'spot': sample, 'reasons': reasons})
+                    {**numbers, 'tier': tier, 'spot': sample, 'reasons': reasons,
+                     **({'chefEvidence': chef_evidence} if chef_evidence else {})})
 
 
 TRUST = {('NFL', 'recYds'): 1.2, ('NFL', 'car'): 1.15, ('NFL', 'rec'): .8,

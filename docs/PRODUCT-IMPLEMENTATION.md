@@ -5285,3 +5285,46 @@ Owner proofs:kookn-sam-houston-withdrawn-live-2026-10-27.png and
 kookn-nba-roster-desktop-2026-10-27.png. Viewport reset; website tab retained.
 Verification metadata staysdev for the next ordinary release; no second
 deployment merely to publish this receipt.
+
+
+## October27 — Chef forward evidence and NBA study continuation (release pending)
+
+Owner requests implementation, tests, separate Chef record, and continued NBA.
+Chef's Pick remains1u/ordinary0.5u with existing shared caps and no quota.
+New policy chef-forward-ev-v1 effective19:40Z retains every existing strict
+price/news/spot/exposure check and requires30 independently graded forward games
+with the same recorded probability specification, direction and nearby predicted
+chance. Capture model/spec on every future decision, not just selected winners.
+Historical rows lack this provenance and are not retrofitted. Freeze pregame
+probability and exact quote; exclude decisions after kickoff, future grades,
+old/changed specifications, duplicate books/players in one game, imported rows,
+and stale receipts. Compare probability squared errors against fair market on
+the same games; buffered chance must still beat the actual offered price. Buffer
+is max2pp or mean overconfidence plus one-sided cohort standard-error allowance;
+not an individual-game confidence claim or guarantee of profit. May fall back to
+ordinary0.5u only through its unchanged gates; current proof is checked again on
+release. Trusted published history keeps original tier, stakes and settlement.
+Record → Best bets always shows Chef subset, units excluding promotional credits,
+open count, separate new-policy subset and measured posted-versus-close counts.
+Overall official record still includes every Chef. No new post type or request.
+
+NBA input source work preserves frozen v1 (0 supported games) and archived PDFs.
+V2 handles explicit numeric zero correctly but never invents missing minutes;
+new disjoint35-date study has34train/5resolvedtest, no approved family. Its four
+ridge coefficients were frozen before later-source confirmation. V3 separates
+core and reserve applicability; exact131 previously unsupported test cases and
+17 exclusions retained, original5 supported feature vectors unchanged. One fixed
+pretip report per group, no timestamp probing or outcome-based selection. Initial
+20 new archive requests plus69 later-source requests in bounded32/32/5 passes;
+no metered allowance or scheduler change. Separate namespaced NBA identities use
+primary NBA pages only; identity repair is not live eligibility. V3 confirmation
+has7resolvedtest/131 scheduled: fails sample/coverage and worsens error. Margin
+MAE10.525baseline/11.621adjusted; total18.845/18.938. No family promoted. Source,
+plan, fitted coefficient hashes, raw receipts and failed measurements preserved.
+New v3 shadow/runtime retains measured per-family gate, baseline if unsupported,
+and existing injury/role holds; old v1 outcomes continue grading. New trial prices
+must be captured after the supporting injury report; missing/future report clock
+holds. NBA remains separate0.5u/max1daily Trial; props/quarter/Climb stay gated.
+Normal1894Python(twoexpectedskips)/285Node and176bounded-release tests passed.
+A later unknown-report supersession regression also passes; deploy reruns exact
+final source in normal/clean exports. Hosted/live verification still pending.

@@ -13,7 +13,7 @@ MODULES = (
     'test_integrity', 'test_gates', 'test_staking', 'test_release_queue',
     'test_moneyline_release', 'test_post_windows', 'test_parlay_caption',
     'test_social_age_notice', 'test_discord_post', 'test_record_audit',
-    'test_publication_guard',
+    'test_publication_guard', 'test_chef_picks',
 )
 
 

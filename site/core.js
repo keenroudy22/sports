@@ -440,7 +440,7 @@
       researched: summarizePicks(straight.filter(p => !p.modelLean), minimum),
       model: summarizePicks(straight.filter(p => p.modelLean), minimum),
       allPlays: summarizePicks(counted.filter(p => !isLadder(p)), minimum),
-      lanes: Object.fromEntries(['gut_call','safer_combo','upset','special','nba','soccer','cbb']
+      lanes: Object.fromEntries(['chef_pick','gut_call','safer_combo','upset','special','nba','soccer','cbb']
         .map(lane => [lane, laneRecord(counted, lane, minimum)])) };
   };
   /* The simple public scorecard: the current model's final pregame calls for the three game markets and player
@@ -476,6 +476,16 @@
      one). Fun parlays (smaller stakes) and the Week 1 legs posted before prices were recorded get their own lines.
      The Pick of the Day record counts the days its post went out. */
   const isParlay = p => p.kind === 'parlays' || Boolean((p.legs || []).length) || Boolean(p.parlayType);
+  const chefRecord = picks => {
+    const rows = picks.filter(p => p.lane === 'chef_pick' && !isParlay(p)
+      && !isUnpricedImport(p) && headlineDeliveryEligible(p));
+    const priced = rows.filter(p => typeof p.odds === 'number' && !p.priceAssumed);
+    const clean = priced.map(p => p.earlyExit && p.result === 'loss'
+      ? { ...p, earlyExit: false, units: -stakeOf(p) } : p);
+    const forward = clean.filter(p => p.chefEvidence?.policy === 'chef-forward-ev-v1');
+    return { rows, all: summarizePicks(rows, 1), captured: summarizePicks(clean, 1),
+      forward: summarizePicks(forward, 1) };
+  };
   const recordBreakdown = picks => {
     const allStraight = picks.filter(p => !isParlay(p));
     const straight = allStraight.filter(isHeadline);
@@ -486,7 +496,7 @@
       ? { ...p, earlyExit: false, units: -stakeOf(p) } : p);
     return { all: summarizePicks(straight), captured: summarizePicks(beforeCredits), assumed: summarizePicks(assumed),
       allPlays: summarizePicks(picks.filter(p => !isLadder(p))),
-      lanes: Object.fromEntries(['gut_call','safer_combo','upset','special','nba','soccer','cbb']
+      lanes: Object.fromEntries(['chef_pick','gut_call','safer_combo','upset','special','nba','soccer','cbb']
         .map(lane => [lane, laneRecord(picks, lane)])),
       credits: captured.filter(p => p.earlyExit && p.result === 'loss').reduce((sum, p) => sum + stakeOf(p), 0) };
   };
@@ -595,7 +605,7 @@
     return {
       season: summarizePicks(straight, 10),
       allPlays: summarizePicks(counted.filter(p => !isLadder(p)), 10),
-      lanes: Object.fromEntries(['gut_call','safer_combo','upset','special','nba','soccer','cbb']
+      lanes: Object.fromEntries(['chef_pick','gut_call','safer_combo','upset','special','nba','soccer','cbb']
         .map(lane => [lane, laneRecord(counted, lane, 10)])),
       week: summarizePicks(straight.filter(p => weekOf(when(p)) === week), 10),
       lastDay: last ? { day: last, ...summarizePicks(straight.filter(p => dayOf(when(p)) === last), 10) } : null,
@@ -858,5 +868,5 @@
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

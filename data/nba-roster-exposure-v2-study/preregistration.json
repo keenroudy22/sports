@@ -1,0 +1,32 @@
+{
+ "development": "Coverage-only pilots before this freeze; no fitted coefficients or test errors viewed. Initial32-date pilot remains preserved; final35-date study includes all disjoint dates available.",
+ "frozenAt": "2026-10-27T19:19:17.048222+00:00",
+ "modelSourceHash": "debea5ba3e5326938dc0e9c111ef1a484a4ae2df4e547a4442187904b9ad8bfc",
+ "outcomeMetricsExposed": false,
+ "planHash": "1486eba126400a8374112233ebd01a54ce17fe1a1478d8a5a114f888b95b3df8",
+ "policy": {
+  "bootstrapReplicates": 1000,
+  "bootstrapSeed": 20261027,
+  "contextGames": 5,
+  "features": [
+   "ownRecentScore",
+   "opponentRecentAllowed",
+   "ownExposureChange",
+   "opponentExposureChange"
+  ],
+  "minimumContext": 3,
+  "minimumCoverage": 0.25,
+  "minimumTestGames": 30,
+  "minimumTrainGames": 30,
+  "ridge": 10,
+  "rotationGames": 3,
+  "shrinkGames": 10,
+  "version": "nba-roster-exposure-v2"
+ },
+ "qualityGates": {
+  "minimumTestCoreAbsenceGames": 10,
+  "minimumTrainCoreAbsenceGames": 10
+ },
+ "scope": "Retrospective disjoint study, not untouched forward evidence; v1 retained unchanged",
+ "validationSourceHash": "be67bfc1dd6db93728d2a9e67edfa86307cb5d75a8fe939e0d1683563196ec0b"
+}

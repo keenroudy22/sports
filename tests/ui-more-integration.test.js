@@ -104,3 +104,19 @@ test('the real app shared interface renders every lazy view with fixture data', 
   routeFixture.climbRoute.weekly.weekStart = '2026-10-12';
   assert.doesNotMatch(await views.record({tab:'climb'}), /This week: 1 of 3/);
 });
+
+test('official record always renders the separate Chef record without changing overall results', async () => {
+  const {api,factory}=loadBrowserApi();
+  const picks=[{id:'chef',league:'CFB',season:2026,kind:'props',lane:'chef_pick',posted:true,
+    riskUnits:1,odds:100,result:'loss',kickoff:'2026-10-28T00:00Z',settledAt:'2026-10-28T04:00Z',
+    title:'Player over 2.5 catches',chefEvidence:{policy:'chef-forward-ev-v1'}}];
+  const ctx=api.moreContext({allPicks:async()=>picks, get:async()=>({}),
+    maybe:async path=>path==='scoreboard.json'?{picks:{rows:[{id:'chef',clv:1}]}}:null});
+  Object.assign(ctx.state,{league:'CFB',record:{season:'current',phase:'current',q:''}});
+  const html=await factory(ctx).record({tab:'official'});
+  assert.match(html,/id="chef-record"/);
+  assert.match(html,/Forward EV policy/);
+  assert.match(html,/Included in the overall best-bet record/);
+  assert.match(html,/beat the close on 1 of 1/);
+  assert.equal(C.recordBreakdown(picks).all.losses,1);
+});

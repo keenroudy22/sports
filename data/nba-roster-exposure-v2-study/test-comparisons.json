@@ -1,0 +1,1170 @@
+{
+ "analysisOnly": true,
+ "rows": [
+  {
+   "actualAway": 106,
+   "actualHome": 92,
+   "adjusted": {
+    "awayAdjustment": -1.947948046609045,
+    "homeAdjustment": -1.041287292420014,
+    "homeWinProb": 0.34269669806141545,
+    "margin": -5.8488966166747955,
+    "model": "nba-roster-exposure-v2",
+    "sdMargin": 14.43764059397947,
+    "sdTotal": 18.354415888015847,
+    "sparse": false,
+    "total": 220.14744058074547
+   },
+   "baseline": {
+    "homeWinProb": 0.3163742382319133,
+    "margin": -6.755557370863826,
+    "sdMargin": 14.137048577755705,
+    "sdTotal": 18.118919922532616,
+    "sparse": false,
+    "total": 223.13667591977452
+   },
+   "close": {
+    "books": 1,
+    "spread": 5.5,
+    "total": 224.5
+   },
+   "day": "2026-03-01",
+   "eventId": "401810730",
+   "feature": {
+    "reportedAt": "2026-03-01T17:00:00Z",
+    "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-03-01_12_00PM.pdf",
+    "teams": {
+     "away": {
+      "comparison": {
+       "allowed": 0.5823791830361793,
+       "allowedSE": 0.392248671687962,
+       "contextEvents": [
+        "NBA-401810651",
+        "NBA-401810669",
+        "NBA-401810683",
+        "NBA-401810697",
+        "NBA-401810713"
+       ],
+       "coreAbsences": [
+        {
+         "exposureFeature": -0.0,
+         "id": "4432810",
+         "name": "Isaiah Stewart",
+         "recentMinutes": [
+          0.0,
+          0.0,
+          0.0
+         ],
+         "replacementRate": 0.3680297397769517,
+         "scoringRate": 0.38095238095238093
+        }
+       ],
+       "exposure": 0.0,
+       "exposureSE": 0.0,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 1.792016837051718,
+       "scoreSE": 1.65198961389704,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [
+        "4432810"
+       ],
+       "eligibleIds": [
+        "2596112",
+        "2991043",
+        "3157465",
+        "4066372",
+        "4278562",
+        "4397882",
+        "4432107",
+        "4432166",
+        "4433621",
+        "4683771",
+        "4684742",
+        "5107199",
+        "6440"
+       ],
+       "knownOut": [
+        "4432810",
+        "4592187",
+        "4700852",
+        "4906923",
+        "5107818"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810683",
+        "NBA-401810697",
+        "NBA-401810713"
+       ],
+       "sourceReceipts": [
+        "2026-10-14T01:25:47Z",
+        "2026-10-14T00:25:39Z",
+        "2026-10-13T20:41:48Z"
+       ],
+       "team": "8",
+       "unresolved": []
+      }
+     },
+     "home": {
+      "comparison": {
+       "allowed": -1.259743708318217,
+       "allowedSE": 1.1160739216174957,
+       "contextEvents": [
+        "NBA-401810655",
+        "NBA-401810666",
+        "NBA-401810682",
+        "NBA-401810695",
+        "NBA-401810707"
+       ],
+       "coreAbsences": [],
+       "exposure": 0.0,
+       "exposureSE": 0.0,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 1.0714541170030334,
+       "scoreSE": 1.0791459316833203,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [],
+       "eligibleIds": [
+        "3133635",
+        "3150844",
+        "4065654",
+        "4066320",
+        "4277847",
+        "4278572",
+        "4348700",
+        "4432165",
+        "4432573",
+        "4702382",
+        "4712849",
+        "5105806",
+        "5214637",
+        "5239561"
+       ],
+       "knownOut": [
+        "4397204",
+        "4566434",
+        "4593034"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810682",
+        "NBA-401810695",
+        "NBA-401810707"
+       ],
+       "sourceReceipts": [
+        "2026-10-14T01:25:48Z",
+        "2026-10-14T00:25:42Z",
+        "2026-10-14T00:25:34Z"
+       ],
+       "team": "19",
+       "unresolved": []
+      }
+     }
+    }
+   }
+  },
+  {
+   "actualAway": 118,
+   "actualHome": 138,
+   "adjusted": {
+    "awayAdjustment": -3.0602749898876427,
+    "homeAdjustment": 1.5434849199178513,
+    "homeWinProb": 0.7741349152122309,
+    "margin": 11.842288285724141,
+    "model": "nba-roster-exposure-v2",
+    "sdMargin": 15.736555365399223,
+    "sdTotal": 18.993465041108717,
+    "sparse": false,
+    "total": 236.39731129977565
+   },
+   "baseline": {
+    "homeWinProb": 0.6962184641877411,
+    "margin": 7.238528375918648,
+    "sdMargin": 14.094939846492453,
+    "sdTotal": 17.657289394915193,
+    "sparse": false,
+    "total": 237.91410136974542
+   },
+   "close": {
+    "books": 1,
+    "spread": -11.5,
+    "total": 244.5
+   },
+   "day": "2026-03-08",
+   "eventId": "401810780",
+   "feature": {
+    "reportedAt": "2026-03-08T16:00:00Z",
+    "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-03-08_12_00PM.pdf",
+    "teams": {
+     "away": {
+      "comparison": {
+       "allowed": 1.7613351531961219,
+       "allowedSE": 0.8836396645992881,
+       "contextEvents": [
+        "NBA-401810705",
+        "NBA-401810720",
+        "NBA-401810734",
+        "NBA-401810740",
+        "NBA-401810755"
+       ],
+       "coreAbsences": [
+        {
+         "exposureFeature": -0.11481876332622609,
+         "id": "4606840",
+         "name": "Jamir Watkins",
+         "recentMinutes": [
+          18.0,
+          0.0,
+          0.0
+         ],
+         "replacementRate": 0.5107142857142857,
+         "scoringRate": 0.5298507462686567
+        },
+        {
+         "exposureFeature": -0.0,
+         "id": "4997537",
+         "name": "Tristan Vukcevic",
+         "recentMinutes": [
+          0.0,
+          0.0,
+          0.0
+         ],
+         "replacementRate": 0.5107142857142857,
+         "scoringRate": 0.5789473684210527
+        },
+        {
+         "exposureFeature": -0.9998599439775915,
+         "id": "5174563",
+         "name": "Kyshawn George",
+         "recentMinutes": [
+          22.0,
+          0.0,
+          0.0
+         ],
+         "replacementRate": 0.5107142857142857,
+         "scoringRate": 0.6470588235294118
+        },
+        {
+         "exposureFeature": -3.820481049562681,
+         "id": "2581184",
+         "name": "Anthony Gill",
+         "recentMinutes": [
+          0.0,
+          0.0,
+          34.0
+         ],
+         "replacementRate": 0.5107142857142857,
+         "returnAfterObservedFullRole": true,
+         "scoringRate": 0.2944606413994169
+        },
+        {
+         "exposureFeature": -1.7688095238095236,
+         "id": "4395650",
+         "name": "Leaky Black",
+         "recentMinutes": [
+          0.0,
+          31.0,
+          39.0
+         ],
+         "replacementRate": 0.5107142857142857,
+         "returnAfterObservedFullRole": true,
+         "scoringRate": 0.28
+        }
+       ],
+       "exposure": -6.703969280676023,
+       "exposureSE": 3.870538468837284,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 0.08147488180409443,
+       "scoreSE": 2.146705124030771,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [
+        "4606840",
+        "4997537",
+        "5174563"
+       ],
+       "eligibleIds": [
+        "2581184",
+        "4277905",
+        "4395650",
+        "4432173",
+        "4432907",
+        "4683742",
+        "4845374",
+        "4868423",
+        "5104155",
+        "5144126",
+        "5238230"
+       ],
+       "knownOut": [
+        "3136776",
+        "4606840",
+        "4997537",
+        "5105592",
+        "5174563",
+        "6583"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810734",
+        "NBA-401810740",
+        "NBA-401810755"
+       ],
+       "sourceReceipts": [
+        "2026-10-13T17:00:33Z",
+        "2026-10-13T17:00:30Z",
+        "2026-10-13T14:28:36Z"
+       ],
+       "team": "27",
+       "unresolved": []
+      }
+     },
+     "home": {
+      "comparison": {
+       "allowed": 0.5914684364265089,
+       "allowedSE": 2.190691850588001,
+       "contextEvents": [
+        "NBA-401810722",
+        "NBA-401810732",
+        "NBA-401810746",
+        "NBA-401810762",
+        "NBA-401810767"
+       ],
+       "coreAbsences": [
+        {
+         "exposureFeature": 1.3362298725723885,
+         "id": "3907497",
+         "name": "Dejounte Murray",
+         "recentMinutes": [
+          28.0,
+          0.0,
+          30.0
+         ],
+         "replacementRate": 0.38735177865612647,
+         "returnAfterObservedFullRole": true,
+         "scoringRate": 0.5877862595419847
+        }
+       ],
+       "exposure": 1.3362298725723885,
+       "exposureSE": 0.7714726766288879,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 0.3989315271375773,
+       "scoreSE": 1.6994680887127491,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [],
+       "eligibleIds": [
+        "3155535",
+        "3442",
+        "3907497",
+        "4277813",
+        "4277956",
+        "4395628",
+        "4397136",
+        "4397688",
+        "4432185",
+        "4576086",
+        "4683750",
+        "4869780",
+        "4997538",
+        "5061589",
+        "5144091"
+       ],
+       "knownOut": [
+        "4432068",
+        "4432180",
+        "4433268"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810746",
+        "NBA-401810762",
+        "NBA-401810767"
+       ],
+       "sourceReceipts": [
+        "2026-10-13T14:28:42Z",
+        "2026-10-13T14:28:31Z",
+        "2026-10-13T11:14:29Z"
+       ],
+       "team": "3",
+       "unresolved": []
+      }
+     }
+    }
+   }
+  },
+  {
+   "actualAway": 123,
+   "actualHome": 87,
+   "adjusted": {
+    "awayAdjustment": -0.4084140460443728,
+    "homeAdjustment": -8.066611960706949,
+    "homeWinProb": 0.20733993076497592,
+    "margin": -15.058753876839585,
+    "model": "nba-roster-exposure-v2",
+    "sdMargin": 18.461463766377765,
+    "sdTotal": 21.3994254455891,
+    "sparse": false,
+    "total": 219.13056088705943
+   },
+   "baseline": {
+    "homeWinProb": 0.2985924943449024,
+    "margin": -7.400555962177009,
+    "sdMargin": 14.004190606656213,
+    "sdTotal": 17.69822362700859,
+    "sparse": false,
+    "total": 227.60558689381077
+   },
+   "close": {
+    "books": 1,
+    "spread": 17.5,
+    "total": 221.5
+   },
+   "day": "2026-04-07",
+   "eventId": "401811010",
+   "feature": {
+    "reportedAt": "2026-04-07T22:00:00Z",
+    "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-04-07_06_00PM.pdf",
+    "teams": {
+     "away": {
+      "comparison": {
+       "allowed": -0.6164448115407547,
+       "allowedSE": 1.1357230570913235,
+       "contextEvents": [
+        "NBA-401810925",
+        "NBA-401810944",
+        "NBA-401810952",
+        "NBA-401810971",
+        "NBA-401810994"
+       ],
+       "coreAbsences": [
+        {
+         "exposureFeature": -2.3032147344549663,
+         "id": "4593803",
+         "name": "Jalen Williams",
+         "recentMinutes": [
+          0.0,
+          23.0,
+          26.0
+         ],
+         "replacementRate": 0.46301369863013697,
+         "scoringRate": 0.6040268456375839
+        },
+        {
+         "exposureFeature": -1.1328147142182334,
+         "id": "4222252",
+         "name": "Isaiah Hartenstein",
+         "recentMinutes": [
+          0.0,
+          20.0,
+          19.0
+         ],
+         "replacementRate": 0.46301369863013697,
+         "returnAfterObservedFullRole": true,
+         "scoringRate": 0.3297413793103448
+        }
+       ],
+       "exposure": -3.4360294486731995,
+       "exposureSE": 1.9837925271349532,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 3.05936526117697,
+       "scoreSE": 1.5342358996306642,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [
+        "4593803"
+       ],
+       "eligibleIds": [
+        "2991350",
+        "3133626",
+        "4222252",
+        "4278073",
+        "4395702",
+        "4397020",
+        "4397183",
+        "4432823",
+        "4433255",
+        "4592435",
+        "4683692",
+        "4683778",
+        "4684208",
+        "4697270",
+        "4900671",
+        "5159925"
+       ],
+       "knownOut": [
+        "4593803",
+        "5061603"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810952",
+        "NBA-401810971",
+        "NBA-401810994"
+       ],
+       "sourceReceipts": [
+        "2026-10-11T13:06:15Z",
+        "2026-10-11T10:23:11Z",
+        "2026-10-11T06:02:56Z"
+       ],
+       "team": "25",
+       "unresolved": []
+      }
+     },
+     "home": {
+      "comparison": {
+       "allowed": 1.5750577068099345,
+       "allowedSE": 2.2789170579979507,
+       "contextEvents": [
+        "NBA-401810930",
+        "NBA-401810953",
+        "NBA-401810958",
+        "NBA-401810971",
+        "NBA-401810995"
+       ],
+       "coreAbsences": [
+        {
+         "exposureFeature": -4.921552127162226,
+         "id": "1966",
+         "name": "LeBron James",
+         "recentMinutes": [
+          31.0,
+          26.0,
+          39.0
+         ],
+         "replacementRate": 0.3911290322580645,
+         "scoringRate": 0.5449275362318841
+        },
+        {
+         "exposureFeature": 0.0,
+         "id": "2990992",
+         "name": "Marcus Smart",
+         "recentMinutes": [
+          0.0,
+          0.0,
+          0.0
+         ],
+         "replacementRate": 0.3911290322580645,
+         "scoringRate": 0.21505376344086022
+        },
+        {
+         "exposureFeature": -13.07397107897664,
+         "id": "3945274",
+         "name": "Luka Doncic",
+         "recentMinutes": [
+          34.0,
+          26.0,
+          0.0
+         ],
+         "replacementRate": 0.3911290322580645,
+         "scoringRate": 1.0448275862068965
+        },
+        {
+         "exposureFeature": -3.753474954104379,
+         "id": "4066457",
+         "name": "Austin Reaves",
+         "recentMinutes": [
+          37.0,
+          27.0,
+          0.0
+         ],
+         "replacementRate": 0.3911290322580645,
+         "scoringRate": 0.5670731707317073
+        }
+       ],
+       "exposure": -21.748998160243247,
+       "exposureSE": 12.556789942421114,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": -0.3875645411886448,
+       "scoreSE": 1.3979141819525225,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [
+        "1966",
+        "2990992",
+        "3945274",
+        "4066457"
+       ],
+       "eligibleIds": [
+        "2960236",
+        "3913174",
+        "4066648",
+        "4278077",
+        "4278129",
+        "4397077",
+        "4431695",
+        "4592691",
+        "4683686",
+        "4683736",
+        "4683774",
+        "4897943",
+        "5060631"
+       ],
+       "knownOut": [
+        "1966",
+        "2990992",
+        "3945274",
+        "4066457"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810958",
+        "NBA-401810971",
+        "NBA-401810995"
+       ],
+       "sourceReceipts": [
+        "2026-10-11T10:23:20Z",
+        "2026-10-11T10:23:11Z",
+        "2026-10-11T06:02:54Z"
+       ],
+       "team": "13",
+       "unresolved": []
+      }
+     }
+    }
+   }
+  },
+  {
+   "actualAway": 108,
+   "actualHome": 113,
+   "adjusted": {
+    "awayAdjustment": -3.3744407267692353,
+    "homeAdjustment": -3.6932824895061476,
+    "homeWinProb": 0.7509347412521222,
+    "margin": 9.977587383566867,
+    "model": "nba-roster-exposure-v2",
+    "sdMargin": 14.728497121369738,
+    "sdTotal": 18.497293344629586,
+    "sparse": false,
+    "total": 213.36392208166458
+   },
+   "baseline": {
+    "homeWinProb": 0.7662916724275465,
+    "margin": 10.29642914630378,
+    "sdMargin": 14.168967585040841,
+    "sdTotal": 18.054940488659035,
+    "sparse": false,
+    "total": 220.43164529793995
+   },
+   "close": {
+    "books": 1,
+    "spread": 12.5,
+    "total": 222.5
+   },
+   "day": "2026-04-12",
+   "eventId": "401811041",
+   "feature": {
+    "reportedAt": "2026-04-12T21:00:00Z",
+    "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-04-12_05_00PM.pdf",
+    "teams": {
+     "away": {
+      "comparison": {
+       "allowed": -0.7458333885159447,
+       "allowedSE": 1.679764279992747,
+       "contextEvents": [
+        "NBA-401810982",
+        "NBA-401810993",
+        "NBA-401810999",
+        "NBA-401811014",
+        "NBA-401811032"
+       ],
+       "coreAbsences": [
+        {
+         "exposureFeature": -0.0,
+         "id": "5105806",
+         "name": "Jett Howard",
+         "recentMinutes": [
+          0.0,
+          0.0,
+          0.0
+         ],
+         "replacementRate": 0.47560975609756095,
+         "scoringRate": 0.4794520547945205
+        },
+        {
+         "exposureFeature": 1.264808362369338,
+         "id": "4566434",
+         "name": "Franz Wagner",
+         "recentMinutes": [
+          0.0,
+          22.0,
+          23.0
+         ],
+         "replacementRate": 0.47560975609756095,
+         "returnAfterObservedFullRole": true,
+         "scoringRate": 0.7285714285714285
+        }
+       ],
+       "exposure": 1.264808362369338,
+       "exposureSE": 0.730237448487227,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 3.881439955345062,
+       "scoreSE": 1.5267669351140298,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [
+        "5105806"
+       ],
+       "eligibleIds": [
+        "3133635",
+        "3150844",
+        "4066320",
+        "4277847",
+        "4278572",
+        "4348700",
+        "4397204",
+        "4432165",
+        "4432573",
+        "4566434",
+        "4593034",
+        "4702382",
+        "4712849",
+        "5214637",
+        "5239561"
+       ],
+       "knownOut": [
+        "4065654",
+        "5105806"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810999",
+        "NBA-401811014",
+        "NBA-401811032"
+       ],
+       "sourceReceipts": [
+        "2026-10-11T01:19:54Z",
+        "2026-10-11T01:19:44Z",
+        "2026-10-11T00:30:26Z"
+       ],
+       "team": "19",
+       "unresolved": []
+      }
+     },
+     "home": {
+      "comparison": {
+       "allowed": 0.8033759149627674,
+       "allowedSE": 1.0643339129023452,
+       "contextEvents": [
+        "NBA-401810981",
+        "NBA-401810987",
+        "NBA-401811004",
+        "NBA-401811023",
+        "NBA-401811029"
+       ],
+       "coreAbsences": [
+        {
+         "exposureFeature": 6.823754789272029,
+         "id": "3078576",
+         "name": "Derrick White",
+         "recentMinutes": [
+          37.0,
+          38.0,
+          16.0
+         ],
+         "replacementRate": 0.5344827586206896,
+         "scoringRate": 0.30952380952380953
+        },
+        {
+         "exposureFeature": -7.3779473899413945,
+         "id": "3917376",
+         "name": "Jaylen Brown",
+         "recentMinutes": [
+          43.0,
+          0.0,
+          29.0
+         ],
+         "replacementRate": 0.5344827586206896,
+         "scoringRate": 0.841897233201581
+        },
+        {
+         "exposureFeature": -4.006273271814797,
+         "id": "4065648",
+         "name": "Jayson Tatum",
+         "recentMinutes": [
+          39.0,
+          40.0,
+          0.0
+         ],
+         "replacementRate": 0.5344827586206896,
+         "scoringRate": 0.6866197183098591
+        },
+        {
+         "exposureFeature": 2.9916985951468704,
+         "id": "4065804",
+         "name": "Sam Hauser",
+         "recentMinutes": [
+          16.0,
+          31.0,
+          28.0
+         ],
+         "replacementRate": 0.5344827586206896,
+         "scoringRate": 0.4148148148148148
+        },
+        {
+         "exposureFeature": -2.9729848451570398,
+         "id": "4066354",
+         "name": "Payton Pritchard",
+         "recentMinutes": [
+          30.0,
+          36.0,
+          30.0
+         ],
+         "replacementRate": 0.5344827586206896,
+         "scoringRate": 0.6273885350318471
+        },
+        {
+         "exposureFeature": 1.1765892563922111,
+         "id": "4397424",
+         "name": "Neemias Queta",
+         "recentMinutes": [
+          25.0,
+          24.0,
+          13.0
+         ],
+         "replacementRate": 0.5344827586206896,
+         "scoringRate": 0.4775510204081633
+        },
+        {
+         "exposureFeature": 3.4041903099083353,
+         "id": "6478",
+         "name": "Nikola Vucevic",
+         "recentMinutes": [
+          23.0,
+          24.0,
+          19.0
+         ],
+         "replacementRate": 0.5344827586206896,
+         "scoringRate": 0.379746835443038
+        }
+       ],
+       "exposure": 0.03902744380621481,
+       "exposureSE": 0.022532505187301117,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 3.334355798040669,
+       "scoreSE": 1.717885277401221,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [
+        "3078576",
+        "3917376",
+        "4065648",
+        "4065804",
+        "4066354",
+        "4397424",
+        "6478"
+       ],
+       "eligibleIds": [
+        "4277951",
+        "4397251",
+        "4593043",
+        "4593841",
+        "4683689",
+        "4701992",
+        "4702745"
+       ],
+       "knownOut": [
+        "3078576",
+        "3917376",
+        "4065648",
+        "4065804",
+        "4066354",
+        "4397424",
+        "5175647",
+        "6478"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401811004",
+        "NBA-401811023",
+        "NBA-401811029"
+       ],
+       "sourceReceipts": [
+        "2026-10-11T01:19:48Z",
+        "2026-10-11T00:30:34Z",
+        "2026-10-11T00:30:28Z"
+       ],
+       "team": "2",
+       "unresolved": []
+      }
+     }
+    }
+   }
+  },
+  {
+   "actualAway": 110,
+   "actualHome": 96,
+   "adjusted": {
+    "awayAdjustment": 1.356364712981608,
+    "homeAdjustment": -7.791838452724931,
+    "homeWinProb": 0.3794597819017886,
+    "margin": -5.308181253145554,
+    "model": "nba-roster-exposure-v2",
+    "sdMargin": 17.296132131803006,
+    "sdTotal": 20.6004228195411,
+    "sparse": false,
+    "total": 210.94247453204582
+   },
+   "baseline": {
+    "homeWinProb": 0.6068107723235341,
+    "margin": 3.840021912560985,
+    "sdMargin": 14.168967585040841,
+    "sdTotal": 18.054940488659035,
+    "sparse": false,
+    "total": 217.37794827178914
+   },
+   "close": {
+    "books": 1,
+    "spread": 14.5,
+    "total": 217.5
+   },
+   "day": "2026-04-12",
+   "eventId": "401811045",
+   "feature": {
+    "reportedAt": "2026-04-12T21:00:00Z",
+    "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-04-12_05_00PM.pdf",
+    "teams": {
+     "away": {
+      "comparison": {
+       "allowed": 0.4868493502662422,
+       "allowedSE": 0.5784734048820864,
+       "contextEvents": [
+        "NBA-401810969",
+        "NBA-401810975",
+        "NBA-401810992",
+        "NBA-401811004",
+        "NBA-401811026"
+       ],
+       "coreAbsences": [],
+       "exposure": 0.0,
+       "exposureSE": 0.0,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 1.2700269480864268,
+       "scoreSE": 1.6053313382444692,
+       "uncertainReserveReturns": []
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [],
+       "eligibleIds": [
+        "2578239",
+        "4066218",
+        "4066383",
+        "4277964",
+        "4395651",
+        "4432811",
+        "4432816",
+        "4432819",
+        "4433249",
+        "4433287",
+        "4576060",
+        "4602025",
+        "5061575"
+       ],
+       "knownOut": [
+        "4592686",
+        "4597865",
+        "4701225"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810992",
+        "NBA-401811004",
+        "NBA-401811026"
+       ],
+       "sourceReceipts": [
+        "2026-10-11T06:02:55Z",
+        "2026-10-11T01:19:48Z",
+        "2026-10-11T00:30:30Z"
+       ],
+       "team": "30",
+       "unresolved": []
+      }
+     },
+     "home": {
+      "comparison": {
+       "allowed": -1.8381694476819281,
+       "allowedSE": 1.4762699319390473,
+       "contextEvents": [
+        "NBA-401810858",
+        "NBA-401810978",
+        "NBA-401810998",
+        "NBA-401811023",
+        "NBA-401811031"
+       ],
+       "coreAbsences": [
+        {
+         "exposureFeature": 1.867134010982591,
+         "id": "3062679",
+         "name": "Josh Hart",
+         "recentMinutes": [
+          31.0,
+          35.0,
+          30.0
+         ],
+         "replacementRate": 0.4148148148148148,
+         "scoringRate": 0.35646687697160884
+        },
+        {
+         "exposureFeature": -7.958450404427418,
+         "id": "3136195",
+         "name": "Karl-Anthony Towns",
+         "recentMinutes": [
+          32.0,
+          30.0,
+          30.0
+         ],
+         "replacementRate": 0.4148148148148148,
+         "scoringRate": 0.6743295019157088
+        },
+        {
+         "exposureFeature": 2.7238977072310404,
+         "id": "3914044",
+         "name": "Landry Shamet",
+         "recentMinutes": [
+          21.0,
+          19.0,
+          28.0
+         ],
+         "replacementRate": 0.4148148148148148,
+         "scoringRate": 0.29464285714285715
+        },
+        {
+         "exposureFeature": -10.552946657349171,
+         "id": "3934672",
+         "name": "Jalen Brunson",
+         "recentMinutes": [
+          39.0,
+          37.0,
+          31.0
+         ],
+         "replacementRate": 0.4148148148148148,
+         "scoringRate": 0.710691823899371
+        },
+        {
+         "exposureFeature": -1.5441303236175035,
+         "id": "3934719",
+         "name": "OG Anunoby",
+         "recentMinutes": [
+          37.0,
+          36.0,
+          15.0
+         ],
+         "replacementRate": 0.4148148148148148,
+         "scoringRate": 0.46745562130177515
+        },
+        {
+         "exposureFeature": 0.11134259259259244,
+         "id": "4351852",
+         "name": "Mitchell Robinson",
+         "recentMinutes": [
+          20.0,
+          19.0,
+          0.0
+         ],
+         "replacementRate": 0.4148148148148148,
+         "scoringRate": 0.40625
+        }
+       ],
+       "exposure": -15.353153074587869,
+       "exposureSE": 11.419870966246744,
+       "sample": 5,
+       "scope": "Learned team exposure indicator, not individual points removed",
+       "score": 1.4253383220037856,
+       "scoreSE": 1.215819964764305,
+       "uncertainReserveReturns": [
+        {
+         "id": "4431823",
+         "priorMinutes": 19.0
+        }
+       ]
+      },
+      "rotation": {
+       "conditionalAvailable": false,
+       "coreOut": [
+        "3062679",
+        "3136195",
+        "3914044",
+        "3934672",
+        "3934719",
+        "4351852"
+       ],
+       "eligibleIds": [
+        "2528426",
+        "3147657",
+        "4277869",
+        "4395623",
+        "4411057",
+        "4431823",
+        "4610139",
+        "4702159",
+        "4871141",
+        "5211983",
+        "5289900"
+       ],
+       "knownOut": [
+        "3062679",
+        "3136195",
+        "3914044",
+        "3934672",
+        "3934719",
+        "4351852",
+        "4433225"
+       ],
+       "minimumRosterCoverage": 1.0,
+       "scope": "Observed roster continuity, not a projected individual minute allocation",
+       "sourceGames": [
+        "NBA-401810998",
+        "NBA-401811023",
+        "NBA-401811031"
+       ],
+       "sourceReceipts": [
+        "2026-10-11T01:19:54Z",
+        "2026-10-11T00:30:34Z",
+        "2026-10-11T00:30:30Z"
+       ],
+       "team": "18",
+       "unresolved": []
+      }
+     }
+    }
+   }
+  }
+ ]
+}

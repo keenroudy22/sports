@@ -664,3 +664,18 @@ test('the 80/20 Climb banks wins, protects the bank on a miss, finishes at $1,00
   assert.equal(rec.ladder.history.length, 2);
   assert.ok(C.isLadder(picks[0]) && !C.isLadder(fun));
 });
+
+test('Chef records are separate subsets of official results with original stakes and no promo profit', () => {
+  const base={posted:true,kickoff:'2026-10-28T00:00Z',kind:'props',lane:'chef_pick',odds:100,riskUnits:1};
+  const rows=[{...base,id:'old',riskUnits:2,result:'win'},
+    {...base,id:'new',result:'loss',earlyExit:true,units:0,chefEvidence:{policy:'chef-forward-ev-v1'}},
+    {...base,id:'open'}, {...base,id:'private',posted:false,result:'win'},
+    {...base,id:'parlay',kind:'parlays',legs:[{}],result:'win'}];
+  const record=C.chefRecord(rows);
+  assert.equal(record.rows.length,3);
+  assert.equal(record.captured.units,1);
+  assert.equal(record.forward.units,-1);
+  assert.equal(record.all.pending,1);
+  assert.equal(C.recordBreakdown(rows.slice(0,3)).all.wins,1);
+  assert.equal(C.recordBreakdown(rows.slice(0,3)).lanes.chef_pick.losses,1);
+});

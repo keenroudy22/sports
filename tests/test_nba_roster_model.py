@@ -193,10 +193,13 @@ class RosterAdmissionIntegrationTests(unittest.TestCase):
             with patch.object(nba_capture,'availability_for_game',return_value=(rows,{})),patch.object(rt.nba_roster_runtime,'current') as current:
                 current.return_value=dict(holds=['Failed historical support'],validatedFamilies=[],prediction=dict(baseline,total=205))
                 self.assertEqual(rt.candidates(AT,root,lambda *args:Model(),history),[])
-                current.return_value=dict(holds=[],validatedFamilies=['total'],prediction=dict(baseline,total=205))
+                current.return_value=dict(holds=[],reportedAt=AT.isoformat(),validatedFamilies=['total'],prediction=dict(baseline,total=205))
                 candidates=rt.candidates(AT,root,lambda *args:Model(),history)
                 self.assertEqual(len(candidates),1);self.assertEqual(candidates[0]['model'],m.VERSION)
                 self.assertEqual(candidates[0]['projection'],205)
+                for reported in (None,(AT+timedelta(minutes=1)).isoformat()):
+                    current.return_value=dict(holds=[],reportedAt=reported,validatedFamilies=['total'],prediction=dict(baseline,total=205))
+                    self.assertEqual(rt.candidates(AT,root,lambda *args:Model(),history),[])
                 rows[0]['status']='Questionable';current.reset_mock()
                 self.assertEqual(rt.candidates(AT,root,lambda *args:Model(),history),[])
                 current.assert_not_called()

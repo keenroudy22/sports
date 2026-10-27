@@ -69,40 +69,41 @@ def price_pair(block,key):
  except (TypeError,ValueError):return None
 
 
-def support(game,line,side,history,now):
+def support(game,line,side,history,now,minimum=5):
  reasons=[];averages=[]
  for team in (game['teams']['away'],game['teams']['home']):
   mine=[r for r in history if r['type']==2 and boxscores.instant(r['kickoff'])<now and str(team['id']) in (r['home']['id'],r['away']['id'])]
   current=[r for r in mine if r['season']==game['season']]
-  window=sorted(current if len(current)>=5 else [r for r in mine if r['season']==game['season']-1],key=lambda r:r['kickoff'])[-5:]
-  if len(window)<5:return []
+  window=sorted(current if len(current)>=minimum else [r for r in mine if r['season']==game['season']-1],key=lambda r:r['kickoff'])[-minimum:]
+  if len(window)<minimum:return []
   values=[r['homeScore'] if r['home']['id']==team['id'] else r['awayScore'] for r in window]
-  average=sum(values)/5;averages.append(average)
+  average=sum(values)/len(values);averages.append(average)
   period='This season' if window[0]['season']==game['season'] else 'Last season'
-  reasons.append(f"{period}, {team['abbreviation']} scored {average:.1f} a game across its last five recorded regular-season games.")
+  reasons.append(f"{period}, {team['abbreviation']} scored {average:.1f} a game across its last {len(window)} recorded regular-season games.")
  if (sum(averages)<line if side=='under' else sum(averages)>line):return reasons
  return []  # opposing history is never dressed up as support
 
 
-def side_support(game,which,line,chance,history,now,market):
+def side_support(game,which,line,chance,history,now,market,minimum=5):
  team=game['teams'][which];mine=[]
  for row in history:
   if row['type']!=2 or boxscores.instant(row['kickoff'])>=now:continue
   if str(team['id']) not in (row['home']['id'],row['away']['id']):continue
   scored=row['homeScore'] if row['home']['id']==team['id'] else row['awayScore']
   allowed=row['awayScore'] if row['home']['id']==team['id'] else row['homeScore']
-  mine.append(scored-allowed)
- window=mine[-5:]
- if len(window)<5:return []
+  mine.append((row['season'],scored-allowed))
+ current=[v for year,v in mine if year==game['season']]
+ window=current[-minimum:] if len(current)>=minimum else [v for year,v in mine][-5:]
+ if len(window)<minimum:return []
  if market=='moneyline':
   hits=sum(value>0 for value in window)
-  if hits<3:return []
-  history_reason=f"{team['abbreviation']} won {hits} of its last five recorded regular-season games."
+  if hits<math.ceil(.6*len(window)):return []
+  history_reason=f"{team['abbreviation']} won {hits} of its last {len(window)} recorded regular-season games."
  else:
   # `line` is this team's signed spread; margin + line above zero covers.
   hits=sum(value+line>0 for value in window)
-  if hits<3:return []
-  history_reason=f"{team['abbreviation']} covered this number in {hits} of its last five recorded regular-season games."
+  if hits<math.ceil(.6*len(window)):return []
+  history_reason=f"{team['abbreviation']} covered this number in {hits} of its last {len(window)} recorded regular-season games."
  return [f"My score model gives {team['abbreviation']} a {100*chance:.1f}% chance here.",history_reason]
 
 
@@ -152,19 +153,25 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
    q=quotes.get((g['providerId'],book))
    if not q:
     held('no stored DraftKings quote');continue
+   if families:
+    try:
+     report_clock=boxscores.instant(result['reportedAt'])
+     if not report_clock<=boxscores.instant(q['retrievedAt'])<=now:raise ValueError('price predates news')
+    except (KeyError,TypeError,ValueError):
+     held('Roster forecast requires a price captured after the injury report');continue
    try:
     if 'total' not in allowed:raise ValueError('Roster total adjustment not validated')
     total=q['current']['total'];line=total['line'];side='under' if prediction['total']<line else 'over'
     chance=total_chance(prediction['total'],prediction['sdTotal'],line,side)
     if any(abs(total[k])>400 for k in ('over','under')):raise ValueError('extreme total price')
-    reasons=support(g,line,side,history,now)
+    reasons=support(g,line,side,history,now,minimum=3 if 'total' in families else 5)
     if len(reasons)==2:out.append({'id':f"NBA-trial-{now.astimezone(nba_trial.EASTERN):%Y-%m-%d}-{g['providerId']}-total",
                 'eventId':g['id'],'league':'NBA','season':g['season'],'seasonType':2,'kickoff':g['kickoff'],
                 'marketType':'total','direction':side,'line':line,'odds':total[side],
                 'oppositeOdds':total['over' if side=='under' else 'under'],'book':book,
                 'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':chance,
                 'riskUnits':1,'roleChecked':True,'sideVerified':True,'exactLineVerified':True,
-                'game':g,'reasons':reasons,'projection':round(prediction['total'],1),'model':nba_roster_runtime.model.VERSION if 'total' in families else 'hoops-v1'})
+                'game':g,'reasons':reasons,'projection':round(prediction['total'],1),'model':(result.get('prediction') or {}).get('model',nba_roster_runtime.model.VERSION) if 'total' in families else 'hoops-v1'})
    except (KeyError,TypeError,ValueError):pass
    try:
     if 'margin' not in allowed:raise ValueError('Roster margin adjustment not validated')
@@ -173,14 +180,14 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
     if pair and isinstance(chance,(int,float)):
      which='home' if chance>=.5 else 'away';raw=chance if which=='home' else 1-chance
      odds,other=(pair[0],pair[1]) if which=='home' else (pair[1],pair[0])
-     reasons=side_support(g,which,0,raw,history,now,'moneyline')
+     reasons=side_support(g,which,0,raw,history,now,'moneyline',minimum=3 if 'margin' in families else 5)
      if len(reasons)==2:
       out.append({'id':f"NBA-trial-{now.astimezone(nba_trial.EASTERN):%Y-%m-%d}-{g['providerId']}-moneyline",
                   'eventId':g['id'],'league':'NBA','season':g['season'],'seasonType':2,'kickoff':g['kickoff'],
                   'marketType':'moneyline','direction':which,'line':0,'odds':odds,'oppositeOdds':other,'book':book,
                   'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':raw,'riskUnits':1,
                   'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
-                  'projection':round(prediction['margin'],1),'model':nba_roster_runtime.model.VERSION if 'margin' in families else 'hoops-v1'})
+                  'projection':round(prediction['margin'],1),'model':(result.get('prediction') or {}).get('model',nba_roster_runtime.model.VERSION) if 'margin' in families else 'hoops-v1'})
    except (KeyError,TypeError,ValueError):pass
    try:
     if 'margin' not in allowed:raise ValueError('Roster margin adjustment not validated')
@@ -191,14 +198,14 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
      which='home' if home_chance>=.5 else 'away';raw=home_chance if which=='home' else 1-home_chance
      line=home_line if which=='home' else float(away['spreadLine'])
      odds,other=(pair[0],pair[1]) if which=='home' else (pair[1],pair[0])
-     reasons=side_support(g,which,line,raw,history,now,'spread')
+     reasons=side_support(g,which,line,raw,history,now,'spread',minimum=3 if 'margin' in families else 5)
      if len(reasons)==2:
       out.append({'id':f"NBA-trial-{now.astimezone(nba_trial.EASTERN):%Y-%m-%d}-{g['providerId']}-spread",
                   'eventId':g['id'],'league':'NBA','season':g['season'],'seasonType':2,'kickoff':g['kickoff'],
                   'marketType':'spread','direction':which,'line':line,'odds':odds,'oppositeOdds':other,'book':book,
                   'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':raw,'riskUnits':1,
                   'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
-                  'projection':round(prediction['margin'],1),'model':nba_roster_runtime.model.VERSION if 'margin' in families else 'hoops-v1'})
+                  'projection':round(prediction['margin'],1),'model':(result.get('prediction') or {}).get('model',nba_roster_runtime.model.VERSION) if 'margin' in families else 'hoops-v1'})
    except (KeyError,TypeError,ValueError):pass
  summary['offers']=len(out)
  return sorted(out,key=lambda r:(-(r['rawChance']-__import__('espn_props').implied(r['odds'])),r['kickoff'],r['id']))

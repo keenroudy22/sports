@@ -19,6 +19,13 @@ ROOT=Path(__file__).resolve().parents[1]
 STORE=validation.STORE
 
 
+def next_runtime(root):
+    # Keep the frozen v1 study; the new experiment remains per-family gated.
+    if Path(root) != STORE: return None
+    import nba_roster_runtime_v3 as newer
+    return newer if (newer.STORE/'validation.json').exists() else None
+
+
 def read(path,fallback):
     try:
         value=json.loads(Path(path).read_text())
@@ -101,6 +108,8 @@ def _current(game,baseline,now,capture_root=nba_capture.STORE,root=STORE,*,boxes
 
 
 def record_forward(now=None,capture_root=nba_capture.STORE,root=STORE):
+    newer=next_runtime(root)
+    if newer:return newer.record_forward(now,capture_root=capture_root)
     now=now or datetime.now(timezone.utc);root=Path(root)
     slate=read(Path(capture_root)/'slate.json',{});old={r['eventId'] for p in (root/'forward').glob('*.jsonl') for r in boxscores.read_store(p)}
     out=[];holds=[];models={}
@@ -123,6 +132,8 @@ def record_forward(now=None,capture_root=nba_capture.STORE,root=STORE):
 
 
 def grade(now=None,root=STORE,boxes=None):
+    newer=next_runtime(root)
+    newer_count=newer.grade(now,boxes=boxes) if newer else 0
     now=now or datetime.now(timezone.utc);root=Path(root)
     if boxes is None:boxes=[r for p in (ROOT/'data/sport-box').glob('nba-*.jsonl') for r in boxscores.read_store(p)]
     finals={str(b['eventId']).removeprefix('NBA-'):b for b in nba_roles.available_boxes(boxes,now)}
@@ -141,11 +152,13 @@ def grade(now=None,root=STORE,boxes=None):
                 baselineErrors={k:abs(v-forecast['baseline'][k]) for k,v in actual.items()},
                 adjustedErrors={k:abs(v-forecast['prediction'][k]) for k,v in actual.items()},
                 analysisOnly=True,source=final.get('source')))
-    return nba_capture.append_changed(rows,root/'outcomes',lambda r:r['eventId'])
+    return newer_count+nba_capture.append_changed(rows,root/'outcomes',lambda r:r['eventId'])
 
 
 def extend_context(now=None,root=STORE,capture_root=nba_capture.STORE):
     """Add only new completed games; no refitting, new calls or old-row rewrites."""
+    newer=next_runtime(root)
+    if newer:return newer.extend_context(now,capture_root=capture_root)
     now=now or datetime.now(timezone.utc);root=Path(root)
     packet=read(root/'validation.json',{})
     try:
@@ -174,6 +187,8 @@ def extend_context(now=None,root=STORE,capture_root=nba_capture.STORE):
 
 
 def summary(root=STORE):
+    newer=next_runtime(root)
+    if newer:return newer.summary()
     root=Path(root);forecasts={r['eventId']:r for p in (root/'forward').glob('*.jsonl') for r in boxscores.read_store(p)}
     outcomes={r['eventId']:r for p in (root/'outcomes').glob('*.jsonl') for r in boxscores.read_store(p)}
     pairs=[r for key,r in outcomes.items() if key in forecasts]
@@ -185,6 +200,8 @@ def summary(root=STORE):
 
 def current(game,baseline,now,capture_root=nba_capture.STORE,root=STORE,*,boxes=None):
     """Malformed evidence holds this experiment, never crashes the normal desk."""
+    newer=next_runtime(root)
+    if newer:return newer.current(game,baseline,now,capture_root,boxes=boxes)
     try:return _current(game,baseline,now,capture_root,root,boxes=boxes)
     except (OSError,ValueError,KeyError,TypeError,IndexError,AttributeError,OverflowError):
         return dict(holds=['Roster evidence integrity unavailable'],validatedFamilies=[],prediction=None)
