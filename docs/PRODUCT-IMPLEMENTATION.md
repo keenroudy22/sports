@@ -5378,3 +5378,41 @@ legacy row with no write receipt cannot masquerade as a forward observation.
 Private _pendingRelease reservations also cannot use old publication timestamps
 to claim the trusted-public grandfather exception. Both have explicit regression
 cases. Current official prices/stakes/results remain unchanged; no Chef posted.
+
+
+## October27 VERIFIED Chef implementation and NBA continuation
+
+Runtime/provenance source5541730dae66009cc35dcd8be9134c2902ba5baf and cache/
+queue source894b89dc0d333c4b147f37a24c8b40d56b839413 passed1904Python(two
+expectedskips)/286Node normal+clean and all release/build/budget/record/public/
+asset/SVG/rehearsal checks. Full tests remained outside the posting lock. Repeated
+after actual immutable upstream capture advances and rejected push; no code gate
+was skipped. Hosted40582331091SUCCESS verifiedHead415e0c1954415588fe1612cb89f59c1e03d0fdf6
+contains both source changes, original closurec709 and Discord receipt91227 by
+checked ancestry.133official/NBA0,688publicfiles/zeroissues. All6liveRecord,
+Today,NBAToday375/1440 checks clean; normal reload serves core hash1f60fba6510b.
+Cached-core crash resolved; original failed observation and stopped release logs
+retained. Record explicitly shows Chef4-5/-1.51u/0open, new-policy0-0, prior stakes
+and combined official totals retained; price and line comparisons kept distinct.
+Original public X/Discord copies are not rewritten. Current-case private X
+annotation was provider-confirmed, old Buffer receipt preserved, original card
+and Discord text unchanged. Actual X20:16:31.616Z tweet2115175832939274386.
+Over51.5/-102/.5u original remains graded as posted. Latest captured52.5/-105
+has chance.507 versus.512 needed, so an official appended close and confirmed
+Discord update20:53:42Z stop new entries. LiveToday explicitly shows all3closed
+plays and no open entry; no claim that52.5 qualifies or a replacement was forced.
+NBA source/workload and input-clock fixes shipped, but predictive improvement
+DID NOT: fixed-coefficient v3 confirmation7/131 fails coverage and worsens error.
+No family, NBA prop/quarter/Climb or Chef promotion. One real forward research
+forecast recorded through the production producer from already-captured sources;
+no extra request/job. The single test-origin row is quarantined with exact
+ledger outside authoritative evidence; replay writes blocked and regression
+passes. Existing17:30/21:00 captures/grades continue the independent evidence.
+No Coach/minute assumption, unit increase, metered allowance or historical
+record changed. Full audit is not declared complete; MODELPARITY remains
+observing genuine NBA proof, with all176 stable queue IDs preserved.
+Receipt:work/chef-final-verified-receipt.json. Owner proof images:
+kookn-chef-record-mobile-2026-10-27.png and
+kookn-chef-record-desktop-2026-10-27.png. Browser override reset and Record tab
+retained. These verification notes remain dev metadata for the next ordinary
+release; no second deployment solely to publish the receipt.
