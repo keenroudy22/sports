@@ -4874,5 +4874,6 @@ and stop. Canonical AGENTS recipe now uses the repository entry point. Real Git
 worktree integration regressions prove both concurrent writers survive and are
 reverified, source changes cannot promote untested, failed checks preserve commits,
 and occupied locks are not stolen. Not shipped until full gates/hosted/live proof.
-Climb remains the latest owner-exempt fixed50-to1000 challenge; ordinary and
-personal social privacy, linked daily-card grading and NBA validation stay open.
+Climb keeps its owner-confirmed fixed50-to1000 sizing and private accounting;
+the broader future social privacy, linked daily-card grading and NBA validation
+requirements remain open. Fixed challenge sizing does not waive exposure gates.
