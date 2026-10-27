@@ -4980,3 +4980,28 @@ reasons;fresh evidence/admission needed,never weaken sendguard. D-CAPTIONFIT
 WarrenactualXreceipt closes that older item. Metadata remainsdevfornextordinary
 release;no seconddeployment. Archivedonlyoldercompletedsamedaily01a1780b.
 Full evidence work/daily-20261027-outcomes.json,release.log,hosted.log andprep files.
+
+
+### October27 NBA current-minutes correction — release pending
+
+New independent nba-current-role-minutes-shadow-v1 uses three dated, received
+current-season full-workload observations with a consistent known starting role.
+It freezes the old baseline inside each new forecast; no historical ledger row
+is rewritten, no injury usage redistributed, no public projection or wager model
+promoted. Existing capture/grade/weekly review run it with no extra feed calls,
+model calls, budget, job or stake. Side/price update together and control-side
+hit-rate/favorite metadata cannot leak into the experiment. Every new shadow is
+analysis-only, not admission-ready. Explicit Available/Active now differ from
+absence/unresolved statuses throughout team/player research and Trial screening;
+other injury, source, role and minutes holds remain. Readiness explicitly says
+player props, quarter tickets and NBA Climbs are not validated.
+
+Read-only latest forward review:2571correlated stat comparisons/45games, baseline
+error larger than quoted lines8/8stats. Defined-before-outcome, frozen-input
+retrospective replay:248comparisons/8games, candidate improves old model8/8stats
+but beats quoted-line error only rebounds. This is diagnostic, not untouched
+validation or profit proof. Existing analyst-reviewed model still only2games.
+Official08:00ET injury report:Boston unsubmitted; known absences/unresolved
+statuses elsewhere. No qualifying official NBA bet or Climb claimed. Private
+receipts work/nba-forward-current-20261027.json, nba-context-current-20261027.json
+and nba-minutes-replay-20261027.json. Full deployment/hosted/live pending.

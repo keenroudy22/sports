@@ -78,7 +78,7 @@ def build(slate, injuries, boxes, rosters, now, target_date=None):
                                 and fresh(roster.get('retrievedAt'), now, 24))
                 roster_ids = {p.get('id') for p in roster.get('players', [])} if roster_fresh else set()
                 # Never use future/stale injury observations to describe a current hold.
-                rows = [r for r in injuries.get('rows', []) if r.get('team') == tid and r.get('status')]
+                rows = [r for r in injuries.get('rows', []) if r.get('team') == tid and nba_capture.blocks_availability(r.get('status'))]
                 usable = injury_fresh and injuries.get('season') == season
                 people = []
                 for r in rows if usable else []:

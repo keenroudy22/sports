@@ -1,5 +1,17 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## October27 NBA current-minutes experiment
+
+Existing prop captures also freeze a separate current-role-minutes shadow. It
+requires three recent observed full-workload games, a consistent known starting
+role, and point-in-time source receipt. It does not redistribute injured-player
+usage, declare a coach restriction, modify public research/model weights, qualify
+props/quarters/Climbs or change a public record. Save the unchanged baseline in
+each shadow forecast; compare natural future outcomes separately by model/stat.
+An explicit Available/Active status is not an absence. Every other nonempty
+status, unknown role, source conflict, stale source and existing model hold stays
+in force. Team Trial activation is distinct from player/quarter/Climb readiness.
+
 ## October26 social forecast presentation
 
 New X/Discord captions and house graphics omit decimal projections. Keep exact

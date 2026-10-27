@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-27T12:01:47.284573+00:00",
+  "updatedAt": "2026-10-27T12:21:35Z",
   "items": [
     {
       "id": "O-20261026-FREEX",
@@ -106,9 +106,9 @@
       "title": "Validate research probability alignment and deeper NBA matchup context",
       "status": "ready",
       "owner": "agent",
-      "next": "Reconcile official NBA availability with feed statuses and review expected rotations. Continue roster-aware chronological comparisons plus frozen-baseline minutes checks. No team/prop/quarter/Climb promotion without supporting evidence.",
+      "next": "Release/test current-minutes shadow and explicit Available/Active handling. Measure new frozen control/variant outcomes. Finish official availability reconciliation and roster-aware team validation; props/quarter/Climb remain unpromoted.",
       "doneWhen": "Held-out evidence and regressions support probability alignment; current-role NBA inputs have source/as-of labels and missing-data behavior. No invented rankings, historical regrading, new paid feeds or automatic gate changes.",
-      "evidence": "0df27155/40344575155SUCCESS/ca3d2ed includes paired-model/frozen-baseline comparison checks.2196correlated comparisons/38games; reviewed minutes only2games, improves4/8stat errors and worsens4/8. OfficialNBA10:45FlaggQuestionable vs freshESPN14:55Out; several unsubmitted teams. Team model not roster-adjusted; no NBA/Climb promotion. Source/watch/validation receipts in work and implementation doc."
+      "evidence": "Oct27 new source changes in development.2571graded comparisons/45games; baseline larger error than line in8/8stats. Frozen-input retrospective current-minutes replay248comparisons/8games improves old model8/8, beats line1/8; not forward proof. NBA08:00official Boston unsubmitted; others absences/unresolved. No gate weakening or new bet."
     },
     {
       "id": "O-20261023-REPORTINDEX",

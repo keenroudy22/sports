@@ -17,6 +17,17 @@ STORE = ROOT / 'data' / 'nba-capture'
 INJURIES = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries'
 
 
+def blocks_availability(status):
+    """An explicit Available/Active designation is not an absence designation.
+
+    Probable, questionable, unknown and every absence remain blocked. This does
+    not clear a separate minutes restriction, role review or team-model hold.
+    """
+    if status in (None, ''):
+        return False
+    return not (isinstance(status, str) and status.strip().casefold() in ('available', 'active'))
+
+
 class Budget:
     def __init__(self, requests=40, seconds=150, fetch=None, sleep=time.sleep, clock=time.monotonic):
         self.limit, self.deadline = min(requests, 60), clock() + min(seconds, 150)

@@ -117,7 +117,7 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
  summary['injuriesCheckedAt']=inj.get('retrievedAt')
  if not 0<=(now-boxscores.instant(inj['retrievedAt'])).total_seconds()<=60*60:
   held('injury snapshot outside sixty-minute window');return []
- holds={r['team'] for r in inj.get('rows',[]) if r.get('status')}
+ holds={r['team'] for r in inj.get('rows',[]) if nba_capture.blocks_availability(r.get('status'))}
  quotes={}
  for p in (root/'quotes').glob('*.jsonl'):
   for q in boxscores.read_store(p):quotes[(q['eventId'],q['book'])]=q

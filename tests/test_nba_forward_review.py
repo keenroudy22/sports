@@ -25,6 +25,17 @@ def outcome(row, actual=20, **extra):
 
 
 class ForwardReviewTests(unittest.TestCase):
+    def test_observed_minutes_shadow_is_not_pooled_with_analyst_review(self):
+        a=forecast('a',model='nba-minutes-rate-reviewed-v1',season=2027,
+            projection=dict(value=18,baselineValue=25,baselineMinutes=30))
+        b=forecast('b',model='nba-current-role-minutes-shadow-v1',season=2027,
+            projection=dict(value=22,baselineValue=24,baselineMinutes=30))
+        result=review.summarize([a,b],[outcome(a),outcome(b)],NOW)
+        rows=result['reviewedMinutes']
+        self.assertEqual(len(rows),2)
+        self.assertEqual({r['comparisons'] for r in rows},{1})
+        self.assertEqual({r['model'] for r in rows},{a['model'],b['model']})
+
     def test_reviewed_minutes_compare_frozen_baseline_without_reconstructing_prices(self):
         a = forecast(model='nba-minutes-rate-reviewed-v1', season=2027,
             projection=dict(value=18, baselineValue=25, baselineMinutes=30))

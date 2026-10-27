@@ -58,14 +58,14 @@ def reviewed_minutes(graded):
     groups = defaultdict(list)
     for row, outcome in graded:
         p = row['projection']
-        if row['model'] != 'nba-minutes-rate-reviewed-v1' or not number(p.get('baselineValue')):
+        if row['model'] not in ('nba-minutes-rate-reviewed-v1', 'nba-current-role-minutes-shadow-v1') or not number(p.get('baselineValue')):
             continue
         if not number(p.get('baselineMinutes')) or not 0 < p['baselineMinutes'] <= 60:
             continue
-        groups[(row['stat'], row.get('season', 0))].append((row, outcome))
+        groups[(row['model'], row['stat'], row.get('season', 0))].append((row, outcome))
     out = []
-    for (stat, season), pairs in sorted(groups.items()):
-        out.append(dict(stat=stat, season=season, comparisons=len(pairs),
+    for (model, stat, season), pairs in sorted(groups.items()):
+        out.append(dict(model=model, stat=stat, season=season, comparisons=len(pairs),
             games=len({r['eventId'] for r, _ in pairs}),
             baselineMAE=round(mean(abs(o['actual']-r['projection']['baselineValue']) for r,o in pairs), 3),
             reviewedMAE=round(mean(abs(o['actual']-r['projection']['value']) for r,o in pairs), 3)))
@@ -178,6 +178,6 @@ def markdown(report):
     if not report.get('pairedModels'):
         lines.append('- No identical-capture model pairs available; separate model samples do not establish improvement.')
     for row in report.get('reviewedMinutes', []):
-        lines.append(f"- Frozen minutes comparison {row['stat']} / season {row['season']}: unchanged baseline error {row['baselineMAE']:g}, reviewed minutes error {row['reviewedMAE']:g}; {row['comparisons']} comparisons / {row['games']} games. Both values saved inside the same pregame forecast; no reconstructed baseline price or returns. Not promotion evidence by itself.")
+        lines.append(f"- Frozen minutes comparison {row['stat']} / season {row['season']} / {row['model']}: unchanged baseline error {row['baselineMAE']:g}, reviewed minutes error {row['reviewedMAE']:g}; {row['comparisons']} comparisons / {row['games']} games. Both values saved inside the same pregame forecast; no reconstructed baseline price or returns. Not promotion evidence by itself.")
     lines.append('- '+report['decision'])
     return '\n'.join(lines)+'\n'

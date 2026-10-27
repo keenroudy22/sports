@@ -74,7 +74,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
     if boxes is None:
         boxes=list({r['eventId']:r for p in BOX.glob('nba-*.jsonl') for r in boxscores.read_store(p)}.values())
     injury_snapshot=read_json(root/'injuries-current.json',{})
-    holds={r['athleteId'] for r in injury_snapshot.get('rows',[]) if r.get('status')}
+    holds={r['athleteId'] for r in injury_snapshot.get('rows',[]) if nba_capture.blocks_availability(r.get('status'))}
     season=max((g.get('season',now.year+1) for g in slate.get('games',[])),default=now.year+1)
     latest={}
     for p in (root/'quotes').glob('*.jsonl'):

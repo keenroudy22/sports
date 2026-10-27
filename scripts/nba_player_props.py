@@ -299,7 +299,7 @@ def build(now, root=STORE, boxes=None, limit=60):
         for r in boxscores.read_store(p):quotes[(r['eventId'],r['athleteId'],r['stat'],r['book'])]=r
     games={str(g['providerId']):g for g in slate.get('games',[]) if g['status']=='scheduled'
            and g['seasonType']=='regular-season' and now<boxscores.instant(g['kickoff'])<=now+timedelta(days=2)}
-    holds={r['athleteId']:r['status'] for r in injury.get('rows',[]) if r.get('status')}
+    holds={r['athleteId']:r['status'] for r in injury.get('rows',[]) if nba_capture.blocks_availability(r.get('status'))}
     out=[]
     for q in quotes.values():
         if q['eventId'] not in games or not fresh(q.get('sourceAt'),now) or not fresh(q.get('retrievedAt'),now):continue
@@ -378,9 +378,23 @@ def record_forward(now,root=STORE,boxes=None):
         if not r.get('projection') or r.get('hold'):continue
         model=r['projection'].get('model',VERSION)
         identity=':'.join((r['eventId'],r['athleteId'],r['stat'],r['book'],model))
-        if identity in old:continue
-        rows.append(dict(r,id=identity,league='NBA',season=r['projection']['season']+int(r['projection']['window']=='Last season'),
-                         retrievedAt=boxscores.stamp(now),model=model))
+        if identity not in old:
+            rows.append(dict(r,id=identity,league='NBA',season=r['projection']['season']+int(r['projection']['window']=='Last season'),
+                             retrievedAt=boxscores.stamp(now),model=model))
+        import nba_minutes_shadow
+        variant=nba_minutes_shadow.adjust(r,boxscores.stamp(now))
+        if variant:
+            shadow_id=':'.join((r['eventId'],r['athleteId'],r['stat'],r['book'],nba_minutes_shadow.VERSION))
+            if shadow_id not in old:
+                side='over' if variant['value']>r['line'] else 'under'
+                shadow=dict(r,id=shadow_id,league='NBA',season=r['projection']['season']+int(r['projection']['window']=='Last season'),
+                    retrievedAt=boxscores.stamp(now),model=nba_minutes_shadow.VERSION,
+                    projection=variant,side=side,odds=r[side],analysisOnly=True,
+                    admissionReady=False,favorite=False,gap=round(variant['value']-r['line'],1),
+                    why='Unpromoted observed-current-minutes comparison; no injury redistribution or bet recommendation.')
+                for field in ('last5','last10','seasonHistory'):
+                    shadow.pop(field,None)  # Saved hit rates belonged to the control's side.
+                rows.append(shadow)
     return nba_capture.append_changed(rows,root/'player-forecasts',lambda r:r['id'])
 
 
