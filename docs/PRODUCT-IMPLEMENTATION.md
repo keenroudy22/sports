@@ -5141,3 +5141,33 @@ or duplicate main declarations and stale hashes fail release checks. A real-brow
 reload must show Model win chance and the unadjusted-model note. Main/lazy byte-change
 and stale-check regressions pass. Cache fix release/live proof pending; preserve the
 parallel approved units-only source commit and all existing records.
+
+
+October27weekly native-social slice VERIFIED LIVE at 2026-10-27T15:43:10.979835+00:00:
+source de5015a0c (originalb98b7b020 before normal data rebases),testedcandidate
+32e8cfeab,hosted40531984071SUCCESS,verifiedheadbff5158e1ac53d5c5dcce24380e75ab5a8f11f53
+contains source and testedcandidate by checked ancestry. scripts/deploy.py
+promoted only after third full pass:1856Python(two expected skips)/282Node normal
+and clean export;build495pages,record131/NBA0,712publicfiles/zeroissues,assets/SVG
+and1125offlinep_ewr53y outcomeok,zerooutside/private. Earlier passes invalidated
+by normal data/approved renderer changes;no lock theft,skipped gate or weak test.
+Existing soft payload warnings retained. Post-hosted22fullyloaded route/width
+checks375/1440 have zerooverflow/load/consolewarnings;three initially uncached
+phone details finished and passed recheck. Phone/desktop visuallyreviewed;
+mainapp fingerprint0e654179323c;viewportreset. No new qualifyingClimb/fun wager
+was invented to demonstrate delivery. Actual units-only future receipt remains
+a natural observation,not claimed delivered. MondayFinal actual13:05:28.823Z
+confirmed separately;stored privateBufferpending0;priorcancellations intact.
+
+OWNERFOLLOW stays ready,not complete. Exact remaining privacy gap:Buffer
+owner_slip_image exempts supplied img/tickets screenshots from native-art checks;
+chef_wins.send_file uploads original bytes without image-privacy verification.
+The caption/native-svg rule does not inspect bitmap contents. Agent next:hold
+new unverified original screenshots until privacy-safe native art is verified,
+preserve originals/sent attachments and provider-state protections,test both
+paths and release through all gates. Then complete combined daily-card linked
+W/L/P/V plus net-unit follow-up. No owner decision needed. This refines the
+earlier next-action ordering rather than marking broad units-only output done.
+Archived only oldercompleted sameweekly01a159d7;latest/otheractive retained.
+Fullreceipt work/weekly-20261027-receipt.json. Receipt metadata follows in the
+next ordinary code release;no second deployment merely for this note.
