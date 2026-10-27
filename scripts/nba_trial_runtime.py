@@ -117,7 +117,6 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
  summary['injuriesCheckedAt']=inj.get('retrievedAt')
  if not 0<=(now-boxscores.instant(inj['retrievedAt'])).total_seconds()<=60*60:
   held('injury snapshot outside sixty-minute window');return []
- holds={r['team'] for r in inj.get('rows',[]) if nba_capture.blocks_availability(r.get('status'))}
  quotes={}
  for p in (root/'quotes').glob('*.jsonl'):
   for q in boxscores.read_store(p):quotes[(q['eventId'],q['book'])]=q
@@ -130,6 +129,11 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
    held('not an eligible upcoming game today');continue
   if inj.get('season')!=g['season']:
    held('injury snapshot season mismatch');continue
+  game_rows,team_holds=nba_capture.availability_for_game(inj,g,now,max_hours=1)
+  if team_holds:
+   for reason in set(team_holds.values()):held(reason)
+   continue
+  holds={r['team'] for r in game_rows if nba_capture.blocks_availability(r.get('status'))}
   if any(t['id'] in holds for t in g['teams'].values()):
    held('unresolved team injury status');continue
   summary['eligibleGames']+=1

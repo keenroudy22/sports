@@ -299,11 +299,12 @@ def build(now, root=STORE, boxes=None, limit=60):
         for r in boxscores.read_store(p):quotes[(r['eventId'],r['athleteId'],r['stat'],r['book'])]=r
     games={str(g['providerId']):g for g in slate.get('games',[]) if g['status']=='scheduled'
            and g['seasonType']=='regular-season' and now<boxscores.instant(g['kickoff'])<=now+timedelta(days=2)}
-    holds={r['athleteId']:r['status'] for r in injury.get('rows',[]) if nba_capture.blocks_availability(r.get('status'))}
     out=[]
     for q in quotes.values():
         if q['eventId'] not in games or not fresh(q.get('sourceAt'),now) or not fresh(q.get('retrievedAt'),now):continue
         g=games[q['eventId']];own=read(root/'rosters'/f"{q['team']}.json",{})
+        game_rows,team_holds=nba_capture.availability_for_game(injury,g,now)
+        holds={r['athleteId']:r['status'] for r in game_rows if nba_capture.blocks_availability(r.get('status'))}
         p=[p for p in own.get('players',[]) if p['id']==q['athleteId']]
         reason=None
         if not fresh(slate.get('retrievedAt'),now,24):reason='Schedule update needed'
@@ -311,6 +312,7 @@ def build(now, root=STORE, boxes=None, limit=60):
         # freshness window. The separate official NBA Trial keeps its 60-minute
         # availability gate; research does not change admission or publish odds.
         elif not fresh(injury.get('retrievedAt'),now,4):reason='Availability update needed'
+        elif q['team'] in team_holds:reason=team_holds[q['team']]
         elif q['athleteId'] in holds:reason=f"Availability: {holds[q['athleteId']]}"
         elif (not fresh(own.get('retrievedAt'),now,24) or own.get('season')!=q['season'] or own.get('team')!=q['team']
               or len(p)!=1 or not p[0]['active']
@@ -341,6 +343,8 @@ def build(now, root=STORE, boxes=None, limit=60):
         if role_review:row['roleReview']=role_review
         row['currentRole']=current_role
         row['rosterAt']=own.get('retrievedAt')
+        row['availabilitySource']=(injury.get('official') or {}).get('source') or injury.get('source')
+        row['availabilityReportedAt']=(injury.get('official') or {}).get('reportedAt')
         row['statName']=NAMES[q['stat']];row['projection']=projection;row['hold']=reason
         if projection:
             side='over' if projection['value']>q['line'] else 'under'

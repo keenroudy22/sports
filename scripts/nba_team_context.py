@@ -69,6 +69,7 @@ def build(slate, injuries, boxes, rosters, now, target_date=None):
                     or str(gates.eastern_date(boxscores.instant(game['kickoff']))) != target):
                 continue
             season = game['season']
+            game_rows,source_holds=nba_capture.availability_for_game(injuries,game,now,max_hours=1)
             teams = []
             for team in game['teams'].values():
                 tid = team['id']
@@ -78,8 +79,8 @@ def build(slate, injuries, boxes, rosters, now, target_date=None):
                                 and fresh(roster.get('retrievedAt'), now, 24))
                 roster_ids = {p.get('id') for p in roster.get('players', [])} if roster_fresh else set()
                 # Never use future/stale injury observations to describe a current hold.
-                rows = [r for r in injuries.get('rows', []) if r.get('team') == tid and nba_capture.blocks_availability(r.get('status'))]
-                usable = injury_fresh and injuries.get('season') == season
+                rows = [r for r in game_rows if r.get('team') == tid and nba_capture.blocks_availability(r.get('status'))]
+                usable = injury_fresh and injuries.get('season') == season and tid not in source_holds
                 people = []
                 for r in rows if usable else []:
                     athlete = r.get('athleteId')
@@ -91,8 +92,8 @@ def build(slate, injuries, boxes, rosters, now, target_date=None):
                 teams.append(dict(team=tid, name=team.get('name') or team.get('abbreviation'),
                     rosterVerified=bool(roster_fresh), rosterObservedAt=roster.get('retrievedAt'),
                     injurySnapshotUsable=usable, injuredPlayers=people,
-                    hold='Team score model is not injury/roster adjusted' if people else
-                         'Current injury evidence unavailable' if not usable else None))
+                    hold=source_holds.get(tid) or ('Team score model is not injury/roster adjusted' if people else
+                         'Current injury evidence unavailable' if not usable else None)))
             games.append(dict(eventId=game.get('providerId'), kickoff=game['kickoff'], teams=teams))
         except (KeyError, TypeError, ValueError):
             continue

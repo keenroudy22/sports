@@ -74,7 +74,6 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
     if boxes is None:
         boxes=list({r['eventId']:r for p in BOX.glob('nba-*.jsonl') for r in boxscores.read_store(p)}.values())
     injury_snapshot=read_json(root/'injuries-current.json',{})
-    holds={r['athleteId'] for r in injury_snapshot.get('rows',[]) if nba_capture.blocks_availability(r.get('status'))}
     season=max((g.get('season',now.year+1) for g in slate.get('games',[])),default=now.year+1)
     latest={}
     for p in (root/'quotes').glob('*.jsonl'):
@@ -136,13 +135,17 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
     prep=[]
     scheduled={str(g['providerId']):g for g in games if g['status']=='scheduled' and g['seasonType']=='regular-season'}
     for row in props.values():
+        current_team=None
         history=logs.get((season,row['athleteId']),[])
         if history:
             current_team=history[-1]['team']
             game=scheduled.get(row['eventId'],{})
             if current_team not in {t.get('id') for t in game.get('teams',{}).values()}:continue
             history=[h for h in history if h['team']==current_team]
-        if (row['eventId'] not in scheduled or row['athleteId'] in holds or not row.get('sideVerified')
+        selected_game=scheduled.get(row['eventId'],{})
+        game_rows,team_holds=nba_capture.availability_for_game(injury_snapshot,selected_game,now)
+        holds={r['athleteId'] for r in game_rows if nba_capture.blocks_availability(r.get('status'))}
+        if (row['eventId'] not in scheduled or current_team in team_holds or row['athleteId'] in holds or not row.get('sideVerified')
                 or not fresh(row.get('retrievedAt'),now) or not fresh(injury_snapshot.get('retrievedAt'),now)
                 or len(history)<5 or row['stat'] not in FLOORS or math.floor(row['line'])+1<FLOORS[row['stat']]
                 or abs(row.get('over',0))>400 or abs(row.get('under',0))>400): continue

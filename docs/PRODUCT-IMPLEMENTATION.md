@@ -5011,3 +5011,29 @@ private availability snapshot, including an explicitly empty provider list.
 Changed-athlete rows could not reconstruct a removed designation at a historical
 clock. Snapshots preserve original capture times; absence is not an official
 clearance. No backfilled snapshot, extra request or new scheduled job.
+
+
+### October27 NBA official participation integration — verification pending
+
+Current-minutes source09defb39a deployed and hosted40505807779 succeeded, including
+actual capture17e1cee52:329 prospective shadow forecasts across4 tonight games,
+83 complete ESPN availability rows at12:41:46Z. These are research observations,
+not329 bets or untouched validation. Prior local release:1840Python/281Node normal
+and clean,record131/NBA0,712publicfiles,0825 offline rehearsal zero outside/private
+writes. Live final proof remains part of the official-source release below.
+
+The same existing NBA capture now reads one official public PDF from one completed
+quarter-hour within its unchanged40/60 request/time ceiling. Free Poppler pdftotext
+installed on capture Mac; no Python package, new job, index scraping, timestamp
+probing or paid source. Report/URL/header clocks, capture freshness, exact matchup/
+kickoff, team and fresh roster identities must agree. Full normalized observations
+are append-only; medical reason wrapping is deliberately not reconstructed.
+Per-event/team resolution prevents back-to-back report contamination. Missing or
+unsubmitted official reports, unknown identities and newer source conflicts hold;
+explicit official Available may supersede older Out, omission never does. Actual
+absences retain the existing unadjusted-team-model gate. Source failure cannot
+turn an empty ESPN feed into a healthy report. Team, player and prep paths share
+this source decision. Real08:45ET PDF read13:00:51Z:1request,32team/event entries,
+28mappedplayers,0unmapped; Boston still not submitted. No NBA bet/Climb promoted.
+Focused132NBA checks pass, including capture-to-Trial success and reader-failure
+paths. Full exact-head tests/deployment/hosted/mobile verification pending.

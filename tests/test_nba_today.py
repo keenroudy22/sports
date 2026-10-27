@@ -127,7 +127,10 @@ class NBAPrepRoleTests(unittest.TestCase):
    root=Path(folder);moment=datetime(2026,11,20,14,tzinfo=timezone.utc)
    g=game();g.update(id='NBA-1',seasonType='regular-season',kickoff='2026-11-20T23:00:00Z',teams={'home':{'id':'2'},'away':{'id':'3'}},scores={'home':None,'away':None})
    (root/'slate.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(moment),'games':[g]}))
-   (root/'injuries-current.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(moment),'rows':[]}))
+   (root/'injuries-current.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(moment),'rows':[],
+    'official':{'reportedAt':'2026-11-20T13:45:00Z','retrievedAt':boxscores.stamp(moment),'season':2027,
+     'source':'https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-20_08_45AM.pdf'},
+    'gameAvailability':{'1':{'kickoff':g['kickoff'],'rows':[],'teamHolds':{}}}}))
    row={'eventId':'1','athleteId':'1','stat':'pts','kind':'main','line':14.5,'over':-110,'under':-115,'book':'DraftKings','season':2027,'sideVerified':True,'retrievedAt':boxscores.stamp(moment),'kickoff':g['kickoff']}
    nba_capture.append_changed([row],root/'props',lambda r:r['athleteId'])
    boxes=[{'eventId':str(i),'season':2027,'seasonType':2,'kickoff':f'2026-11-{10+i:02d}T00:00:00Z','players':[{'id':'1','name':'Fixture Player','team':'2','dnp':False,'stats':{'pts':20,'min':30}}]} for i in range(5)]

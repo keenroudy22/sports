@@ -2,6 +2,7 @@
 import json
 import re
 import time
+import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.request import urlopen
@@ -35,10 +36,18 @@ class Budget:
         self.fetch, self.sleep, self.clock = fetch, sleep, clock
 
     def __call__(self, url):
+        return self._request(url, raw=False)
+
+    def raw(self, url):
+        return self._request(url, raw=True)
+
+    def _request(self, url, raw=False):
         if self.requests >= self.limit or self.errors >= 3 or self.clock() >= self.deadline:
             raise TimeoutError('NBA free capture budget exhausted')
-        if not url.startswith(('https://site.api.espn.com/', 'https://sports.core.api.espn.com/')):
-            raise ValueError('NBA capture requires free ESPN source')
+        allowed = (bool(re.fullmatch(r'https://ak-static\.cms\.nba\.com/referee/injury/Injury-Report_\d{4}-\d{2}-\d{2}_\d{2}_\d{2}(?:AM|PM)\.pdf', url))
+                   if raw else url.startswith(('https://site.api.espn.com/', 'https://sports.core.api.espn.com/')))
+        if not allowed:
+            raise ValueError('NBA capture requires an approved free source')
         self.sleep(.5)
         if self.clock() >= self.deadline:
             raise TimeoutError('NBA capture timebox exhausted')
@@ -48,7 +57,9 @@ class Budget:
                 result = self.fetch(url)
             else:
                 with urlopen(url, timeout=max(1, min(20, self.deadline-self.clock()))) as response:
-                    result = json.load(response)
+                    result = response.read(3_000_001) if raw else json.load(response)
+            if raw and (not isinstance(result, bytes) or len(result)>3_000_000 or not result.startswith(b'%PDF-')):
+                raise ValueError('Official injury report is not a bounded PDF')
             self.errors = 0
             return result
         except (OSError, ValueError):
@@ -109,6 +120,28 @@ def save_availability_snapshot(rows, season, retrieved, root):
     return append_changed([snapshot],Path(root)/'availability-snapshots',lambda r:r['retrievedAt'])
 
 
+def availability_for_game(snapshot, game, now, max_hours=4):
+    """Do not collapse a back-to-back team's reports across different fixtures."""
+    import nba_official_availability as official
+    if now<official.START:
+        return snapshot.get('rows',[]),{}
+    unknown={str(t['id']):'Official NBA availability unavailable' for t in game.get('teams',{}).values()}
+    try:
+        report=snapshot['official']
+        if report.get('state')=='unavailable' or not timedelta(0)<=now-boxscores.instant(report['reportedAt'])<=timedelta(hours=max_hours):
+            return snapshot.get('rows',[]),unknown
+        expected_source='https://ak-static.cms.nba.com/referee/injury/Injury-Report_'+boxscores.instant(report['reportedAt']).astimezone(official.EASTERN).strftime('%Y-%m-%d_%I_%M%p')+'.pdf'
+        if report.get('source')!=expected_source or report.get('season')!=game.get('season'):
+            return snapshot.get('rows',[]),unknown
+        observed=boxscores.instant(report['retrievedAt'])
+        if not boxscores.instant(report['reportedAt'])<=observed<=now:return snapshot.get('rows',[]),unknown
+        record=snapshot['gameAvailability'][str(game['providerId'])]
+        if boxscores.instant(record['kickoff'])!=boxscores.instant(game['kickoff']):return snapshot.get('rows',[]),unknown
+        return record['rows'],record['teamHolds']
+    except (KeyError,TypeError,ValueError):
+        return snapshot.get('rows',[]),unknown
+
+
 def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.utc), scheduled=False):
     now = now or clock(); budget = budget or Budget()
     root = Path(root); root.mkdir(parents=True, exist_ok=True)
@@ -143,7 +176,18 @@ def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.
             raise ValueError('NBA injury identities incomplete')
         result['injuries'] = append_changed(rows, root/'injuries', lambda r:(r['athleteId'], r['team']))
         save_availability_snapshot(rows, season, stamp, root)
-        boxscores.write_json(root/'injuries-current.json', {'retrievedAt':stamp,'season':season,'rows':rows,'source':INJURIES})
+        snapshot={'retrievedAt':stamp,'season':season,'rows':rows,'source':INJURIES}
+        import nba_official_availability as official
+        if now>=official.START:
+            try:
+                report=official.capture(budget,list(games.values()),root,clock(),clock=clock)
+                report.update(league='NBA',season=season)
+                append_changed([report],root/'official-availability',lambda r:r['retrievedAt'])
+                snapshot.update(official=report,gameAvailability=official.merge(rows,report,list(games.values())))
+            except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError):
+                snapshot['official']={'state':'unavailable'}
+                result['errors'].append('official-availability-unavailable')
+        boxscores.write_json(root/'injuries-current.json', snapshot)
     except (OSError, ValueError, KeyError, TypeError):
         result['errors'].append('injuries-unavailable')
     for game in sorted(games.values(), key=lambda g:g['kickoff']):

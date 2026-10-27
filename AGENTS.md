@@ -1,5 +1,18 @@
 # AGENTS.md: running and changing the KeenRoudy Sports desk
 
+## October27 official NBA participation evidence
+
+The existing bounded NBA capture reads one official public injury-report PDF from
+one completed quarter-hour, within its unchanged request/time budget. Poppler's
+free `pdftotext` must be installed on the capture Mac; missing reader, malformed
+PDF, mismatched/future/stale report clock or source fails closed. No index scraping,
+URL probing, extra scheduler or metered allowance. Archive the full normalized
+report with its real report/receipt clocks. Resolve by event plus team so tomorrow's
+unsubmitted report cannot overwrite tonight's submission. Unsubmitted/missing teams,
+unmapped roster identities and newer conflicting ESPN statuses hold. An explicit
+older Out superseded by official Available is distinct from an omission. Official
+participation is not expected minutes, an injury-adjusted score model or bet approval.
+
 ## October27 NBA current-minutes experiment
 
 Existing prop captures also freeze a separate current-role-minutes shadow. It
