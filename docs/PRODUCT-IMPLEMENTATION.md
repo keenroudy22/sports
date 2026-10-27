@@ -4877,3 +4877,54 @@ and occupied locks are not stolen. Not shipped until full gates/hosted/live proo
 Climb keeps its owner-confirmed fixed50-to1000 sizing and private accounting;
 the broader future social privacy, linked daily-card grading and NBA validation
 requirements remain open. Fixed challenge sizing does not waive exposure gates.
+
+
+### October27 overnight — durable deployment VERIFIED LIVE
+
+2026-10-27T05:13:29.465615+00:00 — source46eb83f31, tested candidatee92ec0e8956f7ee82dadbb094a3bf5240744bbc8,
+hosted40453023438SUCCESS; verifiedHeadcf3a57321161bf5578e14f1c565bd92d97e5e76f
+contains source by checked ancestry. Repository scripts/deploy.py and canonical
+AGENTS recipe replace the temporary executor.12focused regressions,1832Python
+(two expected skips)/281Node normal+clean, all build/feed/payload/record/NBA/
+public-boundary/asset/SVG gates passed. Initial full run caught a missing exact
+clean-export command in the recipe; documentation repaired without weakening the
+test. Actual changed-head detection forced a second full normal/clean pass before
+promoting.0025/nvn6azso and0055/nojw4z7x offline rehearsals exit0/outcomeok,
+zero outside writes/private reads. Both normal and clean suites repeated on the
+exact final candidate. Hosted130record/714public files/zeroissues. Fully rendered
+Today/Record375/1440:zero overflow/loading/console errors; phone visually reviewed.
+Existing soft payload warnings remain, not new release failures.
+
+All65released plays are graded;130live grade/time/unit rows agree. MondayFlournoy
+4rec win+.98u,Spann-Ford2rec win+1.48u,Williams0rec loss-.5u:2–1/+1.96u.
+First retained final03:22:01Z; grades.23minutes/officialDiscord2.95minutes;
+actual winX37.51/47.51minutes, historical target misses retained. Ordinary loss
+routes to dailyFinal, accepted13:01Z/9:01ET, not yet delivered. Existing Sunday
+recap actuallysentOct26 13:37:48Z, no duplicate. Website recorded-price season
+31–41/-9.926922965u,69u risked; baseline29–40/-11.886922965u/66.5u retained.
+Private interim month-end snapshot saves original three prices/stakes/results;
+October31 preparation and November1 existing run still own final reconciliation.
+No history, season loss, category or promotional-credit reset.
+
+True-clock TuesdayOct27 prep:2CFB/6side/4total/18prop rows,15candidate checks,
+zero cleared stored gates;4NBA/0fresh prop rows.102alternate spread quotes,
+zero supported Climb options; missing proven support remains held, not invented.
+Existing6:45/8:30 reprice/news/admission own release. Private packets under work/.
+
+Current Buffer2758calendar/rolling receipts,142temporary essential headroom;
+approved2900stop expiresNov6 13:05UTC. Analytics stay paused, nonessential X
+remains normal2700held. With no further requests, normal rolling room is now
+Nov7 21:36:26.237511UTC (4:36PM Eastern), superseding the oldNov6first-room
+estimate after58authorized additional requests. November1 is only calendar
+rollover; provider balance remains unknown. No allowance or schedule changed.
+
+Remaining agent next: reproduce regular command=results/publish_kinds=settle,ladder
+entering pregame capture (actual00:25log sampled10SGOevents); singleton-settle
+recovery fix stays complete. Add actual-command regressions preserving finals,
+all grading/Discord/stored-price Climb and normal13:30NBA capture; full release
+and hosted/mobile proof required. Exact owner/next/doneWhen/evidence in
+work/overnight-20261027-results-capture-followup.md. Broader units-only social
+privacy (fixed private Climb sizing unchanged), linked daily-card grading and
+MODELPARITY remain open. Archived only prior completed same-automation01a17685;
+current retained. Receipt metadata stays ondev for next ordinary safe release.
+Full evidence:work/overnight-20261027-outcomes.json and associated run artifacts.
