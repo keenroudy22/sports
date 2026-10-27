@@ -74,3 +74,18 @@ test('a fallback ticket says Full Send while keeping its record separate from Be
   assert.match(ticketBody, /Full Sends keep their own record/);
   assert.doesNotMatch(ticketBody, /Gut call/);
 });
+
+test('moneyline chances are never formatted as points against a zero line',()=>{
+ const pick={...base,athleteId:null,market:'moneyline',marketType:'moneyline',line:0,
+   projection:.4,odds:180,entryNote:'Off the card: owner withdrew after publication.',
+   probabilityAtPublication:{rawChance:.401,chance:.363,breakEven:1/2.8,calibration:.35}};
+ const original=JSON.stringify(pick);
+ const explanation=M.howWeGotIt(pick).join(' ');
+ assert.doesNotMatch(explanation,/projects 0\.4|against the 0 line/);
+ assert.match(explanation,/40\.1%/);assert.match(explanation,/36\.3%/);
+ const vm=M.pickVM(pick,Date.parse('2026-10-27T18:00:00Z'));
+ assert.doesNotMatch(vm.statusShort,/graded at 0 /);
+ assert.match(vm.statusShort,/graded at \+180/);
+ assert.equal(JSON.stringify(pick),original);
+ assert.match(M.howWeGotIt({...base,projection:60}).join(' '),/projects 60 against the 49\.5 line/);
+});
