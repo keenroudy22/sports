@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 34,
    "gamesQuoted": 36,
-   "moneylineSnapshots": 165,
+   "moneylineSnapshots": 166,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 165,
+   "snapshots": 166,
    "status": "capturing",
-   "totalSnapshots": 165
+   "totalSnapshots": 166
   },
   "NHL": {
-   "gamesGraded": 182,
+   "gamesGraded": 183,
    "gamesQuoted": 194,
-   "moneylineSnapshots": 811,
+   "moneylineSnapshots": 821,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 143,
+     "gamesGraded": 144,
      "gamesQuoted": 153,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 811,
+   "snapshots": 821,
    "status": "capturing",
-   "totalSnapshots": 811
+   "totalSnapshots": 821
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "DET",
+    "id": "5",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png",
+    "name": "Detroit Red Wings",
+    "shortName": "Red Wings"
+   },
+   "awayScore": 4,
+   "gameId": "NHL-401892584",
+   "gradedAt": "2026-10-27T15:25:10Z",
+   "home": {
+    "abbreviation": "EDM",
+    "id": "6",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/edm.png",
+    "name": "Edmonton Oilers",
+    "shortName": "Oilers"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-10-27T01:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final/SO",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "TOR",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "VAN",
-    "id": "22",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
-    "name": "Vancouver Canucks",
-    "shortName": "Canucks"
-   },
-   "awayScore": 2,
-   "gameId": "NHL-401892495",
-   "gradedAt": "2026-10-14T03:30:04Z",
-   "home": {
-    "abbreviation": "NYI",
-    "id": "12",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nyi.png",
-    "name": "New York Islanders",
-    "shortName": "Islanders"
-   },
-   "homeScore": 3,
-   "kickoff": "2026-10-13T23:45:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-27T15:15:06Z"
+ "updatedAt": "2026-10-27T15:25:10Z"
 }
