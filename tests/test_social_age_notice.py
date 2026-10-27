@@ -105,4 +105,4 @@ class SocialAgeNoticeTests(unittest.TestCase):
             self.assertFalse(bp.audit_pending_style({'posts': [entry]}, NOW, items={}, log=lambda *_: None))
         self.assertEqual(entry['socialAgeVersion'], copy.AGE_VERSION)
         self.assertFalse(bp.style_audit_due(entry, NOW))
-        self.assertEqual(social_style.VERSION, 'no-decimal-projections-20261026')
+        self.assertEqual(social_style.VERSION, 'units-only-no-decimal-20261027')

@@ -123,6 +123,9 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
     import x_post
     # The owner-approved live pilot has one exact cheering exception.
     final_text = with_age_notice(without_playbook(text))
+    import social_style
+    if social_style.privacy_issues(final_text):
+        raise DiscordError('Private dollar amount or bet identifier in social caption')
     if decimal_projection(final_text):
         raise DiscordError('Decimal forecast in social caption; revise without changing the wager')
     if len(final_text) > 2000:

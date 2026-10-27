@@ -296,12 +296,15 @@ def ticket_card(p):
     # stake chip, payout, estimated-price note
     r = 44 if compact else 54
     cy = panel_bottom + 18 + r
-    pay = kit.money(p['stake'] * kit.decimal(p['odds']))
+    import social_units
+    units = p.get('units')
+    private = p.get('social_units')
+    pay = (social_units.label(units * kit.decimal(p['odds'])) if units is not None else '') if private else kit.money(p['stake'] * kit.decimal(p['odds']))
     psize = 84 if compact else 104
-    inner += kit.poker_chip(card, X1 + r, cy, r, kit.money(p['stake']))
+    inner += kit.poker_chip(card, X1 + r, cy, r, (social_units.label(units) if units is not None else 'MY') if private else kit.money(p['stake']))
     lx = X1 + 2 * r + 20
-    inner += card.text(lx, cy + 14, 'pays', 42, INK_SOFT, 'd', 600)
-    inner += card.text(lx, cy + 58, f"{float(p.get('units', .25)):g}u", 40, INK_SOFT)
+    inner += card.text(lx, cy + 14, ('pays' if units is not None else 'My card'), 42, INK_SOFT, 'd', 600)
+    inner += card.text(lx, cy + 58, (f"{float(units):g}u" if units is not None else ''), 40, INK_SOFT)
     inner += kit.dots(lx + width('pays', 42, 'd', 600) + 16, X2 - width(pay, psize) - 18, cy + 8)
     inner += card.text(X2, cy + psize * CAP / 2, pay, psize, INK, anchor='end')
     y = cy + r
@@ -323,6 +326,8 @@ def ticket_card(p):
 
 # ---------------------------------------------------------------------------- 80/20 Climb
 def climb_card(p):
+    import social_units
+    money = social_units.climb if p.get('social_units') else kit.money
     card = kit.Card()
     panel_bottom = 568
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(540, 380))
@@ -330,8 +335,8 @@ def climb_card(p):
     inner += chip
     cy, r = 396, 104
     a, b = 316, 764
-    inner += kit.poker_chip(card, a, cy, r, kit.money(p['stake']))
-    inner += kit.poker_chip(card, b, cy, r, kit.money(p['payout']))
+    inner += kit.poker_chip(card, a, cy, r, money(p['stake']))
+    inner += kit.poker_chip(card, b, cy, r, money(p['payout']))
     inner += (f'<path d="M{a + r + 34} {cy} H{b - r - 46}" stroke="{CHALK}" stroke-width="12" stroke-linecap="round"/>'
               f'<path d="M{b - r - 70} {cy - 30} L{b - r - 34} {cy} L{b - r - 70} {cy + 30}" fill="none" stroke="{CHALK}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>')
     sub = f"CLIMB #{p['run']} · STEP {p['step']} · {kit.price(p['odds'])} {p['book'].upper()}"
@@ -345,17 +350,17 @@ def climb_card(p):
     inner += kit.dashed(X1, X2, y)
     y += 70
     result = p.get('result')
-    inner += kit.leader(card, y, 'Banked so far' if not result else 'All climbs banked', kit.money(p['banked']))
+    inner += kit.leader(card, y, 'Banked so far' if not result else 'All climbs banked', money(p['banked']))
     y += 70
     if result == 'win':
-        next_line = (f"CLIMB COMPLETE · NEXT {kit.money(p['start'])}" if p.get('complete') else
-                     f"{kit.money(p['bank_this'])} BANKED · STEP {p['step'] + 1} {kit.money(p['next_stake'])} RIDES")
+        next_line = (f"CLIMB COMPLETE · NEXT {money(p['start'])}" if p.get('complete') else
+                     f"{money(p['bank_this'])} BANKED · STEP {p['step'] + 1} {money(p['next_stake'])} RIDES")
     elif result == 'loss':
-        next_line = f"MISSED · NEXT CLIMB {kit.money(p['start'])}"
+        next_line = f"MISSED · NEXT CLIMB {money(p['start'])}"
     elif result in ('push', 'void'):
-        next_line = f"{result.upper()} · STEP {p['step']} AGAIN · {kit.money(p['stake'])} RIDES"
+        next_line = f"{result.upper()} · STEP {p['step']} AGAIN · {money(p['stake'])} RIDES"
     else:
-        next_line = f"{kit.money(p['bank_this'])} BANKED · {kit.money(p['next_stake'])} RIDES"
+        next_line = f"{money(p['bank_this'])} BANKED · {money(p['next_stake'])} RIDES"
     inner += kit.leader(card, y, 'If it cashes' if not result else 'Result', next_line)
     perf = y + 44
     inner += climb_route(card, p, perf)
@@ -366,6 +371,8 @@ def climb_card(p):
 def climb_route(card, p, perf):
     """Printed route: cashed steps get green checks, the current step is outlined, the future is a muted line
     to the $1,000 flag. No future step count and no guessed amounts."""
+    import social_units
+    money = social_units.climb if p.get('social_units') else kit.money
     cy = perf + 92
     xs = [X1 + 38 + i * 132 for i in range(p['step'])]
     flag_x = X2 - 70
@@ -383,7 +390,7 @@ def climb_route(card, p, perf):
     # the $1,000 flag, printed in ink (a goal marker, never a result colour)
     s += (f'<path d="M{flag_x} {cy + 34} V{cy - 60}" stroke="{INK}" stroke-width="6" stroke-linecap="round"/>'
           f'<path d="M{flag_x + 3} {cy - 60} h64 l-16 21 l16 21 h-64 z" fill="{INK}"/>')
-    s += card.text(flag_x + 20, cy + 86, kit.money(p['goal']), 40, INK, anchor='middle')
+    s += card.text(flag_x + 20, cy + 86, money(p['goal']), 40, INK, anchor='middle')
     return s
 
 

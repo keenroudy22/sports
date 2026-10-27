@@ -5,7 +5,7 @@ import struct
 import zlib
 from datetime import datetime, timezone
 
-VERSION = 'no-decimal-projections-20261026'
+VERSION = 'units-only-no-decimal-20261027'
 EFFECTIVE = datetime(2026, 10, 22, tzinfo=timezone.utc)
 MARKER = b'KooknSocial\x00' + VERSION.encode()
 
@@ -30,9 +30,18 @@ def release_issues(text, path):
     return found
 
 
+def privacy_issues(text):
+    found = []
+    if re.search(r'[$＄]\s*\d|\b(?:USD|dollars?)\b', str(text), re.I):
+        found.append('personal dollar amounts: use known units only')
+    if re.search(r'\b(?:bet|wager|ticket)\s*(?:id|number|#)\s*[:#-]?\s*[A-Za-z0-9-]{4,}', str(text), re.I):
+        found.append('private bet identifier')
+    return found
+
+
 def issues(text, graphic=False):
     text = html.unescape(re.sub(r'<[^>]+>', ' ', str(text or '')))
-    found = []
+    found = privacy_issues(text)
     from social_copy import decimal_projection
     if decimal_projection(text):
         found.append('decimal projection: keep forecasts off bet copy and preserve exact wager lines')

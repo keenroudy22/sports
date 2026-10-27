@@ -30,7 +30,8 @@ class SocialVoiceTests(unittest.TestCase):
 
     def test_preview_is_human_not_promised_ticket(self):
         text = social_voice.climb_preview('Friday')
-        self.assertIn('$50 → $1,000', text)
+        self.assertIn('80/20 Climb', text)
+        self.assertNotIn('$', text)
         self.assertIn('Got my eye on Friday', text)
         self.assertIn('Looking for two legs I love.', text)
         self.assertFalse(x_post.x_style(text))

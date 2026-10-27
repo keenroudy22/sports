@@ -9,6 +9,7 @@ import pick_card
 import record_scope
 import ticket_cards
 import ticket_kit
+import social_units
 import x_post
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -181,7 +182,8 @@ def fun_data(pick, games, player_team=None, *, fetch=None, art=None):
     if len(legs) > 1:
         hero_photo, hero_logo, hero_team = _chef_profile(), None, None
     return {'odds': int(pick['odds']), 'book': pick['book'], 'date': date, 'stake': 10,
-            'units': float(pick.get('riskUnits', .25)), 'price_estimated': bool(pick.get('priceEstimated')),
+            'social_units': social_units.active(pick),
+            'units': (None if pick.get('personalTicket') and pick.get('riskUnits') is None else float(pick.get('riskUnits', .25))), 'price_estimated': bool(pick.get('priceEstimated')),
             'photo': hero_photo, 'hero_logo': hero_logo, 'hero_team': _colors(hero_team or {}),
             'hero_team_name': (hero_team or {}).get('abbreviation') or 'K', 'legs': legs}
 
@@ -201,7 +203,7 @@ def climb_data(pick, games, player_team=None, **kwargs):
     legs = fun_data(pick, games, player_team, **kwargs)['legs']
     stake, payout = int(info['stake']), int(info['payout'])
     bank_this = int(info.get('bankThisWin', round(payout * .2)))
-    return {'run': int(info['run']), 'step': int(info['step']), 'stake': stake, 'payout': payout,
+    return {'social_units': social_units.active(pick), 'run': int(info['run']), 'step': int(info['step']), 'stake': stake, 'payout': payout,
             'banked': int(info.get('banked') or 0), 'bank_this': bank_this,
             'next_stake': int(info.get('nextStake', payout - bank_this)),
             'goal': int(info.get('goal') or 1000), 'odds': int(pick['odds']), 'book': pick['book'], 'legs': legs}

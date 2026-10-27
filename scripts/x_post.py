@@ -32,6 +32,7 @@ import gates
 import llm
 import pick_card
 import pricing
+import social_units
 import voice
 import voice_pick
 import re
@@ -402,6 +403,10 @@ def public_book(value):
 def ladder_text(pick):
     """The three money lines for the Kook'n 80/20 Climb: stake, return, bank and next ride."""
     info = pick.get('ladder') or {}
+    if social_units.active(pick):
+        head = (f"80/20 CLIMB · STEP {info.get('step', 1)}\n"
+                f"{social_units.climb(info.get('stake'))} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})")
+        return head, '', ''
     head = (f"{pick_card.dollars(info.get('start', 50))} → {pick_card.dollars(info.get('goal', 1000))} · "
             f"80/20 CLIMB · STEP {info.get('step', 1)}\n"
             f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} "
@@ -592,7 +597,8 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         odds = int(pick['odds'])
         payout = 10 * (1 + odds / 100) if odds > 0 else 10 * (1 + 100 / abs(odds))
         import parlay_caption
-        top = parlay_caption.layout(parlay_head(pick, league), legs, f"$10 → {pick_card.dollars(payout)}")
+        stake = (social_units.label(pick['riskUnits']) if pick.get('riskUnits') is not None else '') if social_units.active(pick) else f"$10 → {pick_card.dollars(payout)}"
+        top = parlay_caption.layout(parlay_head(pick, league), legs, stake)
         options = ([top, f'{ASK}\n{tail}'], [top, tail])
     else:
         prefix = _play_prefix(pick, game, featured)
@@ -682,7 +688,9 @@ def guard(text, pick, reason=None, now_quote=None):
         extra.append({'reason': reason})       # a stored reason's numbers come from a verified fact or the player's own games
     if now_quote:
         extra.append({'now': list(now_quote)})  # the number available now comes from the latest capture
-    extra.append({'stake': pick_card.stake(pick)})                              # "1 unit" is the stake the record counts
+    extra.append({'stake': pick_card.stake(pick)})
+    if social_units.active(pick) and pick.get('ladder'):
+        extra.append({'climbUnits': [social_units.climb(v) for k, v in pick['ladder'].items() if k in ('stake', 'payout', 'banked', 'bankThisWin', 'nextStake', 'start', 'goal') and isinstance(v, (int, float))]})
     if pick.get('ladder'):          # "$1,062" reads as 1 and 62: the rung's dollars as the post writes them
         extra.append({k: pick_card.dollars(v) for k, v in pick['ladder'].items() if isinstance(v, int)})
     elif pick.get('legs') and isinstance(pick.get('odds'), (int, float)):
@@ -701,6 +709,9 @@ def guard(text, pick, reason=None, now_quote=None):
     final_length = tweet_length(x_ticket_copy(text, 'play', pick.get('id', ''), pick))
     if final_length > LIMIT:
         problems.append(f'{final_length} characters including ticket tag and age notice')
+    if social_units.active(pick):
+        import social_style
+        problems += social_style.privacy_issues(text)
     lane = pick.get('lane')
     if lane in ('best_bet', 'chef_pick', 'hot_plate', 'gut_call', 'upset') and not reason:
         problems.append('play has no supporting reason')

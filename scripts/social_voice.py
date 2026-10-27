@@ -23,6 +23,6 @@ def climb_preview(day, start=50, goal=1000):
     """A target-day teaser, never a selected ticket or promised release."""
     if day not in ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'):
         raise ValueError('Use a verified weekday')
-    return (f'${start:,} → ${goal:,} 🍳\n\n'
+    return ('80/20 Climb 🍳\n\n'
             f'Got my eye on {day} for the next climb. Looking for two legs I love.\n\n'
             "Who's riding with me?")

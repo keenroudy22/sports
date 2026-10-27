@@ -5083,3 +5083,52 @@ probabilities and started/live/final games have no NBA pregame bar. No model
 weights, stake, bet admission, record or social template changes. Focused Python
 projection and Node multi-surface/state regressions pass; full release/live proof
 pending. This is display work, not completion of MODELPARITY model validation.
+
+
+### October27 weekly — units-only social follow-through, release pending
+
+Resumed OWNERFOLLOW after the legitimate NBA-bars release lease exited; no lock
+stealing or overlapping checkout edits. Current Tuesday OWNER-NOTE and10:30
+review/packet verified; local27B1call/zero failures4.82s,no cloud fallback.
+Prior W-20261020-1 repairs remain completed. Mac learning already recorded eleven
+bounded trust moves, calibration NFL/prop0.11→0.09 and refreshed researcher-source
+preferences; no new pause/promotion or duplicate weekly learning by this review.
+Missing closing movement still blocks gap/pause moves. Existing undo keys retained.
+
+Weekly posted straights7-12/-3.538u:BestBets10/-2.028u,Chef9/-1.510u;plus-money
+3-10/-4.870u. Saturday44storedCFB games/7straights(5Best,2Chef),Sunday12NFL/5
+(1Best,4Chef),Monday1NFL/3(1Best,2Chef). Current staking0.5u/1u and shared3u/5u
+limits govern new admissions; historical stakes preserved. Both activeCFB games
+have current research favorites:WKU ML-105DK andSHSU ML+180DK,12:28:59Z.
+These are research reads, not an extra released-play promise.
+
+Stored comparable-age analytics:18at24h/1869impressions,14at72h/2065,2at7d/188.
+Sparse, overlapping cohorts; no content winner or increased stake inferred.
+The quota-approved pause on analytics remains; no new Buffer reads. Concrete
+content change is prospective units-only output; prior decimal-projection/current-
+matchup releases retained. Cached result timing still has1/7within30m,4missing,
+max47.3m; keep historical misses and distinguish X confirmation from timeliness.
+Today's WKU0.5u reachedDiscord10:51:40Z/X11:06:46Z; delivered is not future prep.
+
+New native Climb cards/results and ticket captions use the existing private unit
+conversion; fixedSTART50/GOAL1000,80/20 dollar accounting and saved results stay
+unchanged. Personal tickets with unknown stakes omit amounts, never infer units.
+Climb teaser omits bankroll amounts. New social privacy checks reject currency
+and labeled bet IDs; fresh art attestation includes this rule. Already-sent posts
+and archived attachments are preserved. Provider-confirmed private cancellation
+guards remain mandatory; no live queue mutation was needed/performed by review.
+113focused checks passed; full1855 first caught2 obsolete preview/version assertions;
+bounded repair updates actual teaser and expected privacy version,27affected pass.
+Four native renders(open/win/loss/push) saved underwork/weekly-20261027-climb-*.png;
+open/win visuallychecked. Full release/hosted/live proof pending; not shipped.
+Next finite release after this slice:linked combined daily-card grading; broader
+MODELPARITY/quarter evidence holds stay separate. No schedule,budget,record-count
+change,wager or manual production edit. Rollback must retain privacy refusal:
+hold affected social output rather than restore private dollar posting.
+
+October27weekly pre-release gates:1855Python(two expected skips)/282Node pass
+normally and from clean export. Second bounded repair shortened OWNERFOLLOW
+next/evidence to existing240/500 limits;33affected checks pass,limits unchanged.
+Actual Monday Final confirmed X13:05:28.823Z,2115067356493803926;stored private
+Buffer pending0. No recovery mutation or new provider request. Native previews
+are source-generated test fixtures,not new tickets. Hosted/live release still due.
