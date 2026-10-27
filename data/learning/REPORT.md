@@ -19,6 +19,7 @@
 - **NFL/spread** twoWay.trust: 1.0 to 0.95. NFL/spread trust 1.00 to 0.95.
 - **NFL/total** twoWay.trust: 0.95 to 0.9. NFL/total trust 0.95 to 0.90.
 - **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
+- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
 
 ## Direction changes
 

@@ -1,5 +1,5 @@
 {
- "at": "2026-10-27T12:31:32Z",
+ "at": "2026-10-27T12:55:11Z",
  "calibration": [
   {
    "current": 0.15,
@@ -1137,6 +1137,22 @@
    "to": 0,
    "toOpen": [],
    "why": "weekly stored pregame alternate offers versus official final boxes"
+  },
+  {
+   "at": "2026-10-27T12:55:11Z",
+   "evidence": {
+    "added": 0,
+    "hash": "1d7d8c981e99770e3437fd51726ff393d35fe692ac513e59116e4b53f999ff8e",
+    "offered": 37309,
+    "open": 0
+   },
+   "from": 0,
+   "fromOpen": [],
+   "knob": "ladderSegments",
+   "segment": "Climb/alternate-offers",
+   "to": 0,
+   "toOpen": [],
+   "why": "weekly stored pregame alternate offers versus official final boxes"
   }
  ],
  "climb": {
@@ -1160,7 +1176,7 @@
   "moves": [
    {
     "action": "Weekend card ceiling 3 instead of 5 until Nov 10; weekdays unchanged.",
-    "expires": "2026-11-10T12:31:32Z",
+    "expires": "2026-11-10T12:55:11Z",
     "from": 5,
     "key": "card",
     "knob": "direction.weekendCap",
@@ -1184,7 +1200,7 @@
    },
    {
     "action": "Until Nov 10 a longshot is +300 to +800 with 3-4 legs, and no fun-ticket leg (longshot or easy parlay) comes from a segment paused as a best bet; none that fits means none that day.",
-    "expires": "2026-11-10T12:31:32Z",
+    "expires": "2026-11-10T12:55:11Z",
     "from": "standard",
     "key": "fun",
     "knob": "direction.funTickets",
@@ -3807,7 +3823,7 @@
  "resultsShadows": [
   {
    "action": "observe",
-   "at": "2026-10-27T12:31:32Z",
+   "at": "2026-10-27T12:55:11Z",
    "evidence": {
     "after": 2872,
     "before": 4192,
@@ -3821,7 +3837,7 @@
   },
   {
    "action": "observe",
-   "at": "2026-10-27T12:31:32Z",
+   "at": "2026-10-27T12:55:11Z",
    "evidence": {
     "candidateTotals": 229,
     "results": {
@@ -3858,7 +3874,7 @@
   },
   {
    "action": "observe",
-   "at": "2026-10-27T12:31:32Z",
+   "at": "2026-10-27T12:55:11Z",
    "evidence": {
     "publicCardChanged": false,
     "publishedNflTotals": {
@@ -3893,7 +3909,7 @@
   },
   {
    "action": "observe",
-   "at": "2026-10-27T12:31:32Z",
+   "at": "2026-10-27T12:55:11Z",
    "evidence": {
     "markets": [
      {
@@ -4051,7 +4067,7 @@
   },
   {
    "action": "observe",
-   "at": "2026-10-27T12:31:32Z",
+   "at": "2026-10-27T12:55:11Z",
    "evidence": {
     "available": 1925,
     "freshnessGateChanged": false,
@@ -4101,7 +4117,7 @@
   },
   {
    "action": "observe",
-   "at": "2026-10-27T12:31:32Z",
+   "at": "2026-10-27T12:55:11Z",
    "evidence": {
     "alternateRows": 94,
     "defaultChanged": false,
@@ -4117,7 +4133,7 @@
   },
   {
    "action": "observe",
-   "at": "2026-10-27T12:31:32Z",
+   "at": "2026-10-27T12:55:11Z",
    "evidence": {
     "budgetChanged": false,
     "publishedClosingLine": {
@@ -4146,7 +4162,7 @@
   },
   {
    "action": "observe",
-   "at": "2026-10-27T12:31:32Z",
+   "at": "2026-10-27T12:55:11Z",
    "evidence": {
     "headlineChanged": false,
     "publishedClosingLine": {
