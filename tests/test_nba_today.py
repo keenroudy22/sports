@@ -89,6 +89,15 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertEqual(nba_capture.append_changed([{**rows[0],'retrievedAt':'b'}],root,lambda r:r['eventId']),0)
   p=root/'nba-2027.jsonl';p.write_text(p.read_text().replace('"value":1','"value":2'))
   with self.assertRaises(ValueError):nba_capture.append_changed(rows,root,lambda r:r['eventId'])
+ def test_win_bar_uses_only_valid_model_probability_not_score_ratio(self):
+  g=game();g.update(id='NBA-1',seasonType='regular-season',teams={'home':{'id':'1'},'away':{'id':'2'}},scores={'home':None,'away':None})
+  (self.root/'slate.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(NOW),'games':[g]}))
+  for chance in (.73,0,1,None,True,-.1,1.1,float('nan')):
+   class Model:
+    def predict(self,*args):return {'margin':4,'total':224,'sparse':True,'homeWinProb':chance}
+   projection=nba_today.build(NOW,root=self.root,boxes=[],model_factory=lambda *args:Model())['games'][0]['projection']
+   if type(chance) in (int,float) and 0<=chance<=1:self.assertEqual(projection['winProb'],chance)
+   else:self.assertNotIn('winProb',projection)
  def test_unchanged_rechecked_quote_stays_fresh_without_rewriting_history(self):
   g=game();g.update(id='NBA-1',seasonType='regular-season',teams={'home':{'id':'1'},'away':{'id':'2'}},scores={'home':None,'away':None})
   later=NOW+timedelta(hours=5)

@@ -1841,11 +1841,12 @@
     const score = hasScore ? `${esc(g.away.score)}<i> – </i>${esc(g.home.score)}` : isNum(v2.away) ? `${C.fixed(v2.away, 1)}<i> – </i>${C.fixed(v2.home, 1)}` : '–';
     const sub = hasScore ? (isNum(v2.away) ? `We had ${C.fixed(v2.away, 0)}–${C.fixed(v2.home, 0)}` : '') : isNum(v2.total) ? `Total ${C.fixed(v2.total, 1)}` : 'No number yet';
     const team = t => `<div class="pc-team">${teamMark(t, opts.big ? 'lg' : 'md', g.league)}<b>${esc(t.name || t.abbr)}</b>${t.strength && opts.ranks !== false ? `<span title="Our model's offense and defense ranks${t.strength.teams ? ` out of ${esc(t.strength.teams)}` : ''}. #1 is best.">Off #${esc(t.strength.offense)} · Def #${esc(t.strength.defense)}</span>` : ''}</div>`;
-    const home = isNum(v2.winProb) ? v2.winProb : null;
+    const home = isNum(v2.winProb) && v2.winProb >= 0 && v2.winProb <= 1 ? v2.winProb : null;
+    const barLabel = opts.barLabel || 'Estimated win chance';
     let colors = [barColor(g.away), barColor(g.home)];
     if (colors.some(c => !c) || colors[0] === colors[1]) colors = ['#A9C0B3', '#20C774'];
     const ink = c => luminance(c) > 0.179 ? '#07120D' : '#FFFFFF';
-    const bar = home == null || g.fcs || hasScore ? '' : `<div class="pc-bar" role="img" aria-label="Estimated win chance: ${esc(g.away.name)} ${100 - Math.round(100 * home)}%, ${esc(g.home.name)} ${Math.round(100 * home)}%"><span style="width:${(100 * (1 - home)).toFixed(1)}%;background:${esc(colors[0])};color:${ink(colors[0])}">${100 - Math.round(100 * home)}%</span><span style="width:${(100 * home).toFixed(1)}%;background:${esc(colors[1])};color:${ink(colors[1])}">${Math.round(100 * home)}%</span></div><div class="pc-bar-labels"><span>${esc(g.away.abbr)}</span><span>Estimated win chance</span><span>${esc(g.home.abbr)}</span></div>`;
+    const bar = home == null || g.fcs || hasScore ? '' : `<div class="pc-bar" role="img" aria-label="${esc(barLabel)}: ${esc(g.away.name)} ${100 - Math.round(100 * home)}%, ${esc(g.home.name)} ${Math.round(100 * home)}%"><span style="width:${(100 * (1 - home)).toFixed(1)}%;background:${esc(colors[0])};color:${ink(colors[0])}">${100 - Math.round(100 * home)}%</span><span style="width:${(100 * home).toFixed(1)}%;background:${esc(colors[1])};color:${ink(colors[1])}">${Math.round(100 * home)}%</span></div><div class="pc-bar-labels"><span>${esc(g.away.abbr)}</span><span>${esc(barLabel)}</span><span>${esc(g.home.abbr)}</span></div>`;
     const lean = C.leanText(g) || {};
     const sideTeam = raw.side === 'home' ? g.home : g.away;
     const sideLine = m.spread == null ? '' : ` ${C.spreadText('', raw.side === 'home' ? m.spread : -m.spread).trim()}`;
@@ -1956,7 +1957,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-aa811df24274';
-  const GAMES_ASSET = 'app-games.js?v=sha256-a8671912261d';
+  const GAMES_ASSET = 'app-games.js?v=sha256-8b3f81ff51d7';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

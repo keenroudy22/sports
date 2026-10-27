@@ -5070,3 +5070,16 @@ roster/injury-adjusted team model and validated player/quarter/Climb models rema
 unfinished MODELPARITY work. No NBA official play or broader audit completion
 claimed. This verification metadata stays in dev for the next ordinary release;
 no second deployment merely to update its receipt.
+
+### October27 owner-requested NBA win bars — release pending
+
+NBA projection cards reuse football's team-percentage bar on NBA Today, the
+all-sports summary, Research and Games. The existing score model's homeWinProb
+is passed through as winProb only when finite, numeric and within0..1. Never
+infer chance from a score ratio, market price, projection gap or experimental
+player model. Label NBA bars Model win chance with an explicit unadjusted-score-
+model/research note; retain football's Estimated win chance label. Missing/invalid
+probabilities and started/live/final games have no NBA pregame bar. No model
+weights, stake, bet admission, record or social template changes. Focused Python
+projection and Node multi-surface/state regressions pass; full release/live proof
+pending. This is display work, not completion of MODELPARITY model validation.

@@ -92,6 +92,9 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
                                        'margin':round(projection['margin'],1),
                                        'total':round(projection['total'],1),'sparse':bool(projection.get('sparse')),
                                        'label':'Research projection'}
+                    chance=projection.get('homeWinProb')
+                    if type(chance) in (int,float) and math.isfinite(chance) and 0<=chance<=1:
+                        row['projection']['winProb']=chance
             except (OSError, ValueError, KeyError, TypeError):
                 pass
         if game.get('status')=='scheduled' and boxscores.instant(game['kickoff'])>now:

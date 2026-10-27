@@ -649,9 +649,12 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
       ml ? `Moneyline: ${home} ${oddsText(ml.home)} · ${away} ${oddsText(ml.away)} · ${bookLabel(ml.book)} · ${whenShort(ml.retrievedAt)}` : ''].filter(Boolean);
     const extra = comparison + (prices.length ? `<p class="pc-why small">${prices.map(esc).join('<br>')}<br>Prices seen at the times above.</p>` : '') + (g.status === 'scheduled' ? '<p class="small muted">Projection differences, not picks or win probabilities. Missing or older-than-four-hour prices are not shown.</p>' : '');
     const team = side => ({...g.teams[side], abbr:g.teams[side].abbreviation, score:g.scores?.[side]});
-    // Keep the shared score layout, without football's probability/lean table.
+    // Reuse football's bar with the stored score-model probability, never a
+    // probability inferred from the score ratio, prices or projection gap.
     const v2 = {...p}; delete v2.margin;
-    return projCard({id:g.id,league:'NBA',kickoff:g.kickoff,home:team('home'),away:team('away'),state:g.status === 'in_progress' ? 'in' : 'pre',completed:g.status === 'final',v2},{link:false,ranks:false,extra});
+    if (g.status !== 'scheduled') delete v2.winProb;
+    const modelNote = isNum(v2.winProb) && v2.winProb >= 0 && v2.winProb <= 1 ? '<p class="small muted">Model win chance is a score-model estimate; not injury-adjusted or a bet.</p>' : '';
+    return projCard({id:g.id,league:'NBA',kickoff:g.kickoff,home:team('home'),away:team('away'),state:g.status === 'in_progress' ? 'in' : 'pre',completed:g.status === 'final',v2},{link:false,ranks:false,barLabel:'Model win chance',extra:extra+modelNote});
   };
   views.nbaSummary = data => {
     const games = (data.games || []).filter(g => C.dayOf(g.kickoff) === etDay());

@@ -142,3 +142,27 @@ test('NBA prop view shows numeric projection, exact-line samples and holds witho
  html=await views.nbaToday();for(const text of ['News-aware estimate: 16','20 estimated minutes','Old baseline: 24 at 30','not a coach-announced limit','Bench &lt;role&gt;','Current report'])assert.ok(html.includes(text),text);
  data.playerProps.rows=[{...row,sourceAt:new Date(Date.now()-18000000).toISOString()}];html=await views.nbaToday();assert.ok(!html.includes('Historical baseline: 24'));assert.ok(html.includes('Stale prices are hidden'));
 });
+test('NBA projection bars use stored model chances and hide unknown, invalid and started estimates',async()=>{
+ const s=load(),api=s.module.exports,kickoff=new Date(Date.now()+3600000).toISOString();
+ const g={id:'NBA-bar',kickoff,status:'scheduled',teams:{away:{name:'Away',abbreviation:'AWY',color:'#003087'},home:{name:'Home',abbreviation:'HOM',color:'#ce1141'}},projection:{away:110,home:114,total:224,winProb:.73}};
+ const data={games:[g],scheduleFresh:true},ctx=api.gamesContext({get:async()=>data});ctx.state.league='NBA';const views=s.KRGames(ctx);views.gamesLive=async()=>'';
+ for (const html of [await views.games({tab:'upcoming'}),await views.nbaToday(),await views.nbaToday({research:true})]) {
+  assert.match(html,/Model win chance: Away 27%, Home 73%/);
+  assert.match(html,/width:27\.0%;background:#003087/);assert.match(html,/width:73\.0%;background:#ce1141/);
+  assert.match(html,/not injury-adjusted or a bet/);
+ }
+ for (const chance of [undefined,null,-.1,1.1,NaN,true]) {
+  g.projection.winProb=chance;
+  assert.doesNotMatch(await views.nbaToday(),/class="pc-bar"/);
+ }
+ g.projection.winProb=.73;
+ for (const status of ['in_progress','final']) {
+  g.status=status;assert.doesNotMatch(await views.nbaToday(),/class="pc-bar"/);
+ }
+ g.status='scheduled';g.kickoff=new Date(Date.now()-3600000).toISOString();
+ assert.doesNotMatch(await views.nbaToday(),/class="pc-bar"/);
+ g.kickoff=kickoff;g.projection.winProb=.5;
+ assert.match(await views.nbaToday(),/Model win chance: Away 50%, Home 50%/);
+ const football=ctx.projCard({league:'CFB',away:{name:'Away'},home:{name:'Home'},v2:{away:20,home:24,total:44,winProb:.6}});
+ assert.match(football,/Estimated win chance: Away 40%, Home 60%/);
+});
