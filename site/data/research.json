@@ -38932,5 +38932,1101 @@
         "entryNote": "Off the card: price moved 26 cents against, from +148 to +122 at FanDuel. Published cutoff: OVER 1.5 at +148 or better; off the card at 2+, or at +133 or worse at 1.5. Stays in the record at 1.5 and +148 and is graded as posted."
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-10-27T03:22:15Z",
+    "targetWeek": 8,
+    "summary": "Research update for Oct 26: Settled 3: Ryan Flournoy OVER 3.5 receptions win; Brevyn Spann-Ford OVER 1.5 receptions win; Javonte Williams OVER 2.5 receptions loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "settled",
+        "favorite": true,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "5083754",
+        "market": "rec",
+        "line": 3.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401873009"
+        ],
+        "book": "FanDuel",
+        "odds": -102,
+        "projection": 4.5,
+        "edge": "Price-checked chance 51.8% against the exact two-sided price; 50.5% needed at -102: +1.3 percentage points.",
+        "cutoff": "OVER 3.5 at -102 or better; off the card at 4+, or at -117 or worse at 3.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-24T22:41:01Z",
+        "quotedAt": "2026-10-26T12:30:27Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 8:30 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-26T15:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "chef_pick",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.66,
+          "chance": 0.518,
+          "calibrated": true,
+          "calibration": 0.11,
+          "calibrationN": 2285,
+          "push": 0.0,
+          "breakEven": 0.505,
+          "edgePoints": 1.3,
+          "evPerUnit": 0.025,
+          "snapshotAt": "2026-10-24T22:41:01Z",
+          "evaluatedAt": "2026-10-26T12:31:08Z",
+          "fairChance": 0.472,
+          "anchoredChance": 0.518,
+          "gap": 4.6,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Dallas Cowboys at Philadelphia Eagles",
+        "title": "Ryan Flournoy OVER 3.5 receptions",
+        "id": "NFL-2026-W7-flournoy-over-3-5-rec-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873009",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.philadelphiaeagles.com/news/spadaro-game-preview-vs-cowboys-6-storylines-to-follow-eagles-tanner-mckee-saquon-barkley-dak-prescott-nfl-week-7",
+          "https://www.dallascowboys.com/news/ryan-flournoy-cowboys-offense-is-having-the-tough-conversations",
+          "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 6 of 10 over 3.5.",
+          "context": [
+            "Role: 3rd of 4 DAL WRs by projected targets, 6.6 a game.",
+            "Defense: PHI allows 13.17 receptions a game to WRs, 25th-stingiest of 32 this season."
+          ],
+          "cautions": [],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 4.5 against 3.5. The over reads 51.8% after adjustment from the raw 66.0%; 50.5% is needed at -102. Last 10 games: 6 of 10 over 3.5. Role: 3rd of 4 DAL WRs by projected targets, 6.6 a game. Defense: PHI allows 13.17 receptions a game to WRs, 25th-stingiest of 32 this season.",
+        "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Over 3.5 in 6 of his last 10 games.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Book says 3.5. I say 4.5.",
+              "numbers": {
+                "projection": 4.5,
+                "line": 3.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-24T22:41:01Z"
+            },
+            {
+              "text": "3 of his last 5 games finished over 3.5 receptions.",
+              "numbers": {
+                "values": [
+                  5,
+                  2,
+                  4,
+                  3,
+                  7
+                ],
+                "hits": 3,
+                "games": 5,
+                "line": 3.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-19T00:20Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-10-26T12:31:08Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Cowboys wide receiver KaVontae Turpin is out against the Eagles with a rib injury.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Eagles outside linebacker Nolan Smith is out with a concussion, while outside linebackers Jonathan Greenard and Jalyx Hunt are questionable.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Cowboys wide receiver KaVontae Turpin is out against the Eagles with a rib injury.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Eagles outside linebacker Nolan Smith is out with a concussion, while outside linebackers Jonathan Greenard and Jalyx Hunt are questionable.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Michael Carter II (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4240456/michael-carter-ii",
+              "time": "2026-10-24T22:43Z"
+            },
+            {
+              "text": "Nolan Smith Jr. (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4426331/nolan-smith-jr",
+              "time": "2026-10-24T22:31Z"
+            },
+            {
+              "text": "Dontayvion Wicks (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks",
+              "time": "2026-10-24T20:04Z"
+            },
+            {
+              "text": "Saquon Barkley (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley",
+              "time": "2026-10-24T19:58Z"
+            },
+            {
+              "text": "DeVonta Smith (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+              "time": "2026-10-24T19:54Z"
+            },
+            {
+              "text": "Jonathan Greenard (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard",
+              "time": "2026-10-24T18:21Z"
+            },
+            {
+              "text": "Jalyx Hunt (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt",
+              "time": "2026-10-20T16:10Z"
+            },
+            {
+              "text": "Drew Shelton (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton",
+              "time": "2026-10-25T00:36Z"
+            },
+            {
+              "text": "Dee Winters (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters",
+              "time": "2026-10-24T23:11Z"
+            },
+            {
+              "text": "KaVontae Turpin (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin",
+              "time": "2026-10-24T23:08Z"
+            }
+          ],
+          "weather": {
+            "tempF": 61,
+            "windMph": 5,
+            "windDirection": "W",
+            "precipProb": 0,
+            "periodStart": "2026-10-26T20:00:00-04:00",
+            "issuedAt": "2026-10-26T08:09:03+00:00",
+            "source": "https://api.weather.gov/gridpoints/PHI/50,79/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 3.5,
+                  "price": 102,
+                  "time": "2026-10-25T13:54:48Z"
+                },
+                "now": {
+                  "line": 3.5,
+                  "price": 108,
+                  "time": "2026-10-26T10:45:40Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 3.5,
+                  "price": -102,
+                  "time": "2026-10-25T19:23:48Z"
+                },
+                "now": {
+                  "line": 3.5,
+                  "price": -102,
+                  "time": "2026-10-26T12:30:27Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 3.5,
+              "price": -102,
+              "time": "2026-10-26T12:30:27Z"
+            }
+          },
+          "ours": {
+            "projection": 4.5,
+            "line": 3.5,
+            "market": "rec",
+            "text": "Over 3.5 in 6 of his last 10 games.",
+            "snapshotAt": "2026-10-24T22:41:01Z"
+          },
+          "history": "Last 10 games: 6 of 10 over 3.5.",
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4240456/michael-carter-ii",
+              "time": "2026-10-24T22:43Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4426331/nolan-smith-jr",
+              "time": "2026-10-24T22:31Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks",
+              "time": "2026-10-24T20:04Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley",
+              "time": "2026-10-24T19:58Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+              "time": "2026-10-24T19:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard",
+              "time": "2026-10-24T18:21Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt",
+              "time": "2026-10-20T16:10Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton",
+              "time": "2026-10-25T00:36Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters",
+              "time": "2026-10-24T23:11Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin",
+              "time": "2026-10-24T23:08Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/PHI/50,79/forecast/hourly",
+              "time": "2026-10-26T08:09:03+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873009",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.philadelphiaeagles.com/news/spadaro-game-preview-vs-cowboys-6-storylines-to-follow-eagles-tanner-mckee-saquon-barkley-dak-prescott-nfl-week-7",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.dallascowboys.com/news/ryan-flournoy-cowboys-offense-is-having-the-tough-conversations",
+              "time": "2026-10-26T12:31:08Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-26T12:47:22Z",
+        "result": "win",
+        "actual": "Ryan Flournoy: 4 receptions",
+        "settledAt": "2026-10-27T03:22:15Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873009",
+        "actualValue": 4,
+        "units": 0.98
+      },
+      {
+        "status": "settled",
+        "favorite": true,
+        "modelLean": true,
+        "position": "TE",
+        "athleteId": "4360967",
+        "market": "rec",
+        "line": 1.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401873009"
+        ],
+        "book": "FanDuel",
+        "odds": 148,
+        "projection": 1.6,
+        "edge": "Price-checked chance 50.3% against the exact two-sided price; 40.3% needed at +148: +10.0 percentage points.",
+        "cutoff": "OVER 1.5 at +148 or better; off the card at 2+, or at +133 or worse at 1.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-24T22:41:01Z",
+        "quotedAt": "2026-10-26T12:30:27Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 8:30 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-26T15:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "chef_pick",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.527,
+          "chance": 0.503,
+          "calibrated": true,
+          "calibration": 0.11,
+          "calibrationN": 2285,
+          "push": 0.0,
+          "breakEven": 0.403,
+          "edgePoints": 10.0,
+          "evPerUnit": 0.247,
+          "snapshotAt": "2026-10-24T22:41:01Z",
+          "evaluatedAt": "2026-10-26T12:31:08Z",
+          "fairChance": 0.377,
+          "anchoredChance": 0.503,
+          "gap": 12.6,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Dallas Cowboys at Philadelphia Eagles",
+        "title": "Brevyn Spann-Ford OVER 1.5 receptions",
+        "id": "NFL-2026-W7-spann-ford-over-1-5-rec-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873009",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 3 of 10 over 1.5.",
+          "context": [
+            "Role: 2nd of 3 DAL TEs by projected targets, 2.4 a game.",
+            "Defense: PHI allows 4.83 receptions a game to TEs, 12th-stingiest of 32 this season."
+          ],
+          "cautions": [
+            "Only 3 of the last 10 games cleared this side of the line; recent results oppose it."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 1.6 against 1.5. The over reads 50.3% after adjustment from the raw 52.7%; 40.3% is needed at +148. Last 10 games: 3 of 10 over 1.5. Role: 2nd of 3 DAL TEs by projected targets, 2.4 a game. Defense: PHI allows 4.83 receptions a game to TEs, 12th-stingiest of 32 this season.",
+        "risk": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 5 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 1.5. I say 1.6.",
+              "numbers": {
+                "projection": 1.6,
+                "line": 1.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-24T22:41:01Z"
+            },
+            {
+              "text": "Dallas wide receiver KaVontae Turpin is out with a rib injury.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Philadelphia outside linebacker Nolan Smith is out with a concussion, while outside linebackers Jonathan Greenard and Jalyx Hunt are questionable.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "2 of his last 5 games finished over 1.5 receptions.",
+              "numbers": {
+                "values": [
+                  2,
+                  1,
+                  0,
+                  0,
+                  4
+                ],
+                "hits": 2,
+                "games": 5,
+                "line": 1.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-19T00:20Z"
+            },
+            {
+              "text": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 5 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-10-26T12:31:08Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Dallas wide receiver KaVontae Turpin is out with a rib injury.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Philadelphia outside linebacker Nolan Smith is out with a concussion, while outside linebackers Jonathan Greenard and Jalyx Hunt are questionable.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Dallas wide receiver KaVontae Turpin is out with a rib injury.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Philadelphia outside linebacker Nolan Smith is out with a concussion, while outside linebackers Jonathan Greenard and Jalyx Hunt are questionable.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Michael Carter II (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4240456/michael-carter-ii",
+              "time": "2026-10-24T22:43Z"
+            },
+            {
+              "text": "Nolan Smith Jr. (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4426331/nolan-smith-jr",
+              "time": "2026-10-24T22:31Z"
+            },
+            {
+              "text": "Dontayvion Wicks (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks",
+              "time": "2026-10-24T20:04Z"
+            },
+            {
+              "text": "Saquon Barkley (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley",
+              "time": "2026-10-24T19:58Z"
+            },
+            {
+              "text": "DeVonta Smith (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+              "time": "2026-10-24T19:54Z"
+            },
+            {
+              "text": "Jonathan Greenard (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard",
+              "time": "2026-10-24T18:21Z"
+            },
+            {
+              "text": "Jalyx Hunt (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt",
+              "time": "2026-10-20T16:10Z"
+            },
+            {
+              "text": "Drew Shelton (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton",
+              "time": "2026-10-25T00:36Z"
+            },
+            {
+              "text": "Dee Winters (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters",
+              "time": "2026-10-24T23:11Z"
+            },
+            {
+              "text": "KaVontae Turpin (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin",
+              "time": "2026-10-24T23:08Z"
+            }
+          ],
+          "weather": {
+            "tempF": 61,
+            "windMph": 5,
+            "windDirection": "W",
+            "precipProb": 0,
+            "periodStart": "2026-10-26T20:00:00-04:00",
+            "issuedAt": "2026-10-26T08:09:03+00:00",
+            "source": "https://api.weather.gov/gridpoints/PHI/50,79/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": 148,
+                  "time": "2026-10-26T05:06:26Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": 158,
+                  "time": "2026-10-26T10:45:40Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": 148,
+                  "time": "2026-10-26T05:06:26Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": 148,
+                  "time": "2026-10-26T12:30:27Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 1.5,
+              "price": 148,
+              "time": "2026-10-26T12:30:27Z"
+            }
+          },
+          "ours": {
+            "projection": 1.6,
+            "line": 1.5,
+            "market": "rec",
+            "text": "Book says 1.5. I say 1.6.",
+            "snapshotAt": "2026-10-24T22:41:01Z"
+          },
+          "history": "Last 10 games: 3 of 10 over 1.5.",
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4240456/michael-carter-ii",
+              "time": "2026-10-24T22:43Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4426331/nolan-smith-jr",
+              "time": "2026-10-24T22:31Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks",
+              "time": "2026-10-24T20:04Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley",
+              "time": "2026-10-24T19:58Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+              "time": "2026-10-24T19:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard",
+              "time": "2026-10-24T18:21Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt",
+              "time": "2026-10-20T16:10Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton",
+              "time": "2026-10-25T00:36Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters",
+              "time": "2026-10-24T23:11Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin",
+              "time": "2026-10-24T23:08Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/PHI/50,79/forecast/hourly",
+              "time": "2026-10-26T08:09:03+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873009",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-26T12:31:08Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-26T12:47:22Z",
+        "result": "win",
+        "actual": "Brevyn Spann-Ford: 2 receptions",
+        "settledAt": "2026-10-27T03:22:15Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873009",
+        "actualValue": 2,
+        "units": 1.48
+      },
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "position": "RB",
+        "athleteId": "4361579",
+        "market": "rec",
+        "line": 2.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401873009"
+        ],
+        "book": "FanDuel",
+        "odds": 106,
+        "projection": 2.6,
+        "edge": "Price-checked chance 50.2% against the exact two-sided price; 48.5% needed at +106: +1.7 percentage points.",
+        "cutoff": "OVER 2.5 at +106 or better; off the card at 3+, or at -109 or worse at 2.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-24T22:41:01Z",
+        "quotedAt": "2026-10-26T12:30:27Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 8:30 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-26T15:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 0.5,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.522,
+          "chance": 0.502,
+          "calibrated": true,
+          "calibration": 0.11,
+          "calibrationN": 2285,
+          "push": 0.0,
+          "breakEven": 0.485,
+          "edgePoints": 1.7,
+          "evPerUnit": 0.035,
+          "snapshotAt": "2026-10-24T22:41:01Z",
+          "evaluatedAt": "2026-10-26T12:31:08Z",
+          "fairChance": 0.454,
+          "anchoredChance": 0.502,
+          "gap": 4.8,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Dallas Cowboys at Philadelphia Eagles",
+        "title": "Javonte Williams OVER 2.5 receptions",
+        "id": "NFL-2026-W7-williams-over-2-5-rec-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873009",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.philadelphiaeagles.com/news/spadaro-game-preview-vs-cowboys-6-storylines-to-follow-eagles-tanner-mckee-saquon-barkley-dak-prescott-nfl-week-7",
+          "https://www.dallascowboys.com/news/cowboys-eagles-how-to-watch-listen-stream-in-week-7",
+          "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 3 of 10 over 2.5.",
+          "context": [
+            "Role: 1st of 3 DAL RBs by projected targets, 3.4 a game.",
+            "Defense: PHI allows 3.83 receptions a game to RBs, 9th-stingiest of 32 this season."
+          ],
+          "cautions": [
+            "Only 3 of the last 10 games cleared this side of the line; recent results oppose it."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 2.6 against 2.5. The over reads 50.2% after adjustment from the raw 52.2%; 48.5% is needed at +106. Last 10 games: 3 of 10 over 2.5. Role: 1st of 3 DAL RBs by projected targets, 3.4 a game. Defense: PHI allows 3.83 receptions a game to RBs, 9th-stingiest of 32 this season.",
+        "risk": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 2.5. I say 2.6.",
+              "numbers": {
+                "projection": 2.6,
+                "line": 2.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-24T22:41:01Z"
+            },
+            {
+              "text": "Dallas expects to recommit to handing the ball to Javonte Williams against Philadelphia.",
+              "numbers": {},
+              "source": "https://www.dallascowboys.com/news/cowboys-eagles-how-to-watch-listen-stream-in-week-7",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Philadelphia ruled out Nolan Smith and Michael Carter II, while listing Jonathan Greenard and Jalyx Hunt as questionable.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "2 of his last 5 games finished over 2.5 receptions.",
+              "numbers": {
+                "values": [
+                  3,
+                  2,
+                  5,
+                  2,
+                  2
+                ],
+                "hits": 2,
+                "games": 5,
+                "line": 2.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-19T00:20Z"
+            },
+            {
+              "text": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-10-26T12:31:08Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Dallas expects to recommit to handing the ball to Javonte Williams against Philadelphia.",
+              "numbers": {},
+              "source": "https://www.dallascowboys.com/news/cowboys-eagles-how-to-watch-listen-stream-in-week-7",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Philadelphia ruled out Nolan Smith and Michael Carter II, while listing Jonathan Greenard and Jalyx Hunt as questionable.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Dallas expects to recommit to handing the ball to Javonte Williams against Philadelphia.",
+              "numbers": {},
+              "source": "https://www.dallascowboys.com/news/cowboys-eagles-how-to-watch-listen-stream-in-week-7",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Philadelphia ruled out Nolan Smith and Michael Carter II, while listing Jonathan Greenard and Jalyx Hunt as questionable.",
+              "numbers": {},
+              "source": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "text": "Michael Carter II (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4240456/michael-carter-ii",
+              "time": "2026-10-24T22:43Z"
+            },
+            {
+              "text": "Nolan Smith Jr. (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4426331/nolan-smith-jr",
+              "time": "2026-10-24T22:31Z"
+            },
+            {
+              "text": "Dontayvion Wicks (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks",
+              "time": "2026-10-24T20:04Z"
+            },
+            {
+              "text": "Saquon Barkley (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley",
+              "time": "2026-10-24T19:58Z"
+            },
+            {
+              "text": "DeVonta Smith (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+              "time": "2026-10-24T19:54Z"
+            },
+            {
+              "text": "Jonathan Greenard (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard",
+              "time": "2026-10-24T18:21Z"
+            },
+            {
+              "text": "Jalyx Hunt (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt",
+              "time": "2026-10-20T16:10Z"
+            },
+            {
+              "text": "Drew Shelton (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton",
+              "time": "2026-10-25T00:36Z"
+            },
+            {
+              "text": "Dee Winters (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters",
+              "time": "2026-10-24T23:11Z"
+            },
+            {
+              "text": "KaVontae Turpin (DAL) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin",
+              "time": "2026-10-24T23:08Z"
+            }
+          ],
+          "weather": {
+            "tempF": 61,
+            "windMph": 5,
+            "windDirection": "W",
+            "precipProb": 0,
+            "periodStart": "2026-10-26T20:00:00-04:00",
+            "issuedAt": "2026-10-26T08:09:03+00:00",
+            "source": "https://api.weather.gov/gridpoints/PHI/50,79/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": 112,
+                  "time": "2026-10-25T13:54:48Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": 118,
+                  "time": "2026-10-26T10:45:40Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": 106,
+                  "time": "2026-10-25T19:23:48Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": 106,
+                  "time": "2026-10-26T12:30:27Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 2.5,
+              "price": 106,
+              "time": "2026-10-26T12:30:27Z"
+            }
+          },
+          "ours": {
+            "projection": 2.6,
+            "line": 2.5,
+            "market": "rec",
+            "text": "Book says 2.5. I say 2.6.",
+            "snapshotAt": "2026-10-24T22:41:01Z"
+          },
+          "history": "Last 10 games: 3 of 10 over 2.5.",
+          "sources": [
+            {
+              "label": "role",
+              "url": "https://www.dallascowboys.com/news/cowboys-eagles-how-to-watch-listen-stream-in-week-7",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "injury",
+              "url": "https://www.philadelphiaeagles.com/news/cowboys-vs-eagles-injury-report-2026-nfl-week-7-saquon-barkley-jalyx-hunt",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4240456/michael-carter-ii",
+              "time": "2026-10-24T22:43Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4426331/nolan-smith-jr",
+              "time": "2026-10-24T22:31Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks",
+              "time": "2026-10-24T20:04Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley",
+              "time": "2026-10-24T19:58Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+              "time": "2026-10-24T19:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard",
+              "time": "2026-10-24T18:21Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt",
+              "time": "2026-10-20T16:10Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton",
+              "time": "2026-10-25T00:36Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters",
+              "time": "2026-10-24T23:11Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin",
+              "time": "2026-10-24T23:08Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/PHI/50,79/forecast/hourly",
+              "time": "2026-10-26T08:09:03+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873009",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-26T12:31:08Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.philadelphiaeagles.com/news/spadaro-game-preview-vs-cowboys-6-storylines-to-follow-eagles-tanner-mckee-saquon-barkley-dak-prescott-nfl-week-7",
+              "time": "2026-10-26T12:31:08Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-26T12:47:22Z",
+        "result": "loss",
+        "actual": "Javonte Williams: 0 receptions",
+        "settledAt": "2026-10-27T03:22:15Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873009",
+        "actualValue": 0,
+        "units": -0.5
+      }
+    ]
   }
 ]
