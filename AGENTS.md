@@ -296,7 +296,9 @@ Handy commands (from `~/Projects/sports`):
    It holds `~/.config/keenroudy/release.lock` as a release lease, takes the ordinary
    run lock only to synchronize and promote, and runs every full Python/Node,
    clean-export, build/feed, payload/record/NBA/public-boundary/asset/SVG and real-slot
-   offline rehearsal gate outside the posting lock. Each lock wait is bounded to
+   offline rehearsal gate outside the posting lock.
+   The clean-export gate is `/opt/homebrew/bin/python3 scripts/clean_export_tests.py`;
+   its failure stops promotion just like either full suite. Each lock wait is bounded to
    fifteen minutes; never steal a legitimate lock. Dirty checkouts stop with changes
    preserved. Concurrent head changes or a rejected push require synchronization
    and all gates again, at most three attempts. Only the exact clean tested heads
