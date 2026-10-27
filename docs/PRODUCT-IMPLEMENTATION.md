@@ -5037,3 +5037,36 @@ this source decision. Real08:45ET PDF read13:00:51Z:1request,32team/event entrie
 28mappedplayers,0unmapped; Boston still not submitted. No NBA bet/Climb promoted.
 Focused132NBA checks pass, including capture-to-Trial success and reader-failure
 paths. Full exact-head tests/deployment/hosted/mobile verification pending.
+
+October27 local verification/source operation:tested source9762c4fbb62fc77f714243ea0bb9f81de8a34529
+promoted/pushed on first lease attempt.1848Python(two expected skips)/281Node pass
+normally and from clean export;495pages,131publications/NBA0,712publicfiles,
+feed/budget/record/NBA/public-boundary/assets/SVG gates pass. True0855 offline
+83kig05c rehearsal exit0/outcomeok,zerooutsidewrites/privateReads,twoexpected
+network blocks. An initial check used obsolete systemPython3.9 and stopped; the
+supported capturePython3.14 rerun then caught/fixed the explicit official-free-host
+allowlist and queue text bounds before all gates passed. Neither failure deployed.
+Actual deployed capture13:11:55-13:12:06Z:20free reads within40 ceiling,5newDKquote
+observations,zeroerrors,official08:45ET PDF preserved at realreceipt13:11:55Z.
+All4tonight games screened:Bostonreportunsubmitted in1;unadjustedinjuryhold in3.
+Capture8c812d9f42f3ea5d1fd2ea6055ef3e869ed277b7;no officialNBA bet or publicrecord
+write. Hosted40509968661/live final verification still pending. Private evidence
+work/nba-official-release-verified-20261027.log and nba-official-attended-20261027.json.
+Separate read-only team-total paper check:35 frozen-price regular-season lean
+games19-16,hypotheticalflat1u+1.385,modelMAE15.660/capturedline15.614. Not official
+profit or sufficient evidence to waive injuries/promote props. Team model remains
+unadjusted;player/quarter/Climb validation and broader MODELPARITY are unfinished.
+
+
+October27 official-source release VERIFIED LIVE:hosted40509968661SUCCESS;
+verifiedHead7c5e587e000ec345a1f38afba1805dda4b8107cc contains testedsource9762c4fb
+andactualcapture8c812d9f by checked ancestry. Hosted record131/NBA0 and public
+boundary716files have zero issues. Loaded Today/Record/NBAToday at375/1440 each
+have exactviewport/documentwidth,no loading/error/consolewarnings. NBA comparisons
+andavailability show actual9:11AMET capture. Phone anddesktop visuallyreviewed;
+ownerproof kookn-nba-live-2026-10-27.png. Viewportoverride reset. Receipt
+work/nba-release-verified-20261027.json. Source/capture repair is released; the
+roster/injury-adjusted team model and validated player/quarter/Climb models remain
+unfinished MODELPARITY work. No NBA official play or broader audit completion
+claimed. This verification metadata stays in dev for the next ordinary release;
+no second deployment merely to update its receipt.
