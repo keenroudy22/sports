@@ -5171,3 +5171,24 @@ earlier next-action ordering rather than marking broad units-only output done.
 Archived only oldercompleted sameweekly01a159d7;latest/otheractive retained.
 Fullreceipt work/weekly-20261027-receipt.json. Receipt metadata follows in the
 next ordinary code release;no second deployment merely for this note.
+
+
+October27 NBA bars/cache VERIFIED LIVE:combinedsource32e8cfeab/hosted40531984071
+SUCCESS,verifiedHeadbff5158e1ac53d5c5dcce24380e75ab5a8f11f53 contains barc68ccef07,
+cachefix32e8cfeab and preserved scheduledcapturef2a950ea by checked ancestry.
+1856Python(two expected skips)/282Node pass normal+clean;record131/NBA0,
+hosted716files/zeroissues. Final local lease succeeded on third attempt after
+source/cache and real research-data advances; each repeated all gates. Existing
+weekly-20261027-release.log holds exact combined-source tests/rehearsals. Older
+scheduled40529961625 had pushed its captures asf2a950ea before cancellation;
+latest release retains them, no lost captured record or extra feed replay.
+A normal existing-tab reload changed mainapp206/Estimated-label to fingerprint
+0e654179323c/Model-label and exposed the explicit unadjusted-model note. All4
+NBA matchup bars verified. Today/Record/NBAToday375/1440 loaded without overflow
+or console warnings/errors; Games/Research1440 share the same bar. Final phone
+and desktop proofs captured after fonts loaded and visually reviewed; initial
+transient glyph screenshots superseded. Viewport reset; temporary preview server
+closed. Ownerproof kookn-nba-win-bars-live-2026-10-27.png; full receipt
+work/nba-bars-verified-20261027.json. No price/stake/record or model promotion;
+MODELPARITY remains unfinished. Verification metadata staysdev for next ordinary
+release; no second deployment just to publish its receipt.
