@@ -291,57 +291,21 @@ Handy commands (from `~/Projects/sports`):
    may still run, and it can leave drafts/pending/failed files in the shared private desk. Do not use that command
    as an isolated test. Do not delete a real failure report to clean up a rehearsal.
 4. Commit on `dev` as keenroudy22, ending the message with an attribution line for the agent that wrote it.
-5. Deploy while holding the run lock (it waits for a run in progress), then fast-forward and push:
-   ```
-   cd ~/Projects/sports
-   /opt/homebrew/bin/python3 - <<'PY'
-   import fcntl, os, subprocess, time
-   from pathlib import Path
-   prod = Path('/Users/keen/Projects/sports')
-   dev = Path('/Users/keen/Projects/sports-dev')
-   env = {**os.environ, 'GH_CONFIG_DIR': '/Users/keen/.config/keenroudy/gh',
-          'GIT_CONFIG_NOSYSTEM': '1'}
-   def command(args, cwd):
-       subprocess.run(args, cwd=cwd, env=env, check=True)
-   def clean(path):
-       state = subprocess.run(['git', 'status', '--porcelain'], cwd=path, env=env,
-                              check=True, capture_output=True, text=True).stdout
-       if state.strip():
-           raise SystemExit(f'{path} is not clean; preserve and review changes before deployment')
-   lock = open('/Users/keen/.config/keenroudy/run.lock', 'a')
-   while True:
-       try:
-           fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB); break
-       except OSError:
-           time.sleep(5)
-   clean(prod)
-   clean(dev)
-   command(['git', 'fetch', '-q', 'origin'], prod)
-   command(['git', 'merge', '-q', '--ff-only', 'origin/main'], prod)
-   tested_head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=dev, env=env,
-                                check=True, capture_output=True, text=True).stdout.strip()
-   command(['git', 'rebase', '-q', 'main'], dev)
-   rebased_head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=dev, env=env,
-                                 check=True, capture_output=True, text=True).stdout.strip()
-   if rebased_head != tested_head:
-       raise SystemExit('Rebased dev; repeat rehearsal and affected visual checks, then retry deployment')
-   command(['/opt/homebrew/bin/python3', '-m', 'unittest', 'discover', '-s', 'tests'], dev)
-   node_tests = sorted(str(p.relative_to(dev)) for p in (dev / 'tests').glob('*.test.js'))
-   if not node_tests:
-       raise SystemExit('No frontend tests found; refusing deployment')
-   command(['node', '--test', *node_tests], dev)
-   command(['/opt/homebrew/bin/python3', 'scripts/clean_export_tests.py'], dev)
-   clean(prod)
-   clean(dev)
-   command(['git', 'merge', '-q', '--ff-only', 'dev'], prod)
-   command(['git', 'push', '-q', 'origin', 'main'], prod)
-   PY
-   ```
-   Each test's exit code must stop deployment on failure; never pipe a test into `tail` without preserving the
-   test's status. If the rebase changed code after the rehearsal/visual QA, repeat affected verification before
-   promoting. If `~/Projects/sports` is not clean, inspect first: commit genuine stopped-run captures as "Captures
-   left by a stopped run", preserving unrelated edits. If a rebase stops on a store, `python3 scripts/merge_store.py`
-   resolves it, then `git rebase --continue`. Never discard data or force the merge.
+5. Release the committed candidate through the repository entry point:
+   `/opt/homebrew/bin/python3 scripts/deploy.py` from `~/Projects/sports-dev`.
+   It holds `~/.config/keenroudy/release.lock` as a release lease, takes the ordinary
+   run lock only to synchronize and promote, and runs every full Python/Node,
+   clean-export, build/feed, payload/record/NBA/public-boundary/asset/SVG and real-slot
+   offline rehearsal gate outside the posting lock. Each lock wait is bounded to
+   fifteen minutes; never steal a legitimate lock. Dirty checkouts stop with changes
+   preserved. Concurrent head changes or a rejected push require synchronization
+   and all gates again, at most three attempts. Only the exact clean tested heads
+   may fast-forward production and push. A failed gate stops promotion and preserves
+   evidence; diagnose bounded causes before retrying. Do not substitute an ad hoc
+   `/tmp` executor or the runtime ticket-release suite for these deployment gates.
+   The returned `pushed-needs-hosted-live` receipt is not a successful deployment.
+   If production contains stopped-run captures, inspect and preserve them using
+   the existing capture/immutable-store recovery before retrying; never discard data.
 6. Watch the publish run until it passes (`gh run watch <id> --exit-status`), then check the live site at phone
    width (375 px): no sideways scroll, no console errors, and no rendered `did not load` error state.
 

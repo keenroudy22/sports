@@ -4860,3 +4860,19 @@ checked. Exact2.5/+106/0.5u preserved in clean private production-ticket preview
 Buffer refreshed Queue0/Drafts0; no unresolved ledger release, pending play or
 local X draft to revise. Already-sent originals retained. No test social sends.
 Broader owner audit remains open under OWNERFOLLOW and MODELPARITY.
+
+
+### October27 overnight — durable release entry point, testing
+
+O-20261025-OWNERFOLLOW resumes the unfinished deployment-delay repair. New
+scripts/deploy.py retains a release lease, bounded15minute lock waits and two
+short posting-lock transactions. Full Python/Node/clean-export and all build,
+record, public-boundary, asset, SVG and true-clock offline rehearsal gates run
+outside that lock. Any changed tested head or rejected push repeats all gates,
+at most3attempts; dirty state, failed checks and unknown conflicts preserve work
+and stop. Canonical AGENTS recipe now uses the repository entry point. Real Git
+worktree integration regressions prove both concurrent writers survive and are
+reverified, source changes cannot promote untested, failed checks preserve commits,
+and occupied locks are not stolen. Not shipped until full gates/hosted/live proof.
+Climb remains the latest owner-exempt fixed50-to1000 challenge; ordinary and
+personal social privacy, linked daily-card grading and NBA validation stay open.
