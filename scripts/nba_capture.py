@@ -98,6 +98,17 @@ def injuries(payload, season, retrieved):
     return rows
 
 
+def save_availability_snapshot(rows, season, retrieved, root):
+    """Keep complete capture-time evidence, including removal from this feed.
+
+    Changed-player history alone cannot reconstruct what the provider reported
+    before a game. Absence from this snapshot is not an official clearance.
+    """
+    snapshot = dict(league='NBA',season=season,retrievedAt=retrieved,source=INJURIES,
+        rows=rows,scope='Complete ESPN observation, not an official team submission or medical clearance')
+    return append_changed([snapshot],Path(root)/'availability-snapshots',lambda r:r['retrievedAt'])
+
+
 def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.utc), scheduled=False):
     now = now or clock(); budget = budget or Budget()
     root = Path(root); root.mkdir(parents=True, exist_ok=True)
@@ -131,6 +142,7 @@ def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.
         if len(rows) != expected:
             raise ValueError('NBA injury identities incomplete')
         result['injuries'] = append_changed(rows, root/'injuries', lambda r:(r['athleteId'], r['team']))
+        save_availability_snapshot(rows, season, stamp, root)
         boxscores.write_json(root/'injuries-current.json', {'retrievedAt':stamp,'season':season,'rows':rows,'source':INJURIES})
     except (OSError, ValueError, KeyError, TypeError):
         result['errors'].append('injuries-unavailable')

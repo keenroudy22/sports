@@ -71,5 +71,19 @@ class MinutesShadowTests(unittest.TestCase):
         for status in ('Out','Doubtful','Questionable','Probable','Day-To-Day','Unknown','NOT YET SUBMITTED',' '):
             self.assertTrue(nba_capture.blocks_availability(status))
 
+    def test_full_injury_snapshots_preserve_the_before_game_evidence_when_a_row_disappears(self):
+        row=dict(league='NBA',season=2027,athleteId='2',team='1',status='Out',
+                 retrievedAt=AT,source=nba_capture.INJURIES)
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            self.assertEqual(nba_capture.save_availability_snapshot([row],2027,AT,root),1)
+            self.assertEqual(nba_capture.save_availability_snapshot([row],2027,AT,root),0)
+            self.assertEqual(nba_capture.save_availability_snapshot([],2027,'2026-10-27T13:00:00Z',root),1)
+            snapshots=nba_player_props.saved(root/'availability-snapshots')
+            self.assertEqual(len(snapshots),2)
+            self.assertEqual(snapshots[0]['rows'],[row])
+            self.assertEqual(snapshots[1]['rows'],[])
+            self.assertIn('not an official',snapshots[1]['scope'])
+
 
 if __name__=='__main__':unittest.main()

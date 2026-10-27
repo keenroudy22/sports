@@ -5005,3 +5005,9 @@ Official08:00ET injury report:Boston unsubmitted; known absences/unresolved
 statuses elsewhere. No qualifying official NBA bet or Climb claimed. Private
 receipts work/nba-forward-current-20261027.json, nba-context-current-20261027.json
 and nba-minutes-replay-20261027.json. Full deployment/hosted/live pending.
+
+October27 follow-up:the same successful ESPN injury response now appends a full
+private availability snapshot, including an explicitly empty provider list.
+Changed-athlete rows could not reconstruct a removed designation at a historical
+clock. Snapshots preserve original capture times; absence is not an official
+clearance. No backfilled snapshot, extra request or new scheduled job.
