@@ -41498,5 +41498,230 @@
         "entryNote": "Off the card: original 51.5 at -102 is no longer the captured main line; the latest 52.5 at -105 does not clear our price check, so no new entries. Published cutoff: OVER 51.5 at -102 or better; off the card at 53+, or at -117 or worse at 51.5. Stays in the record at 51.5 and -102 and is graded as posted."
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-27T21:31:32Z",
+    "targetWeek": 9,
+    "summary": "Research update for Oct 27: Nothing to settle. Closed 1: Western Kentucky MONEYLINE. Nothing published. Screened and passed on 12: Jo Silver UNDER 48.5 rushing yards (held); Ajay Allen UNDER 54.5 rushing yards (held); Delaware MONEYLINE (held); Missouri State MONEYLINE (held); Sam Houston +6 (held); Western Kentucky -2 (held); Delaware +1.5 (held); Missouri State -6 (held); and 4 more. odds_api.py: CFB: skipped (captured 2026-10-27T20:02:15Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent) sharp_odds.py: sharp: 3 records appended",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "expired",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401871071"
+        ],
+        "book": "DraftKings",
+        "odds": -105,
+        "projection": 0.6,
+        "edge": "Price-checked chance 52.1% against the exact two-sided price; 51.2% needed at -105: +0.9 percentage points.",
+        "cutoff": "HOME 0 at -105 or better; off the card at -0.5 or lower, or at -120 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-21T04:58:13Z",
+        "quotedAt": "2026-10-27T09:28:18Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 5:28 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-27T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 0.5,
+        "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.58,
+          "chance": 0.521,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.512,
+          "edgePoints": 0.9,
+          "evPerUnit": 0.017,
+          "snapshotAt": "2026-10-21T04:58:13Z",
+          "evaluatedAt": "2026-10-27T10:46:24Z",
+          "fairChance": 0.489,
+          "anchoredChance": 0.521,
+          "gap": 3.2,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "Delaware Blue Hens at Western Kentucky Hilltoppers",
+        "title": "Western Kentucky MONEYLINE",
+        "id": "CFB-2026-W9-del-wku-ml-home-0-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401871071",
+          "https://conven.org/usa/news/tops-out-for-third-straight-win-vs-delaware/",
+          "https://bluehens.com/news/2026/10/26/football-wraps-weekday-cusa-play-at-wku"
+        ],
+        "why": "Price-checked win chance 52.1%; -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Brock Glenn is set to start for Western Kentucky for the second straight week, and coach Tyson Helton said Glenn is healthy. Checked before publishing: Coach Tyson Helton said Rodney Tisdale Jr. has remained available while recovering from an ankle injury but is not quite 100%. The market: The total opened 58.5 and is 57.5 at DraftKings, 1 toward the under. 5 books span -1.5 to 1.5 on the spread; the middle is 1. Our spread is 4.8 points off, bigger than 63% of our past gaps. Gaps this size went 663-648 against the close in 3584 games. Our total is 3.1 points off, bigger than 53% of our past gaps. Gaps this size went 907-793 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Delaware scored 61 points against Missouri State in Minicucci's return, and its passing offense leads Conference USA at 268.0 yards per game. Statistical counterpoint: Western Kentucky allowed 30.6 points per game entering the Delaware matchup. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Western Kentucky starters Jaylen Wester, Mackavelli Malotumau and Rylen Su\u2019a-Filo missed the last two games during an eligibility dispute but are eligible to play against Delaware.",
+            "Western Kentucky is 2-0 at home this season and has won 13 of its last 15 games at Houchens-Smith Stadium.",
+            "Western Kentucky held Sam Houston to 177 yards and three points in its most recent game."
+          ],
+          "cautions": [
+            "Delaware starting quarterback Nick Minicucci returned after missing two games due to injury and threw five touchdown passes in the 61-38 win over Missouri State.",
+            "Delaware scored 61 points against Missouri State in Minicucci's return, and its passing offense leads Conference USA at 268.0 yards per game.",
+            "Western Kentucky allowed 30.6 points per game entering the Delaware matchup."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Price-checked win chance 52.1%; this price needs 51.2%.",
+              "numbers": {
+                "chance": 0.521,
+                "breakEven": 0.512
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-10-27T09:28:18Z"
+            },
+            {
+              "text": "Western Kentucky starters Jaylen Wester, Mackavelli Malotumau and Rylen Su\u2019a-Filo missed the last two games during an eligibility dispute but are eligible to play against Delaware.",
+              "numbers": {},
+              "source": "https://conven.org/usa/news/tops-out-for-third-straight-win-vs-delaware/",
+              "time": "2026-10-27T10:46:24Z"
+            },
+            {
+              "text": "Western Kentucky is 2-0 at home this season and has won 13 of its last 15 games at Houchens-Smith Stadium.",
+              "numbers": {},
+              "source": "https://wkusports.com/news/2026/10/25/football-hilltoppers-welcome-delaware-for-weekday-cusa-matchup",
+              "time": "2026-10-27T10:46:24Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Delaware starting quarterback Nick Minicucci returned after missing two games due to injury and threw five touchdown passes in the 61-38 win over Missouri State.",
+              "numbers": {},
+              "source": "https://bluehens.com/news/2026/10/26/football-wraps-weekday-cusa-play-at-wku",
+              "time": "2026-10-27T10:46:24Z"
+            },
+            {
+              "text": "Delaware scored 61 points against Missouri State in Minicucci's return, and its passing offense leads Conference USA at 268.0 yards per game.",
+              "numbers": {},
+              "source": "https://bluehens.com/news/2026/10/26/football-wraps-weekday-cusa-play-at-wku",
+              "time": "2026-10-27T10:46:24Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Delaware starting quarterback Nick Minicucci returned after missing two games due to injury and threw five touchdown passes in the 61-38 win over Missouri State.",
+              "numbers": {},
+              "source": "https://bluehens.com/news/2026/10/26/football-wraps-weekday-cusa-play-at-wku",
+              "time": "2026-10-27T10:46:24Z"
+            },
+            {
+              "text": "Western Kentucky starters Jaylen Wester, Mackavelli Malotumau and Rylen Su\u2019a-Filo missed the last two games during an eligibility dispute but are eligible to play against Delaware.",
+              "numbers": {},
+              "source": "https://conven.org/usa/news/tops-out-for-third-straight-win-vs-delaware/",
+              "time": "2026-10-27T10:46:24Z"
+            },
+            {
+              "text": "Delaware starting quarterback Nick Minicucci returned after missing two games due to injury and threw five touchdown passes in the 61-38 win over Missouri State.",
+              "numbers": {},
+              "source": "https://bluehens.com/news/2026/10/26/football-wraps-weekday-cusa-play-at-wku",
+              "time": "2026-10-27T10:46:24Z"
+            },
+            {
+              "text": "Western Kentucky starters Jaylen Wester, Mackavelli Malotumau and Rylen Su\u2019a-Filo missed the last two games during an eligibility dispute but are eligible to play against Delaware.",
+              "numbers": {},
+              "source": "https://conven.org/usa/news/tops-out-for-third-straight-win-vs-delaware/",
+              "time": "2026-10-27T10:46:24Z"
+            }
+          ],
+          "weather": {
+            "tempF": 71,
+            "windMph": 1,
+            "windDirection": "E",
+            "precipProb": 0,
+            "periodStart": "2026-10-27T18:00:00-05:00",
+            "issuedAt": "2026-10-26T03:16:00+00:00",
+            "source": "https://api.weather.gov/gridpoints/LMK/29,19/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": -110,
+                  "time": "2026-10-25T10:45:06Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": -112,
+                  "time": "2026-10-27T10:45:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": -110,
+                  "time": "2026-10-23T10:45:06Z"
+                },
+                "now": {
+                  "line": -1.5,
+                  "price": 100,
+                  "time": "2026-10-27T10:45:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": -105,
+              "time": "2026-10-27T09:28:18Z"
+            }
+          },
+          "ours": {
+            "projection": 0.6,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "Price-checked win chance 52.1%; this price needs 51.2%.",
+            "snapshotAt": "2026-10-21T04:58:13Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "role",
+              "url": "https://bluehens.com/news/2026/10/26/football-wraps-weekday-cusa-play-at-wku",
+              "time": "2026-10-27T10:46:24Z"
+            },
+            {
+              "label": "role",
+              "url": "https://conven.org/usa/news/tops-out-for-third-straight-win-vs-delaware/",
+              "time": "2026-10-27T10:46:24Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://wkusports.com/news/2026/10/25/football-hilltoppers-welcome-delaware-for-weekday-cusa-matchup",
+              "time": "2026-10-27T10:46:24Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/LMK/29,19/forecast/hourly",
+              "time": "2026-10-26T03:16:00+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401871071",
+              "time": "2026-10-27T10:46:24Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-27T10:51:40Z",
+        "entryNote": "Off the card: price moved 20 cents against, from -105 to -125 at DraftKings. Published cutoff: HOME 0 at -105 or better; off the card at -0.5 or lower, or at -120 or worse at 0. Stays in the record at 0 and -105 and is graded as posted."
+      }
+    ]
   }
 ]
