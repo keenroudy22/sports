@@ -22,7 +22,7 @@ class SettlementScopeTests(unittest.TestCase):
                             x.func.attr=='enqueue' for x in ast.walk(n)))
         nodes=[n for n in background.body if
                (isinstance(n,ast.If) and 'nbaCapture' in ast.unparse(n)) or
-               (isinstance(n,ast.If) and 'nbaPlayerProps' in ast.unparse(n)) or
+               (isinstance(n,ast.If) and 'capture_nba_props_and_select' in ast.unparse(n)) or
                (isinstance(n,ast.Try) and 'nbaTrialGraded' in ast.unparse(n))]
         self.assertEqual(len(nodes),3)
         code=compile(ast.Module(body=nodes,type_ignores=[]),'<actual NBA branches>','exec')
@@ -35,7 +35,7 @@ class SettlementScopeTests(unittest.TestCase):
                  patch.object(nba_player_props,'grade') as prop_grade:
                 env=dict(run.__dict__,settle_only=settle_only,now=now,
                          slot=now.astimezone(run.EASTERN),status={'errors':[]},
-                         args=SimpleNamespace(command='run',dry_run=False))
+                         args=SimpleNamespace(command='run',dry_run=False,no_push=False,now='explicit-replay'))
                 exec(code,env)
                 trial_grade.assert_called_once_with(now)
                 prop_grade.assert_called_once_with(now)
@@ -57,7 +57,7 @@ class SettlementScopeTests(unittest.TestCase):
                               and x.func.attr == 'enqueue' for x in ast.walk(n)))
         effects = [n for n in background.body if
                    (isinstance(n, ast.If) and 'nbaCapture' in ast.unparse(n)) or
-                   (isinstance(n, ast.If) and 'nbaPlayerProps' in ast.unparse(n)) or
+                   (isinstance(n, ast.If) and 'capture_nba_props_and_select' in ast.unparse(n)) or
                    (isinstance(n, ast.Try) and 'nbaTrialGraded' in ast.unparse(n))]
         climb = next(n for n in tree if isinstance(n, ast.If) and ast.unparse(n.test) == "'ladder' in kinds")
         code = compile(ast.Module(body=[climb, *effects], type_ignores=[]), '<actual results branches>', 'exec')
