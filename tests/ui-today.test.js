@@ -916,3 +916,21 @@ test('Today pulled strip shares public delivery eligibility with Record', async 
     assert.match(shown, /each still counts/);
   }
 });
+
+
+test('withdrawn settled play shows its withdrawal on receipt, slip and detail without erasing loss', async () => {
+  const pick={...prop,id:'removed',result:'loss',units:-0.5,riskUnits:0.5,
+    entryNote:'Off the card: we withdrew this recommendation after review. Our model favors Missouri State.'};
+  const before=structuredClone(pick);
+  const {api}=loadApp('#record',{}, {today:{...TODAY,picks:[pick]}});
+  const ctx=api.moreContext();
+  assert.match(ctx.receipt(pick,new Map()),/Recommendation withdrawn before kickoff/);
+  assert.match(ctx.slip(pick),/Recommendation withdrawn before kickoff/);
+  assert.match(ctx.receipt(pick,new Map()),/Miss/);
+  const page=await api.views.pick({id:pick.id});
+  assert.match(page,/Recommendation withdrawn/);
+  assert.match(page,/Our model favors Missouri State/);
+  assert.equal(C.unitsFor(pick),-0.5);
+  assert.deepEqual(pick,before);
+  assert.doesNotMatch(ctx.receipt({...pick,entryNote:'Off the card: price moved.'},new Map()),/Recommendation withdrawn/);
+});

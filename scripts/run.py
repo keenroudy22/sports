@@ -2181,6 +2181,8 @@ def ladder_step(ctx, games, now, records, published, decided, screened, manual=N
         import climb_prep
         prep = climb_prep.prepare(ctx, now)
         boxscores.write_json(Path(getattr(ctx, 'root', ROOT)) / 'work' / 'climb-prep.json', prep)
+        today_prep = climb_prep.prepare(ctx, now, day=eastern_date(now))
+        boxscores.write_json(Path(getattr(ctx, 'root', ROOT)) / 'work' / 'climb-today-prep.json', today_prep)
     except Exception as error:
         log(f'next-day Climb prep failed ({type(error).__name__}); current-day selection continues')
     try:
@@ -2951,6 +2953,14 @@ def _run(args, now, slot, kinds, status):
         owner_agenda(now, ctx, games)
         # Optional local editorial work comes AFTER official scheduling, never in its critical path.
         homepage_editor(now, status, enabled=use_llm)
+        if (use_llm and args.command == 'run' and not args.dry_run and not args.no_push
+                and not getattr(args,'now',None) and nba_game_capture_due(slot)):
+            try:
+                import local_nba_review
+                status['nbaLocalReview']=local_nba_review.run(datetime.now(timezone.utc),root=ROOT)
+            except Exception as error:
+                status['nbaLocalReview']={'status':'unavailable','error':type(error).__name__}
+
         status['git']['posts'] = commit_log(now, push=not args.no_push)
     status.update(outcome='ok', finishedAt=stamp(datetime.now(timezone.utc)))
     write_status(status)
@@ -4104,6 +4114,8 @@ def heartbeat(args):
     # Cached-only product checks share the existing change-only alert path. Never
     # call a provider or emit raw post bodies, credentials or network errors here.
     try:
+        import schedule_audit
+        problems.extend(schedule_audit.audit(ROOT)['issues'])
         import desk_health
         health = desk_health.summary(root=ROOT, conf=CONF, logs=Path.home() / 'Library/Logs/KeenRoudy', now=now)
         problems.extend(row['message'] for row in health['issues'])

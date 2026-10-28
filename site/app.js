@@ -961,13 +961,15 @@
   const slipTitle = (p, g) => { const parts = betParts(p, g);
     if (p.community) return `<span>${esc(p.displayTitle || p.title)}</span>`;
     return isParlayLike(p) ? `<span>${esc(marketLabel(p))}</span> ${esc(odd(p.odds))}` : `<span>${esc(parts.kind === 'spread' ? '' : parts.name)}</span> ${esc(parts.bet)}${parts.kind === 'prop' && parts.unit.length ? ` ${esc(parts.unit.join(' '))}` : ''}`; };
+  const withdrawalNotice = p => /withdr(?:ew|awn)|removed.*recommendation/i.test(p.entryNote || '')
+    ? 'Recommendation withdrawn before kickoff. Original published result still counts.' : '';
   const slip = (p, opts = {}) => {
     const vm = pickVM(p), g = gameOf(p), kicker = `${p.community ? 'Personal fun ticket' : vm.featured ? 'Hot Plate (POTD)' : vm.kind === 'fun' ? 'Fun ticket' : vm.kind === 'climb' ? '80/20 Climb' : 'Best bet'}${opts.when ? ` · ${ticketWhen(p.kickoff)}` : ''}`;
     const price = `${odd(p.odds)} ${vm.book || ''}${p.community ? ' · original quote' : ''}`.trim();
     const resultName = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ` : '';
     const detail = p.result ? `${resultName}${resultLine(p)} ${price}.` : opts.waiting ? `${price}.` : `${price}. ${vm.statusShort || (vm.mode === 'open' && vm.calibrated && vm.chance != null ? `I have it at ${pctOne(vm.chance)}.` : '')}`;
     const personal = p.community ? `<p class="kt-slip-personal">My card · tracked separately from Best Bets${p.result && p.entryNote ? `. ${esc(p.entryNote)}` : ''}</p>` : '';
-    const body = `<a class="kt-slip${p.community ? ' is-community' : ''}" href="${esc(vm.href)}" aria-label="${esc(`${p.result ? `${RESULT_WORD[p.result]}: ` : ''}${vm.title}, ${oddsText(p.odds)}${vm.book ? ` at ${vm.book}` : ''}`)}"><p class="kt-slip-k">${esc(kicker)}</p><p class="kt-slip-t">${slipTitle(p, g)}</p><p class="kt-slip-d">${esc(detail.trim())}</p>${personal}${opts.waiting ? '<span class="kt-waiting">WAITING ON THE FINAL</span>' : ''}</a>`;
+    const body = `<a class="kt-slip${p.community ? ' is-community' : ''}" href="${esc(vm.href)}" aria-label="${esc(`${p.result ? `${RESULT_WORD[p.result]}: ` : ''}${vm.title}, ${oddsText(p.odds)}${vm.book ? ` at ${vm.book}` : ''}`)}"><p class="kt-slip-k">${esc(kicker)}</p><p class="kt-slip-t">${slipTitle(p, g)}</p><p class="kt-slip-d">${esc(detail.trim())}</p>${personal}${withdrawalNotice(p) ? `<p class="kt-slip-personal">${esc(withdrawalNotice(p))}</p>` : ''}${opts.waiting ? '<span class="kt-waiting">WAITING ON THE FINAL</span>' : ''}</a>`;
     return opts.spike ? `<div class="kt-spiked"><span class="kt-spike" aria-hidden="true"></span>${body}${stampFor(p.result)}</div>` : body;
   };
   /* Full posted-day recap. Compact rows include every ticket, win or loss; Climb dollars stay separate. */
@@ -1357,6 +1359,7 @@
     const research = C.pickResearchRoute ? C.pickResearchRoute(pick) : null;
     const game = (today.games || []).find(g => g.id === pick.gameId);
     const notices = [
+      withdrawalNotice(pick) ? `<b>Recommendation withdrawn.</b> ${esc(pick.entryNote)} Original published result still counts.` : '',
       pick.priceAssumed ? `<b>Price assumed.</b> ${esc(pick.priceNote || 'No price was recorded for this play, so it counts at an assumed −115.')}` : '',
       vm.estimated ? '<b>Estimated price.</b> Combined odds are estimated from the leg prices we saw. Check the real ticket price at your book.' : '',
       clv && clv.clv != null ? `<b>Closing-line value: ${esc(clvWords(clv.clv))}.</b> We posted ${esc(clv.postedLine ?? '–')} at ${esc(oddsText(clv.postedOdds))} and the last number before kickoff was ${esc(clv.closeLine ?? '–')}${clv.closeOdds != null ? ` at ${esc(oddsText(clv.closeOdds))}` : ''}. ${clv.clv > 0 ? 'We got the better number, which is the part we control.' : clv.clv < 0 ? 'The market moved to a better number after we posted.' : ''}` : '',
@@ -1880,7 +1883,7 @@
     const price = p.odds == null ? 'no price recorded' : assumed ? `${oddsText(p.odds)} assumed · no price recorded` : `${oddsText(p.odds)} ${bookLabel(p.book) || ''}`;
     const actual = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${p.resultDetail}` : p.actual != null ? String(typeof p.actual === 'object' ? Object.entries(p.actual).map(([k, v]) => `${k} ${v}`).join(', ') : p.actual).split(/[.;]\s/)[0] : '';
     const lane = p.community ? 'Personal fun ticket' : p.lane === 'gut_call' ? 'Full Send' : C.isParlay(p) ? 'Fun ticket' : 'Best Bet';
-    const meta = [lane, p.cashout ? 'Cashed out · not a sportsbook push' : '', price + (p.community ? ' original quote' : ''), whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? `early-exit credit (counts −${C.stakeOf(p)}u in the headline)` : ''].filter(Boolean).join(' · ');
+    const meta = [lane, withdrawalNotice(p), p.cashout ? 'Cashed out · not a sportsbook push' : '', price + (p.community ? ' original quote' : ''), whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? `early-exit credit (counts −${C.stakeOf(p)}u in the headline)` : ''].filter(Boolean).join(' · ');
     const right = p.result ? (u == null ? '' : assumed ? `<span class="u muted" title="${esc(p.priceNote || 'No price was recorded, so this counts at an assumed −115.')}">(${esc(units(u))})</span>` : `<span class="u ${u > 0 ? 'green' : u < 0 ? 'red' : 'muted'}">${esc(units(u))}</span>`)
       : '<span class="u muted small">Pending</span>';
     return `<div class="receipt"><span class="r-mark ${mark[0]}" aria-hidden="true">${mark[1]}</span><div><b><span class="sr">${esc(mark[2])}: </span><a href="${esc(vm.href)}" class="plain-link">${esc(niceTitle(p.displayTitle || p.title))}</a></b><span>${esc(meta)}</span></div>${right}</div>`;

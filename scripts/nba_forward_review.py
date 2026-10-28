@@ -101,6 +101,29 @@ def priced_check(pairs):
                 shadowNetUnits=round(net, 3), observations=n)
 
 
+def independent_check(pairs):
+    """One equal-weight observation per game; correlated players cannot inflate confidence."""
+    by_game = defaultdict(list)
+    for row, outcome in pairs:
+        by_game[row['eventId']].append((row, outcome))
+    differences = []
+    priced = []
+    days = set()
+    for group in by_game.values():
+        days.add(group[0][0]['kickoff'][:10])
+        differences.append(mean(abs(o['actual']-r['line'])-abs(o['actual']-r['projection']['value']) for r,o in group))
+        checks = [priced_check([(r,o)]) for r,o in group]
+        values = [c['shadowNetUnits'] for c in checks if c['observations']]
+        if values:
+            priced.append(mean(values))
+    return dict(games=len(by_game),gameDays=len(days),
+        meanErrorImprovement=round(mean(differences),3) if differences else None,
+        pricedGames=len(priced),gameBalancedShadowReturn=round(mean(priced),4) if priced else None,
+        trialEligible=False,holds=['No validated NBA prop probability or approved prop admission adapter',
+          'Independent forward evidence must support each market and model before promotion'],
+        scope='Equal game weights, not independent players or a placed-bet portfolio')
+
+
 def summarize(forecasts, outcomes, now=None):
     now = now or datetime.now(timezone.utc)
     chosen, final = {}, {}
@@ -146,7 +169,7 @@ def summarize(forecasts, outcomes, now=None):
     for (model, stat, season), pairs in sorted(groups.items()):
         graded.extend(pairs)
         segments.append(dict(model=model, stat=stat, season=season, observations=len(pairs),
-            pricedShadow=priced_check(pairs),
+            pricedShadow=priced_check(pairs), independentCheck=independent_check(pairs),
             games=len({r['eventId'] for r, _ in pairs}),
             gameDays=len({r['kickoff'][:10] for r, _ in pairs}),
             modelMAE=round(mean(abs(o['actual']-r['projection']['value']) for r, o in pairs), 3),
@@ -171,6 +194,8 @@ def markdown(report):
         '- Average absolute error below is in each stat’s own units; smaller is better. A line is a market benchmark, not necessarily a mean forecast. This is not profitability or proof of an edge.']
     for row in report['segments']:
         lines.append(f"- {row['stat']} ({row['model']}): {row['observations']} comparisons / {row['games']} games; model error {row['modelMAE']:g}, quoted-line error {row['lineMAE']:g}.")
+        check = row['independentCheck']
+        lines.append(f"  Equal-game check: {check['games']} games / {check['gameDays']} dates; line-error improvement {check['meanErrorImprovement']}; game-balanced frozen-price return {check['gameBalancedShadowReturn']}. No approved prop probability/admission adapter; research only.")
         price = row['pricedShadow']
         lines.append(f"  Season {row['season'] or 'unknown'} · frozen-side shadow {price['hits']}-{price['misses']}-{price['pushes']}, {price['shadowNetUnits']:+g} hypothetical units at 1u each; {price['excluded']} lack consistent side/price evidence. Not placed bets; overlapping player exposure is not a staking portfolio.")
     for row in report.get('pairedModels', []):

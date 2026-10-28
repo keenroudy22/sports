@@ -5647,3 +5647,24 @@ those changes were preserved, not staged, deployed or claimed by this run.
 Metadata receipt remainsdev for the next ordinary release; no second deployment.
 Evidence work/daily-20261028-outcomes.json,release.log,hosted.log,live-checks.json,
 prep.json,next-slate.json,climb.json and private rendered samples.
+
+
+### October28 NBA-first platform rework — candidate
+
+Owner approved docs/PLATFORM-REWORK-2026-10-28.md implementation. Saved withdrawal
+appears on settled cards/receipts/detail; original SamHouston+180/.5u loss stays.
+Dated NBA schedule/as-of receipt and paper-grade repair recognizes16complete days
+(previous12), paper37/50 unchanged. Equal-game primary prop comparison: baseline
+trails lines over49games/9dates; current-minutes only3games/2dates. No validated
+probability/admission adapter; no NBA prop promotion. Failed7/131roster retained.
+Actual27B sourced review12:21:17Z:1call/6.26s/119tokens/0failures, selects exact
+source IDs, never bet/role clearance. Runtime12seconds after official scheduling,
+no retries/replays. Seven Mac definitions match installed jobs; offline heartbeat
+detects schedule drift. Three app prompts updated through app tool, same clocks,
+count/model/settings; stale Friday/ten-play text replaced. Current-day Climb prep
+separate from tomorrow's, all holds intact. Weekly read-only captured-price splits
+by sport/market/tier/weekday preserve loss/credit/category accounting. Prior source
+8e2e9dcbc combined-card hosted40685391903SUCCESS; actual eligible summary/linked
+Final still unobserved.1935Python(2skip)/287Node pass after fixing insertion syntax;
+clean/canonical hosted/live verification pending.176queueIDs retained; not full
+audit completion or evidence of a proven NBA advantage.

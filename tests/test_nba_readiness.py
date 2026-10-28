@@ -47,7 +47,7 @@ class NBAReadinessTests(unittest.TestCase):
             game=f'NBA-{i}'
             rows += [
                 {'type':'record','gameId':game,'league':'NBA','season':2027,'lean':True,
-                 'line':220.5,'side':'over','price':-110,'kickoff':'2026-10-20T23:00:00Z'},
+                 'line':220.5,'capturedAt':'2026-10-20T12:00:00Z','side':'over','price':-110,'kickoff':'2026-10-20T23:00:00Z'},
                 {'type':'grade','gameId':game,'result':'win','actual':225,'gradedAt':'2026-10-21T02:00:00Z'},
             ]
         boxscores.append(self.paper/'nba-2027.jsonl', rows)
@@ -67,7 +67,7 @@ class NBAReadinessTests(unittest.TestCase):
               self.observation((base+timedelta(days=1)).replace(hour=1,minute=0)),
               self.observation((base+timedelta(days=1)).replace(hour=3,minute=30))]
         nba_capture.append_changed(rows,self.capture/'observations',lambda row:row['slot'])
-        final=nba_readiness.status(datetime(2026,10,20,12,tzinfo=timezone.utc),capture_root=self.capture,paper_root=self.paper,config=self.config)
+        final=nba_readiness.status(datetime(2026,10,22,12,tzinfo=timezone.utc),capture_root=self.capture,paper_root=self.paper,config=self.config)
         self.assertEqual(final['stage'],'live-trial'); self.assertTrue(final['readyForLiveTrial'])
         self.assertTrue(final['readyForPromotionEvidence'])
 
@@ -96,6 +96,39 @@ class NBAReadinessTests(unittest.TestCase):
         self.assertEqual(live['books'],['DraftKings'])
         self.assertEqual(live['markets'],['moneyline','spread','total'])
         self.assertEqual(live['injuryFreshMinutes'],60)
+
+
+
+    def test_dated_schedule_keeps_old_days_and_requires_all_replacement_slots(self):
+        self.write_days(1)
+        config=dict(self.config,captureScheduleHistory=[{'effectiveDate':'2026-10-24',
+            'slots':['06:45','08:30','11:45','13:30','17:30','21:00']}])
+        from zoneinfo import ZoneInfo
+        day=datetime(2026,10,24,tzinfo=ZoneInfo('America/New_York'))
+        rows=[self.observation(day.replace(hour=h,minute=m)) for h,m in
+              ((6,45),(8,30),(11,45),(13,30),(17,30),(21,0))]
+        nba_capture.append_changed(rows[:-1],self.capture/'observations',lambda r:r['slot'])
+        clock=datetime(2026,10,26,tzinfo=timezone.utc)
+        self.assertEqual(nba_readiness.clean_days(self.capture,config,clock),['2026-10-01'])
+        nba_capture.append_changed(rows[-1:],self.capture/'observations',lambda r:r['slot'])
+        self.assertEqual(nba_readiness.clean_days(self.capture,config,clock),['2026-10-01','2026-10-24'])
+        self.assertEqual(nba_readiness.clean_days(self.capture,config,day),['2026-10-01'])
+
+    def test_future_receipt_cannot_complete_capture_day(self):
+        self.write_days(1)
+        clock=datetime(2026,10,2,3,31,tzinfo=timezone.utc)
+        self.assertEqual(nba_readiness.clean_days(self.capture,self.config,clock),['2026-10-01'])
+        self.assertEqual(nba_readiness.clean_days(self.capture,self.config,clock-timedelta(minutes=2)),[])
+
+    def test_paper_future_correction_does_not_hide_available_grade(self):
+        self.write_paper(1)
+        later={'type':'grade','gameId':'NBA-0','result':'loss','actual':210,'gradedAt':'2026-10-23T02:00:00Z'}
+        boxscores.append(self.paper/'nba-2027.jsonl',[later])
+        rows=nba_readiness.paper_rows(self.paper,datetime(2026,10,22,tzinfo=timezone.utc))
+        self.assertEqual([r['result'] for r in rows],['win'])
+        early=nba_readiness.paper_rows(self.paper,datetime(2026,10,20,13,tzinfo=timezone.utc))
+        self.assertNotIn('result',early[0])
+        self.assertEqual(nba_readiness.paper_rows(self.paper,datetime(2026,10,19,tzinfo=timezone.utc)),[])
 
 
 if __name__ == '__main__': unittest.main()

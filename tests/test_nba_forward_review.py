@@ -25,6 +25,14 @@ def outcome(row, actual=20, **extra):
 
 
 class ForwardReviewTests(unittest.TestCase):
+    def test_game_balanced_check_cannot_count_many_players_as_many_games(self):
+        rows=[forecast(str(i),athleteId=str(i),side='over',odds=-110) for i in range(20)]
+        result=review.summarize(rows,[outcome(r,actual=25,result='hit',side='over',odds=-110) for r in rows],NOW)
+        check=result['segments'][0]['independentCheck']
+        self.assertEqual((check['games'],check['gameDays'],check['pricedGames']),(1,1,1))
+        self.assertFalse(check['trialEligible'])
+        self.assertLess(check['gameBalancedShadowReturn'],1)
+
     def test_observed_minutes_shadow_is_not_pooled_with_analyst_review(self):
         a=forecast('a',model='nba-minutes-rate-reviewed-v1',season=2027,
             projection=dict(value=18,baselineValue=25,baselineMinutes=30))

@@ -283,6 +283,12 @@ def learning_packet(report_path=None, shadow_root=None):
         lines.append(f"- latest silent shadow: {latest}; proposals {', '.join(proposals) or 'none'}; no public effects")
     else:
         lines.append('- no silent results shadow has completed yet')
+    import desk_performance
+    try:
+        record=json.loads((ROOT/'site/data/app/record.json').read_text())
+        lines.append('## Captured-price straight splits\n'+json.dumps(desk_performance.report(record['picks']),sort_keys=True))
+    except (OSError,ValueError,KeyError,TypeError):
+        lines.append('- Captured-price result splits unavailable; no performance inference.')
     import nba_forward_review
     try:
         lines.append(nba_forward_review.markdown(nba_forward_review.from_stores(

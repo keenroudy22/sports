@@ -26,36 +26,81 @@ def observations(root=nba_capture.STORE):
     return [row for path in (Path(root) / 'observations').glob('*.jsonl') for row in boxscores.read_store(path)]
 
 
-def clean_days(root=nba_capture.STORE, config=None):
-    """Count natural Eastern days containing every scheduled slot with clean free-feed evidence."""
+def capture_slots(day, config):
+    """Use the schedule actually assigned to that Eastern day, never today's retroactively."""
+    slots = config['captureSlotsEastern']
+    for change in sorted(config.get('captureScheduleHistory', []), key=lambda r: r['effectiveDate']):
+        if day >= change['effectiveDate']:
+            slots = change['slots']
+    return set(slots)
+
+
+def clean_days(root=nba_capture.STORE, config=None, now=None):
+    """Count real completed scheduled captures available at the evaluation clock."""
     config = config or policy()
-    expected = set(config['captureSlotsEastern'])
+    now = now or datetime.now(timezone.utc)
     by_day = defaultdict(set)
     for row in observations(root):
         if row.get('scheduled') is not True or row.get('errors') or (row.get('props') or {}).get('errors'):
             continue
         try:
-            local = boxscores.instant(row['slot']).astimezone(EASTERN)
+            at = boxscores.instant(row['slot'])
+            received = boxscores.instant(row['retrievedAt'])
+            if at > now or received > now or received < at:
+                continue
+            local = at.astimezone(EASTERN)
+            expected = capture_slots(local.date().isoformat(), config)
+            if not expected:
+                continue
+            clock = min(expected, key=lambda value: abs((local.hour * 60 + local.minute) -
+                         (int(value[:2]) * 60 + int(value[3:]))))
+            target = int(clock[:2]) * 60 + int(clock[3:])
+            if abs(local.hour * 60 + local.minute - target) <= 20:
+                by_day[local.date().isoformat()].add(clock)
         except (KeyError, TypeError, ValueError):
             continue
-        # Give the scheduler a small launch-delay tolerance but never backfill a missing slot.
-        clock = min(expected, key=lambda value: abs((local.hour * 60 + local.minute) -
-                                                     (int(value[:2]) * 60 + int(value[3:]))))
-        target = int(clock[:2]) * 60 + int(clock[3:])
-        if abs(local.hour * 60 + local.minute - target) <= 20:
-            by_day[local.date().isoformat()].add(clock)
-    return sorted(day for day, slots in by_day.items() if slots == expected)
+    return sorted(day for day, slots in by_day.items() if slots == capture_slots(day, config))
 
 
-def paper_rows(root=paper.STORE):
-    return [row for row in paper.joined(root) if row.get('league') == 'NBA' and row.get('lean')]
+def paper_rows(root=paper.STORE, now=None):
+    """Join only evidence already available, retaining earlier grades before later corrections."""
+    now = now or datetime.now(timezone.utc)
+    out = []
+    for path in sorted(Path(root).glob('*.jsonl')):
+        rows = boxscores.read_store(path)
+        grades = {}
+        for row in rows:
+            if row.get('type') != 'grade':
+                continue
+            try:
+                clock = boxscores.instant(row['gradedAt'])
+                if clock <= now and (row['gameId'] not in grades or clock >= grades[row['gameId']][0]):
+                    grades[row['gameId']] = (clock, row)
+            except (KeyError, TypeError, ValueError):
+                continue
+        for row in rows:
+            if row.get('type') != 'record' or row.get('league') != 'NBA' or not row.get('lean'):
+                continue
+            try:
+                captured = boxscores.instant(row['capturedAt'])
+                kickoff = boxscores.instant(row['kickoff'])
+                if captured > now or captured >= kickoff:
+                    continue
+            except (KeyError, TypeError, ValueError):
+                continue
+            grade = grades.get(row['gameId'])
+            if grade and grade[0] >= kickoff:
+                out.append(dict(row, **{k:v for k,v in grade[1].items() if k not in ('type','gameId')}))
+            else:
+                out.append(row)
+    return out
 
 
 def status(now=None, capture_root=nba_capture.STORE, paper_root=paper.STORE, config=None):
     now = now or datetime.now(timezone.utc)
     config = config or policy()
-    days = clean_days(capture_root, config)
-    rows = paper_rows(paper_root)
+    days = clean_days(capture_root, config, now)
+    rows = paper_rows(paper_root, now)
     graded = [row for row in rows if row.get('result') in ('win', 'loss', 'push')]
     clean_need = int(config['cleanCaptureDaysRequired'])
     paper_need = int(config['paperGradesRequired'])
