@@ -5668,3 +5668,47 @@ by sport/market/tier/weekday preserve loss/credit/category accounting. Prior sou
 Final still unobserved.1935Python(2skip)/287Node pass after fixing insertion syntax;
 clean/canonical hosted/live verification pending.176queueIDs retained; not full
 audit completion or evidence of a proven NBA advantage.
+
+
+### October28 platform rework — VERIFIED operating release
+
+Sourcef47f19312 (platform428720e27) verified in40692489988SUCCESS,
+verifiedHead7606acf6304f2d247b78735ab301f4982635f748, ancestry checked. Hosted
+incorporated6changed files/repeated10checks.1936Python(2skip)/288Node normal+clean,
+canonicalattempt2 after real upstream writes; isolated0855rehearsal exit0/ok,
+no outside writes/private reads.133official/NBA0;684public/240609346bytes/0issues.
+No gate, free budget or stake limit weakened. Record/Today/NBA/Samdetail verified
+at375/1440; no overflow, rendered load errors or console errors. ExpandedToday
+results show withdrawal; detail leads with withdrawal above ticket and retains
+actual Discord/X clocks after settlement. Original Sam+180/.5u loss stays;
+season45–55/captured31–44/−11.43u unchanged. Public RecordTrials16/14clean and
+37/50paper verified. Owner mobile/desktop proof:kookn-withdrawal-fixed-*-2026-10-28.png.
+
+Actual production27B review at12:58Z:1call/6.19s/0failures, exact source IDs,
+no hold or admission override. Earlier dev1call/6.26s retained; natural scheduled
+hook observation remains pending. Three app prompts updated with same clocks,
+count/model/settings; seven installed Mac jobs match. ActualOct24 13:30replacement
+18reads/8quotes/0errors;13:34prop12Sharp/890pairs/41Q1/0errors. Oct28 08:30capture
+920pairs/57Q1/76newforecasts.16real completed days meet14capture criterion, not
+model/prop promotion. Close stale capture observations. Six older owner cards
+also have pregame X/Discord receipts; originals plus prior2retained,14personal
+rows settled, separate cash/protection unknowns retained.176queueIDs preserved.
+
+Current-day review12:45Z:2CFB/29priced football rows,12NBA/1023fresh prop rows,
+0supportedClimb combinations. Natural08:30 screened23football,12verified facts
+over2researched candidates,0published. Total lacked support; spread missed model
+margin requirement; exact other price/source holds retained. NBA Trial15games/
+0offers with official-report/identity/injury/roster holds. Primary NBA baseline
+has negative equal-game returns over49games; current-minutes only3games, no
+approved probability/admission adapter. Roster7/131failed plus1forward ungraded
+retained. No NBA prop/quarter/Climb promotion or synthetic quota bet.
+
+DailyFinal actualX2115429894045770189 at13:06:04.566Z/reconciled13:07:08Z,
+not merely queued; previous official individual Discord results confirmed.
+No new qualified play today. Weekly09:23Eastern still only scheduled at this
+receipt. LocalBuffer2856used/44temporaryessentialroom at13:20Z; providerunknown,
+optional research/analytics held; limits/expiry unchanged. First actual eligible
+combined summary/linkedFinal, future qualifyingClimb, independent NBA validation
+and natural hook follow-through stay observing. Full receipt:
+work/oct28-platform-rework-verified.json. Verification metadata remains ondev for
+next ordinary safe release; no duplicate deployment just for these notes.
