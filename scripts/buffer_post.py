@@ -60,6 +60,7 @@ BUFFER_NORMAL_LIMIT = 9              # keep the tenth place free for relabels an
 BUFFER_RESERVED = 3                  # preserve the final places for plays, relabels/reschedules and receipts
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
 BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed', 'community'))
+BUFFER_TEMP_ESSENTIAL = frozenset(('play', 'nba-trial', 'receipt', 'cashed'))
 DISCORD_PLAY_LEAD = post_windows.DISCORD_PLAY_LEAD  # one admission and scheduling window
 DISCORD_DELIVERY_CADENCE = post_windows.DISCORD_DELIVERY_CADENCE
 def card_url(card_key):
@@ -724,7 +725,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         try:
             if quota.temporary_buffer_allowance(now):
                 post_id = create_post(text, channel_id, due, image, key=key, send=send,
-                                      essential=kind in ('play', 'nba-trial', 'receipt', 'cashed'))
+                                      essential=kind in BUFFER_TEMP_ESSENTIAL)
             else:
                 post_id = create_post(text, channel_id, due, image, key=key, send=send)
         except BufferError as error:

@@ -3089,6 +3089,16 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             plans += nba_trial_runtime.social_plans(max(now, later), log_book, reserved=plans)
         # A Buffer discovery/limit outage must not prevent already-authorized
         # Discord delivery above. Empty plans need neither metered lookup.
+        # An optional post blocked by the local journal cannot use the temporary
+        # delivery reserve for channel/limit discovery. This read reserves no
+        # request; essential sends retain their normal atomic/provider guards.
+        if any(p[1] not in buffer_post.BUFFER_TEMP_ESSENTIAL for p in plans):
+            optional_hold = buffer_post.quota.buffer_block_reason(now=now)
+            if optional_hold:
+                for plan in plans:
+                    if plan[1] not in buffer_post.BUFFER_TEMP_ESSENTIAL:
+                        log(f'buffer: {plan[0]} not scheduled before discovery: {optional_hold}')
+                plans = [p for p in plans if p[1] in buffer_post.BUFFER_TEMP_ESSENTIAL]
         channel = buffer_post.x_channel(wanted='keenkooks') if plans or upgrades else None
         limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat()) if plans else None
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):

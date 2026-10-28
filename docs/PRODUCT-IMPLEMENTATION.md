@@ -5451,3 +5451,21 @@ Full release/hosted/live receipts remain pending. Linked combined straight-card
 grading is the next finite technical slice after privacy verification; model
 proof and quarter holds remain separate. Evidence:work/overnight-20261028-* and
 owner-next-day-20261028.json/owner-climb-20261028.json.
+
+October28 additional bounded reserve repair: actual00:57 results journal shows
+channels04:57:15.126/15.370 and limits15.526UTC, although only NBA projections
+and end-zone research were planned and both publish attempts hit normal2700.
+Locally blocked optional plans now filter before channel/daily-limit discovery.
+Read-only journal preflight reserves no request; essential play/NBA-Trial/result/
+receipt plans retain the existing send-time atomic checks, provider backoff,
+reconciliation, pending-card upgrades and Discord-first/results handling. Mixed
+plans retain essentials; no-plan and optional-only holds use no metadata calls.
+The shared temporary-allowance kind set matches existing createPost behavior;
+community queue priority does not confer temporary-budget eligibility. New
+regressions assert zero metadata calls and preserved Discord on optional hold,
+and retained essential scheduling under a mixed plan. Initial mixed-plan test
+mock returned an untyped limit; fixture corrected to explicit None, unchanged
+checks. Final release gates must repeat after this candidate-head change; no
+promotion of the earlier source is claimed.2849at04:50Z is now2852/48remaining
+after these3existing-worker metadata calls, not extra requests by this review.
+Normal2700room needs a fresh chronological calculation before final receipt.
