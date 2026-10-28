@@ -205,6 +205,33 @@ class NBAPlayerPropTests(unittest.TestCase):
         self.assertIn('no historical prices',result['scope'])
         self.assertEqual(n.evaluate(b[:5])['predictions'],0)
 
+    def test_held_book_grade_retries_and_official_corrections_append_once(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);b=self.write(root)
+            n.record_forward(NOW,root,b)
+            forecasts=n.saved(root/'player-forecasts')
+            # Use a real post-policy forecast rather than changing a saved row.
+            forecast=dict(forecasts[0],id='post-policy',retrievedAt='2026-10-29T15:00:00Z',
+                          kickoff='2026-10-29T23:00:00Z')
+            nba_capture.append_changed([forecast],root/'player-forecasts',lambda r:r['id'])
+            final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,
+                       kickoff=forecast['kickoff'],retrievedAt='2026-10-30T02:00:00Z')
+            early=datetime(2026,10,30,3,tzinfo=timezone.utc)
+            with patch('nba_prop_settlement.evaluate',return_value={'state':'held','result':None}):
+                self.assertEqual(n.grade(early,root,[final]),2)
+            before=next((root/'player-outcomes').glob('*.jsonl')).read_bytes()
+            with patch('nba_prop_settlement.evaluate',return_value={'state':'settled','result':'win'}):
+                self.assertEqual(n.grade(early+timedelta(minutes=5),root,[final]),1)
+                self.assertEqual(n.grade(early+timedelta(minutes=6),root,[final]),0)
+                self.assertTrue(next((root/'player-outcomes').glob('*.jsonl')).read_bytes().startswith(before))
+                corrected=copy.deepcopy(final)
+                corrected['retrievedAt']='2026-10-30T03:10:00Z'
+                corrected['players'][0]['stats']['pts']=5
+                self.assertEqual(n.grade(early+timedelta(minutes=11),root,[final,corrected]),2)
+                self.assertEqual(n.grade(early+timedelta(minutes=12),root,[final,corrected]),0)
+                self.assertEqual(n.grade(early,root,[final]),0)
+            self.assertEqual(boxscores.verify(root/'player-outcomes'),[])
+
     def test_grade_uses_only_received_unambiguous_final_versions(self):
         for mode in ('future', 'missing', 'conflict', 'correction'):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as folder:

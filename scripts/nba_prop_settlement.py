@@ -49,6 +49,16 @@ def evaluate(play,final,now,injury_review=None):
         if not numeric(actual) or actual<0 or not numeric(line) or line<0:return decision('held','Actual statistic/threshold unavailable')
         result='push' if actual==line else 'win' if (actual>line)==(side=='over') else 'loss'
         if result=='win':return decision('settled','Full-game result including overtime',actual,result)
+        # Primary unders are excluded from the book's free early-exit rule.
+        # Public losing tickets still need the desk's separate injury research.
+        if side=='under':return decision('settled','Primary under excluded from early-exit protection; full-game statistics',actual,result)
+        periods=player.get('quarters',{})
+        needed={q for p in final['players'] for q in p.get('quarters',{})}
+        complete=(final.get('quarterWorkloadEvidence',{}).get('status')=='reconciled'
+            and {'1','2','3','4'}<=set(periods) and needed<=set(periods)
+            and all(str(q).isdigit() and numeric(periods[q].get('minutes')) for q in needed))
+        if complete and any(periods[q]['minutes']>0 for q in needed if int(q)>=3):
+            return decision('settled','Reconciled second-half participation excludes primary early-exit protection',actual,result)
         review=injury_review or {}
         if review.get('checked') is not True or not review.get('source'):
             return decision('held','Postgame injury check required',actual)
@@ -58,11 +68,6 @@ def evaluate(play,final,now,injury_review=None):
             return decision('held','Injury review identity/clock mismatch',actual)
         if review.get('status')=='no-injury':return decision('settled','Injury check clear; full-game statistics',actual,result)
         if side=='over' and review.get('status')=='injured':
-            periods=player.get('quarters',{})
-            needed={q for p in final['players'] for q in p.get('quarters',{})}
-            complete=(final.get('quarterWorkloadEvidence',{}).get('status')=='reconciled'
-                and {'1','2','3','4'}<=set(periods) and needed<=set(periods)
-                and all(numeric(periods[q].get('minutes')) for q in needed))
             if not complete:return decision('held','Second-half participation not reconciled',actual)
             second_half=any(periods[q]['minutes']>0 for q in needed if int(q)>=3)
             statement=urlparse(review.get('statementSource',''))

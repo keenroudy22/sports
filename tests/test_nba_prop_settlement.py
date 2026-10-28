@@ -25,6 +25,11 @@ class NBAPropSettlementTests(unittest.TestCase):
         self.assertEqual(n.evaluate(p,f,NOW)['result'],'void')
         f['players'][0]['dnp']=False;f['players'][0]['stats']['pts']=25
         self.assertEqual(n.evaluate(p,f,NOW)['result'],'win')
+    def test_losing_primary_under_does_not_invent_injury_protection(self):
+        p,f,r=self.data();p.update(side='under',line=5.5)
+        early=datetime(2026,10,30,3,tzinfo=timezone.utc)
+        result=n.evaluate(p,f,early)
+        self.assertEqual((result['state'],result['result']),('settled','loss'))
     def test_missing_participation_statement_or_book_terms_never_invent_void(self):
         p,f,r=self.data();early=datetime(2026,10,30,3,tzinfo=timezone.utc)
         self.assertEqual(n.evaluate(p,f,early)['state'],'held')
@@ -37,6 +42,10 @@ class NBAPropSettlementTests(unittest.TestCase):
     def test_returning_in_second_half_or_clean_review_uses_actual_result(self):
         p,f,r=self.data();f['players'][0]['quarters']['3']['minutes']=1
         self.assertEqual(n.evaluate(p,f,NOW,r)['result'],'loss')
+        early=datetime(2026,10,30,3,tzinfo=timezone.utc)
+        self.assertEqual(n.evaluate(p,f,early)['result'],'loss')
+        f.pop('quarterWorkloadEvidence')
+        self.assertEqual(n.evaluate(p,f,early)['state'],'held')
         r['status']='no-injury'
         self.assertEqual(n.evaluate(p,f,datetime(2026,10,30,3,tzinfo=timezone.utc),r)['result'],'loss')
     def test_other_game_or_future_final_cannot_grade(self):

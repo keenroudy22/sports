@@ -425,7 +425,7 @@ def grade(now,root=STORE,boxes=None):
     old={r['id']:r for r in saved(root/'player-outcomes')};rows=[]
     for r in saved(root/'player-forecasts'):
         model=r.get('model',VERSION)
-        if (r['id'] in old and old[r['id']].get('model')==model) or r['eventId'] not in finals:continue
+        if r['eventId'] not in finals:continue
         final=finals[r['eventId']]
         if boxscores.instant(r['retrievedAt'])>=boxscores.instant(final['kickoff']):continue
         people=[p for p in final['players'] if p['id']==r['athleteId'] and p['team']==r['team']]
@@ -438,10 +438,17 @@ def grade(now,root=STORE,boxes=None):
         import nba_prop_settlement
         if boxscores.instant(r['retrievedAt'])>=nba_prop_settlement.VERIFIED_AT:
             book_decision['bookSettlement']=nba_prop_settlement.evaluate(r,final,now)
-        rows.append({'id':r['id'],'league':'NBA','season':r['season'],'actual':actual,'result':result,**book_decision,
+        outcome={'id':r['id'],'league':'NBA','season':r['season'],'actual':actual,'result':result,**book_decision,
                      'projection':r['projection']['value'],'line':r['line'],'side':r['side'],
                      'odds':r['odds'],'book':r['book'],'source':final.get('source'),
-                     'retrievedAt':boxscores.stamp(now),'forecastAt':r['retrievedAt'],'model':model})
+                     'retrievedAt':boxscores.stamp(now),'forecastAt':r['retrievedAt'],'model':model}
+        previous=old.get(r['id'],{})
+        if previous and boxscores.instant(previous['retrievedAt'])>now:
+            continue  # A replay cannot append an older decision after a correction.
+        # Recheck held book decisions and official corrections, without appending
+        # the same result again just because another worker observed it later.
+        if {k:v for k,v in outcome.items() if k!='retrievedAt'} != {k:v for k,v in previous.items() if k!='retrievedAt'}:
+            rows.append(outcome)
     return nba_capture.append_changed(rows,root/'player-outcomes',lambda r:r['id'])
 
 
