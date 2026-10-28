@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-28T19:35:59.221100+00:00",
+  "updatedAt": "2026-10-28T19:51:48.021918+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -376,9 +376,9 @@
       "title": "Validate NBA prop baselines and priced forward outcomes before official props",
       "status": "observing",
       "owner": "agent",
-      "next": "Freeze/grade current-role variants and compare saved baselines by stat/model with equal-game weights. No official prop adapter until untouched evidence supports probabilities and prices; props remain research.",
+      "next": "Existing17:30/21:00 captures freeze future forecasts; postfinal runs recheck held grades/corrections. Require30 independent untouched games/five dates by stat plus positive error/price proof before a prop adapter. No forced release.",
       "doneWhen": "A reproducible forward report compares model/history with prices and outcomes using independent samples and noise/role checks; it supports an NBA-specific Trial rule or rejects promotion. Existing NBA promotion rules remain.",
-      "evidence": "Oct28:2953graded comparisons/49games/408player-games. Baseline pts/reb/ast trail quoted-line error and have negative equal-game frozen-price returns; current-role variant3games only. Repeated books excluded; matched baseline retained. f47/40692489988SUCCESS verified7606acf63; full1936Python(2skip)/288Node; no promotion."
+      "evidence": "Oct28 19:50Z:3frozen probability specs/18future forecasts/0completed test games. Earlier baseline2953comparisons/49games failed.39focused tests pass for DK rule exclusions, held-grade retries, append-only corrections/replay and exact season/kickoff. Full release verification in progress; no official NBA props posted."
     },
     {
       "id": "O-20261019-TIERS",

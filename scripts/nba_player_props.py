@@ -427,6 +427,8 @@ def grade(now,root=STORE,boxes=None):
         model=r.get('model',VERSION)
         if r['eventId'] not in finals:continue
         final=finals[r['eventId']]
+        if (boxscores.instant(r['kickoff'])!=boxscores.instant(final['kickoff'])
+            or r['season']!=final.get('season')):continue
         if boxscores.instant(r['retrievedAt'])>=boxscores.instant(final['kickoff']):continue
         people=[p for p in final['players'] if p['id']==r['athleteId'] and p['team']==r['team']]
         if len(people)!=1:continue

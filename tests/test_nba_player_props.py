@@ -212,13 +212,13 @@ class NBAPlayerPropTests(unittest.TestCase):
             forecasts=n.saved(root/'player-forecasts')
             # Use a real post-policy forecast rather than changing a saved row.
             forecast=dict(forecasts[0],id='post-policy',retrievedAt='2026-10-29T15:00:00Z',
-                          kickoff='2026-10-29T23:00:00Z')
+                          kickoff='2026-10-29T23:00:00Z',eventId='101')
             nba_capture.append_changed([forecast],root/'player-forecasts',lambda r:r['id'])
-            final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,
+            final=dict(b[-1],eventId='NBA-101',league='NBA',season=2027,
                        kickoff=forecast['kickoff'],retrievedAt='2026-10-30T02:00:00Z')
             early=datetime(2026,10,30,3,tzinfo=timezone.utc)
             with patch('nba_prop_settlement.evaluate',return_value={'state':'held','result':None}):
-                self.assertEqual(n.grade(early,root,[final]),2)
+                self.assertEqual(n.grade(early,root,[final]),1)
             before=next((root/'player-outcomes').glob('*.jsonl')).read_bytes()
             with patch('nba_prop_settlement.evaluate',return_value={'state':'settled','result':'win'}):
                 self.assertEqual(n.grade(early+timedelta(minutes=5),root,[final]),1)
@@ -227,10 +227,18 @@ class NBAPlayerPropTests(unittest.TestCase):
                 corrected=copy.deepcopy(final)
                 corrected['retrievedAt']='2026-10-30T03:10:00Z'
                 corrected['players'][0]['stats']['pts']=5
-                self.assertEqual(n.grade(early+timedelta(minutes=11),root,[final,corrected]),2)
+                self.assertEqual(n.grade(early+timedelta(minutes=11),root,[final,corrected]),1)
                 self.assertEqual(n.grade(early+timedelta(minutes=12),root,[final,corrected]),0)
                 self.assertEqual(n.grade(early,root,[final]),0)
             self.assertEqual(boxscores.verify(root/'player-outcomes'),[])
+
+    def test_final_requires_forecast_kickoff_and_season_identity(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);b=self.write(root);n.record_forward(NOW,root,b)
+            final=dict(b[-1],eventId='NBA-100',league='NBA',season=2027,
+                       kickoff='2026-10-20T19:00:00Z',retrievedAt='2026-10-20T22:00:00Z')
+            for bad in (dict(final,season=2028),dict(final,kickoff='2026-10-20T18:00:00Z')):
+                self.assertEqual(n.grade(NOW+timedelta(hours=10),root,[bad]),0)
 
     def test_grade_uses_only_received_unambiguous_final_versions(self):
         for mode in ('future', 'missing', 'conflict', 'correction'):
