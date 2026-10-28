@@ -5469,3 +5469,63 @@ checks. Final release gates must repeat after this candidate-head change; no
 promotion of the earlier source is claimed.2849at04:50Z is now2852/48remaining
 after these3existing-worker metadata calls, not extra requests by this review.
 Normal2700room needs a fresh chronological calculation before final receipt.
+
+
+### October28 overnight — privacy and Buffer reserve guards VERIFIED LIVE
+
+2026-10-28T05:21:31.880212+00:00 — privacy0cece2912 and reserve8a72d1e623919bd1999fc12ed654d9561f788afa
+passed canonical scripts/deploy.py retry1. First attempt preserved the stopped
+final dirty-check while the added reserve fix was being committed; no unchecked
+source promoted. Final1913Python(two expected skips)/286Node normal+clean,
+all build/feed/payload/133record/NBA/public/assets/SVG gates passed.0055/k88orilv
+offline exit0/outcomeok with zero outside writes/private reads. Full tests ran
+outside the posting lock; exact tested head promoted under lock. Hosted
+40636174505SUCCESS, verifiedHead330b659b4e216e0e5d3349c942f2069d7ef5d0d4
+contains both sources by checked ancestry.683hostedpublicfiles/zeroissues;
+133record rows match. Today/Record375/1440 fully rendered, no overflow or
+console warnings/errors; phone screenshot visually inspected. Initial Chrome
+416CSS preview was superseded by verified exact375 IAB checks; overrides reset.
+
+Original-slip privacy exemptions are closed in future Buffer scheduling/private
+audit, delayed Discord owner-slip uploads/failed-download fallback and chef-wins
+intake/direct send. Raw originals remain unchanged, held without sent/seen
+receipts; later checked native art is not blocked. No unseen owner images were
+waiting, so no forced demonstration post or claim of a new natural slip send.
+Sent/unknown provider protection, original prices/stakes and private Climb sizes
+remain. This ships code, not the entire owner audit or linked daily-card feature.
+
+Optional-only quota holds now filter before discovery; mixed plans retain
+essentials and independent Discord. Actual pre-fix00:57pass spent3metadata
+requests on blocked research, recorded in reserve-diagnosis.md.2852local
+calendar/rolling receipts leave48temporary essential requests; normal2700room
+if no further requests isNov9 14:02:07.711251UTC/9:02AMEastern. Approved2900
+expiresNov6 13:05UTC; analytics remain paused, provider balance unknown.
+November1 calendar rollover cannot clear rolling hold. Natural savings require
+next existing01:25/01:55 worker/journal observation; no new job or allowance.
+
+All68delivery-backed plays graded;133live rows agree,14personal rows settled.
+TuesdayWKUML/SamML/over51.5 all lost,0–3/−1.50u. First-retained-final to grade
+0.22/0/0minutes; officialDiscord2.82/2.72/2.72minutes. Ordinary losses route
+to actual dailyFinal, accepted09:03ET, not sent yet; weekly09:23ET also accepted.
+PriorFinal actuallysentOct27 13:05:28.823UTC. Sam original+180/0.5u remains
+counted despite owner-reported social removal. Historical Monday winX37.51/
+47.51minute misses remain in prior receipts. No late-timing claim was erased.
+
+Recorded-price season31–44/−11.426922965u/70.5risked/59.073077035returned;
+Oct26baseline29–40/−11.886922965u/66.5risked retained. Subsequent2–4/+0.46u
+on4risked. Assumed-price imports, promotional credits, personal/fun, Climb and
+NBA Trial remain separate. Dated private interim snapshot saved; October31/
+November1 existing runs retain the final reconciliation responsibility.
+
+True-clock Oct28packet refreshed05:19Z:2CFB/29priced rows,12NBA/0freshprops;
+23stored candidate checks include full selection-verdict,0without holds.
+89alternate spreads/0supported Climb legs; no admitted ticket.6:45/8:30 must
+refresh quote/news/reasons/roles and every release check. Coverage is not quota.
+Agent next implementation: linked combined straight card after individual
+releases, frozen original prices/units/categories and a linked W/L/P/V+net
+follow-up; normal full release/hosted/live/actual receipts required. Genuine
+Chef/NBA/quarter proof holds remain separate. All176stable IDs retained.
+Only prior completed same-automation01a17bae archived; current/running/owner
+action chats retained. No schedule, budget, wager or historical record change.
+Full receipt work/overnight-20261028-outcomes.json. Verification metadata stays
+ondev for next ordinary safe release; no duplicate deployment just for notes.
