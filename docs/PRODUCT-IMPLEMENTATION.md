@@ -5760,3 +5760,9 @@ per primary stat in0.09s; those exposed games cannot validate the study. Future
 probability/price performance, settlement and reviewed prop admission adapter
 remain required. No new official bet from this work, no changed historical result,
 no extra feed/job/quota/stake. Natural study and delivery observations remain open.
+Final containing run40701419489 alsoSUCCESS:verified047094950ffb61dfaed32bca2233fcf53ae1bf7b
+includesad7by ancestry;0upstreamchanges/0extra checks,683publicfiles/240078177bytes/
+0issues. Post-deploy live reload clean; served coreadc01f74f0b0/app8da3c72126c7/
+more405994ce1e29 match verified source. Both requested releases fully hosted;
+no pending release being represented as live. Metadata stays ondev for the next
+ordinary safe release; no third source deployment for these verification notes.
