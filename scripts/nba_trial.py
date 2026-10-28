@@ -34,7 +34,7 @@ def snapshot(rows):
     net=round(net,6)
     graded=wins+losses+pushes
     return {'label':nba_pick_policy.label(),'win':wins,'loss':losses,'push':pushes,'graded':graded,
-            'units':round(net,3),'paused':graded>=30 and net<=-5,
+            'units':net,'paused':graded>=30 and net<=-5,
             'promotionReview':graded>=30 and net>=0}
 
 

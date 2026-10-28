@@ -206,3 +206,10 @@ class PropReleaseTests(unittest.TestCase):
   self.assertGreater(evidence['bookReturnLower95'],0)
   self.assertTrue(evidence['study']['evidenceReady'])
   self.assertGreater(offers[0]['chance']-n.espn_props.implied(offers[0]['odds']),.04)
+ def test_website_and_discord_return_displays_do_not_double_round(self):
+  play=dict(self.candidate(),type='publish',result='win',actual=22,settledAt=boxscores.stamp(NOW))
+  summary=nt.snapshot([play,dict(play,type='settle',source='official')])
+  self.assertEqual(summary['units'],.454545)
+  book={'posts':[{'id':play['id'],'kind':'buffer:nba-trial','nbaPick':True,'discord':{'state':'sent'}}]}
+  rt.queue_discord_results(book,NOW,[play])
+  self.assertIn(f"{summary['units']:+.2f}u",book['posts'][0]['discord']['result']['text'])
