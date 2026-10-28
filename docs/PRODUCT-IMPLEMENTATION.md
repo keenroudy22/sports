@@ -5739,3 +5739,24 @@ reopening My Ticket rechecks both football and NBA catalogs. Missing NBA catalog
 holds totals instead of trusting saved prices. Started/stale/future-clock rows
 cannot supply an open quote; held-role rows omit projections. Personal NBA drafts
 never receive a calibrated chance, EV, official designation or record admission.
+
+### October28 ticket comparison — VERIFIED live
+
+Bothbc0f694cc/ad7d8ac48 are ancestors of verifiedfe01fd0d12 in40700360028SUCCESS.
+Hosted merged7files and repeated10checks.1940Python(2expected skips)/290Node,
+normal+clean;133official/NBA0 audited; offline0925 exit0/outcomeok,0outside
+writes/private reads. Live375/1440: no overflow, rendered load or console errors.
+Actual UI add/recheck/remove of AnthonyBlack under4.5assists at−132FD retained
+exact terms, showed baseline1.8 and price need56.9%, explicitly no validated EV.
+Football WISover36.5−110FD showed stored projection43 and calibrated chance/EV.
+Trusted book-home link verified; no prefilled ticket or wager claimed. Test legs
+removed and sport/viewport restored. Screenshots in owner's folder:
+kookn-ticket-comparison-mobile-2026-10-28.png and kookn-nba-ticket-{mobile,desktop}-2026-10-28.png.
+Full receipt:work/oct28-ticket-comparison-verified.json. P31 shipped;176IDs retained.
+
+NBA props are NOT promoted. New prospective study code is deployed; first natural
+11:45Eastern capture must still freeze real specs. Read-only training found49games
+per primary stat in0.09s; those exposed games cannot validate the study. Future
+probability/price performance, settlement and reviewed prop admission adapter
+remain required. No new official bet from this work, no changed historical result,
+no extra feed/job/quota/stake. Natural study and delivery observations remain open.
