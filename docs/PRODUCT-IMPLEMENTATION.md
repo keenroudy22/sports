@@ -1,3 +1,30 @@
+### October28 NBA prop grading repairs — VERIFIED LIVE, PROP SELECTION UNFINISHED
+
+Sources219a13d23/5c503e035 shipped through the standard locked release. Hosted
+40759077827 succeeded, verified73c4d69a687a12aa7222e0180b979360f0439a6d with8
+post-rebase checks after12 upstream data files changed. Normal and clean-export
+suites passed1962Python(two skips)/290Node; focused prop suites39. Build/feed,
+record/NBA/public-boundary, assets/SVG and isolated1525 rehearsal passed with
+zero outside writes/private reads. All133 original record terms remain unchanged.
+
+DraftKings primary unders and reconciled second-half over participation use the
+verified primary early-exit exclusions. This is research book settlement, not a
+bypass of public losing-ticket injury research. Held outcomes now retry; real
+stat/settlement corrections append once while repeated clocks add nothing.
+Exact season/kickoff identity is mandatory and historical replays cannot roll a
+newer outcome backward. The frozen probability implementation was not changed.
+
+Live NBA Today at375/1440 shows the fresh15:59 prices without horizontal overflow;
+phone/desktop visuals inspected and viewport reset. A single GitHub Unicorn error
+after deployment recovered immediately on reload; it is not erased from the receipt.
+The15:58:49–15:59:46 normal selection completed with0errors/0new plays. No new NBA
+publication or X/Discord receipt is claimed. Three frozen probability specs contain
+18future forecasts (points3distinct games, rebounds2, assists2), zero completed test
+cases. Earlier baselines failed. Natural independent probability/price evidence
+and a supported official prop adapter remain open; grading repairs do not finish
+NBA props, quarter tickets or Climbs. Existing17:30/21:00 captures and final-summary
+runs retain responsibility for fresh forecasts and subsequent grades.
+
 ### October28 regular NBA delivery release — VERIFIED LIVE
 
 Source857e253c5/f3b3a39c5 installed through the locked entry point. Hosted run
