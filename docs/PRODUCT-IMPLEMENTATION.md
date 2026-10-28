@@ -5581,3 +5581,69 @@ changed latest quote/stake/unit overrides. The regression now compares each
 outcome directly with run.lock_units (including-110/.5u=.455u), not an incorrect
 unrounded expectation. Existing record/counting and tests remain unchanged.
 Repeat affected, full normal/clean and every canonical gate before promotion.
+
+
+### October28 daily — combined straight-card pipeline VERIFIED LIVE
+
+2026-10-28T12:23:07.655891+00:00 — ae71d27ef plus rounding repair8e2e9dcbcafa4d77fdeb6bff80dc7ef38099c5fa
+passed every canonical scripts/deploy.py gate and promoted exact tested source
+under the release lease/run lock. Final invocation attempt1; earlier own
+invocation was interrupted before promotion to correct settlement rounding.
+No earlier unchecked source was promoted. All affected/full normal/clean-export
+checks repeated:1923Python(two expected skips)/286Node.455pages/88games,
+133record/NBA0,680local public files/no issues, assets/SVG and true0755
+9b7j7nte offline exit0/outcomeok/outside0/private0. Existing soft payload
+warnings remain; no safety assertion or published record was weakened.
+
+Hosted40685391903SUCCESS; verifiedHead2fcc4378cb443ee6f237718e419944715ce6006b
+contains8e2e9dcbc by checked ancestry. Hosted1923Python, record133,684public
+files/0issues; push skipped scheduled feed captures. Six fully rendered live
+checks:Today/Record375and1440 plus both active CFB pages375; all exact width,
+zero overflow/load failures/console warnings or errors, phone visually inspected.
+KENN-MTSU shows AntonioMartin over35.5rushYds/-114FanDuel exact price blocker;
+JXST-NMSU shows research-only NMSUML+136DraftKings. Initial selector expected
+the old favorite-panel heading; actual Lines we like content was read before
+verification. Temporary viewport reset. Final live record12:14:52Z all133rows
+match stored result/settledAt/units, including owner-removed Sam Houston.
+
+The summary is code-live, not an actual new ticket or confirmed first delivery.
+Only two-to-ten already X-confirmed official straights can create it, before
+first kickoff. Every original exact wager/price/book/unit and membership freeze
+in accepted metadata; changed terms refuse a stale card. Normal Final links only
+to a confirmed actual summary X link and grades every frozen row W/L/P/V/net
+using the same three-decimal settlement function as the record. Both summaries
+and linked Final mirror once, after X, to Plays & Results. Existing caps, free
+request checks, price/news/admission, categories and separate NBA/fun/Climb
+accounting remain. Ten lifecycle regressions join the bounded runtime suite.
+Native2/10-row and four-outcome samples are private synthetic QA, never posts.
+
+O-20261025-OWNERFOLLOW is observing: existing workers must save the first
+eligible summary's actual X/Plays receipts, then its linked settled Final's
+actual X/Plays receipts. Do not force a slate or claim a scheduled post sent.
+Current27priced rows cover2CFB,918NBA comparisons=81player-games/498markets
+across7of12games; tomorrowOct29packet covers3footballgames/67prices/3NBA.
+Source timestamps and role/evidence holds remain in private packets.22current
+straight checks/0fullyclear; no supported two-leg Climb or open step. Snapshot
+NBA12/14clean,37/50paper/Trialopen,props-quarter-Climb/promotionheld.5211
+numerical forecast outcomes span408player-games/2773markets;32DNP excluded,
+books/models are not independent validation or permission to promote.
+
+Tuesday0-3/-1.50u stays. Grade.22/0/0minutes, officialDiscord2.82/2.72/2.72
+minutes from retained finals. MorningFinal13:03Z/weekly13:23Zremainaccepted,
+not sent at verification; existing workers own actual receipt checks. Historical
+lateX results remain. Natural reserve-saving is proven by05:27-11:28Zoptional
+refusals before discovery and unchanged last04:57:15.526ZBufferjournal.
+2852partial local receipts/48temporary essential room,2900expiresNov6 13:05UTC;
+normal2700rollingroomNov9 14:02:07.711251UTC if no more requests. Provider
+balance unknown, analytics paused, no reset/newpoll/budget change. Odds440/500,
+SGO829/2500(stop1800). Homepage actually3stories10:53:51Z, exact local-call
+count overwritten/unknown. Oct27weekly actual1local27Bcall/0fail/4.82seconds,
+summaryavailable; not the old Oct20packet.
+
+Only older completed same daily01a17d2b archived through app; latest, running,
+owner-action and other automation chats retained. Another task began unrelated
+NBA/platform edits in sports-dev after promotion; rebase refused cleanly and
+those changes were preserved, not staged, deployed or claimed by this run.
+Metadata receipt remainsdev for the next ordinary release; no second deployment.
+Evidence work/daily-20261028-outcomes.json,release.log,hosted.log,live-checks.json,
+prep.json,next-slate.json,climb.json and private rendered samples.
