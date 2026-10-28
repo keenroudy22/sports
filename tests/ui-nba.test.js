@@ -173,3 +173,19 @@ test('NBA projection bars use stored model chances and hide unknown, invalid and
  const football=ctx.projCard({league:'CFB',away:{name:'Away'},home:{name:'Home'},v2:{away:20,home:24,total:44,winProb:.6}});
  assert.match(football,/Estimated win chance: Away 40%, Home 60%/);
 });
+
+test('posted NBA props show the exact player stat and DNP void without a missing team or null final',async()=>{
+ const s=load(),api=s.module.exports;
+ const play={id:'NBA-prop-test',marketType:'player',player:'Real <Player>',stat:'reb',direction:'under',line:6.5,odds:105,book:'DraftKings',riskUnits:.5,kickoff:new Date(Date.now()+3600000).toISOString(),teams:{home:{abbreviation:'HOM'},away:{abbreviation:'AWY'}},card:'data/cards/prop.png'};
+ const data={games:[],trial:{plays:[play],record:{win:0,loss:0,units:0}}};
+ const ctx=api.gamesContext({get:async()=>data});ctx.state.league='NBA';const views=s.KRGames(ctx);views.gamesLive=async()=>'';
+ let html=await views.nbaToday({data});assert.match(html,/Real &lt;Player&gt; under 6.5 rebounds/);assert.match(html,/0.5u/);assert.doesNotMatch(html,/undefined/);
+ play.result='void';play.actual=null;html=await views.nbaToday({data});assert.match(html,/void/);assert.doesNotMatch(html,/final null|final undefined/);
+});
+
+test('All-sports Today shows actual posted NBA props before matchup research',()=>{
+ const s=load(),views=s.KRGames(s.module.exports.gamesContext());
+ const play={id:'NBA-prop-all',marketType:'player',player:'Real Player',stat:'pts',direction:'over',line:20.5,odds:-110,book:'DraftKings',riskUnits:.5,kickoff:new Date().toISOString(),teams:{home:{abbreviation:'HOM'},away:{abbreviation:'AWY'}},card:'data/cards/prop.png'};
+ const html=views.nbaSummary({games:[],trial:{plays:[play],record:{win:0,loss:0,units:0}}});
+ assert.match(html,/Real Player over 20.5 points/);assert.match(html,/data\/cards\/prop.png/);assert.doesNotMatch(html,/undefined/);
+});

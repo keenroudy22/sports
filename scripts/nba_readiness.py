@@ -112,6 +112,11 @@ def status(now=None, capture_root=nba_capture.STORE, paper_root=paper.STORE, con
         evidence_stage = 'promotion-evidence'
     opening = datetime.fromisoformat(config['openingDate']).date()
     trial_open = now.astimezone(EASTERN).date() >= opening
+    import nba_prop_release
+    try:
+        prop_markets=[stat for stat in nba_prop_release.STATS if nba_prop_release.proof(stat,now,capture_root)]
+    except (OSError,ValueError,TypeError,KeyError):
+        prop_markets=[]
     return {
         'stage': 'live-picks' if nba_pick_policy.active(now) and trial_open else 'live-trial' if trial_open else evidence_stage,
         'evidenceStage': evidence_stage,
@@ -124,10 +129,11 @@ def status(now=None, capture_root=nba_capture.STORE, paper_root=paper.STORE, con
         'paperGradesRequired': paper_need,
         'readyForLiveTrial': trial_open,
         'readyForPicks': nba_pick_policy.active(now) and trial_open,
-        'playerPropsReady': False,
+        'playerPropsReady': bool(prop_markets),
+        'playerPropMarketsReady': prop_markets,
         'quarterTicketsReady': False,
         'climbReady': False,
-        'scope': 'Qualified NBA team picks are active. Player, quarter and Climb approval still requires their own supporting evidence.' if nba_pick_policy.active(now) else 'Trial activation for qualified team markets; not proof that a bet qualifies or that player/quarter/Climb models are validated.',
+        'scope': ('Qualified NBA team and independently validated player markets are active; quarters and Climbs retain separate approval.' if prop_markets else 'Qualified NBA team picks are active. Player, quarter and Climb approval still requires their own supporting evidence.') if nba_pick_policy.active(now) else 'Trial activation for qualified team markets; not proof that a bet qualifies or that player/quarter/Climb models are validated.',
         'readyForPromotionEvidence': evidence_stage == 'promotion-evidence',
         'trialOpensOn': config['openingDate'],
         'source': config['source'],

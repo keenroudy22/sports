@@ -18,6 +18,17 @@ def audit(payload,root=nba_trial.STORE):
   if ordinary and (day,p.get('eventId')) in events:issues.append('more than one NBA pick per game')
   if ordinary and p.get('series')!='NBA Picks':issues.append('new NBA pick category mismatch')
   if p.get('riskUnits')!=nba_trial.staking.expected(p) or p.get('league')!='NBA':issues.append('stake/league mismatch')
+  if p.get('marketType')=='player':
+   import nba_prop_release,nba_prop_probability
+   proof=p.get('propEvidence') or {}
+   if (p.get('stat') not in nba_prop_release.STATS or p.get('period')!='full_game'
+       or p.get('book')!='DraftKings' or not p.get('athleteId') or not p.get('player')
+       or p.get('model')!=nba_prop_probability.VERSION
+       or proof.get('adapter')!=nba_prop_release.VERSION or not proof.get('specHash')
+       or proof.get('games',0)<30 or proof.get('easternDates',0)<5
+       or not nba_prop_probability.numeric(proof.get('bookReturnLower95')) or proof['bookReturnLower95']<=0
+       or proof.get('evidenceHash')!=nba_prop_probability.digest({k:v for k,v in proof.items() if k!='evidenceHash'})):
+    issues.append('NBA prop frozen admission evidence missing or invalid')
   ids.add(p['id']);events.add((day,p.get('eventId')))
  for day,plays in days.items():
   limit=max(nba_trial.nba_pick_policy.daily_cap(boxscores.instant(p['publishedAt'])) for p in plays)

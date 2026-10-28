@@ -205,6 +205,11 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
             probability = nba_prop_probability.capture(Path(root), stamp)
         except (OSError, ValueError, KeyError, TypeError):
             errors.append('probability-shadow-unavailable')
+        try:
+            import nba_prop_release
+            probability['releaseProtocolRecorded'] = nba_prop_release.freeze(Path(root), stamp)
+        except (OSError, ValueError, KeyError, TypeError):
+            errors.append('prop-release-protocol-unavailable')
     return {'probabilityShadow': probability, 'requests':count,'espnRequests':budget.requests,'captured':captured,'paired':len(quotes),
             'quarterPaired':len(quarters),'quarterCaptured':quarter_captured,'quarterPartial':quarter_partial,
             'partial':len(done)<len(BOOKS),'ignored':ignored,'errors':errors,'forwardRecorded':recorded,'forwardGraded':graded}

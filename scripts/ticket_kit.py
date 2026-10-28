@@ -591,6 +591,7 @@ STAT_UNITS = {   # stacked unit labels for the bet line
     'recYds': ('REC', 'YDS'), 'rushYds': ('RUSH', 'YDS'), 'passYds': ('PASS', 'YDS'), 'passTD': ('PASS', 'TDS'),
     'rec': ('CATCHES',), 'car': ('CARRIES',), 'cmp': ('COMP',), 'att': ('PASS', 'ATT'), 'rushRecYds': ('RUSH+REC', 'YDS'),
     'total': ('TOTAL', 'PTS'),
+    'pts': ('POINTS',), 'reb': ('REBOUNDS',), 'ast': ('ASSISTS',),
 }
 SHORT_WORDS = (('rushing + receiving yards', 'rush+rec yds'), ('receiving yards', 'rec yds'), ('rushing yards', 'rush yds'),
                ('passing yards', 'pass yds'), ('passing touchdowns', 'pass TDs'), ('pass attempts', 'pass att'),

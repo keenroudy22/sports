@@ -1,3 +1,21 @@
+# October28 owner — NBA prop delivery adapter, model approval unchanged
+
+The owner explicitly requests the prop posting path while natural evidence grows.
+`scripts/nba_prop_release.py` supports DraftKings full-game points/rebounds/assists
+only, through the existing NBA Picks ledger/Buffer/Discord path. Ordinary0.5u and
+shared exposure/count/free-tier limits stay in force. Every admission/send must
+recompute independent frozen probability proof plus30 fully settled book-priced
+games across five dates with positive conservative return. Held losing book cases
+cannot be omitted. The first natural prop capture freezes the adapter protocol;
+only later games can supply its book proof. Code changes cannot hand-enable it or
+reuse an altered protocol. The existing probability-study implementation remains
+unchanged. Stable current-season roles and fresh official participation/paired
+prices remain mandatory. The role-only source packet never changes minutes.
+Public losing props retain injury research and the explicit12-hour desk fallback;
+that fallback is not book-confirmed profit evidence. Preserve original publications,
+previous Discord result receipts, corrections and all failed experiments. Quarter
+props, combos, FanDuel and NBA Climbs do not inherit this approval.
+
 # October28 owner — regular NBA picks and current-role comparisons
 
 The owner explicitly ends the public NBA Trial framing. From2026-10-28T18:42:40Z,

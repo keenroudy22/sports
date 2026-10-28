@@ -213,8 +213,12 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
                   'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
                   'projection':round(prediction['margin'],1),'model':(result.get('prediction') or {}).get('model',nba_roster_runtime.model.VERSION) if 'margin' in families else 'hoops-v1'})
    except (KeyError,TypeError,ValueError):pass
+ import nba_prop_release
+ summary['props']={}
+ try:out.extend(nba_prop_release.candidates(now,root,lead_minutes,diagnostics=summary['props']))
+ except (OSError,ValueError,TypeError,KeyError):held('NBA prop evidence unavailable')
  summary['offers']=len(out)
- return sorted(out,key=lambda r:(-(r['rawChance']-__import__('espn_props').implied(r['odds'])),r['kickoff'],r['id']))
+ return sorted(out,key=lambda r:(-(r.get('chance',r['rawChance'])-__import__('espn_props').implied(r['odds'])),r['kickoff'],r['id']))
 
 
 def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True):
@@ -254,7 +258,7 @@ def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True):
 def public_rows(root=nba_trial.STORE):
  saved=rows(root);published={r['id']:r for r in saved if r.get('type')=='publish'}
  settled={r['id']:r for r in saved if r.get('type')=='settle'}
- return [{**r,**({k:settled[key].get(k) for k in ('result','actual','settledAt')} if key in settled else {})} for key,r in published.items()]
+ return [{**r,**({k:settled[key].get(k) for k in ('result','actual','settledAt','settlementReason')} if key in settled else {})} for key,r in published.items()]
 
 
 def queue_discord_results(log_book, now, plays=None):
@@ -263,22 +267,31 @@ def queue_discord_results(log_book, now, plays=None):
  for entry in log_book.get('posts',[]):
   mirror=entry.get('discord') or {};play=saved.get(entry.get('id'))
   if (entry.get('kind')!='buffer:nba-trial' or entry.get('nbaPick') is not True
-      or mirror.get('state')!='sent' or mirror.get('result') or not play):continue
+      or mirror.get('state')!='sent' or not play):continue
   try:
    result=play['result'];settled=boxscores.instant(play['settledAt'])
    if result not in ('win','loss','push','void') or not now-timedelta(days=3)<settled<=now:continue
    teams=play['game']['teams'];name=lambda s:teams[s].get('name') or teams[s]['abbreviation']
    market=play['marketType'];which=play['direction']
-   selection=(f"{which.upper()} {play['line']:g}" if market=='total' else
+   import nba_prop_release
+   selection=(nba_prop_release.selection(play) if market=='player' else f"{which.upper()} {play['line']:g}" if market=='total' else
               f"{name(which)} MONEYLINE" if market=='moneyline' else f"{name(which)} {play['line']:+g}")
    stake=play['riskUnits'];odds=play['odds']
    net=stake*(100/-odds if odds<0 else odds/100) if result=='win' else -stake if result=='loss' else 0
    mark={'win':'✅','loss':'❌','push':'➖','void':'➖'}[result]
    word={'win':'HIT','loss':'MISS','push':'PUSH','void':'VOID'}[result]
-   detail='Final total' if market=='total' else 'Selected team final margin'
-   text=f"{mark} NBA FINAL · {word}\n{name('away')} at {name('home')}\n{selection} ({odds:+d}, {play['book']})\n{detail}: {play['actual']:g}\n{net:+.2f}u · {stake:g}u risk"
+   detail=nba_prop_release.STATS[play['stat']] if market=='player' else 'Final total' if market=='total' else 'Selected team final margin'
+   actual='Did not play' if play.get('actual') is None and result=='void' else f"{play['actual']:g}"
+   text=f"{mark} NBA FINAL · {word}\n{name('away')} at {name('home')}\n{selection} ({odds:+d}, {play['book']})\n{detail}: {actual}\n{net:+.2f}u · {stake:g}u risk"
   except (KeyError,TypeError,ValueError,ZeroDivisionError):continue
-  mirror['result']={'state':'pending','text':text,'settledAt':play['settledAt']}
+  import nba_prop_probability
+  signature=nba_prop_probability.digest({k:play.get(k) for k in ('result','actual','settlementReason')})
+  prior=mirror.get('result')
+  if prior:
+   if prior.get('gradeHash')==signature or prior.get('state')!='sent' or not prior.get('gradeHash'):continue
+   mirror.setdefault('previousResults',[]).append(dict(prior))
+   text='CORRECTION\n'+text
+  mirror['result']={'state':'pending','text':text,'settledAt':play['settledAt'],'gradeHash':signature}
   entry['discord']=mirror;count+=1
  return count
 
@@ -286,10 +299,23 @@ def queue_discord_results(log_book, now, plays=None):
 def grade(now,root=nba_trial.STORE,boxroot=None):
  boxroot=boxroot or ROOT/'data'/'sport-box'
  finals={r['eventId']:r for p in boxroot.glob('*.jsonl') for r in boxscores.read_store(p)}
+ import nba_roles
+ prop_finals={str(r['eventId']).removeprefix('NBA-'):r for r in nba_roles.available_boxes(
+     [r for p in boxroot.glob('*.jsonl') for r in boxscores.read_store(p)],now)}
  added=0
  for play in public_rows(root):
-  final=finals.get(play['eventId'])
+  final=(prop_finals.get(str(play['eventId']).removeprefix('NBA-')) if play.get('marketType')=='player' else finals.get(play['eventId']))
   if not final or final['seasonType']!=2 or boxscores.instant(final['kickoff'])!=boxscores.instant(play['kickoff']):continue
+  if play.get('marketType')=='player':
+   import nba_prop_release
+   latest=next((r for r in reversed(rows(root)) if r.get('type')=='settle' and r['id']==play['id']),None)
+   if latest and boxscores.instant(latest['settledAt'])>now:continue
+   row=nba_prop_release.grade(play,final,now)
+   if row is None:continue
+   latest=next((r for r in reversed(rows(root)) if r.get('type')=='settle' and r['id']==play['id']),None)
+   if latest and all(latest.get(k)==row.get(k) for k in ('actual','result','source','bookSettlement','injuryReview')):continue
+   added+=nba_capture.append_changed([row],root,lambda r:(r['type'],r['id']))
+   continue
   teams=final['teams'];scores=[t.get('score') for t in teams.values()]
   if len(scores)!=2 or any(not isinstance(s,(int,float)) for s in scores):continue
   market=play.get('marketType','total')
@@ -332,7 +358,10 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
   teams=play['game']['teams']
   name=lambda side: teams[side].get('displayName') or teams[side].get('name') or teams[side]['abbreviation']
   title=f"{name('away')} at {name('home')}"
-  if play.get('marketType')=='total': selection=f"{play['direction'].upper()} {play['line']:g}"
+  if play.get('marketType')=='player':
+   import nba_prop_release
+   selection=nba_prop_release.selection(play)
+  elif play.get('marketType')=='total': selection=f"{play['direction'].upper()} {play['line']:g}"
   else:
    team=name(play['direction'])
    selection=f"{team} MONEYLINE" if play['marketType']=='moneyline' else f"{team} {play['line']:+g}"
@@ -363,6 +392,10 @@ def render_due(now,folder,log=print,root=nba_trial.STORE):
    if play['id'] in referenced or not play.get('result') or now-boxscores.instant(play['publishedAt'])<=timedelta(days=8):
     raise ValueError('Referenced NBA Trial original card missing: '+play['id'])
    log('Old unreferenced NBA Trial card missing; preserved attachment, skipped site art: '+play['id']);continue
+  if play.get('marketType')=='player':
+   import nba_prop_release
+   pick_card.render(nba_prop_release.card(play),path)
+   continue
   if play.get('marketType')=='total':
    current={'total':{'line':play['line'],'under':play['odds'] if play['direction']=='under' else play['oppositeOdds'],'over':play['odds'] if play['direction']=='over' else play['oppositeOdds']}}
   else:
@@ -382,6 +415,7 @@ def current_match(play,now):
  for candidate in candidates(now,lead_minutes=0):
   nba_trial.staking.apply(candidate,now)
   if candidate['id']==play['id'] and all(candidate[k]==play[k] for k in ('book','line','odds','direction')):
+   if play.get('marketType')=='player' and any(candidate.get(k)!=play.get(k) for k in ('athleteId','team','player','stat','period','model','reasons')):continue
    try:review={} if nba_pick_policy.active(now) else json.loads(REVIEW.read_text())
    except (OSError,ValueError):return False
    other=[r for r in rows() if r.get('id')!=play['id']]
@@ -416,6 +450,7 @@ def reserve_delivery(guid,now,root=nba_trial.STORE):
  if any(r.get('type')=='send-attempt' and r['id']==guid for r in saved):return False
  play=next((r for r in saved if r.get('type')=='publish' and r['id']==guid),None)
  if not play:return False
+ if play.get('marketType')=='player' and not current_match(play,now):return False
  nba_capture.append_changed([{'type':'send-attempt','id':guid,'season':play['season'],
                              'retrievedAt':boxscores.stamp(now),'source':'Buffer create intent'}],root,lambda r:(r['type'],r['id']))
  return True

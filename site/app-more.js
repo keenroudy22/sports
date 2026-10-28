@@ -299,9 +299,9 @@
         ${plays.length ? `<div class="receipts">${plays.map(p => {
           const teams = p.teams || {}, side = p.direction;
           const team = teams[side]?.displayName || teams[side]?.name || teams[side]?.abbreviation || '';
-          const line = p.marketType === 'total' ? `${side} ${p.line}` : p.marketType === 'moneyline' ? `${team} moneyline` : `${team} ${C.signed(p.line)}`;
+          const line = p.marketType === 'player' ? `${p.player} ${side} ${p.line} ${{pts:'points',reb:'rebounds',ast:'assists'}[p.stat] || ''}` : p.marketType === 'total' ? `${side} ${p.line}` : p.marketType === 'moneyline' ? `${team} moneyline` : `${team} ${C.signed(p.line)}`;
           const matchup = `${teams.away?.displayName || teams.away?.name || teams.away?.abbreviation || ''} at ${teams.home?.displayName || teams.home?.name || teams.home?.abbreviation || ''}`;
-          return `<article class="receipt"><div><b>${esc(matchup)} · ${esc(line)}</b><span>${esc(oddsText(p.odds))} ${esc(bookLabel(p.book))} · ${C.stakeOf(p)}u · ${esc(whenShort(p.kickoff))}</span><span>${p.result ? `${esc(p.result)} · final ${esc(p.actual)}` : 'Not graded yet'}</span></div>${p.card ? `<a href="${esc(p.card)}">Ticket ↗</a>` : ''}</article>`;
+          return `<article class="receipt"><div><b>${esc(matchup)} · ${esc(line)}</b><span>${esc(oddsText(p.odds))} ${esc(bookLabel(p.book))} · ${C.stakeOf(p)}u · ${esc(whenShort(p.kickoff))}</span><span>${p.result ? `${esc(p.result)}${p.actual == null ? '' : ` · final ${esc(p.actual)}`}` : 'Not graded yet'}</span></div>${p.card ? `<a href="${esc(p.card)}">Ticket ↗</a>` : ''}</article>`;
         }).join('')}</div>` : '<p class="muted small">No NBA play has been posted yet. Research projections and historical hit counts are not betting results.</p>'}
         <p class="btn-row"><a class="btn small" href="#today?sport=NBA">NBA Today ›</a><a class="btn small" href="#record/trials">Paper-trial evidence ›</a></p>`;
     }

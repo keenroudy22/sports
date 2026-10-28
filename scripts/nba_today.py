@@ -173,7 +173,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
     plays=sorted(focused,key=lambda p:p['publishedAt'])[-20:]
     periods=sorted({(p['season'],p['seasonType']) for p in all_trial_plays},reverse=True)
     trial_seasons=[{'season':s,'stage':stage,'record':nba_trial.snapshot([r for r in trial_rows if r.get('id') in {p['id'] for p in all_trial_plays if (p['season'],p['seasonType'])==(s,stage)}])} for s,stage in periods]
-    public_plays=[{k:p.get(k) for k in ('id','kickoff','publishedAt','marketType','direction','line','odds','book','riskUnits','projection','result','actual','reasons')} | {'teams':p['game']['teams'],'card':f"data/cards/{p['id'].lower()}.png"} for p in plays]
+    public_plays=[{k:p.get(k) for k in ('id','kickoff','publishedAt','marketType','direction','line','odds','book','riskUnits','projection','result','actual','reasons','player','athleteId','stat','period')} | {'teams':p['game']['teams'],'card':f"data/cards/{p['id'].lower()}.png"} for p in plays]
     readiness=nba_readiness.status(now, capture_root=root)
     started=nba_trial_runtime.review_ready(now, readiness=readiness['readyForLiveTrial'])
     import nba_editorial

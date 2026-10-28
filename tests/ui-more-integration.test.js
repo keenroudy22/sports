@@ -131,3 +131,12 @@ test('the Chef record survives a rolling release with an older cached core', asy
   assert.match(html,/id="chef-record"/);
   assert.match(html,/No Chef/);
 });
+
+test('NBA record keeps posted player terms and voids separate from team margins', async()=>{
+ const {api,factory}=loadBrowserApi();
+ const p={id:'NBA-prop-test',marketType:'player',player:'Real Player',stat:'ast',direction:'over',line:5.5,odds:-110,book:'DraftKings',riskUnits:.5,kickoff:new Date().toISOString(),result:'void',actual:null,teams:{home:{abbreviation:'HOM'},away:{abbreviation:'AWY'}}};
+ const data={trial:{record:{win:0,loss:0,units:0},plays:[p]}};
+ const ctx=api.moreContext({get:async()=>data});ctx.state.league='NBA';const views=factory(ctx);
+ const html=await views.record({tab:'official'});
+ assert.match(html,/Real Player over 5.5 assists/);assert.match(html,/void/);assert.match(html,/0.5u/);assert.doesNotMatch(html,/final null|undefined/);
+});

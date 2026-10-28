@@ -48,7 +48,7 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if not timedelta(0)<=now-quoted<=timedelta(hours=4) or quoted>=kickoff:problems.append('price freshness hold')
         if offer.get('league')!='NBA' or offer.get('seasonType') not in (2,'regular-season'):problems.append('NBA regular-season only')
         if nba_pick_policy.active(now) and not offer.get('eventId'):problems.append('verified game identity required')
-        if offer.get('marketType') not in ('total','spread','moneyline') or offer.get('book')!='DraftKings':problems.append('market/book hold')
+        if offer.get('marketType') not in ('total','spread','moneyline','player') or offer.get('book')!='DraftKings':problems.append('market/book hold')
         line=espn_props.number(offer['line'])
         market=offer.get('marketType')
         if now >= ALIGNMENT_FROM and not model_agreement(offer):problems.append('moneyline/model direction hold')
@@ -60,7 +60,12 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if offer.get('roleChecked') is not True or offer.get('roleHold') or offer.get('priceHold') or offer.get('injuryHold'):problems.append('role/price hold')
         if isinstance(offer.get('riskUnits'),bool) or offer.get('riskUnits')!=staking.expected(offer):problems.append('stake policy mismatch')
         if staking.active(now) and offer.get('stakingPolicy')!=staking.VERSION:problems.append('current stake policy required')
-        calibrated=calibration_verified is True and offer.get('calibrated') is True
+        prop_verified=False
+        if market=='player':
+            import nba_prop_release
+            prop_verified=nba_prop_release.verify(offer,now)
+            if not prop_verified:problems.append('NBA prop evidence/current-source hold')
+        calibrated=(prop_verified or calibration_verified is True) and offer.get('calibrated') is True
         chance=offer['chance'] if calibrated else offer['rawChance']
         if isinstance(chance,bool) or not isinstance(chance,(float,int)) or not math.isfinite(chance) or not 0<=chance<=1:
             raise ValueError('missing probability')
@@ -111,7 +116,8 @@ def record_publish(offer,now,root=STORE,preview_sent=None,calibration_verified=F
     required=('id','league','season','seasonType','kickoff','marketType','line','odds','oppositeOdds','book',
               'retrievedAt','rawChance','riskUnits','source')
     row={key:offer[key] for key in required}
-    for key in ('eventId','game','reasons','projection','model','direction','stakingPolicy','modelSnapshot'):
+    for key in ('eventId','game','reasons','projection','model','direction','stakingPolicy','modelSnapshot',
+                'athleteId','team','player','stat','period','chance','calibrated','propEvidence','roleReview','availabilitySource'):
         if key in offer:row[key]=offer[key]
     row.update(type='publish',series=nba_pick_policy.label(now),publishedAt=boxscores.stamp(now))
     return nba_capture.append_changed([row],root,lambda r:(r['type'],r['id']))

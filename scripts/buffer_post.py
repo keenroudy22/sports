@@ -743,7 +743,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if kind == 'nba-trial':
             import nba_trial_runtime
             if not nba_trial_runtime.reserve_delivery(guid, now):
-                log(f'buffer: {guid} held: NBA delivery already attempted; reconcile before retry')
+                log(f'buffer: {guid} held: NBA delivery not cleared or already attempted; recheck before retry')
                 continue
         try:
             if quota.temporary_buffer_allowance(now):
