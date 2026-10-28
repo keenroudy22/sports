@@ -1,3 +1,20 @@
+# October28 owner — regular NBA picks and current-role comparisons
+
+The owner explicitly ends the public NBA Trial framing. From2026-10-28T18:42:40Z,
+new supported NBA game picks use NBA Picks, ordinary0.5u, at most5/day and one
+per game within existing shared3u/5u exposure limits. The internal append-only
+NBA ledger and delivery IDs remain compatible; keep original historical series,
+stakes, prices, art and all result totals. Current numeric value, source, exact
+price, official availability and role gates remain; this is not evidence that
+an unvalidated model passed. Player props/quarters/Climbs need their separate
+supported admission/grading path. Do not call all NBA work finished merely
+because game picks are active. New NBA game picks use the same publication queue
+reserve as ordinary plays; no higher X volume or Buffer allowance.
+A public historical-minutes comparison also holds after a material current-role
+increase (the inverse of the existing70% collapse fence), until a game-specific
+minutes review. Preserve the unchanged baseline in private prospective captures;
+never drop failed model experiments or change old forecast/grade rows.
+
 # October27 live verification follow-through
 
 Content fingerprints cover core.js as well as the app and lazy bundles; a new

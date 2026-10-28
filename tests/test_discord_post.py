@@ -14,6 +14,31 @@ NOW = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
 
 
 class DiscordPostTests(unittest.TestCase):
+    def test_regular_nba_checks_original_then_sends_play_and_real_result_once(self):
+        import nba_trial_runtime as nba
+        now=datetime(2026,10,28,19,tzinfo=timezone.utc)
+        original={'id':'NBA-new','game':{'teams':{'home':{'name':'Detroit'},'away':{'name':'Boston'}}},
+                  'marketType':'total','direction':'over','line':221.5,'odds':-110,'book':'DraftKings','riskUnits':.5}
+        entry={'id':'NBA-new','kind':'buffer:nba-trial','nbaPick':True,
+               'discord':{'state':'pending','destination':'plays','readyAt':'2026-10-28T18:59:00Z','text':'NBA Picks\nOVER 221.5 (-110, DraftKings)'}}
+        book={'posts':[entry]}
+        with patch.object(nba,'public_rows',return_value=[original]),patch.object(nba,'current_match',return_value=False),patch.object(discord_post,'send_message') as send:
+            discord_post.mirror_sent(book,now,url='plays',wins_url='wins',log=lambda *_:None)
+            send.assert_not_called()
+        with patch.object(nba,'public_rows',return_value=[original]),patch.object(nba,'current_match',return_value=True),patch.object(discord_post,'send_message') as send:
+            discord_post.mirror_sent(book,now,url='plays',wins_url='wins',log=lambda *_:None)
+            discord_post.mirror_sent(book,now,url='plays',wins_url='wins',log=lambda *_:None)
+            self.assertEqual(send.call_count,1);self.assertEqual(send.call_args.args[0],'plays')
+        final=dict(original,result='loss',actual=210,settledAt='2026-10-29T02:00:00Z')
+        moment=datetime(2026,10,29,2,5,tzinfo=timezone.utc)
+        self.assertEqual(nba.queue_discord_results(book,moment,[final]),1)
+        self.assertEqual(nba.queue_discord_results(book,moment,[final]),0)
+        self.assertIn('-0.50u',entry['discord']['result']['text'])
+        with patch.object(discord_post,'send_message') as send:
+            discord_post.mirror_sent(book,moment,url='plays',wins_url='wins',log=lambda *_:None)
+            discord_post.mirror_sent(book,moment,url='plays',wins_url='wins',log=lambda *_:None)
+            self.assertEqual(send.call_count,1);self.assertEqual(send.call_args.args[0],'plays')
+        self.assertEqual(entry['discord']['result']['state'],'sent')
     def test_old_nba_x_post_cannot_bypass_current_discord_relevance(self):
         import nba_editorial
         now = datetime(2026, 10, 23, 19, tzinfo=timezone.utc)

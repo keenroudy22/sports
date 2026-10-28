@@ -117,8 +117,8 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
 
 | Post | When (Eastern) | Text shape | Card | Code |
 |---|---|---|---|---|
-| **Play** | Around noon; two hours before an earlier kickoff; never before 9 AM; ten minutes apart | `Iowa/Michigan over 38.5 (-105, ESPN BET)` / `I have it at 47.` / ask / tags | the play card | `x_post.draft`, `pick_card.svg` |
-| **Pick of the Day** | First in the noon batch | `🍳 Hot Plate (POTD): ...` then as a play | the play card labelled `HOT PLATE (POTD)` (`cards/<id>-potd.png`) | `featured.py` |
+| **Play** | Game day: target 9:30 AM ET; 8:30 AM for kickoffs before 10:30 AM. If admitted after target, use the next valid slot at least 15 minutes later and before kickoff. X posts stay twenty minutes apart; Discord leads X by 10–15 minutes. | `Iowa/Michigan over 38.5 (-105, ESPN BET)` / `I have it at 47.` / ask / tags | the play card | `x_post.draft`, `pick_card.svg` |
+| **Pick of the Day** | First in the game-day morning batch, targeting 9:30 AM ET (8:30 AM for kickoffs before 10:30 AM); only from eligible official singles with a fresh matching market. Never create an extra pick or force a designation. | `🍳 Hot Plate (POTD): ...` then as a play | the play card labelled `HOT PLATE (POTD)` (`cards/<id>-potd.png`) | `featured.py` |
 | **Player prop** | As a play | `Jordan Love under 2.5 carries (-111, DraftKings)` / `I have it at 1.2.` | the player's ESPN headshot on the card | `pick_card.artwork` |
 | **Side** | As a play | `Duke -10 vs Stanford (-110, FanDuel)` / `I have Duke by 14.` | the side's logo | |
 | **Lotto / longshot** | After the plays | `🎰 +2506 Chef's Special: 5-leg college lotto (FanDuel)` / `$10 → $260 at the posted +2506` / legs / `❤️ if you're tailing` | parlay card with the legs | `x_post.parlay_head` |
@@ -260,3 +260,13 @@ Use sourced factual support. NBA/football research score sheets display rounded
 whole-number forecasts with an approximation label; website research retains
 the stored precision. Private queued copy/art must pass the updated style marker
 and forecast check. Never rewrite sent posts or archived original graphics.
+
+## October28 regular NBA picks
+
+New NBA game selections use NBA Picks and ordinary0.5u, up tofive distinct games
+per Eastern day inside the existing shared exposure and social caps. Historical
+Trial publications retain their original series and art. Regular NBA game picks
+retain their value, two-sided price, current injury, role and final-send checks.
+Player props, quarters and Climbs still need their own supported admission and
+grading path; a label change is not a passed model experiment. The separate NBA
+record continues to count only actual publications and their original stakes.

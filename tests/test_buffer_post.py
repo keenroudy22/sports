@@ -528,6 +528,25 @@ class ScheduleTests(unittest.TestCase):
                     items={'official': {'league': 'CFB', 'kickoff': '2026-09-26T14:00:00Z'}}, log=lambda *_: None)
         self.assertEqual(stats['officialNotScheduled'], 1, 'the original target has now passed')
 
+    def test_regular_nba_uses_play_reserve_playbook_and_discord_lead(self):
+        now=datetime(2026,10,28,19,tzinfo=timezone.utc)
+        due=now+timedelta(minutes=20)
+        queued=[{'id':str(i),'bufferPostId':str(i),'dueAt':(now+timedelta(hours=1)).isoformat()} for i in range(7)]
+        plan=[('NBA-new','nba-trial','NBA Picks\nBoston at Detroit\nOVER 221.5 (-110, DraftKings)\nBoth rotations are unchanged.\n#NBA',due,'nba-new')]
+        with mock.patch('nba_trial_runtime.reserve_delivery',return_value=True), \
+             mock.patch.object(bp,'ticket_art_live',return_value=True), \
+             mock.patch.object(bp,'plain_art_live',return_value=True):
+            result=bp.schedule(plan,'x',{'posts':queued},now,key='t',send=FakeBuffer(),opener=lambda *_:True,log=lambda *_:None)
+        self.assertEqual(len(result['posts']),8)
+        entry=result['posts'][-1]
+        self.assertTrue(entry['nbaPick'])
+        self.assertIn('@Playbook',entry['queuedText'])
+        self.assertNotIn('@Playbook',entry['discord']['text'])
+        self.assertEqual(entry['discord']['destination'],'plays')
+        self.assertEqual(entry['discord']['readyAt'],bp.gates.stamp(due-bp.DISCORD_PLAY_LEAD))
+        self.assertTrue(entry['discord']['image'].endswith('/nba-new.png'))
+        self.assertFalse(bp.essential_kind('nba-trial',NOW))
+
     def test_post_cutover_play_waits_for_verified_ticket_image(self):
         due = datetime(2026, 10, 9, 22, 0, tzinfo=timezone.utc)
         plan = [('old-announcement', 'play', 'Iowa OVER 41.5', due, 'old-announcement')]

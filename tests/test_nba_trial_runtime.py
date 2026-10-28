@@ -9,6 +9,12 @@ import nba_capture,boxscores
 from test_nba_trial import offer,NOW
 
 class TrialRuntimeTests(unittest.TestCase):
+ def test_regular_nba_uses_current_activation_without_an_old_preview_approval_file(self):
+  moment=datetime(2026,10,28,19,tzinfo=timezone.utc)
+  self.assertTrue(rt.review_ready(moment,readiness=True))
+  self.assertFalse(rt.review_ready(moment,readiness=False))
+  with patch.dict('os.environ',{'KEENROUDY_NBA_TRIAL':'0'}):
+   self.assertFalse(rt.review_ready(moment,readiness=True))
  def setUp(self):
   self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
  def review(self):return {'delivered':True,'vetoed':False,'sentAt':'2026-10-09T22:00:00Z','pngSHA256':hashlib.sha256((rt.ROOT/'design/final/nba-trial-preview.png').read_bytes()).hexdigest()}
@@ -114,6 +120,19 @@ class TrialRuntimeTests(unittest.TestCase):
   self.assertEqual(nba_trial_audit.audit(good,self.root)['issues'],[])
   good['trial']['plays']=[];self.assertTrue(nba_trial_audit.audit(good,self.root)['issues'])
   good['trial']['record']['units']=4;self.assertTrue(nba_trial_audit.audit(good,self.root)['issues'])
+ def test_regular_nba_audit_accepts_distinct_games_without_recounting_football(self):
+  import nba_trial_audit
+  plays=[]
+  for i in range(2):
+   plays.append(dict(offer(),id=f'NBA-pick-{i}',eventId=f'NBA-{i}',type='publish',series='NBA Picks',
+       publishedAt='2026-10-28T19:00:00Z',kickoff='2026-10-28T23:00:00Z',
+       riskUnits=.5,stakingPolicy=nt.staking.VERSION,game={'teams':{}}))
+  nba_capture.append_changed(plays,self.root,lambda r:(r['type'],r['id']))
+  good={'trial':{'record':nt.snapshot(plays),'plays':[{'id':p['id']} for p in plays]}}
+  self.assertEqual(nba_trial_audit.audit(good,self.root)['issues'],[])
+  self.assertEqual((good['trial']['record']['graded'],good['trial']['record']['units']),(0,0))
+  with patch.object(rt,'rows',return_value=[plays[0],dict(plays[1],eventId=plays[0]['eventId'])]):
+   self.assertIn('more than one NBA pick per game',nba_trial_audit.audit(good,self.root)['issues'])
  def test_no_network_or_admission_before_opening(self):
   with patch.object(nba_capture,'step',side_effect=AssertionError('no call')):
    self.assertEqual(rt.admission(NOW-timedelta(days=11),root=self.root,review=self.review())['state'],'held')

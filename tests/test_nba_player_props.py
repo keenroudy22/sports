@@ -131,6 +131,25 @@ class NBAPlayerPropTests(unittest.TestCase):
             q=n.build(NOW,root,b)['rows'][0];self.assertIsNone(q['projection']);self.assertNotIn('favorite',q)
             self.assertIn('Out',q['hold'])
             self.assertEqual(n.build(NOW+timedelta(hours=5),root,b)['rows'],[])
+    def test_larger_current_workload_holds_public_favorite_preserving_frozen_baseline(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);b=self.write(root)
+            for item in b:item['players'][0]['stats']['min']=20
+            for i in range(3):
+                entry=copy.deepcopy(b[0]);entry.update(eventId=f'current-{i}',season=2027,
+                    kickoff=f'2026-10-{15+i:02d}T00:00:00Z')
+                entry['players'][0].update(starter=True,stats={'pts':30,'min':36,'ast':5,'reb':6})
+                b.append(entry)
+            public=n.build(NOW,root,b)['rows'][0]
+            self.assertIsNone(public['projection']);self.assertNotIn('favorite',public)
+            self.assertIn('minutes rose',public['hold'])
+            self.assertEqual((public['line'],public['over'],public['under']),(19.5,-110,-110))
+            n.record_forward(NOW,root,b)
+            frozen=[r for r in n.saved(root/'player-forecasts') if r['model']==n.VERSION]
+            self.assertEqual(len(frozen),1)
+            self.assertEqual(frozen[0]['projection']['minutes'],20)
+            self.assertEqual(n.record_forward(NOW,root,b),0)
+            self.assertEqual(boxscores.verify(root/'player-forecasts'),[])
     def test_stale_availability_holds_without_hiding_prices(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);b=self.write(root)

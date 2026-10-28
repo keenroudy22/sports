@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATES = ('shipped', 'ready', 'owner-needed', 'observing', 'gated')
 OWNERS = ('agent', 'owner', 'desk', 'provider')
 MAX_BYTES = 256 * 1024
-MAX_ITEMS = 176                       # retain 160 existing IDs plus bounded audit follow-ups; byte/text limits unchanged
+MAX_ITEMS = 177                       # retain existing IDs plus the Oct28 owner NBA follow-up; byte/text limits unchanged
 BRIEF_LIMIT = 1200
 ITEM_FIELDS = {'id', 'title', 'status', 'owner', 'next', 'doneWhen', 'evidence'}
 

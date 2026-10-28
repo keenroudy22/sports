@@ -213,7 +213,8 @@ def queue_results(log_book, first, latest, games, now):
         mirror['result'] = {'state': 'pending', 'text': text, 'settledAt': pick['settledAt']}
         entry['discord'] = mirror
         queued += 1
-    return queued
+    import nba_trial_runtime
+    return queued + nba_trial_runtime.queue_discord_results(log_book, now)
 
 
 def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
@@ -271,7 +272,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 mirror['communityType'] = phase
         import daily_straight_card
         combined = daily_straight_card.discord_eligible(entry) and destination == 'plays'
-        allowed = (combined or (kind == 'buffer:play' and destination != 'wins')
+        nba_pick = kind == 'buffer:nba-trial' and entry.get('nbaPick') is True and destination == 'plays'
+        allowed = (combined or nba_pick or (kind == 'buffer:play' and destination != 'wins')
                    or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith(('cashed:', 'burnt:'))
                        and destination != 'wins')
                    or (kind == 'buffer:community' and destination in ('plays', 'wins')
@@ -299,6 +301,13 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                               reason='Current research policy: ' + '; '.join(issues))
                 entry['discord'] = mirror
                 log(f"discord: {entry['id']} not mirrored: {mirror['reason']}")
+                continue
+        if nba_pick:
+            import nba_trial_runtime
+            original=next((p for p in nba_trial_runtime.public_rows() if p['id']==entry['id']),None)
+            if not original or not nba_trial_runtime.current_match(original,now):
+                mirror['lastHold']='NBA current-price or role check did not clear'
+                entry['discord']=mirror
                 continue
         target = (wins_url if destination == 'wins' else
                   research_url if destination == 'research' else url)
@@ -372,7 +381,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
     for entry in log_book.get('posts', []):
         mirror = entry.get('discord') or {}
         result = mirror.get('result') or {}
-        if result.get('state') != 'pending' or entry.get('kind') != 'buffer:play' or mirror.get('state') != 'sent':
+        result_kind=entry.get('kind')=='buffer:play' or (entry.get('kind')=='buffer:nba-trial' and entry.get('nbaPick') is True)
+        if result.get('state') != 'pending' or not result_kind or mirror.get('state') != 'sent':
             continue
         if not url:
             continue

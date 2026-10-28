@@ -61,6 +61,9 @@ BUFFER_RESERVED = 3                  # preserve the final places for plays, rela
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
 BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed', 'community'))
 BUFFER_TEMP_ESSENTIAL = frozenset(('play', 'nba-trial', 'receipt', 'cashed'))
+def essential_kind(kind, now):
+    import nba_pick_policy
+    return kind in BUFFER_ESSENTIAL or kind == 'nba-trial' and nba_pick_policy.active(now)
 DISCORD_PLAY_LEAD = post_windows.DISCORD_PLAY_LEAD  # one admission and scheduling window
 DISCORD_DELIVERY_CADENCE = post_windows.DISCORD_DELIVERY_CADENCE
 def card_url(card_key):
@@ -643,8 +646,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     pending = pending_scheduled(log_book, now)
     # Tickets and result follow-ups get queue capacity before optional updates,
     # even before pressure reaches the reserve threshold. Due times stay intact.
-    plans = sorted(plans, key=lambda plan: (plan[1] not in BUFFER_ESSENTIAL, plan[3], plan[0]))
+    plans = sorted(plans, key=lambda plan: (not essential_kind(plan[1], now), plan[3], plan[0]))
     for guid, kind, text, due, card_key in plans:
+        nba_regular = kind == 'nba-trial' and essential_kind(kind, now)
         prior = next((p for p in reversed(log_book.get('posts', []))
                       if p.get('id') == guid and x_post.cancelled_private_draft(p)), None)
         corrections = (prior or {}).get('captionCorrections') or []
@@ -652,7 +656,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 and corrections and corrections[-1].get('observedText') == prior.get('queuedText')
                 and x_post.text_hash(prior['queuedText']) == prior.get('textHash')):
             text = prior['queuedText']
-        if pending >= BUFFER_NORMAL_LIMIT or (pending >= BUFFER_OPTIONAL_AT and kind not in BUFFER_ESSENTIAL):
+        if pending >= BUFFER_NORMAL_LIMIT or (pending >= BUFFER_OPTIONAL_AT and not essential_kind(kind, now)):
             if kind == 'play' and missed_target(guid, due, now, items):
                 stats['officialNotScheduled'] += 1
             reason = 'the tenth Buffer place is reserved' if pending >= BUFFER_NORMAL_LIMIT else 'the final three Buffer places are reserved'
@@ -690,7 +694,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} held: all parlay legs do not fit X; never omit or merge legs')
                 continue
         text = social_voice.finish(text)
-        text = x_ticket_copy(text, 'play' if combined else kind, guid, item)
+        text = x_ticket_copy(text, 'play' if combined or nba_regular else kind, guid, item)
         if x_post.tweet_length(text) > x_post.LIMIT:
             log(f'buffer: {guid} held: complete caption and Playbook tag exceed X limit')
             continue
@@ -757,6 +761,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
+        if nba_regular:
+            entry['nbaPick'] = True
+            entry['discord'] = {'state':'pending','destination':'plays','text':without_playbook(text),
+                                'readyAt':gates.stamp(max(now,due-DISCORD_PLAY_LEAD))}
         if combined:
             entry['straightCard'] = combined['straightCard']
         if combined_result:

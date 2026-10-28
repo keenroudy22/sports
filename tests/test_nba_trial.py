@@ -6,6 +6,22 @@ import nba_trial as nt
 NOW=datetime(2026,10,20,14,tzinfo=timezone.utc)
 def offer():return dict(id='NBA-trial-1',league='NBA',season=2027,seasonType=2,kickoff='2026-10-20T23:00:00Z',retrievedAt='2026-10-20T13:00:00Z',marketType='total',book='DraftKings',line=221.5,odds=-110,oppositeOdds=-110,sideVerified=True,exactLineVerified=True,roleChecked=True,rawChance=.59,riskUnits=1,source='https://www.espn.com/nba/')
 class TrialTests(unittest.TestCase):
+ def test_owner_cutover_removes_trial_daily_limit_without_weakening_value_or_identity(self):
+  moment=datetime(2026,10,28,19,tzinfo=timezone.utc)
+  row=offer();row.update(id='NBA-new',eventId='NBA-6',kickoff='2026-10-28T23:00:00Z',
+      retrievedAt='2026-10-28T18:30:00Z',riskUnits=.5,stakingPolicy=nt.staking.VERSION)
+  previous=[dict(row,id=f'NBA-{i}',eventId=f'NBA-{i}',type='publish') for i in range(4)]
+  check=lambda offer=row,rows=previous:nt.evaluate(offer,rows,moment,preview_sent='2026-10-20T10:00:00Z')
+  self.assertEqual(check(),[])
+  self.assertEqual(nt.evaluate(row,previous,moment),[])
+  self.assertIn('NBA daily pick cap',check(rows=previous+[dict(previous[0],id='fifth')]))
+  self.assertIn('one NBA pick per game',check(offer=dict(row,eventId='NBA-1')))
+  self.assertIn('edge hold',check(offer=dict(row,rawChance=.53)))
+  self.assertIn('role/price hold',check(offer=dict(row,injuryHold=True)))
+  self.assertIn('verified game identity required',check(offer=dict(row,eventId=None)))
+  self.assertIn('stake policy mismatch',check(offer=dict(row,riskUnits=1)))
+  self.assertEqual(nt.nba_pick_policy.label(moment),'NBA Picks')
+  self.assertEqual(nt.nba_pick_policy.label(NOW),'NBA Trial')
  def evaluate(self,row=None,rows=None,**kw):return nt.evaluate(row or offer(),rows or [],NOW,preview_sent='2026-10-20T10:00:00Z',**kw)
  def test_raw_exact_price_floor_and_one_unit(self):
   self.assertEqual(self.evaluate(),[])

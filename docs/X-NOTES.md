@@ -257,3 +257,44 @@ Kook'n's operating cadence from this review:
 5. Measure Kook'n, not the large accounts. After 24 hours compare views, interactions per thousand, bookmarks when
    available and follows/profile visits when the provider returns them. Keep a format only after a useful sample;
    never loosen a price, injury or role gate to chase a viral screenshot.
+
+## Owner-shared reference, Oct 28: all-slate NBA prop menu
+
+The owner likes Cody Brown's game-by-game NBA prop menu as a saveable research format. Borrow the structure only:
+one slate-wide post, props grouped under each matchup, short exact thresholds and a clean visual hierarchy. Kook'n
+must verify the player is on that night's slate, confirm availability/role and current line/price, and show the
+sample and date range behind any trend. Do not present every row as a recommended bet or repeat an “every game this
+season” claim without a clear denominator and independently checked results. At this date, Oct 21 is the only
+previous Wednesday of the 2026-27 season; a Wednesday-only hit streak is therefore a tiny sample, not an edge. NBA
+props remain research-only until their existing validation and release gates pass. This reference adds no
+post category, frequency, feed or selection permission.
+
+## Owner-shared reference, Oct 28: five-pick sweep receipt
+
+The owner likes Alex Caruso's five-pick daily format and a celebratory post when all five win. Kook'n's daily
+coverage target is five qualifying straights when the slate supports them; five is not a quota, and never fill a
+card with below-standard picks. Keep each play on the existing public record with its original price and grade.
+Use a compact, legible five-pick card and a separate 5-for-5 result graphic only after all five official grades
+are confirmed. The conditional giveaway is not approved for launch: do not promise or announce a prize until the
+owner sets the prize, eligibility, timing and rules. This adds no stake, post cap, or selection-gate change.
+
+## Live Following-feed review, October28 afternoon
+
+Read the owner's actual Following timeline and ThePropCPA's public research,
+without posting or engaging. ThePropCPA published three separate NBA cases
+(Maxey points, Carter rebounds, Smith PRA) earlier today. Useful structure:
+exact line/book first, observed role and matchup next, one clear image. Carter
+source: https://x.com/ThePropCPA/status/2115443972659085503. A conversion-rate
+assumption or a teammate's missing rebounds cannot be adopted as a guaranteed
+redistribution; independently verify source facts and the attainable current price.
+
+Harry Lock's saveable milestone menu was at
+https://x.com/HarryLockPicks/status/2115505117650641393; its visible streak claims
+need their own denominators. Splash's morning parlay at
+https://x.com/splashbets_/status/2115424895308107776 put the ticket and Playbook
+response first. Dan's current NBA pick at
+https://x.com/DanGambleAI/status/2115505537336881456 used a result-linked image.
+These observations support presentation choices, not a verified profitability
+claim or copying their bets. No automated reactions or new giveaway/affiliate
+launch. The owner ends NBA Trial framing prospectively; see AGENTS.md for the
+regular0.5u game-pick policy and the still-unfinished prop admission path.

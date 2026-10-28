@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 import boxscores
 import nba_capture
 import paper
+import nba_pick_policy
 
 ROOT = Path(__file__).resolve().parents[1]
 POLICY = ROOT / 'data' / 'policy' / 'nba.json'
@@ -112,7 +113,7 @@ def status(now=None, capture_root=nba_capture.STORE, paper_root=paper.STORE, con
     opening = datetime.fromisoformat(config['openingDate']).date()
     trial_open = now.astimezone(EASTERN).date() >= opening
     return {
-        'stage': 'live-trial' if trial_open else evidence_stage,
+        'stage': 'live-picks' if nba_pick_policy.active(now) and trial_open else 'live-trial' if trial_open else evidence_stage,
         'evidenceStage': evidence_stage,
         'asOf': boxscores.stamp(now),
         'cleanCaptureDays': len(days),
@@ -122,10 +123,11 @@ def status(now=None, capture_root=nba_capture.STORE, paper_root=paper.STORE, con
         'paperGraded': len(graded),
         'paperGradesRequired': paper_need,
         'readyForLiveTrial': trial_open,
+        'readyForPicks': nba_pick_policy.active(now) and trial_open,
         'playerPropsReady': False,
         'quarterTicketsReady': False,
         'climbReady': False,
-        'scope': 'Trial activation for qualified team markets; not proof that a bet qualifies or that player/quarter/Climb models are validated.',
+        'scope': 'Qualified NBA team picks are active. Player, quarter and Climb approval still requires their own supporting evidence.' if nba_pick_policy.active(now) else 'Trial activation for qualified team markets; not proof that a bet qualifies or that player/quarter/Climb models are validated.',
         'readyForPromotionEvidence': evidence_stage == 'promotion-evidence',
         'trialOpensOn': config['openingDate'],
         'source': config['source'],

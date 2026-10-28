@@ -16,6 +16,7 @@ import paper
 import hoops_store
 import nba_readiness
 import nba_roster_runtime
+import nba_pick_policy
 
 ROOT=Path(__file__).resolve().parents[1]
 CONF=Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')
@@ -30,6 +31,8 @@ def review_ready(now,review=None,readiness=None):
  if review is None and datetime.now(timezone.utc).astimezone(nba_trial.EASTERN).date()<nba_trial.OPENING:return False
  if os.environ.get('KEENROUDY_NBA_TRIAL','1')=='0' or os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')=='0':return False
  if now.astimezone(nba_trial.EASTERN).date()<nba_trial.OPENING:return False
+ if nba_pick_policy.active(now):
+  return (nba_readiness.live_ready(now) if readiness is None else readiness) is True
  if review is None:
   try:review=json.loads(REVIEW.read_text())
   except (OSError,ValueError):return False
@@ -220,24 +223,26 @@ def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True):
  import buffer_post,x_post
  book=log_book if log_book is not None else x_post.load_log()
  day=now.astimezone(nba_trial.EASTERN).date()
- if buffer_post.pending_scheduled(book,now)>=buffer_post.BUFFER_OPTIONAL_AT:return {'state':'held','reason':'football queue reserve'}
+ queue_limit=buffer_post.BUFFER_NORMAL_LIMIT if nba_pick_policy.active(now) else buffer_post.BUFFER_OPTIONAL_AT
+ if buffer_post.pending_scheduled(book,now)>=queue_limit:return {'state':'held','reason':'publication queue reserve' if nba_pick_policy.active(now) else 'football queue reserve'}
  if buffer_post.day_count(book,day)>=buffer_post.MAX_PER_DAY:return {'state':'held','reason':'daily post cap'}
  for e in book.get('posts',[]):
-  if e.get('kind') in ('buffer:nba-trial','buffer:sports-slate','buffer:sports-research') and boxscores.instant(e.get('dueAt') or e['postedAt']).astimezone(nba_trial.EASTERN).date()==day:return {'state':'held','reason':'one other-sport post per day'}
+  if not nba_pick_policy.active(now) and e.get('kind') in ('buffer:nba-trial','buffer:sports-slate','buffer:sports-research') and boxscores.instant(e.get('dueAt') or e['postedAt']).astimezone(nba_trial.EASTERN).date()==day:return {'state':'held','reason':'one other-sport post per day'}
  stored=rows(root)
- if any(r.get('type')=='publish' and boxscores.instant(r['kickoff']).astimezone(nba_trial.EASTERN).date()==day for r in stored):return {'state':'held','reason':'one NBA Trial per day'}
+ today=[r for r in stored if r.get('type')=='publish' and boxscores.instant(r['kickoff']).astimezone(nba_trial.EASTERN).date()==day]
+ if len(today)>=nba_pick_policy.daily_cap(now):return {'state':'held','reason':'NBA daily pick cap' if nba_pick_policy.active(now) else 'one NBA Trial per day'}
  if capture:
   nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
  now=max(now,datetime.now(timezone.utc))
- if review is None:review=json.loads(REVIEW.read_text())
+ if review is None:review={} if nba_pick_policy.active(now) else json.loads(REVIEW.read_text())
  coverage={};refusals={}
  for offer in candidates(now,diagnostics=coverage):
   nba_trial.staking.apply(offer,now)
-  problems=nba_trial.evaluate(offer,stored,now,preview_sent=review['sentAt'])
+  problems=nba_trial.evaluate(offer,stored,now,preview_sent=review.get('sentAt'))
   if problems:
    for reason in problems:refusals[reason]=refusals.get(reason,0)+1
    continue
-  try:nba_trial.record_publish(offer,now,root,preview_sent=review['sentAt'])
+  try:nba_trial.record_publish(offer,now,root,preview_sent=review.get('sentAt'))
   except ValueError as error:
    if str(error).startswith('shared exposure:'):return {'state':'held','reason':str(error)}
    raise
@@ -249,7 +254,33 @@ def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True):
 def public_rows(root=nba_trial.STORE):
  saved=rows(root);published={r['id']:r for r in saved if r.get('type')=='publish'}
  settled={r['id']:r for r in saved if r.get('type')=='settle'}
- return [{**r,**({'result':settled[key]['result'],'actual':settled[key]['actual']} if key in settled else {})} for key,r in published.items()]
+ return [{**r,**({k:settled[key].get(k) for k in ('result','actual','settledAt')} if key in settled else {})} for key,r in published.items()]
+
+
+def queue_discord_results(log_book, now, plays=None):
+ """Use actual NBA ledger grades for the original play's Discord update."""
+ saved={p['id']:p for p in (public_rows() if plays is None else plays)};count=0
+ for entry in log_book.get('posts',[]):
+  mirror=entry.get('discord') or {};play=saved.get(entry.get('id'))
+  if (entry.get('kind')!='buffer:nba-trial' or entry.get('nbaPick') is not True
+      or mirror.get('state')!='sent' or mirror.get('result') or not play):continue
+  try:
+   result=play['result'];settled=boxscores.instant(play['settledAt'])
+   if result not in ('win','loss','push','void') or not now-timedelta(days=3)<settled<=now:continue
+   teams=play['game']['teams'];name=lambda s:teams[s].get('name') or teams[s]['abbreviation']
+   market=play['marketType'];which=play['direction']
+   selection=(f"{which.upper()} {play['line']:g}" if market=='total' else
+              f"{name(which)} MONEYLINE" if market=='moneyline' else f"{name(which)} {play['line']:+g}")
+   stake=play['riskUnits'];odds=play['odds']
+   net=stake*(100/-odds if odds<0 else odds/100) if result=='win' else -stake if result=='loss' else 0
+   mark={'win':'✅','loss':'❌','push':'➖','void':'➖'}[result]
+   word={'win':'HIT','loss':'MISS','push':'PUSH','void':'VOID'}[result]
+   detail='Final total' if market=='total' else 'Selected team final margin'
+   text=f"{mark} NBA FINAL · {word}\n{name('away')} at {name('home')}\n{selection} ({odds:+d}, {play['book']})\n{detail}: {play['actual']:g}\n{net:+.2f}u · {stake:g}u risk"
+  except (KeyError,TypeError,ValueError,ZeroDivisionError):continue
+  mirror['result']={'state':'pending','text':text,'settledAt':play['settledAt']}
+  entry['discord']=mirror;count+=1
+ return count
 
 
 def grade(now,root=nba_trial.STORE,boxroot=None):
@@ -311,7 +342,8 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
    from social_copy import projection_free_reason
    reason=projection_free_reason(reason)
    if not reason:continue
-   candidate=f"🏀 NBA Trial\n{title}\n{selection} ({play['odds']:+d}, {play['book']})\n{projection}\n{reason}\n#NBA"
+   heading=play.get('series') or nba_pick_policy.label(boxscores.instant(play['publishedAt']))
+   candidate=f"🏀 {heading}\n{title}\n{selection} ({play['odds']:+d}, {play['book']})\n{projection}\n{reason}\n#NBA"
    if x_post.tweet_length(candidate)<=x_post.LIMIT and not x_post.x_style(candidate):
     text=candidate;break
   if not text:continue
@@ -341,7 +373,8 @@ def render_due(now,folder,log=print,root=nba_trial.STORE):
   quote={'book':play['book'],'retrievedAt':play['retrievedAt'],'current':current}
   # Same reviewed layout; actual play label and real supporting reason replace preview wording.
   svg=nba_trial.preview_svg(play['game'],quote,preview=False,direction=play['direction'],reason=play['reasons'][0],
-                            market=play.get('marketType','total'),line=play['line'],odds=play['odds'],units=play.get('riskUnits',1))
+                            market=play.get('marketType','total'),line=play['line'],odds=play['odds'],units=play.get('riskUnits',1),
+                            series_label=play.get('series') or nba_pick_policy.label(boxscores.instant(play['publishedAt'])))
   pick_card.render(svg,path)
 
 
@@ -349,10 +382,10 @@ def current_match(play,now):
  for candidate in candidates(now,lead_minutes=0):
   nba_trial.staking.apply(candidate,now)
   if candidate['id']==play['id'] and all(candidate[k]==play[k] for k in ('book','line','odds','direction')):
-   try:review=json.loads(REVIEW.read_text())
+   try:review={} if nba_pick_policy.active(now) else json.loads(REVIEW.read_text())
    except (OSError,ValueError):return False
    other=[r for r in rows() if r.get('id')!=play['id']]
-   return not nba_trial.evaluate(candidate,other,now,preview_sent=review['sentAt'])
+   return not nba_trial.evaluate(candidate,other,now,preview_sent=review.get('sentAt'))
  return False
 
 

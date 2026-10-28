@@ -58,7 +58,7 @@ const views = (overrides = {}) => {
   return factory(ctx);
 };
 const near = (a, b) => Math.abs(a - b) < 1e-9;
-test('All sports Record surfaces actual NBA Trial separately without adding its profit to football',async()=>{
+test('All sports Record surfaces actual NBA picks separately without adding its profit to football',async()=>{
  const {api,factory}=load(),nba={trial:{record:{win:2,loss:1,graded:3,units:77},plays:[{}]}};
  const ctx=api.moreContext({get:async()=>({games:[],picks:[],communityPicks:[]}),maybe:async path=>path==='app/nba.json'?nba:null,allPicks:async()=>[]});
  ctx.state.league='ALL';const html=await factory(ctx).record({});
@@ -75,7 +75,7 @@ test('NBA Record uses the actual separate Trial ledger, not an empty football he
     teams:{home:{name:'New York Knicks'},away:{name:'Philadelphia 76ers'}}}]}};
   const ctx=api.moreContext({get:async path=>{assert.equal(path,'app/nba.json');return nba;}});
   ctx.state.league='NBA';const html=await factory(ctx).record({});
-  assert.match(html,/NBA Trial record/);assert.match(html,/1–0/);assert.match(html,/\+0\.75u/);
+  assert.match(html,/NBA record/);assert.match(html,/1–0/);assert.match(html,/\+0\.75u/);
   assert.match(html,/Philadelphia 76ers at New York Knicks/);
   assert.match(html,/separate from football/);assert.doesNotMatch(html,/Every play, graded in public|Season record/);
 });

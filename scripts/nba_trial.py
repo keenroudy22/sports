@@ -12,6 +12,7 @@ import boxscores
 import espn_props
 import nba_capture
 import staking
+import nba_pick_policy
 
 STORE=Path(__file__).resolve().parents[1]/'data'/'nba-trial'
 OPENING=date(2026,10,20)
@@ -32,7 +33,7 @@ def snapshot(rows):
         net += play.get('riskUnits',1)*((100/-odds if odds<0 else odds/100) if result=='win' else -1 if result=='loss' else 0)
     net=round(net,6)
     graded=wins+losses+pushes
-    return {'label':'NBA Trial','win':wins,'loss':losses,'push':pushes,'graded':graded,
+    return {'label':nba_pick_policy.label(),'win':wins,'loss':losses,'push':pushes,'graded':graded,
             'units':round(net,3),'paused':graded>=30 and net<=-5,
             'promotionReview':graded>=30 and net>=0}
 
@@ -46,6 +47,7 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if game_day!=now.astimezone(EASTERN).date() or kickoff<=now:problems.append('game-day hold')
         if not timedelta(0)<=now-quoted<=timedelta(hours=4) or quoted>=kickoff:problems.append('price freshness hold')
         if offer.get('league')!='NBA' or offer.get('seasonType') not in (2,'regular-season'):problems.append('NBA regular-season only')
+        if nba_pick_policy.active(now) and not offer.get('eventId'):problems.append('verified game identity required')
         if offer.get('marketType') not in ('total','spread','moneyline') or offer.get('book')!='DraftKings':problems.append('market/book hold')
         line=espn_props.number(offer['line'])
         market=offer.get('marketType')
@@ -64,12 +66,17 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
             raise ValueError('missing probability')
         if chance-espn_props.implied(odds) < (.04 if calibrated else .06)-1e-9:problems.append('edge hold')
         if not calibrated and chance<.56:problems.append('chance hold')
+        today=[]
         for row in rows:
             if row.get('type')=='publish' and row.get('id')==offer.get('id'):problems.append('published ID is immutable')
             if row.get('type')=='publish' and boxscores.instant(row['kickoff']).astimezone(EASTERN).date()==game_day:
-                problems.append('one play per day');break
+                today.append(row)
+        if len(today)>=nba_pick_policy.daily_cap(now):
+            problems.append('NBA daily pick cap' if nba_pick_policy.active(now) else 'one play per day')
+        if nba_pick_policy.active(now) and any(row.get('eventId')==offer.get('eventId') for row in today):
+            problems.append('one NBA pick per game')
         if snapshot(rows)['paused']:problems.append('30-graded loss pause')
-        if not preview_sent or now-boxscores.instant(preview_sent)<timedelta(hours=2):problems.append('first-card veto hold')
+        if not nba_pick_policy.active(now) and (not preview_sent or now-boxscores.instant(preview_sent)<timedelta(hours=2)):problems.append('first-card veto hold')
         if offer.get('ownerVeto'):problems.append('owner veto')
     except (KeyError,ValueError,TypeError,OverflowError):problems.append('missing verified evidence')
     return sorted(set(problems))
@@ -106,11 +113,11 @@ def record_publish(offer,now,root=STORE,preview_sent=None,calibration_verified=F
     row={key:offer[key] for key in required}
     for key in ('eventId','game','reasons','projection','model','direction','stakingPolicy','modelSnapshot'):
         if key in offer:row[key]=offer[key]
-    row.update(type='publish',series='NBA Trial',publishedAt=boxscores.stamp(now))
+    row.update(type='publish',series=nba_pick_policy.label(now),publishedAt=boxscores.stamp(now))
     return nba_capture.append_changed([row],root,lambda r:(r['type'],r['id']))
 
 
-def preview_svg(game, quote, *, preview=True, direction='under', reason=None, market='total', line=None, odds=None, units=1):
+def preview_svg(game, quote, *, preview=True, direction='under', reason=None, market='total', line=None, odds=None, units=1, series_label=None):
     """Real stored total quote, clearly labeled layout preview; no admission or invented chance."""
     import ticket_cards
     import ticket_kit
@@ -130,7 +137,7 @@ def preview_svg(game, quote, *, preview=True, direction='under', reason=None, ma
         side=f"{game['teams'][direction]['abbreviation']} {chosen_line:+g}"
     if not .99<=espn_props.implied(first)+espn_props.implied(second)<=1.15:
         raise ValueError('Preview needs two genuine matching prices')
-    data={'kind':'game','featured':False,'seriesLabel':'NBA TRIAL PREVIEW' if preview else 'NBA TRIAL',
+    data={'kind':'game','featured':False,'seriesLabel':'NBA TRIAL PREVIEW' if preview else (series_label or nba_pick_policy.label()).upper(),
           'away':away['abbreviation'],'home':home['abbreviation'],'team':home['abbreviation'],
           'away_name':away['name'],'home_name':home['name'],'away_logo':None,'home_logo':None,
           'when':'Opening night · Oct 20' if preview else boxscores.instant(game['kickoff']).astimezone(EASTERN).strftime('%b %-d · %-I:%M %p'),

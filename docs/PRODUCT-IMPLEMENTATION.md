@@ -1,3 +1,36 @@
+### October28 regular NBA picks and workload comparison repair — RELEASE PENDING
+
+Owner ends public Trial framing at2026-10-28T18:42:40Z. New supported NBA game
+picks use NBA Picks/ordinary0.5u, up tofive distinct games per Eastern day, within
+unchanged shared3u/5u exposure and20-social-post caps. The old one-per-day,
+other-sport-post and first-layout-preview startup limits no longer gate new
+NBA game picks. Current two-sided exact prices, numeric value, source, official
+injury/role checks and the existing drawdown pause remain. No player/quarter/Climb
+model is declared validated. Old series, prices, stakes, art and records remain.
+New game picks receive regular Buffer reserve priority, @Playbook on X, and
+source-rechecked Discord-first routing to Plays & Results. Verified append-only
+NBA grades queue a single Discord result update under that original play. No
+new feed allowance, scheduler, manual X posting, paid access or record merge.
+NBA X combined Final integration remains part of broader delivery follow-through;
+it is not claimed by the Discord result regression.
+
+Actual feed review covered Following and ThePropCPA's three earlier NBA cases,
+plus Harry Lock/Splash/Dan's visible formats (links in X-NOTES). No external
+statistic or profitability claim was adopted as verified selection evidence.
+Found public Trae assist favorite based on21prior-season minutes while current
+observed workload was34/37/38. Material workload rises now hold misleading public
+numeric comparisons using the inverse of the existing70% collapse fence, until
+a sourced game-specific minutes review. Original baseline arithmetic and private
+forward captures remain unchanged; the new hold cannot select a favorable model
+test cohort. Exact lines/odds stay visible. No exposed result is tuned into a pass.
+
+Focused132tests and full1958Python(two skips)/290Node pass, including clean
+export. NBA record remains0-0/0u before release; no new NBA play was manufactured.
+Local Buffer journal shows2857used/43essential request room to the approved2900
+ceiling, provider balance unknown. Optional research is held; earlier blanket
+claim that all X posting was exhausted was incorrect. Hosted and live verification
+are still required. Player prop admission/validation remains NBAPROPFORWARD.
+
 # October 5 product implementation tracker
 
 ### October26 pick-quality follow-up VERIFIED LIVE

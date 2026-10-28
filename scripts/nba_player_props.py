@@ -292,7 +292,7 @@ def display_rows(rows,limit):
     return sorted(selected,key=lambda r:rank[id(r)])
 
 
-def build(now, root=STORE, boxes=None, limit=60):
+def build(now, root=STORE, boxes=None, limit=60, *, _forward_capture=False):
     role_reviews=nba_roles.reviews(Path(root),now)
     root=Path(root)
     def read(path,fallback):
@@ -346,6 +346,13 @@ def build(now, root=STORE, boxes=None, limit=60):
                                and boxscores.instant(role_review['checkedAt']) >= boxscores.instant(current_role['receivedAt'])) if current_hold else False
         if not reason and current_hold and not reviewed_after_role:
             reason=current_hold;projection=None
+        # A much larger current workload can make an old small-minutes under
+        # misleading too. Suppress the public comparison until its game-specific
+        # minutes review. Preserve the unchanged numerical baseline in private
+        # forward captures so this display repair cannot select a new test cohort.
+        if (not reason and projection and not _forward_capture and current_role.get('games',0)>=2
+                and current_role.get('medianMinutes',0)>projection['minutes']/.7):
+            reason='Current-season minutes rose; historical workload needs review';projection=None
         row={k:q[k] for k in ('eventId','athleteId','name','team','teamName','teamAbbr','photo','kickoff','stat','line','book','over','under','sourceAt')}
         if role_review:row['roleReview']=role_review
         row['currentRole']=current_role
@@ -385,7 +392,7 @@ def saved(root):
 def record_forward(now,root=STORE,boxes=None):
     """First verified pregame quote/forecast per player-market-book, immutable."""
     root=Path(root); old={r['id'] for r in saved(root/'player-forecasts')};rows=[]
-    for r in build(now,root,boxes,limit=None)['rows']:
+    for r in build(now,root,boxes,limit=None,_forward_capture=True)['rows']:
         if not r.get('projection') or r.get('hold'):continue
         model=r['projection'].get('model',VERSION)
         identity=':'.join((r['eventId'],r['athleteId'],r['stat'],r['book'],model))
