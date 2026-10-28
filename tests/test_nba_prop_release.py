@@ -83,8 +83,9 @@ class PropReleaseTests(unittest.TestCase):
    self.assertIn('NBA prop evidence/current-source hold',nt.evaluate(offer,[],NOW,calibration_verified=True))
   with patch.object(n,'candidates',return_value=[offer]):
    self.assertEqual(nt.evaluate(offer,[],NOW),[])
-   for field,value in [('line',21.5),('odds',100),('athleteId','9'),('stat','pra'),('player','Wrong Player')]:
+   for field,value in [('line',21.5),('odds',100),('athleteId','9'),('stat','pra'),('player','Wrong Player'),('riskUnits',1),('lane','chef_pick'),('paidProtection',True),('allAction',True)]:
     self.assertIn('NBA prop evidence/current-source hold',nt.evaluate(dict(offer,**{field:value}),[],NOW))
+   self.assertIn('prop market identity hold',nt.evaluate(dict(offer,marketType='total'),[],NOW))
  def test_live_rechecks_stale_prices_and_injuries_even_with_approved_proof(self):
   spec=self.study();_,row=self.live();evidence={'specHash':spec['specHash'],'probabilityAllowance':.02}
   with patch.object(n,'proof',return_value=evidence),patch.object(n.props,'build',return_value={'rows':[row]}),patch.object(nba_capture,'availability_for_game',return_value=([],{})):
@@ -169,3 +170,8 @@ class PropReleaseTests(unittest.TestCase):
  def test_unapproved_lane_does_not_scan_large_settlement_history(self):
   with patch.object(n.probability,'review',side_effect=AssertionError('No study before a protocol')),patch.object(n.boxscores,'verify') as verify:
    self.assertIsNone(n.proof('pts',NOW,self.root));verify.assert_not_called()
+ def test_card_only_changes_do_not_reset_the_frozen_admission_protocol(self):
+  self.study();before=n.implementation_hash()
+  with patch.object(n,'card',return_value='new presentation only'):
+   self.assertEqual(n.implementation_hash(),before)
+   self.assertIsNotNone(n.proof('pts',NOW,self.root))

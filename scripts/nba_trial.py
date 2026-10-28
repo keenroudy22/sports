@@ -51,6 +51,8 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if offer.get('marketType') not in ('total','spread','moneyline','player') or offer.get('book')!='DraftKings':problems.append('market/book hold')
         line=espn_props.number(offer['line'])
         market=offer.get('marketType')
+        if market!='player' and any(offer.get(k) is not None for k in ('athleteId','stat','propEvidence')):
+            problems.append('prop market identity hold')
         if now >= ALIGNMENT_FROM and not model_agreement(offer):problems.append('moneyline/model direction hold')
         if ((market=='total' and line<=0) or (market=='moneyline' and line!=0)
                 or not offer.get('source')):problems.append('line/source hold')

@@ -5,6 +5,7 @@ candidate exists. Public admission and final-send checks recompute this proof.
 """
 import json
 import hashlib
+import inspect
 from collections import defaultdict
 from datetime import timedelta
 from pathlib import Path
@@ -29,6 +30,13 @@ def read_json(path):
     return json.loads(path.read_text())
 
 
+def implementation_hash():
+    """Freeze admission/evidence math, allowing unrelated card-format repairs."""
+    source='\n'.join(inspect.getsource(f) for f in (implementation_hash,proof,candidates,verify))
+    policy=json.dumps([VERSION,STATS,probability.VERSION,settlement.VERSION],sort_keys=True)
+    return hashlib.sha256((source+policy).encode()).hexdigest()
+
+
 def freeze(root, now):
     """Existing natural prop captures preregister this adapter before outcomes."""
     root=Path(root); folder=root/'prop-release-protocol'
@@ -38,7 +46,7 @@ def freeze(root, now):
     if any(r.get('id')==VERSION for r in old):
         return 0
     row=dict(id=VERSION, season=now.year, createdAt=boxscores.stamp(now),
-        retrievedAt=boxscores.stamp(now), implementationHash=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        retrievedAt=boxscores.stamp(now), implementationHash=implementation_hash(),
         probabilityModel=probability.VERSION, settlementPolicy=settlement.VERSION,
         scope='DraftKings full-game pts/reb/ast; original frozen prices; independent book outcomes; no model promotion')
     return nba_capture.append_changed([row],folder,lambda r:r['id'])
@@ -53,7 +61,7 @@ def proof(stat, now, root=nba_capture.STORE):
     matches=[r for r in protocols if r.get('id')==VERSION]
     protocol=matches[0] if len(matches)==1 else None
     if (not protocol or not protocol.get('createdAt') or boxscores.verify(root/'prop-release-protocol')
-            or protocol.get('implementationHash')!=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+            or protocol.get('implementationHash')!=implementation_hash()
             or protocol.get('probabilityModel')!=probability.VERSION or protocol.get('settlementPolicy')!=settlement.VERSION
             or boxscores.instant(protocol['createdAt'])>now):
         return None
@@ -218,7 +226,8 @@ def verify(offer, now):
         return any(all(c.get(k) == offer.get(k) for k in (
             'id','eventId','athleteId','team','player','stat','period','league','season','seasonType',
             'kickoff','marketType','direction','line','odds','oppositeOdds','book','retrievedAt','source',
-            'rawChance','chance','calibrated','projection','model','propEvidence','roleReview','reasons'))
+            'rawChance','chance','calibrated','projection','model','propEvidence','roleReview','reasons',
+            'riskUnits','lane','legs','parlayType','paidProtection','allAction'))
             for c in candidates(now, lead_minutes=0))
     except (OSError, ValueError, TypeError, KeyError):
         return False
