@@ -359,10 +359,13 @@ def final_data(rows, day):
     result_names = {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}
     net = sum(x_post.units_for(pick) or 0 for pick in straight)
     body = [{'result': result_names[pick['result']], 'title': re.sub(r'\s+', ' ', receipts.label(pick)).strip(),
-             'detail': final_detail(pick), 'unit_text':
-             (f"{x_post.units_for(pick):+.2f}u" if x_post.units_for(pick) is not None else '—')}
+             'detail': ((f"{pick['odds']:+g} {x_post.public_book(pick['book'])} · {pick['riskUnits']:g}u · "
+                         if pick.get('combinedOriginalTerms') else '') + final_detail(pick)), 'unit_text':
+             (f"{0.0 if pick['result'] == 'void' else x_post.units_for(pick):+.2f}u"
+              if pick['result'] == 'void' or x_post.units_for(pick) is not None else 'unavailable')}
             for pick in straight]
     return {'headline': f'{wins}-{losses}', 'day': day, 'rows': body, 'net_units': net,
+            'combined': any(pick.get('combinedOriginalTerms') for pick in straight),
             'row_label': 'BEST BETS' if all(record_scope.is_headline(pick) for pick in straight) else 'PLAYS'}
 
 
@@ -482,6 +485,27 @@ def end_zone_svg(choice, *, fetch=None):
                      'redZone': int(red.group(1)), 'inside10': int(ten.group(1))})
     card = ticket_cards.end_zone_card({'game': choice['game'], 'rows': rows})
     problems = ticket_kit.qa(card, 'end-zone-work')
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
+
+
+def daily_straight_svg(snapshot, games):
+    """Every frozen official straight on one neutral Kitchen Ticket summary."""
+    import daily_straight_card
+    from datetime import date
+    rows = snapshot['rows']
+    if snapshot.get('version') != 1 or daily_straight_card.signature(rows) != snapshot.get('fingerprint'):
+        raise ValueError('Combined straight-card terms do not match their snapshot')
+    body = []
+    for row in rows:
+        if daily_straight_card.terms(row) != row:
+            raise ValueError('Combined straight card needs complete original terms')
+        body.append({'title': daily_straight_card.row_label(row, games),
+                     'detail': daily_straight_card.price(row)})
+    card = ticket_cards.daily_straight_card({'day': date.fromisoformat(snapshot['day']).strftime('%A, %b %-d'),
+                                            'rows': body})
+    problems = ticket_kit.qa(card, 'daily-straights')
     if problems:
         raise ValueError('; '.join(problems))
     return card.svg()

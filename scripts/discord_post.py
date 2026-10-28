@@ -269,7 +269,9 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
             if destination:
                 mirror['destination'] = destination
                 mirror['communityType'] = phase
-        allowed = ((kind == 'buffer:play' and destination != 'wins')
+        import daily_straight_card
+        combined = daily_straight_card.discord_eligible(entry) and destination == 'plays'
+        allowed = (combined or (kind == 'buffer:play' and destination != 'wins')
                    or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith(('cashed:', 'burnt:'))
                        and destination != 'wins')
                    or (kind == 'buffer:community' and destination in ('plays', 'wins')

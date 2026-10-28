@@ -63,3 +63,11 @@ public JSON file and call it paid access. No accounts, billing, feed expansion o
   the research minutes input, preserving the old baseline and identifying the estimate, not a coach limit.
   Role-only reports never invent minutes; existing injury/price/roster holds win. Rate history and true
   hit counts remain separate. No public raw journal, new path, calibrated chance or official prop admission.
+
+- `data/cards/straight-card-YYYY-MM-DD-<16hex>.png`: the native Kitchen Ticket
+  summary of two to ten individually X-confirmed official straights, with original
+  exact wagers/books/prices/units. Membership is frozen in the private posting log;
+  no private metadata or new record row is uploaded. The existing daily Final
+  reuses those terms and links to the summary only after its actual X receipt.
+  NBA Trial, personal/fun tickets and Climb stay outside this image. No new feed,
+  scheduler or budget; existing image guard and retained-attachment rules apply.

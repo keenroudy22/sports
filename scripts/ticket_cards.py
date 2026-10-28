@@ -340,6 +340,10 @@ def climb_card(p):
     inner += (f'<path d="M{a + r + 34} {cy} H{b - r - 46}" stroke="{CHALK}" stroke-width="12" stroke-linecap="round"/>'
               f'<path d="M{b - r - 70} {cy - 30} L{b - r - 34} {cy} L{b - r - 70} {cy + 30}" fill="none" stroke="{CHALK}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>')
     sub = f"CLIMB #{p['run']} · STEP {p['step']} · {kit.price(p['odds'])} {p['book'].upper()}"
+    if p.get('combined'):
+        push_count = sum(r['result'] == 'push' for r in p['rows'])
+        void_count = sum(r['result'] == 'void' for r in p['rows'])
+        sub = f"{len(p['rows'])} BEST BETS · {wins}W/{misses}L/{push_count}P/{void_count}V"
     inner += card.text(COL_X, panel_bottom - 30, sub, 46, CHALK, tracking=1)
     # legs
     top = panel_bottom + 24
@@ -496,6 +500,10 @@ def final_card(p):
     misses = sum(r['result'] == 'miss' for r in p['rows'])
     pushes = sum(r['result'] in ('push', 'void') for r in p['rows'])
     sub = f"{len(p['rows'])} {p.get('row_label') or 'BEST BETS'} · {wins} HIT · {misses} MISSED" + (f" · {pushes} PUSH" if pushes else '')
+    if p.get('combined'):
+        push_count = sum(r['result'] == 'push' for r in p['rows'])
+        void_count = sum(r['result'] == 'void' for r in p['rows'])
+        sub = f"{len(p['rows'])} BEST BETS · {wins}W/{misses}L/{push_count}P/{void_count}V"
     inner += card.text(COL_X, panel_bottom - 30, sub, 46, CHALK, tracking=1)
     top = panel_bottom + 20
     y = top
@@ -669,4 +677,35 @@ def end_zone_card(p):
     note = 'RESEARCH · NOT A BET'
     inner += card.text(X1, perf + 68, note, 40, INK_SOFT)
     frame(card, HOUSE, CHALK, perf, bottom, inner)
+    return card
+
+
+def daily_straight_card(p):
+    """Variable-height list: no omitted plays, forecasts, parlay odds or outcome stamps."""
+    if not 2 <= len(p['rows']) <= 10:
+        raise ValueError('Combined straight card needs two to ten released straights')
+    layouts = []
+    for row in p['rows']:
+        title = str(row['title'])
+        lines = kit.wrap(title, 46, X2 - X1, max_lines=4)
+        if not lines:
+            raise ValueError('Combined straight wager cannot fit without losing facts')
+        layouts.append((row, lines, 84 + len(lines) * 50))
+    top = 486
+    perf = max(1100, top + sum(h for _, _, h in layouts) + 28)
+    card = kit.Card(perf + 96 + 154)
+    inner = kit.panel_rect(card, PANEL_TOP, 450, hot=(760, 300))
+    chip, _ = kit.series_chip(card, COL_X, 204, 'BEST BETS')
+    inner += chip
+    inner += card.text(COL_X, 350, f"{len(p['rows'])} STRAIGHTS", 106, CHALK)
+    inner += card.text(COL_X, 414, p['day'].upper(), 42, CHALK)
+    y = top
+    for row, lines, height in layouts:
+        for index, line in enumerate(lines):
+            inner += card.text(X1, y + 48 + index * 50, line, 46, INK)
+        inner += card.text(X1, y + height - 24, row['detail'], 40, INK_SOFT, 'd', 500)
+        inner += f'<line x1="{X1}" y1="{y + height}" x2="{X2}" y2="{y + height}" stroke="{RULE}" stroke-width="2"/>'
+        y += height
+    inner += card.text(X1, perf + 60, 'AT MY POSTED PRICES', 42, INK_SOFT)
+    frame(card, HOUSE, CHALK, perf, perf + 96, inner)
     return card

@@ -5529,3 +5529,46 @@ Only prior completed same-automation01a17bae archived; current/running/owner
 action chats retained. No schedule, budget, wager or historical record change.
 Full receipt work/overnight-20261028-outcomes.json. Verification metadata stays
 ondev for next ordinary safe release; no duplicate deployment just for notes.
+
+
+### October28 daily — combined straight card and linked Final candidate
+
+2026-10-28T11:54:03.135862+00:00 — O-20261025-OWNERFOLLOW resumes the exact overnight handoff.
+One prospective summary uses only two to ten individually X-confirmed official
+straights, before the earliest kickoff. It freezes original wagers/books/prices/
+risk units and membership in the accepted Buffer log. NBA Trial, personal/fun
+and Climb stay separate; no new admission, record row, feed, scheduler or budget.
+A changed snapshot refuses scheduling until rebuilt. A cancelled/unknown accepted
+summary is protected against blind recreation. Native variable-height artwork
+prints every row; captions shorten filler without truncating wager details.
+
+The existing daily Final links to the summary only after actual X proof and
+settlement of every included row. Its attached card preserves the original
+terms and W/L/P/V with exact-price net units. Both summary and linked Final
+mirror once, after confirmed X, to Plays & Results through the existing worker.
+Other receipts retain their routes. New lifecycle regressions cover missing/
+future individual receipts, altered prices/stakes, malformed quotes, category
+isolation, ten-row art, frozen W/L/P/V, stale-card refusal, feed rendering and
+once-only Discord. They join the mandatory runtime release suite.
+
+Focused111Python passed; native2/10-row and W/L/P/V Final samples rendered
+privately and visually inspected. Exact-price arithmetic and void-art failures
+were repaired without weakening assertions. Final full gates, canonical release,
+hosted success and375live checks remain pending here. No synthetic sample is
+an actual publication or a wager. Actual eligible combined-card/Final receipts
+remain a natural observation condition even after code installation.
+
+Compact11:45Z:133public rows/67currently served comparisons/0grade-time-unit
+mismatches/0ungraded/0chosen-not-posted/0official-unscheduled. SamHouston's
+original remains in the public record despite owner removal from social.2active
+CFBpages:1freshfavorite/1exactpriceblocker.22pricedcandidate comparisons,
+0fullycleared;508storedalt rungs/0supportedClimb legs/noopenstep. Existing
+worker05:27through11:28Zlogs refuse optional plans before discovery; private
+Buffer journal has no request after04:57:15.526Z, natural reserve-saving proof.
+2852localreceipts/48temporaryessentialroom remain; normal2700rolling hold,
+Nov6expiry/Nov9 earliestnormalroom from overnight remain, providerunknown.
+MorningFinal13:03Z/weekly13:23Zaccepted,notsent at this check. NBA12/14clean,
+37/50paper,Trialopen/props-quarter-Climbnotready/promotionfalse. Actual
+homepage3stories10:53:51Z; exact successful callcount overwritten/unknown.
+LatestOct27weeklyrouting:1local27Bcall/0failure/4.82seconds/summaryavailable.
+Historical delays and all original records remain. No extra polling schedule.

@@ -277,7 +277,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
         return {}
     out = {}
     for item in items:
-        if 'pick' not in item and 'receipt' not in item and 'ladderResult' not in item and 'resultPick' not in item:
+        if 'pick' not in item and 'receipt' not in item and 'ladderResult' not in item and 'resultPick' not in item and 'straightCard' not in item:
             continue
         path = Path(folder) / f"{item['guid']}.png"
         if item['guid'] in posted_keys and not path.exists():
@@ -308,6 +308,8 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                     svg = (ticket_card.climb_result_svg(pick, games or {}, player_team)
                            if ticket else pick_card.ladder_result_svg(pick))
                     pick_card.render(svg, path)
+                elif 'straightCard' in item:
+                    pick_card.render(ticket_card.daily_straight_svg(item['straightCard'], games or {}), path)
                 elif 'receipt' in item:
                     receipt = item['receipt']
                     # Weekly category summaries are not individual settled plays; retain their existing
@@ -393,7 +395,12 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
             item['receiptDay'] = day.isoformat()
             item['receiptPicks'] = receipts.plays_between(public_first, ctx.latest, ctx.games,
                                                            receipts.counted(public_first, ctx.latest), day, day)
+            frozen = {row['id']: row for row in r.get('linkedStraightRows') or []}
+            item['receiptPicks'] = [frozen.get(p['id'], p) for p in item['receiptPicks']]
         ready.append(item)
+    import daily_straight_card
+    ready += [{'guid': r['card'], 'straightCard': r['straightCard']}
+              for r in daily_straight_card.history(ctx.first, ctx.latest, ctx.games, post_log, now)]
     import ladder
     climb = ladder.state(ctx.first, ctx.latest)
     ready += [{'guid': r['card'], 'ladderResult': dict(r['pick'],

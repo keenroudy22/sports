@@ -658,7 +658,26 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             reason = 'the tenth Buffer place is reserved' if pending >= BUFFER_NORMAL_LIMIT else 'the final three Buffer places are reserved'
             log(f'buffer: {guid} deferred: {reason} ({pending}/{BUFFER_QUEUE} scheduled)')
             continue
-        if kind != 'play':
+        combined, combined_result = None, None
+        if guid.startswith('receipt:card:'):
+            import daily_straight_card
+            # Recreate from immutable stored inputs before accepting Buffer.
+            context = gates.Stores().as_of(now)
+            combined = daily_straight_card.proposal(context.first, context.latest, context.games, log_book, now)
+            if not combined or combined['key'] != guid or combined['card'] != card_key or combined['text'] != text:
+                log(f'buffer: {guid} held: combined card changed; rebuild from delivered plays')
+                continue
+        if guid.startswith('receipt:day:') and any(p.get('id') == 'receipt:card:' + guid.removeprefix('receipt:day:') for p in log_book.get('posts', [])):
+            import daily_straight_card
+            context = gates.Stores().as_of(now)
+            proof = daily_straight_card.linked(log_book, guid.removeprefix('receipt:day:'), context.latest)
+            if proof:
+                if proof['link'] not in text:
+                    log(f'buffer: {guid} held: rebuild linked Final from the confirmed card')
+                    continue
+                combined_result = {'version': 1, 'day': guid.removeprefix('receipt:day:'),
+                                   'source': proof['link'], 'pickIds': [r['id'] for r in proof['rows']]}
+        if kind != 'play' and not combined:
             text = without_playbook(text)
         item = (items or {}).get(guid, {})
         if kind == 'community' and guid.startswith('community:personal-ticket:') and len(item.get('legs') or []) > 1:
@@ -671,7 +690,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} held: all parlay legs do not fit X; never omit or merge legs')
                 continue
         text = social_voice.finish(text)
-        text = x_ticket_copy(text, kind, guid, item)
+        text = x_ticket_copy(text, 'play' if combined else kind, guid, item)
         if x_post.tweet_length(text) > x_post.LIMIT:
             log(f'buffer: {guid} held: complete caption and Playbook tag exceed X limit')
             continue
@@ -738,6 +757,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
+        if combined:
+            entry['straightCard'] = combined['straightCard']
+        if combined_result:
+            entry['straightCardResult'] = combined_result
         if social_style.active(now):
             entry.update(queuedText=text, socialStyleVersion=social_style.VERSION,
                          socialVoiceVersion=social_voice.VERSION, socialAgeVersion=AGE_VERSION)
@@ -747,6 +770,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # & Results. Pregame personal tickets belong there too, while remaining
         # community content and separate from the official Best Bet record.
         # Approved research follows its X post into the dedicated research feed.
+        if combined or combined_result:
+            entry['discord'] = {'state': 'pending', 'text': without_playbook(text), 'destination': 'plays'}
         if kind in ('play', 'community', 'research') or (kind == 'cashed' and guid.startswith(('cashed:', 'burnt:'))):
             entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
             # Replacing a private X draft is not a second Discord release. Carry

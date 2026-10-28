@@ -347,7 +347,8 @@ def ready(first, latest, games, log_book, now):
         receipt = week_receipt(today, first, latest, games, ids, now)
         if receipt:
             out.append(receipt)
-    return [r for r in out if r['stale'] > now]
+    import daily_straight_card
+    return [daily_straight_card.link_final(r, log_book, latest, games) for r in out if r['stale'] > now]
 
 
 def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS, log_book=None):
@@ -372,7 +373,8 @@ def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS, log_book=Non
             receipt = week_receipt(day, first, latest, games, ids, now)
             if receipt:
                 out.append(receipt)
-    return out
+    import daily_straight_card
+    return [daily_straight_card.link_final(r, log_book or {}, latest, games) for r in out]
 
 
 # ------------------------------------------------------------------ the rest of the day's posts
@@ -665,6 +667,10 @@ def house_posts(first, latest, games, log_book, now, log=print):
     """Approved receipts, research and the owner's weekly projection sheet."""
     first = released_first(first, log_book, games)
     out = [dict(r, kind='receipt') for r in ready(first, latest, games, log_book, now)]
+    import daily_straight_card
+    combined = daily_straight_card.proposal(first, latest, games, log_book, now)
+    if combined:
+        out.append(combined)
     extra = book(first, latest, games, log_book, now)
     if extra and extra['stale'] > now:
         out.append(extra)
