@@ -25,6 +25,21 @@ def context(**extra):
 
 
 class StakingTests(unittest.TestCase):
+    def test_regular_nba_and_football_share_the_straight_count_ceiling(self):
+        ctx=context();ctx.now=datetime(2026,10,28,19,tzinfo=timezone.utc)
+        make=lambda key,league:dict(pick(key,league=league),kickoff='2026-10-28T23:00:00Z')
+        ctx.games={str(i):make(str(i),'NBA') for i in range(12)}
+        ctx.first={str(i):make(str(i),'CFB') for i in range(8)}
+        self.assertIn('straight-count cap is 8',staking.check(make('NBA-new','NBA'),ctx))
+        ctx.risk_external={'NBA-open':make('NBA-open','NBA')}
+        ctx.first.pop('7')
+        self.assertIn('straight-count cap is 8',staking.check(make('CFB-new','CFB'),ctx))
+        ctx.first.pop('6')
+        self.assertIsNone(staking.check(make('NBA-new','NBA'),ctx))
+        ctx.games={};ctx.first={str(i):make(str(i),'CFB') for i in range(4)}
+        self.assertIn('straight-count cap is 5',staking.check(make('NBA-new','NBA'),ctx))
+        ctx.risk_external={'personal':dict(make('personal','NBA'),personalTicket=True, riskUnits=.25)}
+        self.assertIsNone(staking.check(make('NBA-new','NBA'),ctx))
     def test_prospective_stakes_and_legacy_results(self):
         for lane, old, new in [('best_bet', 1, .5), ('chef_pick', 2, 1)]:
             row = pick(lane=lane, units=old)

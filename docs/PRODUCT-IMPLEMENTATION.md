@@ -2,7 +2,7 @@
 
 Owner ends public Trial framing at2026-10-28T18:42:40Z. New supported NBA game
 picks use NBA Picks/ordinary0.5u, up tofive distinct games per Eastern day, within
-unchanged shared3u/5u exposure and20-social-post caps. The old one-per-day,
+unchanged shared3u/5u exposure, shared five/eight-straight ceilings and20-social-post caps. The old one-per-day,
 other-sport-post and first-layout-preview startup limits no longer gate new
 NBA game picks. Current two-sided exact prices, numeric value, source, official
 injury/role checks and the existing drawdown pause remain. No player/quarter/Climb
@@ -25,7 +25,7 @@ forward captures remain unchanged; the new hold cannot select a favorable model
 test cohort. Exact lines/odds stay visible. No exposed result is tuned into a pass.
 
 Focused132tests and full1958Python(two skips)/290Node pass, including clean
-export. NBA record remains0-0/0u before release; no new NBA play was manufactured.
+export. Follow-up cross-ledger five/eight straight-count fence is under release verification. NBA record remains0-0/0u before release; no new NBA play was manufactured.
 Local Buffer journal shows2857used/43essential request room to the approved2900
 ceiling, provider balance unknown. Optional research is held; earlier blanket
 claim that all X posting was exhausted was incorrect. Hosted and live verification

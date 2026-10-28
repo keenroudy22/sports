@@ -66,6 +66,7 @@ def check(candidate, ctx):
         return 'shared exposure: missing game day'
     rows = {**getattr(ctx, 'risk_external', {}), **ctx.first}
     used = 0
+    day_rows=[]
     for key, row in rows.items():
         if key == candidate.get('id') or day(row, games) != on:
             continue
@@ -76,12 +77,28 @@ def check(candidate, ctx):
         if value is None:
             return f'shared exposure: stake unknown for {key}'
         used += value
+        day_rows.append(row)
     value = units(candidate)
     ceiling = limit(on, games)
     if value is None:
         return 'shared exposure: candidate stake unknown'
     if used + value > ceiling + 1e-9:
         return f'shared exposure: {used:g}u reserved + {value:g}u exceeds {ceiling:g}u on {on}'
+    # Once NBA joins the ordinary card, its separate ledger must not create a
+    # second straight allowance beside football's existing five/eight ceiling.
+    import nba_pick_policy
+    def league(row):
+        return row.get('league') or games.get((row.get('gameIds') or [None])[0],{}).get('league')
+    def straight(row):
+        return (league(row) in ('NFL','CFB','NBA') and not row.get('legs')
+                and not row.get('parlayType') and not row.get('personalTicket')
+                and not row.get('historicalImport'))
+    if (nba_pick_policy.active(ctx.now) and straight(candidate)
+            and (league(candidate)=='NBA' or any(league(r)=='NBA' for r in day_rows))):
+        maximum=8 if ceiling==5 else 5
+        count=sum(straight(r) for r in day_rows)
+        if count>=maximum:
+            return f'shared exposure: {count} straights already reserved; daily straight-count cap is {maximum}'
     return None
 
 
