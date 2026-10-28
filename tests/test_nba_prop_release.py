@@ -13,12 +13,12 @@ class PropReleaseTests(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
   self.root=Path(self.tmp.name)/'nba-capture';self.root.mkdir()
- def study(self,loser=False,half=True):
+ def study(self,loser=False,half=True,calibrated=False):
   training=[(dict(id=str(i),eventId=str(i),stat='pts',projection={'value':20}),{'actual':22}) for i in range(30)]
   spec=p.fit(training,'pts',START);nba_capture.append_changed([spec],self.root/'probability-specs',lambda r:r['id'])
   n.freeze(self.root,START)
   for i in range(30):
-   at=START+timedelta(days=1+i//5);event=str(1000+i);actual=10 if loser and i==0 else 22
+   at=START+timedelta(days=1+i//5);event=str(1000+i);actual=10 if (loser and i==0) or (calibrated and (i%5==0 or i==1)) else 22
    r=dict(id='q'+event,season=2027,league='NBA',eventId=event,athleteId='2',team='3',stat='pts',
     retrievedAt=boxscores.stamp(at),kickoff=boxscores.stamp(at+timedelta(hours=9)),model=p.BASELINE,
     projection={'value':20},book='DraftKings',line=20.5,over=-110,under=-110,side='over',odds=-110)
@@ -190,3 +190,19 @@ class PropReleaseTests(unittest.TestCase):
   self.assertLessEqual(x_post.tweet_length(final),280)
   for term in ('Nickeil Alexander-Walker OVER 20.5 points','-110','DraftKings','@Playbook','21+ only','AWY at HOM'):
    self.assertIn(term,final)
+ def test_post_capture_admission_does_not_take_another_game_market(self):
+  offer=self.candidate();game=dict(offer,id='other-game',marketType='total')
+  with patch.dict('os.environ',{'BUFFER_TOKEN':'fixture'}),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'candidates',return_value=[game,offer]),patch.object(nt,'evaluate',return_value=[]),patch.object(nt,'record_publish') as publish,patch.object(rt,'datetime',wraps=datetime) as clock:
+   clock.now.return_value=NOW
+   result=rt.admission(NOW,root=self.root.parent/'trial',log_book={'posts':[]},review={},capture=False,markets={'player'})
+  self.assertEqual(result['id'],offer['id']);self.assertEqual(publish.call_count,1);self.assertEqual(publish.call_args.args[0]['marketType'],'player')
+ def test_genuine_forward_error_and_settled_price_proof_can_create_a_candidate(self):
+  self.study(calibrated=True);_,row=self.live()
+  with patch.object(n.props,'build',return_value={'rows':[row]}),patch.object(nba_capture,'availability_for_game',return_value=([],{})):
+   offers=n.candidates(NOW,self.root)
+  self.assertEqual(len(offers),1)
+  evidence=offers[0]['propEvidence']
+  self.assertEqual(evidence['games'],30);self.assertEqual(evidence['easternDates'],6)
+  self.assertGreater(evidence['bookReturnLower95'],0)
+  self.assertTrue(evidence['study']['evidenceReady'])
+  self.assertGreater(offers[0]['chance']-n.espn_props.implied(offers[0]['odds']),.04)

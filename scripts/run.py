@@ -1574,6 +1574,23 @@ def current_run_time(args, started):
     return max(started, datetime.now(timezone.utc))
 
 
+def capture_nba_props_and_select(args, now, status):
+    """One existing capture, then admit fresh props without another feed call."""
+    import nba_player_props
+    status['nbaPlayerProps']=nba_player_props.capture(now if args.dry_run else datetime.now(timezone.utc))
+    log(f"NBA player props: {status['nbaPlayerProps']}")
+    if (args.dry_run or getattr(args,'now',None) or args.no_push or args.command!='run'
+            or os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')=='0'):
+        return
+    try:
+        import nba_trial_runtime
+        status['nbaPropsAdmission']=nba_trial_runtime.admission(current_run_time(args,now),capture=False,markets={'player'})
+        log(f"NBA prop admission after capture: {status['nbaPropsAdmission']}")
+    except Exception as error:
+        status['nbaPropsAdmission']={'state':'error','reason':type(error).__name__}
+        status['errors'].append(f'NBA prop admission: {type(error).__name__}: {error}')
+
+
 def release_before_background(args, status):
     """Release through the same transactional gates while the caller holds the lock."""
     if args.dry_run or args.no_push:
@@ -2907,9 +2924,7 @@ def _run(args, now, slot, kinds, status):
                 log(f'NBA capture: {type(error).__name__}: {error}')
         if not settle_only and os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):
             try:
-                import nba_player_props
-                status['nbaPlayerProps']=nba_player_props.capture(now if args.dry_run else datetime.now(timezone.utc))
-                log(f"NBA player props: {status['nbaPlayerProps']}")
+                capture_nba_props_and_select(args,now,status)
             except Exception as error:
                 status['errors'].append(f'NBA player props: {type(error).__name__}: {error}')
         try:
@@ -2923,9 +2938,10 @@ def _run(args, now, slot, kinds, status):
             log(f'NBA editorial unavailable: {type(error).__name__}: {error}')
         try:
             import nba_trial_runtime
-            status['nbaTrialGraded'] = nba_trial_runtime.grade(now)
+            nba_grade_now=current_run_time(args,now)
+            status['nbaTrialGraded'] = nba_trial_runtime.grade(nba_grade_now)
             import nba_player_props
-            status['nbaPlayerPropGraded'] = nba_player_props.grade(now)
+            status['nbaPlayerPropGraded'] = nba_player_props.grade(nba_grade_now)
             if not args.dry_run and not getattr(args,'no_push',True):
                 import nba_roster_runtime
                 try:

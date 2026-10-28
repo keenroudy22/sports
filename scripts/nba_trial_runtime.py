@@ -221,7 +221,7 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
  return sorted(out,key=lambda r:(-(r.get('chance',r['rawChance'])-__import__('espn_props').implied(r['odds'])),r['kickoff'],r['id']))
 
 
-def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True):
+def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True,markets=None):
  if not review_ready(now,review):return {'state':'held','reason':'opening/review/kill-switch gate'}
  if not os.environ.get('BUFFER_TOKEN'):return {'state':'held','reason':'delivery not configured'}
  import buffer_post,x_post
@@ -241,6 +241,7 @@ def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True):
  if review is None:review={} if nba_pick_policy.active(now) else json.loads(REVIEW.read_text())
  coverage={};refusals={}
  for offer in candidates(now,diagnostics=coverage):
+  if markets is not None and offer.get('marketType') not in markets:continue
   nba_trial.staking.apply(offer,now)
   problems=nba_trial.evaluate(offer,stored,now,preview_sent=review.get('sentAt'))
   if problems:

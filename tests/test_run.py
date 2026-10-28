@@ -27,7 +27,7 @@ class SlotTests(unittest.TestCase):
         self.assertIn("and 'nbaCapture' not in status and args.command != 'run'", source,
                       'non-run capture fallback cannot duplicate the early run capture')
         self.assertEqual(source.count("status['nbaPlayerProps']=nba_player_props.capture("),1,'one prop capture path')
-        self.assertIn("status['nbaPlayerPropGraded'] = nba_player_props.grade(now)",source,'late prop grading is retained')
+        self.assertIn("status['nbaPlayerPropGraded'] = nba_player_props.grade(nba_grade_now)",source,'late prop grading uses the real post-capture clock')
         self.assertNotIn("slot.hour in PAPER_SLOTS or (slot.hour,slot.minute) in ((6,45),(8,30))",source)
 
     def test_nba_trial_fallback_cannot_recreate_moved_late_night_capture(self):
@@ -1905,3 +1905,28 @@ class MirrorClockTests(unittest.TestCase):
         self.assertTrue(all(t == datetime(2026, 10, 21, 13, 19, 17, tzinfo=timezone.utc) for t in seen))
         delete.assert_called_once()
         self.assertEqual(entry['cancelledAt'], '2026-10-21T13:19:17Z')
+
+class NBAPropDeliveryOrderTests(unittest.TestCase):
+    def test_fresh_prop_capture_rechecks_even_after_early_nba_no_play_without_extra_feed(self):
+        import nba_player_props,nba_trial_runtime
+        now=datetime(2026,10,28,21,30,tzinfo=timezone.utc)
+        args=SimpleNamespace(dry_run=False,no_push=False,now=None,command='run')
+        status={'errors':[],'nbaTrial':{'state':'no-play'}};order=[]
+        def capture(at):
+            order.append('capture');return {'paired':4}
+        def admit(at,**kwargs):
+            self.assertEqual(order,['capture']);self.assertGreaterEqual(at,now)
+            self.assertEqual(kwargs,{'capture':False,'markets':{'player'}})
+            order.append('admit');return {'state':'admitted','id':'NBA-prop-test'}
+        with mock.patch.object(nba_player_props,'capture',side_effect=capture) as fetch,mock.patch.object(nba_trial_runtime,'admission',side_effect=admit) as admission,mock.patch.object(run,'datetime',wraps=datetime) as clock:
+            clock.now.return_value=now+timedelta(minutes=2)
+            run.capture_nba_props_and_select(args,now,status)
+        self.assertEqual(order,['capture','admit']);self.assertEqual(fetch.call_count,1);self.assertEqual(admission.call_count,1)
+        self.assertEqual(status['nbaPropsAdmission']['state'],'admitted');self.assertEqual(status['nbaTrial']['state'],'no-play')
+    def test_prop_replay_and_no_push_cannot_create_an_official_admission(self):
+        import nba_player_props,nba_trial_runtime
+        now=datetime(2026,10,28,21,30,tzinfo=timezone.utc)
+        for change in ({'dry_run':True},{'no_push':True},{'now':'explicit-replay'},{'command':'ladder'}):
+            args=SimpleNamespace(**dict({'dry_run':False,'no_push':False,'now':None,'command':'run'},**change))
+            with mock.patch.object(nba_player_props,'capture',return_value={}),mock.patch.object(nba_trial_runtime,'admission') as admission:
+                run.capture_nba_props_and_select(args,now,{'errors':[]});admission.assert_not_called()
