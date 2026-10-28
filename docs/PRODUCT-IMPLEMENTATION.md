@@ -1,4 +1,26 @@
-### October28 regular NBA picks and workload comparison repair — RELEASE PENDING
+### October28 regular NBA delivery release — VERIFIED LIVE
+
+Source857e253c5/f3b3a39c5 installed through the locked entry point. Hosted run
+40752172066 succeeded; its rebase verification checked6a6f0abac53c43ed9b5f877de64b0c74f638e03e
+with10repeated checks, including1959Python(two skips)/290Node after upstream
+source advanced. Normal/clean export, build/feed, payload,133-row official record,
+NBA0-row audit,672-file public boundary, asset/SVG and isolated1455 rehearsals
+passed. No outside writes/private reads in rehearsal. The ordinary NBA and football
+card also shares the five/eight straight-count ceiling as well as3u/5u exposure.
+
+Live IAB Today at375and1440 and NBA Record at375 loaded without horizontal overflow,
+load errors or console errors; current app711836210c19/games9454e40fcd14. Chrome's
+375override produced416pixels, so that attempt is not claimed as phone proof;
+IAB measured exactly375. Temporary viewport overrides reset. New NBA Picks/.5u
+copy is live; the record remains0-0/0u. All133 preexisting public price/stake/result
+rows compare unchanged. The15:19 owner-requested normal selection completed15:23
+with no errors,20football candidates screened,0new plays and0eligibleNBAgames.
+Fresh19:19:56Z official availability held6unresolved games,3identity checks,
+2not-submitted reports and1source disagreement. No qualifying publication, actual
+NBA X/Discord send or natural NBA result receipt is invented. New game-pick flow
+is observing; NBA prop selection/validation and X combined Finals remain open.
+
+### October28 regular NBA picks and workload comparison repair — VERIFIED LIVE
 
 Owner ends public Trial framing at2026-10-28T18:42:40Z. New supported NBA game
 picks use NBA Picks/ordinary0.5u, up tofive distinct games per Eastern day, within
