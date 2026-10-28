@@ -80,7 +80,13 @@ class DailyStraightCardTests(unittest.TestCase):
             latest[k] = {'result': result, 'odds': 900, 'riskUnits': 10, 'units': 90}
         proof = daily.linked(log, DAY, latest)
         self.assertIn('1W/1L/1P/1V', proof['text'])
-        self.assertIn('-0.05u', proof['text'])
+        import run
+        expected_rows = [run.lock_units(dict(frozen, result=latest[frozen['id']]['result']))
+                         for frozen in found['straightCard']['rows']]
+        self.assertEqual(proof['rows'][0]['units'], 0.455)
+        self.assertEqual([r['units'] for r in proof['rows']],
+                         [r.get('units', 0.0) for r in expected_rows])
+        self.assertIn(f"{x_post.summarize(expected_rows)['units']:+.2f}u", proof['text'])
         self.assertEqual([r['odds'] for r in proof['rows']], [-110] * 4)
         self.assertEqual([r['riskUnits'] for r in proof['rows']], [0.5] * 4)
         raw = receipts.day_receipt(gates.eastern_date(NOW), receipts.released_first(first, log, games), latest, games, set(first))

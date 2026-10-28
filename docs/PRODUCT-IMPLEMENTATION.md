@@ -5572,3 +5572,12 @@ MorningFinal13:03Z/weekly13:23Zaccepted,notsent at this check. NBA12/14clean,
 homepage3stories10:53:51Z; exact successful callcount overwritten/unknown.
 LatestOct27weeklyrouting:1local27Bcall/0failure/4.82seconds/summaryavailable.
 Historical delays and all original records remain. No extra polling schedule.
+
+October28 pre-promotion repair: interrupted this task's own canonical deploy
+before any promotion after discovering unrounded linked net diverged from the
+record's run.lock_units three-decimal payouts. No other release was interrupted
+and no lock was stolen. Reuse x_post.units_for on frozen original terms, ignoring
+changed latest quote/stake/unit overrides. The regression now compares each
+outcome directly with run.lock_units (including-110/.5u=.455u), not an incorrect
+unrounded expectation. Existing record/counting and tests remain unchanged.
+Repeat affected, full normal/clean and every canonical gate before promotion.

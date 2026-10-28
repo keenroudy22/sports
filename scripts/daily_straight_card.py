@@ -145,9 +145,9 @@ def linked(log_book, day, latest):
             return None
         merged = dict(frozen, **{k: result[k] for k in RESULT_FIELDS if k in result}, posted=True)
         # Recompute from the frozen price/risk: later quote/stake/units cannot change this card.
-        merged['units'] = (0.0 if merged.get('earlyExit') or merged['result'] in ('push', 'void') else
-                           -merged['riskUnits'] if merged['result'] == 'loss' else
-                           x_post.payout(merged['odds']) * merged['riskUnits'])
+        # Match run.lock_units and the public record's three-decimal settlement.
+        # No latest quote/stake or unrelated saved-unit override enters this row.
+        merged['units'] = x_post.units_for(merged) or 0.0
         merged['combinedOriginalTerms'] = True
         rows.append(merged)
     summary = x_post.summarize(rows)
