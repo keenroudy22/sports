@@ -166,3 +166,6 @@ class PropReleaseTests(unittest.TestCase):
   with patch.object(n,'candidates',return_value=[offer]):
    self.assertIn('NBA daily pick cap',nt.evaluate(offer,prior,NOW))
    self.assertIn('one NBA pick per game',nt.evaluate(offer,[dict(prior[0],eventId=offer['eventId'])],NOW))
+ def test_unapproved_lane_does_not_scan_large_settlement_history(self):
+  with patch.object(n.probability,'review',side_effect=AssertionError('No study before a protocol')),patch.object(n.boxscores,'verify') as verify:
+   self.assertIsNone(n.proof('pts',NOW,self.root));verify.assert_not_called()

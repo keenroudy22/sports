@@ -47,9 +47,7 @@ def freeze(root, now):
 def proof(stat, now, root=nba_capture.STORE):
     """One independent game weight; unresolved priced cases cannot disappear."""
     root = Path(root)
-    if stat not in STATS or boxscores.verify(root.parent/'sport-box'):
-        return None
-    if any(boxscores.verify(root/family) for family in ('probability-specs','probability-forecasts','player-forecasts','player-outcomes')):
+    if stat not in STATS:
         return None
     protocols=probability.read(root/'prop-release-protocol')
     matches=[r for r in protocols if r.get('id')==VERSION]
@@ -61,6 +59,9 @@ def proof(stat, now, root=nba_capture.STORE):
         return None
     studies = [r for r in probability.review(root, now) if r['stat'] == stat and r['evidenceReady']]
     if not studies:
+        return None
+    if (boxscores.verify(root.parent/'sport-box') or any(boxscores.verify(root/family)
+            for family in ('probability-specs','probability-forecasts','player-forecasts','player-outcomes'))):
         return None
     specs = {r['specHash']: r for r in probability.read(root/'probability-specs') if probability.valid_spec(r)}
     originals = {}
