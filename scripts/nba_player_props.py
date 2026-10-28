@@ -427,7 +427,11 @@ def grade(now,root=STORE,boxes=None):
         if p.get('dnp'):result='dnp';actual=None
         elif not isinstance(actual,(int,float)) or not math.isfinite(actual):continue
         else:result='push' if actual==r['line'] else ('hit' if (actual>r['line'])==(r['side']=='over') else 'miss')
-        rows.append({'id':r['id'],'league':'NBA','season':r['season'],'actual':actual,'result':result,
+        book_decision={}
+        import nba_prop_settlement
+        if boxscores.instant(r['retrievedAt'])>=nba_prop_settlement.VERIFIED_AT:
+            book_decision['bookSettlement']=nba_prop_settlement.evaluate(r,final,now)
+        rows.append({'id':r['id'],'league':'NBA','season':r['season'],'actual':actual,'result':result,**book_decision,
                      'projection':r['projection']['value'],'line':r['line'],'side':r['side'],
                      'odds':r['odds'],'book':r['book'],'source':final.get('source'),
                      'retrievedAt':boxscores.stamp(now),'forecastAt':r['retrievedAt'],'model':model})

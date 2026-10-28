@@ -81,6 +81,12 @@ class TrialRuntimeTests(unittest.TestCase):
   self.assertEqual({row['marketType'] for row in found},{'moneyline','spread'})
   self.assertEqual({row['book'] for row in found},{'DraftKings'})
   self.assertTrue(all(len(row['reasons'])==2 for row in found))
+  self.assertTrue(all(nt.model_agreement(row) for row in found if row['marketType']=='moneyline'))
+  bad=json.loads(json.dumps(current));bad['away']['spreadLine']=2.5
+  nba_capture.append_changed([{'eventId':'1','book':'DraftKings','season':2027,'retrievedAt':'2026-10-20T13:31:00Z','source':'https://sports.core.api.espn.com/nba/odds','current':bad}],root/'quotes',lambda r:(r['eventId'],r['book']))
+  coverage={};found=rt.candidates(NOW,root,lambda *a:Model(),history,diagnostics=coverage)
+  self.assertEqual({row['marketType'] for row in found},{'moneyline'})
+  self.assertEqual(coverage['holds']['spread pair has different thresholds'],1)
  def test_reserve_delivery_is_once_even_without_buffer_ack(self):
   play={**offer(),'eventId':'NBA-1','direction':'under'}
   nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')

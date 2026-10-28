@@ -208,6 +208,6 @@ def markdown(report):
     for row in report.get('reviewedMinutes', []):
         lines.append(f"- Frozen minutes comparison {row['stat']} / season {row['season']} / {row['model']}: unchanged baseline error {row['baselineMAE']:g}, reviewed minutes error {row['reviewedMAE']:g}; {row['comparisons']} comparisons / {row['games']} games. Both values saved inside the same pregame forecast; no reconstructed baseline price or returns. Not promotion evidence by itself.")
     for row in report.get('probabilityStudy', []):
-        lines.append(f"- Prospective probability study {row['stat']}: {row['games']} untouched games / {row['easternDates']} Eastern dates; equal-game squared-probability error improvement vs fair market {row['brierImprovement']}. Research only: priced returns and admission adapter remain required.")
+        lines.append(f"- Prospective probability study {row['stat']}: {row['games']} untouched games / {row['easternDates']} Eastern dates; equal-game squared-probability error improvement vs fair market {row['brierImprovement']} (date-cluster lower estimate {row.get('brierImprovementLower95')}). Frozen positive-price raw-stat benchmark: {row.get('pricedGames',0)} games, return {row.get('rawStatShadowReturn')}, lower estimate {row.get('rawStatReturnLower95')}. Holds: {'; '.join(row.get('evidenceHolds',[])) or 'Official settlement and reviewed publishing adapter still required'}. Not settled bets or public admission.")
     lines.append('- '+report['decision'])
     return '\n'.join(lines)+'\n'

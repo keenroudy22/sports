@@ -184,6 +184,7 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
      if len(reasons)==2:
       out.append({'id':f"NBA-trial-{now.astimezone(nba_trial.EASTERN):%Y-%m-%d}-{g['providerId']}-moneyline",
                   'eventId':g['id'],'league':'NBA','season':g['season'],'seasonType':2,'kickoff':g['kickoff'],
+                  'modelSnapshot':{'homeWinProb':prediction.get('homeWinProb'),'margin':prediction.get('margin')},
                   'marketType':'moneyline','direction':which,'line':0,'odds':odds,'oppositeOdds':other,'book':book,
                   'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':raw,'riskUnits':1,
                   'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
@@ -194,6 +195,8 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
     pair=price_pair(q['current'],'spreadPrice')
     home=q['current']['home'];away=q['current']['away']
     if pair and home.get('spreadLine') is not None and away.get('spreadLine') is not None:
+     if abs(float(home['spreadLine'])+float(away['spreadLine']))>1e-9:
+      held('spread pair has different thresholds');continue
      home_line=float(home['spreadLine']);home_chance=normal_chance(prediction['margin'],prediction['sdMargin'],-home_line)
      which='home' if home_chance>=.5 else 'away';raw=home_chance if which=='home' else 1-home_chance
      line=home_line if which=='home' else float(away['spreadLine'])

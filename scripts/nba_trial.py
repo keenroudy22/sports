@@ -16,6 +16,7 @@ import staking
 STORE=Path(__file__).resolve().parents[1]/'data'/'nba-trial'
 OPENING=date(2026,10,20)
 EASTERN=ZoneInfo('America/New_York')
+ALIGNMENT_FROM=datetime(2026,10,28,14,20,tzinfo=timezone.utc)
 
 
 def snapshot(rows):
@@ -48,6 +49,7 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if offer.get('marketType') not in ('total','spread','moneyline') or offer.get('book')!='DraftKings':problems.append('market/book hold')
         line=espn_props.number(offer['line'])
         market=offer.get('marketType')
+        if now >= ALIGNMENT_FROM and not model_agreement(offer):problems.append('moneyline/model direction hold')
         if ((market=='total' and line<=0) or (market=='moneyline' and line!=0)
                 or not offer.get('source')):problems.append('line/source hold')
         odds=espn_props.price(offer['odds']);opposite=espn_props.price(offer['oppositeOdds'])
@@ -73,6 +75,21 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
     return sorted(set(problems))
 
 
+
+def model_agreement(offer):
+    """A claimed price edge cannot turn the model's losing side into an NBA ML."""
+    if offer.get('marketType') != 'moneyline':
+        return True
+    snapshot = offer.get('modelSnapshot') or {}
+    chance, margin = snapshot.get('homeWinProb'), snapshot.get('margin')
+    numeric = lambda n: type(n) in (int, float) and math.isfinite(n)
+    if not numeric(chance) or not numeric(margin) or not 0 < chance < 1:
+        return False
+    direction = offer.get('direction')
+    return ((direction == 'home' and chance > .5 and margin > 0)
+            or (direction == 'away' and chance < .5 and margin < 0))
+
+
 def record_publish(offer,now,root=STORE,preview_sent=None,calibration_verified=False):
     rows=[r for p in root.glob('*.jsonl') for r in boxscores.read_store(p)]
     problems=evaluate(offer,rows,now,preview_sent,calibration_verified)
@@ -87,7 +104,7 @@ def record_publish(offer,now,root=STORE,preview_sent=None,calibration_verified=F
     required=('id','league','season','seasonType','kickoff','marketType','line','odds','oppositeOdds','book',
               'retrievedAt','rawChance','riskUnits','source')
     row={key:offer[key] for key in required}
-    for key in ('eventId','game','reasons','projection','model','direction','stakingPolicy'):
+    for key in ('eventId','game','reasons','projection','model','direction','stakingPolicy','modelSnapshot'):
         if key in offer:row[key]=offer[key]
     row.update(type='publish',series='NBA Trial',publishedAt=boxscores.stamp(now))
     return nba_capture.append_changed([row],root,lambda r:(r['type'],r['id']))

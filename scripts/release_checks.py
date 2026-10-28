@@ -11,7 +11,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = (
     'test_integrity', 'test_gates', 'test_staking', 'test_release_queue',
-    'test_moneyline_release', 'test_post_windows', 'test_parlay_caption',
+    'test_moneyline_release', 'test_moneyline_projection_agreement',
+    'test_nba_moneyline_agreement', 'test_post_windows', 'test_parlay_caption',
     'test_social_age_notice', 'test_discord_post', 'test_record_audit',
     'test_publication_guard', 'test_chef_picks', 'test_daily_straight_card',
 )

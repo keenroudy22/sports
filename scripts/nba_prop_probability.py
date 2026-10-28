@@ -9,13 +9,14 @@ import json
 import math
 from collections import defaultdict
 from datetime import datetime, timezone
-from statistics import mean
+from statistics import mean, stdev
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import boxscores
 import nba_capture
 
-VERSION = 'nba-residual-market-shadow-v1'
+VERSION = 'nba-residual-market-shadow-v2'
 BASELINE = 'nba-minutes-rate-v1'
 STATS = ('pts', 'reb', 'ast')
 MIN_TRAIN = 30
@@ -85,6 +86,8 @@ def fit(training, stat, created):
         trainingEvidence=[dict(forecastId=r['id'], forecastHash=digest(r), outcomeHash=digest(o))
             for r, o in training if r['stat'] == stat],
         trainingEvents=sorted(groups), residuals={k: sorted(v) for k, v in sorted(groups.items())},
+        implementationHash=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        marketAnchor=.5, probabilityAllowance=.02,
         method='Equal-game residual CDF, half-point lines, 50% fair-market anchor; no refit',
         minimumTestGames=MIN_TEST, minimumEasternDates=MIN_DAYS,
         admissionReady=False, analysisOnly=True)
@@ -92,9 +95,25 @@ def fit(training, stat, created):
     return spec
 
 
+
+def valid_spec(spec):
+    """Method changes cannot borrow the earlier experiment's observations."""
+    try:
+        return (spec['model'] == VERSION and spec['stat'] in STATS
+            and spec['implementationHash'] == hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+            and spec['specHash'] == digest({k:v for k,v in spec.items() if k != 'specHash'})
+            and spec['marketAnchor'] == .5 and spec['probabilityAllowance'] == .02
+            and spec['minimumTestGames'] == MIN_TEST and spec['minimumEasternDates'] == MIN_DAYS
+            and len(set(spec['trainingEvents'])) >= MIN_TRAIN
+            and set(spec['trainingEvents']) == set(spec['residuals'])
+            and all(v and all(numeric(x) for x in v) for v in spec['residuals'].values()))
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
 def predict(row, spec, now):
     try:
-        if spec['specHash'] != digest({k: v for k, v in spec.items() if k != 'specHash'}):
+        if not valid_spec(spec):
             return None
         at, kick, frozen = boxscores.instant(row['retrievedAt']), boxscores.instant(row['kickoff']), boxscores.instant(spec['createdAt'])
         if (not frozen <= at <= now < kick or row.get('hold') or row.get('model') != BASELINE
@@ -117,6 +136,7 @@ def predict(row, spec, now):
             kickoff=row['kickoff'], eventId=row['eventId'], athleteId=row['athleteId'], stat=row['stat'],
             forecastId=row['id'], specHash=spec['specHash'], book=row['book'], line=line,
             over=over, under=under, chanceOver=chance, marketOver=fair,
+            baselineProjection=value, baselineSide=row.get('side'), baselineOdds=row.get('odds'),
             admissionReady=False, analysisOnly=True)
     except (KeyError, TypeError, ValueError, ZeroDivisionError):
         return None
@@ -125,7 +145,7 @@ def predict(row, spec, now):
 def capture(root, now):
     """Called only by a natural real-feed capture; replay clocks cannot write proof."""
     forecasts, outcomes = read(root / 'player-forecasts'), read(root / 'player-outcomes')
-    specs = {s['stat']: s for s in read(root / 'probability-specs')}
+    specs = {s['stat']: s for s in read(root / 'probability-specs') if s.get('model') == VERSION}
     training = pairs(forecasts, outcomes, now)
     new_specs = [s for stat in STATS if stat not in specs and (s := fit(training, stat, now))]
     nba_capture.append_changed(new_specs, root / 'probability-specs', lambda r: r['id'])
@@ -140,27 +160,98 @@ def capture(root, now):
             rows.append(p)
             old.add(p['id'])
     count = nba_capture.append_changed(rows, root / 'probability-forecasts', lambda r: r['id'])
-    return dict(specifications=len(specs), recorded=count, admissionReady=False)
+    return dict(specifications=len(specs), recorded=count, admissionReady=False,
+                review=review(root, now))
+
+
+def shadow_price(p, y):
+    """Choose side using frozen odds/probability only; raw-stat benchmark, not a bet."""
+    choices = []
+    for side, chance in (('over',p['chanceOver']), ('under',1-p['chanceOver'])):
+        price = p[side]
+        if not numeric(price) or abs(price) < 100:
+            return None
+        decimal = 1 + (price/100 if price > 0 else 100/-price)
+        conservative = max(0, chance-.02)*decimal-1
+        choices.append((conservative, side, decimal))
+    edge, side, decimal = max(choices)
+    if edge <= 0:
+        return None
+    won = bool(y) == (side == 'over')
+    return dict(side=side, conservativeEV=edge, net=decimal-1 if won else -1)
+
+
+def lower95(values):
+    # Independent Eastern-day clusters, fixed normal approximation; not a
+    # guarantee or a confidence interval for a single wager's probability.
+    return mean(values)-1.96*stdev(values)/math.sqrt(len(values)) if len(values)>1 else None
 
 
 def review(root, now):
-    specs = {s['specHash']: s for s in read(root / 'probability-specs')}
-    outcomes = {o['id']: o for o in read(root / 'player-outcomes') if boxscores.instant(o['retrievedAt']) <= now}
-    groups = defaultdict(lambda: defaultdict(list))
-    for p in read(root / 'probability-forecasts'):
-        s, o = specs.get(p.get('specHash')), outcomes.get(p.get('forecastId'))
-        if not s or not o or not numeric(o.get('actual')) or not o.get('source'):
-            continue
+    specs = {s['specHash']:s for s in read(root/'probability-specs') if valid_spec(s)}
+    finals = {}
+    for o in read(root/'player-outcomes'):
         try:
-            if not boxscores.instant(s['createdAt']) <= boxscores.instant(p['forecastAt']) <= boxscores.instant(p['retrievedAt']) < boxscores.instant(p['kickoff']) <= boxscores.instant(o['retrievedAt']) <= now:
-                continue
-            if p['eventId'] in s['trainingEvents'] or o.get('forecastAt') != p['forecastAt'] or o.get('line') != p['line'] or o.get('book') != p['book'] or o.get('model') != BASELINE:
-                continue
-            y = float(o['actual'] > p['line'])
-            groups[p['stat']][p['eventId']].append((p, (p['marketOver']-y)**2 - (p['chanceOver']-y)**2))
-        except (KeyError, TypeError, ValueError):
+            at=boxscores.instant(o['retrievedAt'])
+            if at<=now and (o['id'] not in finals or at>finals[o['id']][0]):
+                finals[o['id']]=(at,o)
+        except (KeyError,TypeError,ValueError):
             continue
-    return [dict(stat=stat, games=len(games), easternDates=len({boxscores.instant(v[0][0]['kickoff']).astimezone(ZoneInfo('America/New_York')).date() for v in games.values()}),
-        brierImprovement=mean(mean(x[1] for x in v) for v in games.values()) if games else None,
-        admissionReady=False, hold='Prospective experiment only; independent probability and priced-return validation plus a reviewed prop admission adapter still required')
-        for stat, games in sorted(groups.items())]
+    # Choose the first physical observation before examining a result. A later
+    # book/player quote cannot replace a loss; one player/stat per game is one case.
+    chosen={}
+    for p in read(root/'probability-forecasts'):
+        try:
+            at=boxscores.instant(p['retrievedAt'])
+            if at>now:continue
+            key=(p['eventId'],p['athleteId'],p['stat'],p['specHash'])
+            if key not in chosen or (at,p['id'])<chosen[key][0]:chosen[key]=((at,p['id']),p)
+        except (KeyError,TypeError,ValueError):
+            continue
+    groups=defaultdict(lambda:defaultdict(list))
+    for _,p in chosen.values():
+        s=specs.get(p.get('specHash')); entry=finals.get(p.get('forecastId'))
+        if not s or not entry:continue
+        _,o=entry
+        if not numeric(o.get('actual')) or not o.get('source'):continue
+        try:
+            if not boxscores.instant(s['createdAt'])<=boxscores.instant(p['forecastAt'])<=boxscores.instant(p['retrievedAt'])<boxscores.instant(p['kickoff'])<=boxscores.instant(o['retrievedAt'])<=now:continue
+            if (p['eventId'] in s['trainingEvents'] or o.get('forecastAt')!=p['forecastAt']
+                or o.get('line')!=p['line'] or o.get('book')!=p['book'] or o.get('model')!=BASELINE
+                or o.get('projection')!=p['baselineProjection']
+                or o.get('side')!=p['baselineSide'] or o.get('odds')!=p['baselineOdds']
+                or not all(numeric(p.get(k)) and 0<p[k]<1 for k in ('chanceOver','marketOver'))):continue
+            y=float(o['actual']>p['line'])
+            expected='hit' if bool(y)==(p['baselineSide']=='over') else 'miss'
+            if o.get('result')!=expected:continue
+            groups[(p['stat'],p['specHash'])][p['eventId']].append((p,y))
+        except (KeyError,TypeError,ValueError):continue
+    result=[]
+    for (stat,spec_hash),games in sorted(groups.items()):
+        days=defaultdict(list); price_days=defaultdict(list); errors=[]; returns=[]
+        calibration=[]
+        for group in games.values():
+            day=boxscores.instant(group[0][0]['kickoff']).astimezone(ZoneInfo('America/New_York')).date().isoformat()
+            improvement=mean((p['marketOver']-y)**2-(p['chanceOver']-y)**2 for p,y in group)
+            errors.append(improvement);days[day].append(improvement)
+            calibration.append(mean(p['chanceOver']-y for p,y in group))
+            priced=[shadow_price(p,y) for p,y in group]
+            priced=[p['net'] for p in priced if p is not None]
+            if priced:
+                net=mean(priced);returns.append(net);price_days[day].append(net)
+        error_lower=lower95([mean(v) for v in days.values()])
+        price_lower=lower95([mean(v) for v in price_days.values()])
+        holds=[]
+        if len(games)<MIN_TEST:holds.append('Fewer than30 untouched test games')
+        if len(days)<MIN_DAYS:holds.append('Fewer than5 independent Eastern dates')
+        if error_lower is None or error_lower<=0:holds.append('Probability error improvement is unproven')
+        if len(returns)<MIN_TEST or len(price_days)<MIN_DAYS:holds.append('Insufficient games/dates with frozen positive-price candidates')
+        if price_lower is None or price_lower<=0:holds.append('Conservative frozen-price return is unproven')
+        result.append(dict(stat=stat,specHash=spec_hash,games=len(games),easternDates=len(days),
+            brierImprovement=mean(errors),brierImprovementLower95=error_lower,
+            pricedGames=len(returns),pricedEasternDates=len(price_days),
+            rawStatShadowReturn=mean(returns) if returns else None,rawStatReturnLower95=price_lower,
+            meanProbabilityBias=mean(calibration),evidenceReady=not holds,evidenceHolds=holds,
+            admissionReady=False,analysisOnly=True,
+            hold='Research only; official book settlement and a reviewed prop publishing adapter remain required. Raw-stat returns are not settled bets.'))
+    return result

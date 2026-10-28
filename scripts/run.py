@@ -1393,6 +1393,21 @@ def should_research_candidate(candidate, candidate_rank, gap, class_a):
     return needs_research(candidate) or gap > 15 or (candidate_rank < 6 and not class_a)
 
 
+
+def pre_research_refusal(candidate, ctx):
+    """Do not spend a scarce news lookup on a straight that cannot be selected.
+
+    Final admission and release still repeat the current-model agreement check.
+    Other markets and separately labeled historical/fun lanes are unchanged.
+    """
+    if (candidate.get('selectionPolicy') == gates.TIER_POLICY
+            and gates.market_key(candidate) == 'moneyline'):
+        decision = gates.moneyline_projection_agreement(candidate, ctx)
+        if not decision.ok:
+            return decision
+    return None
+
+
 def relevant_facts(candidate, facts, ctx):
     """The facts that can change what this pick depends on. The line's move is not one: the price is already
     taken at the current number, and backtests show a move away from our number does not hurt our side. Long
@@ -2530,6 +2545,14 @@ def _run(args, now, slot, kinds, status):
         if want not in kinds:
             continue
         if price(candidate, ctx, now) is None:
+            continue
+        early_hold = pre_research_refusal(candidate, ctx)
+        if early_hold:
+            league = candidate['_league']
+            screened.append({'league':league,'gameId':candidate['gameIds'][0],'title':candidate['title'],
+                'lineId':(candidate.get('_row') or {}).get('id'),'line':candidate.get('line'),
+                'book':candidate.get('book'),'rule':early_hold.rule,'reason':early_hold.reason})
+            decided.append(decision_record(candidate,league,'refused',[early_hold.rule],early_hold.reason,now,ctx))
             continue
         if candidate['_league'] != 'NFL' or gates.market_key(candidate) != 'total':
             potd_market.append(dict(candidate))

@@ -5766,3 +5766,39 @@ includesad7by ancestry;0upstreamchanges/0extra checks,683publicfiles/240078177by
 more405994ce1e29 match verified source. Both requested releases fully hosted;
 no pending release being represented as live. Metadata stays ondev for the next
 ordinary safe release; no third source deployment for these verification notes.
+
+### October28 selection and NBA core follow-through — release candidate
+
+Owner-requested real10:23selection finished10:29:55Eastern,0errors/0published.
+Fresh prices screened17CFB rows;5facts verified/1dropped for NMSU ML, then current
+model-winner agreement correctly rejected it. Other current chances did not beat
+prices. New pre-research filter rejects this impossible straight before spending
+its web lookup, and final selection/release still repeat the check. The Sam-shape
+regressions now join every bounded release suite, including a separate NBA ML
+snapshot/score-direction check. Paired NBA spreads must be exact opposite rungs.
+No old recommendation or loss is rewritten. Same cap/budget/stake/category rules.
+
+Fresh NBA14:26:42Z snapshot:15storedgames/1eligible/0offers. Holds include unresolved
+statuses4, unmapped team-player identities3, unsubmitted5, failed roster quality1,
+source disagreement1, not-today3 (overlap). This was actual refreshed selection,
+not a promise or manually flipped readiness. Research-only Buffer post correctly
+held before discovery under optional quota; essential plays/results room unchanged.
+
+Probability shadow v2 retains v1 and freezes source bytes/coefficients. No refit,
+changed-source borrowing, future evidence or duplicate-book/player sample gains.
+Separate stat/spec/date-cluster checks now include fixed pre-outcome side choice,
+2pp allowance, losses at frozen prices, game-balanced raw-stat returns and lower
+estimates. Minimum30untouched games/5Eastern dates, favorable probability and
+price evidence required. Evidence success still does not authorize public props.
+These are raw-stat research benchmarks, not an actual placed-bet portfolio.
+
+Added DraftKings Indiana primary-prop settlement decisions to NEW post-policy
+research grades only. Official IN pages verified in browser:general participation,
+full-game overtime and the NBA over-only first-half injury/illness exception.
+Source URLs:https://sportsbook.draftkings.com/help/sport-rules/basketball and
+https://sportsbook.draftkings.com/help/general-betting-rules . Final identity,
+reconciled period participation, timely official statement and review clocks are
+mandatory; unknowns hold. No automatic under injury void, guessed protection,
+paid add-on, quarter support or historical regrading. Pure typed settlement path
+is tested; official public prop admission/rendering remains a separate unfinished
+component and cannot be claimed live merely because grading exists.

@@ -31,6 +31,15 @@ class MoneylineAgreementTests(unittest.TestCase):
         spoof=dict(pick,_selection=dict(pick['_selection'],rawChance=.9,anchoredChance=.8))
         self.assertFalse(gates.selection_verdict(spoof,ctx).ok)
 
+    def test_model_loser_is_rejected_before_spending_web_research(self):
+        import run
+        pick,ctx=inputs()
+        self.assertEqual(run.pre_research_refusal(pick,ctx).rule,'moneyline_projection_agreement')
+        pick,ctx=inputs(home=.4,margin=-3)
+        self.assertIsNone(run.pre_research_refusal(pick,ctx))
+        self.assertIsNone(run.pre_research_refusal(dict(pick,marketType='total'),ctx))
+        self.assertIsNone(run.pre_research_refusal(dict(pick,selectionPolicy=None),ctx))
+
     def test_model_favorite_at_plus_money_remains_eligible_but_not_automatic(self):
         pick,ctx=inputs(home=.4,margin=-3)
         self.assertTrue(gates.moneyline_projection_agreement(pick,ctx).ok)
