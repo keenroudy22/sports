@@ -290,6 +290,26 @@
       reason: 'Illustrative: separate-game quotes multiplied. The sportsbook sets the actual ticket price.' };
   };
 
+  /* NBA full-game quotes may form personal drafts, never official recommendations.
+     Stable side IDs preserve the selected threshold through later price moves. */
+  const nbaTicketLines = (rows, now = Date.now()) => rows.flatMap(r => {
+    const at = Date.parse(r.sourceAt), kick = Date.parse(r.kickoff);
+    if (!r.eventId || !r.athleteId || !r.stat || !r.book || typeof r.line !== 'number' || !Number.isFinite(r.line)
+        || !Number.isFinite(at) || !Number.isFinite(kick)) return [];
+    return ['over', 'under'].flatMap(side => {
+      const price = r[side];
+      if (typeof price !== 'number' || !Number.isFinite(price) || Math.abs(price) < 100) return [];
+      return [{ id: ['nba-draft', r.eventId, r.athleteId, r.stat, bookName(r.book), side].join(':'),
+        league: 'NBA', gameId: 'NBA-' + r.eventId, athleteId: r.athleteId,
+        title: `${r.name} ${side} ${r.line} ${r.statName || r.stat}`, player: r.name,
+        market: r.statName || r.stat, direction: side.toUpperCase(), line: r.line,
+        odds: price, book: r.book, kickoff: r.kickoff, observedAt: r.sourceAt,
+        expiresAt: new Date(at + 14400000).toISOString(),
+        state: at <= now && now - at <= 14400000 && kick > now ? 'open' : 'closed',
+        projection: r.hold ? null : r.projection || null, hold: r.hold || null, grade: null }];
+    });
+  });
+
   /* Compare a single current quote; means and past hit rates are not probabilities.
      Only the board's explicitly calibrated, unheld football chance supplies EV. */
   const compareTicketLeg = (row, now = Date.now()) => {
@@ -884,6 +904,6 @@
 
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
-    rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, compareTicketLeg, ticketText,
+    rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, nbaTicketLines, compareTicketLeg, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

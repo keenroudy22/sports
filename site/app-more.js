@@ -600,6 +600,7 @@
             const c = C.compareTicketLeg ? C.compareTicketLeg(r) : null;
             if (!c) return '';
             return `<p class="small" style="margin-top:8px">Our projection: <b>${c.projection == null ? 'unavailable' : esc(C.fixed(c.projection))}</b> · Book line: <b>${r.line == null ? 'not supplied' : esc(r.line)}</b></p>
+              ${r.hold ? `<p class="small muted">${esc(r.hold)}</p>` : ''}
               <p class="small muted">${c.needed == null ? 'Current price needs rechecking.' : `Price needs ${(100 * c.needed).toFixed(1)}% to break even.`} ${c.chance == null ? 'Estimated EV unavailable: no validated chance for this current quote.' : `Our estimated chance ${(100 * c.chance).toFixed(1)}% · estimated return ${c.ev >= 0 ? '+' : ''}${(100 * c.ev).toFixed(1)}% per unit risked. Model estimate, not a guarantee.`}</p>
               ${c.bookUrl ? `<p style="margin-top:8px"><a class="btn small" href="${esc(c.bookUrl)}" target="_blank" rel="noopener noreferrer">Open ${esc(bookLabel(r.book))} ↗</a></p>` : ''}`;
           })()}</div>
@@ -608,7 +609,7 @@
           <div class="arb-form"><label>Stake${st.mode === 'units' ? ' (units)' : ' ($)'}<input class="search" type="number" min="0" step="0.5" inputmode="decimal" data-stake="amount" value="${esc(st.amount)}"></label>${st.mode === 'units' ? `<label>Dollars per unit<input class="search" type="number" min="0" step="1" inputmode="decimal" data-stake="unit" value="${esc(st.unit)}"></label>` : ''}</div>
           <div id="ticket-summary" style="margin-top:12px">${ticketSummary(rows)}</div><p class="small muted" style="margin-top:8px">Book links open the sportsbook, not a prefilled slip. Add the exact legs there and verify its final price. No combined EV is estimated for this draft.</p>
           <div class="btn-row" style="margin-top:12px"><button type="button" class="btn" data-copy-ticket>Copy ticket text</button><button type="button" class="btn" data-clear-ticket>Clear ticket</button></div></div>`)}`
-      : empty('Your ticket is empty', 'Add priced lines from the <a href="#research/lines">research board</a> with + Ticket.', 'check')}`;
+      : empty('Your ticket is empty', 'Add priced lines from the <a href="#research/lines">research board</a> with + Ticket, or choose a side from <a href="#today?sport=NBA">NBA player lines</a>.', 'check')}`;
   };
   views.arbs = async () => {
     const a = state.arb;

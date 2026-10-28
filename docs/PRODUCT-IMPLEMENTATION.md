@@ -5732,3 +5732,10 @@ future equal-game squared-probability error against fair market, Eastern dates
 and explicit non-admission. This is a research experiment, not NBA approval,
 settlement policy, priced-return validation or a public prop adapter. No forecast,
 record, stake, cap or validation threshold is rewritten to manufacture a play.
+
+NBA personal-draft follow-through: fresh full-game player rows expose separate
+OVER/UNDER Ticket actions. Stable quote identities detect threshold/price moves;
+reopening My Ticket rechecks both football and NBA catalogs. Missing NBA catalog
+holds totals instead of trusting saved prices. Started/stale/future-clock rows
+cannot supply an open quote; held-role rows omit projections. Personal NBA drafts
+never receive a calibrated chance, EV, official designation or record admission.

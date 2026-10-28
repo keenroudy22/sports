@@ -7,7 +7,7 @@
   const { C, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME, teamDirectory, maybe, get, indexGames, withLive,
     defenseRows, defGames, defenseVerdict, projCard, teamMark, headshot, whenShort, dayLabel, bookLabel, ago, niceTitle, oddsText, isNum, inLeague,
     watchButton, setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican, boardRow,
-    matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, etDay } = ctx;
+    matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, ticketButton, etDay } = ctx;
   const views = {};
   /* Navigator, "why" and badge styles arrive with this bundle, so the first-load shell stays inside its budget. */
   const GAMES_CSS = ".tier { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font: 700 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--line-strong); color: var(--chalk); white-space: nowrap; }\n"
@@ -703,6 +703,7 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
       <p class="small muted">${esc(r.projection.window)} · ${esc(r.projection.season-1)}–${esc(String(r.projection.season).slice(-2))} · ${esc(r.projection.sample)} full-role games. Historical scaled range ${esc(r.projection.low)}–${esc(r.projection.high)}, not a prediction interval.</p>
       <p class="small">Exact-line ${esc(r.side)} hits: last 5 ${esc(r.last5.hits)}/${esc(r.last5.games)} · last 10 ${esc(r.last10.hits)}/${esc(r.last10.games)} · recorded season ${esc(r.seasonHistory.hits)}/${esc(r.seasonHistory.games)}</p>
       <p class="small">${esc(r.projection.minutes)} ${r.projection.minutesBasis ? 'reviewed' : 'baseline'} minutes × ${esc(r.projection.rate)} ${esc(r.statName)} per minute from ${esc(r.projection.sample)} full-role games.</p>` : `<p class="small" style="margin-top:8px">${esc(r.hold || 'Projection unavailable')}</p>`}
+      ${C.nbaTicketLines && ticketButton ? `<div class="btn-row" style="margin-top:10px">${C.nbaTicketLines([r]).filter(l => l.state === 'open').map(l => ticketButton(l.id, l.title, l.direction)).join('')}<a class="btn small" href="#ticket">Compare my ticket →</a></div><p class="tiny muted">Personal draft only; no validated NBA EV estimate.</p>` : ''}
       <p class="tiny muted">Prices seen ${esc(whenShort(r.sourceAt))}${r.rosterAt ? ` · Roster checked ${esc(whenShort(r.rosterAt))}` : ''} · <a href="https://sharpapi.io">SharpAPI</a> / ESPN game logs</p></article>`);
     const trial = nbaTrialSection(data, readiness);
     const brief = data.morningBrief;

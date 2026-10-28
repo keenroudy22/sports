@@ -818,7 +818,7 @@
     return `<button type="button" class="${cls}" data-watch="${esc(item.key)}" aria-pressed="${on}" aria-label="${on ? 'Unsave' : 'Save'} ${esc(item.title)}">${on ? '★ Saved' : '☆ Save'}</button>`;
   };
   const onTicket = id => state.ticket.some(r => r.id === id);
-  const ticketButton = (id, title) => `<button type="button" class="btn small" data-add-line="${esc(id)}" aria-pressed="${onTicket(id)}" aria-label="${onTicket(id) ? 'Remove from' : 'Add to'} my ticket: ${esc(title || 'line')}">${onTicket(id) ? '✓ On ticket' : '+ Ticket'}</button>`;
+  const ticketButton = (id, title, sideLabel = '') => `<button type="button" class="btn small" data-add-line="${esc(id)}" aria-pressed="${onTicket(id)}" aria-label="${onTicket(id) ? 'Remove from' : 'Add to'} my ticket: ${esc(title || 'line')}">${sideLabel ? esc(sideLabel) + ' · ' : ''}${onTicket(id) ? '✓ On ticket' : '+ Ticket'}</button>`;
 
   /* ---------- the Kitchen Ticket (design/site, NOTES.md section 4) ---------- */
   const FLAME = '<svg viewBox="0 0 14 18" aria-hidden="true"><path fill="#F2F7F4" d="M7 0C8 4 13 6 13 11.5 13 15.5 10.3 18 7 18 3.7 18 1 15.5 1 12 1 9 3 7.5 4 6c.2 2 1 3 2.2 3.5C6 6 5 3 7 0z"/></svg>';
@@ -1922,8 +1922,13 @@
       <p class="small" style="margin-top:8px"><a href="#games/live?sport=${esc(lg)}">Live scores →</a></p></div>`;
   };
   /* My ticket: legs are re-checked against the current board every time, so a gone or moved price is never priced. */
+  const ticketCatalog = async () => {
+    const [football, nba] = await Promise.all([lineData('ALL'), maybe('app/nba-props.json')]);
+    if (!football || (state.ticket.some(r => String(r.id).startsWith('nba-draft:')) && !Array.isArray(nba?.rows))) return null;
+    return { lines: [...football.lines, ...(C.nbaTicketLines && Array.isArray(nba?.rows) ? C.nbaTicketLines(nba.rows) : [])] };
+  };
   const ticketRows = async () => {
-    const data = await lineData('ALL');
+    const data = await ticketCatalog();
     if (!data) { const rows = state.ticket.map(item => ({ ...item, unchecked: true })); rows.unchecked = true; return rows; }
     const current = new Map(((data.lines) || []).map(l => [l.id, l]));
     const now = Date.now();
@@ -1963,14 +1968,14 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-6d95d633692a';
-  const GAMES_ASSET = 'app-games.js?v=sha256-d33dc2f3ee34';
+  const MORE_ASSET = 'app-more.js?v=sha256-405994ce1e29';
+  const GAMES_ASSET = 'app-games.js?v=sha256-8eede5504df2';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
     GAMES, HEADSHOT, MARK, STAT_UNITS, clock, defGames, defenseVerdict, disc, favoriteHold, favoriteLook, filtersFold, hasValue, lineVM, logoImg, minus, nameSize, odd, onBoard, panelVars, pctOne, teamPanel, ticketWhen, toneFor, watchButton, HOUSE, rail, holdOf, heldWords, slip, etDay, opponentTrendText, ...overrides });
   const gamesContext = (overrides = {}) => moreContext({ setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican,
-    boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, luminance, ...overrides });
+    boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, ticketButton, luminance, ...overrides });
   const BUNDLES = { more: { asset: MORE_ASSET, global: 'KRMore', context: moreContext, word: 'More pages' },
     games: { asset: GAMES_ASSET, global: 'KRGames', context: gamesContext, word: 'Games pages' } };
   const ensureBundle = key => {
@@ -2214,14 +2219,14 @@
       if (d.addLine) {
         const i = state.ticket.findIndex(r => r.id === d.addLine);
         if (i >= 0) { state.ticket.splice(i, 1); saved.set('ticket', state.ticket); toast('Removed from your ticket'); render(true); return; }
-        const lines = await lineData('ALL');
+        const lines = await ticketCatalog();
         const row = ((lines || {}).lines || []).find(r => r.id === d.addLine);
         if (!row) { toast('This price is no longer on the board'); return; }
         state.ticket.push(ticketLeg(row)); saved.set('ticket', state.ticket); toast('Added to your ticket'); render(true);
         return;
       }
       if (d.accept) {
-        const lines = await lineData('ALL');
+        const lines = await ticketCatalog();
         const row = ((lines || {}).lines || []).find(r => r.id === d.accept);
         const i = state.ticket.findIndex(r => r.id === d.accept);
         if (row && i >= 0) { state.ticket[i] = ticketLeg(row); saved.set('ticket', state.ticket); }

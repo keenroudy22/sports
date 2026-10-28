@@ -701,3 +701,25 @@ test('settlement keeps confirmed delivery clocks and never promises a future X p
   assert.equal(C.compareTicketLeg({ ...row, book: 'unknown' }, now).bookUrl, null);
   assert.equal(C.compareTicketLeg({ ...row, grade: null, projection: { value: 3.4 } }, now).projection, 3.4);
 });
+
+test('NBA personal ticket sides preserve exact prices and never manufacture EV', () => {
+  const row = { eventId: '1', athleteId: '2', name: 'Player', stat: 'ast', statName: 'assists',
+    book: 'FanDuel', line: 4.5, over: 110, under: -130, kickoff: '2026-09-20T17:00:00Z',
+    sourceAt: '2026-09-19T11:00:00Z', projection: { value: 3.4 } };
+  const rows = C.nbaTicketLines([row], now);
+  assert.deepEqual(rows.map(r => [r.direction, r.line, r.odds]), [['OVER', 4.5, 110], ['UNDER', 4.5, -130]]);
+  assert.notEqual(rows[0].id, rows[1].id);
+  assert.equal(rows[0].state, 'open');
+  assert.equal(C.compareTicketLeg(rows[0], now).projection, 3.4);
+  assert.equal(C.compareTicketLeg(rows[0], now).ev, null);
+  assert.equal(C.nbaTicketLines([{...row, hold: 'role unknown'}], now)[0].projection, null);
+  assert.equal(C.nbaTicketLines([{...row, sourceAt: '2026-09-19T01:00:00Z'}], now)[0].state, 'closed');
+  assert.equal(C.nbaTicketLines([{...row, sourceAt: '2026-09-19T13:00:00Z'}], now)[0].state, 'closed');
+  assert.equal(C.nbaTicketLines([{...row, kickoff: '2026-09-19T11:00:00Z'}], now)[0].state, 'closed');
+  assert.deepEqual(C.nbaTicketLines([{...row, line: null}], now), []);
+  assert.deepEqual(C.nbaTicketLines([{...row, sourceAt: 'unknown'}], now), []);
+  const moved = C.nbaTicketLines([{...row, line: 5.5, over: 120}], now)[0];
+  assert.equal(moved.id, rows[0].id);
+  assert.equal(moved.line, 5.5);
+  assert.match(C.summarizeTicket(rows, 1, 'units', 10, now).reason, /Same-game/);
+});
