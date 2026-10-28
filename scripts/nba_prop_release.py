@@ -170,6 +170,7 @@ def candidates(now, root=nba_capture.STORE, lead_minutes=60, diagnostics=None):
             if (not approved or r.get('hold') or r['book'] != 'DraftKings' or not r.get('projection')
                     or r['projection']['model'] != probability.BASELINE
                     or not review or review['kind'] != 'role-only'
+                    or type(role.get('starts')) is not int or role['starts'] not in (0,3)
                     or r['projection'].get('window') != 'This season'
                     or r.get('currentRole', {}).get('games', 0) < 3
                     or not props.fresh(r['sourceAt'], now, 2)

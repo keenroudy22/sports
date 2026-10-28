@@ -89,7 +89,11 @@ class PropReleaseTests(unittest.TestCase):
  def test_live_rechecks_stale_prices_and_injuries_even_with_approved_proof(self):
   spec=self.study();_,row=self.live();evidence={'specHash':spec['specHash'],'probabilityAllowance':.02}
   with patch.object(n,'proof',return_value=evidence),patch.object(n.props,'build',return_value={'rows':[row]}),patch.object(nba_capture,'availability_for_game',return_value=([],{})):
-   self.assertEqual(len(n.candidates(NOW,self.root)),1)
+   initial=n.candidates(NOW,self.root);self.assertEqual(len(initial),1)
+   row['roleReview']=initial[0]['roleReview']
+   for starts in (2,None,False):
+    row['currentRole']['starts']=starts;self.assertEqual(n.candidates(NOW,self.root),[])
+   row['currentRole']['starts']=3
    row['sourceAt']='2026-11-05T12:00:00Z';self.assertEqual(n.candidates(NOW,self.root),[])
    row['sourceAt']='2026-11-05T14:55:00Z';row['hold']='changed role';self.assertEqual(n.candidates(NOW,self.root),[])
  def test_publication_and_actual_grade_keep_nba_record_separate_and_immutable(self):
