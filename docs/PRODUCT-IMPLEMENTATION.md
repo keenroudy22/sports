@@ -1,3 +1,33 @@
+### October28 NBA prop posting path — VERIFIED LIVE, MODEL EVIDENCE OBSERVING
+
+Source5b45696c6 installed through the standard locked release. Hosted40776230436
+succeeded and verified a43d3196ddd086d25ea5b2d0cf3a1f3a850a67ce with10 post-rebase
+checks. Full normal/clean suites passed1985Python(two skips)/293Node; publication,
+record/public-boundary audits and isolated rehearsal passed. Live NBA Today checked
+at375/1440 with no overflow or console errors. All133 original record rows retain
+exact original terms. Private long-name/void graphics and pages were also inspected.
+
+DraftKings full-game points/rebounds/assists now have a complete guarded admission,
+website/Buffer-X/Discord Plays path, exact0.5u terms, final-caption fit, existing
+caps, Playbook, current-source checks and duplicate protection. The existing prop
+capture is followed by same-pass player admission even after the earlier game
+screen found no play; it adds no feed request. Grading uses a fresh post-capture
+clock, verified book settlement, sourced losing-prop injury review, explicit typed
+12-hour fallback and append-only correction receipts. Returns retain six decimals
+until display so website and Discord agree. Quarter/combo/other-book support is
+not implied. The frozen probability study implementation remains unchanged.
+
+No model is hand-enabled: natural protocol plus independent probability proof and
+30 fully book-settled games across five dates must pass. Unresolved priced cases
+cannot be omitted; stable current-season starts and fresh participation/prices
+remain required. The17:30 natural capture paired878 rows with126 forward rows,
+12Sharp/27ESPN requests and0errors. Its protocol matches the final adapter and
+three valid specs contain42 frozen forecasts, without completed qualifying proof.
+The22:12:36–22:14:08Z real selection returned0plays/0errors. No actual new NBA
+website/X/Discord publication is claimed. Existing21:00 capture/admission and later
+final runs own the next observation; the first eligible actual send/result still
+requires its real receipts. This ships the software path, not the entire NBA audit.
+
 ### October28 NBA prop grading repairs — VERIFIED LIVE, PROP SELECTION UNFINISHED
 
 Sources219a13d23/5c503e035 shipped through the standard locked release. Hosted
