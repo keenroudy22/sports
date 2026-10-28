@@ -24,6 +24,7 @@ import nba_roles
 VERSION = 'nba-primary-prop-release-v1'
 STATS = {'pts': 'points', 'reb': 'rebounds', 'ast': 'assists'}
 EASTERN = ZoneInfo('America/New_York')
+ROLE_REASON = 'Same starting role across the last three games.'
 
 
 def read_json(path):
@@ -163,7 +164,7 @@ def candidates(now, root=nba_capture.STORE, lead_minutes=60, diagnostics=None):
                     season=games[r['eventId']]['season'], kickoff=r['kickoff'], kind='role-only',
                     checkedAt=boxscores.stamp(max(boxscores.instant(injury['retrievedAt']),boxscores.instant(role['receivedAt']))),
                     headline='Stable observed current-season role',
-                    explanation='Played in each of the last three recorded games in the same starting role.',
+                    explanation=ROLE_REASON,
                     sources=[dict(url=role['source'],label='ESPN official game summary'),
                         dict(url=r['availabilitySource'],label='Official NBA participation report')])
             if (not approved or r.get('hold') or r['book'] != 'DraftKings' or not r.get('projection')
@@ -212,7 +213,7 @@ def candidates(now, root=nba_capture.STORE, lead_minutes=60, diagnostics=None):
                 oppositeOdds=r['under' if side=='over' else 'over'], book=r['book'], retrievedAt=r['sourceAt'],
                 source=review['sources'][0]['url'], rawChance=chance, chance=conservative, calibrated=True,
                 riskUnits=.5, roleChecked=True, sideVerified=True, exactLineVerified=True,
-                game=game, reasons=[reason], projection=r['projection']['value'], model=probability.VERSION,
+                game=game, reasons=list(dict.fromkeys([reason,ROLE_REASON])), projection=r['projection']['value'], model=probability.VERSION,
                 propEvidence=approved, roleReview=review, availabilitySource=r['availabilitySource']))
         except (KeyError, TypeError, ValueError, ZeroDivisionError):
             continue

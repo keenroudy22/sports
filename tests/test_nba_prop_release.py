@@ -175,3 +175,14 @@ class PropReleaseTests(unittest.TestCase):
   with patch.object(n,'card',return_value='new presentation only'):
    self.assertEqual(n.implementation_hash(),before)
    self.assertIsNotNone(n.proof('pts',NOW,self.root))
+ def test_long_player_and_research_copy_fit_after_required_x_footer(self):
+  import buffer_post as bp,social_voice,x_post
+  offer=dict(self.candidate(),player='Nickeil Alexander-Walker',publishedAt=boxscores.stamp(NOW),series='NBA Picks',
+      reasons=['A very long verified research explanation. '*12,n.ROLE_REASON])
+  with patch.object(rt,'public_rows',return_value=[offer]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(nba_capture,'step',return_value={}),patch.object(rt,'datetime',wraps=datetime) as clock:
+   clock.now.return_value=NOW;plans=rt.social_plans(NOW,{'posts':[]})
+  self.assertEqual(len(plans),1)
+  final=bp.x_ticket_copy(social_voice.finish(plans[0][2]),'play',offer['id'])
+  self.assertLessEqual(x_post.tweet_length(final),280)
+  for term in ('Nickeil Alexander-Walker OVER 20.5 points','-110','DraftKings','@Playbook','21+ only','AWY at HOM'):
+   self.assertIn(term,final)

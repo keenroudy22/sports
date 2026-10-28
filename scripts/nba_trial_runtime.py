@@ -360,6 +360,7 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
   title=f"{name('away')} at {name('home')}"
   if play.get('marketType')=='player':
    import nba_prop_release
+   title=f"{teams['away']['abbreviation']} at {teams['home']['abbreviation']}"
    selection=nba_prop_release.selection(play)
   elif play.get('marketType')=='total': selection=f"{play['direction'].upper()} {play['line']:g}"
   else:
@@ -373,7 +374,11 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
    if not reason:continue
    heading=play.get('series') or nba_pick_policy.label(boxscores.instant(play['publishedAt']))
    candidate=f"🏀 {heading}\n{title}\n{selection} ({play['odds']:+d}, {play['book']})\n{projection}\n{reason}\n#NBA"
-   if x_post.tweet_length(candidate)<=x_post.LIMIT and not x_post.x_style(candidate):
+   final_candidate=candidate
+   if play.get('marketType')=='player':
+    import social_voice
+    final_candidate=buffer_post.x_ticket_copy(social_voice.finish(candidate),'play',play['id'])
+   if x_post.tweet_length(final_candidate)<=x_post.LIMIT and not x_post.x_style(final_candidate):
     text=candidate;break
   if not text:continue
   plans.append((play['id'],'nba-trial',text,due,play['id'].lower()))
