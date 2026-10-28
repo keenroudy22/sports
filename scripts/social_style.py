@@ -6,6 +6,7 @@ import zlib
 from datetime import datetime, timezone
 
 VERSION = 'units-only-no-decimal-20261027'
+PRIVACY_EFFECTIVE = datetime(2026, 10, 25, tzinfo=timezone.utc)
 EFFECTIVE = datetime(2026, 10, 22, tzinfo=timezone.utc)
 MARKER = b'KooknSocial\x00' + VERSION.encode()
 

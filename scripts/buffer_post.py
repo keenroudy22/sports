@@ -618,8 +618,10 @@ def missed_target(guid, due, now, items=None):
     return now >= target
 
 
-def owner_slip_image(guid, kind, card_key, items=None):
-    """Only an explicitly supplied personal ticket may use its original book screenshot."""
+def owner_slip_image(guid, kind, card_key, items=None, now=None):
+    """Historical exception only; future owner art needs the native privacy check."""
+    if (now or datetime.now(timezone.utc)) >= social_style.PRIVACY_EFFECTIVE:
+        return False
     item = (items or {}).get(guid) or {}
     path = str(item.get('card') or '')
     return bool(kind == 'community' and guid.startswith('community:personal-ticket:')
@@ -694,20 +696,20 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             projection_sheet = (kind == 'sheet' and sheet_match is not None
                                 and card_key == f'sheet-{sheet_match[1].lower()}-{sheet_match[2]}')
             if pick_card.ticket_enabled(moment=due) and not projection_sheet \
-                    and not owner_slip_image(guid, kind, card_key, items) and not ticket_art_live(image):
+                    and not owner_slip_image(guid, kind, card_key, items, now=now) and not ticket_art_live(image):
                 log(f'buffer: {guid} waits: the live card is not Kitchen Ticket art')
                 continue
         # Resolve every fallible field before Buffer accepts the post. Otherwise a
         # local labeling error after createPost could leave an unlogged post that a
         # later run schedules again. Text-only posts do not enter card comparisons.
-        if image and social_style.active(now) and not owner_slip_image(guid, kind, card_key, items) and not plain_art_live(image):
+        if image and social_style.active(now) and not owner_slip_image(guid, kind, card_key, items, now=now) and not plain_art_live(image):
             log(f'buffer: {guid} waits: image has no verified current social-style marker')
             if kind == 'play':
                 stats['officialNotScheduled'] += 1
             continue
         if image:
             try:
-                card_theme = ('owner-screenshot' if owner_slip_image(guid, kind, card_key, items)
+                card_theme = ('owner-screenshot' if owner_slip_image(guid, kind, card_key, items, now=now)
                               else pick_card.card_theme(theme_moment(guid, kind, due, items)))
             except Exception:
                 card_theme = 'legacy'
@@ -980,7 +982,7 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 problems.append('retired caption voice; fresh casual revision required')
             card = entry.get('cardKey')
             image = entry.get('bufferImage') or (entry.get('discord') or {}).get('image') or (card_url(card) if card else None)
-            owner = owner_slip_image(entry['id'], 'community' if str(entry.get('kind')) == 'buffer:community' else '', card, items)
+            owner = owner_slip_image(entry['id'], 'community' if str(entry.get('kind')) == 'buffer:community' else '', card, items, now=now)
             if entry.get('card') and not owner:
                 # Discord-first official releases archive the exact attachment
                 # before pushing their report. Pages may still be deploying;

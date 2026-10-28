@@ -98,11 +98,34 @@ class ClientTests(unittest.TestCase):
         key = 'community:personal-ticket:2026-10-19-mnf'
         path = 'img/tickets/personal-mnf-2026-10-19.png'
         items = {key: {'personalTicket': True, 'card': path}}
-        self.assertTrue(bp.owner_slip_image(key, 'community', bp.x_post.SITE + path, items))
-        self.assertFalse(bp.owner_slip_image(key, 'play', bp.x_post.SITE + path, items))
-        self.assertFalse(bp.owner_slip_image(key, 'community', bp.x_post.SITE + path, {}))
-        self.assertFalse(bp.owner_slip_image(key, 'community', 'https://example.com/slip.png', items))
-        self.assertFalse(bp.owner_slip_image('official', 'community', bp.x_post.SITE + path, items))
+        self.assertTrue(bp.owner_slip_image(key, 'community', bp.x_post.SITE + path, items, now=NOW))
+        self.assertFalse(bp.owner_slip_image(key, 'play', bp.x_post.SITE + path, items, now=NOW))
+        self.assertFalse(bp.owner_slip_image(key, 'community', bp.x_post.SITE + path, {}, now=NOW))
+        self.assertFalse(bp.owner_slip_image(key, 'community', 'https://example.com/slip.png', items, now=NOW))
+        self.assertFalse(bp.owner_slip_image('official', 'community', bp.x_post.SITE + path, items, now=NOW))
+
+    def test_future_owner_screenshot_never_bypasses_privacy(self):
+        key = "community:personal-ticket:2026-10-28"
+        path = "img/tickets/personal.png"
+        items = {key: {"personalTicket": True, "card": path}}
+        self.assertFalse(bp.owner_slip_image(key, "community", bp.x_post.SITE + path, items,
+            now=datetime(2026, 10, 28, tzinfo=timezone.utc)))
+
+    def test_future_raw_owner_art_is_not_scheduled_even_when_ticket_art_matches(self):
+        now=datetime(2026,10,28,12,tzinfo=timezone.utc)
+        key='community:personal-ticket:2026-10-28'
+        path='img/tickets/personal.png'
+        items={key:dict(personalTicket=True,card=path)}
+        with mock.patch.object(bp,'live_card_url',return_value=bp.x_post.SITE+path), \
+             mock.patch.object(bp,'ticket_art_live',return_value=True), \
+             mock.patch.object(bp,'plain_art_live',return_value=False) as privacy, \
+             mock.patch.object(bp,'create_post') as create:
+            book={'posts':[]}
+            bp.schedule([(key,'community','My card: over 3.5 catches (-110)',now+timedelta(hours=1),bp.x_post.SITE+path)],
+                'x',book,now,items=items,log=lambda *_:None)
+            privacy.assert_called_once()
+            create.assert_not_called()
+            self.assertEqual(book['posts'],[])
 
     def test_channel_lookup_prefers_the_x_channel_named_like_the_account(self):
         fake = FakeBuffer()

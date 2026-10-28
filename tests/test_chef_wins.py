@@ -2,6 +2,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest.mock import Mock
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -41,6 +42,46 @@ class ChefWinsTests(unittest.TestCase):
             second = chef_wins.run(later, root, state, url='wins', send=send, log=lambda *_: None)
             self.assertEqual(second['posted'], 1)
             self.assertEqual(len(sent), 4)
+
+    def test_current_raw_slip_is_held_without_send_or_seen_receipt(self):
+        now=datetime(2026,10,28,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder:
+            root,state=Path(folder),Path(folder)/'state.json'
+            image=root/'winner.png'
+            image.write_bytes(IMAGE_BYTES['.png'])
+            original=image.read_bytes()
+            send=Mock()
+            result=chef_wins.run(now,root,state,url='wins',send=send,log=lambda *_:None)
+            self.assertEqual(result,{'posted':0,'held':1})
+            self.assertEqual(chef_wins.load(state)['seen'],{})
+            self.assertEqual(image.read_bytes(),original)
+            send.assert_not_called()
+            with self.assertRaises(chef_wins.discord_post.DiscordError):
+                chef_wins.send_file('wins',image,send=send,now=now)
+            send.assert_not_called()
+
+    def test_private_raw_slip_does_not_block_later_safe_native_graphic(self):
+        import social_style
+        now=datetime(2026,10,28,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder:
+            root,state=Path(folder),Path(folder)/'state.json'
+            (root/'raw.jpg').write_bytes(IMAGE_BYTES['.jpg'])
+            (root/'native.png').write_bytes(IMAGE_BYTES['.png']+social_style.MARKER)
+            send=Mock(return_value=(204,b''))
+            result=chef_wins.run(now,root,state,url='wins',send=send,log=lambda *_:None)
+            self.assertEqual(result,{'posted':1,'held':1})
+            self.assertEqual(len(chef_wins.load(state)['seen']),1)
+            send.assert_called_once()
+
+    def test_current_native_privacy_checked_graphic_can_send(self):
+        import social_style
+        now=datetime(2026,10,28,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder:
+            image=Path(folder)/'winner.png'
+            image.write_bytes(IMAGE_BYTES['.png']+social_style.MARKER)
+            send=Mock(return_value=(204,b''))
+            chef_wins.send_file('wins',image,send=send,now=now)
+            send.assert_called_once()
 
     def test_missing_webhook_holds_and_alerts_once(self):
         alerts = []

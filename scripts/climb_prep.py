@@ -1,7 +1,7 @@
 """Private next-day Climb shortlist from current captured evidence; never a release."""
 import argparse
 import json
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, timezone, timedelta
 from pathlib import Path
 import boxscores
 import gates
@@ -52,6 +52,8 @@ def prepare(ctx, now, day=None):
     out=[];supported_legs=[];watch_legs=[]
     confirmed=ladder.confirmed_at()
     for game in sorted(ctx.games.values(),key=lambda g:(g['kickoff'],g['id'])):
+        if game.get('state') != 'pre' or gates.when(game['kickoff']) <= now:
+            continue
         if game.get('league') not in ('NFL','CFB') or gates.eastern_date(gates.when(game['kickoff'])) != day:
             continue
         snap=ctx.snapshot(game['id'])
@@ -108,9 +110,10 @@ def prepare(ctx, now, day=None):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',default='work/climb-prep.json')
+    parser.add_argument('--target-date',type=date.fromisoformat)
     args=parser.parse_args()
     now=datetime.now(timezone.utc)
-    report=prepare(gates.Stores().as_of(now),now)
+    report=prepare(gates.Stores().as_of(now),now,day=args.target_date)
     boxscores.write_json(Path(args.output),report)
     print(json.dumps(dict(path=args.output,targetDate=report['targetDate'],games=len(report['games']),
         alternateSpreads=sum(len(g['alternateSpreads']) for g in report['games']),

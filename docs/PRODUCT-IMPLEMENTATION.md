@@ -5416,3 +5416,38 @@ kookn-chef-record-mobile-2026-10-27.png and
 kookn-chef-record-desktop-2026-10-27.png. Browser override reset and Record tab
 retained. These verification notes remain dev metadata for the next ordinary
 release; no second deployment solely to publish the receipt.
+
+
+### October28 overnight — original-slip privacy guard, release pending
+
+Close the remaining original-screenshot exemption after the October25 privacy
+cutover. Buffer scheduling and private-queue style audit require the same current
+native graphic check for owner tickets as other house art; the historical exact
+exception remains clock-bound. Sent/unknown provider states retain protection.
+Delayed Discord owner-slip uploads cannot bypass verification via an external
+embed. Chef-wins intake holds raw originals without a sent/seen receipt, preserves
+their bytes and isolates them so a later checked native graphic can still send.
+Direct send_file enforces the same check. No screenshot OCR claim, inferred units,
+new image mutation, historical artwork change or forced ticket. Regressions cover
+zero sends/unchanged originals, safe native intake, isolation, Buffer attestation
+failure and Discord failed-download/embed refusal.
+
+Climb preparation CLI now accepts --target-date and filters started/non-pregame
+fixtures; true-clock October28 packet covers2CFB games/89alternate spreads with
+zero supported legs. Ordinary packet covers29priced rows (8sides/4totals/17props),
+12NBA games/0fresh props. Morning6:45/8:30 must refresh all evidence; none of this
+is an admission or future delivery promise.
+
+Live133-row record reconciles with published history at04:50:58Z. Tuesday's
+three released straights are0–3/−1.50u, all official Discord results sent.
+Withdrawn Sam Houston remains in history at original+180/0.5u and is not reposted.
+Prior dailyFinal actuallysentOct27 13:05:28.823Z. Current dailyFinal13:03Z and
+weekly13:23Z are accepted, not delivered. Current Buffer2849/51temporary essential
+room; normal2700 rolling room if no more requests nowNov9 13:52:26.250073UTC.
+Approved2900expiresNov6 13:05UTC, analytics remain paused, provider balance
+unknown; November1 calendar rollover does not clear rolling hold.
+
+Full release/hosted/live receipts remain pending. Linked combined straight-card
+grading is the next finite technical slice after privacy verification; model
+proof and quarter holds remain separate. Evidence:work/overnight-20261028-* and
+owner-next-day-20261028.json/owner-climb-20261028.json.

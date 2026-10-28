@@ -11,6 +11,7 @@ from pathlib import Path
 
 import discord_post
 import gates
+import social_style
 from social_copy import with_age_notice
 
 INBOX = Path('/Users/keen/Documents/ChatGPT/Kook\'n/chef-wins')
@@ -74,7 +75,10 @@ def pending(folder=INBOX, state_path=STATE):
     return [path for path in images(folder) if digest(path) not in seen]
 
 
-def send_file(url, path, send=discord_post.http_send):
+def send_file(url, path, send=discord_post.http_send, now=None):
+    # Raw slips can expose dollars and bet IDs; keep originals private and pending.
+    if (now or datetime.now(timezone.utc)) >= social_style.PRIVACY_EFFECTIVE and not social_style.current_png(Path(path)):
+        raise discord_post.DiscordError("owner slip needs a privacy-checked native graphic; original held")
     data = Path(path).read_bytes()
     if not data or len(data) > discord_post.MAX_IMAGE_BYTES:
         raise discord_post.DiscordError('owner slip has an invalid image size')
@@ -107,10 +111,15 @@ def run(now=None, folder=INBOX, state_path=STATE, url=None, send=discord_post.ht
     already = sum(row.get('day') == local_day
                   for row in state['seen'].values() if isinstance(row, dict))
     posted = 0
-    for path in waiting[:max(0, MAX_DAY - already)]:
+    for path in waiting:
+        if posted >= max(0, MAX_DAY - already):
+            break
+        if now >= social_style.PRIVACY_EFFECTIVE and not social_style.current_png(path):
+            log(f'chef wins: {path.name} held: original needs a privacy-checked native graphic')
+            continue
         key = digest(path)
         try:
-            send_file(url, path, send)
+            send_file(url, path, send, now=now)
         except (OSError, discord_post.DiscordError) as error:
             log(f'chef wins: {path.name} held ({type(error).__name__})')
             break

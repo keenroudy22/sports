@@ -137,11 +137,17 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
             'content': final_text}
     headers = {'Content-Type': 'application/json', 'User-Agent': 'KooknSports/1.0'}
     if image_url:
+        # Registered raw owner slips must not bypass privacy through a delayed mirror.
+        owner_slip = "/img/tickets/" in str(image_url)
         try:
             image = fetch(image_url)
         except DiscordError:
+            if owner_slip:
+                raise DiscordError('owner slip unavailable for privacy verification; original held')
             body['embeds'] = [{'image': {'url': image_url}}]
         else:
+            if owner_slip and not (image[0].startswith(b'\x89PNG\r\n\x1a\n') and social_style.MARKER in image[0][:256]):
+                raise DiscordError('owner slip needs a privacy-checked native graphic; original held')
             body['attachments'] = [{'id': 0, 'filename': image[2]}]
             body, content_type = multipart(body, image)
             headers['Content-Type'] = content_type

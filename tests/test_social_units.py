@@ -70,6 +70,15 @@ class SocialUnitsTests(unittest.TestCase):
                 discord_post.send_message('https://example.com/hook',private,send=send)
         send.assert_not_called()
 
+    def test_raw_owner_discord_slip_cannot_fall_back_to_unchecked_embed(self):
+        send=Mock()
+        url='https://keenroudy.com/sports/img/tickets/personal.png'
+        for fetch in (Mock(return_value=(b'private screenshot','image/png','slip.png')),
+                      Mock(side_effect=discord_post.DiscordError('unavailable'))):
+            with self.assertRaises(discord_post.DiscordError):
+                discord_post.send_message('hook','My card cashed',url,send=send,fetch=fetch)
+        send.assert_not_called()
+
     def test_units_reject_missing_or_invalid_amounts(self):
         for value in (None,True,float('nan'),-5):
             with self.assertRaises(ValueError):social_units.climb(value)

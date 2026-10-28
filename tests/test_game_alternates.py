@@ -66,6 +66,7 @@ class GameAlternateTests(unittest.TestCase):
     def test_next_day_packet_is_planning_only_with_exact_holds(self):
         game=copy.deepcopy(GAME)
         game['kickoff']='2026-10-23T23:00:00Z'
+        game['state']='pre'
         ctx=SimpleNamespace(games={'CFB-1':game},prop_odds={},snapshot=lambda _:None,
                             policy={},now=NOW)
         report=climb_prep.prepare(ctx,NOW)
@@ -75,6 +76,17 @@ class GameAlternateTests(unittest.TestCase):
         self.assertIn('No complete',report['games'][0]['coverageHold'])
         self.assertFalse(report['releaseReady'])
         self.assertEqual(report['twoLegOptions'],[])
+
+    def test_current_day_prep_excludes_started_and_nonpregame_fixtures(self):
+        day=NOW.date()
+        for state,kickoff in [('pre', '2026-10-22T17:00:00Z'),
+                              ('in', '2026-10-22T23:00:00Z'),
+                              ('post', '2026-10-22T23:00:00Z')]:
+            ctx=SimpleNamespace(games={'CFB-1':dict(GAME,state=state,kickoff=kickoff)},
+                prop_odds={},snapshot=lambda _:None,policy={},now=NOW)
+            self.assertEqual(climb_prep.prepare(ctx,NOW,day=day)['games'],[])
+        ctx.games['CFB-1'].update(state='pre',kickoff='2026-10-22T23:00:00Z')
+        self.assertEqual(len(climb_prep.prepare(ctx,NOW,day=day)['games']),1)
 
     def test_two_leg_prep_never_combines_same_game_book_or_league_or_claims_quote(self):
         def leg(g,**changes):
