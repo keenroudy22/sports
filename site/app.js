@@ -1386,6 +1386,7 @@
       ? tape('Hit history', `<div data-prop-history data-league="${esc(pick.league)}" data-athlete="${esc(pick.athleteId)}" data-stat="${esc(C.marketKey(pick))}" data-line="${esc(pick.line)}" data-dir="${esc(pick.direction || 'over')}" data-game="${esc(pick.gameId || '')}" data-before="${pick.result || started ? esc(C.dayOf(pick.kickoff) || '') : ''}"${hold ? ' data-held="1"' : ''}></div>`)
       : vm.history ? tape('Hit history', `<p class="small">${esc(vm.history)} ${esc((pick.reasoning || {}).historyNote || 'History, not a probability.')}</p>`) : '';
     return `${back}<p class="small muted">${esc(when(vm.kickoff))}${pick.quotedAt && vm.mode === 'open' ? ` · price quoted ${esc(ago(pick.quotedAt))}` : ''}</p>
+      ${withdrawalNotice(pick) ? `<div class="card on-felt" style="margin-top:14px"><p><b>Recommendation withdrawn.</b> Original published result still counts.</p></div>` : ''}
       <div class="kt-page"><div style="margin-top:14px">${rail([pick], { onPage: true, lines: catalog?.lines, season: (today.season || {})[state.league] })}</div>
       ${result ? tape('Result', result) : ''}${price}${held}${stake}
       ${notices.length ? `<div class="card on-felt" style="margin-top:14px;display:grid;gap:8px">${notices.map(n => `<p class="small">${n}</p>`).join('')}</div>` : ''}

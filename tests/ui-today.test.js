@@ -920,6 +920,7 @@ test('Today pulled strip shares public delivery eligibility with Record', async 
 
 test('withdrawn settled play shows its withdrawal on receipt, slip and detail without erasing loss', async () => {
   const pick={...prop,id:'removed',result:'loss',units:-0.5,riskUnits:0.5,
+    delivery:{discordAt:'2026-10-10T13:00:00Z',xAt:'2026-10-10T13:15:00Z'},
     entryNote:'Off the card: we withdrew this recommendation after review. Our model favors Missouri State.'};
   const before=structuredClone(pick);
   const {api}=loadApp('#record',{}, {today:{...TODAY,picks:[pick]}});
@@ -930,6 +931,9 @@ test('withdrawn settled play shows its withdrawal on receipt, slip and detail wi
   const page=await api.views.pick({id:pick.id});
   assert.match(page,/Recommendation withdrawn/);
   assert.match(page,/Our model favors Missouri State/);
+  assert.ok(page.indexOf('Recommendation withdrawn.')<page.indexOf('class="kt-page"'));
+  assert.match(page,/Discord sent.*X sent/);
+  assert.doesNotMatch(page,/No delivery evidence recorded/);
   assert.equal(C.unitsFor(pick),-0.5);
   assert.deepEqual(pick,before);
   assert.doesNotMatch(ctx.receipt({...pick,entryNote:'Off the card: price moved.'},new Map()),/Recommendation withdrawn/);

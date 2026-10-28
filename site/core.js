@@ -858,11 +858,11 @@
   const shardOf = (id, shards) => Number(id) % shards;
 
   const deliveryText = (pick, now = Date.now()) => {
-    if (pick.result || pick.historicalImport) return '';
+    if (pick.historicalImport) return '';
     const d = pick.delivery || {}, parts = [];
     if (d.discordAt) parts.push('Discord sent');
     if (d.xAt) parts.push(`X sent ${whenShort(d.xAt)}`);
-    else if (!d.cancelled && !d.failed) parts.push('Posted here first · X to follow');
+    else if (!pick.result && !d.cancelled && !d.failed) parts.push('Posted here first · X to follow');
     return parts.join(' · ');
   };
 

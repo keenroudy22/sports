@@ -681,3 +681,11 @@ test('Chef records are separate subsets of official results with original stakes
   assert.equal(C.recordBreakdown(rows).lanes.chef_pick.wins,1,'private and parlay rows cannot inflate Chef record');
   assert.equal(C.recordBreakdown(rows).lanes.chef_pick.units,1,'promo credits stay outside Chef units');
 });
+
+
+test('settlement keeps confirmed delivery clocks and never promises a future X post', () => {
+  const p={result:'loss',delivery:{discordAt:'2026-10-27T15:49:24Z',xAt:'2026-10-27T16:07:57Z'}};
+  assert.match(C.deliveryText(p),/Discord sent.*X sent/);
+  assert.doesNotMatch(C.deliveryText(p),/X to follow/);
+  assert.equal(C.deliveryText({result:'loss'}),'');
+});
