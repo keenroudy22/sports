@@ -290,6 +290,22 @@
       reason: 'Illustrative: separate-game quotes multiplied. The sportsbook sets the actual ticket price.' };
   };
 
+  /* Compare a single current quote; means and past hit rates are not probabilities.
+     Only the board's explicitly calibrated, unheld football chance supplies EV. */
+  const compareTicketLeg = (row, now = Date.now()) => {
+    const g = row.grade || {}, numeric = n => typeof n === 'number' && Number.isFinite(n);
+    const validPrice = numeric(row.odds) && Math.abs(row.odds) >= 100;
+    const current = !row.unchecked && !row.changed && !row.missing && !row.closed && row.freshness !== 'stale' && eligible(row, now) && validPrice;
+    const projection = numeric(g.projection) ? g.projection : numeric(row.projection) ? row.projection
+      : numeric((row.projection || {}).value) ? row.projection.value : null;
+    const chance = current && ['NFL', 'CFB'].includes(row.league) && g.calibrated === true
+      && !g.hold && !row.hold && numeric(g.chance) && g.chance > 0 && g.chance < 1 ? g.chance : null;
+    return { projection, needed: current ? 1 / decimal(row.odds) : null, chance,
+      ev: chance == null ? null : chance * decimal(row.odds) - 1,
+      bookUrl: ({ draftkings: 'https://sportsbook.draftkings.com/', fanduel: 'https://sportsbook.fanduel.com/',
+        bet365: 'https://www.bet365.com/', fanatics: 'https://sportsbook.fanatics.com/' })[bookName(row.book)] || null };
+  };
+
   const ticketText = selected => ["Kook'n Sports: personal draft, not an official ticket",
     ...selected.map((row, i) => `${i + 1}. ${row.title || row.player || 'Line'} | ${row.book || 'Book unavailable'} ${odds(row.odds)} | seen ${row.observedAt || 'time unavailable'}`),
     'Check every market, price and the sportsbook’s ticket total yourself.'].join('\n');
@@ -868,6 +884,6 @@
 
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
-    rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
+    rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, compareTicketLeg, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

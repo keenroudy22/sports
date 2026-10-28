@@ -184,7 +184,10 @@ def summarize(forecasts, outcomes, now=None):
 def from_stores(root, now=None):
     def read(folder):
         return [r for p in sorted((Path(root)/folder).glob('*.jsonl')) for r in boxscores.read_store(p)]
-    return summarize(read('player-forecasts'), read('player-outcomes'), now)
+    report = summarize(read('player-forecasts'), read('player-outcomes'), now)
+    import nba_prop_probability
+    report['probabilityStudy'] = nba_prop_probability.review(Path(root), now or datetime.now(timezone.utc))
+    return report
 
 
 def markdown(report):
@@ -204,5 +207,7 @@ def markdown(report):
         lines.append('- No identical-capture model pairs available; separate model samples do not establish improvement.')
     for row in report.get('reviewedMinutes', []):
         lines.append(f"- Frozen minutes comparison {row['stat']} / season {row['season']} / {row['model']}: unchanged baseline error {row['baselineMAE']:g}, reviewed minutes error {row['reviewedMAE']:g}; {row['comparisons']} comparisons / {row['games']} games. Both values saved inside the same pregame forecast; no reconstructed baseline price or returns. Not promotion evidence by itself.")
+    for row in report.get('probabilityStudy', []):
+        lines.append(f"- Prospective probability study {row['stat']}: {row['games']} untouched games / {row['easternDates']} Eastern dates; equal-game squared-probability error improvement vs fair market {row['brierImprovement']}. Research only: priced returns and admission adapter remain required.")
     lines.append('- '+report['decision'])
     return '\n'.join(lines)+'\n'

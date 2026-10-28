@@ -689,3 +689,15 @@ test('settlement keeps confirmed delivery clocks and never promises a future X p
   assert.doesNotMatch(C.deliveryText(p),/X to follow/);
   assert.equal(C.deliveryText({result:'loss'}),'');
 });
+
+ test('ticket comparison distinguishes projection, price need and validated probability', () => {
+  const row = leg('compare', 150, { league: 'NFL', line: 2.5, grade: { projection: 2.6, calibrated: true, chance: .45 } });
+  const c = C.compareTicketLeg(row, now);
+  assert.equal(c.projection, 2.6); assert.equal(c.needed, .4); assert.equal(c.ev, .125);
+  assert.equal(c.bookUrl, 'https://sportsbook.draftkings.com/');
+  for (const extra of [{ league: 'NBA' }, { freshness: 'stale' }, { changed: true }, { unchecked: true }, { hold: 'injury' }, { odds: 0 }, { grade: { projection: 3.4, chance: .9 } }]) {
+    assert.equal(C.compareTicketLeg({ ...row, ...extra }, now).ev, null);
+  }
+  assert.equal(C.compareTicketLeg({ ...row, book: 'unknown' }, now).bookUrl, null);
+  assert.equal(C.compareTicketLeg({ ...row, grade: null, projection: { value: 3.4 } }, now).projection, 3.4);
+});

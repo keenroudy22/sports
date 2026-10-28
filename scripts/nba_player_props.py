@@ -198,7 +198,14 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
         lambda r:(r['eventId'],r['athleteId'],r['quarter'],r['stat'],r['book'],r['line'],r['kind']),keep_observations=True)
     recorded=record_forward(stamp,root)
     graded=grade(stamp,root)
-    return {'requests':count,'espnRequests':budget.requests,'captured':captured,'paired':len(quotes),
+    probability = {'admissionReady': False, 'recorded': 0}
+    if fetch is sharp_odds.fetch:
+        import nba_prop_probability
+        try:
+            probability = nba_prop_probability.capture(Path(root), stamp)
+        except (OSError, ValueError, KeyError, TypeError):
+            errors.append('probability-shadow-unavailable')
+    return {'probabilityShadow': probability, 'requests':count,'espnRequests':budget.requests,'captured':captured,'paired':len(quotes),
             'quarterPaired':len(quarters),'quarterCaptured':quarter_captured,'quarterPartial':quarter_partial,
             'partial':len(done)<len(BOOKS),'ignored':ignored,'errors':errors,'forwardRecorded':recorded,'forwardGraded':graded}
 

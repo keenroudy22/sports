@@ -5712,3 +5712,23 @@ combined summary/linkedFinal, future qualifyingClimb, independent NBA validation
 and natural hook follow-through stay observing. Full receipt:
 work/oct28-platform-rework-verified.json. Verification metadata remains ondev for
 next ordinary safe release; no duplicate deployment just for these notes.
+
+### October28 ticket comparison and prospective NBA probability study — release candidate
+
+Owner clarified build/compare, then open sportsbook; Kook'n does not accept wagers.
+Existing My Ticket now separates projection, exact book line, price break-even and
+estimated EV. EV requires the current unheld explicitly calibrated football board
+chance; stale/changed/unverified quotes and NBA cannot supply it. Book links use
+fixed trusted home URLs, never an invented prefilled slip. No joint-ticket EV or
+same-game multiplied quote is claimed. Previous cached core has a safe fallback.
+
+New nba-residual-market-shadow-v1 freezes equal-game residual distributions from
+at least30 already-seen games separately for points/rebounds/assists. The50%fair-
+market anchor and method are fixed before future outcomes; no automatic refit.
+First actual real-feed capture saves immutable specs and prospective predictions
+within existing request/time budgets. Injected replay feeds cannot supply proof.
+Earlier captures/training games cannot be test observations. Weekly review shows
+future equal-game squared-probability error against fair market, Eastern dates
+and explicit non-admission. This is a research experiment, not NBA approval,
+settlement policy, priced-return validation or a public prop adapter. No forecast,
+record, stake, cap or validation threshold is rewritten to manufacture a play.
