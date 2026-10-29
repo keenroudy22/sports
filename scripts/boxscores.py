@@ -429,6 +429,10 @@ def build_record(league, event_id, summary, plays, odds, retrieved_at, failures=
                 quality['check'][key] = {
                     'box': sum(p[box] for p in compared), 'pbp': sum(derived[key](p) for p in players.values()),
                     'players': len(compared), 'exact': sum(p[box] == derived[key](p) for p in compared)}
+    first_quarter = {}
+    if league == 'NFL' and quality['plays'] == 'ok':
+        import football_first_quarter
+        first_quarter = football_first_quarter.extract(plays, box_players(summary), stats)
     season = header.get('season', {})
     venue = summary.get('gameInfo', {}).get('venue') or {}
     record = {'extractor': EXTRACTOR, 'league': league, 'eventId': str(event_id),
@@ -440,6 +444,8 @@ def build_record(league, event_id, summary, plays, odds, retrieved_at, failures=
               'players': sorted(players.values(), key=lambda p: (p['team'], int(p['id']))),
               'market': market(odds), 'quality': quality,
               'sources': {k: v for k, v in urls(league, event_id).items()}, 'retrievedAt': retrieved_at}
+    if first_quarter:
+        record['firstQuarter'] = first_quarter
     record['hash'] = content_hash(record)
     return record
 

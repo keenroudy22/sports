@@ -1,3 +1,21 @@
+### October29 NFL first-quarter stats — IMPLEMENTED, RELEASE VERIFICATION PENDING
+
+Owner requested1Q website stats after tonight's Panthers/Packers discussion. NFL
+player pages now have separate1Q rushing/receiving logs and averages, with per-family
+sample counts, season/window filters and ESPN source links. Complete unique plays,
+explicit periods/teams, exact team play totals and per-player family reconciliation
+are mandatory. Unresolved lateral/yardage families stay unknown; actual zero and
+negative values remain. Overtime cannot leak into Q1. Full-game values, predictions,
+prices and published records are unchanged. CFB/NBA/quarter models are not implied.
+
+Existing future final captures derive Q1 from the same ESPN plays response, with no
+new scheduled request. A bounded6-game plays-only enrichment appended3 verified
+records (56 player/game rows) and held3 unreconciled games; original store bytes
+remain covered by its append-only ledger. Tonight's Jacobs/Watson/Kraft have one
+verified current-season game, McMillan two; these are explicitly small samples,
+not a claimed hit rate or validated quarter forecast. Full/clean/release and hosted
+mobile/desktop receipts must finish before this feature is called live.
+
 ### October28 NBA prop posting path — VERIFIED LIVE, MODEL EVIDENCE OBSERVING
 
 Source5b45696c6 installed through the standard locked release. Hosted40776230436

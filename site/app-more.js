@@ -278,7 +278,22 @@
     const view = (LOG_VIEW[pos] || LOG_VIEW[pos === 'FB' ? 'RB' : 'WR']).filter(([label]) => !(label === 'Rec' && stat === 'rec') && !(label === 'Car' && stat === 'car'));
     const chalkLog = log.length ? `<table class="kt-log"><thead><tr><th scope="col">Game</th>${view.map(([label]) => `<th scope="col">${esc(label)}</th>`).join('')}<th scope="col">${esc(unitFor[unitFor.length - 1])}</th></tr></thead><tbody>${log.map(r => { const v = read(r, stat);
       return `<tr><th scope="row"><a class="plain-link" href="#game/${esc(league)}-${esc(r[0])}"><b>${r[7] === 0 ? 'at' : 'vs'} ${esc(abbr(r[6]))}</b></a><span>${esc(md(r))}${r[4] === 3 ? ', postseason' : ''}</span></th>${view.map(([, f]) => `<td>${esc(f(r) ?? '–')}</td>`).join('')}<td class="y">${v == null ? '–' : esc(valueText(v))}</td></tr>`; }).join('')}</tbody></table>` : '<p class="kt-cap">No games to show.</p>';
-    return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}
+    const q1GameIds = new Set(recent.map(r => String(r[0])));
+    const q1Rows = league === 'NFL' ? (data.firstQuarter || []).filter(r => r.seasonType === 2 &&
+      q1GameIds.has(String(r.eventId)) && (scope === 'all' || Number(r.season) === Number(scope === 'current' ? currentSeason : scope)))
+      .sort((a, b) => String(a.date).localeCompare(String(b.date))) : [];
+    const q1Shown = q1Rows;
+    const q1Cols = [['car', 'rushYds', 'Rushing', 'car'], ['rec', 'recYds', 'Receiving', 'rec']];
+    const q1Average = k => { const v = q1Shown.map(r => r.stats?.[k]).filter(isNum);
+      return v.length ? C.fixed(v.reduce((a, b) => a + b, 0) / v.length) : '–'; };
+    const q1 = league === 'NFL' ? `<section class="card" id="first-quarter" style="margin-top:18px"><h2>1Q player stats</h2>
+      <p class="small muted">First quarter only · ${esc(scopeLabel)}. Observed rushing and receiving, not projections or betting probabilities. ${q1Shown.length} verified game${q1Shown.length === 1 ? '' : 's'} in this selection; missing games are excluded, not zero. The player page’s season and sample filters apply.</p>
+      ${q1Shown.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${q1Cols.map(([, , label]) => `<th class="n">${label}</th>`).join('')}</tr></thead><tbody>
+      <tr><th>Average · sample</th>${q1Cols.map(([count, yards, , unit]) => `<td class="n">${esc(q1Average(count))} ${unit}<br>${esc(q1Average(yards))} yds<br><small>${q1Shown.filter(r => isNum(r.stats?.[count])).length} games</small></td>`).join('')}</tr>
+      ${q1Shown.slice().reverse().map(r => `<tr><th><a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(r.date)} · ${esc(abbr(r.opp))} ↗</a></th>${q1Cols.map(([count, yards, , unit]) => `<td class="n"><b>${isNum(r.stats?.[count]) ? esc(r.stats[count]) : '–'}</b> ${unit}<br><b>${isNum(r.stats?.[yards]) ? esc(r.stats[yards]) : '–'}</b> yds</td>`).join('')}</tr>`).join('')}
+      </tbody></table></div><p class="small muted">ESPN play-by-play, reconciled against full-game official player and team totals. Negative yards and actual zeroes are preserved. Latest source check ${esc(clock(q1Shown[q1Shown.length - 1].checkedAt))}.</p>`
+      : '<p class="small muted">No verified 1Q rushing/receiving games stored for this selection yet.</p>'}</section>` : '';
+    return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}${q1}
       ${filtersFold('player', showing, `${seasonSelect}${seg('pwin', [['all', 'All games'], ['last5', 'Last 5'], ['last10', 'Last 10'], ['last20', 'Last 20']], win)}`)}
       ${!recent.length ? `<p class="btn-row">${seasons.filter(x => x !== Number(currentSeason)).slice(0, 1).map(x => `<button type="button" class="btn small" data-set="pseason:${x}">Show ${x}</button>`).join('')}<button type="button" class="btn small" data-set="pseason:all">All seasons</button></p>` : ''}
       ${big}${matchup}${opponentTrend && opponentTrendText(opponentTrend) ? `<p class="kt-matchup ${opponentTrend.opponentAdjustment?.against ? 'red' : ''}">${esc(opponentTrendText(opponentTrend))}</p>` : ''}

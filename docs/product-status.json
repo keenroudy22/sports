@@ -1,7 +1,16 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T05:05:20.501580+00:00",
+  "updatedAt": "2026-10-29T12:44:34.406436+00:00",
   "items": [
+    {
+      "id": "O-20261029-FIRSTQUARTER",
+      "title": "Show verified NFL first-quarter rushing and receiving player logs",
+      "status": "in_progress",
+      "owner": "agent",
+      "next": "Finish full/clean suites, locked deployment and hosted/mobile verification. Keep unknown quarter families absent; preserve all full-game stats and records.",
+      "doneWhen": "NFL player pages show sourced Q1 carries, rush yards, catches and receiving yards with per-stat samples and season/window isolation. Existing final capture populates without extra scheduled reads; hosted/live release verified.",
+      "evidence": "Parser and player view implemented;6-game bounded plays-only enrichment appended3 verified finals, held3. Negative/zero/unknown, period, identity, full-game separation and rendering tests pass. No quarter model or automatic ticket approval."
+    },
     {
       "id": "O-20261028-NBAREGULAR",
       "title": "Regular NBA picks and honest current-role comparisons",

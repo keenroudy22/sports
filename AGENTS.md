@@ -1,3 +1,17 @@
+# October29 owner — observed NFL first-quarter player stats
+
+NFL player pages expose a separate1Q rushing/receiving game log, averages and
+per-stat sample counts. Extract only from complete uniquely identified ESPN plays;
+require known periods/teams, exact full-game team play counts and per-player
+rushing/receiving family reconciliation. Unknown or ambiguous families stay absent,
+never zero-filled; preserve true zeroes, negative yards and overtime separation.
+The existing final box-score capture adds this field without extra scheduled reads.
+An explicit six-game plays-only historical enrichment appended three verified
+records and held three; original lines/forecasts/picks remain unchanged. The public
+panel respects the same regular-season and game-window selection as full-game logs.
+This is observed NFL history, not quarter projections, priced EV, CFB/NBA support
+or automatic quarter parlay approval. Do not divide full-game estimates by four.
+
 # October28 owner — NBA prop delivery adapter, model approval unchanged
 
 The owner explicitly requests the prop posting path while natural evidence grows.

@@ -85,7 +85,7 @@ const playerFiles = (held = true) => {
     'data/app/games/CFB-1.json': { forecast: { players: { home: { players: [{ id: athlete, att: [23.7, 15, 32], passYds: [167.1, 110, 230], ...(held ? { underReview: ['att', 'passYds', 'cmp'] } : {}) }] } } } },
   };
 };
-const playerPage = async (held, change = null) => {
+const playerPage = async (held, change = null, league = 'CFB') => {
   const files = playerFiles(held);
   if (change) change(files);
   const el = () => ({ innerHTML: '', options: [], value: '', dataset: {}, classList: { toggle() {}, add() {}, remove() {} }, querySelector: () => null, querySelectorAll: () => [], setAttribute() {}, focus() {} });
@@ -100,7 +100,7 @@ const playerPage = async (held, change = null) => {
   vm.runInNewContext(source, sandbox, { filename: 'site/app.js' });
   vm.runInNewContext(moreSource, sandbox, { filename: 'site/app-more.js' });
   const api = sandbox.module.exports;
-  return api.views.player(api.model.resolve('#player/CFB/4870883'));
+  return api.views.player(api.model.resolve(`#player/${league}/4870883`));
 };
 
 test('Under review shows no projection, chance or edge, and quotes only the saved recent volumes', async () => {
@@ -180,4 +180,28 @@ test('long two-line names stay at 24 px or less so they clear the matchup row', 
   assert.ok(M.nameSize('Marvin Harrison-Washington') <= 24);
   assert.ok(M.nameSize('Marcellous Hawkins Jr.') <= 24);
   assert.equal(M.nameSize('TK King'), 35);
+});
+
+
+test('NFL player Q1 panel preserves zero/negative and unknown, excludes other seasons, and does not borrow full-game values', async () => {
+  const page = await playerPage(true, files => {
+    for (const key of Object.keys(files)) {
+      if (key.includes('CFB')) files[key.replaceAll('CFB', 'NFL')] = JSON.parse(JSON.stringify(files[key]).replaceAll('CFB','NFL'));
+    }
+    const index = files['data/app/players/NFL.json']; index.shards = 32;
+    const source = files[`data/app/players/NFL/${4870883 % 128}.json`];
+    files[`data/app/players/NFL/${4870883 % 32}.json`] = source;
+    source.players['4870883'].firstQuarter = [
+      {eventId:'e1',date:'2026-09-05',season:2026,seasonType:2,opp:'166',stats:{car:1,rushYds:-2,rec:0,recYds:0},source:'https://www.espn.com/nfl/boxscore/_/gameId/e1',checkedAt:'2026-09-06T12:00:00Z'},
+      {eventId:'e2',date:'2026-09-12',season:2026,seasonType:2,opp:'166',stats:{rec:1,recYds:7},source:'https://www.espn.com/nfl/boxscore/_/gameId/e2',checkedAt:'2026-09-13T12:00:00Z'},
+      {eventId:'old',date:'2025-09-05',season:2025,seasonType:2,opp:'166',stats:{rushYds:999},source:'https://www.espn.com',checkedAt:'2025-09-06T12:00:00Z'},
+      {eventId:'future',date:'2026-12-01',season:2026,seasonType:2,opp:'166',stats:{rushYds:888},source:'https://www.espn.com',checkedAt:'2026-12-02T12:00:00Z'}];
+  }, 'NFL');
+  const q1 = page.split('id="first-quarter"')[1].split('</section>')[0];
+  assert.match(q1,/2 verified games/);
+  assert.match(q1,/>-2</);
+  assert.match(q1,/>0</);
+  assert.match(q1,/>–</);
+  assert.doesNotMatch(q1,/999|888|301|367/);
+  assert.match(q1,/not projections or betting probabilities/);
 });

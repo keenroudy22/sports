@@ -728,6 +728,19 @@ def season_leaders(logs, index, season):
 def build_players(league, records, snaps, teams_meta, trends=None):
     logs = features.player_logs(records)
     index, shards = [], defaultdict(dict)
+    first_quarter = defaultdict(list)
+    for g in records:
+        if g.get('league') != 'NFL':
+            continue
+        for player in g.get('players', []):
+            pid = player['id']
+            if pid in g.get('firstQuarter', {}):
+                first_quarter[pid].append({
+                    'eventId': g['eventId'], 'date': day(g['kickoff']), 'season': g['season'],
+                    'seasonType': g['seasonType'], 'team': player['team'],
+                    'opp': g['away']['id'] if player['team'] == g['home']['id'] else g['home']['id'],
+                    'stats': g['firstQuarter'][pid], 'source': g['sources']['page'],
+                    'checkedAt': g['retrievedAt']})
     trend_contexts = defaultdict(dict)
     for row in trends or []:
         if row.get('league') != league or row.get('kind') != 'main' or not row.get('athleteId'):
@@ -755,7 +768,8 @@ def build_players(league, records, snaps, teams_meta, trends=None):
         index.append([pid, name, pos, team, teams_meta.get((league, team), {}).get('abbr'), day(last['kickoff']), len(rows)])
         upcoming = list(trend_contexts.get(str(pid), {}).values())
         shards[int(pid) % SHARDS[league]][pid] = {'name': name, 'pos': pos, 'rows': table,
-                                                  'upcomingTrends': upcoming}
+                                                  'upcomingTrends': upcoming,
+                                                  'firstQuarter': first_quarter.get(pid, [])}
     index.sort(key=lambda row: (row[1] or '', row[0]))
     return index, shards, season_leaders(logs, index, latest_season), latest_season
 
