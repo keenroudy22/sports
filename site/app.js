@@ -1680,7 +1680,7 @@
         ${r.qbNews ? `<p class=caution>QB news: ${esc(r.qbNews)}</p>` : ''}
         ${r.kind !== 'milestone' ? `<p class="small">${esc(researchPrice(priceMatch(r, catalog?.lines) || {}))}</p>` : ''}
         <p class="small muted">${esc(trendText(r))} · ${esc(windowLabel)}${quarter ? ` · ${r.games} of ${r.selectedGames || r.games} selected games available` : ''}${r.games < 5 ? ' · small sample' : ''}${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
-        ${quarter && r.quarterRoleCaution ? '<p class="small caution">Current role or quarterback context differs from this history; check availability and usage before building a ticket.</p>' : ''}
+        ${quarter && r.quarterRoleCaution ? '<p class="small caution">The current workload estimate or quarterback context conflicts with this history; verify the role before building a ticket.</p>' : ''}
         ${quarter && r.quarterDefense ? `<p class="small muted">${!r.quarterRoleCaution && r.games >= 5 && r.quarterDefense.supports ? '<b>Matchup support · </b>' : ''}${esc(r.quarterDefense.opponent)} allows ${esc(r.quarterDefense.average)} 1Q ${esc(STAT_WORD[r.stat] || r.stat)} to ${esc(r.quarterDefense.position)}s per game · ${r.quarterDefense.games} games${r.quarterDefense.rank ? ` · #${r.quarterDefense.rank} of ${r.quarterDefense.of} (1 allows fewest)` : ' · ranking unavailable'}. Unadjusted season history.</p>` : ''}
         ${opponentTrendText(r) ? `<p class="small ${r.opponentAdjustment?.against ? 'red' : 'muted'}">${esc(opponentTrendText(r))}</p>` : ''}
         ${historyChart(hist.map(h => Number(h.value)), hist.map(h => String(h.date || '').slice(5)), r.line, dir, { legend: false, titles: hist.map(h => String(h.date || '')) })}
