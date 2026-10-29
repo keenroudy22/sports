@@ -52,10 +52,10 @@ class ChefEvidenceTests(unittest.TestCase):
         pick=fixture.pick(chance=.60,gap=6,modelVersion='v2.0')
         with patch.object(gates.spot,'for_candidate',return_value={'spotHit':.6,'n':40}),patch.object(chef,'evidence',return_value={'ok':False,'reason':'not enough forward evidence'}):
             self.assertTrue(run.choose_straight_tier(pick,fixture.ctx).ok)
-        self.assertEqual((pick['lane'],pick['riskUnits']),('best_bet',.5))
+        self.assertEqual((pick['lane'],pick['riskUnits']),('best_bet',1))
         with patch.object(gates.spot,'for_candidate',return_value={'spotHit':.6,'n':40}),patch.object(chef,'evidence',return_value={'ok':True,'reason':'ok','policy':chef.VERSION}):
             self.assertTrue(run.choose_straight_tier(pick,fixture.ctx).ok)
-        self.assertEqual((pick['lane'],pick['riskUnits']),('chef_pick',1))
+        self.assertEqual((pick['lane'],pick['riskUnits']),('chef_pick',2))
         self.assertEqual(pick['chefEvidence']['policy'],chef.VERSION)
 
     def test_gate_rechecks_proof_and_grandfathers_only_trusted_published_history(self):

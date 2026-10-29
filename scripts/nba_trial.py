@@ -61,11 +61,11 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if offer.get('sideVerified') is not True or offer.get('exactLineVerified') is not True:problems.append('exact-side hold')
         if offer.get('roleChecked') is not True or offer.get('roleHold') or offer.get('priceHold') or offer.get('injuryHold'):problems.append('role/price hold')
         if isinstance(offer.get('riskUnits'),bool) or offer.get('riskUnits')!=staking.expected(offer):problems.append('stake policy mismatch')
-        if staking.active(now) and offer.get('stakingPolicy')!=staking.VERSION:problems.append('current stake policy required')
+        if staking.active(now) and offer.get('stakingPolicy')!=staking.policy_for(now,offer.get('lane')):problems.append('current stake policy required')
         prop_verified=False
         if market=='player':
             import nba_prop_release
-            prop_verified=nba_prop_release.verify(offer,now)
+            prop_verified=nba_prop_release.verify(staking.prop_research_copy(offer,now),now)
             if not prop_verified:problems.append('NBA prop evidence/current-source hold')
         calibrated=(prop_verified or calibration_verified is True) and offer.get('calibrated') is True
         chance=offer['chance'] if calibrated else offer['rawChance']

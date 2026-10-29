@@ -140,3 +140,53 @@ class StakingTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class October29StakesTests(unittest.TestCase):
+    def test_dated_best_and_chef_stakes_preserve_old_policy(self):
+        before=staking.CURRENT_EFFECTIVE.replace(second=40)
+        now=staking.CURRENT_EFFECTIVE
+        for lane,old,new in [('best_bet',.5,1),('chef_pick',1,2)]:
+            original={'lane':lane,'stakingPolicy':staking.VERSION,'riskUnits':old}
+            self.assertEqual(staking.apply(dict(original),before),original)
+            revised=staking.apply(dict(original),now)
+            self.assertEqual(revised['riskUnits'],new)
+            self.assertEqual(revised['stakingPolicy'],staking.CURRENT_VERSION)
+            self.assertEqual(staking.expected(original),old)
+            self.assertEqual(original['riskUnits'],old)
+        self.assertEqual(staking.apply({'lane':'gut_call','riskUnits':.5},now)['riskUnits'],.5)
+        ticket={'legs':[{'id':'one'}],'riskUnits':.25}
+        self.assertEqual(staking.apply(dict(ticket),now),ticket)
+        self.assertEqual(staking.apply({'league':'NBA'},now)['riskUnits'],1)
+
+    def test_new_size_uses_existing_caps_without_recycling(self):
+        ctx=context();ctx.now=staking.CURRENT_EFFECTIVE
+        ctx.first={'old':dict(pick('old',2,result='win'),kickoff='2026-10-29T23:00:00Z')}
+        ordinary=staking.apply(dict(pick('new',lane='best_bet'),kickoff='2026-10-29T23:00:00Z'),ctx.now)
+        chef=staking.apply(dict(pick('chef',lane='chef_pick'),kickoff='2026-10-29T23:00:00Z'),ctx.now)
+        self.assertIsNone(staking.check(ordinary,ctx))
+        self.assertIn('exceeds 3u',staking.check(chef,ctx))
+
+    def test_frozen_prop_proof_is_separate_from_stake_authorization(self):
+        now=staking.CURRENT_EFFECTIVE
+        offer=staking.apply(dict(marketType='player',stat='pts',riskUnits=.5),now)
+        proof=staking.prop_research_copy(offer,now)
+        self.assertEqual(offer['riskUnits'],1)
+        self.assertEqual(proof['riskUnits'],.5)
+        self.assertEqual(proof['stat'],'pts')
+        for value in (True,2,.5,None):
+            changed=dict(offer,riskUnits=value)
+            self.assertEqual(staking.prop_research_copy(changed,now),changed)
+
+    def test_never_public_pending_card_gets_new_stake_and_art_version(self):
+        now=staking.CURRENT_EFFECTIVE
+        row={'id':'private','pick':dict(pick(lane='best_bet'),stakingPolicy=staking.VERSION),
+             'caption':'old half-unit copy','card':'old.png','precheckedAt':'2026-10-29T12:00:00Z'}
+        ctx=context(latest={});ctx.now=now
+        with tempfile.TemporaryDirectory() as folder,mock.patch.object(run,'CONF',Path(folder)):
+            release_queue.save(Path(folder),{'plays':[row]})
+            changed=run.normalize_private_stake(row,ctx,now)
+            self.assertEqual(changed['pick']['riskUnits'],1)
+            self.assertIsNone(changed['caption'])
+            self.assertTrue(changed['card'].endswith('-staking-v2.png'))
+            public=dict(row,publicPath='research/already-public.json')
+            self.assertEqual(run.normalize_private_stake(public,ctx,now),public)

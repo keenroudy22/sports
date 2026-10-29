@@ -7,6 +7,8 @@ from zoneinfo import ZoneInfo
 
 VERSION = '2026-10-23-half-unit-shared-cap'
 EFFECTIVE = datetime.fromisoformat('2026-10-23T17:40:00+00:00')
+CURRENT_VERSION = '2026-10-29-one-two-unit-shared-cap'
+CURRENT_EFFECTIVE = datetime.fromisoformat('2026-10-29T13:28:41+00:00')
 EASTERN = ZoneInfo('America/New_York')
 OWNER_UNIT = 25  # Private Climb dollar-to-exposure conversion; never rescale old results.
 
@@ -23,6 +25,29 @@ def instant(value):
         return None
 
 
+def policy_for(now, lane=None):
+    # Full Sends and fun tickets were not included in the owner's stake change.
+    if now >= CURRENT_EFFECTIVE and lane in (None, 'best_bet', 'chef_pick'):
+        return CURRENT_VERSION
+    return VERSION
+
+
+def prop_research_copy(offer, now):
+    """Separate unchanged per-unit model proof from the new public stake policy.
+
+    The frozen adapter's half-unit baseline is not a stake authorization. Only an
+    otherwise exact current ordinary stake may use that research identity; the
+    public offer is independently checked and retained at its actual terms.
+    """
+    if (offer.get('stakingPolicy') == CURRENT_VERSION
+            and policy_for(now, offer.get('lane')) == CURRENT_VERSION
+            and offer.get('lane') in (None, 'best_bet')
+            and type(offer.get('riskUnits')) in (int, float)
+            and offer['riskUnits'] == 1):
+        return dict(offer, riskUnits=.5)
+    return dict(offer)
+
+
 def expected(pick):
     if pick.get('stakingPolicy') == VERSION:
         return 1 if pick.get('lane') == 'chef_pick' else .5
@@ -31,7 +56,7 @@ def expected(pick):
 
 def apply(pick, now):
     if active(now) and not (pick.get('legs') or pick.get('parlayType')):
-        pick.update(stakingPolicy=VERSION)
+        pick.update(stakingPolicy=policy_for(now, pick.get('lane')))
         pick['riskUnits'] = expected(pick)
     return pick
 

@@ -3363,7 +3363,7 @@ def normalize_private_stake(row, ctx, now):
         return row
     key = row['id']
     row = release_queue.update(CONF, key, pick=revised, caption=None,
-        card=str(release_queue.cards(CONF) / f'{key}-staking-v1.png'), precheckedAt=None)
+        card=str(release_queue.cards(CONF) / f"{key}-staking-{'v2' if revised.get('stakingPolicy') == gates.staking.CURRENT_VERSION else 'v1'}.png"), precheckedAt=None)
     ctx.first[key] = dict(revised, _pendingRelease=True)
     ctx.latest[key] = dict(ctx.first[key])
     return row

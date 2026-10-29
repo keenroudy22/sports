@@ -1,3 +1,12 @@
+## Owner stake update — October29, prospective
+
+New Best Bets/NBA Picks use1u; new Chef’s Picks use2u from13:28:41Z.
+Earlier public tickets keep original stakes, art, captions and results. Recheck and
+regenerate only never-public private releases. Full Sends/fun tickets/Climbs keep
+their existing rules. Shared daily3u/5u caps, qualification and free-tier limits
+remain unchanged. Public stakes are units, never personal dollars. This supersedes
+older0.5u/1u prospective defaults below, not historical examples.
+
 # Posts and graphics: everything that goes to X and how it looks
 
 ## October22 owner — direct, confident, non-spammy

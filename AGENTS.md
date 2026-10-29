@@ -1,3 +1,14 @@
+# October29 owner — Best Bets1u, Chef’s Picks2u
+
+From2026-10-29T13:28:41Z, new Best Bets and ordinary NBA Picks use1u; Chef’s
+Picks use2u. Preserve all already-public original stakes, art, captions and grades.
+Never-public private releases must normalize the stake and regenerate art before
+release, with shared exposure rechecked. Existing3u/5u daily exposure caps, Full
+Send/fun/Climb sizing, evidence, free-tier and frequency rules stay unchanged.
+The previous0.5u/1u policy remains valid for its dated history/replays. Frozen NBA
+prop probability/book evidence remains per-unit and must not reset or be promoted
+by this staking change; stake authorization is checked separately from that proof.
+
 # October29 owner — observed NFL first-quarter player stats
 
 NFL player pages expose a separate1Q rushing/receiving game log, averages and

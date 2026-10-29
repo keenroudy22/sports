@@ -1,3 +1,21 @@
+### October29 owner staking update — IMPLEMENTED, RELEASE PENDING
+
+From13:28:41Z new Best Bets/NBA Picks use1u and Chef’s Picks2u. The dated
+October23 half-unit policy remains for its original tickets/replays. Full Sends,
+fun tickets, Climbs,3u/5u shared caps, model/price/availability and free-tier gates
+remain unchanged. Never-public releases normalize and regeneratev2 art; public
+originals remain immutable. NBA frozen prop evidence stays at its existing per-unit
+research identity; current stake authorization is independently mandatory. Neither
+probability source nor adapter hash changes, and no model is promoted.
+
+Website guide/Today/NBA labels and posting documentation updated. Focused stake,
+NBA admission/prop publication tests pass, including new1u profit and old-stake
+grading. Existing Discord #start-here pinned notice edited through the owner’s
+Discord account, saved and verified as UPDATED OCTOBER29 with Best Bets1u/Chef2u,
+unchanged3u/5u caps and original-ticket preservation. No new notice duplicated.
+The private release queue had no unreleased entries when checked. Full/clean,
+locked, hosted and live receipts remain required before declaring code deployed.
+
 ### October29 NFL first-quarter stats — VERIFIED LIVE
 
 Owner requested1Q website stats after tonight's Panthers/Packers discussion. NFL

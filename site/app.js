@@ -1331,7 +1331,7 @@
     const evaluated = today.generatedAt && C.dayOf(today.generatedAt) === etDay()
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
-    return `<p class="small muted" style="margin-bottom:12px"><b>Best Bets · 0.5u</b> · <b>Chef's Picks · 1u</b> · the rarer, stronger tier. Earlier plays keep their posted stakes.</p><div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
+    return `<p class="small muted" style="margin-bottom:12px"><b>Best Bets · 1u</b> · <b>Chef's Picks · 2u</b> · the rarer, stronger tier. Earlier plays keep their posted stakes.</p><div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
       climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
       postedToday: picks.some(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay()),
       nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
@@ -1968,8 +1968,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-26a227849880';
-  const GAMES_ASSET = 'app-games.js?v=sha256-c4f90b94e90d';
+  const MORE_ASSET = 'app-more.js?v=sha256-94860b1d003e';
+  const GAMES_ASSET = 'app-games.js?v=sha256-1c07519a5aeb';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

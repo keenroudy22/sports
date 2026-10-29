@@ -72,18 +72,18 @@ class PropReleaseTests(unittest.TestCase):
  def test_future_finals_cannot_supply_book_profit_proof(self):
   self.study();self.assertIsNone(n.proof('pts',START+timedelta(days=2),self.root))
  def test_verified_candidate_has_original_terms_and_no_forecast_in_card(self):
-  offer=self.candidate();self.assertEqual(offer['riskUnits'],.5)
+  offer=self.candidate();self.assertEqual(offer['riskUnits'],1)
   self.assertEqual(n.selection(offer),'Real Player OVER 20.5 points')
   svg=n.card(offer)
-  for term in ('REAL','PLAYER','20.5','POINTS','DRAFTKINGS','0.5u'):self.assertIn(term,svg)
+  for term in ('REAL','PLAYER','20.5','POINTS','DRAFTKINGS','1u'):self.assertIn(term,svg)
   self.assertNotIn('BOOK SAYS',svg);self.assertNotIn('I HAVE IT',svg)
  def test_caller_flags_cannot_bypass_prop_evidence(self):
   offer=self.candidate()
   with patch.object(n,'candidates',return_value=[]):
    self.assertIn('NBA prop evidence/current-source hold',nt.evaluate(offer,[],NOW,calibration_verified=True))
-  with patch.object(n,'candidates',return_value=[offer]):
+  with patch.object(n,'candidates',return_value=[dict(offer,riskUnits=.5)]):
    self.assertEqual(nt.evaluate(offer,[],NOW),[])
-   for field,value in [('line',21.5),('odds',100),('athleteId','9'),('stat','pra'),('player','Wrong Player'),('riskUnits',1),('lane','chef_pick'),('paidProtection',True),('allAction',True)]:
+   for field,value in [('line',21.5),('odds',100),('athleteId','9'),('stat','pra'),('player','Wrong Player'),('riskUnits',2),('lane','chef_pick'),('paidProtection',True),('allAction',True)]:
     self.assertIn('NBA prop evidence/current-source hold',nt.evaluate(dict(offer,**{field:value}),[],NOW))
    self.assertIn('prop market identity hold',nt.evaluate(dict(offer,marketType='total'),[],NOW))
  def test_live_rechecks_stale_prices_and_injuries_even_with_approved_proof(self):
@@ -98,7 +98,7 @@ class PropReleaseTests(unittest.TestCase):
    row['sourceAt']='2026-11-05T14:55:00Z';row['hold']='changed role';self.assertEqual(n.candidates(NOW,self.root),[])
  def test_publication_and_actual_grade_keep_nba_record_separate_and_immutable(self):
   offer=self.candidate();trial=self.root.parent/'nba-trial'
-  with patch.object(n,'candidates',return_value=[offer]):
+  with patch.object(n,'candidates',return_value=[dict(offer,riskUnits=.5)]):
    self.assertEqual(nt.record_publish(offer,NOW,trial),1)
    with self.assertRaises(ValueError):nt.record_publish(offer,NOW,trial)
   saved=rt.public_rows(trial)[0]
@@ -109,7 +109,7 @@ class PropReleaseTests(unittest.TestCase):
   later=NOW+timedelta(days=1)
   self.assertEqual(rt.grade(later,trial,boxroot),1);self.assertEqual(rt.grade(later,trial,boxroot),0)
   self.assertEqual(nt.snapshot(rt.rows(trial))['win'],1)
-  self.assertAlmostEqual(nt.snapshot(rt.rows(trial))['units'],.455,places=3)
+  self.assertAlmostEqual(nt.snapshot(rt.rows(trial))['units'],.909,places=3)
  def test_public_loss_injury_check_holds_and_typed_fallback_is_not_book_proof(self):
   offer=dict(self.candidate(),publishedAt=boxscores.stamp(NOW))
   final=dict(league='NBA',season=2027,seasonType=2,eventId='NBA-9000',kickoff=offer['kickoff'],retrievedAt='2026-11-06T03:00:00Z',
@@ -129,7 +129,7 @@ class PropReleaseTests(unittest.TestCase):
   import buffer_post as bp,discord_post
   from test_buffer_post import FakeBuffer
   offer=dict(self.candidate(),publishedAt=boxscores.stamp(NOW),series='NBA Picks')
-  with patch.object(rt,'public_rows',return_value=[offer]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(nba_capture,'step',return_value={}),patch.object(rt,'datetime',wraps=datetime) as clock:
+  with patch.object(rt,'public_rows',return_value=[dict(offer,riskUnits=.5)]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(nba_capture,'step',return_value={}),patch.object(rt,'datetime',wraps=datetime) as clock:
    clock.now.return_value=NOW
    plans=rt.social_plans(NOW,{'posts':[]})
   self.assertEqual(len(plans),1);self.assertIn('Real Player OVER 20.5 points',plans[0][2])
@@ -141,15 +141,15 @@ class PropReleaseTests(unittest.TestCase):
   self.assertIn('@Playbook',entry['queuedText']);self.assertTrue(entry['queuedText'].endswith('21+ only'))
   self.assertEqual(entry['discord']['destination'],'plays');self.assertNotIn('@Playbook',entry['discord']['text'])
   self.assertTrue(entry['discord']['text'].endswith('21+ only'));self.assertTrue(entry['discord']['image'].endswith(offer['id'].lower()+'.png'))
-  with patch.object(rt,'public_rows',return_value=[offer]),patch.object(rt,'current_match',return_value=False),patch.object(discord_post,'send_message') as send:
+  with patch.object(rt,'public_rows',return_value=[dict(offer,riskUnits=.5)]),patch.object(rt,'current_match',return_value=False),patch.object(discord_post,'send_message') as send:
    discord_post.mirror_sent(book,plans[0][3],url='plays',wins_url='wins',log=lambda *_:None);send.assert_not_called()
-  with patch.object(rt,'public_rows',return_value=[offer]),patch.object(rt,'current_match',return_value=True),patch.object(discord_post,'send_message') as send:
+  with patch.object(rt,'public_rows',return_value=[dict(offer,riskUnits=.5)]),patch.object(rt,'current_match',return_value=True),patch.object(discord_post,'send_message') as send:
    discord_post.mirror_sent(book,plans[0][3],url='plays',wins_url='wins',log=lambda *_:None)
    discord_post.mirror_sent(book,plans[0][3],url='plays',wins_url='wins',log=lambda *_:None)
    self.assertEqual(send.call_count,1);self.assertEqual(send.call_args.args[0],'plays')
  def test_held_prop_cannot_reserve_a_buffer_send_attempt(self):
   offer=self.candidate();trial=self.root.parent/'nba-trial'
-  with patch.object(n,'candidates',return_value=[offer]):nt.record_publish(offer,NOW,trial)
+  with patch.object(n,'candidates',return_value=[dict(offer,riskUnits=.5)]):nt.record_publish(offer,NOW,trial)
   with patch.object(rt,'current_match',return_value=False):self.assertFalse(rt.reserve_delivery(offer['id'],NOW,trial))
   self.assertFalse(any(r['type']=='send-attempt' for r in rt.rows(trial)))
   with patch.object(rt,'current_match',return_value=True):
@@ -168,7 +168,7 @@ class PropReleaseTests(unittest.TestCase):
  def test_prop_admission_keeps_shared_nba_count_and_same_game_limits(self):
   offer=self.candidate()
   prior=[dict(offer,id=f'previous-{i}',eventId=f'NBA-{i}',type='publish') for i in range(5)]
-  with patch.object(n,'candidates',return_value=[offer]):
+  with patch.object(n,'candidates',return_value=[dict(offer,riskUnits=.5)]):
    self.assertIn('NBA daily pick cap',nt.evaluate(offer,prior,NOW))
    self.assertIn('one NBA pick per game',nt.evaluate(offer,[dict(prior[0],eventId=offer['eventId'])],NOW))
  def test_unapproved_lane_does_not_scan_large_settlement_history(self):
@@ -183,7 +183,7 @@ class PropReleaseTests(unittest.TestCase):
   import buffer_post as bp,social_voice,x_post
   offer=dict(self.candidate(),player='Nickeil Alexander-Walker',publishedAt=boxscores.stamp(NOW),series='NBA Picks',
       reasons=['A very long verified research explanation. '*12,n.ROLE_REASON])
-  with patch.object(rt,'public_rows',return_value=[offer]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(nba_capture,'step',return_value={}),patch.object(rt,'datetime',wraps=datetime) as clock:
+  with patch.object(rt,'public_rows',return_value=[dict(offer,riskUnits=.5)]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(nba_capture,'step',return_value={}),patch.object(rt,'datetime',wraps=datetime) as clock:
    clock.now.return_value=NOW;plans=rt.social_plans(NOW,{'posts':[]})
   self.assertEqual(len(plans),1)
   final=bp.x_ticket_copy(social_voice.finish(plans[0][2]),'play',offer['id'])
@@ -209,7 +209,7 @@ class PropReleaseTests(unittest.TestCase):
  def test_website_and_discord_return_displays_do_not_double_round(self):
   play=dict(self.candidate(),type='publish',result='win',actual=22,settledAt=boxscores.stamp(NOW))
   summary=nt.snapshot([play,dict(play,type='settle',source='official')])
-  self.assertEqual(summary['units'],.454545)
+  self.assertEqual(summary['units'],.909091)
   book={'posts':[{'id':play['id'],'kind':'buffer:nba-trial','nbaPick':True,'discord':{'state':'sent'}}]}
   rt.queue_discord_results(book,NOW,[play])
   self.assertIn(f"{summary['units']:+.2f}u",book['posts'][0]['discord']['result']['text'])

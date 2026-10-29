@@ -200,7 +200,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
             'prepNote':'Current-season games, fresh prices and player availability must clear before a row appears.',
             'readiness':readiness,
             'trial':{'label':nba_trial.nba_pick_policy.label(now),'state':'ready' if started else readiness['stage'],'record':trial_record,'plays':public_plays,'seasons':trial_seasons,
-                     'note':(('NBA picks use 0.5u and the shared daily exposure limit. No qualifying play has been released yet.' if not public_plays else 'NBA results are shown separately by sport at their original posted terms.') if readiness.get('readyForPicks') else
+                     'note':(('NBA picks use 1u and the shared daily exposure limit. No qualifying play has been released yet.' if not public_plays else 'NBA results are shown separately by sport at their original posted terms.') if readiness.get('readyForPicks') else
                              'NBA Trial record is separate from football. Only a fully checked side or total can appear.' if public_plays else
                              ("NBA Trial is open. No play has been released yet." if readiness['readyForLiveTrial'] else
                               f"NBA Trial starts October 20. Preseason logging is {readiness['cleanCaptureDays']}/{readiness['cleanCaptureDaysRequired']} clean days and {readiness['paperGraded']}/{readiness['paperGradesRequired']} paper grades toward eventual Best bets promotion."))}}
