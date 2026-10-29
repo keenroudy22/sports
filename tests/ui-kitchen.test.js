@@ -86,12 +86,12 @@ const playerFiles = (held = true) => {
     'data/app/games/CFB-1.json': { forecast: { players: { home: { players: [{ id: athlete, att: [23.7, 15, 32], passYds: [167.1, 110, 230], ...(held ? { underReview: ['att', 'passYds', 'cmp'] } : {}) }] } } } },
   };
 };
-const playerPage = async (held, change = null, league = 'CFB', stat = null) => {
+const playerPage = async (held, change = null, league = 'CFB', stat = null, core = C) => {
   const files = playerFiles(held);
   if (change) change(files);
   const el = () => ({ innerHTML: '', options: [], value: '', dataset: {}, classList: { toggle() {}, add() {}, remove() {} }, querySelector: () => null, querySelectorAll: () => [], setAttribute() {}, focus() {} });
   class FixedDate extends Date { constructor(...a) { super(...(a.length ? a : [Date.parse('2026-10-07T18:00:00Z')])); } static now() { return Date.parse('2026-10-07T18:00:00Z'); } }
-  const sandbox = { module: { exports: {} }, exports: {}, KRCore: C, KRLive: require('../site/live.js'), KRPersonal: require('../site/personal.js'),
+  const sandbox = { module: { exports: {} }, exports: {}, KRCore: core, KRLive: require('../site/live.js'), KRPersonal: require('../site/personal.js'),
     location: { hash: '#player/CFB/4870883', origin: 'http://localhost', pathname: '/' }, history: { state: null, replaceState() {} },
     document: { hidden: true, body: el(), activeElement: null, querySelector: () => el(), querySelectorAll: () => [], createElement: el, head: { appendChild() {} }, addEventListener() {} },
     localStorage: { getItem: () => null, setItem: () => {} }, matchMedia: () => ({ matches: false }),
@@ -219,7 +219,7 @@ test('NFL player Q1 panel preserves zero/negative and unknown, excludes other se
     shard.players['4870883'].firstQuarter=[
       {eventId:'e1',date:'2026-09-05',season:2026,seasonType:2,opp:'166',stats:{att:8,cmp:5,passYds:40,car:1,rushYds:3},source:'https://www.espn.com',checkedAt:'2026-09-06T12:00:00Z'},
       {eventId:'e2',date:'2026-09-12',season:2026,seasonType:2,opp:'166',stats:{att:11,cmp:7,passYds:80,car:0,rushYds:0},source:'https://www.espn.com',checkedAt:'2026-09-13T12:00:00Z'}];
-  }, 'NFL', 'q1_passYds');
+  }, 'NFL', 'q1_passYds', { ...C, LABEL: Object.fromEntries(Object.entries(C.LABEL).filter(([key]) => !key.startsWith('q1_'))) });
   assert.match(page,/data-set="pstat:q1_passYds" aria-pressed="true"/);
   assert.match(page,/data-set="pstat:q1_cmp"/);assert.match(page,/data-set="pstat:q1_att"/);
   const sheet=page.split('aria-labelledby="line-h"')[1].split('id="first-quarter"')[0];
