@@ -21,7 +21,13 @@ def extract(payload, official, teams):
     full, first, plays = defaultdict(Counter), defaultdict(Counter), Counter()
     seen_q1 = set()
     for p in items:
-        if not bx.scrimmage(p) or str(p.get('type', {}).get('text', '')).lower() in ('two-minute warning', 'end of regulation'):
+        kind = str(p.get('type', {}).get('text', '')).lower()
+        # ESPN may append PAT prose to a touchdown. Its typed TD/yardage and
+        # passer/receiver/rusher roles describe the scoring play; pat* roles do not.
+        combined_td = (kind in ('passing touchdown', 'rushing touchdown')
+                       and (p.get('scoringType') or {}).get('name') == 'touchdown'
+                       and 'no play' not in str(p.get('text', '')).lower())
+        if (not bx.scrimmage(p) and not combined_td) or kind in ('two-minute warning', 'end of regulation'):
             continue
         roles = defaultdict(set)
         for participant in p.get('participants', []):

@@ -1,3 +1,13 @@
+# October29 owner — full-season NFL quarter history
+
+The 1Q panel must show every selected season/game-log row, not only available
+quarter games. Missing families remain dashes, never zero; averages disclose their
+per-stat samples. Current-season enrichment checks107 stored finals, verifies92,
+and retains15 reconciliation holds. Hubbard has6/6. Typed passing/rushing touchdowns
+with appended PAT prose count the touchdown once; pat* participants/conversions do
+not contribute carries, catches or yards. Full-game values/history stay unchanged.
+Use compact rushing/receiving average cards and a season log; source detail folds.
+
 # October29 owner — Best Bets1u, Chef’s Picks2u
 
 From2026-10-29T13:28:41Z, new Best Bets and ordinary NBA Picks use1u; Chef’s

@@ -199,7 +199,11 @@ test('NFL player Q1 panel preserves zero/negative and unknown, excludes other se
       {eventId:'future',date:'2026-12-01',season:2026,seasonType:2,opp:'166',stats:{rushYds:888},source:'https://www.espn.com',checkedAt:'2026-12-02T12:00:00Z'}];
   }, 'NFL');
   const q1 = page.split('id="first-quarter"')[1].split('</section>')[0];
-  assert.match(q1,/2 verified games/);
+  assert.match(q1,/2 of 4 selected games available/);
+  assert.match(q1,/Rushing · 1Q average/);
+  assert.match(q1,/Yards: 1 game · carries: 1 game/);
+  assert.match(q1,/Coverage &amp; sources/);
+  assert.equal((q1.match(/scope="row"/g) || []).length, 4, "full selected season includes unavailable games");
   assert.match(q1,/>-2</);
   assert.match(q1,/>0</);
   assert.match(q1,/>–</);

@@ -57,6 +57,19 @@ class FirstQuarterTests(unittest.TestCase):
         p=copy.deepcopy(self.plays);p['items'][3]['period']['number']=2
         self.assertEqual(q.extract(p,self.box,self.teams),{})
 
+    def test_touchdown_with_appended_conversion_counts_only_touchdown(self):
+        p=copy.deepcopy(self.plays)
+        td=p['items'][2]
+        td.update(type={'text':'Passing Touchdown'}, scoringType={'name':'touchdown'},
+                  text='Pass for 8 yards, TOUCHDOWN. TWO-POINT CONVERSION ATTEMPT. Runner rushes. ATTEMPT SUCCEEDS.')
+        td['participants'].append({'type':'patScorer','athlete':{'$ref':'/athletes/10'}})
+        out=q.extract(p,self.box,self.teams)
+        self.assertEqual(out['30']['recYds'],8)
+        self.assertEqual(out['10']['car'],1)
+        self.assertEqual(out['10']['rushYds'],-2)
+        td['type']={'text':'Two-Point Conversion'}
+        self.assertEqual(q.extract(p,self.box,self.teams),{})
+
     def test_bounded_backfill_rejects_fanout_before_network(self):
         with self.assertRaises(ValueError):q.backfill([str(n) for n in range(7)])
         with self.assertRaises(ValueError):q.backfill(['1','1'])

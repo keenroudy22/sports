@@ -686,3 +686,25 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-number-status { margin: 12px 0 0; }
 .kt-number-chance { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 5px; color: var(--muted); font-size: 13px; }
 @media (max-width: 520px) { .kt-number-grid { grid-template-columns: 1fr; } .kt-number-grid > span { flex-direction: row; align-items: baseline; justify-content: space-between; } }
+
+/* Quarter history stays separate from the full-game ticket. */
+.kt-quarter { max-width: 720px; margin: 24px 0; padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.02); }
+.kt-quarter .kt-sec-head { margin: 0 0 12px; }
+.kt-quarter-coverage { margin: 0 0 18px; font-size: 13px; font-weight: 700; }
+.kt-quarter-coverage span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 400; }
+.kt-quarter-summary { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-bottom: 16px; }
+.kt-quarter-summary > div { padding: 14px; border-radius: 8px; background: rgba(255,255,255,.04); }
+.kt-quarter-label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.kt-quarter-summary p { margin: 8px 0 4px; }
+.kt-quarter-summary p b { font-size: 32px; line-height: 1; }
+.kt-quarter-summary small { font-size: 12px; }
+.kt-quarter-sample { display: block; margin-top: 10px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+.kt-quarter-log { width: 100%; }
+.kt-quarter-log td span { display: block; color: var(--muted); font-size: 11px; font-weight: 400; margin-top: 3px; }
+.kt-quarter-log td b { font-size: 18px; }
+.kt-quarter-source { margin-top: 12px; }
+.kt-quarter-source summary { font-size: 12px; }
+@media(max-width:520px) { .kt-quarter { padding: 14px; } .kt-quarter-summary { gap: 8px; } .kt-quarter-summary > div { padding: 10px; } .kt-quarter-summary p b { font-size: 28px; } .kt-quarter-label { letter-spacing: .02em; } }
+.kt-quarter-log { table-layout: fixed; }
+.kt-quarter-log th:first-child { width: 40%; }
+.kt-quarter-log th:not(:first-child) { width: 30%; }

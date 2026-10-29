@@ -282,17 +282,23 @@
     const q1Rows = league === 'NFL' ? (data.firstQuarter || []).filter(r => r.seasonType === 2 &&
       q1GameIds.has(String(r.eventId)) && (scope === 'all' || Number(r.season) === Number(scope === 'current' ? currentSeason : scope)))
       .sort((a, b) => String(a.date).localeCompare(String(b.date))) : [];
-    const q1Shown = q1Rows;
-    const q1Cols = [['car', 'rushYds', 'Rushing', 'car'], ['rec', 'recYds', 'Receiving', 'rec']];
+    const q1ByGame = new Map(q1Rows.map(r => [String(r.eventId), r]));
+    const q1Shown = recent.map(r => q1ByGame.get(String(r[0])) || { eventId: r[0], date: r[1], opp: r[6], stats: {}, source: `https://www.espn.com/nfl/game/_/gameId/${r[0]}` })
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+    const q1Cols = [['car', 'rushYds', 'Rushing', 'carries'], ['rec', 'recYds', 'Receiving', 'catches']];
+    const q1Sample = k => q1Shown.filter(r => isNum(r.stats?.[k])).length;
     const q1Average = k => { const v = q1Shown.map(r => r.stats?.[k]).filter(isNum);
       return v.length ? C.fixed(v.reduce((a, b) => a + b, 0) / v.length) : '–'; };
-    const q1 = league === 'NFL' ? `<section class="card" id="first-quarter" style="margin-top:18px"><h2>1Q player stats</h2>
-      <p class="small muted">First quarter only · ${esc(scopeLabel)}. Observed rushing and receiving, not projections or betting probabilities. ${q1Shown.length} verified game${q1Shown.length === 1 ? '' : 's'} in this selection; missing games are excluded, not zero. The player page’s season and sample filters apply.</p>
-      ${q1Shown.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${q1Cols.map(([, , label]) => `<th class="n">${label}</th>`).join('')}</tr></thead><tbody>
-      <tr><th>Average · sample</th>${q1Cols.map(([count, yards, , unit]) => `<td class="n">${esc(q1Average(count))} ${unit}<br>${esc(q1Average(yards))} yds<br><small>${q1Shown.filter(r => isNum(r.stats?.[count])).length} games</small></td>`).join('')}</tr>
-      ${q1Shown.slice().reverse().map(r => `<tr><th><a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(r.date)} · ${esc(abbr(r.opp))} ↗</a></th>${q1Cols.map(([count, yards, , unit]) => `<td class="n"><b>${isNum(r.stats?.[count]) ? esc(r.stats[count]) : '–'}</b> ${unit}<br><b>${isNum(r.stats?.[yards]) ? esc(r.stats[yards]) : '–'}</b> yds</td>`).join('')}</tr>`).join('')}
-      </tbody></table></div><p class="small muted">ESPN play-by-play, reconciled against full-game official player and team totals. Negative yards and actual zeroes are preserved. Latest source check ${esc(clock(q1Shown[q1Shown.length - 1].checkedAt))}.</p>`
-      : '<p class="small muted">No verified 1Q rushing/receiving games stored for this selection yet.</p>'}</section>` : '';
+    const q1Games = n => `${n} game${n === 1 ? '' : 's'}`;
+    const q1 = league === 'NFL' ? `<section class="kt-quarter" id="first-quarter" aria-labelledby="q1-heading">
+      <div class="kt-sec-head"><h2 class="kt-tape" id="q1-heading">First quarter</h2><span class="kt-kind">${esc(scopeLabel)}</span></div>
+      <p class="kt-quarter-coverage">${q1Rows.length ? `${q1Rows.length} of ${recent.length} selected games available` : 'No first-quarter games available yet'}<span>Game stats · not projections</span></p>
+      ${q1Shown.length ? `<div class="kt-quarter-summary">${q1Cols.map(([count, yards, label, unit]) => `<div><span class="kt-quarter-label">${label} · 1Q average</span><p><b class="num">${esc(q1Average(yards))}</b> yards</p><small>${esc(q1Average(count))} ${unit} per game</small><span class="kt-quarter-sample">Yards: ${q1Games(q1Sample(yards))} · ${unit}: ${q1Games(q1Sample(count))}</span></div>`).join('')}</div>
+      <table class="kt-log kt-quarter-log"><thead><tr><th scope="col">Game</th><th scope="col">Rush yards</th><th scope="col">Rec yards</th></tr></thead><tbody>
+      ${q1Shown.slice().reverse().map(r => `<tr><th scope="row"><a class="plain-link" href="${esc(r.source)}" target="_blank" rel="noopener"><b>${esc(abbr(r.opp))} ↗</b></a><span>${esc(new Date(r.date + 'T16:00:00Z').toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}))}</span></th>${q1Cols.map(([count, yards, , unit]) => `<td><b>${isNum(r.stats?.[yards]) ? esc(r.stats[yards]) : '–'}</b><span>${isNum(r.stats?.[count]) ? esc(r.stats[count]) : '–'} ${r.stats?.[count] === 1 ? (unit === 'carries' ? 'carry' : 'catch') : unit}</span></td>`).join('')}</tr>`).join('')}
+      </tbody></table>` : '<p class="kt-cap">Verified rushing and receiving stats will appear here as games are added.</p>'}
+      <details class="plain-fold kt-quarter-source"><summary>Coverage &amp; sources</summary><p class="small muted">First quarter only. ESPN play-by-play checked against full-game player and team totals. Missing stats show a dash, never zero. Averages use only available games for each stat; season and game filters apply. These are not projections or betting probabilities.${q1Rows.length ? ` Latest source check ${esc(clock(q1Rows[q1Rows.length - 1].checkedAt))}.` : ''}</p></details></section>` : '';
+
     return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}${q1}
       ${filtersFold('player', showing, `${seasonSelect}${seg('pwin', [['all', 'All games'], ['last5', 'Last 5'], ['last10', 'Last 10'], ['last20', 'Last 20']], win)}`)}
       ${!recent.length ? `<p class="btn-row">${seasons.filter(x => x !== Number(currentSeason)).slice(0, 1).map(x => `<button type="button" class="btn small" data-set="pseason:${x}">Show ${x}</button>`).join('')}<button type="button" class="btn small" data-set="pseason:all">All seasons</button></p>` : ''}
