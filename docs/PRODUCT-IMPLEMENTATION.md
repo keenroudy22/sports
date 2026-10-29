@@ -1,3 +1,16 @@
+### October29 Today stale recap cleanup — VERIFIED LIVE
+
+Owner reported old Sam Houston content on Today. The prior last-graded-day recap
+kept Tuesday results visible on Thursday. Today now shows only yesterday's recap;
+older settled tickets remain unchanged on Record. The hero date line follows the
+same rule. Regression covers stale Sam Houston receipts and preserves yesterday.
+
+Source253a53b1ce1469129c00a60edf2ddbc987b79f16; hosted40887047754SUCCESS,
+verifiedHead5e407806751c3c3665c7d617f3a71d6de59a3291. Full and clean suites:
+1997Python(2skip)/295Node, all locked release gates passed. Live375/1440: no Sam
+Houston links or Tuesday recap, no overflow or console errors. Owner screenshot:
+kookn-today-clean-2026-10-29.png. No record, stake, price or result changed.
+
 ### October29 owner staking update — VERIFIED LIVE
 
 From13:28:41Z new Best Bets/NBA Picks use1u and Chef’s Picks2u. The dated
