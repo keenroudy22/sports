@@ -1665,7 +1665,7 @@
     const limit = t.limit || 40;
     const shown = rows.slice(0, limit);
     const windowLabel = t.window === 'last5' ? 'last 5 this season' : t.window === 'last10' ? 'last 10 this season' : 'this season';
-    const list = shown.length ? `<div class="grid two">${shown.map(r => {
+    const list = shown.length ? `<div class="grid two game-trend-grid">${shown.map(r => {
       const hist = r.history || [];
       const atLeast = r.kind === 'milestone' || r.direction === 'at-least';
       const dir = atLeast ? 'at-least' : r.direction === 'under' ? 'under' : 'over';
