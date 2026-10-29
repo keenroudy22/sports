@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-29T16:19:42Z",
+  "updatedAt": "2026-10-29T17:14:18Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -467,6 +467,15 @@
           "name": "Baltimore Ravens",
           "players": [
             {
+              "id": "4832793",
+              "name": "Olaivavega Ioane",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Knee - MCL",
+              "reportedAt": "2026-10-29T16:50Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4832793/olaivavega-ioane"
+            },
+            {
               "id": "3916387",
               "name": "Lamar Jackson",
               "position": "QB",
@@ -528,15 +537,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-28T21:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/15846/john-jenkins"
-            },
-            {
-              "id": "4832793",
-              "name": "Olaivavega Ioane",
-              "position": "G",
-              "status": "Doubtful",
-              "injury": "Knee - MCL",
-              "reportedAt": "2026-10-28T00:20Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4832793/olaivavega-ioane"
             },
             {
               "id": "3915837",
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-29T16:01Z",
+              "reportedAt": "2026-10-29T17:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-29T16:01Z",
+              "reportedAt": "2026-10-29T17:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -6677,6 +6677,15 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "4371733",
+              "name": "Kenny Gainwell",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Hip",
+              "reportedAt": "2026-10-29T16:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4371733/kenny-gainwell"
+            },
+            {
               "id": "4567750",
               "name": "Emeka Egbuka",
               "position": "WR",
@@ -6720,15 +6729,6 @@
               "injury": null,
               "reportedAt": "2026-10-28T23:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
-            },
-            {
-              "id": "4371733",
-              "name": "Kenny Gainwell",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Hip",
-              "reportedAt": "2026-10-28T20:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4371733/kenny-gainwell"
             },
             {
               "id": "4428522",
@@ -6907,6 +6907,24 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4428557",
+              "name": "Tyjae Spears",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-29T17:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
+            },
+            {
+              "id": "4871023",
+              "name": "Carnell Tate",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-29T17:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
+            },
+            {
               "id": "4373956",
               "name": "Jonah Laulu",
               "position": "DT",
@@ -6914,15 +6932,6 @@
               "injury": null,
               "reportedAt": "2026-10-29T00:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4373956/jonah-laulu"
-            },
-            {
-              "id": "4428557",
-              "name": "Tyjae Spears",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-28T20:15Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
             },
             {
               "id": "3925357",
@@ -6941,15 +6950,6 @@
               "injury": "Groin",
               "reportedAt": "2026-10-28T20:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/3120464/john-franklin-myers"
-            },
-            {
-              "id": "4871023",
-              "name": "Carnell Tate",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-28T17:11Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
             },
             {
               "id": "4036134",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "22",
-          "name": "Tyler Allgeier",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-29T02:02:58Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4373626/tyler-allgeier"
-        },
-        {
-          "teamId": "22",
-          "name": "Michael Wilson",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-29T02:02:58Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360761/michael-wilson"
-        },
-        {
           "teamId": "33",
           "name": "Kyle Hamilton",
           "from": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-10-29T02:02:58Z",
           "source": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs"
+        },
+        {
+          "teamId": "33",
+          "name": "Olaivavega Ioane",
+          "from": "Doubtful",
+          "to": "Questionable",
+          "observedAt": "2026-10-29T17:14:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4832793/olaivavega-ioane"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-29T17:14:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-29T16:19:42Z",
-      "lastAttemptAt": "2026-10-29T16:19:42Z",
+      "checkedAt": "2026-10-29T17:14:18Z",
+      "lastAttemptAt": "2026-10-29T17:14:18Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-29T16:19:42Z",
-      "lastAttemptAt": "2026-10-29T16:19:42Z",
+      "checkedAt": "2026-10-29T17:14:18Z",
+      "lastAttemptAt": "2026-10-29T17:14:18Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
