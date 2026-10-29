@@ -1,3 +1,18 @@
+### October29 NFL1Q cross-game Research filter — RELEASE PENDING
+
+Adds Full game/1Q period control to Research Trends with current-season NFL passing,
+rushing and receiving benchmarks, stat/hit-rate/Season/Last5/Last10/search/day controls,
+bar charts and links to the matching quarter player tab. Build uses already-verified
+quarter history and current-slate player context; no new feed or scheduler. Unknown
+splits are excluded after the selected game window, zero/negative values preserved.
+Quarter milestones have no sportsbook price, projection, EV or wager admission.
+Normal full-game priced trends remain separate. Shared links/preferences retain period.
+
+Prepared owner-requested TNF1Q heaters card/caption in owner folder, not sent or queued:
+production quota2874 on Oct29; optional cap2700 blocks research, remaining2900 allowance
+reserved for essentials. Do not send expired TNF content after quota recovery. This is
+not a new recurring milestone social template or frequency increase.
+
 ### October29 NFL first-quarter passing and selectable charts — VERIFIED LIVE
 
 Owner requested missing1Q passing plus normal stat tabs and bar charts. Extended

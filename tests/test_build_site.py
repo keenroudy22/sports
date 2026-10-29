@@ -915,3 +915,22 @@ class MoneylineCutoffDisplayTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class QuarterTrendsTests(unittest.TestCase):
+    def test_observed_current_season_only_no_quote_or_projection(self):
+        now = datetime(2026, 10, 29, 18, tzinfo=timezone.utc)
+        charts = {'season': 2026, 'games': [{'id':'next','kickoff':'2026-10-30T00:00:00Z',
+            'away':{'id':'1','abbreviation':'CAR'},'home':{'id':'2','abbreviation':'GB'}}],
+            'players':[{'id':'7','name':'QB','gameId':'next','side':'away','rows':[{'date':'2026-10-19'},{'date':'2026-10-25'}]}]}
+        record = {'league':'NFL','season':2026,'seasonType':2,'eventId':'old',
+            'kickoff':'2026-10-20T00:00:00Z','firstQuarter':{'7':{'passYds':0,'cmp':3}}}
+        records = [record, {**record,'season':2025}, {**record,'seasonType':1},
+            {**record,'kickoff':'2026-11-01T00:00:00Z'},
+            {**record,'eventId':'future-capture','quarterCapturedAt':'2026-10-30T00:00:00Z'}]
+        rows=build_site.quarter_trends(charts, records, now)
+        self.assertEqual({r['stat'] for r in rows}, {'passYds','cmp'})
+        self.assertEqual(rows[0]['history'], [{'date':'2026-10-19','value':0},{'date':'2026-10-25','value':None}])
+        self.assertTrue(all(r['period']=='1Q' and r['kind']=='milestone' for r in rows))
+        self.assertTrue(all(not set(r)&{'odds','book','projection','priceClears'} for r in rows))
+        self.assertEqual(build_site.quarter_trends({**charts,'games':[]},records,now), [])

@@ -901,11 +901,56 @@ def build_teams(league, records, team_logs, defense_logs, teams_meta, identities
     return {'teams': directory, 'defense': table}, files
 
 
+# Research benchmarks, not sportsbook lines or betting probabilities.
+QUARTER_BENCHMARKS = {'passYds': (25, 50, 75), 'cmp': (3, 5), 'att': (5, 8),
+                      'rushYds': (5, 10, 20), 'car': (2, 4), 'recYds': (5, 10, 20), 'rec': (1, 2)}
+
+
+def quarter_trends(charts, records, now):
+    """Current-slate NFL history only; retain absent games as unknown sample gaps."""
+    games = {g['id']: g for g in charts.get('games', [])}
+    observed = defaultdict(dict)
+    for record in records:
+        if record.get('league') != 'NFL' or record.get('season') != charts.get('season') \
+                or record.get('seasonType') != 2 or features.when(record['kickoff']) >= now or (instant(record.get('quarterCapturedAt') or record.get('retrievedAt')) or now) > now:
+            continue
+        for pid, stats in record.get('firstQuarter', {}).items():
+            observed[str(pid)][record['eventId']] = {'date': day(record['kickoff']), 'stats': stats,
+                'source': record.get('quarterSource'), 'checkedAt': record.get('quarterCapturedAt')}
+    rows = []
+    for player in charts.get('players', []):
+        game = games.get(player['gameId'])
+        if not game or features.when(game['kickoff']) <= now:
+            continue
+        team = game[player['side']]
+        for stat, thresholds in QUARTER_BENCHMARKS.items():
+            history = []
+            for item in observed.get(str(player['id']), {}).values():
+                value = item['stats'].get(stat)
+                if isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) \
+                        and item['date'] < day(game['kickoff']):
+                    history.append({'date': item['date'], 'value': value})
+            known = {item['date']: item for item in history}
+            history = [known.get(item['date'], {'date': item['date'], 'value': None})
+                       for item in player.get('rows', []) if item.get('date')]
+            history.sort(key=lambda item: item['date'])
+            if not any(item['value'] is not None for item in history):
+                continue
+            for threshold in thresholds:
+                rows.append({'league': 'NFL', 'season': charts['season'], 'period': '1Q',
+                    'athleteId': player['id'], 'player': player['name'], 'team': team,
+                    'gameId': game['id'], 'kickoff': game['kickoff'],
+                    'matchup': f"{game['away'].get('abbreviation')} at {game['home'].get('abbreviation')}",
+                    'stat': stat, 'kind': 'milestone', 'direction': 'at-least', 'line': threshold,
+                    'teamGames': len(player.get('rows', [])), 'history': history})
+    return rows
+
+
 def trend_payload(rows):
     """One history and one player/game context per player/stat; threshold rows point to them."""
     histories, contexts, compact = {}, {}, []
     shared = ('league', 'season', 'athleteId', 'player', 'team', 'gameId', 'kickoff', 'matchup',
-              'teamGames', 'rosterAsOf', 'injuryStatus', 'stat', 'projection', 'uncertainGap', 'qbNews')
+              'teamGames', 'rosterAsOf', 'injuryStatus', 'stat', 'projection', 'uncertainGap', 'qbNews', 'period')
     for source in rows:
         row = dict(source)
         key = '|'.join(str(row.get(name) or '') for name in ('league', 'season', 'athleteId', 'stat'))
@@ -923,10 +968,10 @@ def trend_payload(rows):
 def write_trends(rows, now):
     grouped = defaultdict(list)
     for row in rows:
-        grouped[(row['league'], day(row['kickoff']), row.get('kind') == 'milestone')].append(row)
+        grouped[(row['league'], day(row['kickoff']), row.get('kind') == 'milestone', row.get('period', 'full'))].append(row)
     files = []
-    for (league, game_day, milestones), values in sorted(grouped.items()):
-        suffix = '-milestones' if milestones else ''
+    for (league, game_day, milestones, period), values in sorted(grouped.items()):
+        suffix = ('-1Q' if period == '1Q' else '') + ('-milestones' if milestones else '')
         # Split complete player/stat groups before the two-megabyte warning.
         # No threshold or history is dropped, and the index already supports many files per day.
         groups = defaultdict(list)
@@ -949,7 +994,7 @@ def write_trends(rows, now):
             name = f'{league}-{game_day}{suffix}{part}.json'
             write(OUT / 'trends' / name, {'generatedAt': stamp(now), **trend_payload(chunk)})
             files.append({'league': league, 'date': game_day, 'kind': 'milestone' if milestones else 'priced',
-                          'file': name, 'rows': len(chunk)})
+                          'file': name, 'rows': len(chunk), 'period': period})
     write(OUT / 'trends' / 'index.json', {'generatedAt': stamp(now), 'files': files})
 
 
@@ -1888,7 +1933,9 @@ def build(now=None):
                                         opponentAdjustment=matched.get('opponentAdjustment'),
                                         includesPriorSeason=bool(matched.get('includesPriorSeason')))
     prep = prep_list(trends, lines, picks, league_data, now)
-    write_trends(trends, now)
+    nfl_info = league_data['NFL']
+    quarter_charts = build_player_charts('NFL', window, forecasts, nfl_info['player_logs'], nfl_info['current'], [], now)
+    write_trends(trends + quarter_trends(quarter_charts, nfl_info['records'], now), now)
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])

@@ -723,3 +723,16 @@ test('NBA personal ticket sides preserve exact prices and never manufacture EV',
   assert.equal(moved.line, 5.5);
   assert.match(C.summarizeTicket(rows, 1, 'units', 10, now).reason, /Same-game/);
 });
+
+
+test('quarter trend filters share period and never turn missing splits into zeroes', () => {
+  const hash = C.researchHash('#trends', {league:'NFL',trendPeriod:'1Q',trendStat:'passYds'});
+  assert.equal(C.parseRoute(hash).research.trendPeriod, '1Q');
+  const row = {period:'1Q',direction:'at-least',line:25,history:[
+    {value:50},{value:0},{value:30},{value:null},{value:40},{value:null}]};
+  const last = C.trendWindow([row], 'last5')[0];
+  assert.equal(last.games,3);
+  assert.equal(last.hits,2);
+  assert.deepEqual(last.history.map(h=>h.value),[0,30,40]);
+  assert.equal(C.researchPreferences({trendPeriod:'bogus'}).trendPeriod,'full');
+});

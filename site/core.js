@@ -716,14 +716,15 @@
     const size = window === 'last5' ? 5 : window === 'last10' ? 10 : null;
     return rows.map(row => {
       const all = Array.isArray(row.history) ? row.history : Array.isArray(histories[row.historyKey]) ? histories[row.historyKey] : [];
-      const history = size ? all.slice(-size) : all.slice();
+      const selected = size ? all.slice(-size) : all.slice();
+      const history = row.period === '1Q' ? selected.filter(item => typeof item.value === 'number' && Number.isFinite(item.value)) : selected;
       if (!history.length) return { ...row, history, hits: 0, games: 0, pushes: 0, rate: 0, window };
       const hit = value => row.direction === 'at-least' ? value >= row.line
         : row.direction === 'over' ? value > row.line : value < row.line;
       const hits = history.filter(item => hit(Number(item.value))).length;
       const pushes = row.direction === 'at-least' ? 0 : history.filter(item => Number(item.value) === Number(row.line)).length;
       return { ...row, history, hits, games: history.length, pushes,
-        rate: Math.round(1000 * hits / history.length) / 10, window };
+        rate: Math.round(1000 * hits / history.length) / 10, selectedGames: selected.length, window };
     });
   };
   const bestTrendPrices = rows => [...rows.reduce((best, row) => {
@@ -760,13 +761,13 @@
   /* Browser-local research settings. Unknown saved values fall back to visible, usable controls. */
   const RESEARCH_DEFAULTS = Object.freeze({
     researchQuery:'',
-    trendRate:'80', trendStat:'all', trendKind:'main', trendWindow:'season', trendQuery:'', trendDay:'all',
+    trendPeriod:'full', trendRate:'80', trendStat:'all', trendKind:'main', trendWindow:'season', trendQuery:'', trendDay:'all',
     gamesScope:'upcoming', gamesQuery:'', boardDay:'today', boardScope:'open', boardSort:'best', boardQuery:'', propMarket:'all',
     chartStat:'recYds', chartPos:'all', chartWindow:'season', chartDay:'next', chartQuery:'', chartVenue:'all', chartOpponent:'all',
     recordScope:'straight', recordSeason:'current', recordPhase:'current',
   });
   const RESEARCH_CHOICES = {
-    trendRate:['70','80','90','100'], trendStat:['all','rec','recYds','rushYds','passYds','car','att','cmp'],
+    trendPeriod:['full','1Q'], trendRate:['70','80','90','100'], trendStat:['all','rec','recYds','rushYds','passYds','car','att','cmp'],
     trendKind:['main','alternate','milestone'], trendWindow:['season','last10','last5'], trendDay:['all','today'],
     gamesScope:['upcoming','final'], boardDay:['today','week'], boardScope:['open','settled'], boardSort:['best','confidence','time'],
     propMarket:['all','receiving yards','receptions','rushing yards','carries','passing yards'],
@@ -790,7 +791,7 @@
   const RESEARCH_PARAMS = {
     stats:{stat:'chartStat',sample:'chartWindow',date:'chartDay',position:'chartPos',venue:'chartVenue',opponent:'chartOpponent'},
     board:{market:'propMarket',date:'boardDay',scope:'boardScope',sort:'boardSort'},
-    trends:{stat:'trendStat',sample:'trendWindow',date:'trendDay',rate:'trendRate',kind:'trendKind'},
+    trends:{period:'trendPeriod',stat:'trendStat',sample:'trendWindow',date:'trendDay',rate:'trendRate',kind:'trendKind'},
     player:{stat:'stat',season:'playerSeason',sample:'playerWindow'},
   };
   const RESEARCH_SPORTS = ['ALL','NFL','CFB','NBA','WNBA','CBB','MLB','NHL','EPL','MLS'];

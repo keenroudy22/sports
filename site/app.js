@@ -628,7 +628,7 @@
   const state = {
     league: P.league(saved.get('league', 'ALL')),
     board: { type: ['all', 'props', 'games'].includes(bs.type) ? bs.type : 'all', sort: ['edge', 'chance', 'kickoff'].includes(bs.sort) ? bs.sort : 'edge', show: bs.show === 'all' || (bs.show == null && bs.value === false) ? 'all' : 'value', limit: 40 },
-    q: '', trends: { rate: '80', window: 'season', kind: 'main', heavy: true, stat: 'all', day: 'all', limit: 40 },
+    q: '', trends: { period: 'full', rate: '80', window: 'season', kind: 'main', heavy: true, stat: 'all', day: 'all', limit: 40 },
     players: { q: '', pos: 'WR', stat: 'recYds', scope: 'season', order: 'soft', sub: 'matchup', game: 'next', chartStat: 'recYds', chartPos: 'all', chartWindow: 'season', league: 'NFL' },
     games: { sort: 'bettable', all: false, q: '', day: null, status: 'all', upDay: null, nav: { window: 'all', close: false, conf: 'all' } }, player: { key: null, stat: null, season: 'current', window: 'all' },
     record: { season: 'current', phase: 'current', q: '', cal: { month: null, league: 'ALL', ledger: 'all', day: null } },
@@ -643,12 +643,12 @@
     if (!C.researchPreferences) return;
     const raw = saved.get('research-preferences', {});
     const pr = C.researchPreferences(raw && typeof raw === 'object' ? raw : {});
-    Object.assign(state.trends, { rate: pr.trendRate, stat: pr.trendStat || 'all', kind: pr.trendKind, window: pr.trendWindow, day: pr.trendDay });
+    Object.assign(state.trends, { period: pr.trendPeriod || 'full', rate: pr.trendRate, stat: pr.trendStat || 'all', kind: pr.trendKind, window: pr.trendWindow, day: pr.trendDay });
     Object.assign(state.players, { chartStat: pr.chartStat, chartPos: pr.chartPos, chartWindow: pr.chartWindow });
   })();
   const savePrefs = () => {
     const raw = saved.get('research-preferences', {});
-    saved.set('research-preferences', { ...(raw && typeof raw === 'object' ? raw : {}), trendRate: state.trends.rate, trendStat: state.trends.stat, trendKind: state.trends.kind,
+    saved.set('research-preferences', { ...(raw && typeof raw === 'object' ? raw : {}), trendPeriod: state.trends.period, trendRate: state.trends.rate, trendStat: state.trends.stat, trendKind: state.trends.kind,
       trendWindow: state.trends.window, trendDay: state.trends.day, chartStat: state.players.chartStat, chartPos: state.players.chartPos, chartWindow: state.players.chartWindow });
   };
   /* Team ids and free-text searches don't carry between sports, so a sport change clears them (as the old site did). */
@@ -753,7 +753,7 @@
   const head = (eyebrow, title, sub = '', back = '') => `${back}<div class="page-head">${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}<h1>${esc(title)}</h1>${sub ? `<p class="sub">${sub}</p>` : ''}</div>`;
   const section = (title, body, link = '', note = '') => `<section class="section"><div class="section-head"><h2>${esc(title)}</h2>${link}</div>${note ? `<p class="section-note">${note}</p>` : ''}${body}</section>`;
   const empty = (title, text, icon = 'clock') => `<div class="empty">${svg(icon, 34)}<div><h3>${esc(title)}</h3><p>${text}</p></div></div>`;
-  const SEG_LABEL = { type: 'Line type', show: 'Lines shown', gup: 'Day', trendRate: 'Hit rate', trendWindow: 'History window', trendKind: 'Line kind', trendDay: 'Games', cpos: 'Position', cwin: 'History window', plg: 'League', pos: 'Position', dscope: 'Sample', dorder: 'Order',
+  const SEG_LABEL = { type: 'Line type', show: 'Lines shown', gup: 'Day', trendPeriod: 'Period', trendRate: 'Hit rate', trendWindow: 'History window', trendKind: 'Line kind', trendDay: 'Games', cpos: 'Position', cwin: 'History window', plg: 'League', pos: 'Position', dscope: 'Sample', dorder: 'Order',
     gsort: 'Sort games', gnav: 'Slate filter', rcal: 'Calendar', gday: 'Day', gstatus: 'Game status', pstat: 'Stat', pwin: 'Sample', stakeMode: 'Stake in' };
   const seg = (key, options, current) => `<div class="seg" role="group" aria-label="${esc(SEG_LABEL[key] || key)}">${options.map(([value, label]) =>
     `<button type="button" data-set="${esc(key)}:${esc(value)}" aria-pressed="${String(current) === String(value)}">${esc(label)}</button>`).join('')}</div>`;
@@ -1437,7 +1437,7 @@
   /* A link that reopens this exact view, in the old site's shareable format (the resolver maps it back). */
   const researchShare = (mode, route = {}) => {
     const base = { league: state.league, researchQuery: state.q };
-    if (mode === 'trends' && C.researchHash) return C.researchHash(route.game ? `#trends/${encodeURIComponent(route.game)}` : '#trends', { ...base, trendStat: state.trends.stat, trendWindow: state.trends.window, trendDay: state.trends.day, trendRate: state.trends.rate, trendKind: state.trends.kind });
+    if (mode === 'trends' && C.researchHash) return C.researchHash(route.game ? `#trends/${encodeURIComponent(route.game)}` : '#trends', { ...base, trendPeriod: state.trends.period, trendStat: state.trends.stat, trendWindow: state.trends.window, trendDay: state.trends.day, trendRate: state.trends.rate, trendKind: state.trends.kind });
     if (mode === 'players' && C.researchHash) {
       const pg = state.players.game || 'next';
       return C.researchHash(state.players.sub === 'defense' ? '#stats/defense' : state.players.sub === 'teams' ? '#stats/teams' : '#stats', { ...base, researchQuery: state.players.q, chartStat: state.players.chartStat, chartPos: state.players.chartPos, chartWindow: state.players.chartWindow,
@@ -1626,10 +1626,11 @@
   };
 
   const TREND_STATS = [['all', 'All stats'], ['rec', 'Receptions'], ['recYds', 'Receiving yards'], ['rushYds', 'Rushing yards'], ['passYds', 'Passing yards'], ['car', 'Carries'], ['att', 'Pass attempts'], ['cmp', 'Completions']];
-  const loadTrends = async (route, kind, dayFilter) => {
+  const loadTrends = async (route, kind, dayFilter, period = 'full') => {
     const index = await get('app/trends/index.json');
     const wanted = (index.files || []).filter(file =>
       (state.league === 'ALL' || file.league === state.league) &&
+      (file.period || 'full') === period &&
       (kind === 'milestone' ? file.kind === 'milestone' : file.kind === 'priced') &&
       (route.game || dayFilter !== 'today' || file.date === etDay()));
     const payloads = await Promise.all(wanted.map(file => get(`app/trends/${file.file}`)));
@@ -1638,15 +1639,15 @@
       histories: { ...all.histories, ...(payload.histories || {}) }, generatedAt: all.generatedAt }), { rows: [], histories: {}, generatedAt: index.generatedAt });
   };
   const researchTrends = async route => {
-    const t = state.trends;
+    const t = state.trends, quarter = t.period === '1Q', kind = quarter ? 'milestone' : t.kind;
     /* A saved "Today" with no game today shows every upcoming game instead, without changing the saved choice. */
-    const hasToday = ((await get('app/trends/index.json')).files || []).some(f => f.date === etDay() && (state.league === 'ALL' || f.league === state.league));
+    const hasToday = ((await get('app/trends/index.json')).files || []).some(f => (f.period || 'full') === (t.period || 'full') && f.date === etDay() && (state.league === 'ALL' || f.league === state.league));
     const day = route.game || (t.day === 'today' && !hasToday) ? 'all' : t.day || 'all', fellBack = !route.game && t.day === 'today' && day === 'all';
-    const data = await loadTrends(route, t.kind, day);
+    const data = await loadTrends(route, kind, day, t.period || 'full');
     const catalog = await lineData();
     const windowed = C.trendWindow(C.bestTrendPrices((data.rows || []).map(r => r.team && !r.team.abbr && r.team.abbreviation ? { ...r, team: { ...r.team, abbr: r.team.abbreviation } } : r)), t.window, data.histories);
     const pass = list => t.heavy ? list : list.filter(r => !heavyFavorite(r.odds));
-    const forRate = rate => C.filterTrends(windowed, { min: 3, rate, league: state.league, stat: t.stat || 'all', kind: t.kind, day, game: route.game || null, query: state.q });
+    const forRate = rate => C.filterTrends(windowed, { min: 3, rate, league: state.league, stat: t.stat || 'all', kind, day, game: route.game || null, query: state.q });
     const heavyCount = forRate(t.rate).filter(r => heavyFavorite(r.odds)).length;
     const rows = pass(forRate(t.rate));
     const limit = t.limit || 40;
@@ -1659,26 +1660,26 @@
       const what = atLeast ? `${r.line}+ ${STAT_WORD[r.stat] || r.stat}` : `${r.direction === 'under' ? 'Under' : 'Over'} ${r.line} ${STAT_WORD[r.stat] || r.stat}`;
       const price = r.kind === 'milestone' ? '<span class="badge research">Stat milestone</span> <span class="small muted">No verified price</span>'
         : `<b>${esc(oddsText(r.odds))}</b> ${esc(bookLabel(r.book) || '')} <span class="small muted">· checked ${esc(ago(r.observedAt))}</span>`;
-      const playerHref = `#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(r.stat)}`;
+      const playerHref = `#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc((quarter ? 'q1_' : '') + r.stat)}`;
       return `<div class="card"><div class="with-art" style="margin-bottom:4px">${headshot(r.league, r.athleteId, 'sm')}<p><a href="${playerHref}"><b>${esc(r.player || '')}</b></a> <span class="muted small">${esc(r.team?.abbr || r.team?.name || '')}</span>${heavyFavorite(r.odds) ? ' <span class="badge warn">Heavy favorite</span>' : ''}</p></div>
-        <p style="font-weight:600">${esc(what)}</p>
+        <p style="font-weight:600">${esc((quarter ? '1Q · ' : '') + what)}</p>
         <p class="small" style="margin:2px 0">${price}</p>
         ${r.qbNews ? `<p class=caution>QB news: ${esc(r.qbNews)}</p>` : ''}
         ${r.kind !== 'milestone' ? `<p class="small">${esc(researchPrice(priceMatch(r, catalog?.lines) || {}))}</p>` : ''}
-        <p class="small muted">${esc(trendText(r))} · ${esc(windowLabel)}${r.games < 5 ? ' · small sample' : ''}${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
+        <p class="small muted">${esc(trendText(r))} · ${esc(windowLabel)}${quarter ? ` · ${r.games} of ${r.selectedGames || r.games} selected games available` : ''}${r.games < 5 ? ' · small sample' : ''}${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
         ${opponentTrendText(r) ? `<p class="small ${r.opponentAdjustment?.against ? 'red' : 'muted'}">${esc(opponentTrendText(r))}</p>` : ''}
         ${historyChart(hist.map(h => Number(h.value)), hist.map(h => String(h.date || '').slice(5)), r.line, dir, { legend: false, titles: hist.map(h => String(h.date || '')) })}
         <p class="small"><a href="#game/${esc(r.gameId)}">${esc(r.matchup || 'Game')} · ${esc(whenShort(r.kickoff))} →</a></p></div>`;
     }).join('')}</div>${rows.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-more-trends>Show ${Math.min(40, rows.length - shown.length)} more</button></p>` : ''}`
       : empty('No trends match', 'Try a lower hit rate, another history window or stat, or clear the search. Old and missing prices stay hidden.', 'research');
     const W = { season: 'Season', last10: 'Last 10', last5: 'Last 5' }, K = { main: 'Main lines', alternate: 'Alternates', milestone: 'Milestones' };
-    return `<div class="toolbar"><div class="chip-scroll">${seg('trendRate', ['70', '80', '90', '100'].map(r => [r, `${r}${r === '100' ? '%' : '%+'} · ${pass(forRate(r)).length}`]), t.rate)}</div></div>
-      ${filtersFold('trends', [W[t.window], K[t.kind], (TREND_STATS.find(([k]) => k === (t.stat || 'all')) || [, 'All stats'])[1], day === 'today' ? 'Today' : '', t.heavy ? '' : 'No heavy favorites'].filter(Boolean).join(' · '),
-        `${seg('trendWindow', Object.entries(W), t.window)}${seg('trendKind', Object.entries(K), t.kind)}<label class="sr" for="tstat">Stat</label><select id="tstat" class="select" data-select="trendStat">${TREND_STATS.map(([k, l]) => `<option value="${k}"${(t.stat || 'all') === k ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>
+    return `${seg('trendPeriod', [['full', 'Full game'], ['1Q', '1Q']], t.period || 'full')}${quarter ? '<p class="small muted">NFL first-quarter history · milestones, not sportsbook lines. Missing stats are excluded; no odds, projections or EV implied.</p>' : ''}<div class="toolbar"><div class="chip-scroll">${seg('trendRate', ['70', '80', '90', '100'].map(r => [r, `${r}${r === '100' ? '%' : '%+'} · ${pass(forRate(r)).length}`]), t.rate)}</div></div>
+      ${filtersFold('trends', [quarter ? '1Q' : 'Full game', W[t.window], quarter ? 'Milestones' : K[t.kind], (TREND_STATS.find(([k]) => k === (t.stat || 'all')) || [, 'All stats'])[1], day === 'today' ? 'Today' : '', t.heavy ? '' : 'No heavy favorites'].filter(Boolean).join(' · '),
+        `${seg('trendWindow', Object.entries(W), t.window)}${quarter ? '' : seg('trendKind', Object.entries(K), t.kind)}<label class="sr" for="tstat">Stat</label><select id="tstat" class="select" data-select="trendStat">${TREND_STATS.map(([k, l]) => `<option value="${k}"${(t.stat || 'all') === k ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>
         ${route.game || !hasToday ? '' : seg('trendDay', [['all', 'All upcoming'], ['today', 'Today']], day)}
         ${heavyCount || !t.heavy ? `<button type="button" class="chip" data-flag-trend="heavy" aria-pressed="${!t.heavy}">Hide heavy favorites${heavyCount ? ` (${heavyCount})` : ''}</button>` : ''}`)}
       <div class="toolbar"><div class="grow"><label class="sr" for="tq">Search</label><input id="tq" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off" maxlength="160"></div></div>
-      <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} trend${rows.length === 1 ? '' : 's'} · updated ${esc(ago(data.generatedAt))} · verify prices.${fellBack ? ' No games today, so this shows every upcoming game.' : ''}${route.game ? ' <a href="#research/trends">Show all games →</a>' : ''} Even a 4-of-4 run at −900 needs to win more than 90% of the time to profit. Green cleared the line, red missed, gray tied or not recorded. ${shareLink('trends', route)}</p>${list}`;
+      <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} trend${rows.length === 1 ? '' : 's'} · updated ${esc(ago(data.generatedAt))}${quarter ? ' · Historical milestones; check the book for available 1Q lines.' : ' · verify prices.'}${fellBack ? ' No games today, so this shows every upcoming game.' : ''}${route.game ? ' <a href="#research/trends">Show all games →</a>' : ''} ${quarter ? 'A hit rate alone does not establish betting value.' : 'Even a 4-of-4 run at −900 needs to win more than 90% of the time to profit.'} Green cleared the line, red missed, gray tied or not recorded. ${shareLink('trends', route)}</p>${list}`;
   };
 
   /* Research · Players: the props.cash-style matchup charts (every player in a game, bars vs the line), search and
@@ -2060,7 +2061,7 @@
       if (c.chartDay) state.players.game = c.chartDay === 'all' || c.chartDay === 'next' ? c.chartDay : `day:${c.chartDay}`;
       if (c.researchQuery) { state.players.q = c.researchQuery; state.players.sub = 'search'; }
     } else if (route.mode === 'trends') {
-      if (c.trendStat) state.trends.stat = c.trendStat; if (c.trendWindow) state.trends.window = c.trendWindow;
+      if (c.trendPeriod) state.trends.period = c.trendPeriod; if (c.trendStat) state.trends.stat = c.trendStat; if (c.trendWindow) state.trends.window = c.trendWindow;
       if (c.trendRate) state.trends.rate = c.trendRate; if (c.trendKind) state.trends.kind = c.trendKind; if (c.trendDay) state.trends.day = c.trendDay;
       if (c.researchQuery) state.q = c.researchQuery;
     }
@@ -2191,7 +2192,7 @@
         if (t.tagName === 'A') return;
         const [key, value] = d.set.split(':');
         const SETTERS = {
-          type: v => { state.board.type = v; state.board.limit = 40; saveBoard(); }, show: v => { state.board.show = v === 'all' ? 'all' : 'value'; state.board.limit = 40; saveBoard(); }, trendRate: v => { state.trends.rate = v; }, trendWindow: v => { state.trends.window = v; }, trendKind: v => { state.trends.kind = v; }, trendDay: v => { state.trends.day = v; },
+          type: v => { state.board.type = v; state.board.limit = 40; saveBoard(); }, show: v => { state.board.show = v === 'all' ? 'all' : 'value'; state.board.limit = 40; saveBoard(); }, trendPeriod: v => { state.trends.period = v; }, trendRate: v => { state.trends.rate = v; }, trendWindow: v => { state.trends.window = v; }, trendKind: v => { state.trends.kind = v; }, trendDay: v => { state.trends.day = v; },
           pos: v => { state.players.pos = v; }, plg: v => { state.players.league = v === 'CFB' ? 'CFB' : 'NFL'; state.players.game = 'next'; state.players.q = ''; }, cpos: v => { state.players.chartPos = v; }, cwin: v => { state.players.chartWindow = v; },
           dstat: v => { state.players.stat = v; }, dscope: v => { state.players.scope = v; }, dorder: v => { state.players.order = v; },
           gnav: v => { const [k, x] = v.split('='); state.games.nav[k] = k === 'close' ? !state.games.nav.close : x; state.games.all = false; },
@@ -2200,7 +2201,7 @@
           pstat: v => { state.player.stat = v; }, pwin: v => { state.player.window = v; }, pseason: v => { state.player.season = v; }, stakeMode: v => { state.stake.mode = v; saved.set('stake', state.stake); },
         };
         if (SETTERS[key]) SETTERS[key](value);
-        if (['trendRate', 'trendWindow', 'trendKind', 'trendDay', 'cpos', 'cwin'].includes(key)) { state.trends.limit = 40; savePrefs(); }
+        if (['trendPeriod', 'trendRate', 'trendWindow', 'trendKind', 'trendDay', 'cpos', 'cwin'].includes(key)) { state.trends.limit = 40; savePrefs(); }
         render(true); return;
       }
       if (d.flagTrend) { state.trends.heavy = !state.trends.heavy; state.trends.limit = 40; render(true); return; }
