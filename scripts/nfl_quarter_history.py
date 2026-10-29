@@ -133,6 +133,19 @@ def refresh(season, pbp, players, schedule, root=bx.STORE, now=None, proof_fetch
         rows=groups.get(mapping.get(old['eventId']),[])
         observed,holds=extract(rows,old,cross)
         diagnostic={}
+        saved_proof=old.get('quarterDiagnostics',{})
+        if holds and old.get('quarterProvider')=='nflverse' and saved_proof.get('zeroActivitySourceHash'):
+            # Reuse the independent zero receipt only while the CURRENT bulk feed
+            # still proves zero Q1 activity and the exact official full-game count.
+            proofs=set()
+            for note in saved_proof.get('zeroActivityExceptions',[]):
+                identity=note.split(' ',1)[0].split(':')
+                if len(identity)==2 and identity[1] in ('car','rec'):
+                    proofs.add(tuple(identity))
+            observed,holds=extract(rows,old,cross,proofs,diagnostic)
+            if diagnostic.get('zeroActivityExceptions'):
+                for key in ('zeroActivitySource','zeroActivitySourceHash'):
+                    diagnostic[key]=saved_proof[key]
         if holds and proof_fetch is not None and proof_reads<2 and observed:
             import football_first_quarter as fq
             proof_reads+=1

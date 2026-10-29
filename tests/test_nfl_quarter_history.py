@@ -139,3 +139,24 @@ class QuarterFallbackTests(unittest.TestCase):
         incomplete=copy.deepcopy(old);incomplete['firstQuarter']['10'].pop('rushYds')
         target=copy.deepcopy(self.record);bx.retain_quarter_history(incomplete,target)
         self.assertNotIn('firstQuarter',target)
+
+    def test_saved_zero_receipt_survives_independent_source_outage_but_not_new_activity(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);old=copy.deepcopy(self.record)
+            rows=copy.deepcopy(self.rows);rows[0]['qtr']='2'
+            old['players'][0]['rushYds']=11
+            proofs={('10','car')};d={}
+            old['firstQuarter']=q.extract(rows,old,self.cross,proofs,d)[0]
+            d.update(zeroActivitySource=old['sources']['plays'],zeroActivitySourceHash='a'*64)
+            old.update(quarterProvider='nflverse',quarterDiagnostics=d,quarterHolds=[])
+            old['hash']=bx.content_hash(old);bx.append(bx.store_path('NFL',2026,root),[old]);bx.write_json(root/'ledger.json',bx.ledger(root))
+            players=[{'gsis_id':g,'espn_id':e} for g,e in self.cross.items()]
+            schedule=[{'espn':'100','game_id':'2026_01_B_A'}];now=datetime(2026,10,29,tzinfo=timezone.utc)
+            def down(url):raise OSError('source unavailable')
+            result=q.refresh(2026,rows,players,schedule,root,now,proof_fetch=down)
+            self.assertEqual(result[0]['state'],'complete')
+            self.assertEqual(bx.stored(root)['100']['firstQuarter']['10']['rushYds'],0)
+            rows[0]['qtr']='1'
+            result=q.refresh(2026,rows,players,schedule,root,now,proof_fetch=down)
+            self.assertEqual(result[0]['state'],'partial')
+            self.assertNotIn('rushYds',bx.stored(root)['100']['firstQuarter']['10'])
