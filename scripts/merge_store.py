@@ -59,6 +59,11 @@ def retrieved(line):
         return ''
     if not isinstance(record, dict):
         return ''
+    # Quarter-only backfills preserve the earlier official box-score clock.
+    # Merge by the actual later observation, so a concurrent capture cannot
+    # reorder a newly verified split behind an older partial record.
+    if record.get('firstQuarter') and record.get('quarterCapturedAt'):
+        return max(str(record.get('retrievedAt') or ''), str(record['quarterCapturedAt']))
     return str(next((record[k] for k in STAMPS if record.get(k)), '') or '')
 
 

@@ -38,6 +38,16 @@ def write_store(root, lines, status):
 
 
 class PureTests(unittest.TestCase):
+    def test_quarter_enrichment_merges_by_observation_without_changing_official_age(self):
+        base=json.dumps({'eventId':'1','retrievedAt':'2026-09-01T12:00:00Z'})
+        capture=json.dumps({'eventId':'1','retrievedAt':'2026-10-29T12:00:00Z','firstQuarter':{'10':{'car':1}}})
+        enrichment=json.dumps({'eventId':'1','retrievedAt':'2026-09-01T12:00:00Z','quarterCapturedAt':'2026-10-29T13:00:00Z','firstQuarter':{'10':{'car':1,'att':8}}})
+        merged=ms.merge_lines(base,capture,enrichment)
+        self.assertEqual(merged[-1],enrichment)
+        self.assertEqual(json.loads(merged[-1])['retrievedAt'],'2026-09-01T12:00:00Z')
+        newer=json.dumps({'eventId':'1','retrievedAt':'2026-10-29T14:00:00Z','quarterCapturedAt':'2026-10-29T13:00:00Z','firstQuarter':{'10':{'car':1,'att':8}}})
+        self.assertEqual(ms.merge_lines(base,newer,enrichment)[-1],newer)
+
     def test_lines_from_both_sides_once_in_retrieval_order(self):
         base = rec('g1', '2026-09-26T12:00:00Z', 44) + '\n'
         ours = base + rec('g1', '2026-09-26T12:38:00Z', 45) + '\n'
