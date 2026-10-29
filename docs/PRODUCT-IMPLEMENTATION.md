@@ -1,4 +1,4 @@
-### October29 NFL first-quarter passing and selectable charts — RELEASE PENDING
+### October29 NFL first-quarter passing and selectable charts — VERIFIED LIVE
 
 Owner requested missing1Q passing plus normal stat tabs and bar charts. Extended
 the same free bulk extractor with pass attempts, completions and passing yards;
@@ -15,7 +15,21 @@ TD/INT totals. QB quarter panel now leads with passing yards and C/A. Desktop an
 375px local previews pass; all three passing tabs work and Last5 changes bars/logs
 and coverage together. Live quarter sportsbook capture/EV/model/settlement remains
 a separate gate, not implied by displaying observed stats.
-Full/clean locked release and hosted/live verification pending.
+Source d9c730110cab177bf1e1b5583f49eb84b71608de passed2014Python(2skip)/296Node
+normal and clean suites plus all locked release gates. Hosted40928189984SUCCESS
+verified4680af1f0e9cdadc76804e73d728aa1afb3492d6 contains that source. Live375/1440
+no overflow or console errors. Jordan Love7/7: yards91,3,88,39,93,109,122;
+completions2,3,8,5,9,6,10; attempts7,7,12,6,10,9,14. Last5 updates bars and
+coverage to5/5. Screenshot kookn-q1-passing-charts-2026-10-29.png in owner folder.
+Full-game player/team/score/market history unchanged.
+
+Capture rebase conflict resolved through merge_store, retaining every original
+line and rebuilding the ledger, then re-appending verified passing data. Added
+quarter-observation ordering regression to prevent later verified quarter backfills
+sorting behind older partial captures while preserving official capture age.
+Older cached-core compatibility tested: new quarter labels render correctly
+without the new core labels. Natural next morning/new-final passing receipt remains
+the existing scheduled observation; no quarter sportsbook/model admission implied.
 
 ### October29 remaining NFL quarter gaps and automatic updates — VERIFIED LIVE
 

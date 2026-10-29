@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T17:50:28.250746+00:00",
+  "updatedAt": "2026-10-29T18:22:37.286512+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -151,9 +151,9 @@
       "title": "Exact-period capture, evidence and settlement before automated quarter parlays",
       "status": "gated",
       "owner": "agent",
-      "next": "Release/verify NFL1Q passing and stat-tab charts. Backfill244 passer games; reuse automatic bulk refresh. Quarter sportsbook capture, projection, selection and settlement remain separately gated.",
+      "next": "Observe existing morning refresh/new-final passing receipt. NFL1Q passing, stat tabs and charts are live. Quarter sportsbook capture, projections, selection and settlement remain separately gated.",
       "doneWhen": "Verified period/book/line identities, period workload evidence, correlated ticket quote and tested settlement exist; ordinary full-game estimates are never divided into quarters. Existing budgets and approval gates hold.",
-      "evidence": "Oct29 live107-game rush/rec receipts preserved in PRODUCT. Passing att/cmp/passYds reconciles for244 passer games across107 finals. Separate1Q tabs, chart, logs and filters implemented; mobile preview passes. Focused passing/sack/OT/period-isolation tests pass; full/clean and hosted release pending."
+      "evidence": "d9c730110; hosted40928189984SUCCESS verified4680af1f ancestry.2014Python(2skip)/296Node full+clean/all gates.107 finals/244 passer games reconciled; full-game history unchanged. Live375/1440 clean; all3 passing tabs and Last5 verified. Quarter merge ordering and older-core regressions pass. Existing bulk automation extended, no new feed/task."
     },
     {
       "id": "O-20261022-RESULT",
