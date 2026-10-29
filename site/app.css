@@ -694,13 +694,13 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-quarter-coverage span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 400; }
 .kt-quarter-summary { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-bottom: 16px; }
 .kt-quarter-summary > div { padding: 14px; border-radius: 8px; background: rgba(255,255,255,.04); }
-.kt-quarter-label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.kt-quarter-label { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
 .kt-quarter-summary p { margin: 8px 0 4px; }
 .kt-quarter-summary p b { font-size: 32px; line-height: 1; }
 .kt-quarter-summary small { font-size: 12px; }
-.kt-quarter-sample { display: block; margin-top: 10px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+.kt-quarter-sample { display: block; margin-top: 10px; font-size: 12px; color: var(--muted); line-height: 1.5; }
 .kt-quarter-log { width: 100%; }
-.kt-quarter-log td span { display: block; color: var(--muted); font-size: 11px; font-weight: 400; margin-top: 3px; }
+.kt-quarter-log td span { display: block; color: var(--muted); font-size: 12px; font-weight: 400; margin-top: 3px; }
 .kt-quarter-log td b { font-size: 18px; }
 .kt-quarter-source { margin-top: 12px; }
 .kt-quarter-source summary { font-size: 12px; }
