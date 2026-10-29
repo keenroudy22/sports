@@ -1,3 +1,23 @@
+# October29 owner — complete current-season NFL1Q history and automatic refresh
+
+All107 stored2026 NFL regular-season finals now expose all eligible player Q1
+rushing/receiving families (2,000+ player/game rows), via exact GSIS/ESPN identity,
+team/final and full-game per-player/stat reconciliation. Existing nflverse morning
+job reuses cached schedule/crosswalk and reads one free current-season compressed
+PBP file; new finals still get the normal ESPN extraction first. No new scheduler,
+paid feed, model promotion or per-player polling. Stored source outages keep the
+last verified splits. Existing box-score job retries at most2 gap games, once/day
+per game, without resetting the official stat-correction clock.
+
+Narrow zero-activity exception: when a player's full-game count matches but only
+later-game yards conflict, a Q1 zero needs complete nflverse team-play coverage,
+zero Q1 attempts/catches/lateral yards and independent complete ESPN feed with exact
+team plays and no relevant Q1 actor. It never excuses nonzero Q1 or count conflicts.
+Bo Nix at ARI is the sole current exception; retain its later-game1-yard discrepancy
+in quarterDiagnostics. Preserve full-game fields, old records and all wager grades.
+Per-play ESPN supplements are a bounded explicit diagnostic/backfill path, not
+recurring player polling. Quarter models/parlay admission remain separately gated.
+
 # October29 owner — full-season NFL quarter history
 
 The 1Q panel must show every selected season/game-log row, not only available

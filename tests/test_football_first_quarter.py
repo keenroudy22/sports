@@ -70,6 +70,119 @@ class FirstQuarterTests(unittest.TestCase):
         td['type']={'text':'Two-Point Conversion'}
         self.assertEqual(q.extract(p,self.box,self.teams),{})
 
+    def test_ambiguous_snap_uses_exact_same_play_provider_stats(self):
+        p=copy.deepcopy(self.plays)
+        snap=p['items'][0]
+        base='https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/100/competitions/100/plays/1'
+        snap['participants'].append({'type':'passer','athlete':{'$ref':'/athletes/10'}})
+        snap['participants'][0]['playStatistics']={'$ref':base+'/participants/10/statistics/0'}
+        snap['teamParticipants']=[{'type':'offense','team':{'$ref':'/teams/1'},'playStatistics':{'$ref':base+'/teams/1/statistics/0'}}]
+        def data(owner, values):
+            return {'play':{'$ref':base},owner:{'$ref':'/athletes/10' if owner=='athlete' else '/teams/1'},
+                    'splits':{'name':'play','categories':[{'stats':[{'name':k,'value':v} for k,v in values.items()]}]}}
+        calls=[]
+        def fetch(url):
+            calls.append(url)
+            return data('team',{'totalOffensivePlays':1}) if '/teams/' in url else data('athlete',{'rushingAttempts':1,'rushingYards':-2,'receptions':0,'receivingYards':0})
+        out,evidence=q.resolve(p,self.box,self.teams,fetch)
+        self.assertEqual(out['10']['rushYds'],-2)
+        self.assertTrue(q.complete(self.box,out))
+        self.assertEqual(len(calls),2)
+        self.assertEqual(q.extract(p,self.box,self.teams,evidence),out)
+        # A foreign host never becomes a request, and the missing split stays unknown.
+        snap['teamParticipants'][0]['playStatistics']['$ref']='https://example.com/secret'
+        calls.clear();out,_=q.resolve(p,self.box,self.teams,fetch)
+        self.assertEqual(out,{})
+        self.assertEqual(calls,[])
+
+    def test_replay_spot_duplicate_requires_identical_snap_not_clock_alone(self):
+        p=copy.deepcopy(self.plays)
+        first=p['items'][0]
+        first.update(text='Rush. The ball spot was assisted by replay.',wallclock='2026-09-01T17:00:00Z',drive={'$ref':'/drives/1'},clock={'value':800},statYardage=2)
+        duplicate=copy.deepcopy(first);duplicate['id']='5'
+        p['items'].append(duplicate);p['count']=5
+        box=copy.deepcopy(self.box);box['10']['rushYds']=14
+        self.assertEqual(q.extract(p,box,self.teams)['10']['rushYds'],2)
+        duplicate['start']={'team':{'$ref':'/teams/1'},'down':2}
+        self.assertEqual(q.extract(p,box,self.teams),{})
+
+    def test_automatic_repair_appends_once_and_backs_off_held_games(self):
+        import tempfile
+        from datetime import datetime,timezone,timedelta
+        now=datetime(2026,10,29,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            old={'league':'NFL','eventId':'100','season':2026,'seasonType':2,'kickoff':'2026-09-01T17:00:00Z',
+                 'retrievedAt':'2026-09-02T12:00:00Z','revision':1,'teams':self.teams,
+                 'players':[dict(id=aid,**stats) for aid,stats in self.box.items()],
+                 'sources':{'plays':'https://example.org/plays'},'quality':{'plays':'ok','odds':'ok'}}
+            old['hash']=bx.content_hash(old)
+            bx.append(bx.store_path('NFL',2026,root),[old]);bx.write_json(root/'ledger.json',bx.ledger(root))
+            status={};calls=[]
+            def fetch(url):calls.append(url);return self.plays
+            self.assertEqual(q.repair(status,now,root,fetch=fetch,log=lambda _:None),1)
+            enriched=bx.stored(root)['100']
+            self.assertEqual(enriched['officialRetrievedAt'],old['retrievedAt'])
+            self.assertEqual(enriched['retrievedAt'],old['retrievedAt'])
+            self.assertEqual(enriched['quarterCapturedAt'],bx.stamp(now))
+            self.assertEqual(bx.due('100',old['kickoff'],{'100':enriched},{},now),'recheck')
+            self.assertEqual(q.repair(status,now,root,fetch=fetch,log=lambda _:None),0)
+            self.assertEqual(len(calls),1)
+            self.assertEqual(bx.verify(root),[])
+            # A second held game is retried after a day, not every scheduled run.
+            old.update(eventId='101');old['hash']=bx.content_hash(old)
+            bx.append(bx.store_path('NFL',2026,root),[old]);bx.write_json(root/'ledger.json',bx.ledger(root))
+            held=[]
+            def empty(url):held.append(url);return {}
+            q.repair(status,now,root,fetch=empty,log=lambda _:None)
+            q.repair(status,now+timedelta(hours=1),root,fetch=empty,log=lambda _:None)
+            self.assertEqual(len(held),1)
+            self.assertEqual(status['quarterRepair']['101']['state'],'held')
+            q.repair(status,now+timedelta(days=1),root,fetch=empty,log=lambda _:None)
+            self.assertEqual(len(held),2)
+
+    def test_supplement_reads_are_bounded_and_wrong_play_responses_hold(self):
+        import re
+        p={'items':[],'count':200}
+        for i in range(200):
+            snap=play(i+1,1,2)
+            snap['participants'].append({'type':'passer','athlete':{'$ref':'/athletes/10'}})
+            snap['teamParticipants']=[{'type':'offense','team':{'$ref':'/teams/1'},'playStatistics':{'$ref':f'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/100/competitions/100/plays/{i+1}/teams/1/statistics/0'}}]
+            p['items'].append(snap)
+        calls=[]
+        def fetch(url):
+            calls.append(url);pid=re.search(r'/plays/(\d+)/',url)[1]
+            return {'play':{'$ref':'/plays/'+pid},'team':{'$ref':'/teams/1'},'splits':{'name':'play','categories':[{'stats':[{'name':'totalOffensivePlays','value':0}]}]}}
+        d={};out,_=q.resolve(p,self.box,self.teams,fetch,d)
+        self.assertEqual(out,{})
+        self.assertEqual(len(calls),192)
+        self.assertIn('request limit',d['error'])
+        def wrong(url):
+            result=fetch(url);result['play']['$ref']='/plays/999';return result
+        out,_=q.resolve(p,self.box,self.teams,wrong)
+        self.assertEqual(out,{})
+
+    def test_lateral_recipient_gets_yards_without_a_manufactured_catch(self):
+        p=copy.deepcopy(self.plays);box=copy.deepcopy(self.box)
+        box['30']['team']='1';box['50']={'team':'1','rec':0,'recYds':5}
+        snap=p['items'][2];snap.update(text='Pass complete. Lateral to teammate for 5 yards.',statYardage=13)
+        base='https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/100/competitions/100/plays/3'
+        snap['participants'].append({'type':'other','athlete':{'$ref':'/athletes/50'}})
+        for v in snap['participants']:
+            aid=bx.ref_id(v['athlete'],'athletes');v['playStatistics']={'$ref':base+f'/participants/{aid}/statistics/0'}
+        snap['teamParticipants']=[{'type':'offense','team':{'$ref':'/teams/1'},'playStatistics':{'$ref':base+'/teams/1/statistics/0'}}]
+        def fetch(url):
+            if '/teams/' in url:owner='team';aid='1';values={'totalOffensivePlays':1}
+            else:
+                owner='athlete';aid=url.split('/participants/')[1].split('/')[0]
+                values={'rushingAttempts':0,'rushingYards':0,'receptions':int(aid=='30'),'receivingYards':8 if aid=='30' else 5 if aid=='50' else 0}
+            return {'play':{'$ref':base},owner:{'$ref':('/teams/' if owner=='team' else '/athletes/')+aid},'splits':{'name':'play','categories':[{'stats':[{'name':k,'value':v} for k,v in values.items()]}]}}
+        out,_=q.resolve(p,box,self.teams,fetch)
+        self.assertEqual(out['30']['rec'],1)
+        self.assertEqual(out['30']['recYds'],8)
+        self.assertEqual(out['50']['rec'],0)
+        self.assertEqual(out['50']['recYds'],5)
+
     def test_bounded_backfill_rejects_fanout_before_network(self):
         with self.assertRaises(ValueError):q.backfill([str(n) for n in range(7)])
         with self.assertRaises(ValueError):q.backfill(['1','1'])

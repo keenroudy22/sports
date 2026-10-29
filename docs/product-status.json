@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T13:52:46.782704+00:00",
+  "updatedAt": "2026-10-29T15:28:54.870934+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -151,9 +151,9 @@
       "title": "Exact-period capture, evidence and settlement before automated quarter parlays",
       "status": "gated",
       "owner": "agent",
-      "next": "NFL Q1 observed stats shipped; monitor existing final captures. Quarter projections, Q2/CFB/NBA support, priced selection, book settlement and correlated-ticket quotes remain separately gated. No added scheduled reads or model promotion.",
+      "next": "Finish107-game NFL Q1 full/clean release and hosted/live verification. Existing morning nflverse job fills/corrects all players; box job retries2 gaps/day. Quarter projection/selection/settlement remain separately gated.",
       "doneWhen": "Verified period/book/line identities, period workload evidence, correlated ticket quote and tested settlement exist; ordinary full-game estimates are never divided into quarters. Existing budgets and approval gates hold.",
-      "evidence": "NFL Q1 history sourcee39e43e72 verified live by40877650180/3c0d5bb80SUCCESS with10 rechecks.1993Python(2skip)/294Node normal/clean, audits/rehearsal passed. Live375/1440 no overflow/errors; season isolation verified.6 historical reads appended3 finals/56 player rows,held3;full-game fields unchanged. Existing final capture adds Q1 without new reads; quarter forecasts/tickets remain gated."
+      "evidence": "Oct29 implementation:107/107 current-season finals complete across all rushing/receiving player families; full-game fields unchanged. GSIS/ESPN crosswalk, independent team/player checks, lateral/zero safeguards, idempotent append, cached bulk automatic refresh and retry/correction-clock tests pass. Release pending; prior receipts retained in PRODUCT-IMPLEMENTATION."
     },
     {
       "id": "O-20261022-RESULT",

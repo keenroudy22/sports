@@ -451,7 +451,7 @@ def build_record(league, event_id, summary, plays, odds, retrieved_at, failures=
 
 
 def content_hash(record):
-    body = {k: v for k, v in record.items() if k not in ('retrievedAt', 'hash', 'revision')}
+    body = {k: v for k, v in record.items() if k not in ('retrievedAt', 'hash', 'revision', 'quarterCapturedAt', 'officialRetrievedAt')}
     return hashlib.sha256(json.dumps(body, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()[:20]
 
 
@@ -561,7 +561,7 @@ def due(game_id, kickoff, existing, status, now):
             and status.get('retries', {}).get(game_id, 0) < MAX_FETCH_ATTEMPTS:
         return 'retry'
     if game_id not in status.get('rechecked', {}) and now >= instant(kickoff) + RECHECK_AFTER \
-            and instant(record['retrievedAt']) < instant(kickoff) + RECHECK_AFTER:
+            and instant(record.get('officialRetrievedAt', record['retrievedAt'])) < instant(kickoff) + RECHECK_AFTER:
         return 'recheck'
     return None
 
@@ -662,9 +662,11 @@ def main(argv=None):
         games = list(slate_games(slate))
     added, attempted = run(games, status, now, limit=args.limit)
     STORE.mkdir(parents=True, exist_ok=True)
+    import football_first_quarter
+    repaired = 0 if args.backfill else football_first_quarter.repair(status, now, limit=2 if args.limit is None else min(2,max(0,args.limit-attempted)))
     write_json(STORE / 'ledger.json', ledger())
-    if added or json.dumps(status, sort_keys=True) != before:
-        if added:
+    if added or repaired or json.dumps(status, sort_keys=True) != before:
+        if added or repaired:
             status['lastAppendAt'] = stamp(now)
         write_json(status_path, status)
     failed = sum(1 for f in status.get('failures', {}).values() if f.get('lastAttemptAt') == stamp(now))

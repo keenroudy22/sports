@@ -18,6 +18,7 @@ Stdlib only. Data attribution: nflverse (github.com/nflverse), Pro Football Refe
 import argparse
 import csv
 import io
+import gzip
 import re
 import sys
 from collections import defaultdict
@@ -40,7 +41,10 @@ SUFFIX = re.compile(r'\b(jr|sr|ii|iii|iv|v)\b')
 
 def download(url):
     with urlopen(url, timeout=60) as response:
-        return list(csv.DictReader(io.StringIO(response.read().decode('utf-8'))))
+        data = response.read()
+        if url.endswith('.gz'):
+            data = gzip.decompress(data)
+        return list(csv.DictReader(io.StringIO(data.decode('utf-8'))))
 
 
 def number(value):
@@ -165,13 +169,29 @@ def main(argv=None):
         sys.exit('Refusing to append to a store whose recorded lines changed:\n  ' + '\n  '.join(problems))
     STORE.mkdir(parents=True, exist_ok=True)
     try:
-        added, problems = refresh(args.seasons or [season], now=now)
+        cache = {}
+        def once(url):
+            if url not in cache:
+                cache[url] = download(url)
+            return cache[url]
+        added, problems = refresh(args.seasons or [season], fetch=once, now=now)
     except OSError as error:
         # nflverse unavailable: keep the last good lines; the hosted run continues.
         print(f'nflverse unavailable ({type(error).__name__}); stored snap counts unchanged.')
         return
     boxscores.write_json(STORE / 'ledger.json', boxscores.ledger(STORE))
     print(f'Appended {sum(added.values())} game lines {added or ""}; {len(problems)} games skipped.')
+    if not args.seasons or season in args.seasons:
+        # Same scheduled job and cached player/schedule files; one free season PBP artifact.
+        import nfl_quarter_history
+        try:
+            outcomes = nfl_quarter_history.refresh(season, once(nfl_quarter_history.PBP.format(season=season)), once(PLAYERS), once(GAMES), now=now, proof_fetch=lambda url: boxscores.fetch_json(url, attempts=1))
+            held = [r for r in outcomes if r['state'] != 'complete']
+            print(f'1Q season coverage: {len(outcomes)-len(held)}/{len(outcomes)} complete; {len(held)} source holds.')
+            for row in held[:10]:
+                print('  1Q', row['eventId'], '; '.join(row['reasons']))
+        except (OSError, ValueError) as error:
+            print(f'1Q nflverse fallback unavailable ({type(error).__name__}); verified stored splits retained.')
     for problem in problems[:10]:
         print('  ' + problem)
 

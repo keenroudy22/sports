@@ -1,3 +1,29 @@
+### October29 remaining NFL quarter gaps and automatic updates — RELEASE PENDING
+
+Owner explicitly requested remaining15 games and all-player full-season coverage.
+Diagnosed ESPN replay/penalty/special-team/lateral attribution. The detailed audit
+also found partial player families inside nominally covered games. Added an independent
+free nflverse current-season PBP fallback, exact GSIS-to-ESPN IDs, team/final/period
+checks, full-game team plays and separate per-player rushing/receiving reconciliation.
+All107 current-season regular-season finals now have complete eligible families.
+Full-game players, teams, scores, markets and kickoff are byte-equivalent to the
+previous committed snapshot; all changes append quarter-only revisions.
+
+Existing morning nflverse job reuses cached schedule/crosswalk; one compressed
+season artifact updates everyone and later statistical corrections. No new task or
+metered feed. Existing box-score job retains new-final extraction and retries at
+most2 older gaps/day, once/day/game, preserving official-capture age. Raw per-play
+supplements remain a bounded explicit diagnostic path; source outages retain verified
+history. Build shows the actual provider source and quarter check time.
+
+One full-game-yard discrepancy remains in source diagnostics, not hidden: Bo Nix
+has73 vs official74 rushing yards, all rushing plays after Q1. His Q1 zero is proven
+by both complete feeds and exact full-game carry count. The zero-only exception
+cannot admit nonzero quarter values, count mismatches, incomplete feeds or unknown
+players. Independent validation, missing data, laterals, duplicates, negative yards,
+overtime, zero proof, append/idempotency and automatic cached-read tests pass.
+Full locked release and hosted/live receipts pending.
+
 ### October29 full-season NFL quarter history and layout — VERIFIED LIVE
 
 Owner requested full-season1Q history rather than the initial2-game Hubbard sample.

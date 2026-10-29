@@ -739,8 +739,8 @@ def build_players(league, records, snaps, teams_meta, trends=None):
                     'eventId': g['eventId'], 'date': day(g['kickoff']), 'season': g['season'],
                     'seasonType': g['seasonType'], 'team': player['team'],
                     'opp': g['away']['id'] if player['team'] == g['home']['id'] else g['home']['id'],
-                    'stats': g['firstQuarter'][pid], 'source': g['sources']['page'],
-                    'checkedAt': g['retrievedAt']})
+                    'stats': g['firstQuarter'][pid], 'source': g.get('quarterSource', g['sources']['page']),
+                    'checkedAt': g.get('quarterCapturedAt', g['retrievedAt'])})
     trend_contexts = defaultdict(dict)
     for row in trends or []:
         if row.get('league') != league or row.get('kind') != 'main' or not row.get('athleteId'):

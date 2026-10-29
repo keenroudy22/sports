@@ -71,3 +71,12 @@ public JSON file and call it paid access. No accounts, billing, feed expansion o
   reuses those terms and links to the summary only after its actual X receipt.
   NBA Trial, personal/fun tickets and Climb stay outside this image. No new feed,
   scheduler or budget; existing image guard and retained-attachment rules apply.
+
+October29 NFL first-quarter history: existing player-shard `firstQuarter` rows may
+use the public nflverse PBP release page as `source`, with the actual quarter
+capture time. Only observed car/rushYds/rec/recYds enter the player UI. Exact
+GSIS/ESPN identities, official full-game counts/totals, period and team checks
+apply. Missing values remain unknown. Internal source artifacts, per-play proof,
+request diagnostics and hashes stay in the append-only box-score store; they are
+not added as arbitrary public file families. The source-details text credits
+nflverse and ESPN. No quarter wagering/model admission is implied.
