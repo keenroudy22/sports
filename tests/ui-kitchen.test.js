@@ -45,9 +45,10 @@ test("the chef's lines are count-aware and use the build's last game day", () =>
   assert.equal(M.ledeTitle([noon, night, night], true), 'Three for today.');
   assert.equal(M.ledeTitle([{ kickoff: '2026-10-13T00:15:00Z' }], false), 'One for Monday.');
   assert.equal(M.ledeTitle([], true), 'Nothing on the rail yet.');
-  assert.equal(M.dateLine('2026-10-07T20:00:00Z', { day: '2026-10-05', wins: 0, losses: 1, pushes: 0 }), 'Wednesday, Oct 7. Monday results below.');
+  assert.equal(M.dateLine('2026-10-07T20:00:00Z', { day: '2026-10-05', wins: 0, losses: 1, pushes: 0 }), 'Wednesday, Oct 7.');
   assert.equal(M.dateLine('2026-10-07T20:00:00Z', null), 'Wednesday, Oct 7.');
-  assert.match(M.dateLine('2026-10-20T20:00:00Z', { day: '2026-10-05', wins: 2, losses: 1, pushes: 1 }), /Monday, Oct 5 results below\.$/);
+  assert.equal(M.dateLine('2026-10-20T20:00:00Z', { day: '2026-10-05', wins: 2, losses: 1, pushes: 1 }), 'Tuesday, Oct 20.');
+  assert.equal(M.dateLine('2026-10-07T20:00:00Z', { day: '2026-10-06' }), 'Wednesday, Oct 7. Tuesday results below.');
 });
 
 test('a settled slip prints the margin only when it agrees with the graded result', () => {

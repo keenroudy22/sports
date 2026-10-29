@@ -201,7 +201,7 @@
   const dateLine = (nowIso, last) => {
     const lastDay = last && last.day ? `${last.day}T16:00:00Z` : null;
     const gap = lastDay ? (Date.parse(C.dayOf(nowIso) + 'T16:00:00Z') - Date.parse(lastDay)) / 86400000 : 99;
-    return `${C.dayLabel(nowIso)}.${last ? ` ${gap <= 6 ? weekday(lastDay) : C.dayLabel(lastDay)} results below.` : ''}`;
+    return `${C.dayLabel(nowIso)}.${gap === 1 ? ` ${weekday(lastDay)} results below.` : ''}`;
   };
   /* A settled slip's detail: "Final 45-24, missed by 21." from the saved actual. The margin prints only when it agrees
      with the graded result (a book settlement can differ from the box score). */
@@ -1262,7 +1262,8 @@
       return `<a class="kt-next-day" href="#games"><b>${esc(C.dayLabel(day + 'T12:00:00Z'))}</b><span>${esc(counts)}</span><small>${esc(sample)}</small></a>`;
     }).join('')}</div>`, { kind: 'Schedules and projections · not picks', link: ktLink('#games', 'See all games') }) : '';
     const graded = picks.filter(p => p.result && !p.historicalImport && !C.isUnpricedImport(p) && !C.isLadder(p) && C.countsPublic(p) && C.dayOf(p.kickoff));
-    const lastDay = graded.map(p => C.dayOf(p.kickoff)).filter(d => d < etDay()).sort().pop();
+    const yesterday = new Date(Date.parse(etDay() + 'T16:00:00Z') - 86400000).toISOString().slice(0, 10);
+    const lastDay = graded.some(p => C.dayOf(p.kickoff) === yesterday) ? yesterday : null;
     const recent = graded.filter(p => C.dayOf(p.kickoff) === lastDay);
     const k = kpiStrip(all.filter(inLeague), board);
     const notesList = C.deskNotes(notes, state.league, now, today.games || []).filter(n => !hasGamesToday || C.dayOf(n.kickoff) === etDay());

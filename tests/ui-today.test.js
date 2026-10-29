@@ -938,3 +938,9 @@ test('withdrawn settled play shows its withdrawal on receipt, slip and detail wi
   assert.deepEqual(pick,before);
   assert.doesNotMatch(ctx.receipt({...pick,entryNote:'Off the card: price moved.'},new Map()),/Recommendation withdrawn/);
 });
+
+ test('Today leaves older Sam Houston results on Record instead of recycling them', async () => {
+  const old = { ...yesterday, id: 'old-shsu', displayTitle: 'Sam Houston moneyline', kickoff: '2026-10-07T23:00:00Z', result: 'loss', posted: true };
+  const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [prop, old], lastSlate: { ALL: { day: '2026-10-07' } } } }).api.views.today({ view: 'today' });
+  assert.doesNotMatch(page, /Sam Houston|Wednesday results|results below|id="left-h"/);
+ });
