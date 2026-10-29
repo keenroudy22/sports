@@ -1,4 +1,4 @@
-### October29 owner staking update — IMPLEMENTED, RELEASE PENDING
+### October29 owner staking update — VERIFIED LIVE
 
 From13:28:41Z new Best Bets/NBA Picks use1u and Chef’s Picks2u. The dated
 October23 half-unit policy remains for its original tickets/replays. Full Sends,
@@ -13,8 +13,13 @@ NBA admission/prop publication tests pass, including new1u profit and old-stake
 grading. Existing Discord #start-here pinned notice edited through the owner’s
 Discord account, saved and verified as UPDATED OCTOBER29 with Best Bets1u/Chef2u,
 unchanged3u/5u caps and original-ticket preservation. No new notice duplicated.
-The private release queue had no unreleased entries when checked. Full/clean,
-locked, hosted and live receipts remain required before declaring code deployed.
+The private release queue had no unreleased entries when checked. Normal and clean
+export suites passed1997Python(2skip)/294Node, plus all locked release gates. Tested
+source deaa7e6cdcad6a3cbdf7de0dd0f6386d4fb2eefa; hosted40884167246SUCCESS
+verified67504ef865c32f5ffeae306450121abee96efb25 contains that source. Live Today
+and Start guide show1u/2u; previous.5u cards remain unchanged.375/1440 no overflow
+or console errors. Discord proof: kookn-staking-guide-2026-10-29.png in owner folder.
+No new play was posted as part of this policy update; no record rescaled.
 
 ### October29 NFL first-quarter stats — VERIFIED LIVE
 
