@@ -124,3 +124,18 @@ class QuarterFallbackTests(unittest.TestCase):
                 nflverse.main([])
             fallback.assert_not_called()
 
+
+    def test_official_recheck_preserves_verified_quarters_only_if_underlying_facts_match(self):
+        old=copy.deepcopy(self.record);old['firstQuarter']=q.extract(self.rows,old,self.cross)[0]
+        old.update(quarterProvider='nflverse',quarterCapturedAt='2026-10-29T12:00:00Z')
+        current=copy.deepcopy(self.record);current['retrievedAt']='2026-10-30T12:00:00Z'
+        bx.retain_quarter_history(old,current)
+        self.assertEqual(current['firstQuarter'],old['firstQuarter'])
+        self.assertEqual(current['retrievedAt'],'2026-10-30T12:00:00Z')
+        self.assertEqual(current['players'],self.record['players'])
+        corrected=copy.deepcopy(self.record);corrected['players'][0]['rushYds']=11
+        bx.retain_quarter_history(old,corrected)
+        self.assertNotIn('firstQuarter',corrected)
+        incomplete=copy.deepcopy(old);incomplete['firstQuarter']['10'].pop('rushYds')
+        target=copy.deepcopy(self.record);bx.retain_quarter_history(incomplete,target)
+        self.assertNotIn('firstQuarter',target)

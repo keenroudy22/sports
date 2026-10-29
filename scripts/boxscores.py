@@ -590,6 +590,30 @@ def season_games(league, season, fetch=fetch_json):
     return sorted(events.values(), key=lambda row: (row[2], row[1]))
 
 
+def retain_quarter_history(previous, current):
+    """A partial ESPN recheck must not erase independently verified Q1 history.
+
+    Retain only against identical official rushing/receiving families and team
+    play totals. A real official correction must be reconciled afresh.
+    """
+    import football_first_quarter as fq
+    if not previous or previous.get('quarterProvider') != 'nflverse':
+        return
+    old = {p['id']:p for p in previous['players']}
+    new = {p['id']:p for p in current['players']}
+    if not fq.complete(old, previous.get('firstQuarter', {})) or fq.complete(new,current.get('firstQuarter',{})):
+        return
+    def facts(players):
+        return {aid:{k:p[k] for k in ('team',)+fq.STATS if k in p} for aid,p in players.items() if any(k in p for k in fq.STATS)}
+    if facts(old) != facts(new) or {t:v.get('plays') for t,v in previous['teams'].items()} != {t:v.get('plays') for t,v in current['teams'].items()}:
+        return
+    import copy
+    for key,value in previous.items():
+        if key == 'firstQuarter' or key.startswith('quarter'):
+            current[key] = copy.deepcopy(value)
+    current['hash'] = content_hash(current)
+
+
 def run(games, status, now, fetch=fetch_json, workers=4, limit=None, log=print, root=STORE, clock=None):
     """Read what is due and append changed games. Returns ({file: lines}, games read)."""
     existing = stored(root)
@@ -632,6 +656,7 @@ def run(games, status, now, fetch=fetch_json, workers=4, limit=None, log=print, 
             if reason == 'retry':
                 status['retries'][eid] = status['retries'].get(eid, 0) + 1
             previous = existing.get(eid)
+            retain_quarter_history(previous, record)
             if previous and previous['hash'] == record['hash']:
                 continue
             if previous:
