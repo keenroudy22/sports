@@ -11,6 +11,12 @@ import publication_guard as guard
 
 
 class PublicationGuardTests(unittest.TestCase):
+    def test_only_reviewed_nfl_quarter_milestone_shards_are_public(self):
+        for name in ('quarter-index', 'NFL-2026-10-29-1Q-milestones', 'NFL-2026-11-01-1Q-milestones-part-2'):
+            self.assertTrue(guard.allowed_path(Path(f'data/app/trends/{name}.json')))
+        for name in ('CFB-2026-10-29-1Q-milestones','NBA-2026-10-29-1Q-milestones','NFL-2026-10-29-1Q', 'quarter-captures'):
+            self.assertFalse(guard.allowed_path(Path(f'data/app/trends/{name}.json')))
+
     def test_exact_lazy_nba_prop_payload_is_public_not_capture_journals(self):
         self.assertTrue(guard.allowed_path(Path('data/app/nba-props.json')))
         self.assertFalse(guard.allowed_path(Path('data/app/nba-quarter-quotes.json')))

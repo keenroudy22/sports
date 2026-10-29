@@ -61,7 +61,7 @@ def allowed_path(relative):
     return bool(re.fullmatch(r'data/app/(?:games/(?:NFL|CFB)-[A-Za-z0-9_-]+|'
                              r'player-charts/(?:NFL|CFB)|players/(?:NFL|CFB)(?:/\d+)?|'
                              r'teams/(?:NFL|CFB)(?:/\d+)?|teams/CFB-defense|'
-                             r'trends/(?:index|(?:NFL|CFB)-\d{4}-\d{2}-\d{2}(?:-milestones)?(?:-part-[1-9]\d*)?))\.json', value))
+                             r'trends/(?:index|quarter-index|NFL-\d{4}-\d{2}-\d{2}-1Q-milestones(?:-part-[1-9]\d*)?|(?:NFL|CFB)-\d{4}-\d{2}-\d{2}(?:-milestones)?(?:-part-[1-9]\d*)?))\.json', value))
 
 
 def contains_private_key(value):
