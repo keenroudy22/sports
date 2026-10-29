@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-29T10:35:28Z",
+  "updatedAt": "2026-10-29T11:03:26Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 155,
+    "lines": 156,
     "current": 0,
-    "references": 0
+    "references": 1
   },
   "lines": [
     {
@@ -8766,6 +8766,69 @@
           "source": "https://www.espn.com/nfl/game/_/gameId/401873009",
           "marketWindow": "Full game",
           "cutoff": "OVER 3.5 at -102 or better; off the card at 4+, or at -117 or worse at 3.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401873023",
+      "player": "MarShawn Lloyd",
+      "athleteId": null,
+      "position": "RB",
+      "reportId": "NFL-2026-W8-lloyd-over-6-5-recyds-dk",
+      "identityVerified": false,
+      "direction": "OVER",
+      "line": 6.5,
+      "market": "receiving yards",
+      "book": "DraftKings",
+      "odds": -104,
+      "observedAt": "2026-10-29T10:35:26Z",
+      "expiresAt": "2026-10-29T12:30:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401873023",
+      "marketWindow": "Full game",
+      "cutoff": "OVER 6.5 at -104 or better; off the card at 7+, or at -119 or worse at 6.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-10-29T10:35:26Z",
+      "kickoff": "2026-10-30T00:15Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "MarShawn Lloyd OVER 6.5 receiving yards",
+      "id": "line-4460fc79c806667c3899",
+      "observations": [
+        {
+          "line": 6.5,
+          "odds": -104,
+          "observedAt": "2026-10-29T10:35:26Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873023",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401873023",
+          "player": "MarShawn Lloyd",
+          "athleteId": null,
+          "position": "RB",
+          "reportId": "NFL-2026-W8-lloyd-over-6-5-recyds-dk",
+          "identityVerified": false,
+          "direction": "OVER",
+          "line": 6.5,
+          "market": "receiving yards",
+          "book": "DraftKings",
+          "odds": -104,
+          "observedAt": "2026-10-29T10:35:26Z",
+          "expiresAt": "2026-10-29T12:30:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873023",
+          "marketWindow": "Full game",
+          "cutoff": "OVER 6.5 at -104 or better; off the card at 7+, or at -119 or worse at 6.5.",
           "quoteType": "source reference"
         }
       ]
