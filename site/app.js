@@ -1650,7 +1650,14 @@
     const day = route.game || (t.day === 'today' && !hasToday) ? 'all' : t.day || 'all', fellBack = !route.game && t.day === 'today' && day === 'all';
     const data = await loadTrends(route, kind, day, t.period || 'full');
     const catalog = await lineData();
-    const windowed = C.trendWindow(C.bestTrendPrices((data.rows || []).map(r => r.team && !r.team.abbr && r.team.abbreviation ? { ...r, team: { ...r.team, abbr: r.team.abbreviation } } : r)), t.window, data.histories);
+    const baseRows = C.bestTrendPrices((data.rows || []).map(r => r.team && !r.team.abbr && r.team.abbreviation ? { ...r, team: { ...r.team, abbr: r.team.abbreviation } } : r));
+    // Keep unknown quarter splits out even during rollout with the previous cached core.
+    const windowed = quarter ? baseRows.map(row => {
+      const all = data.histories[row.historyKey] || [], size = t.window === 'last5' ? 5 : t.window === 'last10' ? 10 : null;
+      const selected = size ? all.slice(-size) : all;
+      const history = selected.filter(h => typeof h.value === 'number' && Number.isFinite(h.value));
+      return { ...C.trendWindow([{ ...row, history }], 'season')[0], selectedGames: selected.length };
+    }) : C.trendWindow(baseRows, t.window, data.histories);
     const pass = list => t.heavy ? list : list.filter(r => !heavyFavorite(r.odds));
     const forRate = rate => C.filterTrends(windowed, { min: 3, rate, league: state.league, stat: t.stat || 'all', kind, day, game: route.game || null, query: state.q });
     const heavyCount = forRate(t.rate).filter(r => heavyFavorite(r.odds)).length;
