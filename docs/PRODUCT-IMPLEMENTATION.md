@@ -1,4 +1,4 @@
-### October29 opponent-aware1Q Research — RELEASE PENDING
+### October29 opponent-aware1Q Research — VERIFIED LIVE
 
 Owner asks to prioritize1Q angles against the defense and announce the feature with
 its direct link. Research uses independently observed1Q position/stat totals per
@@ -19,6 +19,25 @@ Uses the existing free stored quarter data/build, no new feed/task or posting qu
 Feature post with a direct1Q Trends link is authorized and prepared after release;
 optional Buffer cap still applies. Do not label unpriced milestones Best Bets or
 silently classify research as essential to spend the reserved delivery allowance.
+
+Sourceb988dc138d1a4fad1276c918e8ec4bc7b50d1c9d passed2019Python(2skip)/299Node
+normal+clean suites and all locked gates, record audit136 unchanged. Hosted40945586484
+SUCCESS verifiedb0a681265c43fa0fa74411f8086c53ad0d794f8a contains tested source.
+Live375/1440 matching document widths, no console errors. Matchup-first example:
+Jeanty carries7/7 vsNYJ#26/32; Irving rush yards7/7 vsATL#28/32. These are research
+milestones with no verified book price. Last5 changes player sample to5 while
+opponent season sample stays7. Love/Young passing correctly retain no unrelated
+rushing-volume caution; a real same-family estimate conflict remains visible and
+cannot earn priority. QB, rushing and receiving families are independently scoped.
+Screenshot kookn-1q-matchups-2026-10-29.png in owner folder. RB includesFB in these
+position totals; passing allowance is credited QB passing yards, not net team yards.
+
+Prepared one-off1Q feature caption with direct Trends link and reviewed Kitchen
+Ticket graphic, not sent or queued. Optional API local cap at2874 remains; extra
+2900 allowance is essentials-only, attended Buffer-web adapter covers receipts/
+already-public plays rather than research. No bypass, extra budget or false receipt.
+Revalidate current feature facts before a later send; old dated TNF copy stays expired
+at kickoff. Existing scheduled build updates these stats without a new data feed.
 
 ### October29 NFL1Q cross-game Research filter — VERIFIED LIVE
 
