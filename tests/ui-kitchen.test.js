@@ -229,3 +229,15 @@ test('NFL player Q1 panel preserves zero/negative and unknown, excludes other se
   assert.match(page,/Passing · 1Q average/);
   assert.doesNotMatch(page,/13 TD, 5 INT|167.1/);
  });
+
+
+test('quarter trend shared controls survive canonical navigation and reload', () => {
+  const route=M.resolve('#trends?sport=NFL&period=1Q&stat=passYds&sample=last5&date=today&rate=90');
+  const url=M.canonical(route);
+  const reload=M.resolve(url);
+  assert.equal(reload.ctx.trendPeriod,'1Q');
+  assert.equal(reload.ctx.trendStat,'passYds');
+  assert.equal(reload.ctx.trendWindow,'last5');
+  assert.equal(reload.ctx.trendDay,'today');
+  assert.equal(reload.ctx.trendRate,'90');
+});

@@ -550,7 +550,7 @@
       case 'research': {
         const lineParams = ['type', 'sort', 'show', 'q'].some(key => params.has(key));
         const mode = a === '' ? (lineParams ? 'lines' : 'news') : ['lines', 'trends', 'players', 'news'].includes(a) ? a : 'lines';
-        return { view: 'research', mode, type: params.get('type') || null, sort: params.get('sort') || null, q, game: params.get('game') || null, sub: params.get('view') || null, rate: params.get('rate') || null, show: params.get('show') || null, pl: (params.get('pl') || '').toUpperCase() || null,
+        return { view: 'research', mode, ctx: mode === 'trends' && C.researchContext ? C.researchContext(`#trends?${params}`) : null, type: params.get('type') || null, sort: params.get('sort') || null, q, game: params.get('game') || null, sub: params.get('view') || null, rate: params.get('rate') || null, show: params.get('show') || null, pl: (params.get('pl') || '').toUpperCase() || null,
           league: params.get('sport') ? params.get('sport').toUpperCase() : null };
       }
       /* Old board links carried their own filters (best, market, sport, sort); keep what still means something. */
@@ -593,6 +593,10 @@
       if (route.game) params.set('game', route.game);
       if (route.sub) params.set('view', route.sub);
       if (route.league && route.league !== 'ALL') params.set('sport', route.league);
+      if (route.mode === 'trends' && route.ctx) {
+        for (const [key, field] of Object.entries({period:'trendPeriod', stat:'trendStat', sample:'trendWindow', date:'trendDay', rate:'trendRate', kind:'trendKind'}))
+          if (route.ctx[field]) params.set(key, route.ctx[field]);
+      }
       const tail = params.toString();
       return `#research/${route.mode}${tail ? '?' + tail : ''}`;
     }
@@ -1468,6 +1472,7 @@
   VIEWS.research = async route => {
     if (location.hash !== appliedHash) {
       appliedHash = location.hash;
+      if (route.ctx) applyContext(route);
       if (route.league) setLeague(route.league);
       if (route.type) state.board.type = route.type;
       if (route.sort && SORTS[route.sort]) state.board.sort = route.sort;
