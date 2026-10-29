@@ -10,8 +10,16 @@ from itertools import combinations
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import mean
+from zoneinfo import ZoneInfo
 
 import boxscores
+
+EASTERN = ZoneInfo('America/New_York')
+
+
+def game_day(row):
+    """Use the desk's Eastern kickoff day, including games after UTC midnight."""
+    return boxscores.instant(row['kickoff']).astimezone(EASTERN).date().isoformat()
 
 
 def number(value):
@@ -110,7 +118,7 @@ def independent_check(pairs):
     priced = []
     days = set()
     for group in by_game.values():
-        days.add(group[0][0]['kickoff'][:10])
+        days.add(game_day(group[0][0]))
         differences.append(mean(abs(o['actual']-r['line'])-abs(o['actual']-r['projection']['value']) for r,o in group))
         checks = [priced_check([(r,o)]) for r,o in group]
         values = [c['shadowNetUnits'] for c in checks if c['observations']]
@@ -171,7 +179,7 @@ def summarize(forecasts, outcomes, now=None):
         segments.append(dict(model=model, stat=stat, season=season, observations=len(pairs),
             pricedShadow=priced_check(pairs), independentCheck=independent_check(pairs),
             games=len({r['eventId'] for r, _ in pairs}),
-            gameDays=len({r['kickoff'][:10] for r, _ in pairs}),
+            gameDays=len({game_day(r) for r, _ in pairs}),
             modelMAE=round(mean(abs(o['actual']-r['projection']['value']) for r, o in pairs), 3),
             lineMAE=round(mean(abs(o['actual']-r['line']) for r, o in pairs), 3)))
     return dict(selected=len(chosen), graded=len(graded), missingOrUnusable=missing,
@@ -198,7 +206,7 @@ def markdown(report):
     for row in report['segments']:
         lines.append(f"- {row['stat']} ({row['model']}): {row['observations']} comparisons / {row['games']} games; model error {row['modelMAE']:g}, quoted-line error {row['lineMAE']:g}.")
         check = row['independentCheck']
-        lines.append(f"  Equal-game check: {check['games']} games / {check['gameDays']} dates; line-error improvement {check['meanErrorImprovement']}; game-balanced frozen-price return {check['gameBalancedShadowReturn']}. No approved prop probability/admission adapter; research only.")
+        lines.append(f"  Equal-game check: {check['games']} games / {check['gameDays']} Eastern dates; line-error improvement {check['meanErrorImprovement']}; game-balanced frozen-price return {check['gameBalancedShadowReturn']}. No approved prop probability/admission adapter; research only.")
         price = row['pricedShadow']
         lines.append(f"  Season {row['season'] or 'unknown'} · frozen-side shadow {price['hits']}-{price['misses']}-{price['pushes']}, {price['shadowNetUnits']:+g} hypothetical units at 1u each; {price['excluded']} lack consistent side/price evidence. Not placed bets; overlapping player exposure is not a staking portfolio.")
     for row in report.get('pairedModels', []):

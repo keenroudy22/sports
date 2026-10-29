@@ -25,6 +25,23 @@ def outcome(row, actual=20, **extra):
 
 
 class ForwardReviewTests(unittest.TestCase):
+    def test_game_dates_follow_eastern_kickoff_across_utc_midnight_and_dst(self):
+        for first, second, expected in (
+            ('2026-10-22T23:00:00Z', '2026-10-23T02:00:00Z', 1),
+            ('2026-10-23T02:00:00Z', '2026-10-23T23:00:00Z', 2),
+            ('2026-11-02T00:00:00Z', '2026-11-02T04:30:00Z', 1),
+            ('2026-11-02T04:30:00Z', '2026-11-02T05:30:00Z', 2),
+        ):
+            with self.subTest(first=first, second=second):
+                rows = [forecast('a', kickoff=first), forecast('b', eventId='other', kickoff=second)]
+                finals = [outcome(r, retrievedAt='2026-11-03T02:00:00Z') for r in rows]
+                report = review.summarize(rows, finals, datetime(2026, 11, 4, tzinfo=timezone.utc))
+                segment = report['segments'][0]
+                self.assertEqual(segment['games'], 2)
+                self.assertEqual(segment['gameDays'], expected)
+                self.assertEqual(segment['independentCheck']['gameDays'], expected)
+                self.assertIn('Eastern dates', review.markdown(report))
+
     def test_game_balanced_check_cannot_count_many_players_as_many_games(self):
         rows=[forecast(str(i),athleteId=str(i),side='over',odds=-110) for i in range(20)]
         result=review.summarize(rows,[outcome(r,actual=25,result='hit',side='over',odds=-110) for r in rows],NOW)

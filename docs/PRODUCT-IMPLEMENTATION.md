@@ -5914,3 +5914,32 @@ mandatory; unknowns hold. No automatic under injury void, guessed protection,
 paid add-on, quarter support or historical regrading. Pure typed settlement path
 is tested; official public prop admission/rendering remains a separate unfinished
 component and cannot be claimed live merely because grading exists.
+
+
+### October29 overnight — Eastern game-day research accounting candidate
+
+Combined straight-card and prop adapter already verified live yesterday; no
+qualifying summary/linked Final invented. Live133rows match68delivery-backed
+grades; no ungraded released play or overdue queue. DailyFinal actuallysentOct28
+13:06:04.566Z; weekly13:23:03.973Z. Natural00:25results holds optional-only plans
+before discovery; journal unchanged sinceOct28 13:28Z. Buffer2857/43temporary
+essentialroom; normal2700roomNov9 14:36:12.379880Z if no further requests.
+Temporary expiryNov6 13:05Z and unknown provider balance retained. All177current
+IDs preserve original176 plus owner-requested NBA regular-picks follow-through.
+
+Bounded repair: nba_forward_review sliced UTC kickoff dates in segment and
+equal-game diagnostics. Both now use America/New_York; markdown names Eastern
+dates. Four stored reviewed-minutes cohorts (fg3m/pr/pts/reb) change1UTC to2Eastern
+dates across2games. All3131graded comparisons, original forecasts/outcomes, errors,
+prices/returns and admission math unchanged; normalized comparison proves only
+date counts changed.12focused tests cover both UTC-boundary directions and DST.
+Full canonical release/hosted/live pending; not shipped yet.
+
+Natural probability study:1untouched game/1Eastern date for pts/reb,0pricedgames;
+all primary approvals null. No promotion/refit/protocol hash change; failures
+retained. Current-day prep:3football/70pricedrows,3NBA/0freshprops;136alternate
+spreads/0supportedClimb legs.06:45/08:30 workers must refresh prices, official
+availability/current roles and full qualification. Private planning, no admission.
+Recorded-price season31-44/-11.426922965u; Oct26baseline29-40/-11.886922965u
+retained; subsequent2-4/+0.46u. Oct31prepare/Nov1finalize and carry pending finals.
+Evidence work/overnight-20261029-* and owner-month-end-baseline-20261029.json.
