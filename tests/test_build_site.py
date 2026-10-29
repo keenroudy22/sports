@@ -922,7 +922,7 @@ class QuarterTrendsTests(unittest.TestCase):
         now = datetime(2026, 10, 29, 18, tzinfo=timezone.utc)
         charts = {'season': 2026, 'games': [{'id':'next','kickoff':'2026-10-30T00:00:00Z',
             'away':{'id':'1','abbreviation':'CAR'},'home':{'id':'2','abbreviation':'GB'}}],
-            'players':[{'id':'7','name':'QB','gameId':'next','side':'away','underReview':['car'],'rows':[{'date':'2026-10-19'},{'date':'2026-10-25'}]}]}
+            'players':[{'id':'7','name':'QB','gameId':'next','side':'away','underReview':['att'],'rows':[{'date':'2026-10-19'},{'date':'2026-10-25'}]}]}
         record = {'league':'NFL','season':2026,'seasonType':2,'eventId':'old',
             'kickoff':'2026-10-20T00:00:00Z','firstQuarter':{'7':{'passYds':0,'cmp':3}}}
         records = [record, {**record,'season':2025}, {**record,'seasonType':1},
@@ -933,6 +933,9 @@ class QuarterTrendsTests(unittest.TestCase):
         self.assertEqual(rows[0]['history'], [{'date':'2026-10-19','value':0},{'date':'2026-10-25','value':None}])
         self.assertTrue(all(r['period']=='1Q' and r['kind']=='milestone' for r in rows))
         self.assertTrue(all(r['quarterRoleCaution'] for r in rows))
+        charts['players'][0]['underReview']=['car']
+        self.assertFalse(any(r['quarterRoleCaution'] for r in build_site.quarter_trends(charts, records, now)),
+                         'a rushing-volume caution must not contaminate passing trends')
         self.assertTrue(all(not set(r)&{'odds','book','projection','priceClears'} for r in rows))
         self.assertEqual(build_site.quarter_trends({**charts,'games':[]},records,now), [])
 

@@ -902,6 +902,7 @@ def build_teams(league, records, team_logs, defense_logs, teams_meta, identities
 
 
 # Research benchmarks, not sportsbook lines or betting probabilities.
+QUARTER_FAMILIES = (('att', 'cmp', 'passYds'), ('car', 'rushYds'), ('rec', 'recYds'))
 QUARTER_BENCHMARKS = {'passYds': (25, 50, 75), 'cmp': (3, 5), 'att': (5, 8),
                       'rushYds': (5, 10, 20), 'car': (2, 4), 'recYds': (5, 10, 20), 'rec': (1, 2)}
 
@@ -913,7 +914,7 @@ def quarter_defenses(records, season, now):
     position and reconciled quarter family. Missing families never become zero.
     Rank only a complete32-team cohort with at least5 games per defense.
     """
-    families = (('att', 'cmp', 'passYds'), ('car', 'rushYds'), ('rec', 'recYds'))
+    families = QUARTER_FAMILIES
     samples = defaultdict(dict)
     teams = set()
     for record in records:
@@ -1006,7 +1007,8 @@ def quarter_trends(charts, records, now):
                     'matchup': f"{game['away'].get('abbreviation')} at {game['home'].get('abbreviation')}",
                     'stat': stat, 'kind': 'milestone', 'direction': 'at-least', 'line': threshold,
                     'teamGames': len(player.get('rows', [])), 'history': history,
-                    'quarterRoleCaution': bool(player.get('underReview')),
+                    'quarterRoleCaution': any(key in (player.get('underReview') or [])
+                        for key in next(family for family in QUARTER_FAMILIES if stat in family)),
                     'quarterDefense': dict(defenses[(str(opponent['id']), position, stat)],
                         opponent=opponent.get('abbreviation')) if (str(opponent['id']), position, stat) in defenses else None})
     return rows
