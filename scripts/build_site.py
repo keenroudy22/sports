@@ -906,9 +906,70 @@ QUARTER_BENCHMARKS = {'passYds': (25, 50, 75), 'cmp': (3, 5), 'att': (5, 8),
                       'rushYds': (5, 10, 20), 'car': (2, 4), 'recYds': (5, 10, 20), 'rec': (1, 2)}
 
 
+def quarter_defenses(records, season, now):
+    """Observed position totals per defensive game, never full-game DVP/probability.
+
+    A game enters a stat family only if every official participant has a known
+    position and reconciled quarter family. Missing families never become zero.
+    Rank only a complete32-team cohort with at least5 games per defense.
+    """
+    families = (('att', 'cmp', 'passYds'), ('car', 'rushYds'), ('rec', 'recYds'))
+    samples = defaultdict(dict)
+    teams = set()
+    for record in records:
+        if record.get('league') != 'NFL' or record.get('season') != season or record.get('seasonType') != 2 \
+                or features.when(record['kickoff']) >= now \
+                or not instant(record.get('quarterCapturedAt') or record.get('retrievedAt')) \
+                or instant(record.get('quarterCapturedAt') or record.get('retrievedAt')) > now:
+            continue
+        ids = {str(record.get(side, {}).get('id') or '') for side in ('away', 'home')}
+        if len(ids) != 2 or '' in ids:
+            continue
+        teams.update(ids)
+        for offense in ids:
+            defense = next(team for team in ids if team != offense)
+            players = [p for p in record.get('players', []) if str(p.get('team')) == offense]
+            for family in families:
+                eligible = [p for p in players if any(key in p for key in family)]
+                if not eligible:
+                    continue
+                totals = defaultdict(float)
+                valid = True
+                for player in eligible:
+                    quarter = record.get('firstQuarter', {}).get(str(player['id']), {})
+                    position = player.get('pos')
+                    if not position or any(not isinstance(quarter.get(key), (int, float))
+                            or isinstance(quarter.get(key), bool) or not math.isfinite(quarter[key]) for key in family):
+                        valid = False
+                        break
+                    position = 'RB' if position == 'FB' else position
+                    for key in family:
+                        totals[(position, key)] += quarter[key]
+                if not valid:
+                    continue
+                for position in ('QB', 'RB', 'WR', 'TE'):
+                    for stat in family:
+                        samples[(defense, position, stat)][record['eventId']] = totals[(position, stat)]
+    out = {}
+    for (team, position, stat), games in samples.items():
+        if len(games) < 5:
+            continue
+        cohort = {other: values for (other, pos, key), values in samples.items()
+                  if pos == position and key == stat and len(values) >= 5}
+        average = sum(games.values()) / len(games)
+        row = {'period': '1Q', 'position': position, 'stat': stat, 'games': len(games),
+               'average': round(average, 2), 'rank': None, 'of': len(cohort), 'supports': False}
+        if len(teams) == 32 and set(cohort) == teams:
+            row['rank'] = 1 + sum(sum(values.values()) / len(values) < average for values in cohort.values())
+            row['supports'] = row['rank'] >= 23 and average > 0
+        out[(team, position, stat)] = row
+    return out
+
+
 def quarter_trends(charts, records, now):
     """Current-slate NFL history only; retain absent games as unknown sample gaps."""
     games = {g['id']: g for g in charts.get('games', [])}
+    defenses = quarter_defenses(records, charts.get('season'), now)
     observed = defaultdict(dict)
     for record in records:
         if record.get('league') != 'NFL' or record.get('season') != charts.get('season') \
@@ -923,6 +984,8 @@ def quarter_trends(charts, records, now):
         if not game or features.when(game['kickoff']) <= now:
             continue
         team = game[player['side']]
+        opponent = game['home' if player['side'] == 'away' else 'away']
+        position = 'RB' if player.get('pos') == 'FB' else player.get('pos')
         for stat, thresholds in QUARTER_BENCHMARKS.items():
             history = []
             for item in observed.get(str(player['id']), {}).values():
@@ -942,7 +1005,10 @@ def quarter_trends(charts, records, now):
                     'gameId': game['id'], 'kickoff': game['kickoff'],
                     'matchup': f"{game['away'].get('abbreviation')} at {game['home'].get('abbreviation')}",
                     'stat': stat, 'kind': 'milestone', 'direction': 'at-least', 'line': threshold,
-                    'teamGames': len(player.get('rows', [])), 'history': history})
+                    'teamGames': len(player.get('rows', [])), 'history': history,
+                    'quarterRoleCaution': bool(player.get('underReview')),
+                    'quarterDefense': dict(defenses[(str(opponent['id']), position, stat)],
+                        opponent=opponent.get('abbreviation')) if (str(opponent['id']), position, stat) in defenses else None})
     return rows
 
 
@@ -950,7 +1016,7 @@ def trend_payload(rows):
     """One history and one player/game context per player/stat; threshold rows point to them."""
     histories, contexts, compact = {}, {}, []
     shared = ('league', 'season', 'athleteId', 'player', 'team', 'gameId', 'kickoff', 'matchup',
-              'teamGames', 'rosterAsOf', 'injuryStatus', 'stat', 'projection', 'uncertainGap', 'qbNews', 'period')
+              'teamGames', 'rosterAsOf', 'injuryStatus', 'stat', 'projection', 'uncertainGap', 'qbNews', 'period', 'quarterDefense', 'quarterRoleCaution')
     for source in rows:
         row = dict(source)
         key = '|'.join(str(row.get(name) or '') for name in ('league', 'season', 'athleteId', 'stat'))

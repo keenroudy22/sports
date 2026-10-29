@@ -736,3 +736,17 @@ test('quarter trend filters share period and never turn missing splits into zero
   assert.deepEqual(last.history.map(h=>h.value),[0,30,40]);
   assert.equal(C.researchPreferences({trendPeriod:'bogus'}).trendPeriod,'full');
 });
+
+
+test('quarter matchup priority needs independent game coverage and exact-period position ranks', () => {
+  const supported={id:'supported',period:'1Q',games:6,quarterDefense:{period:'1Q',games:6,rank:27,of:32,average:10}};
+  const neutral={id:'neutral',period:'1Q',games:7};
+  assert.deepEqual(C.quarterMatchupOrder([neutral,supported]).map(r=>r.id),['supported','neutral']);
+  for(const change of [{period:'full'},{games:4},{quarterRoleCaution:true},{quarterDefense:{...supported.quarterDefense,period:'full'}},
+    {quarterDefense:{...supported.quarterDefense,games:4}},{quarterDefense:{...supported.quarterDefense,of:31}},
+    {quarterDefense:{...supported.quarterDefense,rank:1}},{quarterDefense:{...supported.quarterDefense,average:0}}]) {
+    assert.deepEqual(C.quarterMatchupOrder([neutral,{...supported,...change}]).map(r=>r.id),['neutral','supported']);
+  }
+  assert.equal(supported.odds,undefined);
+  assert.equal(supported.chance,undefined);
+});

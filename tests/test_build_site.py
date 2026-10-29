@@ -922,7 +922,7 @@ class QuarterTrendsTests(unittest.TestCase):
         now = datetime(2026, 10, 29, 18, tzinfo=timezone.utc)
         charts = {'season': 2026, 'games': [{'id':'next','kickoff':'2026-10-30T00:00:00Z',
             'away':{'id':'1','abbreviation':'CAR'},'home':{'id':'2','abbreviation':'GB'}}],
-            'players':[{'id':'7','name':'QB','gameId':'next','side':'away','rows':[{'date':'2026-10-19'},{'date':'2026-10-25'}]}]}
+            'players':[{'id':'7','name':'QB','gameId':'next','side':'away','underReview':['car'],'rows':[{'date':'2026-10-19'},{'date':'2026-10-25'}]}]}
         record = {'league':'NFL','season':2026,'seasonType':2,'eventId':'old',
             'kickoff':'2026-10-20T00:00:00Z','firstQuarter':{'7':{'passYds':0,'cmp':3}}}
         records = [record, {**record,'season':2025}, {**record,'seasonType':1},
@@ -932,6 +932,7 @@ class QuarterTrendsTests(unittest.TestCase):
         self.assertEqual({r['stat'] for r in rows}, {'passYds','cmp'})
         self.assertEqual(rows[0]['history'], [{'date':'2026-10-19','value':0},{'date':'2026-10-25','value':None}])
         self.assertTrue(all(r['period']=='1Q' and r['kind']=='milestone' for r in rows))
+        self.assertTrue(all(r['quarterRoleCaution'] for r in rows))
         self.assertTrue(all(not set(r)&{'odds','book','projection','priceClears'} for r in rows))
         self.assertEqual(build_site.quarter_trends({**charts,'games':[]},records,now), [])
 
@@ -951,3 +952,46 @@ class QuarterTrendsTests(unittest.TestCase):
             self.assertEqual(full['files'][0]['period'],'full')
             self.assertEqual(quarter['files'][0]['period'],'1Q')
             self.assertNotEqual(full['files'][0]['file'],quarter['files'][0]['file'])
+
+
+class QuarterDefenseTests(unittest.TestCase):
+    def records(self):
+        rows=[]
+        for pair in range(16):
+            a,b=str(pair*2),str(pair*2+1)
+            for day in range(1,6):
+                players=[{'id':team,'team':team,'pos':'RB','rec':10,'recYds':999} for team in (a,b)]
+                rows.append({'league':'NFL','season':2026,'seasonType':2,'eventId':f'{pair}-{day}',
+                    'kickoff':f'2026-10-0{day}T18:00:00Z','retrievedAt':'2026-10-06T18:00:00Z',
+                    'home':{'id':a},'away':{'id':b},'players':players,
+                    'firstQuarter':{a:{'rec':1,'recYds':10+int(b)},b:{'rec':1,'recYds':10+int(a)}}})
+        return rows
+
+    def test_game_denominator_position_rank_ties_and_no_full_game_fallback(self):
+        now=datetime(2026,10,29,18,tzinfo=timezone.utc)
+        records=self.records()
+        rows=build_site.quarter_defenses(records+records,2026,now)
+        low,high=rows[('0','RB','recYds')],rows[('31','RB','recYds')]
+        self.assertEqual((low['average'],low['rank'],low['games']),(10,1,5))
+        self.assertEqual((high['average'],high['rank'],high['of']),(41,32,32))
+        self.assertTrue(high['supports'])
+        self.assertFalse(low['supports'])
+        self.assertEqual(rows[('31','RB','rec')]['rank'],1,'tied means do not create a favorable rank')
+        self.assertEqual(rows[('31','WR','recYds')]['average'],0,'complete family proves no credited WR receiving')
+        self.assertFalse(rows[('31','WR','recYds')]['supports'])
+        self.assertNotIn(('0','RB','rushYds'),rows,'no receiving-to-rushing fallback')
+
+    def test_missing_unknown_and_future_evidence_hold_ranking(self):
+        now=datetime(2026,10,29,18,tzinfo=timezone.utc)
+        for change in ('missing','unknown','future','no-clock','preseason'):
+            records=self.records()
+            record=records[0]
+            if change=='missing':record['firstQuarter']['1'].pop('recYds')
+            elif change=='unknown':record['players'][1]['pos']=None
+            elif change=='future':record['retrievedAt']='2026-10-30T00:00:00Z'
+            elif change=='no-clock':record.pop('retrievedAt')
+            else:record['seasonType']=1
+            rows=build_site.quarter_defenses(records,2026,now)
+            self.assertNotIn(('0','RB','recYds'),rows,change)
+            self.assertIsNone(rows[('31','RB','recYds')]['rank'],change)
+            self.assertFalse(rows[('31','RB','recYds')]['supports'],change)

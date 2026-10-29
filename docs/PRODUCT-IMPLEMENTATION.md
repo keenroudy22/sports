@@ -1,3 +1,25 @@
+### October29 opponent-aware1Q Research — RELEASE PENDING
+
+Owner asks to prioritize1Q angles against the defense and announce the feature with
+its direct link. Research uses independently observed1Q position/stat totals per
+defensive game; every official participant in a stat family must have known position
+and verified quarter values. Unknown/future/preseason games stay out, duplicates
+never increase sample size, and tied averages share ranks. Require five games per
+defense and a complete32-team cohort for a rank. Position-group averages are totals
+against all players at that position, not an individual player projection. Raw season
+history is explicitly unadjusted for opponents/pace and does not become a probability.
+
+Quarter trends with5+ player games against a defense in the ten allowing most in
+that1Q position/stat show first, followed by the existing historical hit-rate order.
+Current role/QB-context cautions prevent matchup priority and remain visible. Player
+window filters do not change the explicitly season-long defensive sample. No full-
+game DVP substitution, book quote, EV, quarter model, wager admission or stake change.
+Uses the existing free stored quarter data/build, no new feed/task or posting quota.
+
+Feature post with a direct1Q Trends link is authorized and prepared after release;
+optional Buffer cap still applies. Do not label unpriced milestones Best Bets or
+silently classify research as essential to spend the reserved delivery allowance.
+
 ### October29 NFL1Q cross-game Research filter — VERIFIED LIVE
 
 Adds Full game/1Q period control to Research Trends with current-season NFL passing,

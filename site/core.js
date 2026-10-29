@@ -744,6 +744,13 @@
     researchMatches(filters.query,r.player,r.team?.name,r.team?.abbr,r.matchup,r.title,LABEL[r.stat],r.stat))
     .sort((a, b) => b.hits / b.games - a.hits / a.games || b.games - a.games || a.player.localeCompare(b.player));
 
+  const quarterMatchupOrder = rows => rows.map((row, index) => ({row, index})).sort((a, b) => {
+    const supported = r => r.period === '1Q' && !r.quarterRoleCaution && r.games >= 5 && r.quarterDefense?.period === '1Q'
+      && r.quarterDefense.games >= 5 && r.quarterDefense.of === 32 && r.quarterDefense.rank >= 23
+      && r.quarterDefense.rank <= 32 && r.quarterDefense.average > 0;
+    return Number(supported(b.row)) - Number(supported(a.row)) || a.index - b.index;
+  }).map(item => item.row);
+
   const deskNotes = (data, league = 'ALL', now = Date.now(), games = []) => {
     if (data?.schemaVersion !== 1 || !Array.isArray(data.rows)) return [];
     const current = new Map(games.map(g => [g.id, g]));
@@ -905,7 +912,7 @@
     return parts.join(' · ');
   };
 
-  return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
+  return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, quarterMatchupOrder, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, nbaTicketLines, compareTicketLeg, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };

@@ -1661,7 +1661,8 @@
     const pass = list => t.heavy ? list : list.filter(r => !heavyFavorite(r.odds));
     const forRate = rate => C.filterTrends(windowed, { min: 3, rate, league: state.league, stat: t.stat || 'all', kind, day, game: route.game || null, query: state.q });
     const heavyCount = forRate(t.rate).filter(r => heavyFavorite(r.odds)).length;
-    const rows = pass(forRate(t.rate));
+    const filtered = pass(forRate(t.rate));
+    const rows = quarter && C.quarterMatchupOrder ? C.quarterMatchupOrder(filtered) : filtered;
     const limit = t.limit || 40;
     const shown = rows.slice(0, limit);
     const windowLabel = t.window === 'last5' ? 'last 5 this season' : t.window === 'last10' ? 'last 10 this season' : 'this season';
@@ -1679,6 +1680,8 @@
         ${r.qbNews ? `<p class=caution>QB news: ${esc(r.qbNews)}</p>` : ''}
         ${r.kind !== 'milestone' ? `<p class="small">${esc(researchPrice(priceMatch(r, catalog?.lines) || {}))}</p>` : ''}
         <p class="small muted">${esc(trendText(r))} · ${esc(windowLabel)}${quarter ? ` · ${r.games} of ${r.selectedGames || r.games} selected games available` : ''}${r.games < 5 ? ' · small sample' : ''}${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
+        ${quarter && r.quarterRoleCaution ? '<p class="small caution">Current role or quarterback context differs from this history; check availability and usage before building a ticket.</p>' : ''}
+        ${quarter && r.quarterDefense ? `<p class="small muted">${!r.quarterRoleCaution && r.games >= 5 && r.quarterDefense.supports ? '<b>Matchup support · </b>' : ''}${esc(r.quarterDefense.opponent)} allows ${esc(r.quarterDefense.average)} 1Q ${esc(STAT_WORD[r.stat] || r.stat)} to ${esc(r.quarterDefense.position)}s per game · ${r.quarterDefense.games} games${r.quarterDefense.rank ? ` · #${r.quarterDefense.rank} of ${r.quarterDefense.of} (1 allows fewest)` : ' · ranking unavailable'}. Unadjusted season history.</p>` : ''}
         ${opponentTrendText(r) ? `<p class="small ${r.opponentAdjustment?.against ? 'red' : 'muted'}">${esc(opponentTrendText(r))}</p>` : ''}
         ${historyChart(hist.map(h => Number(h.value)), hist.map(h => String(h.date || '').slice(5)), r.line, dir, { legend: false, titles: hist.map(h => String(h.date || '')) })}
         <p class="small"><a href="#game/${esc(r.gameId)}">${esc(r.matchup || 'Game')} · ${esc(whenShort(r.kickoff))} →</a></p></div>`;
@@ -1691,7 +1694,7 @@
         ${route.game || !hasToday ? '' : seg('trendDay', [['all', 'All upcoming'], ['today', 'Today']], day)}
         ${heavyCount || !t.heavy ? `<button type="button" class="chip" data-flag-trend="heavy" aria-pressed="${!t.heavy}">Hide heavy favorites${heavyCount ? ` (${heavyCount})` : ''}</button>` : ''}`)}
       <div class="toolbar"><div class="grow"><label class="sr" for="tq">Search</label><input id="tq" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off" maxlength="160"></div></div>
-      <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} trend${rows.length === 1 ? '' : 's'} · updated ${esc(ago(data.generatedAt))}${quarter ? ' · Historical milestones; check the book for available 1Q lines.' : ' · verify prices.'}${fellBack ? ' No games today, so this shows every upcoming game.' : ''}${route.game ? ' <a href="#research/trends">Show all games →</a>' : ''} ${quarter ? 'A hit rate alone does not establish betting value.' : 'Even a 4-of-4 run at −900 needs to win more than 90% of the time to profit.'} Green cleared the line, red missed, gray tied or not recorded. ${shareLink('trends', route)}</p>${list}`;
+      <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} trend${rows.length === 1 ? '' : 's'} · updated ${esc(ago(data.generatedAt))}${quarter ? ' · Historical milestones; check the book for available 1Q lines.' : ' · verify prices.'}${fellBack ? ' No games today, so this shows every upcoming game.' : ''}${route.game ? ' <a href="#research/trends">Show all games →</a>' : ''} ${quarter ? 'Opponent-supported trends first, then player hit rate. Defense uses season-long 1Q totals by position; player window filters do not change it. A hit rate alone does not establish betting value.' : 'Even a 4-of-4 run at −900 needs to win more than 90% of the time to profit.'} Green cleared the line, red missed, gray tied or not recorded. ${shareLink('trends', route)}</p>${list}`;
   };
 
   /* Research · Players: the props.cash-style matchup charts (every player in a game, bars vs the line), search and
