@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T12:49:09.977765+00:00",
+  "updatedAt": "2026-10-29T13:17:44.761380+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -151,9 +151,9 @@
       "title": "Exact-period capture, evidence and settlement before automated quarter parlays",
       "status": "gated",
       "owner": "agent",
-      "next": "Verify NFL Q1 observed-stat release hosted/live. Existing finals derive rushing/receiving history without new scheduled reads. Quarter projections, priced selection, book settlement and correlated tickets remain separately gated.",
+      "next": "NFL Q1 observed stats shipped; monitor existing final captures. Quarter projections, Q2/CFB/NBA support, priced selection, book settlement and correlated-ticket quotes remain separately gated. No added scheduled reads or model promotion.",
       "doneWhen": "Verified period/book/line identities, period workload evidence, correlated ticket quote and tested settlement exist; ordinary full-game estimates are never divided into quarters. Existing budgets and approval gates hold.",
-      "evidence": "Oct29 NFL Q1 history parser/player panel implemented;6-game bounded enrichment appended3 verified finals/56 player rows,held3. Exact periods, unique plays, team counts, per-player reconciliation, zero/negative/unknown and full-game isolation tests pass. Await hosted/live. Earlier NBA Q1 capture/workload remains research only; no quarter model, ticket or EV approval."
+      "evidence": "NFL Q1 history sourcee39e43e72 verified live by40877650180/3c0d5bb80SUCCESS with10 rechecks.1993Python(2skip)/294Node normal/clean, audits/rehearsal passed. Live375/1440 no overflow/errors; season isolation verified.6 historical reads appended3 finals/56 player rows,held3;full-game fields unchanged. Existing final capture adds Q1 without new reads; quarter forecasts/tickets remain gated."
     },
     {
       "id": "O-20261022-RESULT",

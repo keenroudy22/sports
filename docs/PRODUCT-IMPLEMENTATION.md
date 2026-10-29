@@ -1,4 +1,4 @@
-### October29 NFL first-quarter stats — IMPLEMENTED, RELEASE VERIFICATION PENDING
+### October29 NFL first-quarter stats — VERIFIED LIVE
 
 Owner requested1Q website stats after tonight's Panthers/Packers discussion. NFL
 player pages now have separate1Q rushing/receiving logs and averages, with per-family
@@ -13,8 +13,16 @@ new scheduled request. A bounded6-game plays-only enrichment appended3 verified
 records (56 player/game rows) and held3 unreconciled games; original store bytes
 remain covered by its append-only ledger. Tonight's Jacobs/Watson/Kraft have one
 verified current-season game, McMillan two; these are explicitly small samples,
-not a claimed hit rate or validated quarter forecast. Full/clean/release and hosted
-mobile/desktop receipts must finish before this feature is called live.
+not a claimed hit rate or validated quarter forecast. Full/clean suites passed1993Python(two skips)/294Node. Standard locked release
+installed/pushed e39e43e729d6ccceafb9626629d1a5b966cdd1fc after preserving an
+intervening morning report and safely revalidating a rejected push. Hosted40877650180
+succeeded, verifying3c0d5bb80205cca71cba86cd88917c65e449bd9b with10 rechecks.
+Publication/record/asset/payload audits and isolated0855 rehearsal passed with0
+outside writes/private reads. Live Jacobs player page checked375/1440: Q1 source,
+4carries/5rush yards/1catch/10receiving yards visible; no overflow or console errors.
+Season change to2025 showed no Q1 sample rather than borrowing full-game values.
+Viewport restored; temporary preview closed. Existing quarter work item remains
+gated for models/automatic tickets; only this observed-stat feature is shipped.
 
 ### October28 NBA prop posting path — VERIFIED LIVE, MODEL EVIDENCE OBSERVING
 
