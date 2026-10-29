@@ -1,3 +1,28 @@
+### October29 full-season NFL quarter history and layout — VERIFIED LIVE
+
+Owner requested full-season1Q history rather than the initial2-game Hubbard sample.
+Enriched107 stored2026 NFL finals through the bounded plays-only appender:92 now
+have verified quarter families (89 appended, original3 retained),15 remain held.
+The existing final capture uses the same parser. Full-game stats, forecasts,
+published terms and outcomes remain unchanged. A typed touchdown with appended
+conversion prose is counted once; pat* roles and conversion yards stay excluded.
+Tested with negative/zero/unknown families, periods, duplicates and full-game totals.
+
+Hubbard now has6/6 games: rushing yards9,10,6,21,19,9; receiving9,11,0,7,0,6.
+Season averages12.3rush yards/3.7carries;5.5rec yards/1catch in the first quarter.
+UI has compact averages, per-stat sample counts and a full selected-season log.
+Unavailable games remain dashed rows rather than disappearing or becoming zero.
+Coverage/source details fold; existing season/window filters apply. Phone text
+meets the12px minimum. This is NFL observed rushing/receiving, not quarter models,
+passing stats or NBA/CFB approval.15 held games require reconcilable source evidence;
+keep the explicit gaps, no guessed splits or recurring fanout.
+
+Source2faea44ab88783237e705ec691794f548f755ef5; hosted40891819581SUCCESS,
+verifiedHeada9f43ac749c7b2bbe00adf311dc6b75bfffb7486. Full/clean1998Python(2skip),
+295Node and all locked gates passed. Live375/1440:6/6 Hubbard, no overflow/errors.
+Owner proof kookn-q1-full-season-2026-10-29.png and JSON receipt. First release
+attempt correctly stopped for11px captions; fixed to12px, all gates rerun.
+
 ### October29 Today stale recap cleanup — VERIFIED LIVE
 
 Owner reported old Sam Houston content on Today. The prior last-graded-day recap
