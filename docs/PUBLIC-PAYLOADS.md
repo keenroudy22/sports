@@ -80,3 +80,9 @@ apply. Missing values remain unknown. Internal source artifacts, per-play proof,
 request diagnostics and hashes stay in the append-only box-score store; they are
 not added as arbitrary public file families. The source-details text credits
 nflverse and ESPN. No quarter wagering/model admission is implied.
+
+October29 passing extension: the existing NFL `firstQuarter[].stats` also carries
+verified `att`, `cmp` and `passYds` for official passers. Separate full-game passing
+reconciliation excludes sacks/conversions. The existing player tabs/chart read
+these through explicit `q1_` display keys; those keys do not authorize quarter
+markets, full-game quotes, probabilities or projection grades.

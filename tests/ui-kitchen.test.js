@@ -86,7 +86,7 @@ const playerFiles = (held = true) => {
     'data/app/games/CFB-1.json': { forecast: { players: { home: { players: [{ id: athlete, att: [23.7, 15, 32], passYds: [167.1, 110, 230], ...(held ? { underReview: ['att', 'passYds', 'cmp'] } : {}) }] } } } },
   };
 };
-const playerPage = async (held, change = null, league = 'CFB') => {
+const playerPage = async (held, change = null, league = 'CFB', stat = null) => {
   const files = playerFiles(held);
   if (change) change(files);
   const el = () => ({ innerHTML: '', options: [], value: '', dataset: {}, classList: { toggle() {}, add() {}, remove() {} }, querySelector: () => null, querySelectorAll: () => [], setAttribute() {}, focus() {} });
@@ -101,7 +101,7 @@ const playerPage = async (held, change = null, league = 'CFB') => {
   vm.runInNewContext(source, sandbox, { filename: 'site/app.js' });
   vm.runInNewContext(moreSource, sandbox, { filename: 'site/app-more.js' });
   const api = sandbox.module.exports;
-  return api.views.player(api.model.resolve(`#player/${league}/4870883`));
+  return api.views.player(api.model.resolve(`#player/${league}/4870883${stat ? '?stat=' + stat : ''}`));
 };
 
 test('Under review shows no projection, chance or edge, and quotes only the saved recent volumes', async () => {
@@ -193,7 +193,7 @@ test('NFL player Q1 panel preserves zero/negative and unknown, excludes other se
     const source = files[`data/app/players/NFL/${4870883 % 128}.json`];
     files[`data/app/players/NFL/${4870883 % 32}.json`] = source;
     source.players['4870883'].firstQuarter = [
-      {eventId:'e1',date:'2026-09-05',season:2026,seasonType:2,opp:'166',stats:{car:1,rushYds:-2,rec:0,recYds:0},source:'https://www.espn.com/nfl/boxscore/_/gameId/e1',checkedAt:'2026-09-06T12:00:00Z'},
+      {eventId:'e1',date:'2026-09-05',season:2026,seasonType:2,opp:'166',stats:{car:1,rushYds:-2,rec:0,recYds:0,att:0,cmp:0,passYds:0},source:'https://www.espn.com/nfl/boxscore/_/gameId/e1',checkedAt:'2026-09-06T12:00:00Z'},
       {eventId:'e2',date:'2026-09-12',season:2026,seasonType:2,opp:'166',stats:{rec:1,recYds:7},source:'https://www.espn.com/nfl/boxscore/_/gameId/e2',checkedAt:'2026-09-13T12:00:00Z'},
       {eventId:'old',date:'2025-09-05',season:2025,seasonType:2,opp:'166',stats:{rushYds:999},source:'https://www.espn.com',checkedAt:'2025-09-06T12:00:00Z'},
       {eventId:'future',date:'2026-12-01',season:2026,seasonType:2,opp:'166',stats:{rushYds:888},source:'https://www.espn.com',checkedAt:'2026-12-02T12:00:00Z'}];
@@ -210,3 +210,22 @@ test('NFL player Q1 panel preserves zero/negative and unknown, excludes other se
   assert.doesNotMatch(q1,/999|888|301|367/);
   assert.match(q1,/not projections or betting probabilities/);
 });
+
+ test('NFL quarter tabs and chart use passing splits without full-game lines or projections', async () => {
+  const page = await playerPage(false, files => {
+    for (const key of Object.keys(files)) if (key.includes('CFB')) files[key.replaceAll('CFB','NFL')] = JSON.parse(JSON.stringify(files[key]).replaceAll('CFB','NFL'));
+    files['data/app/players/NFL.json'].shards=32;
+    const shard=files[`data/app/players/NFL/${4870883 % 128}.json`];files[`data/app/players/NFL/${4870883 % 32}.json`]=shard;
+    shard.players['4870883'].firstQuarter=[
+      {eventId:'e1',date:'2026-09-05',season:2026,seasonType:2,opp:'166',stats:{att:8,cmp:5,passYds:40,car:1,rushYds:3},source:'https://www.espn.com',checkedAt:'2026-09-06T12:00:00Z'},
+      {eventId:'e2',date:'2026-09-12',season:2026,seasonType:2,opp:'166',stats:{att:11,cmp:7,passYds:80,car:0,rushYds:0},source:'https://www.espn.com',checkedAt:'2026-09-13T12:00:00Z'}];
+  }, 'NFL', 'q1_passYds');
+  assert.match(page,/data-set="pstat:q1_passYds" aria-pressed="true"/);
+  assert.match(page,/data-set="pstat:q1_cmp"/);assert.match(page,/data-set="pstat:q1_att"/);
+  const sheet=page.split('aria-labelledby="line-h"')[1].split('id="first-quarter"')[0];
+  assert.match(sheet,/1Q pass yds · history/);
+  assert.match(sheet,/1Q pass yds: 40, 80, not recorded, not recorded/);
+  assert.doesNotMatch(sheet,/against the .* line|My average for this game|I have over|Tonight.s line/);
+  assert.match(page,/Passing · 1Q average/);
+  assert.doesNotMatch(page,/13 TD, 5 INT|167.1/);
+ });

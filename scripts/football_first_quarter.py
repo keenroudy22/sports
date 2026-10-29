@@ -116,8 +116,8 @@ def extract(payload, official, teams, supplements=None, counts=None):
 
 
 def complete(official, observed):
-    expected = [str(aid) for aid, row in official.items() if any(k in row for k in STATS)]
-    return bool(expected) and all(all(k in observed.get(aid, {}) for k in STATS) for aid in expected)
+    expected = [str(aid) for aid, row in official.items() if any(k in row for k in STATS+('att','cmp','passYds'))]
+    return bool(expected) and all(all(k in observed.get(aid, {}) for k in (STATS + (('att','cmp','passYds') if any(k in official[aid] for k in ('att','cmp','passYds')) else ()))) for aid in expected)
 
 
 def resolve(payload, official, teams, fetch, diagnostics=None):

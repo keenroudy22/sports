@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T16:15:40.358980+00:00",
+  "updatedAt": "2026-10-29T17:50:28.250746+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -151,9 +151,9 @@
       "title": "Exact-period capture, evidence and settlement before automated quarter parlays",
       "status": "gated",
       "owner": "agent",
-      "next": "Observe next existing morning bulk run and new-final/correction receipt. NFL1Q history is live107/107; retain source holds and cached proof checks. Quarter projections, Q2/CFB/NBA selection and settlement remain gated.",
+      "next": "Release/verify NFL1Q passing and stat-tab charts. Backfill244 passer games; reuse automatic bulk refresh. Quarter sportsbook capture, projection, selection and settlement remain separately gated.",
       "doneWhen": "Verified period/book/line identities, period workload evidence, correlated ticket quote and tested settlement exist; ordinary full-game estimates are never divided into quarters. Existing budgets and approval gates hold.",
-      "evidence": "600891fe3; hosted40906460075SUCCESS verified8abe832c9 ancestry/10 rechecks.2012Python(2skip)/295Node normal+clean/all gates.107/107 games,2072 eligible rows; full-game fields unchanged. Live375/1440 clean:Lloyd7/7,Hubbard6/6,Nix7/7. Existing morning job bulk-refreshes with cached IDs; retry/backoff, correction-clock, outage/idempotency tests pass. Quarter wager/model admission unchanged."
+      "evidence": "Oct29 live107-game rush/rec receipts preserved in PRODUCT. Passing att/cmp/passYds reconciles for244 passer games across107 finals. Separate1Q tabs, chart, logs and filters implemented; mobile preview passes. Focused passing/sack/OT/period-isolation tests pass; full/clean and hosted release pending."
     },
     {
       "id": "O-20261022-RESULT",

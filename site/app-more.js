@@ -155,7 +155,8 @@
     const [shard, teams, today, lines] = await Promise.all([get(`app/players/${league}/${C.shardOf(route.id, index.shards)}.json`), teamDirectory(league), get('app/today.json'), lineData(league)]);
     const data = shard.players[route.id];
     const keys = shard.keys, rows = data.rows, pos = data.pos;
-    const read = (row, stat) => C.observedStat(row, keys, stat);
+    const quarterByGame = new Map((data.firstQuarter || []).map(r => [String(r.eventId), r.stats || {}]));
+    const read = (row, stat) => stat.startsWith('q1_') ? quarterByGame.get(String(row[0]))?.[stat.slice(3)] : C.observedStat(row, keys, stat);
     /* A new player starts fresh, unless the link carried a stat, season or sample. */
     const pkey = `${league}:${route.id}`;
     const carries = route.stat || route.season || route.sample;
@@ -167,8 +168,11 @@
       state.player.window = ['all', 'last5', 'last10', 'last20'].includes(route.sample) ? route.sample : 'all';
     }
     const options = [...new Set([...(C.POSITION_STATS[pos] || C.POSITION_STATS.WR), 'snapPct'])].filter(stat => rows.some(r => isNum(read(r, stat))));
+    const quarterKeys = league === 'NFL' ? ['passYds','cmp','att','rushYds','car','recYds','rec'].filter(k => (data.firstQuarter || []).some(r => isNum(r.stats?.[k])) && (k === 'passYds' || k === 'cmp' || k === 'att' ? rows.some(r => isNum(C.observedCell(r, keys, k))) : (C.POSITION_STATS[pos] || []).includes(k))) .map(k => `q1_${k}`) : [];
+    options.push(...quarterKeys);
     if (state.player.stat && C.LABEL[state.player.stat] && !options.includes(state.player.stat)) options.push(state.player.stat);
     const stat = options.includes(state.player.stat) ? state.player.stat : options[0] || (C.POSITION_STATS[pos] || C.POSITION_STATS.WR)[0];
+    const isQuarter = stat.startsWith('q1_');
     const team = ((teams || {}).teams || {})[entry[3]] || { name: entry[4] };
     const abbr = id => (((teams || {}).teams || {})[id] || {}).abbr || id;
     const now = Date.now();
@@ -188,10 +192,10 @@
     const values = recent.map(r => read(r, stat));
 
     /* The line: the board's priced quote first, else the captured reference line from the game feed. */
-    const pricedRows = next && lines ? (lines.lines || []).filter(r => String(r.athleteId) === String(route.id) && r.gameId === next.id && C.marketKey(r) === stat) : [];
+    const pricedRows = !isQuarter && next && lines ? (lines.lines || []).filter(r => String(r.athleteId) === String(route.id) && r.gameId === next.id && C.marketKey(r) === stat) : [];
     const priced = pricedRows.filter(r => !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && (vm.age.kind === 'fresh' || vm.age.kind === 'aging')).sort((a, b) => (b.edge ?? -99) - (a.edge ?? -99))[0] || null;
     const latest = pricedRows.slice().sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt))[0];
-    const captured = (((nextDetail || {}).props || {}).lines || {})[route.id];
+    const captured = !isQuarter && (((nextDetail || {}).props || {}).lines || {})[route.id];
     const refLine = captured && isNum((captured[stat] || [])[0]) ? captured[stat][0] : null;
     const quote = priced ? priced.src : latest || (refLine != null ? { line: refLine, state: 'reference', book: (((nextDetail || {}).props) || {}).provider || null, observedAt: (((nextDetail || {}).props) || {}).capturedAt || null } : null);
     const line = quote && isNum(Number(quote.line)) ? Number(quote.line) : null;
@@ -203,7 +207,7 @@
     const opp = next ? (side === 'home' ? next.away : next.home) : null;
     const group = C.POS_GROUP[pos];
     const dRows = teams ? defenseRows(teams, league) : {};
-    const allow = opp && group && teams ? C.rankOf(dRows, opp.id, group, stat) : null;
+    const allow = !isQuarter && opp && group && teams ? C.rankOf(dRows, opp.id, group, stat) : null;
     const tone = allow ? toneFor(allow.rank, allow.of, stat) : 'neutral';
     const verdict = allow && line != null ? defenseVerdict(C.rankTone(allow.rank, allow.of), dir, defGames(dRows, opp.id, group, stat)) : null;
     const vs = opp ? C.splits(recent, keys, stat, opp.id, (row, k, s2) => read(row, s2)).vs : null;
@@ -244,7 +248,7 @@
       <h1 class="kt-name" style="--name-size:${nameSize(data.name, 56)}px">${esc(data.name)}</h1>
       <p class="kt-meta">${next ? `<span class="kt-discs">${disc(mine || team, league)}${disc(opp, league)}</span><span><b>${side === 'home' ? 'vs' : 'at'} ${esc(opp.name)}</b>${esc(ticketWhen(next.kickoff))}${spread != null ? `, ${esc(team.abbr || '')} ${esc(minus(`${spread > 0 ? '+' : ''}${spread}`))}` : ''}</span>` : '<span>No game scheduled in the window</span>'}</p></div>
       ${photo ? `<div class="kt-ph kt-photo" aria-hidden="true">${img}</div>` : ''}</section>`;
-    const tabs = `<nav class="kt-tabs" aria-label="Stat">${options.map(k => `<button type="button" data-set="pstat:${esc(k)}" aria-pressed="${k === stat}"${TAB_SHORT[k] ? ` aria-label="${esc(C.LABEL[k] || k)}"` : ''}>${esc(TAB_SHORT[k] || C.LABEL[k] || k)}</button>`).join('')}</nav>`;
+    const tabs = `<nav class="kt-tabs" aria-label="Stat">${options.filter(k => !k.startsWith('q1_')).map(k => `<button type="button" data-set="pstat:${esc(k)}" aria-pressed="${k === stat}"${TAB_SHORT[k] ? ` aria-label="${esc(C.LABEL[k] || k)}"` : ''}>${esc(TAB_SHORT[k] || C.LABEL[k] || k)}</button>`).join('')}</nav>${quarterKeys.length ? `<nav class="kt-tabs kt-quarter-tabs" aria-label="First-quarter stat">${quarterKeys.map(k => `<button type="button" data-set="pstat:${esc(k)}" aria-pressed="${k === stat}">${esc(C.LABEL[k])}</button>`).join('')}</nav>` : ''}`;
     /* Best price per side at the shown line, never from a row whose price failed the sanity check. */
     const sides = ['over', 'under'].map(d => pricedRows.filter(r => !r.priceSuspect && Number(r.line) === line && String(r.direction).toLowerCase() === d && isNum(r.odds) && r.state === 'open')
       .sort((a, b) => b.odds - a.odds)[0]).map((r, i) => r && { dir: i ? 'under' : 'over', odds: r.odds, book: bookLabel(r.book) });
@@ -253,7 +257,7 @@
     const pricesText = sides[0] && sides[1] && sides[0].odds === sides[1].odds && sides[0].book === sides[1].book ? `Both sides <b class="num">${esc(odd(sides[0].odds))}</b> at ${esc(sides[0].book)}.`
       : held ? (line != null ? `Main line <b class="num">${esc(valueText(line))}</b>${quoteBook ? ` at ${esc(quoteBook)}` : ''}.` : '')
       : sides.filter(Boolean).map(x => `${x.dir === 'over' ? 'Over' : 'Under'} <b class="num">${esc(odd(x.odds))}</b> at ${esc(x.book)}`).join(', ') + (sides.some(Boolean) ? '.' : '');
-    const unitFor = STAT_UNITS[stat] || [String(C.LABEL[stat] || stat).toUpperCase()];
+    const unitFor = STAT_UNITS[isQuarter ? stat.slice(3) : stat] || [String(C.LABEL[stat] || stat).toUpperCase()];
     const shown = recent.slice(-8), sv = shown.map(r => read(r, stat));
     const top = Math.max(...sv.filter(isNum), line || 0) || 1;
     const res = v => line == null || !isNum(v) ? 'unknown' : C.thresholdResult(v, line, dir, false);
@@ -263,19 +267,20 @@
       <div class="kt-x" aria-hidden="true">${shown.map((r, i) => `<span><em class="${res(sv[i])}">${isNum(sv[i]) ? esc(valueText(sv[i])) : '–'}</em><b>${r[7] === 0 ? '@' : ''}${esc(abbr(r[6]))}</b>${res(sv[i]) === 'hit' ? '✓ ' : res(sv[i]) === 'miss' ? '✗ ' : ''}${esc(md(r))}</span>`).join('')}</div>
       <figcaption class="kt-cap">${h && h.n ? `<b>${h[dir]} of ${h.n} ${dir} ${esc(valueText(line))}.</b> ` : ''}${recent.length > shown.length ? `The last ${shown.length} of ${recent.length} games shown.` : ''}</figcaption></figure>` : '<p class="kt-cap">No stored games in this selection.</p>';
     const sheet = `<section class="kt-sheet" aria-labelledby="line-h"><div class="kt-order"><div class="kt-shade"><div class="kt-paper">
-      <p class="kt-k" id="line-h">${next ? (lineStatus && lineStatus.current ? 'Tonight\'s line' : line != null ? 'Reference line' : 'No line yet') : 'Recent games'}</p>
+      <p class="kt-k" id="line-h">${isQuarter ? `${C.LABEL[stat]} · history` : next ? (lineStatus && lineStatus.current ? 'Tonight\'s line' : line != null ? 'Reference line' : 'No line yet') : 'Recent games'}</p>
       ${line != null ? `<div class="kt-betrow"><p class="kt-bet num" style="--bet-size:58px">${esc(valueText(line))}<span class="kt-unit">${unitFor.map(esc).join('<br>')}</span></p>${held ? `<span class="kt-stamp hold" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span>` : ''}</div>` : ''}
       ${pricesText ? `<p class="kt-prices">${pricesText}</p>` : ''}
       ${held ? `<p class="kt-held">${esc(heldText)}</p>`
         : `${priced && priced.calibrated && priced.chance != null ? `<p class="kt-lead kt-chance" style="margin-top:8px"><span>I have ${esc(priced.direction || dir)} at<b class="num">${pctOne(priced.chance)}</b></span><i></i><span>the price needs<b class="num">${pctOne(priced.needs)}</b></span></p>${hasValue(priced) ? '<p class="kt-prices">✓ clears my price</p>' : ''}` : ''}
           ${Array.isArray(projV) ? `<p class="kt-prices">My average for this game: <b class="num">${esc(valueText(projV[0]))}</b>, usually ${esc(rangeText(projV[1]))} to ${esc(rangeText(projV[2]))}.</p>` : ''}`}
-      ${chart}<div class="kt-perf"></div><div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(lineStatus ? `${lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></div></div></div></section>`;
+      ${chart}<div class="kt-perf"></div><div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(!isQuarter && lineStatus ? `${lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></div></div></div></section>`;
     const tds = recent.reduce((n, r) => n + (read(r, 'passTD') || 0), 0), ints = recent.reduce((n, r) => n + (read(r, 'int') || 0), 0), any = recent.reduce((n, r) => n + (read(r, 'anyTD') || 0), 0);
-    const big = summary ? `<div class="kt-big"><p><b class="num">${esc(valueText(summary.avg))}</b>${esc(word)} a game</p><p class="rest">Median ${esc(valueText(summary.median))}.${pos === 'QB' ? ` ${tds} TD, ${ints} INT.` : any ? ` ${any} TD.` : ''}</p></div>` : '';
+    const big = summary ? `<div class="kt-big"><p><b class="num">${esc(valueText(summary.avg))}</b>${esc(word)} a game</p><p class="rest">Median ${esc(valueText(summary.median))}.${!isQuarter && pos === 'QB' ? ` ${tds} TD, ${ints} INT.` : !isQuarter && any ? ` ${any} TD.` : ''}</p></div>` : '';
     const matchup = allow ? `<p class="kt-matchup"><b>${esc(opp.abbr || opp.name)} allows ${esc(valueText(allow.value))} ${esc(word)} a game</b> to ${esc(group)}s, over ${esc(defGames(dRows, opp.id, group, stat))} games: ${allow.rank} of ${allow.of}${league === 'CFB' ? ' FBS defenses' : ''}, 1 allows the least.${verdict && !held ? ` That ${verdict === 'supports' ? 'supports' : 'works against'} the ${dir}.` : ''}${vs && vs.summary ? ` He averaged ${esc(valueText(vs.summary.avg))} in ${vs.summary.n} meeting${vs.summary.n === 1 ? '' : 's'} with them.` : ''}</p>` : '';
     const LOG_VIEW = { QB: [['C/A', r => `${read(r, 'cmp') ?? '–'}/${read(r, 'att') ?? '–'}`], ['TD-INT', r => `${read(r, 'passTD') ?? '–'}-${read(r, 'int') ?? '–'}`]],
       RB: [['Car', r => read(r, 'car')], ['Rec', r => read(r, 'rec')]], WR: [['Tgt', r => read(r, 'targets')], ['Rec', r => read(r, 'rec')]], PK: [['FG', r => `${read(r, 'fgm') ?? '–'}/${read(r, 'fga') ?? '–'}`], ['XP', r => read(r, 'xpm')]] };
-    const view = (LOG_VIEW[pos] || LOG_VIEW[pos === 'FB' ? 'RB' : 'WR']).filter(([label]) => !(label === 'Rec' && stat === 'rec') && !(label === 'Car' && stat === 'car'));
+    const quarterView = pos === 'QB' ? [['C/A', r => `${read(r,'q1_cmp') ?? '–'}/${read(r,'q1_att') ?? '–'}`]] : [['Car', r => read(r,'q1_car')], ['Rec', r => read(r,'q1_rec')]];
+    const view = (isQuarter ? quarterView : LOG_VIEW[pos] || LOG_VIEW[pos === 'FB' ? 'RB' : 'WR']).filter(([label]) => !(label === 'Rec' && stat === 'rec') && !(label === 'Car' && stat === 'car'));
     const chalkLog = log.length ? `<table class="kt-log"><thead><tr><th scope="col">Game</th>${view.map(([label]) => `<th scope="col">${esc(label)}</th>`).join('')}<th scope="col">${esc(unitFor[unitFor.length - 1])}</th></tr></thead><tbody>${log.map(r => { const v = read(r, stat);
       return `<tr><th scope="row"><a class="plain-link" href="#game/${esc(league)}-${esc(r[0])}"><b>${r[7] === 0 ? 'at' : 'vs'} ${esc(abbr(r[6]))}</b></a><span>${esc(md(r))}${r[4] === 3 ? ', postseason' : ''}</span></th>${view.map(([, f]) => `<td>${esc(f(r) ?? '–')}</td>`).join('')}<td class="y">${v == null ? '–' : esc(valueText(v))}</td></tr>`; }).join('')}</tbody></table>` : '<p class="kt-cap">No games to show.</p>';
     const q1GameIds = new Set(recent.map(r => String(r[0])));
@@ -285,7 +290,7 @@
     const q1ByGame = new Map(q1Rows.map(r => [String(r.eventId), r]));
     const q1Shown = recent.map(r => q1ByGame.get(String(r[0])) || { eventId: r[0], date: r[1], opp: r[6], stats: {}, source: `https://www.espn.com/nfl/game/_/gameId/${r[0]}` })
       .sort((a, b) => String(a.date).localeCompare(String(b.date)));
-    const q1Cols = [['car', 'rushYds', 'Rushing', 'carries'], ['rec', 'recYds', 'Receiving', 'catches']];
+    const q1Cols = pos === 'QB' ? [['cmp','passYds','Passing','completions'],['car','rushYds','Rushing','carries']] : [['car', 'rushYds', 'Rushing', 'carries'], ['rec', 'recYds', 'Receiving', 'catches']];
     const q1Sample = k => q1Shown.filter(r => isNum(r.stats?.[k])).length;
     const q1Average = k => { const v = q1Shown.map(r => r.stats?.[k]).filter(isNum);
       return v.length ? C.fixed(v.reduce((a, b) => a + b, 0) / v.length) : '–'; };
@@ -293,11 +298,11 @@
     const q1 = league === 'NFL' ? `<section class="kt-quarter" id="first-quarter" aria-labelledby="q1-heading">
       <div class="kt-sec-head"><h2 class="kt-tape" id="q1-heading">First quarter</h2><span class="kt-kind">${esc(scopeLabel)}</span></div>
       <p class="kt-quarter-coverage">${q1Rows.length ? `${q1Rows.length} of ${recent.length} selected games available` : 'No first-quarter games available yet'}<span>Game stats · not projections</span></p>
-      ${q1Shown.length ? `<div class="kt-quarter-summary">${q1Cols.map(([count, yards, label, unit]) => `<div><span class="kt-quarter-label">${label} · 1Q average</span><p><b class="num">${esc(q1Average(yards))}</b> yards</p><small>${esc(q1Average(count))} ${unit} per game</small><span class="kt-quarter-sample">Yards: ${q1Games(q1Sample(yards))} · ${unit}: ${q1Games(q1Sample(count))}</span></div>`).join('')}</div>
-      <table class="kt-log kt-quarter-log"><thead><tr><th scope="col">Game</th><th scope="col">Rush yards</th><th scope="col">Rec yards</th></tr></thead><tbody>
-      ${q1Shown.slice().reverse().map(r => `<tr><th scope="row"><a class="plain-link" href="${esc(r.source)}" target="_blank" rel="noopener"><b>${esc(abbr(r.opp))} ↗</b></a><span>${esc(new Date(r.date + 'T16:00:00Z').toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}))}</span></th>${q1Cols.map(([count, yards, , unit]) => `<td><b>${isNum(r.stats?.[yards]) ? esc(r.stats[yards]) : '–'}</b><span>${isNum(r.stats?.[count]) ? esc(r.stats[count]) : '–'} ${r.stats?.[count] === 1 ? (unit === 'carries' ? 'carry' : 'catch') : unit}</span></td>`).join('')}</tr>`).join('')}
+      ${q1Shown.length ? `<div class="kt-quarter-summary">${q1Cols.map(([count, yards, label, unit]) => `<div><span class="kt-quarter-label">${label} · 1Q average</span><p><b class="num">${esc(q1Average(yards))}</b> yards</p><small>${esc(q1Average(count))} ${unit} per game${count === 'cmp' ? ` · ${esc(q1Average('att'))} attempts` : ''}</small><span class="kt-quarter-sample">Yards: ${q1Games(q1Sample(yards))} · ${unit}: ${q1Games(q1Sample(count))}</span></div>`).join('')}</div>
+      <table class="kt-log kt-quarter-log"><thead><tr><th scope="col">Game</th>${q1Cols.map(([, , label]) => `<th scope="col">${label === 'Passing' ? 'Pass' : label === 'Rushing' ? 'Rush' : 'Rec'} yards</th>`).join('')}</tr></thead><tbody>
+      ${q1Shown.slice().reverse().map(r => `<tr><th scope="row"><a class="plain-link" href="${esc(r.source)}" target="_blank" rel="noopener"><b>${esc(abbr(r.opp))} ↗</b></a><span>${esc(new Date(r.date + 'T16:00:00Z').toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}))}</span></th>${q1Cols.map(([count, yards, , unit]) => `<td><b>${isNum(r.stats?.[yards]) ? esc(r.stats[yards]) : '–'}</b><span>${isNum(r.stats?.[count]) ? esc(r.stats[count]) : '–'} ${count === 'cmp' ? `/${isNum(r.stats?.att) ? esc(r.stats.att) : '–'} comp/att` : r.stats?.[count] === 1 ? (unit === 'carries' ? 'carry' : 'catch') : unit}</span></td>`).join('')}</tr>`).join('')}
       </tbody></table>` : '<p class="kt-cap">Verified rushing and receiving stats will appear here as games are added.</p>'}
-      <details class="plain-fold kt-quarter-source"><summary>Coverage &amp; sources</summary><p class="small muted">First quarter only. nflverse and ESPN play-by-play checked against full-game player and team totals. Missing stats show a dash, never zero. Averages use only available games for each stat; season and game filters apply. These are not projections or betting probabilities.${q1Rows.length ? ` Latest source check ${esc(clock(q1Rows[q1Rows.length - 1].checkedAt))}.` : ''}</p></details></section>` : '';
+      <details class="plain-fold kt-quarter-source"><summary>Coverage &amp; sources</summary><p class="small muted">First quarter only. Passing, rushing and receiving. nflverse and ESPN play-by-play checked against full-game player and team totals. Missing stats show a dash, never zero. Averages use only available games for each stat; season and game filters apply. These are not projections or betting probabilities.${q1Rows.length ? ` Latest source check ${esc(clock(q1Rows[q1Rows.length - 1].checkedAt))}.` : ''}</p></details></section>` : '';
 
     return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}${q1}
       ${filtersFold('player', showing, `${seasonSelect}${seg('pwin', [['all', 'All games'], ['last5', 'Last 5'], ['last10', 'Last 10'], ['last20', 'Last 20']], win)}`)}
@@ -305,7 +310,7 @@
       ${big}${matchup}${opponentTrend && opponentTrendText(opponentTrend) ? `<p class="kt-matchup ${opponentTrend.opponentAdjustment?.against ? 'red' : ''}">${esc(opponentTrendText(opponentTrend))}</p>` : ''}
       <div class="btn-row" style="margin-top:14px">${watchButton({ type: 'player', key: `player:${league}:${route.id}`, title: data.name, league, href: `#player/${league}/${route.id}` })}<a class="btn small" href="${esc(shareHref)}" data-copy-link>Copy link</a></div>
       <section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">${esc(scope === 'current' ? 'Regular season' : scopeLabel)}</span></div>${chalkLog}
-      <details class="plain-fold" data-box="player-every"><summary>Every stat</summary>${log.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${cols.map(k => `<th class="n">${esc(C.LABEL[k] || k)}</th>`).join('')}</tr></thead><tbody>${log.map(r =>
+      <details class="plain-fold" data-box="player-every"><summary>${isQuarter ? 'Every full-game stat' : 'Every stat'}</summary>${log.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${cols.map(k => `<th class="n">${esc(C.LABEL[k] || k)}</th>`).join('')}</tr></thead><tbody>${log.map(r =>
         `<tr><td><a href="#game/${esc(league)}-${esc(r[0])}">${esc(r[1])}</a><br><span class="tiny muted">${esc(where(r))} ${esc(abbr(r[6]))}${r[4] === 3 ? ' · postseason' : ''}</span></td>${cols.map(k => { const v = C.observedStat(r, keys, k); return `<td class="n">${v == null ? '<span class="muted">–</span>' : k === 'snapPct' ? Math.round(100 * v) + '%' : esc(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div><p class="small muted" style="margin-top:6px">A dash means not recorded, never zero.</p>` : ''}</details>
       <details class="plain-fold" data-box="player-splits"><summary>Splits</summary><div class="kpis"><div class="kpi"><small>Home</small><b class="num">${esc(split.home ? valueText(split.home.avg) : '–')}</b><span>${split.home ? split.home.n : 0} game${split.home && split.home.n === 1 ? '' : 's'}</span></div><div class="kpi"><small>Away</small><b class="num">${esc(split.away ? valueText(split.away.avg) : '–')}</b><span>${split.away ? split.away.n : 0} game${split.away && split.away.n === 1 ? '' : 's'}</span></div>${split.neutral ? `<div class="kpi"><small>Neutral site</small><b class="num">${esc(valueText(split.neutral.avg))}</b><span>${split.neutral.n} game${split.neutral.n === 1 ? '' : 's'}</span></div>` : ''}</div></details></section>`;
   };

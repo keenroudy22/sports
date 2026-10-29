@@ -1,3 +1,17 @@
+# October29 owner — NFL1Q passing and selectable quarter charts
+
+Quarter history now includes att/cmp/passYds for every official passer, separately
+reconciled as a family against full-game official totals. Sacks and two-point
+attempts never become passing attempts/yards; overtime is excluded from Q1.
+The existing bulk morning refresh backfills these fields automatically. Passing
+never inherits the narrow rushing/receiving zero-activity exception.
+
+NFL player pages have explicit1Q stat tabs for passing/rushing/receiving where
+supported. They use quarter values in the existing chart, season/sample filters,
+summary and game log. Quarter tabs cannot read full-game prices, projections,
+defensive grades or touchdown/INT totals. Missing splits stay unknown. These are
+observed stats, not live quarter sportsbook quotes, odds or model approval.
+
 # October29 owner — complete current-season NFL1Q history and automatic refresh
 
 All107 stored2026 NFL regular-season finals now expose all eligible player Q1

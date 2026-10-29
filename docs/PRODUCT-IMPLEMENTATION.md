@@ -1,3 +1,22 @@
+### October29 NFL first-quarter passing and selectable charts — RELEASE PENDING
+
+Owner requested missing1Q passing plus normal stat tabs and bar charts. Extended
+the same free bulk extractor with pass attempts, completions and passing yards;
+sacks/conversions excluded and the entire passing family independently reconciled
+against official full-game totals. All244 official passer-game entries across107
+current-season NFL finals pass. No rushing/receiving zero exception is inherited.
+The existing morning bulk path writes the new fields; no new scheduled task/feed.
+Full-game history and wager records remain unchanged.
+
+Explicit1Q passing/rushing/receiving tabs read only quarter values in the existing
+bar chart, log, averages and season/sample filters. Missing history stays unknown.
+Quarter selection cannot read full-game prices/projections/defensive grades or
+TD/INT totals. QB quarter panel now leads with passing yards and C/A. Desktop and
+375px local previews pass; all three passing tabs work and Last5 changes bars/logs
+and coverage together. Live quarter sportsbook capture/EV/model/settlement remains
+a separate gate, not implied by displaying observed stats.
+Full/clean locked release and hosted/live verification pending.
+
 ### October29 remaining NFL quarter gaps and automatic updates — VERIFIED LIVE
 
 Owner explicitly requested remaining15 games and all-player full-season coverage.

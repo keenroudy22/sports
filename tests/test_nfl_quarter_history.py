@@ -16,13 +16,13 @@ class QuarterFallbackTests(unittest.TestCase):
           'kickoff':'2026-09-01T17:00:00Z','retrievedAt':'2026-09-02T12:00:00Z','revision':1,
           'home':{'id':'1','abbreviation':'A','score':10},'away':{'id':'2','abbreviation':'B','score':3},
           'teams':{'1':{'plays':3},'2':{'plays':1}},'sources':{'plays':'https://example.org/plays'},
-          'players':[{'id':'10','team':'1','car':2,'rushYds':10},{'id':'30','team':'1','rec':1,'recYds':8},{'id':'40','team':'2','car':1,'rushYds':0}]}
-        self.cross={f'G{x}':x for x in ['10','30','40']}
+          'players':[{'id':'10','team':'1','car':2,'rushYds':10},{'id':'30','team':'1','rec':1,'recYds':8},{'id':'40','team':'2','car':1,'rushYds':0},{'id':'20','team':'1','att':1,'cmp':1,'passYds':8}]}
+        self.cross={f'G{x}':x for x in ['10','30','40','20']}
         base={'game_date':'2026-09-01','game_id':'2026_01_B_A','home_team':'A','away_team':'B','home_score':'10','away_score':'3',
               'season_type':'REG','season':'2026','two_point_attempt':'0','rush_attempt':'0','pass_attempt':'0','sack':'0','complete_pass':'0'}
         self.rows=[dict(base,play_id='1',qtr='1',posteam='A',rush_attempt='1',rusher_player_id='G10',rushing_yards='-2'),
                    dict(base,play_id='2',qtr='2',posteam='A',rush_attempt='1',rusher_player_id='G10',rushing_yards='12'),
-                   dict(base,play_id='3',qtr='1',posteam='A',pass_attempt='1',complete_pass='1',receiver_player_id='G30',receiving_yards='8'),
+                   dict(base,play_id='3',qtr='1',posteam='A',pass_attempt='1',complete_pass='1',passer_player_id='G20',passing_yards='8',receiver_player_id='G30',receiving_yards='8'),
                    dict(base,play_id='4',qtr='1',posteam='B',rush_attempt='1',rusher_player_id='G40',rushing_yards='0')]
 
     def test_full_game_reconciliation_preserves_zero_negative_and_overtime(self):
@@ -64,7 +64,8 @@ class QuarterFallbackTests(unittest.TestCase):
 
     def test_lateral_yards_are_not_an_extra_catch_or_play(self):
         rows=copy.deepcopy(self.rows);record=copy.deepcopy(self.record)
-        rows[2].update(lateral_reception='1',lateral_receiver_player_id='G50',lateral_receiving_yards='5')
+        record['players'][3]['passYds']=13
+        rows[2].update(passing_yards='13',lateral_reception='1',lateral_receiver_player_id='G50',lateral_receiving_yards='5')
         record['players'].append({'id':'50','team':'1','rec':0,'recYds':5})
         cross=dict(self.cross,G50='50')
         out,holds=q.extract(rows,record,cross)
@@ -160,3 +161,23 @@ class QuarterFallbackTests(unittest.TestCase):
             result=q.refresh(2026,rows,players,schedule,root,now,proof_fetch=down)
             self.assertEqual(result[0]['state'],'partial')
             self.assertNotIn('rushYds',bx.stored(root)['100']['firstQuarter']['10'])
+
+    def test_passing_family_checks_attempts_completions_and_yards_independently(self):
+        out,holds=q.extract(self.rows,self.record,self.cross)
+        self.assertEqual({k:out['20'][k] for k in ('att','cmp','passYds')},{'att':1,'cmp':1,'passYds':8})
+        overtime=copy.deepcopy(self.rows);overtime[2]['qtr']='5'
+        overtime_stats=q.extract(overtime,self.record,self.cross)[0]['20']
+        self.assertEqual([overtime_stats[k] for k in ('att','cmp','passYds')],[0,0,0])
+        for key in ('att','cmp','passYds'):
+            record=copy.deepcopy(self.record);record['players'][3][key]+=1
+            out,holds=q.extract(self.rows,record,self.cross,{('20','att')})
+            self.assertNotIn('passYds',out['20'])
+            self.assertIn('20:att full-game mismatch',holds)
+        rows=copy.deepcopy(self.rows)
+        # A sack is a team play, never a pass attempt/completion or passing yard.
+        rows.append(dict(rows[2],play_id='5',sack='1',complete_pass='0',passing_yards='-7'))
+        record=copy.deepcopy(self.record);record['teams']['1']['plays']=4
+        out,holds=q.extract(rows,record,self.cross)
+        self.assertEqual(out['20']['att'],1);self.assertEqual(out['20']['passYds'],8)
+        rows[2]['passing_yards']='NA'
+        self.assertEqual(q.extract(rows,record,self.cross)[0],{})

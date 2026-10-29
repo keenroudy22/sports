@@ -604,7 +604,7 @@ def retain_quarter_history(previous, current):
     if not fq.complete(old, previous.get('firstQuarter', {})) or fq.complete(new,current.get('firstQuarter',{})):
         return
     def facts(players):
-        return {aid:{k:p[k] for k in ('team',)+fq.STATS if k in p} for aid,p in players.items() if any(k in p for k in fq.STATS)}
+        return {aid:{k:p[k] for k in ('team',)+fq.STATS+('att','cmp','passYds') if k in p} for aid,p in players.items() if any(k in p for k in fq.STATS)}
     if facts(old) != facts(new) or {t:v.get('plays') for t,v in previous['teams'].items()} != {t:v.get('plays') for t,v in current['teams'].items()}:
         return
     import copy

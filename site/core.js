@@ -190,6 +190,8 @@
     PK: ['kPts', 'fgm', 'fga', 'xpm'],
   };
   const LABEL = {
+    q1_passYds: '1Q pass yds', q1_cmp: '1Q completions', q1_att: '1Q attempts',
+    q1_rushYds: '1Q rush yds', q1_car: '1Q carries', q1_recYds: '1Q rec yds', q1_rec: '1Q receptions',
     passYds: 'Pass yds', cmp: 'Completions', att: 'Attempts', passTD: 'Pass TD', int: 'INT', sacks: 'Sacked',
     rushYds: 'Rush yds', car: 'Carries', rushTD: 'Rush TD', rushLong: 'Long rush', targets: 'Targets', rec: 'Receptions',
     recYds: 'Rec yds', recTD: 'Rec TD', anyTD: 'Any TD', recLong: 'Long rec', rzTgt: 'RZ targets', i10Tgt: 'Inside-10 tgts',

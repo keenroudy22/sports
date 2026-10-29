@@ -11,7 +11,7 @@ import boxscores as bx
 PBP = 'https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.csv.gz'
 PAGE = 'https://github.com/nflverse/nflverse-data/releases/tag/pbp'
 ALIASES = {'LA':'LAR', 'WAS':'WSH'}
-STATS = ('car','rushYds','rec','recYds')
+STATS = ('car','rushYds','rec','recYds','att','cmp','passYds')
 
 
 def number(value):
@@ -55,6 +55,12 @@ def extract(rows, record, crosswalk, zero_proofs=None, diagnostics=None):
             counts[team]+=1
             if q==1:seen.add(team)
             values=[]
+            if passed and not sack:
+                completed=number(r.get('complete_pass'))
+                if completed not in (0,1):
+                    raise ValueError('unknown pass completion')
+                yards=number(r.get('passing_yards')) if completed else 0
+                values.append(('passer_player_id',{'att':1,'cmp':completed,'passYds':yards}))
             if rush:values.append(('rusher_player_id',{'car':1,'rushYds':number(r.get('rushing_yards'))}))
             if number(r.get('complete_pass'))==1:
                 values.append(('receiver_player_id',{'rec':1,'recYds':number(r.get('receiving_yards'))}))
@@ -79,10 +85,12 @@ def extract(rows, record, crosswalk, zero_proofs=None, diagnostics=None):
     for p in record['players']:
         if not any(k in p for k in STATS):continue
         values={}
-        for family in (('car','rushYds'),('rec','recYds')):
+        for family in (('car','rushYds'),('rec','recYds'),('att','cmp','passYds')):
+            if family[0]=='att' and not any(k in p for k in family):
+                continue
             if all(full[p['id']][k]==p.get(k,0) for k in family):
                 values.update({k:first[p['id']][k] for k in family})
-            elif ((p['id'],family[0]) in (zero_proofs or set()) and full[p['id']][family[0]]==p.get(family[0],0) and first[p['id']][family[0]]==0 and first[p['id']][family[1]]==0):
+            elif (family[0] in ('car','rec') and (p['id'],family[0]) in (zero_proofs or set()) and full[p['id']][family[0]]==p.get(family[0],0) and first[p['id']][family[0]]==0 and first[p['id']][family[1]]==0):
                 values.update({k:0 for k in family})
                 if diagnostics is not None:
                     diagnostics.setdefault('zeroActivityExceptions',[]).append(f"{p['id']}:{family[0]} later-game yards {full[p['id']][family[1]]} vs official {p.get(family[1],0)}; independent Q1 zero activity")
