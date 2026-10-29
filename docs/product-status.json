@@ -1,16 +1,7 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T12:44:34.406436+00:00",
+  "updatedAt": "2026-10-29T12:49:09.977765+00:00",
   "items": [
-    {
-      "id": "O-20261029-FIRSTQUARTER",
-      "title": "Show verified NFL first-quarter rushing and receiving player logs",
-      "status": "in_progress",
-      "owner": "agent",
-      "next": "Finish full/clean suites, locked deployment and hosted/mobile verification. Keep unknown quarter families absent; preserve all full-game stats and records.",
-      "doneWhen": "NFL player pages show sourced Q1 carries, rush yards, catches and receiving yards with per-stat samples and season/window isolation. Existing final capture populates without extra scheduled reads; hosted/live release verified.",
-      "evidence": "Parser and player view implemented;6-game bounded plays-only enrichment appended3 verified finals, held3. Negative/zero/unknown, period, identity, full-game separation and rendering tests pass. No quarter model or automatic ticket approval."
-    },
     {
       "id": "O-20261028-NBAREGULAR",
       "title": "Regular NBA picks and honest current-role comparisons",
@@ -160,9 +151,9 @@
       "title": "Exact-period capture, evidence and settlement before automated quarter parlays",
       "status": "gated",
       "owner": "agent",
-      "next": "FD Indiana/DK basketball rules verified Oct24; implement/test sport-specific settlement adapters. Continue period workload, Q2/football prices and actual correlated ticket quotes; validate before automatic release. No extra jobs/budget.",
+      "next": "Verify NFL Q1 observed-stat release hosted/live. Existing finals derive rushing/receiving history without new scheduled reads. Quarter projections, priced selection, book settlement and correlated tickets remain separately gated.",
       "doneWhen": "Verified period/book/line identities, period workload evidence, correlated ticket quote and tested settlement exist; ordinary full-game estimates are never divided into quarters. Existing budgets and approval gates hold.",
-      "evidence": "d36db08f/hosted40045096781SUCCESS verifiedd1811645.12-read cap retains two exactQ1 reads; actual capture35paired Q1 quotes/4games,partial. ESPN401909834 reconciled19players/all4quarters. Exact-period, identity, duplicate, timing and DNP regressions pass. This is input/research comparison, not a validated forecast or sportsbook settlement; Q2/football/void/correlated-ticket gates remain."
+      "evidence": "Oct29 NFL Q1 history parser/player panel implemented;6-game bounded enrichment appended3 verified finals/56 player rows,held3. Exact periods, unique plays, team counts, per-player reconciliation, zero/negative/unknown and full-game isolation tests pass. Await hosted/live. Earlier NBA Q1 capture/workload remains research only; no quarter model, ticket or EV approval."
     },
     {
       "id": "O-20261022-RESULT",
