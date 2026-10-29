@@ -1,4 +1,4 @@
-### October29 NFL1Q cross-game Research filter — RELEASE PENDING
+### October29 NFL1Q cross-game Research filter — VERIFIED LIVE
 
 Adds Full game/1Q period control to Research Trends with current-season NFL passing,
 rushing and receiving benchmarks, stat/hit-rate/Season/Last5/Last10/search/day controls,
@@ -12,6 +12,17 @@ Prepared owner-requested TNF1Q heaters card/caption in owner folder, not sent or
 production quota2874 on Oct29; optional cap2700 blocks research, remaining2900 allowance
 reserved for essentials. Do not send expired TNF content after quota recovery. This is
 not a new recurring milestone social template or frequency increase.
+
+Source9bf675b31460417e519ca8e8a0d182a9565b9417 passed2017Python(2skip)/298Node
+normal+clean suites and all standard locked gates; record audit136 unchanged terms,
+NBA audit0 issues, public boundary/rehearsal clean. Hosted40940319054SUCCESS,
+verifiedc6ed2e72eaa06c88a7c737c43f1993db94e5e8f5 contains tested source.
+Initial hosted40937362617 revealed seven-game mobile grid overflow; reuse existing
+trend-grid containment fixes it. Final live375/1440 has matching scroll widths,
+24 reception benchmarks, correct seven-game histories and Last5 switching, no
+console errors. Screenshot kookn-1q-trends-2026-10-29.png in owner folder. Quarter
+manifest is separate so cached full-game clients cannot label quarter history as
+full-game; previous-core unknown handling and canonical share/reload are protected.
 
 ### October29 NFL first-quarter passing and selectable charts — VERIFIED LIVE
 
