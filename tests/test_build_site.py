@@ -934,3 +934,20 @@ class QuarterTrendsTests(unittest.TestCase):
         self.assertTrue(all(r['period']=='1Q' and r['kind']=='milestone' for r in rows))
         self.assertTrue(all(not set(r)&{'odds','book','projection','priceClears'} for r in rows))
         self.assertEqual(build_site.quarter_trends({**charts,'games':[]},records,now), [])
+
+
+    def test_quarter_manifest_is_invisible_to_previous_full_game_app(self):
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        now=datetime(2026,10,29,18,tzinfo=timezone.utc)
+        row={'league':'NFL','kickoff':'2026-10-30T00:00:00Z','kind':'milestone',
+             'athleteId':'1','stat':'rec','line':1,'history':[{'date':'2026-10-20','value':1}]}
+        with TemporaryDirectory() as folder, patch.object(build_site,'OUT',Path(folder)):
+            build_site.write_trends([row,{**row,'period':'1Q'}],now)
+            full=json.loads((Path(folder)/'trends/index.json').read_text())
+            quarter=json.loads((Path(folder)/'trends/quarter-index.json').read_text())
+            self.assertEqual(len(full['files']),1)
+            self.assertEqual(len(quarter['files']),1)
+            self.assertEqual(full['files'][0]['period'],'full')
+            self.assertEqual(quarter['files'][0]['period'],'1Q')
+            self.assertNotEqual(full['files'][0]['file'],quarter['files'][0]['file'])

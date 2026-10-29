@@ -1632,7 +1632,7 @@
 
   const TREND_STATS = [['all', 'All stats'], ['rec', 'Receptions'], ['recYds', 'Receiving yards'], ['rushYds', 'Rushing yards'], ['passYds', 'Passing yards'], ['car', 'Carries'], ['att', 'Pass attempts'], ['cmp', 'Completions']];
   const loadTrends = async (route, kind, dayFilter, period = 'full') => {
-    const index = await get('app/trends/index.json');
+    const index = await get(period === '1Q' ? 'app/trends/quarter-index.json' : 'app/trends/index.json');
     const wanted = (index.files || []).filter(file =>
       (state.league === 'ALL' || file.league === state.league) &&
       (file.period || 'full') === period &&
@@ -1646,7 +1646,7 @@
   const researchTrends = async route => {
     const t = state.trends, quarter = t.period === '1Q', kind = quarter ? 'milestone' : t.kind;
     /* A saved "Today" with no game today shows every upcoming game instead, without changing the saved choice. */
-    const hasToday = ((await get('app/trends/index.json')).files || []).some(f => (f.period || 'full') === (t.period || 'full') && f.date === etDay() && (state.league === 'ALL' || f.league === state.league));
+    const hasToday = ((await get(quarter ? 'app/trends/quarter-index.json' : 'app/trends/index.json')).files || []).some(f => (f.period || 'full') === (t.period || 'full') && f.date === etDay() && (state.league === 'ALL' || f.league === state.league));
     const day = route.game || (t.day === 'today' && !hasToday) ? 'all' : t.day || 'all', fellBack = !route.game && t.day === 'today' && day === 'all';
     const data = await loadTrends(route, kind, day, t.period || 'full');
     const catalog = await lineData();

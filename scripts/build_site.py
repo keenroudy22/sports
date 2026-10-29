@@ -995,7 +995,8 @@ def write_trends(rows, now):
             write(OUT / 'trends' / name, {'generatedAt': stamp(now), **trend_payload(chunk)})
             files.append({'league': league, 'date': game_day, 'kind': 'milestone' if milestones else 'priced',
                           'file': name, 'rows': len(chunk), 'period': period})
-    write(OUT / 'trends' / 'index.json', {'generatedAt': stamp(now), 'files': files})
+    write(OUT / 'trends' / 'index.json', {'generatedAt': stamp(now), 'files': [f for f in files if f['period'] == 'full']})
+    write(OUT / 'trends' / 'quarter-index.json', {'generatedAt': stamp(now), 'files': [f for f in files if f['period'] == '1Q']})
 
 
 def recent_picks(picks, now):
