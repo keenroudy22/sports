@@ -5943,3 +5943,37 @@ availability/current roles and full qualification. Private planning, no admissio
 Recorded-price season31-44/-11.426922965u; Oct26baseline29-40/-11.886922965u
 retained; subsequent2-4/+0.46u. Oct31prepare/Nov1finalize and carry pending finals.
 Evidence work/overnight-20261029-* and owner-month-end-baseline-20261029.json.
+
+
+### October29 overnight — Eastern-day accounting VERIFIED LIVE
+
+2026-10-29T05:05:20.501580+00:00 — de796301d canonicalattempt1 passed1986Python(two expected skips)/
+293Node normal+clean,447pages/133record/NBA0/674localpublicfiles, all budgets/
+assets/SVG/feed checks.0025cqtm34yl isolated exit0/outcomeok;0outside writes/
+private reads. Initialprecommitclean failure traced inherited queue next248chars
+against240limit; concise nextaction fixed, frozenretry1passed. No weakened gate.
+Hosted40820379111SUCCESS verified43b72a0816eba1c5df222384daa7d971bbd51348
+contains source by ancestry;0upstreamchanges/0rechecks,677publicfiles/0issues.
+Today/Record375/1440fully rendered with0overflow/load/consoleerrors; actual
+375phone screenshot visually reviewed. Viewport reset. All133live rows/68released
+grades match,14personal/0open,0queued-overdue or unscheduled officials.
+
+Repair changes only Eastern date counts in four reviewed research cohorts;
+3131outcomes/errors/frozenprices/returns preserved. Date-aware readiness17clean
+days/45papergrades; probability pts/reb1game/1date/0priced, allpropapprovalnull.
+Failed studies, current-role and official-participation holds unchanged.
+First actual eligible combined-summary/linkedFinal is still observing; code was
+already verified yesterday. Natural optional-request saving and actual daily/
+weekly recap sends now observed. Buffer2857/43temporaryessentialroom, normal
+2700rollingroomNov9 14:36:12.379880Z assuming no furtherrequests;2900expires
+Nov6 13:05Z. No reset, new job, quota/stake/preference change or forced play.
+
+Oct29packet3football/70pricedrows,3NBA/0freshprops;136actualalternates/0supported
+Climb. Existing06:45/08:30refresh/admit or exacthold. Monthsnapshot recomputed
+from current live core:31-44/-11.426922965u/70.5risk/59.073077035return; original
+Oct26baseline29-40/-11.886922965u retained. Oct31prepare/Nov1finalize carries
+unresolved finals and separate categories forward. Original176queueIDs plus
+owner-addedNBAREGULAR retained (177total). Archivedonlypriorcompleted same
+automation01a180d5; current/running/owner-action chats retained. Full receipt
+work/overnight-20261029-outcomes.json. Metadata stays ondev for next ordinary
+release; no duplicate code deployment for these notes.
