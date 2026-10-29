@@ -43247,5 +43247,203 @@
         "publishedAt": "2026-10-29T12:41:03Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-29T21:37:31Z",
+    "summary": "Released 1: Troy at James Madison over 51.5 -105 at FanDuel.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 51.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401869963"
+        ],
+        "book": "FanDuel",
+        "odds": -105,
+        "projection": 53.3,
+        "edge": "Price-checked chance 51.6% against the exact two-sided price; 51.2% needed at -105: +0.4 percentage points.",
+        "cutoff": "OVER 51.5 at -105 or better; off the card at 53+, or at -120 or worse at 51.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-25T00:36:57Z",
+        "quotedAt": "2026-10-29T20:20:16Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 4:20 PM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-29T22:50:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.545,
+          "chance": 0.516,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.512,
+          "edgePoints": 0.4,
+          "evPerUnit": 0.008,
+          "snapshotAt": "2026-10-25T00:36:57Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-10-29T21:31:31Z",
+          "fairChance": 0.489,
+          "anchoredChance": 0.516,
+          "gap": 2.7,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Troy Trojans at James Madison Dukes",
+        "title": "Troy at James Madison over 51.5",
+        "id": "CFB-2026-W9-troy-jmu-over-51-5-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401869963",
+          "https://www.whsv.com/2026/10/29/jmu-seeks-bounce-back-against-troy-rematch-last-seasons-sun-belt-title-game/",
+          "https://troytrojans.com/news/2026/10/28/football-troy-travels-to-jmu-for-sbc-championship-game-rematch"
+        ],
+        "why": "Model lean, our number only. We have the total at 53.3; the book is at 51.5. That makes the over 51.6%, and -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Troy quarterback Goose Crowder is available to play Thursday after recently battling an injury. Checked before publishing: Troy reported uncertainty at quarterback after Goose Crowder left a second straight game with an upper-body injury, while Tucker Kilcrease played in both games. The market: The spread opened -17.5 and is -19.5 at DraftKings, a move of 2 toward the home. The total opened 52.5 and is 51.5 at DraftKings, 1 toward the under. 6 books span -19.5 to -18.5 on the spread; the middle is -19.25. 6 books span 50.5 to 51.5 on the total; the middle is 51.5. Our spread is 7.3 points off, bigger than 77% of our past gaps. Gaps this size went 412-411 against the close in 3584 games. Our total is 1.8 points off, bigger than 34% of our past gaps. Gaps this size went 1245-1115 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Troy averages 11 points and 328.3 yards in road games this season. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "James Madison averages 50.3 points and 491.8 yards in its four home games this season."
+          ],
+          "cautions": [
+            "Troy averages 11 points and 328.3 yards in road games this season."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 51.5. I say 53.3.",
+              "numbers": {
+                "projection": 53.3,
+                "line": 51.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-25T00:36:57Z"
+            },
+            {
+              "text": "James Madison averages 50.3 points and 491.8 yards in its four home games this season.",
+              "numbers": {},
+              "source": "https://troytrojans.com/news/2026/10/28/football-troy-travels-to-jmu-for-sbc-championship-game-rematch",
+              "time": "2026-10-29T21:31:31Z"
+            },
+            {
+              "text": "James Madison averages 50.3 points and 491.8 yards in its four home games this season.",
+              "numbers": {},
+              "source": "https://troytrojans.com/news/2026/10/28/football-troy-travels-to-jmu-for-sbc-championship-game-rematch",
+              "time": "2026-10-29T21:31:31Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Troy averages 11 points and 328.3 yards in road games this season.",
+              "numbers": {},
+              "source": "https://troytrojans.com/news/2026/10/28/football-troy-travels-to-jmu-for-sbc-championship-game-rematch",
+              "time": "2026-10-29T21:31:31Z"
+            },
+            {
+              "text": "Troy averages 11 points and 328.3 yards in road games this season.",
+              "numbers": {},
+              "source": "https://troytrojans.com/news/2026/10/28/football-troy-travels-to-jmu-for-sbc-championship-game-rematch",
+              "time": "2026-10-29T21:31:31Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 65,
+            "windMph": 1,
+            "windDirection": "S",
+            "precipProb": 0,
+            "periodStart": "2026-10-29T19:00:00-04:00",
+            "issuedAt": "2026-10-29T18:22:46+00:00",
+            "source": "https://api.weather.gov/gridpoints/LWX/35,43/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 52.5,
+                  "price": -110,
+                  "time": "2026-10-25T10:45:06Z"
+                },
+                "now": {
+                  "line": 50.5,
+                  "price": -115,
+                  "time": "2026-10-29T15:45:05Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 51.5,
+                  "price": -110,
+                  "time": "2026-10-25T10:45:06Z"
+                },
+                "now": {
+                  "line": 51.5,
+                  "price": -105,
+                  "time": "2026-10-29T15:45:05Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 51.5,
+              "price": -105,
+              "time": "2026-10-29T20:20:16Z"
+            }
+          },
+          "ours": {
+            "projection": 53.3,
+            "line": 51.5,
+            "market": "total",
+            "text": "Book says 51.5. I say 53.3.",
+            "snapshotAt": "2026-10-25T00:36:57Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://troytrojans.com/news/2026/10/28/football-troy-travels-to-jmu-for-sbc-championship-game-rematch",
+              "time": "2026-10-29T21:31:31Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/LWX/35,43/forecast/hourly",
+              "time": "2026-10-29T18:22:46+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401869963",
+              "time": "2026-10-29T21:31:31Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.whsv.com/2026/10/29/jmu-seeks-bounce-back-against-troy-rematch-last-seasons-sun-belt-title-game/",
+              "time": "2026-10-29T21:31:31Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-29T21:37:31Z"
+      }
+    ]
   }
 ]
