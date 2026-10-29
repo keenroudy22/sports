@@ -1,0 +1,201 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-29T12:41:03Z",
+  "summary": "Released 1: Dominique Henry UNDER 3.5 receptions +112 at FanDuel.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4917048",
+      "market": "rec",
+      "line": 3.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401862812"
+      ],
+      "book": "FanDuel",
+      "odds": 112,
+      "projection": 3.1,
+      "edge": "Price-checked chance 51.1% against the exact two-sided price; 47.2% needed at +112: +4.0 percentage points.",
+      "cutoff": "UNDER 3.5 at +112 or better; off the card at 3 or lower, or at -103 or worse at 3.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-25T00:36:57Z",
+      "quotedAt": "2026-10-29T12:31:04Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 8:31 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-29T15:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 0.5,
+      "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.575,
+        "chance": 0.511,
+        "calibrated": true,
+        "calibration": 0.15,
+        "calibrationN": 1312,
+        "push": 0.0,
+        "breakEven": 0.472,
+        "edgePoints": 4.0,
+        "evPerUnit": 0.084,
+        "snapshotAt": "2026-10-25T00:36:57Z",
+        "probabilitySpec": "31a87bac8ccc7700484ad159503c03c8563e6b431f5ee0e8997f7524ddd59470",
+        "evaluatedAt": "2026-10-29T12:31:24Z",
+        "fairChance": 0.441,
+        "anchoredChance": 0.511,
+        "gap": 7.0,
+        "calibrationFamily": "CFB/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Florida Atlantic Owls at North Texas Mean Green",
+      "title": "Dominique Henry UNDER 3.5 receptions",
+      "id": "CFB-2026-W9-henry-under-3-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401862812",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://fausports.com/news/2026/10/28/football-countdown-to-kickoff-game-8-at-north-texas",
+        "https://fausports.com/sports/football/stats/2026/rice/boxscore/24582"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 3 of 10 under 3.5.",
+        "context": [
+          "Role: 3rd of 3 FAU WRs by projected targets, 4.5 a game.",
+          "Defense: UNT allows 10.57 receptions a game to WRs, 29th-stingiest of 138 this season."
+        ],
+        "cautions": [
+          "Only 3 of the last 10 games cleared this side of the line; recent results oppose it."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 3.1 against 3.5. The under reads 51.1% after adjustment from the raw 57.5%; 47.2% is needed at +112. Last 10 games: 3 of 10 under 3.5. Role: 3rd of 3 FAU WRs by projected targets, 4.5 a game. Defense: UNT allows 10.57 receptions a game to WRs, 29th-stingiest of 138 this season.",
+      "risk": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 3.5. I say 3.1.",
+            "numbers": {
+              "projection": 3.1,
+              "line": 3.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-25T00:36:57Z"
+          },
+          {
+            "text": "3 of his last 5 games finished under 3.5 receptions.",
+            "numbers": {
+              "values": [
+                2,
+                9,
+                2,
+                4,
+                0
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 3.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-24T16:00Z"
+          },
+          {
+            "text": "Dominique Henry had 0 receptions and 0 receiving yards against Rice on October 24.",
+            "numbers": {},
+            "source": "https://fausports.com/sports/football/stats/2026/rice/boxscore/24582",
+            "time": "2026-10-29T12:31:24Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-10-29T12:31:24Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 80,
+          "windMph": 5,
+          "windDirection": "S",
+          "precipProb": 18,
+          "periodStart": "2026-10-29T18:00:00-05:00",
+          "issuedAt": "2026-10-29T06:26:19+00:00",
+          "source": "https://api.weather.gov/gridpoints/FWD/77,123/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": null,
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.5,
+                "price": 128,
+                "time": "2026-10-28T00:42:14Z"
+              },
+              "now": {
+                "line": 3.5,
+                "price": 112,
+                "time": "2026-10-29T12:31:04Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 3.5,
+            "price": 112,
+            "time": "2026-10-29T12:31:04Z"
+          }
+        },
+        "ours": {
+          "projection": 3.1,
+          "line": 3.5,
+          "market": "rec",
+          "text": "Book says 3.5. I say 3.1.",
+          "snapshotAt": "2026-10-25T00:36:57Z"
+        },
+        "history": "Last 10 games: 3 of 10 under 3.5.",
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://fausports.com/sports/football/stats/2026/rice/boxscore/24582",
+            "time": "2026-10-29T12:31:24Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/FWD/77,123/forecast/hourly",
+            "time": "2026-10-29T06:26:19+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401862812",
+            "time": "2026-10-29T12:31:24Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-29T12:31:24Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://fausports.com/news/2026/10/28/football-countdown-to-kickoff-game-8-at-north-texas",
+            "time": "2026-10-29T12:31:24Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-29T12:41:03Z"
+    }
+  ]
+}
