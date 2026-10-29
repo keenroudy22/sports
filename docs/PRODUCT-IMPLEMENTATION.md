@@ -1,4 +1,4 @@
-### October29 remaining NFL quarter gaps and automatic updates — RELEASE PENDING
+### October29 remaining NFL quarter gaps and automatic updates — VERIFIED LIVE
 
 Owner explicitly requested remaining15 games and all-player full-season coverage.
 Diagnosed ESPN replay/penalty/special-team/lateral attribution. The detailed audit
@@ -22,7 +22,22 @@ by both complete feeds and exact full-game carry count. The zero-only exception
 cannot admit nonzero quarter values, count mismatches, incomplete feeds or unknown
 players. Independent validation, missing data, laterals, duplicates, negative yards,
 overtime, zero proof, append/idempotency and automatic cached-read tests pass.
-Full locked release and hosted/live receipts pending.
+Source600891fe3eec64f464263ba5f52e1903809e6a9a passed2012Python(2skip)/295Node
+normal and clean suites, build/feed, audits, payload/record/guard and offline rehearsal.
+Hosted40906460075SUCCESS verified8abe832c9b3cb286acbf7a8b734372eb4f01b729 contains
+that source and repeated10 post-rebase checks, including full2012Python/295Node.
+The initial release stopped safely for three moving-input races; the final release
+promoted on its first attempt after the desk jobs finished. Live375/1440 no
+horizontal overflow or console errors; Lloyd7/7, Hubbard6/6, Nix7/7 checked.
+Proof: kookn-q1-everyone-2026-10-29.png and JSON receipt in owner folder.
+
+Additional regressions preserve verified nflverse quarter history through partial
+ESPN rechecks only when the official player families and team plays are unchanged.
+Saved zero-activity receipts survive temporary source outages only while current
+bulk counts and Q1 activity remain consistent; changed/nonzero activity loses the
+exception. One free current-season bulk file runs in the EXISTING morning job;
+actual next natural run/new-final receipt remains the scheduled observation, not
+claimed as already observed. Quarter betting/model gates remain unchanged.
 
 ### October29 full-season NFL quarter history and layout — VERIFIED LIVE
 
