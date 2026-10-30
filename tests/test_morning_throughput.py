@@ -83,7 +83,7 @@ class MorningThroughputTests(unittest.TestCase):
         self.assertEqual(status['nbaTrial']['state'], 'held')
         source = inspect.getsource(run._run)
         self.assertLess(source.index('early_nba_selection('), source.index('for candidate_rank'))
-        self.assertIn("args.command == 'run' and 'nbaTrial' not in status", source)
+        self.assertIn("nba_admission_worker(args,now) and 'nbaTrial' not in status", source)
 
     def test_capture_failure_retains_bounded_existing_trial_retry(self):
         now = datetime(2026, 10, 24, 10, 45, tzinfo=timezone.utc)
@@ -126,3 +126,29 @@ class MorningThroughputTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class AfternoonNBAAdmissionTests(unittest.TestCase):
+    def test_existing_afternoon_capture_can_select_without_new_feed_calls(self):
+        import nba_player_props
+        now=datetime(2026,10,30,17,34,tzinfo=timezone.utc)
+        args=SimpleNamespace(command='ladder',dry_run=False,no_push=False,now=None)
+        status={'errors':[]}
+        with mock.patch.dict(os.environ,{'KEENROUDY_SPORTS_CAPTURE':'1'}), \
+             mock.patch.object(nba_player_props,'capture',return_value={'paired':12}) as capture, \
+             mock.patch.object(nba_trial_runtime,'admission',return_value={'state':'held'}) as admit, \
+             mock.patch.object(run,'log'):
+            run.capture_nba_props_and_select(args,now,status)
+        capture.assert_called_once()
+        admit.assert_called_once()
+        self.assertEqual(admit.call_args.kwargs,{'capture':False,'markets':{'player'}})
+        self.assertTrue(run.nba_admission_worker(args,now))
+
+    def test_historical_and_non_afternoon_climb_workers_keep_their_scope(self):
+        args=SimpleNamespace(command='ladder')
+        for at in (datetime(2026,10,29,17,30,tzinfo=timezone.utc),
+                   datetime(2026,10,30,14,0,tzinfo=timezone.utc),
+                   datetime(2026,10,30,20,0,tzinfo=timezone.utc)):
+            self.assertFalse(run.nba_admission_worker(args,at))
+        self.assertTrue(run.nba_admission_worker(SimpleNamespace(command='run'),datetime(2026,10,29,17,30,tzinfo=timezone.utc)))
+        self.assertFalse(run.nba_admission_worker(SimpleNamespace(command='results'),datetime(2026,10,30,17,30,tzinfo=timezone.utc)))

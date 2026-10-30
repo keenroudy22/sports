@@ -1,4 +1,16 @@
-### October30 independent NBA Discord release — release candidate
+### October30 afternoon capture-to-selection — release candidate
+
+A final NBA path check found that the existing13:30Climb worker captured game and
+prop evidence but skipped admission because its command was not run. A dated
+worker predicate now allows NBA admission from that same afternoon capture;
+all other Climb windows, result-only jobs and historical days retain their scope.
+Props remain independently evidence-gated; no new feed, task, stake or exposure.
+This also exercises the just-shipped independent Discord/late-art path once a
+real market qualifies. Normal game-day checks and exact prices are mandatory.
+Targeted worker tests cover afternoon reuse, no recapture and historical scope;
+full locked/hosted/live release verification pending for this last scheduling fix.
+
+### October30 independent NBA Discord release — VERIFIED LIVE
 
 Current NBA evidence remains unqualified; no live NBA admission or post is claimed.
 A separate delivery defect was found: regular NBA Discord was created only after
@@ -9,10 +21,21 @@ Discord-only entries have no Buffer ID or X sent receipt; later X creation upgra
 the same row, preserving its original caption and Discord receipt. Grading works
 without X. Existing five-minute mirror retries late hosted art using stored prices,
 not additional feeds. Unknown Buffer create intents remain at-most-once.
-Targeted215 delivery/runtime/Buffer regressions and the new discovery-failure test
-pass. Full normal/clean, locked/hosted/live verification still required.
+Targeted215 delivery/runtime/Buffer regressions, discovery-failure coverage and
+154 combined regressions pass. Source2efb2c76d24574b6acfc66bc18cf293484992571
+passed2035Python(2skip)/299Node normal+clean, all locked gates and0955 offline
+rehearsal (zero outside writes/private reads). Hosted41071015082SUCCESS verified
+07d5733a604bd6daa4aec7435deebd27d24a4776 contains source;10 post-rebase checks,
+record139/NBA0 audit clean. NBA Today375/1440 renders without overflow/error state
+or console errors. No qualifying NBA play or actual new NBA delivery is claimed.
+First natural qualified Discord/X-upgrade/grade remains observable.
 
-### October30 NBA validation and weekend readiness — release candidate
+An initial canonical release stopped after three data-head races; all commits and
+legitimate jobs were preserved. A fresh standard invocation in the quieter window
+passed/promoted in one attempt. This is not a claim that the broader release/data-
+head latency issue is repaired; O-20261024-RELEASELATENCY retains that work.
+
+### October30 NBA validation and weekend readiness — OPERATING FIX LIVE
 
 Fresh owner-requested0937 selection completed13:39:51Z:0 new plays;10 NBA games
 held for unavailable official participation. One bounded official report diagnostic
@@ -39,7 +62,9 @@ Buffer API local allowance is2900/2900; no extra reservation. Authenticated Free
 UI works with0queued. Buffer Sent confirms Kent total09:43Eastern X2116163977659003136
 and UCF ML09:23 X2116158953310568743; these were existing CFB plays, not NBA.
 No new GUI post or unattended GUI adapter is claimed. Evidence and all four prep
-packets: work/nba-validation-20261030.json. Full locked/hosted/live checks pending.
+packets: work/nba-validation-20261030.json. Full locked/hosted/live checks passed
+with the2efb2c76/41071015082 receipt above. Statistical NBA prop/roster approval and
+unattended X capacity remain held, not completed by this software release.
 
 ### October30 primary coverage — VERIFIED LIVE
 

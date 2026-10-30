@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-30T14:06:53.810347+00:00",
+  "updatedAt": "2026-10-30T14:54:16.397494+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -43,7 +43,7 @@
       "title": "Remove full-suite per-ticket delay and verify early delivery",
       "status": "observing",
       "owner": "agent",
-      "next": "Repair stored-result retry in existing mirror after hosted art is ready; avoid full desk rebuilds. Preserve cards,15m recovery bound, spacing and caps. Verify actual next-final receipts; no new polling.",
+      "next": "Fix stored-result retry in existing mirror without full desk rebuilds. Address repeated data-head release races; preserve full deployment gates, legitimate jobs,15m recovery/spacing/caps. Verify actual next-final receipts.",
       "doneWhen": "Runtime release checks are bounded and pass; full deployment suites remain; all qualifying queued plays have actual Discord/site/X receipts or exact refusals, with morning latency measured.",
       "evidence": "Oct30 live137rows match append-only record,0issues;Thursday2-2/-0.538u.03:37Zcards not live;03:58scheduled;actualX04:02:16/04:12:16Z,Discord04:03:45/04:14:13Z. work/overnight-20261030-outcomes.json; no new code/release claimed. Oct30daily:40998451112SUCCESS03:49Z;result retry03:58Z then X04:02/04:12. Mirror recovery rebuild path identified; repair not shipped. work/daily-20261030-outcomes.json."
     },
@@ -97,9 +97,9 @@
       "title": "Reuse a late NBA pregame capture to cover the afternoon",
       "status": "ready",
       "owner": "agent",
-      "next": "Release typed official-report failure diagnostics, verify hosted/live, then observe next normal capture. Keep one report request, current source/role holds and original validation evidence.",
+      "next": "Release13:30 capture-to-admission repair, then observe11:45/13:30 NBA capture and selection. Reuse existing inputs; no extra job/feed. Preserve model/role/price/exposure and API holds.",
       "doneWhen": "Six planned captures remain; morning windows retained and daytime gaps at most four hours. Single capture path, failure isolation and stale guards pass full tests/rehearsal. Locked release and hosted/live verification succeed.",
-      "evidence": "Oct30 HTTP403 diagnosed; capture patch retains private reason/source/time/status, never exception body or secret URL.38source/probability/release tests pass. No extra read or model promotion. Full release pending."
+      "evidence": "2efb2c76/41071015082SUCCESS verified07d5733a ancestry.2035Python(2skip)/299Node normal+clean/allgates,0955 rehearsal ok. LiveNBA375/1440clean. HTTP403/reader/parse/budget failures stay unavailable, without secret exception content or an extra request. Prospective13:30 game/prop admission reuses the existing capture; historical/result-only/other Climb scopes remain unchanged. Last scheduling fix pending full release."
     },
     {
       "id": "O-20261023-NBAMATCHUP",
@@ -212,11 +212,11 @@
     {
       "id": "D-20261021-NBADELIVERYSTATE",
       "title": "Audit cancellation provenance across NBA replacement attempts",
-      "status": "ready",
+      "status": "observing",
       "owner": "agent",
-      "next": "Release independent NBA Discord-first path and cached-art retry; verify hosted/live. Observe first natural qualifying delivery, X upgrade and grade. Preserve source/model/price/exposure checks and API cap.",
+      "next": "Operating repair verified live. Observe first naturally qualified Discord-only send, later X upgrade and grade. Existing mirror retries live art; preserve all model/price/role/exposure checks and the API cap.",
       "doneWhen": "Mirror uses current time after recovery/sync; valid replacements survive, true price/role vetoes still cancel and explicit replays stay fixed. Every release gate and hosted/live375 pass; prior attempt and delivery receipts remain unchanged.",
-      "evidence": "Oct30: Discord no longer waits for Buffer acceptance; canonical Discord-only row upgrades once on X success, preserving receipt/caption. Existing mirror retries late art without feed reads; grading works without X.215 regressions plus outage test pass."
+      "evidence": "2efb2c76;2035Python(2skip)/299Node normal+clean/allgates;0955 rehearsal ok/zero outside-private. Hosted41071015082SUCCESS verified07d5733a contains source;10post-rebase checks;139record/NBA0. LiveNBA375/1440clean. No new NBA play admitted."
     },
     {
       "id": "D-20261021-FAVORITE",

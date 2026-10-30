@@ -1584,12 +1584,23 @@ def current_run_time(args, started):
     return max(started, datetime.now(timezone.utc))
 
 
+
+def nba_admission_worker(args, now):
+    """Use existing captures for selection, including the approved afternoon worker.
+
+    Historical Climb-only passes retain their old scope. The prospective13:30
+    pass already captures NBA; this adds no job, quote request or larger cap.
+    """
+    return (args.command == 'run' or coverage_priority.active(now)
+            and args.command == 'ladder' and now.astimezone(EASTERN).hour == 13)
+
+
 def capture_nba_props_and_select(args, now, status):
     """One existing capture, then admit fresh props without another feed call."""
     import nba_player_props
     status['nbaPlayerProps']=nba_player_props.capture(now if args.dry_run else datetime.now(timezone.utc))
     log(f"NBA player props: {status['nbaPlayerProps']}")
-    if (args.dry_run or getattr(args,'now',None) or args.no_push or args.command!='run'
+    if (args.dry_run or getattr(args,'now',None) or args.no_push or not nba_admission_worker(args,now)
             or os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')=='0'):
         return
     try:
@@ -2961,8 +2972,9 @@ def _run(args, now, slot, kinds, status):
                     status['nbaRosterGraded']=nba_roster_runtime.grade(now,root=ROOT/'data/nba-roster-research',boxes=[r for p in (ROOT/'data/sport-box').glob('nba-*.jsonl') for r in __import__('boxscores').read_store(p)])
                 except Exception as error:
                     status['errors'].append(f'NBA roster research grade: {type(error).__name__}: {error}')
-            if args.command == 'run' and 'nbaTrial' not in status and not settle_only:
-                status['nbaTrial'] = nba_trial_runtime.admission(now, capture=nba_trial_needs_capture(slot, status))
+            if nba_admission_worker(args,now) and 'nbaTrial' not in status and not settle_only:
+                status['nbaTrial'] = nba_trial_runtime.admission(
+                    now, capture=args.command == 'run' and nba_trial_needs_capture(slot, status))
         except Exception as error:
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
         if slot.hour in (21,23):

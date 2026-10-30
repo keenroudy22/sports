@@ -1,3 +1,13 @@
+# October30 afternoon NBA selection from the existing capture
+
+The existing13:30Climb worker already captures NBA. Prospectively from the
+October30 coverage policy, it also checks NBA game and independently supported
+prop admission against that same capture. Keep existing jobs, quote budgets,
+previews/kill switches, evidence, exposure and release checks. No additional
+capture occurs for selection. Earlier Climb-only history, result-only workers
+and other Climb windows keep their prior scope. A qualified afternoon market
+must not wait until17:30 merely because the caller is named ladder.
+
 # October30 NBA Discord independent of X transport
 
 From2026-10-30T14:02Z, an already-admitted NBA play may queue its Discord-first
