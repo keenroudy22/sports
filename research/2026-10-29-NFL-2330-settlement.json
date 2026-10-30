@@ -1,0 +1,685 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-30T03:30:13Z",
+  "targetWeek": 8,
+  "summary": "Research update for Oct 29: Settled 2: MarShawn Lloyd OVER 6.5 receiving yards win; Jordan Love OVER 35.5 pass attempts win. Nothing to close. Nothing published. odds_api.py: CFB: skipped (8 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "4429023",
+      "market": "recYds",
+      "line": 6.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873023"
+      ],
+      "book": "DraftKings",
+      "odds": -104,
+      "projection": 12.5,
+      "edge": "Price-checked chance 51.3% against the exact two-sided price; 51.0% needed at -104: +0.3 percentage points.",
+      "cutoff": "OVER 6.5 at -104 or better; off the card at 7+, or at -119 or worse at 6.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-29T02:03:03Z",
+      "quotedAt": "2026-10-29T10:35:26Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 6:35 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-29T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 0.5,
+      "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.644,
+        "chance": 0.513,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.51,
+        "edgePoints": 0.3,
+        "evPerUnit": 0.006,
+        "snapshotAt": "2026-10-29T02:03:03Z",
+        "probabilitySpec": "773587ee30814809af51e95f29290d04fba8c1ddabc477e11e1745954fd0d981",
+        "evaluatedAt": "2026-10-29T10:46:28Z",
+        "fairChance": 0.482,
+        "anchoredChance": 0.513,
+        "gap": 3.1,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Carolina Panthers at Green Bay Packers",
+      "title": "MarShawn Lloyd OVER 6.5 receiving yards",
+      "id": "NFL-2026-W8-lloyd-over-6-5-recyds-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873023",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 8 games: 3 of 8 over 6.5.",
+        "context": [
+          "Role: 3rd of 4 GB RBs by projected targets, 2.3 a game.",
+          "Defense: CAR allows 28.83 receiving yards a game to RBs, 11th-stingiest of 32 this season."
+        ],
+        "cautions": [
+          "Only 3 of the last 8 games cleared this side of the line; recent results oppose it."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 12.5 against 6.5. The over reads 51.3% after adjustment from the raw 64.4%; 51.0% is needed at -104. Last 8 games: 3 of 8 over 6.5. Role: 3rd of 4 GB RBs by projected targets, 2.3 a game. Defense: CAR allows 28.83 receiving yards a game to RBs, 11th-stingiest of 32 this season.",
+      "risk": "Only 3 of the last 8 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 6.5. I say 12.5.",
+            "numbers": {
+              "projection": 12.5,
+              "line": 6.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-29T02:03:03Z"
+          },
+          {
+            "text": "3 of his last 5 games finished over 6.5 receiving yards.",
+            "numbers": {
+              "values": [
+                7,
+                36,
+                6,
+                0,
+                15
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 6.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-25T20:25Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Only 3 of the last 8 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-10-29T10:46:28Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Travis Glover (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361904/travis-glover",
+            "time": "2026-10-29T01:43Z"
+          },
+          {
+            "text": "Sean Rhyan (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426411/sean-rhyan",
+            "time": "2026-10-29T01:39Z"
+          },
+          {
+            "text": "Devonte Wyatt (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361791/devonte-wyatt",
+            "time": "2026-10-28T23:59Z"
+          },
+          {
+            "text": "Zaire Franklin (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3124005/zaire-franklin",
+            "time": "2026-10-28T23:55Z"
+          },
+          {
+            "text": "Micah Parsons (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+            "time": "2026-10-28T23:12Z"
+          },
+          {
+            "text": "Matthew Golden (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4701936/matthew-golden",
+            "time": "2026-10-28T19:12Z"
+          },
+          {
+            "text": "Brenton Cox Jr. (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361776/brenton-cox-jr",
+            "time": "2026-10-27T20:26Z"
+          },
+          {
+            "text": "Anthony Campbell (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4887255/anthony-campbell",
+            "time": "2026-10-26T21:52Z"
+          },
+          {
+            "text": "Torricelli Simpkins III (CAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4696902/torricelli-simpkins-iii",
+            "time": "2026-10-29T01:32Z"
+          },
+          {
+            "text": "Damien Lewis (CAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis",
+            "time": "2026-10-29T01:30Z"
+          },
+          {
+            "text": "Jaelan Phillips (CAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips",
+            "time": "2026-10-28T23:41Z"
+          },
+          {
+            "text": "Bobby Brown III (CAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4372518/bobby-brown-iii",
+            "time": "2026-10-28T18:00Z"
+          }
+        ],
+        "weather": {
+          "tempF": 53,
+          "windMph": 7,
+          "windDirection": "WNW",
+          "precipProb": 0,
+          "periodStart": "2026-10-29T19:00:00-05:00",
+          "issuedAt": "2026-10-29T09:56:30+00:00",
+          "source": "https://api.weather.gov/gridpoints/GRB/79,32/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 5.5,
+                "price": -107,
+                "time": "2026-10-28T00:42:51Z"
+              },
+              "now": {
+                "line": 6.5,
+                "price": -104,
+                "time": "2026-10-29T10:35:26Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 4.5,
+                "price": -120,
+                "time": "2026-10-28T00:42:51Z"
+              },
+              "now": {
+                "line": 4.5,
+                "price": -120,
+                "time": "2026-10-29T02:05:21Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 6.5,
+            "price": -104,
+            "time": "2026-10-29T10:35:26Z"
+          }
+        },
+        "ours": {
+          "projection": 12.5,
+          "line": 6.5,
+          "market": "recYds",
+          "text": "Book says 6.5. I say 12.5.",
+          "snapshotAt": "2026-10-29T02:03:03Z"
+        },
+        "history": "Last 8 games: 3 of 8 over 6.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361904/travis-glover",
+            "time": "2026-10-29T01:43Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426411/sean-rhyan",
+            "time": "2026-10-29T01:39Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361791/devonte-wyatt",
+            "time": "2026-10-28T23:59Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3124005/zaire-franklin",
+            "time": "2026-10-28T23:55Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+            "time": "2026-10-28T23:12Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4701936/matthew-golden",
+            "time": "2026-10-28T19:12Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361776/brenton-cox-jr",
+            "time": "2026-10-27T20:26Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4887255/anthony-campbell",
+            "time": "2026-10-26T21:52Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4696902/torricelli-simpkins-iii",
+            "time": "2026-10-29T01:32Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis",
+            "time": "2026-10-29T01:30Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips",
+            "time": "2026-10-28T23:41Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4372518/bobby-brown-iii",
+            "time": "2026-10-28T18:00Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/GRB/79,32/forecast/hourly",
+            "time": "2026-10-29T09:56:30+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873023",
+            "time": "2026-10-29T10:46:28Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-29T10:46:28Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-29T10:54:57Z",
+      "result": "win",
+      "actual": "MarShawn Lloyd: 9 receiving yards",
+      "settledAt": "2026-10-30T03:30:13Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873023",
+      "actualValue": 9,
+      "units": 0.481
+    },
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "QB",
+      "athleteId": "4036378",
+      "market": "att",
+      "line": 35.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873023"
+      ],
+      "book": "DraftKings",
+      "odds": -104,
+      "projection": 39.4,
+      "edge": "Price-checked chance 51.5% against the exact two-sided price; 51.0% needed at -104: +0.5 percentage points.",
+      "cutoff": "OVER 35.5 at -104 or better; off the card at 36+, or at -119 or worse at 35.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-29T02:03:03Z",
+      "quotedAt": "2026-10-29T10:35:26Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 6:35 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-29T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 0.5,
+      "stakingPolicy": "2026-10-23-half-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.665,
+        "chance": 0.515,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.51,
+        "edgePoints": 0.5,
+        "evPerUnit": 0.01,
+        "snapshotAt": "2026-10-29T02:03:03Z",
+        "probabilitySpec": "ceda45f9417645e9ac0a07be151ef3faa0a5ddedf35902bc158476fc131392fe",
+        "evaluatedAt": "2026-10-29T10:46:28Z",
+        "fairChance": 0.48,
+        "anchoredChance": 0.515,
+        "gap": 3.5,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Carolina Panthers at Green Bay Packers",
+      "title": "Jordan Love OVER 35.5 pass attempts",
+      "id": "NFL-2026-W8-love-over-35-5-att-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873023",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 6 of 10 over 35.5.",
+        "context": [
+          "Role: projected for 39.4 att a game.",
+          "Defense: CAR allows 33.33 pass attempts a game to QBs, 17th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 39.4 against 35.5. The over reads 51.5% after adjustment from the raw 66.5%; 51.0% is needed at -104. Last 10 games: 6 of 10 over 35.5. Role: projected for 39.4 att a game. Defense: CAR allows 33.33 pass attempts a game to QBs, 17th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Over 35.5 in 6 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-10-29T10:46:28Z"
+          },
+          {
+            "text": "Book says 35.5. I say 39.4.",
+            "numbers": {
+              "projection": 39.4,
+              "line": 35.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-29T02:03:03Z"
+          },
+          {
+            "text": "3 of his last 5 games finished over 35.5 pass attempts.",
+            "numbers": {
+              "values": [
+                53,
+                30,
+                31,
+                41,
+                45
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 35.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-25T20:25Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-10-29T10:46:28Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Travis Glover (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361904/travis-glover",
+            "time": "2026-10-29T01:43Z"
+          },
+          {
+            "text": "Sean Rhyan (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426411/sean-rhyan",
+            "time": "2026-10-29T01:39Z"
+          },
+          {
+            "text": "Devonte Wyatt (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361791/devonte-wyatt",
+            "time": "2026-10-28T23:59Z"
+          },
+          {
+            "text": "Zaire Franklin (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3124005/zaire-franklin",
+            "time": "2026-10-28T23:55Z"
+          },
+          {
+            "text": "Micah Parsons (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+            "time": "2026-10-28T23:12Z"
+          },
+          {
+            "text": "Matthew Golden (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4701936/matthew-golden",
+            "time": "2026-10-28T19:12Z"
+          },
+          {
+            "text": "Brenton Cox Jr. (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361776/brenton-cox-jr",
+            "time": "2026-10-27T20:26Z"
+          },
+          {
+            "text": "Anthony Campbell (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4887255/anthony-campbell",
+            "time": "2026-10-26T21:52Z"
+          },
+          {
+            "text": "Torricelli Simpkins III (CAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4696902/torricelli-simpkins-iii",
+            "time": "2026-10-29T01:32Z"
+          },
+          {
+            "text": "Damien Lewis (CAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis",
+            "time": "2026-10-29T01:30Z"
+          },
+          {
+            "text": "Jaelan Phillips (CAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips",
+            "time": "2026-10-28T23:41Z"
+          },
+          {
+            "text": "Bobby Brown III (CAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4372518/bobby-brown-iii",
+            "time": "2026-10-28T18:00Z"
+          }
+        ],
+        "weather": {
+          "tempF": 53,
+          "windMph": 7,
+          "windDirection": "WNW",
+          "precipProb": 0,
+          "periodStart": "2026-10-29T19:00:00-05:00",
+          "issuedAt": "2026-10-29T09:56:30+00:00",
+          "source": "https://api.weather.gov/gridpoints/GRB/79,32/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 34.5,
+                "price": -126,
+                "time": "2026-10-28T00:42:51Z"
+              },
+              "now": {
+                "line": 35.5,
+                "price": -104,
+                "time": "2026-10-29T10:35:26Z"
+              }
+            },
+            "FanDuel": null
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 35.5,
+            "price": -104,
+            "time": "2026-10-29T10:35:26Z"
+          }
+        },
+        "ours": {
+          "projection": 39.4,
+          "line": 35.5,
+          "market": "att",
+          "text": "Over 35.5 in 6 of his last 10 games.",
+          "snapshotAt": "2026-10-29T02:03:03Z"
+        },
+        "history": "Last 10 games: 6 of 10 over 35.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361904/travis-glover",
+            "time": "2026-10-29T01:43Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426411/sean-rhyan",
+            "time": "2026-10-29T01:39Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361791/devonte-wyatt",
+            "time": "2026-10-28T23:59Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3124005/zaire-franklin",
+            "time": "2026-10-28T23:55Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+            "time": "2026-10-28T23:12Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4701936/matthew-golden",
+            "time": "2026-10-28T19:12Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361776/brenton-cox-jr",
+            "time": "2026-10-27T20:26Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4887255/anthony-campbell",
+            "time": "2026-10-26T21:52Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4696902/torricelli-simpkins-iii",
+            "time": "2026-10-29T01:32Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis",
+            "time": "2026-10-29T01:30Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips",
+            "time": "2026-10-28T23:41Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4372518/bobby-brown-iii",
+            "time": "2026-10-28T18:00Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/GRB/79,32/forecast/hourly",
+            "time": "2026-10-29T09:56:30+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873023",
+            "time": "2026-10-29T10:46:28Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-29T10:46:28Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-10-29T10:54:57Z",
+      "result": "win",
+      "actual": "Jordan Love: 41 pass attempts",
+      "settledAt": "2026-10-30T03:30:13Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873023",
+      "actualValue": 41,
+      "units": 0.481
+    }
+  ]
+}
