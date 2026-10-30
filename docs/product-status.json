@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-30T14:54:16.397494+00:00",
+  "updatedAt": "2026-10-30T15:26:07.088336+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -41,9 +41,9 @@
     {
       "id": "O-20261024-RELEASELATENCY",
       "title": "Remove full-suite per-ticket delay and verify early delivery",
-      "status": "observing",
+      "status": "ready",
       "owner": "agent",
-      "next": "Fix stored-result retry in existing mirror without full desk rebuilds. Address repeated data-head release races; preserve full deployment gates, legitimate jobs,15m recovery/spacing/caps. Verify actual next-final receipts.",
+      "next": "Release quota-held idle-mirror preflight. Verify genuine Discord grade/price/card recovery remains; no idle lock/sync/rebuild. Preserve full release gates, original schedules and automatic maintenance restoration.",
       "doneWhen": "Runtime release checks are bounded and pass; full deployment suites remain; all qualifying queued plays have actual Discord/site/X receipts or exact refusals, with morning latency measured.",
       "evidence": "Oct30 live137rows match append-only record,0issues;Thursday2-2/-0.538u.03:37Zcards not live;03:58scheduled;actualX04:02:16/04:12:16Z,Discord04:03:45/04:14:13Z. work/overnight-20261030-outcomes.json; no new code/release claimed. Oct30daily:40998451112SUCCESS03:49Z;result retry03:58Z then X04:02/04:12. Mirror recovery rebuild path identified; repair not shipped. work/daily-20261030-outcomes.json."
     },

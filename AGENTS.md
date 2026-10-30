@@ -1,3 +1,12 @@
+# October30 quota-held idle mirror recovery
+
+An X-only result retry blocked by the free API cap must not wake the Git writer
+when no independent Discord delivery is due. Run the existing result builder on
+a copy of stored inputs before acquiring the posting lock/syncing. New grades,
+corrections, pending Discord messages, private releases, Chef wins and NBA card
+readiness still wake normal recovery. Unknown stored evidence keeps recovery
+active. No new feed, polling window, record edit or disabled permanent scheduler.
+
 # October30 afternoon NBA selection from the existing capture
 
 The existing13:30Climb worker already captures NBA. Prospectively from the

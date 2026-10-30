@@ -3735,6 +3735,42 @@ def result_transport_block(now):
     return quota.buffer_block_reason(now=now, essential=True) or buffer_post.rate_backoff(now)
 
 
+
+def stored_discord_work_due(now, log_book):
+    """Read-only recovery preflight while X is unavailable; no sync or rebuild.
+
+    A blocked X result alone is not Discord work. Reuse the real result builder
+    on a copy so new/corrected grades still wake the normal mirror. Unknown
+    stored inputs fail open to recovery rather than hiding a delivery.
+    """
+    import copy
+    import discord_post
+    book = copy.deepcopy(log_book)
+    try:
+        ctx = gates.Stores().as_of(now)
+        slate = load_json(ROOT / 'site/data/slate.json', None)
+        if not isinstance(slate, dict) or not isinstance(slate.get('games'), list):
+            return True
+        if ctx.first and not slate['games']:
+            return True
+        discord_post.queue_results(book, ctx.first, ctx.latest,
+                                   {g['id']: g for g in slate.get('games', [])}, now)
+    except (OSError, ValueError, KeyError, TypeError):
+        return True
+    for entry in book.get('posts', []):
+        mirror = entry.get('discord') or {}
+        if (mirror.get('followup') or {}).get('state') == 'pending':
+            return True
+        if entry.get('cancelledAt') or entry.get('deletedAt'):
+            continue
+        if (mirror.get('result') or {}).get('state') == 'pending':
+            return True
+        if mirror.get('state') == 'pending' and (entry.get('sentAt') or
+                mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now):
+            return True
+    return False
+
+
 def mirror(args):
     """Every five minutes, observe public plays, send due Discord-first plays and mirror the rest from Buffer."""
     import buffer_post
@@ -3802,8 +3838,13 @@ def mirror(args):
         return 0
     import nba_trial_runtime
     nba_discord_waiting = nba_trial_runtime.discord_delivery_due(now, x_post.load_log())
-    if not chef_waiting and not result_transport_hold and not nba_discord_waiting and not mirror_due(x_post.load_log(), now) and not private_release_ready(now):
-        return 0
+    private_waiting = private_release_ready(now)
+    if not chef_waiting and not nba_discord_waiting and not private_waiting:
+        if result_transport_hold:
+            if not stored_discord_work_due(now, x_post.load_log()):
+                return 0
+        elif not mirror_due(x_post.load_log(), now):
+            return 0
     if args.dry_run:
         log('discord mirror: work is due; dry run sends nothing')
         return 0

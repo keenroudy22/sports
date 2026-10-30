@@ -1,3 +1,16 @@
+### October30 idle-mirror release interference — release candidate
+
+Repeated canonical promotion races were traced to an exhausted-X-result recovery
+path that still entered the five-minute Git writer with no actual Discord work.
+A read-only cloned result preflight now returns before lock/sync/rebuild when all
+Discord work is already sent/cancelled. Real stored grades/corrections, pending
+Discord/private/NBA deliveries and unknown inputs still wake normal recovery.
+No changes to full deployment gates, captures, model approval or staking.
+Targeted idle-recovery and combined regressions pass; full release pending.
+Release maintenance will briefly pause only the confirmed-idle mirror, with
+automatic restoration of its original plist. Selection,
+precheck and grading jobs stay active; no running job or legitimate lock is killed.
+
 ### October30 afternoon capture-to-selection — release candidate
 
 A final NBA path check found that the existing13:30Climb worker captured game and
