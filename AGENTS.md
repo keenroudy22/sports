@@ -1,3 +1,16 @@
+# October30 owner-requested NBA report access repair
+
+From2026-10-30T17:05Z, use one bounded current-season official NBA report listing
+and at most one exact linked PDF, inside the unchanged40-request/150-second NBA
+capture budget. This replaces guessing a quarter-hour file that may not exist;
+the older no-index protocol remains historical. Identify the reader truthfully
+as KooknResearch with normal HTML/PDF Accept headers. No URL probing, alternate
+host, challenge bypass, paid feed, extra scheduler or request-cap increase.
+Only HTTPS canonical NBA PDF links count; report header, receipt clock, roster,
+fixture and90-minute source freshness checks stay mandatory. If the newest
+published link is stale/missing, save its real clock and hold before a PDF request.
+No stale report becomes healthy and no model/prop/role/price approval changes.
+
 # October30 quota-held idle mirror recovery
 
 An X-only result retry blocked by the free API cap must not wake the Git writer

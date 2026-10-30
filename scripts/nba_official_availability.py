@@ -1,7 +1,8 @@
 """Typed official NBA injury-report observations; no model or bet promotion.
 
-Read one public report from the previous completed quarter hour. No URL probing,
-index scraping, report-time invention or extra job. Parse only names/statuses;
+Read one actual published link from the official season page, then at most one
+PDF within the shared capture budget. Earlier captures retain their quarter-hour
+protocol. No URL probing, report-time invention or extra job. Parse only names/statuses;
 wrapped medical-reason cells are deliberately not reconstructed.
 """
 import re
@@ -9,6 +10,8 @@ import json
 import shutil
 import subprocess
 import unicodedata
+from html.parser import HTMLParser
+from urllib.parse import urljoin
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -17,6 +20,7 @@ from urllib.error import HTTPError
 import boxscores
 
 START = datetime(2026,10,27,12,tzinfo=timezone.utc)
+PUBLISHED_LINKS_FROM = datetime(2026,10,30,17,5,tzinfo=timezone.utc)
 EASTERN = ZoneInfo('America/New_York')
 STATUSES = ('Out','Doubtful','Questionable','Probable','Available')
 ALIASES = {'SA':'SAS','GS':'GSW','NY':'NYK','NO':'NOP','UTAH':'UTA','PHO':'PHX','WSH':'WAS'}
@@ -34,6 +38,44 @@ def report_url(now):
 
 
 
+
+def index_url(now):
+    local = now.astimezone(EASTERN)
+    year = local.year if local.month >= 10 else local.year-1
+    return f'https://official.nba.com/nba-injury-report-{year}-{(year+1)%100:02d}-season'
+
+
+class PublishedReportUnavailable(ValueError):
+    def __init__(self, source, latest=None):
+        super().__init__('Official report listing has no recent published PDF')
+        self.source, self.latest = source, latest
+
+
+def published_report(html, now):
+    """One bounded official listing, one exact linked PDF, never URL probing."""
+    if not isinstance(html, str) or len(html.encode('utf-8')) > 1_000_000:
+        raise ValueError('Invalid official report listing')
+    class Links(HTMLParser):
+        def __init__(self):
+            super().__init__(); self.links=[]
+        def handle_starttag(self, tag, attrs):
+            if tag == 'a':
+                self.links.extend(v for k,v in attrs if k == 'href' and isinstance(v,str))
+    parser=Links(); parser.feed(html)
+    candidates={}
+    for href in parser.links:
+        source=urljoin(index_url(now),href)
+        found=re.fullmatch(r'https://ak-static\.cms\.nba\.com/referee/injury/Injury-Report_(\d{4}-\d{2}-\d{2}_\d{2}_\d{2}(?:AM|PM))\.pdf',source)
+        if not found: continue
+        try: reported=datetime.strptime(found[1],'%Y-%m-%d_%I_%M%p').replace(tzinfo=EASTERN).astimezone(timezone.utc)
+        except ValueError: continue
+        if reported <= now: candidates[reported]=source
+    latest=max(candidates,default=None)
+    if latest is None or now-latest > timedelta(minutes=90):
+        raise PublishedReportUnavailable(index_url(now),latest)
+    return candidates[latest],latest
+
+
 def failure(error, attempted_at):
     """Bounded private diagnostics; never copy response bodies or exception URLs.
 
@@ -41,8 +83,11 @@ def failure(error, attempted_at):
     Keep one request per approved capture and retry only in the next normal pass.
     """
     result = dict(state='unavailable', attemptedAt=boxscores.stamp(attempted_at),
-                  source=report_url(attempted_at)[0])
-    if isinstance(error, HTTPError):
+                  source=index_url(attempted_at) if attempted_at>=PUBLISHED_LINKS_FROM else report_url(attempted_at)[0])
+    if isinstance(error, PublishedReportUnavailable):
+        result.update(source=error.source, reason='Official report listing has no recent published PDF')
+        if error.latest is not None: result['latestPublishedAt']=boxscores.stamp(error.latest)
+    elif isinstance(error, HTTPError):
         result.update(reason='Official report request failed', httpStatus=error.code)
     elif isinstance(error, subprocess.SubprocessError):
         result['reason']='Official report PDF extraction failed'
@@ -180,10 +225,18 @@ def merge(provider_rows, report, games):
 
 
 def capture(budget, games, root, now, clock=lambda:datetime.now(timezone.utc)):
-    source,expected=report_url(now)
+    if now >= PUBLISHED_LINKS_FROM:
+        listing=budget.report_index(index_url(now))
+        listed_at=clock()
+        source,expected=published_report(listing,listed_at)
+    else:
+        source,expected=report_url(now)
     pdf=budget.raw(source);received=clock();text=extract(pdf)
     rosters={}
     for p in (Path(root)/'rosters').glob('*.json'):
         try:rosters[p.stem]=json.loads(p.read_text())
         except (OSError,ValueError):continue
-    return parse(text,games,rosters,expected,received,source)
+    report=parse(text,games,rosters,expected,received,source)
+    if now >= PUBLISHED_LINKS_FROM:
+        report['discovery']=dict(source=index_url(now),retrievedAt=boxscores.stamp(listed_at),method='Newest published official link; one PDF attempt')
+    return report

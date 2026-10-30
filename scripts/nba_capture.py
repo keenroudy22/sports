@@ -5,7 +5,7 @@ import time
 import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 import boxscores
 import espn_props
@@ -41,11 +41,18 @@ class Budget:
     def raw(self, url):
         return self._request(url, raw=True)
 
-    def _request(self, url, raw=False):
+    def report_index(self, url):
+        return self._request(url, html=True)
+
+    def _request(self, url, raw=False, html=False):
         if self.requests >= self.limit or self.errors >= 3 or self.clock() >= self.deadline:
             raise TimeoutError('NBA free capture budget exhausted')
-        allowed = (bool(re.fullmatch(r'https://ak-static\.cms\.nba\.com/referee/injury/Injury-Report_\d{4}-\d{2}-\d{2}_\d{2}_\d{2}(?:AM|PM)\.pdf', url))
-                   if raw else url.startswith(('https://site.api.espn.com/', 'https://sports.core.api.espn.com/')))
+        if html:
+            allowed=bool(re.fullmatch(r'https://official\.nba\.com/nba-injury-report-\d{4}-\d{2}-season',url))
+        elif raw:
+            allowed=bool(re.fullmatch(r'https://ak-static\.cms\.nba\.com/referee/injury/Injury-Report_\d{4}-\d{2}-\d{2}_\d{2}_\d{2}(?:AM|PM)\.pdf',url))
+        else:
+            allowed=url.startswith(('https://site.api.espn.com/', 'https://sports.core.api.espn.com/'))
         if not allowed:
             raise ValueError('NBA capture requires an approved free source')
         self.sleep(.5)
@@ -56,8 +63,17 @@ class Budget:
             if self.fetch:
                 result = self.fetch(url)
             else:
-                with urlopen(url, timeout=max(1, min(20, self.deadline-self.clock()))) as response:
-                    result = response.read(3_000_001) if raw else json.load(response)
+                request=(Request(url,headers={
+                    'User-Agent':'Mozilla/5.0 (compatible; KooknResearch/1.0; +https://keenroudy.com/sports/)',
+                    'Accept':'text/html,application/xhtml+xml' if html else 'application/pdf'}) if html or raw else url)
+                with urlopen(request, timeout=max(1, min(20, self.deadline-self.clock()))) as response:
+                    if html and response.geturl().rstrip('/') != url:
+                        raise ValueError('Official listing redirected outside its source')
+                    result = response.read(1_000_001) if html else response.read(3_000_001) if raw else json.load(response)
+            if html:
+                if isinstance(result,bytes): result=result.decode('utf-8')
+                if not isinstance(result,str) or len(result.encode('utf-8'))>1_000_000:
+                    raise ValueError('Official listing is not bounded HTML')
             if raw and (not isinstance(result, bytes) or len(result)>3_000_000 or not result.startswith(b'%PDF-')):
                 raise ValueError('Official injury report is not a bounded PDF')
             self.errors = 0

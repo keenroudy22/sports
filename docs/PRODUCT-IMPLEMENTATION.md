@@ -1,3 +1,21 @@
+### October30 NBA published-report access repair — release candidate
+
+The guessed11:30AM PDF is not listed by NBA and returns403; the actual linked
+06:00AM PDF is readable but stale. One local official listing request with the
+default Python reader also returned403; an explicitly identified compatible
+KooknResearch reader with HTML Accept returned200/120449bytes. Its newest actual
+published report is still06:00AM. This is both a source-selection defect and an
+HTTP-client compatibility issue, not proof of a current healthy roster.
+Prospective17:05Z capture reads one bounded official season listing, then at most
+one exact newest nonfuture HTTPS NBA PDF when within90minutes. Both reads count
+against the existing40/150 budget. Stale/missing listings make zero PDF requests
+and retain latestPublishedAt; no probing, fallback host, new job or relaxed gate.
+Existing frozen prop probability/book protocols remain unchanged. Historical
+captures keep their old single-report protocol. Targeted integration tests cover
+missing/stale/future/foreign/query links, clock mismatch, reader headers/redirects,
+single PDF/shared-budget bounds and preserved historical behavior. Full release,
+live verification and actual13:30 observation remain pending.
+
 ### October30 NBA afternoon/idle repair — VERIFIED HOSTED AND LIVE
 
 Follow-through traced the actual source ancestry rather than relying on the failed
