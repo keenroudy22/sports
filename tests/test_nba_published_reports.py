@@ -69,7 +69,7 @@ class PublishedReportTests(unittest.TestCase):
         budget=nba_capture.Budget(fetch=lambda _:'x'*1_000_001,sleep=lambda _:None)
         with self.assertRaises(ValueError):budget.report_index(official.index_url(NOW))
         budget=nba_capture.Budget(fetch=lambda _:'<html></html>',sleep=lambda _:None)
-        for url in ('https://evil.invalid/index','https://official.nba.com/other',official.index_url(NOW)+'?x=1'):
+        for url in ('https://evil.invalid/index','https://keenroudy.com/sports/','https://official.nba.com/other',official.index_url(NOW)+'?x=1'):
             with self.assertRaises(ValueError):budget.report_index(url)
         self.assertEqual(budget.requests,0)
 

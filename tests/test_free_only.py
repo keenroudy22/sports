@@ -14,7 +14,10 @@ class NBAFreeOnlyTests(unittest.TestCase):
                 self.assertNotIn(forbidden, source.lower())
             allowed={'sports.core.api.espn.com', 'site.api.espn.com'}
             if name in ('nba_capture.py','nba_official_availability.py'):
-                allowed.add('ak-static.cms.nba.com')
+                allowed.update({'ak-static.cms.nba.com','official.nba.com'})
+            if name == 'nba_capture.py':
+                # Public contact URI in the identified reader, never a fetch endpoint.
+                allowed.add('keenroudy.com')
             # Also inspect literal URL guards containing escaped regex dots.
             for host in re.findall(r'https?://([a-z0-9.-]+)', source.replace(r'\.', '.')):
                 self.assertIn(host, allowed)
