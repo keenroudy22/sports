@@ -30,6 +30,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
+import coverage_priority
 import arbs
 import build_site
 import line_payload
@@ -787,11 +788,11 @@ def rank_card(wanted, ctx):
         trust = direction.trust(ctx.policy, segment)
         c['_rank'] = {'edge': round(edge, 1), 'performanceCaution': cautious, 'requiredEdge': need}
         market_priority = 0 if c.get('athleteId') else 1 if c.get('marketType') in ('spread', 'moneyline') else 2
-        # Price and news-review capacity is finite. Check the next slate before
-        # spending those slots on a later Monday game; within a game day, keep
-        # the owner's props/sides/totals priority and the usual value order.
+        # Spend finite research slots on the owner's primary sports first;
+        # inside each coverage tier, review the next slate and preserve the
+        # existing market/value order. Historical runs keep their old order.
         day = gates.slate_day(c, ctx) or date.max
-        return (bool(stopped or edge <= 0 or edge < need), day, market_priority, not first, -trust, -edge,
+        return (bool(stopped or edge <= 0 or edge < need), coverage_priority.candidate_tier(c, ctx, league), day, market_priority, not first, -trust, -edge,
                 str(c.get('id') or row.get('id') or ''))
     kept = [c for c in wanted if not c.get('athleteId')
             or isinstance(c['_row'].get('odds'), (int, float)) and CARD_PROP_PRICES[0] <= c['_row']['odds'] <= CARD_PROP_PRICES[1]]
@@ -1544,7 +1545,8 @@ def record_nba_roster_capture(args,status):
 def early_nba_selection(args, now, slot, status):
     """Use the existing game capture before lengthy football news checks.
 
-    Player research and grading stay later. This moves work, not feed budgets,
+    Prospective player checks share this early window; grading stays later.
+    This moves work, not feed budgets,
     trial limits or evidence gates; admission itself uses the post-capture clock.
     """
     if args.dry_run or args.command != 'run' or not nba_game_capture_due(slot):
@@ -1565,6 +1567,14 @@ def early_nba_selection(args, now, slot, status):
     except Exception as error:
         status['nbaTrial'] = {'state': 'error', 'reason': type(error).__name__}
         status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
+
+    if coverage_priority.active(now):
+        # Mark attempts too: a failed read must not spend the same budget again.
+        status['nbaPropsEarlyAttempted'] = True
+        try:
+            capture_nba_props_and_select(args, now, status)
+        except Exception as error:
+            status['errors'].append(f'NBA player props: {type(error).__name__}: {error}')
 
 
 def current_run_time(args, started):
@@ -2689,7 +2699,7 @@ def _run(args, now, slot, kinds, status):
     # Apply capacity again as rows join the in-run record.
     hot_days = {gates.slate_day(pick, ctx) for pick in ctx.first.values()
                 if pick.get('lane') == 'hot_plate' or pick.get('favorite') is True}
-    for league, candidate in sorted(best_pool, key=lambda item: (-item[1]['_kitchenScore']['total'], item[1]['id'])):
+    for league, candidate in sorted(best_pool, key=lambda item: (coverage_priority.candidate_tier(item[1], ctx, item[0]), -item[1]['_kitchenScore']['total'], item[1]['id'])):
         duplicate = gates.not_duplicate(candidate, ctx)
         cap = gates.card_cap(candidate, ctx)
         if not duplicate.ok or not cap.ok:
@@ -2735,14 +2745,14 @@ def _run(args, now, slot, kinds, status):
                    and gates.when(game['kickoff']).astimezone(gates.EASTERN).hour >= 19}
     selected_guts = []
     for league, candidate, best_refusal in sorted(gut_pool, key=lambda item: (
-            -gates.kitchen_score(item[1], ctx, item[1]['_selectionDecision'])['total'], item[1]['id'])):
+            coverage_priority.candidate_tier(item[1], ctx, item[0]), -gates.kitchen_score(item[1], ctx, item[1]['_selectionDecision'])['total'], item[1]['id'])):
         game_id = candidate['gameIds'][0]
         day = gates.slate_day(candidate, ctx)
         need_prime = game_id in prime_games and game_id not in existing_games \
             and all(game_id not in pick['gameIds'] for _, pick, _ in selected_guts)
         selected_on_day = sum(gates.slate_day(pick, ctx) == day for _, pick, _ in selected_guts)
         need_day = straight_counts[day] + selected_on_day < straight_target(day, games)
-        if need_prime or need_day:
+        if (need_prime or need_day) and not (league == 'CFB' and coverage_priority.candidate_tier(candidate, ctx, league)):
             duplicate = gates.not_duplicate(candidate, ctx)
             cap = gates.card_cap(candidate, ctx)
             if not duplicate.ok or not cap.ok:
@@ -2755,7 +2765,9 @@ def _run(args, now, slot, kinds, status):
     for league, candidate, best_refusal in gut_pool:
         if candidate['id'] not in selected_gut_ids:
             decided.append(decision_record(candidate, league, 'refused', [best_refusal.rule],
-                                           f'{best_refusal.reason}; Gut call qualified but ranked outside the card',
+                                           (f'{best_refusal.reason}; weekday CFB is secondary, not a daily fallback quota'
+                                            if league == 'CFB' and coverage_priority.candidate_tier(candidate, ctx, league)
+                                            else f'{best_refusal.reason}; Gut call qualified but ranked outside the card'),
                                            now, ctx))
     for league, candidate, best_refusal in selected_guts:
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
@@ -2922,7 +2934,8 @@ def _run(args, now, slot, kinds, status):
             except Exception as error:
                 status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
                 log(f'NBA capture: {type(error).__name__}: {error}')
-        if not settle_only and os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot):
+        if (not settle_only and os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot)
+                and not status.get('nbaPropsEarlyAttempted')):
             try:
                 capture_nba_props_and_select(args,now,status)
             except Exception as error:

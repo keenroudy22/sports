@@ -20,6 +20,7 @@ Usage: python scripts/sharp_odds.py [--probe]
 Stdlib only.
 """
 import argparse
+import coverage_priority
 import json
 import os
 import re
@@ -364,13 +365,14 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
     kickoffs = {g['id']: g['kickoff'] for g in slate.get('games', [])}
     confirmed = {gid: at for gid, at in confirmed.items() if gid in kickoffs and now < features.when(kickoffs[gid])}
     status = {'at': boxscores.stamp(now), 'leagues': {}, 'confirmed': confirmed}
-    # The run's requests are few (RUN_REQUESTS): the league and the games that kick off soonest go first, so a
-    # college Saturday is priced before Sunday's NFL slate and a Sunday before Monday.
-    soonest = lambda league: min((g['kickoff'] for g in games if g['league'] == league), default='9999')
-    for league, code in sorted(LEAGUES.items(), key=lambda kv: soonest(kv[0])):
+    # Reorder the same bounded requests: NFL/weekend CFB before weekday CFB,
+    # then the nearest kickoff. No extra event lists, pages or credits.
+    game_priority = lambda g: (coverage_priority.tier(g['league'], g['kickoff'], now), g['kickoff'], g['id'])
+    league_priority = lambda league: min((game_priority(g) for g in games if g['league'] == league), default=(2, '9999', ''))
+    for league, code in sorted(LEAGUES.items(), key=lambda kv: league_priority(kv[0])):
         if budget[0] <= 0:
             break
-        mine = sorted((g for g in games if g['league'] == league), key=lambda g: (g['kickoff'], g['id']))
+        mine = sorted((g for g in games if g['league'] == league), key=game_priority)
         if not mine:
             continue
         listing = events(code, key, fetch=fetch, log=log)

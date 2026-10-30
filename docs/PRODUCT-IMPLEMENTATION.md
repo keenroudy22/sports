@@ -1,3 +1,18 @@
+### October30 primary coverage — release candidate
+
+Owner prioritizes NBA, NFL and weekend CFB after poor midweek CFB results.
+Prospective Eastern-kickoff policy puts Saturday/Sunday CFB and NFL ahead of
+weekday CFB in bounded football research and quote order, and in final ranked
+cards. Weekday CFB remains eligible for independently qualifying Best Bets but
+cannot fill Full Send quota. NBA prop capture/admission moves ahead of football
+research in existing windows, once per attempt including errors; all evidence
+requirements remain intact. Morning research prefers an eligible NBA watch over
+secondary CFB, clearly research-only; retains CFB when no primary watch exists.
+No new feeds, jobs, credit allowance, stake or cap changes. Private release queue
+checked October30 12:51Z: zero never-public rows; no historical play altered.
+Targeted147 regressions plus32 focused quote/brief tests pass. Full locked release,
+hosted verification and next natural capture remain required before completion.
+
 ### October29 opponent-aware1Q Research — VERIFIED LIVE
 
 Owner asks to prioritize1Q angles against the defense and announce the feature with
@@ -6205,3 +6220,13 @@ owner-addedNBAREGULAR retained (177total). Archivedonlypriorcompleted same
 automation01a180d5; current/running/owner-action chats retained. Full receipt
 work/overnight-20261029-outcomes.json. Metadata stays ondev for next ordinary
 release; no duplicate code deployment for these notes.
+
+
+### October30 overnight — settlements reconciled, result latency still open
+
+Live137official rows match append-only research (0audit issues). Thursday2-2/-0.538u; original stakes retained. Lloyd/Love win X receipts04:02:16.350Z/04:12:16.645Z; mirrors04:03:45Z/04:14:13Z. Hosted graphics held03:37Z, accepted03:58Z;32.1/42.1minute misses retained under O-20261024-RELEASELATENCY. No repair or deployment claimed this run. DailyFinal09:03ET accepted, not sent. Current October30 packet3football/48pricedrows,10NBA/0freshprops;130alternates/0supportedClimb.06:45/08:30 refresh primary props, participation, role and price proof. NBA research3658 comparisons/60games; all prospective stat approvals false; no promotion. Recorded-price33-46/-11.964922965u/73risk vs preserved October26 baseline29-40/-11.886922965u/66.5risk. Oct31prepare/Nov1finalize and carry pending; scopes remain separate. All177IDs retained. Buffer2892/8temporary room, optional research held; no new polling/budget/preferences. Evidence work/overnight-20261030-outcomes.json and owner-month-end-baseline-20261030.json.
+
+
+### October30 daily — morning coverage and narrowed result retry
+
+2026-10-30T11:43:47.553978+00:00 —06:45completed10:56:29Z,29screened/0admitted. ThreeCFB/30pricedcomparisons; NBA920paired comparisons/10games held official availability and independent proof. Local sourced review06:56 cannot clear holds. Climb no supportedpair/noopen. Live137rows/71released comparisons/0result-time-unit mismatches; no overdue queue. Buffer2892counted/8temporaryroom,optionalheld. Hosted40998451112SUCCESS03:49Z preceded03:58result retry; existing mirror recovery invokes settlement rebuild and15m cooldown. O-20261024-RELEASELATENCY narrowed to stored-result retry after hosted art, preserving cards/spacing/caps; unimplemented, not shipped. Existing08:30 owns refresh. All177IDs retained; inherited overnight doc changes preserved. No capture/source/deployment/budget/preference change. Evidence work/daily-20261030-outcomes.json and hosted.json.

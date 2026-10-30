@@ -1,3 +1,15 @@
+# October30 owner — prioritize NBA, NFL and weekend CFB
+
+From2026-10-30T12:48:32Z, NBA/NFL and Saturday/Sunday CFB get first use of
+existing research, quote and card capacity. Classify the game's Eastern kickoff,
+not the worker weekday/UTC date. Friday/other weekday CFB remain secondary,
+not banned; independently qualifying Best Bets may still publish, but weekday
+CFB cannot fill the Full Send fallback quota. Historical runs keep prior order.
+Existing NBA prop checks move before lengthy football research in their same
+approved capture windows; a failed early attempt does not retry the same read
+later. Models, injuries, prices, probability proof, stakes, caps, free budgets,
+Climb rules, delivery limits and append-only records remain unchanged.
+
 # October29 owner — NFL1Q passing and selectable quarter charts
 
 Quarter history now includes att/cmp/passYds for every official passer, separately

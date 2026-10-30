@@ -31,6 +31,7 @@ def has_official_straight(admitted):
     return any(not pick.get('parlayType') and not pick.get('legs') for _,_,pick in admitted)
 
 def choose(now,lines,screened,nba,official=False):
+    import coverage_priority
     if official:return None
     options=[];day=eastern_date(now)
     for row in lines:
@@ -51,7 +52,9 @@ def choose(now,lines,screened,nba,official=False):
                  else 'The daily total-play limit is already filled.' if hold.get('rule')=='totals_policy' else reason[:120])
         if missing:options.append((float(grade['edge']),dict(league=row['league'],title=row['title'],line=row['line'],
             odds=row['odds'],book=row['book'],projection=projection,observedAt=row['observedAt'],kickoff=row['kickoff'],missing=missing)))
-    if options:return max(options,key=lambda x:x[0])[1]
+    primary = [item for item in options if coverage_priority.tier(
+        item[1]['league'], item[1]['kickoff'], now) == 0]
+    if primary:return max(primary,key=lambda x:x[0])[1]
     if any(not p.get('result') for p in (nba.get('trial') or {}).get('plays',[])):return None
     for row in (nba.get('playerProps') or {}).get('rows',[]):
         review=row.get('roleReview') or {};p=row.get('projection') or {}
@@ -65,7 +68,7 @@ def choose(now,lines,screened,nba,official=False):
         return dict(league='NBA',title=f"{row['name']} {row['side']} {row['line']:g} {row['statName']}",line=row['line'],
             odds=row['odds'],book=row['book'],projection=p['value'],observedAt=row['sourceAt'],kickoff=row['kickoff'],
             minutes=p['minutes'],missing='NBA prop forecasts still need testing against actual results.')
-    return None
+    return max(options,key=lambda x:x[0])[1] if options else None
 
 def text(row):
     return (f"Morning lean · not a Best Bet\n{row['title']} ({row['odds']:+d}, {row['book']})\n"
