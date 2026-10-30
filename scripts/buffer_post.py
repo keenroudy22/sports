@@ -649,6 +649,14 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     plans = sorted(plans, key=lambda plan: (not essential_kind(plan[1], now), plan[3], plan[0]))
     for guid, kind, text, due, card_key in plans:
         nba_regular = kind == 'nba-trial' and essential_kind(kind, now)
+        nba_discord = next((p for p in log_book.get('posts', [])
+                            if p.get('id') == guid and p.get('nbaDiscordOnly')
+                            and not p.get('bufferPostId') and not p.get('sentAt')), None) if nba_regular else None
+        if nba_discord:
+            saved = nba_discord.get('queuedText')
+            if not saved or x_post.text_hash(saved) != nba_discord.get('textHash'):
+                continue
+            text = saved
         prior = next((p for p in reversed(log_book.get('posts', []))
                       if p.get('id') == guid and x_post.cancelled_private_draft(p)), None)
         corrections = (prior or {}).get('captionCorrections') or []
@@ -695,6 +703,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 continue
         text = social_voice.finish(text)
         text = x_ticket_copy(text, 'play' if combined or nba_regular else kind, guid, item)
+        if nba_discord and text != nba_discord['queuedText']:
+            log(f'buffer: {guid} held: canonical Discord-first caption changed')
+            continue
         if x_post.tweet_length(text) > x_post.LIMIT:
             log(f'buffer: {guid} held: complete caption and Playbook tag exceed X limit')
             continue
@@ -815,7 +826,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if kind == 'play':
             entry['reasonKind'] = x_post.reason_kind(x_post.reason_in(text))      # what learning compares engagement by
             entry['copyVariant'] = x_post.copy_variant(text)
-        log_book.setdefault('posts', []).append(entry)
+        if nba_discord:
+            entry['discord'] = dict(nba_discord['discord'])
+            nba_discord.update(entry, nbaDiscordOnly=False)
+        else:
+            log_book.setdefault('posts', []).append(entry)
         pending += 1
         log(f"buffer: {guid} scheduled for {due.astimezone(gates.EASTERN):%a %-I:%M %p} ET" + (' with card' if image else ''))
     return log_book

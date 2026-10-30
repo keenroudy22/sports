@@ -21,6 +21,7 @@ import nba_pick_policy
 ROOT=Path(__file__).resolve().parents[1]
 CONF=Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')
 REVIEW=CONF/'nba-trial-review.json'
+DISCORD_FIRST_FROM=datetime(2026,10,30,14,2,tzinfo=timezone.utc)
 
 
 def rows(root=nba_trial.STORE):
@@ -338,18 +339,20 @@ def grade(now,root=nba_trial.STORE,boxroot=None):
  return added
 
 
-def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
+def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
  import buffer_post,x_post
  if not review_ready(now):return []
- pending=[p for p in public_rows(root) if not p.get('result') and not any(e['id']==p['id'] for e in log_book.get('posts',[]))]
+ committed={e['id'] for e in log_book.get('posts',[]) if not e.get('nbaDiscordOnly')
+            or e.get('bufferPostId') or e.get('sentAt') or e.get('cancelledAt') or e.get('deletedAt')}
+ pending=[p for p in public_rows(root) if not p.get('result') and p['id'] not in committed]
  if not pending:return []
- nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
+ if refresh:nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
  now=max(now,datetime.now(timezone.utc))
- busy=buffer_post.taken(log_book,now)+[p[3] for p in reserved]
+ busy=buffer_post.taken({'posts':[e for e in log_book.get('posts',[]) if not e.get('nbaDiscordOnly')]},now)+[p[3] for p in reserved]
  plans=[]
  for play in pending:
   if not current_match(play,now):continue
-  if play.get('result') or any(e['id']==play['id'] for e in log_book.get('posts',[])):continue
+  if play.get('result') or play['id'] in committed:continue
   game_day=boxscores.instant(play['kickoff']).astimezone(nba_trial.EASTERN).date()
   if game_day!=now.astimezone(nba_trial.EASTERN).date():continue
   early=boxscores.instant(play['kickoff']).astimezone(nba_trial.EASTERN).hour<10 or (boxscores.instant(play['kickoff']).astimezone(nba_trial.EASTERN).hour==10 and boxscores.instant(play['kickoff']).astimezone(nba_trial.EASTERN).minute<30)
@@ -384,6 +387,50 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
   if not text:continue
   plans.append((play['id'],'nba-trial',text,due,play['id'].lower()))
  return plans
+
+
+
+
+def discord_delivery_due(now,log_book,root=nba_trial.STORE):
+ """Wake only the existing mirror for admitted NBA cards awaiting deployment."""
+ if now<DISCORD_FIRST_FROM or not review_ready(now):return False
+ known={e.get('id') for e in log_book.get('posts',[])}
+ return any(not p.get('result') and p['id'] not in known
+            and boxscores.instant(p['kickoff'])>now+timedelta(minutes=15)
+            and boxscores.instant(p['kickoff']).astimezone(nba_trial.EASTERN).date()==now.astimezone(nba_trial.EASTERN).date()
+            for p in public_rows(root))
+
+
+def queue_discord_first(now,log_book,plans,root=nba_trial.STORE,opener=None):
+ """Prepare admitted NBA delivery before any Buffer discovery/API operation.
+
+ A Discord-only row has no provider ID or X sent receipt. Existing mirror/result
+ machinery owns its real Discord receipt; a later Buffer success upgrades this
+ same row, preserving that receipt and never resending the original message.
+ """
+ import buffer_post,x_post,social_voice,social_style,pick_card
+ if now<DISCORD_FIRST_FROM or not nba_pick_policy.active(now):return 0
+ originals={p['id']:p for p in public_rows(root)};added=0
+ for guid,kind,text,due,card_key in plans:
+  if kind!='nba-trial' or any(e.get('id')==guid for e in log_book.get('posts',[])):continue
+  play=originals.get(guid)
+  if not play or play.get('result') or not current_match(play,now):continue
+  if boxscores.instant(play['kickoff'])<=now+timedelta(minutes=15):continue
+  text=buffer_post.x_ticket_copy(social_voice.finish(buffer_post.without_playbook(text)),'play',guid)
+  issues=x_post.x_style(text)
+  if social_style.active(now):issues+=social_style.issues(text)
+  if issues or x_post.tweet_length(text)>x_post.LIMIT or not card_key:continue
+  image=buffer_post.live_card_url(card_key,opener)
+  if not image:continue
+  if pick_card.ticket_enabled(moment=due) and not buffer_post.ticket_art_live(image):continue
+  if social_style.active(now) and not buffer_post.plain_art_live(image):continue
+  log_book.setdefault('posts',[]).append(dict(id=guid,kind='buffer:nba-trial',nbaPick=True,
+   nbaDiscordOnly=True,postedAt=boxscores.stamp(now),dueAt=boxscores.stamp(due),
+   queuedText=text,textHash=x_post.text_hash(text),card=True,cardKey=card_key,
+   discord=dict(state='pending',destination='plays',text=buffer_post.without_playbook(text),
+                image=image,readyAt=boxscores.stamp(now))))
+  added+=1
+ return added
 
 
 def render_due(now,folder,log=print,root=nba_trial.STORE):

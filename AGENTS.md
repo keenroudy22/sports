@@ -1,3 +1,15 @@
+# October30 NBA Discord independent of X transport
+
+From2026-10-30T14:02Z, an already-admitted NBA play may queue its Discord-first
+receipt before Buffer discovery/API work. Require the original immutable terms,
+current supported model/role/price/exposure checks and verified live branded art.
+A Discord-only row has no Buffer ID or X sent receipt. A later Buffer success
+upgrades the same row, preserving its Discord receipt and caption; no second
+Discord message. Existing result grading includes these rows. The existing
+five-minute mirror may retry card readiness from stored evidence only: no new
+worker, feed request, model promotion or Buffer allowance. Unknown Buffer create
+attempts remain duplicate-protected. No queued item counts as an actual X send.
+
 # October30 NBA official-report failure diagnostics
 
 Preserve the one-report request budget and every availability/model hold. A failed

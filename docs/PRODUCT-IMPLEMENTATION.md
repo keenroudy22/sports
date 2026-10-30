@@ -1,3 +1,17 @@
+### October30 independent NBA Discord release — release candidate
+
+Current NBA evidence remains unqualified; no live NBA admission or post is claimed.
+A separate delivery defect was found: regular NBA Discord was created only after
+Buffer accepted X. The exhausted API allowance could suppress both. New qualified
+NBA publications can now prepare the canonical Discord row and deliver before
+Buffer discovery, with current-match, voice, exposure and live-art guards intact.
+Discord-only entries have no Buffer ID or X sent receipt; later X creation upgrades
+the same row, preserving its original caption and Discord receipt. Grading works
+without X. Existing five-minute mirror retries late hosted art using stored prices,
+not additional feeds. Unknown Buffer create intents remain at-most-once.
+Targeted215 delivery/runtime/Buffer regressions and the new discovery-failure test
+pass. Full normal/clean, locked/hosted/live verification still required.
+
 ### October30 NBA validation and weekend readiness — release candidate
 
 Fresh owner-requested0937 selection completed13:39:51Z:0 new plays;10 NBA games

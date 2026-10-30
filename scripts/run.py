@@ -3108,15 +3108,18 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         return
     log_book = x_post.load_log()
     try:
-        for entry in buffer_post.reconcile(log_book, now, log=log):
-            status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
-            alert('KeenRoudy post did not go out', f"{entry['id']}: {entry['error']}")
+        import nba_trial_runtime
+        nba_discord_plans = nba_trial_runtime.social_plans(now, log_book, refresh=False)
+        nba_trial_runtime.queue_discord_first(now, log_book, nba_discord_plans)
         queued_results = discord_post.queue_results(log_book, ctx.first, ctx.latest, games, now)
         if queued_results:
             log(f'discord: queued {queued_results} official result update(s)')
         for entry in discord_post.mirror_sent(log_book, now, log=log):
             status['errors'].append(f"discord: {entry['id']} failed to mirror: {entry['error']}")
             alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
+        for entry in buffer_post.reconcile(log_book, now, log=log):
+            status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
+            alert('KeenRoudy post did not go out', f"{entry['id']}: {entry['error']}")
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
@@ -3166,7 +3169,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
             log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")
             plans = buffer_post.fit_limit(plans, limit['remaining'])
-        before = len(log_book.get('posts', []))
+        before = {e['bufferPostId'] for e in log_book.get('posts', []) if e.get('bufferPostId')}
         schedule_stats = {}
         theme_items = {key: dict(value, **ctx.latest.get(key, {})) for key, value in ctx.first.items()}
         for item in theme_items.values():
@@ -3175,12 +3178,14 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
                 item['kickoff'] = min(starts)
         if plans:
             buffer_post.schedule(plans, channel['id'], log_book, now, log=log, stats=schedule_stats, items=theme_items)
-        status['x']['posted'] = len(log_book.get('posts', [])) - before
+        newly_scheduled = [e for e in log_book.get('posts', [])
+                           if e.get('bufferPostId') and e['bufferPostId'] not in before]
+        status['x']['posted'] = len(newly_scheduled)
         status['x']['officialUnscheduled'] = schedule_stats.get('officialNotScheduled', 0) + len({key for key, problems in refused if 'has no X window' in problems})
         missing = buffer_post.chosen_not_posted(ctx.first, ctx.latest, games, log_book, now)
         status['x']['chosenNotPosted'] = len(missing)
         status['x']['chosenNotPostedIds'] = missing
-        scheduled = {entry['id'] for entry in log_book.get('posts', [])[before:]}
+        scheduled = {entry['id'] for entry in newly_scheduled}
         for title, message in ladder_schedule_pings([p for p in plans if p[0] in scheduled], ctx, games):
             alert(title, message, click='https://keenroudy.com/sports/#ladder')
         for title, message in lotto_pings([p for p in plans if p[0] in scheduled], ctx):
@@ -3783,7 +3788,9 @@ def mirror(args):
                         (discord_post.webhook() or discord_post.wins_webhook()))
     if not social_ready and not chef_waiting:
         return 0
-    if not chef_waiting and not result_transport_hold and not mirror_due(x_post.load_log(), now) and not private_release_ready(now):
+    import nba_trial_runtime
+    nba_discord_waiting = nba_trial_runtime.discord_delivery_due(now, x_post.load_log())
+    if not chef_waiting and not result_transport_hold and not nba_discord_waiting and not mirror_due(x_post.load_log(), now) and not private_release_ready(now):
         return 0
     if args.dry_run:
         log('discord mirror: work is due; dry run sends nothing')
@@ -3813,14 +3820,20 @@ def mirror(args):
             if private_release_ready(now):
                 release_private_isolated(now)
                 log_book = x_post.load_log()
+            if nba_trial_runtime.discord_delivery_due(now, log_book):
+                plans = nba_trial_runtime.social_plans(now, log_book, refresh=False)
+                nba_trial_runtime.queue_discord_first(now, log_book, plans)
             if not mirror_due(log_book, now):
+                x_post.save_log(log_book)
                 return 0
-            for entry in ([] if result_transport_hold else buffer_post.reconcile(log_book, now, log=log)):
-                failed.append(f"X: {entry['id']}: {entry['error']}")
-                alert("Kook'n post did not go out", f"{entry['id']}: {entry['error']}")
             for entry in discord_post.mirror_sent(log_book, now, log=log):
                 failed.append(f"Discord: {entry['id']}: {entry['error']}")
                 alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
+            # Preserve independent Discord receipts before fallible X work.
+            x_post.save_log(log_book)
+            for entry in ([] if result_transport_hold else buffer_post.reconcile(log_book, now, log=log)):
+                failed.append(f"X: {entry['id']}: {entry['error']}")
+                alert("Kook'n post did not go out", f"{entry['id']}: {entry['error']}")
             x_post.save_log(log_book)
             commit_log(now, push=not args.no_push)
     except RunError as error:
