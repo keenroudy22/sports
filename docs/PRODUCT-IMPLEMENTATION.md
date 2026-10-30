@@ -1,3 +1,28 @@
+### October30 NBA afternoon/idle repair — VERIFIED HOSTED AND LIVE
+
+Follow-through traced the actual source ancestry rather than relying on the failed
+wrapper receipt: afternoon commit c70b9bcee and idle preflight53b3582da are ancestors
+of hosted verifiedHead c7ad58bab9a3bdbe80a63ea719c9bc1010b855d0.
+Hosted41090359487SUCCESS16:47:34Z records139picks/NBA0/no issues. The next canonical
+attempt passed normal+clean2043Python(2skip)/299Node, all audits and1225offline
+rehearsal, then fast-forwarded local production90e1cdaf6; transient GitHub DNS
+blocked only its final push. Its only differences from hosted c7ad58 are the two
+retrospective documentation files, not runtime code. Do not call that DNS-failed
+push successful; the code was already carried by a scheduled writer and verified
+in the successful hosted run. Both maintenance attempts restored the original
+Discord monitor; selection and grading stayed active. Live NBA375/1440 matches
+viewport with no failure state or console errors. First natural13:30 admission,
+qualified delivery/grade and broader stored-result retry latency remain observable.
+
+UCF original1u/-102 remains intact on site, X2116158953310568743 at13:23:05.791Z
+and Discord12:38:32Z. Direct DraftKings Chrome game board confirmed current+105;
+no duplicate/new publication. Exact official NBA11:30AM PDF returned AccessDenied
+in Chrome as well as capture403. No alternate URL probes or missing-source
+clearance. Existing frozen prop math was reviewed against calibration research;
+all three stats still fail prospective evidence. No weights/protocol/stakes/caps
+changed and no NBA play was admitted. Private evidence:
+work/ucf-nba-followthrough-20261030.json and nba-release-maintenance-second-20261030.json.
+
 ### October30 final release attempt — NOT DEPLOYED
 
 At15:49:31Z the bounded840-second canonical deployment ended while waiting for
