@@ -1,3 +1,30 @@
+### October30 NBA official source repair — VERIFIED LIVE AND NATURAL1330
+
+Tested source ef7b5828e3679365f7b1d60265a8cf42be55b783 passed2053Python(2skip)/
+299Node normal+clean, all audits, record139/NBA0 and1255offline rehearsal.
+Canonical promotion/push succeeded in one attempt. Hosted41094714028SUCCESS
+17:29:27Z verified a927ef20c0d06806b39c8ad9a04db96359a7675d contains source;
+10post-rebase checks repeated. NBA Today375/1440/no overflow/load/console errors.
+No scheduler pause, capture window or free request cap was added.
+
+The natural13:30job started17:30:06Z, fetched the official listing17:33:33Z
+without403, refreshed10 game quotes and869 paired prop comparisons, checked game
+and prop admission without recapture, and finished17:35:56Z/outcomeOK/errors[].
+The actual listing's newest report was06:00AM ET (10:00Z), so zero PDF attempts
+were made and all10 current games retained the stale-source hold. No NBA play
+qualified or posted;7 tomorrow games were normally out of scope. This is an
+external stale-report research hold, not another access error or failed worker.
+Prop tests remain assists8/2dates, points11/2, rebounds9/2; no stat admitted.
+Append-only integrity checks found0issues and the frozen release-protocol hash
+is unchanged. An optional local model challenge timed out90s without delaying
+release, altering calculations or clearing a hold. Next existing capture17:30ET
+must still obtain recent published participation and pass model/price/exposure.
+Buffer2900 API allowance remains held; no new X receipt or budget claimed.
+Evidence: work/nba-natural-1330-20261030.json,
+work/nba-source-validation-continuity-20261030.json,
+work/nba-local-research-challenge-20261030.json. Earlier candidate/failed attempt
+notes below are retained as dated history and superseded by this verified receipt.
+
 ### October30 NBA published-report access repair — release candidate
 
 The guessed11:30AM PDF is not listed by NBA and returns403; the actual linked
