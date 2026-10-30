@@ -1,4 +1,4 @@
-### October30 primary coverage — release candidate
+### October30 primary coverage — VERIFIED LIVE
 
 Owner prioritizes NBA, NFL and weekend CFB after poor midweek CFB results.
 Prospective Eastern-kickoff policy puts Saturday/Sunday CFB and NFL ahead of
@@ -10,8 +10,16 @@ requirements remain intact. Morning research prefers an eligible NBA watch over
 secondary CFB, clearly research-only; retains CFB when no primary watch exists.
 No new feeds, jobs, credit allowance, stake or cap changes. Private release queue
 checked October30 12:51Z: zero never-public rows; no historical play altered.
-Targeted147 regressions plus32 focused quote/brief tests pass. Full locked release,
-hosted verification and next natural capture remain required before completion.
+Targeted147 regressions plus32 focused quote/brief tests pass. Tested source
+bb796e47f83c3a545a9f8be04014a1c00c2e095d passed2025Python(2skip)/299Node
+normal+clean, all locked gates and real0855 offline rehearsal (zero outside writes
+or private reads). Record audit139, NBA0, no issues. Hosted41059724285SUCCESS
+revalidated10 checks after merging to87d49746ccbdb1671767df287ae9737b218d55fc;
+ancestry verified. Live375/1440 document widths match, no error state or console
+errors; NBA Today renders projections, comparisons and research. No new play
+was authored in this change; the two morning Friday admissions remain intact.
+Next natural11:45 Eastern run must demonstrate early prop-attempt accounting,
+primary ordering and unchanged budgets; model approval is not inferred from code.
 
 ### October29 opponent-aware1Q Research — VERIFIED LIVE
 
