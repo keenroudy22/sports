@@ -3808,7 +3808,7 @@ def mirror(args):
         if result:
             return result
     missing_results = result_recovery_needed(now)
-    result_transport_hold = result_transport_block(now) if missing_results else None
+    result_transport_hold = result_transport_block(now)
     if missing_results and result_transport_hold:
         log(f'result recovery: X held without a desk rebuild: {result_transport_hold}; Discord remains independent')
     if missing_results and not result_transport_hold and not args.dry_run:

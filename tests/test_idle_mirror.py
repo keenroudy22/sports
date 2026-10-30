@@ -35,7 +35,7 @@ class IdleMirrorTests(unittest.TestCase):
  def test_blocked_x_with_no_discord_work_returns_before_lock_sync_or_rebuild(self):
   args=SimpleNamespace(now=NOW.isoformat(),dry_run=False,no_push=True)
   with patch.dict(os.environ,{'KEENROUDY_LIVE_SHADOW':'0','BUFFER_TOKEN':'fixture'}), \
-       patch.object(run,'result_recovery_needed',return_value=1),patch.object(run,'result_transport_block',return_value='local cap'), \
+       patch.object(run,'result_recovery_needed',return_value=0),patch.object(run,'result_transport_block',return_value='local cap'), \
        patch.object(chef_wins,'pending',return_value=[]),patch.object(discord_post,'webhook',return_value='https://discord.invalid'), \
        patch.object(x_post,'load_log',return_value={'posts':[]}),patch.object(nba_trial_runtime,'discord_delivery_due',return_value=False), \
        patch.object(run,'private_release_ready',return_value=False),patch.object(run,'stored_discord_work_due',return_value=False), \
