@@ -12,6 +12,7 @@ import unicodedata
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from urllib.error import HTTPError
 
 import boxscores
 
@@ -30,6 +31,28 @@ def report_url(now):
     local=now.astimezone(EASTERN)-timedelta(minutes=15)
     local=local.replace(minute=15*(local.minute//15),second=0,microsecond=0)
     return ('https://ak-static.cms.nba.com/referee/injury/Injury-Report_'+local.strftime('%Y-%m-%d_%I_%M%p')+'.pdf',local.astimezone(timezone.utc))
+
+
+
+def failure(error, attempted_at):
+    """Bounded private diagnostics; never copy response bodies or exception URLs.
+
+    A refused/missing PDF remains unavailable, not evidence of a healthy team.
+    Keep one request per approved capture and retry only in the next normal pass.
+    """
+    result = dict(state='unavailable', attemptedAt=boxscores.stamp(attempted_at),
+                  source=report_url(attempted_at)[0])
+    if isinstance(error, HTTPError):
+        result.update(reason='Official report request failed', httpStatus=error.code)
+    elif isinstance(error, subprocess.SubprocessError):
+        result['reason']='Official report PDF extraction failed'
+    elif isinstance(error, ValueError) and str(error)=='Official injury PDF reader unavailable':
+        result['reason']='Official report PDF reader unavailable'
+    elif isinstance(error, (ValueError, KeyError, TypeError)):
+        result['reason']='Official report could not be verified'
+    else:
+        result['reason']='Official report connection or capture budget unavailable'
+    return result
 
 
 def extract(pdf):

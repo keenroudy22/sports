@@ -1,3 +1,32 @@
+### October30 NBA validation and weekend readiness — release candidate
+
+Fresh owner-requested0937 selection completed13:39:51Z:0 new plays;10 NBA games
+held for unavailable official participation. One bounded official report diagnostic
+returnedHTTP403; native manual admission stayed within its existing capture budget.
+The hidden generic failure is now typed in private capture status/current snapshot;
+no extra request, fallback clearance or change to probability/roster math.
+38 targeted source/probability/release regressions pass, including refused PDF,
+missing reader/parse/budget holds, one PDF attempt and no leaked exception content.
+
+Frozen prop studies: assists8games/2Eastern dates, points11/2, rebounds9/2;
+all fail independent probability/conservative-return proof. Protocol frozenOct28
+21:38:31Z; no imported old games or tuned exposed outcomes. Roster v3 retains7
+quoted test games, unproven improvement and no validated family. These are real
+research holds, not a test/deploy backlog. No NBA play posted in this change.
+
+Saved Saturday47CFB/455priced rows plus7NBA and947college alternate spreads;
+Sunday12NFL/58priced rows and no supplied alternate spreads. No Climb qualified.
+Packets require fresh morning prices/news; existing06:45/08:30 jobs confirmed loaded.
+All three existing app tasks updated through the app API and read back: current
+1u/2u stakes, primary NBA/NFL/weekend CFB, all finite queue IDs, unchanged schedules,
+shared caps and budgets. No new job/polling or notification change.
+
+Buffer API local allowance is2900/2900; no extra reservation. Authenticated Free
+UI works with0queued. Buffer Sent confirms Kent total09:43Eastern X2116163977659003136
+and UCF ML09:23 X2116158953310568743; these were existing CFB plays, not NBA.
+No new GUI post or unattended GUI adapter is claimed. Evidence and all four prep
+packets: work/nba-validation-20261030.json. Full locked/hosted/live checks pending.
+
 ### October30 primary coverage — VERIFIED LIVE
 
 Owner prioritizes NBA, NFL and weekend CFB after poor midweek CFB results.

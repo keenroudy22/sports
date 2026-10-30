@@ -1,3 +1,13 @@
+# October30 NBA official-report failure diagnostics
+
+Preserve the one-report request budget and every availability/model hold. A failed
+official NBA PDF now records a bounded private reason, attempted source/time and
+HTTP status when supplied, never exception URLs, response bodies or credentials.
+Do not turn HTTP403 into a healthy report or probe alternate report URLs. Missing
+reports, reader errors, parser failures and exhausted budgets remain unavailable.
+NBA probability and book proof are unchanged; two observed test dates cannot be
+promoted into the required five by a code change. All failed experiments remain.
+
 # October30 owner — prioritize NBA, NFL and weekend CFB
 
 From2026-10-30T12:48:32Z, NBA/NFL and Saturday/Sunday CFB get first use of

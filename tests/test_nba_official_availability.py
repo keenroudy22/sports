@@ -145,4 +145,43 @@ class OfficialAvailabilityTests(unittest.TestCase):
             self.assertEqual(coverage['eligibleGames'],0)
 
 
+    def test_http_failure_is_actionable_without_leaking_exception_content_or_retrying(self):
+        from urllib.error import HTTPError
+        games, _ = fixtures()
+        for game in games:
+            game.update(id='NBA-'+game['providerId'],status='scheduled',seasonType='regular-season')
+        calls=[]
+        def fetch(url):
+            calls.append(url)
+            if url.endswith('.pdf'):
+                raise HTTPError('https://private.invalid/?token=secret',403,'secret response',{},None)
+            return {'injuries':[],'season':{'year':2027}} if url==nba_capture.INJURIES else {}
+        with tempfile.TemporaryDirectory() as folder, patch.object(nba_capture.sports_refresh,'normalize',return_value=games):
+            root=Path(folder)
+            result=nba_capture.step(NOW,root,budget=nba_capture.Budget(fetch=fetch,sleep=lambda _:None),clock=lambda:NOW)
+            snapshot=json.loads((root/'injuries-current.json').read_text())
+            failed=snapshot['official']
+            self.assertEqual(failed['state'],'unavailable')
+            self.assertEqual(failed['httpStatus'],403)
+            self.assertEqual(failed['attemptedAt'],'2026-10-27T12:30:00Z')
+            self.assertEqual(failed['source'],official.report_url(NOW)[0])
+            self.assertNotIn('secret',json.dumps(result))
+            self.assertNotIn('private.invalid',json.dumps(snapshot))
+            self.assertEqual(sum(url.endswith('.pdf') for url in calls),1)
+            self.assertEqual(result['officialAvailability'],failed)
+            self.assertTrue(nba_capture.availability_for_game(snapshot,games[0],NOW)[1])
+            self.assertEqual(list((root/'official-availability').glob('*.jsonl')),[])
+
+    def test_reader_and_parse_failures_do_not_become_participation_evidence(self):
+        import subprocess
+        for error, reason in [(ValueError('private body'),'Official report could not be verified'),
+                              (ValueError('Official injury PDF reader unavailable'),'Official report PDF reader unavailable'),
+                              (subprocess.TimeoutExpired('private command',10),'Official report PDF extraction failed'),
+                              (TimeoutError('private URL'),'Official report connection or capture budget unavailable')]:
+            result=official.failure(error,NOW)
+            self.assertEqual(result['state'],'unavailable')
+            self.assertEqual(result['reason'],reason)
+            self.assertNotIn('private',json.dumps(result))
+
+
 if __name__=='__main__':unittest.main()

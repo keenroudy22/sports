@@ -181,13 +181,15 @@ def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.
         snapshot={'retrievedAt':stamp,'season':season,'rows':rows,'source':INJURIES}
         import nba_official_availability as official
         if now>=official.START:
+            official_attempt=clock()
             try:
-                report=official.capture(budget,list(games.values()),root,clock(),clock=clock)
+                report=official.capture(budget,list(games.values()),root,official_attempt,clock=clock)
                 report.update(league='NBA',season=season)
                 append_changed([report],root/'official-availability',lambda r:r['retrievedAt'])
                 snapshot.update(official=report,gameAvailability=official.merge(rows,report,list(games.values())))
-            except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError):
-                snapshot['official']={'state':'unavailable'}
+            except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError) as error:
+                snapshot['official']=official.failure(error,official_attempt)
+                result['officialAvailability']=snapshot['official']
                 result['errors'].append('official-availability-unavailable')
         boxscores.write_json(root/'injuries-current.json', snapshot)
     except (OSError, ValueError, KeyError, TypeError):
