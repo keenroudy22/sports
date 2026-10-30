@@ -1,3 +1,18 @@
+### October30 final release attempt — NOT DEPLOYED
+
+At15:49:31Z the bounded840-second canonical deployment ended while waiting for
+the legitimate11:45 selection writer after all normal/clean2043Python(2skip)/
+299Node tests, record139/NBA0, publication/asset audits and1125offline rehearsal
+passed. No final promotion receipt exists for the afternoon/idle-mirror changes.
+Only the confirmed-idle Discord monitor was temporarily paused; its original plist
+was restored successfully and launchctl registration verified. Selection/grading
+were never stopped. Earlier2efb2c76/07d5733a deployment remains verified live.
+Do not describe the last two candidate changes as deployed. Maintenance receipt:
+work/nba-release-maintenance-20261030.json; full log:
+/tmp/kookn-nba-maintenance-release-20261030.log. Preserve natural evidence and all
+jobs; next action is finish the standard release after the active selection exits,
+then verify hosted ancestry/live, without bypassing checks or killing its lock.
+
 ### October30 idle-mirror release interference — release candidate
 
 Repeated canonical promotion races were traced to an exhausted-X-result recovery
