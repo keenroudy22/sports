@@ -150,12 +150,19 @@ class ReviewedClimbTests(unittest.TestCase):
              patch.object(x_post,'do_draft'), \
              patch.object(run,'render_private_play_card',side_effect=run.ReleaseArtifactError('renderer unavailable')), \
              patch.object(ladder,'record_shadow'), patch.object(run,'log'):
+            old=Path(folder)/'x-drafts'/'CFB-2026-W9-ladder-1031-c1s1-dk.png'
+            old.parent.mkdir(parents=True)
+            old.write_bytes(b'old-price-image')
+            release_queue.save(folder,{'plays':[{'id':'expired', 'pick':{'expiresAt':'2026-10-31T12:00Z'}}]})
             pick,error=review.enqueue(ticket,ctx,NOW,Path(folder))
             self.assertIsNone(error)
             row=release_queue.load(folder)['plays'][0]
             self.assertEqual(row['id'],pick['id'])
             self.assertEqual(row['artifactState'],'recovery-needed')
             self.assertNotIn('discordSentAt',row)
+            self.assertFalse(old.exists())
+            self.assertIn('card',row['artifactMissing'])
+            self.assertNotIn('expired',[r['id'] for r in release_queue.load(folder)['plays']])
 
 
 if __name__ == '__main__':

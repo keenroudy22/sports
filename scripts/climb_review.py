@@ -167,6 +167,7 @@ def enqueue(spec, ctx, now, conf):
     import release_queue
     import run
     import x_post
+    release_queue.reopen_expired(conf, now)
     release_queue.merge_context(ctx, conf)
     pick, held = ladder.manual_candidate(ctx, ctx.games, now, spec)
     if held:
@@ -187,9 +188,13 @@ def enqueue(spec, ctx, now, conf):
     # The renderer selects prospective social presentation by publication time.
     # This render-only clock is not the eventual public publication timestamp.
     art_pick = dict(pick, publishedAt=gates.stamp(now))
+    target = folder/f"{pick['id']}.png"
+    # An expired, never-public attempt may have left old-price art at this ID.
+    # A renderer outage must not pair that old image with a new checked quote.
+    target.unlink(missing_ok=True)
     try:
         run.render_private_play_card(pick['id'], art_pick, ctx.games[pick['gameIds'][0]],
-                                    ctx.games, ctx, now, folder/f"{pick['id']}.png")
+                                    ctx.games, ctx, now, target)
     except (OSError, RuntimeError, run.ReleaseArtifactError) as error:
         run.log(f'Reviewed Climb card awaits normal artifact recovery ({type(error).__name__})')
     rows = [(league, 'parlays', pick)]
