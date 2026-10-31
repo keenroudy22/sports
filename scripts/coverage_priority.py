@@ -20,20 +20,26 @@ def tier(league, kickoff, now):
     """
     if not active(now):
         return 0
+    day = kickoff_day(kickoff)
+    future = day is not None and day > now.astimezone(EASTERN).date()
     if league in ('NBA', 'NFL'):
-        return 0
-    if league == 'CFB':
-        try:
-            start = datetime.fromisoformat(kickoff.replace('Z', '+00:00')) if isinstance(kickoff, str) else kickoff
-            if start is not None and start.tzinfo is not None and start.astimezone(EASTERN).weekday() >= 5:
-                return 1 if now >= PROPS_FOCUS_FROM else 0
-        except (ValueError, TypeError, AttributeError):
-            pass
-    return 2 if now >= PROPS_FOCUS_FROM else 1
+        return 2 if now >= PROPS_FOCUS_FROM and future else 0
+    if league == 'CFB' and day is not None and day.weekday() >= 5:
+        return (3 if future else 1) if now >= PROPS_FOCUS_FROM else 0
+    return 4 if now >= PROPS_FOCUS_FROM else 1
+
+
+def kickoff_day(kickoff):
+    try:
+        start = datetime.fromisoformat(kickoff.replace('Z', '+00:00')) if isinstance(kickoff, str) else kickoff
+        return start.astimezone(EASTERN).date() if start is not None and start.tzinfo is not None else None
+    except (ValueError,TypeError,AttributeError):
+        return None
 
 
 def research_only(league, kickoff, now):
-    return now >= PROPS_FOCUS_FROM and league == 'CFB' and tier(league,kickoff,now) != 1
+    day=kickoff_day(kickoff)
+    return now >= PROPS_FOCUS_FROM and league == 'CFB' and (day is None or day.weekday() < 5)
 
 
 def candidate_tier(candidate, ctx, league=None):

@@ -1,7 +1,8 @@
 ### October31 owner coverage and operating review — release candidate
 
 Review resumes the177-item queue rather than restarting it. New dated capacity
-order is NFL/NBA, then weekend CFB; qualified NBA props get first admission review
+order is NFL/NBA, then weekend CFB on the same day, with today's CFB ahead of
+tomorrow's NFL preparation; qualified NBA props get first admission review
 without bypassing any failed role/price/probability proof. Weekday CFB new straight,
 Climb and fun recommendations are research-only; old public recommendations and
 all results stay intact. Existing3 app schedules were updated in place with these

@@ -50,7 +50,9 @@ class CoveragePriorityTests(unittest.TestCase):
         self.assertEqual(focus.tier('NFL',saturday,now),0)
         self.assertEqual(focus.tier('NBA',saturday,now),0)
         self.assertEqual(focus.tier('CFB',saturday,now),1)
-        self.assertEqual(focus.tier('CFB',friday,now),2)
+        self.assertEqual(focus.tier('CFB',friday,now),4)
+        self.assertLess(focus.tier('CFB',saturday,now),focus.tier('NFL','2026-11-01T18:00:00Z',now))
+        self.assertFalse(focus.research_only('CFB','2026-11-01T18:00:00Z',now))
         ctx=context(games={'college':dict(league='CFB',kickoff=friday)})
         ctx.now=now
         candidate=dict(league='CFB',gameIds=['college'],kickoff=friday)

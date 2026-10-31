@@ -1,7 +1,8 @@
 # October31 owner — NFL/NBA props first; weekday CFB research only
 
 From2026-10-31T11:25Z, allocate existing quote/research capacity to NFL and NBA
-before weekend CFB. Within qualified NBA offers, primary player props precede
+before weekend CFB on the same game day; today's weekend slate still precedes
+tomorrow's preparation so NFL Sunday cannot starve Saturday CFB. Within qualified NBA offers, primary player props precede
 team markets; every admission test still runs and a held prop cannot block a
 supported game offer. New Monday–Friday CFB straight/Climb/fun recommendations
 are research-only; use each leg's Eastern kickoff day, not the worker day.
