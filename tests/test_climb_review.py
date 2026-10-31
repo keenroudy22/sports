@@ -51,6 +51,7 @@ class ReviewedClimbTests(unittest.TestCase):
         self.assertNotIn('projection clears',pick['why'])
         self.assertEqual(pick['researchReview'],ticket['researchReview'])
         self.assertTrue(gates.ladder_selective(pick,ctx).ok)
+        self.assertNotIn('proven-segment',gates.ladder_supported(pick,ctx).reason)
         self.assertTrue(gates.expiry_ok(pick,ctx).ok)
         bad=dict(pick,expiresAt='2026-10-31T15:50Z')
         self.assertFalse(gates.expiry_ok(bad,ctx).ok)
@@ -59,6 +60,7 @@ class ReviewedClimbTests(unittest.TestCase):
         for mutate in (
             lambda t:t.update(odds=-175),
             lambda t:t.update(chance=.9),
+            lambda t:t['legs'][0].update(chance=.9),
             lambda t:t['researchReview'].update(ticketVerified=False),
             lambda t:t['researchReview'].update(receipt=''),
             lambda t:t['researchReview'].update(ticketSource='https://draftkings.com.evil.invalid/'),

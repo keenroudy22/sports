@@ -59,6 +59,8 @@ def refusal(ticket, ctx):
     product = 1.0
     ids = set()
     for leg in legs:
+        if any(leg.get(key) is not None for key in ('chance', 'rawChance', 'fairOdds', 'expectedValue')):
+            return 'Discretionary Climb legs cannot claim a validated probability or EV'
         game = ctx.games.get(leg.get('gameId')) or {}
         if not game or game.get('league') not in ('NFL', 'CFB') or game.get('state') != 'pre':
             return 'Reviewed Climb needs an eligible upcoming football game'

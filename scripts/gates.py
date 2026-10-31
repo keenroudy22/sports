@@ -1482,7 +1482,10 @@ def ladder_supported(candidate, ctx):
     if eastern_date(ctx.now) < ladder.SELECTIVE_FROM:
         return Decision(True, 'ladder_supported', 'before selective-policy cutover')
     reason = ladder.support_refusal(candidate, ctx)
-    return Decision(not reason, 'ladder_supported', reason or 'all legs retain conservative price and proven-segment support')
+    success = ('sourced desk review and exact ticket verification retained; no validated EV claim'
+               if candidate.get('selectionMethod') == 'sourced-climb-review-v1' else
+               'all legs retain conservative price and proven-segment support')
+    return Decision(not reason, 'ladder_supported', reason or success)
 
 
 FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy', 'stakingPolicy', 'selectionMethod', 'researchReview')))
