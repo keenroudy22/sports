@@ -1,3 +1,20 @@
+### October31 overnight — stored result retry candidate
+
+Existing mirror now plans only stored Cooked/Burnt/Climb results, inside the posting
+lock after sync, without full settlement/capture/build. Original result eligibility,
+caption guards, spacing, daily counts, queue caps and scheduling checks stay shared.
+Missing hosted art performs no Buffer discovery and consumes no retry cooldown;
+quota-held runs make no extra API request. New finals retain normal settlement.
+Candidate tests/release ongoing; not shipped. Saturday stored prep47football games,
+482priced rows,7NBA/0fresh props; Sunday12football/60prices. Existing06:45/08:30
+refresh all prices/roles/official evidence; no forced quota or model promotion.
+Public record fetched04:51Z is stale (generatedOct30 22:15Z): UCF loss is settled
+locally03:07:27Z and official Discord03:11:34Z but website still pending. Preserve
+this material delivery failure until hosted/live reconciliation. Kent–Sac remains
+pending locally. Buffer API cap unchanged; prior Thursday Final actually sent
+Oct30 13:06:16.592Z. Month-end baseline29–40/-11.886922965u stays fixed; November1
+finalization must carry pending finals. Evidence work/overnight-20261031-*.
+
 ### October30 NBA official source repair — VERIFIED LIVE AND NATURAL1330
 
 Tested source ef7b5828e3679365f7b1d60265a8cf42be55b783 passed2053Python(2skip)/

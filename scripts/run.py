@@ -3771,6 +3771,33 @@ def stored_discord_work_due(now, log_book):
     return False
 
 
+def retry_stored_results(now, log_book):
+    """Retry public result delivery from stored evidence, never rebuild or grade."""
+    import buffer_post
+    if result_transport_block(now):
+        return
+    ctx = gates.Stores().as_of(now)
+    slate = load_json(ROOT / 'site/data/slate.json', None)
+    if not isinstance(slate, dict) or not isinstance(slate.get('games'), list):
+        log('result retry held: stored slate unavailable')
+        return
+    games = {g['id']: g for g in slate['games']}
+    plans = [p for p in buffer_post.plan(ctx.first, ctx.latest, games, now, log_book,
+                                      ctx.player_team, log=log, results_only=True) if p[1] == 'cashed']
+    # No discovery for missing hosted art. The existing five-minute mirror
+    # retries; scheduling still rechecks reachability and duplicate/cap guards.
+    plans = [p for p in plans if not p[4] or buffer_post.reachable(buffer_post.card_url(p[4]))]
+    if not plans:
+        return
+    mark_result_recovery(now, len(plans))
+    channel = buffer_post.x_channel(wanted='keenkooks')
+    limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
+    if limit and limit.get('remaining') is not None:
+        plans = buffer_post.fit_limit(plans, limit['remaining'])
+    items = {key: dict(value, **ctx.latest.get(key, {})) for key, value in ctx.first.items()}
+    buffer_post.schedule(plans, channel['id'], log_book, now, log=log, items=items)
+
+
 def mirror(args):
     """Every five minutes, observe public plays, send due Discord-first plays and mirror the rest from Buffer."""
     import buffer_post
@@ -3811,22 +3838,7 @@ def mirror(args):
     result_transport_hold = result_transport_block(now)
     if missing_results and result_transport_hold:
         log(f'result recovery: X held without a desk rebuild: {result_transport_hold}; Discord remains independent')
-    if missing_results and not result_transport_hold and not args.dry_run:
-        # The result is already in the append-only public record; this pass
-        # rebuilds and recreates only the missing result delivery.  It spends
-        # no odds credits and uses no model call.
-        import copy
-        mark_result_recovery(now, missing_results)
-        settlement_args = copy.copy(args)
-        settlement_args.command = 'run'
-        settlement_args.slot = now.astimezone(EASTERN).strftime('%H%M')
-        settlement_args.no_llm = True
-        settlement_args.publish_kinds = 'settle'
-        settlement_args.record_screens = False
-        log(f'result recovery scan: {missing_results} settled result post(s) absent or overdue')
-        result = run(settlement_args)
-        if result:
-            return result
+    retry_results = bool(missing_results and not result_transport_hold)
     # Recovery can refresh inputs minutes after this worker started. Use the
     # current clock so those valid captures are not mistaken for future data.
     if not args.now:
@@ -3839,7 +3851,7 @@ def mirror(args):
     import nba_trial_runtime
     nba_discord_waiting = nba_trial_runtime.discord_delivery_due(now, x_post.load_log())
     private_waiting = private_release_ready(now)
-    if not chef_waiting and not nba_discord_waiting and not private_waiting:
+    if not chef_waiting and not nba_discord_waiting and not private_waiting and not retry_results:
         if result_transport_hold:
             if not stored_discord_work_due(now, x_post.load_log()):
                 return 0
@@ -3870,6 +3882,10 @@ def mirror(args):
                 games = {g['id']: g for g in slate.get('games', [])}
                 discord_post.queue_results(log_book, ctx.first, ctx.latest, games, now)
                 x_post.save_log(log_book)
+            if retry_results:
+                retry_stored_results(now, log_book)
+                x_post.save_log(log_book)
+                commit_log(now, push=not args.no_push)
             if private_release_ready(now):
                 release_private_isolated(now)
                 log_book = x_post.load_log()

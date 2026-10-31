@@ -428,7 +428,7 @@ def yield_optional(log_book, desired, now, channel_id, key=None, send=http_send)
     return moved
 
 
-def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None, log=print):
+def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None, log=print, results_only=False):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
     X gets plays and their receipts. Player props,
@@ -453,7 +453,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     opens = window_open(today)
     plays = []
     late_card_recoveries = set()
-    for key, pick in first.items():
+    for key, pick in ([] if results_only else first.items()):
         merged = dict(pick, **latest.get(key, {}))
         if key in posted or pick.get('historicalImport') or merged.get('_pendingRelease') or not feed.postable(merged):
             continue
@@ -504,7 +504,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         plays.append((target, -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       deadline, key, text, 'play', f'{key}-potd' if key == potd else key))
     order = {'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2, 'sports': 3}
-    for post in receipts.house_posts(first, latest, games, log_book, now, log=log):
+    house = (receipts.cashed(first, latest, games, log_book, now) if results_only else
+             receipts.house_posts(first, latest, games, log_book, now, log=log))
+    for post in house:
         if set(post['key'].split('+')) & posted:
             continue
         problems = receipts.guard(post)
@@ -522,7 +524,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     # the day's remaining room. A late headline can never crowd a pick or receipt out of the queue.
     essential_today = sum(1 for row in plays if eastern_date(row[0]) == today)
     news_room = max(0, MAX_PER_DAY - day_count(log_book, today) - essential_today)
-    for item in (news or [])[:news_room]:
+    for item in ([] if results_only else (news or []))[:news_room]:
         if item['key'] not in posted:
             plays.append((item['target'], -3, item['deadline'], item['key'], item['text'], 'news', None))
     # Research follows the full morning play batch, even when the batch is longer than six posts.

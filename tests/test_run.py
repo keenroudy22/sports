@@ -1764,7 +1764,7 @@ class DiscordMirrorTests(unittest.TestCase):
                          ('settle', True, False))
         self.assertEqual(settlement.slot, '2245')
 
-    def test_a_missing_result_post_wakes_a_bounded_settlement_retry(self):
+    def test_missing_result_without_social_credentials_never_rebuilds(self):
         now = datetime(2026, 10, 18, 13, 15, tzinfo=timezone.utc)
         watcher = SimpleNamespace(run_shadow=mock.Mock(return_value={'pendingFinals': []}))
         progress = SimpleNamespace(run=mock.Mock())
@@ -1777,10 +1777,8 @@ class DiscordMirrorTests(unittest.TestCase):
                 mock.patch.object(run, 'mark_result_recovery') as marked, \
                 mock.patch.object(run, 'run', return_value=0) as official:
             self.assertEqual(run.mirror(args), 0)
-        marked.assert_called_once_with(now, 1)
-        settlement = official.call_args.args[0]
-        self.assertEqual((settlement.publish_kinds, settlement.no_llm, settlement.record_screens),
-                         ('settle', True, False))
+        marked.assert_not_called()
+        official.assert_not_called()
 
 
 if __name__ == '__main__':
