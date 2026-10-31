@@ -1,3 +1,36 @@
+### October31 overnight — VERIFIED HOSTED AND LIVE
+
+Canonical tested0ba2b9073 includes stored-result retry306423129 and fixture-clock
+repair60d35f822. Hosted41171281811SUCCESS verifiedc4848d0605 contains candidate
+(ancestry checked). Full normal/clean2056Python(2skip)/299Node;506pages,
+139official/NBA0 audits,755hosted public files/0issues,assets/SVG,0055_e0_o6we
+isolated rehearsal exit0/ok/outside writes0/private reads0. Today+Record rendered
+at375/1440CSS pixels: no overflow/loading/error state or console errors; phone
+screenshot visually checked. Browser viewport restored. UCF loss/-1u now live;
+prior stale22:15Z artifact and failed hosted runs remain historical failures.
+First canonical snapshot failed the two expired NBA fixtures; fixed test clock.
+Next candidate passed gates but correctly stopped final dirty-check on generated
+immutable settlement index; materialization committed before full repeat.
+No hand production edits or weakened gate. O-20261024-RELEASELATENCY now observing
+next real eligible result timing: implementation is live, future latency unproven.
+
+Actual Buffer Sent UI confirms Kent/Sac over46.5 -108BetMGM atOct30 09:43ET,
+X2116163977659003136; exact seconds unknown/local API sentAt still missing.
+Receipt preserved privately; no invented attended reservation or duplicate post.
+UCF official loss settled03:07:27Z/Discord03:11:34Z; Kent/Sac remains pending.
+Saturday47football/482prices/7NBA/0freshprops; Sunday12football/60prices;
+1083actual alternate spreads/0supportedClimb. Existing06:45/08:30 refresh all
+quotes/official participation/current roles and admission; no forced3–5 quota.
+NBA3833comparisons/62games; ast8/pts11/reb9 independent test games across2Eastern
+dates, each stat's probability and official-book proof still held; failures kept.
+Monthend prepared: season33–47/-12.964922965u/74risk+1pending, October19–30/-9.14u
++1pending. FixedOctober26 baseline29–40/-11.886922965u/66.5risk unchanged.
+November1existingrun finalizes and carries unresolved finals. All177IDs retained.
+Archived only completed prior sameautomation01a18b1c. No budgets/jobs/preferences
+changed; Buffer API cap held/no extra API calls. Evidence work/overnight-20261031-*
+and work/owner-month-end-prepared-20261031.json. Verification metadata is for
+next ordinary safe release; no second deployment needed.
+
 ### October31 overnight — stored result retry candidate
 
 Existing mirror now plans only stored Cooked/Burnt/Climb results, inside the posting
