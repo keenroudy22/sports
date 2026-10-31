@@ -1,3 +1,15 @@
+### October31 owner reset — supersedes pending mechanical coverage changes
+
+The owner explicitly revoked the accumulated selection prescriptions before the
+pending October31 priority/weekday-ban candidate was deployed. Those prospective
+code changes are withdrawn; their commits remain historical. No legitimate job
+was stopped. The working public Chef record caption was also found stale at1u;
+it is being corrected to the owner's existing2u instruction, without touching
+historical stakes. Current work: verify and repair CI failures, re-review the
+already-public Marsh/other CFB props before X, and define a sourced judgment path
+for props and alternate tickets with honest provenance rather than fake model
+approval. No forced volume, paid feed, new budget or hidden record edits.
+
 ### October31 owner coverage and operating review — release candidate
 
 Review resumes the177-item queue rather than restarting it. New dated capacity

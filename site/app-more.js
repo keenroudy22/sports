@@ -394,7 +394,7 @@
       const chefClose = clvSummary(chef.rows.map(p => ({ clv: clvById.get(p.id) })));
       const chefPrices = chef.rows.map(p => p.chefPriceComparison).filter(p => isNum(p?.edgePoints));
       const chefPanel = section("Chef's Picks", `<div class="card" id="chef-record"><p><b>${esc(wl(chef.all))}</b> · ${esc(units(chef.captured.units))} at recorded prices · ${esc(chef.all.pending)} open</p>
-        <p class="small muted">Included in the overall best-bet record. New picks use 1u; earlier stakes stay as posted. Promo credits are excluded from these units.</p>
+        <p class="small muted">Included in the overall best-bet record. New picks use 2u; earlier stakes stay as posted. Promo credits are excluded from these units.</p>
         <p class="small">Forward EV policy: ${esc(wl(chef.forward))} · ${esc(units(chef.forward.units))} · ${esc(chef.forward.pending)} open.</p>
         <p class="small muted">${chefClose.measured ? `Posted line beat the closing line on ${chefClose.beat} of ${chefClose.measured} measured plays; ${chefClose.tied} tied.` : 'Closing-line comparison: no measured plays yet.'} Passing on a day is allowed.</p>
         <p class="small muted">Exact-line price check: ${chefPrices.length ? `${chefPrices.filter(p => p.edgePoints > 0).length} of ${chefPrices.length} posted prices better than the latest stored same-book quote within an hour of kickoff. Captured comparison, not a verified closing price.` : 'no comparable near-kickoff prices recorded yet.'}</p>

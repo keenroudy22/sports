@@ -42,58 +42,6 @@ class CoveragePriorityTests(unittest.TestCase):
         ctx.now = focus.EFFECTIVE-timedelta(seconds=1)
         self.assertEqual([r['id'] for r in run.rank_card(rows, ctx)], ['friday', 'saturday', 'sunday'])
 
-    def test_new_focus_prioritizes_primary_sports_and_makes_weekday_college_research_only(self):
-        import gates
-        from tests.test_gates import context
-        now=focus.PROPS_FOCUS_FROM
-        saturday='2026-10-31T19:00:00Z';friday='2026-11-07T01:00:00Z'
-        self.assertEqual(focus.tier('NFL',saturday,now),0)
-        self.assertEqual(focus.tier('NBA',saturday,now),0)
-        self.assertEqual(focus.tier('CFB',saturday,now),1)
-        self.assertEqual(focus.tier('CFB',friday,now),4)
-        self.assertLess(focus.tier('CFB',saturday,now),focus.tier('NFL','2026-11-01T18:00:00Z',now))
-        self.assertFalse(focus.research_only('CFB','2026-11-01T18:00:00Z',now))
-        ctx=context(games={'college':dict(league='CFB',kickoff=friday)})
-        ctx.now=now
-        candidate=dict(league='CFB',gameIds=['college'],kickoff=friday)
-        self.assertFalse(gates.owner_coverage(candidate,ctx).ok)
-        for kind in ('modelLean','propLean','favorite','researched','longshot','ladder'):
-            self.assertIn(gates.owner_coverage,gates.RULES[kind])
-        self.assertNotIn(gates.owner_coverage,gates.RULES['revision'])
-        ctx.now=now-timedelta(seconds=1)
-        self.assertTrue(gates.owner_coverage(candidate,ctx).ok)
-        ctx.now=now;ctx.games['college']['kickoff']=saturday
-        self.assertTrue(gates.owner_coverage(candidate,ctx).ok)
-        self.assertFalse(focus.research_only('NFL',friday,now))
-        ctx.games['college']['kickoff']=friday
-        candidate['id']='already-public'
-        ctx.first['already-public']={'publishedAt':(now-timedelta(seconds=1)).isoformat()}
-        self.assertTrue(gates.owner_coverage(candidate,ctx).ok)
-
-    def test_nba_prop_preference_preserves_every_admission_check_and_falls_through_when_held(self):
-        import tempfile
-        from contextlib import ExitStack
-        import buffer_post
-        import nba_trial
-        now=focus.PROPS_FOCUS_FROM+timedelta(hours=1)
-        offers=[dict(id='game',marketType='moneyline'),dict(id='prop',marketType='player')]
-        for held,expected in ((False,'prop'),(True,'game')):
-            with ExitStack() as stack, tempfile.TemporaryDirectory() as folder:
-                clock=stack.enter_context(patch.object(nba_trial_runtime,'datetime',wraps=datetime));clock.now.return_value=now
-                stack.enter_context(patch.dict(os.environ,{'BUFFER_TOKEN':'fixture'}))
-                stack.enter_context(patch.object(nba_trial_runtime,'review_ready',return_value=True))
-                stack.enter_context(patch.object(nba_trial_runtime,'rows',return_value=[]))
-                stack.enter_context(patch.object(nba_trial_runtime,'candidates',return_value=offers))
-                stack.enter_context(patch.object(buffer_post,'pending_scheduled',return_value=0))
-                stack.enter_context(patch.object(buffer_post,'day_count',return_value=0))
-                stack.enter_context(patch.object(nba_trial.staking,'apply'))
-                checked=stack.enter_context(patch.object(nba_trial,'evaluate',side_effect=lambda offer,*a,**k:['role hold'] if held and offer['id']=='prop' else []))
-                published=stack.enter_context(patch.object(nba_trial,'record_publish'))
-                result=nba_trial_runtime.admission(now,root=Path(folder),log_book={'posts':[]},review={},capture=False)
-            self.assertEqual(result['id'],expected)
-            self.assertEqual(checked.call_args_list[0].args[0]['id'],'prop')
-            self.assertEqual(published.call_args.args[0]['id'],expected)
-
     def test_prop_capture_moves_to_existing_early_slot_with_failure_no_second_attempt(self):
         now = datetime(2026, 10, 30, 17, 0, tzinfo=timezone.utc)
         args = SimpleNamespace(command='run', dry_run=False, now=None, no_push=False)

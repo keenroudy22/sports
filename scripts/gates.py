@@ -23,7 +23,6 @@ Stdlib only.
 """
 import argparse
 import staking
-import coverage_priority
 import json
 import math
 import re
@@ -511,22 +510,6 @@ def qb_change_recent(candidate, ctx):
     ok = len(recent) == 3 and len(set(recent)) == 1
     return Decision(ok, 'qb-change-recent', 'same starter in the last three games' if ok else
                     'starting-QB change or insufficient current-team history in the last two games')
-
-
-
-def owner_coverage(candidate, ctx):
-    """Prospective weekday college pause; published history and revisions remain intact."""
-    original=ctx.first.get(candidate.get('id'))
-    try:
-        if original and when(original['publishedAt']) < coverage_priority.PROPS_FOCUS_FROM:
-            return Decision(True,'owner_coverage','Preserve an already-public original recommendation')
-    except (KeyError,TypeError,ValueError):
-        pass
-    games=[ctx.games[g] for g in candidate.get('gameIds',[]) if g in ctx.games]
-    if not games:
-        games=[dict(league=candidate.get('league'),kickoff=candidate.get('kickoff'))]
-    held=any(coverage_priority.research_only(g.get('league'),g.get('kickoff'),ctx.now) for g in games)
-    return Decision(not held,'owner_coverage','Midweek CFB is research-only; prioritize NFL/NBA props and weekend CFB' if held else 'Owner sport/day coverage allows evaluation')
 
 
 def totals_policy(candidate, ctx):
@@ -1512,7 +1495,7 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (owner_coverage, not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity,
+COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity,
           sources_https, not_duplicate, not_republished, cfb_jurisdiction, totals_policy, player_overlap,
           player_projection_sanity, qb_change_recent)
 SHOP = (one_book, best_quote_by_ev)
@@ -1524,8 +1507,8 @@ RULES = {
                                  prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),
     'favorite': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'longshot': (owner_coverage, not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_shape, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
-    'ladder': (owner_coverage, not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, ladder_selective, ladder_supported, player_overlap),
+    'longshot': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_shape, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
+    'ladder': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, ladder_selective, ladder_supported, player_overlap),
     'revision': (revision_frozen,),
 }
 

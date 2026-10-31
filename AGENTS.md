@@ -1,17 +1,23 @@
-# October31 owner — NFL/NBA props first; weekday CFB research only
+# October31 owner reset — judgment-led desk
 
-From2026-10-31T11:25Z, allocate existing quote/research capacity to NFL and NBA
-before weekend CFB on the same game day; today's weekend slate still precedes
-tomorrow's preparation so NFL Sunday cannot starve Saturday CFB. Within qualified NBA offers, primary player props precede
-team markets; every admission test still runs and a held prop cannot block a
-supported game offer. New Monday–Friday CFB straight/Climb/fun recommendations
-are research-only; use each leg's Eastern kickoff day, not the worker day.
-Preserve all already-public originals, their prices, stakes, results and delivery;
-this is no retroactive cancellation. One open Climb, -150..-200 alternate shape,
-1u/2u stakes, shared caps and frozen validation requirements stay unchanged.
-Public sportsbook bet/handle splits and most-bet-prop lists are sourced research
-context only. Name book/market/time and missing coverage; popularity is not proof
-of sharp money, true win probability or EV. No paid feed, new poll or raised budget.
+The owner revoked the accumulated selection prescriptions and asks the desk to
+use its own sourced judgment, focusing on NFL/NBA props, weekend CFB and usable
+alternate-line parlays/Climbs. Do not deploy the superseded October31 weekday-ban
+or forced market-order candidate. Old rules below remain historical context;
+reviewed new policy and actual evidence govern prospective changes. Preserve all
+public history, original prices/stakes/results, exact sportsbook terms, free
+budgets, privacy and truthful claims. Do not imply an untested model is validated
+or guaranteed profitable. No wager placement is authorized. Re-review Marsh before
+further social release; do not silently erase its already-public Discord/site row.
+
+# October31 alternate-ticket direction
+
+Use the owner’s winning alternate tickets as format examples, never evidence of
+predictive accuracy. Research low-threshold player props and cushioned alternate
+spreads; prefer two legs around -150 to -200 combined for Climbs. A third leg
+needs a justified tradeoff, not a forced odds target. Check current role, opponent,
+injuries, correlation and actual combined book price. Keep fun tickets separate
+from straights and Climb records. No manufactured EV or untested validation claim.
 
 # October30 owner-requested NBA report access repair
 
