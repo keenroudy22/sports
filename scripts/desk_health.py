@@ -265,7 +265,10 @@ def delivery(posts, now):
         if not isinstance(p, dict):
             continue
         due, sent = moment(p.get('dueAt')), moment(p.get('sentAt'))
-        recent = max((v for v in (due, sent) if v), default=None)
+        mirror = p.get('discord') if isinstance(p.get('discord'), dict) else {}
+        released = (moment(mirror.get('sentAt'))
+                    if p.get('kind') == 'buffer:play' and mirror.get('state') == 'sent' else None)
+        recent = max((v for v in (due, sent, released) if v), default=None)
         if not recent or recent < now - timedelta(hours=48) or recent > now + timedelta(days=8):
             continue
         if (p.get('precheck') or {}).get('result') == 'withheld':
@@ -276,7 +279,7 @@ def delivery(posts, now):
             counts['xConfirmed'] += 1
         elif p.get('error'):
             counts['xFailed'] += 1
-        elif due and due < now - timedelta(minutes=15):
+        elif (due or released) and (due or released) < now - timedelta(minutes=15):
             counts['xOverdue'] += 1
         elif p.get('bufferPostId'):
             counts['queued'] += 1

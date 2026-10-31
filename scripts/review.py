@@ -503,12 +503,14 @@ def main(argv=None):
     sgo = health.get('sgoEvaluation') or {}
     odds = health.get('oddsBudget') or {}
     counts = health.get('requestCounts') or {}
+    import quota
+    buffer_stop = quota.BUFFER_TEMP_STOP if quota.temporary_buffer_allowance(now) else quota.BUFFER_STOP
     free_plan = '\n'.join((
         '## Free-plan usage',
         f"- Odds API: {odds.get('used') if odds.get('used') is not None else 'unknown'}/500 credits at {odds.get('observedAt') or 'unknown'}; local stop 476.",
         f"- SharpAPI Free: {counts.get('sharp', 0)} counted requests this month; 12/minute cap. Counter may cover only part of the month.",
         f"- SportsGameOdds evaluation: {sgo.get('usedBefore') if sgo.get('usedBefore') is not None else 'unknown'}/2500 at {sgo.get('observedAt') or 'unknown'}; local stop 1800.",
-        f"- Buffer Free: {counts.get('buffer', 0)} counted requests this month; local stop 2700 of the 3000-request allowance. Counter may cover only part of the month.",
+        f"- Buffer Free: {counts.get('buffer', 0)} counted requests this month; essential-delivery local stop {buffer_stop} of the 3000-request allowance. Rolling 30-day protection also applies; calendar rollover is not a reset. Counter may cover only part of the month.",
         '- GitHub Actions: public repository; billed usage not available from this packet.',
         '- Cloudflare: Free plan; usage not available from this packet.',
         '- Codex/researcher: ChatGPT plan; account usage not available from this packet.',

@@ -233,6 +233,19 @@ class DeskHealthTests(unittest.TestCase):
         self.assertEqual((result['xOverdue'], result['xFailed'], result['queued'], result['withheld']), (0, 0, 1, 1))
         self.assertEqual(result['discordOverdue'], 1)
 
+    def test_discord_released_play_without_buffer_due_time_is_not_invisible(self):
+        post={'kind':'buffer:play','discord':{'state':'sent','sentAt':'2026-10-05T13:00Z'}}
+        result=H.delivery([post],NOW)
+        self.assertEqual(result['xOverdue'],1)
+        self.assertEqual(result['discordConfirmed'],1)
+        self.assertEqual(result['xConfirmed'],0)
+        post['sentAt']='2026-10-05T13:45Z'
+        result=H.delivery([post],NOW)
+        self.assertEqual(result['xOverdue'],0)
+        self.assertEqual(result['xConfirmed'],1)
+        self.assertEqual(H.delivery([dict(post,cancelledAt='2026-10-05T13:10Z')],NOW)['xConfirmed'],0)
+        self.assertEqual(H.delivery([{'kind':'buffer:research','discord':post['discord']}],NOW)['xOverdue'],0)
+
     def test_held_caption_is_deduplicated_and_cleared_after_queueing(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
