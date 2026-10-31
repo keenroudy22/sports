@@ -23,7 +23,7 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 210,
+   "gamesGraded": 211,
    "gamesQuoted": 222,
    "moneylineSnapshots": 966,
    "seasons": [
@@ -34,7 +34,7 @@
      "season": 2027
     },
     {
-     "gamesGraded": 171,
+     "gamesGraded": 172,
      "gamesQuoted": 181,
      "phase": "regular",
      "season": 2027
@@ -46,6 +46,32 @@
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "WPG",
+    "id": "28",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/wpg.png",
+    "name": "Winnipeg Jets",
+    "shortName": "Jets"
+   },
+   "awayScore": 2,
+   "gameId": "NHL-401892612",
+   "gradedAt": "2026-10-31T01:55:12Z",
+   "home": {
+    "abbreviation": "FLA",
+    "id": "26",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/fla.png",
+    "name": "Florida Panthers",
+    "shortName": "Panthers"
+   },
+   "homeScore": 5,
+   "kickoff": "2026-10-30T23:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "NJ",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "VAN",
-    "id": "22",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
-    "name": "Vancouver Canucks",
-    "shortName": "Canucks"
-   },
-   "awayScore": 2,
-   "gameId": "NHL-401892521",
-   "gradedAt": "2026-10-18T01:00:02Z",
-   "home": {
-    "abbreviation": "TB",
-    "id": "20",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tb.png",
-    "name": "Tampa Bay Lightning",
-    "shortName": "Lightning"
-   },
-   "homeScore": 4,
-   "kickoff": "2026-10-17T20:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-31T01:25:13Z"
+ "updatedAt": "2026-10-31T01:55:12Z"
 }
