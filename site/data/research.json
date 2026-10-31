@@ -45197,5 +45197,210 @@
         "units": -1
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-31T06:17:25Z",
+    "targetWeek": 9,
+    "summary": "Research update for Oct 31: Settled 1: Kent State at Sacramento State over 46.5 loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 46.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401866451"
+        ],
+        "book": "BetMGM",
+        "odds": -108,
+        "projection": 49.1,
+        "edge": "Price-checked chance 52.3% against the exact two-sided price; 51.9% needed at -108: +0.4 percentage points.",
+        "cutoff": "OVER 46.5 at -108 or better; off the card at 48+, or at -123 or worse at 46.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-25T00:36:57Z",
+        "quotedAt": "2026-10-30T10:45:05Z",
+        "quoteType": "capture",
+        "quoteNote": "BetMGM's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-30T15:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.564,
+          "chance": 0.523,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.519,
+          "edgePoints": 0.4,
+          "evPerUnit": 0.007,
+          "snapshotAt": "2026-10-25T00:36:57Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-10-30T12:31:26Z",
+          "fairChance": 0.498,
+          "anchoredChance": 0.523,
+          "gap": 2.5,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Kent State Golden Flashes at Sacramento State Hornets",
+        "title": "Kent State at Sacramento State over 46.5",
+        "id": "CFB-2026-W9-kent-sac-over-46-5-mgm",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401866451",
+          "https://kentstatesports.com/news/2026/10/29/football-kent-state-travels-west-for-first-meeting-at-sacramento-state-friday-night",
+          "https://hornetsports.com/news/2026/10/27/football-football-takes-on-kent-state-on-friday-night.aspx"
+        ],
+        "why": "Model lean, our number only. We have the total at 49.1; the book is at 46.5. That makes the over 52.3%, and -108 needs 51.9%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Kent State's October 29 game preview says Dru DeShields continues to lead its offense; through eight games, he has completed 124 of 218 passes for 1,439 yards and eight touchdowns. Checked before publishing: Kent State's October 29 preview identifies Jackson Sharman as Sacramento State's leading quarterback, with 122 completions on 217 attempts for 1,246 yards, eight touchdowns, and six interceptions. The market: The spread opened +9.5 and is +7 at DraftKings, a move of 2.5 toward the home. The total opened 45.5 and is 46.5 at DraftKings, 1 toward the over. 6 books span 7 to 8.5 on the spread; the middle is 7.5. Our spread is 1.4 points off, bigger than 21% of our past gaps. Gaps this size went 1418-1407 against the close in 3584 games. Our total is 2.6 points off, bigger than 50% of our past gaps. Gaps this size went 956-841 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Sacramento State says its 17 points against Ball State were its most against an FBS opponent this season and its second-highest total overall. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Kent State reports that Sacramento State's defense allows 32.9 points per game and 177.0 rushing yards per game."
+          ],
+          "cautions": [
+            "Sacramento State says its 17 points against Ball State were its most against an FBS opponent this season and its second-highest total overall."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 46.5. I say 49.1.",
+              "numbers": {
+                "projection": 49.1,
+                "line": 46.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-25T00:36:57Z"
+            },
+            {
+              "text": "Kent State reports that Sacramento State's defense allows 32.9 points per game and 177.0 rushing yards per game.",
+              "numbers": {},
+              "source": "https://kentstatesports.com/news/2026/10/29/football-kent-state-travels-west-for-first-meeting-at-sacramento-state-friday-night",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "Kent State reports that Sacramento State's defense allows 32.9 points per game and 177.0 rushing yards per game.",
+              "numbers": {},
+              "source": "https://kentstatesports.com/news/2026/10/29/football-kent-state-travels-west-for-first-meeting-at-sacramento-state-friday-night",
+              "time": "2026-10-30T12:31:26Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Sacramento State says its 17 points against Ball State were its most against an FBS opponent this season and its second-highest total overall.",
+              "numbers": {},
+              "source": "https://hornetsports.com/news/2026/10/27/football-football-takes-on-kent-state-on-friday-night.aspx",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "Sacramento State says its 17 points against Ball State were its most against an FBS opponent this season and its second-highest total overall.",
+              "numbers": {},
+              "source": "https://hornetsports.com/news/2026/10/27/football-football-takes-on-kent-state-on-friday-night.aspx",
+              "time": "2026-10-30T12:31:26Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 65,
+            "windMph": 2,
+            "windDirection": "SW",
+            "precipProb": 0,
+            "periodStart": "2026-10-30T19:00:00-07:00",
+            "issuedAt": "2026-10-30T09:56:23+00:00",
+            "source": "https://api.weather.gov/gridpoints/STO/41,68/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 46.5,
+                  "price": -110,
+                  "time": "2026-10-25T10:45:06Z"
+                },
+                "now": {
+                  "line": 46.5,
+                  "price": -110,
+                  "time": "2026-10-30T10:45:05Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 46.5,
+                  "price": -110,
+                  "time": "2026-10-25T10:45:06Z"
+                },
+                "now": {
+                  "line": 46.5,
+                  "price": -110,
+                  "time": "2026-10-30T10:45:05Z"
+                }
+              }
+            },
+            "best": {
+              "book": "BetMGM",
+              "line": 46.5,
+              "price": -108,
+              "time": "2026-10-30T10:45:05Z"
+            }
+          },
+          "ours": {
+            "projection": 49.1,
+            "line": 46.5,
+            "market": "total",
+            "text": "Book says 46.5. I say 49.1.",
+            "snapshotAt": "2026-10-25T00:36:57Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://hornetsports.com/news/2026/10/27/football-football-takes-on-kent-state-on-friday-night.aspx",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://kentstatesports.com/news/2026/10/29/football-kent-state-travels-west-for-first-meeting-at-sacramento-state-friday-night",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/STO/41,68/forecast/hourly",
+              "time": "2026-10-30T09:56:23+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401866451",
+              "time": "2026-10-30T12:31:26Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-30T12:38:32Z",
+        "result": "loss",
+        "actual": "Kent State 10, Sacramento St 31",
+        "settledAt": "2026-10-31T06:17:25Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401866451",
+        "actualValue": 41,
+        "units": -1
+      }
+    ]
   }
 ]
