@@ -45402,5 +45402,216 @@
         "units": -1
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-31T11:04:28Z",
+    "summary": "Released 1: Nick Marsh UNDER 4.5 receptions +118 at FanDuel.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "5079600",
+        "market": "rec",
+        "line": 4.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401858501"
+        ],
+        "book": "FanDuel",
+        "odds": 118,
+        "projection": 3.5,
+        "edge": "Price-checked chance 52.6% against the exact two-sided price; 45.9% needed at +118: +6.8 percentage points.",
+        "cutoff": "UNDER 4.5 at +118 or better; off the card at 4 or lower, or at +103 or worse at 4.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-30T10:36:31Z",
+        "quotedAt": "2026-10-31T10:11:50Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 6:11 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-31T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.676,
+          "chance": 0.526,
+          "calibrated": true,
+          "calibration": 0.15,
+          "calibrationN": 1312,
+          "push": 0.0,
+          "breakEven": 0.459,
+          "edgePoints": 6.8,
+          "evPerUnit": 0.148,
+          "snapshotAt": "2026-10-30T10:36:31Z",
+          "probabilitySpec": "31a87bac8ccc7700484ad159503c03c8563e6b431f5ee0e8997f7524ddd59470",
+          "evaluatedAt": "2026-10-31T10:48:48Z",
+          "fairChance": 0.428,
+          "anchoredChance": 0.526,
+          "gap": 9.8,
+          "calibrationFamily": "CFB/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Minnesota Golden Gophers at Indiana Hoosiers",
+        "title": "Nick Marsh UNDER 4.5 receptions",
+        "id": "CFB-2026-W9-marsh-under-4-5-rec-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858501",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://hoosierhuddle.com/2026/10/29/josh-hoover-still-probable-quan-sanks-upgraded-on-thursday-availability-report-ahead-of-minnesota-game/",
+          "https://www.insidethehall.com/2026/10/30/game-preview-iu-football-hosts-minnesota-for-homecoming-game/",
+          "https://www.wdrbwave.com/2026/10/31/kickoff-indiana-vs-minnesota-how-watch-what-watch/?outputType=amp"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 5 of 10 under 4.5.",
+          "context": [
+            "Role: 2nd of 4 IU WRs by projected targets, 5.6 a game.",
+            "Defense: MINN allows 9.43 receptions a game to WRs, 13th-stingiest of 138 this season."
+          ],
+          "cautions": [],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 3.5 against 4.5. The under reads 52.6% after adjustment from the raw 67.6%; 45.9% is needed at +118. Last 10 games: 5 of 10 under 4.5. Role: 2nd of 4 IU WRs by projected targets, 5.6 a game. Defense: MINN allows 9.43 receptions a game to WRs, 13th-stingiest of 138 this season.",
+        "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 4.5. I say 3.5.",
+              "numbers": {
+                "projection": 3.5,
+                "line": 4.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-30T10:36:31Z"
+            },
+            {
+              "text": "Josh Hoover completed eight of 18 passes for 81 yards against Michigan, and Indiana attempted just one pass in the second half.",
+              "numbers": {},
+              "source": "https://www.wdrbwave.com/2026/10/31/kickoff-indiana-vs-minnesota-how-watch-what-watch/?outputType=amp",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "text": "Josh Hoover completed eight of 18 passes for 81 yards against Michigan, and Indiana attempted just one pass in the second half.",
+              "numbers": {},
+              "source": "https://www.wdrbwave.com/2026/10/31/kickoff-indiana-vs-minnesota-how-watch-what-watch/?outputType=amp",
+              "time": "2026-10-31T10:48:48Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "2 of his last 5 games finished under 4.5 receptions.",
+              "numbers": {
+                "values": [
+                  5,
+                  7,
+                  6,
+                  3,
+                  2
+                ],
+                "hits": 2,
+                "games": 5,
+                "line": 4.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-24T16:00Z"
+            },
+            {
+              "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-10-31T10:48:48Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 68,
+            "windMph": 6,
+            "windDirection": "ESE",
+            "precipProb": 7,
+            "periodStart": "2026-10-31T15:00:00-04:00",
+            "issuedAt": "2026-10-31T09:15:25+00:00",
+            "source": "https://api.weather.gov/gridpoints/IND/47,41/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": null,
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 4.5,
+                  "price": 118,
+                  "time": "2026-10-30T01:30:20Z"
+                },
+                "now": {
+                  "line": 4.5,
+                  "price": 118,
+                  "time": "2026-10-31T10:11:50Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 4.5,
+              "price": 118,
+              "time": "2026-10-31T10:11:50Z"
+            }
+          },
+          "ours": {
+            "projection": 3.5,
+            "line": 4.5,
+            "market": "rec",
+            "text": "Book says 4.5. I say 3.5.",
+            "snapshotAt": "2026-10-30T10:36:31Z"
+          },
+          "history": "Last 10 games: 5 of 10 under 4.5.",
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://www.wdrbwave.com/2026/10/31/kickoff-indiana-vs-minnesota-how-watch-what-watch/?outputType=amp",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/IND/47,41/forecast/hourly",
+              "time": "2026-10-31T09:15:25+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401858501",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://hoosierhuddle.com/2026/10/29/josh-hoover-still-probable-quan-sanks-upgraded-on-thursday-availability-report-ahead-of-minnesota-game/",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.insidethehall.com/2026/10/30/game-preview-iu-football-hosts-minnesota-for-homecoming-game/",
+              "time": "2026-10-31T10:48:48Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-31T11:04:28Z"
+      }
+    ]
   }
 ]
