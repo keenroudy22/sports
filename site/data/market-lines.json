@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-31T18:00:53Z",
+  "updatedAt": "2026-10-31T19:30:43Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
     "lines": 160,
     "current": 0,
-    "references": 1
+    "references": 0
   },
   "lines": [
     {
@@ -8963,10 +8963,10 @@
       "league": "CFB",
       "gameId": "CFB-401858278",
       "player": "Kendrick Raphael",
-      "athleteId": null,
+      "athleteId": "4899368",
       "position": "RB",
       "reportId": "CFB-2026-W9-raphael-under-102-5-rushyds-fd",
-      "identityVerified": false,
+      "identityVerified": true,
       "direction": "UNDER",
       "line": 102.5,
       "market": "rushing yards",
@@ -9004,10 +9004,10 @@
           "league": "CFB",
           "gameId": "CFB-401858278",
           "player": "Kendrick Raphael",
-          "athleteId": null,
+          "athleteId": "4899368",
           "position": "RB",
           "reportId": "CFB-2026-W9-raphael-under-102-5-rushyds-fd",
-          "identityVerified": false,
+          "identityVerified": true,
           "direction": "UNDER",
           "line": 102.5,
           "market": "rushing yards",
@@ -9043,9 +9043,9 @@
       "quoteType": "source reference",
       "checkedAt": "2026-10-31T10:11:50Z",
       "kickoff": "2026-10-31T19:30Z",
-      "status": "reference",
-      "quoteStatus": "reference",
-      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "status": "closed",
+      "quoteStatus": "closed",
+      "reason": "Game has started or finished; retained for research history only.",
       "builderEligible": false,
       "title": "Nick Marsh UNDER 4.5 receptions",
       "id": "line-e7f64953464c1da8d5b8",
