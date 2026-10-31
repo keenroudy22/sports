@@ -141,6 +141,22 @@ class ReviewedClimbTests(unittest.TestCase):
             self.assertEqual(row['id'],pick['id'])
             self.assertIsNone(review.enqueue(ticket,ctx,NOW,Path(folder))[0])
 
+    def test_render_outage_retains_private_admission_for_existing_recovery(self):
+        ticket,ctx=fixture()
+        import release_queue
+        import x_post
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(gates,'admit',return_value=(True,[])), \
+             patch.object(x_post,'do_draft'), \
+             patch.object(run,'render_private_play_card',side_effect=run.ReleaseArtifactError('renderer unavailable')), \
+             patch.object(ladder,'record_shadow'), patch.object(run,'log'):
+            pick,error=review.enqueue(ticket,ctx,NOW,Path(folder))
+            self.assertIsNone(error)
+            row=release_queue.load(folder)['plays'][0]
+            self.assertEqual(row['id'],pick['id'])
+            self.assertEqual(row['artifactState'],'recovery-needed')
+            self.assertNotIn('discordSentAt',row)
+
 
 if __name__ == '__main__':
     unittest.main()

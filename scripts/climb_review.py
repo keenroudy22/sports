@@ -187,8 +187,11 @@ def enqueue(spec, ctx, now, conf):
     # The renderer selects prospective social presentation by publication time.
     # This render-only clock is not the eventual public publication timestamp.
     art_pick = dict(pick, publishedAt=gates.stamp(now))
-    run.render_private_play_card(pick['id'], art_pick, ctx.games[pick['gameIds'][0]],
-                                ctx.games, ctx, now, folder/f"{pick['id']}.png")
+    try:
+        run.render_private_play_card(pick['id'], art_pick, ctx.games[pick['gameIds'][0]],
+                                    ctx.games, ctx, now, folder/f"{pick['id']}.png")
+    except (OSError, RuntimeError, run.ReleaseArtifactError) as error:
+        run.log(f'Reviewed Climb card awaits normal artifact recovery ({type(error).__name__})')
     rows = [(league, 'parlays', pick)]
     added = release_queue.enqueue(conf, rows, {}, [], folder, now, games=ctx.games)
     if not added:
