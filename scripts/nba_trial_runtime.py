@@ -17,6 +17,7 @@ import hoops_store
 import nba_readiness
 import nba_roster_runtime
 import nba_pick_policy
+import coverage_priority
 
 ROOT=Path(__file__).resolve().parents[1]
 CONF=Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')
@@ -241,7 +242,10 @@ def admission(now,root=nba_trial.STORE,log_book=None,review=None,capture=True,ma
  now=max(now,datetime.now(timezone.utc))
  if review is None:review={} if nba_pick_policy.active(now) else json.loads(REVIEW.read_text())
  coverage={};refusals={}
- for offer in candidates(now,diagnostics=coverage):
+ offers=candidates(now,diagnostics=coverage)
+ if now>=coverage_priority.PROPS_FOCUS_FROM:
+  offers=sorted(offers,key=lambda r:r.get('marketType')!='player')
+ for offer in offers:
   if markets is not None and offer.get('marketType') not in markets:continue
   nba_trial.staking.apply(offer,now)
   problems=nba_trial.evaluate(offer,stored,now,preview_sent=review.get('sentAt'))

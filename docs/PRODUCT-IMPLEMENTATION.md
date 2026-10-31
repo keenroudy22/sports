@@ -1,3 +1,28 @@
+### October31 owner coverage and operating review — release candidate
+
+Review resumes the177-item queue rather than restarting it. New dated capacity
+order is NFL/NBA, then weekend CFB; qualified NBA props get first admission review
+without bypassing any failed role/price/probability proof. Weekday CFB new straight,
+Climb and fun recommendations are research-only; old public recommendations and
+all results stay intact. Existing3 app schedules were updated in place with these
+priorities, current-role trend research, explicit proof holds, Climb diagnosis and
+public money-flow context; no schedule/model/budget/notification change.
+
+Captured-price/stake sample: CFB ML0-5/-3u; NFL props8-8/-0.647u. Weekend CFB
+also lost money; changing a sport or blindly selecting props is not evidence of
+profit. Current Climb dry review:34689 graded alternate offers/387segments/0open.
+Fresh stored prep923alternate spreads yields one held two-leg watch, not a release:
+W Michigan-3.5/Rutgers+27.5 at FanDuel, derived-198, no segment approval or final
+book ticket receipt. No threshold lowered or ticket published. DK's public splits
+and most-bet prop lists were checked: book-specific handle/ticket/popularity are
+context, never proof of professional money or a probability edge.
+
+NBA official report transport timeout is now distinct from exhausted capture
+budget in private diagnostics; no new request or retry. All prop approval remains
+false. Targeted119 regressions pass; full normal/clean/locked/hosted/live pending.
+Evidence work/market-results-review-20261031.json,
+climb-validation-review-20261031.json and climb-current-review-20261031.json.
+
 ### October31 overnight — VERIFIED HOSTED AND LIVE
 
 Canonical tested0ba2b9073 includes stored-result retry306423129 and fixture-clock

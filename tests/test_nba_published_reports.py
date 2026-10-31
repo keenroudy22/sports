@@ -96,6 +96,12 @@ class PublishedReportTests(unittest.TestCase):
         with patch.object(nba_capture,'urlopen',return_value=response):
             with self.assertRaises(ValueError):nba_capture.Budget(sleep=lambda _:None).report_index(official.index_url(NOW))
 
+    def test_request_timeout_is_distinct_from_exhausted_budget_without_error_content(self):
+        self.assertEqual(official.failure(TimeoutError('secret remote error'),NOW)['reason'],'Official report request timed out')
+        for reason in ('NBA free capture budget exhausted','NBA capture timebox exhausted'):
+            self.assertEqual(official.failure(TimeoutError(reason),NOW)['reason'],'NBA capture budget exhausted')
+        self.assertNotIn('secret',json.dumps(official.failure(TimeoutError('secret remote error'),NOW)))
+
     def test_season_page_tracks_october_boundary(self):
         self.assertTrue(official.index_url(NOW).endswith('2026-27-season'))
         self.assertTrue(official.index_url(datetime(2027,3,1,tzinfo=timezone.utc)).endswith('2026-27-season'))

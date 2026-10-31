@@ -1,3 +1,17 @@
+# October31 owner — NFL/NBA props first; weekday CFB research only
+
+From2026-10-31T11:25Z, allocate existing quote/research capacity to NFL and NBA
+before weekend CFB. Within qualified NBA offers, primary player props precede
+team markets; every admission test still runs and a held prop cannot block a
+supported game offer. New Monday–Friday CFB straight/Climb/fun recommendations
+are research-only; use each leg's Eastern kickoff day, not the worker day.
+Preserve all already-public originals, their prices, stakes, results and delivery;
+this is no retroactive cancellation. One open Climb, -150..-200 alternate shape,
+1u/2u stakes, shared caps and frozen validation requirements stay unchanged.
+Public sportsbook bet/handle splits and most-bet-prop lists are sourced research
+context only. Name book/market/time and missing coverage; popularity is not proof
+of sharp money, true win probability or EV. No paid feed, new poll or raised budget.
+
 # October30 owner-requested NBA report access repair
 
 From2026-10-30T17:05Z, use one bounded current-season official NBA report listing

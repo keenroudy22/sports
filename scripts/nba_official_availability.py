@@ -89,6 +89,8 @@ def failure(error, attempted_at):
         if error.latest is not None: result['latestPublishedAt']=boxscores.stamp(error.latest)
     elif isinstance(error, HTTPError):
         result.update(reason='Official report request failed', httpStatus=error.code)
+    elif isinstance(error, TimeoutError):
+        result['reason']=('NBA capture budget exhausted' if str(error) in ('NBA free capture budget exhausted','NBA capture timebox exhausted') else 'Official report request timed out')
     elif isinstance(error, subprocess.SubprocessError):
         result['reason']='Official report PDF extraction failed'
     elif isinstance(error, ValueError) and str(error)=='Official injury PDF reader unavailable':
