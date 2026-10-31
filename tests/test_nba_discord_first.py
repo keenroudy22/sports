@@ -27,6 +27,10 @@ class NBADiscordFirstTests(unittest.TestCase):
  def guards(self):
   from contextlib import ExitStack
   stack=ExitStack()
+  # Production advances to the post-capture wall clock. Historical fixtures
+  # freeze that independent clock instead of expiring after their game date.
+  clock=stack.enter_context(patch.object(rt,'datetime',wraps=datetime))
+  clock.now.return_value=NOW
   stack.enter_context(patch.object(rt,'public_rows',return_value=[copy.deepcopy(PLAY)]))
   stack.enter_context(patch.object(rt,'current_match',return_value=True))
   stack.enter_context(patch.object(b,'live_card_url',return_value=IMAGE))
