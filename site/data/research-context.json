@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-31T15:58:41Z",
+  "updatedAt": "2026-10-31T17:54:37Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-31T15:00Z",
+              "reportedAt": "2026-10-31T17:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,16 +1162,16 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-31T15:00Z",
+              "reportedAt": "2026-10-31T17:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4608686",
               "name": "Kyle Monangai",
               "position": "RB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Thumb",
-              "reportedAt": "2026-10-30T19:40Z",
+              "reportedAt": "2026-10-31T16:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
             },
             {
@@ -4837,6 +4837,24 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "4432710",
+              "name": "TreVeyon Henderson",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Illness",
+              "reportedAt": "2026-10-31T17:10Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432710/treveyon-henderson"
+            },
+            {
+              "id": "4047646",
+              "name": "A.J. Brown",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-31T17:07Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4047646/aj-brown"
+            },
+            {
               "id": "4362890",
               "name": "Ben Brown",
               "position": "C",
@@ -4864,15 +4882,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4245273/christian-elliss"
             },
             {
-              "id": "4432710",
-              "name": "TreVeyon Henderson",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Illness",
-              "reportedAt": "2026-10-30T20:43Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432710/treveyon-henderson"
-            },
-            {
               "id": "16910",
               "name": "DaQuan Jones",
               "position": "DT",
@@ -4889,15 +4898,6 @@
               "injury": null,
               "reportedAt": "2026-10-30T20:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
-            },
-            {
-              "id": "4047646",
-              "name": "A.J. Brown",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-30T17:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4047646/aj-brown"
             },
             {
               "id": "4688779",
@@ -7367,30 +7367,6 @@
       "changes": [
         {
           "teamId": "22",
-          "name": "Tyler Allgeier",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-31T10:05:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4373626/tyler-allgeier"
-        },
-        {
-          "teamId": "22",
-          "name": "Michael Wilson",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-31T10:05:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360761/michael-wilson"
-        },
-        {
-          "teamId": "22",
-          "name": "Jeremiyah Love",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-31T10:05:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
-        },
-        {
-          "teamId": "22",
           "name": "Elijah Wilkinson",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7740,35 @@
           "to": "Out",
           "observedAt": "2026-10-31T15:26:35Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Kyle Monangai",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-31T17:54:37Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
+        },
+        {
+          "teamId": "17",
+          "name": "TreVeyon Henderson",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-31T17:54:37Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4432710/treveyon-henderson"
+        },
+        {
+          "teamId": "17",
+          "name": "A.J. Brown",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-31T17:54:37Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4047646/aj-brown"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-31T15:58:41Z",
-      "lastAttemptAt": "2026-10-31T15:58:41Z",
+      "checkedAt": "2026-10-31T17:54:37Z",
+      "lastAttemptAt": "2026-10-31T17:54:37Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-31T15:58:41Z",
-      "lastAttemptAt": "2026-10-31T15:58:41Z",
+      "checkedAt": "2026-10-31T17:54:37Z",
+      "lastAttemptAt": "2026-10-31T17:54:37Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
