@@ -44962,5 +44962,240 @@
         "publishedAt": "2026-10-30T12:38:32Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-31T03:07:27Z",
+    "targetWeek": 9,
+    "summary": "Research update for Oct 30: Settled 1: UCF MONEYLINE loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401856844"
+        ],
+        "book": "DraftKings",
+        "odds": -102,
+        "projection": 0.6,
+        "edge": "Price-checked chance 52.5% against the exact two-sided price; 50.5% needed at -102: +2.1 percentage points.",
+        "cutoff": "HOME 0 at -102 or better; off the card at -0.5 or lower, or at -117 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-25T04:58:00Z",
+        "quotedAt": "2026-10-30T10:35:36Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 6:35 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-30T15:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.605,
+          "chance": 0.525,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.505,
+          "edgePoints": 2.1,
+          "evPerUnit": 0.041,
+          "snapshotAt": "2026-10-25T04:58:00Z",
+          "probabilitySpec": "01c1ebbdbacb05398ddbe070e4dc33ac06c85897c60cd09425d79575ab170503",
+          "evaluatedAt": "2026-10-30T12:31:26Z",
+          "fairChance": 0.483,
+          "anchoredChance": 0.525,
+          "gap": 4.3,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "Baylor Bears at UCF Knights",
+        "title": "UCF MONEYLINE",
+        "id": "CFB-2026-W9-bay-ucf-ml-home-0-dk",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856844",
+          "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh"
+        ],
+        "why": "Price-checked win chance 52.5%; -102 needs 50.5%. Checked before publishing: Scott Frost said Keyone Jenkins would start against Baylor after trainers cleared him from concussion protocol. Checked before publishing: UCF listed Alonza Barnett III as questionable, and Scott Frost said Barnett probably could play but might not be 100%. The market: The spread opened -1.5 and is +1.5 at DraftKings, a move of 3 toward the away. The total opened 49.5 and is 48.5 at DraftKings, 1 toward the under. 6 books span 1.5 to 2.5 on the spread; the middle is 2. Our spread is 5.8 points off, bigger than 71% of our past gaps. Gaps this size went 528-516 against the close in 3584 games. Our total is 3.7 points off, bigger than 65% of our past gaps. Gaps this size went 702-569 against the close in 3602 games.",
+        "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Baylor listed starting cornerback Devon Jordan and running back Dawson Pendergrass as questionable against UCF.",
+            "Keyone Jenkins completed 25 of 41 attempts for 293 yards, four total touchdowns and no turnovers in UCF's 39-31 double-overtime win over BYU."
+          ],
+          "cautions": [
+            "UCF ruled starting safety Demari Henderson and co-starting cornerback DJ Bell out against Baylor.",
+            "UCF listed starting center Jacob Maiava as probable and ruled offensive lineman Tyler Gibson out against Baylor."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Baylor listed starting cornerback Devon Jordan and running back Dawson Pendergrass as questionable against UCF.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "Price-checked win chance 52.5%; this price needs 50.5%.",
+              "numbers": {
+                "chance": 0.525,
+                "breakEven": 0.505
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-10-30T10:35:36Z"
+            },
+            {
+              "text": "Baylor listed starting cornerback Devon Jordan and running back Dawson Pendergrass as questionable against UCF.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "UCF ruled starting safety Demari Henderson and co-starting cornerback DJ Bell out against Baylor.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "UCF listed starting center Jacob Maiava as probable and ruled offensive lineman Tyler Gibson out against Baylor.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "UCF ruled starting safety Demari Henderson and co-starting cornerback DJ Bell out against Baylor.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "UCF listed starting center Jacob Maiava as probable and ruled offensive lineman Tyler Gibson out against Baylor.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "Baylor listed starting cornerback Devon Jordan and running back Dawson Pendergrass as questionable against UCF.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "UCF ruled starting safety Demari Henderson and co-starting cornerback DJ Bell out against Baylor.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "UCF listed starting center Jacob Maiava as probable and ruled offensive lineman Tyler Gibson out against Baylor.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "text": "Baylor listed starting cornerback Devon Jordan and running back Dawson Pendergrass as questionable against UCF.",
+              "numbers": {},
+              "source": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            }
+          ],
+          "weather": {
+            "tempF": 78,
+            "windMph": 15,
+            "windDirection": "ENE",
+            "precipProb": 11,
+            "periodStart": "2026-10-30T19:00:00-04:00",
+            "issuedAt": "2026-10-30T06:55:53+00:00",
+            "source": "https://api.weather.gov/gridpoints/MLB/26,68/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -2.5,
+                  "price": -105,
+                  "time": "2026-10-25T10:45:06Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": -112,
+                  "time": "2026-10-30T10:45:05Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -2.5,
+                  "price": -115,
+                  "time": "2026-10-25T10:45:06Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": -106,
+                  "time": "2026-10-30T10:45:05Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": -102,
+              "time": "2026-10-30T10:35:36Z"
+            }
+          },
+          "ours": {
+            "projection": 0.6,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "Baylor listed starting cornerback Devon Jordan and running back Dawson Pendergrass as questionable against UCF.",
+            "snapshotAt": "2026-10-25T04:58:00Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.si.com/college/ucf/football/ucf-knights-defensive-back-ruled-out-vs-baylor-bears-injury-report-breakdown-scott-frost-demari-henderson-taevion-swint-lewis-carter-jacob-maiava-owen-spell-keyone-jenkins-alonza-barnett-dj-bell-devon-jordan-01m60ef6pvnh",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://ucfknights.com/news/2026/10/24/ucf-stuns-no-2-byu-in-overtime-victory-39-31",
+              "time": "2026-10-30T12:31:26Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/MLB/26,68/forecast/hourly",
+              "time": "2026-10-30T06:55:53+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856844",
+              "time": "2026-10-30T12:31:26Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-30T12:38:32Z",
+        "result": "loss",
+        "actual": "Baylor 41, UCF 9",
+        "settledAt": "2026-10-31T03:07:27Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856844",
+        "actualValue": -32,
+        "units": -1
+      }
+    ]
   }
 ]
