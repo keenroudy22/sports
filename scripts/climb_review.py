@@ -84,6 +84,13 @@ def refusal(ticket, ctx):
             return 'Reviewed Climb currently supports full-game spreads and totals'
         if not number(line) or not float(line*2).is_integer() or int(line*2) % 2 == 0:
             return 'Reviewed game alternates need half-point lines'
+        def team(which):
+            row = game.get(which) or {}
+            return row.get('school') or row.get('short') or row.get('name')
+        title = (f'{team(side)} {pricing.signed(float(line))}' if market == 'spread' else
+                 f'{team("away")} at {team("home")} {side} {pricing.fmt(float(line))}')
+        if leg.get('title') != title or leg.get('kickoff') != game.get('kickoff'):
+            return f'Climb display must match the exact game, side, line and kickoff: {title}'
         main = leg.get('mainLine')
         if not number(main) or not (line < main if market == 'total' and side == 'over' else line > main):
             return 'Reviewed Climb needs a genuinely cushioned alternate versus the observed main line'

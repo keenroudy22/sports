@@ -23,7 +23,7 @@ def fixture():
         gid = f'g{i}'
         games[gid] = dict(id=gid, league='CFB', season=2026, week=9, state='pre',
                          kickoff='2026-10-31T16:00Z', home=dict(short='Home'), away=dict(short='Away'))
-        legs.append(dict(id=f'l{i}', title=f'Home {i} +7.5', gameId=gid,
+        legs.append(dict(id=f'l{i}', title='Home +7.5', gameId=gid,
             marketType='spread', direction='home', line=7.5, mainLine=-2.5,
             marketWindow='Full game', alternate=True, odds=-425, book='DraftKings',
             observedAt='2026-10-31T12:55Z', kickoff=games[gid]['kickoff'],
@@ -72,6 +72,8 @@ class ReviewedClimbTests(unittest.TestCase):
             lambda t:t['legs'][0].update(book='FanDuel'),
             lambda t:t['legs'][0].update(mainLine=7.5),
             lambda t:t['legs'][0].update(marketWindow='1Q'),
+            lambda t:t['legs'][0].update(title='Away -7.5'),
+            lambda t:t['legs'][0].update(kickoff='2026-10-31T20:00Z'),
         ):
             ticket,ctx=fixture();mutate(ticket)
             self.assertIsNotNone(review.refusal(ticket,ctx))
