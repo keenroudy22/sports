@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-31T12:51:13Z",
+  "updatedAt": "2026-10-31T15:26:35Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-31T12:01Z",
+              "reportedAt": "2026-10-31T15:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-31T12:01Z",
+              "reportedAt": "2026-10-31T15:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4361423",
+              "name": "Micah Parsons",
+              "position": "DE",
+              "status": "Out",
+              "injury": "Knee - ACL",
+              "reportedAt": "2026-10-31T14:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons"
+            },
+            {
               "id": "4429023",
               "name": "MarShawn Lloyd",
               "position": "RB",
@@ -2688,15 +2697,6 @@
               "injury": null,
               "reportedAt": "2026-10-29T22:54Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361776/brenton-cox-jr"
-            },
-            {
-              "id": "4361423",
-              "name": "Micah Parsons",
-              "position": "DE",
-              "status": "Out",
-              "injury": "Knee - ACL",
-              "reportedAt": "2026-10-28T23:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons"
             },
             {
               "id": "4242390",
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4871023",
+              "name": "Carnell Tate",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-31T15:10Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
+            },
+            {
               "id": "3915398",
               "name": "Tommy Townsend",
               "position": "P",
@@ -6968,15 +6977,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-30T20:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
-            },
-            {
-              "id": "4871023",
-              "name": "Carnell Tate",
-              "position": "WR",
-              "status": "Out",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-30T20:03Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
             },
             {
               "id": "4685145",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "22",
-          "name": "Mack Wilson Sr.",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-31T10:05:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4040983/mack-wilson-sr"
-        },
         {
           "teamId": "22",
           "name": "Tyler Allgeier",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-31T12:51:13Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-31T15:26:35Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-31T12:51:13Z",
-      "lastAttemptAt": "2026-10-31T12:51:13Z",
+      "checkedAt": "2026-10-31T15:26:35Z",
+      "lastAttemptAt": "2026-10-31T15:26:35Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-31T12:51:13Z",
-      "lastAttemptAt": "2026-10-31T12:51:13Z",
+      "checkedAt": "2026-10-31T15:26:35Z",
+      "lastAttemptAt": "2026-10-31T15:26:35Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
