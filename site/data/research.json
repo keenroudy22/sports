@@ -45613,5 +45613,193 @@
         "publishedAt": "2026-10-31T11:04:28Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-31T11:04:28Z",
+    "summary": "Released 1: Kendrick Raphael UNDER 102.5 rushing yards -114 at FanDuel.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "RB",
+        "athleteId": "4899368",
+        "market": "rushYds",
+        "line": 102.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401858278"
+        ],
+        "book": "FanDuel",
+        "odds": -114,
+        "projection": 66.6,
+        "edge": "Price-checked chance 53.6% against the exact two-sided price; 53.3% needed at -114: +0.3 percentage points.",
+        "cutoff": "UNDER 102.5 at -114 or better; off the card at 102 or lower, or at -129 or worse at 102.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-25T04:58:00Z",
+        "quotedAt": "2026-10-31T10:46:12Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 6:46 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-10-31T12:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.74,
+          "chance": 0.536,
+          "calibrated": true,
+          "calibration": 0.15,
+          "calibrationN": 1312,
+          "push": 0.0,
+          "breakEven": 0.533,
+          "edgePoints": 0.3,
+          "evPerUnit": 0.006,
+          "snapshotAt": "2026-10-25T04:58:00Z",
+          "probabilitySpec": "30f25f5c1d2b26608d190e01c75571b9e843e9134b67f286613a260e64c8dc4a",
+          "evaluatedAt": "2026-10-31T10:48:48Z",
+          "fairChance": 0.5,
+          "anchoredChance": 0.536,
+          "gap": 3.6,
+          "calibrationFamily": "CFB/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "SMU Mustangs at Syracuse Orange",
+        "title": "Kendrick Raphael UNDER 102.5 rushing yards",
+        "id": "CFB-2026-W9-raphael-under-102-5-rushyds-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858278",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://accsports.com/news/acc-injury-report-week-9/",
+          "https://smumustangs.com/news/2026/10/25/football-smu-rises-to-19th-in-ap-poll"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 6 of 10 under 102.5.",
+          "context": [
+            "Role: 1st of 3 SMU RBs by projected carries, 14.4 a game.",
+            "Defense: SYR allows 124.71 rushing yards a game to RBs, 91st-stingiest of 138 this season."
+          ],
+          "cautions": [
+            "Raphael rushed for 104 yards against California, his second straight game with at least 100 rushing yards."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 66.6 against 102.5. The under reads 53.6% after adjustment from the raw 74.0%; 53.3% is needed at -114. Last 10 games: 6 of 10 under 102.5. Role: 1st of 3 SMU RBs by projected carries, 14.4 a game. Defense: SYR allows 124.71 rushing yards a game to RBs, 91st-stingiest of 138 this season.",
+        "risk": "Raphael rushed for 104 yards against California, his second straight game with at least 100 rushing yards. An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Under 102.5 in 6 of his last 10 games.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "text": "Book says 102.5. I say 66.6.",
+              "numbers": {
+                "projection": 66.6,
+                "line": 102.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-25T04:58:00Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "2 of his last 5 games finished under 102.5 rushing yards.",
+              "numbers": {
+                "values": [
+                  197,
+                  98,
+                  45,
+                  124,
+                  104
+                ],
+                "hits": 2,
+                "games": 5,
+                "line": 102.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-24T16:00Z"
+            },
+            {
+              "text": "Raphael rushed for 104 yards against California, his second straight game with at least 100 rushing yards.",
+              "numbers": {},
+              "source": "https://smumustangs.com/news/2026/10/25/football-smu-rises-to-19th-in-ap-poll",
+              "time": "2026-10-31T10:48:48Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": null,
+          "line": {
+            "books": {
+              "DraftKings": null,
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 105.5,
+                  "price": -114,
+                  "time": "2026-10-29T16:24:01Z"
+                },
+                "now": {
+                  "line": 102.5,
+                  "price": -114,
+                  "time": "2026-10-31T10:46:12Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 102.5,
+              "price": -114,
+              "time": "2026-10-31T10:46:12Z"
+            }
+          },
+          "ours": {
+            "projection": 66.6,
+            "line": 102.5,
+            "market": "rushYds",
+            "text": "Under 102.5 in 6 of his last 10 games.",
+            "snapshotAt": "2026-10-25T04:58:00Z"
+          },
+          "history": "Last 10 games: 6 of 10 under 102.5.",
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://smumustangs.com/news/2026/10/25/football-smu-rises-to-19th-in-ap-poll",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401858278",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-31T10:48:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://accsports.com/news/acc-injury-report-week-9/",
+              "time": "2026-10-31T10:48:48Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-10-31T11:04:28Z"
+      }
+    ]
   }
 ]
