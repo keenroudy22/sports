@@ -51,6 +51,9 @@ class ReviewedClimbTests(unittest.TestCase):
         self.assertNotIn('projection clears',pick['why'])
         self.assertEqual(pick['researchReview'],ticket['researchReview'])
         self.assertTrue(gates.ladder_selective(pick,ctx).ok)
+        self.assertTrue(gates.expiry_ok(pick,ctx).ok)
+        bad=dict(pick,expiresAt='2026-10-31T15:50Z')
+        self.assertFalse(gates.expiry_ok(bad,ctx).ok)
 
     def test_bad_price_receipt_and_probability_claims_are_refused(self):
         for mutate in (

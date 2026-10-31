@@ -599,6 +599,15 @@ def expiry_ok(candidate, ctx):
         return Decision(False, 'expiry_ok', f"expiresAt {candidate['expiresAt']} is not after now")
     starts = kickoffs(candidate, ctx)
     limit = min([next_slot(ctx.now)] + starts)
+    if candidate.get('selectionMethod') == 'sourced-climb-review-v1':
+        import climb_review
+        refusal = climb_review.refusal(candidate, ctx)
+        if refusal:
+            return Decision(False, 'expiry_ok', refusal)
+        # Explicit ticket verification lasts at most two hours and is checked
+        # again at release. A scan boundary alone must not expire fresh art.
+        limit = min([quoted+timedelta(hours=2)] +
+                    [start-timedelta(minutes=15) for start in starts])
     if expires > limit + timedelta(minutes=1):
         return Decision(False, 'expiry_ok', f"expiresAt {candidate['expiresAt']} is past the next run or kickoff "
                                             f'{stamp(limit)}', {'limit': stamp(limit)})
