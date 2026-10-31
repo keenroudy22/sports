@@ -45801,5 +45801,269 @@
         "publishedAt": "2026-10-31T11:04:28Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-31T13:15:36Z",
+    "summary": "Released 1: Ladder step 1: 2 legs at DraftKings -185 at DraftKings.",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "CFB-2026-W9-ladder-1031-c4s1-dk",
+        "title": "Ladder step 1: 2 legs at DraftKings",
+        "status": "active",
+        "favorite": false,
+        "parlayType": "ladder",
+        "riskUnits": 0.25,
+        "ladder": {
+          "run": 4,
+          "step": 1,
+          "stake": 50,
+          "payout": 77,
+          "banked": 0,
+          "bankThisWin": 15,
+          "bankedAfter": 15,
+          "nextStake": 62,
+          "totalAfter": 77,
+          "bankPercent": 20,
+          "ridePercent": 80,
+          "start": 50,
+          "goal": 1000
+        },
+        "legs": [
+          {
+            "id": "review-wmu-minus3-5",
+            "title": "Western Michigan -3.5",
+            "gameId": "CFB-401866452",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -3.5,
+            "mainLine": -14,
+            "book": "DraftKings",
+            "odds": -389,
+            "source": "https://sportsbook.draftkings.com/event/bowling-green-%40-western-michigan/34876678",
+            "observedAt": "2026-10-31T13:14:23Z",
+            "kickoff": "2026-10-31T16:00Z",
+            "marketWindow": "Full game",
+            "alternate": true,
+            "researchCase": {
+              "why": "Western Michigan is 5-3 against Bowling Green at 2-6. I only need the Broncos by four at home, well below the main spread.",
+              "risk": "Bowling Green has forced a fumble in three straight games and its quarterback has completed over 70% in three straight. WMU just allowed 45 at Toledo.",
+              "availability": "Broc Lowry and Jalen Buckley played in the latest official WMU recap. Current opponent preview checked; this is not an all-clear injury guarantee.",
+              "sources": [
+                {
+                  "url": "https://bgsufalcons.com/news/2026/10/26/football-bowling-green-western-michigan-set-for-halloween-clash-in-kalamazoo-saturday",
+                  "fact": "Current game preview lists WMU 5-3 and Bowling Green 2-6; Kastantin has three straight games over 70% completions and the defense three straight with a forced fumble.",
+                  "checkedAt": "2026-10-31T12:17:55Z"
+                },
+                {
+                  "url": "https://wmubroncos.com/news/2026/10/24/football-wmus-comeback-falls-short-at-toledo.aspx",
+                  "fact": "Western Michigan lost 45-38 at Toledo and returns home for Bowling Green. Lowry threw a late interception.",
+                  "checkedAt": "2026-10-31T12:17:55Z"
+                }
+              ]
+            }
+          },
+          {
+            "id": "review-ill-plus7-5",
+            "title": "Illinois +7.5",
+            "gameId": "CFB-401858503",
+            "marketType": "spread",
+            "direction": "away",
+            "line": 7.5,
+            "mainLine": -2.5,
+            "book": "DraftKings",
+            "odds": -438,
+            "source": "https://sportsbook.draftkings.com/event/illinois-%40-maryland/34876668",
+            "observedAt": "2026-10-31T13:14:23Z",
+            "kickoff": "2026-10-31T16:00Z",
+            "marketWindow": "Full game",
+            "alternate": true,
+            "researchCase": {
+              "why": "Illinois just held Oregon to 10 points. I am taking Illinois +7.5 against Maryland, so a touchdown loss still covers.",
+              "risk": "Maryland comes off a bye with a new interim coach. Illinois has quarterback uncertainty: the team preview lists Houser injured and freshman Clayton coming off his first start.",
+              "availability": "Official Illinois preview reports Houser broken hand and Clayton replacement. A newer gameday report lists Houser questionable and traveling; do not assume a healthy returning starter or use his season passing averages.",
+              "sources": [
+                {
+                  "url": "https://fightingillini.com/news/2026/10/26/football-illinois-travels-east-for-matchup-at-maryland",
+                  "fact": "Illinois beat Oregon 21-10; the preview identifies the Houser hand injury and Clayton replacement. Maryland is coming off a bye under interim coach Abdul-Rahim.",
+                  "checkedAt": "2026-10-31T12:17:55Z"
+                },
+                {
+                  "url": "https://umterps.com/news/2026/10/26/football-game-7-rutgers-at-maryland-preview",
+                  "fact": "Maryland hosts Illinois at noon and makes its first appearance under interim coach Aazaar Abdul-Rahim.",
+                  "checkedAt": "2026-10-31T12:17:55Z"
+                },
+                {
+                  "url": "https://www.on3.com/sites/orange-blue-news/news/illinois-at-maryland-gameday/",
+                  "fact": "Gameday reporting lists Houser questionable on Friday and traveling, a status update that keeps quarterback uncertainty explicit.",
+                  "checkedAt": "2026-10-31T12:17:55Z"
+                }
+              ]
+            }
+          }
+        ],
+        "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+        "gameIds": [
+          "CFB-401866452",
+          "CFB-401858503"
+        ],
+        "book": "DraftKings",
+        "odds": -185,
+        "quotedAt": "2026-10-31T13:14:23Z",
+        "priceEstimated": false,
+        "expiresAt": "2026-10-31T15:14:23Z",
+        "quoteType": "sportsbook",
+        "confidence": 1,
+        "edge": "Desk-researched alternate ticket. No validated win probability or positive-EV claim.",
+        "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://bgsufalcons.com/news/2026/10/26/football-bowling-green-western-michigan-set-for-halloween-clash-in-kalamazoo-saturday",
+          "https://fightingillini.com/news/2026/10/26/football-illinois-travels-east-for-matchup-at-maryland",
+          "https://sportsbook.draftkings.com/event/illinois-%40-maryland/34876668",
+          "https://umterps.com/news/2026/10/26/football-game-7-rutgers-at-maryland-preview",
+          "https://wmubroncos.com/news/2026/10/24/football-wmus-comeback-falls-short-at-toledo.aspx",
+          "https://www.espn.com/college-football/game/_/gameId/401858503",
+          "https://www.espn.com/college-football/game/_/gameId/401866452",
+          "https://www.on3.com/sites/orange-blue-news/news/illinois-at-maryland-gameday/"
+        ],
+        "selectionMethod": "sourced-climb-review-v1",
+        "researchReview": {
+          "method": "sourced-climb-review-v1",
+          "reviewer": "kookn-desk",
+          "reviewedAt": "2026-10-31T13:15:08.548843+00:00",
+          "ticketVerified": true,
+          "ticketSource": "https://sportsbook.draftkings.com/event/illinois-%40-maryland/34876668",
+          "receipt": "DraftKings event page reloaded and exact two-pick slip visibly verified at 09:14:23 Eastern: Western Michigan -3.5 (-389), Illinois +7.5 (-438), actual combined -185. No stake entered or wager placed.",
+          "marketContext": {
+            "source": "https://dknetwork.draftkings.com/draftkings-sportsbook-betting-splits/?tb_eg=87637&tb_edate=today&tb_emt=0",
+            "checkedAt": "2026-10-31T12:38:57.801267+00:00",
+            "scope": "DraftKings all jurisdictions; snapshot of main spreads, not alternate-specific volume or proof of professional money/EV.",
+            "rows": [
+              {
+                "side": "Western Michigan -14",
+                "handlePercent": 93,
+                "ticketPercent": 57
+              },
+              {
+                "side": "Illinois -2.5",
+                "handlePercent": 73,
+                "ticketPercent": 65
+              }
+            ]
+          },
+          "weatherContext": {
+            "scope": "Stored NWS noon forecasts; not current measurements or an all-clear guarantee.",
+            "retrievedAt": "2026-10-31T10:05:54Z",
+            "Western Michigan": {
+              "windMph": 7,
+              "precipProb": 2,
+              "source": "https://api.weather.gov/gridpoints/GRR/46,16/forecast/hourly"
+            },
+            "Illinois": {
+              "windMph": 5,
+              "precipProb": 0,
+              "source": "https://api.weather.gov/gridpoints/LWX/100,76/forecast/hourly"
+            }
+          }
+        },
+        "why": "Western Michigan is 5-3 against Bowling Green at 2-6. I only need the Broncos by four at home, well below the main spread. Illinois just held Oregon to 10 points. I am taking Illinois +7.5 against Maryland, so a touchdown loss still covers.",
+        "risks": [
+          "Bowling Green has forced a fumble in three straight games and its quarterback has completed over 70% in three straight. WMU just allowed 45 at Toledo.",
+          "Maryland comes off a bye with a new interim coach. Illinois has quarterback uncertainty: the team preview lists Houser injured and freshman Clayton coming off his first start."
+        ],
+        "risk": "Bowling Green has forced a fumble in three straight games and its quarterback has completed over 70% in three straight. WMU just allowed 45 at Toledo. Maryland comes off a bye with a new interim coach. Illinois has quarterback uncertainty: the team preview lists Houser injured and freshman Clayton coming off his first start. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Western Michigan is 5-3 against Bowling Green at 2-6. I only need the Broncos by four at home, well below the main spread. Illinois just held Oregon to 10 points. I am taking Illinois +7.5 against Maryland, so a touchdown loss still covers.",
+              "numbers": {},
+              "source": "Published ticket detail",
+              "time": "2026-10-31T13:15:09Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Bowling Green has forced a fumble in three straight games and its quarterback has completed over 70% in three straight. WMU just allowed 45 at Toledo. Maryland comes off a bye with a new interim coach. Illinois has quarterback uncertainty: the team preview lists Houser injured and freshman Clayton coming off his first start. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+              "numbers": {},
+              "source": "Published ticket risk",
+              "time": "2026-10-31T13:15:09Z"
+            }
+          ],
+          "reports": [],
+          "weather": null,
+          "line": {
+            "legs": [
+              {
+                "gameId": "CFB-401866452",
+                "title": "Western Michigan -3.5",
+                "line": -3.5,
+                "price": -389,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "CFB-401858503",
+                "title": "Illinois +7.5",
+                "line": 7.5,
+                "price": -438,
+                "book": "DraftKings"
+              }
+            ],
+            "best": {
+              "book": "DraftKings",
+              "price": -185,
+              "time": "2026-10-31T13:14:23Z"
+            }
+          },
+          "ours": null,
+          "history": null,
+          "sources": [
+            {
+              "label": "Published source",
+              "url": "https://bgsufalcons.com/news/2026/10/26/football-bowling-green-western-michigan-set-for-halloween-clash-in-kalamazoo-saturday",
+              "time": "2026-10-31T13:15:09Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://fightingillini.com/news/2026/10/26/football-illinois-travels-east-for-matchup-at-maryland",
+              "time": "2026-10-31T13:15:09Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://sportsbook.draftkings.com/event/illinois-%40-maryland/34876668",
+              "time": "2026-10-31T13:15:09Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://umterps.com/news/2026/10/26/football-game-7-rutgers-at-maryland-preview",
+              "time": "2026-10-31T13:15:09Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://wmubroncos.com/news/2026/10/24/football-wmus-comeback-falls-short-at-toledo.aspx",
+              "time": "2026-10-31T13:15:09Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401858503",
+              "time": "2026-10-31T13:15:09Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401866452",
+              "time": "2026-10-31T13:15:09Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.on3.com/sites/orange-blue-news/news/illinois-at-maryland-gameday/",
+              "time": "2026-10-31T13:15:09Z"
+            }
+          ],
+          "partial": true
+        },
+        "publishedAt": "2026-10-31T13:15:36Z"
+      }
+    ]
   }
 ]
