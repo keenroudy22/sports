@@ -1476,7 +1476,7 @@ def ladder_supported(candidate, ctx):
     return Decision(not reason, 'ladder_supported', reason or 'all legs retain conservative price and proven-segment support')
 
 
-FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy', 'stakingPolicy')))
+FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy', 'stakingPolicy', 'selectionMethod', 'researchReview')))
 
 
 def revision_frozen(candidate, ctx):

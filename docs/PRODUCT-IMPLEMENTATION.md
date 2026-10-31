@@ -1,3 +1,15 @@
+### October31 reviewed-ticket Climb repair — release candidate
+
+Adds an explicit sourced discretionary game-alternate route, independent of the
+legacy proven-segment probability route. It saves facts/countercase/availability
+and exact visible sportsbook ticket terms, retains current-day quote freshness,
+one-open-step/shared exposure/jurisdiction/cadence and release-time rechecks.
+No fabricated probability or positive-EV claim; review metadata is frozen.
+Actual book ticket price takes precedence over small cross-game rounding; a
+material leg/ticket mismatch stops admission. Legacy replays remain unchanged.
+Previous f8808d8b4 hosted41198194909 succeeded. Current work/tests/actual ticket
+delivery remain distinct; no new publication claimed here.
+
 ### October31 owner reset — supersedes pending mechanical coverage changes
 
 The owner explicitly revoked the accumulated selection prescriptions before the

@@ -143,6 +143,9 @@ def ticket_rank(chance, edge, chosen, price):
 
 def support_refusal(ticket, ctx):
     """Recheck saved conservative support at admission/release; operator tickets cannot bypass it."""
+    if ticket.get('selectionMethod') == 'sourced-climb-review-v1':
+        import climb_review
+        return climb_review.refusal(ticket, ctx)
     def number(value):
         return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
     legs = ticket.get('legs')
@@ -756,6 +759,9 @@ def manual_candidate(ctx, games, now, spec):
     """
     if not v3_enabled():
         return None, 'Climb v3 is switched off'
+    if isinstance(spec, dict) and spec.get('selectionMethod') == 'sourced-climb-review-v1':
+        import climb_review
+        return climb_review.candidate(ctx, games, now, spec)
     where = state(ctx.first, ctx.latest)
     if where['open']:
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"

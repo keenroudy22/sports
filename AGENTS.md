@@ -1,3 +1,14 @@
+# October31 reviewed Climb route
+
+Owner authorizes sourced discretionary alternate tickets without pretending the
+model has validated their EV. From12:10Z, sourced-climb-review-v1 may admit exact
+visibly verified same-book cross-game NFL/CFB spread/total tickets. Save current
+main and alternate lines, all leg prices, actual combined price, receipt, checked
+source facts, availability review, reasoning and countercase per leg. Recheck at
+release. No probability/EV claim; legacy model validation remains unchanged.
+Keep shape, current-day freshness, one-open-step, shared exposure, original history
+and delivery checks. New players/NBA are not implicitly admitted by this route.
+
 # October31 owner reset — judgment-led desk
 
 The owner revoked the accumulated selection prescriptions and asks the desk to

@@ -1933,6 +1933,10 @@ def verified_opposition(candidate, facts=()):
 def write_prose(candidate, ctx, records):
     """Template why and risk from the pick's own numbers. A model may polish these later; it never adds a number."""
     if candidate.get('legs'):       # a parlay has no single line or side: its words come first, before any are read
+        if candidate.get('selectionMethod') == 'sourced-climb-review-v1':
+            candidate['why'] = ' '.join(leg['researchCase']['why'] for leg in candidate['legs'])
+            candidate['risk'] = ' '.join(leg['researchCase']['risk'] for leg in candidate['legs']) + ' Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.'
+            return candidate
         if candidate.get('parlayType') == 'ladder':
             info = candidate['ladder']
             game_lines = any(leg.get('marketType') in ('spread', 'total', 'moneyline') and not leg.get('athleteId') for leg in candidate['legs'])
@@ -2262,6 +2266,12 @@ def ladder_step(ctx, games, now, records, published, decided, screened, manual=N
     missing = []
     research_status = (status or {}).get('research') if isinstance(status, dict) else None
     for leg in ticket.get('legs') or []:
+        if ticket.get('selectionMethod') == 'sourced-climb-review-v1':
+            case = leg['researchCase']
+            leg['reason'] = case['why']
+            leg['reasons'] = [dict(direction='for', text=case['why'], source=case['sources'][0]['url']),
+                              dict(direction='against', text=case['risk'], source=case['sources'][0]['url'])]
+            continue
         case = dict(leg, gameIds=[leg.get('gameId')], _league=league,
                     _team=(getattr(ctx, 'player_team', {}) or {}).get(str(leg.get('athleteId') or '')),
                     _player=leg.get('player'))
