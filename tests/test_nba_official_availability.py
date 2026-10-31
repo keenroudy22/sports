@@ -177,7 +177,7 @@ class OfficialAvailabilityTests(unittest.TestCase):
         for error, reason in [(ValueError('private body'),'Official report could not be verified'),
                               (ValueError('Official injury PDF reader unavailable'),'Official report PDF reader unavailable'),
                               (subprocess.TimeoutExpired('private command',10),'Official report PDF extraction failed'),
-                              (TimeoutError('private URL'),'Official report connection or capture budget unavailable')]:
+                              (TimeoutError('private URL'),'Official report request timed out')]:
             result=official.failure(error,NOW)
             self.assertEqual(result['state'],'unavailable')
             self.assertEqual(result['reason'],reason)
