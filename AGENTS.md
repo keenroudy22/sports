@@ -6,7 +6,12 @@ visibly verified same-book cross-game NFL/CFB spread/total tickets. Save current
 main and alternate lines, all leg prices, actual combined price, receipt, checked
 source facts, availability review, reasoning and countercase per leg. Recheck at
 release. No probability/EV claim; legacy model validation remains unchanged.
-Keep shape, current-day freshness, one-open-step, shared exposure, original history
+For a reviewed exact ticket, use the bounded queue-only entry point through the
+standard wrapper: scripts/climb_review.py --spec PATH --queue. It checks ordinary
+admission, renders one card and reserves the existing private release queue, with
+no new quote capture, full-board rebuild or direct public send. The normal release
+worker rechecks and delivers. This avoids running the whole slate merely to queue
+an already-researched ticket. Keep shape, current-day freshness, one-open-step, shared exposure, original history
 and delivery checks. New players/NBA are not implicitly admitted by this route.
 
 # October31 owner reset — judgment-led desk

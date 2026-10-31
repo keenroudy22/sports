@@ -153,3 +153,74 @@ def candidate(ctx, games, now, spec):
                 why=[leg['researchCase']['why'] for leg in ticket['legs']],
                 risks=[leg['researchCase']['risk'] for leg in ticket['legs']])
     return pick, None
+
+
+def enqueue(spec, ctx, now, conf):
+    """Queue one reviewed ticket without recapturing or rebuilding the board.
+
+    Caller holds the ordinary writer lock. Public delivery still belongs to
+    release_private, including its exact report, news, caption and risk checks.
+    """
+    from pathlib import Path
+    import dossier
+    import ladder
+    import release_queue
+    import run
+    import x_post
+    release_queue.merge_context(ctx, conf)
+    pick, held = ladder.manual_candidate(ctx, ctx.games, now, spec)
+    if held:
+        return None, held
+    run.write_prose(pick, ctx, [])
+    league = ctx.games[pick['gameIds'][0]]['league']
+    ok, decisions = gates.admit(dict(pick, league=league), ctx)
+    if not ok:
+        return None, '; '.join(d.reason for d in decisions if not d.ok)
+    pick['jurisdictionVerified'] = any(d.rule == 'cfb_jurisdiction' and
+        (d.data or {}).get('jurisdictionVerified') for d in decisions)
+    pick['dossier'] = dossier.ticket(pick, now)
+    folder = Path(conf)/'x-drafts'
+    folder.mkdir(parents=True, exist_ok=True)
+    first = dict(ctx.first)
+    first[pick['id']] = dict(pick, league=league, publishedAt=gates.stamp(now), kind='parlays')
+    x_post.do_draft(pick['id'], now, first, ctx.latest, ctx.games, out=folder)
+    # The renderer selects prospective social presentation by publication time.
+    # This render-only clock is not the eventual public publication timestamp.
+    art_pick = dict(pick, publishedAt=gates.stamp(now))
+    run.render_private_play_card(pick['id'], art_pick, ctx.games[pick['gameIds'][0]],
+                                ctx.games, ctx, now, folder/f"{pick['id']}.png")
+    rows = [(league, 'parlays', pick)]
+    added = release_queue.enqueue(conf, rows, {}, [], folder, now, games=ctx.games)
+    if not added:
+        return None, 'Reviewed ticket was already queued; no duplicate admission'
+    ladder.record_shadow(ctx, now, ticket=pick)
+    return pick, None
+
+
+def main():
+    import argparse
+    import json
+    from pathlib import Path
+    import run
+    parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    parser.add_argument('--spec', required=True, help='exact sourced sportsbook ticket JSON')
+    parser.add_argument('--queue', action='store_true', help='reserve private admission through ordinary gates; never place a wager')
+    args = parser.parse_args()
+    spec = json.loads(Path(args.spec).read_text())
+    if not args.queue:
+        now = datetime.now(timezone.utc)
+        ctx = gates.Stores().as_of(now)
+        pick, held = candidate(ctx, ctx.games, now, spec)
+    else:
+        with run.Lock(run.CONF/'run.lock', wait=run.RUN_LOCK_WAIT):
+            run.sync()
+            now = datetime.now(timezone.utc)
+            ctx = gates.Stores().as_of(now)
+            pick, held = enqueue(spec, ctx, now, run.CONF)
+    print(json.dumps(dict(state='held' if held else 'admitted-private' if args.queue else 'reviewed-preview',
+                          id=pick.get('id') if pick else None, reason=held)))
+    return 1 if held else 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

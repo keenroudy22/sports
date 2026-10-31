@@ -117,6 +117,30 @@ class ReviewedClimbTests(unittest.TestCase):
         ctx.first[pick['id']]=pick
         self.assertFalse(gates.revision_frozen(changed,ctx).ok)
 
+    def test_fast_queue_reuses_exact_review_and_normal_gates_without_a_capture(self):
+        ticket,ctx=fixture()
+        import release_queue
+        import x_post
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(gates,'admit',return_value=(True,[])) as admit, \
+             patch.object(x_post,'do_draft') as draft, \
+             patch.object(run,'render_private_play_card') as render, \
+             patch.object(run,'capture',side_effect=AssertionError('no capture')), \
+             patch.object(run.build_site,'build',side_effect=AssertionError('no board rebuild')), \
+             patch.object(ladder,'record_shadow'):
+            pick,error=review.enqueue(ticket,ctx,NOW,Path(folder))
+            self.assertIsNone(error)
+            admit.assert_called_once()
+            draft.assert_called_once()
+            render.assert_called_once()
+            self.assertEqual(render.call_args.args[1]['publishedAt'],gates.stamp(NOW))
+            row=release_queue.load(folder)['plays'][0]
+            self.assertEqual(row['pick']['researchReview'],ticket['researchReview'])
+            self.assertNotIn('discordSentAt',row)
+            self.assertNotIn('publicPath',row)
+            self.assertEqual(row['id'],pick['id'])
+            self.assertIsNone(review.enqueue(ticket,ctx,NOW,Path(folder))[0])
+
 
 if __name__ == '__main__':
     unittest.main()

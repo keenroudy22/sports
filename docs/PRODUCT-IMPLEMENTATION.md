@@ -1,3 +1,14 @@
+### October31 bounded reviewed-ticket queue and delivery-health repair
+
+The reviewed Climb entry point queues one exact ticket through normal admission
+and existing private release/artifact checks without a second capture or whole
+board build. Source/case/price/shape/exposure checks still fail closed; it never
+sends a wager or directly publishes. New review/display metadata is immutable.
+Missing discretionary probabilities stay unknown in the private shadow log.
+Discord-first plays without a Buffer due time now remain visible as X overdue;
+the private review reports the actual temporary2900 ceiling and rolling window.
+Current candidate is not yet deployed or publicly delivered.
+
 ### October31 reviewed-ticket Climb repair — release candidate
 
 Adds an explicit sourced discretionary game-alternate route, independent of the
