@@ -1,6 +1,7 @@
 import copy
 import sys
 import unittest
+import tempfile
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from types import SimpleNamespace
@@ -55,6 +56,10 @@ class ReviewedClimbTests(unittest.TestCase):
         self.assertTrue(gates.expiry_ok(pick,ctx).ok)
         bad=dict(pick,expiresAt='2026-10-31T15:50Z')
         self.assertFalse(gates.expiry_ok(bad,ctx).ok)
+        with tempfile.TemporaryDirectory() as folder:
+            shadow=ladder.record_shadow(ctx,NOW,ticket=pick,path=Path(folder)/'shadow.jsonl')
+        self.assertIsNone(shadow['ticket']['chance'])
+        self.assertIsNone(shadow['ticket']['edge'])
 
     def test_bad_price_receipt_and_probability_claims_are_refused(self):
         for mutate in (

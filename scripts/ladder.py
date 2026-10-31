@@ -243,13 +243,18 @@ def record_shadow(ctx, now, ticket=None, blocked=None, path=None):
            'blockedBy': blocked, 'result': None}
     if ticket:
         chance = ticket.get('chance')
-        if not isinstance(chance, (int, float)):
+        reviewed = ticket.get('selectionMethod') == 'sourced-climb-review-v1'
+        if reviewed:
+            chance = None
+        elif not isinstance(chance, (int, float)):
             chance = 1.0
             for leg in ticket.get('legs') or []:
                 chance *= float(leg.get('chance') or 0)
         row['ticket'] = {'id': ticket.get('id'), 'book': ticket.get('book'), 'odds': ticket.get('odds'),
-                         'chance': round(chance, 4), 'priceNeeded': round(pricing.break_even(ticket['odds']), 4),
-                         'edge': round(chance - pricing.break_even(ticket['odds']), 4),
+                         'selectionMethod': ticket.get('selectionMethod'),
+                         'chance': round(chance, 4) if chance is not None else None,
+                         'priceNeeded': round(pricing.break_even(ticket['odds']), 4),
+                         'edge': round(chance - pricing.break_even(ticket['odds']), 4) if chance is not None else None,
                          'legs': [{'id': leg.get('id'), 'gameId': leg.get('gameId'), 'chance': leg.get('chance'),
                                    'odds': leg.get('odds')} for leg in ticket.get('legs') or []]}
     with path.open('a', encoding='utf-8') as handle:
