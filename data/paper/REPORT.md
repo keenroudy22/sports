@@ -2,4 +2,4 @@
 
 Recorded before each game, graded after; nothing here is published. A -110 price needs 52.4%.
 
-- **NBA totals**: 85 games recorded, 48 paper plays graded. At the number recorded 27-21 (56.2%, +3.58u); at the opener 25-23; closing line value +1.23 points (90% +0.62 to +1.79).
+- **NBA totals**: 86 games recorded, 50 paper plays graded. At the number recorded 29-21 (58.0%, +5.40u); at the opener 27-23; closing line value +1.38 points (90% +0.82 to +1.92).
