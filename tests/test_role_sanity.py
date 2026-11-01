@@ -114,7 +114,7 @@ class RoleSanityTests(unittest.TestCase):
         now = datetime(2026, 10, 7, 18, tzinfo=timezone.utc)
         game = {'id': 'CFB-test', 'league': 'CFB', 'season': 2026,
                 'kickoff': '2026-10-08T23:00:00Z', 'home': {'id': '2229'}, 'away': {'id': '166'}}
-        logs = features.player_logs(features.load())['4870883']
+        logs = features.player_logs(features.load(), before=now.isoformat())['4870883']
         snap = {'publishedAt': '2026-10-07T17:00:00Z', 'players': {
             'home': {'players': [{'id': '4870883', 'att': [23.7, 6.7, 40.7]}]},
             'away': {'players': []}}}
@@ -160,7 +160,7 @@ class RoleSanityTests(unittest.TestCase):
                 'players': {'home': {'players': [{'id': '4870883', 'att': [23.7, 6.7, 40.7]}]},
                             'away': {'players': []}}}
         ctx = gates.Context(now=now, games={game['id']: game}, snapshots={game['id']: [snap]},
-                            player_logs={'4870883': features.player_logs(features.load())['4870883']})
+                            player_logs={'4870883': features.player_logs(features.load(), before=now.isoformat())['4870883']})
         candidate = {'athleteId': '4870883', 'market': 'passYds', 'gameIds': [game['id']],
                      'line': 261.5, 'odds': -114, 'direction': 'under'}
         result = gates.player_projection_sanity(candidate, ctx)
