@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-01T00:28:35Z",
+  "updatedAt": "2026-11-01T13:13:40Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 160,
+    "lines": 161,
     "current": 0,
-    "references": 0
+    "references": 1
   },
   "lines": [
     {
@@ -9081,6 +9081,69 @@
           "source": "https://www.espn.com/college-football/game/_/gameId/401858501",
           "marketWindow": "Full game",
           "cutoff": "UNDER 4.5 at +118 or better; off the card at 4 or lower, or at +103 or worse at 4.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401873027",
+      "player": "DK Metcalf",
+      "athleteId": null,
+      "position": "WR",
+      "reportId": "NFL-2026-W8-metcalf-over-4-5-rec-fd",
+      "identityVerified": false,
+      "direction": "OVER",
+      "line": 4.5,
+      "market": "receptions",
+      "book": "FanDuel",
+      "odds": 124,
+      "observedAt": "2026-11-01T00:28:32Z",
+      "expiresAt": "2026-11-01T12:30:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401873027",
+      "marketWindow": "Full game",
+      "cutoff": "OVER 4.5 at +124 or better; off the card at 5+, or at +109 or worse at 4.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-11-01T00:28:32Z",
+      "kickoff": "2026-11-01T18:00Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "DK Metcalf OVER 4.5 receptions",
+      "id": "line-78e9f5726f55b758f6cd",
+      "observations": [
+        {
+          "line": 4.5,
+          "odds": 124,
+          "observedAt": "2026-11-01T00:28:32Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873027",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401873027",
+          "player": "DK Metcalf",
+          "athleteId": null,
+          "position": "WR",
+          "reportId": "NFL-2026-W8-metcalf-over-4-5-rec-fd",
+          "identityVerified": false,
+          "direction": "OVER",
+          "line": 4.5,
+          "market": "receptions",
+          "book": "FanDuel",
+          "odds": 124,
+          "observedAt": "2026-11-01T00:28:32Z",
+          "expiresAt": "2026-11-01T12:30:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873027",
+          "marketWindow": "Full game",
+          "cutoff": "OVER 4.5 at +124 or better; off the card at 5+, or at +109 or worse at 4.5.",
           "quoteType": "source reference"
         }
       ]
