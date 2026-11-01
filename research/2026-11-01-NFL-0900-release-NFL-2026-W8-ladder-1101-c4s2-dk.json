@@ -1,0 +1,200 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-01T14:00:43Z",
+  "summary": "Released 1: Ladder step 2: 2 legs at DraftKings -189 at DraftKings.",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "NFL-2026-W8-ladder-1101-c4s2-dk",
+      "title": "Ladder step 2: 2 legs at DraftKings",
+      "status": "active",
+      "favorite": false,
+      "parlayType": "ladder",
+      "riskUnits": 0.25,
+      "ladder": {
+        "run": 4,
+        "step": 2,
+        "stake": 62,
+        "payout": 95,
+        "banked": 15,
+        "bankThisWin": 19,
+        "bankedAfter": 34,
+        "nextStake": 76,
+        "totalAfter": 110,
+        "bankPercent": 20,
+        "ridePercent": 80,
+        "start": 50,
+        "goal": 1000
+      },
+      "legs": [
+        {
+          "id": "NFL-401873026-alt-home",
+          "title": "Buffalo +6.5",
+          "gameId": "NFL-401873026",
+          "marketType": "spread",
+          "direction": "home",
+          "line": 6.5,
+          "mainLine": -3.5,
+          "book": "DraftKings",
+          "odds": -467,
+          "source": "https://sportsbook.draftkings.com/event/bal-ravens-%40-buf-bills/34118214",
+          "observedAt": "2026-11-01T13:50:06Z",
+          "kickoff": "2026-11-01T18:00Z",
+          "marketWindow": "Full game",
+          "alternate": true,
+          "researchCase": {
+            "why": "Buffalo is a home favorite at -3.5; +6.5 buys ten points of cushion and covers a six-point loss. Ed Oliver is expected back with no injury designation.",
+            "risk": "Lamar Jackson is expected to return from his ankle injury. Buffalo has multiple questionable starters, including Spencer Brown, DJ Moore and Dalton Kincaid. Baltimore can win this outright.",
+            "availability": "Official Friday report checked today: Oliver has no designation; Moore, Kincaid, Brown, Alford, Gaines and Parker are questionable. Final inactives are not yet available.",
+            "sources": [
+              {
+                "url": "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-ravens-week-8",
+                "fact": "Bills expect Ed Oliver back without a game designation; six players remain questionable after the Parker update. Baltimore expects Lamar Jackson to return.",
+                "checkedAt": "2026-11-01T13:50:06Z"
+              }
+            ]
+          }
+        },
+        {
+          "id": "NFL-401873027-alt-home",
+          "title": "Pittsburgh +4.5",
+          "gameId": "NFL-401873027",
+          "marketType": "spread",
+          "direction": "home",
+          "line": 4.5,
+          "mainLine": -3.5,
+          "book": "DraftKings",
+          "odds": -378,
+          "source": "https://sportsbook.draftkings.com/event/cle-browns-%40-pit-steelers/34118052",
+          "observedAt": "2026-11-01T13:50:06Z",
+          "kickoff": "2026-11-01T18:00Z",
+          "marketWindow": "Full game",
+          "alternate": true,
+          "researchCase": {
+            "why": "Pittsburgh is favored by 3.5 at home; taking +4.5 adds eight points and covers a field-goal loss in a game priced at 39.5 total. I prefer that cushion to asking Pittsburgh to cover.",
+            "risk": "A divisional matchup can stay tight or swing on turnovers. Pittsburgh has defensive-line players on injured reserve and two defensive backs ruled out; the cushion is not protection against a poor defensive game.",
+            "availability": "Official Steelers Friday report checked today: Echols and Slaughter out, Skowronek questionable; Joseph-Day and Harmon on IR. Elliott returned last week but a full workload is not assumed. Final inactives pending.",
+            "sources": [
+              {
+                "url": "https://www.steelers.com/news/week-8-injury-report-browns-x7058",
+                "fact": "Echols and Slaughter ruled out; Skowronek questionable. Joseph-Day and Harmon are on injured reserve; Elliott returned for 19 defensive snaps last week.",
+                "checkedAt": "2026-11-01T13:50:06Z"
+              }
+            ]
+          }
+        }
+      ],
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "NFL-401873026",
+        "NFL-401873027"
+      ],
+      "book": "DraftKings",
+      "odds": -189,
+      "quotedAt": "2026-11-01T13:50:06Z",
+      "priceEstimated": false,
+      "expiresAt": "2026-11-01T15:50:06Z",
+      "quoteType": "sportsbook",
+      "confidence": 1,
+      "edge": "Desk-researched alternate ticket. No validated win probability or positive-EV claim.",
+      "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://sportsbook.draftkings.com/event/bal-ravens-%40-buf-bills/34118214",
+        "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-ravens-week-8",
+        "https://www.espn.com/nfl/game/_/gameId/401873026",
+        "https://www.espn.com/nfl/game/_/gameId/401873027",
+        "https://www.steelers.com/news/week-8-injury-report-browns-x7058"
+      ],
+      "selectionMethod": "sourced-climb-review-v1",
+      "researchReview": {
+        "method": "sourced-climb-review-v1",
+        "reviewer": "kookn-desk",
+        "reviewedAt": "2026-11-01T13:50:06Z",
+        "ticketVerified": true,
+        "ticketSource": "https://sportsbook.draftkings.com/event/bal-ravens-%40-buf-bills/34118214",
+        "receipt": "Actual two-pick DraftKings slip visibly checked: PIT Steelers +4.5 -378, BUF Bills +6.5 -467; 2 Pick Parlay -189. No stake entered or wager placed."
+      },
+      "why": "Buffalo is a home favorite at -3.5; +6.5 buys ten points of cushion and covers a six-point loss. Ed Oliver is expected back with no injury designation. Pittsburgh is favored by 3.5 at home; taking +4.5 adds eight points and covers a field-goal loss in a game priced at 39.5 total. I prefer that cushion to asking Pittsburgh to cover.",
+      "risks": [
+        "Lamar Jackson is expected to return from his ankle injury. Buffalo has multiple questionable starters, including Spencer Brown, DJ Moore and Dalton Kincaid. Baltimore can win this outright.",
+        "A divisional matchup can stay tight or swing on turnovers. Pittsburgh has defensive-line players on injured reserve and two defensive backs ruled out; the cushion is not protection against a poor defensive game."
+      ],
+      "risk": "Lamar Jackson is expected to return from his ankle injury. Buffalo has multiple questionable starters, including Spencer Brown, DJ Moore and Dalton Kincaid. Baltimore can win this outright. A divisional matchup can stay tight or swing on turnovers. Pittsburgh has defensive-line players on injured reserve and two defensive backs ruled out; the cushion is not protection against a poor defensive game. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+      "jurisdictionVerified": false,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Buffalo is a home favorite at -3.5; +6.5 buys ten points of cushion and covers a six-point loss. Ed Oliver is expected back with no injury designation. Pittsburgh is favored by 3.5 at home; taking +4.5 adds eight points and covers a field-goal loss in a game priced at 39.5 total. I prefer that cushion to asking Pittsburgh to cover.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-11-01T13:52:25Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Lamar Jackson is expected to return from his ankle injury. Buffalo has multiple questionable starters, including Spencer Brown, DJ Moore and Dalton Kincaid. Baltimore can win this outright. A divisional matchup can stay tight or swing on turnovers. Pittsburgh has defensive-line players on injured reserve and two defensive backs ruled out; the cushion is not protection against a poor defensive game. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-11-01T13:52:25Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "NFL-401873026",
+              "title": "Buffalo +6.5",
+              "line": 6.5,
+              "price": -467,
+              "book": "DraftKings"
+            },
+            {
+              "gameId": "NFL-401873027",
+              "title": "Pittsburgh +4.5",
+              "line": 4.5,
+              "price": -378,
+              "book": "DraftKings"
+            }
+          ],
+          "best": {
+            "book": "DraftKings",
+            "price": -189,
+            "time": "2026-11-01T13:50:06Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://sportsbook.draftkings.com/event/bal-ravens-%40-buf-bills/34118214",
+            "time": "2026-11-01T13:52:25Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-ravens-week-8",
+            "time": "2026-11-01T13:52:25Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873026",
+            "time": "2026-11-01T13:52:25Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873027",
+            "time": "2026-11-01T13:52:25Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.steelers.com/news/week-8-injury-report-browns-x7058",
+            "time": "2026-11-01T13:52:25Z"
+          }
+        ],
+        "partial": true
+      },
+      "publishedAt": "2026-11-01T14:00:43Z"
+    }
+  ]
+}
