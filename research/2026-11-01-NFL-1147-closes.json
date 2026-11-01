@@ -1,0 +1,292 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-01T16:47:33Z",
+  "targetWeek": 8,
+  "summary": "Research update for Nov 1: Nothing to settle. Closed 1: DK Metcalf OVER 4.5 receptions. Nothing published. Screened and passed on 355: Blake Corum OVER 1.5 receptions (daily_exposure); Brian Thomas Jr. OVER 1.5 receptions (daily_exposure); Daniel Bellinger OVER 1.5 receptions (daily_exposure); Dawson Knox OVER 1.5 receptions (daily_exposure); Mark Andrews UNDER 2.5 receptions (one_book); Kenneth Walker III OVER 3.5 receptions (one_book); Javonte Williams OVER 2.5 receptions (one_book); Emmett Johnson OVER 1.5 receptions (one_book); and 347 more. odds_api.py: CFB: skipped (6 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "expired",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4047650",
+      "market": "rec",
+      "line": 4.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873027"
+      ],
+      "book": "FanDuel",
+      "odds": 124,
+      "projection": 5.0,
+      "edge": "Price-checked chance 50.7% against the exact two-sided price; 44.6% needed at +124: +6.1 percentage points.",
+      "cutoff": "OVER 4.5 at +124 or better; off the card at 5+, or at +109 or worse at 4.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-31T19:24:14Z",
+      "quotedAt": "2026-11-01T00:28:32Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 8:28 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-01T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.577,
+        "chance": 0.507,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.446,
+        "edgePoints": 6.1,
+        "evPerUnit": 0.136,
+        "snapshotAt": "2026-10-31T19:24:14Z",
+        "probabilitySpec": "0a4cd5ffad31ea668705cb7aad117caf17ed66c53c1318d321cd3b889b940af8",
+        "evaluatedAt": "2026-11-01T11:48:51Z",
+        "fairChance": 0.417,
+        "anchoredChance": 0.507,
+        "gap": 9.0,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Cleveland Browns at Pittsburgh Steelers",
+      "title": "DK Metcalf OVER 4.5 receptions",
+      "id": "NFL-2026-W8-metcalf-over-4-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873027",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://www.clevelandbrowns.com/news/how-will-the-browns-contain-wr-dk-metcalf-burning-questions",
+        "https://www.steelers.com/news/week-8-injury-report-browns-x7058"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 2 of 10 over 4.5.",
+        "context": [
+          "Role: 1st of 4 PIT WRs by projected targets, 8.6 a game.",
+          "Defense: CLE allows 11 receptions a game to WRs, 17th-stingiest of 32 this season."
+        ],
+        "cautions": [
+          "Only 2 of the last 10 games cleared this side of the line; recent results oppose it.",
+          "Browns safety Grant Delpit said Cleveland needs to take DK Metcalf out of the game after failing to do so in their first meeting."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 5 against 4.5. The over reads 50.7% after adjustment from the raw 57.7%; 44.6% is needed at +124. Last 10 games: 2 of 10 over 4.5. Role: 1st of 4 PIT WRs by projected targets, 8.6 a game. Defense: CLE allows 11 receptions a game to WRs, 17th-stingiest of 32 this season.",
+      "risk": "Only 2 of the last 10 games cleared this side of the line; recent results oppose it. Browns safety Grant Delpit said Cleveland needs to take DK Metcalf out of the game after failing to do so in their first meeting. An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 4.5. I say 5.",
+            "numbers": {
+              "projection": 5.0,
+              "line": 4.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-31T19:24:14Z"
+          },
+          {
+            "text": "DK Metcalf leads Pittsburgh with 32 receptions for 374 receiving yards and one receiving touchdown this season.",
+            "numbers": {},
+            "source": "https://www.clevelandbrowns.com/news/how-will-the-browns-contain-wr-dk-metcalf-burning-questions",
+            "time": "2026-11-01T11:48:51Z"
+          },
+          {
+            "text": "DK Metcalf had five receptions for 115 receiving yards against Cleveland in Week 4.",
+            "numbers": {},
+            "source": "https://www.clevelandbrowns.com/news/how-will-the-browns-contain-wr-dk-metcalf-burning-questions",
+            "time": "2026-11-01T11:48:51Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "2 of his last 5 games finished over 4.5 receptions.",
+            "numbers": {
+              "values": [
+                3,
+                5,
+                3,
+                11,
+                2
+              ],
+              "hits": 2,
+              "games": 5,
+              "line": 4.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-25T13:30Z"
+          },
+          {
+            "text": "Browns safety Grant Delpit said Cleveland needs to take DK Metcalf out of the game after failing to do so in their first meeting.",
+            "numbers": {},
+            "source": "https://www.clevelandbrowns.com/news/how-will-the-browns-contain-wr-dk-metcalf-burning-questions",
+            "time": "2026-11-01T11:48:51Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Browns safety Grant Delpit said Cleveland needs to take DK Metcalf out of the game after failing to do so in their first meeting.",
+            "numbers": {},
+            "source": "https://www.clevelandbrowns.com/news/how-will-the-browns-contain-wr-dk-metcalf-burning-questions",
+            "time": "2026-11-01T11:48:51Z"
+          },
+          {
+            "text": "Browns safety Grant Delpit said Cleveland needs to take DK Metcalf out of the game after failing to do so in their first meeting.",
+            "numbers": {},
+            "source": "https://www.clevelandbrowns.com/news/how-will-the-browns-contain-wr-dk-metcalf-burning-questions",
+            "time": "2026-11-01T11:48:51Z"
+          },
+          {
+            "text": "Doneiko Slaughter (PIT) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4692628/doneiko-slaughter",
+            "time": "2026-10-31T01:44Z"
+          },
+          {
+            "text": "Brandin Echols (PIT) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4567979/brandin-echols",
+            "time": "2026-10-31T01:35Z"
+          },
+          {
+            "text": "Ben Skowronek (PIT) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4035656/ben-skowronek",
+            "time": "2026-10-30T21:33Z"
+          },
+          {
+            "text": "Daniel Thomas (CLE) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4035505/daniel-thomas",
+            "time": "2026-10-31T02:01Z"
+          },
+          {
+            "text": "Myles Harden (CLE) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4695783/myles-harden",
+            "time": "2026-10-30T23:33Z"
+          }
+        ],
+        "weather": {
+          "tempF": 67,
+          "windMph": 5,
+          "windDirection": "SE",
+          "precipProb": 0,
+          "periodStart": "2026-11-01T13:00:00-05:00",
+          "issuedAt": "2026-10-31T23:21:32+00:00",
+          "source": "https://api.weather.gov/gridpoints/PBZ/78,66/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 4.5,
+                "price": 111,
+                "time": "2026-11-01T00:28:32Z"
+              },
+              "now": {
+                "line": 4.5,
+                "price": 111,
+                "time": "2026-11-01T00:28:32Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 4.5,
+                "price": 124,
+                "time": "2026-11-01T00:28:32Z"
+              },
+              "now": {
+                "line": 4.5,
+                "price": 124,
+                "time": "2026-11-01T00:28:32Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 4.5,
+            "price": 124,
+            "time": "2026-11-01T00:28:32Z"
+          }
+        },
+        "ours": {
+          "projection": 5.0,
+          "line": 4.5,
+          "market": "rec",
+          "text": "Book says 4.5. I say 5.",
+          "snapshotAt": "2026-10-31T19:24:14Z"
+        },
+        "history": "Last 10 games: 2 of 10 over 4.5.",
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://www.clevelandbrowns.com/news/how-will-the-browns-contain-wr-dk-metcalf-burning-questions",
+            "time": "2026-11-01T11:48:51Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4692628/doneiko-slaughter",
+            "time": "2026-10-31T01:44Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4567979/brandin-echols",
+            "time": "2026-10-31T01:35Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4035656/ben-skowronek",
+            "time": "2026-10-30T21:33Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4035505/daniel-thomas",
+            "time": "2026-10-31T02:01Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4695783/myles-harden",
+            "time": "2026-10-30T23:33Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/PBZ/78,66/forecast/hourly",
+            "time": "2026-10-31T23:21:32+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873027",
+            "time": "2026-11-01T11:48:51Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-01T11:48:51Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.steelers.com/news/week-8-injury-report-browns-x7058",
+            "time": "2026-11-01T11:48:51Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-01T12:02:19Z",
+      "entryNote": "Off the card: price moved 16 cents against, from +124 to +108 at FanDuel. Published cutoff: OVER 4.5 at +124 or better; off the card at 5+, or at +109 or worse at 4.5. Stays in the record at 4.5 and +124 and is graded as posted."
+    }
+  ]
+}
