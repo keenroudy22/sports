@@ -1,0 +1,321 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-01T21:43:34Z",
+  "targetWeek": 8,
+  "summary": "Research update for Nov 1: Settled 1: Tee Higgins OVER 5.5 receptions win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4239993",
+      "market": "rec",
+      "line": 5.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873031"
+      ],
+      "book": "BetMGM",
+      "odds": 130,
+      "projection": 6.6,
+      "edge": "Price-checked chance 51.2% against the exact two-sided price; 43.5% needed at +130: +7.8 percentage points.",
+      "cutoff": "OVER 5.5 at +130 or better; off the card at 6+, or at +115 or worse at 5.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-31T10:05:48Z",
+      "quotedAt": "2026-11-01T12:30:23Z",
+      "quoteType": "capture",
+      "quoteNote": "BetMGM's number and price from the 7:30 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-01T16:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.638,
+        "chance": 0.512,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.435,
+        "edgePoints": 7.8,
+        "evPerUnit": 0.179,
+        "snapshotAt": "2026-10-31T10:05:48Z",
+        "probabilitySpec": "0a4cd5ffad31ea668705cb7aad117caf17ed66c53c1318d321cd3b889b940af8",
+        "evaluatedAt": "2026-11-01T13:33:18Z",
+        "fairChance": 0.406,
+        "anchoredChance": 0.512,
+        "gap": 10.7,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Tennessee Titans at Cincinnati Bengals",
+      "title": "Tee Higgins OVER 5.5 receptions",
+      "id": "NFL-2026-W8-higgins-over-5-5-rec-mgm",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873031",
+        "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/events/9c5d8f57e0ba0fbd9ef436c1f0898f99/odds",
+        "https://www.tennesseetitans.com/news/six-things-to-watch-for-the-titans-in-sunday-s-game-at-the-bengals",
+        "https://www.bengals.com/news/game-preview-2026-week-8-bengals-titans",
+        "https://www.tennesseetitans.com/news/week-8-injury-report-titans-at-bengals"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 5 of 10 over 5.5.",
+        "context": [
+          "Role: 1st of 5 CIN WRs by projected targets, 10.1 a game.",
+          "Defense: TEN allows 14 receptions a game to WRs, 30th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 6.6 against 5.5. The over reads 51.2% after adjustment from the raw 63.8%; 43.5% is needed at +130. Last 10 games: 5 of 10 over 5.5. Role: 1st of 5 CIN WRs by projected targets, 10.1 a game. Defense: TEN allows 14 receptions a game to WRs, 30th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 5.5. I say 6.6.",
+            "numbers": {
+              "projection": 6.6,
+              "line": 5.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-31T10:05:48Z"
+          },
+          {
+            "text": "3 of his last 5 games finished over 5.5 receptions.",
+            "numbers": {
+              "values": [
+                5,
+                6,
+                11,
+                2,
+                6
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 5.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-25T17:00Z"
+          },
+          {
+            "text": "Tee Higgins leads the Bengals with 33 catches and 571 receiving yards this season.",
+            "numbers": {},
+            "source": "https://www.tennesseetitans.com/news/six-things-to-watch-for-the-titans-in-sunday-s-game-at-the-bengals",
+            "time": "2026-11-01T13:33:18Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-01T13:33:18Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Joe Giles-Harris (CIN) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3917797/joe-giles-harris",
+            "time": "2026-10-28T20:20Z"
+          },
+          {
+            "text": "Kyle Dugger (CIN) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger",
+            "time": "2026-10-26T21:53Z"
+          },
+          {
+            "text": "Carnell Tate (TEN) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate",
+            "time": "2026-10-31T15:10Z"
+          },
+          {
+            "text": "Tommy Townsend (TEN) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3915398/tommy-townsend",
+            "time": "2026-10-31T02:12Z"
+          },
+          {
+            "text": "John Franklin-Myers (TEN) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3120464/john-franklin-myers",
+            "time": "2026-10-31T00:01Z"
+          },
+          {
+            "text": "Calvin Ridley (TEN) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3925357/calvin-ridley",
+            "time": "2026-10-30T23:34Z"
+          },
+          {
+            "text": "Tyjae Spears (TEN) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears",
+            "time": "2026-10-30T20:15Z"
+          },
+          {
+            "text": "Jaylon Jones (TEN) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685145/jaylon-jones",
+            "time": "2026-10-30T19:50Z"
+          }
+        ],
+        "weather": {
+          "tempF": 70,
+          "windMph": 3,
+          "windDirection": "S",
+          "precipProb": 2,
+          "periodStart": "2026-11-01T13:00:00-05:00",
+          "issuedAt": "2026-10-31T18:05:41+00:00",
+          "source": "https://api.weather.gov/gridpoints/ILN/35,39/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 4.5,
+                "price": -143,
+                "time": "2026-11-01T00:28:32Z"
+              },
+              "now": {
+                "line": 4.5,
+                "price": -152,
+                "time": "2026-11-01T12:30:23Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 5.5,
+                "price": 128,
+                "time": "2026-11-01T00:28:32Z"
+              },
+              "now": {
+                "line": 5.5,
+                "price": 128,
+                "time": "2026-11-01T12:30:23Z"
+              }
+            }
+          },
+          "best": {
+            "book": "BetMGM",
+            "line": 5.5,
+            "price": 130,
+            "time": "2026-11-01T12:30:23Z"
+          }
+        },
+        "ours": {
+          "projection": 6.6,
+          "line": 5.5,
+          "market": "rec",
+          "text": "Book says 5.5. I say 6.6.",
+          "snapshotAt": "2026-10-31T10:05:48Z"
+        },
+        "history": "Last 10 games: 5 of 10 over 5.5.",
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://www.tennesseetitans.com/news/six-things-to-watch-for-the-titans-in-sunday-s-game-at-the-bengals",
+            "time": "2026-11-01T13:33:18Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://www.bengals.com/news/game-preview-2026-week-8-bengals-titans",
+            "time": "2026-11-01T13:33:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3917797/joe-giles-harris",
+            "time": "2026-10-28T20:20Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger",
+            "time": "2026-10-26T21:53Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate",
+            "time": "2026-10-31T15:10Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3915398/tommy-townsend",
+            "time": "2026-10-31T02:12Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3120464/john-franklin-myers",
+            "time": "2026-10-31T00:01Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3925357/calvin-ridley",
+            "time": "2026-10-30T23:34Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears",
+            "time": "2026-10-30T20:15Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685145/jaylon-jones",
+            "time": "2026-10-30T19:50Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/ILN/35,39/forecast/hourly",
+            "time": "2026-10-31T18:05:41+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873031",
+            "time": "2026-11-01T13:33:18Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/events/9c5d8f57e0ba0fbd9ef436c1f0898f99/odds",
+            "time": "2026-11-01T13:33:18Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.tennesseetitans.com/news/week-8-injury-report-titans-at-bengals",
+            "time": "2026-11-01T13:33:18Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-01T13:43:26Z",
+      "result": "win",
+      "actual": "Tee Higgins: 10 receptions",
+      "settledAt": "2026-11-01T21:43:34Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873031",
+      "actualValue": 10,
+      "units": 1.3
+    }
+  ]
+}
