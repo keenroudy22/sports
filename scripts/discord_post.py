@@ -197,7 +197,7 @@ def queue_results(log_book, first, latest, games, now):
             continue
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
-        if result not in ('win', 'loss', 'push', 'void') or not pick.get('settledAt') or (mirror.get('result') and not (pick.get('ladder') and mirror['result'].get('state') == 'pending')):
+        if result not in ('win', 'loss', 'push', 'void') or not pick.get('settledAt') or mirror.get('result'):
             continue
         try:
             settled_at = gates.when(pick['settledAt'])

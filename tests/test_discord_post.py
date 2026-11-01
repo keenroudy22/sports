@@ -190,9 +190,8 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(result['attempts'], 95)
         self.assertNotIn('$', sent[0])
 
-    def test_climb_pending_dollar_result_is_rebuilt_and_sent_once(self):
-        entry = {'id': 'climb', 'kind': 'buffer:play', 'discord': {'state': 'sent',
-                 'result': {'state': 'pending', 'text': 'FINAL $50 → $77'}}}
+    def test_new_climb_result_omits_dollars_and_sends_once(self):
+        entry = {'id': 'climb', 'kind': 'buffer:play', 'discord': {'state': 'sent'}}
         first = {'climb': {'id': 'climb', 'ladder': {'step': 1, 'stake': 50, 'payout': 77}}}
         latest = {'climb': {'result': 'win', 'settledAt': '2026-09-28T15:50:00Z',
                             'actual': 'All 2 legs won'}}
