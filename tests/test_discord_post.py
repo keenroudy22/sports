@@ -177,6 +177,19 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual([body['content'] for body in sent], ['Pulled after confirmed news\n\n21+ only'])
         self.assertEqual(entry['discord']['followup']['state'], 'sent')
 
+    def test_already_pending_climb_repairs_after_queue_window(self):
+        old = '✅ FINAL · HIT: 80/20 Climb step 1 ($50 → $77)\nall 2 legs won'
+        result = {'state': 'pending', 'text': old, 'attempts': 95}
+        entry = {'id': 'climb', 'kind': 'buffer:play',
+                 'discord': {'state': 'sent', 'result': result}}
+        sent = []
+        send = lambda url, body, headers: (sent.append(body['content']) or (204, b''))
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', send=send, log=lambda *_: None)
+        self.assertEqual(result['state'], 'sent')
+        self.assertEqual(result['legacyText'], old)
+        self.assertEqual(result['attempts'], 95)
+        self.assertNotIn('$', sent[0])
+
     def test_climb_pending_dollar_result_is_rebuilt_and_sent_once(self):
         entry = {'id': 'climb', 'kind': 'buffer:play', 'discord': {'state': 'sent',
                  'result': {'state': 'pending', 'text': 'FINAL $50 → $77'}}}

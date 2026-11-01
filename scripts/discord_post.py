@@ -5,6 +5,7 @@ downstream of Buffer and waits until X says the post was sent. The exact text an
 newly scheduled Buffer entry, then marked sent here so a later desk run cannot duplicate it.
 """
 import json
+import re
 import hashlib
 import os
 import mimetypes
@@ -388,7 +389,13 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         if not url:
             continue
         try:
-            send_message(url, result.get('text') or '', send=send)
+            text = result.get('text') or ''
+            # Repair the known legacy title even after new-result quiet/freshness windows.
+            safe = re.sub(r'(FINAL · (?:HIT|MISS|PUSH|VOID): 80/20 Climb step \d+) \(\$[\d,]+(?:\.\d+)? → \$[\d,]+(?:\.\d+)?\)', r'\1', text)
+            if safe != text:
+                result.setdefault('legacyText', text)
+                result['text'] = safe
+            send_message(url, safe, send=send)
         except DiscordError as error:
             message = str(error)
             changed = result.get('error') != message
