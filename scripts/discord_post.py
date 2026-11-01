@@ -196,7 +196,7 @@ def queue_results(log_book, first, latest, games, now):
             continue
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
-        if result not in ('win', 'loss', 'push', 'void') or not pick.get('settledAt') or mirror.get('result'):
+        if result not in ('win', 'loss', 'push', 'void') or not pick.get('settledAt') or (mirror.get('result') and not (pick.get('ladder') and mirror['result'].get('state') == 'pending')):
             continue
         try:
             settled_at = gates.when(pick['settledAt'])
@@ -208,7 +208,8 @@ def queue_results(log_book, first, latest, games, now):
         mark = '😩' if overtime else {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}[result]
         word = 'OT BAD BEAT' if overtime else {'win': 'HIT', 'loss': 'MISS', 'push': 'PUSH', 'void': 'VOID'}[result]
         detail = overtime or result_display.detail(pick) or result_display.clean_actual(pick)
-        title = receipts.label(pick, games)
+        title = (f"80/20 Climb step {(pick.get('ladder') or {}).get('step', 1)}"
+                 if pick.get('ladder') else receipts.label(pick, games))
         text = f'{mark} FINAL · {word}: {title}' + (f'\n{detail}' if detail else '')
         mirror['result'] = {'state': 'pending', 'text': text, 'settledAt': pick['settledAt']}
         entry['discord'] = mirror

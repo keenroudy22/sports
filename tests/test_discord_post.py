@@ -177,6 +177,23 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual([body['content'] for body in sent], ['Pulled after confirmed news\n\n21+ only'])
         self.assertEqual(entry['discord']['followup']['state'], 'sent')
 
+    def test_climb_pending_dollar_result_is_rebuilt_and_sent_once(self):
+        entry = {'id': 'climb', 'kind': 'buffer:play', 'discord': {'state': 'sent',
+                 'result': {'state': 'pending', 'text': 'FINAL $50 → $77'}}}
+        first = {'climb': {'id': 'climb', 'ladder': {'step': 1, 'stake': 50, 'payout': 77}}}
+        latest = {'climb': {'result': 'win', 'settledAt': '2026-09-28T15:50:00Z',
+                            'actual': 'All 2 legs won'}}
+        discord_post.queue_results({'posts': [entry]}, first, latest, {}, NOW)
+        self.assertNotIn('$', entry['discord']['result']['text'])
+        self.assertIn('All 2 legs won', entry['discord']['result']['text'])
+        sent = []
+        send = lambda url, body, headers: (sent.append(body['content']) or (204, b''))
+        for _ in range(2):
+            discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', send=send, log=lambda *_: None)
+        self.assertEqual(len(sent), 1)
+        self.assertEqual(entry['discord']['result']['state'], 'sent')
+        self.assertEqual(discord_post.queue_results({'posts': [entry]}, first, latest, {}, NOW), 0)
+
     def test_settled_official_plays_get_one_factual_result_update(self):
         entry = {'id': 'NFL-ty', 'kind': 'buffer:play', 'discord': {'state': 'sent', 'text': 'The play'}}
         first = {'NFL-ty': {'id': 'NFL-ty', 'title': 'Ty Johnson OVER 13.5 receiving yards',
