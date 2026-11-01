@@ -8547,11 +8547,17 @@
    "card": true,
    "cardKey": "sheet-nfl-2026-11-01",
    "webDelivery": {
-    "state": "reserved",
+    "state": "sent",
     "reservedAt": "2026-11-01T12:12:00Z",
     "image": "/Users/keen/Projects/sports-dev/work/sheet-nfl-2026-11-01.png",
-    "evidence": "Owner requests early projection sheet; Free Buffer UI queue0 and Sent checked; official renderer and exact stored DK prices reviewed"
-   }
+    "evidence": "Buffer Sent UI",
+    "verifiedAt": "2026-11-01T12:15:10Z"
+   },
+   "sentAt": "2026-11-01T12:13:00Z",
+   "link": "https://twitter.com/keenkooks/status/2116866163472834931",
+   "tweetId": "2116866163472834931",
+   "sentAtPrecision": "minute",
+   "artSha256": "99238b679062c4f1d3b80a4d4357994a144f250e57edabdde62900803e7b0747"
   }
  ]
 }
