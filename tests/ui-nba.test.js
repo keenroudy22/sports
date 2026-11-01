@@ -1,7 +1,7 @@
 'use strict';
 const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
 const C=require('../site/core.js'),L=require('../site/live.js'),P=require('../site/personal.js');
-function load(){const s={module:{exports:{}},exports:{},KRCore:C,KRLive:L,KRPersonal:P,document:{querySelector:()=>null},localStorage:{getItem:()=>null,setItem:()=>{}},console,URL,URLSearchParams,Intl,Date,Math,Map,Set,Promise,AbortController,TextEncoder,TextDecoder,setTimeout,clearTimeout,setInterval,clearInterval};s.window=s;s.self=s;s.globalThis=s;vm.runInNewContext(fs.readFileSync('site/app.js','utf8'),s);vm.runInNewContext(fs.readFileSync('site/app-games.js','utf8'),s);return s;}
+function load(Clock=Date){const s={module:{exports:{}},exports:{},KRCore:C,KRLive:L,KRPersonal:P,document:{querySelector:()=>null},localStorage:{getItem:()=>null,setItem:()=>{}},console,URL,URLSearchParams,Intl,Date:Clock,Math,Map,Set,Promise,AbortController,TextEncoder,TextDecoder,setTimeout,clearTimeout,setInterval,clearInterval};s.window=s;s.self=s;s.globalThis=s;vm.runInNewContext(fs.readFileSync('site/app.js','utf8'),s);vm.runInNewContext(fs.readFileSync('site/app-games.js','utf8'),s);return s;}
 test('NBA games do not fetch player details; player views retain every row and handle detail failure',async()=>{
  const s=load(),api=s.module.exports,seen=[],stamp=new Date().toISOString(),kickoff=new Date(Date.now()+3600000).toISOString();
  const base={games:[],scheduleFresh:true,playerPropsFile:'nba-props.json',playerProps:{availabilityAt:stamp}};
@@ -72,7 +72,10 @@ test('embedded NBA research honors mode, type, query and stale-price boundaries'
  data.playerProps.rows=[{...row,sourceAt:new Date(Date.now()-18000000).toISOString()}];html=await views.nbaToday({data,research:true,embedded:true,mode:'players'});assert.doesNotMatch(html,/NBA Player/);assert.match(html,/Stale prices are hidden/);
 });
 test('NBA Today and All-sports summary use football projection cards and separate upcoming dates',async()=>{
- const s=load(),api=s.module.exports,now=new Date(),today=now.toISOString(),tomorrow=new Date(+now+86400000).toISOString();
+ // The fall-back Eastern day is 25 hours; 24 hours later can still be today.
+ const at='2026-11-01T04:45:00Z';
+ class Clock extends Date { constructor(...args){super(...(args.length?args:[at]));} static now(){return Date.parse(at);} }
+ const s=load(Clock),api=s.module.exports,today=at,tomorrow='2026-11-02T05:45:00Z';
  const game=(id,kickoff,away,home)=>({id,kickoff,status:'scheduled',teams:{away:{id:'1',name:away,abbreviation:'AWY',logo:'https://a.espncdn.com/a.png'},home:{id:'2',name:home,abbreviation:'HOM'}},projection:{away:110,home:114,total:224,sparse:true}});
  const data={games:[game('NBA-today',today,'Boston Celtics','Detroit Pistons'),game('NBA-tomorrow',tomorrow,'Tomorrow Away','Tomorrow Home')],scheduleFresh:true,readiness:{readyForLiveTrial:true},trial:{note:'NBA picks is open.'}};
  const ctx=api.gamesContext({get:async()=>data});ctx.state.league='NBA';const views=s.KRGames(ctx);views.gamesLive=async()=>'';
