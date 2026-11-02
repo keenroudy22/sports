@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02T09:45:06Z",
+  "updatedAt": "2026-11-02T13:01:03Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -700,9 +700,9 @@
               "id": "4034953",
               "name": "C.J. Gardner-Johnson",
               "position": "S",
-              "status": "Suspension",
+              "status": "Active",
               "injury": "Suspension",
-              "reportedAt": "2026-11-02T09:00Z",
+              "reportedAt": "2026-11-02T12:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "8",
-          "name": "Jacob Saylors",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-11-01T20:33:37Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4383429/jacob-saylors"
-        },
-        {
-          "teamId": "8",
           "name": "Brian Branch",
           "from": "Active",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-11-02T09:45:06Z",
           "source": "https://www.espn.com/nfl/player/_/id/3127586/jeremy-mcnichols"
+        },
+        {
+          "teamId": "2",
+          "name": "C.J. Gardner-Johnson",
+          "from": "Suspension",
+          "to": "Active",
+          "observedAt": "2026-11-02T13:01:03Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-02T09:45:06Z",
-      "lastAttemptAt": "2026-11-02T09:45:06Z",
+      "checkedAt": "2026-11-02T13:01:03Z",
+      "lastAttemptAt": "2026-11-02T13:01:03Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-02T09:45:06Z",
-      "lastAttemptAt": "2026-11-02T09:45:06Z",
+      "checkedAt": "2026-11-02T13:01:03Z",
+      "lastAttemptAt": "2026-11-02T13:01:03Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
