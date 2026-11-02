@@ -676,7 +676,9 @@ def now_line(pick, quote):
     return f'Now {shown} ({int(odds):+d}, {book})'
 
 
-def guard(text, pick, reason=None, now_quote=None):
+def guard(text, pick, reason=None, now_quote=None, *, now=None):
+    # Prospective release clock is validation context, never a public timestamp.
+    units_active = social_units.active(pick) or (now is not None and now >= social_units.EFFECTIVE)
     problems = x_style(text.replace(SITE, ''))
     # A formatter may omit an unsafe suffix from the final shape.  Refuse the
     # source title anyway so a malformed saved play cannot slip through merely
@@ -689,7 +691,7 @@ def guard(text, pick, reason=None, now_quote=None):
     if now_quote:
         extra.append({'now': list(now_quote)})  # the number available now comes from the latest capture
     extra.append({'stake': pick_card.stake(pick)})
-    if social_units.active(pick) and pick.get('ladder'):
+    if units_active and pick.get('ladder'):
         extra.append({'climbUnits': [social_units.climb(v) for k, v in pick['ladder'].items() if k in ('stake', 'payout', 'banked', 'bankThisWin', 'nextStake', 'start', 'goal') and isinstance(v, (int, float))]})
     if pick.get('ladder'):          # "$1,062" reads as 1 and 62: the rung's dollars as the post writes them
         extra.append({k: pick_card.dollars(v) for k, v in pick['ladder'].items() if isinstance(v, int)})
@@ -709,7 +711,7 @@ def guard(text, pick, reason=None, now_quote=None):
     final_length = tweet_length(x_ticket_copy(text, 'play', pick.get('id', ''), pick))
     if final_length > LIMIT:
         problems.append(f'{final_length} characters including ticket tag and age notice')
-    if social_units.active(pick):
+    if units_active:
         import social_style
         problems += social_style.privacy_issues(text)
     lane = pick.get('lane')

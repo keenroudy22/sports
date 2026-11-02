@@ -3580,7 +3580,7 @@ def release_private(now, log=log, only=None, review_only=False):
 
         from social_copy import x_ticket_copy, AGE_VERSION
         text = x_ticket_copy(str(row.get('caption') or '').strip(), 'play', key, pick)
-        if x_post.guard(text, pick, x_post.reason_in(text)):
+        if x_post.guard(text, pick, x_post.reason_in(text), now=now):
             release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason='caption guard')
             log(f'release: {key} held: caption guard failed')
             continue

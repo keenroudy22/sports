@@ -30,6 +30,18 @@ class SocialUnitsTests(unittest.TestCase):
         self.assertEqual(x_post.guard(text,pick),[])
         self.assertEqual(pick,before)
 
+    def test_private_fractional_climb_uses_release_clock_without_publication(self):
+        from datetime import datetime, timezone
+        pick=self.rung();pick.pop('publishedAt');pick['ladder']['stake']=62
+        before=copy.deepcopy(pick)
+        text="80/20 CLIMB · STEP 2\n2.48u (-160, FanDuel)\n\nBills +3.5\nRavens +7.5"
+        now=datetime(2026,11,2,tzinfo=timezone.utc)
+        self.assertEqual(x_post.guard(text,pick,now=now),[])
+        self.assertTrue(x_post.guard(text.replace('2.48u','2.49u'),pick,now=now))
+        self.assertTrue(x_post.guard(text+'\n$62',pick,now=now))
+        self.assertTrue(x_post.guard(text,pick))
+        self.assertEqual(pick,before)
+
     def test_results_convert_same_saved_amounts_without_rewriting_results(self):
         for result in ('win','loss','push','void'):
             pick=dict(self.rung(),result=result,settledAt='2026-10-28T02:00:00Z')
