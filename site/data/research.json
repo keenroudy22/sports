@@ -49086,5 +49086,366 @@
         "units": 1.3
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-11-02T13:38:23Z",
+    "summary": "Released 1: Jaxon Smith-Njigba OVER 7.5 receptions +106 at FanDuel.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "4430878",
+        "market": "rec",
+        "line": 7.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401873036"
+        ],
+        "book": "FanDuel",
+        "odds": 106,
+        "projection": 8.4,
+        "edge": "Price-checked chance 50.9% against the exact two-sided price; 48.5% needed at +106: +2.3 percentage points.",
+        "cutoff": "OVER 7.5 at +106 or better; off the card at 8+, or at -109 or worse at 7.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-01T00:22:15Z",
+        "quotedAt": "2026-11-02T13:30:48Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 8:30 AM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-02T16:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.595,
+          "chance": 0.509,
+          "calibrated": true,
+          "calibration": 0.09,
+          "calibrationN": 3361,
+          "push": 0.0,
+          "breakEven": 0.485,
+          "edgePoints": 2.3,
+          "evPerUnit": 0.048,
+          "snapshotAt": "2026-11-01T00:22:15Z",
+          "probabilitySpec": "0a4cd5ffad31ea668705cb7aad117caf17ed66c53c1318d321cd3b889b940af8",
+          "evaluatedAt": "2026-11-02T13:33:21Z",
+          "fairChance": 0.454,
+          "anchoredChance": 0.509,
+          "gap": 5.4,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Chicago Bears at Seattle Seahawks",
+        "title": "Jaxon Smith-Njigba OVER 7.5 receptions",
+        "id": "NFL-2026-W8-smith-njigba-over-7-5-rec-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873036",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.chicagobears.com/news/game-preview-bears-at-seahawks-2026-week-8",
+          "https://www.seahawks.com/news/week-8-injury-report-bears-at-seahawks",
+          "https://sports.mynorthwest.com/nfl/seattle-seahawks/stacy-rost-3-numbers-that-matter-seattle-seahawks-chicago-bears",
+          "https://www.chicagobears.com/news/injury-update-t-j-edwards-set-to-return-monday-night-in-seattle"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 6 of 10 over 7.5.",
+          "context": [
+            "Role: 1st of 3 SEA WRs by projected targets, 11.7 a game.",
+            "Defense: CHI allows 9.43 receptions a game to WRs, 5th-stingiest of 32 this season."
+          ],
+          "cautions": [
+            "The defense leans against this side (that's the whole position group, not just him)."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 8.4 against 7.5. The over reads 50.9% after adjustment from the raw 59.5%; 48.5% is needed at +106. Last 10 games: 6 of 10 over 7.5. Role: 1st of 3 SEA WRs by projected targets, 11.7 a game. Defense: CHI allows 9.43 receptions a game to WRs, 5th-stingiest of 32 this season.",
+        "risk": "The defense leans against this side (that's the whole position group, not just him). An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Over 7.5 in 6 of his last 10 games.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-02T13:33:21Z"
+            },
+            {
+              "text": "Book says 7.5. I say 8.4.",
+              "numbers": {
+                "projection": 8.4,
+                "line": 7.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-01T00:22:15Z"
+            },
+            {
+              "text": "3 of his last 5 games finished over 7.5 receptions.",
+              "numbers": {
+                "values": [
+                  10,
+                  5,
+                  5,
+                  12,
+                  9
+                ],
+                "hits": 3,
+                "games": 5,
+                "line": 7.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-26T00:20Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "The defense leans against this side (that's the whole position group, not just him). An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-02T13:33:21Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Charles Cross (SEA) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4426376/charles-cross",
+              "time": "2026-11-01T03:18Z"
+            },
+            {
+              "text": "Velus Jones Jr. (SEA) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4035693/velus-jones-jr",
+              "time": "2026-11-01T01:38Z"
+            },
+            {
+              "text": "Drew Lock (SEA) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3924327/drew-lock",
+              "time": "2026-11-01T01:35Z"
+            },
+            {
+              "text": "Uchenna Nwosu (SEA) is listed Doubtful.",
+              "numbers": {
+                "status": "Doubtful"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3120358/uchenna-nwosu",
+              "time": "2026-10-31T20:57Z"
+            },
+            {
+              "text": "Rashid Shaheed (SEA) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4032473/rashid-shaheed",
+              "time": "2026-10-31T20:53Z"
+            },
+            {
+              "text": "Brandon Pili (SEA) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4259651/brandon-pili",
+              "time": "2026-10-30T23:15Z"
+            },
+            {
+              "text": "Anthony Bradford (SEA) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4429211/anthony-bradford",
+              "time": "2026-10-29T23:22Z"
+            },
+            {
+              "text": "Patrick O'Connell (SEA) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4364623/patrick-oconnell",
+              "time": "2026-10-29T22:54Z"
+            },
+            {
+              "text": "Malik Muhammad II (CHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4870953/malik-muhammad-ii",
+              "time": "2026-11-01T02:54Z"
+            },
+            {
+              "text": "D'Marco Jackson (CHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241007/dmarco-jackson",
+              "time": "2026-10-31T23:08Z"
+            },
+            {
+              "text": "Kyle Monangai (CHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai",
+              "time": "2026-10-31T16:55Z"
+            }
+          ],
+          "weather": {
+            "tempF": 51,
+            "windMph": 0,
+            "windDirection": "",
+            "precipProb": 1,
+            "periodStart": "2026-11-02T17:00:00-08:00",
+            "issuedAt": "2026-11-02T07:20:45+00:00",
+            "source": "https://api.weather.gov/gridpoints/SEW/125,68/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 7.5,
+                  "price": 115,
+                  "time": "2026-11-01T19:01:40Z"
+                },
+                "now": {
+                  "line": 7.5,
+                  "price": -102,
+                  "time": "2026-11-02T13:30:48Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 7.5,
+                  "price": 104,
+                  "time": "2026-11-01T19:01:40Z"
+                },
+                "now": {
+                  "line": 7.5,
+                  "price": 106,
+                  "time": "2026-11-02T13:30:48Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 7.5,
+              "price": 106,
+              "time": "2026-11-02T13:30:48Z"
+            }
+          },
+          "ours": {
+            "projection": 8.4,
+            "line": 7.5,
+            "market": "rec",
+            "text": "Over 7.5 in 6 of his last 10 games.",
+            "snapshotAt": "2026-11-01T00:22:15Z"
+          },
+          "history": "Last 10 games: 6 of 10 over 7.5.",
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://sports.mynorthwest.com/nfl/seattle-seahawks/stacy-rost-3-numbers-that-matter-seattle-seahawks-chicago-bears",
+              "time": "2026-11-02T13:33:21Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4426376/charles-cross",
+              "time": "2026-11-01T03:18Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4035693/velus-jones-jr",
+              "time": "2026-11-01T01:38Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3924327/drew-lock",
+              "time": "2026-11-01T01:35Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3120358/uchenna-nwosu",
+              "time": "2026-10-31T20:57Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4032473/rashid-shaheed",
+              "time": "2026-10-31T20:53Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4259651/brandon-pili",
+              "time": "2026-10-30T23:15Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4429211/anthony-bradford",
+              "time": "2026-10-29T23:22Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4364623/patrick-oconnell",
+              "time": "2026-10-29T22:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4870953/malik-muhammad-ii",
+              "time": "2026-11-01T02:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241007/dmarco-jackson",
+              "time": "2026-10-31T23:08Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai",
+              "time": "2026-10-31T16:55Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/SEW/125,68/forecast/hourly",
+              "time": "2026-11-02T07:20:45+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873036",
+              "time": "2026-11-02T13:33:21Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-11-02T13:33:21Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.chicagobears.com/news/game-preview-bears-at-seahawks-2026-week-8",
+              "time": "2026-11-02T13:33:21Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.seahawks.com/news/week-8-injury-report-bears-at-seahawks",
+              "time": "2026-11-02T13:33:21Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.chicagobears.com/news/injury-update-t-j-edwards-set-to-return-monday-night-in-seattle",
+              "time": "2026-11-02T13:33:21Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-02T13:38:23Z"
+      }
+    ]
   }
 ]
