@@ -61,11 +61,11 @@
   };
   const gameTabs = tab => `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
   const teamSearch = () => `<div class="grow"><label class="sr" for="gq">Find a team</label><input id="gq" class="search" type="search" placeholder="Find a team" value="${esc(state.games.q || '')}" data-input="gq" autocomplete="off" maxlength="80"></div>`;
-  const projectionWindow = rows => {
+  const projectionWindow = (rows, newest = false) => {
     const q=String(state.games.q || '').trim().toLowerCase();
     const matches=rows.filter(g=>!q || ['home','away'].some(side=>Object.values(g.teams[side] || {}).some(v=>String(v).toLowerCase().includes(q))));
     const days=[...new Set(matches.map(g=>C.dayOf(g.kickoff)))].sort();
-    const day=state.games.upDay==='all' || days.includes(state.games.upDay) ? state.games.upDay : days[0];
+    const day=state.games.upDay==='all' || days.includes(state.games.upDay) ? state.games.upDay : newest ? days[days.length-1] : days[0];
     const labels=days.map(d=>[d,`${dayLabel(matches.find(g=>C.dayOf(g.kickoff)===d).kickoff)} · ${matches.filter(g=>C.dayOf(g.kickoff)===d).length}`]);
     return {rows:q || day==='all' ? matches : matches.filter(g=>C.dayOf(g.kickoff)===day),html:`<div class="toolbar">${days.length>1 ? `<div class="chip-scroll">${seg('gup',[...labels,['all',`All · ${matches.length}`]],day)}</div>`:''}${teamSearch()}</div>`};
   };
@@ -107,7 +107,7 @@
       let data;
       try { data=await get('app/nba.json'); }
       catch (_) { return `${head('NBA Games','NBA games & projections','Research, not best bets.')}${tabs}<p>NBA research could not be loaded. Please try again.</p>`; }
-      const window=projectionWindow((data.games || []).filter(g => tab === 'final' ? g.status === 'final' : g.status !== 'final' && Date.parse(g.kickoff) >= Date.now()));
+      const window=projectionWindow((data.games || []).filter(g => tab === 'final' ? g.status === 'final' : g.status !== 'final' && Date.parse(g.kickoff) >= Date.now()),tab==='final');
       const rows=window.rows;
       return `${head('NBA Games', tab === 'final' ? 'NBA finals' : 'NBA games & projections', 'Team projections are research; posted NBA plays keep their own record.')}${tabs}${window.html}${nbaProjectionContext(rows)}<div class="projs">${rows.map(nbaGameCard).join('')}</div>${rows.length ? '' : '<p class="small muted">No matching NBA games are stored.</p>'}<p><a href="#today?sport=NBA">NBA plays, player lines & trends ›</a></p>`;
     }
