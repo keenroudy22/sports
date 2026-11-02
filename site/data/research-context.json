@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02T20:28:17Z",
+  "updatedAt": "2026-11-02T21:00:02Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-11-02T20:04Z",
+              "reportedAt": "2026-11-02T20:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -2307,6 +2307,15 @@
           "name": "Detroit Lions",
           "players": [
             {
+              "id": "4569465",
+              "name": "Jack Campbell",
+              "position": "LB",
+              "status": "Doubtful",
+              "injury": "Neck",
+              "reportedAt": "2026-11-02T20:33Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4569465/jack-campbell"
+            },
+            {
               "id": "4602788",
               "name": "Jackson Meeks",
               "position": "WR",
@@ -2386,15 +2395,6 @@
               "injury": null,
               "reportedAt": "2026-11-02T01:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/3046779/jared-goff"
-            },
-            {
-              "id": "4569465",
-              "name": "Jack Campbell",
-              "position": "LB",
-              "status": "Doubtful",
-              "injury": "Neck",
-              "reportedAt": "2026-11-02T00:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4569465/jack-campbell"
             },
             {
               "id": "4374302",
@@ -6226,6 +6226,15 @@
               "source": "https://www.espn.com/nfl/player/_/id/4360438/brandon-aiyuk"
             },
             {
+              "id": "3047876",
+              "name": "KhaDarel Hodge",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-02T19:20Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3047876/khadarel-hodge"
+            },
+            {
               "id": "3916903",
               "name": "Dre Greenlaw",
               "position": "LB",
@@ -6431,15 +6440,6 @@
               "injury": null,
               "reportedAt": "2026-10-25T22:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/3040151/george-kittle"
-            },
-            {
-              "id": "3057524",
-              "name": "Siran Neal",
-              "position": "S",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-25T15:46Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3057524/siran-neal"
             }
           ]
         },
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "3127586",
+              "name": "Jeremy McNichols",
+              "position": "RB",
+              "status": "Doubtful",
+              "injury": "Foot",
+              "reportedAt": "2026-11-02T20:31Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3127586/jeremy-mcnichols"
+            },
+            {
               "id": "3925354",
               "name": "Daron Payne",
               "position": "DT",
@@ -7234,15 +7243,6 @@
               "injury": null,
               "reportedAt": "2026-11-02T04:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
-            },
-            {
-              "id": "3127586",
-              "name": "Jeremy McNichols",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Foot",
-              "reportedAt": "2026-11-02T03:42Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3127586/jeremy-mcnichols"
             },
             {
               "id": "3929865",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "12",
-          "name": "Jack Pyburn",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-11-02T20:28:17Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4837252/jack-pyburn"
-        },
         {
           "teamId": "12",
           "name": "Garrett Nussmeier",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-11-02T20:28:17Z",
           "source": "https://www.espn.com/nfl/player/_/id/4432722/athan-kaliakmanis"
+        },
+        {
+          "teamId": "28",
+          "name": "Jeremy McNichols",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-11-02T21:00:02Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3127586/jeremy-mcnichols"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-02T20:28:17Z",
-      "lastAttemptAt": "2026-11-02T20:28:17Z",
+      "checkedAt": "2026-11-02T21:00:02Z",
+      "lastAttemptAt": "2026-11-02T21:00:02Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-02T20:28:17Z",
-      "lastAttemptAt": "2026-11-02T20:28:17Z",
+      "checkedAt": "2026-11-02T21:00:02Z",
+      "lastAttemptAt": "2026-11-02T21:00:02Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
