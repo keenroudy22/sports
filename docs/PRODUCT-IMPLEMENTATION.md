@@ -1,3 +1,15 @@
+### November2 sport-page consistency — implementation awaiting release
+
+Shared Games navigation now applies to CBB and supported score-only sports.
+NBA/CBB use the same day/team controls; All sports includes supported CBB
+projection cards. Score-only Upcoming/Finals show their actual stored schedules
+and results with common date/search controls rather than a football placeholder.
+Other-sport Today headings identify the selected sport without implying a bet.
+CBB sheet links carry the source-generation version to refresh cached exports.
+Model/odds/record/publishing policies and all sport coverage boundaries unchanged.
+Focused tests cover all score-only leagues, NBA/CBB search/navigation, CBB in
+All sports and versioned sheet links. Full release and live checks pending.
+
 ### November2 CBB projection bars — verified live
 
 Release19bc57b81 / hosted41510504542SUCCESS. Normal and clean2079Python

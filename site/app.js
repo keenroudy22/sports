@@ -1207,7 +1207,7 @@
     const scores = await (await ensureGames()).gamesLive({ day: etDay() });
     const hasTrial = ((trials || {}).leagues || {})[lg], hasLab = ((lab || {}).leagues || {})[lg];
     const status = hasTrial ? 'in a paper trial, not official picks' : hasLab ? 'collecting data for a future model, not picks' : 'scores only for now: no picks or research yet';
-    return `<section class="kt-lede"><p class="date">${esc(C.dayLabel(todayISO()))}. ${esc(LEAGUE_NAME[lg])}.</p><h1>Nothing on the rail yet.</h1></section>
+    return `<section class="kt-lede"><p class="date">${esc(C.dayLabel(todayISO()))}. ${esc(LEAGUE_NAME[lg])}.</p><h1>${esc(LEAGUE_NAME[lg])} today</h1></section>
       ${emptyRail(`No best bets in this sport. ${esc(LEAGUE_NAME[lg])} is ${esc(status)}. <a href="#record/trials">All sports' status ›</a>`)}
       <div class="kt-page-sec">${card}</div><div class="kt-page-sec">${scores}<p class="small" style="margin-top:12px"><a href="#games/live">All scores →</a></p></div>`;
   };
@@ -1987,7 +1987,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-b79fb62a24d9';
-  const GAMES_ASSET = 'app-games.js?v=sha256-4d699a6dc1eb';
+  const GAMES_ASSET = 'app-games.js?v=sha256-d37b92c8d424';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

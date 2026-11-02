@@ -51,7 +51,7 @@
     const why = !w ? '' : w.stale ? `<p class="pc-why muted">${esc(w.text)}</p>` : w.text ? `<p class="pc-why">${esc(w.text)} <a href="#game/${esc(g.id)}#why">Dig deeper ›</a></p>` : '';
     return { badge: tierBadge(g), extra: `${g.plainGap ? `<p class="pc-plain">${esc(g.plainGap)}</p>` : ''}${bet}${why}` };
   };
-  const navCard = (g, opts = {}) => g.league === 'NBA' && g.nbaSource ? nbaGameCard(g.nbaSource) : projCard(g, { ...cardExtras(g), ...opts });
+  const navCard = (g, opts = {}) => g.league === 'CBB' && g.cbbSource ? cbbGameCard(g.cbbSource) : g.league === 'NBA' && g.nbaSource ? nbaGameCard(g.nbaSource) : projCard(g, { ...cardExtras(g), ...opts });
   const byBettable = (a, b) => (Number(b.bettable) || 0) - (Number(a.bettable) || 0) || String(a.kickoff).localeCompare(String(b.kickoff)) || String(a.id).localeCompare(String(b.id));
   const worthStrip = list => {
     const top = list.filter(g => g.league === 'CFB' && !g.completed).slice().sort(byBettable).slice(0, 6);
@@ -59,53 +59,64 @@
     return `<section class="section" style="margin:8px 0 18px" aria-labelledby="worth-h"><div class="section-head"><h2 id="worth-h" style="white-space:nowrap">Worth your time</h2><span class="kt-kind">Research · the one thing to check</span></div>
       <div class="chip-scroll"><div class="kt-worth-strip">${top.map(g => `<a class="kt-worth-card" href="#game/${esc(g.id)}"><span class="wc-t">${esc(g.away.abbr)} at ${esc(g.home.abbr)}</span><b>${esc(g.look || g.plainGap || 'Take a look')}</b><small>${esc([TIER_WORD[g.tier], whenShort(g.kickoff).split(', ').pop(), !(g.bettableParts || {}).official ? 'Research lean · not a bet' : ''].filter(Boolean).join(' · '))}</small></a>`).join('')}</div></div></section>`;
   };
-  views.cbbToday = async () => {
+  const gameTabs = tab => `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
+  const teamSearch = () => `<div class="grow"><label class="sr" for="gq">Find a team</label><input id="gq" class="search" type="search" placeholder="Find a team" value="${esc(state.games.q || '')}" data-input="gq" autocomplete="off" maxlength="80"></div>`;
+  const projectionWindow = rows => {
+    const q=String(state.games.q || '').trim().toLowerCase();
+    const matches=rows.filter(g=>!q || ['home','away'].some(side=>Object.values(g.teams[side] || {}).some(v=>String(v).toLowerCase().includes(q))));
+    const days=[...new Set(matches.map(g=>C.dayOf(g.kickoff)))].sort();
+    const day=state.games.upDay==='all' || days.includes(state.games.upDay) ? state.games.upDay : days[0];
+    const labels=days.map(d=>[d,`${dayLabel(matches.find(g=>C.dayOf(g.kickoff)===d).kickoff)} · ${matches.filter(g=>C.dayOf(g.kickoff)===d).length}`]);
+    return {rows:q || day==='all' ? matches : matches.filter(g=>C.dayOf(g.kickoff)===day),html:`<div class="toolbar">${days.length>1 ? `<div class="chip-scroll">${seg('gup',[...labels,['all',`All · ${matches.length}`]],day)}</div>`:''}${teamSearch()}</div>`};
+  };
+  const cbbGameCard = g => {
+    const name=t=>t.shortName || t.name || t.abbreviation;
+    const season=y=>Number.isInteger(y) ? `${y-1}–${String(y).slice(-2)}` : '';
+    const stat=s=>!s || !s.games ? 'No recorded games' : `${esc(s.wins)}–${esc(s.losses)} · ${esc(s.ppg)} scored / ${esc(s.allowed)} allowed · ${esc(s.games)} games`;
+    const p=g.projection,h=g.teams.home,a=g.teams.away;
+    const stats=['away','home'].map(side=>{const t=g.teams[side],s=(g.stats || {})[side] || {},c=s.current || {},prior=s.prior || {};return `<div><b>${esc(name(t))}</b><p class="small">This season · ${esc(season(c.season))}: ${stat(c)}</p><p class="small muted">Prior season · ${esc(season(prior.season))}: ${stat(prior)}</p></div>`;}).join('');
+    const first=g.firstTotal ? `<p class="small muted">First recorded total: ${esc(g.firstTotal.line)} · ${esc(g.firstTotal.book)} · ${esc(whenShort(g.firstTotal.capturedAt))}. Historical quote, not a live offer.</p>` : '';
+    const team=t=>({id:t.id,name:name(t),abbr:t.abbreviation || name(t),logo:t.logo});
+    return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link:false,ranks:false,barLabel:'Baseline model win chance',extra:`<p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${first}<details><summary>Team scoring stats</summary>${stats}</details>`});
+  };
+  views.cbbToday = async (opts = {}) => {
     let data;
     try { data = await get('app/cbb.json'); }
-    catch (_) { return head('College basketball', 'CBB projections & stats', 'Research, not picks.') + '<p>CBB research could not be loaded. Please try again.</p>'; }
-    const season = y => Number.isInteger(y) ? `${y-1}–${String(y).slice(-2)}` : '';
-    const stat = s => !s || !s.games ? 'No recorded games' : `${esc(s.wins)}–${esc(s.losses)} · ${esc(s.ppg)} scored / ${esc(s.allowed)} allowed · ${esc(s.games)} games`;
-    const name = t => t.shortName || t.name || t.abbreviation;
-    const q = String((state.games || {}).q || '').trim().toLowerCase();
-    const rows = (data.games || []).filter(g => g.kickoff && Date.parse(g.kickoff) > Date.now() && (!q || ['home','away'].some(side => Object.values(g.teams[side]).some(v => String(v).toLowerCase().includes(q)))));
-    const projected = rows.filter(g => g.projection);
-    const cards = projected.map(g => {
-      const p = g.projection, h = g.teams.home, a = g.teams.away;
-      const stats = ['away', 'home'].map(side => {
-        const t = g.teams[side], s = (g.stats || {})[side] || {}, c = s.current || {}, prior = s.prior || {};
-        return `<div><b>${esc(name(t))}</b><p class="small">This season · ${esc(season(c.season))}: ${stat(c)}</p><p class="small muted">Prior season · ${esc(season(prior.season))}: ${stat(prior)}</p></div>`;
-      }).join('');
-      const first = g.firstTotal ? `<p class="small muted">First recorded total: ${esc(g.firstTotal.line)} · ${esc(g.firstTotal.book)} · ${esc(whenShort(g.firstTotal.capturedAt))}. Historical quote, not a live offer.</p>` : '';
-      const team = t => ({ id:t.id, name:name(t), abbr:t.abbreviation || name(t), logo:t.logo });
-      return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link:false,ranks:false,barLabel:'Baseline model win chance',extra:`<p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${first}<details><summary>Team scoring stats</summary>${stats}</details>`});
-    }).join('');
+    catch (_) { return head('College basketball', 'CBB projections & stats', 'Research, not picks.') + (opts.gamesPage ? gameTabs('upcoming') : '') + '<p>CBB research could not be loaded. Please try again.</p>'; }
+    const available=(data.games || []).filter(g=>g.kickoff && Date.parse(g.kickoff)>Date.now());
+    const window=projectionWindow(available),rows=window.rows,projected=rows.filter(g=>g.projection);
+    const cards=projected.map(cbbGameCard).join('');
     const groups = new Map();
     for (const s of data.sheets || []) if (rows.some(g => g.date === s.date)) {
       if (!groups.has(s.date)) groups.set(s.date, []);
       groups.get(s.date).push(s);
     }
-    const sheets = [...groups].map(([day, list], i) => `<details><summary>${esc(day)} · ${esc(list.length)} sheets</summary><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0">${list.map(s => `<a class="btn" style="white-space:normal" href="data/app/${esc(s.file)}" target="_blank" rel="noopener">Sheet ${esc(s.page)}/${esc(s.pages)}</a>`).join('')}</div></details>`).join('');
-    return head('College basketball', 'CBB projections & stats', `${projected.length} projected matchups · ${rows.length} upcoming games across three days · Research, not picks.`) + `<p class="small muted">${esc(data.note || '')}</p>${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}<section class="section"><h2>Projection sheets</h2><p class="small">12 matchups per sheet. Open a sheet to save or share. Unsupported matchups stay off the sheets.</p><div>${sheets || '<p>No supported future projections available yet.</p>'}</div></section><label for="gq">Find a team</label><input id="gq" class="search" type="search" placeholder="Find a team" value="${esc(q)}" data-input="gq" autocomplete="off" maxlength="80"><p class="small muted">${rows.length - projected.length} matchups without a verified projection are omitted.</p><div class="projs">${cards}</div>${rows.length ? '' : '<p>No upcoming CBB games stored.</p>'}<p><a href="#games/live?sport=CBB">Live scores & finals ›</a></p>`;
+    const sheets = [...groups].map(([day, list], i) => `<details><summary>${esc(day)} · ${esc(list.length)} sheets</summary><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0">${list.map(s => `<a class="btn" style="white-space:normal" href="data/app/${esc(s.file)}?v=${esc(encodeURIComponent(data.generatedAt || data.checkedAt || 'current'))}" target="_blank" rel="noopener">Sheet ${esc(s.page)}/${esc(s.pages)}</a>`).join('')}</div></details>`).join('');
+    return head('College basketball', 'CBB projections & stats', `${projected.length} projected matchups · ${rows.length} upcoming games across three days · Research, not picks.`) + `${opts.gamesPage ? gameTabs('upcoming') : ''}<p class="small muted">${esc(data.note || '')}</p>${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}<section class="section"><h2>Projection sheets</h2><p class="small">12 matchups per sheet. Open a sheet to save or share. Unsupported matchups stay off the sheets.</p><div>${sheets || '<p>No supported future projections available yet.</p>'}</div></section>${window.html}<p class="small muted">${rows.length - projected.length} matchups without a verified projection are omitted.</p><div class="projs">${cards}</div>${rows.length ? '' : '<p>No upcoming CBB games stored.</p>'}<p><a href="#games/live?sport=CBB">Live scores & finals ›</a></p>`;
   };
   views.games = async route => {
     const tab = route.tab || 'upcoming';
     if (route.league) setLeague(route.league);
-    if (state.league === 'CBB' && tab === 'upcoming') return views.cbbToday();
-    const tabs = `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
+    if (state.league === 'CBB' && tab === 'upcoming') return views.cbbToday({gamesPage:true});
+    const tabs = gameTabs(tab);
     const football = FOOTBALL.includes(state.league) || state.league === 'ALL';
-    const intro = !football && state.league !== 'NBA' ? `${LEAGUE_NAME[state.league]} scores and schedules are available under Live & scores. This sport has no published game projections yet.` : tab === 'upcoming' ? "My projected score and win chance for every game, and how my number compares with the book. Off and Def are my team ranks; #1 is best. Research, not best bets." : tab === 'live' ? 'Every sport I track. Scores refresh about every minute while this page is open.' : 'How my projected scores compared with the finals.';
+    const intro = !football && state.league !== 'NBA' ? `${LEAGUE_NAME[state.league]} scores and schedules are available under Live & scores. Game projections are not available for this sport; schedules and results are shown below.` : tab === 'upcoming' ? "My projected score and win chance for every game, and how my number compares with the book. Off and Def are my team ranks; #1 is best. Research, not best bets." : tab === 'live' ? 'Every sport I track. Scores refresh about every minute while this page is open.' : 'How my projected scores compared with the finals.';
     const top = `${head('Games', tab === 'live' ? 'Live and scores' : tab === 'final' ? 'Recent finals' : 'Upcoming games', intro)}${tabs}`;
     if (tab === 'live') return top + await gamesLive();
     if (state.league === 'NBA') {
-      const data = await get('app/nba.json');
-      const rows = (data.games || []).filter(g => tab === 'final' ? g.status === 'final' : g.status !== 'final' && Date.parse(g.kickoff) >= Date.now());
-      return `${head('NBA Games', tab === 'final' ? 'NBA finals' : 'NBA games & projections', 'Team projections are research; posted NBA plays keep their own record.')}${tabs}${nbaProjectionContext(rows)}<div class="projs">${rows.map(nbaGameCard).join('')}</div>${rows.length ? '' : '<p class="small muted">No matching NBA games are stored.</p>'}<p><a href="#today?sport=NBA">NBA plays, player lines & trends ›</a></p>`;
+      let data;
+      try { data=await get('app/nba.json'); }
+      catch (_) { return `${head('NBA Games','NBA games & projections','Research, not best bets.')}${tabs}<p>NBA research could not be loaded. Please try again.</p>`; }
+      const window=projectionWindow((data.games || []).filter(g => tab === 'final' ? g.status === 'final' : g.status !== 'final' && Date.parse(g.kickoff) >= Date.now()));
+      const rows=window.rows;
+      return `${head('NBA Games', tab === 'final' ? 'NBA finals' : 'NBA games & projections', 'Team projections are research; posted NBA plays keep their own record.')}${tabs}${window.html}${nbaProjectionContext(rows)}<div class="projs">${rows.map(nbaGameCard).join('')}</div>${rows.length ? '' : '<p class="small muted">No matching NBA games are stored.</p>'}<p><a href="#today?sport=NBA">NBA plays, player lines & trends ›</a></p>`;
     }
-    const [today, nba] = await Promise.all([get('app/today.json'), state.league === 'ALL' ? maybe('app/nba.json') : null]);
-    if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${empty('Football only for projections', `${esc(LEAGUE_NAME[state.league])} has live scores here, not projections yet. Some sports also run a paper trial. <a href="#games/live">See live scores</a> or <a href="#record/trials">the trial record</a>.`, 'research')}`;
+    if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${await gamesLive({status:tab==='final' ? 'final' : 'scheduled'})}`;
+    const [today,nba,cbb]=await Promise.all([get('app/today.json'),state.league==='ALL' ? maybe('app/nba.json') : null,state.league==='ALL' ? maybe('app/cbb.json') : null]);
     const merged = withLive((today.games || []).filter(inLeague));
     const nbaRows = (nba?.games || []).map(g => ({id:g.id,league:'NBA',kickoff:g.kickoff,completed:g.status === 'final',home:{...g.teams.home,abbr:g.teams.home.abbreviation},away:{...g.teams.away,abbr:g.teams.away.abbreviation},nbaSource:g}));
-    let games = [...new Map([...merged.games,...nbaRows].map(g => [g.id,g])).values()];
+    const cbbRows=(cbb?.games || []).filter(g=>g.projection && Date.parse(g.kickoff)>Date.now()).map(g=>({id:g.id,league:'CBB',kickoff:g.kickoff,home:{...g.teams.home,abbr:g.teams.home.abbreviation},away:{...g.teams.away,abbr:g.teams.away.abbreviation},cbbSource:g}));
+    let games = [...new Map([...merged.games,...nbaRows,...cbbRows].map(g => [g.id,g])).values()];
     const q = state.games.q.trim().toLowerCase();
     if (q) games = games.filter(g => [g.home.abbr, g.home.name, g.away.abbr, g.away.name].some(v => String(v || '').toLowerCase().includes(q)));
     const search = `<div class="grow"><label class="sr" for="gq">Find a team</label><input id="gq" class="search" type="search" placeholder="Find a team" value="${esc(state.games.q)}" data-input="gq" autocomplete="off" maxlength="80"></div>`;
@@ -144,13 +155,14 @@
       ${seg('gsort', [['bettable', 'Bettable'], ['kickoff', 'Kickoff']], sort)}</div>`;
     const nbaList = filtered.filter(g => g.league === 'NBA');
     const nbaSection = nbaList.length ? `<section class="section" id="games-nba"><h2>NBA</h2><p class="small muted">Team projections and current book totals.</p>${nbaProjectionContext(nbaList.map(g => g.nbaSource))}<div class="projs">${nbaList.map(navCard).join('')}</div><p><a href="#research/lines?sport=NBA">NBA player lines & trends ›</a></p></section>` : '';
+    const cbbSection=filtered.some(g=>g.cbbSource) ? `<section class="section"><h2>College hoops</h2><p class="small muted">Baseline team research; not roster/injury adjusted.</p><div class="projs">${filtered.filter(g=>g.cbbSource).map(navCard).join('')}</div></section>` : '';
     const stamp = liveStamp(merged.refreshed) + (state.league === 'ALL' && !nba ? '<p class="small muted">NBA data is unavailable right now. Football remains available.</p>' : '');
     if (!filtered.length) return `${top}${toolbar}${controls}${stamp}${empty('No game matches these filters', 'Try another window or conference, or turn off close games only.', 'games')}${nextBtn}`;
     const strip = college ? worthStrip(filtered) : '';
     if (sort === 'bettable') {
       const nfl = filtered.filter(g => g.league === 'NFL'), cfb = filtered.filter(g => g.league === 'CFB').sort(byBettable);
       const shown = state.games.all ? cfb : cfb.slice(0, 24);
-      return `${top}${toolbar}${controls}${strip}${stamp}${nbaSection}${nfl.length ? byDay(nfl, 'NFL') : ''}
+      return `${top}${toolbar}${controls}${strip}${stamp}${nbaSection}${cbbSection}${nfl.length ? byDay(nfl, 'NFL') : ''}
         <p class="eyebrow" style="margin:18px 0 10px">College · most bettable first</p><p class="small muted" style="margin:-6px 0 10px">Fresh two-sided lines, competitiveness, how far my number sits from the book and any best bet, upset watch or priced props. A high score is a reason to look, not a bet.</p>
         <div class="projs">${shown.map(g => navCard(g)).join('')}</div>
         ${cfb.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-all-games>Show all ${cfb.length} games</button></p>` : nextBtn}`;
@@ -163,8 +175,8 @@
     const today = todayRaw || {};
     const day = opts.day || (state.games.day && [etDay(-1), etDay(), etDay(1)].includes(state.games.day) ? state.games.day : etDay());
     const leagues = state.league === 'ALL' ? Object.keys(LIVE) : [state.league];
-    const status = opts.day ? 'all' : state.games.status;
-    const controls = `<div class="toolbar">${seg('gday', [[etDay(-1), 'Yesterday'], [etDay(), 'Today'], [etDay(1), 'Tomorrow']], day)}${seg('gstatus', [['all', 'All'], ['live', 'Live'], ['final', 'Final']], status)}</div>`;
+    const status = opts.status || (opts.day ? 'all' : state.games.status);
+    const controls = `<div class="toolbar">${seg('gday', [[etDay(-1), 'Yesterday'], [etDay(), 'Today'], [etDay(1), 'Tomorrow']], day)}${opts.status ? '' : seg('gstatus', [['all', 'All'], ['live', 'Live'], ['final', 'Final']], status)}${teamSearch()}</div>`;
     let failed = 0;
     const recent = (game, league) => {
       if (!['MLB', 'NHL'].includes(league)) return '';
@@ -196,6 +208,9 @@
       let merged = snap ? L.mergeGames(stored.map(g => ({ ...g, date: g.date || day })), snap, day) : stored;
       const isLive = g => ['in_progress', 'delayed', 'suspended'].includes(g.status) || g.state === 'in';
       const isFinal = g => g.status === 'final' || g.completed;
+      const q=String(state.games.q || '').trim().toLowerCase();
+      if(q) merged=merged.filter(g=>['home','away'].some(side=>Object.values((g.teams || {})[side] || {}).some(v=>String(v).toLowerCase().includes(q))));
+      if(status==='scheduled') merged=merged.filter(g=>g.status==='scheduled' && Date.parse(g.kickoff)>Date.now());
       if (status === 'live') merged = merged.filter(isLive);
       if (status === 'final') merged = merged.filter(isFinal);
       if (!merged.length) return '';
