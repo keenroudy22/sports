@@ -66,7 +66,8 @@
     const season = y => Number.isInteger(y) ? `${y-1}–${String(y).slice(-2)}` : '';
     const stat = s => !s || !s.games ? 'No recorded games' : `${esc(s.wins)}–${esc(s.losses)} · ${esc(s.ppg)} scored / ${esc(s.allowed)} allowed · ${esc(s.games)} games`;
     const name = t => t.shortName || t.name || t.abbreviation;
-    const rows = (data.games || []).filter(g => g.kickoff && Date.parse(g.kickoff) > Date.now());
+    const q = String((state.games || {}).q || '').trim().toLowerCase();
+    const rows = (data.games || []).filter(g => g.kickoff && Date.parse(g.kickoff) > Date.now() && (!q || ['home','away'].some(side => Object.values(g.teams[side]).some(v => String(v).toLowerCase().includes(q)))));
     const projected = rows.filter(g => g.projection);
     const cards = projected.map(g => {
       const p = g.projection, h = g.teams.home, a = g.teams.away;
@@ -82,8 +83,8 @@
       if (!groups.has(s.date)) groups.set(s.date, []);
       groups.get(s.date).push(s);
     }
-    const sheets = [...groups].map(([day, list], i) => `<details ${i === 0 ? 'open' : ''}><summary>${esc(day)} · ${esc(list.length)} sheets</summary><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0">${list.map(s => `<a class="btn" style="white-space:normal" href="data/app/${esc(s.file)}" target="_blank" rel="noopener">Sheet ${esc(s.page)}/${esc(s.pages)}</a>`).join('')}</div></details>`).join('');
-    return head('College basketball', 'CBB projections & stats', `${projected.length} projected matchups · ${rows.length} upcoming games across three days · Research, not picks.`) + `<p class="small muted">${esc(data.note || '')}</p>${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}<section class="section"><h2>Projection sheets</h2><p class="small">12 matchups per sheet. Open a sheet to save or share. Unsupported matchups stay off the sheets.</p><div>${sheets || '<p>No supported future projections available yet.</p>'}</div></section><p class="small muted">${rows.length - projected.length} matchups without a verified projection are omitted.</p><div class="projs">${cards}</div>${rows.length ? '' : '<p>No upcoming CBB games stored.</p>'}<p><a href="#games/live?sport=CBB">Live scores & finals ›</a></p>`;
+    const sheets = [...groups].map(([day, list], i) => `<details><summary>${esc(day)} · ${esc(list.length)} sheets</summary><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0">${list.map(s => `<a class="btn" style="white-space:normal" href="data/app/${esc(s.file)}" target="_blank" rel="noopener">Sheet ${esc(s.page)}/${esc(s.pages)}</a>`).join('')}</div></details>`).join('');
+    return head('College basketball', 'CBB projections & stats', `${projected.length} projected matchups · ${rows.length} upcoming games across three days · Research, not picks.`) + `<p class="small muted">${esc(data.note || '')}</p>${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}<section class="section"><h2>Projection sheets</h2><p class="small">12 matchups per sheet. Open a sheet to save or share. Unsupported matchups stay off the sheets.</p><div>${sheets || '<p>No supported future projections available yet.</p>'}</div></section><label for="gq">Find a team</label><input id="gq" class="search" type="search" placeholder="Find a team" value="${esc(q)}" data-input="gq" autocomplete="off" maxlength="80"><p class="small muted">${rows.length - projected.length} matchups without a verified projection are omitted.</p><div class="projs">${cards}</div>${rows.length ? '' : '<p>No upcoming CBB games stored.</p>'}<p><a href="#games/live?sport=CBB">Live scores & finals ›</a></p>`;
   };
   views.games = async route => {
     const tab = route.tab || 'upcoming';
