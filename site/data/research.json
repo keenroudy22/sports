@@ -49447,5 +49447,351 @@
         "publishedAt": "2026-11-02T13:38:23Z"
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-11-02T16:55:49Z",
+    "summary": "Released 1: Tory Horton UNDER 1.5 receptions +142 at DraftKings.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "4597703",
+        "market": "rec",
+        "line": 1.5,
+        "direction": "under",
+        "gameIds": [
+          "NFL-401873036"
+        ],
+        "book": "DraftKings",
+        "odds": 142,
+        "projection": 1.1,
+        "edge": "Price-checked chance 51.1% against the exact two-sided price; 41.3% needed at +142: +9.8 percentage points.",
+        "cutoff": "UNDER 1.5 at +142 or better; off the card at 1 or lower, or at +127 or worse at 1.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-01T00:22:15Z",
+        "quotedAt": "2026-11-02T13:30:48Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 8:30 AM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-02T22:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.626,
+          "chance": 0.511,
+          "calibrated": true,
+          "calibration": 0.09,
+          "calibrationN": 3361,
+          "push": 0.0,
+          "breakEven": 0.413,
+          "edgePoints": 9.8,
+          "evPerUnit": 0.237,
+          "snapshotAt": "2026-11-01T00:22:15Z",
+          "probabilitySpec": "0a4cd5ffad31ea668705cb7aad117caf17ed66c53c1318d321cd3b889b940af8",
+          "evaluatedAt": "2026-11-02T16:47:26Z",
+          "fairChance": 0.39,
+          "anchoredChance": 0.511,
+          "gap": 12.1,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Chicago Bears at Seattle Seahawks",
+        "title": "Tory Horton UNDER 1.5 receptions",
+        "id": "NFL-2026-W8-horton-under-1-5-rec-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873036",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.chicagobears.com/team/depth-chart",
+          "https://www.seahawks.com/news/week-8-injury-report-bears-at-seahawks"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 6 of 10 under 1.5.",
+          "context": [
+            "Role: 3rd of 3 SEA WRs by projected targets, 1.8 a game.",
+            "Defense: CHI allows 9.43 receptions a game to WRs, 5th-stingiest of 32 this season."
+          ],
+          "cautions": [],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 1.1 against 1.5. The under reads 51.1% after adjustment from the raw 62.6%; 41.3% is needed at +142. Last 10 games: 6 of 10 under 1.5. Role: 3rd of 3 SEA WRs by projected targets, 1.8 a game. Defense: CHI allows 9.43 receptions a game to WRs, 5th-stingiest of 32 this season.",
+        "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 4 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Under 1.5 in 6 of his last 10 games.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-02T16:47:26Z"
+            },
+            {
+              "text": "Book says 1.5. I say 1.1.",
+              "numbers": {
+                "projection": 1.1,
+                "line": 1.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-01T00:22:15Z"
+            },
+            {
+              "text": "3 of his last 4 games finished under 1.5 receptions.",
+              "numbers": {
+                "values": [
+                  3,
+                  1,
+                  1,
+                  0
+                ],
+                "hits": 3,
+                "games": 4,
+                "line": 1.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-26T00:20Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 4 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-02T16:47:26Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Charles Cross (SEA) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4426376/charles-cross",
+              "time": "2026-11-01T03:18Z"
+            },
+            {
+              "text": "Velus Jones Jr. (SEA) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4035693/velus-jones-jr",
+              "time": "2026-11-01T01:38Z"
+            },
+            {
+              "text": "Drew Lock (SEA) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3924327/drew-lock",
+              "time": "2026-11-01T01:35Z"
+            },
+            {
+              "text": "Uchenna Nwosu (SEA) is listed Doubtful.",
+              "numbers": {
+                "status": "Doubtful"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3120358/uchenna-nwosu",
+              "time": "2026-10-31T20:57Z"
+            },
+            {
+              "text": "Rashid Shaheed (SEA) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4032473/rashid-shaheed",
+              "time": "2026-10-31T20:53Z"
+            },
+            {
+              "text": "Brandon Pili (SEA) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4259651/brandon-pili",
+              "time": "2026-10-30T23:15Z"
+            },
+            {
+              "text": "Anthony Bradford (SEA) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4429211/anthony-bradford",
+              "time": "2026-10-29T23:22Z"
+            },
+            {
+              "text": "Patrick O'Connell (SEA) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4364623/patrick-oconnell",
+              "time": "2026-10-29T22:54Z"
+            },
+            {
+              "text": "Malik Muhammad II (CHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4870953/malik-muhammad-ii",
+              "time": "2026-11-01T02:54Z"
+            },
+            {
+              "text": "D'Marco Jackson (CHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241007/dmarco-jackson",
+              "time": "2026-10-31T23:08Z"
+            },
+            {
+              "text": "Kyle Monangai (CHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai",
+              "time": "2026-10-31T16:55Z"
+            }
+          ],
+          "weather": {
+            "tempF": 51,
+            "windMph": 0,
+            "windDirection": "",
+            "precipProb": 1,
+            "periodStart": "2026-11-02T17:00:00-08:00",
+            "issuedAt": "2026-11-02T07:20:45+00:00",
+            "source": "https://api.weather.gov/gridpoints/SEW/125,68/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": 135,
+                  "time": "2026-11-01T19:01:40Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": 142,
+                  "time": "2026-11-02T13:30:48Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": 140,
+                  "time": "2026-11-01T19:01:40Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": 140,
+                  "time": "2026-11-02T13:30:48Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 1.5,
+              "price": 142,
+              "time": "2026-11-02T13:30:48Z"
+            }
+          },
+          "ours": {
+            "projection": 1.1,
+            "line": 1.5,
+            "market": "rec",
+            "text": "Under 1.5 in 6 of his last 10 games.",
+            "snapshotAt": "2026-11-01T00:22:15Z"
+          },
+          "history": "Last 10 games: 6 of 10 under 1.5.",
+          "sources": [
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4426376/charles-cross",
+              "time": "2026-11-01T03:18Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4035693/velus-jones-jr",
+              "time": "2026-11-01T01:38Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3924327/drew-lock",
+              "time": "2026-11-01T01:35Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3120358/uchenna-nwosu",
+              "time": "2026-10-31T20:57Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4032473/rashid-shaheed",
+              "time": "2026-10-31T20:53Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4259651/brandon-pili",
+              "time": "2026-10-30T23:15Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4429211/anthony-bradford",
+              "time": "2026-10-29T23:22Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4364623/patrick-oconnell",
+              "time": "2026-10-29T22:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4870953/malik-muhammad-ii",
+              "time": "2026-11-01T02:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241007/dmarco-jackson",
+              "time": "2026-10-31T23:08Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai",
+              "time": "2026-10-31T16:55Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/SEW/125,68/forecast/hourly",
+              "time": "2026-11-02T07:20:45+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873036",
+              "time": "2026-11-02T16:47:26Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-11-02T16:47:26Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.chicagobears.com/team/depth-chart",
+              "time": "2026-11-02T16:47:26Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.seahawks.com/news/week-8-injury-report-bears-at-seahawks",
+              "time": "2026-11-02T16:47:26Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-02T16:55:49Z"
+      }
+    ]
   }
 ]
