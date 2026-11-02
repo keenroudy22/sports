@@ -1,3 +1,19 @@
+### November2 shared sport navigation/search — verified live
+
+Releasef3322c69d / hosted41514093051SUCCESS. Normal+clean2079Python
+(2skips)/305Node, publication/record audits and offline rehearsal pass.
+CBB now retains Upcoming/Live & scores/Finals in Games, NBA/CBB share team/day
+controls, and All sports includes supported CBB projections. Score-only sports
+show actual schedules/finals with date/search controls, no football placeholder.
+Other-sport Today titles identify their sport. Versioned sheet links remove the
+previous cached-export issue. Model/data coverage, record and posting unchanged.
+Live CBB/NBA/NHL controls and mobile375/desktop1440 layouts verified without
+horizontal overflow; NBA Cleveland search returns one card. Local All sports
+verified NFL1/NBA15/CBB116 cards. Regression fixtures cover WNBA/MLB/NHL/EPL/MLS,
+NBA/CBB search/navigation, CBB in All sports and sheet-source versions.
+Proof: work/sport-consistency-release-evidence-20261102.json and saved live
+CBB mobile/NHL desktop screenshots. No new picks, feed or scheduler.
+
 ### November2 sport-page consistency — implementation awaiting release
 
 Shared Games navigation now applies to CBB and supported score-only sports.
