@@ -76,7 +76,8 @@
         return `<div><b>${esc(name(t))}</b><p class="small">This season · ${esc(season(c.season))}: ${stat(c)}</p><p class="small muted">Prior season · ${esc(season(prior.season))}: ${stat(prior)}</p></div>`;
       }).join('');
       const first = g.firstTotal ? `<p class="small muted">First recorded total: ${esc(g.firstTotal.line)} · ${esc(g.firstTotal.book)} · ${esc(whenShort(g.firstTotal.capturedAt))}. Historical quote, not a live offer.</p>` : '';
-      return `<article class="section" style="padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--felt)"><p class="small muted">${esc(whenShort(g.kickoff))}</p><h2>${esc(name(a))} at ${esc(name(h))}</h2>${p ? `<p class="small">PROJECTED · away / home</p><div class="display" style="font-size:32px">${esc(p.away)} – ${esc(p.home)}</div><p>Total <b>${esc(p.total)}</b> · ${p.neutral ? 'Neutral court' : 'Home court included'}${p.sparse ? ' · Early-season baseline' : ''}</p>` : `<p class="muted">${esc(g.hold || 'Projection unavailable')}</p>`}${first}<details><summary>Team scoring stats</summary>${stats}</details></article>`;
+      const team = t => ({ id:t.id, name:name(t), abbr:t.abbreviation || name(t), logo:t.logo });
+      return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link:false,ranks:false,barLabel:'Baseline model win chance',extra:`<p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${first}<details><summary>Team scoring stats</summary>${stats}</details>`});
     }).join('');
     const groups = new Map();
     for (const s of data.sheets || []) if (rows.some(g => g.date === s.date)) {

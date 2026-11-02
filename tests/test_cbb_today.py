@@ -15,7 +15,7 @@ class Model:
     def key(self,k):return k
     def predict(self,h,a,neutral):
         assert neutral is True
-        return dict(margin=4,total=140,sparse=True)
+        return dict(margin=4,total=140,sparse=True,homeWinProb=.62)
 class CbbTests(unittest.TestCase):
     def build(self,games=None,records=None,checked='2026-11-02T14:00Z',factory=None):
         with tempfile.TemporaryDirectory() as t:
@@ -27,6 +27,12 @@ class CbbTests(unittest.TestCase):
         self.assertEqual(g['projection']['home'],72)
         self.assertIsNone(g['stats']['home']['current']['ppg'])
         self.assertEqual(g['stats']['home']['current']['games'],0)
+    def test_probability_uses_model_output_and_missing_invalid_stays_unknown(self):
+        self.assertEqual(self.build()['games'][0]['projection']['winProb'],.62)
+        for chance in (None,True,-.1,1.1,float('nan')):
+            class Missing(Model):
+                def predict(self,*a):return dict(margin=4,total=140,homeWinProb=chance)
+            self.assertNotIn('winProb',self.build(factory=lambda *a,**k:Missing())['games'][0]['projection'])
     def test_unknown_venue_stale_schedule_and_past_tip_never_project(self):
         for g,checked in [(dict(G,neutral=None),'2026-11-02T14:00Z'),(G,'2026-10-30T14:00Z')]:
             self.assertNotIn('projection',self.build([g],checked=checked)['games'][0])

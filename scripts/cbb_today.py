@@ -70,6 +70,11 @@ def build(now=None, root=ROOT, records=None, model_factory=None):
                     row['projection']=dict(home=round((p['total']+p['margin'])/2,1),
                         away=round((p['total']-p['margin'])/2,1),total=round(p['total'],1),
                         margin=round(p['margin'],1),sparse=p.get('sparse',True),neutral=g['neutral'])
+                    # Display the existing score model's own win probability;
+                    # never invent one from the rounded score or missing variance.
+                    chance=p.get('homeWinProb')
+                    if type(chance) in (float,int) and math.isfinite(chance) and 0 <= chance <= 1:
+                        row['projection']['winProb']=round(chance,6)
             except (ValueError,KeyError,TypeError,ArithmeticError):row['hold']='Projection unavailable'
         q=quotes.get(g['id'])
         if q and boxscores.instant(q['capturedAt']) < boxscores.instant(g['kickoff']):
@@ -88,10 +93,18 @@ def sheet(rows, day, page, pages, as_of=""):
          '<g fill="#f4f7fa" font-family="Arial,sans-serif">',
          '<text x="42" y="62" fill="#56e4ad" font-size="25" font-weight="bold">KOOK’N · RESEARCH</text>',
          '<text x="42" y="126" font-size="49" font-weight="bold">CBB PROJECTIONS</text>',
-         f'<text x="42" y="169" font-size="24">{escape(day)} · Page {page} of {pages} · Projected scores</text>']
+         f'<text x="42" y="169" font-size="24">{escape(day)} · Page {page} of {pages} · Bars: model win chance (away / home)</text>']
     for i,g in enumerate(rows):
         y=204+i*81; p=g['projection']; a=g['teams']['away'];h=g['teams']['home']
-        out += [f'<rect x="36" y="{y}" width="1008" height="72" rx="10" fill="#10222c"/>',
+        chance=p.get('winProb')
+        bar=''
+        if type(chance) in (int,float) and math.isfinite(chance) and 0 <= chance <= 1:
+            hp=math.floor(100*chance+.5);ap=100-hp;aw=300*(1-chance)
+            bar=(f'<text x="476" y="{y+59}" text-anchor="end" fill="#f4f7fa" font-size="18">{ap}%</text>'
+                 f'<rect x="490" y="{y+44}" width="300" height="14" rx="7" fill="#56e4ad"/>'
+                 f'<rect x="490" y="{y+44}" width="{aw:.2f}" height="14" fill="#69b6ee"/>'
+                 f'<text x="804" y="{y+59}" fill="#f4f7fa" font-size="18">{hp}%</text>')
+        out += [f'<rect x="36" y="{y}" width="1008" height="72" rx="10" fill="#10222c"/>',bar,
                 f'<text x="52" y="{y+29}" font-size="22">{escape(a.get("abbreviation") or a["shortName"])} at {escape(h.get("abbreviation") or h["shortName"])}</text>',
                 f'<text x="52" y="{y+57}" fill="#a9bcb7" font-size="18">{escape(boxscores.instant(g["kickoff"]).astimezone(ZoneInfo("America/New_York")).strftime("%I:%M %p ET"))} · {"Neutral court" if p["neutral"] else "Home court included"}</text>',
                 f'<text x="1018" y="{y+34}" text-anchor="end" font-size="30" font-weight="bold">{round(p["away"])} – {round(p["home"])}</text>',

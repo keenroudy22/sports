@@ -1,3 +1,14 @@
+### November2 CBB shared projection bars — implementation awaiting release
+
+CBB cards now reuse the NFL/NBA shared score/logo/total/probability-bar layout.
+The JSON exposes only finite0–1 homeWinProb supplied by the unchanged hoops
+model; missing variance/probability is never inferred from rounded scores.
+Twelve-matchup exports add away/home percentage bars. Existing prior/current
+team stats, exact dated historical total labels and neutral/home venue context
+remain; no roster/injury adjustment, model promotion or wager admission implied.
+Targeted source/UI regressions cover valid, missing, invalid probability and
+legacy cached payloads. Full release and hosted/mobile/desktop checks pending.
+
 ### November2 CBB opening-night fun ticket — actual social receipts
 
 Owner explicitly requested the eight-leg CBB fun ticket and graphic on X/Discord,
