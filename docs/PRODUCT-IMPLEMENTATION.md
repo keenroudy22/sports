@@ -1,3 +1,17 @@
+### November2 CBB projection bars — verified live
+
+Release19bc57b81 / hosted41510504542SUCCESS. Normal and clean2079Python
+(2skips)/302Node pass; publication/record audits and rehearsal pass.
+Live #today?sport=CBB renders148 supported future matchup bars; mobile375 and
+desktop1440 have matching scroll widths, authentic logos, scores/totals,
+neutral venue context and retained team stats/historical quote disclosure.
+Hosted sheet with v=19bc57b81 renders new away/home probability bars; bare
+sheet URL initially served an older cached SVG. Work evidence preserves this
+cache observation rather than claiming all clients instantly refreshed.
+Probability is unchanged hoops model output, not roster/injury adjustment,
+validated betting probability or new CBB play admission. Receipt/screenshots:
+work/cbb-bars-release-evidence-20261102.json and cbb-bars-live-*.png.
+
 ### November2 CBB shared projection bars — implementation awaiting release
 
 CBB cards now reuse the NFL/NBA shared score/logo/total/probability-bar layout.
