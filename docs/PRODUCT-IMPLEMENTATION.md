@@ -23,7 +23,7 @@ X actual Buffer Sent12:47ET: https://twitter.com/keenkooks/status/21173127572130
 Discord Plays attachment confirmed17:48:53Z/message1566871739844268113.
 No API allowance increase, official model promotion, Best Bet entry, website
 release or wager placement. Original terms/news/receipts are frozen separately
-in docs/cbb-opening-fun-2026-11-02.json. O-20261102-CBBFUN retains sourced final
+in docs/cbb-opening-fun-2026-11-02.json. P40 retains sourced final
 settlement and genuine graphic engagement observations for existing desk jobs.
 
 ### October31 reviewed Climb delivered — verified receipts
