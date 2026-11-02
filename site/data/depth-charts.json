@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-11-02T13:01:04Z",
+  "updatedAt": "2026-11-02T17:21:43Z",
   "coverage": "ESPN listed roles for upcoming NFL teams with injuries; not confirmed game starters.",
   "teams": {
     "22": {
       "name": "Arizona Cardinals",
       "abbr": "ARI",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ari",
       "positions": [
         {
@@ -354,12 +354,16 @@
           "key": "lcb",
           "players": [
             {
-              "id": "4568506",
+              "id": "4426923",
               "order": 1
             },
             {
-              "id": "4685408",
+              "id": "4568506",
               "order": 2
+            },
+            {
+              "id": "4685408",
+              "order": 3
             }
           ]
         },
@@ -401,12 +405,8 @@
               "order": 1
             },
             {
-              "id": "4426923",
-              "order": 2
-            },
-            {
               "id": "4363408",
-              "order": 3
+              "order": 2
             }
           ]
         },
@@ -702,8 +702,8 @@
       "name": "Atlanta Falcons",
       "abbr": "ATL",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/atl",
       "positions": [
         {
@@ -1367,8 +1367,8 @@
       "name": "Baltimore Ravens",
       "abbr": "BAL",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/bal",
       "positions": [
         {
@@ -1377,18 +1377,9 @@
           "group": "QB",
           "players": [
             {
-              "id": "3916387",
-              "name": "Lamar Jackson",
-              "order": 1,
-              "availability": {
-                "status": "Out",
-                "unavailable": true
-              }
-            },
-            {
               "id": "4035671",
               "name": "Tyler Huntley",
-              "order": 2,
+              "order": 1,
               "availability": {
                 "status": "Active",
                 "unavailable": false
@@ -1397,6 +1388,15 @@
             {
               "id": "4429582",
               "name": "Joe Fagnano",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "3916387",
+              "name": "Lamar Jackson",
               "order": 3,
               "availability": {
                 "status": "Out",
@@ -1964,15 +1964,15 @@
           "key": "qb",
           "players": [
             {
-              "id": "3916387",
+              "id": "4035671",
               "order": 1
             },
             {
-              "id": "4035671",
+              "id": "4429582",
               "order": 2
             },
             {
-              "id": "4429582",
+              "id": "3916387",
               "order": 3
             },
             {
@@ -2033,8 +2033,8 @@
       "name": "Buffalo Bills",
       "abbr": "BUF",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/buf",
       "positions": [
         {
@@ -2652,8 +2652,8 @@
       "name": "Carolina Panthers",
       "abbr": "CAR",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/car",
       "positions": [
         {
@@ -2757,8 +2757,8 @@
               }
             },
             {
-              "id": "4567096",
-              "name": "John Metchie III",
+              "id": "4360763",
+              "name": "Brycen Tremayne",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -2807,8 +2807,8 @@
           "group": "WR",
           "players": [
             {
-              "id": "4360763",
-              "name": "Brycen Tremayne",
+              "id": "4567096",
+              "name": "John Metchie III",
               "order": 1,
               "availability": {
                 "status": "Active",
@@ -3158,7 +3158,7 @@
               "order": 1
             },
             {
-              "id": "4567096",
+              "id": "4360763",
               "order": 2
             },
             {
@@ -3184,7 +3184,7 @@
           "key": "wr3",
           "players": [
             {
-              "id": "4360763",
+              "id": "4567096",
               "order": 1
             },
             {
@@ -3351,8 +3351,8 @@
       "name": "Chicago Bears",
       "abbr": "CHI",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/chi",
       "positions": [
         {
@@ -4000,8 +4000,8 @@
       "name": "Cincinnati Bengals",
       "abbr": "CIN",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/cin",
       "positions": [
         {
@@ -4616,8 +4616,8 @@
       "name": "Cleveland Browns",
       "abbr": "CLE",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/cle",
       "positions": [
         {
@@ -4746,8 +4746,8 @@
               }
             },
             {
-              "id": "4808839",
-              "name": "Isaiah Bond",
+              "id": "4241424",
+              "name": "Tylan Wallace",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -4771,8 +4771,8 @@
               }
             },
             {
-              "id": "4241424",
-              "name": "Tylan Wallace",
+              "id": "4613104",
+              "name": "Malachi Corley",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -4796,8 +4796,8 @@
               }
             },
             {
-              "id": "4613104",
-              "name": "Malachi Corley",
+              "id": "4808839",
+              "name": "Isaiah Bond",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -5083,7 +5083,7 @@
           "key": "kr",
           "players": [
             {
-              "id": "4722893",
+              "id": "5081397",
               "order": 1
             },
             {
@@ -5091,12 +5091,16 @@
               "order": 2
             },
             {
-              "id": "5081397",
+              "id": "4722893",
               "order": 3
             },
             {
-              "id": "4601080",
+              "id": "4808839",
               "order": 4
+            },
+            {
+              "id": "4601080",
+              "order": 5
             }
           ]
         },
@@ -5117,7 +5121,7 @@
               "order": 1
             },
             {
-              "id": "4808839",
+              "id": "4241424",
               "order": 2
             }
           ]
@@ -5130,7 +5134,7 @@
               "order": 1
             },
             {
-              "id": "4241424",
+              "id": "4613104",
               "order": 2
             }
           ]
@@ -5143,7 +5147,7 @@
               "order": 1
             },
             {
-              "id": "4613104",
+              "id": "4808839",
               "order": 2
             }
           ]
@@ -5303,8 +5307,8 @@
       "name": "Dallas Cowboys",
       "abbr": "DAL",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/dal",
       "positions": [
         {
@@ -5943,8 +5947,8 @@
       "name": "Denver Broncos",
       "abbr": "DEN",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/den",
       "positions": [
         {
@@ -6306,11 +6310,11 @@
               "order": 1
             },
             {
-              "id": "4039007",
+              "id": "4037559",
               "order": 2
             },
             {
-              "id": "4037559",
+              "id": "4257240",
               "order": 3
             }
           ]
@@ -6323,11 +6327,11 @@
               "order": 1
             },
             {
-              "id": "4428503",
+              "id": "4039007",
               "order": 2
             },
             {
-              "id": "4257240",
+              "id": "4428503",
               "order": 3
             }
           ]
@@ -6406,11 +6410,11 @@
           "key": "kr",
           "players": [
             {
-              "id": "4702555",
+              "id": "4686472",
               "order": 1
             },
             {
-              "id": "4686472",
+              "id": "4702555",
               "order": 2
             },
             {
@@ -6634,8 +6638,8 @@
       "name": "Detroit Lions",
       "abbr": "DET",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/det",
       "positions": [
         {
@@ -7278,8 +7282,8 @@
       "name": "Green Bay Packers",
       "abbr": "GB",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/gb",
       "positions": [
         {
@@ -7998,8 +8002,8 @@
       "name": "Houston Texans",
       "abbr": "HOU",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/hou",
       "positions": [
         {
@@ -8042,8 +8046,8 @@
           "group": "RB",
           "players": [
             {
-              "id": "4035538",
-              "name": "David Montgomery",
+              "id": "4429059",
+              "name": "Woody Marks",
               "order": 1,
               "availability": {
                 "status": "Active",
@@ -8051,8 +8055,8 @@
               }
             },
             {
-              "id": "4429059",
-              "name": "Woody Marks",
+              "id": "4035538",
+              "name": "David Montgomery",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -8255,7 +8259,7 @@
               "order": 2
             },
             {
-              "id": "4360189",
+              "id": "4046716",
               "order": 3
             }
           ]
@@ -8268,7 +8272,7 @@
               "order": 1
             },
             {
-              "id": "4362910",
+              "id": "4360189",
               "order": 2
             },
             {
@@ -8654,11 +8658,11 @@
           "key": "rb",
           "players": [
             {
-              "id": "4035538",
+              "id": "4429059",
               "order": 1
             },
             {
-              "id": "4429059",
+              "id": "4035538",
               "order": 2
             },
             {
@@ -8681,8 +8685,8 @@
       "name": "Indianapolis Colts",
       "abbr": "IND",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ind",
       "positions": [
         {
@@ -9344,8 +9348,8 @@
       "name": "Jacksonville Jaguars",
       "abbr": "JAX",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/jax",
       "positions": [
         {
@@ -9574,15 +9578,15 @@
           "key": "rdt",
           "players": [
             {
-              "id": "3915520",
+              "id": "4430271",
               "order": 1
             },
             {
-              "id": "4430271",
+              "id": "4612298",
               "order": 2
             },
             {
-              "id": "4612298",
+              "id": "3915520",
               "order": 3
             }
           ]
@@ -9971,8 +9975,8 @@
       "name": "Kansas City Chiefs",
       "abbr": "KC",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/kc",
       "positions": [
         {
@@ -10083,8 +10087,8 @@
               }
             },
             {
-              "id": "4912218",
-              "name": "Cyrus Allen",
+              "id": "5082630",
+              "name": "Jalen Royals",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -10117,8 +10121,8 @@
               }
             },
             {
-              "id": "4372716",
-              "name": "Nikko Remigio",
+              "id": "5093923",
+              "name": "Andrew Armstrong",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -10142,8 +10146,8 @@
           "group": "WR",
           "players": [
             {
-              "id": "5082630",
-              "name": "Jalen Royals",
+              "id": "4912218",
+              "name": "Cyrus Allen",
               "order": 1,
               "availability": {
                 "status": "Active",
@@ -10151,8 +10155,8 @@
               }
             },
             {
-              "id": "5093923",
-              "name": "Andrew Armstrong",
+              "id": "4372716",
+              "name": "Nikko Remigio",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -10474,7 +10478,7 @@
               "order": 1
             },
             {
-              "id": "4912218",
+              "id": "5082630",
               "order": 2
             },
             {
@@ -10491,7 +10495,7 @@
               "order": 1
             },
             {
-              "id": "4372716",
+              "id": "5093923",
               "order": 2
             },
             {
@@ -10504,11 +10508,11 @@
           "key": "wr3",
           "players": [
             {
-              "id": "5082630",
+              "id": "4912218",
               "order": 1
             },
             {
-              "id": "5093923",
+              "id": "4372716",
               "order": 2
             },
             {
@@ -10680,8 +10684,8 @@
       "name": "Las Vegas Raiders",
       "abbr": "LV",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lv",
       "positions": [
         {
@@ -11350,8 +11354,8 @@
       "name": "Los Angeles Chargers",
       "abbr": "LAC",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lac",
       "positions": [
         {
@@ -11471,12 +11475,12 @@
               }
             },
             {
-              "id": "4362477",
-              "name": "Derius Davis",
+              "id": "4426535",
+              "name": "Theo Wease Jr.",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -11521,12 +11525,12 @@
               }
             },
             {
-              "id": "4426535",
-              "name": "Theo Wease Jr.",
+              "id": "4362477",
+              "name": "Derius Davis",
               "order": 2,
               "availability": {
-                "status": "Out",
-                "unavailable": true
+                "status": "Active",
+                "unavailable": false
               }
             }
           ]
@@ -11838,7 +11842,7 @@
               "order": 2
             },
             {
-              "id": "4362477",
+              "id": "4426535",
               "order": 3
             }
           ]
@@ -11864,7 +11868,7 @@
               "order": 1
             },
             {
-              "id": "4426535",
+              "id": "4362477",
               "order": 2
             }
           ]
@@ -12048,8 +12052,8 @@
       "name": "Los Angeles Rams",
       "abbr": "LAR",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lar",
       "positions": [
         {
@@ -12153,8 +12157,8 @@
               }
             },
             {
-              "id": "4360797",
-              "name": "Tutu Atwell",
+              "id": "4569382",
+              "name": "Jordan Whittington",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -12203,8 +12207,8 @@
           "group": "WR",
           "players": [
             {
-              "id": "4569382",
-              "name": "Jordan Whittington",
+              "id": "4360797",
+              "name": "Tutu Atwell",
               "order": 1,
               "availability": {
                 "status": "Active",
@@ -12542,7 +12546,7 @@
               "order": 1
             },
             {
-              "id": "4360797",
+              "id": "4569382",
               "order": 2
             },
             {
@@ -12568,7 +12572,7 @@
           "key": "wr3",
           "players": [
             {
-              "id": "4569382",
+              "id": "4360797",
               "order": 1
             },
             {
@@ -12719,8 +12723,8 @@
       "name": "Miami Dolphins",
       "abbr": "MIA",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/mia",
       "positions": [
         {
@@ -13068,7 +13072,7 @@
               "order": 1
             },
             {
-              "id": "4880346",
+              "id": "4880273",
               "order": 2
             }
           ]
@@ -13077,11 +13081,11 @@
           "key": "fs",
           "players": [
             {
-              "id": "3932335",
+              "id": "4880346",
               "order": 1
             },
             {
-              "id": "4880273",
+              "id": "3932335",
               "order": 2
             },
             {
@@ -13372,8 +13376,8 @@
       "name": "Minnesota Vikings",
       "abbr": "MIN",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/min",
       "positions": [
         {
@@ -14004,8 +14008,8 @@
       "name": "New England Patriots",
       "abbr": "NE",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ne",
       "positions": [
         {
@@ -14732,8 +14736,8 @@
       "name": "New Orleans Saints",
       "abbr": "NO",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/no",
       "positions": [
         {
@@ -15398,8 +15402,8 @@
       "name": "New York Giants",
       "abbr": "NYG",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyg",
       "positions": [
         {
@@ -16097,8 +16101,8 @@
       "name": "New York Jets",
       "abbr": "NYJ",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyj",
       "positions": [
         {
@@ -16334,10 +16338,6 @@
             {
               "id": "4692555",
               "order": 4
-            },
-            {
-              "id": "4240405",
-              "order": 5
             }
           ]
         },
@@ -16366,11 +16366,11 @@
           "key": "rdt",
           "players": [
             {
-              "id": "3117255",
+              "id": "4426676",
               "order": 1
             },
             {
-              "id": "4426676",
+              "id": "3117255",
               "order": 2
             },
             {
@@ -16391,8 +16391,16 @@
               "order": 2
             },
             {
-              "id": "4429005",
+              "id": "3933407",
               "order": 3
+            },
+            {
+              "id": "4429005",
+              "order": 4
+            },
+            {
+              "id": "4240405",
+              "order": 5
             }
           ]
         },
@@ -16430,12 +16438,8 @@
               "order": 1
             },
             {
-              "id": "3933407",
-              "order": 2
-            },
-            {
               "id": "4700136",
-              "order": 3
+              "order": 2
             }
           ]
         },
@@ -16759,8 +16763,8 @@
       "name": "Philadelphia Eagles",
       "abbr": "PHI",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/phi",
       "positions": [
         {
@@ -17460,8 +17464,8 @@
       "name": "San Francisco 49ers",
       "abbr": "SF",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sf",
       "positions": [
         {
@@ -18193,8 +18197,8 @@
       "name": "Seattle Seahawks",
       "abbr": "SEA",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sea",
       "positions": [
         {
@@ -18865,8 +18869,8 @@
       "name": "Tampa Bay Buccaneers",
       "abbr": "TB",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/tb",
       "positions": [
         {
@@ -19468,8 +19472,8 @@
       "name": "Washington Commanders",
       "abbr": "WSH",
       "status": "ok",
-      "checkedAt": "2026-11-02T13:01:04Z",
-      "lastAttemptAt": "2026-11-02T13:01:04Z",
+      "checkedAt": "2026-11-02T17:21:43Z",
+      "lastAttemptAt": "2026-11-02T17:21:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/wsh",
       "positions": [
         {
@@ -19598,8 +19602,8 @@
               }
             },
             {
-              "id": "4426948",
-              "name": "Luke McCaffrey",
+              "id": "3930066",
+              "name": "Van Jefferson",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -19632,8 +19636,8 @@
               }
             },
             {
-              "id": "3930066",
-              "name": "Van Jefferson",
+              "id": "4426948",
+              "name": "Luke McCaffrey",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -19962,7 +19966,7 @@
               "order": 1
             },
             {
-              "id": "4426948",
+              "id": "3930066",
               "order": 2
             },
             {
@@ -19979,7 +19983,7 @@
               "order": 1
             },
             {
-              "id": "3930066",
+              "id": "4426948",
               "order": 2
             }
           ]
