@@ -140,6 +140,7 @@ def normalize(payload, league, now, url):
             'season': season.get('year'), 'seasonType': season.get('slug'),
             'date': eastern_date(kickoff).isoformat(), 'kickoff': kickoff,
             'timeConfirmed': competition.get('timeValid', True) is not False,
+            'neutral': competition.get('neutralSite') if type(competition.get('neutralSite')) is bool else None,
             'status': status,
             'statusDetail': status_data.get('type', {}).get('shortDetail') or status_data.get('type', {}).get('description', 'Status unavailable'),
             'period': status_data.get('period'), 'clock': status_data.get('displayClock'),
@@ -159,8 +160,10 @@ def refresh(previous, fetch, now):
         sport = info['sport']
         old = previous.get('leagues', {}).get(league, {})
         base = {'league': league, 'sport': sport,
-                'coverage': {'scores': True, 'forecasts': league == 'NBA', 'props': False, 'picks': False},
-                'coverageNote': 'NBA Today has team projections, player research and a separate record of posted NBA picks.' if league == 'NBA' else 'Schedules and scores only. Researched picks and forecasts are not yet available.',
+                'coverage': {'scores': True, 'forecasts': league in ('NBA','CBB'), 'props': False, 'picks': False},
+                'coverageNote': ('NBA Today has team projections, player research and a separate record of posted NBA picks.' if league == 'NBA' else
+                                 'CBB Today has baseline score projections, team scoring stats and downloadable research sheets; not picks.' if league == 'CBB' else
+                                 'Schedules and scores only. Researched picks and forecasts are not yet available.'),
                 'lastAttemptAt': now, 'requestedWindow': window}
         try:
             by_id = {}

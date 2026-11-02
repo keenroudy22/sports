@@ -2097,6 +2097,12 @@ def build(now=None):
             write(OUT / 'teams' / league / f'{team}.json', payload)
     write(OUT / 'research.json', {'generatedAt': stamp(now), **build_research(context, reports, now, depth_charts)})
     write(OUT / 'sport-research.json', sport_research.build(now))
+    import cbb_today
+    cbb = cbb_today.build(now)
+    cbb_sheets, cbb['sheets'] = cbb_today.exports(cbb)
+    write(OUT / 'cbb.json', cbb)
+    for filename, svg in cbb_sheets.items():
+        (OUT / filename).write_text(svg, encoding='utf-8')
     import nba_today
     nba_overview, nba_props = nba_today.public_payloads(dict(nba_today.build(now),morningBrief=morning_brief.current(now)))
     write(OUT / 'nba.json', nba_overview)

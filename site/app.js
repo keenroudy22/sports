@@ -1200,6 +1200,7 @@
      trial and scores. Never football substituted. */
   const sportToday = async () => {
     if (state.league === 'NBA') return (await ensureGames()).nbaToday();
+    if (state.league === 'CBB') return (await ensureGames()).cbbToday();
     const [lab, trials] = await Promise.all([maybe('market-lab.json'), maybe('app/sport-research.json')]);
     const lg = state.league;
     const card = trialCard(lg, lab, trials);
@@ -1986,7 +1987,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-b79fb62a24d9';
-  const GAMES_ASSET = 'app-games.js?v=sha256-1c07519a5aeb';
+  const GAMES_ASSET = 'app-games.js?v=sha256-356e043ad337';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

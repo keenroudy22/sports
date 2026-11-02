@@ -59,9 +59,31 @@
     return `<section class="section" style="margin:8px 0 18px" aria-labelledby="worth-h"><div class="section-head"><h2 id="worth-h" style="white-space:nowrap">Worth your time</h2><span class="kt-kind">Research · the one thing to check</span></div>
       <div class="chip-scroll"><div class="kt-worth-strip">${top.map(g => `<a class="kt-worth-card" href="#game/${esc(g.id)}"><span class="wc-t">${esc(g.away.abbr)} at ${esc(g.home.abbr)}</span><b>${esc(g.look || g.plainGap || 'Take a look')}</b><small>${esc([TIER_WORD[g.tier], whenShort(g.kickoff).split(', ').pop(), !(g.bettableParts || {}).official ? 'Research lean · not a bet' : ''].filter(Boolean).join(' · '))}</small></a>`).join('')}</div></div></section>`;
   };
+  views.cbbToday = async () => {
+    let data;
+    try { data = await get('app/cbb.json'); }
+    catch (_) { return head('College basketball', 'CBB projections & stats', 'Research, not picks.') + '<p>CBB research could not be loaded. Please try again.</p>'; }
+    const season = y => Number.isInteger(y) ? `${y-1}–${String(y).slice(-2)}` : '';
+    const stat = s => !s || !s.games ? 'No recorded games' : `${esc(s.wins)}–${esc(s.losses)} · ${esc(s.ppg)} scored / ${esc(s.allowed)} allowed · ${esc(s.games)} games`;
+    const name = t => t.shortName || t.name || t.abbreviation;
+    const rows = (data.games || []).filter(g => g.kickoff && Date.parse(g.kickoff) > Date.now());
+    const projected = rows.filter(g => g.projection);
+    const cards = projected.map(g => {
+      const p = g.projection, h = g.teams.home, a = g.teams.away;
+      const stats = ['away', 'home'].map(side => {
+        const t = g.teams[side], s = (g.stats || {})[side] || {}, c = s.current || {}, prior = s.prior || {};
+        return `<div><b>${esc(name(t))}</b><p class="small">This season · ${esc(season(c.season))}: ${stat(c)}</p><p class="small muted">Prior season · ${esc(season(prior.season))}: ${stat(prior)}</p></div>`;
+      }).join('');
+      const first = g.firstTotal ? `<p class="small muted">First recorded total: ${esc(g.firstTotal.line)} · ${esc(g.firstTotal.book)} · ${esc(whenShort(g.firstTotal.capturedAt))}. Historical quote, not a live offer.</p>` : '';
+      return `<article class="section"><p class="small muted">${esc(whenShort(g.kickoff))}</p><h2>${esc(name(a))} at ${esc(name(h))}</h2>${p ? `<p class="small">PROJECTED · away / home</p><div class="display" style="font-size:32px">${esc(p.away)} – ${esc(p.home)}</div><p>Total <b>${esc(p.total)}</b> · ${p.neutral ? 'Neutral court' : 'Home court included'}${p.sparse ? ' · Early-season baseline' : ''}</p>` : `<p class="muted">${esc(g.hold || 'Projection unavailable')}</p>`}${first}<details><summary>Team scoring stats</summary>${stats}</details></article>`;
+    }).join('');
+    const sheets = (data.sheets || []).filter(s => rows.some(g => g.date === s.date)).map(s => `<a class="chip" href="data/app/${esc(s.file)}" target="_blank" rel="noopener">${esc(s.date)} · Sheet ${esc(s.page)}/${esc(s.pages)}</a>`).join(' ');
+    return head('College basketball', 'CBB projections & stats', `${projected.length} projected matchups · ${rows.length} upcoming games across three days · Research, not picks.`) + `<p class="small muted">${esc(data.note || '')}</p>${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}<section class="section"><h2>Projection sheets</h2><p class="small">12 matchups per sheet. Open a sheet to save or share. Unsupported matchups stay off the sheets.</p><div class="chip-scroll">${sheets || '<p>No supported future projections available yet.</p>'}</div></section><p class="small muted">${rows.length - projected.length} matchups without a verified projection are omitted.</p><div class="projs">${cards}</div>${rows.length ? '' : '<p>No upcoming CBB games stored.</p>'}<p><a href="#games/live?sport=CBB">Live scores & finals ›</a></p>`;
+  };
   views.games = async route => {
     const tab = route.tab || 'upcoming';
     if (route.league) setLeague(route.league);
+    if (state.league === 'CBB' && tab === 'upcoming') return views.cbbToday();
     const tabs = `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
     const football = FOOTBALL.includes(state.league) || state.league === 'ALL';
     const intro = !football && state.league !== 'NBA' ? `${LEAGUE_NAME[state.league]} scores and schedules are available under Live & scores. This sport has no published game projections yet.` : tab === 'upcoming' ? "My projected score and win chance for every game, and how my number compares with the book. Off and Def are my team ranks; #1 is best. Research, not best bets." : tab === 'live' ? 'Every sport I track. Scores refresh about every minute while this page is open.' : 'How my projected scores compared with the finals.';
