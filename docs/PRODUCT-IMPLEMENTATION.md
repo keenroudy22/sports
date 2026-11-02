@@ -1,3 +1,20 @@
+### November2 CBB opening-night fun ticket — actual social receipts
+
+Owner explicitly requested the eight-leg CBB fun ticket and graphic on X/Discord,
+separate from Best Bets. Official previews reviewed current roster changes,
+neutral sites, Florida Fland illness/expected start and Aberdeen eligibility,
+UNC exhibition struggles, and WVU Jenkins shoulder absence. Missing comprehensive
+injury information is not a claim that everyone is healthy. Native dark arena
+art retains authentic logos, all exact full-game alts, +814 DraftKings unboosted
+and11:45ET quote clock; no wager amounts/payouts/IDs. Caption/privacy/native-art
+checks passed; full caption/graphic inspected in Buffer before attended send.
+X actual Buffer Sent12:47ET: https://twitter.com/keenkooks/status/2117312757213040716
+Discord Plays attachment confirmed17:48:53Z/message1566871739844268113.
+No API allowance increase, official model promotion, Best Bet entry, website
+release or wager placement. Original terms/news/receipts are frozen separately
+in docs/cbb-opening-fun-2026-11-02.json. O-20261102-CBBFUN retains sourced final
+settlement and genuine graphic engagement observations for existing desk jobs.
+
 ### October31 reviewed Climb delivered — verified receipts
 
 Core source ce169a48a6906a3154a5b0fff1adc04c2aea5d22 passed2066Python
