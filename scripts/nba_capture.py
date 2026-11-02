@@ -66,7 +66,14 @@ class Budget:
                 request=(Request(url,headers={
                     'User-Agent':'Mozilla/5.0 (compatible; KooknResearch/1.0; +https://keenroudy.com/sports/)',
                     'Accept':'text/html,application/xhtml+xml' if html else 'application/pdf'}) if html or raw else url)
-                with urlopen(request, timeout=max(1, min(20, self.deadline-self.clock()))) as response:
+                # Official PDFs can outlive the normal short JSON deadline.
+                # Give the single approved PDF attempt more of the existing
+                # capture window, never another request or a larger window.
+                request_limit = 45 if raw else 20
+                remaining = self.deadline-self.clock()
+                if remaining <= 0:
+                    raise TimeoutError('NBA capture timebox exhausted')
+                with urlopen(request, timeout=min(request_limit, remaining)) as response:
                     if html and response.geturl().rstrip('/') != url:
                         raise ValueError('Official listing redirected outside its source')
                     result = response.read(1_000_001) if html else response.read(3_000_001) if raw else json.load(response)

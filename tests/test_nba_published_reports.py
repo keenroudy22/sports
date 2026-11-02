@@ -102,6 +102,25 @@ class PublishedReportTests(unittest.TestCase):
             self.assertEqual(official.failure(TimeoutError(reason),NOW)['reason'],'NBA capture budget exhausted')
         self.assertNotIn('secret',json.dumps(official.failure(TimeoutError('secret remote error'),NOW)))
 
+    def test_single_pdf_can_use_more_time_but_never_exceed_shared_deadline(self):
+        from unittest.mock import MagicMock
+        response=MagicMock();response.__enter__.return_value=response
+        response.read.return_value=b'%PDF-1.4'
+        for remaining, expected in ((150,45),(12,12),(.25,.25)):
+            clock=iter((0,150-remaining,150-remaining,150-remaining))
+            budget=nba_capture.Budget(seconds=150,sleep=lambda _:None,clock=lambda:next(clock))
+            with patch.object(nba_capture,'urlopen',return_value=response) as opened:
+                self.assertEqual(budget.raw(PDF),b'%PDF-1.4')
+                self.assertEqual(opened.call_args.kwargs['timeout'],expected)
+            self.assertEqual(budget.requests,1)
+
+    def test_slow_pdf_failure_never_retries_or_invents_availability(self):
+        with patch.object(nba_capture,'urlopen',side_effect=TimeoutError('slow PDF')) as opened:
+            budget=nba_capture.Budget(sleep=lambda _:None)
+            with self.assertRaises(TimeoutError):budget.raw(PDF)
+            self.assertEqual(opened.call_count,1)
+            self.assertEqual(budget.requests,1)
+
     def test_season_page_tracks_october_boundary(self):
         self.assertTrue(official.index_url(NOW).endswith('2026-27-season'))
         self.assertTrue(official.index_url(datetime(2027,3,1,tzinfo=timezone.utc)).endswith('2026-27-season'))
