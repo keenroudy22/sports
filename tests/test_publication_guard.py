@@ -11,6 +11,13 @@ import publication_guard as guard
 
 
 class PublicationGuardTests(unittest.TestCase):
+    def test_cbb_public_research_does_not_expose_raw_model_stores(self):
+        for path in ('data/app/cbb.json','data/app/cbb-sheet-2026-11-02-1.svg'):
+            self.assertTrue(guard.allowed_path(Path(path)))
+        for path in ('data/app/cbb-sheet-private.svg','data/app/cbb-sheet-2026-11-02-0.svg',
+                     'data/app/cbb-captures.json','data/hoops/cbb-2027.jsonl'):
+            self.assertFalse(guard.allowed_path(Path(path)))
+
     def test_only_reviewed_nfl_quarter_milestone_shards_are_public(self):
         for name in ('quarter-index', 'NFL-2026-10-29-1Q-milestones', 'NFL-2026-11-01-1Q-milestones-part-2'):
             self.assertTrue(guard.allowed_path(Path(f'data/app/trends/{name}.json')))

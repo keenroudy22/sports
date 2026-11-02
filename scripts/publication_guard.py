@@ -19,7 +19,7 @@ DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.
               'market-lab.json', 'market-lines.json', 'depth-charts.json', 'player-identity.json',
               'scoreboard-games.json', 'forecasts.json', 'feed.xml'}
 APP_FILES = {'today.json', 'today-hero.json', 'record.json', 'lines.json', 'lines-NFL.json', 'lines-CFB.json',
-             'research.json', 'sport-research.json', 'vegas.json', 'nba.json', 'nba-props.json'}
+             'research.json', 'sport-research.json', 'vegas.json', 'nba.json', 'nba-props.json', 'cbb.json'}
 PRIVATE_NAMES = {'env', '.env', 'desk-health.html', 'desk-health.json', 'desk-health-state.json',
                  'desk-reliability.json', 'reliability-history.json', 'live-watch.json',
                  'live-progress.json', 'x-posted.json', 'status.json', 'policy.json',
@@ -57,7 +57,7 @@ def allowed_path(relative):
     if parts[:2] != ('data', 'app'):
         return False
     if len(parts) == 3:
-        return parts[2] in APP_FILES
+        return parts[2] in APP_FILES or bool(re.fullmatch(r'cbb-sheet-\d{4}-\d{2}-\d{2}-[1-9]\d?\.svg', parts[2]))
     return bool(re.fullmatch(r'data/app/(?:games/(?:NFL|CFB)-[A-Za-z0-9_-]+|'
                              r'player-charts/(?:NFL|CFB)|players/(?:NFL|CFB)(?:/\d+)?|'
                              r'teams/(?:NFL|CFB)(?:/\d+)?|teams/CFB-defense|'
