@@ -1,3 +1,11 @@
+# November3 official suffix identity repair
+
+The actual17:30 report prints "Udeh, Jr., Ernest". Reorder only explicit
+Jr/Sr/II/III/IV/V middle suffixes, then require the same unique current-team
+roster identity. Standard "Udeh Jr., Ernest" remains supported. Do not infer
+Christopher/Chris nicknames or treat other unlisted/ambiguous players as mapped.
+This source parser repair does not clear other team/source/model holds.
+
 # November3 prospective validation follow-through
 
 From22:00Z, actual browser PDF recovery may finish a recent real scheduled NBA

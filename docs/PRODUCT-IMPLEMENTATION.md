@@ -6746,3 +6746,14 @@ Found late browser report recovery did not complete the physical quote capture, 
 Added separate fixed sqrt(1+mean) residual-scale experiment,50% fair-market anchor, old exposed cases training-only, new physical pregame test cohort, equal-game/date Brier comparison,30new games/five dates. All versions/failures retained; never an admission route or injury/mean adjustment. Existing real captures and source completion collect it without new feeds.
 
 Climb prep source-review-needed drafts now work even when legacy model segments hold. They keep actual quoted alts, same-book cross-game two-leg derived-150..-200 prices and review/final-ticket requirements. No model chance or EV is invented. Current research favors further review of Ball State and CMU cushions; current primary previews identify Ball State offensive improvement and Glasser replacing season-ending-injured Flores against EMU's weaker passing defense. No selected or published Nov4 ticket. Full canonical/hosted/live verification pending.
+
+
+## November 3 — real validation recovery and suffix follow-through
+
+Source9bebd56fa passed2129Python/307Node normal+clean, record/publication audits and offline rehearsal; hosted41729533181SUCCESS, actual artifact9bebd56fa, live375/1440 loaded without overflow or console errors. Existing00:45/07:45 tasks retain their windows/budgets and now inspect recovery receipts and sourced Climb drafts.
+
+The actual17:30 official PDF was downloaded from its visible canonical listing link with the ordinary in-app browser and reviewed across all five pages. Its13submitted/27parsed teams retain unknown identities and unsubmitted-team holds. Recovery of the real scheduled capture recorded107pregame baselines and58probability/volume observations with0feed requests; repeating it added0. The58observations span4games per market, not58independent games. Three new frozen volume specifications trained on62points/61rebounds/62assists games; no new test result or official approval is claimed. Completion data a52ff310d is committed; its hosted proof is pending.
+
+Next-day prep covers14NBA games/256prop rows and3CFB games/126alternate quotes, with8source-review options. Private sourced Ball State+11.5/CMU+12.5 draft is derived-174 at captured DK leg prices; actual combined ticket and game-day qualification remain required. No new public play was sent in this repair.
+
+The real report also exposed the explicit comma-suffix name form Udeh, Jr., Ernest. A narrow exact-roster parser repair and two regression tests passed the24targeted source/recovery tests. Nickname/unknown-name holds remain. This follow-up still needs canonical release and hosted/live proof before being called shipped. See docs/nba-validation-followthrough-2026-11-03.json for final receipts.

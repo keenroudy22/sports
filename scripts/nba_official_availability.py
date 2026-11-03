@@ -33,6 +33,17 @@ def normal(value):
     return re.sub(r'[^a-z0-9]','',text)
 
 
+def player_identity(value):
+    parts=[p.strip() for p in value.split(',')]
+    if len(parts)==2 and all(parts):
+        return normal(parts[1]+' '+parts[0])
+    # The official PDF also prints "Udeh, Jr., Ernest". Reorder only
+    # an explicit suffix; nicknames and other ambiguous comma rows stay held.
+    if len(parts)==3 and all(parts) and normal(parts[1]) in ('jr','sr','ii','iii','iv','v'):
+        return normal(parts[2]+' '+parts[0]+' '+parts[1])
+    return None
+
+
 def report_url(now):
     local=now.astimezone(EASTERN)-timedelta(minutes=15)
     local=local.replace(minute=15*(local.minute//15),second=0,microsecond=0)
@@ -188,7 +199,7 @@ def parse(text, games, rosters, expected_at, observed_at, source, *, archive=Fal
                     record['unmapped'].append('Unrecognized status row');continue
                 raise ValueError('Unrecognized official player/status row')
             continue  # Wrapped reason only, never a participation claim.
-        last,first=player[1].split(',',1);identity=normal(first+' '+last)
+        identity=player_identity(player[1])
         record['submitted']=True
         roster=rosters.get(team_id,{})
         roster_ok=(roster.get('team')==team_id and roster.get('season')==game['season']

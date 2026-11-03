@@ -38,6 +38,27 @@ def fixtures():
 
 
 class OfficialAvailabilityTests(unittest.TestCase):
+    def test_official_comma_suffix_matches_only_exact_current_roster_identity(self):
+        for name in ('Udeh, Jr., Ernest','Udeh Jr., Ernest'):
+            with self.subTest(name=name):
+                games,rosters=fixtures()
+                rosters['17']['players']=[dict(id='5106261',name='Ernest Udeh Jr.')]
+                report=official.parse(TEXT.replace('Player, Test',name),games,rosters,REPORTED,NOW,SOURCE)
+                team=next(t for t in report['teams'] if t['eventId']=='27' and t['team']=='17')
+                self.assertEqual(team['rows'][0]['athleteId'],'5106261')
+                self.assertEqual(team['rows'][0]['status'],'Out')
+                self.assertEqual(team['unmapped'],[])
+
+    def test_suffix_repair_does_not_infer_nicknames_or_ambiguous_names(self):
+        for name,roster_name in [('Cenac Jr., Christopher','Chris Cenac Jr.'),
+                                 ('Udeh, Ernest, Jr.','Ernest Udeh Jr.')]:
+            with self.subTest(name=name):
+                games,rosters=fixtures();rosters['17']['players']=[dict(id='1',name=roster_name)]
+                report=official.parse(TEXT.replace('Player, Test',name),games,rosters,REPORTED,NOW,SOURCE)
+                team=next(t for t in report['teams'] if t['eventId']=='27' and t['team']=='17')
+                self.assertEqual(team['rows'],[])
+                self.assertEqual(team['unmapped'],[name])
+
     def test_wrapped_transport_diagnostics_are_typed_and_private(self):
         cases = [(TimeoutError('private-token'), 'Official report request timed out'),
                  (socket.gaierror('private-token'), 'Official report host lookup failed'),
