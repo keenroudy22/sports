@@ -1,0 +1,177 @@
+{
+  "date": "2026-11-03",
+  "state": "shipped-observing-natural-runs",
+  "tracking": [
+    {
+      "path": "/Users/keen/Projects/sports-dev/work/nba-tracking-passing-last3-current.json",
+      "sha256": "d7b57f4b6b8a73ddf314739bd6f1f8c8f9a3ae290feb1dc2b2cfc76f09b8d40c",
+      "source": "https://www.nba.com/stats/players/passing?LastNGames=3",
+      "observedAt": "2026-11-03T20:01:54.711Z",
+      "controls": {
+        "season": "2026-27",
+        "seasonType": "Regular Season",
+        "perMode": "Per Game",
+        "segment": "Last 3 Games",
+        "page": "All"
+      },
+      "rows": 415
+    },
+    {
+      "path": "/Users/keen/Projects/sports-dev/work/nba-tracking-passing-season-current.json",
+      "sha256": "826bd2bda4d1215901bbf228cc08c1bf523ca828f496ad7274f62d8c9082af35",
+      "source": "https://www.nba.com/stats/players/passing",
+      "observedAt": "2026-11-03T20:01:42.696Z",
+      "controls": {
+        "season": "2026-27",
+        "seasonType": "Regular Season",
+        "perMode": "Per Game",
+        "segment": "All Season Segments",
+        "page": "All"
+      },
+      "rows": 448
+    },
+    {
+      "path": "/Users/keen/Projects/sports-dev/work/nba-tracking-rebounding-last3-current.json",
+      "sha256": "bce907169fff35a1e4c6d61f8e6d6170e891ce756a1842c12a7f83d3264d9e0c",
+      "source": "https://www.nba.com/stats/players/rebounding?LastNGames=3",
+      "observedAt": "2026-11-03T20:02:37.722Z",
+      "controls": {
+        "season": "2026-27",
+        "seasonType": "Regular Season",
+        "perMode": "Per Game",
+        "segment": "Last 3 Games",
+        "page": "All"
+      },
+      "rows": 381
+    },
+    {
+      "path": "/Users/keen/Projects/sports-dev/work/nba-tracking-rebounding-season-current.json",
+      "sha256": "783b3de77828c3ad67ceeb440a54ba36e06ef21c9f39fef0329135eeab0a04d3",
+      "source": "https://www.nba.com/stats/players/rebounding",
+      "observedAt": "2026-11-03T20:02:28.972Z",
+      "controls": {
+        "season": "2026-27",
+        "seasonType": "Regular Season",
+        "perMode": "Per Game",
+        "segment": "All Season Segments",
+        "page": "All"
+      },
+      "rows": 423
+    }
+  ],
+  "trackingDataCommit": "f225013d0ed26fcd3cb122c3bb6d1b32c9823394",
+  "officialPdf": {
+    "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-03_03_15PM.pdf",
+    "path": "/Users/keen/Downloads/Injury-Report_2026-11-03_03_15PM.pdf",
+    "sha256": "460db5f6183c318c575ae84297204b8d40febaef42b06cb691d2238e48a44f82",
+    "bytes": 82922,
+    "pages": 2,
+    "teams": 28,
+    "submitted": 0,
+    "transport": "ordinary Chrome official listing link downloadMedia",
+    "directTransportRecovered": false,
+    "ingestedTeams": 28,
+    "originalReportAt": "2026-11-03T20:15:00Z",
+    "originalObservedAt": "2026-11-03T20:27:52Z",
+    "providerObservedAtPreserved": "2026-11-03T18:34:23Z"
+  },
+  "privateResearch": {
+    "targetDate": "2026-11-04",
+    "players": 387,
+    "passingMatches": 387,
+    "reboundingMatches": 355,
+    "uniquePricedPrimaryMarketWatches": 30,
+    "officialBetApproval": false,
+    "packet": "/Users/keen/Projects/sports/work/nba-opportunity-research-20261104.json",
+    "watch": "/Users/keen/Projects/sports-dev/work/nba-role-watch-20261104.json",
+    "availablePropRows": 139,
+    "games": 14,
+    "opponentContextCases": 30,
+    "opponentRecentSample": 5,
+    "localReview": {
+      "status": "evidence-only",
+      "elapsedSeconds": 12.01,
+      "canAdmit": false,
+      "canClearHolds": false
+    }
+  },
+  "automations": {
+    "updated": [
+      "kook-n-desk-health-and-fix",
+      "kook-n-overnight-outcome-follow-through"
+    ],
+    "newJobs": 0,
+    "scheduleChanges": 0,
+    "stakeChanges": 0,
+    "requestAllowanceChanges": 0,
+    "verifiedConfigs": [
+      {
+        "id": "kook-n-desk-health-and-fix",
+        "status": "ACTIVE",
+        "rrule": "FREQ=DAILY;BYHOUR=7;BYMINUTE=45",
+        "model": "gpt-6.1-sol",
+        "reasoningEffort": "medium",
+        "promptSha256": "b265ab9d0d82924b140dc65e92f02172e7326c5b6e13d0ac2c06cc9c5b240747",
+        "hasActualPdfArgument": true,
+        "hasExplicitSlateDate": true
+      },
+      {
+        "id": "kook-n-overnight-outcome-follow-through",
+        "status": "ACTIVE",
+        "rrule": "FREQ=DAILY;BYHOUR=0;BYMINUTE=45",
+        "model": "gpt-6.1-sol",
+        "reasoningEffort": "medium",
+        "promptSha256": "79b8aea523ce9ac105c8de301feb3eecb4fee4ebec5dd4e600ba3d2a6d3f53a1",
+        "hasActualPdfArgument": true,
+        "hasExplicitSlateDate": true
+      }
+    ],
+    "dateTargeting": "Earliest upcoming Eastern slate, explicit target date; do not skip current slate after midnight"
+  },
+  "holds": [
+    "Direct official PDF HTTP transport remains unreliable; actual browser download succeeds",
+    "All teams unsubmitted in observed15:15ET report",
+    "NBA frozen prop proof not promoted; research does not clear admission"
+  ],
+  "newPublicPlays": 0,
+  "sourceCandidate": "b1913d9b1abf757056f3f27787502d65ca51ae20",
+  "officialDataCommit": "35b66a380da5da9d1f2dcd3ed51c10eba4dc6944",
+  "sourceState": "canonical-promoted-hosted-final-pending",
+  "tests": {
+    "python": 2121,
+    "skipped": 2,
+    "node": 307,
+    "normalAndClean": true
+  },
+  "rehearsal": {
+    "slot": "1525",
+    "path": "/private/var/folders/k0/hcj9t5tj2tn3p0pnsyfnv4r40000gn/T/kookn-rehearsal-_k8qtnwr",
+    "outcome": "ok",
+    "outsideWrite": 0,
+    "privateRead": 0
+  },
+  "live": {
+    "mobileWidth": 375,
+    "desktopWidth": 1440,
+    "horizontalOverflow": false,
+    "loadError": false,
+    "consoleErrors": 0,
+    "opportunityRows": 20,
+    "observedExample": "Ausar Thompson10.3 recent potential assists vs8.5season,3recent/6season tracked games",
+    "verificationScope": "Final41712940129 artifact contains sourceb1913d9b and official data35b66a38; repeated live375/1440 clean",
+    "finalHostedVerified": true,
+    "finalMobile": "work/nba-opportunities-final-mobile-20261103.png",
+    "finalDesktop": "work/nba-opportunities-final-desktop-20261103.png",
+    "injuryHold": "Official team report not submitted or not found"
+  },
+  "hostedRun": 41712940129,
+  "verifiedHead": "6708f8401d3d6778b30658d102fc80c6137f0dc2",
+  "sourceAncestryVerified": true,
+  "officialDataAncestryVerified": true,
+  "remaining": [
+    "Observe actual scheduled00:45/07:45 source refresh and eventual release/grading",
+    "Independent NBA prop probability/book validation remains unapproved; no admission bypass",
+    "Direct HTTP transport is not recovered; ordinary official browser download is verified",
+    "Opportunity/dispersion predictive experiment is not implemented by these research-only changes"
+  ]
+}
