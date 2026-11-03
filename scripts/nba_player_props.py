@@ -203,8 +203,14 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
         import nba_prop_probability
         try:
             probability = nba_prop_probability.capture(Path(root), stamp)
+
         except (OSError, ValueError, KeyError, TypeError):
             errors.append('probability-shadow-unavailable')
+        try:
+            import nba_dispersion_shadow
+            probability['volumeExperiment']=nba_dispersion_shadow.capture(Path(root),stamp)
+        except (OSError,ValueError,KeyError,TypeError):
+            errors.append('volume-experiment-unavailable')
         try:
             import nba_prop_release
             probability['releaseProtocolRecorded'] = nba_prop_release.freeze(Path(root), stamp)
@@ -404,10 +410,12 @@ def saved(root):
     return [r for p in Path(root).glob('*.jsonl') for r in boxscores.read_store(p)]
 
 
-def record_forward(now,root=STORE,boxes=None):
+def record_forward(now,root=STORE,boxes=None,*,eligible_quotes=None):
     """First verified pregame quote/forecast per player-market-book, immutable."""
     root=Path(root); old={r['id'] for r in saved(root/'player-forecasts')};rows=[]
     for r in build(now,root,boxes,limit=None,_forward_capture=True)['rows']:
+        if eligible_quotes is not None and tuple(r[k] for k in ('eventId','athleteId','stat','book','sourceAt')) not in eligible_quotes:
+            continue
         if not r.get('projection') or r.get('hold'):continue
         model=r['projection'].get('model',VERSION)
         identity=':'.join((r['eventId'],r['athleteId'],r['stat'],r['book'],model))

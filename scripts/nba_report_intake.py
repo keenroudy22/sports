@@ -105,6 +105,11 @@ def main():
     packet=with_pdf(json.loads(Path(args.input).read_text()),Path(args.pdf).read_bytes())
     with deployment_lock.bounded_lock(Path.home()/'.config/keenroudy/run.lock'):
         result=ingest(packet,datetime.now(timezone.utc),args.root)
+        import nba_validation_runtime
+        try:
+            result['validationCompletion']=nba_validation_runtime.finish(args.root,datetime.now(timezone.utc))
+        except (OSError,ValueError,KeyError,TypeError):
+            result['validationCompletion']=dict(state='held',reason='Validation source completion failed; original report retained',admissionReady=False,requests=0)
     print(json.dumps(result))
 
 if __name__=='__main__':main()

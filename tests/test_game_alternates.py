@@ -146,3 +146,20 @@ class GameAlternateTests(unittest.TestCase):
                 self.assertTrue(legs)
                 self.assertTrue(all(r['alternate'] is True for r in legs))
                 self.assertEqual(ladder.alternate_spread_legs(GAME,ctx,NOW+timedelta(days=1)),[])
+
+class SourceReviewPrepTests(unittest.TestCase):
+    def test_price_drafts_do_not_require_an_unvalidated_model_or_become_admission(self):
+        legs=[dict(team=f'T{i}',gameId=f'g{i}',league='CFB',book='DraftKings',odds=price,
+                   line=6.5,title=f'T{i} +6.5',alternate=True,holds=['Source review required'])
+              for i,price in enumerate((-350,-400))]
+        result=climb_prep.source_review_options(legs,NOW)
+        self.assertEqual(len(result),1);option=result[0]
+        self.assertEqual(option['status'],'source-review-needed');self.assertTrue(option['planningOnly'])
+        self.assertIn('final ticket',option['priceBasis'])
+        self.assertTrue(-200<=option['derivedOdds']<=-150)
+        for leg in option['legs']:
+            self.assertNotIn('chance',leg);self.assertNotIn('rawChance',leg)
+        same=[dict(legs[0]),dict(legs[1],gameId='g0')]
+        self.assertEqual(climb_prep.source_review_options(same,NOW),[])
+        mixed=[dict(legs[0]),dict(legs[1],book='FanDuel')]
+        self.assertEqual(climb_prep.source_review_options(mixed,NOW),[])

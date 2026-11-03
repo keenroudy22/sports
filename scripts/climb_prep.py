@@ -47,9 +47,27 @@ def two_leg_options(legs, now, supported=False, limit=8):
     return options[:limit]
 
 
+def source_review_options(legs, now, limit=8):
+    """Price-only drafts for the approved sourced review; never model approval."""
+    grouped={}
+    for leg in legs:
+        if leg.get('book') not in ladder.SLUGS or not ladder.LEG_PRICES[0]<=leg['odds']<=ladder.LEG_PRICES[1]:continue
+        grouped.setdefault((leg['league'],leg['book'],leg['gameId'],leg['team']),[]).append(leg)
+    pool=[]
+    for rows in grouped.values():
+        # Two quoted rungs per team near the preferred two-leg price shape.
+        rows.sort(key=lambda r:(abs(r['odds']+400),r['line']))
+        pool.extend(rows[:2])
+    result=two_leg_options(pool,now,limit=limit)
+    for option in result:
+        option.update(status='source-review-needed',reviewRoute='sourced-climb-review-v1')
+        option['releaseChecks']+=['Sourced matchup/availability reason and countercase for each leg','Existing reviewed-ticket admission; no probability/EV claim']
+    return result
+
+
 def prepare(ctx, now, day=None):
     day = day or gates.eastern_date(now)+timedelta(days=1)
-    out=[];supported_legs=[];watch_legs=[]
+    out=[];supported_legs=[];watch_legs=[];review_legs=[]
     confirmed=ladder.confirmed_at()
     for game in sorted(ctx.games.values(),key=lambda g:(g['kickoff'],g['id'])):
         if game.get('state') != 'pre' or gates.when(game['kickoff']) <= now:
@@ -77,6 +95,12 @@ def prepare(ctx, now, day=None):
             row=dict(team=game[side]['short'],line=line,odds=price,book=book,observedAt=at,
                 projection=desk['projection'] if desk else None,holds=holds)
             quotes.append(row)
+            if ladder.LEG_PRICES[0]<=price<=ladder.LEG_PRICES[1]:
+                review_legs.append(dict(team=game[side]['short'],line=line,odds=price,
+                    book=ladder.BOOKS.get(book),observedAt=at,gameId=game['id'],league=game['league'],
+                    kickoff=game['kickoff'],title=f"{game[side]['short']} {pricing.signed(line)}",alternate=True,
+                    holds=['Unreviewed price option; current matchup/news research and exact final ticket price required']+
+                          (['Quote needs refresh'] if 'Quote needs refresh' in holds else [])))
             if desk and desk['rawChance']>=ladder.MANUAL_RAW_CHANCE:
                 watch_legs.append(dict(row,book=ladder.BOOKS.get(book),gameId=game['id'],league=game['league'],
                     kickoff=game['kickoff'],title=f"{game[side]['short']} {pricing.signed(line)}",
@@ -103,6 +127,7 @@ def prepare(ctx, now, day=None):
     return dict(asOf=gates.stamp(now),targetDate=day.isoformat(),planningOnly=True,games=out,
                 twoLegOptions=supported_options,
                 evidenceHeldOptions=two_leg_options(watch_legs,now) if not supported_options else [],
+                sourceReviewOptions=source_review_options(review_legs,now),
                 releaseReady=False,
                 nextAction='Refresh prices, news and models at existing game-day morning checks; release only through normal admission and delivery.')
 

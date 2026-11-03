@@ -1,3 +1,29 @@
+# November3 prospective validation follow-through
+
+From22:00Z, actual browser PDF recovery may finish a recent real scheduled NBA
+quote capture without another feed call. Require an actual PDF digest and original
+report/observation clocks; fresh provider evidence; a recent scheduled receipt;
+fresh paired primary quotes physically observed after report publication and
+within that capture's bounded completion window. Record computations now, never
+at a fabricated missed slot. Only those exact quotes may enter this completion;
+ordinary capture behavior, frozen baseline/probability/adapter hashes and all
+admission rules remain. Repeated completion receipts are idempotent. Stale,
+future, conflicting, replayed and pre-report prices cannot create evidence.
+
+Natural captures also freeze a separate volume-scaled residual experiment. Past
+exposed outcomes train once; only later actual pregame observations test. Fixed
+sqrt(1+mean) scaling and50% market anchor cannot be retuned into a pass. Keep it
+in separate dispersion stores, with equal-game/date comparison and at least30
+new games/five dates. It never approves a bet, changes a baseline mean, redistributes
+injuries or replaces the failed original study. Official-book proof and a future
+reviewed adapter remain separate requirements.
+
+Private Climb prep now also shows source-review-needed price drafts for the
+already approved NFL/CFB reviewed route when the old model pool is empty. These
+are derived prices, not final sportsbook tickets or selected plays. Source facts,
+current availability, reason/countercase, game-day reprice, exact final ticket,
+one-open-step and shared exposure checks remain mandatory before publication.
+
 # November3 browser-backed official injury-report intake
 
 When direct official PDF transport fails, the existing attended/research browser
