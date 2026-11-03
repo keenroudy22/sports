@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-11-03T12:41:32.503402+00:00",
+  "scope": "Owner-approved final review of Kentucky under and Arkansas alternate; no wager placement",
+  "slateCorrection": {
+    "defaultEspnGames": 5,
+    "allDivisionIGames": 29,
+    "pricedGames": 19,
+    "method": "ESPN scoreboard groups=50; verified fuller board against DraftKings visible UI"
+  },
+  "decisions": [
+    {
+      "game": "Manhattan at Kentucky",
+      "market": "under",
+      "line": 158.5,
+      "odds": -110,
+      "book": "DraftKings",
+      "quoteProof": "Visible DraftKings CBB game-lines UI 07:40-07:41 Eastern November3",
+      "status": "research_lean_not_official",
+      "case": "Current exhibition regulation scoring69,76,71 supports investigating under; UCF90 includes19OT points.",
+      "risk": "Only3 exhibition games, different opponents and lineups; shooting/rebounding mismatch can lift Kentucky scoring. No demonstrated priced probability advantage.",
+      "baselineTotal": 157.7,
+      "baselineCaution": "Prior-heavy, sparse model;0.8point gap cannot establish actionable edge.",
+      "sources": [
+        "https://ukathletics.com/news/2026/11/02/big-blue-preview-kentucky-vs-manhattan/"
+      ]
+    },
+    {
+      "game": "Arkansas-Pine Bluff at Arkansas",
+      "market": "alternate spread",
+      "line": -27.5,
+      "odds": -523,
+      "book": "DraftKings",
+      "quoteProof": "Visible DraftKings CBB alternate-spread UI November3 around07:41ET",
+      "status": "watch_not_approved_ticket",
+      "case": "Current exhibition wins over Gonzaga/Memphis and nine-player17+minute rotation support depth case.",
+      "risk": "Large winning margin still required; rotation experiments, opponent unknowns, late scoring and price risk. No actual two-leg ticket selected or combined price verified.",
+      "mainLineObserved": -39.5,
+      "sources": [
+        "https://arkansasrazorbacks.com/mbb-preview-arkansas-vs-ua-pine-bluff/"
+      ]
+    }
+  ],
+  "published": false,
+  "nextAction": "Review remaining19priced DivisionI matchups with current roster/availability and exact prices; do not label these tentative cases BestBets. CBB Climb adapter is not supported by current football-only sourced review."
+}
