@@ -4,6 +4,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 from datetime import timedelta
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
@@ -25,6 +26,20 @@ class BrowserReportTests(unittest.TestCase):
             listing=dict(source=official.index_url(f.NOW),retrievedAt='2026-10-27T12:10:00Z',html=f'<a href="{f.SOURCE}">report</a>'),
             pages=[dict(number=1,totalPages=1,text=text,screenshot=str(image),sha256=hashlib.sha256(image.read_bytes()).hexdigest())])
         return root,games,packet
+
+    def test_downloaded_pdf_bytes_replace_transcription_without_changing_receipt(self):
+        with tempfile.TemporaryDirectory() as folder:
+            _,_,p=self.fixture(folder);original=copy.deepcopy(p)
+            actual=p['pages'][0]['text'];p['pages'][0]['text']='invented status'
+            with patch.object(official,'extract',return_value=actual+'\f'):
+                result=intake.with_pdf(p,b'%PDF-test-only')
+            self.assertEqual(result['pages'][0]['text'],actual)
+            self.assertEqual(result['retrievedAt'],original['retrievedAt'])
+            self.assertEqual(p['pages'][0]['text'],'invented status')
+            self.assertEqual(result['pdfSha256'],hashlib.sha256(b'%PDF-test-only').hexdigest())
+            with patch.object(official,'extract',return_value=actual+'\f'+actual):
+                with self.assertRaises(ValueError):intake.with_pdf(original,b'%PDF-test-only')
+            with self.assertRaises(ValueError):intake.with_pdf(original,b'not a PDF')
 
     def test_browser_source_reuses_strict_parser_and_preserves_provider_clock_and_failure(self):
         with tempfile.TemporaryDirectory() as folder:

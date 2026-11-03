@@ -6,6 +6,7 @@ reviewed. The same official text parser/identity/freshness rules still apply.
 An unsubmitted report stays unsubmitted; an old ESPN observation stays old.
 """
 import argparse
+import copy
 import hashlib
 import json
 import re
@@ -16,6 +17,18 @@ import boxscores
 import deployment_lock
 import nba_capture
 import nba_official_availability as official
+
+
+def with_pdf(packet, pdf):
+    """Use actual downloaded bytes, never an AI-generated status transcription."""
+    text=official.extract(pdf)
+    pages=[page for page in text.split('\f') if page.strip()]
+    if len(pages)!=len(packet['pages']):
+        raise ValueError('Downloaded PDF and reviewed page counts differ')
+    result=copy.deepcopy(packet)
+    for page,text in zip(result['pages'],pages):page['text']=text
+    result['pdfSha256']=hashlib.sha256(pdf).hexdigest()
+    return result
 
 
 def build(packet, now, root):
@@ -53,6 +66,9 @@ def build(packet, now, root):
     if not report['teams']:raise ValueError('No official teams reconciled to current slate')
     seasons={g['season'] for g in games if str(g['providerId']) in {r['eventId'] for r in report['teams']}}
     if len(seasons)!=1:raise ValueError('Official season identity unavailable')
+    if packet.get('pdfSha256'):
+        if not re.fullmatch('[0-9a-f]{64}',packet['pdfSha256']):raise ValueError('Invalid original PDF digest')
+        report['browserPdfSha256']=packet['pdfSha256']
     report.update(league='NBA',season=seasons.pop(),observedMethod='Reviewed ordinary-browser official PDF',
         browserEvidence=evidence,discovery=dict(source=listing['source'],retrievedAt=listing['retrievedAt'],method='Newest published official link; complete browser PDF review'))
     return report
@@ -84,9 +100,9 @@ def ingest(packet, now, root=nba_capture.STORE):
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--input',required=True)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--input',required=True);parser.add_argument('--pdf',required=True)
     parser.add_argument('--root',type=Path,default=nba_capture.STORE);args=parser.parse_args()
-    packet=json.loads(Path(args.input).read_text())
+    packet=with_pdf(json.loads(Path(args.input).read_text()),Path(args.pdf).read_bytes())
     with deployment_lock.bounded_lock(Path.home()/'.config/keenroudy/run.lock'):
         result=ingest(packet,datetime.now(timezone.utc),args.root)
     print(json.dumps(result))

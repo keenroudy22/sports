@@ -3,7 +3,9 @@
 When direct official PDF transport fails, the existing attended/research browser
 may read the exact newest PDF linked by the canonical season listing. Preserve
 actual listing HTML/receipt, source, original report/observation clocks and complete
-page screenshots/hashes plus faithful name/status table transcription. The tested
+page screenshots/hashes and the actual PDF downloaded from that listing link.
+The CLI requires --pdf PATH and derives every page from the existing PDF reader;
+it never trusts a model-written status transcription. The tested
 scripts/nba_report_intake.py entry point takes the run lock and reuses the strict
 official parser, fixture/roster/freshness checks and append-only store. Never
 assume a hidden, truncated or unreviewed page is complete. Unknown names and
