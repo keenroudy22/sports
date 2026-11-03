@@ -45,6 +45,17 @@ class CBBPicksTests(unittest.TestCase):
             self.assertNotIn('SOUTH DAKOTA STATE JACKRABBITS',svg)
             self.assertEqual(p['game']['teams']['away']['name'],'South Dakota State Jackrabbits')
 
+    def test_settled_art_has_result_label_and_complete_team_palette(self):
+        import pick_card,ticket_kit
+        p=fixture();p.update(result='loss',actual=160,book='DraftKings')
+        p['game']['teams']['away'].update(name='South Dakota State Jackrabbits',shortName='S Dakota St')
+        with tempfile.TemporaryDirectory() as d, patch.object(pick_card,'render') as output:
+            cbb.render_result(p,Path(d))
+            svg=output.call_args.args[0]
+            self.assertIn('CBB FINAL',svg);self.assertIn('LOSS',svg)
+            self.assertIn('S DAKOTA ST',svg)
+            self.assertNotIn('SOUTH DAKOTA STATE JACKRABBITS',svg)
+
     def test_source_review_is_distinct_from_probability_approval(self):
         p=fixture();self.assertIsNone(cbb.refusal(p,NOW))
         for k in ('chance','rawChance','fairOdds','expectedValue','calibrated'):

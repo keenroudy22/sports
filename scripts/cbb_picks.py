@@ -250,9 +250,9 @@ def render_result(p,folder):
     if target.exists():return
     t=p['game']['teams']
     data=dict(kind='game',featured=False,seriesLabel='CBB FINAL · '+p['result'].upper(),away=t['away']['abbreviation'],
-        home=t['home']['abbreviation'],team=t['home']['abbreviation'],away_name=t['away']['name'],home_name=t['home']['name'],
+        home=t['home']['abbreviation'],team=t['home']['abbreviation'],away_name=t['away'].get('shortName') or t['away']['abbreviation'],home_name=t['home'].get('shortName') or t['home']['abbreviation'],
         when='FINAL',when_caps='FINAL',market=p['marketType'],line=f"{p['line']:g}",odds=p['odds'],book=p['book'],
-        reason=f"Actual: {p['actual']:g}",units=1,side=selection(p),team_colors={},photo=None,team_logo=None,
+        reason=f"Actual: {p['actual']:g}",units=1,side=selection(p),team_colors={team['abbreviation']:('#17241f','#eef4ec') for team in t.values()},photo=None,team_logo=None,
         away_logo=None,home_logo=None,chance=None,needs=None,calibrated=False)
     pick_card.render(ticket_cards.play_card(data).svg(),target)
 
