@@ -1,3 +1,22 @@
+# November3 official tracking intake and observed-role research
+
+Existing daily/overnight research may capture the rendered official NBA passing
+and rebounding tables, season and Last3, within existing research capacity. Save
+all selected controls, visible headers/cells, complete All-page row coverage,
+exact player links/source URLs and actual observation clocks. Use
+scripts/nba_opportunities.py ingest through the normal wrapper; it takes the
+run lock and validates the entire batch before append. No hidden browser,
+undocumented stats API, new job, paid feed or request-budget increase.
+
+Exact name/current-team/season roster identity plus matching NBA player IDs
+are required for season/recent joins. Missing, stale, future, conflicting or
+unmatched observations stay unknown. NBA player research and existing overnight
+prep consume these observed opportunities without changing any frozen forecast,
+probability/book protocol or official admission. Recent samples overlap season;
+tracking coverage differs from boxes. Never infer an assist conversion probability
+from these aggregates or redistribute an absent teammate's usage automatically.
+A failed official injury PDF remains a hold; this intake is not clearance.
+
 # November3 sourced CBB straight delivery
 
 The owner requests the CBB posting path. scripts/cbb_picks.py admits explicitly

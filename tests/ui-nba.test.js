@@ -192,3 +192,13 @@ test('All-sports Today shows actual posted NBA props before matchup research',()
  const html=views.nbaSummary({games:[],trial:{plays:[play],record:{win:0,loss:0,units:0}}});
  assert.match(html,/Real Player over 20.5 points/);assert.match(html,/data\/cards\/prop.png/);assert.doesNotMatch(html,/undefined/);
 });
+test('NBA opportunities retain tracked sample sizes without turning chances into bet probabilities',async()=>{
+ const s=load(),api=s.module.exports,stamp=new Date().toISOString(),kickoff=new Date(Date.now()+3600000).toISOString();
+ const context={kind:'passing',analysisOnly:true,admissionReady:false,observedAt:stamp,season:{games:7,metrics:{potentialAssists:8}},recent:{games:3,metrics:{potentialAssists:11}},warnings:['Assist definitions/coverage differ']};
+ const row={name:'Tracked player',teamName:'Home',kickoff,sourceAt:stamp,statName:'assists',line:4.5,over:-110,under:-110,book:'DraftKings',hold:'Official report not submitted',opportunityContext:[context]};
+ const views=s.KRGames(api.gamesContext({get:async()=>({rows:[row]})}));
+ const html=await views.nbaToday({data:{games:[],scheduleFresh:true,playerPropsFile:'nba-props.json'},embedded:true,mode:'players'});
+ assert.match(html,/11 potential assists per game across 3 recent tracked games/);assert.match(html,/season 8 across 7 tracked games/);
+ assert.match(html,/Official report not submitted/);assert.match(html,/not a projection or chance to cash/);assert.match(html,/no conversion rate calculated/);
+ assert.doesNotMatch(html,/100%|positive EV|admissionReady/);
+});

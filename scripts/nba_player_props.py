@@ -311,6 +311,11 @@ def build(now, root=STORE, boxes=None, limit=60, *, _forward_capture=False):
         for r in boxscores.read_store(p):quotes[(r['eventId'],r['athleteId'],r['stat'],r['book'])]=r
     games={str(g['providerId']):g for g in slate.get('games',[]) if g['status']=='scheduled'
            and g['seasonType']=='regular-season' and now<boxscores.instant(g['kickoff'])<=now+timedelta(days=2)}
+    import nba_opportunities
+    try:
+        tracking=nba_opportunities.observations(root,now) if not _forward_capture else {}
+    except (OSError,ValueError,KeyError,TypeError):
+        tracking={}  # Unavailable supplementary tracking cannot alter frozen forecasts.
     out=[]
     for q in quotes.values():
         if q['eventId'] not in games or not fresh(q.get('sourceAt'),now) or not fresh(q.get('retrievedAt'),now):continue
@@ -361,6 +366,11 @@ def build(now, root=STORE, boxes=None, limit=60, *, _forward_capture=False):
         row={k:q[k] for k in ('eventId','athleteId','name','team','teamName','teamAbbr','photo','kickoff','stat','line','book','over','under','sourceAt')}
         if role_review:row['roleReview']=role_review
         row['currentRole']=current_role
+        if not _forward_capture:
+            own_tracking=dict(own,abbreviation=q.get('teamAbbr'))
+            context=nba_opportunities.context(q['athleteId'],q['team'],q['season'],own_tracking,tracking,now)
+            wanted={'ast':'passing','reb':'rebounding'}.get(q['stat'])
+            row['opportunityContext']=[c for c in context if c['kind']==wanted]
         row['rosterAt']=own.get('retrievedAt')
         row['availabilitySource']=(injury.get('official') or {}).get('source') or injury.get('source')
         row['availabilityReportedAt']=(injury.get('official') or {}).get('reportedAt')
