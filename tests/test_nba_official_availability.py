@@ -3,6 +3,8 @@ import json
 import sys
 import tempfile
 import unittest
+import socket
+from urllib.error import URLError
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
@@ -36,6 +38,35 @@ def fixtures():
 
 
 class OfficialAvailabilityTests(unittest.TestCase):
+    def test_wrapped_transport_diagnostics_are_typed_and_private(self):
+        cases = [(TimeoutError('private-token'), 'Official report request timed out'),
+                 (socket.gaierror('private-token'), 'Official report host lookup failed'),
+                 ('https://secret.example/private-token', 'Official report connection unavailable')]
+        for cause, reason in cases:
+            with self.subTest(reason=reason):
+                error = URLError(cause)
+                error.official_stage = 'listing'
+                result = official.failure(error, NOW)
+                self.assertEqual(result['state'], 'unavailable')
+                self.assertEqual(result['stage'], 'listing')
+                self.assertEqual(result['reason'], reason)
+                self.assertNotIn('private-token', json.dumps(result))
+
+    def test_failed_listing_identifies_stage_without_requesting_pdf(self):
+        class FailedListing:
+            def __init__(self): self.calls = []
+            def report_index(self, url):
+                self.calls.append('listing')
+                raise URLError(TimeoutError('private-token'))
+            def raw(self, url):
+                self.calls.append('pdf')
+                raise AssertionError('No PDF after failed listing')
+        budget = FailedListing()
+        with self.assertRaises(URLError) as caught:
+            official.capture(budget, [], Path('/unused'), official.PUBLISHED_LINKS_FROM)
+        self.assertEqual(budget.calls, ['listing'])
+        self.assertEqual(official.failure(caught.exception, NOW)['stage'], 'listing')
+
     def report(self,text=TEXT):
         games,rosters=fixtures()
         r=official.parse(text,games,rosters,REPORTED,NOW,SOURCE)

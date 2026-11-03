@@ -15,7 +15,9 @@ from urllib.parse import urljoin
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
+import socket
+import ssl
 
 import boxscores
 
@@ -84,6 +86,9 @@ def failure(error, attempted_at):
     """
     result = dict(state='unavailable', attemptedAt=boxscores.stamp(attempted_at),
                   source=index_url(attempted_at) if attempted_at>=PUBLISHED_LINKS_FROM else report_url(attempted_at)[0])
+    stage = getattr(error, 'official_stage', None)
+    if stage in ('listing', 'pdf', 'extraction', 'verification'):
+        result['stage'] = stage
     if isinstance(error, PublishedReportUnavailable):
         result.update(source=error.source, reason='Official report listing has no recent published PDF')
         if error.latest is not None: result['latestPublishedAt']=boxscores.stamp(error.latest)
@@ -91,6 +96,14 @@ def failure(error, attempted_at):
         result.update(reason='Official report request failed', httpStatus=error.code)
     elif isinstance(error, TimeoutError):
         result['reason']=('NBA capture budget exhausted' if str(error) in ('NBA free capture budget exhausted','NBA capture timebox exhausted') else 'Official report request timed out')
+    elif isinstance(error, URLError):
+        # urllib wraps transport failures. Classify the typed cause only;
+        # exception strings can contain URLs or other private request details.
+        cause = error.reason
+        result['reason'] = ('Official report request timed out' if isinstance(cause, TimeoutError)
+                            else 'Official report host lookup failed' if isinstance(cause, socket.gaierror)
+                            else 'Official report TLS verification failed' if isinstance(cause, ssl.SSLError)
+                            else 'Official report connection unavailable')
     elif isinstance(error, subprocess.SubprocessError):
         result['reason']='Official report PDF extraction failed'
     elif isinstance(error, ValueError) and str(error)=='Official injury PDF reader unavailable':
@@ -227,18 +240,25 @@ def merge(provider_rows, report, games):
 
 
 def capture(budget, games, root, now, clock=lambda:datetime.now(timezone.utc)):
+    def observed(stage, action):
+        try:
+            return action()
+        except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as error:
+            error.official_stage = stage
+            raise
     if now >= PUBLISHED_LINKS_FROM:
-        listing=budget.report_index(index_url(now))
+        listing=observed('listing', lambda: budget.report_index(index_url(now)))
         listed_at=clock()
         source,expected=published_report(listing,listed_at)
     else:
         source,expected=report_url(now)
-    pdf=budget.raw(source);received=clock();text=extract(pdf)
+    pdf=observed('pdf', lambda: budget.raw(source));received=clock()
+    text=observed('extraction', lambda: extract(pdf))
     rosters={}
     for p in (Path(root)/'rosters').glob('*.json'):
         try:rosters[p.stem]=json.loads(p.read_text())
         except (OSError,ValueError):continue
-    report=parse(text,games,rosters,expected,received,source)
+    report=observed('verification', lambda: parse(text,games,rosters,expected,received,source))
     if now >= PUBLISHED_LINKS_FROM:
         report['discovery']=dict(source=index_url(now),retrievedAt=boxscores.stamp(listed_at),method='Newest published official link; one PDF attempt')
     return report
