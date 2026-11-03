@@ -1,3 +1,19 @@
+# November3 browser-backed official injury-report intake
+
+When direct official PDF transport fails, the existing attended/research browser
+may read the exact newest PDF linked by the canonical season listing. Preserve
+actual listing HTML/receipt, source, original report/observation clocks and complete
+page screenshots/hashes plus faithful name/status table transcription. The tested
+scripts/nba_report_intake.py entry point takes the run lock and reuses the strict
+official parser, fixture/roster/freshness checks and append-only store. Never
+assume a hidden, truncated or unreviewed page is complete. Unknown names and
+unsubmitted teams stay holds. The independent ESPN snapshot clock is unchanged;
+browser access is not a claim the direct collector recovered. No alternate host,
+security bypass, hidden unattended browser worker, extra capture job or feed cap.
+The existing collector can reuse a verified browser observation only when its
+fresh source is the exact newest currently published PDF, preserving its original
+clock and current identity checks. Newer URLs require a new observation.
+
 # November3 official tracking intake and observed-role research
 
 Existing daily/overnight research may capture the rendered official NBA passing

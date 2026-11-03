@@ -208,7 +208,8 @@ def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.
             try:
                 report=official.capture(budget,list(games.values()),root,official_attempt,clock=clock)
                 report.update(league='NBA',season=season)
-                append_changed([report],root/'official-availability',lambda r:r['retrievedAt'])
+                if not report.pop('_from_verified_browser_cache',False):
+                    append_changed([report],root/'official-availability',lambda r:r['retrievedAt'])
                 snapshot.update(official=report,gameAvailability=official.merge(rows,report,list(games.values())))
             except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError) as error:
                 snapshot['official']=official.failure(error,official_attempt)

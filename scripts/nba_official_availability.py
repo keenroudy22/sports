@@ -239,6 +239,43 @@ def merge(provider_rows, report, games):
     return out
 
 
+def browser_observation(root, source, expected, games, now):
+    """Reuse only a verified observation of this exact newest published file.
+
+    Keep its original receipt clock. A newer URL, stale observation, changed
+    fixture or unresolved current roster cannot inherit an older clearance.
+    """
+    root=Path(root)
+    if boxscores.verify(root/'official-availability'):return None
+    candidates=[r for p in (root/'official-availability').glob('*.jsonl') for r in boxscores.read_store(p)
+                if r.get('observedMethod')=='Reviewed ordinary-browser official PDF' and r.get('source')==source]
+    candidates.sort(key=lambda r:r.get('retrievedAt',''),reverse=True)
+    indexed={str(g['providerId']):g for g in games}
+    for report in candidates:
+        try:
+            received=boxscores.instant(report['retrievedAt'])
+            if (boxscores.instant(report['reportedAt'])!=expected or not expected<=received<=now
+                    or now-expected>timedelta(minutes=90) or not report.get('browserEvidence')
+                    or report.get('archive') or report.get('analysisOnly') or not report.get('teams')):continue
+            valid=True
+            for team in report['teams']:
+                game=indexed.get(team['eventId'])
+                if (not game or report['season']!=game['season'] or team['team'] not in {str(t['id']) for t in game['teams'].values()}
+                        or boxscores.instant(team['kickoff'])!=boxscores.instant(game['kickoff'])):
+                    valid=False;break
+                if team['rows']:
+                    roster=json.loads((root/'rosters'/f"{team['team']}.json").read_text())
+                    if (roster.get('identityOnly') or roster.get('team')!=team['team'] or roster.get('season')!=report['season']
+                            or not timedelta(0)<=now-boxscores.instant(roster['retrievedAt'])<=timedelta(hours=24)):
+                        valid=False;break
+                    for player in team['rows']:
+                        matches=[p for p in roster['players'] if p.get('id')==player['athleteId'] and normal(p.get('name'))==normal(player['name'])]
+                        if len(matches)!=1:valid=False;break
+            if valid:return dict(report,_from_verified_browser_cache=True)
+        except (OSError,ValueError,KeyError,TypeError):continue
+    return None
+
+
 def capture(budget, games, root, now, clock=lambda:datetime.now(timezone.utc)):
     def observed(stage, action):
         try:
@@ -250,6 +287,8 @@ def capture(budget, games, root, now, clock=lambda:datetime.now(timezone.utc)):
         listing=observed('listing', lambda: budget.report_index(index_url(now)))
         listed_at=clock()
         source,expected=published_report(listing,listed_at)
+        cached=browser_observation(root,source,expected,games,listed_at)
+        if cached:return cached
     else:
         source,expected=report_url(now)
     pdf=observed('pdf', lambda: budget.raw(source));received=clock()

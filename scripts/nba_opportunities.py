@@ -164,6 +164,9 @@ def from_stores(now, root=nba_capture.STORE, target_date=None):
         if (game.get('status')!='scheduled' or game.get('seasonType')!='regular-season'
                 or boxscores.instant(game['kickoff'])<=now or str(gates.eastern_date(boxscores.instant(game['kickoff'])))!=target):continue
         availability,holds=nba_capture.availability_for_game(injury,game,now,max_hours=1)
+        if not fresh(injury.get('retrievedAt'),now,1):
+            availability=[]
+            holds={str(t['id']):'Current injury observation unavailable' for t in game['teams'].values()}
         for t in game['teams'].values():
             tid=str(t['id']);roster=read(root/'rosters'/f'{tid}.json');roster=dict(roster,abbreviation=t.get('abbreviation'))
             for player in roster.get('players',[]):
