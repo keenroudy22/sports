@@ -1,0 +1,75 @@
+{
+  "date": "2026-11-03",
+  "source": "6974299f5f3b00d7e9eee04e819aa1a91c2007bf",
+  "state": "hosted-verified-live-recheck-blocked",
+  "tests": {
+    "python": 2107,
+    "skipped": 2,
+    "node": 306,
+    "normalAndClean": true
+  },
+  "rehearsal": {
+    "slot": 1155,
+    "outcome": "ok",
+    "outsideWrite": 0,
+    "privateRead": 0,
+    "path": "/private/var/folders/k0/hcj9t5tj2tn3p0pnsyfnv4r40000gn/T/kookn-rehearsal-wfg0_le4"
+  },
+  "ownerReport": "/Users/keen/Documents/ChatGPT/Kook'n/kookn-selection-review-2026-11-03.html",
+  "evidence": [
+    "work/selection-review-20261103.json",
+    "work/nba-residual-scale-review-20261103.json",
+    "work/nba-tracking-access-review-20261103.json",
+    "work/nba-opportunity-identity-research-20261103.json",
+    "work/nba-pdf-transport-diagnostic-20261103.json"
+  ],
+  "findings": {
+    "officialCapturedPriceGameLines": {
+      "plays": 41,
+      "wins": 13,
+      "losses": 28,
+      "units": -13.761
+    },
+    "officialCapturedPriceProps": {
+      "plays": 47,
+      "wins": 23,
+      "losses": 24,
+      "units": -0.846
+    },
+    "probabilityForecastMean": 0.5143,
+    "observedHits": 0.3636,
+    "probabilitySample": 44,
+    "legacyPricedRowsRecovered": 20
+  },
+  "implemented": [
+    "legacy unit review accounting",
+    "frozen publication probability clocks",
+    "postgame NBA minutes/rate attribution",
+    "comparable-age creative review",
+    "read-only reproducible audit",
+    "existing daily/overnight prompt updates preserving schedules/settings"
+  ],
+  "notImplemented": [
+    "NBA tracking automated ingestion",
+    "new opportunity/conditional dispersion model",
+    "creative randomized comparison"
+  ],
+  "holds": [
+    "production NBA official PDF transport timeout",
+    "frozen independent NBA proof below admission",
+    "no NBA games Nov3"
+  ],
+  "newPublications": 0,
+  "recordChanges": 0,
+  "stakeChanges": 0,
+  "newJobs": 0,
+  "newBudget": 0,
+  "hostedRun": 41679873120,
+  "verifiedHead": "d16e99f7893a157ae74af32732d55be08d828e8e",
+  "sourceAncestorVerified": true,
+  "liveRecheck": {
+    "browser": "unavailable: browser.user is unavailable",
+    "http": "403; no bypass attempted",
+    "visualVerification": false
+  }
+}
