@@ -1,3 +1,19 @@
+# November3 sourced CBB straight delivery
+
+The owner requests the CBB posting path. scripts/cbb_picks.py admits explicitly
+reviewed DraftKings main full-game spreads/totals, with a visible exact two-sided
+quote receipt, both teams' current source packets, availability review, reason
+and countercase. Recheck within one hour at delivery and before the kickoff
+buffer. Compare fixture identity with the current stored CBB slate. Ordinary1u,
+shared exposure/count caps and free budgets apply. No claim of calibrated chance,
+fair odds or positive EV; the prior-heavy model is separate research. This does
+not enable CBB props, Chef picks, alternates or Climbs. Preserve originals and
+append score corrections. Existing jobs grade from official stored CBB finals,
+build cards/site data, retry Discord-first delivery and plan X plays/results.
+Unknown sends stay duplicate-protected. A private queue, accepted API call or
+scheduled Buffer item is never an actual sent receipt. Source/specs alone cannot
+bypass live card, caption, quote, queue or account-backoff checks.
+
 # October31 reviewed Climb route
 
 Owner authorizes sourced discretionary alternate tickets without pretending the

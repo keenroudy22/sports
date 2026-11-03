@@ -317,6 +317,11 @@
   };
 
   views.record = async route => {
+    if (state.league === 'CBB' && (!route.tab || route.tab === 'official')) {
+      const data = await get('app/cbb.json'), r = data.picks || {}, plays = (r.plays || []).slice().reverse();
+      return head('The record', 'CBB picks', 'Original terms and every result. Sourced desk decisions; separate from model accuracy and fun tickets.') + `<section class="card"><h2>${esc(r.win || 0)}–${esc(r.loss || 0)} · ${esc(units(Number(r.units || 0)))}</h2><p>${esc(r.push || 0)} pushes · ${esc(plays.filter(p => !p.result).length)} open</p></section>${plays.map(p => `<article class="card"><h3>${esc(p.game.teams.away.name)} at ${esc(p.game.teams.home.name)}</h3><p>${esc(p.marketType === 'total' ? p.direction.toUpperCase() + ' ' + p.line : p.game.teams[p.direction].abbreviation + ' ' + (p.line > 0 ? '+' : '') + p.line)} · ${esc(oddsText(p.odds))} ${esc(p.book)} · 1u</p><p>${esc(p.result || 'open')}${p.actual == null ? '' : ' · Actual: ' + esc(p.actual)}</p><p class="small">Posted ${esc(whenShort(p.publishedAt))}</p></article>`).join('') || '<p>No CBB straight posted yet.</p>'}<p><a href="#today?sport=CBB">CBB Today ›</a></p>`;
+    }
+
     const tab = route.tab || 'official';
     if (state.league === 'NBA' && tab === 'official') {
       const data = await get('app/nba.json'), trial = data.trial || {}, r = trial.record || {};

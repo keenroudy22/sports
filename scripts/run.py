@@ -65,7 +65,7 @@ PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('data/morning-brief/', 'data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
+             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -151,7 +151,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/',
+LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
@@ -2974,6 +2974,8 @@ def _run(args, now, slot, kinds, status):
             import nba_trial_runtime
             nba_grade_now=current_run_time(args,now)
             status['nbaTrialGraded'] = nba_trial_runtime.grade(nba_grade_now)
+            import cbb_picks
+            status['cbbPicksGraded'] = cbb_picks.grade(nba_grade_now)
             import nba_player_props
             status['nbaPlayerPropGraded'] = nba_player_props.grade(nba_grade_now)
             if not args.dry_run and not getattr(args,'no_push',True):
@@ -3133,6 +3135,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         import nba_trial_runtime
         nba_discord_plans = nba_trial_runtime.social_plans(now, log_book, refresh=False)
         nba_trial_runtime.queue_discord_first(now, log_book, nba_discord_plans)
+        import cbb_picks
+        cbb_picks.queue_discord(now, log_book)
         queued_results = discord_post.queue_results(log_book, ctx.first, ctx.latest, games, now)
         if queued_results:
             log(f'discord: queued {queued_results} official result update(s)')
@@ -3163,6 +3167,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
                 alert('KeenRoudy post held back', f"{key}: {'; '.join(problems)}")
         import nba_trial_runtime
         plans += nba_trial_runtime.social_plans(now, log_book, reserved=plans)
+        plans += cbb_picks.plans(now, log_book, reserved=plans)
         upgrades = pending_ladder_result_cards(log_book, ctx, now)
         if deploying and (plans or upgrades):
             cards = [card for *_, card in plans if card] + list(upgrades.values())
@@ -3859,7 +3864,9 @@ def mirror(args):
     if not social_ready and not chef_waiting:
         return 0
     import nba_trial_runtime
-    nba_discord_waiting = nba_trial_runtime.discord_delivery_due(now, x_post.load_log())
+    import cbb_picks
+    nba_discord_waiting = (nba_trial_runtime.discord_delivery_due(now, x_post.load_log())
+                           or cbb_picks.discord_delivery_due(now, x_post.load_log()))
     private_waiting = private_release_ready(now)
     if not chef_waiting and not nba_discord_waiting and not private_waiting and not retry_results:
         if result_transport_hold:
@@ -3902,6 +3909,7 @@ def mirror(args):
             if nba_trial_runtime.discord_delivery_due(now, log_book):
                 plans = nba_trial_runtime.social_plans(now, log_book, refresh=False)
                 nba_trial_runtime.queue_discord_first(now, log_book, plans)
+            cbb_picks.queue_discord(now, log_book)
             if not mirror_due(log_book, now):
                 x_post.save_log(log_book)
                 return 0
@@ -4432,7 +4440,9 @@ def precheck(args):
             log_book = x_post.load_log()
             if not args.dry_run:
                 import nba_trial_runtime
-                if nba_trial_runtime.precheck(now, log_book):
+                import cbb_picks
+                cbb_changed = cbb_picks.precheck(now, log_book)
+                if nba_trial_runtime.precheck(now, log_book) or cbb_changed:
                     x_post.save_log(log_book)
                     commit_log(now, push=not args.no_push)
             due = precheck_due(log_book, now)

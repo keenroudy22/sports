@@ -216,7 +216,8 @@ def queue_results(log_book, first, latest, games, now):
         entry['discord'] = mirror
         queued += 1
     import nba_trial_runtime
-    return queued + nba_trial_runtime.queue_discord_results(log_book, now)
+    import cbb_picks
+    return queued + nba_trial_runtime.queue_discord_results(log_book, now) + cbb_picks.queue_results(log_book, now)
 
 
 def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
@@ -275,7 +276,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         import daily_straight_card
         combined = daily_straight_card.discord_eligible(entry) and destination == 'plays'
         nba_pick = kind == 'buffer:nba-trial' and entry.get('nbaPick') is True and destination == 'plays'
-        allowed = (combined or nba_pick or (kind == 'buffer:play' and destination != 'wins')
+        cbb_pick = kind == 'buffer:cbb-pick' and entry.get('cbbPick') is True and destination == 'plays'
+        allowed = (combined or nba_pick or cbb_pick or (kind == 'buffer:play' and destination != 'wins')
                    or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith(('cashed:', 'burnt:'))
                        and destination != 'wins')
                    or (kind == 'buffer:community' and destination in ('plays', 'wins')
@@ -310,6 +312,12 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
             if not original or not nba_trial_runtime.current_match(original,now):
                 mirror['lastHold']='NBA current-price or role check did not clear'
                 entry['discord']=mirror
+                continue
+        if cbb_pick:
+            import cbb_picks
+            original = next((p for p in cbb_picks.public_rows() if p['id'] == entry['id']), None)
+            if not original or not cbb_picks.current_match(original, now):
+                mirror['lastHold'] = 'CBB exact quote or sourced review needs renewal'
                 continue
         target = (wins_url if destination == 'wins' else
                   research_url if destination == 'research' else url)
@@ -383,7 +391,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
     for entry in log_book.get('posts', []):
         mirror = entry.get('discord') or {}
         result = mirror.get('result') or {}
-        result_kind=entry.get('kind')=='buffer:play' or (entry.get('kind')=='buffer:nba-trial' and entry.get('nbaPick') is True)
+        result_kind=(entry.get('kind')=='buffer:play' or (entry.get('kind')=='buffer:nba-trial' and entry.get('nbaPick') is True)
+                     or (entry.get('kind')=='buffer:cbb-pick' and entry.get('cbbPick') is True))
         if result.get('state') != 'pending' or not result_kind or mirror.get('state') != 'sent':
             continue
         if not url:

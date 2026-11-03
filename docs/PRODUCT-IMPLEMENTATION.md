@@ -6656,3 +6656,25 @@ Release88d2a07af; hosted41479728403SUCCESS. Normal/clean2078Python(2skip)/301Nod
 Original creative observed around12h age:218impressions,0reactions/comments/reposts/clicks,8%engagement; provider says refreshed5hours ago. No invented24h checkpoint or Oct19 age comparison. Monday official straights0-2/-2u (JSN6catches,Horton3); stored settlement04:25:12Z and both Discord results04:35:23Z. X result receipts unconfirmed. CurrentNov3 prep2CFB/35prices, NBA0stored upcoming/0prop rows; fresh day-of schedule/role/quote/proof required at06:45/08:30. Saturday51/Sunday13 football planning packets refreshed read-only. No reviewed Climb ticket/actual combined book receipt admitted. NBA stat proof remains held. ALTFUN recurring implementation remains unshipped with concrete next action; no code release or hosted/live success claimed. No API allowance, jobs or preference changes.
 
 November3 queue text repair — original ALTFUN next action retained: Finish sourced primetime admission/grading/category-isolation adapter using current roles, exact periods and verified joint same-book receipt; full canonical release then actual delivery/grading. Nov3 one-off CBB result is separate; recurring path remains unshipped.
+
+### November3 basketball delivery — implementation candidate
+
+NBA wrapped transport diagnostics identify listing/PDF/extraction/verification
+stage without exposing exception text or adding reads. CBB sourced main-line
+straight admission, shared cap, immutable ledger, original-price official-score
+grading/corrections, cards, Today/Record, X planning and Discord-first/results
+are wired into existing workers. No probability model, prop, Chef or Climb
+promotion. Quote/review expires after1h; exact current fixture and both-team
+sources required. API budget/backoff and live-card gates remain. Eleven CBB
+regressions pass, including category isolation, original-term grade correction,
+expired queued cancellation and at-most-once Discord results. Full2089Python
+(2skip) before final additions passed;306Node pass after fingerprints. Canonical
+full/clean release and live verification still required; not yet shipped.
+
+Social actual: existing Nov2 CBB fun loss recap expedited from09:58 to09:45ET,
+confirmed Buffer Sent and X2117629341106335858. Discord result already confirmed
+in overnight receipt. Original5/8 loss separate from straights. Buffalo/Miami
+original public play remains site/Discord; attended X review refused expired
+08:30ET quote. No old price resent or public history erased. GitHub first NBA
+release attempt failed fetch timeout, not an approval hold. Failed test run with
+systemPython3.9 retained; requiredHomebrew3.14 full suite subsequently passed.

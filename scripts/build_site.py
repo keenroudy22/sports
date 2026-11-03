@@ -2099,6 +2099,8 @@ def build(now=None):
     write(OUT / 'sport-research.json', sport_research.build(now))
     import cbb_today
     cbb = cbb_today.build(now)
+    import cbb_picks
+    cbb['picks'] = cbb_picks.payload()
     cbb_sheets, cbb['sheets'] = cbb_today.exports(cbb)
     write(OUT / 'cbb.json', cbb)
     for filename, svg in cbb_sheets.items():

@@ -115,11 +115,11 @@ def check(candidate, ctx):
     def league(row):
         return row.get('league') or games.get((row.get('gameIds') or [None])[0],{}).get('league')
     def straight(row):
-        return (league(row) in ('NFL','CFB','NBA') and not row.get('legs')
+        return (league(row) in ('NFL','CFB','NBA','CBB') and not row.get('legs')
                 and not row.get('parlayType') and not row.get('personalTicket')
                 and not row.get('historicalImport'))
     if (nba_pick_policy.active(ctx.now) and straight(candidate)
-            and (league(candidate)=='NBA' or any(league(r)=='NBA' for r in day_rows))):
+            and (league(candidate) in ('NBA','CBB') or any(league(r) in ('NBA','CBB') for r in day_rows))):
         maximum=8 if ceiling==5 else 5
         count=sum(straight(r) for r in day_rows)
         if count>=maximum:
@@ -133,7 +133,7 @@ def external(root, now):
     rows, games = {}, {}
     def read(path, fallback):
         return json.loads(path.read_text()) if path.exists() else fallback
-    for path in (root / 'data/nba-trial').glob('*.jsonl'):
+    for path in [*(root / 'data/nba-trial').glob('*.jsonl'), *(root / 'data/cbb-picks').glob('*.jsonl')]:
         for line in path.read_text().splitlines():
             row = json.loads(line)
             if row.get('type') == 'publish' and (instant(row.get('publishedAt')) or now) <= now:
@@ -143,7 +143,8 @@ def external(root, now):
         rows[row['id']] = dict(row, riskUnits=row.get('riskUnits'))
     sports = read(root / 'site/data/sports.json', {})
     for league, block in sports.get('leagues', {}).items():
-        if league == 'NBA':
+        if league in ('NBA','CBB'):
             for game in block.get('games', []):
-                games['NBA-' + str(game['id'])] = dict(game, league='NBA')
+                key = str(game['id']) if str(game['id']).startswith(league + '-') else league + '-' + str(game['id'])
+                games[key] = dict(game, league=league)
     return rows, games

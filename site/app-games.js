@@ -79,6 +79,15 @@
     const team=t=>({id:t.id,name:name(t),abbr:t.abbreviation || name(t),logo:t.logo});
     return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link:false,ranks:false,barLabel:'Baseline model win chance',extra:`<p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${first}<details><summary>Team scoring stats</summary>${stats}</details>`});
   };
+  views.cbbPicks = (data, onlyToday = false) => {
+    const r = data.picks || {}, all = r.plays || [];
+    const plays = all.filter(p => !onlyToday || C.dayOf(p.kickoff) === etDay());
+    if (!plays.length && onlyToday) return '';
+    return `<section class="section" id="cbb-picks"><h2>CBB picks</h2><p>${esc(r.win || 0)}–${esc(r.loss || 0)} · ${esc(Number(r.units || 0).toFixed(2))}u</p><p class="small muted">${esc(r.note || 'Sourced desk picks, separate from model research and fun tickets.')}</p><div class="projs">${plays.map(p => {
+      const t = p.game.teams, pick = p.marketType === 'total' ? `${p.direction.toUpperCase()} ${p.line}` : `${t[p.direction].abbreviation} ${p.line > 0 ? '+' : ''}${p.line}`;
+      return `<article class="card" id="${esc(p.id)}"><p class="eyebrow">CBB PICK · 1u</p><h3>${esc(t.away.name)} at ${esc(t.home.name)}</h3><h2>${esc(pick)}</h2><p>${esc(p.odds > 0 ? '+' + p.odds : p.odds)} · ${esc(p.book)}</p><p>${esc(p.reason)}</p><details><summary>What could beat it</summary><p>${esc(p.countercase)}</p></details><p class="small">${esc(p.result ? p.result.toUpperCase() + ' · Actual: ' + p.actual : 'Open')} · Posted ${esc(whenShort(p.publishedAt))}</p><a href="data/cards/${esc(p.id.toLowerCase())}.png" target="_blank" rel="noopener">Original card ›</a></article>`;
+    }).join('')}</div>${plays.length ? '' : '<p>No CBB straight posted yet.</p>'}<a href="#record?sport=CBB">Every CBB pick ›</a></section>`;
+  };
   views.cbbToday = async (opts = {}) => {
     let data;
     try { data = await get('app/cbb.json'); }
@@ -92,7 +101,7 @@
       groups.get(s.date).push(s);
     }
     const sheets = [...groups].map(([day, list], i) => `<details><summary>${esc(day)} · ${esc(list.length)} sheets</summary><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0">${list.map(s => `<a class="btn" style="white-space:normal" href="data/app/${esc(s.file)}?v=${esc(encodeURIComponent(data.generatedAt || data.checkedAt || 'current'))}" target="_blank" rel="noopener">Sheet ${esc(s.page)}/${esc(s.pages)}</a>`).join('')}</div></details>`).join('');
-    return head('College basketball', 'CBB projections & stats', `${projected.length} projected matchups · ${rows.length} upcoming games across three days · Research, not picks.`) + `${opts.gamesPage ? gameTabs('upcoming') : ''}<p class="small muted">${esc(data.note || '')}</p>${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}<section class="section"><h2>Projection sheets</h2><p class="small">12 matchups per sheet. Open a sheet to save or share. Unsupported matchups stay off the sheets.</p><div>${sheets || '<p>No supported future projections available yet.</p>'}</div></section>${window.html}<p class="small muted">${rows.length - projected.length} matchups without a verified projection are omitted.</p><div class="projs">${cards}</div>${rows.length ? '' : '<p>No upcoming CBB games stored.</p>'}<p><a href="#games/live?sport=CBB">Live scores & finals ›</a></p>`;
+    return head('College basketball', 'CBB projections & stats', `${projected.length} projected matchups · ${rows.length} upcoming games across three days · Research, not picks.`) + `${opts.gamesPage ? gameTabs('upcoming') : views.cbbPicks(data)}<p class="small muted">${esc(data.note || '')}</p>${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}<section class="section"><h2>Projection sheets</h2><p class="small">12 matchups per sheet. Open a sheet to save or share. Unsupported matchups stay off the sheets.</p><div>${sheets || '<p>No supported future projections available yet.</p>'}</div></section>${window.html}<p class="small muted">${rows.length - projected.length} matchups without a verified projection are omitted.</p><div class="projs">${cards}</div>${rows.length ? '' : '<p>No upcoming CBB games stored.</p>'}<p><a href="#games/live?sport=CBB">Live scores & finals ›</a></p>`;
   };
   views.games = async route => {
     const tab = route.tab || 'upcoming';

@@ -145,5 +145,16 @@
     "providerFreshnessLabel": "Refreshed 5 hours ago",
     "historicalCheckpoint": false,
     "note": "Observed around12hours post age. Provider metrics stale; no inferred read clock or24h checkpoint. Not comparable to Oct19 older posts."
-  }
+  },
+  "deliveryHistory": [
+    {
+      "destination": "X",
+      "state": "sent",
+      "sentAt": "2026-11-03T14:45:00Z",
+      "precision": "minute",
+      "link": "https://twitter.com/keenkooks/status/2117629341106335858",
+      "verifiedAt": "2026-11-03T14:47:10.165473+00:00",
+      "evidence": "Buffer Sent UI and actual publication link; expedited existing09:58ET scheduled post at09:45ET. Original scheduled receipt retained."
+    }
+  ]
 }

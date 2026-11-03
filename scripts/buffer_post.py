@@ -60,10 +60,10 @@ BUFFER_NORMAL_LIMIT = 9              # keep the tenth place free for relabels an
 BUFFER_RESERVED = 3                  # preserve the final places for plays, relabels/reschedules and receipts
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
 BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed', 'community'))
-BUFFER_TEMP_ESSENTIAL = frozenset(('play', 'nba-trial', 'receipt', 'cashed'))
+BUFFER_TEMP_ESSENTIAL = frozenset(('play', 'nba-trial', 'cbb-pick', 'receipt', 'cashed'))
 def essential_kind(kind, now):
     import nba_pick_policy
-    return kind in BUFFER_ESSENTIAL or kind == 'nba-trial' and nba_pick_policy.active(now)
+    return kind in BUFFER_ESSENTIAL or kind == 'cbb-pick' or kind == 'nba-trial' and nba_pick_policy.active(now)
 DISCORD_PLAY_LEAD = post_windows.DISCORD_PLAY_LEAD  # one admission and scheduling window
 DISCORD_DELIVERY_CADENCE = post_windows.DISCORD_DELIVERY_CADENCE
 def card_url(card_key):
@@ -650,10 +650,17 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     # even before pressure reaches the reserve threshold. Due times stay intact.
     plans = sorted(plans, key=lambda plan: (not essential_kind(plan[1], now), plan[3], plan[0]))
     for guid, kind, text, due, card_key in plans:
+        cbb_regular = kind == 'cbb-pick'
         nba_regular = kind == 'nba-trial' and essential_kind(kind, now)
+        if cbb_regular:
+            import cbb_picks
+            original = next((p for p in cbb_picks.public_rows() if p['id'] == guid), None)
+            if not original or not cbb_picks.current_match(original, now):
+                log(f'buffer: {guid} held: CBB quote/review needs renewal')
+                continue
         nba_discord = next((p for p in log_book.get('posts', [])
-                            if p.get('id') == guid and p.get('nbaDiscordOnly')
-                            and not p.get('bufferPostId') and not p.get('sentAt')), None) if nba_regular else None
+                            if p.get('id') == guid and (p.get('nbaDiscordOnly') or p.get('cbbDiscordOnly'))
+                            and not p.get('bufferPostId') and not p.get('sentAt')), None) if nba_regular or cbb_regular else None
         if nba_discord:
             saved = nba_discord.get('queuedText')
             if not saved or x_post.text_hash(saved) != nba_discord.get('textHash'):
@@ -673,6 +680,12 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             log(f'buffer: {guid} deferred: {reason} ({pending}/{BUFFER_QUEUE} scheduled)')
             continue
         combined, combined_result = None, None
+        if guid.startswith('receipt:cbb:'):
+            import cbb_picks
+            original = next((p for p in cbb_picks.public_rows() if p.get('result') and cbb_picks.result_key(p) == guid), None)
+            if not original or text != cbb_picks.result_text(original) or card_key != guid.replace(':','-').lower():
+                log(f'buffer: {guid} held: CBB result differs from its immutable ledger')
+                continue
         if guid.startswith('receipt:card:'):
             import daily_straight_card
             # Recreate from immutable stored inputs before accepting Buffer.
@@ -704,7 +717,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} held: all parlay legs do not fit X; never omit or merge legs')
                 continue
         text = social_voice.finish(text)
-        text = x_ticket_copy(text, 'play' if combined or nba_regular else kind, guid, item)
+        text = x_ticket_copy(text, 'play' if combined or nba_regular or cbb_regular else kind, guid, item)
         if nba_discord and text != nba_discord['queuedText']:
             log(f'buffer: {guid} held: canonical Discord-first caption changed')
             continue
@@ -753,6 +766,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} card theme label fell back to legacy')
         else:
             card_theme = 'none'
+        if cbb_regular and not cbb_picks.reserve_delivery(guid, now):
+            log(f'buffer: {guid} held: CBB delivery already attempted or review expired')
+            continue
         if kind == 'nba-trial':
             import nba_trial_runtime
             if not nba_trial_runtime.reserve_delivery(guid, now):
@@ -765,6 +781,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             else:
                 post_id = create_post(text, channel_id, due, image, key=key, send=send)
         except BufferError as error:
+            if cbb_regular:
+                cbb_picks.delivery_failed(guid, now)
             if kind == 'nba-trial':
                 nba_trial_runtime.delivery_failed(guid, now)
             if kind == 'play' and missed_target(guid, due, now, items):
@@ -774,6 +792,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
+        if cbb_regular:
+            entry['cbbPick'] = True
+            entry['discord'] = {'state':'pending','destination':'plays','text':without_playbook(text),
+                                'readyAt':gates.stamp(max(now,due-DISCORD_PLAY_LEAD))}
         if nba_regular:
             entry['nbaPick'] = True
             entry['discord'] = {'state':'pending','destination':'plays','text':without_playbook(text),
@@ -830,7 +852,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             entry['copyVariant'] = x_post.copy_variant(text)
         if nba_discord:
             entry['discord'] = dict(nba_discord['discord'])
-            nba_discord.update(entry, nbaDiscordOnly=False)
+            nba_discord.update(entry)
+            nba_discord['cbbDiscordOnly' if cbb_regular else 'nbaDiscordOnly'] = False
         else:
             log_book.setdefault('posts', []).append(entry)
         pending += 1

@@ -1313,10 +1313,13 @@
     const u = full ? publicUnits : null, wlText = full ? wl(publicSummary) : s ? wl(s) : '';
     const proof = wlText ? `<p class="kt-proof"><a href="#record">${full ? 'All posted football plays' : 'Best Bets'} · <b class="num">${esc(wlText.replace(/–/g, '-'))}</b>${isNum(u) ? ` · <span class="${u < 0 ? 'neg' : u > 0 ? 'pos' : ''}">${esc(units(u).replace(/u$/, ' units'))}</span> at posted prices` : ''} · <span class="go">Every result ›</span></a></p>` : '';
     const cards = new Map(((heroLoaded || {}).bets || []).map(b => [b.id, b.card]));
+    const cbbData = state.league === 'ALL' ? await maybe('app/cbb.json') : null;
+    const cbbSummary = cbbData ? (await ensureGames()).cbbPicks(cbbData, true) : '';
     const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba) : '';
     const rest2 = [
       leftovers(recent, awaiting.filter(p => C.dayOf(p.kickoff) === lastDay), (today.lastSlate || {})[state.league]),
       nbaSummary,
+      cbbSummary,
       prepList(today.prep, notesList, now),
       ktSec('upsets', 'Underdog watch', upsetHtml, { tape: true, kind: 'Upset research, not best bets' }),
       ktSec('worth', 'Research worth a look', worth.length ? `<div class="board">${worth.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="kt-blank">Nothing on the board clears our price check right now.</p>',
@@ -1986,8 +1989,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-b79fb62a24d9';
-  const GAMES_ASSET = 'app-games.js?v=sha256-4209a4529d9a';
+  const MORE_ASSET = 'app-more.js?v=sha256-215605accdea';
+  const GAMES_ASSET = 'app-games.js?v=sha256-fccbf780e7ff';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
