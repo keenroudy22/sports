@@ -39,6 +39,13 @@ class OpportunityTests(unittest.TestCase):
             with self.assertRaises(ValueError):n.ingest([packet('rebounding','last3'),bad],NOW,root)
             self.assertEqual(len(n.observations(root,NOW)),2)
 
+    def test_observed_rounded_zero_minutes_are_retained_without_a_rate_division(self):
+        p=packet();p['rows'][0]['cells'][5]='0.0'
+        row=n.normalize(p,NOW)['rows'][0]
+        self.assertEqual(row['minutes'],0)
+        self.assertEqual(row['metrics']['potentialAssists'],8)
+        self.assertNotIn('perMinute',row)
+
     def test_wrong_filters_source_future_stale_columns_and_nonfinite_hold(self):
         for change in ('future','stale','source','season','mode','window','page','headers','nan','sample','identity','duplicate'):
             p=copy.deepcopy(packet())

@@ -74,7 +74,7 @@ def normalize(packet, now):
             numbers.append(number)
         gp,w,l,minutes=numbers[:4]
         if (gp!=int(gp) or gp<1 or w!=int(w) or l!=int(l) or w+l!=gp
-                or not 0<minutes<=60 or window=='last3' and gp>3):
+                or not 0<=minutes<=60 or window=='last3' and gp>3):
             raise ValueError('Tracking sample/minutes unavailable')
         key=(identity[1],cells[1])
         if key in seen:raise ValueError('Duplicate tracking player/team')
