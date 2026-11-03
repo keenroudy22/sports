@@ -1,10 +1,10 @@
 {
   "date": "2026-11-03",
-  "state": "source-shipped-data-host-pending",
+  "state": "shipped-observing-natural-runs",
   "sourceCommit": "9bebd56fa3ef55a9a18b3c5aafdff53726481f19",
   "officialDataCommit": "fed0596a9317c845419b026e264e7d739ea27cda",
   "tests": {
-    "python": 2129,
+    "python": 2131,
     "pythonSkipped": 2,
     "node": 307,
     "normal": true,
@@ -13,7 +13,8 @@
     "publicationAuditIssues": 0,
     "rehearsal": "ok",
     "outsideWrites": 0,
-    "privateReads": 0
+    "privateReads": 0,
+    "canonicalAttempts": 2
   },
   "fixes": [
     "Finish a recent actual scheduled quote capture after verified browser PDF recovery without new feed requests or fabricated clocks",
@@ -35,7 +36,7 @@
     "nbaGames": 14,
     "nbaPropResearchRows": 256,
     "footballGames": 3,
-    "alternateQuotes": 149,
+    "alternateQuotes": 126,
     "sourceReviewOptions": 8,
     "privatePacket": "work/nov4-climb-source-review.json",
     "preferredDraft": [
@@ -44,7 +45,16 @@
     ],
     "derivedOdds": -174,
     "actualTicketPrice": null,
-    "releaseReady": false
+    "releaseReady": false,
+    "focusedNbaResearch": "work/nov4-nba-research-priorities.json",
+    "primaryQuoteCoverageAsOfCapture": {
+      "FanDuel": 256,
+      "DraftKings": 0
+    },
+    "unpricedWatches": [
+      "Shai assists",
+      "Hartenstein rebounds"
+    ]
   },
   "automations": {
     "updated": [
@@ -54,14 +64,30 @@
     "unchangedWindows": [
       "00:45 Eastern",
       "07:45 Eastern"
+    ],
+    "configs": [
+      {
+        "id": "kook-n-desk-health-and-fix",
+        "status": "ACTIVE",
+        "rrule": "FREQ=DAILY;BYHOUR=7;BYMINUTE=45",
+        "model": "gpt-6.1-sol",
+        "promptSha256": "3ef6420241726820c4c18b8ba9618f554909652209dc04c822d1ce2f98d1f1f0"
+      },
+      {
+        "id": "kook-n-overnight-outcome-follow-through",
+        "status": "ACTIVE",
+        "rrule": "FREQ=DAILY;BYHOUR=0;BYMINUTE=45",
+        "model": "gpt-6.1-sol",
+        "promptSha256": "187900727257bf36e764facfaa621076dfb7bc7f253221e5e8ea39dd1ac22906"
+      }
     ]
   },
   "newPostedPlays": 0,
   "remaining": [
-    "Independent future game results/dates and positive conservative probability/book proof; no supported NBA prop market yet",
-    "Resolve actual official identity/participation disagreements and unsubmitted teams without fabricated clearance",
+    "Independent future outcomes/dates and positive conservative probability/book proof; no supported NBA prop market yet",
+    "Remaining official/current roster identity and participation disagreements; unsubmitted teams stay unknown",
     "Fresh game-day prices, exact Climb ticket and admission; actual delivery receipts",
-    "Latest capture-data hosted/live verification; source already hosted successfully"
+    "Observe real overnight/morning delivery before calling ongoing operations reliable"
   ],
   "hostedSourceRun": 41729533181,
   "hostedSourceHead": "9bebd56fa3ef55a9a18b3c5aafdff53726481f19",
@@ -72,10 +98,11 @@
     "desktopWidth": 1440,
     "horizontalOverflow": false,
     "loaded": true,
+    "loadError": false,
     "consoleErrors": 0,
-    "mobile": "work/nba-validation-followthrough-mobile.png",
-    "desktop": "work/nba-validation-followthrough-desktop.png",
-    "scope": "Hosted source release; latest actual capture data still awaits its hosted artifact"
+    "mobile": "work/nba-validation-final-mobile.png",
+    "desktop": "work/nba-validation-final-desktop.png",
+    "scope": "Final41737637418SUCCESS artifactee663 contains tested sourcec15, recovered future forecasts a52 and latest actual14-submitted-team report"
   },
   "naturalCapture": {
     "at": "2026-11-03T22:33:20Z",
@@ -87,7 +114,12 @@
       "reb": 61,
       "ast": 62
     },
-    "newTestResults": 0
+    "newTestResults": 0,
+    "newFutureGamesPerMarket": {
+      "pts": 4,
+      "reb": 4,
+      "ast": 4
+    }
   },
   "sourceCompletion": {
     "ingested": 1,
@@ -119,5 +151,85 @@
     "state": "already-completed",
     "newObservations": 0,
     "requests": 0
-  }
+  },
+  "completionHosted": {
+    "hostedRun": 41733304777,
+    "artifactHead": "686c5be7c7b59c0bb1d8b3691dfa47023ff469fa",
+    "ancestry": {
+      "9bebd56fa3ef55a9a18b3c5aafdff53726481f19": true,
+      "a52ff310d399d3bdc9cc2f02c50bfa05959e721a": true
+    }
+  },
+  "suffixRelease": {
+    "testedCandidate": "c15b877a301ab17640ba994b983a726c508e70af",
+    "testedBase": "cec20f8e530a8f226842739b0fe8d37a617f60c2",
+    "attempts": 2,
+    "python": 2131,
+    "node": 307,
+    "normalAndClean": true,
+    "targeted": 24,
+    "rehearsal": "ok",
+    "outsideWrites": 0,
+    "privateReads": 0,
+    "realInput": "work/nba-suffix-real-report-check.json",
+    "state": "shipped-hosted-live-verified",
+    "hostedRun": 41737637418,
+    "latestDataCommit": "ee663032958871284c24634909d0e6f18b3d45d4",
+    "artifactHead": "ee663032958871284c24634909d0e6f18b3d45d4"
+  },
+  "latestSource": {
+    "ingested": 1,
+    "teams": 27,
+    "submitted": 14,
+    "reportedAt": "2026-11-03T22:45:00Z",
+    "retrievedAt": "2026-11-03T23:00:43Z",
+    "providerRetrievedAt": "2026-11-03T22:31:10Z",
+    "validationCompletion": {
+      "state": "held",
+      "reason": "No fresh paired primary quotes from that scheduled capture",
+      "admissionReady": false,
+      "requests": 0
+    },
+    "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-03_05_45PM.pdf",
+    "pagesReviewed": 5,
+    "pdfSha256": "e5bde3a096a6dbd453de3c1396ae355ce75020328f944d6942bf4173f5cf3f92"
+  },
+  "deliveryReview": {
+    "newPlaysSent": 0,
+    "existingCbbAllThreeVerified": true,
+    "existingCbbX": "https://x.com/1753110091912413184/status/2117649066804781324",
+    "missingX": "CFB-2026-W10-buff-m-oh-over-44-5-fd",
+    "originalOfferExpiredAt": "2026-11-03T13:30:00Z",
+    "missingCause": "Free API transport hold outlasted original offer; current private release no longer exists. Do not replay expired FD terms as a current recommendation.",
+    "historyPreserved": true,
+    "morningTaskChanged": "Reconcile current-day public Discord/site plays and real X Sent first, before optional research and original offer expiry; use normal attended-web review, never fabricated reviewer or backoff bypass."
+  },
+  "hostedFinal": {
+    "hostedRun": 41737637418,
+    "artifactHead": "ee663032958871284c24634909d0e6f18b3d45d4",
+    "conclusion": "success",
+    "ancestry": {
+      "c15b877a301ab17640ba994b983a726c508e70af": true,
+      "ee663032958871284c24634909d0e6f18b3d45d4": true,
+      "a52ff310d399d3bdc9cc2f02c50bfa05959e721a": true
+    }
+  },
+  "mainTests": {
+    "python": 2129,
+    "pythonSkipped": 2,
+    "node": 307,
+    "normal": true,
+    "cleanExport": true,
+    "recordAuditIssues": 0,
+    "publicationAuditIssues": 0,
+    "rehearsal": "ok",
+    "outsideWrites": 0,
+    "privateReads": 0
+  },
+  "originalFrozenProtocols": {
+    "adapter": "432249595222a8c66cf336af85928d440fccd721da08596a2aef8cfc946f75ef",
+    "probability": "71ee75a32b9ceb186ee2280051963c5884b11922a9d93ffbc8f50813c683e4f6",
+    "unchanged": true
+  },
+  "verifiedAt": "2026-11-03T23:33:19.004974+00:00"
 }
