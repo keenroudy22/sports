@@ -1,12 +1,12 @@
 # What the kitchen learned, 2026-11-03
 
-5451 recorded candidate rows, 3895 distinct game/side/player observations, 5303 graded. Closing line value is how far the market moved toward our side by kickoff; it is the first thing learning trusts.
+5452 recorded candidate rows, 3895 distinct game/side/player observations, 5303 graded. Closing line value is how far the market moved toward our side by kickoff; it is the first thing learning trusts.
 
 ## Changes this week
 
 - **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
 - **CFB/prop** calibration: 0.15 to 0.16. Calibrated chances predicted the later record better than the raw ones.
-- **researcher** domains: {'preferDomains': ['si.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'abqjournal.com', 'chicagobears.com', 'buffalobills.com', 'denverbroncos.com', 'seahawks.com'], 'avoidDomains': []} to {'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'on3.com', 'seahawks.com', 'buffalobills.com'], 'avoidDomains': ['startribune.com']}. Which sites the researcher cites keep checking out.
+- **researcher** domains: {'avoidDomains': [], 'preferDomains': ['si.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'abqjournal.com', 'chicagobears.com', 'buffalobills.com', 'denverbroncos.com', 'seahawks.com']} to {'avoidDomains': ['startribune.com'], 'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'on3.com', 'seahawks.com', 'buffalobills.com']}. Which sites the researcher cites keep checking out.
 - **card** direction.weekendCap: 5 to 3. Cut the weekend card from 5 to 3 best bets until Nov 17 (last 60 straight plays 24-36, -11.8u). Weekdays unchanged. To undo, tell Codex: undo card.
 - **funTickets** direction.funTickets: standard to shorter. Fun tickets go shorter until Nov 17: +300 to +800, 3-4 legs (0 wins in the last 12). To undo, tell Codex: undo fun.
 - **CFB/moneyline** twoWay.trust: 1.0 to 0.971. CFB/moneyline trust 1.00 to 0.97.
@@ -24,25 +24,19 @@
 - **NFL/prop:rushYds** twoWay.trust: 0.9 to 0.85. NFL/prop:rushYds trust 0.90 to 0.85.
 - **NFL/total** twoWay.trust: 0.9 to 0.868. NFL/total trust 0.90 to 0.87.
 - **NFL/total** twoWay.gap: 0.0 to 2.0. NFL/total gap floor +2 points.
+- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
 
 ## Direction changes
 
 Owner-approved bounded moves (2026-10-07): they only tighten, pause, shift weight between approved categories, or restore what they tightened. Nothing loosens below the Oct 7 baseline, no market is added, and the record and published plays are untouched.
 
 Applied:
-- 2026-11-03 · Cut the weekend card from 5 to 3 best bets until Nov 17 (last 60 straight plays 24-36, -11.8u). Weekdays unchanged. To undo, tell Codex: undo card. Trigger: n 60, 24-36, -11.75u, hit 40% vs break-even 49%, CLV +0.01. Does: Weekend card ceiling 3 instead of 5 until Nov 17; weekdays unchanged. Undo: The next 30 straight plays at or above break-even restore 5 early. Expires 2026-11-17.
-- 2026-11-03 · Fun tickets go shorter until Nov 17: +300 to +800, 3-4 legs (0 wins in the last 12). To undo, tell Codex: undo fun. Trigger: n 12, 0-12, -3.00u, hit 0% vs break-even 14%, CLV unmeasured. Does: Until Nov 17 a longshot is +300 to +800 with 3-4 legs, and no fun-ticket leg (longshot or easy parlay) comes from a segment paused as a best bet; none that fits means none that day. Undo: 2 wins in the next 10 tickets end it early. Expires 2026-11-17.
+- none
 
 In force now:
-- NFL totals: paused as a best bet since 2026-10-08 (research and shadow only)
+- NFL totals: paused as a best bet since 2026-10-08 (research and shadow only); edge bar +2 since None
 - Weekend card: 3 best bets until 2026-11-17
 - Fun tickets: +300 to +800, 3-4 legs until 2026-11-17
-
-Owner ping:
-
-    Cut the weekend card from 5 to 3 best bets until Nov 17 (last 60 straight plays 24-36, -11.8u). Weekdays unchanged. To undo, tell Codex: undo card.
-    Fun tickets go shorter until Nov 17: +300 to +800, 3-4 legs (0 wins in the last 12). To undo, tell Codex: undo fun.
-    Details: https://github.com/keenroudy22/sports/blob/main/data/learning/REPORT.md
 
 ## Segments (published since their last change)
 
@@ -81,35 +75,25 @@ Owner ping:
 
 ## Two-way Autopilot learning
 
-- Applied trust:CFB/moneyline: CFB/moneyline trust 1.00 to 0.97.
-- Applied trust:CFB/prop:passYds: CFB/prop:passYds trust 0.90 to 0.85.
-- Applied trust:CFB/spread: CFB/spread trust 0.95 to 0.91.
-- Applied trust:CFB/total: CFB/total trust 0.90 to 0.88.
-- Applied trust:CFB/total/plus_money: CFB/total/plus_money trust 1.00 to 0.95.
-- Applied trust:NFL/moneyline: NFL/moneyline trust 1.00 to 1.04.
-- Applied trust:NFL/moneyline/plus_money: NFL/moneyline/plus_money trust 1.00 to 0.95.
-- Applied trust:NFL/prop:att: NFL/prop:att trust 1.04 to 1.00.
-- Applied trust:NFL/prop:car: NFL/prop:car trust 1.00 to 0.95.
-- Applied trust:NFL/prop:cmp: NFL/prop:cmp trust 1.10 to 1.15.
-- Applied trust:NFL/prop:rec: NFL/prop:rec trust 0.96 to 1.00.
-- Applied trust:NFL/prop:recYds/plus_money: NFL/prop:recYds/plus_money trust 1.00 to 1.05.
-- Applied trust:NFL/prop:rushYds: NFL/prop:rushYds trust 0.90 to 0.85.
-- Applied trust:NFL/total: NFL/total trust 0.90 to 0.87.
-- Applied gap:NFL/total: NFL/total gap floor +2 points.
+- Waiting for a second Tuesday: gap:NFL/total (NFL/total gap floor +2 points).
 - Waiting for a second Tuesday: pause:NFL/total (Pause NFL/total; research and shadow continue).
 - Waiting for a second Tuesday: trust:CFB/moneyline/plus_money (CFB/moneyline/plus_money trust 1.00 to 0.96).
+- Waiting for a second Tuesday: trust:CFB/prop:passYds (CFB/prop:passYds trust 0.85 to 0.84).
 - Waiting for a second Tuesday: trust:CFB/prop:rec/plus_money (CFB/prop:rec/plus_money trust 1.00 to 0.97).
 - Waiting for a second Tuesday: trust:CFB/prop:rushYds (CFB/prop:rushYds trust 0.96 to 0.97).
 - Waiting for a second Tuesday: trust:CFB/spread/plus_money (CFB/spread/plus_money trust 1.00 to 1.04).
+- Waiting for a second Tuesday: trust:NFL/moneyline/plus_money (NFL/moneyline/plus_money trust 0.95 to 0.91).
 - Waiting for a second Tuesday: trust:NFL/prop:car/plus_money (NFL/prop:car/plus_money trust 1.00 to 0.97).
 - Waiting for a second Tuesday: trust:NFL/prop:passYds (NFL/prop:passYds trust 0.92 to 0.96).
 - Waiting for a second Tuesday: trust:NFL/prop:recYds (NFL/prop:recYds trust 1.06 to 1.02).
+- Waiting for a second Tuesday: trust:NFL/prop:recYds/plus_money (NFL/prop:recYds/plus_money trust 1.05 to 1.08).
+- Waiting for a second Tuesday: trust:NFL/prop:rushYds (NFL/prop:rushYds trust 0.85 to 0.80).
 - Waiting for a second Tuesday: trust:NFL/spread (NFL/spread trust 0.95 to 0.96).
 - Waiting for a second Tuesday: trust:NFL/spread/plus_money (NFL/spread/plus_money trust 1.00 to 1.01).
 
 ## Player chances
 
-- CFB/prop: 2871 graded projections; our favoured side came in 52.1% against a raw 60.5%; tested shrink k 0.16 (previous: 0.15).
+- CFB/prop: 2871 graded projections; our favoured side came in 52.1% against a raw 60.5%; tested shrink k 0.16 (previous: 0.16).
 - NFL/prop: 3893 graded projections; our favoured side came in 51.4% against a raw 61.2%; tested shrink k 0.11 (previous: 0.09).
 
 ## What each rule refused
@@ -451,11 +435,11 @@ p = 0.5 + k * (raw - 0.5); k = w*k_market + (1-w)*k_league; w = n_train/(n_train
 ## Silent results shadows
 
 - These observations changed no play, card, post, record, gate or request budget.
-- R0: 5442 raw rows, 3891 distinct
+- R0: 5443 raw rows, 3891 distinct
 - R1: observation active; public behavior unchanged
 - R2: observation active; public behavior unchanged
 - R3: 11 prop markets observed
 - R4: observation active; public behavior unchanged
-- R5: 98 heavy alternates observed; default unchanged
+- R5: 92 heavy alternates observed; default unchanged
 - R6: observation active; public behavior unchanged
 - R7: observation active; public behavior unchanged
