@@ -25,6 +25,7 @@
 - **NFL/total** twoWay.trust: 0.9 to 0.868. NFL/total trust 0.90 to 0.87.
 - **NFL/total** twoWay.gap: 0.0 to 2.0. NFL/total gap floor +2 points.
 - **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
+- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
 
 ## Direction changes
 
