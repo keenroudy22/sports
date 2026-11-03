@@ -4169,7 +4169,7 @@ def homepage_editor(now, status, enabled=True):
 
 def commit_log(now, push=True, runner=git, cwd=ROOT):
     """Commit delivery evidence and the optional local homepage notes after scheduling."""
-    paths = ('data/x-posted.json', 'site/data/desk-notes.json', 'data/nba-capture/', 'data/nba-trial/')
+    paths = ('data/x-posted.json', 'site/data/desk-notes.json', 'data/nba-capture/', 'data/nba-trial/', 'data/cbb-picks/')
     changed = [p for p in paths if runner('status', '--porcelain', '--', p, cwd=cwd).stdout.strip()]
     if not changed:
         return {'committed': False, 'pushed': False}

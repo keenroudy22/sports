@@ -33,6 +33,18 @@ def context():
     return SimpleNamespace(now=NOW,games={},first={},latest={},risk_external={},risk_games={'CBB-123':fixture()['game']})
 
 class CBBPicksTests(unittest.TestCase):
+    def test_long_college_names_render_without_rewriting_fixture(self):
+        import nba_trial,pick_card
+        p=fixture();p['marketType']='spread';p['direction']='away';p['line']=11.5
+        p['game']['teams']['away'].update(name='South Dakota State Jackrabbits',shortName='S Dakota St')
+        p['game']['teams']['home'].update(name='Kansas State Wildcats',shortName='Kansas St')
+        with tempfile.TemporaryDirectory() as d, patch.object(cbb,'public_rows',return_value=[p]), patch.object(pick_card,'render') as output:
+            cbb.render(Path(d))
+            svg=output.call_args.args[0]
+            self.assertIn('S DAKOTA ST',svg)
+            self.assertNotIn('SOUTH DAKOTA STATE JACKRABBITS',svg)
+            self.assertEqual(p['game']['teams']['away']['name'],'South Dakota State Jackrabbits')
+
     def test_source_review_is_distinct_from_probability_approval(self):
         p=fixture();self.assertIsNone(cbb.refusal(p,NOW))
         for k in ('chance','rawChance','fairOdds','expectedValue','calibrated'):

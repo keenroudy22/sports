@@ -234,7 +234,10 @@ def render(folder,root=STORE):
         current=({'total':dict(line=p['line'],**{side:p['odds'],('under' if side=='over' else 'over'):p['oppositeOdds']})}
                  if market=='total' else {side:dict(spreadPrice=p['odds'],spreadLine=p['line']),
                     ('away' if side=='home' else 'home'):dict(spreadPrice=p['oppositeOdds'],spreadLine=-p['line'])})
-        svg=nba_trial.preview_svg(p['game'],dict(book='DraftKings',retrievedAt=q['checkedAt'],current=current),
+        # Keep immutable fixture names; use the provider's compact names on art.
+        game=dict(p['game'],teams={side:dict(team,name=team.get('shortName') or team['abbreviation'])
+                                  for side,team in p['game']['teams'].items()})
+        svg=nba_trial.preview_svg(game,dict(book='DraftKings',retrievedAt=q['checkedAt'],current=current),
             preview=False,direction=side,market=market,line=p['line'],odds=p['odds'],units=1,
             reason=p['review']['why'],series_label='CBB PICK')
         pick_card.render(svg,target)
