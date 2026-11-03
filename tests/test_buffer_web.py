@@ -13,6 +13,22 @@ import buffer_post as bp
 class WebReceiptTests(unittest.TestCase):
     now = datetime(2026, 10, 26, 13, tzinfo=timezone.utc)
 
+    def test_cbb_recovery_reuses_own_intent_but_respects_other_slots(self):
+        import cbb_picks
+        now=datetime(2026,11,3,15,tzinfo=timezone.utc)
+        text='CBB PICK · SDST +11.5 (-115 DraftKings) · 1u\n\n21+ only'
+        for other in (False,True):
+            entry=dict(id='CBB-one',kind='buffer:cbb-pick',cbbPick=True,textHash=web.x_post.text_hash(text),
+                       dueAt=bp.stamp(now+timedelta(minutes=14)),discord={'state':'sent'})
+            posts=[entry]
+            if other:posts.append(dict(id='other',dueAt=bp.stamp(now+timedelta(minutes=15))))
+            with patch.object(bp,'rate_backoff',return_value=None), patch.object(cbb_picks,'public_rows',return_value=[{'id':'CBB-one','kickoff':bp.stamp(now+timedelta(hours=5)),'quote':{'checkedAt':bp.stamp(now)}}]), patch.object(cbb_picks,'current_match',return_value=True), patch.object(cbb_picks,'caption',return_value=text), patch.object(bp,'live_card_url',return_value='https://keenroudy.com/sports/data/cards/cbb-one.png'), patch.object(bp,'ticket_art_live',return_value=True), patch.object(bp,'plain_art_live',return_value=True), patch.object(bp,'graphql') as api:
+                web.reserve_cbb_pick(entry['id'],{'posts':posts},now)
+                target=now+timedelta(minutes=15)+(bp.SPACING if other else timedelta())
+                self.assertEqual(web.gates.when(entry['dueAt']),target)
+                self.assertEqual(len(posts),2 if other else 1)
+                api.assert_not_called()
+
     def test_public_play_web_reservation_requires_real_discord_and_current_review(self):
         text = 'Player over 2.5 catches -110 FanDuel\n\n21+ only'
         entry = dict(id='NFL-public', kind='buffer:play', textHash=web.x_post.text_hash(text),

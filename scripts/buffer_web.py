@@ -144,10 +144,12 @@ def reserve_cbb_pick(guid, log_book, now, *, opener=None):
     image=bp.live_card_url(guid.lower(),opener)
     if not image or not bp.ticket_art_live(image) or not bp.plain_art_live(image):
         raise WebHold('CBB original branded card is not verified live')
-    due=bp.free_slot(now+timedelta(minutes=15),bp.taken(log_book,now))
+    # Replacing this play's unsent intent consumes no second queue slot.
+    other_posts=dict(log_book,posts=[e for e in log_book.get('posts',[]) if e is not entry])
+    due=bp.free_slot(now+timedelta(minutes=15),bp.taken(other_posts,now))
     if due>=min(gates.when(play['kickoff'])-timedelta(minutes=15),gates.when(play['quote']['checkedAt'])+timedelta(hours=1)):
         raise WebHold('No current reviewed CBB release window')
-    if bp.day_count(log_book,now.astimezone(gates.EASTERN).date())>=bp.MAX_PER_DAY:
+    if bp.day_count(other_posts,now.astimezone(gates.EASTERN).date())>=bp.MAX_PER_DAY:
         raise WebHold('Daily social cap reached')
     entry.update(dueAt=gates.stamp(due),queuedText=text)
     entry['webDelivery']=dict(state='reserved',reservedAt=gates.stamp(now),reviewedAt=gates.stamp(now),image=image,
