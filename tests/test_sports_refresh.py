@@ -75,7 +75,7 @@ class SportsRefreshTests(unittest.TestCase):
         for league in result['leagues'].values():
             self.assertEqual(league['status'], 'ok')
             self.assertEqual(league['games'], [])
-            self.assertFalse(league['coverage']['picks'])
+            self.assertEqual(league['coverage']['picks'], league['league'] == 'CBB')
 
     def test_failed_league_preserves_snapshot_and_success_time(self):
         old = sports.refresh({}, lambda url: payload([event()] if '/mlb/' in url else [], league_for_url(url)), NOW)

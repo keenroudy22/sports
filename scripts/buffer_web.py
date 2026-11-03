@@ -123,3 +123,33 @@ def confirm_sent(entry, *, observed_text, link, sent_at, now):
         raise WebHold('Invalid actual publication time')
     entry.update(sentAt=gates.stamp(at), link=link, tweetId=link.rsplit('/', 1)[-1])
     web.update(state='sent', verifiedAt=gates.stamp(now), evidence='Buffer Sent UI')
+
+
+def reserve_cbb_pick(guid, log_book, now, *, opener=None):
+    """Attended recovery for an admitted, delivered CBB pick; no API call."""
+    import cbb_picks, social_style
+    if bp.rate_backoff(now):
+        raise WebHold('Provider backoff active; do not route around it')
+    entry=next((e for e in log_book.get('posts',[]) if e.get('id')==guid),None)
+    if (not entry or entry.get('kind')!='buffer:cbb-pick' or not entry.get('cbbPick')
+            or (entry.get('discord') or {}).get('state')!='sent'
+            or any(entry.get(k) for k in ('bufferPostId','sentAt','webDelivery','error','cancelledAt','deletedAt'))):
+        raise WebHold('Requires one public CBB play with no prior or ambiguous X attempt')
+    play=next((p for p in cbb_picks.public_rows() if p['id']==guid),None)
+    if not play or not cbb_picks.current_match(play,now):
+        raise WebHold('Current CBB quote/review did not clear')
+    text=cbb_picks.caption(play)
+    if x_post.text_hash(text)!=entry.get('textHash') or x_post.x_style(text) or social_style.issues(text) or x_post.tweet_length(text)>x_post.LIMIT:
+        raise WebHold('CBB caption differs from the original public release or fails style')
+    image=bp.live_card_url(guid.lower(),opener)
+    if not image or not bp.ticket_art_live(image) or not bp.plain_art_live(image):
+        raise WebHold('CBB original branded card is not verified live')
+    due=bp.free_slot(now+timedelta(minutes=15),bp.taken(log_book,now))
+    if due>=min(gates.when(play['kickoff'])-timedelta(minutes=15),gates.when(play['quote']['checkedAt'])+timedelta(hours=1)):
+        raise WebHold('No current reviewed CBB release window')
+    if bp.day_count(log_book,now.astimezone(gates.EASTERN).date())>=bp.MAX_PER_DAY:
+        raise WebHold('Daily social cap reached')
+    entry.update(dueAt=gates.stamp(due),queuedText=text)
+    entry['webDelivery']=dict(state='reserved',reservedAt=gates.stamp(now),reviewedAt=gates.stamp(now),image=image,
+                               evidence='CBB original ledger, current source/quote, caption and hosted-card checks')
+    return entry
