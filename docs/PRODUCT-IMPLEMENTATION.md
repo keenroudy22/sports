@@ -6687,3 +6687,14 @@ Local10:30packet exists; local27B timed out180.03s/no cloud fallback. Week strai
 W-20261103-1 repairs direction readers/evaluate/apply after October31 reset: obsolete automatic weekend ceiling3 and fun3–4/+300..800 cannot override current owner terms, including from cached moves. Original policy/history, older replay, all losses, shared caps and probability/book/role checks remain.48 focused candidate checks pass; initial historical fixture crossed reset and now explicitly expects the new policy at November2. Full canonical release and hosted/live checks pending. Concurrent CBB56ea45451 release was allowed to finish before tracked edits; its receipt is separate.
 
 Stored15:55:57Z Climb prep:2games/0two-leg options/0admitted new ticket; legacy alternate support holds remain, and no exact visibly verified combined-price spec was supplied for discretionary admission. No capture/API/job/budget/preferences/public history changes.
+
+
+## November3 — NBA diagnostics and CBB delivery verified
+
+Candidate56ea passed2096Python(2skips)/306Node tests, both clean-export suites, all release audits and1055 offline rehearsal (ok, zero outside writes/private reads). Hosted41667910196SUCCESS verified7311a1b, including source56ea and actual X receipt e78c. Live CBB Today/Record checked375/1440px with exact terms, no overflow, load errors or console errors. Newer weekly repair W-20261103-1 is preserved separately, not claimed in this receipt.
+
+South Dakota State+11.5 -115DraftKings/1u: original admission15:29:21Z; hosted data41664410465SUCCESS; actual Plays Discord15:48:31Z; actual X2117649066804781324 at16:04Z. Exact caption, original graphic, @Playbook and21+only verified in Buffer Sent. Original planned time remains distinct from the expedited actual send. Own-intent scheduling correction retains other posts' spacing/caps and duplicate protection. Site countercase distinguishes this sourced opinion from the prior-heavy model and quantified EV. First natural settlement is future; existing results worker grades the official final.
+
+Yesterday's fun ticket remains a loss5/8; recap X2117629341106335858 actually sent14:45Z and Discord1567051660302229624 confirmed. Original schedule evidence remains in history. NBA typed report-stage diagnostics are deployed, not proof of restored report access or validated props. Nov3 has no NBA games; frozen independent prop evidence remains below30games/five dates. Local-model challenge timed out15s and was nonblocking.
+
+Social recovery is partial: attended Buffer graphics work; unattended API remains held at2900 local rolling requests. Saved history estimates normal2700-ceiling room around Nov10 12:31Z, not a provider guarantee. No reset, paid stack, extra worker, exposure increase or model promotion. See docs/basketball-delivery-2026-11-03.json. All preexisting queue IDs, including the separately added weekly repair, remain intact.
