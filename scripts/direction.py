@@ -35,6 +35,12 @@ import pricing
 
 EASTERN = ZoneInfo('America/New_York')
 APPROVED = '2026-10-07'
+OWNER_RESET = datetime(2026, 10, 31, tzinfo=timezone.utc)
+
+
+def judgment_reset(now):
+    return now is None or now >= OWNER_RESET
+
 REPORT_LINK = 'https://github.com/keenroudy22/sports/blob/main/data/learning/REPORT.md'
 
 # Best bets, per segment (league x market).
@@ -575,6 +581,12 @@ def evaluate(policy, evidence, now):
                           'Report only: nothing loosens.', 'n/a',
                           f"No Climb rung for {spell} straight days with 2+ games. Nothing was loosened.", False,
                           reportOnly=True, notify=False))
+    if judgment_reset(now):
+        for m in moves:
+            if m['key'] in ('card', 'fun'):
+                m.update(reportOnly=True, notify=False,
+                         sentence='Diagnostic only after October31 owner reset: ' + m['sentence'],
+                         action='No automatic card ceiling or ticket-shape change.')
     return moves
 
 
@@ -591,7 +603,7 @@ def apply(policy, moves, now):
     at = stamp(now)
     applied = []
     for m in moves:
-        if m.get('reportOnly'):
+        if m.get('reportOnly') or (judgment_reset(now) and m['key'] in ('card', 'fun')):
             continue
         family, _, rest = m['key'].partition(':')
         if family in ('raise', 'pause', 'priority'):
@@ -689,6 +701,8 @@ def priority(policy, segment, now=None):
 
 def weekend_cap(policy, now, base):
     """The weekend card's ceiling: the base, or 3 while a cut is in force. Never above the base, never below 3."""
+    if judgment_reset(now):
+        return base
     card = state_of(policy)['card']
     cap = card.get('weekendCap')
     if not isinstance(cap, (int, float)) or not started(card.get('since'), now):
@@ -700,6 +714,8 @@ def weekend_cap(policy, now, base):
 
 def fun_shape(policy, now):
     """The shorter longshot shape while it is in force, else None."""
+    if judgment_reset(now):
+        return None
     fun = state_of(policy)['funTickets']
     if fun.get('active') is not True or not started(fun.get('since'), now):
         return None

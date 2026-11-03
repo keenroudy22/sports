@@ -6678,3 +6678,12 @@ original public play remains site/Discord; attended X review refused expired
 08:30ET quote. No old price resent or public history erased. GitHub first NBA
 release attempt failed fetch timeout, not an approval hold. Failed test run with
 systemPython3.9 retained; requiredHomebrew3.14 full suite subsequently passed.
+
+
+### November3 weekly — retired automatic card/fun prescriptions
+
+Local10:30packet exists; local27B timed out180.03s/no cloud fallback. Week straights5–8/-3.18u; captured-price sport/market/tier/weekday splits retained. No same-period settled social metrics; legacy category cohorts are not a fair new-creative comparison. No policy tuning from these outcomes.
+
+W-20261103-1 repairs direction readers/evaluate/apply after October31 reset: obsolete automatic weekend ceiling3 and fun3–4/+300..800 cannot override current owner terms, including from cached moves. Original policy/history, older replay, all losses, shared caps and probability/book/role checks remain.48 focused candidate checks pass; initial historical fixture crossed reset and now explicitly expects the new policy at November2. Full canonical release and hosted/live checks pending. Concurrent CBB56ea45451 release was allowed to finish before tracked edits; its receipt is separate.
+
+Stored15:55:57Z Climb prep:2games/0two-leg options/0admitted new ticket; legacy alternate support holds remain, and no exact visibly verified combined-price spec was supplied for discretionary admission. No capture/API/job/budget/preferences/public history changes.

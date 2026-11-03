@@ -274,7 +274,8 @@ class CardCapTests(unittest.TestCase):
         losing = rows + card_rows(3, 7, at=NOW + DAY)
         moves, _ = settle(policy, losing, NOW + 14 * DAY)
         self.assertEqual([m['rule'] for m in moves], ['card-cap-extend'])
-        self.assertEqual(direction.weekend_cap(policy, NOW + 20 * DAY, 5), 3)
+        self.assertEqual(direction.weekend_cap(policy, NOW + 20 * DAY, 5), 5,
+                         'November2 is after the owner reset; saved cap is historical only')
 
     def test_card_cap_gate_honors_the_cut_on_weekends_only(self):
         team = lambda key, gid: total_lean(id=key, gameIds=[gid], publishedAt='2026-09-25T12:00:00Z')
