@@ -132,7 +132,38 @@ def independent_check(pairs):
         scope='Equal game weights, not independent players or a placed-bet portfolio')
 
 
-def summarize(forecasts, outcomes, now=None):
+def workload_diagnostics(graded, boxes, now):
+    """Postgame error attribution, never a forecast using actual minutes."""
+    import nba_roles
+    finals={str(b['eventId']).removeprefix('NBA-'):b for b in nba_roles.available_boxes(boxes,now)}
+    groups=defaultdict(list)
+    for r,o in graded:
+        p=r['projection'];b=finals.get(r['eventId'])
+        if not b or b.get('season')!=r.get('season') or boxscores.instant(b['kickoff'])!=boxscores.instant(r['kickoff']):continue
+        people=[a for a in b.get('players',[]) if a['id']==r['athleteId'] and a['team']==r.get('team') and not a.get('dnp')]
+        if len(people)!=1:continue
+        stats=people[0]['stats'];m=stats.get('min');actual=stats.get(r['stat'])
+        if not all(number(v) for v in (m,actual,p.get('minutes'),p.get('rate'))) or m<0 or p['minutes']<=0 or p['rate']<0 or actual!=o['actual']:continue
+        minutes=(m-p['minutes'])*p['rate'];rate=actual-m*p['rate'];rounding=p['minutes']*p['rate']-p['value']
+        groups[(r['model'],r['stat'],r.get('season'),p.get('window','unknown'))].append(dict(
+            event=r['eventId'],error=actual-p['value'],minutes=minutes,rate=rate,rounding=rounding))
+    out=[]
+    for (model,stat,season,window),values in sorted(groups.items()):
+        out.append(dict(model=model,stat=stat,season=season,window=window,comparisons=len(values),
+            games=len({v['event'] for v in values}),forecastMAE=round(mean(abs(v['error']) for v in values),3),
+            withActualMinutesMAE=round(mean(abs(v['rate']) for v in values),3),
+            minutesComponentMAE=round(mean(abs(v['minutes']) for v in values),3),
+            rateComponentMAE=round(mean(abs(v['rate']) for v in values),3),
+            maxIdentityError=max(abs(v['error']-v['minutes']-v['rate']-v['rounding']) for v in values)))
+    current=max((b.get('season',0) for b in finals.values()),default=0)
+    people=[a for b in finals.values() if b.get('season')==current for a in b.get('players',[]) if not a.get('dnp')]
+    fields=('fga','fg3a','fta','fgm','fg3m','ftm','potentialAssists','reboundChances')
+    return dict(segments=out,inputCoverage=dict(season=current,playerGames=len(people),
+        fields={f:sum(number(a.get('stats',{}).get(f)) for a in people) for f in fields}),
+        scope='Postgame attribution only. Actual minutes are unavailable pregame; no model/price/probability promotion. Components can offset and their MAEs do not add.')
+
+
+def summarize(forecasts, outcomes, now=None, boxes=None):
     now = now or datetime.now(timezone.utc)
     chosen, final = {}, {}
     rejected = 0
@@ -186,13 +217,15 @@ def summarize(forecasts, outcomes, now=None):
         rejected=rejected, games=len({r['eventId'] for r, _ in graded}),
         playerGames=len({(r['eventId'], r['athleteId']) for r, _ in graded}),
         segments=segments, pairedModels=paired_models(graded), reviewedMinutes=reviewed_minutes(graded),
+        workloadDiagnostics=workload_diagnostics(graded,boxes or [],now),
         decision='Research only; no automatic promotion or weight change.')
 
 
 def from_stores(root, now=None):
     def read(folder):
         return [r for p in sorted((Path(root)/folder).glob('*.jsonl')) for r in boxscores.read_store(p)]
-    report = summarize(read('player-forecasts'), read('player-outcomes'), now)
+    boxes=[r for p in sorted((Path(root).parent/'sport-box').glob('*.jsonl')) for r in boxscores.read_store(p) if r.get('league')=='NBA']
+    report = summarize(read('player-forecasts'), read('player-outcomes'), now,boxes)
     import nba_prop_probability
     report['probabilityStudy'] = nba_prop_probability.review(Path(root), now or datetime.now(timezone.utc))
     return report
@@ -217,5 +250,8 @@ def markdown(report):
         lines.append(f"- Frozen minutes comparison {row['stat']} / season {row['season']} / {row['model']}: unchanged baseline error {row['baselineMAE']:g}, reviewed minutes error {row['reviewedMAE']:g}; {row['comparisons']} comparisons / {row['games']} games. Both values saved inside the same pregame forecast; no reconstructed baseline price or returns. Not promotion evidence by itself.")
     for row in report.get('probabilityStudy', []):
         lines.append(f"- Prospective probability study {row['stat']}: {row['games']} untouched games / {row['easternDates']} Eastern dates; equal-game squared-probability error improvement vs fair market {row['brierImprovement']} (date-cluster lower estimate {row.get('brierImprovementLower95')}). Frozen positive-price raw-stat benchmark: {row.get('pricedGames',0)} games, return {row.get('rawStatShadowReturn')}, lower estimate {row.get('rawStatReturnLower95')}. Holds: {'; '.join(row.get('evidenceHolds',[])) or 'Official settlement and reviewed publishing adapter still required'}. Not settled bets or public admission.")
+    for row in report.get('workloadDiagnostics',{}).get('segments',[]):
+        lines.append(f"- Postgame workload diagnostic {row['model']}/{row['stat']}/{row['window']}: forecast MAE {row['forecastMAE']}; using unknowable actual minutes {row['withActualMinutesMAE']}; {row['comparisons']} comparisons/{row['games']} games. This is error attribution, not a deployable model improvement.")
+    lines.append('- Opportunity input coverage: '+str(report.get('workloadDiagnostics',{}).get('inputCoverage',{})))
     lines.append('- '+report['decision'])
     return '\n'.join(lines)+'\n'

@@ -1,5 +1,6 @@
 """Comparable-age editorial evidence. Never changes wagers, stakes or results."""
 from statistics import median
+import math
 from datetime import timedelta
 import gates
 
@@ -45,3 +46,30 @@ def research_order(default, log_book, now):
     ranked=sorted((ordered[i] for i in slots),key=lambda name:(-mature[name],default.index(name)))
     for i,name in zip(slots,ranked): ordered[i]=name
     return ordered, {name:dict(posts=len(groups[name]),median24hViews=value) for name,value in mature.items()}
+
+
+def comparable_themes(log_book, now):
+    """One actual24–48h read/post; missing or late snapshots stay missing."""
+    groups={};seen=set()
+    for e in log_book.get('posts',[]):
+        if e.get('id') in seen or not e.get('sentAt') or e.get('deletedAt') or e.get('card') is False or e.get('cardTheme')=='none':continue
+        if not str(e.get('kind','')).startswith('buffer:'):continue
+        sent=gates.when(e['sentAt'])
+        snapshots=e.get('metricsHistory') or [dict(at=e.get('metricsAt'),metrics=e.get('metrics'))]
+        eligible=[]
+        for snap in snapshots:
+            try:
+                at=gates.when(snap['at']);m=snap['metrics'];views=m.get('impressions',m.get('views'))
+                if not sent<=at<=now or not 24<= (at-sent).total_seconds()/3600 <=48:continue
+                if type(views) not in (int,float) or not math.isfinite(views) or views<0:continue
+                rate=m.get('engagementRate')
+                eligible.append((at,views,rate if type(rate) in (int,float) and math.isfinite(rate) else None))
+            except (KeyError,TypeError,ValueError,AttributeError):continue
+        if not eligible:continue
+        seen.add(e['id']);at,views,rate=min(eligible,key=lambda v:v[0])
+        key=(e['kind'].removeprefix('buffer:'),e.get('cardTheme') or 'legacy')
+        groups.setdefault(key,[]).append((views,rate))
+    return [dict(category=key[0],theme=key[1],posts=len(values),median24hViews=median(v[0] for v in values),
+        medianEngagementRate=median(r for v,r in values if type(r) in (int,float)) if any(type(r) in (int,float) for v,r in values) else None,
+        sampleFloorMet=len(values)>=8,scope='Recorded24–48h read age; provider refresh may lag. Observational, not a causal creative winner.')
+        for key,values in sorted(groups.items())]

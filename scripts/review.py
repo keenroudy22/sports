@@ -283,6 +283,13 @@ def learning_packet(report_path=None, shadow_root=None):
         lines.append(f"- latest silent shadow: {latest}; proposals {', '.join(proposals) or 'none'}; no public effects")
     else:
         lines.append('- no silent results shadow has completed yet')
+    import social_learning
+    try:
+        current_log=json.loads((ROOT/'data/x-posted.json').read_text())
+        lines.append('## Comparable-age creative evidence\n'+json.dumps(social_learning.comparable_themes(current_log,datetime.now(timezone.utc)),sort_keys=True))
+        lines.append('- Older all-age creative totals are descriptive; do not use them to declare a format winner.')
+    except (OSError,ValueError,KeyError,TypeError):
+        lines.append('- Comparable-age creative evidence unavailable; no format winner inferred.')
     import desk_performance
     try:
         record=json.loads((ROOT/'site/data/app/record.json').read_text())
