@@ -91,11 +91,14 @@ def restore_posted_cards(folder, keys, fetch=None, archive=None):
         if not re.fullmatch(r'[A-Za-z0-9_.:-]+', str(key)):
             raise RuntimeError(f'invalid posted card name: {key!r}')
         path = folder / f'{key}.png'
-        if path.exists():
+        saved = archive / f'{key}.png'
+        # A cache can contain an earlier, never-published draft under this key.
+        # The archived actual attachment is authoritative, including after a
+        # reviewed pre-send correction. Never let that cache replace history.
+        if path.exists() and not saved.exists():
             if not path.read_bytes().startswith(PNG):
                 raise RuntimeError(f'posted card cache is not a PNG: {key}')
             continue
-        saved = archive / f'{key}.png'
         if saved.exists():
             data = saved.read_bytes()
         else:
@@ -105,6 +108,8 @@ def restore_posted_cards(folder, keys, fetch=None, archive=None):
                 raise RuntimeError(f'posted card could not be restored without changing its art: {key}') from error
         if not isinstance(data, bytes) or not data.startswith(PNG) or not 64 <= len(data) <= 10 * 1024 * 1024:
             raise RuntimeError(f'posted card recovery returned invalid PNG bytes: {key}')
+        if path.exists() and path.read_bytes() == data:
+            continue
         folder.mkdir(parents=True, exist_ok=True)
         temporary = path.with_suffix('.restore.tmp')
         temporary.write_bytes(data)

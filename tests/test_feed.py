@@ -188,6 +188,33 @@ class FeedTests(unittest.TestCase):
                                       fetch=lambda url: self.fail('first publish must not fetch a missing live URL'))
             self.assertEqual((cards / 'new-play.png').read_bytes(), original)
 
+    def test_actual_attachment_archive_replaces_an_older_cached_draft(self):
+        import tempfile
+        actual = feed.PNG + b'actual corrected published attachment' * 8
+        draft = feed.PNG + b'older never-published draft' * 8
+        with tempfile.TemporaryDirectory() as root:
+            root = Path(root); archive = root/'archive'; cards = root/'cards'
+            archive.mkdir(); cards.mkdir()
+            (archive/'nba-research.png').write_bytes(actual)
+            (cards/'nba-research.png').write_bytes(draft)
+            for _ in range(2):
+                feed.restore_posted_cards(cards, {'nba-research'}, archive=archive,
+                    fetch=lambda url: self.fail('the actual attachment is already archived'))
+                self.assertEqual((cards/'nba-research.png').read_bytes(), actual)
+            self.assertEqual((archive/'nba-research.png').read_bytes(), actual)
+
+    def test_invalid_attachment_archive_cannot_fall_back_to_cached_draft(self):
+        import tempfile
+        draft = feed.PNG + b'cached draft' * 8
+        with tempfile.TemporaryDirectory() as root:
+            root=Path(root); archive=root/'archive'; cards=root/'cards'
+            archive.mkdir(); cards.mkdir()
+            (archive/'research.png').write_bytes(b'not an original PNG')
+            (cards/'research.png').write_bytes(draft)
+            with self.assertRaisesRegex(RuntimeError,'invalid PNG'):
+                feed.restore_posted_cards(cards, {'research'}, archive=archive)
+            self.assertEqual((cards/'research.png').read_bytes(),draft)
+
     def test_card_build_only_restores_confirmed_attachments_it_will_use(self):
         import tempfile
         with tempfile.TemporaryDirectory() as folder:
