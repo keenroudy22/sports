@@ -179,7 +179,9 @@ class CBBPicksTests(unittest.TestCase):
                 self.assertEqual(cbb.queue_results(log,later,root),0)
                 discord_post.mirror_sent(log,later,url='plays',wins_url='wins',research_url='research')
             self.assertEqual(len(sent),1);self.assertEqual(sent[0][0],'plays')
-            self.assertIn('Actual: 155',sent[0][1])
+            self.assertIn('Game total: 155',sent[0][1])
+            self.assertIn('CBB FINAL · Nov 03',sent[0][1])
+            self.assertIn('21+ only',sent[0][1])
 
     def test_expired_queued_play_cancels_without_removing_original(self):
         with tempfile.TemporaryDirectory() as d:

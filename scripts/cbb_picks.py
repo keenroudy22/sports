@@ -273,7 +273,8 @@ def queue_results(log_book,now,root=STORE):
         signature=f"{p['result']}:{p['actual']}";old=mirror.get('result')
         if old and (old.get('gradeHash')==signature or old.get('state')!='sent'):continue
         if old:mirror.setdefault('previousResults',[]).append(dict(old))
-        text=f"{'✅' if p['result']=='win' else '❌' if p['result']=='loss' else '➖'} CBB FINAL\n{selection(p)} ({p['odds']:+d}, DraftKings)\nActual: {p['actual']:g}"
+        import social_voice,social_copy
+        text=social_copy.with_age_notice(social_voice.finish(result_text(p)))
         mirror['result']=dict(state='pending',text=text,gradeHash=signature,settledAt=p['settledAt'])
         entry['discord']=mirror;count+=1
     return count
