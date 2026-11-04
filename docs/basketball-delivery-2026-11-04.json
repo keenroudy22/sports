@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-11-04T12:28:02.899564+00:00",
+  "state": "delivery-scheduled-not-complete",
+  "codeChanges": false,
+  "nba": {
+    "officialReport": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-04_06_45AM.pdf",
+    "reportedAt": "2026-11-04T11:45:00Z",
+    "observedAt": "2026-11-04T12:13:48Z",
+    "reviewedPages": 8,
+    "submittedTeams": 27,
+    "parsedTeams": 31,
+    "admission": "no-play",
+    "candidateOffers": 0,
+    "holds": {
+      "unresolved team injury status": 11,
+      "identity verification": 3,
+      "missing team report": 1
+    },
+    "note": "Hold counts may overlap games; two slate fixtures are tomorrow. Player props independently unapproved. No new quote requests for report recovery/admission.",
+    "research": {
+      "id": "nba-projections-2026-11-04",
+      "bufferQueueObserved": true,
+      "dueAt": "2026-11-04T13:04:00Z",
+      "sent": false,
+      "discord": "dedicated research after actual X send"
+    }
+  },
+  "cbb": {
+    "currentStoredGames": 1,
+    "game": "Framingham State at Dartmouth",
+    "qualifyingVerifiedOffers": 0,
+    "newPlayPublished": false,
+    "priorSDSTGrade": "win +0.869565u preserved"
+  },
+  "otherCurrentDelivery": {
+    "id": "CFB-2026-W10-ball-mass-over-49-5-br",
+    "line": 49.5,
+    "odds": -108,
+    "book": "BetRivers",
+    "riskUnits": 1,
+    "discordSentAt": "2026-11-04T12:16:14Z",
+    "bufferQueueObserved": true,
+    "dueAt": "2026-11-04T12:35:00Z",
+    "xSent": false
+  },
+  "tests": {
+    "buffer_web": 9,
+    "nba_report_intake": 7,
+    "cbb_picks": 14,
+    "result": "pass"
+  },
+  "next": "Verify actual Buffer Sent and mirror receipts in existing operator windows;08:30 existing capture rechecks NBA. No new scheduler/feed/paid allowance/model promotion."
+}

@@ -1,3 +1,21 @@
+### November4 basketball morning delivery — scheduled, not complete
+
+Actual06:45ET official NBA PDF reviewed across8pages and ingested with original
+clocks:27submitted of31parsed team records. Recomputed current admission gives
+0NBA offers: unresolved statuses, exact roster identities and a missing team
+report remain holds; prop validation remains independently unapproved. No new
+quote requests for this recovery. Current CBB listing has Framingham/Dartmouth
+and no verified qualifying offer. Prior SDST win/+0.87u is unchanged.
+
+NBA canonical projection graphic/caption visibly queued in ordinary Buffer UI
+for08:04ET; dedicated research Discord follows actual X confirmation. Current
+Ball State/Massachusetts over49.5 -108BR1u is already public on site/Discord,
+with attended Buffer Queue verified07:35ET. Neither queue is a sent receipt.
+Thirty focused buffer-web/intake/CBB tests pass. No production source edits,
+new capture job, paid allowance, model promotion or history rewrite. Evidence
+and exact next checks:docs/basketball-delivery-2026-11-04.json; existing queue
+items O-20261019-NBASOCIAL and KA-R1 retain observing status.
+
 ### November2 shared sport navigation/search — verified live
 
 Releasef3322c69d / hosted41514093051SUCCESS. Normal+clean2079Python
