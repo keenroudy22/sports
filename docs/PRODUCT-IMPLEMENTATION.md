@@ -1,3 +1,28 @@
+### November4 NBA recovery source-clock repair — hosted verification pending
+
+Code04b47aad5ff requires the price source clock, not just its download, to follow
+the observed injury report. It also rejects a price timestamp after its download.
+Two new regressions;37focused NBA tests and normal/clean2140Python(2skip)/307Node
+pass. Record/publication gates and real-slot rehearsal pass with0outside writes
+and0private reads. Canonical release pushed; hosted41864251952 is queued behind
+41859452577. GitHub confirmed an Actions/Pages incident from16:05Z, with
+updates16:11/16:12Z: https://www.githubstatus.com/incidents/xr3myzj7ms51 .
+Latest capture run41864282732 also includes the fix and is queued. No legitimate
+run canceled. This is not a verified hosted release yet.
+
+Actual10:45ET official PDF downloaded from the newest observed canonical link;
+all8pages reviewed and ingested with original clocks. Independent ESPN13:31:26Z
+clock preserved. No recent scheduled capture exists to complete, so no forecasts
+or missed slots fabricated. Current admission0offers. Current visible DraftKings
+McCollum assists3.5 over-130/under-101 and Okongwu rebounds8.5 over+104/under-137
+reviewed privately; Johnson/Sarr questionable and independent model/book proof
+remain holds. No new NBA publication. Original failed studies/hashes and every
+historical outcome remain unchanged. Queens+8.5 original website/X/Discord
+receipts remain confirmed. Live NBA research loads without an error state or
+overflow at actual416px/1600px. Browser375/1440 overrides did not yield those
+CSS widths; no exact375/1440 proof claimed. Evidence:
+work/nov4-nba-source-clock-release-receipt.json.
+
 ### November4 CBB publication and completed NBA review — actual receipts
 
 Ten priced CBB matchups screened with current primary-source research. Queens
