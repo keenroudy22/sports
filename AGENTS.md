@@ -1,3 +1,15 @@
+# November4 source-recovery selection follow-through
+
+The existing attended NBA injury-report intake accepts --select against its
+canonical store only. Under the ordinary run lock it synchronizes, ingests the
+actual fully reviewed PDF, completes eligible real-capture research, rechecks
+normal NBA admission with capture=False and commits through the normal desk.
+This adds no feed request, job, probability approval or send. Admitted rows remain
+pending the existing publisher and require actual website/X/Discord receipts.
+Use this standard command for morning recovery instead of an ad hoc second
+selection script. Failed probability studies, source clocks, caps and owner-deleted
+post suppression remain unchanged. Tomorrow's natural run still needs observation.
+
 # November3 official suffix identity repair
 
 The actual17:30 report prints "Udeh, Jr., Ernest". Reorder only explicit

@@ -6,11 +6,39 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from pathlib import Path
-from datetime import timedelta
+from datetime import datetime,timedelta,timezone
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import boxscores,nba_capture,nba_official_availability as official,nba_report_intake as intake
 import test_nba_official_availability as f
+import nba_trial_runtime
+
+
+class IntakeSelectionTests(unittest.TestCase):
+    def test_recovery_rechecks_admission_at_actual_completion_without_recapture_or_false_send(self):
+        now=datetime(2026,11,5,13,36,tzinfo=timezone.utc)
+        for state in ('admitted','no-play','held'):
+            with self.subTest(state=state),patch.object(nba_trial_runtime,'admission',return_value={'state':state}) as admit,patch.object(nba_capture,'step',side_effect=AssertionError('extra capture')):
+                result=intake.select_after_intake(nba_capture.STORE,clock=lambda:now)
+                admit.assert_called_once_with(now,capture=False)
+                self.assertEqual(result['requests'],0)
+                self.assertFalse(result['sent'])
+                self.assertEqual(result['delivery'],'pending-existing-worker' if state=='admitted' else 'no-new-play')
+
+    def test_alternate_root_cannot_accidentally_admit_against_production(self):
+        with tempfile.TemporaryDirectory() as folder,patch.object(nba_trial_runtime,'admission') as admit:
+            with self.assertRaisesRegex(ValueError,'canonical'):
+                intake.select_after_intake(folder)
+            admit.assert_not_called()
+
+    def test_real_admission_remains_held_with_no_approval_and_never_captures(self):
+        # Exercise the actual admission boundary: recovering a source does not
+        # bypass the reviewed opening/kill switch or create a publish record.
+        with patch.object(nba_trial_runtime,'review_ready',return_value=False),patch.object(nba_capture,'step',side_effect=AssertionError('extra capture')):
+            result=intake.select_after_intake(nba_capture.STORE)
+        self.assertEqual(result['admission']['state'],'held')
+        self.assertEqual(result['delivery'],'no-new-play')
+        self.assertFalse(result['sent'])
 
 
 class BrowserReportTests(unittest.TestCase):

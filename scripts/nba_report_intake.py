@@ -101,15 +101,41 @@ def ingest(packet, now, root=nba_capture.STORE):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--input',required=True);parser.add_argument('--pdf',required=True)
-    parser.add_argument('--root',type=Path,default=nba_capture.STORE);args=parser.parse_args()
+    parser.add_argument('--root',type=Path,default=nba_capture.STORE)
+    parser.add_argument('--select',action='store_true',help='Recheck admission from stored evidence and commit through the normal desk after intake; no new feed request')
+    args=parser.parse_args()
+    if args.select and args.root.resolve()!=nba_capture.STORE.resolve():
+        parser.error('--select requires the canonical NBA store')
     packet=with_pdf(json.loads(Path(args.input).read_text()),Path(args.pdf).read_bytes())
     with deployment_lock.bounded_lock(Path.home()/'.config/keenroudy/run.lock'):
+        if args.select:
+            import run
+            run.sync()
         result=ingest(packet,datetime.now(timezone.utc),args.root)
         import nba_validation_runtime
         try:
             result['validationCompletion']=nba_validation_runtime.finish(args.root,datetime.now(timezone.utc))
         except (OSError,ValueError,KeyError,TypeError):
             result['validationCompletion']=dict(state='held',reason='Validation source completion failed; original report retained',admissionReady=False,requests=0)
+        if args.select:
+            result['selection']=select_after_intake(args.root,clock=lambda:datetime.now(timezone.utc))
+            result['committed']=run.commit_log(datetime.now(timezone.utc))
     print(json.dumps(result))
+
+
+def select_after_intake(root,clock=lambda:datetime.now(timezone.utc)):
+    """Recheck normal admission now; the existing delivery worker owns sends.
+
+    A completed research observation is never itself approval. Admission applies
+    the unchanged probability, availability, price, exposure and duplicate gates.
+    An intake can clear game markets even when no prop experiment can advance.
+    """
+    if Path(root).resolve()!=nba_capture.STORE.resolve():
+        raise ValueError('Selection requires the canonical NBA store')
+    import nba_trial_runtime
+    result=nba_trial_runtime.admission(clock(),capture=False)
+    return dict(admission=result,requests=0,
+                delivery='pending-existing-worker' if result.get('state')=='admitted' else 'no-new-play',
+                sent=False)
 
 if __name__=='__main__':main()
