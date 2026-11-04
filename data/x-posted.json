@@ -8988,13 +8988,14 @@
     "beforeX": true
    },
    "webDelivery": {
-    "state": "reserved",
+    "state": "scheduled",
     "reservedAt": "2026-11-04T15:18:26Z",
     "reviewedAt": "2026-11-04T15:18:26Z",
     "image": "https://keenroudy.com/sports/data/cards/cbb-20261104-queens-plus-8-5-dk.png",
-    "evidence": "CBB original ledger, current source/quote, caption and hosted-card checks",
+    "evidence": "Buffer Queue UI",
     "originalDueAt": "2026-11-04T15:33:26Z",
-    "scheduleNote": "Rounded future time up to Buffer UI minute precision, preserving lead and spacing."
+    "scheduleNote": "Rounded future time up to Buffer UI minute precision, preserving lead and spacing.",
+    "verifiedAt": "2026-11-04T15:24:40Z"
    }
   }
  ]
