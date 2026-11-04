@@ -951,7 +951,9 @@ test('All-sports Today puts published CBB picks before research with an explicit
  app.sandbox.KRGames=()=>({cbbPicks:()=>'<section id="cbb-picks">Published CBB ticket</section>',nbaSummary:()=>'<section id="nba-research">NBA research</section>'});
  await app.api.views.today({view:'today'});await settle();
  const page=await app.api.views.today({view:'today'});
- assert.match(page,/<a href="#today\?sport=CBB"><span>CBB picks<\/span><b>1 posted today<\/b>/);
+ assert.match(page,/<a href="#today\?sport=CBB"><span>CBB picks<\/span><b>1 posted<\/b>/);
+ assert.match(page,/kt-today-jumps has-other-plays/);
+ assert.match(page,/<h1[^>]*>Today’s posted plays\.<\/h1>/);
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
  assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);
  assert.match(page,/Best bets<\/span><b>2 live/);

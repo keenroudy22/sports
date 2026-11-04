@@ -1,3 +1,37 @@
+### November4 Today visibility and recap correction — hosted verification pending
+
+Today’s current plays are the CFB Ball State/Massachusetts over and Queens+8.5.
+Queens was present in its CBB payload but buried below all NBA research in the
+all-sports view. Sourcef673bd496 adds a current-day CBB count/link at the top and
+moves the published CBB section before research. Separate records stay separate.
+
+A late SDST X Final was actually sent14:03ET, then the owner deleted it. The
+wording Actual:2 was an unlabeled scoring margin, and its art looked like a new
+pick. Record the failed presentation, not a successful retained grade post.
+Original sent evidence is preserved; owner-reported deletion/doNotRepost saved
+at19:06:06Z. Never repost receipt:cbb:CBB-20261103-sdak-plus-11-5-dk:ecd0d25b67.
+SDST’s original win/+0.87u and every original price/stake remain unchanged.
+Further social sends from this session stopped. Original Queens/CFB X and
+Discord delivery receipts remain confirmed. The SDST X Final is intentionally
+absent after owner deletion, not a retry obligation.
+
+Source007f25355 includes a dated Final recap with result stamp/units, explicit
+selected-team scoring margin or game total, matching future Discord wording
+and21+ notice, plus clear website grade labels. Existing sent receipts and
+archived art are preserved. Private prospective art visually checked; not posted.
+25focused tests pass. Normal/clean2142Python(2skip)/308Node, record/publication
+and zero-outside-write/private-read rehearsal gates pass. Canonical release
+pushed; hosted41895897548/active ancestor41893660068 still require success and
+actual artifact/live checks. Do not call this a verified hosted release yet.
+
+Live audit before this UI release:150main-record grades/418explicit original
+term fields and2CBB payloads match,0issues.26old main rows have no saved original
+price; no missing price reconstructed. NBA afternoon admission0offers, official
+availability unavailable, all3book proofs null, prospective experiment0settled
+games. Source-clock guard04b47aad5 is now verified in hosted41887769115SUCCESS,
+actual artifact2d4a0b5e9. No new NBA play or promotion. Evidence:
+work/nov4-channel-sync-release-receipt.json; work/nov4-live-record-parity-audit.json.
+
 ### November4 NBA recovery source-clock repair — hosted verification pending
 
 Code04b47aad5ff requires the price source clock, not just its download, to follow

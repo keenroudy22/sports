@@ -1165,12 +1165,12 @@
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
   const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '' }) => {
-    const title = postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
+    const title = otherPosted ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     const climbState = climb && climb.open ? `Step ${climb.open.step || climb.step} live` : climb ? `Step ${climb.step} next` : 'Route';
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <nav class="kt-today-jumps" aria-label="Today at a glance"><a href="#today-card"><span>Best bets</span><b>${rows.length ? `${rows.length} live` : favorite ? 'Strongest lean' : 'Checking'}</b></a>${otherPosted}<a href="#today-climb"><span>80/20 Climb</span><b>${esc(climbState)}</b></a></nav>
+      <nav class="kt-today-jumps${otherPosted ? ' has-other-plays' : ''}" aria-label="Today at a glance"><a href="#today-card"><span>Best bets</span><b>${rows.length ? `${rows.length} live` : favorite ? 'Strongest lean' : 'Checking'}</b></a>${otherPosted}<a href="#today-climb"><span>80/20 Climb</span><b>${esc(climbState)}</b></a></nav>
       <div class="kt-focus-head"><h2>Today’s best bets</h2><a href="#record">Every result ›</a></div>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card' }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
       ${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
@@ -1316,7 +1316,7 @@
     const cbbData = state.league === 'ALL' ? await maybe('app/cbb.json') : null;
     const cbbSummary = cbbData ? (await ensureGames()).cbbPicks(cbbData, true) : '';
     const cbbCount = ((cbbData?.picks || {}).plays || []).filter(p => C.dayOf(p.kickoff) === etDay()).length;
-    const otherPosted = cbbCount ? `<a href="#today?sport=CBB"><span>CBB picks</span><b>${cbbCount} posted today</b></a>` : '';
+    const otherPosted = cbbCount ? `<a href="#today?sport=CBB"><span>CBB picks</span><b>${cbbCount} posted</b></a>` : '';
     const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba) : '';
     const rest2 = [
       leftovers(recent, awaiting.filter(p => C.dayOf(p.kickoff) === lastDay), (today.lastSlate || {})[state.league]),
