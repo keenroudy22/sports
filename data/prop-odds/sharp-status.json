@@ -1,41 +1,40 @@
 {
- "at": "2026-11-04T22:06:18Z",
+ "at": "2026-11-04T22:31:05Z",
  "confirmed": {
   "CFB-401862817": "2026-11-04T22:08:25Z",
-  "CFB-401866455": "2026-11-04T22:08:25Z",
+  "CFB-401866455": "2026-11-04T22:32:00Z",
   "CFB-401866456": "2026-11-04T22:08:25Z",
   "CFB-401866457": "2026-11-04T22:08:25Z",
   "CFB-401869964": "2026-11-04T22:08:25Z",
-  "NFL-401873037": "2026-11-04T22:06:48Z"
+  "NFL-401873037": "2026-11-04T22:31:37Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1396,
-    "fanduel": 1581
+    "draftkings": 294,
+    "fanduel": 306
    },
    "eventsListed": 90,
    "eventsMatched": 5,
    "games": 5,
    "marketTypes": {
-    "player_field_goals_made": 7,
-    "player_kicking_points": 7,
-    "player_longest_passing_completion": 7,
-    "player_longest_reception": 26,
-    "player_longest_rush": 8,
-    "player_passing_+_rushing_yards": 42,
-    "player_passing_attempts": 30,
-    "player_passing_completions": 26,
-    "player_passing_touchdowns": 62,
-    "player_passing_yards": 271,
-    "player_receiving_yards": 888,
-    "player_receptions": 159,
-    "player_rushing_attempts": 8,
-    "player_rushing_yards": 520,
-    "point_spread": 916
+    "player_field_goals_made": 2,
+    "player_kicking_points": 2,
+    "player_longest_passing_completion": 1,
+    "player_longest_reception": 1,
+    "player_longest_rush": 1,
+    "player_passing_+_rushing_yards": 43,
+    "player_passing_attempts": 15,
+    "player_passing_completions": 12,
+    "player_passing_touchdowns": 12,
+    "player_passing_yards": 53,
+    "player_receiving_yards": 185,
+    "player_receptions": 69,
+    "player_rushing_yards": 124,
+    "point_spread": 80
    },
-   "requestsLeft": 36,
-   "rows": 2977,
+   "requestsLeft": 0,
+   "rows": 600,
    "slateGames": [
     "Ball State Cardinals at Massachusetts Minutemen 2026-11-05T00:00Z",
     "Toledo Rockets at Sacramento State Hornets 2026-11-05T00:00Z",
@@ -57,6 +56,7 @@
       "fliff": "424328_c_p_209_prematch",
       "gemini": "NCAAF-2611052200-SCST-HOW-M",
       "hardrock": "3028522140849799578",
+      "kalshi": "KXNCAAFSPREAD-26NOV05SCSTHOW",
       "novig": "01a1851e-3ed3-7723-8eb3-222e59f96f67",
       "onexbet": "767858847",
       "paddypower": "36266813",
@@ -74,6 +74,7 @@
       "away_team": "South Carolina State",
       "home_team": "Howard",
       "markets": [
+       "1st_half_moneyline_3-way",
        "draw_no_bet",
        "moneyline",
        "point_spread",
@@ -104,6 +105,7 @@
       "fliff": "fobj__conflict_event__422677",
       "gemini": "NCAAF-2611070000-VTU-SMU-S",
       "hardrock": "793659705347146131",
+      "kalshi": "KXNCAAF2Q-26NOV06VTSMU",
       "ladbrokes": "ed9bbecd-6749-44ef-9ad5-82075ed0f88e",
       "novig": "01a18a2b-eb56-7993-b439-6709461c6a2b",
       "onexbet": "767034106",
@@ -218,7 +220,7 @@
      "type": "fixture"
     },
     {
-     "away": "South Florida",
+     "away": "South Florida Bulls",
      "external": {
       "ballybet": "1027553319",
       "betmgm": "6:48275",
@@ -235,6 +237,7 @@
       "fliff": "423642_c_p_209_prematch",
       "gemini": "NCAAF-2611070030-USF-ECU-S",
       "hardrock": "8197721279659377064",
+      "kalshi": "KXNCAAF1HTOTAL-26NOV06USFECU",
       "ladbrokes": "568515b0-8199-433f-b1b8-3da48521814b",
       "novig": "01a18a47-71b2-7bb3-ac6d-32095d8116a3",
       "onexbet": "767204204",
@@ -252,10 +255,10 @@
       "sportzino": "sz-18018789",
       "thescorebet": "StandardEvent:ce196f78-c48c-4621-879c-f22f3c927f0f"
      },
-     "home": "East Carolina",
+     "home": "East Carolina Pirates",
      "sample": {
-      "away_team": "South Florida",
-      "home_team": "East Carolina",
+      "away_team": "South Florida Bulls",
+      "home_team": "East Carolina Pirates",
       "markets": [
        "1st_half_correct_score",
        "1st_half_draw_no_bet",
@@ -340,6 +343,7 @@
       "fliff": "fobj__conflict_event__423641",
       "gemini": "NCAAF-2611070100-NEB-ILL-S",
       "hardrock": "4306410712537891225",
+      "kalshi": "KXNCAAF1HTEAMTOTAL-26NOV06NEBILL",
       "ladbrokes": "59ee432f-ff15-47f7-a01f-24b75b8ed272",
       "novig": "01a18a63-1538-7c40-8479-877776deb908",
       "onexbet": "767093559",
@@ -475,6 +479,7 @@
       "fliff": "423643_c_p_209_prematch",
       "gemini": "NCAAF-2611070200-NMU-NEV-S",
       "hardrock": "2870708385068745105",
+      "kalshi": "KXNCAAFSPREAD-26NOV06UNMNEV",
       "ladbrokes": "9412136b-286e-465d-ad77-50116b0f1388",
       "novig": "01a18a99-de68-7c81-8649-3e747e6c84b3",
       "onexbet": "767187243",
@@ -574,6 +579,7 @@
       "fliff": "fobj__conflict_event__423640",
       "gemini": "NCAAF-2611070315-TCU-ARI-M",
       "hardrock": "4940203999728107926",
+      "kalshi": "KXNCAAF4QTOTAL-26NOV06TCUARIZ",
       "ladbrokes": "6913a42a-e918-4fd2-a158-fc31a12a0925",
       "novig": "01a18ad0-83fd-7763-a48a-9d7aa81593bd",
       "onexbet": "767113031",
@@ -695,6 +701,7 @@
       "betonline": "491170515",
       "betparx": "1027569756",
       "betrivers": "1027569756",
+      "betsson": "f-a3XOfbZ5hkKEhGv-0whXwQ",
       "bwin": "6:48343",
       "caesars": "2b437500-892e-4ac7-be22-d334bc5aa58a",
       "circa": "236924",
@@ -704,6 +711,7 @@
       "fliff": "423667_c_p_209_prematch",
       "gemini": "NCAAF-2611071700-ISU-BAY-M",
       "hardrock": "3038325478495748528",
+      "kalshi": "KXNCAAFTEAMTOTAL-26NOV07ISUBAY",
       "ladbrokes": "6ad953b9-b000-4904-92eb-1788fd737639",
       "novig": "01a18b3e-69e7-79e0-a446-2e6f5a051b54",
       "onexbet": "767281470",
@@ -752,6 +760,7 @@
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_half_moneyline",
+       "2nd_half_moneyline_3-way",
        "2nd_half_point_spread",
        "2nd_half_team_total",
        "2nd_half_total_points",
@@ -806,6 +815,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_rushing_touchdowns",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
@@ -815,7 +825,7 @@
      "type": "fixture"
     },
     {
-     "away": "Florida State",
+     "away": "Florida State Seminoles",
      "external": {
       "ballybet": "1027553344",
       "betmgm": "6:48421",
@@ -831,6 +841,7 @@
       "fliff": "423663_c_p_209_prematch",
       "gemini": "NCAAF-2611071700-FSU-BC-M",
       "hardrock": "1485898622959747475",
+      "kalshi": "KXNCAAFTEAMTOTAL-26NOV07FSUBC",
       "ladbrokes": "fc3970eb-bff8-459d-9ddc-d5f74164efe0",
       "novig": "01a18dd2-7446-7de0-a5e3-3ea2e220000d",
       "onexbet": "767305546",
@@ -849,10 +860,10 @@
       "underdog": "underdog_275533",
       "underdog_multipliers": "underdog_275533"
      },
-     "home": "Boston College",
+     "home": "Boston College Eagles",
      "sample": {
-      "away_team": "Florida State",
-      "home_team": "Boston College",
+      "away_team": "Florida State Seminoles",
+      "home_team": "Boston College Eagles",
       "markets": [
        "1st_half_correct_score",
        "1st_half_draw_no_bet",
@@ -877,6 +888,7 @@
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_half_moneyline",
+       "2nd_half_moneyline_3-way",
        "2nd_half_point_spread",
        "2nd_half_team_total",
        "2nd_half_total_points",
@@ -890,6 +902,7 @@
        "3rd_quarter_point_spread",
        "3rd_quarter_total_points",
        "4th_quarter_moneyline",
+       "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
@@ -934,10 +947,12 @@
      "away": "Brown",
      "external": {
       "fanduel": "36266817",
+      "kalshi": "KXNCAAFSPREAD-26NOV07BRWNYALE",
       "novig": "01a18dd2-7ab3-73e0-ab44-323ed5b1c712",
       "onexbet": "767823596",
       "paddypower": "36266817",
       "polymarket": "nfl_brown_yale_2026-11-07_b2",
+      "polymarket_us": "cfb-brwn-yale-2026-11-07",
       "prophetx": "1704707989",
       "rebet": "sr:match:70993000",
       "smarkets": "45421232"
@@ -975,6 +990,7 @@
       "fliff": "fobj__conflict_event__422155",
       "gemini": "NCAAF-2611071700-BYU-UTA-S",
       "hardrock": "1250264485034328491",
+      "kalshi": "KXNCAAF1Q-26NOV07BYUUTAH",
       "ladbrokes": "be0a2154-bbf8-4015-94e9-588eade0485c",
       "novig": "01a18dd2-74e8-7541-9ad7-a2555743b436",
       "onexbet": "767034107",
@@ -1089,13 +1105,14 @@
      "type": "fixture"
     },
     {
-     "away": "Clemson",
+     "away": "Clemson Tigers",
      "external": {
       "ballybet": "1027553310",
       "betmgm": "6:48345",
       "betonline": "491170527",
       "betparx": "1027553310",
       "betrivers": "1027553310",
+      "betsson": "f-uOY0ZFcQREixikt88MfUcw",
       "bwin": "6:48345",
       "caesars": "e40d3f05-dcf1-46e8-8a1f-ac67e3b75dee",
       "circa": "236915",
@@ -1105,6 +1122,7 @@
       "fliff": "fobj__conflict_event__423656",
       "gemini": "NCAAF-2611071700-CLE-SYR-S",
       "hardrock": "9022703385689850287",
+      "kalshi": "KXNCAAF1HSPREAD-26NOV07CLEMSYR",
       "ladbrokes": "89b9f860-c0a1-4820-a32f-076a95b9cdc4",
       "novig": "01a18dd2-663f-7e23-aa85-55c6578c6ce8",
       "onexbet": "767272632",
@@ -1123,10 +1141,10 @@
       "underdog": "underdog_275534",
       "underdog_multipliers": "underdog_275534"
      },
-     "home": "Syracuse",
+     "home": "Syracuse Orange",
      "sample": {
-      "away_team": "Clemson",
-      "home_team": "Syracuse",
+      "away_team": "Clemson Tigers",
+      "home_team": "Syracuse Orange",
       "markets": [
        "1st_half_correct_score",
        "1st_half_draw_no_bet",
@@ -1152,6 +1170,7 @@
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_half_moneyline",
+       "2nd_half_moneyline_3-way",
        "2nd_half_point_spread",
        "2nd_half_team_total",
        "2nd_half_total_points",
@@ -1165,6 +1184,7 @@
        "3rd_quarter_point_spread",
        "3rd_quarter_total_points",
        "4th_quarter_moneyline",
+       "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
@@ -1198,6 +1218,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_rushing_touchdowns",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
@@ -1210,10 +1231,12 @@
      "away": "Colgate",
      "external": {
       "fanduel": "36266832",
+      "kalshi": "KXNCAAFGAME-26NOV07COLGLEH",
       "novig": "01a18dd2-766e-7902-8fc0-de53a6816699",
       "onexbet": "767816630",
       "paddypower": "36266832",
       "polymarket": "nfl_colgate_lehigh_2026-11-07_b2",
+      "polymarket_us": "cfb-colg-lehi-2026-11-07",
       "prophetx": "1704707934",
       "rebet": "sr:match:70924448",
       "smarkets": "45421154"
@@ -1262,7 +1285,7 @@
     "player_rushing_yards": 69,
     "point_spread": 173
    },
-   "requestsLeft": 54,
+   "requestsLeft": 4,
    "rows": 918,
    "slateGames": [
     "Jacksonville Jaguars at Baltimore Ravens 2026-11-06T01:15Z"
@@ -1287,6 +1310,7 @@
       "galera": "21668878",
       "gemini": "NFL-2611081430-CIN-ATL-S",
       "hardrock": "3954398527496520087",
+      "kalshi": "KXNFLRECYDS-26NOV08CINATL-CINMGESICKI88-40",
       "ladbrokes": "c237405c-7e43-41c9-bdc3-d65fe685626b",
       "novig": "01a17f1a-e8c2-7253-ab6a-aa31d5a8a1c5",
       "paddypower": "35603243",
@@ -1298,12 +1322,14 @@
       "prophetx": "1700008927",
       "rebet": "sr:match:71474296",
       "robinhood": "e9565357-24bc-4e06-a38f-7d74eb7eb2b6",
+      "skybet": "35603243",
       "sport888_it": "1028823920",
       "sportzino": "sz-16498842",
       "stake": "5a7c4ed0-b170-4839-ab68-0d5d72c377ea",
       "thescorebet": "StandardEvent:98aa04c6-c5a6-4067-b871-53d8a53e1995",
       "underdog": "underdog_178338",
-      "underdog_multipliers": "underdog_178338"
+      "underdog_multipliers": "underdog_178338",
+      "underdog_predictions": "underdog_178338"
      },
      "home": "Atlanta Falcons",
      "sample": {
@@ -1448,6 +1474,7 @@
       "galera": "21668885",
       "gemini": "NFL-2611081800-DEN-CAR-S",
       "hardrock": "1588319873266745768",
+      "kalshi": "KXNFL1H-26NOV08DENCAR",
       "ladbrokes": "a3f18ee1-f335-4e3d-bf32-54740ef8d0ff",
       "novig": "01a17f1a-ebea-7641-9bc7-f5f9e80c7946",
       "paddypower": "36244867",
@@ -1465,7 +1492,8 @@
       "stake": "4a4f0074-56cf-4e92-b82b-caaa882295c2",
       "thescorebet": "StandardEvent:2d6bf32a-16d3-4e99-a975-f1e89ce43be7",
       "underdog": "underdog_179086",
-      "underdog_multipliers": "underdog_179086"
+      "underdog_multipliers": "underdog_179086",
+      "underdog_predictions": "underdog_179086"
      },
      "home": "Carolina Panthers",
      "sample": {
@@ -1603,6 +1631,7 @@
       "galera": "21668884",
       "gemini": "NFL-2611081800-CLE-NO-S",
       "hardrock": "4807336125758833057",
+      "kalshi": "KXNFLPASSYDS-26NOV08CLENO-NOTSHOUGH6-200",
       "ladbrokes": "716d98f0-7fc5-4de9-ba84-a015708c6a34",
       "novig": "01a17f1a-ea0b-7720-aa75-5899ba78ead0",
       "paddypower": "36244869",
@@ -1756,6 +1785,7 @@
       "galera": "21668886",
       "gemini": "NFL-2611081800-NYJ-KC-S",
       "hardrock": "2130440678411469227",
+      "kalshi": "KXNFL1HTOTAL-26NOV08NYJKC",
       "ladbrokes": "b2ce132d-5b4b-4d85-9baf-26bcb174b3ff",
       "novig": "01a17f1a-ec74-70b3-b5f0-7639783d83df",
       "paddypower": "36244871",
@@ -1901,6 +1931,7 @@
       "galera": "21668879",
       "gemini": "NFL-2611081800-DAL-IND-S",
       "hardrock": "5943369131763040657",
+      "kalshi": "KXNFLRECYDS-26NOV08DALIND-DALCLAMB88-40",
       "ladbrokes": "5ed0c368-faa8-4308-9b88-5b8753d682a5",
       "novig": "01a17f1a-eb49-75b1-87c9-dce9271b6bab",
       "paddypower": "36244868",
@@ -1918,7 +1949,8 @@
       "stake": "13222660-ce7b-4fcc-a4b3-e4c5dbca076f",
       "thescorebet": "StandardEvent:5fd873d6-5b2e-40f4-a022-e9313e050f52",
       "underdog": "underdog_179081",
-      "underdog_multipliers": "underdog_179081"
+      "underdog_multipliers": "underdog_179081",
+      "underdog_predictions": "underdog_179081"
      },
      "home": "Indianapolis Colts",
      "sample": {
@@ -2060,6 +2092,7 @@
       "galera": "21668877",
       "gemini": "NFL-2611081800-LAR-WAS-S",
       "hardrock": "5732898167842800033",
+      "kalshi": "KXNFL1HTOTAL-26NOV08LARWAS",
       "ladbrokes": "38a543b5-642e-4bc2-bc34-4fe6843cb68f",
       "novig": "01a17f1a-ed00-78e3-b4bb-fab0dfb71dc4",
       "paddypower": "36244876",
@@ -2077,7 +2110,8 @@
       "stake": "fa5585ca-dbc3-4968-acdb-6ecfa25a145a",
       "thescorebet": "StandardEvent:aa127089-6010-4164-95a8-b60b3166427d",
       "underdog": "underdog_179082",
-      "underdog_multipliers": "underdog_179082"
+      "underdog_multipliers": "underdog_179082",
+      "underdog_predictions": "underdog_179082"
      },
      "home": "Washington Commanders",
      "sample": {
@@ -2215,6 +2249,7 @@
       "galera": "21668880",
       "gemini": "NFL-2611081800-DET-MIA-T",
       "hardrock": "7195864359296434580",
+      "kalshi": "KXNFLRECYDS-26NOV08DETMIA-MIAMWASHINGTON6-25",
       "ladbrokes": "1853b720-1990-4051-80fe-a68c17a3be0b",
       "novig": "01a17f1a-e957-77c1-816c-2d0ae98be0de",
       "paddypower": "36244872",
@@ -2232,7 +2267,8 @@
       "stake": "21717b60-0a9f-4537-bc9d-ad49ce2a502c",
       "thescorebet": "StandardEvent:dc23146a-3703-4fee-b828-12cf118e5c9e",
       "underdog": "underdog_179085",
-      "underdog_multipliers": "underdog_179085"
+      "underdog_multipliers": "underdog_179085",
+      "underdog_predictions": "underdog_179085"
      },
      "home": "Miami Dolphins",
      "sample": {
@@ -2371,6 +2407,7 @@
       "galera": "21668881",
       "gemini": "NFL-2611081800-NYG-PHI-T",
       "hardrock": "3188364378378469791",
+      "kalshi": "KXNFLPASSYDS-26NOV08NYGPHI-PHITMCKEE16-175",
       "ladbrokes": "0deddf6b-501a-4820-9fee-f366d065df0a",
       "novig": "01a17f1a-eacc-7fa0-856c-82ea9c7d04ee",
       "paddypower": "36244873",
@@ -2388,7 +2425,8 @@
       "stake": "9cf82933-7830-4d01-ad0b-46fea38faeca",
       "thescorebet": "StandardEvent:3fce4c34-fb59-4448-adb7-7e96ed1c9916",
       "underdog": "underdog_179087",
-      "underdog_multipliers": "underdog_179087"
+      "underdog_multipliers": "underdog_179087",
+      "underdog_predictions": "underdog_179087"
      },
      "home": "Philadelphia Eagles",
      "sample": {
@@ -2550,6 +2588,7 @@
       "galera": "21668882",
       "gemini": "NFL-2611082105-HOU-LAC-S",
       "hardrock": "6150534714622083469",
+      "kalshi": "KXNFL1HTEAMTOTAL-26NOV08HOULAC",
       "ladbrokes": "75ba85b9-2315-43cc-b49a-c0b2e4215b55",
       "novig": "01a17f1a-eda7-7820-8e04-5b45d714ea91",
       "paddypower": "36244874",
@@ -2567,7 +2606,8 @@
       "stake": "067f4818-5880-45fb-8eab-2bf07f684867",
       "thescorebet": "StandardEvent:c812b990-c444-4c24-9b93-50f6abc907ed",
       "underdog": "underdog_179089",
-      "underdog_multipliers": "underdog_179089"
+      "underdog_multipliers": "underdog_179089",
+      "underdog_predictions": "underdog_179089"
      },
      "home": "Los Angeles Chargers",
      "sample": {
@@ -2710,6 +2750,7 @@
       "galera": "21668887",
       "gemini": "NFL-2611082125-LV-SF-S",
       "hardrock": "2143529264828514707",
+      "kalshi": "KXNFLPASSYDS-26NOV08LVSF-SFBPURDY13-175",
       "ladbrokes": "19804276-e905-41af-b48b-c3b1bbad5877",
       "novig": "01a17f1a-ef94-7a33-ac49-42d1cde2b17a",
       "paddypower": "36244875",
@@ -2727,7 +2768,8 @@
       "stake": "b0df97ef-b206-42f5-af53-395133a18f6b",
       "thescorebet": "StandardEvent:c6634f3e-913a-4278-94b9-ca9520f32726",
       "underdog": "underdog_179088",
-      "underdog_multipliers": "underdog_179088"
+      "underdog_multipliers": "underdog_179088",
+      "underdog_predictions": "underdog_179088"
      },
      "home": "San Francisco 49ers",
      "sample": {
