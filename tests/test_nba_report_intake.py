@@ -27,6 +27,16 @@ class BrowserReportTests(unittest.TestCase):
             pages=[dict(number=1,totalPages=1,text=text,screenshot=str(image),sha256=hashlib.sha256(image.read_bytes()).hexdigest())])
         return root,games,packet
 
+    def test_official_listing_trailing_slash_preserves_actual_source(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root,_,p=self.fixture(folder)
+            p['listing']['source']+='/'
+            result=intake.build(p,f.NOW,root)
+            self.assertEqual(result['discovery']['source'],p['listing']['source'])
+            for suffix in ('//','?redirect=other','#other'):
+                p['listing']['source']=official.index_url(f.NOW)+suffix
+                with self.assertRaises(ValueError):intake.build(p,f.NOW,root)
+
     def test_downloaded_pdf_bytes_replace_transcription_without_changing_receipt(self):
         with tempfile.TemporaryDirectory() as folder:
             _,_,p=self.fixture(folder);original=copy.deepcopy(p)

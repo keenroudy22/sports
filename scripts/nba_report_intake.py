@@ -34,7 +34,7 @@ def with_pdf(packet, pdf):
 def build(packet, now, root):
     root=Path(root);listing=packet['listing'];received=boxscores.instant(packet['retrievedAt'])
     listed=boxscores.instant(listing['retrievedAt'])
-    if (listing['source']!=official.index_url(listed) or not listed<=received<=now
+    if (listing['source'] not in (official.index_url(listed), official.index_url(listed)+'/') or not listed<=received<=now
             or now-listed>timedelta(minutes=90) or now-received>timedelta(minutes=90)):
         raise ValueError('Browser report listing/receipt clock unavailable')
     source,expected=official.published_report(listing['html'],listed)
