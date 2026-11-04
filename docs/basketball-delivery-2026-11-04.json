@@ -49,5 +49,41 @@
     "cbb_picks": 14,
     "result": "pass"
   },
-  "next": "Verify actual Buffer Sent and mirror receipts in existing operator windows;08:30 existing capture rechecks NBA. No new scheduler/feed/paid allowance/model promotion."
+  "next": "Verify actual Buffer Sent and mirror receipts in existing operator windows;08:30 existing capture rechecks NBA. No new scheduler/feed/paid allowance/model promotion.",
+  "followThrough": {
+    "checkedAt": "2026-11-04T14:09:00Z",
+    "nbaResearch": {
+      "xSentAt": "2026-11-04T13:01:00Z",
+      "url": "https://x.com/1753110091912413184/status/2117965462730420435",
+      "discordSentAt": "2026-11-04T13:02:17Z",
+      "category": "research, not an official bet"
+    },
+    "cfb": {
+      "url": "https://x.com/1753110091912413184/status/2117958797536665816",
+      "xSentAt": "2026-11-04T12:35:00Z",
+      "websiteDiscordSentAt": "2026-11-04T12:16:14Z"
+    },
+    "nba0830": {
+      "receipt": "work/nov4-nba-0830-followthrough.json",
+      "pairedQuotes": 872,
+      "newPrimaryRequests": 12,
+      "recoveryRequests": 0,
+      "forwardRecorded": 321,
+      "probabilityRecorded": 70,
+      "volumeExperimentRecorded": 70,
+      "officialAdmission": false
+    },
+    "sourceRelease": {
+      "candidate": "d629ac180c40fa094e68d60623a9329c12158710",
+      "hostedRun": 41834467796,
+      "verifiedHead": "c0290370d3669041b4247813f727133d916feafe",
+      "result": "success"
+    },
+    "archiveRepair": {
+      "reason": "Hosted cached unposted draft replaced the corrected actual X image",
+      "expectedSHA256": "00443937c531fdcd88139ca73860b21cc114af94b1eae5597a5a8c7297a67da8",
+      "tests": "2138 Python (2 skips), 307 Node, normal and clean export; audits/rehearsal passed",
+      "state": "final locked release running; not yet live verified"
+    }
+  }
 }
