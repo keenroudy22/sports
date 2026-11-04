@@ -1,0 +1,148 @@
+{
+  "checkedAt": "2026-11-04T15:11:44.318392+00:00",
+  "scope": "Complete current frozen NBA probability and sportsbook-proof review, not a model promotion",
+  "result": "not-qualified",
+  "markets": [
+    {
+      "stat": "ast",
+      "specHash": "8a5aa161cb2b0c976cd0e63432e468da68d0af1acd98447dfe0824c3f98a8fab",
+      "games": 8,
+      "easternDates": 2,
+      "brierImprovement": -0.0443959077891374,
+      "brierImprovementLower95": -0.04646516705332317,
+      "pricedGames": 8,
+      "pricedEasternDates": 2,
+      "rawStatShadowReturn": -0.2266389419769661,
+      "rawStatReturnLower95": -0.5924656984226964,
+      "meanProbabilityBias": 0.12638892583873979,
+      "evidenceReady": false,
+      "evidenceHolds": [
+        "Fewer than30 untouched test games",
+        "Fewer than5 independent Eastern dates",
+        "Probability error improvement is unproven",
+        "Insufficient games/dates with frozen positive-price candidates",
+        "Conservative frozen-price return is unproven"
+      ],
+      "admissionReady": false,
+      "analysisOnly": true,
+      "hold": "Research only; official book settlement and a reviewed prop publishing adapter remain required. Raw-stat returns are not settled bets."
+    },
+    {
+      "stat": "pts",
+      "specHash": "8d6edd86424b5fd1eb3d093676e0e66761d2b2f5f0cefdfc41db8b7f5f1914c3",
+      "games": 11,
+      "easternDates": 2,
+      "brierImprovement": -0.0027650052481164584,
+      "brierImprovementLower95": -0.02167284049672797,
+      "pricedGames": 10,
+      "pricedEasternDates": 2,
+      "rawStatShadowReturn": -0.09362709894098041,
+      "rawStatReturnLower95": -0.4168990560994312,
+      "meanProbabilityBias": 0.02091287320417353,
+      "evidenceReady": false,
+      "evidenceHolds": [
+        "Fewer than30 untouched test games",
+        "Fewer than5 independent Eastern dates",
+        "Probability error improvement is unproven",
+        "Insufficient games/dates with frozen positive-price candidates",
+        "Conservative frozen-price return is unproven"
+      ],
+      "admissionReady": false,
+      "analysisOnly": true,
+      "hold": "Research only; official book settlement and a reviewed prop publishing adapter remain required. Raw-stat returns are not settled bets."
+    },
+    {
+      "stat": "reb",
+      "specHash": "3ff7c18f0a0f90b073c8f1ef4f6221168a1febbf16e7a982758e7c7c12bbda74",
+      "games": 9,
+      "easternDates": 2,
+      "brierImprovement": 0.00947037758857101,
+      "brierImprovementLower95": -0.045925152196496705,
+      "pricedGames": 7,
+      "pricedEasternDates": 2,
+      "rawStatShadowReturn": 0.20619356088601123,
+      "rawStatReturnLower95": -0.24689840533509932,
+      "meanProbabilityBias": -0.10410021560929379,
+      "evidenceReady": false,
+      "evidenceHolds": [
+        "Fewer than30 untouched test games",
+        "Fewer than5 independent Eastern dates",
+        "Probability error improvement is unproven",
+        "Insufficient games/dates with frozen positive-price candidates",
+        "Conservative frozen-price return is unproven"
+      ],
+      "admissionReady": false,
+      "analysisOnly": true,
+      "hold": "Research only; official book settlement and a reviewed prop publishing adapter remain required. Raw-stat returns are not settled bets."
+    }
+  ],
+  "bookProof": {
+    "pts": null,
+    "reb": null,
+    "ast": null
+  },
+  "separateProspectiveExperiment": [
+    {
+      "model": "nba-volume-residual-shadow-v1",
+      "stat": "pts",
+      "specHash": "efb45bef3024d73850e945189a177c8ca8b450a0700240d12cbdf409fbbebc6a",
+      "games": 0,
+      "easternDates": 0,
+      "brierImprovement": null,
+      "descriptiveLower95": null,
+      "probabilityEvidenceReady": false,
+      "evidenceHolds": [
+        "Fewer than30 new independent test games",
+        "Fewer than5 new Eastern dates",
+        "Probability improvement unproven"
+      ],
+      "admissionReady": false,
+      "analysisOnly": true,
+      "note": "Unpromoted uncertainty experiment; no current-opportunity conversion, injury redistribution or official-book profit proof."
+    },
+    {
+      "model": "nba-volume-residual-shadow-v1",
+      "stat": "reb",
+      "specHash": "9564c6a87abf6e7822311c8d4f1b1a59258934b7328033f2d32489e6630fd264",
+      "games": 0,
+      "easternDates": 0,
+      "brierImprovement": null,
+      "descriptiveLower95": null,
+      "probabilityEvidenceReady": false,
+      "evidenceHolds": [
+        "Fewer than30 new independent test games",
+        "Fewer than5 new Eastern dates",
+        "Probability improvement unproven"
+      ],
+      "admissionReady": false,
+      "analysisOnly": true,
+      "note": "Unpromoted uncertainty experiment; no current-opportunity conversion, injury redistribution or official-book profit proof."
+    },
+    {
+      "model": "nba-volume-residual-shadow-v1",
+      "stat": "ast",
+      "specHash": "33b9da7c38bd382d914d6dd655433c1609928850cccaaf2db07e8d76d944ad48",
+      "games": 0,
+      "easternDates": 0,
+      "brierImprovement": null,
+      "descriptiveLower95": null,
+      "probabilityEvidenceReady": false,
+      "evidenceHolds": [
+        "Fewer than30 new independent test games",
+        "Fewer than5 new Eastern dates",
+        "Probability improvement unproven"
+      ],
+      "admissionReady": false,
+      "analysisOnly": true,
+      "note": "Unpromoted uncertainty experiment; no current-opportunity conversion, injury redistribution or official-book profit proof."
+    }
+  ],
+  "tests": {
+    "nbaProbabilityReleaseDispersionCompletion": 35,
+    "cbbPicks": 14,
+    "result": "pass"
+  },
+  "interpretation": "Software checks pass. Original points/assists have negative observed error improvement and raw-stat shadow return; rebounds has positive point estimates with negative conservative bounds. All have only two independent dates and fewer than30 games. No official-book proof. No result supports official NBA player-prop release.",
+  "next": "Preserve failed studies. Existing scheduled captures add only genuinely observed pregame evidence; future experiment needs30 new games/five new dates and independent book protocol. No same-day evidence fabrication or tuning exposed cases into a pass.",
+  "sourceNote": "Computed read-only from canonical append-only NBA stores on November4. Raw-stat shadow return is research, not actual wager profit. No frozen spec or exposed outcome was altered."
+}

@@ -1,3 +1,21 @@
+### November4 CBB publication and completed NBA review — actual receipts
+
+Ten priced CBB matchups screened with current primary-source research. Queens
++8.5 -112DraftKings1u admitted10:05ET; hosted41854103113SUCCESS verified18f2c631f5.
+Actual live site/card verified, Discord10:18:24ET and X10:34ET(minute precision)
+confirmed:2118003847071240243. Same terms/caption/category; no personal money.
+Host2138Python/307Node, record150/zeroissues.14CBB and35NBA focused tests pass.
+SDST first natural win/+0.87u remains unchanged; Queens is open, not graded.
+
+Current NBA validation review is completed without approval, not waiting for a
+software test. Original assists8games/2dates, points11/2, rebounds9/2 all fail
+conservative proof; DraftKings book proof is absent; separate future experiment
+has0settled test games. Failed experiments and original forecasts retained.
+No tuning exposed outcomes, waived sample requirement or invented EV. Detailed
+review:docs/nba-prop-validation-review-2026-11-04.json. Existing scheduled capture
+and grading windows remain. Free API quota still held; attended X sends do not
+prove unattended recovery. Final proof:docs/basketball-delivery-2026-11-04.json.
+
 ### November4 confirmed delivery and NBA graphic repair — verified live
 
 NBA research X08:01ET / dedicated research Discord08:02:17ET confirmed;
