@@ -1,7 +1,7 @@
 {
   "checkedAt": "2026-11-04T12:28:02.899564+00:00",
-  "state": "delivery-scheduled-not-complete",
-  "codeChanges": false,
+  "state": "confirmed-delivery-and-verified-release; NBA-prop-validation-open",
+  "codeChanges": true,
   "nba": {
     "officialReport": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-04_06_45AM.pdf",
     "reportedAt": "2026-11-04T11:45:00Z",
@@ -49,9 +49,9 @@
     "cbb_picks": 14,
     "result": "pass"
   },
-  "next": "Verify actual Buffer Sent and mirror receipts in existing operator windows;08:30 existing capture rechecks NBA. No new scheduler/feed/paid allowance/model promotion.",
+  "next": "Existing11:45NBA capture and13:30selection recheck original-source/quote/admission holds; CBB requires current reviewed exact offer and team/availability packets. X API quota remains held; attended UI success is not unattended recovery. No extra job/feed/paid allowance.",
   "followThrough": {
-    "checkedAt": "2026-11-04T14:09:00Z",
+    "checkedAt": "2026-11-04T14:29:23.022454Z",
     "nbaResearch": {
       "xSentAt": "2026-11-04T13:01:00Z",
       "url": "https://x.com/1753110091912413184/status/2117965462730420435",
@@ -83,7 +83,33 @@
       "reason": "Hosted cached unposted draft replaced the corrected actual X image",
       "expectedSHA256": "00443937c531fdcd88139ca73860b21cc114af94b1eae5597a5a8c7297a67da8",
       "tests": "2138 Python (2 skips), 307 Node, normal and clean export; audits/rehearsal passed",
-      "state": "final locked release running; not yet live verified"
+      "state": "shipped-hosted-and-live-verified",
+      "testedCandidate": "b4b18d5706ef3184376c77aa9524e6b73cef1dbc",
+      "hostedRun": 41845718698,
+      "verifiedHead": "56e60ff864ce4657837c5cb0939954c99f5d6beb",
+      "canonicalAndVersionedSHA256": "00443937c531fdcd88139ca73860b21cc114af94b1eae5597a5a8c7297a67da8",
+      "livePage": "NBA Research14games;1280px no overflow. Viewport override did not change width in this session; no new375/1440 proof claimed."
+    },
+    "deeperResearch": {
+      "receipt": "work/nov4-basketball-deeper-research.json",
+      "nbaPlayers": 387,
+      "sourceTables": 4,
+      "unmatchedPlayers": 98,
+      "localReviewSeconds": 18.84,
+      "localReviewCalls": 1,
+      "nbaInvestigations": [
+        "CJ McCollum potential assists",
+        "Shai Gilgeous-Alexander potential assists",
+        "Onyeka Okongwu rebound chances"
+      ],
+      "cbbScheduleCorrection": "Initial snapshot counted one game incorrectly; canonical stored slate has26 scheduled today; visible DK board has10 priced matchups. No new CBB play admitted.",
+      "cbbVisibleQuoteAt": "2026-11-04T14:16:24Z",
+      "cbbSources": [
+        "https://longwoodlancers.com/news/2026/11/3/mens-basketball-travels-to-saint-josephs-on-wednesday-night.aspx",
+        "https://sjuhawks.com/news/2026/11/3/mens-basketball-opens-season-on-wednesday-against-longwood.aspx",
+        "https://goyotes.com/news/2026/11/3/mens-basketball-preview-south-dakota-welcome-northern-kentucky-to-scsc-wednesday-night.aspx"
+      ],
+      "limitations": "Overlap/small samples, non-D1 opening opponents, conflicting roster details and heavy one-game free-throw contributions require countercases; no calibrated EV or new official bet inferred."
     }
   }
 }

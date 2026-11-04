@@ -1,3 +1,25 @@
+### November4 confirmed delivery and NBA graphic repair — verified live
+
+NBA research X08:01ET / dedicated research Discord08:02:17ET confirmed;
+CFB Ball State/Massachusetts over49.5 -108BR1u website/Discord07:16ET,
+X07:35ET confirmed. Prior SDST win/+0.87u preserved. No new NBA/CBB official bet.
+Source draft/quote repaird629 and archive repairb4b18d570 shipped. Hosted
+41845718698SUCCESS verified56e60ff864; canonical and versioned NBA PNG bytes
+match the actual X attachment00443937c531. Normal/clean2138Python(2skip),
+307Node, audits and zero-outside-write/private-read rehearsal pass.
+Live NBA Research14games/1280px no overflow; viewport override had no effect,
+so no new375/1440 verification claimed. Earlier cache regression is corrected.
+
+Actual08:30 capture872paired quotes; browser08:15 official PDF recovery used
+zero additional quote requests, appended321forward/70probability observations.
+NBA props remain unapproved. Deeper sourced role research covers387players;
+local27B review18.84seconds, unsupported interpretation excluded from publication.
+CBB canonical slate26games/10visible DK matchups corrects initial one-game
+snapshot; full reviewed current offers/team availability still required.
+Buffer API quota remains held: attended UI sends do not prove unattended recovery.
+Queue remains observing. Actual receipts, tests, source limits and next existing
+capture/selection checks:docs/basketball-delivery-2026-11-04.json.
+
 ### November4 basketball morning delivery — scheduled, not complete
 
 Actual06:45ET official NBA PDF reviewed across8pages and ingested with original
