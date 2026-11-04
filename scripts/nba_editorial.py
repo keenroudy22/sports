@@ -93,7 +93,26 @@ def current_role(row, now):
 
 
 def relevance_issues(snapshot, now):
-    if now < RELEVANCE_START or snapshot.get('family') == 'projections':
+    if now < RELEVANCE_START:
+        return []
+    if snapshot.get('family') == 'projections':
+        # A next-day draft's editorial deadline does not refresh its source.
+        # Book comparisons have the same four-hour lifetime as the site.
+        priced = any(' / N/A' not in str(r.get('right', '')) and ' / ' in str(r.get('right', ''))
+                     for r in snapshot.get('rows', []))
+        try:
+            if not timedelta(0) <= now-boxscores.instant(snapshot['sourceAt']) <= timedelta(hours=4 if priced else 24):
+                return ['projection research source needs refresh']
+        except (KeyError, TypeError, ValueError):
+            return ['projection research source unavailable']
+        for row in snapshot.get('rows', []):
+            if ' / ' not in str(row.get('right', '')) or str(row['right']).endswith(' / N/A'):
+                continue
+            try:
+                if not timedelta(0) <= now-boxscores.instant(row['quote']['retrievedAt']) < timedelta(hours=4):
+                    return ['projection book comparison needs refresh']
+            except (KeyError, TypeError, ValueError):
+                return ['projection book comparison clock unavailable']
         return []
     if snapshot.get('family') == 'trends':
         if snapshot.get('editorialPolicy') != EDITORIAL_POLICY or not snapshot.get('rows'):
@@ -227,7 +246,7 @@ def choices(data, now, history=None):
             value = quote['line']
             if (type(value) in (int, float) and math.isfinite(value) and value > 0
                     and quote.get('book')
-                    and timedelta(0) <= now-boxscores.instant(quote['retrievedAt']) <= timedelta(hours=4)
+                    and timedelta(0) <= max(now, datetime(target.year,target.month,target.day,8,tzinfo=gates.EASTERN).astimezone(timezone.utc))-boxscores.instant(quote['retrievedAt']) < timedelta(hours=4)
                     and all(type(quote.get(k)) in (int,float) and math.isfinite(quote[k])
                             and abs(quote[k]) >= 100 for k in ('over','under'))):
                 book_total = value
@@ -236,6 +255,7 @@ def choices(data, now, history=None):
         projected.append({'subject':f"{a['abbreviation']} at {h['abbreviation']}",
                           'line':f"My rounded score {round(p['away'])} - {round(p['home'])}" + (f" | {quote['book']}" if book_total is not None else ''),
                           'right':f"≈{round(p['total'])} / {book_total:g}" if book_total is not None else f"≈{round(p['total'])} / N/A",
+                          'quote':dict(quote) if book_total is not None else None,
                           'detail':'', 'logo':a.get('logo'),
                           'caption':f"{names(g)}: about {round(p['away'])}-{round(p['home'])}"})
     if len(games)==1:
@@ -264,6 +284,10 @@ def choices(data, now, history=None):
         if relevant and family == 'trends':
             cutoff=min(cutoff,*(boxscores.instant(r['quote']['retrievedAt'])+timedelta(hours=4) for r in rows))
             if cutoff<=due:continue  # overnight prices cannot become tomorrow's morning post
+        if relevant and family == 'projections':
+            for row in rows:
+                if row.get('quote'):
+                    cutoff=min(cutoff,boxscores.instant(row['quote']['retrievedAt'])+timedelta(hours=4))
         if now>=cutoff:
             continue
         import x_post
@@ -301,7 +325,7 @@ def prepare(now, root=STORE, data=None, history=None):
         import nba_today
         data=nba_today.build(now)
     import x_post
-    attempted={r.get('id') for r in x_post.load_log().get('posts',[]) if r.get('bufferPostId') or r.get('sentAt')}
+    attempted={r.get('id') for r in x_post.load_log().get('posts',[]) if r.get('bufferPostId') or r.get('sentAt') or r.get('webDelivery')}
     previous={r['key']:r for r in stored(root)}
     created=[]
     prop=prop_choice(data,now)
@@ -309,6 +333,8 @@ def prepare(now, root=STORE, data=None, history=None):
         old=previous.get(row['key'])
         if old:
             current_draft=(not relevance_issues(old,now) and (old.get('family')!='props' or props_current(old,now)))
+            if row.get('family') == 'projections' and old.get('rows') != row.get('rows'):
+                current_draft = False
             # Never rewrite a frozen/queued publication. A never-queued invalid or expired
             # draft may get a new immutable revision under the same deduplicated post ID.
             if row['key'] in attempted or (current_draft and boxscores.instant(old['stale'])>now

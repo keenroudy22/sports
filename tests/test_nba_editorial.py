@@ -26,6 +26,35 @@ def fixture():
 
 
 class NBAEditorialTests(unittest.TestCase):
+    def test_next_day_projection_does_not_carry_overnight_book_prices(self):
+        now,data,h=self.relevant_fixture()
+        for g in data['games']:
+            g['kickoff']=g['kickoff'].replace('2026-10-24','2026-10-25')
+        row=next(r for r in n.choices(data,now,h) if r['family']=='projections')
+        self.assertTrue(all(r['right'].endswith('/ N/A') for r in row['rows']))
+
+    def test_projection_deadline_does_not_extend_source_freshness(self):
+        now,data,h=self.relevant_fixture()
+        row=next(r for r in n.choices(data,now,h) if r['family']=='projections')
+        row['stale']=boxscores.stamp(now+timedelta(days=1))
+        self.assertTrue(n.relevance_issues(row,now+timedelta(hours=5)))
+
+    def test_unqueued_projection_refreshes_but_attended_queue_stays_frozen(self):
+        now,data,h=self.relevant_fixture()
+        with tempfile.TemporaryDirectory() as folder, patch.object(x_post,'load_log',return_value={'posts':[]}):
+            root=Path(folder)
+            n.prepare(now,root,data,h)
+            before=next(r for r in n.stored(root) if r['family']=='projections')
+            data['games'][0]['totalQuote']['line']+=1
+            self.assertIn(before['key'],n.prepare(now+timedelta(seconds=1),root,data,h))
+            after=next(r for r in n.stored(root) if r['family']=='projections')
+            self.assertNotEqual(before['rows'],after['rows'])
+            self.assertEqual(after['supersedesCapturedAt'],before['capturedAt'])
+            data['games'][0]['totalQuote']['line']+=1
+            with patch.object(x_post,'load_log',return_value={'posts':[{'id':before['key'],'webDelivery':{'state':'scheduled'}}]}):
+                self.assertNotIn(before['key'],n.prepare(now+timedelta(seconds=2),root,data,h))
+            self.assertEqual(next(r for r in n.stored(root) if r['family']=='projections'),after)
+
     def relevant_fixture(self):
         now=datetime(2026,10,24,13,tzinfo=timezone.utc)
         data,history=fixture()
