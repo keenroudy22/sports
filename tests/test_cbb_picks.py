@@ -91,6 +91,21 @@ class CBBPicksTests(unittest.TestCase):
             self.assertEqual(len([r for r in cbb.rows(root) if r['type']=='settle']),2)
             self.assertEqual(cbb.public_rows(root)[0]['odds'],-110)
 
+    def test_real_hoops_store_final_without_source_grades_once(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);p=fixture();cbb.admit(p,context(),NOW,root)
+            final=dict(eventId='123',type=2,state='post',season=2027,
+                kickoff=p['game']['kickoff'],home={'id':'1'},away={'id':'2'},
+                homeScore=66,awayScore=68,retrievedAt='2026-11-04T03:00:00Z')
+            later=datetime(2026,11,4,4,tzinfo=timezone.utc)
+            self.assertEqual(cbb.grade(later,root,[final]),1)
+            self.assertEqual(cbb.grade(later,root,[final]),0)
+            row=cbb.public_rows(root)[0]
+            self.assertEqual(row['resultSource'],
+                'https://www.espn.com/mens-college-basketball/boxscore/_/gameId/123')
+            self.assertEqual(row['odds'],p['odds'])
+            self.assertEqual(row['riskUnits'],1)
+
     def test_future_final_is_not_graded(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);p=fixture();cbb.admit(p,context(),NOW,root)

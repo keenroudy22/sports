@@ -210,7 +210,7 @@ def grade(now,root=STORE,finals=None):
         result='win' if margin>0 else 'loss' if margin<0 else 'push'
         if p.get('result')==result and p.get('actual')==actual:continue
         count+=nba_capture.append_changed([dict(type='settle',id=p['id'],league='CBB',season=p['season'],result=result,
-            actual=actual,resultSource=f['source'],settledAt=boxscores.stamp(now),retrievedAt=boxscores.stamp(now))],Path(root),lambda r:(r['type'],r['id']))
+            actual=actual,resultSource=f.get('source') or ('https://www.espn.com/mens-college-basketball/boxscore/_/gameId/'+str(f['eventId'])),settledAt=boxscores.stamp(now),retrievedAt=boxscores.stamp(now))],Path(root),lambda r:(r['type'],r['id']))
     return count
 
 
