@@ -4,6 +4,13 @@ const assert = require('node:assert/strict');
 globalThis.KRCore = require('../site/core.js');
 const { model: M } = require('../site/app.js');
 
+test('Today shortcuts keep their scroll destination through the app router', () => {
+  for (const anchor of ['today-card','today-climb','today-posted-straights','cbb-picks']) {
+    assert.deepEqual(M.resolve('#'+anchor),{view:'today',anchor});
+  }
+  assert.equal(M.resolve('#not-a-posted-ticket').anchor,undefined);
+});
+
 test('legacy route table lands on an equivalent preview view', () => {
   const table = [
     ['', 'today'], ['#sports', 'today'], ['#digest', 'today'], ['#board', 'research'], ['#board/props', 'research'],

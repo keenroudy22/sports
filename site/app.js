@@ -545,6 +545,7 @@
     const rest = parts.slice(1).join('/');
     const q = params.get('q') || '';
     switch (v) {
+      case 'today-card': case 'today-climb': case 'today-posted-straights': case 'cbb-picks': return { view: 'today', anchor: v };
       case '': case 'today': case 'sports': case 'home': case 'overview': case 'digest': return { view: 'today', league: params.get('sport') ? params.get('sport').toUpperCase() : null };
       case 'pick': return rest ? { view: 'pick', id: rest } : { view: 'today' };
       case 'research': {
