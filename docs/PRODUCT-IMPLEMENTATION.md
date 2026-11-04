@@ -1,3 +1,43 @@
+### November4 NBA source recovery to admission — verified release
+
+The standard verified PDF intake now supports --select against its canonical store.
+It syncs under the normal lock, ingests the actual fully reviewed report, completes
+eligible real-capture research, rechecks unchanged admission with capture=False and
+commits through the existing desk. No extra quote request, probability promotion,
+public-send shortcut or alternate-root production admission. An admitted row remains
+pending the existing publisher; scheduled/queued is never sent.52 focused tests pass.
+
+Source c6fd0f676c1: normal and clean2145Python(2skip)/308Node, all record/publication
+checks and actual-slot1555 offline rehearsal pass;0outside writes/private reads.
+Hosted41913742587SUCCESS, actual verified artifact380980806d4b; ancestry verified.
+Live375/1440 no overflow/load/console errors. Actual deployed stored-input admission
+made0feed requests and correctly held the stale afternoon injury snapshot;0new plays.
+
+Read-only morning evidence audit verified the actual08:30:05Eastern invocation,
+its08:31:24capture, eight-page08:15report observed08:34:18,321pregame forecasts,
+70probability and70experiment rows, original source/download clocks and0extra quotes.
+This verifies November4 capture plus attended recovery, not autonomous future proof.
+Mac06:45/08:30 jobs are registered, with last exit0. The existing daily app task now
+starts08:35Eastern after the08:30capture, replacing07:45; no new job or feed window.
+Both existing daily/00:45night prompts use the standard --select follow-through and
+require actual website/X/Discord receipts. App read-back confirms ACTIVE and unchanged
+models/project/free limits. First revised natural run remains unobserved.
+
+NBA prop approval is still open: original studies have only2independent test dates,
+negative conservative performance bounds and no official-book proof. New future
+experiment requires30independent games/5dates; no tuning exposed outcomes into a pass.
+All four model/protocol module hashes unchanged. Buffer API2900cap stays held;
+ordinary authorized Buffer UI remains the existing delivery alternative. No new
+social sends or resurrection of the owner-deleted SDST recap in this repair.
+
+Evidence:work/nov4-morning-actual-chain-verification.json;
+work/nov4-morning-launchd-verification.json;
+work/nov4-morning-selection-automation-receipt.json;
+work/nov4-deployed-recovery-selection-check.json;
+work/nov4-nba-recovery-selection-release.log;
+work/nov4-nba-recovery-hosted-success.log;
+work/nov4-nba-recovery-live-phone.png.
+
 ### November4 Today and recap corrections — verified live
 
 Source02a53a4fd64 includes the top current-day CBB link/count, Queens in the main
