@@ -50922,5 +50922,200 @@
         "units": 0.909
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-04T12:16:14Z",
+    "summary": "Released 1: Ball State at Massachusetts over 49.5 -108 at BetRivers.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 49.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401866455"
+        ],
+        "book": "BetRivers",
+        "odds": -108,
+        "projection": 51.8,
+        "edge": "Price-checked chance 52.1% against the exact two-sided price; 51.9% needed at -108: +0.1 percentage points.",
+        "cutoff": "OVER 49.5 at -108 or better; off the card at 51+, or at -123 or worse at 49.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-28T00:40:43Z",
+        "quotedAt": "2026-11-04T11:45:06Z",
+        "quoteType": "capture",
+        "quoteNote": "BetRivers's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-04T13:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.557,
+          "chance": 0.521,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.519,
+          "edgePoints": 0.1,
+          "evPerUnit": 0.002,
+          "snapshotAt": "2026-10-28T00:40:43Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-11-04T12:13:34Z",
+          "fairChance": 0.493,
+          "anchoredChance": 0.521,
+          "gap": 2.8,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Ball State Cardinals at Massachusetts Minutemen",
+        "title": "Ball State at Massachusetts over 49.5",
+        "id": "CFB-2026-W10-ball-mass-over-49-5-br",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401866455",
+          "https://ballstatesports.com/news/2026/10/30/football-ball-state-turns-attention-to-umass-as-the-cardinals-prepare-for-midweek-maction",
+          "https://ballstatesports.com/sports/2026/10/30/ball-state-football-weekly-news-conference-quotes-october-30-game-9-at-umass"
+        ],
+        "why": "Model lean, our number only. We have the total at 51.8; the book is at 49.5. That makes the over 52.1%, and -108 needs 51.9%. Checked before publishing: Ball State quarterback Keldric Luster took part in the team's news conference for the UMass game and discussed preparing to play Wednesday. Checked before publishing: Ball State coach Mike Uremovich said his offense needs to run the ball against UMass and that UMass has been good at stopping the run. The market: The spread opened -4.5 and is -3.5 at DraftKings, a move of 1 toward the away. The total opened 48.5 and is 49.5 at DraftKings, 1 toward the over. Our spread is 4 points off, bigger than 56% of our past gaps. Gaps this size went 787-786 against the close in 3584 games. Our total is 2.3 points off, bigger than 39% of our past gaps. Gaps this size went 1164-1043 against the close in 3602 games.",
+        "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Ball State averaged 395.5 yards of total offense over its last four games."
+          ],
+          "cautions": [],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 49.5. I say 51.8.",
+              "numbers": {
+                "projection": 51.8,
+                "line": 49.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-28T00:40:43Z"
+            },
+            {
+              "text": "Ball State averaged 395.5 yards of total offense over its last four games.",
+              "numbers": {},
+              "source": "https://ballstatesports.com/news/2026/11/2/football-ball-state-visits-umass-to-begin-midweek-maction-schedule-in-november",
+              "time": "2026-11-04T12:13:34Z"
+            },
+            {
+              "text": "Ball State averaged 395.5 yards of total offense over its last four games.",
+              "numbers": {},
+              "source": "https://ballstatesports.com/news/2026/11/2/football-ball-state-visits-umass-to-begin-midweek-maction-schedule-in-november",
+              "time": "2026-11-04T12:13:34Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-04T12:13:34Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 59,
+            "windMph": 6,
+            "windDirection": "S",
+            "precipProb": 0,
+            "periodStart": "2026-11-04T19:00:00-05:00",
+            "issuedAt": "2026-11-03T18:48:22+00:00",
+            "source": "https://api.weather.gov/gridpoints/BOX/22,93/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 48.5,
+                  "price": -110,
+                  "time": "2026-11-01T11:45:06Z"
+                },
+                "now": {
+                  "line": 49.5,
+                  "price": -112,
+                  "time": "2026-11-04T11:45:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 48.5,
+                  "price": -110,
+                  "time": "2026-10-30T10:37:21Z"
+                },
+                "now": {
+                  "line": 49.5,
+                  "price": -110,
+                  "time": "2026-11-04T11:45:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "BetRivers",
+              "line": 49.5,
+              "price": -108,
+              "time": "2026-11-04T11:45:06Z"
+            }
+          },
+          "ours": {
+            "projection": 51.8,
+            "line": 49.5,
+            "market": "total",
+            "text": "Book says 49.5. I say 51.8.",
+            "snapshotAt": "2026-10-28T00:40:43Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://ballstatesports.com/news/2026/11/2/football-ball-state-visits-umass-to-begin-midweek-maction-schedule-in-november",
+              "time": "2026-11-04T12:13:34Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/BOX/22,93/forecast/hourly",
+              "time": "2026-11-03T18:48:22+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401866455",
+              "time": "2026-11-04T12:13:34Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://ballstatesports.com/news/2026/10/30/football-ball-state-turns-attention-to-umass-as-the-cardinals-prepare-for-midweek-maction",
+              "time": "2026-11-04T12:13:34Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://ballstatesports.com/sports/2026/10/30/ball-state-football-weekly-news-conference-quotes-october-30-game-9-at-umass",
+              "time": "2026-11-04T12:13:34Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-04T12:16:14Z"
+      }
+    ]
   }
 ]
