@@ -1,0 +1,212 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-04T04:54:45Z",
+  "targetWeek": 10,
+  "summary": "Research update for Nov 3: Settled 1: Buffalo at Miami (OH) over 44.5 win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 44.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401866454"
+      ],
+      "book": "FanDuel",
+      "odds": -110,
+      "projection": 49.4,
+      "edge": "Price-checked chance 54.3% against the exact two-sided price; 52.4% needed at -110: +1.9 percentage points.",
+      "cutoff": "OVER 44.5 at -110 or better; off the card at 46+, or at -125 or worse at 44.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-27T01:44:13Z",
+      "quotedAt": "2026-11-03T11:45:06Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-03T13:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.619,
+        "chance": 0.543,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.524,
+        "edgePoints": 1.9,
+        "evPerUnit": 0.036,
+        "snapshotAt": "2026-10-27T01:44:13Z",
+        "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+        "evaluatedAt": "2026-11-03T11:48:22Z",
+        "fairChance": 0.5,
+        "anchoredChance": 0.543,
+        "gap": 4.3,
+        "calibrationFamily": "CFB/total",
+        "calibrationMethod": "neutral-centered-fitted"
+      },
+      "matchup": "Buffalo Bulls at Miami (OH) RedHawks",
+      "title": "Buffalo at Miami (OH) over 44.5",
+      "id": "CFB-2026-W10-buff-m-oh-over-44-5-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401866454",
+        "https://ubbulls.com/news/2026/10/30/football-bulls-begin-midweek-maction-at-miami-oh-on-tuesday-night",
+        "https://miamiredhawks.com/news/2026/10/29/football-redhawks-put-win-streak-on-the-line-versus-buffalo-on-tuesday",
+        "https://www.miamistudent.net/article/2026/11/preview-miami-plays-first-tuesday-game-of-the-season-against-buffalo?ct=content_open&cv=cbox_featured"
+      ],
+      "why": "Model lean, our number only. We have the total at 49.4; the book is at 44.5. That makes the over 54.3%, and -110 needs 52.4%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Buffalo's preview for the Miami game identifies Jason Wright as its quarterback. Checked before publishing: Miami expects Caleb Heavner to make his fifth start against Buffalo on Tuesday. The market: The spread opened -6.5 and is -6 at DraftKings, a move of 0.5 toward the away. The total opened 45.5 and is 44.5 at DraftKings, 1 toward the under. 6 books span -6.5 to -6 on the spread; the middle is -6.5. 6 books span 43.5 to 44.5 on the total; the middle is 44.5. Our spread is 2.6 points off, bigger than 42% of our past gaps. Gaps this size went 1037-1033 against the close in 3584 games. Our total is 4.9 points off, bigger than 77% of our past gaps. Gaps this size went 455-371 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: Buffalo has allowed 17.5 points per game since the start of MAC play. Statistical counterpoint: Miami ranks 14th nationally in rush defense, allowing 94.9 rushing yards per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Buffalo running back Messiah Burch rushed for 745 yards over his last five games."
+        ],
+        "cautions": [
+          "Buffalo has allowed 17.5 points per game since the start of MAC play.",
+          "Miami ranks 14th nationally in rush defense, allowing 94.9 rushing yards per game."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 44.5. I say 49.4.",
+            "numbers": {
+              "projection": 49.4,
+              "line": 44.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-27T01:44:13Z"
+          },
+          {
+            "text": "Buffalo running back Messiah Burch rushed for 745 yards over his last five games.",
+            "numbers": {},
+            "source": "https://ubbulls.com/news/2026/10/30/football-bulls-begin-midweek-maction-at-miami-oh-on-tuesday-night",
+            "time": "2026-11-03T11:48:22Z"
+          },
+          {
+            "text": "Buffalo running back Messiah Burch rushed for 745 yards over his last five games.",
+            "numbers": {},
+            "source": "https://ubbulls.com/news/2026/10/30/football-bulls-begin-midweek-maction-at-miami-oh-on-tuesday-night",
+            "time": "2026-11-03T11:48:22Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Buffalo has allowed 17.5 points per game since the start of MAC play.",
+            "numbers": {},
+            "source": "https://www.miamistudent.net/article/2026/11/preview-miami-plays-first-tuesday-game-of-the-season-against-buffalo?ct=content_open&cv=cbox_featured",
+            "time": "2026-11-03T11:48:22Z"
+          },
+          {
+            "text": "Miami ranks 14th nationally in rush defense, allowing 94.9 rushing yards per game.",
+            "numbers": {},
+            "source": "https://miamiredhawks.com/news/2026/10/29/football-redhawks-put-win-streak-on-the-line-versus-buffalo-on-tuesday",
+            "time": "2026-11-03T11:48:22Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 65,
+          "windMph": 8,
+          "windDirection": "SE",
+          "precipProb": 0,
+          "periodStart": "2026-11-03T20:00:00-05:00",
+          "issuedAt": "2026-11-02T18:44:37+00:00",
+          "source": "https://api.weather.gov/gridpoints/ILN/26,56/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 45.5,
+                "price": -110,
+                "time": "2026-11-01T11:45:06Z"
+              },
+              "now": {
+                "line": 44.5,
+                "price": -110,
+                "time": "2026-11-03T11:45:06Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 45.5,
+                "price": -110,
+                "time": "2026-10-30T10:37:21Z"
+              },
+              "now": {
+                "line": 44.5,
+                "price": -110,
+                "time": "2026-11-03T11:45:06Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 44.5,
+            "price": -110,
+            "time": "2026-11-03T11:45:06Z"
+          }
+        },
+        "ours": {
+          "projection": 49.4,
+          "line": 44.5,
+          "market": "total",
+          "text": "Book says 44.5. I say 49.4.",
+          "snapshotAt": "2026-10-27T01:44:13Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://www.miamistudent.net/article/2026/11/preview-miami-plays-first-tuesday-game-of-the-season-against-buffalo?ct=content_open&cv=cbox_featured",
+            "time": "2026-11-03T11:48:22Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://miamiredhawks.com/news/2026/10/29/football-redhawks-put-win-streak-on-the-line-versus-buffalo-on-tuesday",
+            "time": "2026-11-03T11:48:22Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://ubbulls.com/news/2026/10/30/football-bulls-begin-midweek-maction-at-miami-oh-on-tuesday-night",
+            "time": "2026-11-03T11:48:22Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/ILN/26,56/forecast/hourly",
+            "time": "2026-11-02T18:44:37+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866454",
+            "time": "2026-11-03T11:48:22Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-03T11:53:53Z",
+      "result": "win",
+      "actual": "Buffalo 34, Miami OH 31",
+      "settledAt": "2026-11-04T04:54:45Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401866454",
+      "actualValue": 65,
+      "units": 0.909
+    }
+  ]
+}
