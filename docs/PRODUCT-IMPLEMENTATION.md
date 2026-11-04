@@ -1,3 +1,30 @@
+### November4 owner-reported two X plays / one website counter — verified live
+
+The one-football Best Bets counter and CBB card below the Climb made the day's
+whole card look like one play. All-sports Today now has one compact current-day
+published-straight list/count before large cards, preserving original line, price,
+book and stake. It includes football/CBB/NBA lanes, excludes future/private/fun/
+Climb entries, deduplicates IDs and preserves separate records. Today's Queens
+full card is before the Climb. Named Today/CBB shortcuts retain their actual scroll
+target through the router; unknown hashes do not gain arbitrary anchor behavior.
+
+Actual live375/1440 verified two selections: Ball State at UMass over49.5-108
+BetRivers1u; Queens+8.5-112DraftKings1u. Queens link reaches its original card.
+No overflow, load failure or console errors. Original morning X and Discord
+sent receipts match both plays; no duplicate post, record or bet was created.
+Owner-deleted SDST recap remains suppressed. No new NBA approval or staking change.
+
+Source0889a153eaf (includes e5da2e2b0), full normal/clean2145Python(2skip)/309Node,
+record/publication/asset gates and actual-slot offline rehearsal passed.
+Hosted41919179919SUCCESS, verified artifactd336a8a5acb7; ancestry checked.
+The earlier unfinished local candidate was stopped before promotion when the
+shortcut issue was found; only the corrected fully tested candidate was released.
+Evidence:work/nov4-two-plays-live-phone.png;
+work/nov4-two-plays-live-phone.json;
+work/nov4-two-plays-channel-receipts.json;
+work/nov4-unified-posted-plays-release-final.log;
+work/nov4-unified-plays-hosted-success.log.
+
 ### November4 NBA source recovery to admission — verified release
 
 The standard verified PDF intake now supports --select against its canonical store.
