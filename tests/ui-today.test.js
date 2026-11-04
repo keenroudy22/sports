@@ -944,3 +944,15 @@ test('withdrawn settled play shows its withdrawal on receipt, slip and detail wi
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [prop, old], lastSlate: { ALL: { day: '2026-10-07' } } } }).api.views.today({ view: 'today' });
   assert.doesNotMatch(page, /Sam Houston|Wednesday results|results below|id="left-h"/);
  });
+
+test('All-sports Today puts published CBB picks before research with an explicit top link', async () => {
+ const cbb={picks:{plays:[{id:'cbb-today',kickoff:prop.kickoff},{id:'cbb-tomorrow',kickoff:laterOpen.kickoff}]}};
+ const app=loadApp('#record',{}, {extra:{'data/app/cbb.json':cbb,'data/app/nba.json':{games:[]}}});
+ app.sandbox.KRGames=()=>({cbbPicks:()=>'<section id="cbb-picks">Published CBB ticket</section>',nbaSummary:()=>'<section id="nba-research">NBA research</section>'});
+ await app.api.views.today({view:'today'});await settle();
+ const page=await app.api.views.today({view:'today'});
+ assert.match(page,/<a href="#today\?sport=CBB"><span>CBB picks<\/span><b>1 posted today<\/b>/);
+ assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
+ assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);
+ assert.match(page,/Best bets<\/span><b>2 live/);
+});
