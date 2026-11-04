@@ -52,6 +52,16 @@ class CompletionTests(unittest.TestCase):
    root,injury,capture,quote=self.setup_root(folder,quote_override={'sourceAt':'2026-11-04T12:20:00Z','retrievedAt':'2026-11-04T12:25:00Z'})
    with patch.object(n.props,'record_forward') as record:
     self.assertEqual(n.finish(root,NOW)['state'],'held');record.assert_not_called()
+ def test_download_after_report_does_not_refresh_pre_report_price(self):
+  with tempfile.TemporaryDirectory() as folder:
+   root,_,_,_=self.setup_root(folder,quote_override={'sourceAt':'2026-11-04T12:20:00Z'})
+   with patch.object(n.props,'record_forward') as record:
+    self.assertEqual(n.finish(root,NOW)['state'],'held');record.assert_not_called()
+ def test_source_clock_after_download_cannot_create_evidence(self):
+  with tempfile.TemporaryDirectory() as folder:
+   root,_,_,_=self.setup_root(folder,quote_override={'sourceAt':'2026-11-04T12:37:00Z'})
+   with patch.object(n.props,'record_forward') as record:
+    self.assertEqual(n.finish(root,NOW)['state'],'held');record.assert_not_called()
  def test_filter_leaves_ordinary_capture_unchanged_and_never_records_unmatched_quotes(self):
   rows=[]
   for athlete in ('2','3'):

@@ -54,7 +54,7 @@ def finish(root,now):
         latest=latest_received(probability.read(root/'player-quotes'),lambda q:tuple(q[k] for k in ('eventId','athleteId','stat','book')))
         latest={key:q for key,q in latest.items() if fresh(q.get('retrievedAt')) and fresh(q.get('sourceAt'))
                 and slot<=boxscores.instant(q['retrievedAt'])<=received
-                and boxscores.instant(report['reportedAt'])<=boxscores.instant(q['retrievedAt'])
+                and boxscores.instant(report['reportedAt'])<=boxscores.instant(q['sourceAt'])<=boxscores.instant(q['retrievedAt'])
                 and boxscores.instant(injury['retrievedAt'])<=boxscores.instant(q['retrievedAt'])
                 and q.get('source')=='https://sharpapi.io' and q.get('sideVerified') is True
                 and q.get('kind')=='main' and q.get('stat') in probability.STATS}
