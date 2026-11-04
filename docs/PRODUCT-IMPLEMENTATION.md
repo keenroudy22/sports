@@ -1,36 +1,42 @@
-### November4 Today visibility and recap correction — hosted verification pending
+### November4 Today and recap corrections — verified live
 
-Today’s current plays are the CFB Ball State/Massachusetts over and Queens+8.5.
-Queens was present in its CBB payload but buried below all NBA research in the
-all-sports view. Sourcef673bd496 adds a current-day CBB count/link at the top and
-moves the published CBB section before research. Separate records stay separate.
+Source02a53a4fd64 includes the top current-day CBB link/count, Queens in the main
+posted-play column ahead of phone NBA research, the corrected Today’s posted
+plays headline and compact three-link phone navigation. Hosted41895897548SUCCESS
+verified actual artifactfd34ee97d98; source ancestry checked. Actual live375/1440
+views, CBB shortcut, original terms and explicit scoring-margin label verified;
+no sideways scroll, load error or console errors. Normal/clean2142Python(2skip)
+and308Node, record/publication gates and real-slot rehearsal pass with0outside
+writes/private reads. Phone proof:work/nov4-live-today-375-final.png.
 
-A late SDST X Final was actually sent14:03ET, then the owner deleted it. The
-wording Actual:2 was an unlabeled scoring margin, and its art looked like a new
-pick. Record the failed presentation, not a successful retained grade post.
-Original sent evidence is preserved; owner-reported deletion/doNotRepost saved
-at19:06:06Z. Never repost receipt:cbb:CBB-20261103-sdak-plus-11-5-dk:ecd0d25b67.
-SDST’s original win/+0.87u and every original price/stake remain unchanged.
-Further social sends from this session stopped. Original Queens/CFB X and
-Discord delivery receipts remain confirmed. The SDST X Final is intentionally
-absent after owner deletion, not a retry obligation.
+The late SDST X Final2118056566028988917 was sent14:03ET, then owner-deleted.
+Unlabeled Actual:2 and new-pick-style artwork were a presentation failure.
+Its original sent receipt remains; owner-reported deletedAt/doNotRepost was saved
+19:06:06Z. Never resurrect receipt:cbb:CBB-20261103-sdak-plus-11-5-dk:ecd0d25b67.
+The original pick/win/+0.87u is preserved. No further social posts were sent.
+Future recaps use dated Final art, result stamps/units and a labeled selected-team
+scoring margin or game total; Discord shares that caption with21+notice. Existing
+sent receipts and archived art remain unchanged. Prospective preview was checked
+privately, not posted. Intentional deletion is not an unsent-grade retry.
 
-Source007f25355 includes a dated Final recap with result stamp/units, explicit
-selected-team scoring margin or game total, matching future Discord wording
-and21+ notice, plus clear website grade labels. Existing sent receipts and
-archived art are preserved. Private prospective art visually checked; not posted.
-25focused tests pass. Normal/clean2142Python(2skip)/308Node, record/publication
-and zero-outside-write/private-read rehearsal gates pass. Canonical release
-pushed; hosted41895897548/active ancestor41893660068 still require success and
-actual artifact/live checks. Do not call this a verified hosted release yet.
+Live record audit:150main grades,418explicit original wager fields and2CBB rows
+match with0issues.26old main rows lack an original saved price; none reconstructed.
+Today’s CFB and Queens original website/X/Discord receipts remain confirmed.
+NBA afternoon admission0offers:official availability unavailable, all3book proofs
+null, prospective experiment0settled games. No NBA promotion. Earlier source-clock
+fix04b47aad5 is also verified in hosted41887769115/artifact2d4a0b5e9.
 
-Live audit before this UI release:150main-record grades/418explicit original
-term fields and2CBB payloads match,0issues.26old main rows have no saved original
-price; no missing price reconstructed. NBA afternoon admission0offers, official
-availability unavailable, all3book proofs null, prospective experiment0settled
-games. Source-clock guard04b47aad5 is now verified in hosted41887769115SUCCESS,
-actual artifact2d4a0b5e9. No new NBA play or promotion. Evidence:
-work/nov4-channel-sync-release-receipt.json; work/nov4-live-record-parity-audit.json.
+Existing07:45daily and00:45overnight app prompts updated through the app and read
+back: same project, model, reasoning, cadence, status and notification defaults.
+Morning now prioritizes browser source completion after the actual08:30capture
+before the next report supersedes its prices; both retain the owner-deleted guard.
+No new jobs/requests/budgets. Manual zero-extra-quote completion was exercised
+Nov4; the first updated natural scheduled run still requires observation. Frozen
+study/profit requirements and Buffer API allowance remain unchanged.
+
+Evidence:work/nov4-channel-sync-release-receipt.json;
+work/nov4-live-record-parity-audit.json;
+work/nov4-automation-timing-correction-receipt.json.
 
 ### November4 NBA recovery source-clock repair — hosted verification pending
 
