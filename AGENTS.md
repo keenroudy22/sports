@@ -1,3 +1,15 @@
+# November4 NBA morning operational proof
+
+Existing cached desk health now checks actual08:30NBA captures and matching
+source-completion receipts, with a09:00Eastern completion deadline. Missing,
+failed, future, unscheduled and late evidence cannot become a healthy morning
+because another job exited0. Real on-time retries and reviewed PDF recoveries
+are explicit. This is capture/source evidence, never model or delivery approval.
+NBA provider and official-report freshness have separate prospective diagnostics;
+the official publication clock governs freshness. Keep them outside the frozen
+version1 reliability source family so its history is neither reset nor rewritten.
+Use the existing change-only monitor/alerts; no new job, feed or quota allowance.
+
 # November4 owner — one visible list of today's posted straights
 
 All-sports Today must list and count current-day published football, CBB and NBA

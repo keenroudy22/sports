@@ -526,7 +526,27 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
         checks.append(source(f'{league} multi-book prices', ((odds.get('leagues') or {}).get(league) or {}).get('lastAt'),
                              now, 4, league in active))
     checks.append(source('Sharp prop capture', read(root / 'data/prop-odds/sharp-status.json').get('at'), now, 4, bool(active)))
-    for check in checks:
+    nba_store=root/'data/nba-capture'
+    nba_slate=read(nba_store/'slate.json')
+    nba_games=nba_slate.get('games',[]) or ((sports.get('leagues') or {}).get('NBA') or {}).get('games',[])
+    nba_nearby=any(moment(g.get('kickoff')) and now<moment(g['kickoff'])<=now+timedelta(hours=6)
+                   for g in nba_games)
+    nba_today=any(moment(g.get('kickoff')) and moment(g['kickoff']).astimezone(gates.EASTERN).date()==local.date()
+                  for g in nba_games)
+    nba_injuries=read(nba_store/'injuries-current.json');nba_official=nba_injuries.get('official') or {}
+    # These prospective diagnostics must not change the frozen source family or
+    # rewrite/reset its existing reliability journal.
+    nba_checks=[]
+    if nba_slate or nba_nearby:
+        nba_checks.append(source('NBA injury context',nba_injuries.get('retrievedAt'),now,1,nba_nearby))
+        nba_checks.append(source('NBA official availability',nba_official.get('reportedAt'),now,1,nba_nearby,
+                                 nba_official.get('state')=='unavailable'))
+    import nba_morning_health
+    nba_morning=nba_morning_health.status(nba_store,now)
+    issues.extend(nba_morning['issues'])
+    if nba_today and local.hour>=9 and nba_morning['state']=='unavailable':
+        issue('nba-morning-unknown','NBA morning capture evidence could not be verified; inspect the stored receipt.')
+    for check in checks+nba_checks:
         if check['requiredNow'] and check['state'] != 'fresh':
             issue('source-' + check['name'], f"{check['name']} needs a freshness check before the nearby slate.")
 
@@ -643,7 +663,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
                      'finishedAt': stamp(state.get('finishedAt')), 'expectedSlot': gates.stamp(expected),
                      'selection': 'unknown' if published is None else 'published' if published else 'no-new-play'},
             'reliability': reliability,
-            'sources': checks, 'deliveriesLast48h': counts,
+            'sources': checks, 'nbaSources': nba_checks, 'nbaMorning': nba_morning, 'deliveriesLast48h': counts,
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
             'deliveryCohorts': delivery_cohorts(post_book, now),
             'resultTimeliness': result_speed,
@@ -682,7 +702,10 @@ def markdown(data):
         fixtures = ', '.join(f'{league} {count}' for league, count in sorted(day['storedUpcomingGames'].items())) or 'no upcoming fixtures stored'
         lines.append(f"{day['day']}: {fixtures}; football screen {day['footballScreen']}; NBA trial screen {day['nbaTrialScreen']}; "
                      f"multi-game Climb research {day['climbResearchWindow']}.")
-    for row in data['sources']:
+    morning=data.get('nbaMorning') or {}
+    if morning:
+        lines.append(f"NBA morning capture: {morning.get('state','unknown')}; completion {morning.get('completedAt') or 'not recorded'}. Capture/source evidence only, not model approval or delivery proof.")
+    for row in data['sources']+data.get('nbaSources',[]):
         lines.append(f"{row['name']}: {row['state']}; last successful observation {row['observedAt'] or 'unknown'}.")
     counts = data['deliveriesLast48h']
     lines.append('Delivery evidence (48h): ' + ', '.join(f'{key} {value}' for key, value in counts.items()) + '.')
@@ -749,7 +772,7 @@ def html_report(data):
         '<p>No actionable issue found in the cached checks. This is not a live service guarantee.</p>'
     source_rows = ''.join('<tr>' + ''.join(f'<td>{text(value)}</td>' for value in (
         row.get('name'), row.get('state'), row.get('observedAt'), row.get('ageMinutes'),
-        'Yes' if row.get('requiredNow') else 'No')) + '</tr>' for row in data.get('sources') or [])
+        'Yes' if row.get('requiredNow') else 'No')) + '</tr>' for row in (data.get('sources') or [])+data.get('nbaSources',[]))
     desk, budget = data.get('desk') or {}, data.get('oddsBudget') or {}
     local, pilot = data.get('localModel') or {}, data.get('livePilot') or {}
     delivery_labels = {'queued': 'X queued', 'xOverdue': 'X overdue', 'xFailed': 'X failed',
