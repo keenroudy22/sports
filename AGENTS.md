@@ -1,3 +1,12 @@
+# November4 owner — one visible list of today's posted straights
+
+All-sports Today must list and count current-day published football, CBB and NBA
+straights together above the large cards when multiple sport lanes are present.
+Show each original selection, price, book and stake; exclude future/private/fun/
+Climb entries and retain separate category records. Today's CBB cards belong
+before the Climb, not below it. A football-only count must not look like the total
+number of posts across all sports. Preserve every public term, grade and receipt.
+
 # November4 source-recovery selection follow-through
 
 The existing attended NBA injury-report intake accepts --select against its

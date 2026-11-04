@@ -946,7 +946,7 @@ test('withdrawn settled play shows its withdrawal on receipt, slip and detail wi
  });
 
 test('All-sports Today puts published CBB picks before research with an explicit top link', async () => {
- const cbb={picks:{plays:[{id:'cbb-today',kickoff:prop.kickoff},{id:'cbb-tomorrow',kickoff:laterOpen.kickoff}]}};
+ const cbb={picks:{plays:[{id:'cbb-today',kickoff:prop.kickoff,marketType:'spread',direction:'away',line:8.5,odds:-112,book:'DraftKings',riskUnits:1,game:{teams:{away:{abbreviation:'QUC'},home:{abbreviation:'LMU'}}}},{id:'cbb-tomorrow',kickoff:laterOpen.kickoff}]}};
  const app=loadApp('#record',{}, {extra:{'data/app/cbb.json':cbb,'data/app/nba.json':{games:[]}}});
  app.sandbox.KRGames=()=>({cbbPicks:()=>'<section id="cbb-picks">Published CBB ticket</section>',nbaSummary:()=>'<section id="nba-research">NBA research</section>'});
  await app.api.views.today({view:'today'});await settle();
@@ -956,5 +956,11 @@ test('All-sports Today puts published CBB picks before research with an explicit
  assert.match(page,/<h1[^>]*>Today’s posted plays\.<\/h1>/);
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
  assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);
- assert.match(page,/Best bets<\/span><b>2 live/);
+ assert.match(page,/Posted straights<\/span><b>2 today/);
+ assert.match(page,/2 posted straights today/);
+ const summary=page.slice(page.indexOf('id="today-posted-straights"'),page.indexOf('class="kt-focus-head"'));
+ assert.match(summary,/Fixture Receiver OVER 49\.5/);
+ assert.match(summary,/QUC \+8\.5[\s\S]*-112 · DraftKings · 1u/);
+ assert.doesNotMatch(summary,/cbb-tomorrow|Later Open/);
+ assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('class="kt-sec kt-climb"'));
 });

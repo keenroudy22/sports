@@ -1164,16 +1164,17 @@
   /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '' }) => {
-    const title = otherPosted ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
+    const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     const climbState = climb && climb.open ? `Step ${climb.open.step || climb.step} live` : climb ? `Step ${climb.step} next` : 'Route';
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <nav class="kt-today-jumps${otherPosted ? ' has-other-plays' : ''}" aria-label="Today at a glance"><a href="#today-card"><span>Best bets</span><b>${rows.length ? `${rows.length} live` : favorite ? 'Strongest lean' : 'Checking'}</b></a>${otherPosted}<a href="#today-climb"><span>80/20 Climb</span><b>${esc(climbState)}</b></a></nav>
-      <div class="kt-focus-head"><h2>Today’s best bets</h2><a href="#record">Every result ›</a></div>
+      <nav class="kt-today-jumps${otherPosted ? ' has-other-plays' : ''}" aria-label="Today at a glance"><a href="${postedSummary ? '#today-posted-straights' : '#today-card'}"><span>${postedSummary ? 'Posted straights' : 'Best bets'}</span><b>${postedSummary ? `${postedSummary.count} today` : rows.length ? `${rows.length} live` : favorite ? 'Strongest lean' : 'Checking'}</b></a>${otherPosted}<a href="#today-climb"><span>80/20 Climb</span><b>${esc(climbState)}</b></a></nav>
+      ${postedSummary ? postedSummary.html : ''}
+      <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Today’s best bets'}</h2><a href="#record">Every result ›</a></div>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card' }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
-      ${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
+      ${otherTickets}${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
       ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
       ${rail(later, { season, lines, cards, more: true, label: 'Upcoming best bets' })}</section>` : ''}`;
   };
@@ -1317,6 +1318,21 @@
     const cbbSummary = cbbData ? (await ensureGames()).cbbPicks(cbbData, true) : '';
     const cbbCount = ((cbbData?.picks || {}).plays || []).filter(p => C.dayOf(p.kickoff) === etDay()).length;
     const otherPosted = cbbCount ? `<a href="#today?sport=CBB"><span>CBB picks</span><b>${cbbCount} posted</b></a>` : '';
+    const postedRows = state.league === 'ALL' ? picks.filter(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay())
+      .map(p => ({ ...p, label: p.displayTitle, href: `#pick/${p.id}` })) : [];
+    for (const p of (cbbData?.picks?.plays || []).filter(p => C.dayOf(p.kickoff) === etDay())) {
+      const t = p.game?.teams || {}, side = t[p.direction]?.name || t[p.direction]?.abbreviation || '';
+      const label = p.marketType === 'total' ? `${t.away?.abbreviation || ''} at ${t.home?.abbreviation || ''} ${p.direction} ${p.line}` : `${side} ${Number(p.line) > 0 ? '+' : ''}${p.line}`;
+      postedRows.push({ ...p, label, href: '#cbb-picks' });
+    }
+    for (const p of (state.league === 'ALL' ? nba?.trial?.plays || [] : []).filter(p => C.dayOf(p.kickoff) === etDay())) {
+      const t = p.teams || {}, side = t[p.direction]?.abbreviation || '';
+      const label = p.marketType === 'player' ? `${p.player} ${p.direction} ${p.line} ${{pts:'points',reb:'rebounds',ast:'assists'}[p.stat] || p.stat}` : p.marketType === 'total' ? `${t.away?.abbreviation || ''} at ${t.home?.abbreviation || ''} ${p.direction} ${p.line}` : p.marketType === 'moneyline' ? `${side} moneyline` : `${side} ${Number(p.line) > 0 ? '+' : ''}${p.line}`;
+      postedRows.push({ ...p, label, href: '#today?sport=NBA' });
+    }
+    const posted = [...new Map(postedRows.map(p => [p.id, p])).values()];
+    const postedSummary = state.league === 'ALL' && posted.length && (cbbCount || (nba?.trial?.plays || []).some(p => C.dayOf(p.kickoff) === etDay())) ? { count: posted.length,
+      html: `<section id="today-posted-straights" aria-label="Today’s posted straights"><p><b>${posted.length} posted straight${posted.length === 1 ? '' : 's'} today</b> · All sports. Separate records.</p><ul>${posted.map(p => `<li><a href="${esc(p.href)}"><b>${esc(p.label)}</b></a><br>${esc(oddsText(p.odds))} · ${esc(bookLabel(p.book))} · ${esc(C.stakeOf(p))}u${p.result ? ` · ${esc(String(p.result).toUpperCase())}` : ''}</li>`).join('')}</ul><p class="tiny muted">Original posted prices; check your book. Climbs and fun tickets are separate.</p></section>` } : null;
     const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba) : '';
     const rest2 = [
       leftovers(recent, awaiting.filter(p => C.dayOf(p.kickoff) === lastDay), (today.lastSlate || {})[state.league]),
@@ -1344,7 +1360,7 @@
     return `<p class="small muted" style="margin-bottom:12px"><b>Best Bets · 1u</b> · <b>Chef's Picks · 2u</b> · the rarer, stronger tier. Earlier plays keep their posted stakes.</p><div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
       climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
       postedToday: picks.some(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay()),
-      otherPosted, nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}${cbbSummary}</div>
+      otherPosted, postedSummary, otherTickets: cbbSummary, nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
   };
 
