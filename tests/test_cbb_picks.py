@@ -33,6 +33,23 @@ def context():
     return SimpleNamespace(now=NOW,games={},first={},latest={},risk_external={},risk_games={'CBB-123':fixture()['game']})
 
 class CBBPicksTests(unittest.TestCase):
+    def test_recap_dates_and_labels_actual_market_without_changing_grade(self):
+        p=fixture();p.update(result='win',actual=2,book='DraftKings',marketType='spread',direction='away',line=11.5)
+        before=copy.deepcopy(p)
+        text=cbb.result_text(p)
+        self.assertIn('CBB FINAL · Nov 03',text)
+        self.assertIn('AWAY scoring margin: +2',text)
+        self.assertNotIn('Actual:',text)
+        self.assertEqual(p,before)
+        p.update(marketType='total',actual=155)
+        self.assertEqual(cbb.result_detail(p),'Game total: 155')
+
+    def test_owner_deleted_result_is_not_planned_again(self):
+        p=fixture();p.update(result='win',actual=2,book='DraftKings',settledAt=boxscores.stamp(NOW))
+        entry=dict(id=cbb.result_key(p),deletedAt=boxscores.stamp(NOW),doNotRepost=True)
+        with patch.object(cbb,'public_rows',return_value=[p]),patch.object(cbb,'current_match',return_value=False):
+            self.assertEqual(cbb.plans(NOW,{'posts':[entry]}),[])
+
     def test_long_college_names_render_without_rewriting_fixture(self):
         import nba_trial,pick_card
         p=fixture();p['marketType']='spread';p['direction']='away';p['line']=11.5
@@ -52,7 +69,7 @@ class CBBPicksTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, patch.object(pick_card,'render') as output:
             cbb.render_result(p,Path(d))
             svg=output.call_args.args[0]
-            self.assertIn('CBB FINAL',svg);self.assertIn('LOSS',svg)
+            self.assertIn('FINAL',svg);self.assertIn('CBB LOSS',svg)
             self.assertIn('S DAKOTA ST',svg)
             self.assertNotIn('SOUTH DAKOTA STATE JACKRABBITS',svg)
 

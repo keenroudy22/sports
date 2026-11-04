@@ -171,11 +171,18 @@ def result_key(p):
     return f"receipt:cbb:{p['id']}:{signature}"
 
 
+def result_detail(p):
+    if p['marketType']=='total':return f"Game total: {p['actual']:g}"
+    team=p['game']['teams'][p['direction']]['abbreviation']
+    return f"{team} scoring margin: {p['actual']:+g}"
+
+
 def result_text(p):
     net=(100/-p['odds'] if p['odds']<0 else p['odds']/100) if p['result']=='win' else -1 if p['result']=='loss' else 0
-    return (f"{'✅' if p['result']=='win' else '❌' if p['result']=='loss' else '➖'} CBB FINAL\n"
+    day=boxscores.instant(p.get('kickoff') or p['game']['kickoff']).astimezone(gates.EASTERN).strftime('%b %d')
+    return (f"{'✅' if p['result']=='win' else '❌' if p['result']=='loss' else '➖'} CBB FINAL · {day}\n"
             f"{p['game']['teams']['away']['abbreviation']} at {p['game']['teams']['home']['abbreviation']}\n"
-            f"{selection(p)} ({p['odds']:+d}, DraftKings)\nActual: {p['actual']:g} · {net:+.2f}u")
+            f"{selection(p)} ({p['odds']:+d}, DraftKings)\n{result_detail(p)} · {net:+.2f}u")
 
 
 def queue_discord(now,log_book,root=STORE,opener=None):
@@ -249,12 +256,13 @@ def render_result(p,folder):
     key=result_key(p).replace(':','-').lower();target=Path(folder)/(key+'.png')
     if target.exists():return
     t=p['game']['teams']
-    data=dict(kind='game',featured=False,seriesLabel='CBB FINAL · '+p['result'].upper(),away=t['away']['abbreviation'],
-        home=t['home']['abbreviation'],team=t['home']['abbreviation'],away_name=t['away'].get('shortName') or t['away']['abbreviation'],home_name=t['home'].get('shortName') or t['home']['abbreviation'],
-        when='FINAL',when_caps='FINAL',market=p['marketType'],line=f"{p['line']:g}",odds=p['odds'],book=p['book'],
-        reason=f"Actual: {p['actual']:g}",units=1,side=selection(p),team_colors={team['abbreviation']:('#17241f','#eef4ec') for team in t.values()},photo=None,team_logo=None,
-        away_logo=None,home_logo=None,chance=None,needs=None,calibrated=False)
-    pick_card.render(ticket_cards.play_card(data).svg(),target)
+    net=(100/-p['odds'] if p['odds']<0 else p['odds']/100) if p['result']=='win' else -1 if p['result']=='loss' else 0
+    day=boxscores.instant(p.get('kickoff') or p['game']['kickoff']).astimezone(gates.EASTERN).strftime('%b %d')
+    matchup=' AT '.join((t[s].get('shortName') or t[s]['abbreviation']).upper() for s in ('away','home'))
+    data=dict(headline='CBB '+p['result'].upper(),row_label='CBB PICKS',net_units=net,
+        rows=[dict(title=selection(p),detail=f"{day} · {matchup} · {p['odds']:+d} {p['book']} · {result_detail(p)}",
+                   result={'win':'hit','loss':'miss'}.get(p['result'],'push'),unit_text=f'{net:+.2f}u')])
+    pick_card.render(ticket_cards.final_card(data).svg(),target)
 
 
 def queue_results(log_book,now,root=STORE):

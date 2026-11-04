@@ -19,6 +19,6 @@ test('CBB score-only payload does not fabricate a probability bar',async()=>{
 test('CBB posted picks retain exact terms, result and source separation',async()=>{
  const p={id:'CBB-pick',publishedAt:'2026-11-03T15:00Z',kickoff:'2026-11-03T23:00Z',marketType:'spread',direction:'away',line:10.5,odds:-118,book:'DraftKings',reason:'Current rotation case.',countercase:'Frontcourt mismatch.',game:{teams:{away:{name:'Away',abbreviation:'AWY'},home:{name:'Home',abbreviation:'HOM'}}},result:'loss',actual:-12};
  const html=views(async()=>({})).cbbPicks({picks:{plays:[p],win:0,loss:1,units:-1,note:'Separate from model research.'}});
- for(const text of ['AWY +10.5','-118','LOSS','-1.00u','Current rotation case.','Frontcourt mismatch.','Separate from model research.'])assert.ok(html.includes(text),text);
+ for(const text of ['AWY +10.5','-118','LOSS','-1.00u','Current rotation case.','Frontcourt mismatch.','Separate from model research.','AWY scoring margin: -12'])assert.ok(html.includes(text),text);
  assert.doesNotMatch(html,/positive EV|fair odds|guarantee/);
 });
