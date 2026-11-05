@@ -1,3 +1,27 @@
+### November5 overnight — Queens grade and hosted CI date fixture
+
+Queens +8.5 (-112 DraftKings, 1u) won 96–95. The exact ESPN final was graded
+through the normal writer at05:50:42Z (60cd26fc1); Discord Final actually sent
+05:51:01Z (54d0ec696). Hosted41976557505 succeeded with actual artifact07e9c549d.
+Public CBB is 2–0/+1.76u; live375/1440 checks and the dated Final card with
+scoring margin +1 and +0.89u were verified. No Queens Final was observed in X
+Sent; Buffer free API cap remains. The deleted SDST recap remains doNotRepost.
+
+Hosted41968788896 and41968163345 failed the same WNBA test because its scheduled
+fixture landed tomorrow when evaluated near Eastern midnight. A shared fixed
+test clock now keeps the fixture and renderer on the same Eastern date. Canonical
+5a64ce9e8 pushed on attempt3 after retaining concurrent writers; normal/clean
+2156 Python (2 skipped),309 Node, build, audits, guard and 0055 offline rehearsal
+passed (0 outside writes, 0 private reads). Hosted41978249401 is pending; next
+existing morning review must verify a successful artifact containing5a64ce9e8
+and repeat live Today/Record/CBB at375/1440 before marking shipped. No new job.
+
+Nov5 planning: 3 football, 2 NBA and 65 stored CBB games; weekend 51 CFB/13 NFL.
+No fresh NBA prop rows or exact combined quote qualified. Actual02:00Z scheduled
+NBA capture retained a PDF timeout and is too old for source completion.
+The next existing06:45/08:30 checks and08:35 task remain unobserved. Evidence:
+work/overnight-20261105-outcomes.json. Original October baseline is unchanged.
+
 ### November4 owner-reported two X plays / one website counter — verified live
 
 The one-football Best Bets counter and CBB card below the Climb made the day's
