@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 242,
+   "gamesGraded": 244,
    "gamesQuoted": 257,
-   "moneylineSnapshots": 1127,
+   "moneylineSnapshots": 1128,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,70 @@
      "season": 2027
     },
     {
-     "gamesGraded": 203,
+     "gamesGraded": 205,
      "gamesQuoted": 216,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1127,
+   "snapshots": 1128,
    "status": "capturing",
-   "totalSnapshots": 1127
+   "totalSnapshots": 1128
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "OTT",
+    "id": "14",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ott.png",
+    "name": "Ottawa Senators",
+    "shortName": "Senators"
+   },
+   "awayScore": 2,
+   "gameId": "NHL-401892644",
+   "gradedAt": "2026-11-05T04:25:12Z",
+   "home": {
+    "abbreviation": "BUF",
+    "id": "2",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/buf.png",
+    "name": "Buffalo Sabres",
+    "shortName": "Sabres"
+   },
+   "homeScore": 1,
+   "kickoff": "2026-11-05T00:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "CHI",
+    "id": "4",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/chi.png",
+    "name": "Chicago Blackhawks",
+    "shortName": "Blackhawks"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401892645",
+   "gradedAt": "2026-11-05T04:25:12Z",
+   "home": {
+    "abbreviation": "FLA",
+    "id": "26",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/fla.png",
+    "name": "Florida Panthers",
+    "shortName": "Panthers"
+   },
+   "homeScore": 5,
+   "kickoff": "2026-11-05T00:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "ANA",
@@ -2593,59 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "PHI",
-    "id": "15",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/phi.png",
-    "name": "Philadelphia Flyers",
-    "shortName": "Flyers"
-   },
-   "awayScore": 3,
-   "gameId": "NHL-401892550",
-   "gradedAt": "2026-10-22T03:15:40Z",
-   "home": {
-    "abbreviation": "BUF",
-    "id": "2",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/buf.png",
-    "name": "Buffalo Sabres",
-    "shortName": "Sabres"
-   },
-   "homeScore": 1,
-   "kickoff": "2026-10-21T23:30:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "FLA",
-    "id": "26",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/fla.png",
-    "name": "Florida Panthers",
-    "shortName": "Panthers"
-   },
-   "awayScore": 1,
-   "gameId": "NHL-401892551",
-   "gradedAt": "2026-10-22T03:15:40Z",
-   "home": {
-    "abbreviation": "OTT",
-    "id": "14",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ott.png",
-    "name": "Ottawa Senators",
-    "shortName": "Senators"
-   },
-   "homeScore": 5,
-   "kickoff": "2026-10-21T23:30:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-05T03:58:02Z"
+ "updatedAt": "2026-11-05T04:25:12Z"
 }
