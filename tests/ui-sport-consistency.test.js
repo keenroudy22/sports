@@ -1,14 +1,20 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const C=require('../site/core.js'),L=require('../site/live.js'),P=require('../site/personal.js');
+// One Eastern date for both the renderer and its scheduled fixture.
+const now=Date.parse('2026-11-02T19:00:00Z');
+class FixtureDate extends Date {
+ constructor(...args){super(...(args.length ? args : [now]));}
+ static now(){return now;}
+}
 function desk(league,files={}){
- const s={module:{exports:{}},exports:{},KRCore:C,KRLive:L,KRPersonal:P,document:{querySelector:()=>null},localStorage:{getItem:()=>null,setItem:()=>{}},console,URL,URLSearchParams,Intl,Date,Math,Map,Set,Promise,AbortController,TextEncoder,TextDecoder,setTimeout,clearTimeout,setInterval,clearInterval};s.window=s;s.self=s;s.globalThis=s;
+ const s={module:{exports:{}},exports:{},KRCore:C,KRLive:L,KRPersonal:P,document:{querySelector:()=>null},localStorage:{getItem:()=>null,setItem:()=>{}},console,URL,URLSearchParams,Intl,Date:FixtureDate,Math,Map,Set,Promise,AbortController,TextEncoder,TextDecoder,setTimeout,clearTimeout,setInterval,clearInterval};s.window=s;s.self=s;s.globalThis=s;
  for(const file of ['site/app.js','site/app-games.js'])vm.runInNewContext(fs.readFileSync(file,'utf8'),s);
  const get=async path=>files[path] || {};
  const ctx=s.module.exports.gamesContext({get,maybe:get,liveFor:()=>null});ctx.state.league=league;ctx.state.games.q='';ctx.state.games.upDay='all';
  return {ctx,views:s.KRGames(ctx)};
 }
-const kickoff=new Date(Date.now()+3600000).toISOString();
+const kickoff=new Date(now+3600000).toISOString();
 const game=(id='one')=>({id,kickoff,date:L.dayOf(kickoff),status:'scheduled',teams:{home:{name:'Home Club',abbreviation:'H'},away:{name:'Away Club',abbreviation:'A'}}});
 test('score-only sport pages share tabs, date and team search without football placeholders',async()=>{
  for(const league of ['WNBA','MLB','NHL','EPL','MLS']){
