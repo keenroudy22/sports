@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-11-05T13:39:06Z",
+  "selectedAt": "2026-11-05T16:47:39Z",
   "mode": "local",
   "rows": [
     {
@@ -14,27 +14,46 @@
       "player": "Travis Hunter",
       "stat": "recYds",
       "title": "Travis Hunter \u00b7 Over 9.5 receiving yards",
-      "text": "7/10 recorded games this season. FanDuel -114 captured; history, not a prediction.",
-      "observedAt": "2026-11-05T11:45:42Z",
-      "expiresAt": "2026-11-05T15:45:42Z",
+      "text": "7/10 recorded games this season. DraftKings -113 captured; history, not a prediction.",
+      "observedAt": "2026-11-05T15:44:41Z",
+      "expiresAt": "2026-11-05T19:44:41Z",
       "rate": 0.7,
       "sample": 10,
+      "price": -113,
+      "id": "E4"
+    },
+    {
+      "gameId": "CFB-401869964",
+      "league": "CFB",
+      "kickoff": "2026-11-06T01:00:00Z",
+      "matchup": "JMU at USM",
+      "href": "#game/CFB-401869964",
+      "kind": "trend",
+      "label": "Season trend",
+      "player": "Seth Cromwell",
+      "stat": "rushYds",
+      "title": "Seth Cromwell \u00b7 Under 86.5 rushing yards",
+      "text": "7/8 recorded games this season. FanDuel -114 captured; history, not a prediction.",
+      "observedAt": "2026-11-05T15:46:54Z",
+      "expiresAt": "2026-11-05T19:46:54Z",
+      "rate": 0.875,
+      "sample": 8,
       "price": -114,
       "id": "E2"
     },
     {
-      "gameId": "NHL-401892648",
-      "league": "NHL",
+      "gameId": "CBB-401925031",
+      "league": "CBB",
       "kind": "schedule",
       "label": "Next up",
-      "kickoff": "2026-11-06T00:00:00Z",
-      "matchup": "UTA at MTL",
-      "title": "UTA at MTL",
-      "text": "Thu 7:00 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-11-05T12:55:12Z",
-      "expiresAt": "2026-11-05T16:55:12Z",
-      "href": "#scores/NHL",
-      "id": "E6"
+      "kickoff": "2026-11-05T22:00:00Z",
+      "matchup": "MCN at UNT",
+      "title": "MCN at UNT",
+      "text": "Thu 5:00 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-11-05T15:42:58Z",
+      "expiresAt": "2026-11-05T19:42:58Z",
+      "href": "#scores/CBB",
+      "id": "E16"
     }
   ]
 }
