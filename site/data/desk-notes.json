@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-11-05T04:30:20Z",
+  "selectedAt": "2026-11-05T11:48:31Z",
   "mode": "local",
   "rows": [
     {
@@ -12,29 +12,34 @@
       "kind": "trend",
       "label": "Season trend",
       "player": "Travis Hunter",
-      "stat": "rec",
-      "title": "Travis Hunter \u00b7 Over 0.5 receptions",
-      "text": "9/10 recorded games this season. DraftKings -221 captured; history, not a prediction.",
-      "observedAt": "2026-11-05T03:59:25Z",
-      "expiresAt": "2026-11-05T07:59:25Z",
-      "rate": 0.9,
+      "stat": "recYds",
+      "title": "Travis Hunter \u00b7 Over 9.5 receiving yards",
+      "text": "7/10 recorded games this season. FanDuel -114 captured; history, not a prediction.",
+      "observedAt": "2026-11-05T11:45:42Z",
+      "expiresAt": "2026-11-05T15:45:42Z",
+      "rate": 0.7,
       "sample": 10,
-      "price": -221,
-      "id": "E4"
+      "price": -114,
+      "id": "E2"
     },
     {
-      "gameId": "NHL-401892648",
-      "league": "NHL",
-      "kind": "schedule",
-      "label": "Next up",
-      "kickoff": "2026-11-06T00:00:00Z",
-      "matchup": "UTA at MTL",
-      "title": "UTA at MTL",
-      "text": "Thu 7:00 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-11-05T03:57:47Z",
-      "expiresAt": "2026-11-05T07:57:47Z",
-      "href": "#scores/NHL",
-      "id": "E10"
+      "gameId": "CFB-401862817",
+      "league": "CFB",
+      "kickoff": "2026-11-06T00:30:00Z",
+      "matchup": "UTSA at FAU",
+      "href": "#game/CFB-401862817",
+      "kind": "trend",
+      "label": "Season trend",
+      "player": "AJ Wilson",
+      "stat": "rec",
+      "title": "AJ Wilson \u00b7 Under 2.5 receptions",
+      "text": "5/7 recorded games this season. FanDuel +116 captured; history, not a prediction.",
+      "observedAt": "2026-11-05T11:46:05Z",
+      "expiresAt": "2026-11-05T15:46:05Z",
+      "rate": 0.7142857142857143,
+      "sample": 7,
+      "price": 116,
+      "id": "E0"
     }
   ]
 }
