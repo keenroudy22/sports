@@ -127,7 +127,7 @@ def independent_check(pairs):
     return dict(games=len(by_game),gameDays=len(days),
         meanErrorImprovement=round(mean(differences),3) if differences else None,
         pricedGames=len(priced),gameBalancedShadowReturn=round(mean(priced),4) if priced else None,
-        trialEligible=False,holds=['No validated NBA prop probability or approved prop admission adapter',
+        trialEligible=False,holds=['Per-market frozen probability and official-book return proof required',
           'Independent forward evidence must support each market and model before promotion'],
         scope='Equal game weights, not independent players or a placed-bet portfolio')
 
@@ -239,7 +239,7 @@ def markdown(report):
     for row in report['segments']:
         lines.append(f"- {row['stat']} ({row['model']}): {row['observations']} comparisons / {row['games']} games; model error {row['modelMAE']:g}, quoted-line error {row['lineMAE']:g}.")
         check = row['independentCheck']
-        lines.append(f"  Equal-game check: {check['games']} games / {check['gameDays']} Eastern dates; line-error improvement {check['meanErrorImprovement']}; game-balanced frozen-price return {check['gameBalancedShadowReturn']}. No approved prop probability/admission adapter; research only.")
+        lines.append(f"  Equal-game check: {check['games']} games / {check['gameDays']} Eastern dates; line-error improvement {check['meanErrorImprovement']}; game-balanced frozen-price return {check['gameBalancedShadowReturn']}. The delivery adapter cannot approve its own probability or book-return evidence; research only.")
         price = row['pricedShadow']
         lines.append(f"  Season {row['season'] or 'unknown'} · frozen-side shadow {price['hits']}-{price['misses']}-{price['pushes']}, {price['shadowNetUnits']:+g} hypothetical units at 1u each; {price['excluded']} lack consistent side/price evidence. Not placed bets; overlapping player exposure is not a staking portfolio.")
     for row in report.get('pairedModels', []):

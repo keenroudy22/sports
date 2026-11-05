@@ -1,3 +1,18 @@
+# November4 NBA attended publishing follow-through
+
+For an admitted NBA Pick already sent to Discord during the free API hold, use
+scripts/buffer_web.py reserve_nba_pick under the normal writer lock. It reuses
+the real NBA social planner with refresh=False and current admission proof,
+original caption/card checks, spacing, quote window, queue/daily caps and the
+same append-only delivery intent as the API route. Save the log before ordinary
+Buffer UI use. Confirm Queue and Sent separately with actual observed text/time/
+X URL; never invent a Buffer ID or duplicate Discord. Ambiguous API/UI attempts,
+provider backoff, expired quotes, failed model/role/availability proof remain holds.
+This supports the existing NBA ledger, not new markets or model approval. No new
+job, API allowance, feed call or direct X automation. Frozen probability and
+adapter implementation hashes remain unchanged. Research grades stay separate
+from published picks; only finals actually observed by the evaluation clock count.
+
 # November4 NBA morning operational proof
 
 Existing cached desk health now checks actual08:30NBA captures and matching

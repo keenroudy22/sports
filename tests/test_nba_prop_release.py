@@ -127,7 +127,7 @@ class PropReleaseTests(unittest.TestCase):
   self.assertEqual(rt.queue_discord_results(log,NOW,[offer]),0)
  def test_delivery_rehearsal_uses_playbook_spacing_image_and_plays_channel_once(self):
   import buffer_post as bp,discord_post
-  from test_buffer_post import FakeBuffer
+  from tests.test_buffer_post import FakeBuffer
   offer=dict(self.candidate(),publishedAt=boxscores.stamp(NOW),series='NBA Picks')
   with patch.object(rt,'public_rows',return_value=[dict(offer,riskUnits=.5)]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(nba_capture,'step',return_value={}),patch.object(rt,'datetime',wraps=datetime) as clock:
    clock.now.return_value=NOW
@@ -213,3 +213,41 @@ class PropReleaseTests(unittest.TestCase):
   book={'posts':[{'id':play['id'],'kind':'buffer:nba-trial','nbaPick':True,'discord':{'state':'sent'}}]}
   rt.queue_discord_results(book,NOW,[play])
   self.assertIn(f"{summary['units']:+.2f}u",book['posts'][0]['discord']['result']['text'])
+ def web_fixture(self):
+  import buffer_web as web,buffer_post as bp
+  offer=dict(self.candidate(),publishedAt=boxscores.stamp(NOW),series='NBA Picks')
+  with patch.object(rt,'public_rows',return_value=[offer]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(rt,'datetime',wraps=datetime) as clock:
+   clock.now.return_value=NOW;plans=rt.social_plans(NOW,{'posts':[]},refresh=False)
+  import social_voice
+  text=bp.x_ticket_copy(social_voice.finish(plans[0][2]),'play',offer['id'])
+  entry=dict(id=offer['id'],kind='buffer:nba-trial',nbaPick=True,nbaDiscordOnly=True,
+      textHash=web.x_post.text_hash(text),queuedText=text,discord={'state':'sent','messageId':'original-discord'})
+  return offer,plans,entry
+ def test_attended_nba_handoff_preserves_discord_and_requires_actual_sent_evidence(self):
+  import buffer_web as web,buffer_post as bp
+  offer,plans,entry=self.web_fixture();book={'posts':[entry]}
+  with patch.object(bp,'rate_backoff',return_value=None),patch.object(rt,'public_rows',return_value=[offer]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(rt,'social_plans',return_value=plans) as planner,patch.object(bp,'live_card_url',return_value='https://keenroudy.com/sports/data/cards/'+offer['id'].lower()+'.png'),patch.object(bp,'ticket_art_live',return_value=True),patch.object(bp,'plain_art_live',return_value=True),patch.object(rt,'reserve_delivery',return_value=True) as intent,patch.object(nba_capture,'step') as feed,patch.object(bp,'graphql') as api:
+   self.assertIs(web.reserve_nba_pick(offer['id'],book,NOW),entry)
+   self.assertEqual(planner.call_args.kwargs,{'refresh':False});intent.assert_called_once_with(offer['id'],NOW)
+   feed.assert_not_called();api.assert_not_called()
+   self.assertNotIn('sentAt',entry);self.assertNotIn('bufferPostId',entry)
+   self.assertEqual(entry['discord']['messageId'],'original-discord');self.assertEqual(len(book['posts']),1)
+   with self.assertRaises(web.WebHold):web.reserve_nba_pick(offer['id'],book,NOW)
+  web.confirm_scheduled(entry,observed_text=entry['queuedText'],due_at=entry['dueAt'],now=NOW)
+  self.assertNotIn('sentAt',entry)
+  web.confirm_sent(entry,observed_text=entry['queuedText'],link='https://x.com/keenkooks/status/123',sent_at=boxscores.stamp(NOW+timedelta(minutes=16)),now=NOW+timedelta(minutes=17))
+  self.assertEqual(entry['webDelivery']['state'],'sent');self.assertEqual(entry['discord']['messageId'],'original-discord')
+ def test_attended_nba_rejects_unproven_changed_stale_or_ambiguous_attempts(self):
+  import buffer_web as web,buffer_post as bp
+  offer,plans,base=self.web_fixture()
+  cases=[('entry',{'bufferPostId':'unknown'}),('entry',{'deletedAt':boxscores.stamp(NOW)}),('entry',{'discord':{'state':'pending'}}),('entry',{'textHash':'changed'}),('play',{'retrievedAt':boxscores.stamp(NOW-timedelta(hours=2))}),('play',{'result':'loss'}),('held',{}),('intent',{}),('art',{}),('backoff',{}),('queue',{})]
+  for kind,changes in cases:
+   with self.subTest(kind=kind,changes=changes):
+    entry=copy.deepcopy(base);play=dict(offer);book={'posts':[entry]}
+    if kind=='entry':entry.update(changes)
+    if kind=='play':play.update(changes)
+    before=copy.deepcopy(book)
+    with patch.object(bp,'rate_backoff',return_value=kind=='backoff'),patch.object(rt,'public_rows',return_value=[play]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=kind!='held'),patch.object(rt,'social_plans',return_value=plans),patch.object(bp,'live_card_url',return_value='https://keenroudy.com/sports/data/cards/fixture.png'),patch.object(bp,'ticket_art_live',return_value=kind!='art'),patch.object(bp,'plain_art_live',return_value=True),patch.object(bp,'pending_scheduled',return_value=bp.BUFFER_NORMAL_LIMIT if kind=='queue' else 0),patch.object(rt,'reserve_delivery',return_value=kind!='intent') as intent,patch.object(nba_capture,'step') as feed,patch.object(bp,'graphql') as api:
+     with self.assertRaises(web.WebHold):web.reserve_nba_pick(offer['id'],book,NOW)
+     self.assertEqual(book,before);feed.assert_not_called();api.assert_not_called()
+     if kind!='intent':intent.assert_not_called()

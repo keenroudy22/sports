@@ -155,3 +155,54 @@ def reserve_cbb_pick(guid, log_book, now, *, opener=None):
     entry['webDelivery']=dict(state='reserved',reservedAt=gates.stamp(now),reviewedAt=gates.stamp(now),image=image,
                                evidence='CBB original ledger, current source/quote, caption and hosted-card checks')
     return entry
+
+
+def reserve_nba_pick(guid, log_book, now, *, opener=None):
+    """Attended handoff for an admitted NBA pick already delivered to Discord.
+
+    Reuse the actual NBA planner with capture disabled and its final-send
+    evidence checks. This never admits a play, calls an odds/API endpoint or
+    marks a reservation as sent. Caller holds the ordinary desk writer lock.
+    """
+    import nba_trial_runtime as nba, social_style, social_voice
+    if bp.rate_backoff(now):
+        raise WebHold('Provider backoff active; do not route around it')
+    entry=next((e for e in log_book.get('posts',[]) if e.get('id')==guid),None)
+    if (not entry or entry.get('kind')!='buffer:nba-trial' or entry.get('nbaPick') is not True
+            or entry.get('nbaDiscordOnly') is not True
+            or (entry.get('discord') or {}).get('state')!='sent'
+            or any(entry.get(k) for k in ('bufferPostId','sentAt','webDelivery','error','cancelledAt','deletedAt'))):
+        raise WebHold('Requires one public NBA play with no prior or ambiguous X attempt')
+    play=next((p for p in nba.public_rows() if p['id']==guid),None)
+    if not play or play.get('result') or not nba.review_ready(now) or not nba.current_match(play,now):
+        raise WebHold('Current NBA evidence/price/availability did not clear')
+    plans=nba.social_plans(now,log_book,refresh=False)
+    plan=next((p for p in plans if p[0]==guid and p[1]=='nba-trial'),None)
+    if not plan:
+        raise WebHold('No current NBA release plan')
+    text=bp.x_ticket_copy(social_voice.finish(plan[2]),'play',guid)
+    if (x_post.text_hash(text)!=entry.get('textHash') or x_post.x_style(text)
+            or social_style.issues(text) or x_post.tweet_length(text)>x_post.LIMIT
+            or '$' in text or re.search(r'\bbet\s*id\b',text,re.I)):
+        raise WebHold('NBA caption differs from the original public release or fails style')
+    image=bp.live_card_url(plan[4],opener)
+    if not image or not bp.ticket_art_live(image) or not bp.plain_art_live(image):
+        raise WebHold('NBA original branded card is not verified live')
+    others=dict(log_book,posts=[e for e in log_book.get('posts',[]) if e is not entry])
+    due=plan[3]
+    web_slots=sum(1 for e in others['posts'] if not e.get('bufferPostId')
+                  and not any(e.get(k) for k in ('sentAt','cancelledAt','deletedAt','error'))
+                  and (e.get('webDelivery') or {}).get('state') in ('reserved','scheduled'))
+    if (due<=now or due>=min(gates.when(play['kickoff'])-timedelta(minutes=15),
+                            gates.when(play['retrievedAt'])+timedelta(hours=2))
+            or bp.day_count(others,now.astimezone(gates.EASTERN).date())>=bp.MAX_PER_DAY
+            or bp.pending_scheduled(others,now)+web_slots>=bp.BUFFER_NORMAL_LIMIT):
+        raise WebHold('No current NBA release capacity or quote window')
+    # Same append-only at-most-once intent used by the API publisher. An old
+    # unknown create attempt cannot become a second attempt through the UI.
+    if not nba.reserve_delivery(guid,now):
+        raise WebHold('Existing or ambiguous NBA delivery intent')
+    entry.update(dueAt=gates.stamp(due),queuedText=text)
+    entry['webDelivery']=dict(state='reserved',reservedAt=gates.stamp(now),reviewedAt=gates.stamp(now),
+        image=image,evidence='NBA original ledger, frozen proof, current sources, caption and hosted-card checks')
+    return entry
