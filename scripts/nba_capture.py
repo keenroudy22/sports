@@ -64,8 +64,9 @@ class Budget:
                 result = self.fetch(url)
             else:
                 request=(Request(url,headers={
-                    'User-Agent':'Mozilla/5.0 (compatible; KooknResearch/1.0; +https://keenroudy.com/sports/)',
-                    'Accept':'text/html,application/xhtml+xml' if html else 'application/pdf'}) if html or raw else url)
+                    'User-Agent':'Mozilla/5.0 (compatible; KooknResearch/1.0; +https://keenroudy.com/sports/)' if html else 'Mozilla/5.0',
+                    'Accept':'text/html,application/xhtml+xml' if html else 'application/pdf',
+                    **({'Cache-Control': 'no-cache'} if html else {})}) if html or raw else url)
                 # Official PDFs can outlive the normal short JSON deadline.
                 # Give the single approved PDF attempt more of the existing
                 # capture window, never another request or a larger window.
