@@ -1496,7 +1496,7 @@
     players: ['Players and matchups', "Each player's recent games against the current line, by matchup."],
     news: ['Injuries and news', 'ESPN injury list and status changes, newest first.'] };
   const researchHead = mode => {
-    const [title, sub] = RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our estimated chance with how often the posted price needs to win. ✓ marks a line that passes our price check. Research is not a best bet unless it is labeled <span class="badge best">Best bet</span>.'];
+    const [title, sub] = RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
     return `${head('Research', title, sub)}
       <div class="toolbar"><div class="chip-scroll">${segLinks([['#research/lines', 'Kook’n vs. the Book', 'lines'], ['#research/trends', 'Trends', 'trends'], ['#trends?period=1Q&sport=NFL', '1Q Heaters', 'quarter'], ['#trends?period=full&kind=alternate&sport=ALL', 'Alternates', 'alternate'], ['#research/players', 'Players', 'players'], ['#research/news', 'News', 'news']], mode)}</div></div>`;
   };
@@ -1912,9 +1912,13 @@
     const sideLine = m.spread == null ? '' : ` ${C.spreadText('', raw.side === 'home' ? m.spread : -m.spread).trim()}`;
     const ourSide = (text, chance, caution) => { const tone = chance == null ? '' : C.leanTone(chance, Boolean(v2.sparse));
       return !tone ? '<span class="muted">No lean</span>' : `<span class="lean ${tone}">${esc(text)} · ${pctText(chance)}${tone === 'lean-mild' ? ' · slight' : ''}${caution ? ' · higher bar' : ''}</span>`; };
-    const lines = hasScore || g.fcs || !isNum(v2.margin) ? '' : `<div class="pc-lines"><span class="h"></span><span class="h">Mine</span><span class="h">Market</span><span class="h">${esc(opts.sideLabel || 'My side')}</span>
-      <span class="k">Spread</span><span class="num">${esc(C.modelSpread(g.home.abbr, g.away.abbr, v2.margin))}</span><span class="num">${esc(favSpread(g.home.abbr, g.away.abbr, m.spread))}</span><span>${lean.side ? ourSide(`${sideTeam.abbr}${sideLine}`, lean.side.chance, raw.spreadCaution) : '<span class="muted">No lean</span>'}</span>
-      <span class="k">Total</span><span class="num">${esc(C.fixed(v2.total, 1))}</span><span class="num">${esc(C.fixed(m.total, 1))}</span><span>${lean.total ? ourSide(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalCaution) : '<span class="muted">No lean</span>'}</span></div>`;
+    const spreadGap = isNum(m.spread) ? v2.margin + m.spread : null;
+    const totalGap = isNum(m.total) && isNum(v2.total) ? v2.total - m.total : null;
+    const spreadDiff = spreadGap == null ? '—' : Math.abs(spreadGap) < .05 ? 'Same' : `${C.fixed(Math.abs(spreadGap), 1)} toward ${spreadGap > 0 ? g.home.abbr : g.away.abbr}`;
+    const totalDiff = totalGap == null ? '—' : Math.abs(totalGap) < .05 ? 'Same' : C.signed(totalGap, 1);
+    const lines = hasScore || g.fcs || !isNum(v2.margin) ? '' : `<div class="pc-lines"><span class="h"></span><span class="h">${opts.compact ? 'Kook’n' : 'Mine'}</span><span class="h">${opts.compact ? 'Book' : 'Market'}</span><span class="h">${esc(opts.compact ? 'Difference' : opts.sideLabel || 'My side')}</span>
+      <span class="k">Spread</span><span class="num">${esc(C.modelSpread(g.home.abbr, g.away.abbr, v2.margin))}</span><span class="num">${esc(favSpread(g.home.abbr, g.away.abbr, m.spread))}</span><span>${opts.compact ? esc(spreadDiff) : lean.side ? ourSide(`${sideTeam.abbr}${sideLine}`, lean.side.chance, raw.spreadCaution) : '<span class="muted">No lean</span>'}</span>
+      <span class="k">Total</span><span class="num">${esc(C.fixed(v2.total, 1))}</span><span class="num">${esc(C.fixed(m.total, 1))}</span><span>${opts.compact ? esc(totalDiff) : lean.total ? ourSide(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalCaution) : '<span class="muted">No lean</span>'}</span></div>`;
     const gap = gapScore(g);
     /* No generic caution (owner, Oct 7): a specific, data-supplied reason arrives through opts.extra when one applies. */
     const note = g.fcs ? 'FBS vs FCS: my number is not reliable here.' : hasScore || g.league === 'NBA' ? '' : v2.sparse ? 'Thin history: a team has fewer than three games, so this leans on last season.' : '';
@@ -2021,8 +2025,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-215605accdea';
-  const GAMES_ASSET = 'app-games.js?v=sha256-190966798f2c';
+  const MORE_ASSET = 'app-more.js?v=sha256-0f6fd52f0227';
+  const GAMES_ASSET = 'app-games.js?v=sha256-595c48c9f063';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

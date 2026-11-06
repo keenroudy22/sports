@@ -358,7 +358,7 @@
     const tabs = `<div class="toolbar"><div class="chip-scroll">${segLinks([['#record', 'Best bets', 'official'], ['#record/fun', 'Fun', 'fun'], ['#record/climb', 'Climb', 'climb'], ['#record/model', 'Model', 'model'], ['#record/trials', 'Trials', 'trials']], tab)}</div></div>`;
     const nba = state.league === 'ALL' && ['official','model','trials'].includes(tab) ? await maybe('app/nba.json') : null;
     const nbaRecord = nba ? `<section class="card" id="record-nba" style="margin-bottom:16px"><h2>NBA record</h2><p>${esc(nba.trial?.record?.win || 0)}–${esc(nba.trial?.record?.loss || 0)} · ${esc(units(Number(nba.trial?.record?.units || 0)))} · ${esc(nba.trial?.record?.graded || 0)} graded · ${esc((nba.trial?.plays || []).filter(p => !p.result).length)} open</p><p class="small muted">Posted NBA plays only. Separate from the football totals and paper-model results below.</p><a href="#record?sport=NBA">Every NBA play ›</a></section>` : state.league === 'ALL' && ['official','model','trials'].includes(tab) ? '<p class="small muted">NBA record is unavailable right now; it is not included in the football totals.</p>' : '';
-    const top = `${head('The record', 'Every play, graded in public', `Win or lose, at the price and book we posted. Nothing is deleted.${state.league !== 'ALL' ? ` Showing ${esc(LEAGUE_NAME[state.league])}.` : ''}`)}${nbaRecord}`;
+    const top = `${head('The record', 'Every play, graded in public', `Every result at its original line, price, and stake.${state.league !== 'ALL' ? ` Showing ${esc(LEAGUE_NAME[state.league])}.` : ''}`)}${nbaRecord}`;
     const clvById = new Map(((board || {}).picks || {}).rows?.map(r => [r.id, r.clv]) || []);
     const pickers = !showSeason && !hasPlayoffs ? '' : `<div class="toolbar">${showSeason ? `<label class="sr" for="rs">Season</label><select id="rs" class="select" data-select="season">${[['current', curSeasonLabel], ...archive.seasons.filter(v => curSeasons.length !== 1 || String(v) !== String(curSeasons[0])).map(v => [String(v), String(v)]), ['all', 'All seasons']].map(([v, l]) => `<option value="${esc(v)}"${String(archive.selectedSeason) === v ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>` : ''}
       ${hasPlayoffs ? `<label class="sr" for="rp">Stage</label><select id="rp" class="select" data-select="phase">${[['current', curPhaseLabel], ['regular', 'Regular season'], ['playoffs', 'Playoffs'], ['all', 'Full season']].filter(([v]) => curPhases.length !== 1 || v !== curPhases[0]).map(([v, l]) => `<option value="${v}"${archive.selectedPhase === v ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>` : ''}</div>
@@ -558,10 +558,10 @@
 
   views.more = async () => `${head('More', 'Tools and help', '')}
     ${moreGroup('New here', `<a href="#start"><span><b>Start here</b><br><span class="small muted">How to read a best bet in 30 seconds, plus the glossary</span></span><small>→</small></a>
-      <a href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener"><span><b>Free Kook'n Discord</b><br><span class="small muted">Best bets land here about 10–15 minutes before X</span></span><small>↗</small></a>
+      <a href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener"><span><b>Free Kook'n Discord</b><br><span class="small muted">Picks, results, and slate discussion</span></span><small>↗</small></a>
       <a href="https://x.com/keenkooks" target="_blank" rel="noopener"><span><b>Follow on X</b></span><small>@keenkooks ↗</small></a>`)}
     ${moreGroup('Yours', `<a href="#saved"><span><b>Saved</b></span><small>${state.watchlist.length} saved →</small></a>
-      <a href="#ticket"><span><b>My ticket</b><br><span class="small muted">A personal draft, never a pick</span></span><small>${state.ticket.length} legs →</small></a>`)}
+      <a href="#ticket"><span><b>My ticket</b><br><span class="small muted">Save and compare legs</span></span><small>${state.ticket.length} legs →</small></a>`)}
     ${moreGroup('Tools', `<a href="#arbs"><span><b>Arb calculator</b><br><span class="small muted">Exact two-book stake math</span></span><small>→</small></a>`)}
     ${moreGroup('Help', `<a href="#feedback"><span><b>Feedback</b></span><small>→</small></a>`)}`;
   views.glossary = async () => views.start();
