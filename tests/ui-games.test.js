@@ -180,6 +180,8 @@ test('the game page prints every driver under #why, a note only when a flag fire
   assert.match(blowout, /Blowout · gap 4/);
   assert.match(blowout, /<span class="h">My number<\/span>/);
   assert.match(blowout, /My number vs Vegas/);
+  assert.match(blowout, /Kook’n Prediction/);
+  assert.match(blowout, /Kook’n line/);
   assert.match(blowout, /Research lean only — not a bet/);
   assert.match(blowout, /My chance <b>51\.8%<\/b>/);
   assert.match(blowout, /Price needs <b>53\.3%<\/b>/);

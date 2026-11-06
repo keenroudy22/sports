@@ -495,11 +495,11 @@
     const gap = (detail.marketRead || fromSlate.marketRead || {}).ourGap || {};
     const caution = g.fcs ? 'FBS vs FCS: my number is not reliable here.' : model.sparse ? 'Thin history: one of these teams has fewer than three games this season, so this forecast leans on last season and the league average.' : '';
     const gapWords = r => r && r.gapsThisLargeVsClose ? `${Number(r.gapsThisLargeVsClose[0]).toLocaleString('en-US')}–${Number(r.gapsThisLargeVsClose[1]).toLocaleString('en-US')}` : null;
-    const modelBlock = `<div class="card"><div class="vs" style="grid-template-columns:auto 1fr 1fr;font-size:15px"><span class="h"></span><span class="h">My number</span><span class="h">${g.market ? `Book line${bookLabel(m.book) ? ` (${esc(bookLabel(m.book))})` : ''}` : 'No book line recorded'}</span>
+    const modelBlock = `<div class="card"><div class="vs" style="grid-template-columns:auto 1fr 1fr;font-size:15px"><span class="h"></span><span class="h">Kook’n line</span><span class="h">${g.market ? `Book line${bookLabel(m.book) ? ` (${esc(bookLabel(m.book))})` : ''}` : 'No book line recorded'}</span>
       <span class="k">Score</span><span class="num">${esc(g.away.abbr)} ${esc(C.fixed(model.away))} – ${esc(g.home.abbr)} ${esc(C.fixed(model.home))}</span><span class="muted">–</span>
       <span class="k">Favorite</span><span class="num">${esc(fav2)}</span><span class="num">${esc(mFav)}</span>
-      <span class="k">Spread</span><span class="num">${esc(C.modelSpread(g.home.abbr, g.away.abbr, model.margin))}</span><span class="num">${esc(favSpread(g.home.abbr, g.away.abbr, m.spread))}${m.spreadOpen != null && m.spreadOpen !== m.spread ? ` <span class="muted small">(opened ${esc(favSpread(g.home.abbr, g.away.abbr, m.spreadOpen))})</span>` : ''}</span>
-      <span class="k">Total</span><span class="num">${esc(C.fixed(model.total))}</span><span class="num">${esc(C.fixed(m.total))}${m.totalOpen != null && m.totalOpen !== m.total ? ` <span class="muted small">(opened ${esc(m.totalOpen)})</span>` : ''}</span></div>
+      <span class="k">Spread</span><span class="num">${esc(C.modelSpread(g.home.abbr, g.away.abbr, model.margin))}</span><span class="num">${esc(favSpread(g.home.abbr, g.away.abbr, m.spread))}${isNum(m.spreadOdds) ? ` <span class="muted small">(${esc(g.home.abbr)} ${esc(oddsText(m.spreadOdds))})</span>` : ''}${m.spreadOpen != null && m.spreadOpen !== m.spread ? ` <span class="muted small">(opened ${esc(favSpread(g.home.abbr, g.away.abbr, m.spreadOpen))})</span>` : ''}</span>
+      <span class="k">Total</span><span class="num">${esc(C.fixed(model.total))}</span><span class="num">${esc(C.fixed(m.total))}${isNum(m.overOdds) && isNum(m.underOdds) ? ` <span class="muted small">(O ${esc(oddsText(m.overOdds))} / U ${esc(oddsText(m.underOdds))})</span>` : ''}${m.totalOpen != null && m.totalOpen !== m.total ? ` <span class="muted small">(opened ${esc(m.totalOpen)})</span>` : ''}</span></div>
       ${range ? `<p class="chart-cap">${esc(rangeWords(g, range))}</p>` : ''}
       ${gapWords(gap.margin) || gapWords(gap.total) ? `<p class="chart-cap">In past-season backtests, ${gapWords(gap.margin) ? `spread gaps at least this large went ${gapWords(gap.margin)} against the closing line` : ''}${gapWords(gap.margin) && gapWords(gap.total) ? ', and ' : ''}${gapWords(gap.total) ? `total gaps went ${gapWords(gap.total)}` : ''}. Not a live record, and a gap is not a bet. <a href="#record/model">Model record →</a></p>` : ''}
       ${caution ? `<p class="caution" style="margin-top:6px">${esc(caution)}</p>` : ''}${why && !final ? `<p class="small" style="margin-top:8px"><a href="#game/${esc(g.id)}#why">Why my number differs ›</a></p>` : ''}</div>`;
@@ -620,18 +620,30 @@
     /* Touchdown watch: recent role snapshots only, before kickoff. */
     const tdw = pregame ? (detail.scorerResearch || []).filter(r => r.roleSnapshotAt && now - Date.parse(r.roleSnapshotAt) >= 0 && now - Date.parse(r.roleSnapshotAt) <= 7 * 86400000 && (r.games ?? 0) >= 3).slice(0, 5) : [];
     const tdAt = tdw.map(r => r.roleSnapshotAt).sort().pop();
-    const tdHtml = tdw.length ? section('Touchdown watch', `<div class="board">${tdw.map(r => `<div class="row-main" style="grid-template-columns:minmax(0,2fr) minmax(0,1.2fr)"><div class="row-title with-art">${headshot(g.league, r.athleteId, 'sm')}<div>${r.athleteId ? `<a href="#player/${esc(g.league)}/${esc(r.athleteId)}"><b>${esc(r.player)}</b></a>` : `<b>${esc(r.player)}</b>`}<span>${esc(r.redZone)} red-zone carries + targets · ${esc(r.inside10)} inside the 10</span></div></div><div class="small muted">${esc(r.touchdowns)} TDs in ${esc(r.games)} games · ${esc(r.priceStatus || 'no verified TD price')}</div></div>`).join('')}</div>`, '', `Scoring opportunity, not a touchdown probability or a play. Role data as of ${esc(tdAt ? ago(tdAt) : '–')}. Verify the latest availability.`) : '';
+    const touchdownSide = side => {
+      const rows = tdw.filter(r => r.side === side);
+      return `<div class="card"><h3>${esc(g[side].name)}</h3>${rows.length ? rows.map(r =>
+        `<p class="small"><a href="#player/${esc(g.league)}/${esc(r.athleteId)}"><b>${esc(r.player)}</b></a><br>
+        ${esc(r.redZone)} red-zone carries + targets · ${esc(r.inside10)} inside the 10<br>
+        ${esc(r.touchdowns)} TDs in ${esc(r.games)} games · ${esc(r.priceStatus || 'No verified TD price')}</p>`
+      ).join('') : '<p class="small muted">No verified opportunity rows.</p>'}</div>`;
+    };
+    const tdHtml = tdw.length ? section('Touchdown opportunities', `<div class="grid two">${touchdownSide('away')}${touchdownSide('home')}</div>`, '',
+      `Scoring opportunity research. Role data as of ${esc(ago(tdAt))}.`) : '';
+    const sheet = pregame ? anchored('model-vs', section("Kook’n Prediction", modelBlock,
+      `<a class="more" href="#game/${esc(g.id)}#model-vs" data-copy-link>Copy matchup link</a>`,
+      'Projected score, spread and total compared with the captured market.')) : '';
 
-    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${postedHtml}${linePreview}${header}${quickNumber}${actions}${liveStamp(liveNow.refreshed)}
+    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${postedHtml}${linePreview}${header}${quickNumber}${sheet}${tdHtml}${actions}${liveStamp(liveNow.refreshed)}
       ${finalHtml}
       ${whySection(g, why, final)}
       ${pregame ? anchored('lines-we-like', section('Lines we like', favHtml, why && !final ? `<a class="more" href="#game/${esc(g.id)}#why">Why my number differs →</a>` : '', fav.length ? 'Current prices where my estimated chance is above what the price needs. Research, not extra best bets.' : 'Research held until the stated check clears. Not an official play.')) : ''}
       ${edgesHtml ? section('Matchup lines', edgesHtml, '<span class="small muted">Research, not posted plays</span>', 'Our projection, this-season hit rate at the exact line, and the opponent defense in one view. College game-script cautions rank lower.') : ''}
       ${othersHtml ? `<section class="section">${othersHtml}</section>` : ''}
-      ${final && detail.final ? '' : anchored('model-vs', section('Model vs market', modelBlock))}
+      ${pregame || (final && detail.final) ? '' : anchored('model-vs', section('Model vs market', modelBlock))}
       ${upsetHtml}${trendsHtml}${depthHtml}${projHtml}${alternateHtml}${matchupHtml}
       ${section('Recent form', `<div class="grid two">${form('away')}${form('home')}</div>`)}
-      ${injuryHtml}${tdHtml}`;
+      ${injuryHtml}`;
   };
   views.team = async route => {
     const league = route.league;
