@@ -3511,6 +3511,20 @@ def release_private(now, log=log, only=None, review_only=False):
         starts = sorted(gates.when(ctx.games[g]['kickoff']) for g in pick.get('gameIds') or [] if g in ctx.games)
         if not key or not starts or row.get('held'):
             continue
+        row = normalize_private_stake(row, ctx, now)
+        pick = dict(row.get('pick') or {})
+        refusal = private_release_refusal(row, ctx, now)
+        if refusal:
+            release_queue.remove(CONF, key)
+            if not row.get('discordSentAt') and not row.get('publicPath'):
+                ctx.first.pop(key, None)
+                ctx.latest.pop(key, None)
+            if row.get('discordSentAt') or row.get('publicPath'):
+                log(f'release: {key} X recovery closed; original public play retained: {refusal}')
+            else:
+                log(f'release: {key} withdrawn before public release: {refusal}')
+                alert("Kook'n play withdrawn before release", f'{key}: {refusal}')
+            continue
         if (not review_only and row.get('discordSentAt') and row.get('publicPath')
                 and not row.get('bufferPostId')):
             # The public release is complete. An unchanged X transport hold
@@ -3520,17 +3534,6 @@ def release_private(now, log=log, only=None, review_only=False):
             if blocked:
                 log(f'buffer: {key} already released on Discord/site; X transport held: {blocked}')
                 continue
-        row = normalize_private_stake(row, ctx, now)
-        pick = dict(row.get('pick') or {})
-        refusal = private_release_refusal(row, ctx, now)
-        if refusal:
-            release_queue.remove(CONF, key)
-            if not row.get('discordSentAt') and not row.get('publicPath'):
-                ctx.first.pop(key, None)
-                ctx.latest.pop(key, None)
-            log(f'release: {key} withdrawn before public release: {refusal}')
-            alert("Kook'n play withdrawn before release", f'{key}: {refusal}')
-            continue
         kickoff = starts[0]
         target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
         due = max(target, now + post_windows.DISCORD_PLAY_LEAD)
