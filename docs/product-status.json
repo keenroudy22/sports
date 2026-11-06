@@ -43,7 +43,7 @@
       "title": "Remove full-suite per-ticket delay and verify early delivery",
       "status": "observing",
       "owner": "agent",
-      "next": "At the existing morning refresh verify fresh exact offers and an attended X window before expiry. Preserve both missed Nov5 X offers and their public grades.",
+      "next": "At the existing pregame review, check for a fresh Nevada total quote. On the next morning slate, confirm Buffer Sent before 08:30 ET. Preserve all expired offers and public grades.",
       "doneWhen": "Runtime release checks are bounded and pass; full deployment suites remain; all qualifying queued plays have actual Discord/site/X receipts or exact refusals, with morning latency measured.",
       "evidence": "Nov6 Today expiry fix 4d85eb53e/42174139755 SUCCESS, verified03191bc58f, live JS d8b13566cff3 and 375/1440 clean. Normal/clean 2156 Python (2 skipped)/309 Node; all release gates. Public Nov5 Wilson win/Thomas loss +0.16u. Wilson Discord Final 05:59:55Z."
     },
