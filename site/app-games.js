@@ -75,7 +75,11 @@
     const stat=s=>!s || !s.games ? 'No recorded games' : `${esc(s.wins)}–${esc(s.losses)} · ${esc(s.ppg)} scored / ${esc(s.allowed)} allowed · ${esc(s.games)} games`;
     const p=g.projection,h=g.teams.home,a=g.teams.away;
     const stats=['away','home'].map(side=>{const t=g.teams[side],s=(g.stats || {})[side] || {},c=s.current || {},prior=s.prior || {};return `<div><b>${esc(name(t))}</b><p class="small">This season · ${esc(season(c.season))}: ${stat(c)}</p><p class="small muted">Prior season · ${esc(season(prior.season))}: ${stat(prior)}</p></div>`;}).join('');
-    const first=g.firstTotal ? `<p class="small muted">First recorded total: ${esc(g.firstTotal.line)} · ${esc(g.firstTotal.book)} · ${esc(whenShort(g.firstTotal.capturedAt))}. Historical quote, not a live offer.</p>` : '';
+    const quote = g.firstTotal;
+    const difference = isNum(p.total) && isNum(quote?.line) ? C.fixed(p.total - quote.line, 1) : null;
+    const first = `<div class="pc-lines nba-comparison"><span class="h"></span><span class="h">Kook’n</span><span class="h">Book</span><span class="h">Difference</span>
+      <span class="k">Total</span><span>${esc(C.fixed(p.total, 1))}</span><span>${quote ? esc(quote.line) : 'Unavailable'}</span><span>${difference === null ? '—' : esc(difference)}</span></div>
+      ${quote ? `<p class="small muted">First recorded total · ${esc(quote.book)} · ${esc(whenShort(quote.capturedAt))}. Historical quote, not a live offer.</p>` : ''}`;
     const team=t=>({id:t.id,name:name(t),abbr:t.abbreviation || name(t),logo:t.logo});
     return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link:false,ranks:false,barLabel:'Baseline model win chance',extra:`<p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${first}<details><summary>Team scoring stats</summary>${stats}</details>`});
   };
@@ -706,7 +710,7 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
     const p = g.projection || {}, home = g.teams.home.abbreviation, away = g.teams.away.abbreviation;
     const margin = isNum(p.margin) ? p.margin : isNum(p.home) && isNum(p.away) ? Math.round((p.home-p.away)*10)/10 : null;
     const gap = n => Math.abs(n) < .05 ? 'Same number' : `${C.fixed(Math.abs(n),1)} ${n > 0 ? 'higher' : 'lower'}`;
-    const comparison = g.status !== 'scheduled' ? '' : `<div class="pc-lines nba-comparison"><span class="h"></span><span class="h">Mine</span><span class="h">Book</span><span class="h">Difference</span>
+    const comparison = g.status !== 'scheduled' ? '' : `<div class="pc-lines nba-comparison"><span class="h"></span><span class="h">Kook’n</span><span class="h">Book</span><span class="h">Difference</span>
       <span class="k">Spread</span><span>${margin == null ? '—' : esc(C.modelSpread(home,away,margin))}</span><span>${spread ? esc(C.modelSpread(home,away,-spread.homeLine)) : 'Unavailable'}</span><span>${spread && margin != null ? Math.abs(margin+spread.homeLine) < .05 ? 'Same number' : `${esc(C.fixed(Math.abs(margin+spread.homeLine),1))} toward ${esc(margin+spread.homeLine > 0 ? home : away)}` : '—'}</span>
       <span class="k">Total</span><span>${isNum(p.total) ? esc(C.fixed(p.total,1)) : '—'}</span><span>${quote ? esc(quote.line) : 'Unavailable'}</span><span>${quote && isNum(p.total) ? esc(gap(p.total-quote.line)) : '—'}</span></div>`;
     const prices = [spread ? `${home} ${C.signed(spread.homeLine)} (${oddsText(spread.home)}) · ${away} ${C.signed(spread.awayLine)} (${oddsText(spread.away)}) · ${bookLabel(spread.book)} · ${whenShort(spread.retrievedAt)}` : '',

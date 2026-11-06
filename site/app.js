@@ -1498,7 +1498,7 @@
   const researchHead = mode => {
     const [title, sub] = RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our estimated chance with how often the posted price needs to win. ✓ marks a line that passes our price check. Research is not a best bet unless it is labeled <span class="badge best">Best bet</span>.'];
     return `${head('Research', title, sub)}
-      <div class="toolbar"><div class="chip-scroll">${segLinks([['#research/lines', 'Kook’n vs. the Book', 'lines'], ['#research/trends', 'Trends', 'trends'], ['#research/players', 'Players', 'players'], ['#research/news', 'News', 'news']], mode)}</div></div>`;
+      <div class="toolbar"><div class="chip-scroll">${segLinks([['#research/lines', 'Kook’n vs. the Book', 'lines'], ['#research/trends', 'Trends', 'trends'], ['#trends?period=1Q&sport=NFL', '1Q Heaters', 'quarter'], ['#trends?period=full&kind=alternate&sport=ALL', 'Alternates', 'alternate'], ['#research/players', 'Players', 'players'], ['#research/news', 'News', 'news']], mode)}</div></div>`;
   };
   /* A link's filters apply once, when it is opened. After that the reader's own choices win, even on refresh. */
   let appliedHash = null;
@@ -1518,6 +1518,7 @@
       if (route.show === 'all' || route.show === 'value') state.board.show = route.show;
     }
     if (state.league === 'NBA') return (await ensureGames()).nbaToday({ research: true });
+    if (state.league === 'CBB' && route.mode === 'lines') return researchHead(route.mode) + await (await ensureGames()).cbbToday();
     const today = await get('app/today.json');
     indexGames(today);
     const top = researchHead(route.mode);
@@ -2021,7 +2022,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-215605accdea';
-  const GAMES_ASSET = 'app-games.js?v=sha256-296717577e23';
+  const GAMES_ASSET = 'app-games.js?v=sha256-190966798f2c';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
