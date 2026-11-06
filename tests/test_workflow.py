@@ -16,6 +16,22 @@ WORKFLOW = (ROOT / '.github' / 'workflows' / 'publish.yml').read_text(encoding='
 
 
 class WorkflowTests(unittest.TestCase):
+    def test_push_has_a_fast_current_main_publish_lane(self):
+        fast = WORKFLOW[WORKFLOW.index('  push-publish:'):WORKFLOW.index('  publish:')]
+        self.assertIn("if: github.event_name == 'push'", fast)
+        self.assertIn('ref: main', fast)
+        for command in ('materialize_research', 'scoreboard', 'market_lines', 'build_site', 'feed'):
+            self.assertIn(f'python scripts/{command}.py', fast)
+        self.assertIn('python scripts/publication_guard.py', fast)
+        self.assertIn('actions/upload-pages-artifact@', fast)
+        self.assertIn('actions/deploy-pages@', fast)
+        self.assertNotIn('Preserve the public record', fast)
+        for capture in ('refresh.py', 'sports_refresh.py', 'odds_api.py', 'prop_odds.py', 'sharp_odds.py'):
+            self.assertNotIn(capture, fast)
+        self.assertIn("'football-pages-push'", WORKFLOW)
+        self.assertIn("'football-pages-refresh'", WORKFLOW)
+        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' }}", WORKFLOW)
+
     def test_ticket_push_does_not_wait_for_new_capture(self):
         capture = ('refresh', 'sports_refresh', 'boxscores', 'research_context',
                    'depth_charts', 'forecast', 'venues', 'weather', 'prop_lines',

@@ -163,3 +163,26 @@ def update(conf, key, **changes):
     row.update(changes)
     save(conf, book)
     return row
+
+
+def retry_caption_guards(conf, version, log=print):
+    """Reopen each caption hold once for the current caption implementation.
+
+    A guard failure must remain fail-closed, but it cannot become a permanent
+    tombstone after the caption code is repaired.  The version is written
+    before retrying; if the same implementation still fails, the row is held
+    again and ordinary five-minute workers will not loop on it.
+    """
+    book = load(conf)
+    retried = []
+    for row in book['plays']:
+        if (not row.get('held') or row.get('holdReason') != 'caption guard'
+                or row.get('captionGuardVersion') == version):
+            continue
+        row.update(held=False, heldAt=None, holdReason=None, caption=None,
+                   captionGuardVersion=version)
+        retried.append(row.get('id'))
+        log(f"private caption hold reopened under {version}: {row.get('id')}")
+    if retried:
+        save(conf, book)
+    return retried

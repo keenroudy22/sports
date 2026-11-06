@@ -115,6 +115,7 @@ def slot_for(now, forced=None):
 
 
 RUN_LOCK_WAIT = 15 * 60      # seconds a scheduled run waits out a price check before giving up its slot
+CAPTION_GUARD_VERSION = '2026-11-06-sourced-reason-1'
 
 
 class Lock:
@@ -3479,6 +3480,7 @@ def release_private(now, log=log, only=None, review_only=False):
     import release_queue
     import x_post
 
+    release_queue.retry_caption_guards(CONF, CAPTION_GUARD_VERSION, log=log)
     book = release_queue.load(CONF)
     if not book.get('plays'):
         return []
@@ -3590,7 +3592,8 @@ def release_private(now, log=log, only=None, review_only=False):
         from social_copy import x_ticket_copy, AGE_VERSION
         text = x_ticket_copy(str(row.get('caption') or '').strip(), 'play', key, pick)
         if x_post.guard(text, pick, x_post.reason_in(text), now=now):
-            release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason='caption guard')
+            release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason='caption guard',
+                                 captionGuardVersion=CAPTION_GUARD_VERSION)
             log(f'release: {key} held: caption guard failed')
             continue
 

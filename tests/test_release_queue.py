@@ -180,6 +180,27 @@ class ReleaseQueueTests(unittest.TestCase):
             release_queue.remove(root, 'one')
             self.assertEqual([row['id'] for row in release_queue.load(root)['plays']], ['two'])
 
+    def test_caption_guard_reopens_once_per_caption_implementation(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            release_queue.save(root, {'plays': [
+                {'id': 'old-caption', 'held': True, 'heldAt': 'earlier',
+                 'holdReason': 'caption guard', 'caption': 'Reasonless caption'},
+                {'id': 'same-version', 'held': True, 'holdReason': 'caption guard',
+                 'captionGuardVersion': 'v2', 'caption': 'Still invalid'},
+                {'id': 'hard-news', 'held': True, 'holdReason': 'starter ruled out',
+                 'caption': 'Do not reopen'},
+            ]})
+            messages = []
+            self.assertEqual(release_queue.retry_caption_guards(root, 'v2', messages.append), ['old-caption'])
+            rows = {row['id']: row for row in release_queue.load(root)['plays']}
+            self.assertFalse(rows['old-caption']['held'])
+            self.assertIsNone(rows['old-caption']['caption'])
+            self.assertEqual(rows['old-caption']['captionGuardVersion'], 'v2')
+            self.assertTrue(rows['same-version']['held'])
+            self.assertTrue(rows['hard-news']['held'])
+            self.assertEqual(release_queue.retry_caption_guards(root, 'v2', messages.append), [])
+
     def test_expired_unreleased_admission_reopens_for_fresh_selection(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

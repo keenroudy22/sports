@@ -27,10 +27,84 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: football-pages
-  cancel-in-progress: false
+  # A time-sensitive public-play push must not sit behind a long scheduled
+  # capture.  Refreshes keep their append-only serialization; a newer push
+  # supersedes an older push and both paths still deploy from current main.
+  group: ${{ github.event_name == 'push' && 'football-pages-push' || 'football-pages-refresh' }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 jobs:
+  push-publish:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # A newer desk push supersedes an older one. Always publish current
+          # main so the fast lane cannot put an older ticket back on the site.
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Check time-sensitive publication rules
+        run: >-
+          python -m unittest
+          tests.test_integrity tests.test_build_site tests.test_feed
+          tests.test_payload_budget tests.test_record_audit
+          tests.test_publication_guard tests.test_workflow
+      - name: Compare complete reports with the pre-push record
+        if: github.event.before != '0000000000000000000000000000000000000000'
+        env:
+          RECORD_BASE: ${{ github.event.before }}
+        run: python scripts/integrity.py --verify-base "$RECORD_BASE"
+      - name: Check browser scripts
+        run: |
+          node --check site/core.js
+          node --check site/app.js
+          node --test tests/*.test.js
+      - name: Build recorded multi-sport history
+        run: python scripts/market_lab.py report
+      - name: Rebuild the published report index without network calls
+        run: python scripts/materialize_research.py
+      - name: Grade forecasts and picks against the close
+        run: python scripts/scoreboard.py
+      - name: Compile sourced line catalog
+        run: python scripts/market_lines.py
+      - name: Build the page payloads
+        run: python scripts/build_site.py
+      - name: Enforce phone-first payload budgets
+        run: python scripts/payload_budget.py
+      - name: Reconcile the public record with official publications
+        run: python scripts/record_audit.py --today site/data/app/record.json
+      - name: Reconcile the separate NBA Trial record
+        run: python scripts/nba_trial_audit.py
+      - name: Restore immutable card renders
+        uses: actions/cache@v4
+        with:
+          path: site/data/cards
+          key: kookn-cards-${{ runner.os }}-${{ hashFiles('research/*.json', 'data/nba-trial/*.jsonl') }}
+          restore-keys: |
+            kookn-cards-${{ runner.os }}-
+      - name: Build the plays feed and its cards
+        run: python scripts/feed.py
+      - name: Verify the public artifact boundary
+        run: python scripts/publication_guard.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+
   publish:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
