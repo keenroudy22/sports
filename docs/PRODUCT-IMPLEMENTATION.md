@@ -1,3 +1,26 @@
+### November 6 overnight settlements and delivery
+
+Both November 5 FanDuel originals were confirmed on the site and Discord. They
+expired at 08:30 Eastern and had no matching original in the later Buffer Sent
+view. Official participation and receiving tables support AJ Wilson under 2.5
++116 1u as a win and Brian Thomas Jr. over 1.5 +144 1u as a loss, both on zero
+catches. The appended settlements went live under hosted42171186817 verified
+b6364e44f. Wilson Discord Final actually sent05:59:55Z. Thomas graded after
+01:00 Eastern, so the existing Discord result window reopens at08:00.
+
+Buffer Sent confirms the Nov5 Ball State–UMass Final at10:50 Eastern
+(2118370430926856531) and Queens Final at10:51 (2118370536673751141), both with
+graphics and visible original URLs. Native quote delivery remains unverified.
+The owner-deleted SDST receipt remains suppressed. Existing08:35 reviewed PDF
+recovery ran Nov5 and returned no paired primary quotes or play. Nov6 overnight
+source report was stale. Friday and weekend planning remained research only.
+
+The Today fix requires a same-book observation at or after the original
+expiry before restoring playable wording. First promotion stopped on a stale
+bundle fingerprint, then on the generated settlement index. The index was
+regenerated from immutable reports after rebasing the hosted writer. Full
+canonical and hosted/live verification still apply.
+
 ### November5 overnight — Queens grade and hosted CI date fixture
 
 Queens +8.5 (-112 DraftKings, 1u) won 96–95. The exact ESPN final was graded
