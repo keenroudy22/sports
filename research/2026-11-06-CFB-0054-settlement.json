@@ -1,0 +1,200 @@
+{
+ "league": "CFB",
+ "props": [
+  {
+   "actual": "AJ Wilson: 0 receptions",
+   "actualValue": 0,
+   "athleteId": "5084802",
+   "book": "FanDuel",
+   "confidence": 2,
+   "cutoff": "UNDER 2.5 at +116 or better; off the card at 2 or lower, or at +101 or worse at 2.5.",
+   "direction": "under",
+   "dossier": {
+    "history": "Last 10 games: 6 of 10 under 2.5.",
+    "line": {
+     "best": {
+      "book": "FanDuel",
+      "line": 2.5,
+      "price": 116,
+      "time": "2026-11-05T11:46:05Z"
+     },
+     "books": {
+      "DraftKings": null,
+      "FanDuel": {
+       "firstCaptured": {
+        "line": 3.5,
+        "price": -154,
+        "time": "2026-11-04T18:10:24Z"
+       },
+       "now": {
+        "line": 2.5,
+        "price": 116,
+        "time": "2026-11-05T11:46:05Z"
+       },
+       "open": null
+      }
+     }
+    },
+    "ours": {
+     "line": 2.5,
+     "market": "rec",
+     "projection": 2.2,
+     "snapshotAt": "2026-10-30T10:36:31Z",
+     "text": "Under 2.5 in 6 of his last 10 games."
+    },
+    "partial": false,
+    "reasons": [
+     {
+      "numbers": {},
+      "source": "Game box scores or verified report",
+      "text": "Under 2.5 in 6 of his last 10 games.",
+      "time": "2026-11-05T11:48:31Z"
+     },
+     {
+      "numbers": {
+       "line": 2.5,
+       "projection": 2.2
+      },
+      "source": "Kook'n projection",
+      "text": "Book says 2.5. I say 2.2.",
+      "time": "2026-10-30T10:36:31Z"
+     },
+     {
+      "numbers": {
+       "games": 5,
+       "hits": 4,
+       "line": 2.5,
+       "values": [
+        3,
+        1,
+        2,
+        2,
+        1
+       ]
+      },
+      "source": "ESPN box scores",
+      "text": "4 of his last 5 games finished under 2.5 receptions.",
+      "time": "2026-10-25T00:00Z"
+     }
+    ],
+    "reports": [
+     {
+      "numbers": {},
+      "source": null,
+      "text": "College injury news is thin; no verified status report is stored.",
+      "time": null
+     }
+    ],
+    "risks": [
+     {
+      "numbers": {},
+      "source": "Published risk note",
+      "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "time": "2026-11-05T11:48:31Z"
+     }
+    ],
+    "sources": [
+     {
+      "label": "National Weather Service",
+      "time": "2026-11-04T18:32:04+00:00",
+      "url": "https://api.weather.gov/gridpoints/MFL/111,77/forecast/hourly"
+     },
+     {
+      "label": "Published source",
+      "time": "2026-11-05T11:48:31Z",
+      "url": "https://www.espn.com/college-football/game/_/gameId/401862817"
+     },
+     {
+      "label": "Published source",
+      "time": "2026-11-05T11:48:31Z",
+      "url": "https://api.sharpapi.io/api/v1/odds"
+     },
+     {
+      "label": "Published source",
+      "time": "2026-11-05T11:48:31Z",
+      "url": "https://fausports.com/news/2026/11/1/football-veltkamp-and-doggette-to-join-kittley-on-weekly-espn-presser"
+     }
+    ],
+    "weather": {
+     "issuedAt": "2026-11-04T18:32:04+00:00",
+     "periodStart": "2026-11-05T19:00:00-05:00",
+     "precipProb": 0,
+     "source": "https://api.weather.gov/gridpoints/MFL/111,77/forecast/hourly",
+     "tempF": 80,
+     "windDirection": "NE",
+     "windMph": 8
+    }
+   },
+   "edge": "Price-checked chance 51.1% against the exact two-sided price; 46.3% needed at +116: +4.8 percentage points.",
+   "expiresAt": "2026-11-05T13:30:00Z",
+   "favorite": false,
+   "gameIds": [
+    "CFB-401862817"
+   ],
+   "id": "CFB-2026-W10-wilson-under-2-5-rec-fd",
+   "jurisdictionVerified": true,
+   "lane": "best_bet",
+   "line": 2.5,
+   "market": "rec",
+   "matchup": "UTSA Roadrunners at Florida Atlantic Owls",
+   "modelLean": true,
+   "modelVersion": "v2.1",
+   "odds": 116,
+   "position": "WR",
+   "probabilityAtPublication": {
+    "anchoredChance": 0.511,
+    "breakEven": 0.463,
+    "calibrated": true,
+    "calibration": 0.16,
+    "calibrationFamily": "CFB/prop",
+    "calibrationMethod": "neutral-centered-held-out",
+    "calibrationN": 2871,
+    "chance": 0.511,
+    "edgePoints": 4.8,
+    "evPerUnit": 0.104,
+    "evaluatedAt": "2026-11-05T11:48:31Z",
+    "fairChance": 0.433,
+    "gap": 7.8,
+    "probabilitySpec": "3573b046d7e2e67b471cd55e59f4b0f7e19cd494df378a01997ee2193aebad6c",
+    "push": 0.0,
+    "rawChance": 0.569,
+    "snapshotAt": "2026-10-30T10:36:31Z"
+   },
+   "projection": 2.2,
+   "publishedAt": "2026-11-05T11:57:56Z",
+   "quoteNote": "FanDuel's number and price from the 6:46 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+   "quoteType": "capture",
+   "quotedAt": "2026-11-05T11:46:05Z",
+   "reasoning": {
+    "cautions": [],
+    "context": [
+     "Role: 3rd of 4 UTSA WRs by projected targets, 3.4 a game.",
+     "Defense: FAU allows 11.38 receptions a game to WRs, 46th-stingiest of 138 this season."
+    ],
+    "history": "Last 10 games: 6 of 10 under 2.5.",
+    "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+   },
+   "result": "win",
+   "resultSource": "https://storage.googleapis.com/goutsa-prod/2026/11/06/Xg7nM2Jl5A0gi9rPnHtQwkAs1RGzWbhwbVwK1Z6A.pdf",
+   "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+   "riskUnits": 1,
+   "selectionPolicy": "2026-10-19-1u-2u",
+   "settledAt": "2026-11-06T05:54:02Z",
+   "settlementReason": "UTSA official final book confirms participation and zero credited receptions. The 37-yard catch was nullified by offensive pass interference.",
+   "snapshotAt": "2026-10-30T10:36:31Z",
+   "sources": [
+    "https://www.espn.com/college-football/game/_/gameId/401862817",
+    "https://api.sharpapi.io/api/v1/odds",
+    "https://fausports.com/news/2026/11/1/football-veltkamp-and-doggette-to-join-kittley-on-weekly-espn-presser"
+   ],
+   "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+   "status": "settled",
+   "title": "AJ Wilson UNDER 2.5 receptions",
+   "units": 1.16,
+   "why": "Prop lean: our projection is 2.2 against 2.5. The under reads 51.1% after adjustment from the raw 56.9%; 46.3% is needed at +116. Last 10 games: 6 of 10 under 2.5. Role: 3rd of 4 UTSA WRs by projected targets, 3.4 a game. Defense: FAU allows 11.38 receptions a game to WRs, 46th-stingiest of 138 this season."
+  }
+ ],
+ "publishedAt": "2026-11-06T05:54:02Z",
+ "summary": "Research update for Nov 6: Settled 1: AJ Wilson UNDER 2.5 receptions win. Nothing to close. Nothing published.",
+ "takeaways": []
+}
