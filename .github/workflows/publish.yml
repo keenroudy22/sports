@@ -3,6 +3,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      publish_only:
+        description: Rebuild and deploy stored public evidence without provider capture
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: '07 11 * * *'
       timezone: America/New_York
@@ -30,11 +36,11 @@ concurrency:
   # A time-sensitive public-play push must not sit behind a long scheduled
   # capture.  Refreshes keep their append-only serialization; a newer push
   # supersedes an older push and both paths still deploy from current main.
-  group: ${{ github.event_name == 'push' && 'football-pages-push' || 'football-pages-refresh' }}
-  cancel-in-progress: ${{ github.event_name == 'push' }}
+  group: ${{ (github.event_name == 'push' || inputs.publish_only) && 'football-pages-push' || 'football-pages-refresh' }}
+  cancel-in-progress: ${{ github.event_name == 'push' || inputs.publish_only }}
 jobs:
   push-publish:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || inputs.publish_only
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -57,9 +63,10 @@ jobs:
           python -m unittest
           tests.test_integrity tests.test_build_site tests.test_feed
           tests.test_payload_budget tests.test_record_audit
-          tests.test_publication_guard tests.test_workflow
+          tests.test_publication_guard tests.test_publication_supervisor
+          tests.test_workflow
       - name: Compare complete reports with the pre-push record
-        if: github.event.before != '0000000000000000000000000000000000000000'
+        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
         env:
           RECORD_BASE: ${{ github.event.before }}
         run: python scripts/integrity.py --verify-base "$RECORD_BASE"
@@ -104,7 +111,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   publish:
-    if: github.event_name != 'push'
+    if: github.event_name != 'push' && !inputs.publish_only
     runs-on: ubuntu-latest
     environment:
       name: github-pages

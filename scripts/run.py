@@ -4437,6 +4437,13 @@ def precheck(args):
                                 lambda message: alert("Kook'n desk health", message, priority='default'))
         except Exception:
             log('cached desk-health check unavailable; pre-post review continues')
+        try:
+            import publication_supervisor
+            publication = publication_supervisor.supervise(ROOT, CONF, now=now)
+            if publication.get('notify') and publication.get('issue'):
+                alert("Kook'n publication recovery", publication['issue'], priority='high')
+        except Exception:
+            log('publication supervisor unavailable; pre-post review continues')
     if not precheck_due(x_post.load_log(), now):
         return 0
     status = {'errors': [], 'llm': {'judged': 0}, 'research': {'asked': 0, 'verified': 0, 'dropped': 0}}

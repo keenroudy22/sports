@@ -18,7 +18,7 @@ WORKFLOW = (ROOT / '.github' / 'workflows' / 'publish.yml').read_text(encoding='
 class WorkflowTests(unittest.TestCase):
     def test_push_has_a_fast_current_main_publish_lane(self):
         fast = WORKFLOW[WORKFLOW.index('  push-publish:'):WORKFLOW.index('  publish:')]
-        self.assertIn("if: github.event_name == 'push'", fast)
+        self.assertIn("if: github.event_name == 'push' || inputs.publish_only", fast)
         self.assertIn('ref: main', fast)
         for command in ('materialize_research', 'scoreboard', 'market_lines', 'build_site', 'feed'):
             self.assertIn(f'python scripts/{command}.py', fast)
@@ -30,7 +30,11 @@ class WorkflowTests(unittest.TestCase):
             self.assertNotIn(capture, fast)
         self.assertIn("'football-pages-push'", WORKFLOW)
         self.assertIn("'football-pages-refresh'", WORKFLOW)
-        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' }}", WORKFLOW)
+        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' || inputs.publish_only }}", WORKFLOW)
+        self.assertIn('publish_only:', WORKFLOW)
+        self.assertIn("if: github.event_name != 'push' && !inputs.publish_only", WORKFLOW)
+        self.assertIn("if: github.event_name == 'push' && github.event.before !=", fast)
+        self.assertIn('tests.test_publication_supervisor', fast)
 
     def test_ticket_push_does_not_wait_for_new_capture(self):
         capture = ('refresh', 'sports_refresh', 'boxscores', 'research_context',
