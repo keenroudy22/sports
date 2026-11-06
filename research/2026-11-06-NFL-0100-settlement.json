@@ -1,0 +1,268 @@
+{
+ "league": "NFL",
+ "props": [
+  {
+   "actual": "Brian Thomas Jr.: 0 receptions",
+   "actualValue": 0,
+   "athleteId": "4432773",
+   "book": "FanDuel",
+   "confidence": 2,
+   "cutoff": "OVER 1.5 at +144 or better; off the card at 2+, or at +129 or worse at 1.5.",
+   "direction": "over",
+   "dossier": {
+    "history": "Last 10 games: 6 of 10 over 1.5.",
+    "line": {
+     "best": {
+      "book": "FanDuel",
+      "line": 1.5,
+      "price": 144,
+      "time": "2026-11-05T11:45:42Z"
+     },
+     "books": {
+      "DraftKings": {
+       "firstCaptured": {
+        "line": 1.5,
+        "price": 159,
+        "time": "2026-11-04T02:35:52Z"
+       },
+       "now": {
+        "line": 1.5,
+        "price": 141,
+        "time": "2026-11-05T11:45:42Z"
+       },
+       "open": null
+      },
+      "FanDuel": {
+       "firstCaptured": {
+        "line": 1.5,
+        "price": 158,
+        "time": "2026-11-04T02:35:52Z"
+       },
+       "now": {
+        "line": 1.5,
+        "price": 144,
+        "time": "2026-11-05T11:45:42Z"
+       },
+       "open": null
+      }
+     }
+    },
+    "ours": {
+     "line": 1.5,
+     "market": "rec",
+     "projection": 1.5,
+     "snapshotAt": "2026-11-04T22:05:16Z",
+     "text": "Over 1.5 in 6 of his last 10 games."
+    },
+    "partial": false,
+    "reasons": [
+     {
+      "numbers": {},
+      "source": "Game box scores or verified report",
+      "text": "Over 1.5 in 6 of his last 10 games.",
+      "time": "2026-11-05T11:48:31Z"
+     }
+    ],
+    "reports": [
+     {
+      "numbers": {
+       "status": "Out"
+      },
+      "source": "https://www.espn.com/nfl/player/_/id/3858276/jaylinn-hawkins",
+      "text": "Jaylinn Hawkins (BAL) is listed Out.",
+      "time": "2026-11-05T01:14Z"
+     },
+     {
+      "numbers": {
+       "status": "Questionable"
+      },
+      "source": "https://www.espn.com/nfl/player/_/id/4601278/nate-wiggins",
+      "text": "Nate Wiggins (BAL) is listed Questionable.",
+      "time": "2026-11-05T01:06Z"
+     },
+     {
+      "numbers": {
+       "status": "Out"
+      },
+      "source": "https://www.espn.com/nfl/player/_/id/4035671/tyler-huntley",
+      "text": "Tyler Huntley (BAL) is listed Out.",
+      "time": "2026-11-04T14:00Z"
+     },
+     {
+      "numbers": {
+       "status": "Questionable"
+      },
+      "source": "https://www.espn.com/nfl/player/_/id/4426349/travon-walker",
+      "text": "Travon Walker (JAX) is listed Questionable.",
+      "time": "2026-11-05T00:51Z"
+     },
+     {
+      "numbers": {
+       "status": "Questionable"
+      },
+      "source": "https://www.espn.com/nfl/player/_/id/4882093/bhayshul-tuten",
+      "text": "Bhayshul Tuten (JAX) is listed Questionable.",
+      "time": "2026-11-04T20:07Z"
+     }
+    ],
+    "risks": [
+     {
+      "numbers": {
+       "line": 1.5,
+       "projection": 1.5
+      },
+      "source": "Kook'n projection",
+      "text": "Book says 1.5. I say 1.5.",
+      "time": "2026-11-04T22:05:16Z"
+     },
+     {
+      "numbers": {
+       "games": 5,
+       "hits": 1,
+       "line": 1.5,
+       "values": [
+        1,
+        2,
+        0,
+        0,
+        1
+       ]
+      },
+      "source": "ESPN box scores",
+      "text": "1 of his last 5 games finished over 1.5 receptions.",
+      "time": "2026-11-01T18:00Z"
+     }
+    ],
+    "sources": [
+     {
+      "label": "ESPN injury report",
+      "time": "2026-11-05T01:14Z",
+      "url": "https://www.espn.com/nfl/player/_/id/3858276/jaylinn-hawkins"
+     },
+     {
+      "label": "ESPN injury report",
+      "time": "2026-11-05T01:06Z",
+      "url": "https://www.espn.com/nfl/player/_/id/4601278/nate-wiggins"
+     },
+     {
+      "label": "ESPN injury report",
+      "time": "2026-11-04T14:00Z",
+      "url": "https://www.espn.com/nfl/player/_/id/4035671/tyler-huntley"
+     },
+     {
+      "label": "ESPN injury report",
+      "time": "2026-11-05T00:51Z",
+      "url": "https://www.espn.com/nfl/player/_/id/4426349/travon-walker"
+     },
+     {
+      "label": "ESPN injury report",
+      "time": "2026-11-04T20:07Z",
+      "url": "https://www.espn.com/nfl/player/_/id/4882093/bhayshul-tuten"
+     },
+     {
+      "label": "National Weather Service",
+      "time": "2026-11-04T18:23:04+00:00",
+      "url": "https://api.weather.gov/gridpoints/LWX/109,91/forecast/hourly"
+     },
+     {
+      "label": "Published source",
+      "time": "2026-11-05T11:48:31Z",
+      "url": "https://www.espn.com/nfl/game/_/gameId/401873037"
+     },
+     {
+      "label": "Published source",
+      "time": "2026-11-05T11:48:31Z",
+      "url": "https://api.sharpapi.io/api/v1/odds"
+     },
+     {
+      "label": "Published source",
+      "time": "2026-11-05T11:48:31Z",
+      "url": "https://www.jaguars.com/news/o-zone-fashion-statement-x7212"
+     }
+    ],
+    "weather": {
+     "issuedAt": "2026-11-04T18:23:04+00:00",
+     "periodStart": "2026-11-05T20:00:00-05:00",
+     "precipProb": 7,
+     "source": "https://api.weather.gov/gridpoints/LWX/109,91/forecast/hourly",
+     "tempF": 68,
+     "windDirection": "S",
+     "windMph": 5
+    }
+   },
+   "edge": "Price-checked chance 50.0% against the exact two-sided price; 41.0% needed at +144: +9.0 percentage points.",
+   "expiresAt": "2026-11-05T13:30:00Z",
+   "favorite": false,
+   "gameIds": [
+    "NFL-401873037"
+   ],
+   "id": "NFL-2026-W9-jr-over-1-5-rec-fd",
+   "lane": "best_bet",
+   "line": 1.5,
+   "market": "rec",
+   "matchup": "Jacksonville Jaguars at Baltimore Ravens",
+   "modelLean": true,
+   "modelVersion": "v2.1",
+   "odds": 144,
+   "position": "WR",
+   "probabilityAtPublication": {
+    "anchoredChance": 0.5,
+    "breakEven": 0.41,
+    "calibrated": true,
+    "calibration": 0.09,
+    "calibrationFamily": "NFL/prop",
+    "calibrationMethod": "neutral-centered-held-out",
+    "calibrationN": 3361,
+    "chance": 0.5,
+    "edgePoints": 9.0,
+    "evPerUnit": 0.22,
+    "evaluatedAt": "2026-11-05T11:48:31Z",
+    "fairChance": 0.383,
+    "gap": 11.7,
+    "probabilitySpec": "0a4cd5ffad31ea668705cb7aad117caf17ed66c53c1318d321cd3b889b940af8",
+    "push": 0.0,
+    "rawChance": 0.5,
+    "snapshotAt": "2026-11-04T22:05:16Z"
+   },
+   "projection": 1.5,
+   "publishedAt": "2026-11-05T11:57:56Z",
+   "quoteNote": "FanDuel's number and price from the 6:45 AM ET capture across 2 books, the best expected value on the board for this side.",
+   "quoteType": "capture",
+   "quotedAt": "2026-11-05T11:45:42Z",
+   "reasoning": {
+    "cautions": [],
+    "context": [
+     "Role: 3rd of 5 JAX WRs by projected targets, 2.7 a game.",
+     "Defense: BAL allows 12.75 receptions a game to WRs, 26th-stingiest of 32 this season."
+    ],
+    "history": "Last 10 games: 6 of 10 over 1.5.",
+    "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+   },
+   "result": "loss",
+   "resultSource": "https://static.www.nfl.com/gamecenter/ab380826-4feb-11f1-abca-2c54536568a9.pdf",
+   "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+   "riskUnits": 1,
+   "selectionPolicy": "2026-10-19-1u-2u",
+   "settledAt": "2026-11-06T06:00:07Z",
+   "settlementReason": "NFL official game book lists Thomas among the substitutions and credits zero receptions. The game book and postgame participation review gave no evidence of an in-game injury for Thomas.",
+   "settlementReviewSources": [
+    "https://static.www.nfl.com/gamecenter/ab380826-4feb-11f1-abca-2c54536568a9.pdf",
+    "https://www.pff.com/news/nfl-week-9-recap-immediate-fantasy-football-takeaways-from-jaguars-ravens"
+   ],
+   "snapshotAt": "2026-11-04T22:05:16Z",
+   "sources": [
+    "https://www.espn.com/nfl/game/_/gameId/401873037",
+    "https://api.sharpapi.io/api/v1/odds",
+    "https://www.jaguars.com/news/o-zone-fashion-statement-x7212"
+   ],
+   "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+   "status": "settled",
+   "title": "Brian Thomas Jr. OVER 1.5 receptions",
+   "units": -1,
+   "why": "Prop lean: our projection is 1.5 against 1.5. The over reads 50.0% after adjustment from the raw 50.0%; 41.0% is needed at +144. Last 10 games: 6 of 10 over 1.5. Role: 3rd of 5 JAX WRs by projected targets, 2.7 a game. Defense: BAL allows 12.75 receptions a game to WRs, 26th-stingiest of 32 this season."
+  }
+ ],
+ "publishedAt": "2026-11-06T06:00:07Z",
+ "summary": "Research update for Nov 6: Settled 1: Brian Thomas Jr. OVER 1.5 receptions loss. Nothing to close. Nothing published.",
+ "takeaways": []
+}
