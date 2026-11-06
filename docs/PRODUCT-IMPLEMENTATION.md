@@ -18,8 +18,14 @@ source report was stale. Friday and weekend planning remained research only.
 The Today fix requires a same-book observation at or after the original
 expiry before restoring playable wording. First promotion stopped on a stale
 bundle fingerprint, then on the generated settlement index. The index was
-regenerated from immutable reports after rebasing the hosted writer. Full
-canonical and hosted/live verification still apply.
+regenerated from immutable reports after rebasing the hosted writer. A queue
+evidence length issue was corrected without changing the validator. Following a
+concurrent hosted push, the canonical retry tested and pushed4d85eb53e.
+Normal and clean2156 Python (2 skipped)/309 Node, full release gates, and0055
+offline rehearsal passed with zero outside writes/private reads. Hosted
+42174139755 succeeded at verified03191bc58f, which contains the tested candidate.
+Live bundle d8b13566cff3 matched source. Today, Record and CBB at375/1440
+rendered without overflow or runtime errors.
 
 ### November5 overnight — Queens grade and hosted CI date fixture
 

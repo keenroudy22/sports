@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-06T06:07:24.530830+00:00",
+  "updatedAt": "2026-11-06T06:36:14.067390+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -43,9 +43,9 @@
       "title": "Remove full-suite per-ticket delay and verify early delivery",
       "status": "observing",
       "owner": "agent",
-      "next": "Verify the canonical Today expiry fix, hosted artifact ancestry and live 375/1440. At the existing morning refresh verify fresh exact offers and an attended X window. Preserve both missed Nov5 X offers and the public grades.",
+      "next": "At the existing morning refresh verify fresh exact offers and an attended X window before expiry. Preserve both missed Nov5 X offers and their public grades.",
       "doneWhen": "Runtime release checks are bounded and pass; full deployment suites remain; all qualifying queued plays have actual Discord/site/X receipts or exact refusals, with morning latency measured.",
-      "evidence": "Nov6 expiry regression passed 55 Today tests. Old same-book observation can no longer revive the expired offer. Public Record confirms Wilson win/Thomas loss, +0.16u; Wilson Discord Final 05:59:55Z. Prior Nov1 release and detailed receipts are in PRODUCT-IMPLEMENTATION."
+      "evidence": "Nov6 Today expiry fix 4d85eb53e/42174139755 SUCCESS, verified03191bc58f, live JS d8b13566cff3 and 375/1440 clean. Normal/clean 2156 Python (2 skipped)/309 Node; all release gates. Public Nov5 Wilson win/Thomas loss +0.16u. Wilson Discord Final 05:59:55Z."
     },
     {
       "id": "O-20261023-NIGHTFOLLOW",
@@ -1465,7 +1465,7 @@
       "title": "Kook'n Autopilot R1 delivery, research, results and daily operator",
       "status": "observing",
       "owner": "agent",
-      "next": "Verify next natural 08:30 capture, 08:35 recovery and 09:00 deadline. Confirm Thomas Discord Final via existing mirror and the Today expiry release. Verify native quote capability before future X Finals; preserve owner deletions.",
+      "next": "Verify next natural 08:30 capture, 08:35 recovery and 09:00 deadline. Confirm Thomas Discord Final at the existing 08:00 mirror. Verify native quote capability before future X Finals; preserve owner deletions.",
       "doneWhen": "Every approved lane can render and fire or logs its exact refusal; delivery is transactional; results settle on time; the outcome report ships a fix or names an external blocker each day.",
       "evidence": "Nov5 CI 41978249401 success; successor 7180973a0 contains the fix and passed Today/Record/CBB 375/1440. Actual Nov5 08:35 PDF recovery produced no paired quotes or play. Buffer Sent confirms Nov5 Finals 2118370430926856531 and 2118370536673751141 with graphics and visible original URLs."
     },
