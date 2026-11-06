@@ -1,0 +1,211 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-06T22:43:48Z",
+  "summary": "Released 1: Kevin Jennings UNDER 14.5 rushing yards -105 at ESPN BET.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "QB",
+      "athleteId": "5084084",
+      "market": "rushYds",
+      "line": 14.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401858288"
+      ],
+      "book": "ESPN BET",
+      "odds": -105,
+      "projection": 10.5,
+      "edge": "Price-checked chance 52.7% against the exact two-sided price; 51.2% needed at -105: +1.5 percentage points.",
+      "cutoff": "UNDER 14.5 at -105 or better; off the card at 14 or lower, or at -120 or worse at 14.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-01T00:22:15Z",
+      "quotedAt": "2026-11-06T18:32:21Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 1:32 PM ET capture across 3 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-07T00:00:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.667,
+        "chance": 0.527,
+        "calibrated": true,
+        "calibration": 0.16,
+        "calibrationN": 2871,
+        "push": 0.0,
+        "breakEven": 0.512,
+        "edgePoints": 1.5,
+        "evPerUnit": 0.028,
+        "snapshotAt": "2026-11-01T00:22:15Z",
+        "probabilitySpec": "8f6c0bdc639135290b89c2e6a75eceaa0201ed509ef90a68a4286ae1309b83e8",
+        "evaluatedAt": "2026-11-06T22:33:40Z",
+        "fairChance": 0.48,
+        "anchoredChance": 0.527,
+        "gap": 4.7,
+        "calibrationFamily": "CFB/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Virginia Tech Hokies at SMU Mustangs",
+      "title": "Kevin Jennings UNDER 14.5 rushing yards",
+      "id": "CFB-2026-W10-jennings-under-14-5-rushyds-espnbet",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858288",
+        "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events/11da04c7d3fba48caf11a5d8b66b8ccd/odds",
+        "https://smumustangs.com/news/2026/11/3/football-smu-set-for-friday-night-showdown-with-virginia-tech",
+        "https://hokiesports.com/news/2026/11/2/virginia-tech-football-first-look-virginia-tech-vs-smu-2026",
+        "https://www.thekeyplay.com/virginia-tech-football/2026/11/26348/practice-report-mostly-mended-front-caging-kevin-jennings",
+        "https://theacc.com/news/2026/11/5/football-week-10-friday-preview-hokies-and-mustangs-face-off-on-espn.aspx"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 5 of 10 under 14.5.",
+        "context": [
+          "Role: projected for 6.0 carries a game.",
+          "Defense: VT allows 29 rushing yards a game to QBs, 83rd-stingiest of 138 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 10.5 against 14.5. The under reads 52.7% after adjustment from the raw 66.7%; 51.2% is needed at -105. Last 10 games: 5 of 10 under 14.5. Role: projected for 6.0 carries a game. Defense: VT allows 29 rushing yards a game to QBs, 83rd-stingiest of 138 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 14.5. I say 10.5.",
+            "numbers": {
+              "projection": 10.5,
+              "line": 14.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-01T00:22:15Z"
+          },
+          {
+            "text": "3 of his last 5 games finished under 14.5 rushing yards.",
+            "numbers": {
+              "values": [
+                3,
+                -7,
+                26,
+                26,
+                -6
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 14.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-31T16:00Z"
+          },
+          {
+            "text": "Virginia Tech ranks No. 12 nationally in rushing defense.",
+            "numbers": {},
+            "source": "https://theacc.com/news/2026/11/5/football-week-10-friday-preview-hokies-and-mustangs-face-off-on-espn.aspx",
+            "time": "2026-11-06T22:33:40Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-06T22:33:40Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 69,
+          "windMph": 10,
+          "windDirection": "N",
+          "precipProb": 1,
+          "periodStart": "2026-11-06T18:00:00-06:00",
+          "issuedAt": "2026-11-06T11:06:14+00:00",
+          "source": "https://api.weather.gov/gridpoints/FWD/89,104/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": null,
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 14.5,
+                "price": -114,
+                "time": "2026-11-05T02:50:58Z"
+              },
+              "now": {
+                "line": 14.5,
+                "price": -114,
+                "time": "2026-11-06T18:32:21Z"
+              }
+            }
+          },
+          "best": {
+            "book": "ESPN BET",
+            "line": 14.5,
+            "price": -105,
+            "time": "2026-11-06T18:32:21Z"
+          }
+        },
+        "ours": {
+          "projection": 10.5,
+          "line": 14.5,
+          "market": "rushYds",
+          "text": "Book says 14.5. I say 10.5.",
+          "snapshotAt": "2026-11-01T00:22:15Z"
+        },
+        "history": "Last 10 games: 5 of 10 under 14.5.",
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://theacc.com/news/2026/11/5/football-week-10-friday-preview-hokies-and-mustangs-face-off-on-espn.aspx",
+            "time": "2026-11-06T22:33:40Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/FWD/89,104/forecast/hourly",
+            "time": "2026-11-06T11:06:14+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858288",
+            "time": "2026-11-06T22:33:40Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events/11da04c7d3fba48caf11a5d8b66b8ccd/odds",
+            "time": "2026-11-06T22:33:40Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://smumustangs.com/news/2026/11/3/football-smu-set-for-friday-night-showdown-with-virginia-tech",
+            "time": "2026-11-06T22:33:40Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://hokiesports.com/news/2026/11/2/virginia-tech-football-first-look-virginia-tech-vs-smu-2026",
+            "time": "2026-11-06T22:33:40Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.thekeyplay.com/virginia-tech-football/2026/11/26348/practice-report-mostly-mended-front-caging-kevin-jennings",
+            "time": "2026-11-06T22:33:40Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-06T22:43:48Z"
+    }
+  ]
+}
