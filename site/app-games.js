@@ -76,7 +76,7 @@
     const labels=days.map(d=>[d,`${dayLabel(matches.find(g=>C.dayOf(g.kickoff)===d).kickoff)} · ${matches.filter(g=>C.dayOf(g.kickoff)===d).length}`]);
     return {rows:q || day==='all' ? matches : matches.filter(g=>C.dayOf(g.kickoff)===day),html:`<div class="toolbar">${days.length>1 ? `<div class="chip-scroll">${seg('gup',[...labels,['all',`All · ${matches.length}`]],day)}</div>`:''}${teamSearch()}</div>`};
   };
-  const cbbGameCard = g => {
+  const cbbGameCard = (g, link = true) => {
     const name=t=>t.shortName || t.name || t.abbreviation;
     const season=y=>Number.isInteger(y) ? `${y-1}–${String(y).slice(-2)}` : '';
     const stat=s=>!s || !s.games ? 'No recorded games' : `${esc(s.wins)}–${esc(s.losses)} · ${esc(s.ppg)} scored / ${esc(s.allowed)} allowed · ${esc(s.games)} games`;
@@ -88,7 +88,7 @@
       <span class="k">Total</span><span>${esc(C.fixed(p.total, 1))}</span><span>${quote ? esc(quote.line) : 'Unavailable'}</span><span>${difference === null ? '—' : esc(difference)}</span></div>
       ${quote ? `<p class="small muted">First recorded total · ${esc(quote.book)} · ${esc(whenShort(quote.capturedAt))}. Historical quote, not a live offer.</p>` : ''}`;
     const team=t=>({id:t.id,name:name(t),abbr:t.abbreviation || name(t),logo:t.logo});
-    return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link:false,ranks:false,barLabel:'Baseline model win chance',extra:`<p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${first}<details><summary>Team scoring stats</summary>${stats}</details>`});
+    return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link,ranks:false,barLabel:'Baseline model win chance',extra:`<p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${first}<details><summary>Team scoring stats</summary>${stats}</details>`});
   };
   views.cbbPicks = (data, onlyToday = false) => {
     const r = data.picks || {}, all = r.plays || [];
@@ -105,7 +105,7 @@
     catch (_) { return head('College basketball', 'CBB projections & stats', 'Research, not picks.') + (opts.gamesPage ? gameTabs('upcoming') : '') + '<p>CBB research could not be loaded. Please try again.</p>'; }
     const available=(data.games || []).filter(g=>g.kickoff && Date.parse(g.kickoff)>Date.now());
     const window=projectionWindow(available),rows=window.rows,projected=rows.filter(g=>g.projection);
-    const cards=projected.map(cbbGameCard).join('');
+    const cards=projected.map(g => cbbGameCard(g)).join('');
     const groups = new Map();
     for (const s of data.sheets || []) if (rows.some(g => g.date === s.date)) {
       if (!groups.has(s.date)) groups.set(s.date, []);
@@ -129,7 +129,7 @@
       catch (_) { return `${head('NBA Games','NBA games & projections','Research, not best bets.')}${tabs}<p>NBA research could not be loaded. Please try again.</p>`; }
       const window=projectionWindow((data.games || []).filter(g => tab === 'final' ? g.status === 'final' : g.status !== 'final' && Date.parse(g.kickoff) >= Date.now()),tab==='final');
       const rows=window.rows;
-      return `${head('NBA Games', tab === 'final' ? 'NBA finals' : 'NBA games & projections', 'Kook’n projections vs. sportsbook lines.')}${tabs}${window.html}${nbaProjectionContext(rows)}<div class="projs">${rows.map(nbaGameCard).join('')}</div>${rows.length ? '' : '<p class="small muted">No matching NBA games are stored.</p>'}<p><a href="#today?sport=NBA">NBA plays, player lines & trends ›</a></p>`;
+      return `${head('NBA Games', tab === 'final' ? 'NBA finals' : 'NBA games & projections', 'Kook’n projections vs. sportsbook lines.')}${tabs}${window.html}${nbaProjectionContext(rows)}<div class="projs">${rows.map(g => nbaGameCard(g)).join('')}</div>${rows.length ? '' : '<p class="small muted">No matching NBA games are stored.</p>'}<p><a href="#today?sport=NBA">NBA plays, player lines & trends ›</a></p>`;
     }
     if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${await gamesLive({status:tab==='final' ? 'final' : 'scheduled'})}`;
     const [today,nba,cbb]=await Promise.all([get('app/today.json'),state.league==='ALL' ? maybe('app/nba.json') : null,state.league==='ALL' ? maybe('app/cbb.json') : null]);
@@ -356,6 +356,17 @@
   };
   views.game = async route => {
     const back = '<a class="back" href="#games">← Games</a>';
+    const league = /^(NBA|CBB)-/.exec(route.id)?.[1];
+    if (league) {
+      const data = await get(`app/${league.toLowerCase()}.json`).catch(() => null);
+      const game = data?.games?.find(g => g.id === route.id);
+      if (!game) return head(league, 'Matchup unavailable', 'This game is outside the stored schedule.', back);
+      const title = `${game.teams.away.name} at ${game.teams.home.name}`;
+      const top = head(league, title, esc(whenShort(game.kickoff)), back);
+      if (league === 'NBA') return top + await views.nbaToday({ data, game, research: true });
+      return top + (game.projection ? cbbGameCard(game, false) : '<p>No projection available.</p>')
+        + '<section class="section"><h2>Player stats</h2><p>Player game logs are not available for this CBB matchup.</p></section>';
+    }
     let detail;
     try { detail = await get(`app/games/${route.id}.json`); } catch (e) {
       return head('', 'Game page not available', 'Game pages cover NFL and college football for games from about three days back to eight days ahead. <a href="#games/live">Live scores</a> cover every sport.', back);
@@ -705,7 +716,7 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
     return `<section class="kt-page-sec" id="nba-plays"><h2>Today's plays <span class="badge">NBA picks</span></h2>${open.length ? open.map(ticket).join('') : `<p class="small">${esc(String(trial.note || 'No NBA play has been posted.').replace(/NBA Trial/g, 'NBA picks'))}</p>`}<p class="small muted">New NBA picks use 1u within the shared daily exposure limit.</p><details class="more-box"><summary>NBA record: ${esc(trial.record?.win || 0)}–${esc(trial.record?.loss || 0)} · ${esc(Number(trial.record?.units || 0).toFixed(2))}u</summary><p class="small">${esc(trial.record?.graded || 0)} graded</p>${readiness}${past.map(ticket).join('')}${(trial.seasons || []).length > 1 ? trial.seasons.map(s => `<p>${esc(s.season-1)}–${esc(String(s.season).slice(-2))} · ${s.stage === 3 ? 'Playoffs' : 'Regular season'} · ${esc(s.record.win)}–${esc(s.record.loss)} · ${esc(Number(s.record.units).toFixed(2))}u</p>`).join('') : ''}</details></section>`;
   }
   const nbaProjectionContext = games => games.some(g => g.projection?.sparse && g.status !== 'final') ? '<p class="small muted nba-history">Early-season projections draw on last season’s team ratings while this season’s results build.</p>' : '';
-  const nbaGameCard = g => {
+  const nbaGameCard = (g, link = true) => {
     // The schedule snapshot can lag tipoff. Never show a cached pregame
     // projection as if the matchup were still upcoming, or invent a live score.
     if (g.status === 'scheduled' && Date.parse(g.kickoff) <= Date.now()) {
@@ -732,13 +743,13 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
     const roster = g.status === 'scheduled' && g.rosterContext ? `<p class="small muted">${esc(g.rosterContext.note)}${g.rosterContext.holds?.length ? ' ' + g.rosterContext.holds.map(esc).join(' · ') : ''}</p>` : '';
     const adjustedMargin = g.rosterContext?.adjustedMarkets?.includes('margin');
     const modelNote = isNum(v2.winProb) && v2.winProb >= 0 && v2.winProb <= 1 ? `<p class="small muted">Model win chance is a score-model estimate; ${adjustedMargin ? 'validated roster adjustment applied; not a bet.' : 'not injury-adjusted or a bet.'}</p>` : '';
-    return projCard({id:g.id,league:'NBA',kickoff:g.kickoff,home:team('home'),away:team('away'),state:g.status === 'in_progress' ? 'in' : 'pre',completed:g.status === 'final',v2},{link:false,ranks:false,barLabel:'Model win chance',extra:extra+roster+modelNote});
+    return projCard({id:g.id,league:'NBA',kickoff:g.kickoff,home:team('home'),away:team('away'),state:g.status === 'in_progress' ? 'in' : 'pre',completed:g.status === 'final',v2},{link:link !== false,ranks:false,barLabel:'Model win chance',extra:extra+roster+modelNote});
   };
   views.nbaSummary = data => {
     const games = (data.games || []).filter(g => C.dayOf(g.kickoff) === etDay());
     const open = (data.trial?.plays || []).filter(p => !p.result && C.dayOf(p.kickoff) === etDay());
     if (!games.length && !open.length) return '';
-    return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${open.length ? `${open.length} posted NBA picks play${open.length === 1 ? '' : 's'}.` : 'No NBA play posted yet.'} Team projections and player lines are research.</p>${open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}<div class="projs">${games.map(nbaGameCard).join('')}</div><a class="more" href="#today?sport=NBA">Open NBA Today ›</a></section>`;
+    return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${open.length ? `${open.length} posted NBA picks play${open.length === 1 ? '' : 's'}.` : 'No NBA play posted yet.'} Team projections and player lines are research.</p>${open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}<div class="projs">${games.map(g => nbaGameCard(g)).join('')}</div><a class="more" href="#today?sport=NBA">Open NBA Today ›</a></section>`;
   };
   views.nbaToday = async (opts = {}) => {
     let data = opts.data || await get('app/nba.json');
@@ -761,14 +772,14 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
     const focusGames = (data.games || []).filter(g => C.dayOf(g.kickoff) === focusDay);
     const teamsToday = new Set(focusGames.flatMap(g => Object.values(g.teams).map(t => String(t.id))));
     const laterGames = (data.games || []).filter(g => C.dayOf(g.kickoff) > (focusDay || etDay()));
-    const games = focusGames.filter(g => matches(...Object.values(g.teams).flatMap(t => [t.name,t.displayName,t.abbreviation]))).map(nbaGameCard).join('');
+    const games = focusGames.filter(g => matches(...Object.values(g.teams).flatMap(t => [t.name,t.displayName,t.abbreviation]))).map(g => nbaGameCard(g)).join('');
     const trends = (data.trends || []).filter(r => matches(r.name,r.statName)).map(r => `<article class="card" style="margin-top:12px"><p class="eyebrow">${esc(r.window)} · ${esc(r.season-1)}–${esc(String(r.season).slice(-2))}</p><h3>${esc(r.name)} · ${esc(r.statName)}</h3><p>${esc(r.average)} average across ${esc(r.games)} recorded games</p><p class="small muted" style="overflow-wrap:anywhere">Game log: ${esc(r.values.join(' · '))}</p><p class="tiny muted">${esc(r.dates[0])} through ${esc(r.dates.at(-1))}. Recorded appearances only.</p></article>`).join('');
     const prep = (data.prep || []).map(r => `<div class="receipt"><div><b>${esc(r.name)} over ${esc(r.line)} ${esc(r.statName || r.stat)}</b><span>${esc(r.hits)} of ${esc(r.games)} · ${esc(oddsText(r.over))} ${esc(bookLabel(r.book))} · Research</span></div></div>`).join('');
     const ready = data.readiness;
     const propAvailability = data.playerProps?.availabilityAt ? `<p class="small muted">Player availability checked ${esc(whenShort(data.playerProps.availabilityAt))}. Recheck before playing; these are research baselines.</p>` : '';
     const readiness = ready ? `<details class="more-box"><summary>NBA picks · model research</summary><p class="small">${esc(ready.cleanCaptureDays)}/${esc(ready.cleanCaptureDaysRequired)} clean capture days · ${esc(ready.paperGraded)}/${esc(ready.paperGradesRequired)} paper grades</p><p class="small muted">Saved pregame forecasts and later outcomes are tracked separately from posted picks. Player approval is checked separately for points, rebounds and assists.</p></details>` : '';
-    const live = opts.embedded ? '' : await views.gamesLive({day:etDay()});
-    const playerProps = (data.playerProps?.rows || []).filter(r => matches(r.name,r.teamName,r.statName) && (!focusDay || C.dayOf(r.kickoff) === focusDay) && Date.now() < Date.parse(r.kickoff) && Date.now()-Date.parse(r.sourceAt) >= 0 && Date.now()-Date.parse(r.sourceAt) <= 14400000).map(r => `<article class="card" style="margin-top:12px;min-width:0;overflow-wrap:anywhere">
+    const live = opts.embedded || opts.game ? '' : await views.gamesLive({day:etDay()});
+    const playerProps = (data.playerProps?.rows || []).filter(r => (!opts.game || String(r.eventId) === String(opts.game.providerId)) && matches(r.name,r.teamName,r.statName) && (opts.game || !focusDay || C.dayOf(r.kickoff) === focusDay) && Date.now() < Date.parse(r.kickoff) && Date.now()-Date.parse(r.sourceAt) >= 0 && Date.now()-Date.parse(r.sourceAt) <= 14400000).map(r => `<article class="card" style="margin-top:12px;min-width:0;overflow-wrap:anywhere">
       <p class="eyebrow">${esc(r.teamName)} · ${esc(whenShort(r.kickoff))}${r.favorite ? ' · FAVORITE PROP · RESEARCH' : ''}</p>${String(r.photo || '').startsWith('https://a.espncdn.com/') ? `<img src="${esc(r.photo)}" alt="" loading="lazy" style="float:right;width:48px;height:48px;object-fit:cover;border-radius:50%;margin:0 0 8px 8px">` : ''}<h3>${esc(r.name)} · ${esc(r.statName)}</h3>
       <p>Book line ${esc(r.line)} · over ${esc(oddsText(r.over))} / under ${esc(oddsText(r.under))} · ${esc(bookLabel(r.book))}</p>
       ${r.currentRole?.games ? `<p class="small"><b>This season’s workload:</b> ${r.currentRole.minutes.map(m => esc(m)).join(' / ')} minutes in the last ${esc(r.currentRole.games)} recorded game${r.currentRole.games === 1 ? '' : 's'}${Number.isInteger(r.currentRole.starts) ? ` · ${esc(r.currentRole.starts)} start${r.currentRole.starts === 1 ? '' : 's'}` : ''}.</p><p class="tiny muted">${String(r.currentRole.source || '').startsWith('https://') ? `<a href="${esc(r.currentRole.source)}" target="_blank" rel="noopener">Latest game ${esc(whenShort(r.currentRole.asOf))}</a>` : esc(whenShort(r.currentRole.asOf))}. Observed workload, not tonight’s confirmed minutes.</p>` : '<p class="small muted">No current-season workload recorded yet.</p>'}
@@ -788,6 +799,8 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
       <p class="small">${esc(r.projection.minutes)} ${r.projection.minutesBasis ? 'reviewed' : 'baseline'} minutes × ${esc(r.projection.rate)} ${esc(r.statName)} per minute from ${esc(r.projection.sample)} full-role games.</p>` : `<p class="small" style="margin-top:8px">${esc(r.hold || 'Projection unavailable')}</p>`}
       ${C.nbaTicketLines && ticketButton ? `<div class="btn-row" style="margin-top:10px">${C.nbaTicketLines([r]).filter(l => l.state === 'open').map(l => ticketButton(l.id, l.title, l.direction)).join('')}<a class="btn small" href="#ticket">Compare my ticket →</a></div><p class="tiny muted">Personal draft only; no validated NBA EV estimate.</p>` : ''}
       <p class="tiny muted">Prices seen ${esc(whenShort(r.sourceAt))}${r.rosterAt ? ` · Roster checked ${esc(whenShort(r.rosterAt))}` : ''} · <a href="https://sharpapi.io">SharpAPI</a> / ESPN game logs</p></article>`);
+    if (opts.game) return `${nbaGameCard(opts.game, false)}<section class="section"><h2>Player projections vs lines</h2>
+      ${propAvailability}${playerProps.join('') || '<p>No fresh player prices for this matchup.</p>'}</section>`;
     const trial = nbaTrialSection(data, readiness);
     const brief = data.morningBrief;
     const morning = !opts.research && !opts.embedded && brief?.league === 'NBA' && !(data.trial?.plays || []).some(p => !p.result)
@@ -802,7 +815,7 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
       ${opts.embedded ? `${mode === 'news' ? `${propAvailability}<p class="small muted">NBA availability is shown with the player research; no separate NBA news feed is published here.</p>` : ''}${showTrends || mode === 'players' ? `<details class="more-box"><summary>Recorded NBA player history</summary>${trends || '<p class="small muted">No recorded player history matches this view.</p>'}</details>` : ''}</section>` : `
       ${(data.editorial || []).length ? `<section class="kt-page-sec"><h2>NBA research cards</h2>${data.editorial.map(r => `<article class="card" style="margin-top:12px"><h3>${esc(r.title)} · ${esc(r.day)}</h3><p class="small" style="white-space:pre-line;overflow-wrap:anywhere">${esc(r.text)}</p><a href="${esc(r.card)}">Open research graphic ↗</a></article>`).join('')}</section>` : ''}
       <details class="more-box"><summary>More recorded player history</summary>${trends || '<p class="small muted">Player game logs are being collected. Current-season trends need at least three recorded games.</p>'}</details>
-      ${laterGames.length ? `<details class="more-box"><summary>Upcoming NBA · ${laterGames.length} games after this slate</summary><div class="projs">${laterGames.map(nbaGameCard).join('')}</div></details>` : ''}
+      ${laterGames.length ? `<details class="more-box"><summary>Upcoming NBA · ${laterGames.length} games after this slate</summary><div class="projs">${laterGames.map(g => nbaGameCard(g)).join('')}</div></details>` : ''}
       <section class="kt-page-sec"><h2>Prep List <span class="badge research">Research</span></h2>${prep || `<p class="small muted">${esc(data.prepNote)}</p>`}</section>
       <section class="kt-page-sec">${live}</section>`}`;
   };

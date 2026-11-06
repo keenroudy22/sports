@@ -22,3 +22,19 @@ test('CBB posted picks retain exact terms, result and source separation',async()
  for(const text of ['AWY +10.5','-118','LOSS','-1.00u','Current rotation case.','Frontcourt mismatch.','Separate from model research.','AWY scoring margin: -12'])assert.ok(html.includes(text),text);
  assert.doesNotMatch(html,/positive EV|fair odds|guarantee/);
 });
+
+test('basketball cards open matchup details and NBA props stay in their own game', async () => {
+  const kickoff = '2099-11-02T23:00Z';
+  const teams = {home:{name:'Home',abbreviation:'HOM'},away:{name:'Away',abbreviation:'AWY'}};
+  const cbb = {id:'CBB-1',kickoff,teams,projection:{home:72,away:68,total:140}};
+  const nba = {id:'NBA-2',providerId:'2',kickoff,teams,status:'scheduled',projection:{home:112,away:108,total:220}};
+  const prop = {eventId:'2',name:'Matched player',kickoff,statName:'Points',line:15.5,over:-110,under:-110,sourceAt:new Date().toISOString()};
+  const v = views(async path => path === 'app/cbb.json' ? {games:[cbb],scheduleFresh:true} : {
+    games:[nba],playerProps:{rows:[prop,{...prop,eventId:'3',name:'Other game player'}]}
+  });
+  assert.match(await v.cbbToday(), /href="#game\/CBB-1"/);
+  assert.match(await v.game({id:'CBB-1'}), /Away at Home/);
+  const matchup = await v.game({id:'NBA-2'});
+  assert.match(matchup, /Matched player/);
+  assert.doesNotMatch(matchup, /Other game player/);
+});
