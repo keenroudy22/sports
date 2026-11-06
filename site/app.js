@@ -1345,8 +1345,8 @@
       nbaSummary,
       prepList(today.prep, notesList, now),
       ktSec('upsets', 'Underdog watch', upsetHtml, { tape: true, kind: 'Upset research, not best bets' }),
-      ktSec('worth', 'Research worth a look', worth.length ? `<div class="board">${worth.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="kt-blank">Nothing on the board clears our price check right now.</p>',
-        { tape: true, kind: 'Not best bets', link: ktLink('#research/lines', 'See every line') }),
+      ktSec('worth', 'Kook’n vs. the Book', worth.length ? `<div class="board">${worth.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="kt-blank">Nothing on the board clears our price check right now.</p>',
+        { tape: true, kind: 'Not best bets', link: ktLink('#research/lines', 'Compare projections and odds') }),
       shown.length ? ktSec('games', nflNow.length ? 'Other games today' : "Today's games", `${liveStamp(liveToday.refreshed)}<div class="projs">${shown.map(g => projCard(g, { ranks: false })).join('')}</div>`,
         { link: ktLink(otherGames.length > shown.length ? '#games' : '#games/live', otherGames.length > shown.length ? `All ${todayGames.length} games today` : 'Live scores') }) : '',
       fun.length ? ktSec('fun', 'Fun tickets', slips(fun), { kind: 'Smaller stake, apart from best bets' }) : '',
@@ -1437,17 +1437,25 @@
 
   /* ---------- Research (B: one pro board) ---------- */
   const boardRow = (vm, expandable = true) => {
-    const price = vm.bestOdds != null && vm.bestOdds > Number(vm.odds) ? `${oddsText(vm.bestOdds)}` : oddsText(vm.odds);
-    const book = vm.bestOdds != null && vm.bestOdds > Number(vm.odds) ? vm.bestBook : vm.book;
-    const ageCls = vm.age.kind === 'fresh' ? '' : 'stale', clears = vm.clears != null ? vm.clears : hasValue(vm);
+    const price = oddsText(vm.odds);
+    const book = vm.book;
+    const ageCls = vm.age.kind === 'fresh' ? '' : 'stale';
+    const current = ['fresh', 'aging'].includes(vm.age.kind);
+    const clears = current && (vm.clears != null ? vm.clears : hasValue(vm));
+    const projection = isNum(vm.projection) ? C.fixed(vm.projection) : null;
+    const comparable = projection !== null && isNum(vm.line) && (vm.isProp || /total/i.test(vm.market));
+    const difference = comparable ? round1(vm.projection - vm.line) : null;
+    const verdict = clears ? 'Cook It' : current && projection !== null ? 'On the Skillet' : 'Leave It Alone';
     const badge = vm.official ? `<span class="badge best">Best bet${vm.officialLine != null && Number(vm.officialLine) !== Number(vm.line) ? ` at ${esc(vm.officialLine)}` : ''}</span>`
       : vm.onCard ? `<span class="badge research" title="Posted at ${esc(oddsText(vm.onCard.odds))}${vm.onCard.line != null ? `, line ${esc(vm.onCard.line)}` : ''} and graded there">On the card${vm.onCard.line != null && Number(vm.onCard.line) !== Number(vm.line) ? ` at ${esc(vm.onCard.line)}` : ''}</span>` : '';
     const summary = `<div class="row-main">
-      <div class="row-title with-art">${artFor(vm, 'sm')}<div><b>${esc(vm.title)}${badge}${vm.alternate ? '<span class="badge research">Alternate</span>' : ''}</b><span>${esc(vm.market)}${vm.position ? ` · ${esc(vm.position)}` : ''}${vm.matchup && !vm.isProp ? ` · ${esc(vm.matchup)}` : ''} · ${esc(vm.league === 'CFB' ? 'College' : vm.league)} · ${esc(whenShort(vm.kickoff))}</span>${vm.sub ? `<span>${esc(vm.sub)}</span>` : ''}</div></div>
+      <div class="row-title with-art">${artFor(vm, 'sm')}<div><b>${esc(vm.title)}${badge}${vm.alternate ? '<span class="badge research">Alternate</span>' : ''}</b><span>${esc(vm.market)}${vm.position ? ` · ${esc(vm.position)}` : ''}${vm.matchup && !vm.isProp ? ` · ${esc(vm.matchup)}` : ''} · ${esc(vm.league === 'CFB' ? 'College' : vm.league)} · ${esc(whenShort(vm.kickoff))}</span>${vm.sub ? `<span>${esc(vm.sub)}</span>` : ''}
+        <span>Kook’n projection <b>${esc(projection ?? 'Unavailable')}</b>${difference !== null ? ` · ${difference > 0 ? '+' : ''}${esc(difference)} vs book line ${esc(vm.line)}` : ''}</span>
+        <span>${verdict} · Research</span></div></div>
       <div class="row-price"><b class="num">${esc(price)}</b><span class="${ageCls}">${esc(book || '')}${vm.booksCount > 1 ? ` · ${vm.booksCount} books` : ''}${vm.age.kind !== 'fresh' ? ` · ${esc(vm.age.label)}` : ''}${isNum(vm.opened) && vm.opened !== Number(vm.line) ? ` · opened ${esc(vm.opened)}` : ''}</span></div>
       <div class="row-meter on-felt">${meter(vm.chance, vm.needs, true)}<span>${pctText(vm.chance)} our chance · ${pctText(vm.needs)} needed</span></div>
       <div class="row-edge ${clears ? 'clears' : vm.edge > 0 ? 'pos' : 'neg'}">${clears ? '<span aria-hidden="true">✓ </span>' : ''}${vm.edge != null ? `${vm.edge > 0 ? '+' : ''}${vm.edge}` : '–'}<small class="lbl"> pts vs price need</small>${clears ? '<span class="sr"> · passes our price check</span>' : ''}</div>
-      <div class="row-fair num"><small class="lbl">our price </small>${esc(oddsText(vm.fair))}</div></div>`;
+      <div class="row-fair num"><small class="lbl">our price </small>${esc(oddsText(current && vm.calibrated ? vm.fair : null))}</div></div>`;
     if (!expandable) return `<a href="${vm.athleteId && FOOTBALL.includes(vm.league) ? `#player/${vm.league}/${encodeURIComponent(vm.athleteId)}${vm.stat ? `?stat=${encodeURIComponent(vm.stat)}` : ''}` : vm.gameId ? `#game/${encodeURIComponent(vm.gameId)}` : `#research/lines?q=${encodeURIComponent(vm.player || vm.title)}`}" style="color:inherit;display:block;border-bottom:1px solid var(--line)">${summary}</a>`;
     const fa = [...(vm.extraFa || [])];
     if (vm.chance != null && vm.needs != null) fa.push([vm.chance > vm.needs ? 'for' : 'against', vm.chance > vm.needs ? `Our chance ${pctText(vm.chance)} beats the ${pctText(vm.needs)} this price needs.` : `Our chance ${pctText(vm.chance)} does not clear the ${pctText(vm.needs)} this price needs.`]);
@@ -1488,9 +1496,9 @@
     players: ['Players and matchups', "Each player's recent games against the current line, by matchup."],
     news: ['Injuries and news', 'ESPN injury list and status changes, newest first.'] };
   const researchHead = mode => {
-    const [title, sub] = RESEARCH_HEAD[mode] || [state.board.show === 'value' ? 'Lines that pass our price check' : 'Every current line', 'Compare our estimated chance with how often the posted price needs to win. ✓ marks a line that passes our price check. Research is not a best bet unless it is labeled <span class="badge best">Best bet</span>.'];
+    const [title, sub] = RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our estimated chance with how often the posted price needs to win. ✓ marks a line that passes our price check. Research is not a best bet unless it is labeled <span class="badge best">Best bet</span>.'];
     return `${head('Research', title, sub)}
-      <div class="toolbar"><div class="chip-scroll">${segLinks([['#research/lines', 'Lines', 'lines'], ['#research/trends', 'Trends', 'trends'], ['#research/players', 'Players', 'players'], ['#research/news', 'News', 'news']], mode)}</div></div>`;
+      <div class="toolbar"><div class="chip-scroll">${segLinks([['#research/lines', 'Kook’n vs. the Book', 'lines'], ['#research/trends', 'Trends', 'trends'], ['#research/players', 'Players', 'players'], ['#research/news', 'News', 'news']], mode)}</div></div>`;
   };
   /* A link's filters apply once, when it is opened. After that the reader's own choices win, even on refresh. */
   let appliedHash = null;

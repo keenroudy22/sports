@@ -806,11 +806,11 @@ test('Today research favors props, then sides, then one total; held and posted l
   await settle();
   const page = await api.views.today({ view: 'today' });
   const sec = page.slice(page.indexOf('kt-worth"'), page.indexOf('kt-games"'));
-  assert.match(sec, /<h2 class="kt-tape" id="worth-h">Research worth a look<\/h2><span class="kt-kind">Not best bets<\/span>/);
+  assert.match(sec, /<h2 class="kt-tape" id="worth-h">Kook’n vs. the Book<\/h2><span class="kt-kind">Not best bets<\/span>/);
   assert.match(sec, /Board Receiver over 60\.5[\s\S]*G-small over 44\.5[\s\S]*ARIZ \+6\.5/);
   for (const out of ['D-thin', 'E-raw', 'F-on-card', 'A-total', 'A-total-alt']) assert.ok(!sec.includes(out), out);
   assert.match(sec, /58% our chance · 52% needed/);
-  assert.match(sec, /href="#research\/lines">See every line ›/);
+  assert.match(sec, /href="#research\/lines">Compare projections and odds ›/);
 });
 
 test('an empty official rail names the strongest current look and the exact reason it is not a play', async () => {
