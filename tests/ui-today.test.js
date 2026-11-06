@@ -164,6 +164,8 @@ test('Today keeps current sections visible and past tickets expandable; Off the 
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
   const page = await api.views.today({ view: 'today' });
   assert.match(page, /aria-label="Today at a glance"[\s\S]*Best bets[\s\S]*80\/20 Climb/);
+  assert.match(page, /<span>Best bets<\/span><b>2 posted<\/b>/, 'the count describes durable posted plays, not whether their saved prices remain actionable');
+  assert.doesNotMatch(page, /<span>Best bets<\/span><b>2 live<\/b>/, 'an aged quote must never leave a stale live claim in the jump nav');
   assert.match(page, /Today’s best bets[\s\S]*Today’s Climb/);
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
   const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'class="kt-sec kt-left"', 'class="kt-sec kt-prep"',
