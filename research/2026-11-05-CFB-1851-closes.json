@@ -1,0 +1,195 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-05T23:51:38Z",
+  "targetWeek": 10,
+  "summary": "Research update for Nov 5: Nothing to settle. Closed 1: AJ Wilson UNDER 2.5 receptions. Nothing published. Screened and passed on 26: Mekhi Anderson UNDER 3.5 receptions (x_window); Dominique Henry UNDER 4.5 receptions (x_window); Florida Atlantic MONEYLINE (moneyline_projection_agreement); UTSA at Florida Atlantic under 72.5 (x_window); AJ Wilson OVER 34.5 receiving yards (x_window); David Amador II UNDER 59.5 receiving yards (x_window); Mario Sanders OVER 69.5 receiving yards (x_window); Kelby Valsin UNDER 82.5 receiving yards (x_window); and 18 more. odds_api.py: CFB: skipped (8 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent) sharp_odds.py: sharp: 3 records appended",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "expired",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "5084802",
+      "market": "rec",
+      "line": 2.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401862817"
+      ],
+      "book": "FanDuel",
+      "odds": 116,
+      "projection": 2.2,
+      "edge": "Price-checked chance 51.1% against the exact two-sided price; 46.3% needed at +116: +4.8 percentage points.",
+      "cutoff": "UNDER 2.5 at +116 or better; off the card at 2 or lower, or at +101 or worse at 2.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-30T10:36:31Z",
+      "quotedAt": "2026-11-05T11:46:05Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 6:46 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-05T13:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.569,
+        "chance": 0.511,
+        "calibrated": true,
+        "calibration": 0.16,
+        "calibrationN": 2871,
+        "push": 0.0,
+        "breakEven": 0.463,
+        "edgePoints": 4.8,
+        "evPerUnit": 0.104,
+        "snapshotAt": "2026-10-30T10:36:31Z",
+        "probabilitySpec": "3573b046d7e2e67b471cd55e59f4b0f7e19cd494df378a01997ee2193aebad6c",
+        "evaluatedAt": "2026-11-05T11:48:31Z",
+        "fairChance": 0.433,
+        "anchoredChance": 0.511,
+        "gap": 7.8,
+        "calibrationFamily": "CFB/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "UTSA Roadrunners at Florida Atlantic Owls",
+      "title": "AJ Wilson UNDER 2.5 receptions",
+      "id": "CFB-2026-W10-wilson-under-2-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401862817",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://fausports.com/news/2026/11/1/football-veltkamp-and-doggette-to-join-kittley-on-weekly-espn-presser"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 6 of 10 under 2.5.",
+        "context": [
+          "Role: 3rd of 4 UTSA WRs by projected targets, 3.4 a game.",
+          "Defense: FAU allows 11.38 receptions a game to WRs, 46th-stingiest of 138 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 2.2 against 2.5. The under reads 51.1% after adjustment from the raw 56.9%; 46.3% is needed at +116. Last 10 games: 6 of 10 under 2.5. Role: 3rd of 4 UTSA WRs by projected targets, 3.4 a game. Defense: FAU allows 11.38 receptions a game to WRs, 46th-stingiest of 138 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Under 2.5 in 6 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-05T11:48:31Z"
+          },
+          {
+            "text": "Book says 2.5. I say 2.2.",
+            "numbers": {
+              "projection": 2.2,
+              "line": 2.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-30T10:36:31Z"
+          },
+          {
+            "text": "4 of his last 5 games finished under 2.5 receptions.",
+            "numbers": {
+              "values": [
+                3,
+                1,
+                2,
+                2,
+                1
+              ],
+              "hits": 4,
+              "games": 5,
+              "line": 2.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-25T00:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-05T11:48:31Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 80,
+          "windMph": 8,
+          "windDirection": "NE",
+          "precipProb": 0,
+          "periodStart": "2026-11-05T19:00:00-05:00",
+          "issuedAt": "2026-11-04T18:32:04+00:00",
+          "source": "https://api.weather.gov/gridpoints/MFL/111,77/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": null,
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.5,
+                "price": -154,
+                "time": "2026-11-04T18:10:24Z"
+              },
+              "now": {
+                "line": 2.5,
+                "price": 116,
+                "time": "2026-11-05T11:46:05Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 2.5,
+            "price": 116,
+            "time": "2026-11-05T11:46:05Z"
+          }
+        },
+        "ours": {
+          "projection": 2.2,
+          "line": 2.5,
+          "market": "rec",
+          "text": "Under 2.5 in 6 of his last 10 games.",
+          "snapshotAt": "2026-10-30T10:36:31Z"
+        },
+        "history": "Last 10 games: 6 of 10 under 2.5.",
+        "sources": [
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/MFL/111,77/forecast/hourly",
+            "time": "2026-11-04T18:32:04+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401862817",
+            "time": "2026-11-05T11:48:31Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-05T11:48:31Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://fausports.com/news/2026/11/1/football-veltkamp-and-doggette-to-join-kittley-on-weekly-espn-presser",
+            "time": "2026-11-05T11:48:31Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-05T11:57:56Z",
+      "entryNote": "Off the card: price moved 56 cents against, from +116 to -140 at FanDuel. Published cutoff: UNDER 2.5 at +116 or better; off the card at 2 or lower, or at +101 or worse at 2.5. Stays in the record at 2.5 and +116 and is graded as posted."
+    }
+  ]
+}
