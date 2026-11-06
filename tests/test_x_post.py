@@ -183,6 +183,27 @@ class DraftTests(unittest.TestCase):
         reason = 'Cowboys cornerback Cobie Durant and tackle Drew Shelton are out with hamstring injuries.'
         self.assertEqual(x_post._short_reason(reason), reason)
 
+    def test_short_reason_keeps_verified_complete_clause_past_word_preference(self):
+        reason = ('East Carolina coach Blake Harrell said safety David Coleman Jr. would be out '
+                  'for the foreseeable future after breaking his leg against Temple.')
+        self.assertGreater(len(reason.split()), 14)
+        shortened = ('East Carolina coach Blake Harrell said safety David Coleman Jr. would be out '
+                     'for the foreseeable future.')
+        self.assertEqual(x_post._short_reason(reason), shortened)
+
+        game = {'league': 'CFB', 'kickoff': '2026-11-07T00:30:00Z',
+                'away': {'school': 'South Florida Bulls'},
+                'home': {'school': 'East Carolina Pirates'}}
+        pick = dict(PICK, id='CFB-2026-W10-usf-ecu-ml-away-0-dk', lane='best_bet',
+                    selectionPolicy='2026-10-19-1u-2u', riskUnits=1,
+                    title='South Florida MONEYLINE', marketType='moneyline', direction='away',
+                    line=0, odds=114, book='DraftKings', projection=.5,
+                    probabilityAtPublication={'chance': .474, 'breakEven': .467, 'calibrated': True},
+                    dossier={'reasons': [{'text': reason}]}, reasons=[])
+        text = x_post.draft(pick, game, history=[])
+        self.assertIn(shortened, text)
+        self.assertEqual(x_post.guard(text, pick, x_post.reason_in(text)), [])
+
     def test_the_post_shows_the_number_available_now_when_it_moved(self):
         pick = dict(PICK, favorite=False, modelLean=True, projection=31.2)
         moved = x_post.draft(pick, GAME, reason='', now_quote=('DraftKings', 37.5, -110))

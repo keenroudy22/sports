@@ -54,6 +54,7 @@ JARGON = ('calibrat', 'percentile', 'raw', 'shrunk', 'break-even', 'break even',
           # the line's move and the books' spread are the price's story, not a reason, and often point the other way
           'opened', 'a move of', 'toward the', 'books range', 'books span', 'the middle is')
 REASON_MAX = 150
+COMPACT_REASON_MAX = 118  # Leave room for the wager, book and required ticket footer.
 NOT_REASONS = ('checked before publishing',)   # the web check's lineup notes: diligence for the site, not a reason to play
 
 DANGLING = {'is', 'are', 'was', 'were', 'has', 'have', 'had', 'will', 'would', 'can', 'could', 'does', 'do', 'did',
@@ -440,6 +441,12 @@ def _short_reason(text):
     """Keep a verified reason short without turning it into a fragment."""
     value = str(text or '').strip()
     words = value.split()
+    # A complete verified sentence that already fits the real public reason
+    # limit is safer than dropping it only because it crosses the old
+    # fourteen-word preference.  The final caption still has to pass the X
+    # length, style, number and market-support guards below.
+    if len(value) <= COMPACT_REASON_MAX and plain(value):
+        return value
     # A complete, sourced sentence is better public copy than a shorter noun
     # phrase.  Fourteen words still keeps the post compact and preserves facts
     # such as "X and Y are out with hamstring injuries" whole.
@@ -450,10 +457,11 @@ def _short_reason(text):
     # leading clause already present in the verified source; if there is no
     # safe clause, omit this candidate and let _choose_reason try the next
     # stored fact.  The send guard will hold when no complete reason survives.
-    for clause in llm.re.split(r'\s+(?:and|but|which|while|so)\s+|[;:]', value, maxsplit=1):
+    for clause in llm.re.split(r'\s+(?:and|but|which|while|so|after|because|when)\s+|[;:]', value, maxsplit=1):
         clause = clause.strip().rstrip(',;: ')
-        if 4 <= len(clause.split()) <= 12:
-            return clause + ('' if clause.endswith(('.', '!', '?')) else '.')
+        complete = clause + ('' if clause.endswith(('.', '!', '?')) else '.')
+        if 4 <= len(clause.split()) <= 18 and plain(complete):
+            return complete
     return ''
 
 
