@@ -596,6 +596,10 @@ test('an expired quote never wears ORDER UP unless a fresh same-book price is st
   const aged = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z' });
   assert.match(aged, /Posted price may be gone/);
   assert.doesNotMatch(aged, /kt-orderup|ORDER UP/, 'an expired quote never reads as open');
+  const preExpiryQuote = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z',
+    quote: { odds: -115, line: 49.5, observedAt: '2026-10-10T11:45:00Z' } });
+  assert.match(preExpiryQuote, /Posted price may be gone/);
+  assert.doesNotMatch(preExpiryQuote, /Still good to|kt-orderup/);
   const moved = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -130, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } });
   assert.match(moved, /Past my −124 limit\./);
   const changedLine = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', cutoffBoundary: 51.5, quote: { odds: -108, line: 53.5, observedAt: '2026-10-10T13:20:00Z' } });

@@ -85,8 +85,13 @@
   const latestPickQuote = (pick, rows, now = Date.now()) => {
     if (Date.parse(pick.kickoff) <= now || pick.held) return null;
     const own = pick.quote && isNum(pick.quote.odds) ? [{ ...pick.quote, own: true }] : [];
+    const expires = Date.parse(pick.expiresAt);
     const current = [...own, ...(rows || []).filter(r => !heldRow(r) && officialKey(r) === officialKey(pick) && bookLabel(r.book) === bookLabel(pick.book) && r.state === 'open' && isNum(r.odds))]
-      .filter(r => Date.parse(r.observedAt) <= now && now - Date.parse(r.observedAt) <= 4 * 3600000)
+      .filter(r => {
+        const observed = Date.parse(r.observedAt);
+        return observed <= now && now - observed <= 4 * 3600000
+          && !(Date.parse(r.expiresAt) <= now) && !(expires <= now && observed < expires);
+      })
       .sort((a,b) => Date.parse(b.observedAt)-Date.parse(a.observedAt) || Number(b.line===pick.line)-Number(a.line===pick.line))[0];
     if (!current) return null;
     const cents = n => n < 0 ? n + 100 : n - 100;
@@ -368,7 +373,7 @@
     /* One line for compact tickets. */
     const graded = `graded at ${pick.line != null && !moneyline && !isParlayLike(pick) && word === 'Line moved' ? `${pick.line} ` : ''}${at}`;
     const awaitingResult = word === 'In play' && Date.parse(pick.kickoff) < now - 4 * 3600000;
-    const statusShort = awaitingResult ? `Awaiting result · ${graded}` : mode === 'expired' ? goodTo(pick) || 'Posted quote is older than four hours' : word === 'Line moved' ? `Off the card · ${graded}` : word === 'Pulled' ? `Pulled before posting · ${graded}`
+    const statusShort = awaitingResult ? `Awaiting result · ${graded}` : mode === 'expired' ? 'Posted price expired · check your book' : word === 'Line moved' ? `Off the card · ${graded}` : word === 'Pulled' ? `Pulled before posting · ${graded}`
       : word === 'Withdrawn' ? 'Withdrawn before kickoff' : word === 'Posted ticket' ? 'Posted ticket · not settled' : word === 'In play' ? `In play · ${graded}` : '';
     const stub = result === 'win' ? { cls: 'hit', big: '✓', small: 'Hit' }
       : result === 'loss' ? { cls: 'miss', big: '✗', small: 'Miss' }
