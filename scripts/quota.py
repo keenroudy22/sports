@@ -18,7 +18,10 @@ STATE = ROOT / 'work' / 'quota'
 CEILING = 500
 RESERVE = 24
 BUFFER_STOP = 2700
-BUFFER_TEMP_STOP = 2900
+BUFFER_ESSENTIAL_STOP = 2900
+# Kept as a compatibility name for historical reports/tests that describe the
+# former dated trial.  The ceiling itself is now the permanent delivery lane.
+BUFFER_TEMP_STOP = BUFFER_ESSENTIAL_STOP
 BUFFER_TEMP_START = datetime(2026, 10, 26, 13, 55, tzinfo=timezone.utc)
 BUFFER_TEMP_END = datetime(2026, 11, 6, 13, 5, tzinfo=timezone.utc)
 BUFFER_DELIVERY_RESERVE = 300
@@ -50,7 +53,19 @@ def current_month_usage(value, now=None):
 
 
 def temporary_buffer_allowance(now):
+    """Whether the historical owner trial was active (reporting only)."""
     return BUFFER_TEMP_START <= now < BUFFER_TEMP_END
+
+
+def buffer_request_stop(essential=False, operation=None):
+    """Return the fail-closed stop for this Buffer request.
+
+    Official publication and the control-plane reads needed to reconcile it may
+    use the protected 2700-2899 lane.  Optional/editorial work never can, and
+    the final 100 requests of the free allowance remain untouched.
+    """
+    control = operation in ('status', 'channels', 'limits', 'cancel')
+    return BUFFER_ESSENTIAL_STOP if essential or control else BUFFER_STOP
 
 
 def count_request(provider, root=STATE, now=None, optional=False, reserve=True, operation=None, essential=False):
@@ -71,10 +86,7 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
                        isinstance(row.get('count'), int) and row['count'] == 1 and row.get('at') for row in rows):
                 raise ValueError('invalid journal')
             month = now.astimezone(timezone.utc).strftime('%Y-%m')
-            temporary = provider == 'buffer' and temporary_buffer_allowance(now)
-            stop = BUFFER_TEMP_STOP if temporary and (essential or operation in ('status', 'channels', 'limits', 'cancel')) else BUFFER_STOP
-            if temporary and (optional or operation == 'analytics'):
-                raise QuotaBlocked('Buffer optional analytics paused during temporary delivery allowance')
+            stop = buffer_request_stop(essential, operation) if provider == 'buffer' else BUFFER_STOP
             if provider == 'buffer' and sum(row['count'] for row in rows if row.get('month') == month) >= stop:
                 raise QuotaBlocked('Buffer local free-plan request cap reached')
             if provider == 'buffer':
@@ -108,7 +120,7 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
             row['operation'] = 'analytics'
         elif operation is not None:
             row['operation'] = operation
-        if provider == 'buffer' and temporary and essential:
+        if provider == 'buffer' and essential:
             row['essentialDelivery'] = True
         with (root / f'{provider}.jsonl').open('a', encoding='utf-8') as handle:
             handle.write(json.dumps(row, sort_keys=True) + '\n')

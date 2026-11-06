@@ -60,7 +60,9 @@ BUFFER_NORMAL_LIMIT = 9              # keep the tenth place free for relabels an
 BUFFER_RESERVED = 3                  # preserve the final places for plays, relabels/reschedules and receipts
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
 BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed', 'community'))
-BUFFER_TEMP_ESSENTIAL = frozenset(('play', 'nba-trial', 'cbb-pick', 'receipt', 'cashed'))
+BUFFER_DELIVERY_ESSENTIAL = frozenset(('play', 'nba-trial', 'cbb-pick', 'receipt', 'cashed'))
+# Compatibility alias for callers deployed before the permanent protected lane.
+BUFFER_TEMP_ESSENTIAL = BUFFER_DELIVERY_ESSENTIAL
 def essential_kind(kind, now):
     import nba_pick_policy
     return kind in BUFFER_ESSENTIAL or kind == 'cbb-pick' or kind == 'nba-trial' and nba_pick_policy.active(now)
@@ -775,11 +777,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} held: NBA delivery not cleared or already attempted; recheck before retry')
                 continue
         try:
-            if quota.temporary_buffer_allowance(now):
-                post_id = create_post(text, channel_id, due, image, key=key, send=send,
-                                      essential=kind in BUFFER_TEMP_ESSENTIAL)
-            else:
-                post_id = create_post(text, channel_id, due, image, key=key, send=send)
+            post_id = create_post(text, channel_id, due, image, key=key, send=send,
+                                  essential=kind in BUFFER_DELIVERY_ESSENTIAL)
         except BufferError as error:
             if cbb_regular:
                 cbb_picks.delivery_failed(guid, now)

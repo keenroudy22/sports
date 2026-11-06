@@ -17,8 +17,8 @@ class Response(io.StringIO):
 
 
 class QuotaTests(unittest.TestCase):
-    def test_owner_temporary_allowance_is_bounded_and_delivery_only(self):
-        now = quota.BUFFER_TEMP_START
+    def test_protected_delivery_lane_is_bounded_and_delivery_only(self):
+        now = quota.BUFFER_TEMP_END + timedelta(days=1)
         with tempfile.TemporaryDirectory() as root:
             path = Path(root) / 'buffer.jsonl'
             row = json.dumps(dict(at=now.isoformat(), month='2026-10', provider='buffer', count=1)) + '\n'
@@ -31,12 +31,11 @@ class QuotaTests(unittest.TestCase):
             quota.count_request('buffer', root, now, operation='publish', essential=True)
             self.assertTrue(json.loads(path.read_text().splitlines()[-1])['essentialDelivery'])
             quota.count_request('buffer', root, now, operation='status')
-            path.write_text(row * quota.BUFFER_TEMP_STOP)
+            path.write_text(row * quota.BUFFER_ESSENTIAL_STOP)
             with self.assertRaises(quota.QuotaBlocked):
                 quota.count_request('buffer', root, now, operation='publish', essential=True)
             path.write_text(row * quota.BUFFER_STOP)
-            with self.assertRaises(quota.QuotaBlocked):
-                quota.count_request('buffer', root, quota.BUFFER_TEMP_END, essential=True)
+            quota.count_request('buffer', root, now, essential=True)
 
     def test_daily_analytics_ceiling_preserves_delivery_and_next_day(self):
         now = datetime(2026, 11, 26, 12, tzinfo=timezone.utc)

@@ -501,6 +501,16 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual((rows[4]['kind'], rows[4]['discord']['destination']), ('buffer:community', 'plays'))
         self.assertEqual(rows[4]['discord']['communityType'], 'ticket')
 
+    def test_official_schedule_uses_protected_delivery_lane_after_trial_end(self):
+        now = bp.quota.BUFFER_TEMP_END + timedelta(days=1)
+        due = now + timedelta(hours=1)
+        with mock.patch.object(bp, 'create_post', return_value='buffer-id') as create:
+            rows = bp.schedule([('official', 'play', 'Player over 2.5 receptions (-110, FanDuel)', due, None)],
+                               'ch-x', {'posts': []}, now, key='t', send=FakeBuffer(),
+                               log=lambda *_: None)['posts']
+        self.assertEqual([row['id'] for row in rows], ['official'])
+        self.assertTrue(create.call_args.kwargs['essential'])
+
     def test_card_theme_is_resolved_before_buffer_accepts_the_post(self):
         fake = FakeBuffer()
         plan = [('a', 'play', 'text', NOW + timedelta(hours=1), 'a')]
