@@ -54410,5 +54410,441 @@
         "units": -1
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-07T03:59:57Z",
+    "targetWeek": 10,
+    "summary": "Research update for Nov 6: Settled 1: South Florida MONEYLINE loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "away",
+        "gameIds": [
+          "CFB-401862818"
+        ],
+        "book": "DraftKings",
+        "odds": 114,
+        "projection": 0.5,
+        "edge": "Price-checked chance 47.4% against the exact two-sided price; 46.7% needed at +114: +0.7 percentage points.",
+        "cutoff": "AWAY 0 at +114 or better; off the card at -0.5 or lower, or at -101 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-06T12:39:01Z",
+        "quotedAt": "2026-11-06T12:38:29Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 7:38 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-06T16:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.521,
+          "chance": 0.474,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.467,
+          "edgePoints": 0.7,
+          "evPerUnit": 0.014,
+          "snapshotAt": "2026-11-06T12:39:01Z",
+          "probabilitySpec": "01c1ebbdbacb05398ddbe070e4dc33ac06c85897c60cd09425d79575ab170503",
+          "evaluatedAt": "2026-11-06T13:34:38Z",
+          "fairChance": 0.449,
+          "anchoredChance": 0.474,
+          "gap": 2.5,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "South Florida Bulls at East Carolina Pirates",
+        "title": "South Florida MONEYLINE",
+        "id": "CFB-2026-W10-usf-ecu-ml-away-0-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862818",
+          "https://gousfbulls.com/news/2026/11/4/south-florida-football-hits-road-for-friday-night-clash-at-ecu",
+          "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/"
+        ],
+        "why": "Price-checked win chance 47.4%; +114 needs 46.7%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: South Florida starter Michael Van Buren Jr. left the UAB game with an injury, and coach Brian Hartline did not specify whether he would be available against East Carolina. Checked before publishing: East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple. The market: The spread opened +1.5 and is -2.5 at DraftKings, a move of 4 toward the home. The total opened 45.5 and is 39.5 at DraftKings, 6 toward the under. 6 books span -2.5 to -2 on the spread; the middle is -2.5. 6 books span 38.5 to 39.5 on the total; the middle is 39.5. Our spread is 3.4 points off, bigger than 48% of our past gaps. Gaps this size went 942-929 against the close in 3584 games. Our total is 9.2 points off, bigger than 97% of our past gaps. Gaps this size went 64-36 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: East Carolina allowed 249 total yards and made three second-half interceptions in its 17-9 win against Temple. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+            "South Florida has allowed 14.5 points per game through eight games, the lowest eight-game total in program history."
+          ],
+          "cautions": [
+            "Mitch Griffis returned to East Carolina's starting lineup against Temple after Emory Williams started multiple October games, and local reporting expects Griffis to start against South Florida.",
+            "East Carolina allowed 249 total yards and made three second-half interceptions in its 17-9 win against Temple."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "Price-checked win chance 47.4%; this price needs 46.7%.",
+              "numbers": {
+                "chance": 0.474,
+                "breakEven": 0.467
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-11-06T12:38:29Z"
+            },
+            {
+              "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Mitch Griffis returned to East Carolina's starting lineup against Temple after Emory Williams started multiple October games, and local reporting expects Griffis to start against South Florida.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "East Carolina allowed 249 total yards and made three second-half interceptions in its 17-9 win against Temple.",
+              "numbers": {},
+              "source": "https://gousfbulls.com/news/2026/11/4/south-florida-football-hits-road-for-friday-night-clash-at-ecu",
+              "time": "2026-11-06T13:34:38Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Mitch Griffis returned to East Carolina's starting lineup against Temple after Emory Williams started multiple October games, and local reporting expects Griffis to start against South Florida.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "Mitch Griffis returned to East Carolina's starting lineup against Temple after Emory Williams started multiple October games, and local reporting expects Griffis to start against South Florida.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            }
+          ],
+          "weather": {
+            "tempF": 66,
+            "windMph": 6,
+            "windDirection": "NW",
+            "precipProb": 10,
+            "periodStart": "2026-11-06T19:00:00-05:00",
+            "issuedAt": "2026-11-06T11:01:02+00:00",
+            "source": "https://api.weather.gov/gridpoints/MHX/30,95/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -1.5,
+                  "price": -105,
+                  "time": "2026-11-01T11:45:06Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": -110,
+                  "time": "2026-11-06T11:45:07Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": -110,
+                  "time": "2026-11-02T11:45:46Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": -104,
+                  "time": "2026-11-06T11:45:07Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": 114,
+              "time": "2026-11-06T12:38:29Z"
+            }
+          },
+          "ours": {
+            "projection": 0.5,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+            "snapshotAt": "2026-11-06T12:39:01Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "role",
+              "url": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://gousfbulls.com/news/2026/11/4/south-florida-football-hits-road-for-friday-night-clash-at-ecu",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/MHX/30,95/forecast/hourly",
+              "time": "2026-11-06T11:01:02+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401862818",
+              "time": "2026-11-06T13:34:38Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-06T16:08:26Z",
+        "result": "loss",
+        "actual": "South Florida 17, East Carolina 20",
+        "settledAt": "2026-11-07T03:59:57Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401862818",
+        "actualValue": -3,
+        "units": -1
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-07T05:12:39Z",
+    "targetWeek": 10,
+    "summary": "Research update for Nov 7: Settled 1: New Mexico at Nevada over 38.5 loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 38.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401864533"
+        ],
+        "book": "ESPN BET",
+        "odds": -105,
+        "projection": 48.0,
+        "edge": "Price-checked chance 58.0% against the exact two-sided price; 51.2% needed at -105: +6.7 percentage points.",
+        "cutoff": "OVER 38.5 at -105 or better; off the card at 40+, or at -120 or worse at 38.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-01T00:22:15Z",
+        "quotedAt": "2026-11-06T11:45:07Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-06T13:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.721,
+          "chance": 0.58,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.512,
+          "edgePoints": 6.7,
+          "evPerUnit": 0.132,
+          "snapshotAt": "2026-11-01T00:22:15Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-11-06T11:49:31Z",
+          "fairChance": 0.489,
+          "anchoredChance": 0.58,
+          "gap": 9.0,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "New Mexico Lobos at Nevada Wolf Pack",
+        "title": "New Mexico at Nevada over 38.5",
+        "id": "CFB-2026-W10-unm-nev-over-38-5-espnbet",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401864533",
+          "https://www.abqjournal.com/sports/whos-starting-for-the-lobos-against-nevada/3156924",
+          "https://www.abqjournal.com/sports/new-mexico-center-kaden-robnett-out-for-season-with-undisclosed-injury/3156381",
+          "https://nevadawolfpack.com/news/2026/11/2/football-nevada-hosts-no-22-25-new-mexico-friday-night.aspx"
+        ],
+        "why": "Model lean, our number only. We have the total at 48; the book is at 38.5. That makes the over 58.0%, and -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Nevada lists AJ Bianco as its starting quarterback, with Luke Duncan also on the depth chart. Checked before publishing: The Mountain West availability report lists Nevada quarterback Carter Jones out for the full game. The market: The spread opened +12.5 and is +10 at DraftKings, a move of 2.5 toward the home. The total opened 43.5 and is 38.5 at DraftKings, 5 toward the under. 6 books span 9.5 to 10.5 on the spread; the middle is 9.75. 6 books span 37.5 to 38.5 on the total; the middle is 38.5. Our spread is 0.3 points off, bigger than 4% of our past gaps. Gaps this size went 1728-1724 against the close in 3584 games. Our total is 9.5 points off, bigger than 97% of our past gaps. Gaps this size went 58-34 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Nevada's game notes say the Wolf Pack allows 156.9 passing yards per game and holds opponents to a 30.3 percent third-down success rate. Statistical counterpoint: Nevada's game notes say New Mexico allows 81.6 rushing yards and 258.1 total yards per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Nevada's game notes say New Mexico averages 35.0 points per game and 213.1 rushing yards per game."
+          ],
+          "cautions": [
+            "Nevada's game notes say the Wolf Pack allows 156.9 passing yards per game and holds opponents to a 30.3 percent third-down success rate.",
+            "Nevada's game notes say New Mexico allows 81.6 rushing yards and 258.1 total yards per game."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 38.5. I say 48.",
+              "numbers": {
+                "projection": 48.0,
+                "line": 38.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-01T00:22:15Z"
+            },
+            {
+              "text": "Nevada's game notes say New Mexico averages 35.0 points per game and 213.1 rushing yards per game.",
+              "numbers": {},
+              "source": "https://nevadawolfpack.com/news/2026/11/2/football-nevada-hosts-no-22-25-new-mexico-friday-night.aspx",
+              "time": "2026-11-06T11:49:31Z"
+            },
+            {
+              "text": "Nevada's game notes say New Mexico averages 35.0 points per game and 213.1 rushing yards per game.",
+              "numbers": {},
+              "source": "https://nevadawolfpack.com/news/2026/11/2/football-nevada-hosts-no-22-25-new-mexico-friday-night.aspx",
+              "time": "2026-11-06T11:49:31Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Nevada's game notes say the Wolf Pack allows 156.9 passing yards per game and holds opponents to a 30.3 percent third-down success rate.",
+              "numbers": {},
+              "source": "https://nevadawolfpack.com/news/2026/11/2/football-nevada-hosts-no-22-25-new-mexico-friday-night.aspx",
+              "time": "2026-11-06T11:49:31Z"
+            },
+            {
+              "text": "Nevada's game notes say New Mexico allows 81.6 rushing yards and 258.1 total yards per game.",
+              "numbers": {},
+              "source": "https://nevadawolfpack.com/news/2026/11/2/football-nevada-hosts-no-22-25-new-mexico-friday-night.aspx",
+              "time": "2026-11-06T11:49:31Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 54,
+            "windMph": 0,
+            "windDirection": "",
+            "precipProb": 0,
+            "periodStart": "2026-11-06T18:00:00-08:00",
+            "issuedAt": "2026-11-05T16:25:55+00:00",
+            "source": "https://api.weather.gov/gridpoints/REV/45,106/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 43.5,
+                  "price": -110,
+                  "time": "2026-11-01T11:45:06Z"
+                },
+                "now": {
+                  "line": 38.5,
+                  "price": -108,
+                  "time": "2026-11-06T11:45:07Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 42.5,
+                  "price": -110,
+                  "time": "2026-11-01T11:45:06Z"
+                },
+                "now": {
+                  "line": 38.5,
+                  "price": -110,
+                  "time": "2026-11-06T11:45:07Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 38.5,
+              "price": -105,
+              "time": "2026-11-06T11:45:07Z"
+            }
+          },
+          "ours": {
+            "projection": 48.0,
+            "line": 38.5,
+            "market": "total",
+            "text": "Book says 38.5. I say 48.",
+            "snapshotAt": "2026-11-01T00:22:15Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://nevadawolfpack.com/news/2026/11/2/football-nevada-hosts-no-22-25-new-mexico-friday-night.aspx",
+              "time": "2026-11-06T11:49:31Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/REV/45,106/forecast/hourly",
+              "time": "2026-11-05T16:25:55+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401864533",
+              "time": "2026-11-06T11:49:31Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.abqjournal.com/sports/whos-starting-for-the-lobos-against-nevada/3156924",
+              "time": "2026-11-06T11:49:31Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.abqjournal.com/sports/new-mexico-center-kaden-robnett-out-for-season-with-undisclosed-injury/3156381",
+              "time": "2026-11-06T11:49:31Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-06T11:58:48Z",
+        "result": "loss",
+        "actual": "New Mexico 31, Nevada 3",
+        "settledAt": "2026-11-07T05:12:39Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401864533",
+        "actualValue": 34,
+        "units": -1
+      }
+    ]
   }
 ]
