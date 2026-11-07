@@ -53762,5 +53762,435 @@
         "publishedAt": "2026-11-06T16:08:26Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-06T22:33:40Z",
+    "targetWeek": 10,
+    "summary": "Research update for Nov 6: Nothing to settle. Closed 1: South Florida MONEYLINE. Nothing published. Screened and passed on 47: Kendrick Raphael UNDER 74.5 rushing yards (one_book); Nyziah Hunter UNDER 2.5 receptions (plan_selection); Yannick Smith UNDER 3.5 receptions (one_book); Illinois MONEYLINE (moneyline_projection_agreement); Nevada MONEYLINE (moneyline_projection_agreement); SMU MONEYLINE (one_book); Arizona MONEYLINE (one_book); South Florida at East Carolina over 39.5 (totals_policy); and 39 more. odds_api.py: CFB: skipped (8 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent) sharp_odds.py: sharp: 3 records appended",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "expired",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "away",
+        "gameIds": [
+          "CFB-401862818"
+        ],
+        "book": "DraftKings",
+        "odds": 114,
+        "projection": 0.5,
+        "edge": "Price-checked chance 47.4% against the exact two-sided price; 46.7% needed at +114: +0.7 percentage points.",
+        "cutoff": "AWAY 0 at +114 or better; off the card at -0.5 or lower, or at -101 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-06T12:39:01Z",
+        "quotedAt": "2026-11-06T12:38:29Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 7:38 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-06T16:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.521,
+          "chance": 0.474,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.467,
+          "edgePoints": 0.7,
+          "evPerUnit": 0.014,
+          "snapshotAt": "2026-11-06T12:39:01Z",
+          "probabilitySpec": "01c1ebbdbacb05398ddbe070e4dc33ac06c85897c60cd09425d79575ab170503",
+          "evaluatedAt": "2026-11-06T13:34:38Z",
+          "fairChance": 0.449,
+          "anchoredChance": 0.474,
+          "gap": 2.5,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "South Florida Bulls at East Carolina Pirates",
+        "title": "South Florida MONEYLINE",
+        "id": "CFB-2026-W10-usf-ecu-ml-away-0-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862818",
+          "https://gousfbulls.com/news/2026/11/4/south-florida-football-hits-road-for-friday-night-clash-at-ecu",
+          "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/"
+        ],
+        "why": "Price-checked win chance 47.4%; +114 needs 46.7%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: South Florida starter Michael Van Buren Jr. left the UAB game with an injury, and coach Brian Hartline did not specify whether he would be available against East Carolina. Checked before publishing: East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple. The market: The spread opened +1.5 and is -2.5 at DraftKings, a move of 4 toward the home. The total opened 45.5 and is 39.5 at DraftKings, 6 toward the under. 6 books span -2.5 to -2 on the spread; the middle is -2.5. 6 books span 38.5 to 39.5 on the total; the middle is 39.5. Our spread is 3.4 points off, bigger than 48% of our past gaps. Gaps this size went 942-929 against the close in 3584 games. Our total is 9.2 points off, bigger than 97% of our past gaps. Gaps this size went 64-36 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: East Carolina allowed 249 total yards and made three second-half interceptions in its 17-9 win against Temple. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+            "South Florida has allowed 14.5 points per game through eight games, the lowest eight-game total in program history."
+          ],
+          "cautions": [
+            "Mitch Griffis returned to East Carolina's starting lineup against Temple after Emory Williams started multiple October games, and local reporting expects Griffis to start against South Florida.",
+            "East Carolina allowed 249 total yards and made three second-half interceptions in its 17-9 win against Temple."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "Price-checked win chance 47.4%; this price needs 46.7%.",
+              "numbers": {
+                "chance": 0.474,
+                "breakEven": 0.467
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-11-06T12:38:29Z"
+            },
+            {
+              "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Mitch Griffis returned to East Carolina's starting lineup against Temple after Emory Williams started multiple October games, and local reporting expects Griffis to start against South Florida.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "East Carolina allowed 249 total yards and made three second-half interceptions in its 17-9 win against Temple.",
+              "numbers": {},
+              "source": "https://gousfbulls.com/news/2026/11/4/south-florida-football-hits-road-for-friday-night-clash-at-ecu",
+              "time": "2026-11-06T13:34:38Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Mitch Griffis returned to East Carolina's starting lineup against Temple after Emory Williams started multiple October games, and local reporting expects Griffis to start against South Florida.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "Mitch Griffis returned to East Carolina's starting lineup against Temple after Emory Williams started multiple October games, and local reporting expects Griffis to start against South Florida.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+              "numbers": {},
+              "source": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            }
+          ],
+          "weather": {
+            "tempF": 66,
+            "windMph": 6,
+            "windDirection": "NW",
+            "precipProb": 10,
+            "periodStart": "2026-11-06T19:00:00-05:00",
+            "issuedAt": "2026-11-06T11:01:02+00:00",
+            "source": "https://api.weather.gov/gridpoints/MHX/30,95/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -1.5,
+                  "price": -105,
+                  "time": "2026-11-01T11:45:06Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": -110,
+                  "time": "2026-11-06T11:45:07Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": -110,
+                  "time": "2026-11-02T11:45:46Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": -104,
+                  "time": "2026-11-06T11:45:07Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": 114,
+              "time": "2026-11-06T12:38:29Z"
+            }
+          },
+          "ours": {
+            "projection": 0.5,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "East Carolina coach Blake Harrell said safety David Coleman Jr. would be out for the foreseeable future after breaking his leg against Temple.",
+            "snapshotAt": "2026-11-06T12:39:01Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "role",
+              "url": "https://ncfootballnews.com/games/east-carolina-football-vs-south-florida-2026/",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://gousfbulls.com/news/2026/11/4/south-florida-football-hits-road-for-friday-night-clash-at-ecu",
+              "time": "2026-11-06T13:34:38Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/MHX/30,95/forecast/hourly",
+              "time": "2026-11-06T11:01:02+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401862818",
+              "time": "2026-11-06T13:34:38Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-06T16:08:26Z",
+        "entryNote": "Off the card: price moved 22 cents against, from +114 to -108 at DraftKings. Published cutoff: AWAY 0 at +114 or better; off the card at -0.5 or lower, or at -101 or worse at 0. Stays in the record at 0 and +114 and is graded as posted."
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-06T22:43:48Z",
+    "summary": "Released 1: Kevin Jennings UNDER 14.5 rushing yards -105 at ESPN BET.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "QB",
+        "athleteId": "5084084",
+        "market": "rushYds",
+        "line": 14.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401858288"
+        ],
+        "book": "ESPN BET",
+        "odds": -105,
+        "projection": 10.5,
+        "edge": "Price-checked chance 52.7% against the exact two-sided price; 51.2% needed at -105: +1.5 percentage points.",
+        "cutoff": "UNDER 14.5 at -105 or better; off the card at 14 or lower, or at -120 or worse at 14.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-01T00:22:15Z",
+        "quotedAt": "2026-11-06T18:32:21Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 1:32 PM ET capture across 3 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-07T00:00:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.667,
+          "chance": 0.527,
+          "calibrated": true,
+          "calibration": 0.16,
+          "calibrationN": 2871,
+          "push": 0.0,
+          "breakEven": 0.512,
+          "edgePoints": 1.5,
+          "evPerUnit": 0.028,
+          "snapshotAt": "2026-11-01T00:22:15Z",
+          "probabilitySpec": "8f6c0bdc639135290b89c2e6a75eceaa0201ed509ef90a68a4286ae1309b83e8",
+          "evaluatedAt": "2026-11-06T22:33:40Z",
+          "fairChance": 0.48,
+          "anchoredChance": 0.527,
+          "gap": 4.7,
+          "calibrationFamily": "CFB/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Virginia Tech Hokies at SMU Mustangs",
+        "title": "Kevin Jennings UNDER 14.5 rushing yards",
+        "id": "CFB-2026-W10-jennings-under-14-5-rushyds-espnbet",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858288",
+          "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events/11da04c7d3fba48caf11a5d8b66b8ccd/odds",
+          "https://smumustangs.com/news/2026/11/3/football-smu-set-for-friday-night-showdown-with-virginia-tech",
+          "https://hokiesports.com/news/2026/11/2/virginia-tech-football-first-look-virginia-tech-vs-smu-2026",
+          "https://www.thekeyplay.com/virginia-tech-football/2026/11/26348/practice-report-mostly-mended-front-caging-kevin-jennings",
+          "https://theacc.com/news/2026/11/5/football-week-10-friday-preview-hokies-and-mustangs-face-off-on-espn.aspx"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 5 of 10 under 14.5.",
+          "context": [
+            "Role: projected for 6.0 carries a game.",
+            "Defense: VT allows 29 rushing yards a game to QBs, 83rd-stingiest of 138 this season."
+          ],
+          "cautions": [],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 10.5 against 14.5. The under reads 52.7% after adjustment from the raw 66.7%; 51.2% is needed at -105. Last 10 games: 5 of 10 under 14.5. Role: projected for 6.0 carries a game. Defense: VT allows 29 rushing yards a game to QBs, 83rd-stingiest of 138 this season.",
+        "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 14.5. I say 10.5.",
+              "numbers": {
+                "projection": 10.5,
+                "line": 14.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-01T00:22:15Z"
+            },
+            {
+              "text": "3 of his last 5 games finished under 14.5 rushing yards.",
+              "numbers": {
+                "values": [
+                  3,
+                  -7,
+                  26,
+                  26,
+                  -6
+                ],
+                "hits": 3,
+                "games": 5,
+                "line": 14.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-31T16:00Z"
+            },
+            {
+              "text": "Virginia Tech ranks No. 12 nationally in rushing defense.",
+              "numbers": {},
+              "source": "https://theacc.com/news/2026/11/5/football-week-10-friday-preview-hokies-and-mustangs-face-off-on-espn.aspx",
+              "time": "2026-11-06T22:33:40Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-06T22:33:40Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 69,
+            "windMph": 10,
+            "windDirection": "N",
+            "precipProb": 1,
+            "periodStart": "2026-11-06T18:00:00-06:00",
+            "issuedAt": "2026-11-06T11:06:14+00:00",
+            "source": "https://api.weather.gov/gridpoints/FWD/89,104/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": null,
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 14.5,
+                  "price": -114,
+                  "time": "2026-11-05T02:50:58Z"
+                },
+                "now": {
+                  "line": 14.5,
+                  "price": -114,
+                  "time": "2026-11-06T18:32:21Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 14.5,
+              "price": -105,
+              "time": "2026-11-06T18:32:21Z"
+            }
+          },
+          "ours": {
+            "projection": 10.5,
+            "line": 14.5,
+            "market": "rushYds",
+            "text": "Book says 14.5. I say 10.5.",
+            "snapshotAt": "2026-11-01T00:22:15Z"
+          },
+          "history": "Last 10 games: 5 of 10 under 14.5.",
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://theacc.com/news/2026/11/5/football-week-10-friday-preview-hokies-and-mustangs-face-off-on-espn.aspx",
+              "time": "2026-11-06T22:33:40Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/FWD/89,104/forecast/hourly",
+              "time": "2026-11-06T11:06:14+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401858288",
+              "time": "2026-11-06T22:33:40Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events/11da04c7d3fba48caf11a5d8b66b8ccd/odds",
+              "time": "2026-11-06T22:33:40Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://smumustangs.com/news/2026/11/3/football-smu-set-for-friday-night-showdown-with-virginia-tech",
+              "time": "2026-11-06T22:33:40Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://hokiesports.com/news/2026/11/2/virginia-tech-football-first-look-virginia-tech-vs-smu-2026",
+              "time": "2026-11-06T22:33:40Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.thekeyplay.com/virginia-tech-football/2026/11/26348/practice-report-mostly-mended-front-caging-kevin-jennings",
+              "time": "2026-11-06T22:33:40Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-06T22:43:48Z"
+      }
+    ]
   }
 ]
