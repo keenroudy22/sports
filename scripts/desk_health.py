@@ -618,13 +618,18 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     if chosen_not_posted:
         issue('chosen-not-posted', f'{chosen_not_posted} chosen plays have no scheduled delivery receipt.')
     private = read(conf / 'pending/play-releases.json')
-    waiting = [r for r in private.get('plays', []) if isinstance(r, dict)
-               and not any(r.get(k) for k in ('releasedAt', 'discordSentAt', 'publicPath'))]
+    unresolved = [r for r in private.get('plays', []) if isinstance(r, dict)
+                  and not any(r.get(k) for k in ('releasedAt', 'discordSentAt', 'publicPath'))]
+    # A caption/role/price guard is an intentional safety outcome, not a delivery
+    # backlog.  Keep it visible, but never describe it as waiting or delayed.
+    safety_held = [r for r in unresolved if r.get('held')]
+    waiting = [r for r in unresolved if not r.get('held')]
     delayed = [r for r in waiting if r.get('deliveryDelay') or
                (moment(r.get('admittedAt')) and now - moment(r['admittedAt']) >= timedelta(minutes=30))]
     if delayed:
         issue('private-release-delayed', f'{len(delayed)} privately admitted plays await delivery; not public plays or a no-selection day.')
     private_release = {'waiting': len(waiting), 'delayed': len(delayed),
+                       'safetyHeld': len(safety_held),
                        'providerRetryAt': min((stamp(r['bufferRetryAt']) for r in waiting
                                                if moment(r.get('bufferRetryAt'))), default=None)}
     if (root / 'site/data/app').is_dir():
@@ -710,7 +715,8 @@ def markdown(data):
     lines.append(f"Last completed desk run: {data['desk']['finishedAt'] or 'unknown'}.")
     pending = data.get('privateReleases') or {}
     lines.append(f"Private admissions awaiting delivery: {pending.get('waiting', 0)}; delayed {pending.get('delayed', 0)}; "
-                 f"provider retry time {pending.get('providerRetryAt') or 'not recorded'}. These are not published bets.")
+                 f"safety-held {pending.get('safetyHeld', 0)}; provider retry time "
+                 f"{pending.get('providerRetryAt') or 'not recorded'}. These are not published bets.")
     lines.append('Seven-day preparation windows (stored fixtures only; not promised bets or complete league coverage):')
     for day in data.get('opportunityPlan') or []:
         fixtures = ', '.join(f'{league} {count}' for league, count in sorted(day['storedUpcomingGames'].items())) or 'no upcoming fixtures stored'

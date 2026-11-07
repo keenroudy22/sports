@@ -35,6 +35,19 @@ class DeskHealthTests(unittest.TestCase):
             self.assertIn('private-release-delayed',{r['code'] for r in result['issues']})
             self.assertIn('These are not published bets',H.markdown(result))
 
+    def test_safety_held_private_admission_is_visible_but_not_called_delayed(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);self.fixture(root)
+            self.write(root,'private/pending/play-releases.json',{'plays':[
+                {'id':'guarded','admittedAt':(NOW-timedelta(hours=1)).isoformat(),
+                 'held':True,'holdReason':'caption guard'}]})
+            result=H.summary(root,root/'private',root,NOW)
+            self.assertEqual(result['privateReleases']['waiting'],0)
+            self.assertEqual(result['privateReleases']['delayed'],0)
+            self.assertEqual(result['privateReleases']['safetyHeld'],1)
+            self.assertNotIn('private-release-delayed',{r['code'] for r in result['issues']})
+            self.assertIn('safety-held 1',H.markdown(result))
+
     def test_full_season_slate_above_private_limit_keeps_nearby_price_checks(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
