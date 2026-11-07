@@ -9265,7 +9265,11 @@
    "socialStyleAudit": {
     "checkedAt": "2026-11-06T23:00:41Z",
     "state": "already-public"
-   }
+   },
+   "metricsAttemptAt": "2026-11-07T23:30:07Z",
+   "metricsAttempts": [
+    "2026-11-07T23:30:07Z"
+   ]
   },
   {
    "id": "cashed:CFB-2026-W10-ball-mass-over-49-5-br",
@@ -9596,6 +9600,11 @@
     "at": "2026-11-07T23:05:06Z",
     "result": "clear",
     "facts": 4
+   },
+   "socialStyleAudit": {
+    "checkedAt": "2026-11-07T23:30:07Z",
+    "state": "unverified",
+    "error": "Buffer local free-plan rolling 30-day cap reached"
    }
   }
  ]
