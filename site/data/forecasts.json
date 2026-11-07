@@ -14524,5 +14524,23 @@
     "sources": [
       "https://www.espn.com/nfl/game/_/gameId/401873123"
     ]
+  },
+  {
+    "gameId": "CFB-401866463",
+    "publishedAt": "2026-11-07T22:06:36Z",
+    "home": 32,
+    "away": 21,
+    "model": "elo-total-v1",
+    "type": "baseline",
+    "confidence": 3,
+    "sparse": false,
+    "trainingGames": {
+      "home": 12,
+      "away": 14
+    },
+    "why": "Opponent-adjusted historical scoring margin with smoothed team game totals. No injury, roster, weather, or betting-market adjustment. Analyst review pending.",
+    "sources": [
+      "https://www.espn.com/college-football/game/_/gameId/401866463"
+    ]
   }
 ]
