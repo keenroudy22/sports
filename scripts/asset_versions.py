@@ -47,11 +47,11 @@ def sync(site=SITE, check=False):
     index = site / 'index.html'
     if index.is_file():
         html = index.read_text(encoding='utf-8')
-        for name in ('app.js','core.js'):
+        for name, attribute in (('app.js', 'src'), ('core.js', 'src'), ('app.css', 'href')):
             asset=site/name
             if not asset.is_file():continue
-            pattern = re.compile(r'src="'+re.escape(name)+r'\?v=[^"]+"')
-            wanted = f'src="{name}?v=sha256-{fingerprint(asset)}"'
+            pattern = re.compile(re.escape(attribute)+r'="'+re.escape(name)+r'\?v=[^"]+"')
+            wanted = f'{attribute}="{name}?v=sha256-{fingerprint(asset)}"'
             matches = pattern.findall(html)
             if len(matches) != 1:
                 raise ValueError(f'{index}: expected one versioned {name} script')

@@ -72,5 +72,23 @@ class AssetVersionTests(unittest.TestCase):
             self.assertEqual(asset_versions.sync(site),['core.js'])
             self.assertIn('core.js?v=sha256-'+asset_versions.fingerprint(site/'core.js'),(site/'index.html').read_text())
 
+    def test_stylesheet_is_invalidated_when_its_layout_changes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            site = Path(folder)
+            (site / 'app.js').write_text('')
+            (site / 'app.css').write_text('.numbers{display:grid}')
+            (site / 'index.html').write_text(
+                f'<link rel="stylesheet" href="app.css?v=100">'
+                f'<script src="app.js?v=sha256-{asset_versions.fingerprint(site / "app.js")}"></script>'
+            )
+            self.assertEqual(asset_versions.sync(site), ['app.css'])
+            html = (site / 'index.html').read_text()
+            self.assertIn('app.css?v=sha256-' + asset_versions.fingerprint(site / 'app.css'), html)
+            self.assertEqual(asset_versions.sync(site, check=True), [])
+            (site / 'app.css').write_text('.numbers{display:grid;grid-template-columns:1fr 1fr}')
+            with self.assertRaisesRegex(ValueError, 'app.css content fingerprint is stale'):
+                asset_versions.sync(site, check=True)
+            self.assertEqual(asset_versions.sync(site), ['app.css'])
+
 if __name__ == '__main__':
     unittest.main()
