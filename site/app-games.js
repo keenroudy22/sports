@@ -190,7 +190,7 @@
     const strip = college ? `<details class="more-box"><summary>More college research</summary>${worthStrip(filtered)}</details>` : '';
     if (sort === 'bettable') {
       const nfl = filtered.filter(g => g.league === 'NFL'), cfb = filtered.filter(g => g.league === 'CFB').sort(byBettable);
-      const shown = state.games.all ? cfb : cfb.slice(0, 24);
+      const shown = state.games.all || q ? cfb : cfb.slice(0, 8);
       return `${top}${toolbar}${sportJumps}${controls ? `<details class="more-box"><summary>College filters & sorting</summary>${controls}</details>` : ''}${strip}${stamp}${nfl.length ? `<section id="games-football">${byDay(nfl, 'NFL')}</section>` : ''}
         <section id="games-college"><h2 style="margin-top:18px">College football</h2><p class="eyebrow">College · most bettable first</p><p class="small muted" style="margin:-6px 0 10px">Ranked for research.</p>
         <div class="projs">${shown.map(g => navCard(g, { compact: true, ranks: false })).join('')}</div>
