@@ -33,11 +33,12 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  # A time-sensitive public-play push must not sit behind a long scheduled
-  # capture.  Refreshes keep their append-only serialization; a newer push
-  # supersedes an older push and both paths still deploy from current main.
+  # Finish the active publish before starting the newest pending push. A full
+  # artifact build can outlast the five-minute record writer; cancelling it at
+  # Deploy leaves the public site stale indefinitely. GitHub retains the newest
+  # pending run, and each run checks out current main when it actually starts.
   group: ${{ (github.event_name == 'push' || inputs.publish_only) && 'football-pages-push' || 'football-pages-refresh' }}
-  cancel-in-progress: ${{ github.event_name == 'push' || inputs.publish_only }}
+  cancel-in-progress: false
 jobs:
   push-publish:
     if: github.event_name == 'push' || inputs.publish_only
@@ -48,8 +49,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          # A newer desk push supersedes an older one. Always publish current
-          # main so the fast lane cannot put an older ticket back on the site.
+          # Always publish current main so a queued fast-lane run includes every
+          # record commit that landed while the previous deployment finished.
           ref: main
           fetch-depth: 0
       - uses: actions/setup-python@v6

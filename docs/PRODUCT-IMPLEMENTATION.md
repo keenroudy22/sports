@@ -7083,3 +7083,12 @@ Before release,2167Python tests passed with2 expected skips and all310Node tests
 passed. The replacement Queens card was rendered and visually inspected. No
 public send is claimed by this section; canonical release, hosted build and
 actual Buffer Sent/X receipts remain the completion evidence.
+
+During hosted verification, frequent append-only `Record posts` pushes exposed
+a separate publication liveness defect: the push concurrency group cancelled
+an active five-minute artifact build, including at its final Pages Deploy step.
+Repeated data writes could therefore keep a correct website revision from ever
+becoming live. Push publishes now finish instead of being cancelled; GitHub
+keeps the newest pending run, and that queued run checks out current `main` when
+it starts. This preserves current-data convergence without abandoning a fully
+validated artifact seconds before deployment.
