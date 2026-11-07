@@ -110,6 +110,8 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: '1200000'
 
   publish:
     if: github.event_name != 'push' && !inputs.publish_only
@@ -278,3 +280,5 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: '1200000'
