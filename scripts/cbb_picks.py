@@ -158,6 +158,10 @@ def plans(now,log_book,root=STORE,reserved=()):
         result.append((p['id'],'cbb-pick',text,due,p['id'].lower()));busy.append(due)
     for p in public_rows(root):
         if not p.get('result') or not now-timedelta(days=3)<=boxscores.instant(p['settledAt'])<=now:continue
+        original=next((e for e in reversed(log_book.get('posts',[])) if e.get('id')==p['id']
+                       and e.get('sentAt') and e.get('tweetId') and not e.get('cancelledAt')
+                       and not e.get('deletedAt')),None)
+        if not original:continue
         guid=result_key(p)
         if any(e['id']==guid for e in log_book.get('posts',[])):continue
         due=buffer_post.free_slot(now,busy)
@@ -254,9 +258,39 @@ def render(folder,root=STORE):
 def render_result(p,folder):
     import ticket_cards,pick_card
     key=result_key(p).replace(':','-').lower();target=Path(folder)/(key+'.png')
-    if target.exists():return
+    # Win/loss art was upgraded from a recap row to the owner-approved
+    # individual Final. Re-render those keys so an old cached layout cannot
+    # survive a normal hosted build.
+    if target.exists() and p.get('result') not in ('win','loss'):return
     t=p['game']['teams']
     net=(100/-p['odds'] if p['odds']<0 else p['odds']/100) if p['result']=='win' else -1 if p['result']=='loss' else 0
+    if p['result'] in ('win','loss'):
+        try:
+            import hoops_store
+            final=next((r for r in reversed(hoops_store.load('CBB'))
+                        if str(r.get('eventId'))==str(p['eventId']).removeprefix('CBB-') and r.get('type')==2),None)
+        except (OSError,ValueError,TypeError):
+            final=None
+        away_score=(final or {}).get('awayScore');home_score=(final or {}).get('homeScore')
+        score=(f'{away_score:g}-{home_score:g}' if finite(away_score) and finite(home_score)
+               else f'{p["actual"]:g}')
+        selected=t[p['direction']] if p['marketType']=='spread' else t['away']
+        logo=None
+        try:
+            logo=pick_card.fetch_data_uri(selected.get('logo')) if selected.get('logo') else None
+        except (OSError,ValueError,TypeError):
+            pass
+        logo=logo or str(ROOT/'site/kookn-chef.png')
+        margin=abs(p['actual']-p['line']) if p['marketType']=='total' else abs(p['actual']+p['line'])
+        close=(f"FINAL: {t['away']['abbreviation']} {away_score:g}, {t['home']['abbreviation']} {home_score:g}"
+               if finite(away_score) and finite(home_score) else result_detail(p))
+        data=dict(player=(selected.get('shortName') or selected['abbreviation']).upper(),
+            side=selection(p),line='',market=p['marketType'],odds=p['odds'],book=p['book'],final=score,
+            margin=f'{margin:g}',photo=None,team_logo=logo,close_line=close,
+            chip='CBB PICK · FINAL',**({'units_won':net} if p['result']=='win' else {'units_lost':net}))
+        card=ticket_cards.cooked_card(data) if p['result']=='win' else ticket_cards.burnt_card(data)
+        pick_card.render(card.svg(),target)
+        return
     day=boxscores.instant(p.get('kickoff') or p['game']['kickoff']).astimezone(gates.EASTERN).strftime('%b %d')
     matchup=' AT '.join((t[s].get('shortName') or t[s]['abbreviation']).upper() for s in ('away','home'))
     data=dict(headline='CBB '+p['result'].upper(),row_label='CBB PICKS',net_units=net,

@@ -58,7 +58,7 @@ class CBBPicksTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, patch.object(cbb,'public_rows',return_value=[p]), patch.object(pick_card,'render') as output:
             cbb.render(Path(d))
             svg=output.call_args.args[0]
-            self.assertIn('S DAKOTA ST',svg)
+            self.assertIn('DAKOTA ST',svg)
             self.assertNotIn('SOUTH DAKOTA STATE JACKRABBITS',svg)
             self.assertEqual(p['game']['teams']['away']['name'],'South Dakota State Jackrabbits')
 
@@ -69,8 +69,8 @@ class CBBPicksTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, patch.object(pick_card,'render') as output:
             cbb.render_result(p,Path(d))
             svg=output.call_args.args[0]
-            self.assertIn('FINAL',svg);self.assertIn('CBB LOSS',svg)
-            self.assertIn('S DAKOTA ST',svg)
+            self.assertIn('FINAL',svg);self.assertIn('CBB PICK · FINAL',svg);self.assertIn('BURNT',svg)
+            self.assertIn('DAKOTA ST',svg)
             self.assertNotIn('SOUTH DAKOTA STATE JACKRABBITS',svg)
 
     def test_source_review_is_distinct_from_probability_approval(self):

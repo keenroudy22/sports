@@ -3297,11 +3297,18 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
         record = dict(record, picks=[p for p in record['picks']
             if isinstance(p, dict) and desk_health.moment(p.get('settledAt')) and
             now - (receipts.LADDER_CASHED_FRESH if p.get('ladder') or p.get('kind') == 'ladder'
-                   else receipts.CASHED_FRESH) < desk_health.moment(p['settledAt']) <= now])
+                   else receipts.RESULT_RECOVERY_FRESH) < desk_health.moment(p['settledAt']) <= now])
     result = desk_health.result_timeliness(
         record,
         log_book.get('posts', []) if isinstance(log_book, dict) else [], now)
-    if result.get('state') != 'available' or not result.get('missing'):
+    import cbb_picks
+    try:
+        cbb_missing = len([p for p in cbb_picks.plans(
+            now, log_book, root=Path(root) / 'data/cbb-picks') if p[1] == 'receipt'])
+    except (OSError, ValueError, KeyError, TypeError):
+        cbb_missing = 0
+    missing = int(result.get('missing') or 0) + cbb_missing
+    if result.get('state') != 'available' or not missing:
         return 0
     state = load_json(Path(conf) / 'result-recovery.json', {})
     last = state.get('attemptedAt')
@@ -3311,7 +3318,7 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
                 return 0
         except (TypeError, ValueError):
             pass
-    return int(result['missing'])
+    return missing
 
 
 def mark_result_recovery(now, count, conf=CONF):
@@ -3806,6 +3813,8 @@ def retry_stored_results(now, log_book):
     games = {g['id']: g for g in slate['games']}
     plans = [p for p in buffer_post.plan(ctx.first, ctx.latest, games, now, log_book,
                                       ctx.player_team, log=log, results_only=True) if p[1] == 'cashed']
+    import cbb_picks
+    plans += [p for p in cbb_picks.plans(now, log_book, reserved=plans) if p[1] == 'receipt']
     # No discovery for missing hosted art. The existing five-minute mirror
     # retries; scheduling still rechecks reachability and duplicate/cap guards.
     plans = [p for p in plans if not p[4] or buffer_post.reachable(buffer_post.card_url(p[4]))]

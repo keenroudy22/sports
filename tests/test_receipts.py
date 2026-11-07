@@ -253,7 +253,7 @@ class CashedTests(unittest.TestCase):
         posts = {p['key']: p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)}
         self.assertEqual(sorted(posts), ['burnt:NFL-2026-W4-b', 'cashed:NFL-2026-W4-a', 'cashed:NFL-2026-W4-c'])
         self.assertEqual(posts['cashed:NFL-2026-W4-a']['text'],
-                         '✅ Player Seven over 4.5 catches.\n#NFL\nhttps://x.com/keenkooks/status/20a')
+                         '✅ Player Seven over 4.5 catches.\n#NFL')
         self.assertTrue(posts['cashed:NFL-2026-W4-c']['text'].startswith('✅ +600 3-leg parlay cashed (DraftKings)\n'))
         self.assertEqual(posts['cashed:NFL-2026-W4-a']['card'], 'cooked-NFL-2026-W4-a')
         self.assertEqual(posts['burnt:NFL-2026-W4-b']['card'], 'burnt-NFL-2026-W4-b')

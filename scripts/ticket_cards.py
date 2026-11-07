@@ -418,7 +418,7 @@ def result_card(p, won):
     nb, _ = name_block(card, p['player'], 286, 452)
     inner += nb
     inner += card.text(COL_X, 506, f"{kit.price(p['odds'])} · {p['book'].upper()}", 46, CHALK, tracking=1, extra=' opacity="0.92"')
-    side_line = f"{p['side']} {p['line']}"
+    side_line = f"{p['side']} {p['line']}".strip()
     base = 772
     b, _ = bet_line(card, side_line, kit.STAT_UNITS.get(p.get('market'), ()), base, max_size=176)
     inner += b

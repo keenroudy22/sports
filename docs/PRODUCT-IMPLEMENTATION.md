@@ -7050,3 +7050,36 @@ Source979964df76f8353cc424bafc599994b2065c27ab adds the missing attended Buffer 
 44focused tests pass. Full2156Python(2skip)/309Node pass normal+clean export, build/feed/payload/record150/NBA/publication749/assets/SVG and actual2025offline rehearsal(ok,0outside writes/private reads). Canonical attempt1 promoted source. Hosted41950820377SUCCESS verified artifact691567aef1522778bcf937fcc50394b4bb05017a,0upstream changed files. LiveToday/NBA375/1440 no overflow/load error/console errors; both original straights visible. NBA says no released pick and overdue schedule rows remain update pending: rendering verification does not claim source freshness. Viewport reset.
 
 Actual cached-only grading at01:38Z and01:59Z appended0new forecast/public outcomes,0requests/no commit.4168selected/3833graded comparisons/62games/492player-games;335unusable:17observed DNPs,23missing exact player evidence(Holmgren/Murray absent from saved final boxes),272started games without received finals and23future rows. Unknowns never become zero or inferred DNP. Separate untouched probability cohorts remain8assists/11points/9rebounds games/2dates; all fail, no book proof. Large raw comparison counts do not inflate independent denominators. Final01:59:36Z admission:no-play/stale injury snapshot outside60minutes. NoNBAplay or new social send. First eligible actual delivery and later natural finals/grading remain observing. All179queue IDs retained. Receipts: work/nov4-nba-publishing-final-receipt.json, work/nov4-frozen-grading-result.json, work/nov4-frozen-missing-outcomes.json.
+
+
+## November 7 — native-quote individual Final recovery prepared
+
+The result audit found three separate failures that had been conflated. Ordinary
+football result recovery expired after3hours while cached health retained a
+48hour miss; CBB Finals were not part of the five-minute stored-result recovery;
+and the old Buffer result caption exposed the original X URL instead of using
+the owner's required native quote attachment. Missing original X posts were
+also counted as generic result misses even though no truthful quote target
+existed.
+
+Buffer's live GraphQL schema was checked read-only and returned the current
+`RetweetMetadataInput` fields `id` and optional `comment`. The guarded scheduler
+now uses those fields for individual X Finals, with the confirmed original tweet
+ID and caption as quote metadata. The visible caption contains no source URL.
+Invalid, absent, cancelled or owner-deleted originals hold before a Buffer
+mutation. The exact quote source ID is retained in the append-only delivery row.
+Normal live reactions keep their3hour window; bounded recovery uses72hours and
+the cached health report uses the same period. CBB Finals join that recovery.
+
+The Queens +8.5 Final is upgraded from the superseded recap row to an individual
+Kitchen Ticket: original +8.5/-112 DraftKings terms,96-95 score,9.5-point cover
+margin,+0.89u and authentic Queens art. Existing result keys are deliberately
+re-rendered so stale layout cannot survive a hosted build. Ball State-UMass and
+Queens-LMU are the two currently prepared native-quote recoveries. AJ Wilson
+and Brian Thomas Jr. remain explicit missing-original quote blockers; neither
+can be falsely marked recovered or attached to an invented post.
+
+Before release,2167Python tests passed with2 expected skips and all310Node tests
+passed. The replacement Queens card was rendered and visually inspected. No
+public send is claimed by this section; canonical release, hosted build and
+actual Buffer Sent/X receipts remain the completion evidence.

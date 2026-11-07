@@ -1715,7 +1715,9 @@ class DiscordMirrorTests(unittest.TestCase):
             path.write_text(json.dumps(data))
             with mock.patch.object(x_post,'load_log',return_value={'posts':[]}):
                 self.assertEqual(run.result_recovery_needed(now,root,root/'private'),0)
-            self.assertEqual(desk_health.result_timeliness(data,[],now)['missing'],1)
+            speed=desk_health.result_timeliness(data,[],now)
+            self.assertEqual(speed['missing'],0)
+            self.assertEqual(speed['quoteBlockedIds'],['old'])
 
     def test_missing_result_recovery_is_bounded_and_ignores_a_future_queue(self):
         now = datetime(2026, 10, 18, 13, 15, tzinfo=timezone.utc)
@@ -1728,11 +1730,13 @@ class DiscordMirrorTests(unittest.TestCase):
                 {'id': 'win', 'posted': True, 'result': 'win',
                  'settledAt': '2026-10-18T12:45:00Z'}]}))
             import x_post
-            with mock.patch.object(x_post, 'load_log', return_value={'posts': []}):
+            original={'posts':[{'id':'win','kind':'buffer:play','sentAt':run.stamp(now-timedelta(hours=2)),
+                                'tweetId':'1234567890123456789'}]}
+            with mock.patch.object(x_post, 'load_log', return_value=original):
                 self.assertEqual(run.result_recovery_needed(now, root, conf), 1)
                 run.mark_result_recovery(now, 1, conf)
                 self.assertEqual(run.result_recovery_needed(now + timedelta(minutes=5), root, conf), 0)
-            queued = {'posts': [{'id': 'cashed:win', 'bufferPostId': 'future',
+            queued = {'posts': [original['posts'][0], {'id': 'cashed:win', 'bufferPostId': 'future',
                                  'dueAt': run.stamp(now + timedelta(minutes=7))}]}
             with mock.patch.object(x_post, 'load_log', return_value=queued):
                 self.assertEqual(run.result_recovery_needed(now + timedelta(minutes=16), root, conf), 0)

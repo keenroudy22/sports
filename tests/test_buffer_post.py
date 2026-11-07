@@ -154,6 +154,19 @@ class ClientTests(unittest.TestCase):
         with self.assertRaises(bp.MissingToken):
             bp.token({})
 
+    def test_create_post_uses_native_quote_metadata_without_a_visible_url(self):
+        fake = FakeBuffer()
+        due = datetime(2026, 11, 7, 2, 30, tzinfo=timezone.utc)
+        caption = '✅ Ball State at Massachusetts over 49.5. Went 30-31.\n#CFB'
+        bp.create_post(caption, 'ch-x', due, key='t', send=fake,
+                       quote_tweet_id='2117958797536665816')
+        sent = fake.calls[-1]['variables']['input']
+        self.assertNotIn('x.com/', sent['text'])
+        self.assertEqual(sent['metadata']['twitter']['retweet'], {
+            'id': '2117958797536665816', 'comment': sent['text']})
+        with self.assertRaisesRegex(bp.BufferError, 'verified original'):
+            bp.create_post(caption, 'ch-x', due, key='t', send=fake, quote_tweet_id='not-a-tweet')
+
     def test_rate_limit_retains_provider_reset_and_blocks_calls_without_spending_requests(self):
         with TemporaryDirectory() as folder, mock.patch.object(bp,'rate_path',return_value=Path(folder)/'rate.json'):
             now=datetime.now(timezone.utc)
@@ -487,7 +500,9 @@ class ScheduleTests(unittest.TestCase):
                  ('ladder-loss:p', 'cashed', 'Loss', due + 2 * bp.SPACING, None),
                  ('r', 'research', 'Research', due + 3 * bp.SPACING, None),
                  ('community:owner', 'play', 'Owner ticket', due + 4 * bp.SPACING, None)]
-        rows = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None,
+        log_book = {'posts': [{'id': 'p', 'kind': 'buffer:play', 'sentAt': '2026-09-26T11:00:00Z',
+                               'tweetId': '1234567890123456789'}]}
+        rows = bp.schedule(plans, 'ch-x', log_book, NOW, key='t', send=FakeBuffer(), log=lambda *_: None,
                            items={'community:owner': {'personalTicket': True}})['posts']
         self.assertLess(next(i for i,r in enumerate(rows) if r['id']=='community:owner'),
                         next(i for i,r in enumerate(rows) if r['id']=='r'))
@@ -500,6 +515,26 @@ class ScheduleTests(unittest.TestCase):
         self.assertNotIn('readyAt', rows[3]['discord'], 'research must wait for confirmed X delivery')
         self.assertEqual((rows[4]['kind'], rows[4]['discord']['destination']), ('buffer:community', 'plays'))
         self.assertEqual(rows[4]['discord']['communityType'], 'ticket')
+
+    def test_x_result_recovery_reuses_confirmed_discord_result_receipt(self):
+        due = NOW + timedelta(hours=1)
+        log_book = {'posts': [{
+            'id': 'p', 'kind': 'buffer:play', 'sentAt': '2026-09-26T11:00:00Z',
+            'tweetId': '1234567890123456789',
+            'discord': {'state': 'sent', 'result': {
+                'state': 'sent', 'sentAt': '2026-09-26T11:15:00Z',
+                'messageId': 'discord-result-1', 'text': 'Original confirmed result'}},
+        }]}
+        rows = bp.schedule([('cashed:p', 'cashed', 'Recovered X result', due, None)],
+                           'ch-x', log_book, NOW, key='t', send=FakeBuffer(),
+                           log=lambda *_: None)['posts']
+        result = rows[-1]
+        self.assertEqual(result['quoteSourceId'], 'p')
+        self.assertEqual(result['discordResultSourceId'], 'p')
+        self.assertEqual(result['discord']['state'], 'sent')
+        self.assertEqual(result['discord']['messageId'], 'discord-result-1')
+        self.assertEqual(result['discord']['destination'], 'wins')
+        self.assertTrue(result['discord']['reusedResultReceipt'])
 
     def test_official_schedule_uses_protected_delivery_lane_after_trial_end(self):
         now = bp.quota.BUFFER_TEMP_END + timedelta(days=1)

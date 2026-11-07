@@ -310,21 +310,27 @@ def result_timeliness(record, posts, now):
         return {'state': 'unknown', 'source': 'settledAt', 'eligible': 0, 'posted': 0,
                 'within30Minutes': 0, 'over30Minutes': 0, 'pendingScheduled': 0, 'missing': 0,
                 'latestMinutesFromFinalToPost': None, 'maxMinutesFromFinalToPost': None}
-    sent, pending = {}, {}
+    sent, pending, originals = {}, {}, set()
     for post in posts:
         if not isinstance(post, dict):
             continue
         key = str(post.get('id') or '')
+        if (post.get('sentAt') and post.get('tweetId') and not post.get('cancelledAt')
+                and not post.get('deletedAt') and not key.startswith(('cashed:', 'burnt:'))):
+            originals.add(key)
         for prefix in ('cashed:', 'burnt:'):
             if key.startswith(prefix):
                 source_id = key[len(prefix):]
                 if post.get('sentAt'):
                     sent[source_id] = moment(post['sentAt'])
+                    originals.add(source_id)
                 elif (post.get('bufferPostId') and not any(post.get(field) for field in
                       ('cancelledAt', 'deletedAt', 'error')) and moment(post.get('dueAt'))):
                     pending[source_id] = moment(post['dueAt'])
-    delays, missing, pending_scheduled = [], 0, 0
-    cutoff = now - timedelta(hours=48)
+                    originals.add(source_id)
+    delays, missing, pending_scheduled, quote_blocked = [], 0, 0, []
+    missing_ids = []
+    cutoff = now - timedelta(hours=72)
     for pick in rows:
         if not isinstance(pick, dict) or not pick.get('posted') or not pick.get('settledAt'):
             continue
@@ -341,13 +347,18 @@ def result_timeliness(record, posts, now):
                 eligible = abs(float(actual) - float(line)) <= threshold
         if not eligible:
             continue
-        delivered = sent.get(str(pick.get('id') or ''))
+        pick_id = str(pick.get('id') or '')
+        if pick_id not in originals:
+            quote_blocked.append(pick_id)
+            continue
+        delivered = sent.get(pick_id)
         if delivered is None:
             due = pending.get(str(pick.get('id') or ''))
             if due and due >= now - timedelta(minutes=15):
                 pending_scheduled += 1
             else:
                 missing += 1
+                missing_ids.append(pick_id)
             continue
         delays.append(max(0, round((delivered - settled).total_seconds() / 60, 1)))
     return {'state': 'available', 'source': 'settledAt',
@@ -355,6 +366,7 @@ def result_timeliness(record, posts, now):
             'posted': len(delays), 'within30Minutes': sum(delay <= 30 for delay in delays),
             'over30Minutes': sum(delay > 30 for delay in delays),
             'pendingScheduled': pending_scheduled, 'missing': missing,
+            'missingIds': missing_ids, 'quoteBlocked': len(quote_blocked), 'quoteBlockedIds': quote_blocked,
             'latestMinutesFromFinalToPost': delays[-1] if delays else None,
             'maxMinutesFromFinalToPost': max(delays) if delays else None}
 
@@ -560,7 +572,9 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             issue('delivery-' + field, label)
     result_speed = result_timeliness(read(root / 'site/data/app/record.json'), posts, now)
     if result_speed['state'] == 'available' and result_speed['missing']:
-        issue('result-post-missing', f"{result_speed['missing']} settled win or near miss has no result post in the last 48 hours.")
+        issue('result-post-missing', f"{result_speed['missing']} settled win or near miss with a confirmed original X post has no individual Final in the last 72 hours.")
+    if result_speed['state'] == 'available' and result_speed.get('quoteBlocked'):
+        issue('result-quote-blocked', f"{result_speed['quoteBlocked']} settled result cannot be quoted because its original X delivery was never confirmed.")
     if result_speed['state'] == 'available' and result_speed['over30Minutes']:
         issue('result-post-late', f"{result_speed['over30Minutes']} result post took more than 30 minutes from the first verified final.")
     watch = read(conf / 'live-watch.json')

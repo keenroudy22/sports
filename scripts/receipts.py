@@ -431,7 +431,8 @@ def book(first, latest, games, log_book, now):
             'stale': at(today, BOOK_UNTIL)}
 
 
-CASHED_FRESH = timedelta(hours=3)          # a win settled longer ago than this is left to the morning receipt
+CASHED_FRESH = timedelta(hours=3)          # normal live reaction window
+RESULT_RECOVERY_FRESH = timedelta(hours=72)  # recovery matches the monitored individual-Final window
 LADDER_CASHED_FRESH = timedelta(hours=24)  # the Climb is a continuing story; an overnight final advances next morning
 LADDER_MORNING = (9, 5)                    # a result first verified during quiet hours joins the morning sweep
 QUIET = ((1, 0), (9, 0))                   # Eastern: after 1:00 AM, the morning receipt carries those wins
@@ -475,22 +476,27 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
     merely because the site was rebuilt.
     """
     cutoff = now - timedelta(days=days)
-    posted = set()
+    posted, originals = set(), set()
     for entry in (log_book or {}).get('posts', []):
         key = str(entry.get('id') or '')
+        if (entry.get('kind') == 'buffer:play' and entry.get('tweetId') and entry.get('sentAt')
+                and not entry.get('cancelledAt') and not entry.get('deletedAt')):
+            originals.add(key)
         if key.startswith(('cashed:', 'burnt:')) and (entry.get('card') or entry.get('cardKey')) \
                 and not entry.get('cancelledAt') and not entry.get('deletedAt'):
-            posted.add(key.split(':', 1)[1])
+            source_id = key.split(':', 1)[1]
+            posted.add(source_id)
+            originals.add(source_id)  # an already-recorded card is durable proof of the historical route
     out = []
     for key, original in first.items():
         pick = dict(original, **latest.get(key, {}))
-        if pick_card.play_kind(pick) not in ('player', 'team') or not pick.get('settledAt'):
+        if key not in originals or pick_card.play_kind(pick) not in ('player', 'team') or not pick.get('settledAt'):
             continue
         if pick.get('result') != 'win' and not near_miss(pick):
             continue
         try:
             settled = gates.when(pick['settledAt'])
-            if settled < cutoff or (key not in posted and settled < now - CASHED_FRESH):
+            if settled < cutoff or (key not in posted and settled < now - RESULT_RECOVERY_FRESH):
                 continue
         except (TypeError, ValueError):
             continue
@@ -557,7 +563,7 @@ def burnt_reaction(pick, games=None):
     return f'{play}. {detail}. Pain.' if detail else f'{play}. One short. Pain.'
 
 
-def cashed(first, latest, games, log_book, now):
+def cashed(first, latest, games, log_book, now, fresh_window=None):
     """A win or owner-defined near miss that went out on X gets its reviewed result card and quotes the original.
     Every Climb result is its own continuing-story post: a win advances it, a loss
     shows what stayed banked and starts the next climb at $50, and a push keeps the rung open. The result card remains
@@ -577,7 +583,7 @@ def cashed(first, latest, games, log_book, now):
         if not pick.get('settledAt') or (result != 'win' and not ladder and not near_miss(pick)):
             continue
         settled_at = gates.when(pick['settledAt'])
-        fresh = LADDER_CASHED_FRESH if ladder else CASHED_FRESH
+        fresh = LADDER_CASHED_FRESH if ladder else (fresh_window or CASHED_FRESH)
         if not now - fresh < settled_at <= now:
             continue
         parlay = pick_card.play_kind(pick) == 'parlay'
@@ -612,7 +618,9 @@ def cashed(first, latest, games, log_book, now):
                 continue
         league = str(key).split('-')[0]
         tag = x_post.TAGS.get(league, '')
-        text = '\n'.join(x for x in (head, what, tag, f"https://x.com/{HANDLE}/status/{entry['tweetId']}") if x)
+        # Buffer attaches the confirmed original tweet as native quote metadata.
+        # Keeping the URL out of the caption is an owner requirement.
+        text = '\n'.join(x for x in (head, what, tag) if x)
         out.append({'key': post_key, 'kind': 'cashed', 'card': card, 'text': text, 'due': due,
                     'stale': settled_at + fresh})
     return out

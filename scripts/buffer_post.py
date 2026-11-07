@@ -273,7 +273,8 @@ def stamp(moment):
     return moment.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
 
-def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_send, essential=False):
+def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_send, essential=False,
+                quote_tweet_id=None):
     """Schedule one post for an exact time. Returns Buffer's post id."""
     text = with_age_notice(text)
     if x_post.tweet_length(text) > x_post.LIMIT:
@@ -282,6 +283,13 @@ def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_se
         raise BufferError('outgoing copy fails the public voice check')
     payload = {'text': text, 'channelId': channel_id, 'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': stamp(due_at),
                'needsApproval': False, 'tagIds': [], 'assets': [{'image': {'url': image_url}}] if image_url else []}
+    if quote_tweet_id:
+        quote_tweet_id = str(quote_tweet_id)
+        if not re.fullmatch(r'\d{8,30}', quote_tweet_id):
+            raise BufferError('native quote needs a verified original X post id')
+        # Buffer's current X metadata turns this into a native quote post. The
+        # caption intentionally contains no visible x.com URL.
+        payload['metadata'] = {'twitter': {'retweet': {'id': quote_tweet_id, 'comment': text}}}
     data = graphql(CREATE, {'input': payload}, key=key, send=send, essential=essential)
     result = data.get('createPost') or {}
     if result.get('message'):
@@ -506,7 +514,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         plays.append((target, -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       deadline, key, text, 'play', f'{key}-potd' if key == potd else key))
     order = {'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2, 'sports': 3}
-    house = (receipts.cashed(first, latest, games, log_book, now) if results_only else
+    house = (receipts.cashed(first, latest, games, log_book, now,
+                              fresh_window=receipts.RESULT_RECOVERY_FRESH) if results_only else
              receipts.house_posts(first, latest, games, log_book, now, log=log))
     for post in house:
         if set(post['key'].split('+')) & posted:
@@ -638,6 +647,47 @@ def owner_slip_image(guid, kind, card_key, items=None, now=None):
                 and card_key == x_post.SITE + path)
 
 
+def quote_source_id(guid):
+    """Return the immutable original-play id for an individual Final."""
+    for prefix in ('cashed:', 'burnt:', 'ladder-loss:', 'ladder-push:', 'ladder-void:'):
+        if str(guid).startswith(prefix):
+            return str(guid)[len(prefix):]
+    match = re.fullmatch(r'receipt:cbb:(CBB-[A-Za-z0-9-]+):[0-9a-f]{10}', str(guid))
+    return match.group(1) if match else None
+
+
+def quote_tweet_id(log_book, guid):
+    """Use only a confirmed, still-live original X receipt as a quote target."""
+    source_id = quote_source_id(guid)
+    if not source_id:
+        return None
+    for entry in reversed(log_book.get('posts', [])):
+        if entry.get('id') != source_id or entry.get('cancelledAt') or entry.get('deletedAt'):
+            continue
+        tweet_id = str(entry.get('tweetId') or '')
+        if entry.get('sentAt') and re.fullmatch(r'\d{8,30}', tweet_id):
+            return tweet_id
+    return None
+
+
+def prior_discord_result(log_book, guid):
+    """Return the confirmed Discord result receipt for this original play.
+
+    Result recovery exists to repair X delivery, not to republish a result that
+    already reached Discord through the original play row.
+    """
+    source_id = quote_source_id(guid)
+    if not source_id:
+        return None
+    for original in reversed(log_book.get('posts', [])):
+        if original.get('id') != source_id:
+            continue
+        result = (original.get('discord') or {}).get('result') or {}
+        if result.get('state') == 'sent' and result.get('sentAt'):
+            return dict(result)
+    return None
+
+
 def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=None, log=print, stats=None, items=None):
     """Create the planned posts in Buffer and record each in the log; a play whose card is not live yet is left
     for the next run, never posted bare. Returns the log."""
@@ -682,6 +732,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             log(f'buffer: {guid} deferred: {reason} ({pending}/{BUFFER_QUEUE} scheduled)')
             continue
         combined, combined_result = None, None
+        native_quote_id = quote_tweet_id(log_book, guid)
+        if (kind == 'cashed' or guid.startswith('receipt:cbb:')) and not native_quote_id:
+            log(f'buffer: {guid} held: confirmed original X post is required for the native quote')
+            continue
         if guid.startswith('receipt:cbb:'):
             import cbb_picks
             original = next((p for p in cbb_picks.public_rows() if p.get('result') and cbb_picks.result_key(p) == guid), None)
@@ -778,7 +832,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 continue
         try:
             post_id = create_post(text, channel_id, due, image, key=key, send=send,
-                                  essential=kind in BUFFER_DELIVERY_ESSENTIAL)
+                                  essential=kind in BUFFER_DELIVERY_ESSENTIAL,
+                                  quote_tweet_id=native_quote_id)
         except BufferError as error:
             if cbb_regular:
                 cbb_picks.delivery_failed(guid, now)
@@ -791,6 +846,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
+        if native_quote_id:
+            entry['quoteTweetId'] = native_quote_id
+            entry['quoteSourceId'] = quote_source_id(guid)
         if cbb_regular:
             entry['cbbPick'] = True
             entry['discord'] = {'state':'pending','destination':'plays','text':without_playbook(text),
@@ -824,6 +882,13 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 entry['replacesBufferPostId'] = prior['bufferPostId']
                 if (prior.get('discord') or {}).get('state') == 'sent':
                     entry['discord'] = dict(prior['discord'])
+            if kind == 'cashed':
+                result_receipt = prior_discord_result(log_book, guid)
+                if result_receipt:
+                    entry['discord'] = result_receipt
+                    entry['discord']['destination'] = 'wins'
+                    entry['discord']['reusedResultReceipt'] = True
+                    entry['discordResultSourceId'] = quote_source_id(guid)
         if kind == 'community':
             import discord_post
             phase = discord_post.community_type(guid, items)

@@ -115,7 +115,8 @@ class WindowTests(unittest.TestCase):
         plans=[('optional','research','Research',NOW+timedelta(minutes=5),None),
                ('win','cashed','Win',NOW+timedelta(minutes=10),None),
                ('play','play','Play',NOW+timedelta(minutes=20),None)]
-        bp.schedule(plans,'x',book,NOW,key='test',send=FakeBuffer(),log=lambda *_:None)
+        with mock.patch.object(bp,'quote_tweet_id',return_value='1234567890123456789'):
+            bp.schedule(plans,'x',book,NOW,key='test',send=FakeBuffer(),log=lambda *_:None)
         self.assertEqual([p['id'] for p in book['posts'][7:]],['win','play'])
         self.assertEqual(len(book['posts']),9)
 

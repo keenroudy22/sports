@@ -131,10 +131,20 @@ class DeskHealthTests(unittest.TestCase):
             self.fixture(root)
             self.write(root, 'site/data/app/record.json', {'picks': [
                 {'id': 'missing', 'posted': True, 'result': 'win', 'settledAt': '2026-10-05T13:45:00Z'}]})
-            self.write(root, 'data/x-posted.json', {'posts': []})
+            self.write(root, 'data/x-posted.json', {'posts': [
+                {'id': 'missing', 'kind': 'buffer:play', 'sentAt': '2026-10-05T12:00:00Z',
+                 'tweetId': '1234567890123456789'}]})
             data = H.summary(root, root / 'private', root, NOW)
             self.assertEqual(data['resultTimeliness']['missing'], 1)
             self.assertIn('result-post-missing', {row['code'] for row in data['issues']})
+
+    def test_missing_original_x_receipt_is_a_quote_blocker_not_a_false_result_retry(self):
+        record = {'picks': [
+            {'id': 'never-on-x', 'posted': True, 'result': 'win',
+             'settledAt': '2026-10-05T13:45:00Z'}]}
+        result = H.result_timeliness(record, [], NOW)
+        self.assertEqual(result['missing'], 0)
+        self.assertEqual(result['quoteBlockedIds'], ['never-on-x'])
 
     def test_future_result_post_is_queued_not_missing(self):
         record = {'picks': [
