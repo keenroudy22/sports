@@ -58,7 +58,9 @@
     const market = g.market || {};
     const forecastAt = g.v2?.publishedAt;
     const modelAge = forecastAt ? `<p class="small muted">Projection · ${esc(whenShort(forecastAt))}</p>` : '';
-    const checked = market.retrievedAt ? `<p class="small muted">${esc(bookLabel(market.book) || 'Book')} · checked ${esc(ago(market.retrievedAt))}</p>` : '';
+    const priceAge = market.retrievedAt ? quoteAge(market.retrievedAt, g.kickoff, Date.now(), { odds: -110, state: 'open' }) : null;
+    const currentPrice = priceAge && ['fresh', 'aging'].includes(priceAge.kind);
+    const checked = market.retrievedAt ? `<p class="small ${currentPrice ? 'muted' : 'caution'}">${currentPrice ? '' : 'Reference price · '}${esc(bookLabel(market.book) || 'Book')} · checked ${esc(ago(market.retrievedAt))}</p>` : '';
     return projCard(g, { ...opts, badge, extra: checked + modelAge + (extra ? `<details class="more-box"><summary>Matchup notes</summary>${extra}</details>` : '') });
   };
   const projectionCards = (games, render, label, limit = 6) => {
