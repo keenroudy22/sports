@@ -55497,5 +55497,204 @@
         "publishedAt": "2026-11-07T12:07:08Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-07T13:49:27Z",
+    "summary": "Released 1: Air Force at Army over 43.5 -105 at BetRivers.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 43.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401862823"
+        ],
+        "book": "BetRivers",
+        "odds": -105,
+        "projection": 53.3,
+        "edge": "Price-checked chance 58.2% against the exact two-sided price; 51.2% needed at -105: +7.0 percentage points.",
+        "cutoff": "OVER 43.5 at -105 or better; off the card at 45+, or at -120 or worse at 43.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-01T14:28:51Z",
+        "quotedAt": "2026-11-07T11:31:10Z",
+        "quoteType": "capture",
+        "quoteNote": "BetRivers's number and price from the 6:31 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-07T16:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.728,
+          "chance": 0.582,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.512,
+          "edgePoints": 7.0,
+          "evPerUnit": 0.136,
+          "snapshotAt": "2026-11-01T14:28:51Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-11-07T13:33:15Z",
+          "fairChance": 0.484,
+          "anchoredChance": 0.582,
+          "gap": 9.8,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Air Force Falcons at Army Black Knights",
+        "title": "Air Force at Army over 43.5",
+        "id": "CFB-2026-W10-afa-army-over-43-5-br",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862823",
+          "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+          "https://goairforcefalcons.com/news/2026/11/2/football-game-9-air-force-at-army-west-point"
+        ],
+        "why": "Model lean, our number only. We have the total at 53.3; the book is at 43.5. That makes the over 58.2%, and -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Air Force had not settled its quarterback plan for Army as of November 4: Evan Medders could return from turf toe, Kemper Hodges could play, or Howard Fisher IV could make his second consecutive start. Checked before publishing: Evan Medders could return from a turf toe injury for the Army game. The market: The spread opened -6 and is -4 at DraftKings, a move of 2 toward the away. The total opened 52.5 and is 43.5 at DraftKings, 9 toward the under. 6 books span -4 to -3.5 on the spread; the middle is -3.5. 6 books span 42.5 to 43.5 on the total; the middle is 43.5. Our spread is 4.2 points off, bigger than 57% of our past gaps. Gaps this size went 774-775 against the close in 3584 games. Our total is 9.8 points off, bigger than 98% of our past gaps. Gaps this size went 32-26 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Air Force held the ball for 41:54 against UConn, and one 19-play, 75-yard fourth-quarter drive took 11:37. Statistical counterpoint: Air Force averaged 59.1 passing yards per game and Army averaged 71.1 entering their matchup. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Army had surrendered an average of 36 points in its three losses and allowed a 50.5% third-down success rate."
+          ],
+          "cautions": [
+            "Air Force held the ball for 41:54 against UConn, and one 19-play, 75-yard fourth-quarter drive took 11:37.",
+            "Air Force averaged 59.1 passing yards per game and Army averaged 71.1 entering their matchup."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 43.5. I say 53.3.",
+              "numbers": {
+                "projection": 53.3,
+                "line": 43.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-01T14:28:51Z"
+            },
+            {
+              "text": "Army had surrendered an average of 36 points in its three losses and allowed a 50.5% third-down success rate.",
+              "numbers": {},
+              "source": "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+              "time": "2026-11-07T13:33:15Z"
+            },
+            {
+              "text": "Army had surrendered an average of 36 points in its three losses and allowed a 50.5% third-down success rate.",
+              "numbers": {},
+              "source": "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+              "time": "2026-11-07T13:33:15Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Air Force held the ball for 41:54 against UConn, and one 19-play, 75-yard fourth-quarter drive took 11:37.",
+              "numbers": {},
+              "source": "https://goairforcefalcons.com/news/2026/11/2/football-game-9-air-force-at-army-west-point",
+              "time": "2026-11-07T13:33:15Z"
+            },
+            {
+              "text": "Air Force averaged 59.1 passing yards per game and Army averaged 71.1 entering their matchup.",
+              "numbers": {},
+              "source": "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+              "time": "2026-11-07T13:33:15Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 48,
+            "windMph": 12,
+            "windDirection": "NW",
+            "precipProb": 17,
+            "periodStart": "2026-11-07T19:00:00-05:00",
+            "issuedAt": "2026-11-07T07:00:48+00:00",
+            "source": "https://api.weather.gov/gridpoints/OKX/30,73/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 52.5,
+                  "price": -110,
+                  "time": "2026-10-29T10:34:11Z"
+                },
+                "now": {
+                  "line": 43.5,
+                  "price": -112,
+                  "time": "2026-11-07T11:31:10Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 47.5,
+                  "price": -115,
+                  "time": "2026-11-02T11:45:46Z"
+                },
+                "now": {
+                  "line": 43.5,
+                  "price": -114,
+                  "time": "2026-11-07T11:31:10Z"
+                }
+              }
+            },
+            "best": {
+              "book": "BetRivers",
+              "line": 43.5,
+              "price": -105,
+              "time": "2026-11-07T11:31:10Z"
+            }
+          },
+          "ours": {
+            "projection": 53.3,
+            "line": 43.5,
+            "market": "total",
+            "text": "Book says 43.5. I say 53.3.",
+            "snapshotAt": "2026-11-01T14:28:51Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://goairforcefalcons.com/news/2026/11/2/football-game-9-air-force-at-army-west-point",
+              "time": "2026-11-07T13:33:15Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+              "time": "2026-11-07T13:33:15Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/OKX/30,73/forecast/hourly",
+              "time": "2026-11-07T07:00:48+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401862823",
+              "time": "2026-11-07T13:33:15Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-07T13:49:27Z"
+      }
+    ]
   }
 ]
