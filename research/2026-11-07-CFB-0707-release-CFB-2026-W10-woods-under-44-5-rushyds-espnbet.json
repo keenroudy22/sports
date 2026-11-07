@@ -1,0 +1,219 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-07T12:07:08Z",
+  "summary": "Released 1: Anthony Woods UNDER 44.5 rushing yards +100 at ESPN BET.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "5083175",
+      "market": "rushYds",
+      "line": 44.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401858512"
+      ],
+      "book": "ESPN BET",
+      "odds": 100,
+      "projection": 42.5,
+      "edge": "Price-checked chance 50.4% against the exact two-sided price; 50.0% needed at +100: +0.4 percentage points.",
+      "cutoff": "UNDER 44.5 at +100 or better; off the card at 44 or lower, or at -115 or worse at 44.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-01T14:28:51Z",
+      "quotedAt": "2026-11-07T11:36:54Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 6:36 AM ET capture across 2 books, the best expected value on the board for this side. ESPN BET is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-07T13:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.522,
+        "chance": 0.504,
+        "calibrated": true,
+        "calibration": 0.16,
+        "calibrationN": 2871,
+        "push": 0.0,
+        "breakEven": 0.5,
+        "edgePoints": 0.4,
+        "evPerUnit": 0.007,
+        "snapshotAt": "2026-11-01T14:28:51Z",
+        "probabilitySpec": "8f6c0bdc639135290b89c2e6a75eceaa0201ed509ef90a68a4286ae1309b83e8",
+        "evaluatedAt": "2026-11-07T11:49:15Z",
+        "fairChance": 0.469,
+        "anchoredChance": 0.504,
+        "gap": 3.4,
+        "calibrationFamily": "CFB/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "UCLA Bruins at Minnesota Golden Gophers",
+      "title": "Anthony Woods UNDER 44.5 rushing yards",
+      "id": "CFB-2026-W10-woods-under-44-5-rushyds-espnbet",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858512",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://bigten.org/news/2026/11/6/football-november-heat.aspx",
+        "https://uclabruins.com/news/2026/11/03/no-5-ucla-travels-to-minnesota-for-b1g-road-test-saturday",
+        "https://www.on3.com/sites/bruin-report-online/news/first-availability-report-released-ahead-of-no-8-ucla-at-minnesota/"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 7 of 10 under 44.5.",
+        "context": [
+          "Role: 2nd of 3 UCLA RBs by projected carries, 7.9 a game.",
+          "Defense: MINN allows 92.12 rushing yards a game to RBs, 38th-stingiest of 138 this season."
+        ],
+        "cautions": [
+          "UCLA said Anthony Woods leads the team with 6.6 yards per carry."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 42.5 against 44.5. The under reads 50.4% after adjustment from the raw 52.2%; 50.0% is needed at +100. Last 10 games: 7 of 10 under 44.5. Role: 2nd of 3 UCLA RBs by projected carries, 7.9 a game. Defense: MINN allows 92.12 rushing yards a game to RBs, 38th-stingiest of 138 this season.",
+      "risk": "UCLA said Anthony Woods leads the team with 6.6 yards per carry. An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Under 44.5 in 7 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-07T11:49:15Z"
+          },
+          {
+            "text": "Book says 44.5. I say 42.5.",
+            "numbers": {
+              "projection": 42.5,
+              "line": 44.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-01T14:28:51Z"
+          },
+          {
+            "text": "4 of his last 5 games finished under 44.5 rushing yards.",
+            "numbers": {
+              "values": [
+                41,
+                39,
+                39,
+                112,
+                36
+              ],
+              "hits": 4,
+              "games": 5,
+              "line": 44.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-31T20:15Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "UCLA said Anthony Woods leads the team with 6.6 yards per carry.",
+            "numbers": {},
+            "source": "https://uclabruins.com/news/2026/11/03/no-5-ucla-travels-to-minnesota-for-b1g-road-test-saturday",
+            "time": "2026-11-07T11:49:15Z"
+          },
+          {
+            "text": "UCLA said Anthony Woods leads the team with 6.6 yards per carry.",
+            "numbers": {},
+            "source": "https://uclabruins.com/news/2026/11/03/no-5-ucla-travels-to-minnesota-for-b1g-road-test-saturday",
+            "time": "2026-11-07T11:49:15Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "UCLA starting left tackle Jordan Davis is doubtful for the Minnesota game.",
+            "numbers": {},
+            "source": "https://www.on3.com/sites/bruin-report-online/news/first-availability-report-released-ahead-of-no-8-ucla-at-minnesota/",
+            "time": "2026-11-07T11:49:15Z"
+          },
+          {
+            "text": "UCLA starting left tackle Jordan Davis is doubtful for the Minnesota game.",
+            "numbers": {},
+            "source": "https://www.on3.com/sites/bruin-report-online/news/first-availability-report-released-ahead-of-no-8-ucla-at-minnesota/",
+            "time": "2026-11-07T11:49:15Z"
+          }
+        ],
+        "weather": {
+          "tempF": 43,
+          "windMph": 10,
+          "windDirection": "SSW",
+          "precipProb": 0,
+          "periodStart": "2026-11-07T11:00:00-06:00",
+          "issuedAt": "2026-11-07T09:52:03+00:00",
+          "source": "https://api.weather.gov/gridpoints/MPX/108,72/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": null,
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 47.5,
+                "price": -114,
+                "time": "2026-11-05T18:15:08Z"
+              },
+              "now": {
+                "line": 45.5,
+                "price": -114,
+                "time": "2026-11-07T11:36:54Z"
+              }
+            }
+          },
+          "best": {
+            "book": "ESPN BET",
+            "line": 44.5,
+            "price": 100,
+            "time": "2026-11-07T11:36:54Z"
+          }
+        },
+        "ours": {
+          "projection": 42.5,
+          "line": 44.5,
+          "market": "rushYds",
+          "text": "Under 44.5 in 7 of his last 10 games.",
+          "snapshotAt": "2026-11-01T14:28:51Z"
+        },
+        "history": "Last 10 games: 7 of 10 under 44.5.",
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://uclabruins.com/news/2026/11/03/no-5-ucla-travels-to-minnesota-for-b1g-road-test-saturday",
+            "time": "2026-11-07T11:49:15Z"
+          },
+          {
+            "label": "injury",
+            "url": "https://www.on3.com/sites/bruin-report-online/news/first-availability-report-released-ahead-of-no-8-ucla-at-minnesota/",
+            "time": "2026-11-07T11:49:15Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/MPX/108,72/forecast/hourly",
+            "time": "2026-11-07T09:52:03+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858512",
+            "time": "2026-11-07T11:49:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-07T11:49:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://bigten.org/news/2026/11/6/football-november-heat.aspx",
+            "time": "2026-11-07T11:49:15Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-07T12:07:08Z"
+    }
+  ]
+}
