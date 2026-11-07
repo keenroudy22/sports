@@ -56,8 +56,15 @@
     if (g.nbaSource) return nbaGameCard(g.nbaSource);
     const { badge, extra } = cardExtras(g);
     const market = g.market || {};
+    const forecastAt = g.v2?.publishedAt;
+    const modelAge = forecastAt ? `<p class="small muted">Projection · ${esc(whenShort(forecastAt))}</p>` : '';
     const checked = market.retrievedAt ? `<p class="small muted">${esc(bookLabel(market.book) || 'Book')} · checked ${esc(ago(market.retrievedAt))}</p>` : '';
-    return projCard(g, { ...opts, badge, extra: checked + (extra ? `<details class="more-box"><summary>Matchup notes</summary>${extra}</details>` : '') });
+    return projCard(g, { ...opts, badge, extra: checked + modelAge + (extra ? `<details class="more-box"><summary>Matchup notes</summary>${extra}</details>` : '') });
+  };
+  const projectionCards = (games, render, label, limit = 6) => {
+    const first = games.slice(0, limit).map(g => render(g)).join('');
+    const rest = games.slice(limit);
+    return `<div class="projs">${first}</div>${rest.length ? `<details class="more-box"><summary>All ${games.length} ${esc(label)} games</summary><div class="projs">${rest.map(g => render(g)).join('')}</div></details>` : ''}`;
   };
   const byBettable = (a, b) => (Number(b.bettable) || 0) - (Number(a.bettable) || 0) || String(a.kickoff).localeCompare(String(b.kickoff)) || String(a.id).localeCompare(String(b.id));
   const worthStrip = list => {
@@ -88,7 +95,7 @@
       <span class="k">Total</span><span>${esc(C.fixed(p.total, 1))}</span><span>${quote ? esc(quote.line) : 'Unavailable'}</span><span>${difference === null ? '—' : esc(difference)}</span></div>
       ${quote ? `<p class="small muted">First recorded total · ${esc(quote.book)} · ${esc(whenShort(quote.capturedAt))}. Historical quote, not a live offer.</p>` : ''}`;
     const team=t=>({id:t.id,name:name(t),abbr:t.abbreviation || name(t),logo:t.logo});
-    return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link,ranks:false,barLabel:'Baseline model win chance',extra:`<p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${first}<details><summary>Team scoring stats</summary>${stats}</details>`});
+    return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link,ranks:false,barLabel:'Baseline model win chance',extra:`${first}<details class="more-box"><summary>Team stats & model context</summary><p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${stats}</details>`});
   };
   views.cbbPicks = (data, onlyToday = false) => {
     const r = data.picks || {}, all = r.plays || [];
@@ -174,18 +181,20 @@
       ${confs.length > 1 ? `<label class="sr" for="gconf">Conference</label><select id="gconf" class="select" data-select="gconf"><option value="all"${chosenConf === 'all' ? ' selected' : ''}>All conferences</option>${confs.map(c => `<option value="${esc(c)}"${c === chosenConf ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select>` : ''}
       ${seg('gsort', [['bettable', 'Bettable'], ['kickoff', 'Kickoff']], sort)}</div>`;
     const nbaList = filtered.filter(g => g.league === 'NBA');
-    const nbaSection = nbaList.length ? `<section class="section" id="games-nba"><h2>NBA</h2><p class="small muted">Team projections and current book totals.</p>${nbaProjectionContext(nbaList.map(g => g.nbaSource))}<div class="projs">${nbaList.map(navCard).join('')}</div><p><a href="#research/lines?sport=NBA">NBA player lines & trends ›</a></p></section>` : '';
-    const cbbSection=filtered.some(g=>g.cbbSource) ? `<section class="section"><h2>College hoops</h2><p class="small muted">Baseline team research; not roster/injury adjusted.</p><div class="projs">${filtered.filter(g=>g.cbbSource).map(navCard).join('')}</div></section>` : '';
+    const nbaSection = nbaList.length ? `<section class="section" id="games-nba"><h2>NBA</h2><p class="small muted">Team projections and current book totals.</p>${nbaProjectionContext(nbaList.map(g => g.nbaSource))}${projectionCards(nbaList, navCard, 'NBA', q ? nbaList.length : 6)}<p><a href="#research/lines?sport=NBA">NBA player lines & trends ›</a></p></section>` : '';
+    const cbbList = filtered.filter(g => g.cbbSource);
+    const cbbSection = cbbList.length ? `<section class="section" id="games-cbb"><h2>College hoops</h2><p class="small muted">Team projections · first recorded book totals.</p>${projectionCards(cbbList, navCard, 'CBB', q ? cbbList.length : 6)}</section>` : '';
+    const sportJumps = state.league === 'ALL' ? `<nav class="chip-scroll" aria-label="Jump to sport">${filtered.some(g => g.league === 'NFL') ? '<a class="btn small" href="#games-football">NFL</a>' : ''}${college ? '<a class="btn small" href="#games-college">College football</a>' : ''}${nbaList.length ? '<a class="btn small" href="#games-nba">NBA</a>' : ''}${cbbList.length ? '<a class="btn small" href="#games-cbb">College hoops</a>' : ''}</nav>` : '';
     const stamp = liveStamp(merged.refreshed) + (state.league === 'ALL' && !nba ? '<p class="small muted">NBA data is unavailable right now. Football remains available.</p>' : '');
     if (!filtered.length) return `${top}${toolbar}${controls}${stamp}${empty('No game matches these filters', 'Try another window or conference, or turn off close games only.', 'games')}${nextBtn}`;
     const strip = college ? `<details class="more-box"><summary>More college research</summary>${worthStrip(filtered)}</details>` : '';
     if (sort === 'bettable') {
       const nfl = filtered.filter(g => g.league === 'NFL'), cfb = filtered.filter(g => g.league === 'CFB').sort(byBettable);
       const shown = state.games.all ? cfb : cfb.slice(0, 24);
-      return `${top}${toolbar}${controls}${strip}${stamp}${nbaSection}${cbbSection}${nfl.length ? byDay(nfl, 'NFL') : ''}
-        <p class="eyebrow" style="margin:18px 0 10px">College · most bettable first</p><p class="small muted" style="margin:-6px 0 10px">Ranked for research.</p>
+      return `${top}${toolbar}${sportJumps}${controls ? `<details class="more-box"><summary>College filters & sorting</summary>${controls}</details>` : ''}${strip}${stamp}${nfl.length ? `<section id="games-football">${byDay(nfl, 'NFL')}</section>` : ''}
+        <section id="games-college"><h2 style="margin-top:18px">College football</h2><p class="eyebrow">College · most bettable first</p><p class="small muted" style="margin:-6px 0 10px">Ranked for research.</p>
         <div class="projs">${shown.map(g => navCard(g, { compact: true, ranks: false })).join('')}</div>
-        ${cfb.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-all-games>Show all ${cfb.length} games</button></p>` : nextBtn}`;
+        ${cfb.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-all-games>Show all ${cfb.length} games</button></p>` : nextBtn}</section>${nbaSection}${cbbSection}`;
     }
     return `${top}${toolbar}${controls}${strip}${stamp}${nbaSection}${byDay(filtered.filter(g => g.league !== 'NBA'))}${nextBtn}`;
   };
@@ -743,13 +752,13 @@ return `<article class="card" style="margin-top:12px"><h3>${esc(p.teams.away.abb
     const roster = g.status === 'scheduled' && g.rosterContext ? `<p class="small muted">${esc(g.rosterContext.note)}${g.rosterContext.holds?.length ? ' ' + g.rosterContext.holds.map(esc).join(' · ') : ''}</p>` : '';
     const adjustedMargin = g.rosterContext?.adjustedMarkets?.includes('margin');
     const modelNote = isNum(v2.winProb) && v2.winProb >= 0 && v2.winProb <= 1 ? `<p class="small muted">Model win chance is a score-model estimate; ${adjustedMargin ? 'validated roster adjustment applied; not a bet.' : 'not injury-adjusted or a bet.'}</p>` : '';
-    return projCard({id:g.id,league:'NBA',kickoff:g.kickoff,home:team('home'),away:team('away'),state:g.status === 'in_progress' ? 'in' : 'pre',completed:g.status === 'final',v2},{link:link !== false,ranks:false,barLabel:'Model win chance',extra:extra+roster+modelNote});
+    return projCard({id:g.id,league:'NBA',kickoff:g.kickoff,home:team('home'),away:team('away'),state:g.status === 'in_progress' ? 'in' : 'pre',completed:g.status === 'final',v2},{link:link !== false,ranks:false,barLabel:'Model win chance',extra:comparison + (g.status === 'scheduled' && g.rosterContext?.holds?.length ? `<p class="small caution">${esc(g.rosterContext.holds.join(' · '))}</p>` : '') + (prices.length ? `<p class="small muted">${esc(bookLabel((spread || quote || ml).book))} · checked ${esc(ago((spread || quote || ml).retrievedAt))}</p>` : '<p class="small muted">No fresh book price.</p>') + `<details class="more-box"><summary>Prices & availability</summary>${extra.slice(comparison.length)}${roster}${modelNote}</details>`});
   };
   views.nbaSummary = data => {
     const games = (data.games || []).filter(g => C.dayOf(g.kickoff) === etDay());
     const open = (data.trial?.plays || []).filter(p => !p.result && C.dayOf(p.kickoff) === etDay());
     if (!games.length && !open.length) return '';
-    return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${open.length ? `${open.length} posted NBA picks play${open.length === 1 ? '' : 's'}.` : 'No NBA play posted yet.'} Team projections and player lines are research.</p>${open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}<div class="projs">${games.map(g => nbaGameCard(g)).join('')}</div><a class="more" href="#today?sport=NBA">Open NBA Today ›</a></section>`;
+    return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${open.length ? `${open.length} posted NBA picks play${open.length === 1 ? '' : 's'}.` : 'No NBA play posted yet.'} Team projections and player lines are research.</p>${open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}${projectionCards(games, nbaGameCard, 'NBA', 2)}<a class="more" href="#today?sport=NBA">Open NBA Today ›</a></section>`;
   };
   views.nbaToday = async (opts = {}) => {
     let data = opts.data || await get('app/nba.json');

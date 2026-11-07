@@ -550,6 +550,7 @@
     const rest = parts.slice(1).join('/');
     const q = params.get('q') || '';
     switch (v) {
+      case 'games-football': case 'games-college': case 'games-nba': case 'games-cbb': return { view: 'games', tab: 'upcoming', anchor: v };
       case 'today-card': case 'today-climb': case 'today-posted-straights': case 'cbb-picks': return { view: 'today', anchor: v };
       case '': case 'today': case 'sports': case 'home': case 'overview': case 'digest': return { view: 'today', league: params.get('sport') ? params.get('sport').toUpperCase() : null };
       case 'pick': return rest ? { view: 'pick', id: rest } : { view: 'today' };
@@ -1493,7 +1494,7 @@
   const shareLink = (mode, route) => `<a class="linkish" href="${esc(researchShare(mode, route))}" data-copy-link>Copy link</a>`;
   const RESEARCH_HEAD = {
     trends: ['Hit-rate trends', 'How often a player cleared a line in recorded regular-season games. History, not a probability.'],
-    players: ['Players and matchups', "Each player's recent games against the current line, by matchup."],
+    players: ['Player projections', "Book line, Kook’n projection, edge and recent results—then the deeper evidence."],
     news: ['Injuries and news', 'ESPN injury list and status changes, newest first.'] };
   const researchHead = mode => {
     const [title, sub] = RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
@@ -1786,8 +1787,10 @@
           const review = (pl.underReview || []).includes(key), proj = review ? null : (pl.projection || {})[key];
           const matched = priceMatch({ gameId: g.id, athleteId: pl.id, stat: key, direction: dir, line, odds: cur?.odds, book: cur?.book }, catalog?.lines);
           const gap = averageGap(proj, values);
-          return `<a class="card" style="color:inherit;display:block" href="#player/${esc(league)}/${esc(pl.id)}?stat=${esc(key)}"><div class="with-art">${headshot(league, pl.id, 'sm', null, pl.pos)}<div><b>${esc(pl.name)}</b> <span class="muted small">${esc(pl.pos || '')}</span></div></div>
-            <p class="small" style="margin:8px 0 4px">${status.current ? 'Line' : 'Reference line'} <b>${line == null ? '–' : esc(C.statValue(line, key))} ${esc(dir)}</b>${isNum(proj) ? ` · Our average <b>${esc(C.statValue(proj, key))}</b>` : ''} · Hits <b>${line == null ? '–' : `${values.filter(v => C.thresholdResult(v, line, dir) === 'hit').length}/${values.length}`}</b> (${values.length} games)</p>
+          const hits = line == null ? '–' : `${values.filter(v => C.thresholdResult(v, line, dir) === 'hit').length}/${values.length}`;
+          const delta = isNum(proj) && line != null ? proj - line : null;
+          return `<a class="card player-quick" style="color:inherit;display:block" href="#player/${esc(league)}/${esc(pl.id)}?stat=${esc(key)}"><div class="with-art">${headshot(league, pl.id, 'sm', null, pl.pos)}<div><b>${esc(pl.name)}</b> <span class="muted small">${esc(pl.pos || '')}</span></div></div>
+            <div class="kt-number-grid player-quick-numbers"><span><small>Book line</small><b>${line == null ? '–' : esc(C.statValue(line, key))}</b></span><span><small>Kook’n projection</small><b>${isNum(proj) ? esc(C.statValue(proj, key)) : 'Unavailable'}</b></span><span><small>Projection vs line</small><b>${delta == null ? '–' : esc(`${delta > 0 ? '+' : ''}${C.fixed(delta)}`)}</b></span><span><small>Recent hits</small><b>${esc(hits)}</b></span></div>
             <p class="tiny muted">${esc(status.label)}${cur && cur.book ? ` · ${esc(bookLabel(cur.book) || cur.book)}` : ''}${cur && isNum(cur.odds) ? ` ${esc(oddsText(cur.odds))}` : ''}${cur && cur.observedAt ? ` · ${esc(ago(cur.observedAt))}` : ''}</p>
             <p class="small">${esc(researchPrice(matched || {}))}</p>${gap ? `<p class="small red">${esc(gap)}</p>` : ''}
             ${matched?.qbNews ? `<p class=caution>QB news: ${esc(matched.qbNews)}</p>` : ''}
@@ -1802,7 +1805,7 @@
         <label class="sr" for="cstat">Stat</label><select id="cstat" class="select" data-select="chartStat">${(stats.length ? stats : CHART_STATS).map(([k, l]) => `<option value="${k}"${k === key ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>
         <label class="sr" for="cgame">Games</label><select id="cgame" class="select" data-select="chartGame">${gameOptions}</select>
 </div>${filtersFold('players', `${pos === 'all' ? 'All positions' : pos === 'PK' ? 'K' : pos} · ${{ last5: 'Last 5', last10: 'Last 10', season: 'Season' }[p.chartWindow]}`, seg('cpos', [['all', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['PK', 'K']], pos) + seg('cwin', [['season', 'Season'], ['last10', 'Last 10'], ['last5', 'Last 5']], p.chartWindow))}
-      ${note ? `<p class="small" style="margin-bottom:6px">${esc(note)}</p>` : ''}<p class="small muted" style="margin-bottom:6px">${anyLine ? '' : `No recorded lines for ${esc((CHART_STATS.find(([k]) => k === key) || [, key])[1])}. Showing history only. `}Every player in the matchup with recent games against the line we saw. Green cleared the line, red missed, gray tied or not recorded. History is not a probability. ${shareLink('players')}</p>
+      ${note ? `<p class="small" style="margin-bottom:6px">${esc(note)}</p>` : ''}<p class="small muted" style="margin-bottom:6px">${anyLine ? '' : `No recorded lines for ${esc((CHART_STATS.find(([k]) => k === key) || [, key])[1])}. Showing history only. `}Green cleared the line; red missed. History is not a probability. ${shareLink('players')}</p>
       ${blocks.length ? blocks.map(([g, h]) => `<section class="section" style="margin:14px 0"><div class="section-head"><h2>${esc(g.away.abbreviation)} at ${esc(g.home.abbreviation)}</h2><a class="more" href="#game/${esc(g.id)}">Game page →</a></div><p class="section-note">${esc(when(g.kickoff))}</p>${h}</section>`).join('') : empty('No players match', 'Try another name, team, stat or position.', 'research')}`;
   };
 
@@ -2025,8 +2028,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-1dc5280653c7';
-  const GAMES_ASSET = 'app-games.js?v=sha256-ed2da59716f0';
+  const MORE_ASSET = 'app-more.js?v=sha256-2c883c131f36';
+  const GAMES_ASSET = 'app-games.js?v=sha256-adb99b964acc';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

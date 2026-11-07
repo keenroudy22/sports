@@ -258,6 +258,11 @@
     const pricesText = sides[0] && sides[1] && sides[0].odds === sides[1].odds && sides[0].book === sides[1].book ? `Both sides <b class="num">${esc(odd(sides[0].odds))}</b> at ${esc(sides[0].book)}.`
       : held ? (line != null ? `Main line <b class="num">${esc(valueText(line))}</b>${quoteBook ? ` at ${esc(quoteBook)}` : ''}.` : '')
       : sides.filter(Boolean).map(x => `${x.dir === 'over' ? 'Over' : 'Under'} <b class="num">${esc(odd(x.odds))}</b> at ${esc(x.book)}`).join(', ') + (sides.some(Boolean) ? '.' : '');
+    const projectionValue = Array.isArray(projV) && isNum(projV[0]) ? projV[0] : null;
+    const projectionDelta = projectionValue != null && line != null ? projectionValue - line : null;
+    const projectionLabel = held ? 'Held' : projectionValue == null ? 'Unavailable' : valueText(projectionValue);
+    const edgeLabel = held || projectionDelta == null ? '–' : `${projectionDelta > 0 ? '+' : ''}${C.fixed(projectionDelta)}`;
+    const hitLabel = h && h.n ? `${h[dir]}/${h.n}` : '–';
     const unitFor = STAT_UNITS[isQuarter ? stat.slice(3) : stat] || [String(PLAYER_LABEL[stat] || stat).toUpperCase()];
     const shown = recent.slice(-8), sv = shown.map(r => read(r, stat));
     const top = Math.max(...sv.filter(isNum), line || 0) || 1;
@@ -269,11 +274,12 @@
       <figcaption class="kt-cap">${h && h.n ? `<b>${h[dir]} of ${h.n} ${dir} ${esc(valueText(line))}.</b> ` : ''}${recent.length > shown.length ? `The last ${shown.length} of ${recent.length} games shown.` : ''}</figcaption></figure>` : '<p class="kt-cap">No stored games in this selection.</p>';
     const sheet = `<section class="kt-sheet" aria-labelledby="line-h"><div class="kt-order"><div class="kt-shade"><div class="kt-paper">
       <p class="kt-k" id="line-h">${isQuarter ? `${PLAYER_LABEL[stat]} · history` : next ? (lineStatus && lineStatus.current ? 'Tonight\'s line' : line != null ? 'Reference line' : 'No line yet') : 'Recent games'}</p>
-      ${line != null ? `<div class="kt-betrow"><p class="kt-bet num" style="--bet-size:58px">${esc(valueText(line))}<span class="kt-unit">${unitFor.map(esc).join('<br>')}</span></p>${held ? `<span class="kt-stamp hold" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span>` : ''}</div>` : ''}
+      <div class="kt-number-grid kt-player-numbers"><span><small>Book line</small><b class="num">${line == null ? '–' : esc(valueText(line))}</b></span><span><small>Kook’n projection</small><b class="num">${esc(projectionLabel)}</b></span><span><small>Projection vs line</small><b class="num">${esc(edgeLabel)}</b></span><span><small>Recent hits</small><b class="num">${esc(hitLabel)}</b></span></div>
+      ${held ? `<span class="kt-stamp hold kt-player-hold" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span>` : ''}
       ${pricesText ? `<p class="kt-prices">${pricesText}</p>` : ''}
       ${held ? `<p class="kt-held">${esc(heldText)}</p>`
         : `${priced && priced.calibrated && priced.chance != null ? `<p class="kt-lead kt-chance" style="margin-top:8px"><span>I have ${esc(priced.direction || dir)} at<b class="num">${pctOne(priced.chance)}</b></span><i></i><span>the price needs<b class="num">${pctOne(priced.needs)}</b></span></p>${hasValue(priced) ? '<p class="kt-prices">✓ clears my price</p>' : ''}` : ''}
-          ${Array.isArray(projV) ? `<p class="kt-prices">My average for this game: <b class="num">${esc(valueText(projV[0]))}</b>, usually ${esc(rangeText(projV[1]))} to ${esc(rangeText(projV[2]))}.</p>` : ''}`}
+          ${Array.isArray(projV) ? `<p class="kt-prices">Typical range ${esc(rangeText(projV[1]))}–${esc(rangeText(projV[2]))}.</p>` : ''}`}
       ${chart}<div class="kt-perf"></div><div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(!isQuarter && lineStatus ? `${lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></div></div></div></section>`;
     const tds = recent.reduce((n, r) => n + (read(r, 'passTD') || 0), 0), ints = recent.reduce((n, r) => n + (read(r, 'int') || 0), 0), any = recent.reduce((n, r) => n + (read(r, 'anyTD') || 0), 0);
     const big = summary ? `<div class="kt-big"><p><b class="num">${esc(valueText(summary.avg))}</b>${esc(word)} a game</p><p class="rest">Median ${esc(valueText(summary.median))}.${!isQuarter && pos === 'QB' ? ` ${tds} TD, ${ints} INT.` : !isQuarter && any ? ` ${any} TD.` : ''}</p></div>` : '';
@@ -308,7 +314,7 @@
     return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}${q1}
       ${filtersFold('player', showing, `${seasonSelect}${seg('pwin', [['all', 'All games'], ['last5', 'Last 5'], ['last10', 'Last 10'], ['last20', 'Last 20']], win)}`)}
       ${!recent.length ? `<p class="btn-row">${seasons.filter(x => x !== Number(currentSeason)).slice(0, 1).map(x => `<button type="button" class="btn small" data-set="pseason:${x}">Show ${x}</button>`).join('')}<button type="button" class="btn small" data-set="pseason:all">All seasons</button></p>` : ''}
-      ${big}${matchup}${opponentTrend && opponentTrendText(opponentTrend) ? `<p class="kt-matchup ${opponentTrend.opponentAdjustment?.against ? 'red' : ''}">${esc(opponentTrendText(opponentTrend))}</p>` : ''}
+      <details class="plain-fold kt-player-detail" data-box="player-context"><summary>Why this number</summary>${big}${matchup}${opponentTrend && opponentTrendText(opponentTrend) ? `<p class="kt-matchup ${opponentTrend.opponentAdjustment?.against ? 'red' : ''}">${esc(opponentTrendText(opponentTrend))}</p>` : ''}</details>
       <div class="btn-row" style="margin-top:14px">${watchButton({ type: 'player', key: `player:${league}:${route.id}`, title: data.name, league, href: `#player/${league}/${route.id}` })}<a class="btn small" href="${esc(shareHref)}" data-copy-link>Copy link</a></div>
       <section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">${esc(scope === 'current' ? 'Regular season' : scopeLabel)}</span></div>${chalkLog}
       <details class="plain-fold" data-box="player-every"><summary>${isQuarter ? 'Every full-game stat' : 'Every stat'}</summary>${log.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${cols.map(k => `<th class="n">${esc(PLAYER_LABEL[k] || k)}</th>`).join('')}</tr></thead><tbody>${log.map(r =>

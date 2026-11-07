@@ -686,7 +686,17 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-number-grid b { font-size: 16px; line-height: 1.15; }
 .kt-number-status { margin: 12px 0 0; }
 .kt-number-chance { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 5px; color: var(--muted); font-size: 13px; }
-@media (max-width: 520px) { .kt-number-grid { grid-template-columns: 1fr; } .kt-number-grid > span { flex-direction: row; align-items: baseline; justify-content: space-between; } }
+.kt-player-numbers { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 12px 0; }
+.kt-player-numbers b { font-size: 22px; }
+.kt-player-hold { position: static; margin: 2px 0 8px; transform: rotate(-2deg); }
+.kt-player-detail { max-width: 720px; margin-top: 18px; }
+.player-quick-numbers { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 10px 0; }
+.player-quick-numbers > span { padding: 8px; }
+.player-quick-numbers b { font-size: 14px; }
+@media (max-width: 520px) { .kt-number-grid { grid-template-columns: 1fr; } .kt-number-grid > span { flex-direction: row; align-items: baseline; justify-content: space-between; }
+  .kt-player-numbers, .player-quick-numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kt-player-numbers > span, .player-quick-numbers > span { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+}
 
 /* Quarter history stays separate from the full-game ticket. */
 .kt-quarter { max-width: 720px; margin: 24px 0; padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.02); }

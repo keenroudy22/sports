@@ -116,11 +116,13 @@ test('Under review shows no projection, chance or edge, and quotes only the save
   assert.match(page, /<button type="button" data-set="pstat:passYds" aria-pressed="true">/);
 });
 
-test('a player line with no hold keeps its price check and the projection sentence', async () => {
+test('a player line with no hold puts the projection beside the book line and keeps its price check', async () => {
   const page = await playerPage(false);
   assert.doesNotMatch(page, /UNDER REVIEW|No grade from me/);
   assert.match(page, /I have over at<b class="num">57\.0%<\/b>/);
-  assert.match(page, /My average for this game: <b class="num">167\.1<\/b>/);
+  assert.match(page, /<small>Kook’n projection<\/small><b class="num">167\.1<\/b>/);
+  assert.match(page, /<small>Projection vs line<\/small><b class="num">-94\.4<\/b>/);
+  assert.match(page, /<details class="plain-fold kt-player-detail"[^>]*><summary>Why this number<\/summary>/);
 });
 
 /* A soft pass defense for NMSU (rank 3 of 3), so an unheld over reads "supports the over". */
