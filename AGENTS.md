@@ -1,3 +1,11 @@
+# November8 owner — results may release together
+
+Graded result posts have no Discord exclusivity or lead requirement. Release
+X and Discord in the same eligible publishing cycle when each route is ready;
+never delay one solely to create a lead on the other. Preserve actual grading,
+artwork, quote and Sent-receipt checks. This permission does not change pregame
+pick leads or authorize wagers. Prioritize the full-slate recap by8AM Eastern.
+
 # November8 owner delegation — daily card and conditional rollover
 
 The owner delegates selection and reasonable big-slate expansion: target five
