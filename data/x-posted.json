@@ -9803,7 +9803,7 @@
    "discordResultSourceId": "CFB-2026-W10-colo-asu-ml-home-0-dk",
    "cardKey": "cooked-CFB-2026-W10-colo-asu-ml-home-0-dk",
    "socialStyleAudit": {
-    "checkedAt": "2026-11-08T15:54:50Z",
+    "checkedAt": "2026-11-08T16:00:11Z",
     "state": "unverified",
     "error": "queued style check cannot confirm a private scheduled provider state"
    }
@@ -10030,7 +10030,11 @@
    "socialStyleVersion": "units-only-no-decimal-20261027",
    "socialVoiceVersion": "casual-20261022",
    "socialAgeVersion": "age-20261023",
-   "cardKey": "sheet-nfl-2026-11-08"
+   "cardKey": "sheet-nfl-2026-11-08",
+   "socialStyleAudit": {
+    "checkedAt": "2026-11-08T16:00:11Z",
+    "state": "clear"
+   }
   },
   {
    "id": "research:season:2026-11-08",
@@ -10052,6 +10056,26 @@
     "image": "https://keenroudy.com/sports/data/cards/research-season-2026-11-08.png"
    },
    "cardKey": "research-season-2026-11-08"
+  },
+  {
+   "id": "nba-trends-2026-11-08",
+   "postedAt": "2026-11-08T16:00:11Z",
+   "dueAt": "2026-11-08T16:42:05Z",
+   "bufferPostId": "6af09c99562f2e6de9c9fdb9",
+   "textHash": "cf5f9bb761f879c0",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "NBA totals on my radar 👀\nNO at LAC: book 228.5, my total about 232.\nUTAH at MIN: book 223.5, my total about 226.\nBKN at DAL: book 220.5, my total about 223.\nMIA at SAC: book 237.5, my total about 240.\nModel/line gaps, not ranked bets. Research, not a bet.\n#NBA\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "NBA totals on my radar 👀\nNO at LAC: book 228.5, my total about 232.\nUTAH at MIN: book 223.5, my total about 226.\nBKN at DAL: book 220.5, my total about 223.\nMIA at SAC: book 237.5, my total about 240.\nModel/line gaps, not ranked bets. Research, not a bet.\n#NBA\n\n21+ only",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/nba-trends-2026-11-08.png"
+   }
   }
  ]
 }
