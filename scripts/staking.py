@@ -105,7 +105,8 @@ def check(candidate, ctx):
         day_rows.append(row)
     value = units(candidate)
     ceiling = limit(on, games)
-    # Owner's Nov8 action-time approval is for this exact Step3 only. It
+    # Owner's Nov8 follow-up delegates this full rollover after the fourth
+    # straight released. This allowance remains for this exact Step3 only. It
     # neither replenishes today's budget nor authorizes a later Step4.
     info = candidate.get('ladder') or {}
     if (on.isoformat() == '2026-11-08'
@@ -115,7 +116,7 @@ def check(candidate, ctx):
             and info.get('run') == 4 and info.get('step') == 3
             and type(info.get('stake')) is int and info['stake'] == 76
             and not info.get('stakeAdjustment')):
-        ceiling = 6.04
+        ceiling = 7.04
     if value is None:
         return 'shared exposure: candidate stake unknown'
     if used + value > ceiling + 1e-9:

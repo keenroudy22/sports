@@ -7,6 +7,7 @@ remain charged conservatively. This never changes a subscription or enables over
 """
 import fcntl
 import json
+import hashlib
 import os
 import urllib.parse
 import urllib.request
@@ -25,8 +26,56 @@ BUFFER_TEMP_STOP = BUFFER_ESSENTIAL_STOP
 BUFFER_TEMP_START = datetime(2026, 10, 26, 13, 55, tzinfo=timezone.utc)
 BUFFER_TEMP_END = datetime(2026, 11, 6, 13, 5, tzinfo=timezone.utc)
 BUFFER_DELIVERY_RESERVE = 300
-BUFFER_ANALYTICS_PER_DAY = 12
+BUFFER_ANALYTICS_PER_DAY = 3  # Sample engagement without crowding out actual publication.
 SHARP_PER_MINUTE = 12
+
+
+def observe_buffer_usage(used, limit, *, root=STATE, now=None):
+    """Save an attended official Usage observation without deleting reservations.
+
+    Caller must have read the signed-in Buffer API Usage page. Every subsequent
+    reservation adds to this conservative baseline, even after calendar rollover.
+    """
+    now = now or datetime.now(timezone.utc)
+    if type(used) is not int or type(limit) is not int or limit != 1000 or not 0 <= used <= limit:
+        raise ValueError('Expected the observed single-channel Free allowance')
+    root = Path(root); root.mkdir(parents=True, exist_ok=True)
+    with (root/'buffer.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        raw = (root/'buffer.jsonl').read_bytes() if (root/'buffer.jsonl').exists() else b''
+        rows = [json.loads(line) for line in raw.splitlines() if line.strip()]
+        value = dict(version=1, used=used, limit=limit, observedAt=now.isoformat(),
+                     accountIdentity=hashlib.sha256((os.environ.get('BUFFER_CHANNEL','')+'|'+os.environ.get('BUFFER_TOKEN','')).encode()).hexdigest(),
+                     source='https://publish.buffer.com/settings/api',
+                     method='attended-official-usage', journalBytes=len(raw), journalRows=len(rows),
+                     journalHash=hashlib.sha256(raw).hexdigest())
+        path=root/'buffer-observation.json'; temporary=path.with_suffix('.tmp')
+        temporary.write_text(json.dumps(value)+'\n'); temporary.replace(path)
+    return value
+
+
+def observed_buffer_usage(root, rows, now):
+    """Conservative provider baseline plus all appended local attempts. No reset."""
+    path=Path(root)/'buffer-observation.json'
+    if not path.exists(): return None
+    try:
+        value=json.loads(path.read_text()); at=datetime.fromisoformat(value['observedAt'])
+        raw=(Path(root)/'buffer.jsonl').read_bytes() if (Path(root)/'buffer.jsonl').exists() else b''
+        size=value['journalBytes']; count=value['journalRows']
+        if (value['version'] != 1 or value['method'] != 'attended-official-usage'
+                or value.get('accountIdentity') != hashlib.sha256((os.environ.get('BUFFER_CHANNEL','')+'|'+os.environ.get('BUFFER_TOKEN','')).encode()).hexdigest()
+                or value['source'] != 'https://publish.buffer.com/settings/api'
+                or type(value['used']) is not int or value['limit'] != 1000
+                or not 0 <= value['used'] <= 1000
+                or type(size) is not int or not 0 <= size <= len(raw)
+                or type(count) is not int or not 0 <= count <= len(rows)
+                or len([line for line in raw[:size].splitlines() if line.strip()]) != count
+                or hashlib.sha256(raw[:size]).hexdigest() != value['journalHash']
+                or not 0 <= (now-at).total_seconds() < 30*86400):
+            raise ValueError('Invalid observation anchor')
+        return value['used'] + sum(r['count'] for r in rows[count:])
+    except (OSError, ValueError, KeyError, TypeError):
+        raise QuotaBlocked('Buffer usage observation needs review') from None
 
 
 class QuotaBlocked(RuntimeError):
@@ -87,8 +136,6 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
                 raise ValueError('invalid journal')
             month = now.astimezone(timezone.utc).strftime('%Y-%m')
             stop = buffer_request_stop(essential, operation) if provider == 'buffer' else BUFFER_STOP
-            if provider == 'buffer' and sum(row['count'] for row in rows if row.get('month') == month) >= stop:
-                raise QuotaBlocked('Buffer local free-plan request cap reached')
             if provider == 'buffer':
                 # The provider also enforces a rolling window. Calendar rollover
                 # must not reset the local protection or spend delivery reserves
@@ -96,9 +143,15 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
                 rolling = sum(row['count'] for row in rows
                               if 0 <= (now - datetime.fromisoformat(row['at'])).total_seconds() < 30 * 86400)
                 monthly = sum(row['count'] for row in rows if row.get('month') == month)
+                observed = observed_buffer_usage(root, rows, now)
+                if observed is not None:
+                    rolling = monthly = observed
+                    stop = 950 if essential or operation in ('status','channels','limits','cancel') else 900
+                if monthly >= stop:
+                    raise QuotaBlocked('Buffer local free-plan request cap reached')
                 if rolling >= stop:
                     raise QuotaBlocked('Buffer local free-plan rolling 30-day cap reached')
-                if optional and max(rolling, monthly) >= BUFFER_STOP - BUFFER_DELIVERY_RESERVE:
+                if optional and max(rolling, monthly) >= min(BUFFER_STOP - BUFFER_DELIVERY_RESERVE, stop-100):
                     raise QuotaBlocked('Buffer delivery reserve protected; optional analytics deferred')
                 if optional and sum(row['count'] for row in rows
                         if row.get('operation') == 'analytics'

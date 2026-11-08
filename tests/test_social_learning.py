@@ -65,7 +65,7 @@ class SocialLearningTests(unittest.TestCase):
         entries=[dict(id=str(i),bufferPostId=str(i),sentAt=gates.stamp(NOW-timedelta(hours=73)),
                metricsAt=gates.stamp(NOW-timedelta(hours=49)),metrics={'impressions':100}) for i in range(10)]
         send=lambda *a:(200,b'{"data":{"post":{"metrics":[{"type":"impressions","value":200}]}}}')
-        self.assertEqual(b.collect_metrics({'posts':entries},NOW,key='t',send=send),8)
+        self.assertEqual(b.collect_metrics({'posts':entries},NOW,key='t',send=send),3)
         self.assertEqual(b.collect_metrics({'posts':entries},NOW,key='t',send=send),0)
 
     def test_failed_reads_are_budgeted_and_first_reads_go_first(self):
@@ -79,7 +79,7 @@ class SocialLearningTests(unittest.TestCase):
         book={'posts':entries}
         self.assertEqual(b.collect_metrics(book,NOW,key='t',send=failed,log=lambda *_:None),0)
         self.assertEqual(calls[0],'first')
-        self.assertEqual(len(calls),9)
+        self.assertEqual(len(calls),3)
         calls.clear()
         b.collect_metrics(book,NOW,key='t',send=failed,log=lambda *_:None)
         self.assertEqual(calls,[], 'failed first reads have the same retry cooldown')

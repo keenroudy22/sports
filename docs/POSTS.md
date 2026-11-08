@@ -1,3 +1,31 @@
+## November 8: owner voice and useful research
+
+Write as Kook’n in first person. Lead with the exact selection, line, price and book.
+Use one or two current verified facts that explain THIS wager: changed role/minutes,
+coverage or defensive matchup, pace/opportunities, or a meaningful price comparison.
+State how the evidence supports the selection and retain material uncertainty.
+No invented coach quotes, opponent ranks, probabilities or positive-EV claims.
+Do not pad with “they need to win,” “more touches means more yards,” “should be a
+fun matchup,” obvious betting definitions, personal-ticket disclaimers, or AI/desk
+process language. Omit weak commentary rather than make it sound more convincing.
+Keep the actual player/stat/period explicit, blank lines between sections, one leg
+per line, units only and 21+ only. Original records and sent captions stay intact.
+
+Research formats to test in existing approved slots: (1) exact line plus a sourced
+role/matchup reason; (2) Kook’n vs. the Book comparison with honest model status;
+(3) verified alternate-threshold hit counts with N/N, period and season, explicitly
+history rather than a promised probability. A 100% sample is never a guarantee.
+Keep official picks, research and fun tickets identifiable. No new giveaways,
+engagement automation, or copying another account’s selections.
+
+Free-delivery budget: reuse verified channel identity for 24h, invalidate on token/
+channel/account identity changes, and limit optional API metric reads to 3/day.
+This changes neither provider limits nor actual Sent verification. Refresh 24h/72h/
+7d snapshots within existing jobs; report unmeasured posts and stale metrics plainly.
+Compare medians and interactions per 1,000 views within format and post age, retaining
+wins AND losses. Follower/profile/Discord conversion remains unknown until observed;
+never claim an improvement from missing values. No paid plan or API credit purchase.
+
 ## Owner stake update — October29, prospective
 
 New Best Bets/NBA Picks use1u; new Chef’s Picks use2u from13:28:41Z.
@@ -279,3 +307,13 @@ retain their value, two-sided price, current injury, role and final-send checks.
 Player props, quarters and Climbs still need their own supported admission and
 grading path; a label change is not a passed model experiment. The separate NBA
 record continues to count only actual publications and their original stakes.
+
+November 8 capacity evidence: attended Buffer Settings → API showed629/1,000
+requests over30days, not an exhausted provider. Preserve the old local journal.
+A verified Usage observation anchors its existing byte-prefix/hash and adds every
+subsequent attempted request conservatively. The account/token identity is bound;
+changed credentials, altered journals, future/expired observations hold for review.
+With this single-channel Free observation, routine stops at900 and essential
+delivery/control at950. Calendar rollover does not reset the baseline. There is
+no paid call, raised allowance or inferred Sent receipt. Re-observe official Usage
+in an existing attended review when the conservative reserve needs refreshing.

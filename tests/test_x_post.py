@@ -20,6 +20,13 @@ PICK = {'id': 'CFB-2026-W5-iowa-michigan-under-38-5-fd', 'title': 'Iowa at Michi
 
 
 class OAuthTests(unittest.TestCase):
+    def test_owner_voice_omits_betting_truisms_but_keeps_specific_matchup_facts(self):
+        for text in ('They just need to win.', 'More targets means more yards.',
+                     'This should be a fun matchup.'):
+            self.assertFalse(x_post.plain(text))
+            self.assertEqual(x_post._short_reason(text), '')
+        self.assertTrue(x_post.plain('Queens returns Parker, Mann and Watford; LMU has eight transfers.'))
+
     def test_signature_matches_the_documented_example(self):
         # The worked example from X's own OAuth 1.0a signing guide.
         creds = {'consumer_key': 'xvz1evFS4wEEPTGEFPHBog', 'consumer_secret': 'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw',

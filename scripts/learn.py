@@ -390,12 +390,14 @@ def engagement(entry):
     return (1000.0 * acts / views) if views else None
 
 
-def engagement_scorecard(log_book):
+def engagement_scorecard(log_book, now=None):
     """Minimal settled scorecard using the owner's public engagement formula.
 
     Buffer names likes ``reactions``.  The retired @Playbook mention generated one automated reply, so that one
     comment is removed before counting human replies.  Missing-view rows are not silently treated as zero.
     """
+    from statistics import median
+    now = now or datetime.now(timezone.utc)
     rows = []
     for entry in log_book.get('posts', []):
         metrics = entry.get('metrics') or {}
@@ -404,6 +406,8 @@ def engagement_scorecard(log_book):
         if not views or rate is None:
             continue
         rows.append({'kind': str(entry.get('kind') or 'unknown').removeprefix('buffer:'),
+                     'reasonKind': entry.get('reasonKind') or 'unknown',
+                     'sentAt': entry.get('sentAt'),
                      'theme': entry.get('cardTheme') or ('none' if entry.get('card') is False else 'legacy'),
                      'views': views, 'interactions': round(rate * views / 1000.0)})
 
@@ -411,6 +415,7 @@ def engagement_scorecard(log_book):
         views = sum(row['views'] for row in items)
         interactions = sum(row['interactions'] for row in items)
         return {'posts': len(items), 'impressions': views, 'interactions': interactions,
+                'medianViews': median([row['views'] for row in items]) if items else None,
                 'perThousand': round(1000.0 * interactions / views, 2) if views else None,
                 'smallSample': len(items) < ENGAGE_MIN}
 
@@ -418,8 +423,29 @@ def engagement_scorecard(log_book):
     by_theme = [{'category': kind, 'theme': theme,
                  **summary([row for row in rows if (row['kind'], row['theme']) == (kind, theme)])}
                 for kind, theme in sorted({(r['kind'], r['theme']) for r in rows})]
-    return {'formula': '(likes + reposts + quotes + human replies + clicks) per 1,000 impressions',
-            'measuredPosts': len(rows), 'overall': summary(rows), 'byKind': by_kind, 'byTheme': by_theme}
+    def past(value, days=None):
+        try:
+            age = now - datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+            return age.total_seconds() >= 0 and (days is None or age < timedelta(days=days))
+        except (ValueError, TypeError):
+            return False
+    sent = [e for e in log_book.get('posts', []) if past(e.get('sentAt'), 30)]
+    measured = sum(bool(e.get('metrics')) for e in sent)
+    recent = [r for r in rows if past(r['sentAt'], 30)]
+    clocks = [e['metricsAt'] for e in log_book.get('posts', [])
+              if e.get('metrics') and past(e.get('metricsAt'))]
+    latest = max(clocks, key=lambda t: datetime.fromisoformat(t.replace('Z', '+00:00')), default=None)
+    return {'generatedAt': now.isoformat(),
+            'formula': '(likes + reposts + quotes + human replies + clicks) per 1,000 impressions',
+            'measuredPosts': len(rows), 'overall': summary(rows), 'byKind': by_kind, 'byTheme': by_theme,
+            'coverage': {'confirmedLast30Days': len(sent), 'measuredLast30Days': measured,
+                         'unmeasuredLast30Days': len(sent)-measured, 'latestMetricsAt': latest,
+                         'metricsStale': latest is None or not past(latest, 8)},
+            'last30Days': summary(recent),
+            'last30ByKind': {kind: summary([r for r in recent if r['kind'] == kind])
+                             for kind in sorted({r['kind'] for r in recent})},
+            'byReasonKind': {kind: summary([r for r in rows if r['reasonKind'] == kind])
+                             for kind in sorted({r['reasonKind'] for r in rows})}}
 
 
 MATCHUP_COVERAGE = {

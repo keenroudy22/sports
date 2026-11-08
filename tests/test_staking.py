@@ -29,7 +29,7 @@ class StakingTests(unittest.TestCase):
         ctx = context()
         ctx.now = datetime(2026, 11, 8, 13, tzinfo=timezone.utc)
         start = '2026-11-08T14:30:00Z'
-        ctx.first = {str(i): dict(pick(str(i), 1), kickoff=start) for i in range(3)}
+        ctx.first = {str(i): dict(pick(str(i), 1), kickoff=start) for i in range(4)}
         rung = dict(pick('NFL-2026-W9-ladder-1108-c4s3-fd'), kickoff=start,
                     parlayType='ladder', ladder=dict(run=4, step=3, stake=76))
         self.assertIsNone(staking.check(rung, ctx))
@@ -38,7 +38,7 @@ class StakingTests(unittest.TestCase):
                         dict(rung, ladder=dict(run=4, step=3, stake=77))):
             self.assertIn('exceeds 5u', staking.check(changed, ctx))
         ctx.first['extra'] = dict(pick('extra', .01), kickoff=start)
-        self.assertIn('exceeds 6.04u', staking.check(rung, ctx))
+        self.assertIn('exceeds 7.04u', staking.check(rung, ctx))
         ctx.first.pop('extra')
         ctx.first[rung['id']] = dict(rung, result='win')
         self.assertIn('exceeds 5u', staking.check(dict(pick('new', 1), kickoff=start), ctx))

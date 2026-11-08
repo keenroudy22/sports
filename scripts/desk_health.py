@@ -595,8 +595,18 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     if projected is not None and projected > 450:
         issue('odds-pace', 'The stored Odds API pace projects past 450 free credits this month.')
     request_counts = quota.monthly_counts(root / 'work/quota', now)
-    if request_counts['buffer'] >= 2400:
-        issue('buffer-api-pace', 'Counted Buffer requests reached 80% of the free 3,000-request monthly limit.')
+    buffer_used, buffer_limit = request_counts['buffer'], 3000
+    try:
+        journal=root/'work/quota/buffer.jsonl'
+        buffer_rows=[json.loads(line) for line in journal.read_text().splitlines() if line.strip()] if journal.exists() else []
+        observed=quota.observed_buffer_usage(root/'work/quota',buffer_rows,now)
+        if observed is not None:
+            buffer_used, buffer_limit = observed, 1000
+            request_counts['bufferProviderConservative'] = observed
+    except (OSError,ValueError,TypeError,quota.QuotaBlocked):
+        issue('buffer-usage-review','Buffer usage observation needs review; publication stays fail-closed.')
+    if buffer_used >= .8*buffer_limit:
+        issue('buffer-api-pace', f'Counted Buffer requests reached 80% of the free {buffer_limit:,}-request allowance.')
     try:
         sharp_rows = [json.loads(line) for line in (root / 'work/quota/sharp.jsonl').read_text().splitlines() if line.strip()]
         recent = sum(1 for row in sharp_rows if moment(row.get('at')) and

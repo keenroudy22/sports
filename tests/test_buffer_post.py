@@ -185,8 +185,18 @@ class ClientTests(unittest.TestCase):
             self.assertEqual(bp.x_channel(key='one',wanted='keenkooks')['id'],'x')
             self.assertEqual(bp.x_channel(key='one',wanted='keenkooks')['id'],'x')
             channels.assert_called_once()
-            bp.x_channel(key='two',wanted='keenkooks')
+            cache = Path(folder)/'buffer-channel-cache.json'
+            saved = json.loads(cache.read_text())
+            saved['checkedAt'] = (datetime.now(timezone.utc)-timedelta(hours=2)).isoformat()
+            cache.write_text(json.dumps(saved))
+            self.assertEqual(bp.x_channel(key='one',wanted='keenkooks')['id'],'x')
+            channels.assert_called_once()
+            saved['checkedAt'] = (datetime.now(timezone.utc)-timedelta(hours=25)).isoformat()
+            cache.write_text(json.dumps(saved))
+            bp.x_channel(key='one',wanted='keenkooks')
             self.assertEqual(channels.call_count,2)
+            bp.x_channel(key='two',wanted='keenkooks')
+            self.assertEqual(channels.call_count,3)
 
     def test_an_unsent_cashed_result_can_move_forward_once_with_discord_ready(self):
         fake = FakeBuffer()

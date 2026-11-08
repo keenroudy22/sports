@@ -3,6 +3,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -17,6 +18,38 @@ class Response(io.StringIO):
 
 
 class QuotaTests(unittest.TestCase):
+    def test_observed_buffer_usage_preserves_journal_and_counts_new_attempts(self):
+        now=datetime(2026,11,8,15,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as root:
+            path=Path(root)/'buffer.jsonl'
+            old=''.join(json.dumps(dict(provider='buffer',count=1,month='2026-11',at=now.isoformat()))+'\n' for _ in range(2900))
+            path.write_text(old)
+            quota.observe_buffer_usage(629,1000,root=root,now=now)
+            self.assertEqual(path.read_text(),old)
+            quota.count_request('buffer',root,now,essential=True)
+            rows=[json.loads(l) for l in path.read_text().splitlines()]
+            self.assertEqual(quota.observed_buffer_usage(root,rows,now),630)
+            self.assertEqual(len(rows),2901)
+            with mock.patch.dict(quota.os.environ, {'BUFFER_TOKEN':'different-account-key'}):
+                with self.assertRaisesRegex(quota.QuotaBlocked,'observation needs review'):
+                    quota.count_request('buffer',root,now)
+            path.write_text(path.read_text().replace('"month": "2026-11"','"month": "2026-10"',1))
+            with self.assertRaisesRegex(quota.QuotaBlocked,'observation needs review'):
+                quota.count_request('buffer',root,now)
+
+    def test_observed_buffer_reserve_survives_month_rollover_and_expiry_holds(self):
+        now=datetime(2026,11,30,15,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as root:
+            quota.observe_buffer_usage(948,1000,root=root,now=now)
+            with self.assertRaises(quota.QuotaBlocked):quota.count_request('buffer',root,now)
+            quota.count_request('buffer',root,now,essential=True)
+            quota.count_request('buffer',root,now+timedelta(days=1),essential=True)
+            with self.assertRaises(quota.QuotaBlocked):quota.count_request('buffer',root,now+timedelta(days=1),essential=True)
+            with self.assertRaisesRegex(quota.QuotaBlocked,'observation needs review'):
+                quota.count_request('buffer',root,now+timedelta(days=31),essential=True)
+            with self.assertRaisesRegex(quota.QuotaBlocked,'observation needs review'):
+                quota.count_request('buffer',root,now-timedelta(seconds=1),essential=True)
+
     def test_protected_delivery_lane_is_bounded_and_delivery_only(self):
         now = quota.BUFFER_TEMP_END + timedelta(days=1)
         with tempfile.TemporaryDirectory() as root:

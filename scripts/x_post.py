@@ -277,8 +277,18 @@ def plain(sentence):
     """Short, none of the desk's arithmetic words, and within the house style (no dashes, no model names). Words
     match from their start ("raw" is not in "drawn", "calibrat" is in "calibrated")."""
     low = sentence.lower()
-    return (len(sentence) <= REASON_MAX and not any(llm.re.search(r'\b' + llm.re.escape(word), low) for word in JARGON)
+    return (not obvious_reason(sentence) and len(sentence) <= REASON_MAX and not any(llm.re.search(r'\b' + llm.re.escape(word), low) for word in JARGON)
             and not x_style(sentence))
+
+
+def obvious_reason(sentence):
+    """Drop generic betting truisms; never invent a more persuasive fact."""
+    return bool(llm.re.search(
+        r'\b(?:they (?:just )?need to (?:win|score)|'
+        r'(?:more|extra) (?:minutes|targets|carries|touches) (?:means?|leads? to) more (?:points|yards|opportunities)|'
+        r'any(?:thing|one) can happen|every (?:game|bet) (?:is different|has risk)|'
+        r'(?:should|could) be a (?:good|great|fun|competitive) (?:game|matchup))\b',
+        str(sentence or ''), llm.re.I))
 
 
 REASON_WORDS = (      # weather first: "no wind called out" is about the weather, not an injury
@@ -440,6 +450,8 @@ def _caption_day(pick, game):
 def _short_reason(text):
     """Keep a verified reason short without turning it into a fragment."""
     value = str(text or '').strip()
+    if obvious_reason(value):
+        return ''
     words = value.split()
     # A complete verified sentence that already fits the real public reason
     # limit is safer than dropping it only because it crosses the old

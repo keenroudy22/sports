@@ -289,6 +289,24 @@ class OtherLearningTests(unittest.TestCase):
         self.assertTrue(card['byKind']['play']['smallSample'])
         self.assertEqual(card['formula'], '(likes + reposts + quotes + human replies + clicks) per 1,000 impressions')
 
+    def test_growth_coverage_does_not_call_missing_metrics_zero_engagement(self):
+        now = datetime(2026, 11, 8, 15, tzinfo=timezone.utc)
+        sent = '2026-11-07T15:00:00Z'
+        card = learn.engagement_scorecard({'posts': [
+            dict(sentAt=sent, kind='buffer:play'),
+            dict(sentAt=sent, kind='buffer:play', reasonKind='role',
+                 metricsAt='2026-11-07T18:00:00Z', metrics={'impressions': 100, 'likes': 2}),
+            dict(sentAt=sent, kind='buffer:research', metrics={'impressions': 0}),
+            dict(sentAt='2026-11-09T15:00:00Z', metricsAt='2026-11-09T16:00:00Z'),
+        ]}, now=now)
+        self.assertEqual(card['coverage']['confirmedLast30Days'], 3)
+        self.assertEqual(card['coverage']['unmeasuredLast30Days'], 1)
+        self.assertFalse(card['coverage']['metricsStale'])
+        self.assertEqual(card['last30Days']['medianViews'], 100)
+        self.assertEqual(card['byReasonKind']['role']['posts'], 1)
+        stale = learn.engagement_scorecard({'posts': [dict(sentAt=sent, metrics={'impressions': 5})]}, now=now)
+        self.assertTrue(stale['coverage']['metricsStale'])
+
     def test_card_theme_learning_compares_only_inside_the_same_category(self):
         posts = [
             {'kind': 'buffer:play', 'cardTheme': 'felt', 'metrics': {'impressions': 100, 'likes': 5}},

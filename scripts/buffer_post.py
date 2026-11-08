@@ -211,7 +211,7 @@ def x_channel(key=None, send=http_send, wanted=None, channel_id=None):
         try:
             saved = json.loads(cache.read_text())
             age = datetime.now(timezone.utc)-gates.when(saved['checkedAt'])
-            if saved['identity'] == identity and timedelta(0) <= age < timedelta(hours=1) and saved['channel'].get('id'):
+            if saved['identity'] == identity and timedelta(0) <= age < timedelta(hours=24) and saved['channel'].get('id'):
                 return saved['channel']
         except (OSError, ValueError, KeyError, TypeError):
             pass

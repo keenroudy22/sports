@@ -156,3 +156,26 @@ under every play. The card keeps the three promises together: official plays ear
 only in Discord, and the full win-or-lose record public on the site.
 Track invite joins, X link clicks and follows weekly. Once a play is live in Discord it is official, stays in the
 public record and is graded. Confirmed hard news before X produces a Discord pull update and cancels the X post.
+
+## November 8 measurement repair
+
+The scorecard now reports confirmed vs measured posts over 30 days, latest actual
+metric observation and staleness, median views, and saved reason category. Historical
+format totals are not a current growth claim. Existing weekly review consumes the
+same scorecard; optional metric requests are capped at three per day. Free-tier
+recovery is attended Buffer UI, not an unattended browser worker. One useful post
+should not be replaced by multiple filler announcements to inflate frequency.
+
+Next observation: measure the next natural published play/research/fun posts at
+existing 24h/72h/7d checkpoints; compare at least eight posts per format before
+changing its allocation. Report unknown conversions and API-held snapshots.
+
+November 8 capacity evidence: attended Buffer Settings → API showed629/1,000
+requests over30days, not an exhausted provider. Preserve the old local journal.
+A verified Usage observation anchors its existing byte-prefix/hash and adds every
+subsequent attempted request conservatively. The account/token identity is bound;
+changed credentials, altered journals, future/expired observations hold for review.
+With this single-channel Free observation, routine stops at900 and essential
+delivery/control at950. Calendar rollover does not reset the baseline. There is
+no paid call, raised allowance or inferred Sent receipt. Re-observe official Usage
+in an existing attended review when the conservative reserve needs refreshing.
