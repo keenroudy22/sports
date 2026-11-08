@@ -82,7 +82,17 @@ def label(pick, games=None):
     """A play as its post named it: "Iowa/Michigan over 38.5", "5-leg lotto", "80/20 Climb step 2"."""
     if pick_card.play_kind(pick) == 'ladder':
         info = pick.get('ladder') or {}
-        return f"80/20 Climb step {info.get('step', 1)} ({pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))})"
+        name = f"80/20 Climb step {info.get('step', 1)}"
+        # Modern public results omit private dollars. Keep historical receipts
+        # stable; the separate Climb advancement card carries its approved units.
+        import social_style
+        try:
+            modern = gates.when(pick.get('publishedAt')) >= social_style.PRIVACY_EFFECTIVE
+        except (TypeError, ValueError):
+            modern = False
+        if modern:
+            return name
+        return f"{name} ({pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))})"
     if pick_card.play_kind(pick) == 'parlay':
         odds = pick.get('odds')
         return f"{len(pick.get('legs') or [])}-leg {'lotto' if isinstance(odds, (int, float)) and odds >= x_post.LOTTO else 'parlay'}"

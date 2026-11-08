@@ -332,6 +332,13 @@ class LadderReceiptTests(unittest.TestCase):
                         'bankedAfter': 48, 'nextStake': 117, 'totalAfter': 165, 'bankPercent': 20,
                         'ridePercent': 80, 'start': 50, 'goal': 1000})
 
+    def test_current_climb_does_not_block_full_slate_with_private_dollars(self):
+        rung = pick('l', 'sun', **self.RUNG, result='win', publishedAt='2026-11-08T15:17:05Z')
+        self.assertEqual(receipts.label(rung), '80/20 Climb step 2')
+        text = receipts.fit_result_rows([rung], 'Sunday: 1-0.', '#NFL')
+        import social_style
+        self.assertEqual(social_style.privacy_issues(text), [])
+
     def test_a_rung_is_named_by_its_step_and_money_and_kept_off_the_straight_record(self):
         rung = pick('l', 'sun', **self.RUNG, result='win')
         self.assertEqual(receipts.label(rung), '80/20 Climb step 2 ($75 → $146)')
