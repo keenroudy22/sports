@@ -179,3 +179,19 @@ With this single-channel Free observation, routine stops at900 and essential
 delivery/control at950. Calendar rollover does not reset the baseline. There is
 no paid call, raised allowance or inferred Sent receipt. Re-observe official Usage
 in an existing attended review when the conservative reserve needs refreshing.
+
+## November 8 creator-format observations and active experiments
+
+The owner authorizes adapting useful presentation, not copying selections. Read
+`work/growth-20261108/content-experiments.json` and the append-only
+`creator-observations.jsonl` during the existing daily/weekly review. The first
+attended sample covers Cody Brown and Alex Caruso, with URLs, visible post ages,
+views and actions. Creator claims are not independently verified betting evidence.
+Pinned posts, different ages and audience sizes prevent causal rankings.
+
+Use one current verified role/matchup fact tied to the exact line, or omit the
+reason. Rotate verified N/N research and Kook’n vs Book comparisons in existing
+slots. Keep a continuing Climb story only when an actual rung is ready. Record
+the actual caption, format, Sent receipt and observed measurement time. Missing
+clicks, follows or metrics remain unknown. Eight measured comparable posts are
+required before a format winner; never optimize selection for likes.
