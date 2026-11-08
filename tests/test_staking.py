@@ -25,6 +25,26 @@ def context(**extra):
 
 
 class StakingTests(unittest.TestCase):
+    def test_nov8_owner_exception_is_exact_step_and_date_only(self):
+        ctx = context()
+        ctx.now = datetime(2026, 11, 8, 13, tzinfo=timezone.utc)
+        start = '2026-11-08T14:30:00Z'
+        ctx.first = {str(i): dict(pick(str(i), 1), kickoff=start) for i in range(3)}
+        rung = dict(pick('NFL-2026-W9-ladder-1108-c4s3-fd'), kickoff=start,
+                    parlayType='ladder', ladder=dict(run=4, step=3, stake=76))
+        self.assertIsNone(staking.check(rung, ctx))
+        for changed in (dict(rung, id='other'),
+                        dict(rung, ladder=dict(run=4, step=4, stake=76)),
+                        dict(rung, ladder=dict(run=4, step=3, stake=77))):
+            self.assertIn('exceeds 5u', staking.check(changed, ctx))
+        ctx.first['extra'] = dict(pick('extra', .01), kickoff=start)
+        self.assertIn('exceeds 6.04u', staking.check(rung, ctx))
+        ctx.first.pop('extra')
+        ctx.first[rung['id']] = dict(rung, result='win')
+        self.assertIn('exceeds 5u', staking.check(dict(pick('new', 1), kickoff=start), ctx))
+        ctx.now = datetime(2026, 11, 9, 13, tzinfo=timezone.utc)
+        self.assertIn('exceeds 5u', staking.check(rung, ctx))
+
     def test_regular_nba_and_football_share_the_straight_count_ceiling(self):
         ctx=context();ctx.now=datetime(2026,10,28,19,tzinfo=timezone.utc)
         make=lambda key,league:dict(pick(key,league=league),kickoff='2026-10-28T23:00:00Z')
