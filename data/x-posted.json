@@ -9452,7 +9452,11 @@
    },
    "sentAt": "2026-11-07T12:42:16.265Z",
    "link": "https://x.com/1753110091912413184/status/2119047782258409508",
-   "tweetId": "2119047782258409508"
+   "tweetId": "2119047782258409508",
+   "metricsAttemptAt": "2026-11-08T14:30:16Z",
+   "metricsAttempts": [
+    "2026-11-08T14:30:16Z"
+   ]
   },
   {
    "id": "CFB-2026-W10-woods-under-44-5-rushyds-espnbet",
@@ -9791,9 +9795,9 @@
    "discordResultSourceId": "CFB-2026-W10-colo-asu-ml-home-0-dk",
    "cardKey": "cooked-CFB-2026-W10-colo-asu-ml-home-0-dk",
    "socialStyleAudit": {
-    "checkedAt": "2026-11-08T14:13:56Z",
+    "checkedAt": "2026-11-08T14:30:16Z",
     "state": "unverified",
-    "error": "queued style check cannot confirm a private scheduled provider state"
+    "error": "Buffer local free-plan rolling 30-day cap reached"
    }
   },
   {
@@ -9872,7 +9876,12 @@
    "socialStyleVersion": "units-only-no-decimal-20261027",
    "socialVoiceVersion": "casual-20261022",
    "socialAgeVersion": "age-20261023",
-   "cardKey": "receipt-day-2026-11-07"
+   "cardKey": "receipt-day-2026-11-07",
+   "socialStyleAudit": {
+    "checkedAt": "2026-11-08T14:30:16Z",
+    "state": "unverified",
+    "error": "Buffer local free-plan rolling 30-day cap reached"
+   }
   },
   {
    "id": "NFL-2026-W9-allen-over-7-5-recyds-dk",
