@@ -97,6 +97,17 @@ class QueueStyleTests(unittest.TestCase):
             self.assertNotIn('cancelledAt',e)
             self.assertFalse(any('deletePost' in c['query'] for c in calls))
 
+    def test_repeated_unknown_provider_state_does_not_create_timestamp_only_commits(self):
+        e=self.entry()
+        original={'checkedAt':'2026-10-22T14:50:00Z','state':'unverified',
+                  'error':'queued style check cannot confirm a private scheduled provider state'}
+        e['socialStyleAudit']=dict(original)
+        send,calls=self.provider('publishing')
+        failed=bp.audit_pending_style({'posts':[e]},NOW,key='t',send=send,items={},log=lambda *_:None)
+        self.assertEqual(failed,[])
+        self.assertEqual(e['socialStyleAudit'],original)
+        self.assertFalse(any('deletePost' in c['query'] for c in calls))
+
     def test_registered_owner_proof_is_exempt_from_house_art_marker(self):
         key='community:personal-ticket:2026-10-22-tnf-q1'
         url='https://keenroudy.com/sports/img/tickets/personal-tnf-q1-2026-10-22.png'

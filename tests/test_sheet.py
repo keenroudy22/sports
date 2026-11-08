@@ -52,7 +52,7 @@ class DrawTests(unittest.TestCase):
     def test_the_sheet_says_save_this_and_shows_every_number_the_games_page_does(self):
         games = [card('a', '2026-09-27T17:00Z', gap=2.4), card('b', '2026-09-27T20:25Z')]
         text = sheet.svg(games, 'NFL', SUNDAY, 3, {('a', 'away'): 'data:image/png;base64,x'}, RENDERED_AT)
-        for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'rings name the lines we like', 'Aa', 'Ha',
+        for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'numbered rings name the lines we like', 'Aa', 'Ha',
                        '≈20', '≈24', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -4', 'LIKE: Ha -2.5 -105 FD', '≈44', 'OVER 41.5 -110 MGM',
                        'Left: model · Right: market', 'data:image/png;base64,x', 'Green names the line we like.'):
             self.assertIn(needle, text, needle)
@@ -116,26 +116,42 @@ class PostTests(unittest.TestCase):
 
     def test_the_sheet_posts_at_eight_on_its_day_with_the_ask_first(self):
         early = datetime(2026, 9, 27, 10, 45, tzinfo=timezone.utc)       # 6:45 AM ET Sunday
-        post = sheet.post(self.GAMES, early)
+        one_watch = [card('watch', '2026-09-27T17:00Z')]
+        one_watch[0]['value']['spread']['observedAt']='2026-09-27T10:30:00Z'
+        post = sheet.post(self.GAMES, early, cards=one_watch)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
         self.assertEqual(post['text'], '📌 Full NFL projections for the slate.\n'
-                                       'My scores next to the book. Numbered lines are the ones I’m watching.\n📌 Save this one\n#NFL')
+                                       'My scores next to the book. The outlined matchup contains the line I’m watching.\n📌 Save this one\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 12, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])
-        self.assertIsNone(sheet.post(self.GAMES, datetime(2026, 9, 27, 16, 0, tzinfo=timezone.utc)), 'past 11:45 AM it is too late')
+        self.assertIsNone(sheet.post(self.GAMES, datetime(2026, 9, 27, 16, 0, tzinfo=timezone.utc), cards=one_watch), 'past 11:45 AM it is too late')
         monday_games = {'mnf': {'id': 'mnf', 'league': 'NFL', 'week': 4,
                                 'kickoff': '2026-09-29T00:15:00Z'}}
-        monday = sheet.post(monday_games, datetime(2026, 9, 28, 12, 0, tzinfo=timezone.utc))
+        monday_card = card('mnf', '2026-09-29T00:15:00Z')
+        monday_card['value']['spread']['observedAt']='2026-09-28T11:30:00Z'
+        monday = sheet.post(monday_games, datetime(2026, 9, 28, 12, 0, tzinfo=timezone.utc), cards=[monday_card])
         self.assertEqual(monday['text'], "📌 Tonight's MNF projection.\n"
                          'My number next to Vegas, plus the line I like most.\n📌 Save this one\n#NFL')
         thursday_games = {'tnf': {'id': 'tnf', 'league': 'NFL', 'week': 4,
                                   'kickoff': '2026-10-02T00:15:00Z'}}
-        thursday = sheet.post(thursday_games, datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc))
+        thursday_card = card('tnf', '2026-10-02T00:15:00Z')
+        thursday_card['value']['spread']['observedAt']='2026-10-01T11:30:00Z'
+        thursday = sheet.post(thursday_games, datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc), cards=[thursday_card])
         self.assertIsNotNone(thursday)
         self.assertIn("Tonight's TNF projection", thursday['text'])
         few = dict(list(self.GAMES.items())[:3])
-        self.assertIsNone(sheet.post(few, early), 'a thin slate gets no sheet')
+        self.assertIsNone(sheet.post(few, early, cards=one_watch), 'a thin slate gets no sheet')
+
+    def test_projection_caption_matches_zero_one_or_many_actual_outlines(self):
+        early = datetime(2026, 9, 27, 10, 45, tzinfo=timezone.utc)
+        none = card('none', '2026-09-27T17:00Z', value=None)
+        one = card('one', '2026-09-27T17:00Z')
+        two = card('two', '2026-09-27T20:25Z')
+        for watched in (one,two): watched['value']['spread']['observedAt']='2026-09-27T10:30:00Z'
+        self.assertIn('No line is outlined', sheet.post(self.GAMES, early, cards=[none])['text'])
+        self.assertIn('The outlined matchup', sheet.post(self.GAMES, early, cards=[one])['text'])
+        self.assertIn('Numbered outlines mark the lines', sheet.post(self.GAMES, early, cards=[one,two])['text'])
 
     def test_the_next_slate_sheet_posts_the_night_before(self):
         saturday_evening = datetime(2026, 9, 27, 0, 0, tzinfo=timezone.utc)  # Sat 8 PM ET

@@ -124,6 +124,20 @@ def watches(games, now=None):
     return out
 
 
+def watch_copy(count, *, single_game=False):
+    """Describe exactly what the rendered card highlights; never use plural copy for one ring."""
+    if count is None:
+        return ("My number next to Vegas. A green outline marks a current line I’m watching." if single_game else
+                "My scores next to the book. Green outlines mark current lines I’m watching.")
+    if count == 0:
+        return ("My number next to Vegas. No current priced line cleared the watch check." if single_game else
+                "My scores next to the book. No line is outlined because none cleared the current watch check.")
+    if count == 1:
+        return ("My number next to Vegas, plus the line I like most." if single_game else
+                "My scores next to the book. The outlined matchup contains the line I’m watching.")
+    return "My scores next to the book. Numbered outlines mark the lines I’m watching."
+
+
 def book_short(name):
     return {'BetMGM': 'MGM', 'BetRivers': 'BR', 'DraftKings': 'DK', 'ESPN BET': 'ESPN',
             'theScore Bet': 'ESPN', 'FanDuel': 'FD', 'Fanatics': 'FAN',
@@ -296,6 +310,9 @@ def svg(games, league, day, week=None, logos=None, now=None):
     w = (WIDTH - 72 - 20) // 2
     title = title_for(games, league, day, week)
     when = f"{day:%A, %B} {day.day}"
+    ring_note = ("no current priced line cleared the watch check" if not watch else
+                 "the ring names the line we like" if len(watch) == 1 else
+                 "numbered rings name the lines we like")
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" '
              f'font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
              f'<rect width="{WIDTH}" height="{HEIGHT}" fill="{BG}"/>',
@@ -304,7 +321,7 @@ def svg(games, league, day, week=None, logos=None, now=None):
              f'<text x="64" y="71" fill="{ACCENT}" font-size="26" font-weight="800" letter-spacing="5">SAVE THIS</text>',
              f'<text x="{WIDTH - 36}" y="71" fill="{DIM}" font-size="24" font-weight="700" letter-spacing="4" text-anchor="end">KOOK’N</text>',
              f'<text x="36" y="132" fill="{TEXT}" font-size="54" font-weight="800">{esc(title)}</text>',
-             f'<text x="36" y="172" fill="{DIM}" font-size="22">{esc(when)} · rings name the lines we like · not picks</text>']
+             f'<text x="36" y="172" fill="{DIM}" font-size="22">{esc(when)} · {esc(ring_note)} · not picks</text>']
     for i, card in enumerate(games):
         col, row = i % 2, i // 2
         drawer = compact_card_svg if len(games) > 4 else card_svg
@@ -374,7 +391,7 @@ def at(day, hm):
     return datetime(day.year, day.month, day.day, hm[0], hm[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
 
 
-def post(games, now):
+def post(games, now, cards=None):
     """The night-before preview, with a game-day fallback, or None. `games` is the slate
     (gameId -> game), so the desk can schedule it without the site's files."""
     today = eastern_date(now)
@@ -399,8 +416,10 @@ def post(games, now):
                 when = "Tomorrow's " if preview else 'Full '
                 lead = (f"📌 {when}{name} projections for the slate." if league == 'NFL' else
                         f"📌 {when}{name} projections for the slate.")
-            middle = ("My number next to Vegas, plus the line I like most." if len(todays) == 1
-                      else "My scores next to the book. Numbered lines are the ones I’m watching.")
+            source_cards = load_cards() if cards is None else cards
+            rendered = pick_games(source_cards, league, day)
+            count = len(watches(rendered, now)) if rendered else None
+            middle = watch_copy(count, single_game=len(todays) == 1)
             text = lead + f"\n{middle}\n📌 Save this one\n#{league}"
             return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
                     'due': max(due_at, now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}

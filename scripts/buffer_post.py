@@ -1148,9 +1148,14 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                 entry['queuedText'] = text
                 entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'clear'}
         except BufferError as error:
-            previous = (entry.get('socialStyleAudit') or {}).get('error')
-            entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'unverified', 'error': str(error)}
-            if previous != str(error):
+            prior_audit = entry.get('socialStyleAudit') or {}
+            previous = prior_audit.get('error')
+            # A five-minute retry that sees the same unknown provider state is
+            # not new public evidence. Preserve the first observation instead
+            # of advancing a tracked timestamp and creating a no-op Git commit
+            # on every mirror pass. A changed failure still gets a fresh receipt.
+            if prior_audit.get('state') != 'unverified' or previous != str(error):
+                entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'unverified', 'error': str(error)}
                 failed.append({**entry, 'error': str(error)})
             log(f"buffer: {entry['id']} style audit unavailable; no deletion: {error}")
     return failed
