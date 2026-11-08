@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 272,
-   "gamesQuoted": 278,
-   "moneylineSnapshots": 1245,
+   "gamesGraded": 273,
+   "gamesQuoted": 281,
+   "moneylineSnapshots": 1251,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 233,
-     "gamesQuoted": 237,
+     "gamesGraded": 234,
+     "gamesQuoted": 240,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1245,
+   "snapshots": 1251,
    "status": "capturing",
-   "totalSnapshots": 1245
+   "totalSnapshots": 1251
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "FLA",
+    "id": "26",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/fla.png",
+    "name": "Florida Panthers",
+    "shortName": "Panthers"
+   },
+   "awayScore": 1,
+   "gameId": "NHL-401892674",
+   "gradedAt": "2026-11-08T22:25:12Z",
+   "home": {
+    "abbreviation": "BOS",
+    "id": "1",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/bos.png",
+    "name": "Boston Bruins",
+    "shortName": "Bruins"
+   },
+   "homeScore": 4,
+   "kickoff": "2026-11-08T18:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "VAN",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "FLA",
-    "id": "26",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/fla.png",
-    "name": "Florida Panthers",
-    "shortName": "Panthers"
-   },
-   "awayScore": 3,
-   "gameId": "NHL-401892578",
-   "gradedAt": "2026-10-25T21:55:11Z",
-   "home": {
-    "abbreviation": "CHI",
-    "id": "4",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/chi.png",
-    "name": "Chicago Blackhawks",
-    "shortName": "Blackhawks"
-   },
-   "homeScore": 2,
-   "kickoff": "2026-10-25T19:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-08T22:23:14Z"
+ "updatedAt": "2026-11-08T22:29:12Z"
 }
