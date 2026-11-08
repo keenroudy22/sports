@@ -9806,7 +9806,14 @@
     "checkedAt": "2026-11-08T17:29:28Z",
     "state": "unverified",
     "error": "queued style check cannot confirm a private scheduled provider state"
-   }
+   },
+   "operatorQualityHold": {
+    "observedAt": "2026-11-08T23:45:45.218911+00:00",
+    "providerState": "draft",
+    "reason": "Older private Final is overdue after the full Saturday recap. Prior art inspection found HOME0/FINAL10 instead of ArizonaState20,Colorado10. Requires current graphic/native-quote review; do not keep polling this unsubmitted draft every5minutes. Owner prefers timely Finals and full-slate recap over stale next-day drip.",
+    "next": "Retain original/history; verify any replacement image and current owner timing preference before resuming. No public record or original X post is removed."
+   },
+   "error": "Operator quality hold: unsubmitted outdated Final needs artwork/native-quote review; not a provider failure."
   },
   {
    "id": "NFL-2026-W9-barkley-under-1-5-rec-dk",
