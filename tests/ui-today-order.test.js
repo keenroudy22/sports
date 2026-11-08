@@ -51,5 +51,6 @@ test('Today\'s restored rows meet the 14 px floor and research rows stack on a p
 });
 
 test('the Climb stub has breathing room below the first ticket', () => {
-  assert.match(css, /\.kt-climb\s*\{\s*margin-top:\s*44px\s*;/);
+  assert.match(css, /\.kt-climb\s*\{\s*margin-top:\s*32px\s*;/);
+  assert.match(css, /\.kt-stub \{[^}]*border-radius: 15px;[^}]*background: linear-gradient/, 'the Climb is a flat dashboard card, not a paper receipt');
 });

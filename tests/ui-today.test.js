@@ -146,15 +146,15 @@ test('the first paint and the full card draw the same top, so nothing moves when
   await settle();
   const first = view.innerHTML;
   assert.match(first, /class="hero-first kt-today"/);
-  assert.match(first, /<p class="date">Saturday, Oct 10\. Friday results below\.<\/p><h1>Two for today\.<\/h1>/);
-  assert.match(first, /Hot Plate \(POTD\)/);
-  assert.match(first, /−110<\/b><i><\/i><b class="kt-book">FanDuel/, 'price and book are on the first paint');
+  assert.match(first, /<p class="date">Saturday, Oct 10\. Friday results below\.<\/p><h1>Today’s board<\/h1><p class="today-summary">Two for today\.<\/p>/);
+  assert.match(first, /Pick of the day/);
+  assert.match(first, /Posted price<\/small><b class="num">−110<\/b>[\s\S]*<strong>FanDuel/, 'price and book are on the first paint');
   assert.match(first, /Today 4:00 PM/, 'kickoff is on the first paint');
   assert.match(first, /80\/20 Climb #2[\s\S]*Step 3[\s\S]*Not posted yet/, 'the Climb stub is on the first paint');
   release();
   const full = await pending;
   assert.doesNotMatch(full, /hero-first/);
-  assert.equal(top(full), top(first), 'the chef\'s line, the first ticket and the Climb stub are identical on both paints');
+  assert.equal(top(full), top(first), 'the dashboard, first pick and Climb are identical on both paints');
   await settle();
 });
 
@@ -163,15 +163,13 @@ test('Today leads with the card, games and research paths while secondary sectio
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /aria-label="Today at a glance"[\s\S]*Best bets[\s\S]*80\/20 Climb/);
-  assert.match(page, /<span>Best bets<\/span><b>2 posted<\/b>/, 'the count describes durable posted plays, not whether their saved prices remain actionable');
-  assert.doesNotMatch(page, /<span>Best bets<\/span><b>2 live<\/b>/, 'an aged quote must never leave a stale live claim in the jump nav');
-  assert.match(page, /Today’s best bets[\s\S]*Today’s Climb/);
-  assert.match(page, /class="kt-pass" data-view="quick"[^>]*aria-label="Today&#39;s best bet"/, 'Today uses the decision-first summary card');
-  assert.match(page, /class="kt-open-pick" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>Full breakdown/, 'the summary card opens the complete preserved play');
-  assert.match(page, /The play, price and model number first\./, 'the page explains what stays in the fast view');
+  assert.match(page, /aria-label="Betting data and research"[\s\S]*Games[\s\S]*Players[\s\S]*Lines[\s\S]*Results/);
+  assert.match(page, /<h1>Today’s board<\/h1>[\s\S]*<h2>Kook’n picks<\/h2>[\s\S]*Today’s Climb/);
+  assert.match(page, /class="decision-list"[^>]*aria-label="Today&#39;s best bet"/, 'Today uses the clean decision summary');
+  assert.match(page, /class="decision-more" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>See stats, trends and full breakdown/, 'the summary opens the complete preserved play');
+  assert.doesNotMatch(page.slice(0, page.indexOf('class="kt-sec kt-left"')), /class="kt-order|class="kt-paper"/, 'Today no longer stacks branded paper tickets');
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'research-start today-research', 'class="kt-sec kt-left"',
+  const order = ['class="kt-lede', 'class="decision-list"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'research-start today-research', 'class="kt-sec kt-left"',
     'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-worth"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
   assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> NFL -> other bets -> research shortcuts -> results and games -> one secondary fold');
   assert.match(page, /<summary>More today<\/summary>/);
@@ -184,13 +182,13 @@ test('Today leads with the card, games and research paths while secondary sectio
   const bets = page.slice(at('kt-bets"'), at('class="kt-sec kt-left"'));
   assert.match(bets, /<h2 class="kt-head" id="bets-h">More best bets<\/h2>/);
   assert.match(bets, /Example Tech/, 'today\'s other best bet stays on the page');
+  assert.doesNotMatch(bets, /80\/20 Climb step/, 'the dedicated Climb card is not repeated under More best bets');
   assert.doesNotMatch(bets, /Later Open/, 'future bets stay off an active game day');
   assert.match(bets, /Still good to −124\./, 'each other best bet names its price limit, in the first ticket\'s words');
-  assert.doesNotMatch(bets, /Still a bet down to|Best bets this season/, 'one limit sentence everywhere; the season record rides the first ticket and the season line only');
-  assert.equal((page.match(/Best bets this season/g) || []).length, 1);
-  assert.match(bets, /Book says<b class="num">51\.5<\/b>[\s\S]*I have it at<b class="num">61\.2<\/b>/,
+  assert.doesNotMatch(bets, /Still a bet down to|Best bets this season/, 'one limit sentence everywhere');
+  assert.match(bets, /Book line<\/small><b class="num">51\.5<\/b>[\s\S]*Kook’n projection<\/small><b class="num">61\.2<\/b>/,
     'and its useful model number against the book line');
-  assert.doesNotMatch(bets, /kt-clip/, 'one chef, on the first rail only');
+  assert.doesNotMatch(page.slice(0, page.indexOf('research-start today-research')), /kt-clip/, 'the browsing surface has no mascot overlap');
   assert.match(page, /Best Bets: 1–0<\/b> · \+0\.95u/, 'Same-category results carry their units');
   assert.match(page, /r-mark hit/);
   assert.match(page, /result Visitors 24, Hosts 21/);
@@ -200,6 +198,14 @@ test('Today leads with the card, games and research paths while secondary sectio
   const discord = page.slice(at('kt-community"'));
   assert.match(discord, /Best bets land here about 10–15 minutes before X\.[\s\S]*discord\.gg\/ZnjubjsBPM[\s\S]*x\.com\/keenkooks/);
   assert.match(page.slice(at('kt-sports"')), /href="#today\?sport=NBA">NBA →/);
+});
+
+test('Today drops a reason that merely repeats the visible book and projection numbers', async () => {
+  const repeated = { ...prop, ticketWhy: 'Book says 49.5. I say 61.2.' };
+  const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [repeated, ...rungs] } }).api.views.today({ view: 'today' });
+  const first = page.slice(page.indexOf('<article class="decision-card'), page.indexOf('</article>'));
+  assert.match(first, /Book line[\s\S]*Kook’n projection/);
+  assert.doesNotMatch(first, /Why it made the card|Book says 49\.5/, 'the full play page keeps reasoning; Today stays concise');
 });
 
 test('an NFL game today stays prominent and a later best bet stays off Today', async () => {
@@ -237,20 +243,17 @@ test('the Prep List shows only the rows the build chose, with the price check on
 test('the first ticket carries no fair price or edge, and its numbers are the pick\'s own', async () => {
   const { api } = loadApp('#record');
   const page = await api.views.today({ view: 'today' });
-  const first = page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>') + 10);
-  assert.match(first, /<p class="kt-chip"><svg[^>]*>.*?<\/svg>Hot Plate \(POTD\)<\/p>/, 'the exact Hot Plate (POTD) phrase');
-  assert.match(first, /Book says<b class="num">49\.5<\/b><\/span><i><\/i><span>I have it at<b class="num">61\.2<\/b>/);
+  const first = page.slice(page.indexOf('<article class="decision-card'), page.indexOf('</article>') + 10);
+  assert.match(first, /<span class="decision-tier">Pick of the day<\/span>/);
+  assert.match(first, /Book line<\/small><b class="num">49\.5<\/b>[\s\S]*Kook’n projection<\/small><b class="num">61\.2<\/b>/);
   assert.doesNotMatch(first, /%|price needs/);
-  assert.match(first, /<span class="kt-tag">WHY<\/span><span>I project 7\.3 targets, AWY&#39;s top WR\.<\/span>/);
-  assert.match(first, /<span class="kt-tag">BUT<\/span><span>HOM&#39;s WR defense points against the over\.<\/span>/);
+  assert.match(first, /<p class="decision-why"><b>Why it made the card<\/b><span>I project 7\.3 targets, AWY&#39;s top WR\.<\/span>/);
+  assert.doesNotMatch(first, /HOM&#39;s WR defense/, 'the countercase stays in the full breakdown');
   assert.match(first, /Still good to −124\./);
-  assert.match(first, /Best bets this season<b class="num">35-35<\/b>/);
-  assert.match(first, /3 of 5 this season<\/b>5 of his last 10/);
+  assert.match(first, /3 of 5 at this line this season/);
   for (const banned of ['Price matching our chance', 'Chance vs price', ' pts', 'fair', 'edge']) assert.ok(!first.includes(banned), banned);
   const text = first.replace(/<[^>]+>/g, ' ').replace(/&#\d+;/g, "'");
-  /* 6 and 0: the kickoff countdown ("Kicks off in 6h 0m"), restored on 2026-10-07. */
-  const allowed = new Set(['49.5', '61.2', '110', '7.3', '124', '35', '35', '78', '94', '67', '26', '21', '3', '5', '5', '10', '4', '00', '1', '2', '6', '0']);
-  assert.match(first, /<p class="kt-cd">Kicks off in 6h 0m<\/p>/);
+  const allowed = new Set(['49.5', '61.2', '11.7', '110', '7.3', '124', '3', '5', '4', '00']);
   for (const n of text.match(/\d+(?:\.\d+)?/g) || []) assert.ok(allowed.has(n), `unexpected number ${n} on the ticket`);
 });
 
@@ -259,15 +262,15 @@ test('an uncalibrated chance, an expired quote and a moved line never read as an
   await api.views.today({ view: 'today' });
   const ticketOf = (pick, opts) => {
     const { api: a } = loadApp('#record', {}, { today: { ...TODAY, picks: [pick] } });
-    return a.views.today({ view: 'today' }).then(page => page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>')));
+    return a.views.today({ view: 'today' }).then(page => page.slice(page.indexOf('<article class="decision-card'), page.indexOf('</article>')));
   };
   const raw = await ticketOf({ ...prop, probabilityAtPublication: { chance: 0.6, breakEven: 0.524, calibrated: false } });
-  assert.match(raw, /Book says[\s\S]*I have it at/, 'the plain model number does not depend on a public percentage');
+  assert.match(raw, /Book line[\s\S]*Kook’n projection/, 'the plain model number does not depend on a public percentage');
   assert.doesNotMatch(raw, /%|price needs/);
   const aged = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z' });
   assert.match(aged, /Posted price may be gone\. Check your book\./);
-  assert.match(aged, /I had it at/);
-  assert.doesNotMatch(aged, /Still good to|I have it at/);
+  assert.match(aged, /Kook’n projection/);
+  assert.doesNotMatch(aged, /Still good to/);
 });
 
 test('partial Today history never replaces the complete hero Climb balance', async () => {
@@ -341,7 +344,7 @@ test('a league change repaints the hero for that league, and other sports clear 
   api.render();
   await settle();
   assert.match(view.innerHTML, /hero-first/);
-  assert.match(view.innerHTML, /Arizona/);
+  assert.match(view.innerHTML, /Fixture State at Example Tech|ARIZ at WVU/);
   assert.doesNotMatch(view.innerHTML, /Fixture Receiver/);
   sandbox.location.hash = '#today?sport=NBA';
   api.render();
@@ -365,7 +368,7 @@ test('a saved league filter does not flash a future bet as today while the game-
   release();
   await pending;
   await settle();
-  assert.match(next.view.innerHTML, /<h1>Nothing cleared my bar today\.<\/h1>/);
+  assert.match(next.view.innerHTML, /<h1>Today’s board<\/h1><p class="today-summary">Nothing cleared my bar today\.<\/p>/);
   assert.doesNotMatch(next.view.innerHTML, /Upcoming best bets|Monday Visitors at Hosts under 54\.5/);
   assert.doesNotMatch(next.view.innerHTML, /NFL only/, 'bare Today resets a stale saved NFL-only filter');
   assert.doesNotMatch(next.view.innerHTML, /Fixture State/);
@@ -404,12 +407,12 @@ test('an off-day may show clearly labeled future prep', async () => {
 test('with nothing on the card the rail does not reveal desk timing', async () => {
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [yesterday, ...rungs] } });
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /<h1>Nothing cleared my bar today\.<\/h1>/);
-  assert.match(page, /class="kt-hook h1"[\s\S]*class="kt-hook h2"/);
+  assert.match(page, /<h1>Today’s board<\/h1><p class="today-summary">Nothing cleared my bar today\.<\/p>/);
+  assert.match(page, /class="decision-empty"[\s\S]*No official pick[\s\S]*Nothing forced\./);
   assert.match(page, /Nothing cleared my bar today\./);
   assert.match(page, /No best bet today\. Tonight's games are below\./);
   assert.doesNotMatch(page, /I look again|desk run|11:45 AM/i);
-  assert.doesNotMatch(page, /<article class="kt-order/, 'no blank ticket and no forced pick');
+  assert.doesNotMatch(page, /<article class="decision-card/, 'no blank card and no forced pick');
 });
 
 test('the compact prior-day recap lists every win and loss without truncation', async () => {
@@ -503,7 +506,7 @@ const kingRow = { id: 'prop-NFL-1-9-recYds', gameId: 'NFL-1', athleteId: '9', st
   odds: -104, book: 'FanDuel', state: 'open', observedAt: '2026-10-10T13:37:35Z', kickoff: prop.kickoff, roleSuspect: true, priceSuspect: true, roleHold: 'qb', grade: null };
 const linesFor = rows => ({ 'data/app/lines.json': { files: { NFL: 'lines-NFL.json', CFB: 'lines-CFB.json' } },
   'data/app/lines-NFL.json': { league: 'NFL', lines: rows }, 'data/app/lines-CFB.json': { league: 'CFB', lines: [] } });
-const firstTicket = page => page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>'));
+const firstTicket = page => page.slice(page.indexOf('<article class="decision-card'), page.indexOf('</article>'));
 
 test('a held market never yields a quote, and its hold comes from the build or from any of its rows', () => {
   assert.equal(M.latestPickQuote({ ...prop, held: KING_HOLD }, [{ ...kingRow, roleSuspect: false, priceSuspect: false, roleHold: null }], NOW), null);
@@ -527,13 +530,13 @@ test('the held Hot Plate reads Under review on the first paint and the full card
   await settle();
   const again = firstTicket(await api.views.today({ view: 'today' }));     // after the board rows land
   for (const t of [first, firstTicket(full), again]) {
-    assert.match(t, /<p class="kt-now">Projection unavailable\.<\/p>/);
+    assert.match(t, /<p class="decision-current">Projection unavailable\.<\/p>/);
     assert.doesNotMatch(t, /under review|checking.*role/i);
-    assert.match(t, /class="kt-order[^"]*is-held/);
-    for (const banned of ['Still good', 'I have it', 'I had it', 'kt-chance', 'kt-orderup', 'Now −', '56.0%', 'I project', '7.3 targets']) assert.ok(!t.includes(banned), banned);
-    assert.match(t, /<span class="kt-tag">BUT<\/span><span>HOM&#39;s WR defense points against the over\.<\/span>/, 'a counterpoint with no projection stays');
-    assert.ok(!t.includes('<span class="kt-tag">WHY</span>'), 'the projection WHY is left off, never swapped for a later saved line');
-    assert.match(t, /−110<\/b><i><\/i><b class="kt-book">FanDuel/, 'the posted price and book stay');
+    assert.match(t, /class="decision-card is-closed"/);
+    assert.match(t, /<span class="decision-state">Unavailable<\/span>/);
+    for (const banned of ['Still good', 'Kook’n projection', 'Gap to pick', 'Now −', '56.0%', 'I project', '7.3 targets']) assert.ok(!t.includes(banned), banned);
+    assert.ok(!t.includes('decision-why'), 'the projection WHY is left off, never swapped for a later saved line');
+    assert.match(t, /Posted price<\/small><b class="num">−110<\/b>[\s\S]*<strong>FanDuel/, 'the posted price and book stay');
   }
   assert.equal(first, firstTicket(full), 'both paints say the same thing');
 });
@@ -560,14 +563,13 @@ test('a play held after Discord delivery keeps its posted Hot Plate, historical 
   const today = { ...TODAY, picks: [delivered, total, ...rungs] };
   const { api } = loadApp('#today', {}, { today, hero: { ...HERO, bets: [delivered] }, extra: linesFor([kingRow]) });
   const ticket = firstTicket(await api.views.today({ view: 'today' }));
-  assert.match(ticket, /Hot Plate \(POTD\)/);
-  assert.match(ticket, /Book said/);
-  assert.match(ticket, /I had it at/);
+  assert.match(ticket, /Pick of the day/);
+  assert.match(ticket, /Book line[\s\S]*Kook’n projection/);
   assert.doesNotMatch(ticket, /price needed|%/);
   assert.match(ticket, /quarterback picture changed since I posted/);
   assert.match(ticket, /Latest −104/);
-  assert.match(ticket, /<span class="kt-tag">WHY<\/span><span>I project 7\.3 targets/);
-  assert.doesNotMatch(ticket, /Under review|ORDER UP/);
+  assert.match(ticket, /<p class="decision-why"><b>Why it made the card<\/b><span>I project 7\.3 targets/);
+  assert.doesNotMatch(ticket, /Under review/);
   const page = await api.views.pick({ id: delivered.id });
   assert.match(page, /I posted this at 12:00 PM at −110 at FanDuel/);
   assert.match(page, /It still counts at that price/);
@@ -587,36 +589,37 @@ test('an expired saved quote with a fresh same-book price reads the same on both
   const full = firstTicket(await pending);
   await settle();
   assert.match(first, /Now 49.5 at −115 at 9:20 AM\. Still good to −124\./);
-  assert.match(first, /I have it at/);
+  assert.match(first, /Kook’n projection/);
   assert.equal(first, full);
   const stale = { ...aged, quote: { ...aged.quote, observedAt: '2026-10-10T09:00:00Z' } };
   const { api: a2 } = loadApp('#record', {}, { today: { ...TODAY, picks: [stale, ...rungs] } });
   const t = firstTicket(await a2.views.today({ view: 'today' }));
   assert.match(t, /Posted price may be gone\. Check your book\./, 'older than four hours at view time: the browser drops it');
-  assert.match(t, /I had it at/);
+  assert.match(t, /Kook’n projection/);
 });
 
 test('an expired quote never wears ORDER UP unless a fresh same-book price is still inside the limit', async () => {
   const ticketOf = async pick => { const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [pick, ...rungs] } }).api.views.today({ view: 'today' });
-    return page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>')); };
+    return page.slice(page.indexOf('<article class="decision-card'), page.indexOf('</article>')); };
   const aged = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z' });
   assert.match(aged, /Posted price may be gone/);
-  assert.doesNotMatch(aged, /kt-orderup|ORDER UP/, 'an expired quote never reads as open');
+  assert.match(aged, /class="decision-card is-closed"/, 'an expired quote never reads as open');
   const preExpiryQuote = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z',
     quote: { odds: -115, line: 49.5, observedAt: '2026-10-10T11:45:00Z' } });
   assert.match(preExpiryQuote, /Posted price may be gone/);
-  assert.doesNotMatch(preExpiryQuote, /Still good to|kt-orderup/);
+  assert.doesNotMatch(preExpiryQuote, /Still good to/);
   const moved = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -130, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } });
   assert.match(moved, /Past my −124 limit\./);
   const changedLine = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', cutoffBoundary: 51.5, quote: { odds: -108, line: 53.5, observedAt: '2026-10-10T13:20:00Z' } });
   assert.match(changedLine, /Now 53.5 at −108/);
   assert.match(changedLine, /Line moved from 49.5; outside my posted range/);
-  assert.doesNotMatch(changedLine, /Past my|kt-orderup/);
-  assert.doesNotMatch(moved, /kt-orderup/, 'a fresh price past the limit is not open either');
+  assert.doesNotMatch(changedLine, /Past my/);
+  assert.match(changedLine, /class="decision-card is-closed"/);
+  assert.match(moved, /class="decision-card is-closed"/, 'a fresh price past the limit is not open either');
   const inside = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -115, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } });
   assert.match(inside, /Still good to −124\./);
-  assert.match(inside, /kt-orderup/, 'a fresh same-book price inside the limit is still live');
-  assert.match(await ticketOf(prop), /kt-orderup/, 'an open quote does');
+  assert.match(inside, /class="decision-card is-open"/, 'a fresh same-book price inside the limit is still live');
+  assert.match(await ticketOf(prop), /class="decision-card is-open"/, 'an open quote does');
 });
 
 test('a settled ticket never wears ORDER UP', async () => {
@@ -673,28 +676,28 @@ test('Today headings run h1, then h2 for each ticket and section', async () => {
   const levels = [...page.matchAll(/<h([1-6])[ >]/g)].map(m => Number(m[1]));
   assert.equal(levels[0], 1);
   for (let i = 1; i < levels.length; i++) assert.ok(levels[i] <= levels[i - 1] + 1, `h${levels[i - 1]} then h${levels[i]}`);
-  assert.match(page, /<h2 class="kt-name"/);
+  assert.match(page, /<h3><a href="#pick\/NFL-2026-W5-fixture-rec-fd">/, 'decision cards sit under the Kook’n picks h2');
 });
 
-test('WHY and BUT print the saved words whole: clamped on the Today rail only, never cut in the markup', async () => {
+test('Today keeps the saved reason whole in markup while visually limiting it to two lines', async () => {
   const long = 'Bowling Green cornerback JoJo Johnson, who had 13 pass breakups last season, missed the Iowa State game due to injury.';
   const pick = { ...prop, ticketWhy: long };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [pick, ...rungs] } });
   const today = await api.views.today({ view: 'today' });
-  assert.ok(today.includes(long.replace("'", '&#39;')), 'the full sentence is in the Today ticket');
-  assert.match(css, /\.kt-pass:not\(\.on-page\) \.kt-say > span:last-child \{[^}]*-webkit-line-clamp: 2/);
+  assert.ok(today.includes(long.replace("'", '&#39;')), 'the full sentence is in the Today decision card');
+  assert.match(css, /\.decision-why span \{[^}]*-webkit-line-clamp: 2/);
   const page = await api.views.pick({ id: pick.id });
   assert.match(page, /<section class="kt-pass on-page"/, 'the play page is exempt from the clamp');
   assert.ok(page.includes(long));
 });
 
 /* ---------- the 2026-10-07 restore: what the old Today showed, back on the page without a tap ---------- */
-test('the countdown and the share-card link show only before kickoff and only for a card path the build named', async () => {
+test('Today keeps countdowns and social-card links out of the browsing summary', async () => {
   const card = 'data/cards/NFL-2026-W5-fixture-rec-fd-potd.png';
   const withCard = path => ({ ...HERO, bets: [{ ...HERO.bets[0], card: path }, HERO.bets[1]] });
-  const firstOf = page => page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>'));
+  const firstOf = page => page.slice(page.indexOf('<article class="decision-card'), page.indexOf('</article>'));
   const shown = firstOf(await loadApp('#record', {}, { hero: withCard(card) }).api.views.today({ view: 'today' }));
-  assert.match(shown, /<p class="kt-cd">Kicks off in 6h 0m · <a href="data\/cards\/NFL-2026-W5-fixture-rec-fd-potd\.png" target="_blank" rel="noopener">See the card ↗<\/a><\/p>/);
+  assert.doesNotMatch(shown, /Kicks off in|See the card|data\/cards/, 'the fast view shows the scheduled time without social-art controls');
   for (const bad of [null, 'data/cards/../secret.png', 'https://example.com/x.png', 'data/cards/x.jpg']) {
     assert.doesNotMatch(firstOf(await loadApp('#record', {}, { hero: withCard(bad) }).api.views.today({ view: 'today' })), /See the card/, String(bad));
   }
@@ -702,8 +705,7 @@ test('the countdown and the share-card link show only before kickoff and only fo
   const after = await loadApp('#record', {}, { today: { ...TODAY, picks: [started, total, ...rungs] } }).api.views.today({ view: 'today' });
   assert.doesNotMatch(after.slice(0, after.indexOf('kt-bets"')), /kt-cd|Kicks off/, 'no countdown once the game has kicked off');
   const page = await loadApp('#record').api.views.today({ view: 'today' });
-  const later = page.slice(page.indexOf('Later Open at Somewhere') - 1600, page.indexOf('Later Open at Somewhere'));
-  assert.doesNotMatch(later.slice(later.lastIndexOf('<article')), /Kicks off/, 'no countdown more than a day out');
+  assert.doesNotMatch(page, /class="decision-card[\s\S]*Kicks off in/, 'no decision card carries a countdown');
 });
 
 test('the season line uses the same record math as the Record page once every play has loaded', async () => {
@@ -830,7 +832,7 @@ test('an empty official rail names the strongest current look and the exact reas
   await api.views.today({ view: 'today' });
   await settle();
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /<h1>Here’s what I like most today\.<\/h1>/);
+  assert.match(page, /<h1>Today’s board<\/h1><p class="today-summary">Here’s what I like most today\.<\/p>/);
   assert.match(page, /No official best bet yet\. My strongest current look is below\./);
   const favorite = page.slice(page.indexOf('kt-favorite"'), page.indexOf('class="kt-sec kt-climb"'));
   assert.match(favorite, /What I like most/);
@@ -955,18 +957,16 @@ test('withdrawn settled play shows its withdrawal on receipt, slip and detail wi
   assert.doesNotMatch(page, /Sam Houston|Wednesday results|results below|id="left-h"/);
  });
 
-test('All-sports Today puts published CBB picks before research with an explicit top link', async () => {
+test('All-sports Today puts every published straight before research', async () => {
  const cbb={picks:{plays:[{id:'cbb-today',kickoff:prop.kickoff,marketType:'spread',direction:'away',line:8.5,odds:-112,book:'DraftKings',riskUnits:1,game:{teams:{away:{abbreviation:'QUC'},home:{abbreviation:'LMU'}}}},{id:'cbb-tomorrow',kickoff:laterOpen.kickoff}]}};
  const app=loadApp('#record',{}, {extra:{'data/app/cbb.json':cbb,'data/app/nba.json':{games:[]}}});
  app.sandbox.KRGames=()=>({cbbPicks:()=>'<section id="cbb-picks">Published CBB ticket</section>',nbaSummary:()=>'<section id="nba-research">NBA research</section>'});
  await app.api.views.today({view:'today'});await settle();
  const page=await app.api.views.today({view:'today'});
- assert.match(page,/<a href="#today\?sport=CBB"><span>CBB picks<\/span><b>1 posted<\/b>/);
- assert.match(page,/kt-today-jumps has-other-plays/);
- assert.match(page,/<h1[^>]*>Today’s posted plays\.<\/h1>/);
+ assert.match(page,/aria-label="Betting data and research"[\s\S]*Games[\s\S]*Players[\s\S]*Lines[\s\S]*Results/);
+ assert.match(page,/<h1>Today’s board<\/h1><p class="today-summary">Today’s posted plays\.<\/p>/);
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
  assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);
- assert.match(page,/Posted straights<\/span><b>2 today/);
  assert.match(page,/2 posted straights today/);
  const summary=page.slice(page.indexOf('id="today-posted-straights"'),page.indexOf('class="kt-focus-head"'));
  assert.match(summary,/Fixture Receiver OVER 49\.5/);

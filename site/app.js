@@ -949,10 +949,54 @@
         ${stub || extra || orderUp || breakdown ? `<div class="kt-perf"></div><div class="kt-stubrow"><div class="kt-stubl">${stub}${extra}</div>${breakdown}${orderUp}</div>` : ''}</div></div>
       ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;
   };
-  const rail = (rows, opts = {}) => `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="kt-pass${opts.onPage ? ' on-page' : ''}"${opts.quick ? ' data-view="quick"' : ''} aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
+  const rail = (rows, opts = {}) => opts.quick
+    ? `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="decision-list" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}">${rows.map(p => decisionCard(p, opts)).join('')}</section>`
+    : `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="kt-pass${opts.onPage ? ' on-page' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
     <div class="kt-tickets">${rows.map((p, i) => ticket(p, { ...opts, card: p.card || (opts.cards && opts.cards.get(p.id)), clip: i === 0 && !opts.more, strip: i === 0 && !opts.more, compact: (i > 0 || opts.more) && !C.isLadder(p) })).join('')}</div></section>`;
-  const HOOK = '<svg class="kt-hook h%" viewBox="0 0 26 22" aria-hidden="true"><path d="M7 0v8M19 0v8" stroke="#8C9892" stroke-width="2"/><rect x="1" y="6" width="24" height="13" rx="2.5" fill="#A3AEA8"/><rect x="3" y="15.5" width="20" height="2" rx="1" fill="#1E2622"/></svg>';
-  const emptyRail = (note, id = '') => `<section${id ? ` id="${esc(id)}"` : ''} class="kt-pass" aria-label="No best bet yet"><div class="kt-rail" aria-hidden="true"></div><div class="kt-hooks" aria-hidden="true">${HOOK.replace('%', '1')}${HOOK.replace('%', '2')}${CHEF}</div></section><p class="kt-blank">${note}</p>`;
+  /* Today uses a familiar sportsbook-style summary. The full Kitchen Ticket is reserved for the play page and social art. */
+  const decisionCard = (pick, opts = {}) => {
+    const vm = pickVM(pick), g = gameOf(pick), parts = betParts(pick, g), best = vm.kind === 'best';
+    const laneChip = { gut_call: 'Full Send', upset: 'Upset pick', safer_combo: 'Safer combo', special: "Chef's Special",
+      nba: 'NBA picks', soccer: 'Soccer Trial', cbb: 'College hoops Trial' };
+    const tier = pick.lane === 'chef_pick' ? `Chef's Pick · ${C.stakeOf(pick)}u`
+      : pick.selectionPolicy === '2026-10-19-1u-2u' && pick.lane === 'best_bet' ? `Best Bet · ${C.stakeOf(pick)}u`
+        : vm.featured ? 'Pick of the day' : vm.kind === 'climb' ? '80/20 Climb' : vm.kind === 'fun' ? 'Fun ticket' : laneChip[pick.lane] || 'Best bet';
+    const rows = opts.lines || todayExtras?.lines?.lines;
+    const hold = best && !pick.result ? pickHold(pick, rows) : null;
+    const latest = !pick.result && best && !hold ? latestPickQuote(pick, rows) : null;
+    const afterHold = Boolean(hold?.afterPosting), holdPrice = afterHold ? heldQuote(pick, rows) : null;
+    const good = isNum(pick.cutoffOdds) ? `Still good to ${odd(pick.cutoffOdds)}.` : '';
+    const current = pick.result ? resultLine(pick) : afterHold
+      ? `${afterPostingWords(hold)}${holdPrice ? ` Latest ${odd(holdPrice.odds)} at ${clock(holdPrice.observedAt)} at ${vm.book}.` : ''}`
+      : hold ? heldShort(hold)
+        : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${isNum(latest.current.line) && pick.marketType !== 'moneyline' && pick.market !== 'moneyline' ? `${latest.current.line} at ` : ''}${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.pastLine ? `Line moved from ${pick.line}; outside my posted range.` : latest.pastPrice ? `Past my ${odd(pick.cutoffOdds)} limit.` : latest.inside ? good : 'Check the current line and price.'}`
+          : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
+    const showModel = best && pick.marketType !== 'moneyline' && pick.market !== 'moneyline' && (!hold || afterHold)
+      && isNum(pick.projection) && isNum(pick.line);
+    const toward = showModel ? round1(String(pick.direction || '').toLowerCase() === 'under' ? Number(pick.line) - Number(pick.projection) : Number(pick.projection) - Number(pick.line)) : null;
+    const comparison = showModel ? `<div class="decision-numbers" aria-label="Book line ${esc(C.fixed(pick.line))}, Kook’n projection ${esc(C.fixed(pick.projection))}, projected gap ${esc(toward)} toward the pick">
+      <span><small>Book line</small><b class="num">${esc(C.fixed(pick.line))}</b></span><span class="ours"><small>Kook’n projection</small><b class="num">${esc(C.fixed(pick.projection))}</b></span><span class="gap${toward > 0 ? ' good' : ''}"><small>Gap to pick</small><b class="num">${toward > 0 ? '+' : ''}${esc(C.fixed(toward))}</b></span></div>` : '';
+    const heldSafe = text => hold && !hold.afterPosting && HELD_WORDS.test(text || '') ? null : text;
+    const savedWhy = heldSafe(pick.ticketWhy);
+    const summaryWhy = savedWhy && !/^Book says .+ I say /i.test(savedWhy) ? savedWhy : null;
+    const matchup = g && g.away && g.home ? `${g.away.abbr} at ${g.home.abbr}` : vm.league === 'CFB' ? 'College football' : vm.league;
+    const history = best && pick.hitStrip && Array.isArray(pick.hitStrip.season) && pick.hitStrip.season[1]
+      ? `${pick.hitStrip.season[0]} of ${pick.hitStrip.season[1]} at this line this season` : '';
+    const actionable = !pick.result && !hold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
+    const status = pick.result ? RESULT_WORD[pick.result] || 'Final' : hold && !afterHold ? 'Unavailable' : actionable ? 'Open' : vm.mode === 'expired' ? 'Check price' : vm.status || 'Closed';
+    const title = vm.kind === 'climb' ? `${vm.title} · Step ${(pick.ladder || {}).step || ''}` : vm.title;
+    const art = pick.athleteId ? artFor(pick, 'sm') : g && g.away && g.home
+      ? `<span class="ava-pair sm">${teamMark(g.away, 'sm', g.league || pick.league)}${teamMark(g.home, 'sm', g.league || pick.league)}</span>` : '';
+    return `<article class="decision-card ${actionable ? 'is-open' : 'is-closed'}${pick.result ? ` is-${esc(pick.result)}` : ''}">
+      <div class="decision-top"><span class="decision-tier">${esc(tier)}</span><span class="decision-state">${esc(status)}</span></div>
+      <div class="decision-title">${art}<div><h3><a href="${esc(vm.href)}">${esc(title)}</a></h3><p>${esc(matchup)}${pick.kickoff ? ` · ${esc(ticketWhen(pick.kickoff))}` : ''}${history ? ` · ${esc(history)}` : ''}</p></div></div>
+      <div class="decision-price"><span><small>Posted price</small><b class="num">${esc(odd(vm.odds))}</b></span><strong>${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</strong></div>
+      ${comparison}${current ? `<p class="decision-current">${esc(current)}</p>` : ''}
+      ${best && summaryWhy ? `<p class="decision-why"><b>Why it made the card</b><span>${esc(summaryWhy)}</span></p>` : ''}
+      <a class="decision-more" href="${esc(vm.href)}">See stats, trends and full breakdown <span aria-hidden="true">→</span></a>
+    </article>`;
+  };
+  const emptyRail = (note, id = '') => `<section${id ? ` id="${esc(id)}"` : ''} class="decision-empty" aria-label="No best bet yet"><span>No official pick</span><h3>Nothing forced.</h3><p>${note}</p></section>`;
   const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
   /* The 80/20 Climb stub: the chip carries the real stake; done steps get a check, the current one is outlined, the
      $1,000 flag stays visible. Never a guessed return or a promised step count. */
@@ -1173,15 +1217,11 @@
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
   const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
-    const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
-    const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
-    const size = photo ? ledeSize(title) : null;
-    const climbState = climb && climb.open ? `Step ${climb.open.step || climb.step} live` : climb ? `Step ${climb.step} next` : 'Route';
-    return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <nav class="kt-today-jumps${otherPosted ? ' has-other-plays' : ''}" aria-label="Today at a glance"><a href="${postedSummary ? '#today-posted-straights' : '#today-card'}"><span>${postedSummary ? 'Posted straights' : 'Best bets'}</span><b>${postedSummary ? `${postedSummary.count} today` : rows.length ? `${rows.length} posted` : favorite ? 'Strongest lean' : 'Checking'}</b></a>${otherPosted}<a href="#today-climb"><span>80/20 Climb</span><b>${esc(climbState)}</b></a></nav>
+    const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today);
+    return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
+      <nav class="today-tools" aria-label="Betting data and research"><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&sport=NFL"><span aria-hidden="true">⌕</span><b>Players</b><small>Stats & game logs</small></a><a href="#research/lines"><span aria-hidden="true">↕</span><b>Lines</b><small>Book vs Kook’n</small></a><a href="#record"><span aria-hidden="true">✓</span><b>Results</b><small>Every graded play</small></a></nav>
       ${postedSummary ? postedSummary.html : ''}
-      <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Today’s best bets'}</h2><a href="#record">Every result ›</a></div>
-      ${rows.length ? '<p class="kt-quick-help">The play, price and model number first. Open the breakdown for the full reasoning, risk and trends.</p>' : ''}
+      <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Kook’n picks'}</h2><a href="#record">Track record ›</a></div>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card', quick: true }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
       ${otherTickets}${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
       ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, quick: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
@@ -1249,7 +1289,6 @@
     /* A future bet must not become today's best bet just because today's bar cleared nothing. */
     const rows = todays;
     const ladder = C.theLadder(all);
-    const rungHere = ladder.open && (state.league === 'ALL' || ladder.open.league === state.league) ? [ladder.open] : [];
     const climb = !Array.isArray(todayExtras && todayExtras.every) && heroLoaded && heroLoaded.climb ? heroLoaded.climb : { run: ladder.run, step: ladder.step, riding: ladder.open ? Number((ladder.open.ladder || {}).stake) || ladder.stake : ladder.stake,
       open: ladder.open && { step: (ladder.open.ladder || {}).step }, settled: ladder.history.length, saved: ladder.saved, net: ladder.accounting.net,
       last: ladder.history.length ? { result: ladder.history[ladder.history.length - 1].result, step: (ladder.history[ladder.history.length - 1].ladder || {}).step } : null };
@@ -1376,8 +1415,8 @@
     const evaluated = today.generatedAt && C.dayOf(today.generatedAt) === etDay()
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
-    return `<p class="small muted" style="margin-bottom:12px"><b>Best Bets · 1u</b> · <b>Chef's Picks · 2u</b> · the rarer, stronger tier. Earlier plays keep their posted stakes.</p><div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
-      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
+    return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
+      climb, lines: lines && lines.lines, more: [], past: ladder.history, later: rest, cards, proof, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
       postedToday: picks.some(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay()),
       otherPosted, postedSummary, otherTickets: cbbSummary, nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
