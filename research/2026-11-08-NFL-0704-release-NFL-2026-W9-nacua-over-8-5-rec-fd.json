@@ -1,0 +1,296 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-08T12:04:25Z",
+  "summary": "Released 1: Puka Nacua OVER 8.5 receptions +106 at FanDuel.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4426515",
+      "market": "rec",
+      "line": 8.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873043"
+      ],
+      "book": "FanDuel",
+      "odds": 106,
+      "projection": 9.7,
+      "edge": "Price-checked chance 51.0% against the exact two-sided price; 48.5% needed at +106: +2.5 percentage points.",
+      "cutoff": "OVER 8.5 at +106 or better; off the card at 9+, or at -109 or worse at 8.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-08T09:19:38Z",
+      "quotedAt": "2026-11-08T09:26:07Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 4:26 AM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-08T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.614,
+        "chance": 0.51,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.485,
+        "edgePoints": 2.5,
+        "evPerUnit": 0.051,
+        "snapshotAt": "2026-11-08T09:19:38Z",
+        "probabilitySpec": "0a4cd5ffad31ea668705cb7aad117caf17ed66c53c1318d321cd3b889b940af8",
+        "evaluatedAt": "2026-11-08T11:50:09Z",
+        "fairChance": 0.454,
+        "anchoredChance": 0.51,
+        "gap": 5.6,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Los Angeles Rams at Washington Commanders",
+      "title": "Puka Nacua OVER 8.5 receptions",
+      "id": "NFL-2026-W9-nacua-over-8-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873043",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 6 of 10 over 8.5.",
+        "context": [
+          "Role: 1st of 3 LAR WRs by projected targets, 13.3 a game.",
+          "Defense: WSH allows 12.57 receptions a game to WRs, 27th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 9.7 against 8.5. The over reads 51.0% after adjustment from the raw 61.4%; 48.5% is needed at +106. Last 10 games: 6 of 10 over 8.5. Role: 1st of 3 LAR WRs by projected targets, 13.3 a game. Defense: WSH allows 12.57 receptions a game to WRs, 27th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Over 8.5 in 6 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-08T11:50:09Z"
+          },
+          {
+            "text": "Book says 8.5. I say 9.7.",
+            "numbers": {
+              "projection": 9.7,
+              "line": 8.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-08T09:19:38Z"
+          },
+          {
+            "text": "3 of his last 5 games finished over 8.5 receptions.",
+            "numbers": {
+              "values": [
+                9,
+                17,
+                6,
+                8,
+                11
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 8.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-01T21:05Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-08T11:50:09Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Jer'Zhan Newton (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4430560/jerzhan-newton",
+            "time": "2026-11-07T20:53Z"
+          },
+          {
+            "text": "Treylon Burks (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4567156/treylon-burks",
+            "time": "2026-11-06T21:31Z"
+          },
+          {
+            "text": "Jordan Whittington (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4569382/jordan-whittington",
+            "time": "2026-11-07T01:46Z"
+          },
+          {
+            "text": "Colby Parkinson (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4242557/colby-parkinson",
+            "time": "2026-11-06T21:35Z"
+          },
+          {
+            "text": "Joe Cardona (LAR) is listed Doubtful.",
+            "numbers": {
+              "status": "Doubtful"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2575907/joe-cardona",
+            "time": "2026-11-06T21:27Z"
+          },
+          {
+            "text": "Kam Curl (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4242154/kam-curl",
+            "time": "2026-11-06T20:10Z"
+          },
+          {
+            "text": "Trent McDuffie (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426405/trent-mcduffie",
+            "time": "2026-11-06T19:57Z"
+          },
+          {
+            "text": "Grant Stuard (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4240255/grant-stuard",
+            "time": "2026-11-02T23:46Z"
+          }
+        ],
+        "weather": {
+          "tempF": 60,
+          "windMph": 12,
+          "windDirection": "W",
+          "precipProb": 0,
+          "periodStart": "2026-11-08T13:00:00-05:00",
+          "issuedAt": "2026-11-08T06:22:57+00:00",
+          "source": "https://api.weather.gov/gridpoints/LWX/101,74/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 8.5,
+                "price": 104,
+                "time": "2026-11-08T01:42:32Z"
+              },
+              "now": {
+                "line": 8.5,
+                "price": 104,
+                "time": "2026-11-08T09:26:07Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 8.5,
+                "price": 106,
+                "time": "2026-11-08T01:42:32Z"
+              },
+              "now": {
+                "line": 8.5,
+                "price": 106,
+                "time": "2026-11-08T09:26:07Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 8.5,
+            "price": 106,
+            "time": "2026-11-08T09:26:07Z"
+          }
+        },
+        "ours": {
+          "projection": 9.7,
+          "line": 8.5,
+          "market": "rec",
+          "text": "Over 8.5 in 6 of his last 10 games.",
+          "snapshotAt": "2026-11-08T09:19:38Z"
+        },
+        "history": "Last 10 games: 6 of 10 over 8.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4430560/jerzhan-newton",
+            "time": "2026-11-07T20:53Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4567156/treylon-burks",
+            "time": "2026-11-06T21:31Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4569382/jordan-whittington",
+            "time": "2026-11-07T01:46Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4242557/colby-parkinson",
+            "time": "2026-11-06T21:35Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2575907/joe-cardona",
+            "time": "2026-11-06T21:27Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4242154/kam-curl",
+            "time": "2026-11-06T20:10Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426405/trent-mcduffie",
+            "time": "2026-11-06T19:57Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4240255/grant-stuard",
+            "time": "2026-11-02T23:46Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/LWX/101,74/forecast/hourly",
+            "time": "2026-11-08T06:22:57+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873043",
+            "time": "2026-11-08T11:50:09Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-08T11:50:09Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-08T12:04:25Z"
+    }
+  ]
+}
