@@ -141,6 +141,13 @@ def candidate(ctx, games, now, spec):
     held = refusal(ticket, ctx)
     if held:
         return None, held
+    try:
+        # Validate the optional owner-directed split before the ticket can pass
+        # any admission or queue boundary.  ticket_pick stores it on the new
+        # rung; it never mutates prior ladder history.
+        ladder.prospective_stake(where, ticket)
+    except ValueError as error:
+        return None, str(error)
     ticket.update(firstKickoff=min(games[g]['kickoff'] for g in ticket['gameIds']),
                   decimal=parlay.decimal(ticket['odds']), quoteType='sportsbook', priceEstimated=False,
                   sources=sorted({ticket['researchReview']['ticketSource']} |

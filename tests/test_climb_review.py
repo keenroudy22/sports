@@ -141,6 +141,21 @@ class ReviewedClimbTests(unittest.TestCase):
             self.assertEqual(row['id'],pick['id'])
             self.assertIsNone(review.enqueue(ticket,ctx,NOW,Path(folder))[0])
 
+    def test_owner_roll_split_is_prospective_and_reconciles_current_rung(self):
+        ticket, _ = fixture()
+        where = {'run': 4, 'step': 3, 'stake': 76, 'banked': 34}
+        ticket['stakeAdjustment'] = {
+            'method': ladder.OWNER_ROLL_SPLIT, 'approvedAt': '2026-11-07',
+            'priorStake': 76, 'nextStake': 25, 'additionalBank': 51,
+            'priorBank': 34, 'bankedAfter': 85,
+        }
+        stake, banked, adjustment = ladder.prospective_stake(where, ticket)
+        self.assertEqual((stake, banked), (25, 85))
+        self.assertEqual(adjustment['additionalBank'], 51)
+        ticket['stakeAdjustment']['additionalBank'] = 50
+        with self.assertRaises(ValueError):
+            ladder.prospective_stake(where, ticket)
+
     def test_render_outage_retains_private_admission_for_existing_recovery(self):
         ticket,ctx=fixture()
         import release_queue

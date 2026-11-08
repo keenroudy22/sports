@@ -716,11 +716,39 @@ def build(legs, now=None):
     return best[1], None
 
 
+OWNER_ROLL_SPLIT = 'owner-approved-climb-roll-split-v1'
+
+
+def prospective_stake(where, ticket):
+    """Return the current rung's dollars, optionally applying one reviewed split.
+
+    A split is deliberately attached to the new, unpublished rung rather than
+    changing any prior rung.  It is only valid when its complete before/after
+    accounting agrees with the actual append-only ladder state.
+    """
+    adjustment = ticket.get('stakeAdjustment')
+    if adjustment is None:
+        return int(where['stake']), int(where['banked']), None
+    if not isinstance(adjustment, dict) or adjustment.get('method') != OWNER_ROLL_SPLIT:
+        raise ValueError('Climb stake adjustment needs the approved prospective split method')
+    required = ('priorStake', 'nextStake', 'additionalBank', 'priorBank', 'bankedAfter')
+    if any(not isinstance(adjustment.get(key), int) or isinstance(adjustment.get(key), bool)
+           for key in required):
+        raise ValueError('Climb stake adjustment needs whole-dollar accounting')
+    prior, next_stake = adjustment['priorStake'], adjustment['nextStake']
+    added, prior_bank, after = (adjustment['additionalBank'], adjustment['priorBank'],
+                                adjustment['bankedAfter'])
+    if (prior != int(where['stake']) or prior_bank != int(where['banked']) or next_stake <= 0
+            or added <= 0 or next_stake + added != prior or after != prior_bank + added):
+        raise ValueError('Climb stake adjustment does not reconcile to the current open rung')
+    return next_stake, after, dict(adjustment)
+
+
 def ticket_pick(ticket, league, where, now, games):
     """Attach the climb's dollars and public fields to a validated ticket."""
     first = games.get(ticket['gameIds'][0]) or {}
     day = eastern_date(now)
-    stake, banked = where['stake'], where['banked']
+    stake, banked, adjustment = prospective_stake(where, ticket)
     returned = payout(stake, ticket['odds'])
     bank_cut, next_stake = split_return(returned)
     info = {'run': where['run'], 'step': where['step'], 'stake': stake, 'payout': returned,
@@ -728,6 +756,8 @@ def ticket_pick(ticket, league, where, now, games):
             'nextStake': next_stake, 'totalAfter': banked + returned,
             'bankPercent': int(BANK_RATE * 100), 'ridePercent': 100 - int(BANK_RATE * 100),
             'start': START, 'goal': GOAL}
+    if adjustment:
+        info['stakeAdjustment'] = adjustment
     base = (f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-"
             f"c{info['run']}s{info['step']}-{SLUGS[ticket['book']]}")
     sources = set(ticket.get('sources') or [])
