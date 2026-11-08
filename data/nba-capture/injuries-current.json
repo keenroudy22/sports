@@ -1,19 +1,3111 @@
 {
- "official": {
-  "attemptedAt": "2026-11-07T22:31:28Z",
-  "latestPublishedAt": "2026-11-07T18:30:00Z",
-  "reason": "Official report listing has no recent published PDF",
-  "source": "https://official.nba.com/nba-injury-report-2026-27-season",
-  "state": "unavailable"
+ "gameAvailability": {
+  "401909938": {
+   "conflicts": [],
+   "kickoff": "2026-11-07T22:00:00Z",
+   "rows": [
+    {
+     "athleteId": "5157066",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Johnny Furphy",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "11"
+    },
+    {
+     "athleteId": "4396993",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Tyrese Haliburton",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "11"
+    },
+    {
+     "athleteId": "2530530",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "T.J. McConnell",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "11"
+    },
+    {
+     "athleteId": "3133603",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Kelly Oubre Jr.",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "11"
+    },
+    {
+     "athleteId": "4433076",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Ben Sheppard",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "11"
+    },
+    {
+     "athleteId": "3978",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "DeMar DeRozan",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "7"
+    },
+    {
+     "athleteId": "4432181",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Julian Strawther",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "7"
+    }
+   ],
+   "teamHolds": {}
+  },
+  "401909939": {
+   "conflicts": [
+    {
+     "athleteId": "4432194",
+     "officialStatus": "not listed",
+     "providerStatus": "Day-To-Day",
+     "team": "17"
+    }
+   ],
+   "kickoff": "2026-11-08T00:30:00Z",
+   "rows": [
+    {
+     "athleteId": "4431941",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "RayJ Dennis",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "1"
+    },
+    {
+     "athleteId": "4585618",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Keshon Gilbert",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "1"
+    },
+    {
+     "athleteId": "4712863",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Mouhamed Gueye",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "1"
+    },
+    {
+     "athleteId": "4701230",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jalen Johnson",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "1"
+    },
+    {
+     "athleteId": "3146557",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jock Landale",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "1"
+    },
+    {
+     "athleteId": "4873201",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Asa Newell",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "1"
+    },
+    {
+     "athleteId": "5105571",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Henri Veesaar",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "1"
+    },
+    {
+     "athleteId": "4431714",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jalen Wilson",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "1"
+    },
+    {
+     "athleteId": "5105626",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Tyler Bilodeau",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "17"
+    },
+    {
+     "athleteId": "4712896",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Noah Clowney",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "17"
+    },
+    {
+     "athleteId": "5175643",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Egor Demin",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "17"
+    },
+    {
+     "athleteId": "4870564",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Joshua Jefferson",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "17"
+    },
+    {
+     "athleteId": "4702670",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Grant Nelson",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "17"
+    },
+    {
+     "athleteId": "5037873",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Drake Powell",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "17"
+    },
+    {
+     "athleteId": "5242502",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Ben Saraf",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "17"
+    }
+   ],
+   "teamHolds": {
+    "17": "Availability sources disagree; ESPN designation missing from official report"
+   }
+  },
+  "401909940": {
+   "conflicts": [],
+   "kickoff": "2026-11-08T01:00:00Z",
+   "rows": [
+    {
+     "athleteId": "4066328",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jarrett Allen",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "5"
+    },
+    {
+     "athleteId": "4431734",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Tristan Enaruna",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "5"
+    },
+    {
+     "athleteId": "4066757",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Sam Merrill",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "5"
+    },
+    {
+     "athleteId": "4683747",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jaylon Tyson",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "5"
+    },
+    {
+     "athleteId": "5106261",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Ernest Udeh Jr.",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "5"
+    },
+    {
+     "athleteId": "3062679",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Josh Hart",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "18"
+    }
+   ],
+   "teamHolds": {
+    "5": "Official report player/roster identity needs verification"
+   }
+  },
+  "401909941": {
+   "conflicts": [],
+   "kickoff": "2026-11-08T01:00:00Z",
+   "rows": [
+    {
+     "athleteId": "4433255",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Chet Holmgren",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "25"
+    },
+    {
+     "athleteId": "5061603",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Thomas Sorber",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "25"
+    },
+    {
+     "athleteId": "5159925",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Nikola Topic",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "25"
+    },
+    {
+     "athleteId": "4683692",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Cason Wallace",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "25"
+    },
+    {
+     "athleteId": "4593803",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jalen Williams",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "25"
+    },
+    {
+     "athleteId": "4432823",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jaylin Williams",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "25"
+    },
+    {
+     "athleteId": "4432187",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Reece Beekman",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "27"
+    },
+    {
+     "athleteId": "4432907",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Justin Champagnie",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "27"
+    },
+    {
+     "athleteId": "6583",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Anthony Davis",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "27"
+    },
+    {
+     "athleteId": "5105841",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Felix Okpara",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "27"
+    },
+    {
+     "athleteId": "4997537",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Tristan Vukcevic",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "27"
+    },
+    {
+     "athleteId": "4606840",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jamir Watkins",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "27"
+    }
+   ],
+   "teamHolds": {}
+  },
+  "401909942": {
+   "conflicts": [],
+   "kickoff": "2026-11-08T01:30:00Z",
+   "rows": [
+    {
+     "athleteId": "6430",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jimmy Butler III",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "9"
+    },
+    {
+     "athleteId": "6589",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Draymond Green",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "9"
+    },
+    {
+     "athleteId": "4432171",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Moses Moody",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "9"
+    },
+    {
+     "athleteId": "3134903",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Gary Payton II",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "9"
+    },
+    {
+     "athleteId": "3102531",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Kristaps Porzingis",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "9"
+    },
+    {
+     "athleteId": "4997536",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Gui Santos",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "9"
+    },
+    {
+     "athleteId": "4432573",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Paolo Banchero",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "19"
+    },
+    {
+     "athleteId": "4066320",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Desmond Bane",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "19"
+    },
+    {
+     "athleteId": "4065654",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jonathan Isaac",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "19"
+    },
+    {
+     "athleteId": "5107251",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Izaiyah Nelson",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "19"
+    },
+    {
+     "athleteId": "5214637",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Noah Penda",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "19"
+    },
+    {
+     "athleteId": "4432165",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jalen Suggs",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "19"
+    }
+   ],
+   "teamHolds": {}
+  },
+  "401909943": {
+   "conflicts": [],
+   "kickoff": "2026-11-08T02:00:00Z",
+   "rows": [
+    {
+     "athleteId": "5105977",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Rasheer Fleming",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "21"
+    },
+    {
+     "athleteId": "4278402",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jordan Goodwin",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "21"
+    },
+    {
+     "athleteId": "4431695",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Drew Timme",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "21"
+    },
+    {
+     "athleteId": "4701232",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Mark Williams",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "21"
+    },
+    {
+     "athleteId": "2991235",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Steven Adams",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "10"
+    },
+    {
+     "athleteId": "3102529",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Clint Capela",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "10"
+    },
+    {
+     "athleteId": "4683860",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Quadir Copeland",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "10"
+    },
+    {
+     "athleteId": "5105553",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Julian Phillips",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "10"
+    }
+   ],
+   "teamHolds": {
+    "10": "Official report player/roster identity needs verification"
+   }
+  },
+  "401909944": {
+   "conflicts": [],
+   "kickoff": "2026-11-08T03:00:00Z",
+   "rows": [
+    {
+     "athleteId": "4578893",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Vit Krejci",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "22"
+    },
+    {
+     "athleteId": "4279888",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Ja Morant",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "22"
+    },
+    {
+     "athleteId": "4914336",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Shaedon Sharpe",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "22"
+    },
+    {
+     "athleteId": "4593043",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "John Tonje",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "22"
+    },
+    {
+     "athleteId": "4066211",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Robert Williams III",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "22"
+    },
+    {
+     "athleteId": "5105337",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Maliq Brown",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "24"
+    },
+    {
+     "athleteId": "5107968",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Ja'Kobi Gillespie",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "24"
+    },
+    {
+     "athleteId": "6440",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Tobias Harris",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "24"
+    },
+    {
+     "athleteId": "5101845",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jayden Quaintance",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "24"
+    }
+   ],
+   "teamHolds": {}
+  },
+  "401909945": {
+   "conflicts": [],
+   "kickoff": "2026-11-08T20:30:00Z",
+   "rows": [
+    {
+     "athleteId": "5105555",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Tobe Awaka",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Questionable",
+     "team": "4"
+    },
+    {
+     "athleteId": "4278067",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Nic Claxton",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Questionable",
+     "team": "4"
+    },
+    {
+     "athleteId": "4066650",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Zach Collins",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "4"
+    },
+    {
+     "athleteId": "4898010",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jaylin Sellers",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "4"
+    },
+    {
+     "athleteId": "4397189",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jalen Smith",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Probable",
+     "team": "4"
+    },
+    {
+     "athleteId": "4848625",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Dailyn Swain",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "4"
+    },
+    {
+     "athleteId": "4870562",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Dominick Barlow",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "20"
+    },
+    {
+     "athleteId": "5105637",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Adem Bona",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "20"
+    },
+    {
+     "athleteId": "3059318",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Joel Embiid",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Probable",
+     "team": "20"
+    },
+    {
+     "athleteId": "4871141",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Ariel Hukporti",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "20"
+    }
+   ],
+   "teamHolds": {}
+  },
+  "401909946": {
+   "conflicts": [],
+   "kickoff": "2026-11-08T23:00:00Z",
+   "rows": [
+    {
+     "athleteId": "4433621",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jalen Duren",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "8"
+    },
+    {
+     "athleteId": "4397449",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Elijah Harkless",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Questionable",
+     "team": "8"
+    },
+    {
+     "athleteId": "4395702",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Isaiah Joe",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "8"
+    },
+    {
+     "athleteId": "5107818",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Isaac Jones",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Questionable",
+     "team": "8"
+    },
+    {
+     "athleteId": "5037878",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Ugonna Onyenso",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "8"
+    },
+    {
+     "athleteId": "3945274",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Luka Doncic",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Questionable",
+     "team": "13"
+    },
+    {
+     "athleteId": "4433136",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Walker Kessler",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "13"
+    }
+   ],
+   "teamHolds": {}
+  },
+  "401909947": {
+   "conflicts": [],
+   "kickoff": "2026-11-09T00:00:00Z",
+   "rows": [
+    {
+     "athleteId": "5279133",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Joan Beringer",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Questionable",
+     "team": "16"
+    },
+    {
+     "athleteId": "3934673",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Donte DiVincenzo",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "16"
+    },
+    {
+     "athleteId": "4594268",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Anthony Edwards",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "16"
+    },
+    {
+     "athleteId": "4433268",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Trey Alexander",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "26"
+    },
+    {
+     "athleteId": "4433618",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Harrison Ingram",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "26"
+    },
+    {
+     "athleteId": "4277961",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jaren Jackson Jr.",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "26"
+    },
+    {
+     "athleteId": "4066336",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Lauri Markkanen",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Questionable",
+     "team": "26"
+    },
+    {
+     "athleteId": "3102530",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jusuf Nurkic",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "26"
+    }
+   ],
+   "teamHolds": {}
+  },
+  "401909948": {
+   "conflicts": [],
+   "kickoff": "2026-11-09T00:30:00Z",
+   "rows": [
+    {
+     "athleteId": "5148538",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Tarik Biberovic",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "6"
+    },
+    {
+     "athleteId": "5279129",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Sergio de Larrea",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "6"
+    },
+    {
+     "athleteId": "4683688",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Dereck Lively II",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "6"
+    },
+    {
+     "athleteId": "3138160",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Caleb Martin",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Available",
+     "team": "6"
+    },
+    {
+     "athleteId": "4432194",
+     "date": "2026-11-05T02:29Z",
+     "league": "NBA",
+     "name": "Day'Ron Sharpe",
+     "retrievedAt": "2026-11-08T02:00:07Z",
+     "season": 2027,
+     "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
+     "status": "Day-To-Day",
+     "team": "17"
+    },
+    {
+     "athleteId": "5175643",
+     "date": "2026-10-29T17:09Z",
+     "league": "NBA",
+     "name": "Egor Demin",
+     "retrievedAt": "2026-11-08T02:00:07Z",
+     "season": 2027,
+     "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
+     "status": "Out",
+     "team": "17"
+    }
+   ],
+   "teamHolds": {
+    "17": "Official team report not submitted or not found"
+   }
+  },
+  "401909949": {
+   "conflicts": [],
+   "kickoff": "2026-11-09T01:00:00Z",
+   "rows": [
+    {
+     "athleteId": "4697268",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Kam Jones",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "15"
+    },
+    {
+     "athleteId": "5214989",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Bogoljub Markovic",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "15"
+    },
+    {
+     "athleteId": "4397233",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Pete Nance",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "15"
+    },
+    {
+     "athleteId": "4397114",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Cormac Ryan",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "15"
+    },
+    {
+     "athleteId": "4433188",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Devin Carter",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "2"
+    },
+    {
+     "athleteId": "5106283",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Dillon Mitchell",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "2"
+    },
+    {
+     "athleteId": "4702745",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Amari Williams",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "2"
+    }
+   ],
+   "teamHolds": {
+    "2": "Official report player/roster identity needs verification"
+   }
+  },
+  "401909950": {
+   "conflicts": [],
+   "kickoff": "2026-11-09T02:00:00Z",
+   "rows": [
+    {
+     "athleteId": "6580",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Bradley Beal",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "12"
+    },
+    {
+     "athleteId": "3913176",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Brandon Ingram",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "12"
+    },
+    {
+     "athleteId": "4432170",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Isaiah Jackson",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "12"
+    },
+    {
+     "athleteId": "4396818",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jordan Miller",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "12"
+    },
+    {
+     "athleteId": "5108024",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Yanic Konan Niederhauser",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "12"
+    },
+    {
+     "athleteId": "4712862",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Malik Dia",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "3"
+    },
+    {
+     "athleteId": "5061589",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Yves Missi",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "3"
+    },
+    {
+     "athleteId": "4703115",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jaron Pierre Jr.",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "3"
+    }
+   ],
+   "teamHolds": {}
+  },
+  "401909951": {
+   "conflicts": [],
+   "kickoff": "2026-11-09T02:00:00Z",
+   "rows": [
+    {
+     "athleteId": "5107897",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Jonathan Mogbo",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "23"
+    },
+    {
+     "athleteId": "4594327",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Keegan Murray",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Questionable",
+     "team": "23"
+    },
+    {
+     "athleteId": "4709131",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Sean Pedulla",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "23"
+    },
+    {
+     "athleteId": "4898371",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Maxime Raynaud",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "23"
+    },
+    {
+     "athleteId": "3907387",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Ben Simmons",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "23"
+    },
+    {
+     "athleteId": "4837356",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Tre Donaldson",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "14"
+    },
+    {
+     "athleteId": "4700818",
+     "date": "2026-11-08T02:00:00Z",
+     "league": "NBA",
+     "name": "Vladislav Goldin",
+     "retrievedAt": "2026-11-08T02:00:14Z",
+     "season": 2027,
+     "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+     "status": "Out",
+     "team": "14"
+    }
+   ],
+   "teamHolds": {}
+  }
  },
- "retrievedAt": "2026-11-07T22:31:28Z",
+ "official": {
+  "discovery": {
+   "method": "Newest published official link; one PDF attempt",
+   "retrievedAt": "2026-11-08T02:00:13Z",
+   "source": "https://official.nba.com/nba-injury-report-2026-27-season"
+  },
+  "league": "NBA",
+  "reportedAt": "2026-11-08T02:00:00Z",
+  "retrievedAt": "2026-11-08T02:00:14Z",
+  "scope": "Official participation statuses, not expected minutes or a model adjustment",
+  "season": 2027,
+  "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+  "teams": [
+   {
+    "eventId": "401909938",
+    "kickoff": "2026-11-07T22:00:00Z",
+    "rows": [
+     {
+      "athleteId": "3978",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "DeMar DeRozan",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "7"
+     },
+     {
+      "athleteId": "4432181",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Julian Strawther",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "7"
+     }
+    ],
+    "submitted": true,
+    "team": "7",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909938",
+    "kickoff": "2026-11-07T22:00:00Z",
+    "rows": [
+     {
+      "athleteId": "5157066",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Johnny Furphy",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "11"
+     },
+     {
+      "athleteId": "4396993",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Tyrese Haliburton",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "11"
+     },
+     {
+      "athleteId": "2530530",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "T.J. McConnell",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "11"
+     },
+     {
+      "athleteId": "3133603",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Kelly Oubre Jr.",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "11"
+     },
+     {
+      "athleteId": "4433076",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Ben Sheppard",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "11"
+     }
+    ],
+    "submitted": true,
+    "team": "11",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909939",
+    "kickoff": "2026-11-08T00:30:00Z",
+    "rows": [
+     {
+      "athleteId": "5105626",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Tyler Bilodeau",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "17"
+     },
+     {
+      "athleteId": "4712896",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Noah Clowney",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "17"
+     },
+     {
+      "athleteId": "5175643",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Egor Demin",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "17"
+     },
+     {
+      "athleteId": "4870564",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Joshua Jefferson",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "17"
+     },
+     {
+      "athleteId": "4702670",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Grant Nelson",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "17"
+     },
+     {
+      "athleteId": "5037873",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Drake Powell",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "17"
+     },
+     {
+      "athleteId": "5242502",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Ben Saraf",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "17"
+     }
+    ],
+    "submitted": true,
+    "team": "17",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909939",
+    "kickoff": "2026-11-08T00:30:00Z",
+    "rows": [
+     {
+      "athleteId": "4431941",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "RayJ Dennis",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "1"
+     },
+     {
+      "athleteId": "4585618",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Keshon Gilbert",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "1"
+     },
+     {
+      "athleteId": "4712863",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Mouhamed Gueye",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "1"
+     },
+     {
+      "athleteId": "4701230",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jalen Johnson",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "1"
+     },
+     {
+      "athleteId": "3146557",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jock Landale",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "1"
+     },
+     {
+      "athleteId": "4873201",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Asa Newell",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "1"
+     },
+     {
+      "athleteId": "5105571",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Henri Veesaar",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "1"
+     },
+     {
+      "athleteId": "4431714",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jalen Wilson",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "1"
+     }
+    ],
+    "submitted": true,
+    "team": "1",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909940",
+    "kickoff": "2026-11-08T01:00:00Z",
+    "rows": [
+     {
+      "athleteId": "3062679",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Josh Hart",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "18"
+     }
+    ],
+    "submitted": true,
+    "team": "18",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909940",
+    "kickoff": "2026-11-08T01:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4066328",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jarrett Allen",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "5"
+     },
+     {
+      "athleteId": "4431734",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Tristan Enaruna",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "5"
+     },
+     {
+      "athleteId": "4066757",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Sam Merrill",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "5"
+     },
+     {
+      "athleteId": "4683747",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jaylon Tyson",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "5"
+     },
+     {
+      "athleteId": "5106261",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Ernest Udeh Jr.",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "5"
+     }
+    ],
+    "submitted": true,
+    "team": "5",
+    "unmapped": [
+     "Diop, Khalifa",
+     "Tomlin, Nae'Qwan"
+    ],
+    "unmappedRows": [
+     {
+      "name": "Diop, Khalifa",
+      "status": "Out"
+     },
+     {
+      "name": "Tomlin, Nae'Qwan",
+      "status": "Out"
+     }
+    ]
+   },
+   {
+    "eventId": "401909941",
+    "kickoff": "2026-11-08T01:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4432187",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Reece Beekman",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "27"
+     },
+     {
+      "athleteId": "4432907",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Justin Champagnie",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "27"
+     },
+     {
+      "athleteId": "6583",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Anthony Davis",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "27"
+     },
+     {
+      "athleteId": "5105841",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Felix Okpara",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "27"
+     },
+     {
+      "athleteId": "4997537",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Tristan Vukcevic",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "27"
+     },
+     {
+      "athleteId": "4606840",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jamir Watkins",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "27"
+     }
+    ],
+    "submitted": true,
+    "team": "27",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909941",
+    "kickoff": "2026-11-08T01:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4433255",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Chet Holmgren",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "25"
+     },
+     {
+      "athleteId": "5061603",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Thomas Sorber",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "25"
+     },
+     {
+      "athleteId": "5159925",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Nikola Topic",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "25"
+     },
+     {
+      "athleteId": "4683692",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Cason Wallace",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "25"
+     },
+     {
+      "athleteId": "4593803",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jalen Williams",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "25"
+     },
+     {
+      "athleteId": "4432823",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jaylin Williams",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "25"
+     }
+    ],
+    "submitted": true,
+    "team": "25",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909942",
+    "kickoff": "2026-11-08T01:30:00Z",
+    "rows": [
+     {
+      "athleteId": "4432573",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Paolo Banchero",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "19"
+     },
+     {
+      "athleteId": "4066320",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Desmond Bane",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "19"
+     },
+     {
+      "athleteId": "4065654",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jonathan Isaac",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "19"
+     },
+     {
+      "athleteId": "5107251",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Izaiyah Nelson",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "19"
+     },
+     {
+      "athleteId": "5214637",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Noah Penda",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "19"
+     },
+     {
+      "athleteId": "4432165",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jalen Suggs",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "19"
+     }
+    ],
+    "submitted": true,
+    "team": "19",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909942",
+    "kickoff": "2026-11-08T01:30:00Z",
+    "rows": [
+     {
+      "athleteId": "6430",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jimmy Butler III",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "9"
+     },
+     {
+      "athleteId": "6589",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Draymond Green",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "9"
+     },
+     {
+      "athleteId": "4432171",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Moses Moody",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "9"
+     },
+     {
+      "athleteId": "3134903",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Gary Payton II",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "9"
+     },
+     {
+      "athleteId": "3102531",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Kristaps Porzingis",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "9"
+     },
+     {
+      "athleteId": "4997536",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Gui Santos",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "9"
+     }
+    ],
+    "submitted": true,
+    "team": "9",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909943",
+    "kickoff": "2026-11-08T02:00:00Z",
+    "rows": [
+     {
+      "athleteId": "2991235",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Steven Adams",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "10"
+     },
+     {
+      "athleteId": "3102529",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Clint Capela",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "10"
+     },
+     {
+      "athleteId": "4683860",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Quadir Copeland",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "10"
+     },
+     {
+      "athleteId": "5105553",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Julian Phillips",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "10"
+     }
+    ],
+    "submitted": true,
+    "team": "10",
+    "unmapped": [
+     "Thornton, Bruce"
+    ],
+    "unmappedRows": [
+     {
+      "name": "Thornton, Bruce",
+      "status": "Available"
+     }
+    ]
+   },
+   {
+    "eventId": "401909943",
+    "kickoff": "2026-11-08T02:00:00Z",
+    "rows": [
+     {
+      "athleteId": "5105977",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Rasheer Fleming",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "21"
+     },
+     {
+      "athleteId": "4278402",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jordan Goodwin",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "21"
+     },
+     {
+      "athleteId": "4431695",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Drew Timme",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "21"
+     },
+     {
+      "athleteId": "4701232",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Mark Williams",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "21"
+     }
+    ],
+    "submitted": true,
+    "team": "21",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909944",
+    "kickoff": "2026-11-08T03:00:00Z",
+    "rows": [
+     {
+      "athleteId": "5105337",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Maliq Brown",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "24"
+     },
+     {
+      "athleteId": "5107968",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Ja'Kobi Gillespie",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "24"
+     },
+     {
+      "athleteId": "6440",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Tobias Harris",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "24"
+     },
+     {
+      "athleteId": "5101845",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jayden Quaintance",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "24"
+     }
+    ],
+    "submitted": true,
+    "team": "24",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909944",
+    "kickoff": "2026-11-08T03:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4578893",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Vit Krejci",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "22"
+     },
+     {
+      "athleteId": "4279888",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Ja Morant",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "22"
+     },
+     {
+      "athleteId": "4914336",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Shaedon Sharpe",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "22"
+     },
+     {
+      "athleteId": "4593043",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "John Tonje",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "22"
+     },
+     {
+      "athleteId": "4066211",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Robert Williams III",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "22"
+     }
+    ],
+    "submitted": true,
+    "team": "22",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909945",
+    "kickoff": "2026-11-08T20:30:00Z",
+    "rows": [
+     {
+      "athleteId": "4870562",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Dominick Barlow",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "20"
+     },
+     {
+      "athleteId": "5105637",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Adem Bona",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "20"
+     },
+     {
+      "athleteId": "3059318",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Joel Embiid",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Probable",
+      "team": "20"
+     },
+     {
+      "athleteId": "4871141",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Ariel Hukporti",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "20"
+     }
+    ],
+    "submitted": true,
+    "team": "20",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909945",
+    "kickoff": "2026-11-08T20:30:00Z",
+    "rows": [
+     {
+      "athleteId": "5105555",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Tobe Awaka",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Questionable",
+      "team": "4"
+     },
+     {
+      "athleteId": "4278067",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Nic Claxton",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Questionable",
+      "team": "4"
+     },
+     {
+      "athleteId": "4066650",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Zach Collins",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "4"
+     },
+     {
+      "athleteId": "4898010",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jaylin Sellers",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "4"
+     },
+     {
+      "athleteId": "4397189",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jalen Smith",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Probable",
+      "team": "4"
+     },
+     {
+      "athleteId": "4848625",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Dailyn Swain",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "4"
+     }
+    ],
+    "submitted": true,
+    "team": "4",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909946",
+    "kickoff": "2026-11-08T23:00:00Z",
+    "rows": [
+     {
+      "athleteId": "3945274",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Luka Doncic",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Questionable",
+      "team": "13"
+     },
+     {
+      "athleteId": "4433136",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Walker Kessler",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "13"
+     }
+    ],
+    "submitted": true,
+    "team": "13",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909946",
+    "kickoff": "2026-11-08T23:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4433621",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jalen Duren",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "8"
+     },
+     {
+      "athleteId": "4397449",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Elijah Harkless",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Questionable",
+      "team": "8"
+     },
+     {
+      "athleteId": "4395702",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Isaiah Joe",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "8"
+     },
+     {
+      "athleteId": "5107818",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Isaac Jones",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Questionable",
+      "team": "8"
+     },
+     {
+      "athleteId": "5037878",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Ugonna Onyenso",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "8"
+     }
+    ],
+    "submitted": true,
+    "team": "8",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909947",
+    "kickoff": "2026-11-09T00:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4433268",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Trey Alexander",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "26"
+     },
+     {
+      "athleteId": "4433618",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Harrison Ingram",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "26"
+     },
+     {
+      "athleteId": "4277961",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jaren Jackson Jr.",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "26"
+     },
+     {
+      "athleteId": "4066336",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Lauri Markkanen",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Questionable",
+      "team": "26"
+     },
+     {
+      "athleteId": "3102530",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jusuf Nurkic",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "26"
+     }
+    ],
+    "submitted": true,
+    "team": "26",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909947",
+    "kickoff": "2026-11-09T00:00:00Z",
+    "rows": [
+     {
+      "athleteId": "5279133",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Joan Beringer",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Questionable",
+      "team": "16"
+     },
+     {
+      "athleteId": "3934673",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Donte DiVincenzo",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "16"
+     },
+     {
+      "athleteId": "4594268",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Anthony Edwards",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "16"
+     }
+    ],
+    "submitted": true,
+    "team": "16",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909948",
+    "kickoff": "2026-11-09T00:30:00Z",
+    "rows": [],
+    "submitted": false,
+    "team": "17",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909948",
+    "kickoff": "2026-11-09T00:30:00Z",
+    "rows": [
+     {
+      "athleteId": "5148538",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Tarik Biberovic",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "6"
+     },
+     {
+      "athleteId": "5279129",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Sergio de Larrea",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "6"
+     },
+     {
+      "athleteId": "4683688",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Dereck Lively II",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "6"
+     },
+     {
+      "athleteId": "3138160",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Caleb Martin",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Available",
+      "team": "6"
+     }
+    ],
+    "submitted": true,
+    "team": "6",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909949",
+    "kickoff": "2026-11-09T01:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4433188",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Devin Carter",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "2"
+     },
+     {
+      "athleteId": "5106283",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Dillon Mitchell",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "2"
+     },
+     {
+      "athleteId": "4702745",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Amari Williams",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "2"
+     }
+    ],
+    "submitted": true,
+    "team": "2",
+    "unmapped": [
+     "Cenac Jr., Christopher"
+    ],
+    "unmappedRows": [
+     {
+      "name": "Cenac Jr., Christopher",
+      "status": "Out"
+     }
+    ]
+   },
+   {
+    "eventId": "401909949",
+    "kickoff": "2026-11-09T01:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4697268",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Kam Jones",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "15"
+     },
+     {
+      "athleteId": "5214989",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Bogoljub Markovic",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "15"
+     },
+     {
+      "athleteId": "4397233",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Pete Nance",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "15"
+     },
+     {
+      "athleteId": "4397114",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Cormac Ryan",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "15"
+     }
+    ],
+    "submitted": true,
+    "team": "15",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909951",
+    "kickoff": "2026-11-09T02:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4837356",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Tre Donaldson",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "14"
+     },
+     {
+      "athleteId": "4700818",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Vladislav Goldin",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "14"
+     }
+    ],
+    "submitted": true,
+    "team": "14",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909951",
+    "kickoff": "2026-11-09T02:00:00Z",
+    "rows": [
+     {
+      "athleteId": "5107897",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jonathan Mogbo",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "23"
+     },
+     {
+      "athleteId": "4594327",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Keegan Murray",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Questionable",
+      "team": "23"
+     },
+     {
+      "athleteId": "4709131",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Sean Pedulla",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "23"
+     },
+     {
+      "athleteId": "4898371",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Maxime Raynaud",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "23"
+     },
+     {
+      "athleteId": "3907387",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Ben Simmons",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "23"
+     }
+    ],
+    "submitted": true,
+    "team": "23",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909950",
+    "kickoff": "2026-11-09T02:00:00Z",
+    "rows": [
+     {
+      "athleteId": "4712862",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Malik Dia",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "3"
+     },
+     {
+      "athleteId": "5061589",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Yves Missi",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "3"
+     },
+     {
+      "athleteId": "4703115",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jaron Pierre Jr.",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "3"
+     }
+    ],
+    "submitted": true,
+    "team": "3",
+    "unmapped": [],
+    "unmappedRows": []
+   },
+   {
+    "eventId": "401909950",
+    "kickoff": "2026-11-09T02:00:00Z",
+    "rows": [
+     {
+      "athleteId": "6580",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Bradley Beal",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "12"
+     },
+     {
+      "athleteId": "3913176",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Brandon Ingram",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "12"
+     },
+     {
+      "athleteId": "4432170",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Isaiah Jackson",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "12"
+     },
+     {
+      "athleteId": "4396818",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Jordan Miller",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "12"
+     },
+     {
+      "athleteId": "5108024",
+      "date": "2026-11-08T02:00:00Z",
+      "league": "NBA",
+      "name": "Yanic Konan Niederhauser",
+      "retrievedAt": "2026-11-08T02:00:14Z",
+      "season": 2027,
+      "source": "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-11-07_09_00PM.pdf",
+      "status": "Out",
+      "team": "12"
+     }
+    ],
+    "submitted": true,
+    "team": "12",
+    "unmapped": [],
+    "unmappedRows": []
+   }
+  ]
+ },
+ "retrievedAt": "2026-11-08T02:00:07Z",
  "rows": [
   {
    "athleteId": "4585618",
    "date": "2026-11-07T18:17Z",
    "league": "NBA",
    "name": "Keshon Gilbert",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -24,7 +3116,7 @@
    "date": "2026-11-07T18:16Z",
    "league": "NBA",
    "name": "Asa Newell",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -35,18 +3127,7 @@
    "date": "2026-11-07T18:14Z",
    "league": "NBA",
    "name": "Jock Landale",
-   "retrievedAt": "2026-11-07T22:31:28Z",
-   "season": 2027,
-   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Out",
-   "team": "1"
-  },
-  {
-   "athleteId": "4701230",
-   "date": "2026-11-07T18:10Z",
-   "league": "NBA",
-   "name": "Jalen Johnson",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -57,7 +3138,7 @@
    "date": "2026-10-19T19:38Z",
    "league": "NBA",
    "name": "Mouhamed Gueye",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -68,29 +3149,18 @@
    "date": "2026-09-21T19:50Z",
    "league": "NBA",
    "name": "Henri Veesaar",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
    "team": "1"
   },
   {
-   "athleteId": "4712896",
-   "date": "2026-11-07T15:19Z",
-   "league": "NBA",
-   "name": "Noah Clowney",
-   "retrievedAt": "2026-11-07T22:31:28Z",
-   "season": 2027,
-   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Day-To-Day",
-   "team": "17"
-  },
-  {
    "athleteId": "4432194",
    "date": "2026-11-05T02:29Z",
    "league": "NBA",
    "name": "Day'Ron Sharpe",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -101,7 +3171,7 @@
    "date": "2026-10-29T17:09Z",
    "league": "NBA",
    "name": "Egor Demin",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -112,7 +3182,7 @@
    "date": "2026-11-07T17:39Z",
    "league": "NBA",
    "name": "Moussa Diabate",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -123,7 +3193,7 @@
    "date": "2026-11-07T04:27Z",
    "league": "NBA",
    "name": "Brandon Miller",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -134,7 +3204,7 @@
    "date": "2026-11-06T18:09Z",
    "league": "NBA",
    "name": "Dennis Schroder",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -145,7 +3215,7 @@
    "date": "2026-11-05T22:05Z",
    "league": "NBA",
    "name": "Kon Knueppel",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -156,7 +3226,7 @@
    "date": "2026-11-04T23:50Z",
    "league": "NBA",
    "name": "Grant Williams",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -167,7 +3237,7 @@
    "date": "2026-11-07T21:36Z",
    "league": "NBA",
    "name": "Tobe Awaka",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -178,7 +3248,7 @@
    "date": "2026-11-07T21:31Z",
    "league": "NBA",
    "name": "Jalen Smith",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -189,7 +3259,7 @@
    "date": "2026-11-07T21:25Z",
    "league": "NBA",
    "name": "Nic Claxton",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -200,7 +3270,7 @@
    "date": "2026-11-07T21:24Z",
    "league": "NBA",
    "name": "Zach Collins",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -211,7 +3281,7 @@
    "date": "2026-11-07T18:14Z",
    "league": "NBA",
    "name": "Jaylon Tyson",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -222,7 +3292,7 @@
    "date": "2026-11-07T18:13Z",
    "league": "NBA",
    "name": "Sam Merrill",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -233,7 +3303,7 @@
    "date": "2026-11-07T18:11Z",
    "league": "NBA",
    "name": "Jarrett Allen",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -244,7 +3314,7 @@
    "date": "2026-11-05T22:24Z",
    "league": "NBA",
    "name": "Sergio de Larrea",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -255,7 +3325,7 @@
    "date": "2026-11-01T23:19Z",
    "league": "NBA",
    "name": "Tarik Biberovic",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -266,7 +3336,7 @@
    "date": "2026-11-01T22:57Z",
    "league": "NBA",
    "name": "Dereck Lively II",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -277,7 +3347,7 @@
    "date": "2026-10-17T00:52Z",
    "league": "NBA",
    "name": "Julian Strawther",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -288,7 +3358,7 @@
    "date": "2026-11-07T21:59Z",
    "league": "NBA",
    "name": "Isaiah Joe",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -299,7 +3369,7 @@
    "date": "2026-11-07T21:57Z",
    "league": "NBA",
    "name": "Isaac Jones",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -310,7 +3380,7 @@
    "date": "2026-11-07T21:57Z",
    "league": "NBA",
    "name": "Elijah Harkless",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -321,54 +3391,21 @@
    "date": "2026-10-25T14:56Z",
    "league": "NBA",
    "name": "Jalen Duren",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
    "team": "8"
   },
   {
-   "athleteId": "6589",
-   "date": "2026-11-06T22:21Z",
-   "league": "NBA",
-   "name": "Draymond Green",
-   "retrievedAt": "2026-11-07T22:31:28Z",
-   "season": 2027,
-   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Day-To-Day",
-   "team": "9"
-  },
-  {
-   "athleteId": "3134903",
-   "date": "2026-11-06T22:21Z",
-   "league": "NBA",
-   "name": "Gary Payton II",
-   "retrievedAt": "2026-11-07T22:31:28Z",
-   "season": 2027,
-   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Day-To-Day",
-   "team": "9"
-  },
-  {
    "athleteId": "3102531",
    "date": "2026-11-06T21:26Z",
    "league": "NBA",
    "name": "Kristaps Porzingis",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
-   "team": "9"
-  },
-  {
-   "athleteId": "4997536",
-   "date": "2026-11-06T20:49Z",
-   "league": "NBA",
-   "name": "Gui Santos",
-   "retrievedAt": "2026-11-07T22:31:28Z",
-   "season": 2027,
-   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Day-To-Day",
    "team": "9"
   },
   {
@@ -376,7 +3413,7 @@
    "date": "2026-10-16T16:14Z",
    "league": "NBA",
    "name": "Moses Moody",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -387,7 +3424,7 @@
    "date": "2026-10-16T16:11Z",
    "league": "NBA",
    "name": "Jimmy Butler III",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -398,7 +3435,7 @@
    "date": "2026-11-06T20:32Z",
    "league": "NBA",
    "name": "Clint Capela",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -409,7 +3446,7 @@
    "date": "2026-11-05T00:21Z",
    "league": "NBA",
    "name": "Steven Adams",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -420,7 +3457,7 @@
    "date": "2026-11-07T20:46Z",
    "league": "NBA",
    "name": "Tyrese Haliburton",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -431,7 +3468,7 @@
    "date": "2026-10-30T19:06Z",
    "league": "NBA",
    "name": "Johnny Furphy",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -442,7 +3479,7 @@
    "date": "2026-10-28T21:41Z",
    "league": "NBA",
    "name": "Ben Sheppard",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -450,10 +3487,21 @@
   },
   {
    "athleteId": "3913176",
-   "date": "2026-11-06T20:20Z",
+   "date": "2026-11-08T01:11Z",
    "league": "NBA",
    "name": "Brandon Ingram",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
+   "season": 2027,
+   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
+   "status": "Out",
+   "team": "12"
+  },
+  {
+   "athleteId": "4432170",
+   "date": "2026-11-08T01:03Z",
+   "league": "NBA",
+   "name": "Isaiah Jackson",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -464,7 +3512,7 @@
    "date": "2026-11-02T16:12Z",
    "league": "NBA",
    "name": "Yanic Konan Niederhauser",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -475,7 +3523,7 @@
    "date": "2026-10-15T01:03Z",
    "league": "NBA",
    "name": "Bradley Beal",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -486,7 +3534,7 @@
    "date": "2026-08-26T20:04Z",
    "league": "NBA",
    "name": "Jordan Miller",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -497,7 +3545,7 @@
    "date": "2026-11-07T22:11Z",
    "league": "NBA",
    "name": "Luka Doncic",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -508,7 +3556,7 @@
    "date": "2026-11-07T17:24Z",
    "league": "NBA",
    "name": "Richie Saunders",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -519,7 +3567,7 @@
    "date": "2026-11-05T23:04Z",
    "league": "NBA",
    "name": "Isaiah Stewart",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -530,7 +3578,7 @@
    "date": "2026-11-05T23:03Z",
    "league": "NBA",
    "name": "Scotty Pippen Jr.",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -538,24 +3586,13 @@
   },
   {
    "athleteId": "5279133",
-   "date": "2026-11-07T15:05Z",
+   "date": "2026-11-07T23:10Z",
    "league": "NBA",
    "name": "Joan Beringer",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
-   "team": "16"
-  },
-  {
-   "athleteId": "4432847",
-   "date": "2026-11-06T18:06Z",
-   "league": "NBA",
-   "name": "Terrence Shannon Jr.",
-   "retrievedAt": "2026-11-07T22:31:28Z",
-   "season": 2027,
-   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Out",
    "team": "16"
   },
   {
@@ -563,7 +3600,7 @@
    "date": "2026-10-29T18:33Z",
    "league": "NBA",
    "name": "Anthony Edwards",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -574,7 +3611,7 @@
    "date": "2026-10-05T20:53Z",
    "league": "NBA",
    "name": "Donte DiVincenzo",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -585,7 +3622,7 @@
    "date": "2026-11-05T20:47Z",
    "league": "NBA",
    "name": "Yves Missi",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -596,7 +3633,7 @@
    "date": "2026-11-06T21:48Z",
    "league": "NBA",
    "name": "Josh Hart",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -607,7 +3644,7 @@
    "date": "2026-11-07T19:10Z",
    "league": "NBA",
    "name": "Jaylin Williams",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -618,7 +3655,7 @@
    "date": "2026-11-03T22:45Z",
    "league": "NBA",
    "name": "Thomas Sorber",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -629,7 +3666,7 @@
    "date": "2026-10-31T01:16Z",
    "league": "NBA",
    "name": "Cason Wallace",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -640,7 +3677,7 @@
    "date": "2026-10-31T01:02Z",
    "league": "NBA",
    "name": "Chet Holmgren",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -651,7 +3688,7 @@
    "date": "2026-10-28T23:41Z",
    "league": "NBA",
    "name": "Jalen Williams",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -662,7 +3699,7 @@
    "date": "2026-11-07T19:36Z",
    "league": "NBA",
    "name": "Desmond Bane",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -673,7 +3710,7 @@
    "date": "2026-11-05T15:12Z",
    "league": "NBA",
    "name": "Jonathan Isaac",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -684,7 +3721,7 @@
    "date": "2026-10-26T18:44Z",
    "league": "NBA",
    "name": "Jalen Suggs",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -695,7 +3732,7 @@
    "date": "2026-10-24T16:47Z",
    "league": "NBA",
    "name": "Paolo Banchero",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -706,7 +3743,7 @@
    "date": "2026-10-17T22:19Z",
    "league": "NBA",
    "name": "Noah Penda",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -717,21 +3754,32 @@
    "date": "2026-09-28T21:33Z",
    "league": "NBA",
    "name": "Izaiyah Nelson",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
    "team": "19"
   },
   {
-   "athleteId": "5105637",
-   "date": "2026-11-07T17:38Z",
+   "athleteId": "3059318",
+   "date": "2026-11-07T23:12Z",
    "league": "NBA",
-   "name": "Adem Bona",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "name": "Joel Embiid",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
+   "team": "20"
+  },
+  {
+   "athleteId": "5105637",
+   "date": "2026-11-07T23:07Z",
+   "league": "NBA",
+   "name": "Adem Bona",
+   "retrievedAt": "2026-11-08T02:00:07Z",
+   "season": 2027,
+   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
+   "status": "Out",
    "team": "20"
   },
   {
@@ -739,7 +3787,7 @@
    "date": "2026-11-04T22:41Z",
    "league": "NBA",
    "name": "Dominick Barlow",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -750,32 +3798,21 @@
    "date": "2026-10-06T19:17Z",
    "league": "NBA",
    "name": "Ariel Hukporti",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
    "team": "20"
   },
   {
-   "athleteId": "5105977",
-   "date": "2026-11-07T00:20Z",
-   "league": "NBA",
-   "name": "Rasheer Fleming",
-   "retrievedAt": "2026-11-07T22:31:28Z",
-   "season": 2027,
-   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Day-To-Day",
-   "team": "21"
-  },
-  {
    "athleteId": "4278402",
-   "date": "2026-11-07T00:20Z",
+   "date": "2026-11-08T01:08Z",
    "league": "NBA",
    "name": "Jordan Goodwin",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Day-To-Day",
+   "status": "Out",
    "team": "21"
   },
   {
@@ -783,7 +3820,7 @@
    "date": "2026-09-11T16:03Z",
    "league": "NBA",
    "name": "Mark Williams",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -794,7 +3831,7 @@
    "date": "2026-11-07T21:12Z",
    "league": "NBA",
    "name": "Robert Williams III",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -805,7 +3842,7 @@
    "date": "2026-11-05T05:17Z",
    "league": "NBA",
    "name": "Vit Krejci",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -816,7 +3853,7 @@
    "date": "2026-10-30T18:45Z",
    "league": "NBA",
    "name": "Ja Morant",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -827,21 +3864,21 @@
    "date": "2026-08-24T20:23Z",
    "league": "NBA",
    "name": "Shaedon Sharpe",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
    "team": "22"
   },
   {
-   "athleteId": "4065732",
-   "date": "2026-11-07T15:05Z",
+   "athleteId": "4594327",
+   "date": "2026-11-08T01:30Z",
    "league": "NBA",
-   "name": "De'Andre Hunter",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "name": "Keegan Murray",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Day-To-Day",
+   "status": "Out",
    "team": "23"
   },
   {
@@ -849,18 +3886,7 @@
    "date": "2026-10-26T22:07Z",
    "league": "NBA",
    "name": "Maxime Raynaud",
-   "retrievedAt": "2026-11-07T22:31:28Z",
-   "season": 2027,
-   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Out",
-   "team": "23"
-  },
-  {
-   "athleteId": "4594327",
-   "date": "2026-10-26T22:01Z",
-   "league": "NBA",
-   "name": "Keegan Murray",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -871,7 +3897,7 @@
    "date": "2026-10-21T04:22Z",
    "league": "NBA",
    "name": "Ben Simmons",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -882,7 +3908,7 @@
    "date": "2026-10-30T21:44Z",
    "league": "NBA",
    "name": "Tobias Harris",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -893,7 +3919,7 @@
    "date": "2026-10-05T21:43Z",
    "league": "NBA",
    "name": "Jayden Quaintance",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -904,7 +3930,7 @@
    "date": "2026-11-07T17:39Z",
    "league": "NBA",
    "name": "Scottie Barnes",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -915,7 +3941,7 @@
    "date": "2026-11-07T17:37Z",
    "league": "NBA",
    "name": "Immanuel Quickley",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Day-To-Day",
@@ -926,7 +3952,7 @@
    "date": "2026-11-04T00:14Z",
    "league": "NBA",
    "name": "Kawhi Leonard",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -937,18 +3963,29 @@
    "date": "2026-11-02T20:20Z",
    "league": "NBA",
    "name": "Nate Bittle",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
    "team": "28"
   },
   {
+   "athleteId": "4066336",
+   "date": "2026-11-07T23:14Z",
+   "league": "NBA",
+   "name": "Lauri Markkanen",
+   "retrievedAt": "2026-11-08T02:00:07Z",
+   "season": 2027,
+   "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
+   "status": "Day-To-Day",
+   "team": "26"
+  },
+  {
    "athleteId": "3102530",
    "date": "2026-11-06T18:20Z",
    "league": "NBA",
    "name": "Jusuf Nurkic",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -959,7 +3996,7 @@
    "date": "2026-10-27T19:25Z",
    "league": "NBA",
    "name": "Jaren Jackson Jr.",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -967,13 +4004,13 @@
   },
   {
    "athleteId": "6583",
-   "date": "2026-11-07T19:13Z",
+   "date": "2026-11-07T23:33Z",
    "league": "NBA",
    "name": "Anthony Davis",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
-   "status": "Day-To-Day",
+   "status": "Out",
    "team": "27"
   },
   {
@@ -981,7 +4018,7 @@
    "date": "2026-11-02T18:22Z",
    "league": "NBA",
    "name": "Reece Beekman",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -992,7 +4029,7 @@
    "date": "2026-11-01T21:51Z",
    "league": "NBA",
    "name": "Tristan Vukcevic",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -1003,7 +4040,7 @@
    "date": "2026-10-28T18:38Z",
    "league": "NBA",
    "name": "Justin Champagnie",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
@@ -1014,7 +4051,7 @@
    "date": "2026-07-30T20:11Z",
    "league": "NBA",
    "name": "Jamir Watkins",
-   "retrievedAt": "2026-11-07T22:31:28Z",
+   "retrievedAt": "2026-11-08T02:00:07Z",
    "season": 2027,
    "source": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries",
    "status": "Out",
