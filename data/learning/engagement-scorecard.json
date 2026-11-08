@@ -1,9 +1,10 @@
 {
- "asOf": "2026-10-22T20:38:56Z",
+ "asOf": "2026-10-23T19:26:43Z",
  "byKind": {
   "announcement": {
    "impressions": 21,
    "interactions": 0,
+   "medianViews": 21,
    "perThousand": 0.0,
    "posts": 1,
    "smallSample": true
@@ -11,27 +12,31 @@
   "book": {
    "impressions": 31,
    "interactions": 1,
+   "medianViews": 31,
    "perThousand": 32.26,
    "posts": 1,
    "smallSample": true
   },
   "cashed": {
-   "impressions": 1065,
-   "interactions": 10,
-   "perThousand": 9.39,
-   "posts": 18,
+   "impressions": 1128,
+   "interactions": 11,
+   "medianViews": 59,
+   "perThousand": 9.75,
+   "posts": 19,
    "smallSample": false
   },
   "community": {
-   "impressions": 6806,
-   "interactions": 12,
-   "perThousand": 1.76,
-   "posts": 10,
+   "impressions": 7961,
+   "interactions": 22,
+   "medianViews": 135.5,
+   "perThousand": 2.76,
+   "posts": 18,
    "smallSample": false
   },
   "conversation": {
    "impressions": 190,
    "interactions": 4,
+   "medianViews": 46.0,
    "perThousand": 21.05,
    "posts": 4,
    "smallSample": true
@@ -39,44 +44,100 @@
   "menu": {
    "impressions": 309,
    "interactions": 0,
+   "medianViews": 58.0,
    "perThousand": 0.0,
    "posts": 4,
    "smallSample": true
   },
   "news": {
-   "impressions": 315,
+   "impressions": 324,
    "interactions": 0,
+   "medianViews": 324,
    "perThousand": 0.0,
    "posts": 1,
    "smallSample": true
   },
   "play": {
-   "impressions": 9347,
-   "interactions": 48,
-   "perThousand": 5.14,
-   "posts": 45,
+   "impressions": 9741,
+   "interactions": 50,
+   "medianViews": 182,
+   "perThousand": 5.13,
+   "posts": 47,
    "smallSample": false
   },
   "receipt": {
-   "impressions": 1357,
-   "interactions": 9,
-   "perThousand": 6.63,
-   "posts": 23,
+   "impressions": 1407,
+   "interactions": 10,
+   "medianViews": 46.0,
+   "perThousand": 7.11,
+   "posts": 24,
    "smallSample": false
   },
   "research": {
-   "impressions": 4111,
-   "interactions": 12,
-   "perThousand": 2.92,
-   "posts": 28,
+   "impressions": 4415,
+   "interactions": 15,
+   "medianViews": 108.5,
+   "perThousand": 3.4,
+   "posts": 32,
    "smallSample": false
   },
   "sheet": {
-   "impressions": 155,
+   "impressions": 193,
    "interactions": 1,
-   "perThousand": 6.45,
+   "medianViews": 31.0,
+   "perThousand": 5.18,
+   "posts": 6,
+   "smallSample": true
+  }
+ },
+ "byReasonKind": {
+  "injury": {
+   "impressions": 1508,
+   "interactions": 6,
+   "medianViews": 238,
+   "perThousand": 3.98,
+   "posts": 7,
+   "smallSample": true
+  },
+  "none": {
+   "impressions": 6090,
+   "interactions": 30,
+   "medianViews": 185,
+   "perThousand": 4.93,
+   "posts": 27,
+   "smallSample": false
+  },
+  "other": {
+   "impressions": 1096,
+   "interactions": 8,
+   "medianViews": 153,
+   "perThousand": 7.3,
+   "posts": 7,
+   "smallSample": true
+  },
+  "role": {
+   "impressions": 234,
+   "interactions": 0,
+   "medianViews": 234,
+   "perThousand": 0.0,
+   "posts": 1,
+   "smallSample": true
+  },
+  "stats": {
+   "impressions": 813,
+   "interactions": 6,
+   "medianViews": 144,
+   "perThousand": 7.38,
    "posts": 5,
    "smallSample": true
+  },
+  "unknown": {
+   "impressions": 15979,
+   "interactions": 64,
+   "medianViews": 69.0,
+   "perThousand": 4.01,
+   "posts": 110,
+   "smallSample": false
   }
  },
  "byTheme": [
@@ -84,6 +145,7 @@
    "category": "announcement",
    "impressions": 21,
    "interactions": 0,
+   "medianViews": 21,
    "perThousand": 0.0,
    "posts": 1,
    "smallSample": true,
@@ -93,6 +155,7 @@
    "category": "book",
    "impressions": 31,
    "interactions": 1,
+   "medianViews": 31,
    "perThousand": 32.26,
    "posts": 1,
    "smallSample": true,
@@ -102,6 +165,7 @@
    "category": "cashed",
    "impressions": 142,
    "interactions": 3,
+   "medianViews": 71.0,
    "perThousand": 21.13,
    "posts": 2,
    "smallSample": true,
@@ -111,6 +175,7 @@
    "category": "cashed",
    "impressions": 618,
    "interactions": 6,
+   "medianViews": 63,
    "perThousand": 9.71,
    "posts": 9,
    "smallSample": false,
@@ -118,17 +183,19 @@
   },
   {
    "category": "cashed",
-   "impressions": 305,
-   "interactions": 1,
-   "perThousand": 3.28,
-   "posts": 7,
-   "smallSample": true,
+   "impressions": 368,
+   "interactions": 2,
+   "medianViews": 43.0,
+   "perThousand": 5.43,
+   "posts": 8,
+   "smallSample": false,
    "theme": "ticket"
   },
   {
    "category": "community",
    "impressions": 223,
    "interactions": 3,
+   "medianViews": 111.5,
    "perThousand": 13.45,
    "posts": 2,
    "smallSample": true,
@@ -138,6 +205,7 @@
    "category": "community",
    "impressions": 2333,
    "interactions": 5,
+   "medianViews": 132.0,
    "perThousand": 2.14,
    "posts": 4,
    "smallSample": true,
@@ -145,19 +213,21 @@
   },
   {
    "category": "community",
-   "impressions": 4016,
-   "interactions": 3,
-   "perThousand": 0.75,
-   "posts": 3,
+   "impressions": 4564,
+   "interactions": 8,
+   "medianViews": 328,
+   "perThousand": 1.75,
+   "posts": 5,
    "smallSample": true,
    "theme": "owner-screenshot"
   },
   {
    "category": "community",
-   "impressions": 234,
-   "interactions": 1,
-   "perThousand": 4.27,
-   "posts": 1,
+   "impressions": 841,
+   "interactions": 6,
+   "medianViews": 102,
+   "perThousand": 7.13,
+   "posts": 7,
    "smallSample": true,
    "theme": "ticket"
   },
@@ -165,6 +235,7 @@
    "category": "conversation",
    "impressions": 190,
    "interactions": 4,
+   "medianViews": 46.0,
    "perThousand": 21.05,
    "posts": 4,
    "smallSample": true,
@@ -174,6 +245,7 @@
    "category": "menu",
    "impressions": 309,
    "interactions": 0,
+   "medianViews": 58.0,
    "perThousand": 0.0,
    "posts": 4,
    "smallSample": true,
@@ -181,8 +253,9 @@
   },
   {
    "category": "news",
-   "impressions": 315,
+   "impressions": 324,
    "interactions": 0,
+   "medianViews": 324,
    "perThousand": 0.0,
    "posts": 1,
    "smallSample": true,
@@ -192,6 +265,7 @@
    "category": "play",
    "impressions": 6175,
    "interactions": 30,
+   "medianViews": 169,
    "perThousand": 4.86,
    "posts": 29,
    "smallSample": false,
@@ -199,10 +273,11 @@
   },
   {
    "category": "play",
-   "impressions": 3172,
-   "interactions": 18,
-   "perThousand": 5.67,
-   "posts": 16,
+   "impressions": 3566,
+   "interactions": 20,
+   "medianViews": 198.5,
+   "perThousand": 5.61,
+   "posts": 18,
    "smallSample": false,
    "theme": "ticket"
   },
@@ -210,6 +285,7 @@
    "category": "receipt",
    "impressions": 856,
    "interactions": 6,
+   "medianViews": 61,
    "perThousand": 7.01,
    "posts": 13,
    "smallSample": false,
@@ -219,6 +295,7 @@
    "category": "receipt",
    "impressions": 75,
    "interactions": 0,
+   "medianViews": 37.5,
    "perThousand": 0.0,
    "posts": 2,
    "smallSample": true,
@@ -226,10 +303,11 @@
   },
   {
    "category": "receipt",
-   "impressions": 426,
-   "interactions": 3,
-   "perThousand": 7.04,
-   "posts": 8,
+   "impressions": 476,
+   "interactions": 4,
+   "medianViews": 43,
+   "perThousand": 8.4,
+   "posts": 9,
    "smallSample": false,
    "theme": "ticket"
   },
@@ -237,6 +315,7 @@
    "category": "research",
    "impressions": 555,
    "interactions": 1,
+   "medianViews": 110,
    "perThousand": 1.8,
    "posts": 5,
    "smallSample": true,
@@ -244,19 +323,21 @@
   },
   {
    "category": "research",
-   "impressions": 118,
+   "impressions": 175,
    "interactions": 0,
+   "medianViews": 34,
    "perThousand": 0.0,
-   "posts": 4,
+   "posts": 5,
    "smallSample": true,
    "theme": "none"
   },
   {
    "category": "research",
-   "impressions": 3438,
-   "interactions": 11,
-   "perThousand": 3.2,
-   "posts": 19,
+   "impressions": 3685,
+   "interactions": 14,
+   "medianViews": 135.0,
+   "perThousand": 3.8,
+   "posts": 22,
    "smallSample": false,
    "theme": "ticket"
   },
@@ -264,6 +345,7 @@
    "category": "sheet",
    "impressions": 114,
    "interactions": 1,
+   "medianViews": 40,
    "perThousand": 8.77,
    "posts": 3,
    "smallSample": true,
@@ -271,21 +353,97 @@
   },
   {
    "category": "sheet",
-   "impressions": 41,
+   "impressions": 79,
    "interactions": 0,
+   "medianViews": 24,
    "perThousand": 0.0,
-   "posts": 2,
+   "posts": 3,
    "smallSample": true,
    "theme": "ticket"
   }
  ],
+ "coverage": {
+  "confirmedLast30Days": 167,
+  "latestMetricsAt": "2026-10-23T19:26:43Z",
+  "measuredLast30Days": 85,
+  "metricsStale": true,
+  "unmeasuredLast30Days": 82
+ },
  "formula": "(likes + reposts + quotes + human replies + clicks) per 1,000 impressions",
- "measuredPosts": 140,
+ "generatedAt": "2026-11-08T15:15:36.218557+00:00",
+ "last30ByKind": {
+  "cashed": {
+   "impressions": 548,
+   "interactions": 4,
+   "medianViews": 54,
+   "perThousand": 7.3,
+   "posts": 11,
+   "smallSample": false
+  },
+  "community": {
+   "impressions": 7738,
+   "interactions": 19,
+   "medianViews": 157.5,
+   "perThousand": 2.46,
+   "posts": 16,
+   "smallSample": false
+  },
+  "news": {
+   "impressions": 324,
+   "interactions": 0,
+   "medianViews": 324,
+   "perThousand": 0.0,
+   "posts": 1,
+   "smallSample": true
+  },
+  "play": {
+   "impressions": 3248,
+   "interactions": 16,
+   "medianViews": 190,
+   "perThousand": 4.93,
+   "posts": 17,
+   "smallSample": false
+  },
+  "receipt": {
+   "impressions": 515,
+   "interactions": 4,
+   "medianViews": 41.0,
+   "perThousand": 7.77,
+   "posts": 10,
+   "smallSample": false
+  },
+  "research": {
+   "impressions": 3618,
+   "interactions": 10,
+   "medianViews": 97,
+   "perThousand": 2.76,
+   "posts": 25,
+   "smallSample": false
+  },
+  "sheet": {
+   "impressions": 79,
+   "interactions": 0,
+   "medianViews": 24,
+   "perThousand": 0.0,
+   "posts": 3,
+   "smallSample": true
+  }
+ },
+ "last30Days": {
+  "impressions": 16070,
+  "interactions": 53,
+  "medianViews": 87,
+  "perThousand": 3.3,
+  "posts": 83,
+  "smallSample": false
+ },
+ "measuredPosts": 157,
  "overall": {
-  "impressions": 23707,
-  "interactions": 97,
-  "perThousand": 4.09,
-  "posts": 140,
+  "impressions": 25720,
+  "interactions": 114,
+  "medianViews": 91,
+  "perThousand": 4.43,
+  "posts": 157,
   "smallSample": false
  }
 }
