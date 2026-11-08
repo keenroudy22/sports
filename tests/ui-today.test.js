@@ -158,7 +158,7 @@ test('the first paint and the full card draw the same top, so nothing moves when
   await settle();
 });
 
-test('Today keeps current sections visible and past tickets expandable; Off the card never hangs on the rail', async () => {
+test('Today leads with the card, games and research paths while secondary sections share one clear fold', async () => {
   const todayOff = { ...total, id: 'CFB-today-off-fd', displayTitle: 'Moved Line Today under 56.5', status: 'expired',
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
@@ -168,10 +168,11 @@ test('Today keeps current sections visible and past tickets expandable; Off the 
   assert.doesNotMatch(page, /<span>Best bets<\/span><b>2 live<\/b>/, 'an aged quote must never leave a stale live claim in the jump nav');
   assert.match(page, /Today’s best bets[\s\S]*Today’s Climb/);
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'class="kt-sec kt-left"', 'class="kt-sec kt-prep"',
-    'kt-upsets"', 'kt-worth"', 'kt-games"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> tonight NFL -> future bets -> Leftovers -> Prep List -> research -> games -> off -> Discord -> sports');
-  for (const gone of ['today-more', 'kt-fold', 'class="onboard"', 'today-status']) assert.ok(!page.includes(gone), gone);
+  const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'research-start today-research', 'class="kt-sec kt-left"',
+    'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-worth"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> NFL -> other bets -> research shortcuts -> results and games -> one secondary fold');
+  assert.match(page, /<summary>More today<\/summary>/);
+  for (const gone of ['kt-fold', 'class="onboard"', 'today-status']) assert.ok(!page.includes(gone), gone);
   const folds = [...page.matchAll(/<details[^>]*data-box="([^"]+)"/g)].map(m => m[1]);
   assert.deepEqual(folds, ['climb-past', 'previous-results'], 'past Climb steps and previous results stay expandable');
   const rails = page.slice(0, at('class="kt-sec kt-left"'));
@@ -203,7 +204,7 @@ test('an NFL game today stays prominent and a later best bet stays off Today', a
   const nightGame = { ...GAMES[0], kickoff: '2026-10-11T00:15:00Z', v2: { away: 23.2, home: 26.9, total: 50.1, margin: 3.7, winProb: 0.61 }, market: { spread: -8.5, total: 48.5 } };
   const games = [nightGame, GAMES[1]];
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today' });
-  const spot = page.slice(page.indexOf('kt-nfl-now"'), page.indexOf('kt-upsets"'));
+  const spot = page.slice(page.indexOf('kt-nfl-now"'), page.indexOf('research-start today-research'));
   assert.ok(page.indexOf('kt-climb"') < page.indexOf('kt-nfl-now"'));
   assert.match(spot, /Tonight&#39;s NFL|Tonight's NFL/);
   assert.match(spot, /href="#game\/NFL-1"[\s\S]*Visitors[\s\S]*Hosts/);
@@ -807,7 +808,7 @@ test('Today research favors props, then sides, then one total; held and posted l
   await api.views.today({ view: 'today' });
   await settle();
   const page = await api.views.today({ view: 'today' });
-  const sec = page.slice(page.indexOf('kt-worth"'), page.indexOf('kt-games"'));
+  const sec = page.slice(page.indexOf('kt-worth"'), page.indexOf('kt-community"'));
   assert.match(sec, /<h2 class="kt-tape" id="worth-h">Kook’n vs. the Book<\/h2><span class="kt-kind">Not best bets<\/span>/);
   assert.match(sec, /Board Receiver over 60\.5[\s\S]*G-small over 44\.5[\s\S]*ARIZ \+6\.5/);
   for (const out of ['D-thin', 'E-raw', 'F-on-card', 'A-total', 'A-total-alt']) assert.ok(!sec.includes(out), out);

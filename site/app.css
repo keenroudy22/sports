@@ -604,7 +604,7 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-note { margin-top: 10px; font: 500 14px/1.4 var(--font-body); color: var(--dim); }
 .kt-note b { color: var(--chalk); font-weight: 600; }
 .kt-more-link { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: 4px; font: 700 15px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; }
-/* Today below the first screen: every section visible, no fold (owner, 2026-10-07). */
+/* Today keeps the card and live slate obvious; secondary research is grouped below one deliberate fold. */
 .kt-rest { margin-top: 34px; } .kt-rest > .kt-sec-head { margin-bottom: 12px; }
 .kt-rest .kt-head { font-size: 26px; } .kt-rest .grid.two { gap: 10px; } .kt-rest .projs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 .kt-nfl-now { margin-top: 26px; }
@@ -693,9 +693,28 @@ details.filters > .toolbar { margin-top: 4px; }
 .player-quick-numbers { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 10px 0; }
 .player-quick-numbers > span { padding: 8px; }
 .player-quick-numbers b { font-size: 14px; }
+.research-more { margin: -4px 0 16px; }
+.research-more summary { color: var(--dim); font-size: 13px; }
+.research-start { margin: 18px 0 24px; padding: 16px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: linear-gradient(145deg, rgba(32,199,116,.08), rgba(7,18,13,.72)); }
+.research-start h2 { margin: 0 0 12px; font-size: 24px; }
+.research-paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.research-paths a { display: grid; align-content: start; gap: 5px; min-width: 0; min-height: 92px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--felt); color: var(--chalk); text-decoration: none; }
+.research-paths a:hover { border-color: var(--kookd); }
+.research-paths b { font: 700 18px/1.05 var(--font-display); }
+.research-paths span { color: var(--dim); font: 500 13px/1.35 var(--font-body); }
+.today-research { margin-top: 0; }
+.today-research .section-head { margin-bottom: 12px; }
+.today-research .section-head h2 { margin-bottom: 0; }
+.today-more { margin: 30px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.today-more > summary { display: flex; align-items: center; justify-content: space-between; min-height: 58px; color: var(--chalk); cursor: pointer; font: 700 24px/1 var(--font-display); }
+.today-more > summary::after { content: '+'; color: var(--kookd); font: 700 24px/1 var(--font-display); }
+.today-more[open] > summary::after { content: '–'; }
+.today-more > .small { margin: -4px 0 12px; }
 @media (max-width: 520px) { .kt-number-grid { grid-template-columns: 1fr; } .kt-number-grid > span { flex-direction: row; align-items: baseline; justify-content: space-between; }
   .kt-player-numbers, .player-quick-numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kt-player-numbers > span, .player-quick-numbers > span { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+  .research-paths { grid-template-columns: 1fr; }
+  .research-paths a { min-height: 0; }
 }
 
 /* Quarter history stays separate from the full-game ticket. */

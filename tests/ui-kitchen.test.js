@@ -125,6 +125,18 @@ test('a player line with no hold puts the projection beside the book line and ke
   assert.match(page, /<details class="plain-fold kt-player-detail"[^>]*><summary>Why this number<\/summary>/);
 });
 
+test('a player without a current line leads with useful history instead of an unavailable betting grid', async () => {
+  const page = await playerPage(false, files => {
+    files['data/app/lines-CFB.json'].lines = [];
+    const shard = files[`data/app/players/CFB/${4870883 % 128}.json`].players['4870883'];
+    shard.firstQuarter = [{ eventId: 'e4', date: '2026-09-26', season: 2026, seasonType: 2, opp: '2341', stats: { cmp: 3, att: 6, passYds: 48, car: 1, rushYds: 4 } }];
+  });
+  assert.match(page, /<p class="kt-k" id="line-h">Season snapshot<\/p>/);
+  assert.match(page, /Season average[\s\S]*Last 5 average[\s\S]*Season high[\s\S]*Games recorded/);
+  assert.match(page, /Historical stats are available\.[\s\S]*No current book line has been captured/);
+  assert.doesNotMatch(page, /<small>Book line<\/small><b class="num">–<\/b>/);
+});
+
 /* A soft pass defense for NMSU (rank 3 of 3), so an unheld over reads "supports the over". */
 const softDefense = files => {
   files['data/app/teams/CFB.json'].teams['2'] = { abbr: 'XYZ', name: 'Other', fbs: true };
@@ -201,6 +213,7 @@ test('NFL player Q1 panel preserves zero/negative and unknown, excludes other se
       {eventId:'future',date:'2026-12-01',season:2026,seasonType:2,opp:'166',stats:{rushYds:888},source:'https://www.espn.com',checkedAt:'2026-12-02T12:00:00Z'}];
   }, 'NFL');
   const q1 = page.split('id="first-quarter"')[1].split('</section>')[0];
+  assert.ok(page.indexOf('Game log') < page.indexOf('id="first-quarter"'), 'the full-game log comes before the niche first-quarter block');
   assert.match(q1,/2 of 4 selected games available/);
   assert.match(q1,/Rushing · 1Q average/);
   assert.match(q1,/Yards: 1 game · carries: 1 game/);

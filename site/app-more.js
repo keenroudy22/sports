@@ -149,6 +149,7 @@
   const PLAYER_LABEL = { ...C.LABEL, q1_passYds: '1Q pass yds', q1_cmp: '1Q completions', q1_att: '1Q attempts', q1_rushYds: '1Q rush yds', q1_car: '1Q carries', q1_recYds: '1Q rec yds', q1_rec: '1Q receptions' };
   views.player = async route => {
     const league = route.league;
+    if (state.league !== league) state.league = league;
     const back = `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>`;
     const index = await get(`app/players/${league}.json`);
     const entry = (index.players || []).find(p => String(p[0]) === String(route.id));
@@ -221,6 +222,10 @@
     const valueText = v => C.statValue(v, stat, Number.isInteger(v) ? 0 : 1);
     const rangeText = v => C.statValue(stat === 'snapPct' ? v : Math.round(v), stat);
     const word = (PLAYER_LABEL[stat] || stat).toLowerCase();
+    const seasonSummary = C.summarize(thisSeason.map(r => read(r, stat)));
+    const last5Summary = C.summarize(recent.slice(-5).map(r => read(r, stat)));
+    const seasonValues = thisSeason.map(r => read(r, stat)).filter(isNum);
+    const seasonHigh = seasonValues.length ? Math.max(...seasonValues) : null;
 
     const seasonSelect = `<label class="sr" for="psea">Season</label><select id="psea" class="select" data-select="playerSeason"><option value="current"${scope === 'current' ? ' selected' : ''}>This season · ${esc(currentSeason ?? '')}</option>${seasons.filter(x => x !== Number(currentSeason)).map(x => `<option value="${x}"${String(x) === String(scope) ? ' selected' : ''}>${x}</option>`).join('')}<option value="all"${scope === 'all' ? ' selected' : ''}>All seasons</option></select>`;
     const showing = `${scopeLabel} · ${recent.length} game${recent.length === 1 ? '' : 's'}${win === 'all' ? '' : ` · last ${win.replace('last', '')}`} · ${PLAYER_LABEL[stat] || stat}`;
@@ -260,7 +265,7 @@
       : sides.filter(Boolean).map(x => `${x.dir === 'over' ? 'Over' : 'Under'} <b class="num">${esc(odd(x.odds))}</b> at ${esc(x.book)}`).join(', ') + (sides.some(Boolean) ? '.' : '');
     const projectionValue = Array.isArray(projV) && isNum(projV[0]) ? projV[0] : null;
     const projectionDelta = projectionValue != null && line != null ? projectionValue - line : null;
-    const projectionLabel = held ? 'Held' : projectionValue == null ? 'Unavailable' : valueText(projectionValue);
+    const projectionLabel = held ? 'Held' : projectionValue == null ? 'Not posted' : valueText(projectionValue);
     const edgeLabel = held || projectionDelta == null ? '–' : `${projectionDelta > 0 ? '+' : ''}${C.fixed(projectionDelta)}`;
     const hitLabel = h && h.n ? `${h[dir]}/${h.n}` : '–';
     const unitFor = STAT_UNITS[isQuarter ? stat.slice(3) : stat] || [String(PLAYER_LABEL[stat] || stat).toUpperCase()];
@@ -272,11 +277,14 @@
       <div class="kt-bars" aria-hidden="true">${sv.map(v => `<div class="col"><div class="bar ${res(v)}" style="height:${(isNum(v) ? Math.max(2, 112 * Math.max(0, v) / top) : 2).toFixed(1)}px"></div></div>`).join('')}${line != null ? `<div class="line" style="bottom:${(112 * line / top).toFixed(1)}px"><span>${esc(line)}</span></div>` : ''}</div>
       <div class="kt-x" aria-hidden="true">${shown.map((r, i) => `<span><em class="${res(sv[i])}">${isNum(sv[i]) ? esc(valueText(sv[i])) : '–'}</em><b>${r[7] === 0 ? '@' : ''}${esc(abbr(r[6]))}</b>${res(sv[i]) === 'hit' ? '✓ ' : res(sv[i]) === 'miss' ? '✗ ' : ''}${esc(md(r))}</span>`).join('')}</div>
       <figcaption class="kt-cap">${h && h.n ? `<b>${h[dir]} of ${h.n} ${dir} ${esc(valueText(line))}.</b> ` : ''}${recent.length > shown.length ? `The last ${shown.length} of ${recent.length} games shown.` : ''}</figcaption></figure>` : '<p class="kt-cap">No stored games in this selection.</p>';
+    const bettingNumbers = `<span><small>Book line</small><b class="num">${esc(valueText(line))}</b></span><span><small>Kook’n projection</small><b class="num">${esc(projectionLabel)}</b></span><span><small>Projection vs line</small><b class="num">${esc(edgeLabel)}</b></span><span><small>Recent hits</small><b class="num">${esc(hitLabel)}</b></span>`;
+    const historyNumbers = `<span><small>Season average</small><b class="num">${seasonSummary ? esc(valueText(seasonSummary.avg)) : '–'}</b></span><span><small>Last 5 average</small><b class="num">${last5Summary ? esc(valueText(last5Summary.avg)) : '–'}</b></span><span><small>Season high</small><b class="num">${seasonHigh == null ? '–' : esc(valueText(seasonHigh))}</b></span><span><small>Games recorded</small><b class="num">${esc(seasonValues.length)}</b></span>`;
     const sheet = `<section class="kt-sheet" aria-labelledby="line-h"><div class="kt-order"><div class="kt-shade"><div class="kt-paper">
-      <p class="kt-k" id="line-h">${isQuarter ? `${PLAYER_LABEL[stat]} · history` : next ? (lineStatus && lineStatus.current ? 'Tonight\'s line' : line != null ? 'Reference line' : 'No line yet') : 'Recent games'}</p>
-      <div class="kt-number-grid kt-player-numbers"><span><small>Book line</small><b class="num">${line == null ? '–' : esc(valueText(line))}</b></span><span><small>Kook’n projection</small><b class="num">${esc(projectionLabel)}</b></span><span><small>Projection vs line</small><b class="num">${esc(edgeLabel)}</b></span><span><small>Recent hits</small><b class="num">${esc(hitLabel)}</b></span></div>
+      <p class="kt-k" id="line-h">${isQuarter ? `${PLAYER_LABEL[stat]} · history` : line != null ? (lineStatus && lineStatus.current ? 'Current line' : 'Reference line') : 'Season snapshot'}</p>
+      <div class="kt-number-grid kt-player-numbers">${line != null ? bettingNumbers : historyNumbers}</div>
       ${held ? `<span class="kt-stamp hold kt-player-hold" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span>` : ''}
       ${pricesText ? `<p class="kt-prices">${pricesText}</p>` : ''}
+      ${!isQuarter && line == null ? `<p class="kt-prices"><b>Historical stats are available.</b> No current book line has been captured for ${next ? 'this matchup' : 'an upcoming game'} yet, so there is no line-based Kook’n projection to compare.</p>` : ''}
       ${held ? `<p class="kt-held">${esc(heldText)}</p>`
         : `${priced && priced.calibrated && priced.chance != null ? `<p class="kt-lead kt-chance" style="margin-top:8px"><span>I have ${esc(priced.direction || dir)} at<b class="num">${pctOne(priced.chance)}</b></span><i></i><span>the price needs<b class="num">${pctOne(priced.needs)}</b></span></p>${hasValue(priced) ? '<p class="kt-prices">✓ clears my price</p>' : ''}` : ''}
           ${Array.isArray(projV) ? `<p class="kt-prices">Typical range ${esc(rangeText(projV[1]))}–${esc(rangeText(projV[2]))}.</p>` : ''}`}
@@ -311,7 +319,7 @@
       </tbody></table>` : '<p class="kt-cap">Verified rushing and receiving stats will appear here as games are added.</p>'}
       <details class="plain-fold kt-quarter-source"><summary>Coverage &amp; sources</summary><p class="small muted">First quarter only. Passing, rushing and receiving. nflverse and ESPN play-by-play checked against full-game player and team totals. Missing stats show a dash, never zero. Averages use only available games for each stat; season and game filters apply. These are not projections or betting probabilities.${q1Rows.length ? ` Latest source check ${esc(clock(q1Rows[q1Rows.length - 1].checkedAt))}.` : ''}</p></details></section>` : '';
 
-    return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}${q1}
+    return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}
       ${filtersFold('player', showing, `${seasonSelect}${seg('pwin', [['all', 'All games'], ['last5', 'Last 5'], ['last10', 'Last 10'], ['last20', 'Last 20']], win)}`)}
       ${!recent.length ? `<p class="btn-row">${seasons.filter(x => x !== Number(currentSeason)).slice(0, 1).map(x => `<button type="button" class="btn small" data-set="pseason:${x}">Show ${x}</button>`).join('')}<button type="button" class="btn small" data-set="pseason:all">All seasons</button></p>` : ''}
       <details class="plain-fold kt-player-detail" data-box="player-context"><summary>Why this number</summary>${big}${matchup}${opponentTrend && opponentTrendText(opponentTrend) ? `<p class="kt-matchup ${opponentTrend.opponentAdjustment?.against ? 'red' : ''}">${esc(opponentTrendText(opponentTrend))}</p>` : ''}</details>
@@ -319,7 +327,7 @@
       <section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">${esc(scope === 'current' ? 'Regular season' : scopeLabel)}</span></div>${chalkLog}
       <details class="plain-fold" data-box="player-every"><summary>${isQuarter ? 'Every full-game stat' : 'Every stat'}</summary>${log.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${cols.map(k => `<th class="n">${esc(PLAYER_LABEL[k] || k)}</th>`).join('')}</tr></thead><tbody>${log.map(r =>
         `<tr><td><a href="#game/${esc(league)}-${esc(r[0])}">${esc(r[1])}</a><br><span class="tiny muted">${esc(where(r))} ${esc(abbr(r[6]))}${r[4] === 3 ? ' · postseason' : ''}</span></td>${cols.map(k => { const v = C.observedStat(r, keys, k); return `<td class="n">${v == null ? '<span class="muted">–</span>' : k === 'snapPct' ? Math.round(100 * v) + '%' : esc(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div><p class="small muted" style="margin-top:6px">A dash means not recorded, never zero.</p>` : ''}</details>
-      <details class="plain-fold" data-box="player-splits"><summary>Splits</summary><div class="kpis"><div class="kpi"><small>Home</small><b class="num">${esc(split.home ? valueText(split.home.avg) : '–')}</b><span>${split.home ? split.home.n : 0} game${split.home && split.home.n === 1 ? '' : 's'}</span></div><div class="kpi"><small>Away</small><b class="num">${esc(split.away ? valueText(split.away.avg) : '–')}</b><span>${split.away ? split.away.n : 0} game${split.away && split.away.n === 1 ? '' : 's'}</span></div>${split.neutral ? `<div class="kpi"><small>Neutral site</small><b class="num">${esc(valueText(split.neutral.avg))}</b><span>${split.neutral.n} game${split.neutral.n === 1 ? '' : 's'}</span></div>` : ''}</div></details></section>`;
+      <details class="plain-fold" data-box="player-splits"><summary>Splits</summary><div class="kpis"><div class="kpi"><small>Home</small><b class="num">${esc(split.home ? valueText(split.home.avg) : '–')}</b><span>${split.home ? split.home.n : 0} game${split.home && split.home.n === 1 ? '' : 's'}</span></div><div class="kpi"><small>Away</small><b class="num">${esc(split.away ? valueText(split.away.avg) : '–')}</b><span>${split.away ? split.away.n : 0} game${split.away && split.away.n === 1 ? '' : 's'}</span></div>${split.neutral ? `<div class="kpi"><small>Neutral site</small><b class="num">${esc(valueText(split.neutral.avg))}</b><span>${split.neutral.n} game${split.neutral.n === 1 ? '' : 's'}</span></div>` : ''}</div></details></section>${q1}`;
   };
 
   views.record = async route => {

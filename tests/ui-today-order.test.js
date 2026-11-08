@@ -6,13 +6,18 @@ const app = fs.readFileSync(new URL('../site/app.js', import.meta.url), 'utf8');
 const css = fs.readFileSync(new URL('../site/app.css', import.meta.url), 'utf8');
 const body = (start, end) => { const a = app.indexOf(start), b = app.indexOf(end, a); assert.ok(a >= 0 && b > a, start); return app.slice(a, b); };
 
-test('Today is the first screen, then every section visible with no fold (owner, 2026-10-07)', () => {
+test('Today leads with decisions and games, then groups lower-priority research under one fold', () => {
   const view = body('VIEWS.today = async', '/* ---------- a single best bet');
+  const extra = view.slice(view.indexOf('const extraToday = ['), view.indexOf('const rest2 = ['));
+  const atExtra = s => { const i = extra.indexOf(s); assert.ok(i >= 0, s); return i; };
+  const extraOrder = ['prepList(', "ktSec('upsets'", "ktSec('worth'", "ktSec('pulled'", "ktSec('off-card'", 'COMMUNITY', "ktSec('sports'"].map(atExtra);
+  assert.deepEqual(extraOrder, extraOrder.slice().sort((a, b) => a - b), 'Prep, underdogs, value, closed plays, community and sports stay in a predictable order');
   const rest = view.slice(view.indexOf('const rest2 = ['));
   const at = s => { const i = rest.indexOf(s); assert.ok(i >= 0, s); return i; };
-  const order = ['leftovers(', 'prepList(', "ktSec('upsets'", "ktSec('worth'", "ktSec('games'", "ktSec('fun'", "ktSec('pulled'", "ktSec('off-card'", 'COMMUNITY', "ktSec('sports'"].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'Leftovers, Prep List, Underdog watch, Worth a look, games, fun, pulled, off, Discord, sports');
-  assert.doesNotMatch(view, /today-more|kt-fold|foldRow|<details/, 'no More for today fold and no new fold on Today');
+  const order = ['researchHub', 'leftovers(', "ktSec('games'", 'nbaSummary', "ktSec('fun'", 'class="today-more"'].map(at);
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'Research shortcuts, results, games, NBA and fun precede the secondary fold');
+  assert.match(view, /<details class="today-more"><summary>More today<\/summary>/);
+  assert.doesNotMatch(view, /kt-fold|foldRow/);
   const top = body('const todayTop =', 'const firstPaint =');
   const t = s => { const i = top.indexOf(s); assert.ok(i >= 0, s); return i; };
   assert.ok(t('rail(rows.slice(0, 1)') < t('${climbStub(climb, past)}') && t('${climbStub(climb, past)}') < t('${proof}')
