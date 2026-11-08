@@ -217,6 +217,13 @@ def morning(day):
     return datetime(day.year, day.month, day.day, MORNING[0], MORNING[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
 
 
+def daily_morning(day):
+    """Owner's earlier full-slate recap; historical/weekly clocks stay intact."""
+    if day >= date(2026, 11, 9):
+        return datetime(day.year, day.month, day.day, 8, 0, tzinfo=gates.EASTERN).astimezone(timezone.utc)
+    return morning(day)
+
+
 def plays_between(first, latest, games, ids, start, end):
     """Served plays whose game day falls in [start, end], merged with their latest revision."""
     rows = []
@@ -282,7 +289,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
     if not rows:
         return None
     name = f'{day:%A}'
-    due = morning(day + timedelta(days=1))
+    due = daily_morning(day + timedelta(days=1))
     late = as_of is not None and as_of > due + timedelta(minutes=30)
     opener = f"Late, but here's {name}.\n\n" if late else ''
     head = f"{opener}{name}: {headline(rows)}."

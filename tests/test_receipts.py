@@ -133,6 +133,12 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(sunday['card'], 'receipt-day-2026-09-27')
         self.assertEqual(receipts.guard(sunday), [])
 
+    def test_earlier_daily_recap_is_prospective_and_weekly_is_unchanged(self):
+        from datetime import date
+        self.assertEqual(receipts.daily_morning(date(2026,11,8)).astimezone(gates.EASTERN).hour,9)
+        self.assertEqual(receipts.daily_morning(date(2026,11,9)).astimezone(gates.EASTERN).hour,8)
+        self.assertEqual(receipts.morning(date(2026,11,11)).astimezone(gates.EASTERN).hour,9)
+
     def test_not_until_every_served_play_is_settled_and_not_after_the_evening(self):
         first, latest, log = world()
         del latest['NFL-2026-W4-b']
