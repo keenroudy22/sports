@@ -499,6 +499,50 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-orderup { flex: none; padding: 5px 8px 3px; border: 3px solid var(--ticket-ink); border-radius: 6px; transform: rotate(-4deg); font: 700 15px/1 var(--font-display); letter-spacing: .12em; opacity: .88; }
 .kt-order.compact .kt-bet { --bet-size: 60px; }
 .kt-order.is-closed .kt-paper { opacity: .94; }
+/* Today is a decision board, not a stack of posters. The full Kitchen Ticket remains on the pick page;
+   this quick view keeps the exact posted terms and model comparison above the fold. */
+.kt-quick-help { max-width: 440px; margin: -2px 0 10px; color: var(--dim); font: 500 13px/1.35 var(--font-body); }
+.kt-pass[data-view="quick"] { max-width: 440px; margin: 0; padding-top: 0; }
+.kt-pass[data-view="quick"] .kt-rail { display: none; }
+.kt-pass[data-view="quick"] .kt-tickets { gap: 12px; }
+.kt-pass[data-view="quick"] .kt-order { --panel-h: 88px; --ph-w: 112px; --ph-h: 143px; margin: 0; }
+.kt-pass[data-view="quick"] .kt-shade { filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .34)); }
+.kt-pass[data-view="quick"] .kt-paper { --tear: 0px; margin-top: 0; padding: 10px; border: 1px solid rgba(62, 84, 72, .42); border-radius: 12px; -webkit-mask: none; mask: none; }
+.kt-pass[data-view="quick"] .kt-panel { padding: 10px 12px 0; border-radius: 9px; }
+.kt-pass[data-view="quick"] .kt-chip { height: 21px; padding: 0 7px; font-size: 12px; letter-spacing: .08em; }
+.kt-pass[data-view="quick"] .kt-chip svg { width: 9px; height: 12px; }
+.kt-pass[data-view="quick"] .kt-name { max-width: 72%; margin-top: 5px; font-size: min(var(--name-size, 34px), 34px); line-height: .92; }
+.kt-pass[data-view="quick"] .kt-meta { left: 12px; right: 12px; bottom: 7px; font-size: 12px; }
+.kt-pass[data-view="quick"] .kt-meta b { display: inline; margin-right: 6px; font-size: 12px; }
+.kt-pass[data-view="quick"] .kt-disc { width: 22px; height: 22px; }
+.kt-pass[data-view="quick"] .kt-photo { display: none; }
+.kt-pass[data-view="quick"] .kt-split { height: 92px; }
+.kt-pass[data-view="quick"] .kt-split .kt-chip { left: 9px; top: 9px; }
+.kt-pass[data-view="quick"] .kt-when { right: 9px; top: 13px; font-size: 12px; }
+.kt-pass[data-view="quick"] .kt-half { gap: 3px; padding-bottom: 7px; }
+.kt-pass[data-view="quick"] .kt-half .kt-disc { width: 34px; height: 34px; padding: 4px; }
+.kt-pass[data-view="quick"] .kt-half b { font-size: 14px; }
+.kt-pass[data-view="quick"] .kt-at { top: 48px; width: 24px; height: 24px; font-size: 12px; }
+.kt-pass[data-view="quick"] .kt-bet { --bet-size: 40px !important; --bet-size-k: .131 !important; margin-top: 8px; }
+.kt-pass[data-view="quick"] .kt-cut { margin-top: 7px; border-top-width: 1px; }
+.kt-pass[data-view="quick"] .kt-price { margin-top: 5px; }
+.kt-pass[data-view="quick"] .kt-price .kt-odds { font-size: 27px; }
+.kt-pass[data-view="quick"] .kt-price .kt-book { font-size: 16px; }
+.kt-pass[data-view="quick"] .kt-now { min-height: 0; margin-top: 2px; text-align: left; font-size: 12.5px; line-height: 1.25; }
+.kt-pass[data-view="quick"] .kt-chance { margin-top: 5px; font-size: 12.5px; }
+.kt-pass[data-view="quick"] .kt-chance b { font-size: 18px; }
+.kt-pass[data-view="quick"] .kt-say { margin-top: 5px; font-size: 13px; line-height: 1.25; }
+.kt-pass[data-view="quick"] .kt-say > span:last-child { -webkit-line-clamp: 1; line-clamp: 1; }
+.kt-pass[data-view="quick"] .kt-strip,
+.kt-pass[data-view="quick"] .kt-note { display: none; }
+.kt-pass[data-view="quick"] .kt-perf { margin-top: 6px; border-top-width: 2px; }
+.kt-pass[data-view="quick"] .kt-stubrow { min-height: 34px; margin: 0 4px; }
+.kt-pass[data-view="quick"] .kt-season { font-size: 12px; }
+.kt-pass[data-view="quick"] .kt-season b { font-size: 19px; }
+.kt-pass[data-view="quick"] .kt-orderup { padding: 4px 6px 3px; border-width: 2px; font-size: 12px; }
+.kt-pass[data-view="quick"] .kt-clip { display: none; }
+.kt-open-pick { flex: none; display: inline-flex; align-items: center; min-height: 34px; color: var(--ticket-ink); font: 700 12px/1 var(--font-display); letter-spacing: .07em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 3px; }
+.kt-open-pick span { margin-left: 4px; font-size: 18px; line-height: 0; }
 /* Game line: SPEC 5.3 split panel, no photo, no breakout. */
 .kt-split { height: 132px; padding: 0; display: grid; grid-template-columns: 1fr 1fr; align-items: end;
   background: repeating-linear-gradient(-62deg, rgba(255, 255, 255, .035) 0 2px, transparent 2px 13px),

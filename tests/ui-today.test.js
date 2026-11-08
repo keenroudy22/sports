@@ -167,6 +167,9 @@ test('Today leads with the card, games and research paths while secondary sectio
   assert.match(page, /<span>Best bets<\/span><b>2 posted<\/b>/, 'the count describes durable posted plays, not whether their saved prices remain actionable');
   assert.doesNotMatch(page, /<span>Best bets<\/span><b>2 live<\/b>/, 'an aged quote must never leave a stale live claim in the jump nav');
   assert.match(page, /Today’s best bets[\s\S]*Today’s Climb/);
+  assert.match(page, /class="kt-pass" data-view="quick"[^>]*aria-label="Today&#39;s best bet"/, 'Today uses the decision-first summary card');
+  assert.match(page, /class="kt-open-pick" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>Full breakdown/, 'the summary card opens the complete preserved play');
+  assert.match(page, /The play, price and model number first\./, 'the page explains what stays in the fast view');
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
   const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'research-start today-research', 'class="kt-sec kt-left"',
     'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-worth"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);

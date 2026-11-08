@@ -936,6 +936,7 @@
       : record ? `<p class="kt-season">Best bets ${s.playoffs ? 'these playoffs' : 'this season'}<b class="num">${esc(record)}</b></p>` : '<p class="kt-season">Best bet</p>';
     const stub = best && opts.more ? '' : best ? straightStub
       : climb ? `<p class="kt-season">Banked this climb<b class="num">${money(info.banked)}</b></p>` : '<p class="kt-season">Tracked apart from best bets</p>';
+    const breakdown = opts.quick && vm.href ? `<a class="kt-open-pick" href="${esc(vm.href)}">Full breakdown <span aria-hidden="true">›</span></a>` : '';
     /* ORDER UP needs a live price. */
     const orderUp = best && !pick.result && !hold && tense ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : '';
     const label = `${chip}: ${vm.title}, ${oddsText(vm.odds)}${vm.book ? ` at ${vm.book}` : ''}${pick.result ? `. ${RESULT_WORD[pick.result] || ''}` : hold && !afterHold ? '. Unavailable' : ''}`;
@@ -945,10 +946,10 @@
         <p class="kt-now">${esc(nowLine)}</p>${number}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
         ${opts.strip && best ? strip(pick.hitStrip, pick.line, String(pick.direction || '').toLowerCase()) : ''}
         ${best && opponentTrendText(pick) ? `<p class="kt-note">${esc(opponentTrendText(pick))}</p>` : ''}
-        ${stub || extra || orderUp ? `<div class="kt-perf"></div><div class="kt-stubrow"><div class="kt-stubl">${stub}${extra}</div>${orderUp}</div>` : ''}</div></div>
+        ${stub || extra || orderUp || breakdown ? `<div class="kt-perf"></div><div class="kt-stubrow"><div class="kt-stubl">${stub}${extra}</div>${breakdown}${orderUp}</div>` : ''}</div></div>
       ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;
   };
-  const rail = (rows, opts = {}) => `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="kt-pass${opts.onPage ? ' on-page' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
+  const rail = (rows, opts = {}) => `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="kt-pass${opts.onPage ? ' on-page' : ''}"${opts.quick ? ' data-view="quick"' : ''} aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
     <div class="kt-tickets">${rows.map((p, i) => ticket(p, { ...opts, card: p.card || (opts.cards && opts.cards.get(p.id)), clip: i === 0 && !opts.more, strip: i === 0 && !opts.more, compact: (i > 0 || opts.more) && !C.isLadder(p) })).join('')}</div></section>`;
   const HOOK = '<svg class="kt-hook h%" viewBox="0 0 26 22" aria-hidden="true"><path d="M7 0v8M19 0v8" stroke="#8C9892" stroke-width="2"/><rect x="1" y="6" width="24" height="13" rx="2.5" fill="#A3AEA8"/><rect x="3" y="15.5" width="20" height="2" rx="1" fill="#1E2622"/></svg>';
   const emptyRail = (note, id = '') => `<section${id ? ` id="${esc(id)}"` : ''} class="kt-pass" aria-label="No best bet yet"><div class="kt-rail" aria-hidden="true"></div><div class="kt-hooks" aria-hidden="true">${HOOK.replace('%', '1')}${HOOK.replace('%', '2')}${CHEF}</div></section><p class="kt-blank">${note}</p>`;
@@ -1180,10 +1181,11 @@
       <nav class="kt-today-jumps${otherPosted ? ' has-other-plays' : ''}" aria-label="Today at a glance"><a href="${postedSummary ? '#today-posted-straights' : '#today-card'}"><span>${postedSummary ? 'Posted straights' : 'Best bets'}</span><b>${postedSummary ? `${postedSummary.count} today` : rows.length ? `${rows.length} posted` : favorite ? 'Strongest lean' : 'Checking'}</b></a>${otherPosted}<a href="#today-climb"><span>80/20 Climb</span><b>${esc(climbState)}</b></a></nav>
       ${postedSummary ? postedSummary.html : ''}
       <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Today’s best bets'}</h2><a href="#record">Every result ›</a></div>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card' }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
+      ${rows.length ? '<p class="kt-quick-help">The play, price and model number first. Open the breakdown for the full reasoning, risk and trends.</p>' : ''}
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card', quick: true }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
       ${otherTickets}${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
-      ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
-      ${rail(later, { season, lines, cards, more: true, label: 'Upcoming best bets' })}</section>` : ''}`;
+      ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, quick: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
+      ${rail(later, { season, lines, cards, more: true, quick: true, label: 'Upcoming best bets' })}</section>` : ''}`;
   };
   const firstPaint = (hero, now = Date.now()) => {
     const { today, rows } = heroBets(hero, now, state.league);
