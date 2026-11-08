@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-08T01:36:22Z",
+  "updatedAt": "2026-11-08T01:53:29Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "3149687",
+              "name": "Chris Brooks",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Ankle",
+              "reportedAt": "2026-11-08T01:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3149687/chris-brooks"
+            },
+            {
               "id": "4429466",
               "name": "Drake Dabney",
               "position": "TE",
@@ -2598,15 +2607,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-11-07T01:13Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360086/josh-whyle"
-            },
-            {
-              "id": "3149687",
-              "name": "Chris Brooks",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Ankle",
-              "reportedAt": "2026-11-07T01:07Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3149687/chris-brooks"
             },
             {
               "id": "4429023",
@@ -6217,6 +6217,24 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "4240542",
+              "name": "Nate Hobbs",
+              "position": "CB",
+              "status": "Injured Reserve",
+              "injury": "Groin",
+              "reportedAt": "2026-11-08T01:27Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4240542/nate-hobbs"
+            },
+            {
+              "id": "3047876",
+              "name": "KhaDarel Hodge",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-08T01:20Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3047876/khadarel-hodge"
+            },
+            {
               "id": "3895856",
               "name": "Christian Kirk",
               "position": "WR",
@@ -6260,15 +6278,6 @@
               "injury": null,
               "reportedAt": "2026-11-07T04:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116097/luke-gifford"
-            },
-            {
-              "id": "4240542",
-              "name": "Nate Hobbs",
-              "position": "CB",
-              "status": "Injured Reserve",
-              "injury": "Groin",
-              "reportedAt": "2026-11-07T02:33Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4240542/nate-hobbs"
             },
             {
               "id": "4693337",
@@ -6431,15 +6440,6 @@
               "injury": null,
               "reportedAt": "2026-10-26T00:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431466/jordan-watkins"
-            },
-            {
-              "id": "4696044",
-              "name": "Kaelon Black",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-26T00:29Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4696044/kaelon-black"
             }
           ]
         },
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-08T01:36:22Z",
-      "lastAttemptAt": "2026-11-08T01:36:22Z",
+      "checkedAt": "2026-11-08T01:53:29Z",
+      "lastAttemptAt": "2026-11-08T01:53:29Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-08T01:36:22Z",
-      "lastAttemptAt": "2026-11-08T01:36:22Z",
+      "checkedAt": "2026-11-08T01:53:29Z",
+      "lastAttemptAt": "2026-11-08T01:53:29Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
