@@ -1,3 +1,18 @@
+## November 8 owner priority — timely full-slate results
+
+The full-slate results graphic is the primary daily recap. Publish after all
+required official grades are available that night, or target 8 AM Eastern the
+next morning. If a grade is unresolved, label it pending rather than inventing
+a final. Individual Final graphics remain useful promptly after settlement,
+with wins and losses treated equally; they must not delay the full-slate recap
+or displace current-day plays. Do not trickle stale individual Finals through
+the following morning merely to fill the queue. Surface any quota or delivery
+hold to the owner immediately, distinguishing scheduled from actually Sent.
+Daily recaps for November8 onward target8AM the following morning through
+`receipts.daily_morning`; the timing release was hosted successfully in
+run42506286942. The November8 complete3–1 card was sent early at18:34Eastern
+through its same daily identity after all four official straight grades completed.
+
 ## November 8: owner voice and useful research
 
 Write as Kook’n in first person. Lead with the exact selection, line, price and book.
