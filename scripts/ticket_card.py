@@ -259,12 +259,14 @@ def cooked_data(pick, game, *, art=None, fetch=None, player_side=None):
     if won is None or won <= 0:
         raise ValueError('Cooked preview needs priced won units')
     subject, selection = ticket_kit.leg_parts(str(pick.get('title') or ''))
-    spread = not prop and str(pick.get('marketType') or '').lower() == 'spread'
+    spread = not prop and str(pick.get('marketType') or '').lower() in ('spread', 'moneyline')
     return {'player': subject if spread else _name(pick),
             'side': selection if spread else str(pick['direction']).upper(),
             'line': '' if spread else f"{float(pick['line']):g}",
             'market': pick.get('market') or pick.get('marketType'),
             'odds': pick['odds'], 'book': pick['book'],
+            'final_label': 'FINAL · SCORING MARGIN' if pick.get('marketType') == 'moneyline' else 'FINAL',
+            'score_detail': str(pick.get('actual') or '') if pick.get('marketType') == 'moneyline' else '',
             'final': pick['actualValue'], 'margin': f"{abs(pick['actualValue'] - pick['line']):g}",
             'photo': (art or {}).get('uri') if (art or {}).get('kind') == 'photo' else None,
             'team_logo': _logo(team, game.get('league'), fetch), 'units_won': won,
@@ -280,10 +282,10 @@ def cooked_svg(pick, game, **kwargs):
 
 
 def burnt_data(pick, game, *, art=None, fetch=None, player_side=None):
-    """A narrowly missed straight play, using only the immutable stored grade."""
+    """A lost straight play, using only the immutable stored grade."""
     import receipts
-    if pick_card.play_kind(pick) not in ('player', 'team') or not receipts.near_miss(pick):
-        raise ValueError('Burnt preview needs a settled near-miss straight play')
+    if pick_card.play_kind(pick) not in ('player', 'team') or pick.get('result') != 'loss':
+        raise ValueError('Burnt preview needs a settled lost straight play')
     if not isinstance(pick.get('actualValue'), (int, float)):
         raise ValueError('Burnt preview needs a recorded numeric final')
     fetch = fetch or pick_card.fetch_data_uri
@@ -295,12 +297,14 @@ def burnt_data(pick, game, *, art=None, fetch=None, player_side=None):
     if units is None or units >= 0:
         units = -float(pick.get('riskUnits') or 1)
     subject, selection = ticket_kit.leg_parts(str(pick.get('title') or ''))
-    spread = not prop and str(pick.get('marketType') or '').lower() == 'spread'
+    spread = not prop and str(pick.get('marketType') or '').lower() in ('spread', 'moneyline')
     return {'player': subject if spread else _name(pick),
             'side': selection if spread else str(pick['direction']).upper(),
             'line': '' if spread else f"{float(pick['line']):g}",
             'market': pick.get('market') or pick.get('marketType'),
             'odds': pick['odds'], 'book': pick['book'],
+            'final_label': 'FINAL · SCORING MARGIN' if pick.get('marketType') == 'moneyline' else 'FINAL',
+            'score_detail': str(pick.get('actual') or '') if pick.get('marketType') == 'moneyline' else '',
             'final': pick['actualValue'], 'margin': f"{abs(pick['actualValue'] - pick['line']):g}",
             'photo': (art or {}).get('uri') if (art or {}).get('kind') == 'photo' else None,
             'team_logo': _logo(team, game.get('league'), fetch), 'units_lost': units,

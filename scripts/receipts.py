@@ -492,7 +492,7 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         pick = dict(original, **latest.get(key, {}))
         if key not in originals or pick_card.play_kind(pick) not in ('player', 'team') or not pick.get('settledAt'):
             continue
-        if pick.get('result') != 'win' and not near_miss(pick):
+        if pick.get('result') not in ('win', 'loss'):
             continue
         try:
             settled = gates.when(pick['settledAt'])
@@ -580,7 +580,7 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
         ladder = pick_card.play_kind(pick) == 'ladder'
-        if not pick.get('settledAt') or (result != 'win' and not ladder and not near_miss(pick)):
+        if not pick.get('settledAt') or (result not in ('win', 'loss') and not ladder):
             continue
         settled_at = gates.when(pick['settledAt'])
         fresh = LADDER_CASHED_FRESH if ladder else (fresh_window or CASHED_FRESH)

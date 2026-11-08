@@ -423,7 +423,7 @@ def result_card(p, won):
     b, _ = bet_line(card, side_line, kit.STAT_UNITS.get(p.get('market'), ()), base, max_size=176)
     inner += b
     inner += kit.dashed(X1, X2, base + 38)
-    inner += card.text(X1, base + 98, 'FINAL', 48, INK_SOFT, tracking=2)
+    inner += card.text(X1, base + 98, p.get('final_label', 'FINAL'), 40, INK_SOFT, tracking=2)
     fb = base + 266
     inner += card.text(X1 - 4, fb, str(p['final']), 176, INK)
     fx = X1 - 4 + width(str(p['final']), 176) + 22
@@ -436,8 +436,8 @@ def result_card(p, won):
         inner += kit.pill(card, X2, fb - 62, f"CLEARED BY {p['margin']}", GREEN, GREEN_INK, 52, CHECK)
     else:
         inner += kit.pill(card, X2, fb - 62, f"MISSED BY {p['margin']}", RED, '#2A0306', 52, CROSS)
-    if p.get('close_line'):
-        inner += card.text(X1, fb + 60, p['close_line'], 40, INK_SOFT, 'd', 600)
+    if p.get('score_detail') or p.get('close_line'):
+        inner += card.text(X1, fb + 60, p.get('score_detail') or p['close_line'], 40, INK_SOFT, 'd', 600)
     perf = 1100
     result_units = (f"+{float(p.get('units_won', 0)):.2f}u WON" if won
                     else f"{float(p.get('units_lost', -1)):.2f}u")

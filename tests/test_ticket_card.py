@@ -280,6 +280,20 @@ class TicketCardTests(unittest.TestCase):
         self.assertIn('The plan at a typical −160 a step.', svg)
         self.assertNotIn('1-800-', svg)
 
+    def test_moneyline_final_names_selection_and_score_margin(self):
+        pick = dict(PROP, athleteId=None, title='FIU MONEYLINE', marketType='moneyline', market=None,
+                    direction='home', line=0, result='win', actualValue=10,
+                    actual='New Mexico State 10, FIU 20', units=0.62)
+        data = ticket_card.cooked_data(pick, GAME, art={}, fetch=lambda _: self.logo)
+        self.assertNotEqual(data['side'], 'HOME')
+        self.assertEqual(data['line'], '')
+        self.assertEqual(data['final_label'], 'FINAL · SCORING MARGIN')
+        self.assertEqual(data['score_detail'], pick['actual'])
+        loss = dict(pick, result='loss', actualValue=-35, units=-1)
+        data = ticket_card.burnt_data(loss, GAME, art={}, fetch=lambda _: self.logo)
+        self.assertEqual(data['units_lost'], -1)
+        self.assertEqual(data['margin'], '35')
+
     def test_cooked_uses_recorded_units_and_player_team_badge(self):
         game = dict(GAME, players=[{'id': PROP['athleteId'], 'team': GAME['away']['id']}])
         won = dict(PROP, result='win', actualValue=64, units=1.02)
