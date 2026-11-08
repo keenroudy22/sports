@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-11-07T22:07:08Z",
+  "updatedAt": "2026-11-08T01:36:22Z",
   "coverage": "ESPN listed roles for upcoming NFL teams with injuries; not confirmed game starters.",
   "teams": {
     "22": {
       "name": "Arizona Cardinals",
       "abbr": "ARI",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ari",
       "positions": [
         {
@@ -68,9 +68,18 @@
               }
             },
             {
+              "id": "4372019",
+              "name": "Jerome Ford",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "3045147",
               "name": "James Conner",
-              "order": 4,
+              "order": 5,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -79,7 +88,7 @@
             {
               "id": "4870808",
               "name": "Jeremiyah Love",
-              "order": 5,
+              "order": 6,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -88,7 +97,7 @@
             {
               "id": "4429275",
               "name": "Trey Benson",
-              "order": 6,
+              "order": 7,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -213,9 +222,18 @@
               }
             },
             {
+              "id": "4366910",
+              "name": "Shawn Bowman",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "4696700",
               "name": "Tip Reiman",
-              "order": 4,
+              "order": 5,
               "availability": {
                 "status": "Out",
                 "unavailable": true
@@ -224,7 +242,7 @@
             {
               "id": "4239944",
               "name": "Hunter Long",
-              "order": 5,
+              "order": 6,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -570,19 +588,19 @@
           "key": "rg",
           "players": [
             {
-              "id": "4431214",
+              "id": "5084939",
               "order": 1
             },
             {
-              "id": "4567410",
+              "id": "4431214",
               "order": 2
             },
             {
-              "id": "4367199",
+              "id": "4567410",
               "order": 3
             },
             {
-              "id": "5084939",
+              "id": "4367199",
               "order": 4
             },
             {
@@ -637,12 +655,16 @@
               "order": 3
             },
             {
-              "id": "4696700",
+              "id": "4366910",
               "order": 4
             },
             {
-              "id": "4239944",
+              "id": "4696700",
               "order": 5
+            },
+            {
+              "id": "4239944",
+              "order": 6
             }
           ]
         },
@@ -662,16 +684,20 @@
               "order": 3
             },
             {
-              "id": "3045147",
+              "id": "4372019",
               "order": 4
             },
             {
-              "id": "4870808",
+              "id": "3045147",
               "order": 5
             },
             {
-              "id": "4429275",
+              "id": "4870808",
               "order": 6
+            },
+            {
+              "id": "4429275",
+              "order": 7
             }
           ]
         }
@@ -681,8 +707,8 @@
       "name": "Atlanta Falcons",
       "abbr": "ATL",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/atl",
       "positions": [
         {
@@ -743,9 +769,18 @@
               }
             },
             {
+              "id": "4035886",
+              "name": "Khalil Herbert",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "4241474",
               "name": "Brian Robinson Jr.",
-              "order": 2,
+              "order": 3,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -754,7 +789,7 @@
             {
               "id": "4241401",
               "name": "Trey Sermon",
-              "order": 3,
+              "order": 4,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -831,8 +866,8 @@
               "name": "Beaux Collins",
               "order": 2,
               "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
+                "status": "Active",
+                "unavailable": false
               }
             }
           ]
@@ -937,12 +972,16 @@
               "order": 2
             },
             {
-              "id": "3045527",
+              "id": "4569511",
               "order": 3
             },
             {
-              "id": "4685597",
+              "id": "3045527",
               "order": 4
+            },
+            {
+              "id": "4685597",
+              "order": 5
             }
           ]
         },
@@ -1126,12 +1165,16 @@
               "order": 1
             },
             {
-              "id": "3917914",
+              "id": "4035886",
               "order": 2
             },
             {
-              "id": "4870612",
+              "id": "3917914",
               "order": 3
+            },
+            {
+              "id": "4870612",
+              "order": 4
             }
           ]
         },
@@ -1306,12 +1349,16 @@
               "order": 1
             },
             {
-              "id": "4241474",
+              "id": "4035886",
               "order": 2
             },
             {
-              "id": "4241401",
+              "id": "4241474",
               "order": 3
+            },
+            {
+              "id": "4241401",
+              "order": 4
             }
           ]
         }
@@ -1321,8 +1368,8 @@
       "name": "Buffalo Bills",
       "abbr": "BUF",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/buf",
       "positions": [
         {
@@ -1928,8 +1975,8 @@
       "name": "Carolina Panthers",
       "abbr": "CAR",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/car",
       "positions": [
         {
@@ -2271,16 +2318,20 @@
           "key": "lcb",
           "players": [
             {
-              "id": "5225251",
+              "id": "4240595",
               "order": 1
             },
             {
-              "id": "4244607",
+              "id": "5225251",
               "order": 2
             },
             {
-              "id": "3917853",
+              "id": "4244607",
               "order": 3
+            },
+            {
+              "id": "3917853",
+              "order": 4
             }
           ]
         },
@@ -2320,6 +2371,10 @@
             {
               "id": "5151083",
               "order": 1
+            },
+            {
+              "id": "4697636",
+              "order": 2
             }
           ]
         },
@@ -2327,7 +2382,7 @@
           "key": "nb",
           "players": [
             {
-              "id": "4697636",
+              "id": "4431426",
               "order": 1
             },
             {
@@ -2627,8 +2682,8 @@
       "name": "Chicago Bears",
       "abbr": "CHI",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/chi",
       "positions": [
         {
@@ -3302,8 +3357,8 @@
       "name": "Cincinnati Bengals",
       "abbr": "CIN",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/cin",
       "positions": [
         {
@@ -3918,8 +3973,8 @@
       "name": "Cleveland Browns",
       "abbr": "CLE",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/cle",
       "positions": [
         {
@@ -4600,8 +4655,8 @@
       "name": "Dallas Cowboys",
       "abbr": "DAL",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/dal",
       "positions": [
         {
@@ -5253,8 +5308,8 @@
       "name": "Denver Broncos",
       "abbr": "DEN",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/den",
       "positions": [
         {
@@ -5315,9 +5370,18 @@
               }
             },
             {
+              "id": "4391845",
+              "name": "Cody Schrader",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "4568490",
               "name": "RJ Harvey",
-              "order": 3,
+              "order": 4,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -5326,7 +5390,7 @@
             {
               "id": "4362748",
               "name": "Tyler Badie",
-              "order": 4,
+              "order": 5,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -5365,8 +5429,8 @@
               }
             },
             {
-              "id": "4686472",
-              "name": "Marvin Mims Jr.",
+              "id": "4431280",
+              "name": "Troy Franklin",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -5390,8 +5454,8 @@
               }
             },
             {
-              "id": "4039057",
-              "name": "Lil'Jordan Humphrey",
+              "id": "4686472",
+              "name": "Marvin Mims Jr.",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -5406,21 +5470,21 @@
           "group": "WR",
           "players": [
             {
-              "id": "4431280",
-              "name": "Troy Franklin",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
               "id": "4600981",
               "name": "Pat Bryant",
-              "order": 2,
+              "order": 1,
               "availability": {
                 "status": "Day-To-Day",
                 "unavailable": true
+              }
+            },
+            {
+              "id": "4039057",
+              "name": "Lil'Jordan Humphrey",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
               }
             }
           ]
@@ -5513,15 +5577,15 @@
           "key": "rde",
           "players": [
             {
-              "id": "4066109",
+              "id": "4039064",
               "order": 1
             },
             {
-              "id": "4039064",
+              "id": "4683535",
               "order": 2
             },
             {
-              "id": "4683535",
+              "id": "4066109",
               "order": 3
             }
           ]
@@ -5624,8 +5688,12 @@
               "order": 1
             },
             {
-              "id": "4428503",
+              "id": "4039007",
               "order": 2
+            },
+            {
+              "id": "4428503",
+              "order": 3
             }
           ]
         },
@@ -5639,6 +5707,10 @@
             {
               "id": "4429193",
               "order": 2
+            },
+            {
+              "id": "4565769",
+              "order": 3
             }
           ]
         },
@@ -5737,7 +5809,7 @@
               "order": 1
             },
             {
-              "id": "4686472",
+              "id": "4431280",
               "order": 2
             }
           ]
@@ -5750,7 +5822,7 @@
               "order": 1
             },
             {
-              "id": "4039057",
+              "id": "4686472",
               "order": 2
             }
           ]
@@ -5759,11 +5831,11 @@
           "key": "wr3",
           "players": [
             {
-              "id": "4431280",
+              "id": "4600981",
               "order": 1
             },
             {
-              "id": "4600981",
+              "id": "4039057",
               "order": 2
             }
           ]
@@ -5899,12 +5971,16 @@
               "order": 2
             },
             {
-              "id": "4568490",
+              "id": "4391845",
               "order": 3
             },
             {
-              "id": "4362748",
+              "id": "4568490",
               "order": 4
+            },
+            {
+              "id": "4362748",
+              "order": 5
             }
           ]
         },
@@ -5923,8 +5999,8 @@
       "name": "Detroit Lions",
       "abbr": "DET",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/det",
       "positions": [
         {
@@ -6592,8 +6668,8 @@
       "name": "Green Bay Packers",
       "abbr": "GB",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/gb",
       "positions": [
         {
@@ -7325,8 +7401,8 @@
       "name": "Houston Texans",
       "abbr": "HOU",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/hou",
       "positions": [
         {
@@ -8012,8 +8088,8 @@
       "name": "Indianapolis Colts",
       "abbr": "IND",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ind",
       "positions": [
         {
@@ -8675,8 +8751,8 @@
       "name": "Jacksonville Jaguars",
       "abbr": "JAX",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/jax",
       "positions": [
         {
@@ -9298,8 +9374,8 @@
       "name": "Kansas City Chiefs",
       "abbr": "KC",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/kc",
       "positions": [
         {
@@ -9578,6 +9654,10 @@
             {
               "id": "4871063",
               "order": 2
+            },
+            {
+              "id": "4573152",
+              "order": 3
             }
           ]
         },
@@ -10003,8 +10083,8 @@
       "name": "Las Vegas Raiders",
       "abbr": "LV",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lv",
       "positions": [
         {
@@ -10239,6 +10319,10 @@
             {
               "id": "4430896",
               "order": 2
+            },
+            {
+              "id": "4431414",
+              "order": 3
             }
           ]
         },
@@ -10652,8 +10736,8 @@
       "name": "Los Angeles Chargers",
       "abbr": "LAC",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lac",
       "positions": [
         {
@@ -11346,8 +11430,8 @@
       "name": "Los Angeles Rams",
       "abbr": "LAR",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lar",
       "positions": [
         {
@@ -12016,8 +12100,8 @@
       "name": "Miami Dolphins",
       "abbr": "MIA",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/mia",
       "positions": [
         {
@@ -12678,8 +12762,8 @@
       "name": "Minnesota Vikings",
       "abbr": "MIN",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/min",
       "positions": [
         {
@@ -13306,8 +13390,8 @@
       "name": "New England Patriots",
       "abbr": "NE",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ne",
       "positions": [
         {
@@ -14009,8 +14093,8 @@
       "name": "New Orleans Saints",
       "abbr": "NO",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/no",
       "positions": [
         {
@@ -14525,15 +14609,15 @@
           "key": "lt",
           "players": [
             {
-              "id": "4430379",
+              "id": "4685260",
               "order": 1
             },
             {
-              "id": "4682479",
+              "id": "4430379",
               "order": 2
             },
             {
-              "id": "4685260",
+              "id": "4682479",
               "order": 3
             }
           ]
@@ -14667,8 +14751,8 @@
       "name": "New York Giants",
       "abbr": "NYG",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyg",
       "positions": [
         {
@@ -14738,9 +14822,18 @@
               }
             },
             {
+              "id": "4431562",
+              "name": "Phil Mafah",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "4360516",
               "name": "Tyrone Tracy Jr.",
-              "order": 4,
+              "order": 5,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -14788,8 +14881,8 @@
               }
             },
             {
-              "id": "4424106",
-              "name": "Gunner Olszewski",
+              "id": "3123075",
+              "name": "Braxton Berrios",
               "order": 3,
               "availability": {
                 "status": "Injured Reserve",
@@ -14813,9 +14906,18 @@
               }
             },
             {
-              "id": "4243389",
-              "name": "Calvin Austin III",
+              "id": "4692590",
+              "name": "Jalin Hyatt",
               "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4424106",
+              "name": "Gunner Olszewski",
+              "order": 3,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -14838,8 +14940,8 @@
               }
             },
             {
-              "id": "3123075",
-              "name": "Braxton Berrios",
+              "id": "4243389",
+              "name": "Calvin Austin III",
               "order": 2,
               "availability": {
                 "status": "Injured Reserve",
@@ -14944,8 +15046,12 @@
               "order": 1
             },
             {
-              "id": "4035631",
+              "id": "3042476",
               "order": 2
+            },
+            {
+              "id": "4035631",
+              "order": 3
             }
           ]
         },
@@ -15179,7 +15285,7 @@
               "order": 2
             },
             {
-              "id": "4424106",
+              "id": "3123075",
               "order": 3
             }
           ]
@@ -15192,8 +15298,12 @@
               "order": 1
             },
             {
-              "id": "4243389",
+              "id": "4692590",
               "order": 2
+            },
+            {
+              "id": "4424106",
+              "order": 3
             }
           ]
         },
@@ -15205,7 +15315,7 @@
               "order": 1
             },
             {
-              "id": "3123075",
+              "id": "4243389",
               "order": 2
             }
           ]
@@ -15333,8 +15443,12 @@
               "order": 3
             },
             {
-              "id": "4360516",
+              "id": "4431562",
               "order": 4
+            },
+            {
+              "id": "4360516",
+              "order": 5
             }
           ]
         },
@@ -15353,8 +15467,8 @@
       "name": "New York Jets",
       "abbr": "NYJ",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyj",
       "positions": [
         {
@@ -15660,8 +15774,12 @@
               "order": 1
             },
             {
-              "id": "4045299",
+              "id": "3116177",
               "order": 2
+            },
+            {
+              "id": "4045299",
+              "order": 3
             }
           ]
         },
@@ -15877,8 +15995,12 @@
               "order": 2
             },
             {
-              "id": "4373656",
+              "id": "4426623",
               "order": 3
+            },
+            {
+              "id": "4373656",
+              "order": 4
             }
           ]
         },
@@ -16007,8 +16129,8 @@
       "name": "Philadelphia Eagles",
       "abbr": "PHI",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/phi",
       "positions": [
         {
@@ -16069,9 +16191,18 @@
               }
             },
             {
+              "id": "4241555",
+              "name": "Elijah Mitchell",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "4685279",
               "name": "Jaydon Blue",
-              "order": 2,
+              "order": 3,
               "availability": {
                 "status": "Active",
                 "unavailable": false
@@ -16080,7 +16211,7 @@
             {
               "id": "4429013",
               "name": "Tank Bigsby",
-              "order": 3,
+              "order": 4,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -16089,7 +16220,7 @@
             {
               "id": "4431545",
               "name": "Will Shipley",
-              "order": 4,
+              "order": 5,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -16351,8 +16482,12 @@
               "order": 2
             },
             {
-              "id": "4878896",
+              "id": "4693345",
               "order": 3
+            },
+            {
+              "id": "4878896",
+              "order": 4
             }
           ]
         },
@@ -16651,16 +16786,708 @@
               "order": 1
             },
             {
-              "id": "4685279",
+              "id": "4241555",
               "order": 2
             },
             {
-              "id": "4429013",
+              "id": "4685279",
               "order": 3
             },
             {
-              "id": "4431545",
+              "id": "4429013",
               "order": 4
+            },
+            {
+              "id": "4431545",
+              "order": 5
+            }
+          ]
+        }
+      ]
+    },
+    "23": {
+      "name": "Pittsburgh Steelers",
+      "abbr": "PIT",
+      "status": "ok",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
+      "source": "https://www.espn.com/nfl/team/depth/_/name/pit",
+      "positions": [
+        {
+          "key": "qb",
+          "label": "QB",
+          "group": "QB",
+          "players": [
+            {
+              "id": "8439",
+              "name": "Aaron Rodgers",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "3116407",
+              "name": "Mason Rudolph",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4429955",
+              "name": "Will Howard",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4714771",
+              "name": "Drew Allar",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "rb",
+          "label": "RB",
+          "group": "RB",
+          "players": [
+            {
+              "id": "4569987",
+              "name": "Jaylen Warren",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4038815",
+              "name": "Rico Dowdle",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4428119",
+              "name": "Lew Nichols",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4037457",
+              "name": "Travis Homer",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "5081508",
+              "name": "Eli Heidenreich",
+              "order": 5,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "fb",
+          "label": "FB",
+          "group": "FB",
+          "players": [
+            {
+              "id": "4693370",
+              "name": "Riley Nowakowski",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr1",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4047650",
+              "name": "DK Metcalf",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4240577",
+              "name": "Brandon Smith",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4431492",
+              "name": "Roman Wilson",
+              "order": 3,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4685261",
+              "name": "Germie Bernard",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "5081338",
+              "name": "Kaden Wetjen",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "5192448",
+              "name": "Cole Burgess",
+              "order": 3,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr3",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4035656",
+              "name": "Ben Skowronek",
+              "order": 1,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            },
+            {
+              "id": "4035687",
+              "name": "Michael Pittman Jr.",
+              "order": 2,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "te",
+          "label": "TE",
+          "group": "TE",
+          "players": [
+            {
+              "id": "4430802",
+              "name": "Darnell Washington",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4361411",
+              "name": "Pat Freiermuth",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "2975674",
+              "name": "Robert Tonyan",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        }
+      ],
+      "rolePositions": [
+        {
+          "key": "lde",
+          "players": [
+            {
+              "id": "4430947",
+              "order": 1
+            },
+            {
+              "id": "4431533",
+              "order": 2
+            },
+            {
+              "id": "4682980",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "nt",
+          "players": [
+            {
+              "id": "4426694",
+              "order": 1
+            },
+            {
+              "id": "3047495",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "rde",
+          "players": [
+            {
+              "id": "13977",
+              "order": 1
+            },
+            {
+              "id": "5084849",
+              "order": 2
+            },
+            {
+              "id": "4569474",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "wlb",
+          "players": [
+            {
+              "id": "3045282",
+              "order": 1
+            },
+            {
+              "id": "4429164",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "lilb",
+          "players": [
+            {
+              "id": "4361652",
+              "order": 1
+            },
+            {
+              "id": "3116689",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "rilb",
+          "players": [
+            {
+              "id": "4242207",
+              "order": 1
+            },
+            {
+              "id": "4429490",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "slb",
+          "players": [
+            {
+              "id": "4037333",
+              "order": 1
+            },
+            {
+              "id": "4431590",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "lcb",
+          "players": [
+            {
+              "id": "4363034",
+              "order": 1
+            },
+            {
+              "id": "3932886",
+              "order": 2
+            },
+            {
+              "id": "4360935",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "ss",
+          "players": [
+            {
+              "id": "3929846",
+              "order": 1
+            },
+            {
+              "id": "4820584",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "fs",
+          "players": [
+            {
+              "id": "4570044",
+              "order": 1
+            }
+          ]
+        },
+        {
+          "key": "rcb",
+          "players": [
+            {
+              "id": "3873935",
+              "order": 1
+            },
+            {
+              "id": "4685327",
+              "order": 2
+            },
+            {
+              "id": "4692628",
+              "order": 3
+            },
+            {
+              "id": "4429743",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "key": "nb",
+          "players": [
+            {
+              "id": "3045373",
+              "order": 1
+            },
+            {
+              "id": "4567979",
+              "order": 2
+            },
+            {
+              "id": "4608004",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "pk",
+          "players": [
+            {
+              "id": "17372",
+              "order": 1
+            }
+          ]
+        },
+        {
+          "key": "p",
+          "players": [
+            {
+              "id": "3051397",
+              "order": 1
+            }
+          ]
+        },
+        {
+          "key": "h",
+          "players": [
+            {
+              "id": "3051397",
+              "order": 1
+            }
+          ]
+        },
+        {
+          "key": "pr",
+          "players": [
+            {
+              "id": "5081338",
+              "order": 1
+            },
+            {
+              "id": "4431492",
+              "order": 2
+            },
+            {
+              "id": "4608004",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "kr",
+          "players": [
+            {
+              "id": "5081338",
+              "order": 1
+            },
+            {
+              "id": "5081508",
+              "order": 2
+            },
+            {
+              "id": "4608004",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "ls",
+          "players": [
+            {
+              "id": "2978524",
+              "order": 1
+            }
+          ]
+        },
+        {
+          "key": "wr1",
+          "players": [
+            {
+              "id": "4047650",
+              "order": 1
+            },
+            {
+              "id": "4240577",
+              "order": 2
+            },
+            {
+              "id": "4431492",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "players": [
+            {
+              "id": "4685261",
+              "order": 1
+            },
+            {
+              "id": "5081338",
+              "order": 2
+            },
+            {
+              "id": "5192448",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "wr3",
+          "players": [
+            {
+              "id": "4035656",
+              "order": 1
+            },
+            {
+              "id": "4035687",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "lt",
+          "players": [
+            {
+              "id": "4427170",
+              "order": 1
+            },
+            {
+              "id": "4570898",
+              "order": 2
+            },
+            {
+              "id": "3932668",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "lg",
+          "players": [
+            {
+              "id": "4368304",
+              "order": 1
+            },
+            {
+              "id": "4241087",
+              "order": 2
+            },
+            {
+              "id": "4431258",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "c",
+          "players": [
+            {
+              "id": "4429775",
+              "order": 1
+            },
+            {
+              "id": "4035253",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "rg",
+          "players": [
+            {
+              "id": "4241087",
+              "order": 1
+            },
+            {
+              "id": "4372056",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "rt",
+          "players": [
+            {
+              "id": "5150136",
+              "order": 1
+            },
+            {
+              "id": "4570898",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "qb",
+          "players": [
+            {
+              "id": "8439",
+              "order": 1
+            },
+            {
+              "id": "3116407",
+              "order": 2
+            },
+            {
+              "id": "4429955",
+              "order": 3
+            },
+            {
+              "id": "4714771",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "key": "te",
+          "players": [
+            {
+              "id": "4430802",
+              "order": 1
+            },
+            {
+              "id": "4361411",
+              "order": 2
+            },
+            {
+              "id": "2975674",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "rb",
+          "players": [
+            {
+              "id": "4569987",
+              "order": 1
+            },
+            {
+              "id": "4038815",
+              "order": 2
+            },
+            {
+              "id": "4428119",
+              "order": 3
+            },
+            {
+              "id": "4037457",
+              "order": 4
+            },
+            {
+              "id": "5081508",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "key": "fb",
+          "players": [
+            {
+              "id": "4693370",
+              "order": 1
             }
           ]
         }
@@ -16670,8 +17497,8 @@
       "name": "San Francisco 49ers",
       "abbr": "SF",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sf",
       "positions": [
         {
@@ -16782,6 +17609,49 @@
               }
             },
             {
+              "id": "4431466",
+              "name": "Jordan Watkins",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "3047876",
+              "name": "KhaDarel Hodge",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4428209",
+              "name": "Ricky Pearsall",
+              "order": 4,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "3126486",
+              "name": "Deebo Samuel Sr.",
+              "order": 1,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            },
+            {
               "id": "16731",
               "name": "Brandin Cooks",
               "order": 2,
@@ -16811,17 +17681,17 @@
           ]
         },
         {
-          "key": "wr2",
+          "key": "wr3",
           "label": "WR",
           "group": "WR",
           "players": [
             {
-              "id": "3126486",
-              "name": "Deebo Samuel Sr.",
+              "id": "3043116",
+              "name": "Demarcus Robinson",
               "order": 1,
               "availability": {
-                "status": "Out",
-                "unavailable": true
+                "status": "Active",
+                "unavailable": false
               }
             },
             {
@@ -16836,40 +17706,6 @@
             {
               "id": "4710714",
               "name": "De'Zhaun Stribling",
-              "order": 3,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4431466",
-              "name": "Jordan Watkins",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "3043116",
-              "name": "Demarcus Robinson",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4428209",
-              "name": "Ricky Pearsall",
               "order": 3,
               "availability": {
                 "status": "Injured Reserve",
@@ -17205,6 +18041,27 @@
               "order": 1
             },
             {
+              "id": "4431466",
+              "order": 2
+            },
+            {
+              "id": "3047876",
+              "order": 3
+            },
+            {
+              "id": "4428209",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "players": [
+            {
+              "id": "3126486",
+              "order": 1
+            },
+            {
               "id": "16731",
               "order": 2
             },
@@ -17219,10 +18076,10 @@
           ]
         },
         {
-          "key": "wr2",
+          "key": "wr3",
           "players": [
             {
-              "id": "3126486",
+              "id": "3043116",
               "order": 1
             },
             {
@@ -17231,23 +18088,6 @@
             },
             {
               "id": "4710714",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "players": [
-            {
-              "id": "4431466",
-              "order": 1
-            },
-            {
-              "id": "3043116",
-              "order": 2
-            },
-            {
-              "id": "4428209",
               "order": 3
             }
           ]
@@ -17403,8 +18243,8 @@
       "name": "Seattle Seahawks",
       "abbr": "SEA",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sea",
       "positions": [
         {
@@ -17531,6 +18371,15 @@
                 "status": "Active",
                 "unavailable": false
               }
+            },
+            {
+              "id": "4360405",
+              "name": "Jake Bobo",
+              "order": 3,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
             }
           ]
         },
@@ -17574,12 +18423,12 @@
               }
             },
             {
-              "id": "4360405",
-              "name": "Jake Bobo",
+              "id": "4600597",
+              "name": "Montorie Foster Jr.",
               "order": 2,
               "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
+                "status": "Active",
+                "unavailable": false
               }
             }
           ]
@@ -17652,6 +18501,10 @@
             {
               "id": "4259651",
               "order": 2
+            },
+            {
+              "id": "4609203",
+              "order": 3
             }
           ]
         },
@@ -17873,6 +18726,10 @@
             {
               "id": "4597703",
               "order": 2
+            },
+            {
+              "id": "4360405",
+              "order": 3
             }
           ]
         },
@@ -17897,7 +18754,7 @@
               "order": 1
             },
             {
-              "id": "4360405",
+              "id": "4600597",
               "order": 2
             }
           ]
@@ -17906,12 +18763,16 @@
           "key": "lt",
           "players": [
             {
-              "id": "3914630",
+              "id": "4426376",
               "order": 1
             },
             {
-              "id": "4426376",
+              "id": "3914630",
               "order": 2
+            },
+            {
+              "id": "2576789",
+              "order": 3
             }
           ]
         },
@@ -18049,8 +18910,8 @@
       "name": "Tampa Bay Buccaneers",
       "abbr": "TB",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/tb",
       "positions": [
         {
@@ -18652,8 +19513,8 @@
       "name": "Tennessee Titans",
       "abbr": "TEN",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ten",
       "positions": [
         {
@@ -19276,8 +20137,8 @@
       "name": "Washington Commanders",
       "abbr": "WSH",
       "status": "ok",
-      "checkedAt": "2026-11-07T22:07:08Z",
-      "lastAttemptAt": "2026-11-07T22:07:08Z",
+      "checkedAt": "2026-11-08T01:36:22Z",
+      "lastAttemptAt": "2026-11-08T01:36:22Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/wsh",
       "positions": [
         {
