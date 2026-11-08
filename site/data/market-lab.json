@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 269,
+   "gamesGraded": 271,
    "gamesQuoted": 278,
-   "moneylineSnapshots": 1238,
+   "moneylineSnapshots": 1239,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,70 @@
      "season": 2027
     },
     {
-     "gamesGraded": 230,
+     "gamesGraded": 232,
      "gamesQuoted": 237,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1238,
+   "snapshots": 1239,
    "status": "capturing",
-   "totalSnapshots": 1238
+   "totalSnapshots": 1239
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "DET",
+    "id": "5",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png",
+    "name": "Detroit Red Wings",
+    "shortName": "Red Wings"
+   },
+   "awayScore": 0,
+   "gameId": "NHL-401892671",
+   "gradedAt": "2026-11-08T04:55:12Z",
+   "home": {
+    "abbreviation": "COL",
+    "id": "17",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/col.png",
+    "name": "Colorado Avalanche",
+    "shortName": "Avalanche"
+   },
+   "homeScore": 4,
+   "kickoff": "2026-11-08T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "PIT",
+    "id": "16",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/pit.png",
+    "name": "Pittsburgh Penguins",
+    "shortName": "Penguins"
+   },
+   "awayScore": 5,
+   "gameId": "NHL-401892672",
+   "gradedAt": "2026-11-08T04:55:12Z",
+   "home": {
+    "abbreviation": "LA",
+    "id": "8",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/la.png",
+    "name": "Los Angeles Kings",
+    "shortName": "Kings"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-11-08T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "CHI",
@@ -2593,59 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "MIN",
-    "id": "30",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/min.png",
-    "name": "Minnesota Wild",
-    "shortName": "Wild"
-   },
-   "awayScore": 5,
-   "gameId": "NHL-401892577",
-   "gradedAt": "2026-10-25T15:25:12Z",
-   "home": {
-    "abbreviation": "SEA",
-    "id": "124292",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/sea.png",
-    "name": "Seattle Kraken",
-    "shortName": "Kraken"
-   },
-   "homeScore": 1,
-   "kickoff": "2026-10-25T02:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "TB",
-    "id": "20",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tb.png",
-    "name": "Tampa Bay Lightning",
-    "shortName": "Lightning"
-   },
-   "awayScore": 4,
-   "gameId": "NHL-401892575",
-   "gradedAt": "2026-10-25T15:25:12Z",
-   "home": {
-    "abbreviation": "UTA",
-    "id": "129764",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/uta.png",
-    "name": "Utah Mammoth",
-    "shortName": "Mammoth"
-   },
-   "homeScore": 5,
-   "kickoff": "2026-10-25T01:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final/OT",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-08T04:30:13Z"
+ "updatedAt": "2026-11-08T04:55:12Z"
 }
