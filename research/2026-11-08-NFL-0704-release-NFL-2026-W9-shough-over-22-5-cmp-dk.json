@@ -1,0 +1,260 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-08T12:04:25Z",
+  "summary": "Released 1: Tyler Shough OVER 22.5 completions -101 at DraftKings.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "QB",
+      "athleteId": "4360689",
+      "market": "cmp",
+      "line": 22.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873039"
+      ],
+      "book": "DraftKings",
+      "odds": -101,
+      "projection": 24.4,
+      "edge": "Price-checked chance 51.1% against the exact two-sided price; 50.2% needed at -101: +0.8 percentage points.",
+      "cutoff": "OVER 22.5 at -101 or better; off the card at 23+, or at -116 or worse at 22.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-08T09:19:38Z",
+      "quotedAt": "2026-11-08T11:46:33Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 6:46 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-08T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.62,
+        "chance": 0.511,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.502,
+        "edgePoints": 0.8,
+        "evPerUnit": 0.017,
+        "snapshotAt": "2026-11-08T09:19:38Z",
+        "probabilitySpec": "a39d2bede93eb62e63615ef6ea3c297f4eb57f50d83ae625960c1e47d8204528",
+        "evaluatedAt": "2026-11-08T11:50:09Z",
+        "fairChance": 0.473,
+        "anchoredChance": 0.511,
+        "gap": 3.8,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Cleveland Browns at New Orleans Saints",
+      "title": "Tyler Shough OVER 22.5 completions",
+      "id": "NFL-2026-W9-shough-over-22-5-cmp-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873039",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 7 of 10 over 22.5.",
+        "context": [
+          "Role: projected for 36.5 att a game.",
+          "Defense: CLE allows 19.5 completions a game to QBs, 8th-stingiest of 32 this season."
+        ],
+        "cautions": [
+          "The defense leans against this side (that's the whole position group, not just him)."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 24.4 against 22.5. The over reads 51.1% after adjustment from the raw 62.0%; 50.2% is needed at -101. Last 10 games: 7 of 10 over 22.5. Role: projected for 36.5 att a game. Defense: CLE allows 19.5 completions a game to QBs, 8th-stingiest of 32 this season.",
+      "risk": "The defense leans against this side (that's the whole position group, not just him). An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Over 22.5 in 7 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-08T11:50:09Z"
+          },
+          {
+            "text": "Book says 22.5. I say 24.4.",
+            "numbers": {
+              "projection": 24.4,
+              "line": 22.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-08T09:19:38Z"
+          },
+          {
+            "text": "3 of his last 5 games finished over 22.5 completions.",
+            "numbers": {
+              "values": [
+                29,
+                30,
+                16,
+                16,
+                30
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 22.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-25T13:30Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "The defense leans against this side (that's the whole position group, not just him). An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-08T11:50:09Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Kelvin Banks Jr. (NO) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685260/kelvin-banks-jr",
+            "time": "2026-11-08T03:02Z"
+          },
+          {
+            "text": "Jordyn Tyson (NO) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4880281/jordyn-tyson",
+            "time": "2026-11-07T21:09Z"
+          },
+          {
+            "text": "Martin Emerson Jr. (NO) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4429568/martin-emerson-jr",
+            "time": "2026-11-07T00:17Z"
+          },
+          {
+            "text": "CJ Donaldson (NO) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/5081999/cj-donaldson",
+            "time": "2026-11-06T19:12Z"
+          },
+          {
+            "text": "Asim Richards (NO) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4430379/asim-richards",
+            "time": "2026-11-04T22:03Z"
+          },
+          {
+            "text": "Deshaun Watson (CLE) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3122840/deshaun-watson",
+            "time": "2026-11-07T18:12Z"
+          },
+          {
+            "text": "Maliek Collins (CLE) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3040471/maliek-collins",
+            "time": "2026-11-06T19:45Z"
+          }
+        ],
+        "weather": null,
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 21.5,
+                "price": -120,
+                "time": "2026-11-07T22:13:23Z"
+              },
+              "now": {
+                "line": 22.5,
+                "price": -101,
+                "time": "2026-11-08T11:46:33Z"
+              }
+            },
+            "FanDuel": null
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 22.5,
+            "price": -101,
+            "time": "2026-11-08T11:46:33Z"
+          }
+        },
+        "ours": {
+          "projection": 24.4,
+          "line": 22.5,
+          "market": "cmp",
+          "text": "Over 22.5 in 7 of his last 10 games.",
+          "snapshotAt": "2026-11-08T09:19:38Z"
+        },
+        "history": "Last 10 games: 7 of 10 over 22.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685260/kelvin-banks-jr",
+            "time": "2026-11-08T03:02Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4880281/jordyn-tyson",
+            "time": "2026-11-07T21:09Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4429568/martin-emerson-jr",
+            "time": "2026-11-07T00:17Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/5081999/cj-donaldson",
+            "time": "2026-11-06T19:12Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4430379/asim-richards",
+            "time": "2026-11-04T22:03Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3122840/deshaun-watson",
+            "time": "2026-11-07T18:12Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3040471/maliek-collins",
+            "time": "2026-11-06T19:45Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873039",
+            "time": "2026-11-08T11:50:09Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-08T11:50:09Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-08T12:04:25Z"
+    }
+  ]
+}
