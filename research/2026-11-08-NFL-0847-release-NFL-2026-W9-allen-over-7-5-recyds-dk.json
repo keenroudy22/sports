@@ -1,0 +1,303 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-08T13:47:32Z",
+  "summary": "Released 1: Braelon Allen OVER 7.5 receiving yards -105 at DraftKings.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "4685247",
+      "market": "recYds",
+      "line": 7.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873045"
+      ],
+      "book": "DraftKings",
+      "odds": -105,
+      "projection": 18.2,
+      "edge": "Price-checked chance 52.0% against the exact two-sided price; 51.2% needed at -105: +0.7 percentage points.",
+      "cutoff": "OVER 7.5 at -105 or better; off the card at 8+, or at -120 or worse at 7.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-07T20:18:31Z",
+      "quotedAt": "2026-11-08T11:49:22Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 6:49 AM ET capture across 2 books, the best expected value on the board for this side. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-08T16:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.717,
+        "chance": 0.52,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.512,
+        "edgePoints": 0.7,
+        "evPerUnit": 0.014,
+        "snapshotAt": "2026-11-07T20:18:31Z",
+        "probabilitySpec": "773587ee30814809af51e95f29290d04fba8c1ddabc477e11e1745954fd0d981",
+        "evaluatedAt": "2026-11-08T13:33:57Z",
+        "fairChance": 0.484,
+        "anchoredChance": 0.52,
+        "gap": 3.5,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "New York Jets at Kansas City Chiefs",
+      "title": "Braelon Allen OVER 7.5 receiving yards",
+      "id": "NFL-2026-W9-allen-over-7-5-recyds-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873045",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 5 of 10 over 7.5.",
+        "context": [
+          "Role: 1st of 3 NYJ RBs by projected targets, 3.6 a game.",
+          "Defense: KC allows 41.86 receiving yards a game to RBs, 26th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 18.2 against 7.5. The over reads 52.0% after adjustment from the raw 71.7%; 51.2% is needed at -105. Last 10 games: 5 of 10 over 7.5. Role: 1st of 3 NYJ RBs by projected targets, 3.6 a game. Defense: KC allows 41.86 receiving yards a game to RBs, 26th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 7.5. I say 18.2.",
+            "numbers": {
+              "projection": 18.2,
+              "line": 7.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-07T20:18:31Z"
+          },
+          {
+            "text": "3 of his last 5 games finished over 7.5 receiving yards.",
+            "numbers": {
+              "values": [
+                8,
+                0,
+                26,
+                30,
+                6
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 7.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-01T18:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-08T13:33:57Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Peter Woods (KC) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4871063/peter-woods",
+            "time": "2026-11-07T02:59Z"
+          },
+          {
+            "text": "Nikko Remigio (KC) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4372716/nikko-remigio",
+            "time": "2026-11-07T02:40Z"
+          },
+          {
+            "text": "Mansoor Delane (KC) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4880124/mansoor-delane",
+            "time": "2026-11-06T20:29Z"
+          },
+          {
+            "text": "Omarr Norman-Lott (KC) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4591008/omarr-norman-lott",
+            "time": "2026-10-29T01:48Z"
+          },
+          {
+            "text": "Nahshon Wright (NYJ) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4570470/nahshon-wright",
+            "time": "2026-11-08T01:51Z"
+          },
+          {
+            "text": "Joseph Ossai (NYJ) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai",
+            "time": "2026-11-08T01:45Z"
+          },
+          {
+            "text": "Trevin Wallace (NYJ) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4683815/trevin-wallace",
+            "time": "2026-11-06T20:52Z"
+          },
+          {
+            "text": "Garrett Wilson (NYJ) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4569618/garrett-wilson",
+            "time": "2026-11-06T16:16Z"
+          },
+          {
+            "text": "Harrison Phillips (NYJ) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3117255/harrison-phillips",
+            "time": "2026-11-04T21:46Z"
+          }
+        ],
+        "weather": {
+          "tempF": 60,
+          "windMph": 6,
+          "windDirection": "WNW",
+          "precipProb": 0,
+          "periodStart": "2026-11-08T12:00:00-06:00",
+          "issuedAt": "2026-11-08T07:52:18+00:00",
+          "source": "https://api.weather.gov/gridpoints/EAX/44,51/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 7.5,
+                "price": -105,
+                "time": "2026-11-08T01:42:32Z"
+              },
+              "now": {
+                "line": 7.5,
+                "price": -105,
+                "time": "2026-11-08T11:49:22Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 6.5,
+                "price": -113,
+                "time": "2026-11-08T01:42:32Z"
+              },
+              "now": {
+                "line": 6.5,
+                "price": -113,
+                "time": "2026-11-08T11:49:22Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 7.5,
+            "price": -105,
+            "time": "2026-11-08T11:49:22Z"
+          }
+        },
+        "ours": {
+          "projection": 18.2,
+          "line": 7.5,
+          "market": "recYds",
+          "text": "Book says 7.5. I say 18.2.",
+          "snapshotAt": "2026-11-07T20:18:31Z"
+        },
+        "history": "Last 10 games: 5 of 10 over 7.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4871063/peter-woods",
+            "time": "2026-11-07T02:59Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4372716/nikko-remigio",
+            "time": "2026-11-07T02:40Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4880124/mansoor-delane",
+            "time": "2026-11-06T20:29Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4591008/omarr-norman-lott",
+            "time": "2026-10-29T01:48Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4570470/nahshon-wright",
+            "time": "2026-11-08T01:51Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai",
+            "time": "2026-11-08T01:45Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4683815/trevin-wallace",
+            "time": "2026-11-06T20:52Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4569618/garrett-wilson",
+            "time": "2026-11-06T16:16Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3117255/harrison-phillips",
+            "time": "2026-11-04T21:46Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/EAX/44,51/forecast/hourly",
+            "time": "2026-11-08T07:52:18+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873045",
+            "time": "2026-11-08T13:33:57Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-08T13:33:57Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-08T13:47:32Z"
+    }
+  ]
+}
