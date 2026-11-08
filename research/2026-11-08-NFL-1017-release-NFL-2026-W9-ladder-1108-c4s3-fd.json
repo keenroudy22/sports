@@ -1,0 +1,198 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-08T15:17:05Z",
+  "summary": "Released 1: Ladder step 3: 2 legs at FanDuel -178 at FanDuel.",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "NFL-2026-W9-ladder-1108-c4s3-fd",
+      "title": "Ladder step 3: 2 legs at FanDuel",
+      "status": "active",
+      "favorite": false,
+      "parlayType": "ladder",
+      "riskUnits": 0.25,
+      "ladder": {
+        "run": 4,
+        "step": 3,
+        "stake": 76,
+        "payout": 119,
+        "banked": 34,
+        "bankThisWin": 24,
+        "bankedAfter": 58,
+        "nextStake": 95,
+        "totalAfter": 153,
+        "bankPercent": 20,
+        "ridePercent": 80,
+        "start": 50,
+        "goal": 1000
+      },
+      "legs": [
+        {
+          "gameId": "NFL-401873045",
+          "direction": "home",
+          "line": -2.5,
+          "mainLine": -9.5,
+          "title": "Kansas City -2.5",
+          "kickoff": "2026-11-08T18:00Z",
+          "source": "https://in.sportsbook.fanduel.com/football/nfl/new-york-jets-@-kansas-city-chiefs-36244871",
+          "researchCase": {
+            "why": "Mahomes, Kelce and Rice cleared the final report; require only a three-point home win against a Jets offense missing Garrett Wilson.",
+            "risk": "Chiefs are missing Woods, Norman-Lott and Delane; a close upset still loses the leg.",
+            "availability": "Mahomes, Kelce and Rice full Friday without a game designation; Garrett Wilson and Trevin Wallace out.",
+            "sources": [
+              {
+                "url": "https://www.chiefs.com/news/week-9-injury-report-jets-vs-chiefs",
+                "fact": "Official Friday report clears Mahomes, Kelce and Rice and lists Garrett Wilson out.",
+                "checkedAt": "2026-11-08T13:54:21.718121Z"
+              }
+            ]
+          },
+          "odds": -400,
+          "book": "FanDuel",
+          "alternate": true,
+          "marketType": "spread",
+          "marketWindow": "Full game",
+          "observedAt": "2026-11-08T15:05:58.248163Z"
+        },
+        {
+          "gameId": "NFL-401873044",
+          "direction": "away",
+          "line": 6.5,
+          "mainLine": -3,
+          "title": "New York +6.5",
+          "kickoff": "2026-11-08T18:00Z",
+          "source": "https://in.sportsbook.fanduel.com/football/nfl/new-york-giants-@-philadelphia-eagles-36244873",
+          "researchCase": {
+            "why": "Philadelphia is missing DeVonta Smith and Dontayvion Wicks; taking the Giants through a six-point loss rather than laying their main spread.",
+            "risk": "Barkley has no game designation and can keep Philadelphia competitive; Skattebo is doubtful for New York.",
+            "availability": "Both final team reports reviewed; Nabers no game designation, Skattebo doubtful, Smith and Wicks out.",
+            "sources": [
+              {
+                "url": "https://www.giants.com/news/giants-vs-eagles-week-9-injury-report-cam-skattebo-abdul-carter",
+                "fact": "Giants final report: Skattebo doubtful; Eagles Smith and Wicks out.",
+                "checkedAt": "2026-11-08T13:54:21.718121Z"
+              }
+            ]
+          },
+          "odds": -400,
+          "book": "FanDuel",
+          "alternate": true,
+          "marketType": "spread",
+          "marketWindow": "Full game",
+          "observedAt": "2026-11-08T15:05:58.248163Z"
+        }
+      ],
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "NFL-401873045",
+        "NFL-401873044"
+      ],
+      "book": "FanDuel",
+      "odds": -178,
+      "quotedAt": "2026-11-08T15:05:58.248163Z",
+      "priceEstimated": false,
+      "expiresAt": "2026-11-08T17:05:58Z",
+      "quoteType": "sportsbook",
+      "confidence": 1,
+      "edge": "Desk-researched alternate ticket. No validated win probability or positive-EV claim.",
+      "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://in.sportsbook.fanduel.com/football/nfl/new-york-giants-@-philadelphia-eagles-36244873",
+        "https://www.chiefs.com/news/week-9-injury-report-jets-vs-chiefs",
+        "https://www.espn.com/nfl/game/_/gameId/401873044",
+        "https://www.espn.com/nfl/game/_/gameId/401873045",
+        "https://www.giants.com/news/giants-vs-eagles-week-9-injury-report-cam-skattebo-abdul-carter"
+      ],
+      "selectionMethod": "sourced-climb-review-v1",
+      "researchReview": {
+        "method": "sourced-climb-review-v1",
+        "reviewer": "kookn-desk",
+        "reviewedAt": "2026-11-08T15:05:58.248163Z",
+        "ticketVerified": true,
+        "ticketSource": "https://in.sportsbook.fanduel.com/football/nfl/new-york-giants-@-philadelphia-eagles-36244873",
+        "receipt": "FanDuel visible betslip rechecked during release review: Chiefs (-2.5) -400; Giants (+6.5) -400; 2 leg Parlay -178. Giants main spread -3 (-105), Eagles +3 (-115). No amount entered or wager submitted."
+      },
+      "why": "Mahomes, Kelce and Rice cleared the final report; require only a three-point home win against a Jets offense missing Garrett Wilson. Philadelphia is missing DeVonta Smith and Dontayvion Wicks; taking the Giants through a six-point loss rather than laying their main spread.",
+      "risks": [
+        "Chiefs are missing Woods, Norman-Lott and Delane; a close upset still loses the leg.",
+        "Barkley has no game designation and can keep Philadelphia competitive; Skattebo is doubtful for New York."
+      ],
+      "risk": "Chiefs are missing Woods, Norman-Lott and Delane; a close upset still loses the leg. Barkley has no game designation and can keep Philadelphia competitive; Skattebo is doubtful for New York. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+      "jurisdictionVerified": false,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Mahomes, Kelce and Rice cleared the final report; require only a three-point home win against a Jets offense missing Garrett Wilson. Philadelphia is missing DeVonta Smith and Dontayvion Wicks; taking the Giants through a six-point loss rather than laying their main spread.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-11-08T15:16:15Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Chiefs are missing Woods, Norman-Lott and Delane; a close upset still loses the leg. Barkley has no game designation and can keep Philadelphia competitive; Skattebo is doubtful for New York. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-11-08T15:16:15Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "NFL-401873045",
+              "title": "Kansas City -2.5",
+              "line": -2.5,
+              "price": -400,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "NFL-401873044",
+              "title": "New York +6.5",
+              "line": 6.5,
+              "price": -400,
+              "book": "FanDuel"
+            }
+          ],
+          "best": {
+            "book": "FanDuel",
+            "price": -178,
+            "time": "2026-11-08T15:05:58.248163Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://in.sportsbook.fanduel.com/football/nfl/new-york-giants-@-philadelphia-eagles-36244873",
+            "time": "2026-11-08T15:16:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.chiefs.com/news/week-9-injury-report-jets-vs-chiefs",
+            "time": "2026-11-08T15:16:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873044",
+            "time": "2026-11-08T15:16:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873045",
+            "time": "2026-11-08T15:16:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.giants.com/news/giants-vs-eagles-week-9-injury-report-cam-skattebo-abdul-carter",
+            "time": "2026-11-08T15:16:15Z"
+          }
+        ],
+        "partial": true
+      },
+      "publishedAt": "2026-11-08T15:17:05Z"
+    }
+  ]
+}
