@@ -1,0 +1,808 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-08T21:19:19Z",
+  "targetWeek": 9,
+  "summary": "Research update for Nov 8: Settled 3: Saquon Barkley UNDER 1.5 receptions win; Puka Nacua OVER 8.5 receptions win; Ladder step 3: 2 legs at FanDuel win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "3929630",
+      "market": "rec",
+      "line": 1.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401873044"
+      ],
+      "book": "DraftKings",
+      "odds": 106,
+      "projection": 1.1,
+      "edge": "Price-checked chance 51.1% against the exact two-sided price; 48.5% needed at +106: +2.5 percentage points.",
+      "cutoff": "UNDER 1.5 at +106 or better; off the card at 1 or lower, or at -109 or worse at 1.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-07T11:30:34Z",
+      "quotedAt": "2026-11-08T09:26:07Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 4:26 AM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-08T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.618,
+        "chance": 0.511,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.485,
+        "edgePoints": 2.5,
+        "evPerUnit": 0.052,
+        "snapshotAt": "2026-11-07T11:30:34Z",
+        "probabilitySpec": "0a4cd5ffad31ea668705cb7aad117caf17ed66c53c1318d321cd3b889b940af8",
+        "evaluatedAt": "2026-11-08T11:50:09Z",
+        "fairChance": 0.458,
+        "anchoredChance": 0.511,
+        "gap": 5.3,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "New York Giants at Philadelphia Eagles",
+      "title": "Saquon Barkley UNDER 1.5 receptions",
+      "id": "NFL-2026-W9-barkley-under-1-5-rec-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873044",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 7 of 10 under 1.5.",
+        "context": [
+          "Role: 3rd of 5 PHI RBs by projected targets, 1.5 a game.",
+          "Defense: NYG allows 3.14 receptions a game to RBs, 3rd-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 1.1 against 1.5. The under reads 51.1% after adjustment from the raw 61.8%; 48.5% is needed at +106. Last 10 games: 7 of 10 under 1.5. Role: 3rd of 5 PHI RBs by projected targets, 1.5 a game. Defense: NYG allows 3.14 receptions a game to RBs, 3rd-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Under 1.5 in 7 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-08T11:50:09Z"
+          },
+          {
+            "text": "Book says 1.5. I say 1.1.",
+            "numbers": {
+              "projection": 1.1,
+              "line": 1.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-07T11:30:34Z"
+          },
+          {
+            "text": "4 of his last 5 games finished under 1.5 receptions.",
+            "numbers": {
+              "values": [
+                1,
+                1,
+                1,
+                2,
+                1
+              ],
+              "hits": 4,
+              "games": 5,
+              "line": 1.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-02T01:20Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-08T11:50:09Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Jonathan Jones (PHI) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2971027/jonathan-jones",
+            "time": "2026-11-07T03:50Z"
+          },
+          {
+            "text": "Michael Carter II (PHI) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4240456/michael-carter-ii",
+            "time": "2026-11-07T03:45Z"
+          },
+          {
+            "text": "Jihaad Campbell (PHI) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685287/jihaad-campbell",
+            "time": "2026-11-07T01:37Z"
+          },
+          {
+            "text": "Britain Covey (PHI) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3926231/britain-covey",
+            "time": "2026-11-07T01:32Z"
+          },
+          {
+            "text": "Tanner McKee (PHI) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685201/tanner-mckee",
+            "time": "2026-11-07T01:26Z"
+          },
+          {
+            "text": "DeVonta Smith (PHI) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+            "time": "2026-11-06T21:09Z"
+          },
+          {
+            "text": "Dontayvion Wicks (PHI) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks",
+            "time": "2026-11-06T21:02Z"
+          },
+          {
+            "text": "Cam Skattebo (NYG) is listed Doubtful.",
+            "numbers": {
+              "status": "Doubtful"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4696981/cam-skattebo",
+            "time": "2026-11-06T21:18Z"
+          },
+          {
+            "text": "Charlie Jones (NYG) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4257188/charlie-jones",
+            "time": "2026-11-04T21:27Z"
+          }
+        ],
+        "weather": {
+          "tempF": 60,
+          "windMph": 10,
+          "windDirection": "W",
+          "precipProb": 0,
+          "periodStart": "2026-11-08T13:00:00-05:00",
+          "issuedAt": "2026-11-08T07:00:03+00:00",
+          "source": "https://api.weather.gov/gridpoints/PHI/50,79/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 1.5,
+                "price": 106,
+                "time": "2026-11-08T01:42:32Z"
+              },
+              "now": {
+                "line": 1.5,
+                "price": 106,
+                "time": "2026-11-08T09:26:07Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 1.5,
+                "price": 104,
+                "time": "2026-11-08T01:42:32Z"
+              },
+              "now": {
+                "line": 1.5,
+                "price": 104,
+                "time": "2026-11-08T09:26:07Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 1.5,
+            "price": 106,
+            "time": "2026-11-08T09:26:07Z"
+          }
+        },
+        "ours": {
+          "projection": 1.1,
+          "line": 1.5,
+          "market": "rec",
+          "text": "Under 1.5 in 7 of his last 10 games.",
+          "snapshotAt": "2026-11-07T11:30:34Z"
+        },
+        "history": "Last 10 games: 7 of 10 under 1.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2971027/jonathan-jones",
+            "time": "2026-11-07T03:50Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4240456/michael-carter-ii",
+            "time": "2026-11-07T03:45Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685287/jihaad-campbell",
+            "time": "2026-11-07T01:37Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3926231/britain-covey",
+            "time": "2026-11-07T01:32Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685201/tanner-mckee",
+            "time": "2026-11-07T01:26Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+            "time": "2026-11-06T21:09Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks",
+            "time": "2026-11-06T21:02Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4696981/cam-skattebo",
+            "time": "2026-11-06T21:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4257188/charlie-jones",
+            "time": "2026-11-04T21:27Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/PHI/50,79/forecast/hourly",
+            "time": "2026-11-08T07:00:03+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873044",
+            "time": "2026-11-08T11:50:09Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-08T11:50:09Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-08T12:04:25Z",
+      "result": "win",
+      "actual": "Saquon Barkley: 0 receptions",
+      "settledAt": "2026-11-08T21:19:19Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873044",
+      "actualValue": 0,
+      "units": 1.06
+    },
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4426515",
+      "market": "rec",
+      "line": 8.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873043"
+      ],
+      "book": "FanDuel",
+      "odds": 106,
+      "projection": 9.7,
+      "edge": "Price-checked chance 51.0% against the exact two-sided price; 48.5% needed at +106: +2.5 percentage points.",
+      "cutoff": "OVER 8.5 at +106 or better; off the card at 9+, or at -109 or worse at 8.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-08T09:19:38Z",
+      "quotedAt": "2026-11-08T09:26:07Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 4:26 AM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-08T12:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.614,
+        "chance": 0.51,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.485,
+        "edgePoints": 2.5,
+        "evPerUnit": 0.051,
+        "snapshotAt": "2026-11-08T09:19:38Z",
+        "probabilitySpec": "0a4cd5ffad31ea668705cb7aad117caf17ed66c53c1318d321cd3b889b940af8",
+        "evaluatedAt": "2026-11-08T11:50:09Z",
+        "fairChance": 0.454,
+        "anchoredChance": 0.51,
+        "gap": 5.6,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Los Angeles Rams at Washington Commanders",
+      "title": "Puka Nacua OVER 8.5 receptions",
+      "id": "NFL-2026-W9-nacua-over-8-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873043",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 6 of 10 over 8.5.",
+        "context": [
+          "Role: 1st of 3 LAR WRs by projected targets, 13.3 a game.",
+          "Defense: WSH allows 12.57 receptions a game to WRs, 27th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 9.7 against 8.5. The over reads 51.0% after adjustment from the raw 61.4%; 48.5% is needed at +106. Last 10 games: 6 of 10 over 8.5. Role: 1st of 3 LAR WRs by projected targets, 13.3 a game. Defense: WSH allows 12.57 receptions a game to WRs, 27th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Over 8.5 in 6 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-08T11:50:09Z"
+          },
+          {
+            "text": "Book says 8.5. I say 9.7.",
+            "numbers": {
+              "projection": 9.7,
+              "line": 8.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-08T09:19:38Z"
+          },
+          {
+            "text": "3 of his last 5 games finished over 8.5 receptions.",
+            "numbers": {
+              "values": [
+                9,
+                17,
+                6,
+                8,
+                11
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 8.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-01T21:05Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-08T11:50:09Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Jer'Zhan Newton (WSH) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4430560/jerzhan-newton",
+            "time": "2026-11-07T20:53Z"
+          },
+          {
+            "text": "Treylon Burks (WSH) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4567156/treylon-burks",
+            "time": "2026-11-06T21:31Z"
+          },
+          {
+            "text": "Jordan Whittington (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4569382/jordan-whittington",
+            "time": "2026-11-07T01:46Z"
+          },
+          {
+            "text": "Colby Parkinson (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4242557/colby-parkinson",
+            "time": "2026-11-06T21:35Z"
+          },
+          {
+            "text": "Joe Cardona (LAR) is listed Doubtful.",
+            "numbers": {
+              "status": "Doubtful"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2575907/joe-cardona",
+            "time": "2026-11-06T21:27Z"
+          },
+          {
+            "text": "Kam Curl (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4242154/kam-curl",
+            "time": "2026-11-06T20:10Z"
+          },
+          {
+            "text": "Trent McDuffie (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426405/trent-mcduffie",
+            "time": "2026-11-06T19:57Z"
+          },
+          {
+            "text": "Grant Stuard (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4240255/grant-stuard",
+            "time": "2026-11-02T23:46Z"
+          }
+        ],
+        "weather": {
+          "tempF": 60,
+          "windMph": 12,
+          "windDirection": "W",
+          "precipProb": 0,
+          "periodStart": "2026-11-08T13:00:00-05:00",
+          "issuedAt": "2026-11-08T06:22:57+00:00",
+          "source": "https://api.weather.gov/gridpoints/LWX/101,74/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 8.5,
+                "price": 104,
+                "time": "2026-11-08T01:42:32Z"
+              },
+              "now": {
+                "line": 8.5,
+                "price": 104,
+                "time": "2026-11-08T09:26:07Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 8.5,
+                "price": 106,
+                "time": "2026-11-08T01:42:32Z"
+              },
+              "now": {
+                "line": 8.5,
+                "price": 106,
+                "time": "2026-11-08T09:26:07Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 8.5,
+            "price": 106,
+            "time": "2026-11-08T09:26:07Z"
+          }
+        },
+        "ours": {
+          "projection": 9.7,
+          "line": 8.5,
+          "market": "rec",
+          "text": "Over 8.5 in 6 of his last 10 games.",
+          "snapshotAt": "2026-11-08T09:19:38Z"
+        },
+        "history": "Last 10 games: 6 of 10 over 8.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4430560/jerzhan-newton",
+            "time": "2026-11-07T20:53Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4567156/treylon-burks",
+            "time": "2026-11-06T21:31Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4569382/jordan-whittington",
+            "time": "2026-11-07T01:46Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4242557/colby-parkinson",
+            "time": "2026-11-06T21:35Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2575907/joe-cardona",
+            "time": "2026-11-06T21:27Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4242154/kam-curl",
+            "time": "2026-11-06T20:10Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426405/trent-mcduffie",
+            "time": "2026-11-06T19:57Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4240255/grant-stuard",
+            "time": "2026-11-02T23:46Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/LWX/101,74/forecast/hourly",
+            "time": "2026-11-08T06:22:57+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873043",
+            "time": "2026-11-08T11:50:09Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-08T11:50:09Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-08T12:04:25Z",
+      "result": "win",
+      "actual": "Puka Nacua: 14 receptions",
+      "settledAt": "2026-11-08T21:19:19Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873043",
+      "actualValue": 14,
+      "units": 1.06
+    }
+  ],
+  "parlays": [
+    {
+      "id": "NFL-2026-W9-ladder-1108-c4s3-fd",
+      "title": "Ladder step 3: 2 legs at FanDuel",
+      "status": "settled",
+      "favorite": false,
+      "parlayType": "ladder",
+      "riskUnits": 0.25,
+      "ladder": {
+        "run": 4,
+        "step": 3,
+        "stake": 76,
+        "payout": 119,
+        "banked": 34,
+        "bankThisWin": 24,
+        "bankedAfter": 58,
+        "nextStake": 95,
+        "totalAfter": 153,
+        "bankPercent": 20,
+        "ridePercent": 80,
+        "start": 50,
+        "goal": 1000
+      },
+      "legs": [
+        {
+          "gameId": "NFL-401873045",
+          "direction": "home",
+          "line": -2.5,
+          "mainLine": -9.5,
+          "title": "Kansas City -2.5",
+          "kickoff": "2026-11-08T18:00Z",
+          "source": "https://in.sportsbook.fanduel.com/football/nfl/new-york-jets-@-kansas-city-chiefs-36244871",
+          "researchCase": {
+            "why": "Mahomes, Kelce and Rice cleared the final report; require only a three-point home win against a Jets offense missing Garrett Wilson.",
+            "risk": "Chiefs are missing Woods, Norman-Lott and Delane; a close upset still loses the leg.",
+            "availability": "Mahomes, Kelce and Rice full Friday without a game designation; Garrett Wilson and Trevin Wallace out.",
+            "sources": [
+              {
+                "url": "https://www.chiefs.com/news/week-9-injury-report-jets-vs-chiefs",
+                "fact": "Official Friday report clears Mahomes, Kelce and Rice and lists Garrett Wilson out.",
+                "checkedAt": "2026-11-08T13:54:21.718121Z"
+              }
+            ]
+          },
+          "odds": -400,
+          "book": "FanDuel",
+          "alternate": true,
+          "marketType": "spread",
+          "marketWindow": "Full game",
+          "observedAt": "2026-11-08T15:05:58.248163Z"
+        },
+        {
+          "gameId": "NFL-401873044",
+          "direction": "away",
+          "line": 6.5,
+          "mainLine": -3,
+          "title": "New York +6.5",
+          "kickoff": "2026-11-08T18:00Z",
+          "source": "https://in.sportsbook.fanduel.com/football/nfl/new-york-giants-@-philadelphia-eagles-36244873",
+          "researchCase": {
+            "why": "Philadelphia is missing DeVonta Smith and Dontayvion Wicks; taking the Giants through a six-point loss rather than laying their main spread.",
+            "risk": "Barkley has no game designation and can keep Philadelphia competitive; Skattebo is doubtful for New York.",
+            "availability": "Both final team reports reviewed; Nabers no game designation, Skattebo doubtful, Smith and Wicks out.",
+            "sources": [
+              {
+                "url": "https://www.giants.com/news/giants-vs-eagles-week-9-injury-report-cam-skattebo-abdul-carter",
+                "fact": "Giants final report: Skattebo doubtful; Eagles Smith and Wicks out.",
+                "checkedAt": "2026-11-08T13:54:21.718121Z"
+              }
+            ]
+          },
+          "odds": -400,
+          "book": "FanDuel",
+          "alternate": true,
+          "marketType": "spread",
+          "marketWindow": "Full game",
+          "observedAt": "2026-11-08T15:05:58.248163Z"
+        }
+      ],
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "NFL-401873045",
+        "NFL-401873044"
+      ],
+      "book": "FanDuel",
+      "odds": -178,
+      "quotedAt": "2026-11-08T15:05:58.248163Z",
+      "priceEstimated": false,
+      "expiresAt": "2026-11-08T17:05:58Z",
+      "quoteType": "sportsbook",
+      "confidence": 1,
+      "edge": "Desk-researched alternate ticket. No validated win probability or positive-EV claim.",
+      "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://in.sportsbook.fanduel.com/football/nfl/new-york-giants-@-philadelphia-eagles-36244873",
+        "https://www.chiefs.com/news/week-9-injury-report-jets-vs-chiefs",
+        "https://www.espn.com/nfl/game/_/gameId/401873044",
+        "https://www.espn.com/nfl/game/_/gameId/401873045",
+        "https://www.giants.com/news/giants-vs-eagles-week-9-injury-report-cam-skattebo-abdul-carter"
+      ],
+      "selectionMethod": "sourced-climb-review-v1",
+      "researchReview": {
+        "method": "sourced-climb-review-v1",
+        "reviewer": "kookn-desk",
+        "reviewedAt": "2026-11-08T15:05:58.248163Z",
+        "ticketVerified": true,
+        "ticketSource": "https://in.sportsbook.fanduel.com/football/nfl/new-york-giants-@-philadelphia-eagles-36244873",
+        "receipt": "FanDuel visible betslip rechecked during release review: Chiefs (-2.5) -400; Giants (+6.5) -400; 2 leg Parlay -178. Giants main spread -3 (-105), Eagles +3 (-115). No amount entered or wager submitted."
+      },
+      "why": "Mahomes, Kelce and Rice cleared the final report; require only a three-point home win against a Jets offense missing Garrett Wilson. Philadelphia is missing DeVonta Smith and Dontayvion Wicks; taking the Giants through a six-point loss rather than laying their main spread.",
+      "risks": [
+        "Chiefs are missing Woods, Norman-Lott and Delane; a close upset still loses the leg.",
+        "Barkley has no game designation and can keep Philadelphia competitive; Skattebo is doubtful for New York."
+      ],
+      "risk": "Chiefs are missing Woods, Norman-Lott and Delane; a close upset still loses the leg. Barkley has no game designation and can keep Philadelphia competitive; Skattebo is doubtful for New York. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+      "jurisdictionVerified": false,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Mahomes, Kelce and Rice cleared the final report; require only a three-point home win against a Jets offense missing Garrett Wilson. Philadelphia is missing DeVonta Smith and Dontayvion Wicks; taking the Giants through a six-point loss rather than laying their main spread.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-11-08T15:16:15Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Chiefs are missing Woods, Norman-Lott and Delane; a close upset still loses the leg. Barkley has no game designation and can keep Philadelphia competitive; Skattebo is doubtful for New York. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-11-08T15:16:15Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "NFL-401873045",
+              "title": "Kansas City -2.5",
+              "line": -2.5,
+              "price": -400,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "NFL-401873044",
+              "title": "New York +6.5",
+              "line": 6.5,
+              "price": -400,
+              "book": "FanDuel"
+            }
+          ],
+          "best": {
+            "book": "FanDuel",
+            "price": -178,
+            "time": "2026-11-08T15:05:58.248163Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://in.sportsbook.fanduel.com/football/nfl/new-york-giants-@-philadelphia-eagles-36244873",
+            "time": "2026-11-08T15:16:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.chiefs.com/news/week-9-injury-report-jets-vs-chiefs",
+            "time": "2026-11-08T15:16:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873044",
+            "time": "2026-11-08T15:16:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873045",
+            "time": "2026-11-08T15:16:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.giants.com/news/giants-vs-eagles-week-9-injury-report-cam-skattebo-abdul-carter",
+            "time": "2026-11-08T15:16:15Z"
+          }
+        ],
+        "partial": true
+      },
+      "publishedAt": "2026-11-08T15:17:05Z",
+      "result": "win",
+      "actual": "all 2 legs won",
+      "settledAt": "2026-11-08T21:19:19Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873045",
+      "settlementReason": "Every leg won.",
+      "units": 0.14
+    }
+  ]
+}
