@@ -1,7 +1,7 @@
 import sys
 import unittest
 import tempfile
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -25,6 +25,36 @@ def context(**extra):
 
 
 class StakingTests(unittest.TestCase):
+    def test_owner_daily_five_target_and_big_slate_capacity_are_prospective(self):
+        now=datetime(2026,11,9,15,tzinfo=timezone.utc)
+        self.assertEqual(staking.limit(now.date(),{},now),5)
+        sunday=now.date()-timedelta(days=1)
+        self.assertEqual(staking.limit(sunday,{},now),8)
+        games={str(i):dict(league='NBA',kickoff='2026-11-09T23:00:00Z') for i in range(8)}
+        self.assertEqual(staking.limit(now.date(),games,now),8)
+        before=staking.CAP_EFFECTIVE-timedelta(seconds=1)
+        self.assertEqual(staking.limit(sunday,{},before),5)
+        self.assertEqual(staking.limit(datetime(2026,10,23).date(),{},now),3)
+
+    def test_same_day_step4_requires_step3_win_and_exact_banked_rollover(self):
+        ctx = context();ctx.now=datetime(2026,11,8,21,tzinfo=timezone.utc)
+        start='2026-11-08T18:00:00Z'
+        ctx.first={str(i):dict(pick(str(i),1),kickoff=start) for i in range(4)}
+        prior='NFL-2026-W9-ladder-1108-c4s3-fd'
+        ctx.first[prior]=dict(pick(prior),kickoff=start,parlayType='ladder',ladder=dict(stake=76,nextStake=95))
+        rung=dict(pick('NFL-2026-W9-ladder-1108-c4s4-fd'),kickoff='2026-11-09T01:20:00Z',
+                  parlayType='ladder',ladder=dict(run=4,step=4,stake=95))
+        self.assertIsNotNone(staking.check(rung,ctx))
+        ctx.latest={prior:dict(result='loss')}
+        self.assertIsNotNone(staking.check(rung,ctx))
+        ctx.latest={prior:dict(result='win')}
+        self.assertIsNone(staking.check(rung,ctx))
+        for stake in (96,50):
+            self.assertIsNotNone(staking.check(dict(rung,ladder=dict(run=4,step=4,stake=stake)),ctx))
+        self.assertIsNotNone(staking.check(dict(rung,id='NFL-2026-W9-ladder-1108-c4s5-fd'),ctx))
+        ctx.first['extra']=dict(pick('extra',.01),kickoff=start)
+        self.assertIn('exceeds 10.84u',staking.check(rung,ctx))
+
     def test_nov8_owner_exception_is_exact_step_and_date_only(self):
         ctx = context()
         ctx.now = datetime(2026, 11, 8, 13, tzinfo=timezone.utc)
@@ -43,7 +73,8 @@ class StakingTests(unittest.TestCase):
         ctx.first[rung['id']] = dict(rung, result='win')
         self.assertIn('exceeds 5u', staking.check(dict(pick('new', 1), kickoff=start), ctx))
         ctx.now = datetime(2026, 11, 9, 13, tzinfo=timezone.utc)
-        self.assertIn('exceeds 5u', staking.check(rung, ctx))
+        ctx.first['extra'] = dict(pick('extra', 1), kickoff=start)
+        self.assertIn('exceeds 8u', staking.check(rung, ctx))
 
     def test_regular_nba_and_football_share_the_straight_count_ceiling(self):
         ctx=context();ctx.now=datetime(2026,10,28,19,tzinfo=timezone.utc)

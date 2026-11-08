@@ -749,7 +749,7 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
               'segments': segments, 'climbValidation': climb_validation_report,
               'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
               'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book),
-              'cardThemes': post_themes(log_book), 'engagementScorecard': engagement_scorecard(log_book),
+              'cardThemes': post_themes(log_book), 'engagementScorecard': engagement_scorecard(log_book, now=now),
               'matchups': matchup_scorecard(rows),
               'tickets': ticket_scorecard(first_picks, latest_picks, log_book),
               'model': model_findings(), 'changes': changes,

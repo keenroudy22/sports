@@ -11,6 +11,7 @@ CURRENT_VERSION = '2026-10-29-one-two-unit-shared-cap'
 CURRENT_EFFECTIVE = datetime.fromisoformat('2026-10-29T13:28:41+00:00')
 EASTERN = ZoneInfo('America/New_York')
 OWNER_UNIT = 25  # Private Climb dollar-to-exposure conversion; never rescale old results.
+CAP_EFFECTIVE = datetime.fromisoformat('2026-11-08T15:30:00+00:00')
 
 
 def active(now):
@@ -76,10 +77,18 @@ def units(pick):
     return float(value) / OWNER_UNIT if climb else float(value)
 
 
-def limit(on, games):
+def large_slate(on, games):
     # Eight eligible-sport games is the existing definition of a large slate.
     count = sum(g.get('league') in ('NFL', 'CFB', 'NBA') and day(g, {}) == on for g in games.values())
-    return 5 if on.weekday() in (5, 6) or count >= 8 else 3
+    return on.weekday() in (5, 6) or count >= 8
+
+
+def limit(on, games, now=None):
+    large = large_slate(on, games)
+    now = now or datetime.now(CAP_EFFECTIVE.tzinfo)
+    if now >= CAP_EFFECTIVE and on >= CAP_EFFECTIVE.astimezone(EASTERN).date():
+        return 8 if large else 5
+    return 5 if large else 3
 
 
 def check(candidate, ctx):
@@ -104,7 +113,7 @@ def check(candidate, ctx):
         used += value
         day_rows.append(row)
     value = units(candidate)
-    ceiling = limit(on, games)
+    ceiling = limit(on, games, ctx.now)
     # Owner's Nov8 follow-up delegates this full rollover after the fourth
     # straight released. This allowance remains for this exact Step3 only. It
     # neither replenishes today's budget nor authorizes a later Step4.
@@ -116,7 +125,23 @@ def check(candidate, ctx):
             and info.get('run') == 4 and info.get('step') == 3
             and type(info.get('stake')) is int and info['stake'] == 76
             and not info.get('stakeAdjustment')):
-        ceiling = 7.04
+        ceiling = max(ceiling, 7.04)
+    # The owner also delegates a later Step4 only if today's Step3 actually
+    # wins. Allow its recorded 80% rollover, never a fresh stake or a fifth
+    # step. All quote, source, timing and one-open-step gates still apply.
+    prior_id = 'NFL-2026-W9-ladder-1108-c4s3-fd'
+    prior = {**ctx.first.get(prior_id, {}), **getattr(ctx, 'latest', {}).get(prior_id, {})}
+    prior_info = prior.get('ladder') or {}
+    rollover = prior_info.get('nextStake')
+    if (on.isoformat() == '2026-11-08' and ctx.now.astimezone(EASTERN).date() == on
+            and candidate.get('id') in ('NFL-2026-W9-ladder-1108-c4s4-fd', 'NFL-2026-W9-ladder-1108-c4s4-dk')
+            and candidate.get('parlayType') == 'ladder'
+            and info.get('run') == 4 and info.get('step') == 4
+            and prior.get('result') == 'win' and prior_info.get('stake') == 76
+            and type(rollover) is int and 0 < rollover <= 95
+            and type(info.get('stake')) is int and info['stake'] == rollover
+            and not info.get('stakeAdjustment')):
+        ceiling = max(ceiling, 7.04 + rollover/OWNER_UNIT)
     if value is None:
         return 'shared exposure: candidate stake unknown'
     if used + value > ceiling + 1e-9:
@@ -132,7 +157,7 @@ def check(candidate, ctx):
                 and not row.get('historicalImport'))
     if (nba_pick_policy.active(ctx.now) and straight(candidate)
             and (league(candidate) in ('NBA','CBB') or any(league(r) in ('NBA','CBB') for r in day_rows))):
-        maximum=8 if ceiling==5 else 5
+        maximum=8 if large_slate(on, games) else 5
         count=sum(straight(r) for r in day_rows)
         if count>=maximum:
             return f'shared exposure: {count} straights already reserved; daily straight-count cap is {maximum}'

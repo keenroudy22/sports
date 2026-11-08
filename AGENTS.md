@@ -1,3 +1,23 @@
+# November8 owner delegation — daily card and conditional rollover
+
+The owner delegates selection and reasonable big-slate expansion: target five
+qualifying straights, NBA during quieter football weekdays and NFL/weekend CFB
+coverage, without forcing a quota or requesting repeated routine approval.
+Ordinary Best Bets remain1u; Chef’s Picks remain2u. Prospective shared exposure
+from2026-11-08T15:30Z is5u on regular days and8u on weekends/eight-game slates.
+Historical limits, stakes and losses remain intact; this is not model approval.
+
+For Nov8 only, Climb4 Step3 rides the full76 under unchanged80/20 banking; the
+owner revoked the earlier25 ride/51 additional-bank idea. A later Step4 may use
+only the actual recorded80% return after Step3 is officially graded a win,
+through the tested exact-date/step allowance. No new funding, fifth step or
+extra straight is authorized by that narrow allowance. Current-source review,
+actual ticket price, one-open-step, timing and delivery checks remain mandatory.
+The existing one-time Sunday Climb job is repurposed for15:40 late review; no new
+recurring poll/feed job. The daily/weekly jobs retain their existing schedules
+and now include dated engagement coverage and the owner’s specific-fact voice.
+Code decisions require canonical release and actual receipts before shipped claims.
+
 # November4 NBA attended publishing follow-through
 
 For an admitted NBA Pick already sent to Discord during the free API hold, use
