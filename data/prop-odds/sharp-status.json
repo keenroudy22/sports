@@ -1,420 +1,54 @@
 {
- "at": "2026-11-08T02:50:12Z",
+ "at": "2026-11-08T09:20:25Z",
  "confirmed": {
-  "CFB-401860912": "2026-11-08T02:50:49Z",
-  "CFB-401864535": "2026-11-08T02:50:49Z",
-  "NFL-401873038": "2026-11-08T02:55:54Z",
-  "NFL-401873039": "2026-11-08T02:55:54Z",
-  "NFL-401873040": "2026-11-08T02:55:54Z",
-  "NFL-401873041": "2026-11-08T02:55:54Z",
-  "NFL-401873042": "2026-11-08T02:55:54Z",
-  "NFL-401873043": "2026-11-08T02:55:54Z",
-  "NFL-401873044": "2026-11-08T02:55:54Z",
-  "NFL-401873045": "2026-11-08T02:55:54Z",
-  "NFL-401873046": "2026-11-08T02:55:54Z",
-  "NFL-401873047": "2026-11-08T02:55:54Z"
+  "NFL-401873038": "2026-11-08T09:26:07Z",
+  "NFL-401873039": "2026-11-08T09:26:07Z",
+  "NFL-401873040": "2026-11-08T09:26:07Z",
+  "NFL-401873041": "2026-11-08T09:26:07Z",
+  "NFL-401873042": "2026-11-08T09:26:07Z",
+  "NFL-401873043": "2026-11-08T09:26:07Z",
+  "NFL-401873044": "2026-11-08T09:26:07Z",
+  "NFL-401873045": "2026-11-08T09:26:07Z",
+  "NFL-401873046": "2026-11-08T09:26:07Z",
+  "NFL-401873047": "2026-11-08T09:26:07Z",
+  "NFL-401873048": "2026-11-08T09:26:07Z"
  },
  "leagues": {
-  "CFB": {
-   "books": {
-    "draftkings": 453,
-    "fanduel": 675
-   },
-   "eventsListed": 13,
-   "eventsMatched": 2,
-   "games": 2,
-   "marketTypes": {
-    "player_passing_+_rushing_yards": 25,
-    "player_passing_touchdowns": 29,
-    "player_passing_yards": 101,
-    "player_receiving_yards": 318,
-    "player_receptions": 50,
-    "player_rushing_yards": 240,
-    "point_spread": 365
-   },
-   "requestsLeft": 53,
-   "rows": 1128,
-   "slateGames": [
-    "Texas State Bobcats at Oregon State Beavers 2026-11-08T03:30Z",
-    "Wyoming Cowboys at UNLV Rebels 2026-11-08T03:30Z"
-   ],
-   "unmatchedEvents": [
-    {
-     "away": "Western Michigan Broncos",
-     "external": {
-      "draftkings": "34964153",
-      "fanatics": "5538162",
-      "fanduel": "36280892",
-      "fliff": "424869_c_p_209_prematch",
-      "kalshi": "KXNCAAFSPREAD-26NOV10WMUAKR",
-      "novig": "01a19ecd-7afd-7422-bd81-e52779ab87a5",
-      "onexbet": "768314506",
-      "polymarket_us": "cfb-wmich-akron-2026-11-10",
-      "prophetx": "1704709831",
-      "rebet": "sr:match:70899054",
-      "smarkets": "45418405",
-      "thescorebet": "StandardEvent:03bf3d16-6a83-40ad-8c1b-a38de4300a71"
-     },
-     "home": "Akron Zips",
-     "sample": {
-      "away_team": "Western Michigan Broncos",
-      "home_team": "Akron Zips",
-      "markets": [
-       "1st_half_correct_score",
-       "1st_half_moneyline_3-way",
-       "correct_score",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-11-11T00:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Kent State Golden Flashes",
-     "external": {
-      "draftkings": "34964152",
-      "fanatics": "5538160",
-      "fanduel": "36280893",
-      "fliff": "424868_c_p_209_prematch",
-      "kalshi": "KXNCAAFSPREAD-26NOV10KENTBGSU",
-      "novig": "01a19ecd-7c25-7343-bca6-40529dc9dafe",
-      "onexbet": "768313662",
-      "polymarket_us": "cfb-kentst-bowlgr-2026-11-10",
-      "prophetx": "1704709830",
-      "rebet": "sr:match:70899052",
-      "smarkets": "45420669",
-      "thescorebet": "StandardEvent:8ea9dcd1-aca1-485b-97a5-3570e470e917"
-     },
-     "home": "Bowling Green Falcons",
-     "sample": {
-      "away_team": "Kent State Golden Flashes",
-      "home_team": "Bowling Green Falcons",
-      "markets": [
-       "1st_half_correct_score",
-       "correct_score",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-11-11T00:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Ohio",
-     "external": {
-      "draftkings": "34982373",
-      "fanatics": "5538164",
-      "fanduel": "36280926",
-      "fliff": "424870_c_p_209_prematch",
-      "kalshi": "KXNCAAFSPREAD-26NOV10OHIOMOH",
-      "novig": "01a19f04-07c0-7923-85f0-6b9a235c7cc4",
-      "onexbet": "768315345",
-      "polymarket_us": "cfb-ohio-miaoh-2026-11-10",
-      "prophetx": "1704709829",
-      "rebet": "sr:match:70918996",
-      "smarkets": "45418407",
-      "thescorebet": "StandardEvent:9601f6ec-cfb2-4e87-ad28-7637ec4e5bad"
-     },
-     "home": "Miami Ohio",
-     "sample": {
-      "away_team": "Ohio",
-      "home_team": "Miami Ohio",
-      "markets": [
-       "1st_half_correct_score",
-       "1st_half_moneyline_3-way",
-       "correct_score",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-11-11T01:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Buffalo Bulls",
-     "external": {
-      "draftkings": "34964154",
-      "fanatics": "5545221",
-      "fanduel": "36280934",
-      "fliff": "424871_c_p_209_prematch",
-      "kalshi": "KXNCAAFGAME-26NOV11BUFFBALL",
-      "novig": "01a19fdf-23f0-7b03-8c61-76e7359264ae",
-      "onexbet": "768316551",
-      "polymarket_us": "cfb-buf-ballst-2026-11-11",
-      "prophetx": "1704709828",
-      "smarkets": "45418409"
-     },
-     "home": "Ball State Cardinals",
-     "sample": {
-      "away_team": "Buffalo Bulls",
-      "home_team": "Ball State Cardinals",
-      "markets": [
-       "1st_half_correct_score",
-       "correct_score",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-12T00:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Sacramento State",
-     "external": {
-      "caesars": "64af1141-baa4-49ef-9b81-e01ae50c1421",
-      "draftkings": "34964155",
-      "fanatics": "5545223",
-      "fanduel": "36280936",
-      "fliff": "424872_c_p_209_prematch",
-      "kalshi": "KXNCAAFGAME-26NOV11SACCMU",
-      "novig": "01a1a40e-a130-7323-99b7-b1951191a5b0",
-      "onexbet": "768316552",
-      "polymarket_us": "cfb-sacst-cmich-2026-11-11",
-      "prophetx": "1704709852",
-      "rebet": "sr:match:70899058",
-      "smarkets": "45418500",
-      "thescorebet": "StandardEvent:1ed34a43-0da3-4b44-a611-5e15da9299ec"
-     },
-     "home": "Central Michigan",
-     "sample": {
-      "away_team": "Sacramento State",
-      "home_team": "Central Michigan",
-      "markets": [
-       "1st_half_correct_score",
-       "correct_score",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-11-12T00:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Massachusetts",
-     "external": {
-      "draftkings": "34964156",
-      "fanduel": "36280928",
-      "fliff": "424636_c_p_209_prematch",
-      "kalshi": "KXNCAAFSPREAD-26NOV11MASSTOL",
-      "novig": "01a19fdf-2480-7f41-a07d-b89f568e70e4",
-      "onexbet": "768315344",
-      "polymarket_us": "cfb-umass-toledo-2026-11-11",
-      "prophetx": "1704709827",
-      "rebet": "sr:match:70971502",
-      "smarkets": "45418410"
-     },
-     "home": "Toledo",
-     "sample": {
-      "away_team": "Massachusetts",
-      "home_team": "Toledo",
-      "markets": [
-       "1st_half_correct_score",
-       "1st_half_moneyline_3-way",
-       "correct_score",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-11-12T00:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Illinois",
-     "external": {
-      "draftkings": "34964163",
-      "fanatics": "5563284",
-      "fanduel": "36285251",
-      "fliff": "424881_c_p_209_prematch",
-      "kalshi": "KXNCAAFSPREAD-26NOV13ILLUCLA",
-      "novig": "01a1aeab-5f1d-7353-966a-0e0855fbc508",
-      "onexbet": "768346426",
-      "polymarket_us": "cfb-ill-ucla-2026-11-13",
-      "prophetx": "1704709346"
-     },
-     "home": "UCLA",
-     "sample": {
-      "away_team": "Illinois",
-      "home_team": "UCLA",
-      "markets": [
-       "1st_half_correct_score",
-       "1st_half_moneyline_3-way",
-       "correct_score",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-14T02:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Texas",
-     "external": {
-      "fanduel": "36285327",
-      "fliff": "424832_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26NOV14TEXLSU",
-      "novig": "01a1af50-101b-7190-b4c2-68d8b6d88c0d",
-      "onexbet": "768348990",
-      "prophetx": "1704709377"
-     },
-     "home": "LSU",
-     "sample": {
-      "away_team": "Texas",
-      "home_team": "LSU",
-      "markets": [
-       "1st_half_moneyline_3-way",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-14T05:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "USC",
-     "external": {
-      "draftkings": "34226139",
-      "fanatics": "5571167",
-      "fanduel": "36277287",
-      "fliff": "424662_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26NOV14USCIND",
-      "novig": "01a1b2a4-466a-73d1-bbdd-1d7c8d5d7ec1",
-      "onexbet": "768020356",
-      "polymarket_us": "cfb-usc-ind-2026-11-14",
-      "prophetx": "1704709053",
-      "smarkets": "45418455"
-     },
-     "home": "Indiana",
-     "sample": {
-      "away_team": "USC",
-      "home_team": "Indiana",
-      "markets": [
-       "1st_half_moneyline_3-way",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-14T20:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Minnesota Golden Gophers",
-     "external": {
-      "fanatics": "5571105",
-      "fanduel": "36285378",
-      "kalshi": "KXNCAAFGAME-26NOV14MINNPSU",
-      "novig": "01a1b364-cf4c-7371-a66e-cc82ebc165b5",
-      "onexbet": "769020048",
-      "prophetx": "1704710890",
-      "smarkets": "45418449"
-     },
-     "home": "Penn State Nittany Lions",
-     "sample": {
-      "away_team": "Minnesota Golden Gophers",
-      "home_team": "Penn State Nittany Lions",
-      "markets": [
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-15T00:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "South Carolina Gamecocks",
-     "external": {
-      "fanatics": "5571111",
-      "fanduel": "36285386",
-      "kalshi": "KXNCAAFGAME-26NOV14SCARARK",
-      "novig": "01a1b380-2dad-72e3-91c8-80bb36ec194a",
-      "onexbet": "769011558",
-      "prophetx": "1704710855",
-      "smarkets": "45426871"
-     },
-     "home": "Arkansas Razorbacks",
-     "sample": {
-      "away_team": "South Carolina Gamecocks",
-      "home_team": "Arkansas Razorbacks",
-      "markets": [
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-15T00:45:00Z",
-     "type": "fixture"
-    }
-   ]
-  },
   "NFL": {
    "books": {
-    "draftkings": 5874,
-    "fanduel": 3878
+    "draftkings": 6629,
+    "fanduel": 4411
    },
    "eventsListed": 33,
    "eventsMatched": 14,
    "games": 14,
    "marketTypes": {
-    "player_assists": 148,
-    "player_extra_points_made": 36,
-    "player_fantasy_score": 124,
-    "player_field_goals_made": 36,
-    "player_interceptions": 40,
-    "player_kicking_points": 36,
-    "player_longest_passing_completion": 40,
-    "player_longest_reception": 206,
-    "player_longest_rush": 92,
-    "player_passing_+_rushing_yards": 36,
-    "player_passing_attempts": 40,
-    "player_passing_completions": 40,
-    "player_passing_touchdowns": 126,
-    "player_passing_yards": 737,
-    "player_receiving_yards": 2914,
-    "player_receptions": 1626,
-    "player_rushing_+_receiving_yards": 106,
-    "player_rushing_attempts": 60,
-    "player_rushing_yards": 1269,
-    "player_sacks": 165,
-    "player_tackles": 128,
-    "player_tackles_+_assists": 128,
-    "point_spread": 1619
+    "player_assists": 218,
+    "player_extra_points_made": 38,
+    "player_fantasy_score": 120,
+    "player_field_goals_made": 38,
+    "player_interceptions": 60,
+    "player_kicking_points": 38,
+    "player_longest_passing_completion": 44,
+    "player_longest_reception": 210,
+    "player_longest_rush": 100,
+    "player_passing_+_rushing_yards": 38,
+    "player_passing_attempts": 44,
+    "player_passing_completions": 44,
+    "player_passing_touchdowns": 149,
+    "player_passing_yards": 801,
+    "player_receiving_yards": 3261,
+    "player_receptions": 1850,
+    "player_rushing_+_receiving_yards": 118,
+    "player_rushing_attempts": 74,
+    "player_rushing_yards": 1407,
+    "player_sacks": 176,
+    "player_tackles": 218,
+    "player_tackles_+_assists": 218,
+    "point_spread": 1776
    },
    "requestsLeft": 0,
-   "rows": 9752,
+   "rows": 11040,
    "slateGames": [
     "Cincinnati Bengals at Atlanta Falcons 2026-11-08T14:30Z",
     "Cleveland Browns at New Orleans Saints 2026-11-08T18:00Z",
@@ -515,20 +149,29 @@
     {
      "away": "Washington Commanders",
      "external": {
+      "ballybet": "1028823932",
       "betonline": "491172765",
+      "betparx": "1028823932",
       "betrivers": "1028823932",
       "circa": "238309",
       "draftkings": "34118102",
       "fanduel": "36275757",
       "fliff": "407851_c_p_202_prematch",
       "galera": "21810313",
+      "gemini": "NFL-2611130115-WAS-NYG-M",
       "kalshi": "KXNFLTOTAL-26NOV12WASNYG",
       "novig": "01a1a3d7-9d33-7361-99bb-73a1d663face",
       "onexbet": "767778015",
+      "paddypower": "36275757",
+      "polymarket": "nfl_commanders_giants_2026-11-12_b3",
       "polymarket_us": "nfl-was-nyg-2026-11-12",
       "prophetx": "1700008776",
       "rebet": "sr:match:71516008",
+      "robinhood": "9641d810-8d5c-4363-9078-e8930c23ab03",
+      "skybet": "36275757",
       "smarkets": "45274634",
+      "sport888_it": "1028823932",
+      "sportzino": "sz-16564440",
       "stake": "cb45c7cb-455c-4fd0-a1aa-b7b011f77f1d"
      },
      "home": "New York Giants",
@@ -553,18 +196,25 @@
     {
      "away": "New England Patriots",
      "external": {
+      "ballybet": "1028824788",
       "betonline": "491172777",
+      "betparx": "1028824788",
       "betrivers": "1028824788",
       "circa": "238310",
       "draftkings": "34118220",
       "fanduel": "35605986",
+      "fliff": "391736_c_p_202_prematch",
       "galera": "21810314",
       "kalshi": "KXNFLGAME-26NOV15NEDET",
       "novig": "01a1a3d7-9d9e-7352-9f2b-e7ada243693d",
       "onexbet": "720841764",
-      "polymarket_us": "nfl-ne-det-2026-11-15",
+      "paddypower": "35605986",
+      "polymarket": "nfl_lions_patriots_2026-11-15_b1",
       "rebet": "sr:match:71488892",
+      "robinhood": "1d7a05a2-18d4-456b-8295-230adbb4ab49",
+      "skybet": "35605986",
       "smarkets": "45076218",
+      "sport888_it": "1028824788",
       "stake": "5a853fb5-f521-4987-bed9-35e98133a261"
      },
      "home": "Detroit Lions",
@@ -584,18 +234,25 @@
     {
      "away": "Buffalo Bills",
      "external": {
+      "ballybet": "1028824794",
       "betonline": "491172772",
+      "betparx": "1028824794",
       "betrivers": "1028824794",
       "circa": "238311",
       "draftkings": "34118183",
       "fanduel": "36275763",
+      "fliff": "407913_c_p_202_prematch",
       "galera": "21810330",
       "kalshi": "KXNFLGAME-26NOV15BUFNYJ",
       "novig": "01a1a3d7-9f92-7931-9bbb-45541be6a60d",
       "onexbet": "767778016",
-      "polymarket_us": "nfl-buf-nyj-2026-11-15",
+      "paddypower": "36275763",
+      "polymarket": "nfl_bills_jets_2026-11-15_b2",
       "rebet": "sr:match:71516020",
+      "robinhood": "7d173212-8e08-4354-b61c-ea4b6327a041",
+      "skybet": "36275763",
       "smarkets": "45274640",
+      "sport888_it": "1028824794",
       "stake": "9767cb1b-e5ee-4ed3-bc73-07ac076d2fc6"
      },
      "home": "New York Jets",
@@ -603,6 +260,7 @@
       "away_team": "Buffalo Bills",
       "home_team": "New York Jets",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -618,17 +276,24 @@
     {
      "away": "Houston Texans",
      "external": {
+      "ballybet": "1028824792",
       "betonline": "491172770",
+      "betparx": "1028824792",
       "betrivers": "1028824792",
       "circa": "238315",
       "draftkings": "34118093",
       "fanduel": "36275760",
+      "fliff": "407916_c_p_202_prematch",
       "galera": "21810312",
       "kalshi": "KXNFLGAME-26NOV15HOUCLE",
       "novig": "01a1a3d7-9e17-7f93-9dfc-f89d2482bd30",
       "onexbet": "767802606",
-      "polymarket_us": "nfl-hou-cle-2026-11-15",
+      "paddypower": "36275760",
+      "polymarket": "nfl_browns_texans_2026-11-15_b2",
+      "robinhood": "5c7309b8-6f01-4200-afbd-a1279d4a4a4b",
+      "skybet": "36275760",
       "smarkets": "45274636",
+      "sport888_it": "1028824792",
       "stake": "9f83f269-8d4c-46a9-8998-29eb705101ce"
      },
      "home": "Cleveland Browns",
@@ -652,19 +317,26 @@
     {
      "away": "Kansas City Chiefs",
      "external": {
+      "ballybet": "1028824789",
       "betonline": "491172771",
+      "betparx": "1028824789",
       "betrivers": "1028824789",
-      "caesars": "fad561f3-5b12-d9e7-0b0d-e27fd3c7262e",
       "circa": "238314",
       "draftkings": "34118132",
       "fanduel": "36275759",
+      "fliff": "407919_c_p_202_prematch",
       "galera": "21810323",
       "kalshi": "KXNFLGAME-26NOV15KCATL",
       "novig": "01a1a3d7-a006-7731-ab06-0e88439a7b96",
       "onexbet": "767778018",
+      "paddypower": "36275759",
+      "polymarket": "nfl_chiefs_falcons_2026-11-15_b2",
       "polymarket_us": "nfl-kc-atl-2026-11-15",
       "rebet": "sr:match:71516010",
+      "robinhood": "249ea27e-f822-457e-854d-3ffe1ce05b31",
+      "skybet": "36275759",
       "smarkets": "45274635",
+      "sport888_it": "1028824789",
       "stake": "05ed543d-e350-43d6-9ade-87e51436e035"
      },
      "home": "Atlanta Falcons",
@@ -688,18 +360,25 @@
     {
      "away": "Miami Dolphins",
      "external": {
+      "ballybet": "1028824793",
       "betonline": "491172767",
+      "betparx": "1028824793",
       "betrivers": "1028824793",
       "circa": "238313",
       "draftkings": "34118270",
       "fanduel": "36275761",
+      "fliff": "407917_c_p_202_prematch",
       "galera": "21810310",
       "kalshi": "KXNFLGAME-26NOV15MIAIND",
       "novig": "01a1a3d7-9e89-79b0-affc-c88bf2b9b2f6",
       "onexbet": "767802607",
-      "polymarket_us": "nfl-mia-ind-2026-11-15",
+      "paddypower": "36275761",
+      "polymarket": "nfl_colts_dolphins_2026-11-15_b2",
       "rebet": "sr:match:71516016",
+      "robinhood": "2de9c1c9-8577-404c-9c31-83d62d6ca70c",
+      "skybet": "36275761",
       "smarkets": "45274638",
+      "sport888_it": "1028824793",
       "stake": "f0a6c6de-d248-4d55-9259-02e5d0e1d45a"
      },
      "home": "Indianapolis Colts",
@@ -723,16 +402,23 @@
     {
      "away": "Jacksonville Jaguars",
      "external": {
+      "ballybet": "1028824797",
+      "betparx": "1028824797",
       "betrivers": "1028824797",
       "circa": "238312",
       "draftkings": "34118232",
       "fanduel": "36275762",
+      "fliff": "407914_c_p_202_prematch",
       "galera": "21810309",
       "kalshi": "KXNFLGAME-26NOV15JACTEN",
       "novig": "01a1a3d7-9f14-7460-b0f4-d36a12d665ee",
       "onexbet": "767850846",
-      "polymarket_us": "nfl-jax-ten-2026-11-15",
+      "paddypower": "36275762",
+      "polymarket": "nfl_jaguars_titans_2026-11-15_b2",
+      "robinhood": "c6a72aa2-0cdb-44bd-ad36-b4052fdbb51d",
+      "skybet": "36275762",
       "smarkets": "45274641",
+      "sport888_it": "1028824797",
       "stake": "f065baa6-6c79-4fa1-b33a-4797378ef3f0"
      },
      "home": "Tennessee Titans",

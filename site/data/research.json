@@ -56335,5 +56335,650 @@
         "publishedAt": "2026-11-07T22:49:24Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-08T03:44:25Z",
+    "targetWeek": 10,
+    "summary": "Research update for Nov 7: Settled 1: Air Force at Army over 43.5 win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 43.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401862823"
+        ],
+        "book": "BetRivers",
+        "odds": -105,
+        "projection": 53.3,
+        "edge": "Price-checked chance 58.2% against the exact two-sided price; 51.2% needed at -105: +7.0 percentage points.",
+        "cutoff": "OVER 43.5 at -105 or better; off the card at 45+, or at -120 or worse at 43.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-01T14:28:51Z",
+        "quotedAt": "2026-11-07T11:31:10Z",
+        "quoteType": "capture",
+        "quoteNote": "BetRivers's number and price from the 6:31 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-07T16:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.728,
+          "chance": 0.582,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.512,
+          "edgePoints": 7.0,
+          "evPerUnit": 0.136,
+          "snapshotAt": "2026-11-01T14:28:51Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-11-07T13:33:15Z",
+          "fairChance": 0.484,
+          "anchoredChance": 0.582,
+          "gap": 9.8,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Air Force Falcons at Army Black Knights",
+        "title": "Air Force at Army over 43.5",
+        "id": "CFB-2026-W10-afa-army-over-43-5-br",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862823",
+          "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+          "https://goairforcefalcons.com/news/2026/11/2/football-game-9-air-force-at-army-west-point"
+        ],
+        "why": "Model lean, our number only. We have the total at 53.3; the book is at 43.5. That makes the over 58.2%, and -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Air Force had not settled its quarterback plan for Army as of November 4: Evan Medders could return from turf toe, Kemper Hodges could play, or Howard Fisher IV could make his second consecutive start. Checked before publishing: Evan Medders could return from a turf toe injury for the Army game. The market: The spread opened -6 and is -4 at DraftKings, a move of 2 toward the away. The total opened 52.5 and is 43.5 at DraftKings, 9 toward the under. 6 books span -4 to -3.5 on the spread; the middle is -3.5. 6 books span 42.5 to 43.5 on the total; the middle is 43.5. Our spread is 4.2 points off, bigger than 57% of our past gaps. Gaps this size went 774-775 against the close in 3584 games. Our total is 9.8 points off, bigger than 98% of our past gaps. Gaps this size went 32-26 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Air Force held the ball for 41:54 against UConn, and one 19-play, 75-yard fourth-quarter drive took 11:37. Statistical counterpoint: Air Force averaged 59.1 passing yards per game and Army averaged 71.1 entering their matchup. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Army had surrendered an average of 36 points in its three losses and allowed a 50.5% third-down success rate."
+          ],
+          "cautions": [
+            "Air Force held the ball for 41:54 against UConn, and one 19-play, 75-yard fourth-quarter drive took 11:37.",
+            "Air Force averaged 59.1 passing yards per game and Army averaged 71.1 entering their matchup."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 43.5. I say 53.3.",
+              "numbers": {
+                "projection": 53.3,
+                "line": 43.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-01T14:28:51Z"
+            },
+            {
+              "text": "Army had surrendered an average of 36 points in its three losses and allowed a 50.5% third-down success rate.",
+              "numbers": {},
+              "source": "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+              "time": "2026-11-07T13:33:15Z"
+            },
+            {
+              "text": "Army had surrendered an average of 36 points in its three losses and allowed a 50.5% third-down success rate.",
+              "numbers": {},
+              "source": "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+              "time": "2026-11-07T13:33:15Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Air Force held the ball for 41:54 against UConn, and one 19-play, 75-yard fourth-quarter drive took 11:37.",
+              "numbers": {},
+              "source": "https://goairforcefalcons.com/news/2026/11/2/football-game-9-air-force-at-army-west-point",
+              "time": "2026-11-07T13:33:15Z"
+            },
+            {
+              "text": "Air Force averaged 59.1 passing yards per game and Army averaged 71.1 entering their matchup.",
+              "numbers": {},
+              "source": "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+              "time": "2026-11-07T13:33:15Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 48,
+            "windMph": 12,
+            "windDirection": "NW",
+            "precipProb": 17,
+            "periodStart": "2026-11-07T19:00:00-05:00",
+            "issuedAt": "2026-11-07T07:00:48+00:00",
+            "source": "https://api.weather.gov/gridpoints/OKX/30,73/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 52.5,
+                  "price": -110,
+                  "time": "2026-10-29T10:34:11Z"
+                },
+                "now": {
+                  "line": 43.5,
+                  "price": -112,
+                  "time": "2026-11-07T11:31:10Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 47.5,
+                  "price": -115,
+                  "time": "2026-11-02T11:45:46Z"
+                },
+                "now": {
+                  "line": 43.5,
+                  "price": -114,
+                  "time": "2026-11-07T11:31:10Z"
+                }
+              }
+            },
+            "best": {
+              "book": "BetRivers",
+              "line": 43.5,
+              "price": -105,
+              "time": "2026-11-07T11:31:10Z"
+            }
+          },
+          "ours": {
+            "projection": 53.3,
+            "line": 43.5,
+            "market": "total",
+            "text": "Book says 43.5. I say 53.3.",
+            "snapshotAt": "2026-11-01T14:28:51Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://goairforcefalcons.com/news/2026/11/2/football-game-9-air-force-at-army-west-point",
+              "time": "2026-11-07T13:33:15Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://www.denvergazette.com/2026/11/04/similarly-built-air-force-army-expect-another-close-matchup/",
+              "time": "2026-11-07T13:33:15Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/OKX/30,73/forecast/hourly",
+              "time": "2026-11-07T07:00:48+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401862823",
+              "time": "2026-11-07T13:33:15Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-07T13:49:27Z",
+        "result": "win",
+        "actual": "Air Force 24, Army 21",
+        "settledAt": "2026-11-08T03:44:25Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401862823",
+        "actualValue": 45,
+        "units": 0.952
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-08T03:55:12Z",
+    "targetWeek": 11,
+    "summary": "Research update for Nov 7: Settled 1: Arizona State MONEYLINE win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401856852"
+        ],
+        "book": "DraftKings",
+        "odds": -162,
+        "projection": 0.7,
+        "edge": "Price-checked chance 63.9% against the exact two-sided price; 61.8% needed at -162: +2.1 percentage points.",
+        "cutoff": "HOME 0 at -162 or better; off the card at -0.5 or lower, or at -177 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-01T00:22:15Z",
+        "quotedAt": "2026-11-07T22:06:36Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 5:06 PM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-08T00:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.724,
+          "chance": 0.639,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.618,
+          "edgePoints": 2.1,
+          "evPerUnit": 0.034,
+          "snapshotAt": "2026-11-01T00:22:15Z",
+          "probabilitySpec": "01c1ebbdbacb05398ddbe070e4dc33ac06c85897c60cd09425d79575ab170503",
+          "evaluatedAt": "2026-11-07T22:33:59Z",
+          "fairChance": 0.593,
+          "anchoredChance": 0.639,
+          "gap": 4.6,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "Colorado Buffaloes at Arizona State Sun Devils",
+        "title": "Arizona State MONEYLINE",
+        "id": "CFB-2026-W10-colo-asu-ml-home-0-dk",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856852",
+          "https://arizonasports.com/ncaa/arizona-state/asu-football/jake-fette-starter-kenny-dillingham-potential",
+          "https://www.si.com/college-football/qb-injury-tracker-week-10-aidan-chiles-maddux-madsen",
+          "https://thesundevils.com/news/2026/11/04/football-returns-home-for-tilt-against-colorado"
+        ],
+        "why": "Price-checked win chance 63.9%; -162 needs 61.8%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Arizona State coach Kenny Dillingham said Jake Fette had earned the starting quarterback job and was expected to start against Colorado. Checked before publishing: Mikey Keene was listed as probable against Colorado while working back from a right knee injury, and Sports Illustrated reported that he was expected to back up Jake Fette if able to play. The market: The spread opened -4 and is -3 at DraftKings, a move of 1 toward the away. The total opened 49.5 and is 47.5 at DraftKings, 2 toward the under. 6 books span -3.5 to -3 on the spread; the middle is -3.5. 6 books span 47.5 to 48.5 on the total; the middle is 48.5. Our spread is 6.7 points off, bigger than 76% of our past gaps. Gaps this size went 443-428 against the close in 3584 games. Our total is 6.1 points off, bigger than 86% of our past gaps. Gaps this size went 289-205 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Colorado's Richard Young rushed 24 times for 120 yards and two touchdowns in the overtime win over Kansas State. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Arizona State was 4-4 overall and 2-3 in the Big 12, while Colorado was 3-5 overall and 1-4 in the Big 12 entering the game.",
+            "Arizona State's Reed Harris had 804 receiving yards and eight touchdown receptions through eight games."
+          ],
+          "cautions": [
+            "Colorado's Richard Young rushed 24 times for 120 yards and two touchdowns in the overtime win over Kansas State."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Price-checked win chance 63.9%; this price needs 61.8%.",
+              "numbers": {
+                "chance": 0.639,
+                "breakEven": 0.618
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-11-07T22:06:36Z"
+            },
+            {
+              "text": "Arizona State was 4-4 overall and 2-3 in the Big 12, while Colorado was 3-5 overall and 1-4 in the Big 12 entering the game.",
+              "numbers": {},
+              "source": "https://thesundevils.com/news/2026/11/04/football-returns-home-for-tilt-against-colorado",
+              "time": "2026-11-07T22:33:59Z"
+            },
+            {
+              "text": "Arizona State's Reed Harris had 804 receiving yards and eight touchdown receptions through eight games.",
+              "numbers": {},
+              "source": "https://thesundevils.com/news/2026/11/04/football-returns-home-for-tilt-against-colorado",
+              "time": "2026-11-07T22:33:59Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Colorado's Richard Young rushed 24 times for 120 yards and two touchdowns in the overtime win over Kansas State.",
+              "numbers": {},
+              "source": "https://thesundevils.com/news/2026/11/04/football-returns-home-for-tilt-against-colorado",
+              "time": "2026-11-07T22:33:59Z"
+            },
+            {
+              "text": "Colorado's Richard Young rushed 24 times for 120 yards and two touchdowns in the overtime win over Kansas State.",
+              "numbers": {},
+              "source": "https://thesundevils.com/news/2026/11/04/football-returns-home-for-tilt-against-colorado",
+              "time": "2026-11-07T22:33:59Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 79,
+            "windMph": 0,
+            "windDirection": "",
+            "precipProb": 1,
+            "periodStart": "2026-11-07T17:00:00-07:00",
+            "issuedAt": "2026-11-07T08:32:16+00:00",
+            "source": "https://api.weather.gov/gridpoints/PSR/165,56/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -3.5,
+                  "price": -105,
+                  "time": "2026-11-02T11:45:46Z"
+                },
+                "now": {
+                  "line": -3.0,
+                  "price": -118,
+                  "time": "2026-11-07T16:34:35Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -3.5,
+                  "price": -112,
+                  "time": "2026-11-01T11:45:06Z"
+                },
+                "now": {
+                  "line": -3.5,
+                  "price": -102,
+                  "time": "2026-11-07T16:34:35Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": -162,
+              "time": "2026-11-07T22:06:36Z"
+            }
+          },
+          "ours": {
+            "projection": 0.7,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "Price-checked win chance 63.9%; this price needs 61.8%.",
+            "snapshotAt": "2026-11-01T00:22:15Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://thesundevils.com/news/2026/11/04/football-returns-home-for-tilt-against-colorado",
+              "time": "2026-11-07T22:33:59Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/PSR/165,56/forecast/hourly",
+              "time": "2026-11-07T08:32:16+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856852",
+              "time": "2026-11-07T22:33:59Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://arizonasports.com/ncaa/arizona-state/asu-football/jake-fette-starter-kenny-dillingham-potential",
+              "time": "2026-11-07T22:33:59Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.si.com/college-football/qb-injury-tracker-week-10-aidan-chiles-maddux-madsen",
+              "time": "2026-11-07T22:33:59Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-07T22:49:24Z",
+        "result": "win",
+        "actual": "Colorado 10, Arizona St 20",
+        "settledAt": "2026-11-08T03:55:12Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856852",
+        "actualValue": 10,
+        "units": 0.617
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-08T04:10:00Z",
+    "targetWeek": 11,
+    "summary": "Research update for Nov 7: Settled 1: Ole Miss MONEYLINE loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401856741"
+        ],
+        "book": "DraftKings",
+        "odds": 145,
+        "projection": 0.6,
+        "edge": "Price-checked chance 45.2% against the exact two-sided price; 40.8% needed at +145: +4.4 percentage points.",
+        "cutoff": "HOME 0 at +145 or better; off the card at -0.5 or lower, or at +130 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-01T14:28:51Z",
+        "quotedAt": "2026-11-07T11:30:05Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 6:30 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-07T13:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.567,
+          "chance": 0.452,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.408,
+          "edgePoints": 4.4,
+          "evPerUnit": 0.108,
+          "snapshotAt": "2026-11-01T14:28:51Z",
+          "probabilitySpec": "01c1ebbdbacb05398ddbe070e4dc33ac06c85897c60cd09425d79575ab170503",
+          "evaluatedAt": "2026-11-07T11:49:15Z",
+          "fairChance": 0.391,
+          "anchoredChance": 0.452,
+          "gap": 6.2,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "Georgia Bulldogs at Ole Miss Rebels",
+        "title": "Ole Miss MONEYLINE",
+        "id": "CFB-2026-W10-uga-miss-ml-home-0-dk",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856741",
+          "https://olemisssports.com/news/2026/11/2/football-vs-georgia-first-look",
+          "https://georgiadogs.com/news/2026/11/2/football-georgia-travels-to-oxford-to-take-on-ole-miss"
+        ],
+        "why": "Price-checked win chance 45.2%; +145 needs 40.8%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Ole Miss identifies Trinidad Chambliss as the quarterback leading its offense against Georgia. Checked before publishing: Ole Miss identifies Gunner Stockton as the quarterback heading Georgia's offense against the Rebels. The market: The spread opened +5.5 and is +3.5 at DraftKings, a move of 2 toward the home. The total opened 55.5 and is 56.5 at DraftKings, 1 toward the over. Our spread is 6.3 points off, bigger than 72% of our past gaps. Gaps this size went 506-488 against the close in 3584 games. Our total is 0 points off, bigger than 0% of our past gaps. Gaps this size went 1893-1692 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Georgia entered the game averaging 41.0 points and allowing 14.9 points per game, while Ole Miss averaged 37.1 points and allowed 24.0. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Georgia outside linebacker Amaris Williams is listed as out for the Ole Miss game."
+          ],
+          "cautions": [
+            "Ole Miss running back Kewan Lacy will miss the Georgia game after suffering a shoulder injury at Texas on Oct. 24.",
+            "Georgia entered the game averaging 41.0 points and allowing 14.9 points per game, while Ole Miss averaged 37.1 points and allowed 24.0."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Georgia outside linebacker Amaris Williams is listed as out for the Ole Miss game.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-07T11:49:15Z"
+            },
+            {
+              "text": "Price-checked win chance 45.2%; this price needs 40.8%.",
+              "numbers": {
+                "chance": 0.452,
+                "breakEven": 0.408
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-11-07T11:30:05Z"
+            },
+            {
+              "text": "Georgia outside linebacker Amaris Williams is listed as out for the Ole Miss game.",
+              "numbers": {},
+              "source": "https://www.supertalk.fm/ole-miss-georgia-kickoff-time-radio-and-tv-info-and-more/",
+              "time": "2026-11-07T11:49:15Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Ole Miss running back Kewan Lacy will miss the Georgia game after suffering a shoulder injury at Texas on Oct. 24.",
+              "numbers": {},
+              "source": "https://www.supertalk.fm/ole-miss-georgia-kickoff-time-radio-and-tv-info-and-more/",
+              "time": "2026-11-07T11:49:15Z"
+            },
+            {
+              "text": "Georgia entered the game averaging 41.0 points and allowing 14.9 points per game, while Ole Miss averaged 37.1 points and allowed 24.0.",
+              "numbers": {},
+              "source": "https://georgiadogs.com/news/2026/11/2/football-georgia-travels-to-oxford-to-take-on-ole-miss",
+              "time": "2026-11-07T11:49:15Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Ole Miss running back Kewan Lacy will miss the Georgia game after suffering a shoulder injury at Texas on Oct. 24.",
+              "numbers": {},
+              "source": "https://www.supertalk.fm/ole-miss-georgia-kickoff-time-radio-and-tv-info-and-more/",
+              "time": "2026-11-07T11:49:15Z"
+            },
+            {
+              "text": "Georgia outside linebacker Amaris Williams is listed as out for the Ole Miss game.",
+              "numbers": {},
+              "source": "https://www.supertalk.fm/ole-miss-georgia-kickoff-time-radio-and-tv-info-and-more/",
+              "time": "2026-11-07T11:49:15Z"
+            },
+            {
+              "text": "Ole Miss running back Kewan Lacy will miss the Georgia game after suffering a shoulder injury at Texas on Oct. 24.",
+              "numbers": {},
+              "source": "https://www.supertalk.fm/ole-miss-georgia-kickoff-time-radio-and-tv-info-and-more/",
+              "time": "2026-11-07T11:49:15Z"
+            },
+            {
+              "text": "Georgia outside linebacker Amaris Williams is listed as out for the Ole Miss game.",
+              "numbers": {},
+              "source": "https://www.supertalk.fm/ole-miss-georgia-kickoff-time-radio-and-tv-info-and-more/",
+              "time": "2026-11-07T11:49:15Z"
+            }
+          ],
+          "weather": {
+            "tempF": 51,
+            "windMph": 5,
+            "windDirection": "N",
+            "precipProb": 0,
+            "periodStart": "2026-11-07T18:00:00-06:00",
+            "issuedAt": "2026-11-07T09:05:31+00:00",
+            "source": "https://api.weather.gov/gridpoints/MEG/63,33/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 3.0,
+                  "price": -110,
+                  "time": "2026-10-29T10:34:11Z"
+                },
+                "now": {
+                  "line": 3.5,
+                  "price": -108,
+                  "time": "2026-11-07T11:31:10Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": 100,
+                  "time": "2026-10-27T10:45:06Z"
+                },
+                "now": {
+                  "line": 3.5,
+                  "price": -110,
+                  "time": "2026-11-07T11:31:10Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": 145,
+              "time": "2026-11-07T11:30:05Z"
+            }
+          },
+          "ours": {
+            "projection": 0.6,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "Georgia outside linebacker Amaris Williams is listed as out for the Ole Miss game.",
+            "snapshotAt": "2026-11-01T14:28:51Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.supertalk.fm/ole-miss-georgia-kickoff-time-radio-and-tv-info-and-more/",
+              "time": "2026-11-07T11:49:15Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://georgiadogs.com/news/2026/11/2/football-georgia-travels-to-oxford-to-take-on-ole-miss",
+              "time": "2026-11-07T11:49:15Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/MEG/63,33/forecast/hourly",
+              "time": "2026-11-07T09:05:31+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856741",
+              "time": "2026-11-07T11:49:15Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://olemisssports.com/news/2026/11/2/football-vs-georgia-first-look",
+              "time": "2026-11-07T11:49:15Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-07T12:07:08Z",
+        "result": "loss",
+        "actual": "Georgia 42, Ole Miss 7",
+        "settledAt": "2026-11-08T04:10:00Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856741",
+        "actualValue": -35,
+        "units": -1
+      }
+    ]
   }
 ]
