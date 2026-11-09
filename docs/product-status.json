@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-09T12:50:45.656139+00:00",
+  "updatedAt": "2026-11-09T14:47:42Z",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -988,9 +988,9 @@
       "title": "Kitchen Ticket website for Today, plays and players",
       "status": "shipped",
       "owner": "agent",
-      "next": "Preserve the clean Today dashboard and exact-price states. Keep full Kitchen Tickets on play details/social art; continue improving player coverage without hiding historical stats when a current line is absent.",
+      "next": "Preserve chart-first player pages and the build-time coverage invariant. Next simplify player discovery/search and reduce existing lazy-bundle and Today payload warnings without weakening data coverage.",
       "doneWhen": "Today stays decision-first at phone and desktop widths, projections remain paired with book lines, player logs survive missing current quotes, and hosted/live checks remain clean.",
-      "evidence": "Nov8 rebuild 02c04d468; hosted 42539828215 succeeded. Normal/clean 2183 Python (2 skipped), 312 Node, 165-pick audit, public guard and 18:55 rehearsal passed. Live375 Today: no overflow, paper-card homepage markup, load or console error. Live Chase Brown: 8 games, 49.6 season average, 40.0 last-five, game log and first-quarter splits."
+      "evidence": "Nov9 release 5fdf3f590; hosted 42635438782 succeeded. Normal/clean 2186 Python (2 skipped), 312 Node; build 526/151, record 165/NBA0, guard 868 and 08:55 rehearsal passed. Audit reduced CFB chart-linked missing profiles from 344 to 0; NFL remained 0. Directories: 7,051 CFB/816 NFL. Live375 Khalil Shakir: chart board, 7 bars/14 log rows; Egypt Nelson: 8 rows. Both had matched widths and no load/console errors."
     },
     {
       "id": "P62",

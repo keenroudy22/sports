@@ -1,3 +1,33 @@
+### November 9 player coverage and chart-first research — verified live
+
+Chase Brown was one visible symptom, not the scope of the defect. A full join
+between the current matchup charts and player directories found 344 CFB athletes
+whose valid history linked to a missing profile; NFL had zero missing profiles in
+the same audit. The builder had discarded an athlete when the newest partial
+box-score row omitted the name, even when an earlier row identified the same ESPN
+athlete. Profiles now use the newest available identity, retain the newest row for
+team/date, and fall back to an explicit player-ID label only when no stored row has
+a name. A build-time coverage invariant stops publication if any chart athlete
+with history lacks both a directory entry and shard page. The rebuilt directories
+contain 7,051 CFB and 816 NFL athletes, with zero linked-history or line-player
+coverage gaps at audit time.
+
+Player research is now a flat, dark chart-first betting board rather than another
+paper ticket. Book line, Kook’n projection, projection gap and recent hit count are
+paired above a larger game-by-game chart with cleared/missed/push labels. Game log,
+splits, matchup evidence, first-quarter data and the full Why section remain below.
+This changes presentation and coverage only; it does not alter projections,
+prices, selection rules, staking or records.
+
+Release 5fdf3f59052a6c00f60bfaf857b20bc82e99d335 passed normal and clean-export
+2186 Python checks (2 skipped), 312 Node checks, build 526/151, 165-pick record
+audit, NBA audit, 868-file public guard, asset/SVG gates and the 08:55 stored-input
+rehearsal with zero outside writes/private reads. Hosted run 42635438782 succeeded.
+At live 375px, Khalil Shakir shows the chart-first board, seven chart bars and 14
+game-log rows; document and viewport widths both equal 375 with no load state or
+console error. Formerly broken Egypt Nelson renders eight game-log rows under the
+same checks.
+
 ### November 8 Today rebuild — verified live
 
 Today is now a clean betting dashboard instead of a stack of poster-style
