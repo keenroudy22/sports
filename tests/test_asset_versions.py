@@ -42,15 +42,17 @@ class AssetVersionTests(unittest.TestCase):
             self.assertEqual(asset_versions.sync(site), ['app-more.js'])
             self.assertNotEqual(first, (site / 'app.js').read_text())
 
-    def test_every_lazy_bundle_has_its_own_declaration(self):
+    def test_every_lazy_asset_has_its_own_declaration(self):
         with tempfile.TemporaryDirectory() as folder:
             site = Path(folder)
             (site / 'app-more.js').write_text('more')
             (site / 'app-games.js').write_text('games')
-            (site / 'app.js').write_text("const MORE_ASSET = 'app-more.js?v=old';\nconst GAMES_ASSET = 'app-games.js?v=old';\n")
-            self.assertEqual(asset_versions.sync(site), ['app-more.js', 'app-games.js'])
+            (site / 'research.css').write_text('.research{}')
+            (site / 'app.js').write_text("const MORE_ASSET = 'app-more.js?v=old';\nconst GAMES_ASSET = 'app-games.js?v=old';\nconst RESEARCH_CSS = 'research.css?v=old';\n")
+            self.assertEqual(asset_versions.sync(site), ['app-more.js', 'app-games.js', 'research.css'])
             source = (site / 'app.js').read_text()
             self.assertIn(f"const GAMES_ASSET = 'app-games.js?v=sha256-{asset_versions.fingerprint(site / 'app-games.js')}';", source)
+            self.assertIn(f"const RESEARCH_CSS = 'research.css?v=sha256-{asset_versions.fingerprint(site / 'research.css')}';", source)
             (site / 'app-games.js').write_text('games changed')
             with self.assertRaisesRegex(ValueError, 'app-games.js content fingerprint is stale'):
                 asset_versions.sync(site, check=True)

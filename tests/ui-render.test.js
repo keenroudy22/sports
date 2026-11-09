@@ -130,3 +130,12 @@ test('matchup charts can filter by player or team name', () => {
   assert.match(source, /&& nameMatch\(pl\)/);
   assert.match(source, /History is not a probability\. \$\{shareLink\('players'\)\}/);
 });
+
+test('matchup research is a scan-first prop board with Kookn and paid-tool comparison windows', () => {
+  for (const label of ['Book line', 'Kook’n', 'L5', 'L10', 'Season', 'Vs defense']) assert.ok(source.includes(label), label);
+  assert.match(source, /class="prop-explorer"/);
+  assert.match(source, /defenseWords\(teams, String\(opponent\.id\), pl\.pos, key, league, dir\)/);
+  assert.match(source, /#research\/trends\?period=1Q&amp;sport=NFL/);
+  assert.match(source, /Tap a player to open the chart/);
+  assert.match(source, /includes\(route\.view\)\) await ensureResearchCss\(\)/);
+});
