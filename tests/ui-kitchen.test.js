@@ -122,6 +122,10 @@ test('a player line with no hold puts the projection beside the book line and ke
   assert.match(page, /I have over at<b class="num">57\.0%<\/b>/);
   assert.match(page, /<small>Kook’n projection<\/small><b class="num">167\.1<\/b>/);
   assert.match(page, /<small>Projection vs line<\/small><b class="num">-94\.4<\/b>/);
+  assert.match(page, /<section class="player-board"/);
+  assert.match(page, /Book vs Kook’n/);
+  assert.match(page, /Cleared line[\s\S]*Missed line/);
+  assert.doesNotMatch(page, /class="kt-paper"/, 'player research is a chart dashboard, not a ticket');
   assert.match(page, /<details class="plain-fold kt-player-detail"[^>]*><summary>Why this number<\/summary>/);
 });
 
@@ -131,7 +135,7 @@ test('a player without a current line leads with useful history instead of an un
     const shard = files[`data/app/players/CFB/${4870883 % 128}.json`].players['4870883'];
     shard.firstQuarter = [{ eventId: 'e4', date: '2026-09-26', season: 2026, seasonType: 2, opp: '2341', stats: { cmp: 3, att: 6, passYds: 48, car: 1, rushYds: 4 } }];
   });
-  assert.match(page, /<p class="kt-k" id="line-h">Season snapshot<\/p>/);
+  assert.match(page, /<p class="eyebrow">Season snapshot<\/p>[\s\S]*<span class="player-board-mode">Trend view<\/span>/);
   assert.match(page, /Season average[\s\S]*Last 5 average[\s\S]*Season high[\s\S]*Games recorded/);
   assert.match(page, /Historical stats are available\.[\s\S]*No current book line has been captured/);
   assert.doesNotMatch(page, /<small>Book line<\/small><b class="num">–<\/b>/);

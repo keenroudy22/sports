@@ -751,11 +751,19 @@ def build_players(league, records, snaps, teams_meta, trends=None):
                                                 'vsQuality', 'opponentAdjustment', 'includesPriorSeason')}
     latest_season = max((g['season'] for g in records), default=None)
     for pid, rows in logs.items():
+        # A corrected/partial box-score line can omit the athlete name even
+        # when an earlier row identified the same ESPN athlete. The old
+        # last-row name check dropped that athlete's entire profile, while
+        # the matchup chart still showed their history and linked to a 404.
+        # Keep the newest game for team/date and the newest available
+        # identity for display. Sorting here also makes the public directory
+        # independent of caller order.
+        rows = sorted(rows, key=lambda r: (r.get('kickoff') or '', r.get('eventId') or ''))
         last = rows[-1]
-        if not last.get('name') or last['season'] < latest_season - 1:
-            continue
-        name = next((r['name'] for r in reversed(rows) if r.get('name')), None)
+        name = next((r['name'] for r in reversed(rows) if r.get('name')), None) or f'Player {pid}'
         pos = next((r['pos'] for r in reversed(rows) if r.get('pos')), None)
+        if last['season'] < latest_season - 1:
+            continue
         table = []
         for r in rows:
             stats = dict(r['stats'])
@@ -772,6 +780,24 @@ def build_players(league, records, snaps, teams_meta, trends=None):
                                                   'firstQuarter': first_quarter.get(pid, [])}
     index.sort(key=lambda row: (row[1] or '', row[0]))
     return index, shards, season_leaders(logs, index, latest_season), latest_season
+
+
+def validate_player_coverage(league, charts, index, shards):
+    """Every linked matchup-chart athlete with history must have a player page.
+
+    This is a build-time product invariant, not a feed-quality claim. It keeps
+    an incomplete directory from publishing a player card whose click ends at
+    "Player not found".
+    """
+    indexed = {str(row[0]) for row in index}
+    sharded = {str(pid) for players in shards.values() for pid in players}
+    missing = sorted({str(player.get('id')) for player in charts.get('players', [])
+                      if player.get('rows') and (str(player.get('id')) not in indexed
+                                                 or str(player.get('id')) not in sharded)})
+    if missing:
+        sample = ', '.join(missing[:10])
+        raise RuntimeError(f'{league} player coverage missing {len(missing)} linked profiles: {sample}')
+    return len(indexed)
 
 
 def build_player_charts(league, games, forecasts, player_logs, season, lines, now):
@@ -2078,10 +2104,11 @@ def build(now=None):
                            'lines': [row for row in lines if row.get('league') == league]})
     for league in ('NFL', 'CFB'):
         info = league_data[league]
-        write(OUT / 'player-charts' / f'{league}.json',
-              build_player_charts(league, window, forecasts, info['player_logs'], info['current'], lines, now))
+        charts = build_player_charts(league, window, forecasts, info['player_logs'], info['current'], lines, now)
         index, shards, leaders, leader_season = build_players(
             league, info['records'], snaps if league == 'NFL' else {}, teams_meta, trends)
+        validate_player_coverage(league, charts, index, shards)
+        write(OUT / 'player-charts' / f'{league}.json', charts)
         write(OUT / 'players' / f'{league}.json', {'keys': list(LOG_KEYS), 'shards': SHARDS[league], 'players': index,
                                                    'leaders': leaders, 'season': leader_season})
         for shard, players in shards.items():

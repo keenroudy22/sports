@@ -788,6 +788,32 @@ class TableTests(unittest.TestCase):
         self.assertIsNone(rows[0][8 + keys.index('snapPct')], 'no snap count is unknown, not zero')
         self.assertEqual(shards[10 % build_site.SHARDS['NFL']]['10']['upcomingTrends'][0]['dvp']['rank'], 22)
 
+    def test_player_profile_survives_when_the_latest_feed_row_omits_the_name(self):
+        older = game('1', datetime(2026, 9, 7, 17, tzinfo=timezone.utc), 'A', 'B', 24, 17,
+                     players=[self.wr('10', 'A', 5, 70)])
+        latest = game('2', datetime(2026, 9, 14, 17, tzinfo=timezone.utc), 'B', 'A', 20, 13,
+                      players=[{'id': '10', 'team': 'A', 'pos': 'WR', 'rec': 3, 'recYds': 30}])
+        index, shards, _, _ = build_site.build_players('NFL', [older, latest], {},
+                                                       {('NFL', 'A'): {'abbr': 'AAA'}})
+        self.assertEqual(index[0][0:6], ['10', 'Player 10', 'WR', 'A', 'AAA', '2026-09-14'])
+        self.assertEqual(len(shards[10 % build_site.SHARDS['NFL']]['10']['rows']), 2)
+
+    def test_player_coverage_rejects_a_chart_link_without_a_profile(self):
+        charts = {'players': [{'id': '10', 'rows': [{'date': '2026-09-07'}]},
+                              {'id': '11', 'rows': []}]}
+        with self.assertRaisesRegex(RuntimeError, r'NFL player coverage missing 1 linked profiles: 10'):
+            build_site.validate_player_coverage('NFL', charts, [], {})
+        self.assertEqual(build_site.validate_player_coverage(
+            'NFL', charts, [['10', 'Player 10']], {10: {'10': {}}}), 1)
+
+    def test_unnamed_current_player_keeps_stats_under_an_explicit_id_label(self):
+        record = game('1', datetime(2026, 9, 7, 17, tzinfo=timezone.utc), 'A', 'B', 24, 17,
+                      players=[{'id': '10', 'team': 'A', 'pos': 'WR', 'rec': 2, 'recYds': 19}])
+        index, shards, _, _ = build_site.build_players('NFL', [record], {},
+                                                       {('NFL', 'A'): {'abbr': 'AAA'}})
+        self.assertEqual(index[0][0:3], ['10', 'Player 10', 'WR'])
+        self.assertEqual(shards[10 % build_site.SHARDS['NFL']]['10']['rows'][0][0], '1')
+
     def test_player_charts_keep_all_stats_for_upcoming_roles_in_a_compact_payload(self):
         now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)
         upcoming = dict(slate_game('NFL-next', '2026-10-05T00:20:00Z'), season=2026)
