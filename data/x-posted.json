@@ -10290,6 +10290,50 @@
     "destination": "research",
     "image": "https://keenroudy.com/sports/data/cards/nba-projections-2026-11-09.png"
    }
+  },
+  {
+   "id": "research:end-zone:2026-11-09",
+   "postedAt": "2026-11-09T05:28:24Z",
+   "dueAt": "2026-11-09T15:36:00Z",
+   "bufferPostId": "6af15a007522f65ac0bf87f2",
+   "textHash": "8bdb22dad006624b",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "🎯 END-ZONE WORK\nJames Cook III (first TD dart): 30 red-zone · 16 inside 10\nJosh Allen (anytime TD lean): 17 red-zone · 10 inside 10\nDJ Moore: 5 red-zone · 3 inside 10\nKhalil Shakir: 8 red-zone · 4 inside 10\n#NFL\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nJames Cook III (first TD dart): 30 red-zone · 16 inside 10\nJosh Allen (anytime TD lean): 17 red-zone · 10 inside 10\nDJ Moore: 5 red-zone · 3 inside 10\nKhalil Shakir: 8 red-zone · 4 inside 10\n#NFL\n\n21+ only",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-11-09.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "James Cook III",
+      "athleteId": "4379399",
+      "gameId": "NFL-401873051",
+      "league": "NFL",
+      "kickoff": "2026-11-10T01:15Z",
+      "anytime": false,
+      "firstTd": true
+     },
+     {
+      "player": "Josh Allen",
+      "athleteId": "3918298",
+      "gameId": "NFL-401873051",
+      "league": "NFL",
+      "kickoff": "2026-11-10T01:15Z",
+      "anytime": true,
+      "firstTd": false
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-11-09"
   }
  ]
 }
