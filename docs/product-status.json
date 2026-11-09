@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-09T14:47:42Z",
+  "updatedAt": "2026-11-09T23:45:58Z",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -1013,11 +1013,11 @@
     {
       "id": "P64",
       "title": "Results calendar and later month receipt art",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the tested calendar series through the lock-holding deploy; verify the live Record at 375 and 1440 px; build the month art and weekly strip only after that review.",
+      "next": "Preserve the bare #record all-sports default and explicit ?sport= filter across Results sub-tabs. Any future month or weekly share art must use the same calendar totals and existing caps.",
       "doneWhen": "Live phone and desktop Record calendar agrees with the unchanged public record by Eastern kickoff day, and any later share art matches the same totals inside existing caps.",
-      "evidence": "Owner-delegated decision 27 dated 2026-10-07; CALENDAR-SPEC.md. Claude's calendar view and tests are built on the Today-restore series; local headless Chrome QA passed. Not yet released."
+      "evidence": "Decision27/CALENDAR-SPEC. Repair 6f78956fc stops bare Results inheriting NFL. 2191 Python(2skip)/320 Node, clean export, build528/151, record165/NBA0, guard873 and 1825 rehearsal passed; hosted42721946586SUCCESS. Live390 exact NFL-player-to-Results path selected All sports with no overflow: Nov7 4-1/+2.77u, Nov8 3-1/+2.07u, week Nov3-9 10-6/+3.84u/16 plays. Explicit ?sport= filters persist; record math unchanged."
     },
     {
       "id": "P65",

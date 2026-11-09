@@ -1,3 +1,14 @@
+# November9 Results calendar routing continuity
+
+The bare Results route (`#record`) is an all-sports view. It must reset any
+league inherited from a player, team, game or research page so Saturday CFB and
+the full cross-sport week cannot disappear behind a stale NFL filter. A user
+chooses a league only through an explicit Results sport selection, represented
+by `#record?sport=LEAGUE`; Results sub-tabs must preserve that explicit choice.
+Keep the route and calendar regressions in every release. The November9 live
+reference is Nov7 4-1/+2.77u, Nov8 3-1/+2.07u and Nov3-9 10-6/+3.84u/16 plays.
+This changes filtering only, never the append-only record or its arithmetic.
+
 # November8 owner — results may release together
 
 Graded result posts have no Discord exclusivity or lead requirement. Release

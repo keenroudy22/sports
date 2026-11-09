@@ -1,3 +1,23 @@
+### November 9 Results calendar all-sports route repair — verified live
+
+The Results data and grading were correct, but navigation could hide them. When
+a visitor opened Results from an NFL player page, the app retained the player's
+league in memory even though the URL was the bare `#record` route. The calendar
+therefore looked NFL-only: Saturday's CFB plays disappeared and the weekly total
+was incomplete. Bare Results now resets to All sports. An intentional league
+filter uses `#record?sport=LEAGUE` and is preserved across Results sub-tabs.
+Legacy Results links use the same rule. No pick, result, unit or record math was
+changed.
+
+Release 6f78956fc4e420c7ae529136fc473763244ffadd passed 2,191 Python checks
+(2 skipped), 320 Node/interface checks, clean export, build 528/151, 165-pick
+record audit, NBA audit, 873-file public guard and the 18:25 stored-input
+rehearsal with zero outside writes or private reads. Hosted run 42721946586
+succeeded. The exact live 390px failure path—NFL player page to the bottom
+Results tab—now lands on `#record` with All sports selected, document and
+viewport widths both 390, and shows Nov7 4-1/+2.77u, Nov8 3-1/+2.07u and the
+Nov3-9 week at 10-6/+3.84u across 16 plays.
+
 ### November 9 player coverage and chart-first research — verified live
 
 Chase Brown was one visible symptom, not the scope of the defect. A full join
