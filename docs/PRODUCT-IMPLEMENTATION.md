@@ -1,3 +1,23 @@
+### November 8 Today rebuild — verified live
+
+Today is now a clean betting dashboard instead of a stack of poster-style
+Kitchen Tickets. The first view gives four direct paths (Games, Players, Lines
+and Results), then shows official picks with the exact posted price/book,
+current status, Kook’n projection, book line and the gap toward the selection.
+Full branded Kitchen Tickets remain on play details and social graphics. The
+Climb is a compact dark status card, empty cards say nothing was forced, and a
+Climb step is not duplicated under More best bets. Repetitive numeric-only
+reason text is suppressed on Today while full detail retains the saved record.
+
+Normal and clean 2183 Python (2 skipped) and 312 Node checks passed with the
+public guard, 165-pick record audit and 18:55 stored-input rehearsal; rehearsal
+made zero outside writes and zero private reads. Candidate 02c04d468 shipped in
+hosted run 42539828215. Live 375px Today has no horizontal overflow, paper-card
+homepage markup, load error or console error. Live Chase Brown shows eight
+games, a 49.6 rushing-yard season average, a 40.0 last-five average, full game
+log and first-quarter splits; its no-current-line state preserves those stats
+instead of reporting data unavailable.
+
 ### November 6 overnight settlements and delivery
 
 Both November 5 FanDuel originals were confirmed on the site and Discord. They

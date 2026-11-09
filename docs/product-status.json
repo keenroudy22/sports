@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-08T23:49:00Z",
+  "updatedAt": "2026-11-09T00:30:00Z",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -988,9 +988,9 @@
       "title": "Kitchen Ticket website for Today, plays and players",
       "status": "shipped",
       "owner": "agent",
-      "next": "Preserve the live Today, play and player layouts; keep the 11:45 PM Kitchen Ticket card cutover separate.",
-      "doneWhen": "Hosted publish passes and the live phone and desktop checks show the whole Today ticket and Climb stub, held-play protections, expired-price wording, working legacy routes and no overflow, console errors or caught load state.",
-      "evidence": "Owner approved October 7. Claude's 11-patch series shipped in 48e57391; hosted run 37700211419 succeeded. Gates: 1138 Python (2 skipped), 196 frontend, clean export, build, 92-pick audit, budget, guard and 17:30 rehearsal. Live app133/CSS82: 375/1440 Today, held play, Kohl player, old quote and legacy routes had no overflow, caught load state or console errors."
+      "next": "Preserve the clean Today dashboard and exact-price states. Keep full Kitchen Tickets on play details/social art; continue improving player coverage without hiding historical stats when a current line is absent.",
+      "doneWhen": "Today stays decision-first at phone and desktop widths, projections remain paired with book lines, player logs survive missing current quotes, and hosted/live checks remain clean.",
+      "evidence": "Nov8 rebuild 02c04d468; hosted 42539828215 succeeded. Normal/clean 2183 Python (2 skipped), 312 Node, 165-pick audit, public guard and 18:55 rehearsal passed. Live375 Today: no overflow, paper-card homepage markup, load or console error. Live Chase Brown: 8 games, 49.6 season average, 40.0 last-five, game log and first-quarter splits."
     },
     {
       "id": "P62",
