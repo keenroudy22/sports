@@ -462,9 +462,6 @@
       || compare(a, b) || String(a.id || a.gameId || a.player).localeCompare(String(b.id || b.gameId || b.player)))
       .filter(row => todayMarketRank(row) !== 2 || ++totals <= 1).slice(0, limit);
   };
-  /* Current, priced rows only; one per market and side, never held or already on the card. */
-  const worthRows = (rows, official = new Set()) => todayResearchOrder(
-    collapse(rows.filter(vm => hasValue(vm) && !heldRow(vm.src) && !official.has(vm.key))), 3, SORTS.edge);
   /* The kitchen never goes blank. This is the strongest current research look, not a back door around the
      official-play gates. It names the exact reason the row is still research so a visitor can separate
      "I like the direction" from "I would bet this price." */
@@ -620,7 +617,7 @@
   const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, favoriteHold, favoriteLook, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, opponentTrendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
-    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, worthRows, todayMarketRank, todayResearchOrder };
+    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, todayMarketRank, todayResearchOrder };
 
   if (typeof document === 'undefined') return { model };
 
@@ -1194,15 +1191,21 @@
   const DATA_TTL = 300000;
   let todayExtras = null, todayExtrasAt = 0, todayExtrasLoading = false;
   const queueTodayExtras = () => {
-    if (todayExtrasLoading || (todayExtras && Date.now() - todayExtrasAt < DATA_TTL && (state.league !== 'ALL' || todayExtras.nbaRequested !== false))) return;
+    const chartLeague = state.league === 'CFB' ? 'CFB' : 'NFL';
+    if (todayExtrasLoading || (todayExtras && Date.now() - todayExtrasAt < DATA_TTL && todayExtras.chartLeague === chartLeague && (state.league !== 'ALL' || todayExtras.nbaRequested !== false))) return;
     todayExtrasLoading = true;
     const nbaRequested = state.league === 'ALL';
-    Promise.all([maybe('scoreboard.json'), lineData(), maybe('sports.json'), allPicks(), nbaRequested ? maybe('app/nba.json') : null])
-      .then(([board, lines, sports, every, nba]) => { todayExtras = { board, lines, sports, every, nba, nbaRequested }; todayExtrasAt = Date.now(); })
+    Promise.all([maybe('scoreboard.json'), lineData(), maybe('sports.json'), allPicks(), nbaRequested ? maybe('app/nba.json') : null,
+      maybe(`app/player-charts/${chartLeague}.json`)])
+      .then(([board, lines, sports, every, nba, charts]) => { todayExtras = { board, lines, sports, every, nba, charts, chartLeague, nbaRequested }; todayExtrasAt = Date.now(); })
       .catch(() => { todayExtras = {}; todayExtrasAt = Date.now(); })
-      .finally(() => { todayExtrasLoading = false; if (C.parseRoute(location.hash).view === 'today') render(true); });
+      .finally(() => {
+        todayExtrasLoading = false;
+        if (C.parseRoute(location.hash).view === 'today') render(true);
+        ensureKvb().then(kvb => { if (todayExtras) todayExtras.kvb = kvb; if (C.parseRoute(location.hash).view === 'today') render(true); }).catch(() => null);
+      });
   };
-  /* Today's first paint: today-hero.json (a few kilobytes, requested by index.html as the page starts). */
+  /* Small first-paint payload. */
   let heroLoaded = null, todayLanded = false;
   const heroFetch = () => {
     const early = window.krHero;
@@ -1213,17 +1216,16 @@
   const LOADING = '<p class="loading muted" role="status">Loading…</p>';
   /* A painted hero belongs to football Today in the league it was painted for; anything else clears it at once. */
   const dropHero = () => { const view = $('#view'); if (view && view.querySelector('.hero-first')) view.innerHTML = LOADING; };
-  /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
-     chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
-     at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
+  /* The first paint and full card share this top. */
+  const KVB_WAIT = '<section class="kt-sec" id="today-kvb"><h2 class="kt-head">Kook vs. Book</h2><p class="small muted">Our number. Their line. Your call.</p><p class="loading" role="status">Checking lines…</p></section>';
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', market = KVB_WAIT, favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
     const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today);
     return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
       <nav class="today-tools" aria-label="Betting data and research"><a href="#research/players?sport=NFL"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&amp;sport=NFL"><span aria-hidden="true">⌕</span><b>Find a player</b><small>Stats & logs</small></a></nav>
       ${postedSummary ? postedSummary.html : ''}
       <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Kook’n picks'}</h2><a href="#record">Track record ›</a></div>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card', quick: true }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
-      ${otherTickets}${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
+      ${market}${otherTickets}${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
       ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, quick: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
       ${rail(later, { season, lines, cards, more: true, quick: true, label: 'Upcoming best bets' })}</section>` : ''}`;
   };
@@ -1271,7 +1273,7 @@
     const [today, notes] = await Promise.all([todayP, maybe('desk-notes.json'), heroP]);
     todayLanded = true;
     queueTodayExtras();
-    const { board = null, lines = null, sports = null, every = today.picks || [], nba = null } = todayExtras || {};
+    const { board = null, lines = null, sports = null, every = today.picks || [], nba = null, charts = null, kvb = null, chartLeague = null } = todayExtras || {};
     indexGames(today);
     const now = Date.now(), all = every, picks = all.filter(inLeague), sched = C.cardSchedule(picks, now);
     const pulled = p => p.status === 'withdrawn' || /before its post went out|^Pulled before posting:/.test(p.entryNote || '');
@@ -1334,13 +1336,14 @@
     const upsetHtml = upsets.length || spreadRows.length ? `<p class="eyebrow" style="margin-bottom:8px">Outright upset candidates</p>${upsets.length ? `<div class="grid two">${upsets.map((g, i) => upsetRow(g, i + 1)).join('')}</div>` : '<p class="muted small">No fresh outright candidate.</p>'}
       ${spreadRows.length ? `<p class="eyebrow" style="margin:16px 0 4px">Underdog spread value</p><p class="small muted" style="margin-bottom:8px">Covering does not mean winning outright.</p><div class="board">${spreadRows.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="muted small" style="margin-top:10px">Underdog spreads: none highlighted right now.</p>'}`
       : '<p class="muted small">No current outright-upset or underdog-spread highlight.</p>';
-    /* Research worth a look: the old Today's top three price-checked lines, never a play already on the card. */
-    const official = new Set(picks.filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(officialKey));
+    const officialPicks = new Map(picks.filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(p => [officialKey(p), p]));
+    const official = new Set(officialPicks.keys());
+    lineRows.forEach(vm => { const pick = officialPicks.get(vm.key); vm.official = Boolean(pick && C.isOpen(pick)); vm.officialLine = pick ? pick.line : null; });
     const gameIdsToday = new Set(games.filter(g => C.dayOf(g.kickoff) === etDay() && !g.completed).map(g => g.id));
     const favorite = !rows.length ? favoriteLook(lineRows, gameIdsToday, official) : null;
     const favoriteHtml = favorite ? ktSec('favorite', 'What I like most', `<div class="board">${boardRow(favorite, false)}</div><p class="kt-note"><b>Why it is not an official play:</b> ${esc(favoriteHold(favorite))}</p>`,
       { tape: true, kind: 'Strongest current lean · not a best bet', link: ktLink(`#game/${favorite.gameId}`, 'See the matchup') }) : '';
-    const worth = worthRows(lineRows.filter(vm => (!hasGamesToday || C.dayOf(vm.kickoff) === etDay()) && (!favorite || vm.key !== favorite.key)), official);
+    const market = kvb && charts ? kvb.home({ rows: lineRows.filter(vm => vm.league === chartLeague && (!hasGamesToday || C.dayOf(vm.kickoff) === etDay())), charts, games }) : KVB_WAIT;
     /* Today's games: live first, scores refreshed from the free scoreboard, with our projected score. */
     const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
     const todayGames = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
@@ -1382,16 +1385,9 @@
     const postedSummary = state.league === 'ALL' && posted.length && (cbbCount || (nba?.trial?.plays || []).some(p => C.dayOf(p.kickoff) === etDay())) ? { count: posted.length,
       html: `<section id="today-posted-straights" aria-label="Today’s posted straights"><p><b>${posted.length} posted straight${posted.length === 1 ? '' : 's'} today</b> · All sports. Separate records.</p><ul>${posted.map(p => `<li><a href="${esc(p.href)}"><b>${esc(p.label)}</b></a><br>${esc(oddsText(p.odds))} · ${esc(bookLabel(p.book))} · ${esc(C.stakeOf(p))}u${p.result ? ` · ${esc(String(p.result).toUpperCase())}` : ''}</li>`).join('')}</ul><p class="tiny muted">Original posted prices; check your book. Climbs and fun tickets are separate.</p></section>` } : null;
     const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba) : '';
-    const researchHub = `<section class="research-start today-research" aria-labelledby="today-research-h"><div class="section-head"><h2 id="today-research-h">Research a player or game</h2><a class="more" href="#research/players">All research →</a></div><div class="research-paths">
-      <a href="#research/players?view=search&sport=NFL"><b>Find a player</b><span>Game logs, averages, splits and projections.</span></a>
-      <a href="#research/lines?type=props&sport=NFL"><b>Compare props</b><span>Kook’n projection against the current line and price.</span></a>
-      <a href="#games"><b>Browse games</b><span>Scores, projected scores, spreads and totals.</span></a>
-    </div></section>`;
     const extraToday = [
       prepList(today.prep, notesList, now),
       ktSec('upsets', 'Underdog watch', upsetHtml, { tape: true, kind: 'Upset research, not best bets' }),
-      ktSec('worth', 'Kook’n vs. the Book', worth.length ? `<div class="board">${worth.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="kt-blank">Nothing on the board clears our price check right now.</p>',
-        { tape: true, kind: 'Not best bets', link: ktLink('#research/lines', 'Compare projections and odds') }),
       gone.length ? ktSec('pulled', `Pulled before kickoff · ${gone.length}`, slips(gone), { kind: 'Pulled over news; each still counts' }) : '',
       off.length ? ktSec('off-card', `Off the card · ${off.length}`, slips(off), { kind: 'Closed to new entries; each still counts at its posted price' }) : '',
       COMMUNITY,
@@ -1399,13 +1395,12 @@
         return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) || !sports ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''
     ].filter(Boolean).join('');
     const rest2 = [
-      researchHub,
       leftovers(recent, awaiting.filter(p => C.dayOf(p.kickoff) === lastDay), (today.lastSlate || {})[state.league]),
       shown.length ? ktSec('games', nflNow.length ? 'Other games today' : "Today's games", `${liveStamp(liveToday.refreshed)}<div class="projs">${shown.map(g => projCard(g, { ranks: false })).join('')}</div>`,
         { link: ktLink(otherGames.length > shown.length ? '#games' : '#games/live', otherGames.length > shown.length ? `All ${todayGames.length} games today` : 'Live scores') }) : '',
       nbaSummary,
       fun.length ? ktSec('fun', 'Fun tickets', slips(fun), { kind: 'Smaller stake, apart from best bets' }) : '',
-      extraToday ? `<details class="today-more"><summary>More today</summary><p class="small muted">Prep lists, underdog research, value comparisons and sport links.</p>${extraToday}</details>` : ''
+      extraToday ? `<details class="today-more"><summary>More today</summary><p class="small muted">Prep lists, underdog research and sport links.</p>${extraToday}</details>` : ''
     ].join('');
     const brief = today.morningBrief;
     const morningHtml = !rows.length && brief && (state.league === 'ALL' || state.league === brief.league)
@@ -1416,7 +1411,7 @@
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
     return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
-      climb, lines: lines && lines.lines, more: [], past: ladder.history, later: rest, cards, proof, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
+      climb, lines: lines && lines.lines, more: [], past: ladder.history, later: rest, cards, proof, market, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
       postedToday: picks.some(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay()),
       otherPosted, postedSummary, otherTickets: cbbSummary, nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
@@ -2112,6 +2107,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-f15885d837eb';
   const GAMES_ASSET = 'app-games.js?v=sha256-4c1b90518d37';
+  const KVB_ASSET = 'app-kvb.js?v=sha256-338cc9fd90bf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
@@ -2125,7 +2121,8 @@
   const gamesContext = (overrides = {}) => moreContext({ setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican,
     boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, ticketButton, luminance, ...overrides });
   const BUNDLES = { more: { asset: MORE_ASSET, global: 'KRMore', context: moreContext, word: 'More pages' },
-    games: { asset: GAMES_ASSET, global: 'KRGames', context: gamesContext, word: 'Games pages' } };
+    games: { asset: GAMES_ASSET, global: 'KRGames', context: gamesContext, word: 'Games pages' },
+    kvb: { asset: KVB_ASSET, global: 'KRKvb', context: () => moreContext({ historyChart, pctText }), word: 'Kook vs. Book' } };
   const ensureBundle = key => {
     const b = BUNDLES[key];
     if (b.views) return Promise.resolve(b.views);
@@ -2158,7 +2155,7 @@
     });
     return b.loading;
   };
-  const ensureMore = () => ensureBundle('more'), ensureGames = () => ensureBundle('games');
+  const ensureMore = () => ensureBundle('more'), ensureGames = () => ensureBundle('games'), ensureKvb = () => ensureBundle('kvb');
   MORE_VIEW_NAMES.forEach(name => { VIEWS[name] = async route => (await ensureMore())[name](route); });
   GAMES_VIEW_NAMES.forEach(name => { VIEWS[name] = async route => (await ensureGames())[name](route); });
   /* Games data does not wait for its bundle either. */

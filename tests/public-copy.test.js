@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const banned = /\b(?:launchd|pipeline|deskRuns|desk runs?|next run|automated|automation|I look again|hosted refresh|every 5 min|every 30 min|climb check|behind the scenes|pre-post review|delivery checks|release schedule|data status|scans?|scheduled check|the desk|the owner|kitchen.s closed|ladder step)\b|closed to new entries at \d{1,2}:\d{2}/i;
 
 test('the phone-facing shell does not tell readers private publishing times', () => {
-  for (const name of ['index.html', 'app.js', 'app-more.js', 'app-games.js', 'core.js', 'live.js', 'personal.js']) {
+  for (const name of ['index.html', 'app.js', 'app-more.js', 'app-games.js', 'app-kvb.js', 'core.js', 'live.js', 'personal.js']) {
     assert.doesNotMatch(fs.readFileSync(`site/${name}`, 'utf8'), banned, name);
   }
 });

@@ -47,11 +47,14 @@ class OfflineRehearsalTests(unittest.TestCase):
             (root / 'site/data/app' / 'old.json').write_text('{}')
             (root / 'site/app.js').write_text("const MORE_ASSET = 'app-more.js?v=sha256-test';")
             (root / 'site/app-more.js').write_text('window.KRMore = {};')
+            (root / 'site/app-games.js').write_text('window.KRGames = {};')
+            (root / 'site/app-kvb.js').write_text('window.KRKvb = {};')
             snap = rehearse.stage(root, output)
             (snap / 'data/store.json').write_text('{}')
             self.assertTrue(json.loads((root / 'data/store.json').read_text())['original'])
             self.assertFalse((snap / 'site/data/app').exists())
             self.assertEqual((snap / 'site/app-more.js').read_text(), 'window.KRMore = {};')
+            self.assertEqual((snap / 'site/app-kvb.js').read_text(), 'window.KRKvb = {};')
 
 
 if __name__ == '__main__':

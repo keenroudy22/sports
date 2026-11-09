@@ -18,6 +18,7 @@ class PayloadBudgetTests(unittest.TestCase):
             (root / name).write_bytes(b'ok')
         (root / 'app-more.js').write_bytes(b'ok')
         (root / 'app-games.js').write_bytes(b'ok')
+        (root / 'app-kvb.js').write_bytes(b'ok')
         app = root / 'data/app'
         (app / 'teams').mkdir(parents=True)
         (app / 'trends').mkdir()
@@ -106,6 +107,15 @@ class PayloadBudgetTests(unittest.TestCase):
             self.assertEqual(result['issues'], [])
             (root / 'app-games.js').unlink()
             self.assertIn('lazy-games-gzip:missing', payload_budget.check(root)['warnings'])
+
+    def test_kook_vs_book_bundle_has_a_small_lazy_budget(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.site(folder)
+            self.assertLess(payload_budget.LIMITS['lazy-kvb-gzip'], payload_budget.LIMITS['lazy-more-gzip'])
+            (root / 'app-kvb.js').write_bytes(os.urandom(payload_budget.LIMITS['lazy-kvb-gzip'] * 2))
+            result = payload_budget.check(root)
+            self.assertTrue(any(x.startswith('lazy-kvb-gzip:') for x in result['warnings']))
+            self.assertEqual(result['issues'], [])
 
     def test_hosted_budget_runs_after_build_and_before_upload(self):
         workflow = (Path(__file__).resolve().parents[1] / '.github/workflows/publish.yml').read_text()

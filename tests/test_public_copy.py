@@ -40,7 +40,7 @@ class PublicCopyTests(unittest.TestCase):
                               ('data/app/today.json', 'schedule-or-automation-field')})
 
     def test_shipped_shell_and_current_payloads_have_no_private_copy(self):
-        paths = [ROOT / 'site' / name for name in ('index.html', 'app.js', 'app-more.js', 'app-games.js',
+        paths = [ROOT / 'site' / name for name in ('index.html', 'app.js', 'app-more.js', 'app-games.js', 'app-kvb.js',
                                                   'core.js', 'live.js', 'personal.js')]
         paths += [ROOT / 'site/data/app' / name for name in ('today.json', 'today-hero.json', 'record.json')]
         for path in paths:

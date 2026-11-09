@@ -158,7 +158,7 @@ test('the first paint and the full card draw the same top, so nothing moves when
   await settle();
 });
 
-test('Today leads with the card, current matchup and bettor tools while secondary sections share one clear fold', async () => {
+test('Today leads with the card, Kook vs. Book and current matchup while secondary sections share one clear fold', async () => {
   const todayOff = { ...total, id: 'CFB-today-off-fd', displayTitle: 'Moved Line Today under 56.5', status: 'expired',
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
@@ -169,9 +169,9 @@ test('Today leads with the card, current matchup and bettor tools while secondar
   assert.match(page, /class="decision-more" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>See stats, trends and full breakdown/, 'the summary opens the complete preserved play');
   assert.doesNotMatch(page.slice(0, page.indexOf('class="kt-sec kt-left"')), /class="kt-order|class="kt-paper"/, 'Today no longer stacks branded paper tickets');
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="decision-list"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'research-start today-research', 'class="kt-sec kt-left"',
-    'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-worth"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> NFL -> other bets -> research shortcuts -> results and games -> one secondary fold');
+  const order = ['class="kt-lede', 'class="decision-list"', 'id="today-kvb"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'class="kt-sec kt-left"',
+    'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'official card -> Kook vs. Book -> NFL -> other bets -> results and games -> one secondary fold');
   assert.match(page, /<summary>More today<\/summary>/);
   for (const gone of ['kt-fold', 'class="onboard"', 'today-status']) assert.ok(!page.includes(gone), gone);
   const folds = [...page.matchAll(/<details[^>]*data-box="([^"]+)"/g)].map(m => m[1]);
@@ -188,7 +188,7 @@ test('Today leads with the card, current matchup and bettor tools while secondar
   assert.doesNotMatch(bets, /Still a bet down to|Best bets this season/, 'one limit sentence everywhere');
   assert.match(bets, /Book line<\/small><b class="num">51\.5<\/b>[\s\S]*Kook’n projection<\/small><b class="num">61\.2<\/b>/,
     'and its useful model number against the book line');
-  assert.doesNotMatch(page.slice(0, page.indexOf('research-start today-research')), /kt-clip/, 'the browsing surface has no mascot overlap');
+  assert.doesNotMatch(page.slice(0, page.indexOf('class="kt-sec kt-left"')), /kt-clip/, 'the browsing surface has no mascot overlap');
   assert.match(page, /Best Bets: 1–0<\/b> · \+0\.95u/, 'Same-category results carry their units');
   assert.match(page, /r-mark hit/);
   assert.match(page, /result Visitors 24, Hosts 21/);
@@ -213,7 +213,7 @@ test('an NFL game today stays prominent and a later best bet stays off Today', a
   const nightGame = { ...GAMES[0], kickoff: '2026-10-11T00:15:00Z', v2: { away: 23.2, home: 26.9, total: 50.1, margin: 3.7, winProb: 0.61 }, market: { spread: -8.5, total: 48.5 } };
   const games = [nightGame, GAMES[1]];
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today' });
-  const spot = page.slice(page.indexOf('kt-nfl-now"'), page.indexOf('research-start today-research'));
+  const spot = page.slice(page.indexOf('kt-nfl-now"'), page.indexOf('kt-games"'));
   assert.ok(page.indexOf('kt-climb"') < page.indexOf('kt-nfl-now"'));
   assert.match(spot, /Tonight&#39;s NFL|Tonight's NFL/);
   assert.match(spot, /href="#game\/NFL-1"[\s\S]*Visitors[\s\S]*Hosts/);
@@ -752,7 +752,7 @@ const UPSET = { team: 'Arizona', opponent: 'West Virginia', odds: 150, opponentO
 test('Underdog watch is its own visible research section: outright upsets apart from spread covers, never a best bet', async () => {
   const games = [GAMES[0], { ...GAMES[1], upsetWatch: UPSET }];
   const page = await loadApp('#record', {}, { today: { ...TODAY, games } }).api.views.today({ view: 'today' });
-  const sec = page.slice(page.indexOf('kt-upsets"'), page.indexOf('kt-worth"'));
+  const sec = page.slice(page.indexOf('kt-upsets"'), page.indexOf('kt-community"'));
   assert.match(sec, /<h2 class="kt-tape" id="upsets-h">Underdog watch<\/h2><span class="kt-kind">Upset research, not best bets<\/span>/);
   assert.match(sec, /Arizona · \+150 to win outright<\/b><\/a> <span class="badge research">Top upset signal<\/span>/);
   assert.match(sec, /We give them 53% to win\. Vegas has them at 38% once you take out the book&#39;s cut\. At \+150 you need 40\.0% to profit\./);
@@ -762,42 +762,23 @@ test('Underdog watch is its own visible research section: outright upsets apart 
   assert.match(sec, /Outright upset candidates[\s\S]*Underdog spreads: none highlighted right now\./, 'spread covers stay a separate line');
   for (const bad of ['kt-order', 'Best bet', 'ORDER UP', 'Hot Plate']) assert.ok(!sec.includes(bad), bad);
   const none = await loadApp('#record').api.views.today({ view: 'today' });
-  assert.match(none.slice(none.indexOf('kt-upsets"'), none.indexOf('kt-worth"')), /No current outright-upset or underdog-spread highlight\./, 'the honest empty state stays');
+  assert.match(none.slice(none.indexOf('kt-upsets"'), none.indexOf('kt-community"')), /No current outright-upset or underdog-spread highlight\./, 'the honest empty state stays');
 });
 
 test('Today never promotes a future-day upset candidate', async () => {
   const future = { ...GAMES[1], id: 'CFB-future', kickoff: '2026-10-17T19:30:00Z', upsetWatch: UPSET };
   const page = await loadApp('#record', {}, { today: { ...TODAY, games: [GAMES[0], future] } }).api.views.today({ view: 'today' });
-  const sec = page.slice(page.indexOf('kt-upsets"'), page.indexOf('kt-worth"'));
+  const sec = page.slice(page.indexOf('kt-upsets"'), page.indexOf('kt-community"'));
   assert.doesNotMatch(sec, /Arizona · \+150/);
   assert.match(sec, /No current outright-upset or underdog-spread highlight\./);
 });
 
-/* Board rows for Worth a look: fresh, open, priced, graded. */
+/* A current modeled line used by the strongest-look tests below. */
 const OBS = '2026-10-10T13:40:00Z';
 const lineRow = (id, extra = {}, grade = {}) => ({ id, league: 'NFL', gameId: 'NFL-1', kickoff: prop.kickoff, state: 'open', odds: -110, book: 'draftkings',
   observedAt: OBS, title: `${id} over 44.5`, marketType: 'total', direction: 'over', line: 44.5,
   grade: { calibrated: true, view: 'lean', chance: 0.58, needs: 0.524, edge: 5, ...grade }, ...extra });
-const LINES = [
-  lineRow('A-total', {}, { edge: 6 }),
-  lineRow('A-total-alt', { line: 45.5, title: 'A-total-alt over 45.5' }, { edge: 4 }),
-  lineRow('B-prop', { athleteId: '50', player: 'Board Receiver', stat: 'recYds', marketType: null, title: 'Board Receiver over 60.5 receiving yards', line: 60.5 }, { edge: 3 }),
-  lineRow('C-spread', { league: 'CFB', gameId: 'CFB-2', kickoff: total.kickoff, marketType: 'spread', direction: 'away', title: 'ARIZ +6.5', line: 6.5 }, { edge: 2.5 }),
-  lineRow('D-thin', { gameId: 'CFB-2', league: 'CFB', kickoff: total.kickoff }, { edge: 9, thin: true }),
-  lineRow('E-raw', { athleteId: '51', stat: 'rec', marketType: null, player: 'Raw Guy' }, { edge: 8, calibrated: false }),
-  lineRow('F-on-card', { athleteId: '9', stat: 'recYds', marketType: null, player: 'Fixture Receiver', line: 49.5 }, { edge: 7 }),
-  lineRow('G-small', { athleteId: '52', stat: 'rushYds', marketType: null, player: 'Small Edge' }, { edge: 1 }),
-];
-test('Today research favors props, then sides, then one total; held and posted lines stay out', async () => {
-  const now = NOW;
-  const vms = LINES.map(r => M.lineVM(r, now));
-  const official = new Set([M.officialKey(prop)]);
-  assert.deepEqual(M.worthRows(vms, official).map(r => r.id), ['B-prop', 'G-small', 'C-spread']);
-  const otherTotal = M.lineVM(lineRow('H-other-total', { gameId: 'NFL-2' }, { edge: 20 }), now);
-  assert.deepEqual(M.worthRows([otherTotal, ...vms], official).map(r => r.id),
-    ['B-prop', 'G-small', 'C-spread'], 'a total cannot crowd props or sides off Today');
-  assert.deepEqual(M.worthRows([otherTotal, ...vms.filter(vm => vm.id !== 'G-small')], official).map(r => r.id),
-    ['B-prop', 'C-spread', 'H-other-total'], 'when a slot remains, only the top total appears');
+test('the Prep List still favors props, then sides, then one total', () => {
   assert.deepEqual(M.todayResearchOrder([
     { id: 'total-a', marketType: 'total', hits: 10, games: 10 },
     { id: 'side', marketType: 'spread', hits: 7, games: 10 },
@@ -805,20 +786,6 @@ test('Today research favors props, then sides, then one total; held and posted l
     { id: 'total-b', marketType: 'total', hits: 9, games: 10 },
   ], 3, (a, b) => b.hits / b.games - a.hits / a.games).map(r => r.id),
   ['prop', 'side', 'total-a'], 'the Prep List uses the same category order and one-total cap');
-  const held = M.lineVM(lineRow('H-held', { athleteId: '53', stat: 'recYds', marketType: null, roleSuspect: true }, { edge: 12 }), now);
-  assert.ok(!M.worthRows([held, ...vms], official).some(r => r.id === 'H-held'), 'a role or price hold never shows as research worth a look');
-  const files = { 'data/app/lines.json': { files: { NFL: 'lines-NFL.json', CFB: 'lines-CFB.json' } },
-    'data/app/lines-NFL.json': { league: 'NFL', lines: LINES.filter(r => r.league === 'NFL') }, 'data/app/lines-CFB.json': { league: 'CFB', lines: LINES.filter(r => r.league === 'CFB') } };
-  const { api } = loadApp('#record', {}, { extra: files });
-  await api.views.today({ view: 'today' });
-  await settle();
-  const page = await api.views.today({ view: 'today' });
-  const sec = page.slice(page.indexOf('kt-worth"'), page.indexOf('kt-community"'));
-  assert.match(sec, /<h2 class="kt-tape" id="worth-h">Kook’n vs. the Book<\/h2><span class="kt-kind">Not best bets<\/span>/);
-  assert.match(sec, /Board Receiver over 60\.5[\s\S]*G-small over 44\.5[\s\S]*ARIZ \+6\.5/);
-  for (const out of ['D-thin', 'E-raw', 'F-on-card', 'A-total', 'A-total-alt']) assert.ok(!sec.includes(out), out);
-  assert.match(sec, /58% our chance · 52% needed/);
-  assert.match(sec, /href="#research\/lines">Compare projections and odds ›/);
 });
 
 test('an empty official rail names the strongest current look and the exact reason it is not a play', async () => {
@@ -840,7 +807,7 @@ test('an empty official rail names the strongest current look and the exact reas
   assert.match(favorite, /Closest Look over 42\.5 receiving yards/);
   assert.match(favorite, /Why it is not an official play:<\/b> It is positive value by 0\.6 points, but it still needs a strong verified reason and the final release checks before I call it Full Send\./);
   assert.doesNotMatch(favorite, /Raw Look/);
-  assert.equal((page.match(/Closest Look over 42\.5 receiving yards/g) || []).length, 1, 'the favorite is not repeated in Research worth a look');
+  assert.equal((page.match(/Closest Look over 42\.5 receiving yards/g) || []).length, 1, 'the favorite is not duplicated before the lazy comparison board loads');
 });
 
 test('the Prep List rolls to the next game day once the first day\'s rows have kicked off', async () => {

@@ -38,9 +38,9 @@ def stage(root, workspace):
     shutil.copytree(root / 'site' / 'data', snapshot / 'site' / 'data',
                     ignore=shutil.ignore_patterns('app', 'cards', '__pycache__', '.DS_Store'))
     # The site build verifies the lazy-bundle content fingerprint before writing
-    # generated payloads.  Stage the two source files that establish that
+    # generated payloads.  Stage the source files that establish that
     # contract without copying any generated app data.
-    for name in ('app.js', 'app-more.js'):
+    for name in ('app.js', 'app-more.js', 'app-games.js', 'app-kvb.js'):
         source = root / 'site' / name
         if source.is_file():
             target = snapshot / 'site' / name

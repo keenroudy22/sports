@@ -6,23 +6,23 @@ const app = fs.readFileSync(new URL('../site/app.js', import.meta.url), 'utf8');
 const css = fs.readFileSync(new URL('../site/app.css', import.meta.url), 'utf8');
 const body = (start, end) => { const a = app.indexOf(start), b = app.indexOf(end, a); assert.ok(a >= 0 && b > a, start); return app.slice(a, b); };
 
-test('Today leads with decisions and games, then groups lower-priority research under one fold', () => {
+test('Today leads with decisions and Kook vs. Book, then groups lower-priority research under one fold', () => {
   const view = body('VIEWS.today = async', '/* ---------- a single best bet');
   const extra = view.slice(view.indexOf('const extraToday = ['), view.indexOf('const rest2 = ['));
   const atExtra = s => { const i = extra.indexOf(s); assert.ok(i >= 0, s); return i; };
-  const extraOrder = ['prepList(', "ktSec('upsets'", "ktSec('worth'", "ktSec('pulled'", "ktSec('off-card'", 'COMMUNITY', "ktSec('sports'"].map(atExtra);
-  assert.deepEqual(extraOrder, extraOrder.slice().sort((a, b) => a - b), 'Prep, underdogs, value, closed plays, community and sports stay in a predictable order');
+  const extraOrder = ['prepList(', "ktSec('upsets'", "ktSec('pulled'", "ktSec('off-card'", 'COMMUNITY', "ktSec('sports'"].map(atExtra);
+  assert.deepEqual(extraOrder, extraOrder.slice().sort((a, b) => a - b), 'Prep, underdogs, closed plays, community and sports stay in a predictable order');
   const rest = view.slice(view.indexOf('const rest2 = ['));
   const at = s => { const i = rest.indexOf(s); assert.ok(i >= 0, s); return i; };
-  const order = ['researchHub', 'leftovers(', "ktSec('games'", 'nbaSummary', "ktSec('fun'", 'class="today-more"'].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'Research shortcuts, results, games, NBA and fun precede the secondary fold');
+  const order = ['leftovers(', "ktSec('games'", 'nbaSummary', "ktSec('fun'", 'class="today-more"'].map(at);
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'Results, games, NBA and fun precede the secondary fold');
   assert.match(view, /<details class="today-more"><summary>More today<\/summary>/);
   assert.doesNotMatch(view, /kt-fold|foldRow/);
   const top = body('const todayTop =', 'const firstPaint =');
   const t = s => { const i = top.indexOf(s); assert.ok(i >= 0, s); return i; };
-  assert.ok(t('rail(rows.slice(0, 1)') < t('${climbStub(climb, past)}') && t('${climbStub(climb, past)}') < t('${proof}')
+  assert.ok(t('rail(rows.slice(0, 1)') < t('${market}') && t('${market}') < t('${climbStub(climb, past)}') && t('${climbStub(climb, past)}') < t('${proof}')
     && t('${proof}') < t('${nextSlate}') && t('${nextSlate}') < t('rail(later,'),
-  'first ticket, Climb, season line, then explicitly labeled off-day prep');
+  'first ticket, Kook vs. Book, Climb, season line, then explicitly labeled off-day prep');
 });
 
 test('Off the card is the line-moved state only: its own visible section, never on the rail', () => {
