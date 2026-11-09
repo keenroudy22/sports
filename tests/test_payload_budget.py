@@ -29,6 +29,8 @@ class PayloadBudgetTests(unittest.TestCase):
         (app / 'lines.json').write_text(json.dumps({'count': 0, 'files': {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}}))
         (app / 'lines-NFL.json').write_bytes(b'{}')
         (app / 'lines-CFB.json').write_bytes(b'{}')
+        (app / 'kvb-NFL.json').write_bytes(b'{}')
+        (app / 'kvb-CFB.json').write_bytes(b'{}')
         (app / 'teams/CFB.json').write_bytes(b'{}')
         (app / 'teams/CFB-defense.json').write_bytes(b'{}')
         (app / 'trends/index.json').write_text(json.dumps({'files': []}))
@@ -115,6 +117,14 @@ class PayloadBudgetTests(unittest.TestCase):
             (root / 'app-kvb.js').write_bytes(os.urandom(payload_budget.LIMITS['lazy-kvb-gzip'] * 2))
             result = payload_budget.check(root)
             self.assertTrue(any(x.startswith('lazy-kvb-gzip:') for x in result['warnings']))
+            self.assertEqual(result['issues'], [])
+
+    def test_kook_vs_book_data_stays_a_small_phone_payload(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.site(folder)
+            (root / 'data/app/kvb-CFB.json').write_bytes(b'x' * (payload_budget.LIMITS['kvb'] + 1))
+            result = payload_budget.check(root)
+            self.assertTrue(any(x.startswith('kvb-CFB:') for x in result['warnings']))
             self.assertEqual(result['issues'], [])
 
     def test_hosted_budget_runs_after_build_and_before_upload(self):

@@ -845,6 +845,35 @@ class TableTests(unittest.TestCase):
         kicker = next(p for p in payload['players'] if p['id'] == '11')
         self.assertEqual(kicker['rows'][0]['stats']['kPts'], 9, 'unprojected kickers still reach the all-stat chart')
 
+    def test_kvb_charts_keep_only_honest_shortlist_players_and_common_stats(self):
+        now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)
+        charts = {'players': [
+            {'gameId': 'NFL-next', 'id': '10', 'side': 'home', 'rows': [
+                {'date': '2026-09-20', 'stats': {'rec': 5, 'recYds': 72, 'recTD': 1, 'rzTgt': 2}}]},
+            {'gameId': 'NFL-next', 'id': '11', 'side': 'away', 'rows': [
+                {'date': '2026-09-20', 'stats': {'rushYds': 90, 'rushTD': 2}}]},
+        ]}
+        lines = [
+            {'gameId': 'NFL-next', 'athleteId': '10', 'stat': 'rec', 'state': 'open', 'line': 3.5,
+             'direction': 'over', 'grade': {'calibrated': True, 'projection': 4.2, 'edge': 1.2, 'tier': 'pass'}},
+            {'gameId': 'NFL-next', 'athleteId': '11', 'stat': 'rushYds', 'state': 'open', 'line': 70.5,
+             'direction': 'over', 'grade': {'calibrated': True, 'projection': 80, 'edge': 7, 'tier': 'lean',
+                                            'performanceCaution': True}},
+        ]
+        payload = build_site.build_kvb_charts(charts, lines, [], now)
+        self.assertEqual([p['id'] for p in payload['players']], ['10'])
+        self.assertEqual(payload['players'][0]['rows'][0]['stats'], {'rec': 5, 'recYds': 72})
+
+    def test_kvb_charts_always_keep_an_open_official_prop(self):
+        now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)
+        charts = {'players': [{'gameId': 'NFL-next', 'id': '11', 'side': 'away', 'rows': [
+            {'date': '2026-09-20', 'stats': {'rushYds': 90}}]}]}
+        lines = [{'gameId': 'NFL-next', 'athleteId': '11', 'stat': 'rushYds', 'state': 'open', 'line': 70.5,
+                  'direction': 'over', 'grade': {'performanceCaution': True}}]
+        picks = [{'gameId': 'NFL-next', 'athleteId': '11', 'kickoff': '2026-10-05T00:20:00Z', 'league': 'NFL'}]
+        payload = build_site.build_kvb_charts(charts, lines, picks, now)
+        self.assertEqual([p['id'] for p in payload['players']], ['11'])
+
     def test_dates_are_eastern_calendar_dates(self):
         self.assertEqual(build_site.day('2026-09-18T00:15Z'), '2026-09-17')
         self.assertEqual(build_site.day('2026-12-01T01:15Z'), '2026-11-30')

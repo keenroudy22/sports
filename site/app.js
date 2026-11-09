@@ -1196,7 +1196,7 @@
     todayExtrasLoading = true;
     const nbaRequested = state.league === 'ALL';
     Promise.all([maybe('scoreboard.json'), lineData(), maybe('sports.json'), allPicks(), nbaRequested ? maybe('app/nba.json') : null,
-      maybe(`app/player-charts/${chartLeague}.json`)])
+      maybe(`app/kvb-${chartLeague}.json`)])
       .then(([board, lines, sports, every, nba, charts]) => { todayExtras = { board, lines, sports, every, nba, charts, chartLeague, nbaRequested }; todayExtrasAt = Date.now(); })
       .catch(() => { todayExtras = {}; todayExtrasAt = Date.now(); })
       .finally(() => {

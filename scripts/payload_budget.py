@@ -16,6 +16,7 @@ LIMITS = {
     'lazy-more-gzip': 32 * 1024,
     'lazy-games-gzip': 32 * 1024,
     'lazy-kvb-gzip': 16 * 1024,
+    'kvb': 32 * 1024,
     'today': 320 * 1024,
     'today-hero': 4 * 1024,
     'lines': 768 * 1024,
@@ -68,12 +69,14 @@ def check(site=SITE):
         'today-hero': site / 'data/app/today-hero.json',
         'lines-NFL': site / 'data/app/lines-NFL.json',
         'lines-CFB': site / 'data/app/lines-CFB.json',
+        'kvb-NFL': site / 'data/app/kvb-NFL.json',
+        'kvb-CFB': site / 'data/app/kvb-CFB.json',
         'cfb-teams': site / 'data/app/teams/CFB.json',
         'cfb-defense': site / 'data/app/teams/CFB-defense.json',
         'vegas': site / 'data/app/vegas.json',
     }
     for name, path in files.items():
-        limit = LIMITS['lines'] if name.startswith('lines-') else LIMITS[name]
+        limit = LIMITS['lines'] if name.startswith('lines-') else LIMITS['kvb'] if name.startswith('kvb-') else LIMITS[name]
         if not path.is_file():
             warnings.append(f'{name}:missing')
         else:

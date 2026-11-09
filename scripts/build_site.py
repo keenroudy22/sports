@@ -16,6 +16,7 @@ Each page loads only what it shows:
   app/players/<L>.json        player directory for a league
   app/players/<L>/<n>.json    game logs, sharded by athlete ID
   app/player-charts/<L>.json  compact upcoming-matchup player charts
+  app/kvb-<L>.json            tiny Today-only histories for Kook vs. Book
   app/teams/<L>.json          team metadata (NFL also carries its defense table)
   app/teams/CFB-defense.json  the college defense table
   app/teams/<L>/<id>.json     one team's games, defense log and roster usage
@@ -899,6 +900,57 @@ def build_player_charts(league, games, forecasts, player_logs, season, lines, no
                                     'lines': player_lines})
     return {'generatedAt': stamp(now), 'season': season, 'keys': list(LOG_KEYS),
             'games': out_games, 'players': out_players}
+
+
+KVB_STATS = {'recYds', 'rushYds', 'passYds', 'rec', 'car', 'cmp', 'att'}
+KVB_FLOORS = {'recYds': 15.5, 'rushYds': 15.5, 'passYds': 100, 'rec': 1.5,
+              'car': 5.5, 'cmp': 10.5, 'att': 15.5}
+
+
+def build_kvb_charts(charts, lines, picks, now):
+    """Only the history Today needs for its three Kook-vs-Book cards.
+
+    The full player-chart payload can be hundreds of kilobytes (and much larger
+    for college). Today must not download that directory to draw three small
+    charts. Keep every player who can honestly enter the shortlist plus any open
+    official prop, then retain only the seven common stats used by the cards.
+    """
+    official = {(p.get('gameId'), str(p.get('athleteId'))) for p in picks
+                if p.get('athleteId') and not p.get('result') and not p.get('historicalImport')
+                and features.when(p.get('kickoff')) > now}
+    eligible = set(official)
+    for row in lines:
+        stat, grade = row.get('stat'), row.get('grade') or {}
+        key = (row.get('gameId'), str(row.get('athleteId') or ''))
+        if (row.get('state') != 'open' or not key[1] or stat not in KVB_STATS
+                or row.get('roleSuspect') or row.get('priceSuspect')):
+            continue
+        if key in official:
+            eligible.add(key)
+            continue
+        line, projection = row.get('line'), grade.get('projection')
+        if (grade.get('calibrated') is not True or grade.get('thin') or grade.get('limited')
+                or grade.get('performanceCaution') or not isinstance(line, (int, float))
+                or line < KVB_FLOORS[stat] or not isinstance(projection, (int, float))):
+            continue
+        direction = str(row.get('direction') or '').lower()
+        if (direction == 'under' and projection >= line) or (direction != 'under' and projection <= line):
+            continue
+        ratio = abs(projection - line) / max(abs(line), 1)
+        tier, edge = grade.get('view') or grade.get('tier'), grade.get('edge')
+        has_value = tier in {'lean', 'strong'} and isinstance(edge, (int, float)) and edge > 0
+        if ratio > 1 or (ratio > .5 and not has_value):
+            continue
+        eligible.add(key)
+    players = []
+    for player in charts.get('players') or []:
+        if (player.get('gameId'), str(player.get('id'))) not in eligible:
+            continue
+        rows = [{'date': row.get('date'),
+                 'stats': {key: value for key, value in (row.get('stats') or {}).items() if key in KVB_STATS}}
+                for row in player.get('rows') or []]
+        players.append({key: player.get(key) for key in ('gameId', 'id', 'side')} | {'rows': rows})
+    return {'generatedAt': stamp(now), 'players': players}
 
 
 def build_teams(league, records, team_logs, defense_logs, teams_meta, identities, current):
@@ -2109,6 +2161,9 @@ def build(now=None):
             league, info['records'], snaps if league == 'NFL' else {}, teams_meta, trends)
         validate_player_coverage(league, charts, index, shards)
         write(OUT / 'player-charts' / f'{league}.json', charts)
+        write(OUT / f'kvb-{league}.json', build_kvb_charts(charts,
+              [row for row in lines if row.get('league') == league],
+              [pick for pick in picks if pick.get('league') == league], now))
         write(OUT / 'players' / f'{league}.json', {'keys': list(LOG_KEYS), 'shards': SHARDS[league], 'players': index,
                                                    'leaders': leaders, 'season': leader_season})
         for shard, players in shards.items():
