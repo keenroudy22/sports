@@ -1,165 +1,331 @@
 {
- "tickets": [
-  {
-   "id": "community:personal-ticket:2026-10-22-jmu-straight",
-   "league": "CFB", "kind": "spreads", "personalTicket": true,
-   "displayTitle": "My James Madison -11.5 · -115", "title": "James Madison -11.5 at FanDuel",
-   "odds": -115, "book": "FanDuel", "kickoff": "2026-10-22T23:00:00Z", "status": "active",
-   "card": "img/tickets/personal-jmu-straight-2026-10-22.png",
-   "legs": ["James Madison -11.5 spread"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-22-braun-straight",
-   "league": "NBA", "kind": "props", "personalTicket": true,
-   "displayTitle": "My Christian Braun over 10.5 points · +132 with 50% boost",
-   "title": "Christian Braun over 10.5 points at FanDuel · boosted",
-   "odds": 132, "baseOdds": -114, "priceBoosted": true, "book": "FanDuel",
-   "kickoff": "2026-10-23T01:40:00Z", "status": "active",
-   "card": "img/tickets/personal-braun-straight-2026-10-22.png",
-   "legs": ["Christian Braun over 10.5 points"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-22-maye-straight",
-   "league": "NFL", "kind": "props", "personalTicket": true,
-   "displayTitle": "My Drake Maye under 20.5 completions · -125",
-   "title": "Drake Maye under 20.5 completions at FanDuel",
-   "odds": -125, "book": "FanDuel", "kickoff": "2026-10-23T00:16:00Z", "status": "active",
-   "card": "img/tickets/personal-maye-straight-2026-10-22.png",
-   "legs": ["Drake Maye under 20.5 pass completions"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-22-cfb-four",
-   "league": "CFB", "kind": "parlays", "parlayType": "community", "personalTicket": true,
-   "displayTitle": "My 4-leg college parlay · +381", "title": "4-leg college personal parlay at FanDuel",
-   "odds": 381, "book": "FanDuel", "kickoff": "2026-10-22T23:00:00Z", "status": "active",
-   "card": "img/tickets/mycard-cfb-four-2026-10-22.png",
-   "legs": ["Memphis -6.5 alternate spread", "Jaylin Carter 80+ rushing yards", "James Madison -6.5 alternate spread", "Liberty -5.5 alternate spread"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-22-tnf-ten",
-   "league": "NFL", "kind": "parlays", "parlayType": "community", "personalTicket": true,
-   "displayTitle": "My 10-leg TNF lotto · +2013 with 30% boost", "title": "10-leg TNF personal lotto at FanDuel · boosted",
-   "odds": 2013, "baseOdds": 1548, "priceBoosted": true, "book": "FanDuel",
-   "kickoff": "2026-10-23T00:16:00Z", "status": "active",
-   "card": "img/tickets/mycard-tnf-ten-2026-10-22.png",
-   "legs": ["Rhamondre Stevenson 30+ rushing yards", "Rome Odunze 30+ receiving yards", "TreVeyon Henderson 15+ rushing yards", "Drake Maye 200+ passing yards", "Caleb Williams 225+ passing yards", "Luther Burden III 4+ receptions", "Rome Odunze 3+ receptions", "Hunter Henry 3+ receptions", "DeMario Douglas 3+ receptions", "Kalif Raymond 2+ receptions"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-22-tnf-seven",
-   "league": "NFL", "kind": "parlays", "parlayType": "community", "personalTicket": true,
-   "displayTitle": "My 7-leg TNF parlay · +902", "title": "7-leg TNF personal parlay at FanDuel",
-   "odds": 902, "book": "FanDuel", "kickoff": "2026-10-23T00:16:00Z", "status": "active",
-   "card": "img/tickets/mycard-tnf-seven-2026-10-22.png",
-   "legs": ["D'Andre Swift 50+ rushing yards", "A.J. Brown 40+ receiving yards", "Colston Loveland 40+ receiving yards", "DeMario Douglas 25+ receiving yards", "Caleb Williams 200+ passing yards", "Chicago Bears moneyline", "Luther Burden III 40+ receiving yards"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-22-tnf-q1",
-   "league": "NFL", "kind": "parlays", "parlayType": "community",
-   "displayTitle": "TNF first-quarter receiving fun ticket · +1399",
-   "title": "4-leg TNF first-quarter fun ticket at FanDuel",
-   "odds": 1399, "book": "FanDuel", "kickoff": "2026-10-23T00:15:00Z",
-   "status": "active", "personalTicket": true,
-   "card": "img/tickets/personal-tnf-q1-2026-10-22.png",
-   "legs": ["Hunter Henry over 0.5 first-quarter receiving yards", "DeMario Douglas over 0.5 first-quarter receiving yards", "Kalif Raymond over 0.5 first-quarter receiving yards", "Rome Odunze over 3.5 first-quarter receiving yards"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-22-tnf-lotto",
-   "league": "NFL", "kind": "parlays", "parlayType": "community",
-   "displayTitle": "5-leg TNF fun lotto · +579 with 30% boost",
-   "title": "5-leg TNF fun lotto at FanDuel · boosted",
-   "odds": 579, "baseOdds": 446, "book": "FanDuel", "priceBoosted": true,
-   "kickoff": "2026-10-23T00:15:00Z", "status": "active", "personalTicket": true,
-   "card": "img/tickets/personal-tnf-lotto-2026-10-22.png",
-   "legs": ["D'Andre Swift 50+ rushing yards", "A.J. Brown 40+ receiving yards", "Colston Loveland 40+ receiving yards", "DeMario Douglas 25+ receiving yards", "Caleb Williams 200+ passing yards"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-21-nba-lotto",
-   "league": "NBA", "kind": "parlays", "parlayType": "community",
-   "displayTitle": "4-leg NBA fun lotto · +668 with 50% boost",
-   "title": "4-leg NBA fun lotto at FanDuel · boosted",
-   "odds": 668, "baseOdds": 446, "book": "FanDuel", "priceBoosted": true,
-   "stakeDollars": 25, "protectionFeeDollars": 0.75, "totalChargedDollars": 25.75,
-   "potentialReturnDollars": 192.12, "unitDollars": 50,
-   "kickoff": "2026-10-21T23:00:00Z", "status": "active", "personalTicket": true,
-   "card": "img/tickets/personal-nba-lotto-2026-10-21.png",
-   "legs": ["Jalen Johnson 15+ points", "Paolo Banchero 8+ rebounds", "Matas Buzelis 6+ rebounds", "Scottie Barnes 6+ assists"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-19-mnf-eight",
-   "league": "NFL", "kind": "parlays", "parlayType": "community",
-   "displayTitle": "8-leg MNF fun parlay", "title": "8-leg MNF fun parlay at FanDuel",
-   "odds": 654, "book": "FanDuel", "kickoff": "2026-10-20T00:16:00Z",
-   "status": "active", "personalTicket": true,
-   "card": "img/tickets/personal-mnf-eight-2026-10-19.png",
-   "legs": ["Brock Purdy 200+ passing yards", "Antonio Williams 2+ receptions", "Mike Evans 40+ receiving yards", "Stefon Diggs 3+ receptions", "Terry McLaurin 30+ receiving yards", "Chigoziem Okonkwo 2+ receptions", "Christian McCaffrey 3+ receptions", "George Kittle 4+ receptions"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-19-mnf-q1",
-   "league": "NFL", "kind": "parlays", "parlayType": "community",
-   "displayTitle": "First-quarter receiving fun ticket", "title": "First-quarter receiving fun ticket at FanDuel",
-   "odds": 1493, "book": "FanDuel", "priceBoosted": true, "stakeDollars": 10,
-   "kickoff": "2026-10-20T00:16:00Z", "status": "active", "personalTicket": true,
-   "card": "img/tickets/personal-mnf-q1-2026-10-19.png",
-   "legs": ["Stefon Diggs over 3.5 first-quarter receiving yards", "Terry McLaurin over 4.5 first-quarter receiving yards", "Mike Evans over 10.5 first-quarter receiving yards", "Christian McCaffrey over 6.5 first-quarter receiving yards"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-19-juszczyk-first",
-   "league": "NFL", "kind": "parlays", "parlayType": "community",
-   "displayTitle": "Kyle Juszczyk first-TD dart", "title": "Kyle Juszczyk first touchdown scorer",
-   "odds": 3000, "book": "FanDuel", "stakeDollars": 5,
-   "kickoff": "2026-10-20T00:16:00Z", "status": "active", "personalTicket": true,
-   "card": "img/tickets/personal-juszczyk-first-2026-10-19.png",
-   "legs": ["Kyle Juszczyk first touchdown scorer"]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-15-sea-den",
-   "league": "NFL",
-   "kind": "parlays",
-   "parlayType": "community",
-   "displayTitle": "7-leg boosted Fun Lotto",
-   "title": "7-leg boosted Fun Lotto at FanDuel",
-   "odds": 9023,
-   "book": "FanDuel",
-   "riskUnits": 0.25,
-   "kickoff": "2026-10-16T00:15:00Z",
-   "status": "active",
-   "personalTicket": true,
-   "priceBoosted": true,
-   "card": "img/tickets/personal-sea-den-2026-10-15.png",
-   "legs": [
-    "Seattle Seahawks -2.5",
-    "Marvin Mims Jr. 2+ receptions",
-    "AJ Barner anytime touchdown scorer",
-    "AJ Barner 2+ receptions",
-    "Emanuel Wilson 50+ rushing yards",
-    "Jaxon Smith-Njigba 80+ receiving yards",
-    "Tory Horton 1+ receptions"
-   ]
-  },
-  {
-   "id": "community:personal-ticket:2026-10-17-cfb-lotto",
-   "league": "CFB",
-   "kind": "parlays",
-   "parlayType": "community",
-   "displayTitle": "8-leg Saturday Fun Lotto",
-   "title": "8-leg Saturday Fun Lotto at FanDuel",
-   "odds": 2148,
-   "book": "FanDuel",
-   "riskUnits": 0.25,
-   "kickoff": "2026-10-17T16:00:00Z",
-   "status": "active",
-   "personalTicket": true,
-   "card": "img/tickets/personal-cfb-lotto-2026-10-17.png",
-   "legs": [
-    "Northwestern moneyline",
-    "Pittsburgh moneyline",
-    "Ole Miss moneyline",
-    "Texas Tech -5.5 alternate spread",
-    "UCLA moneyline",
-    "Wake Forest moneyline",
-    "Houston moneyline",
-    "Vanderbilt moneyline"
-   ]
-  }
- ]
+  "tickets": [
+    {
+      "id": "community:personal-ticket:2026-10-22-jmu-straight",
+      "league": "CFB",
+      "kind": "spreads",
+      "personalTicket": true,
+      "displayTitle": "My James Madison -11.5 \u00b7 -115",
+      "title": "James Madison -11.5 at FanDuel",
+      "odds": -115,
+      "book": "FanDuel",
+      "kickoff": "2026-10-22T23:00:00Z",
+      "status": "active",
+      "card": "img/tickets/personal-jmu-straight-2026-10-22.png",
+      "legs": [
+        "James Madison -11.5 spread"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-22-braun-straight",
+      "league": "NBA",
+      "kind": "props",
+      "personalTicket": true,
+      "displayTitle": "My Christian Braun over 10.5 points \u00b7 +132 with 50% boost",
+      "title": "Christian Braun over 10.5 points at FanDuel \u00b7 boosted",
+      "odds": 132,
+      "baseOdds": -114,
+      "priceBoosted": true,
+      "book": "FanDuel",
+      "kickoff": "2026-10-23T01:40:00Z",
+      "status": "active",
+      "card": "img/tickets/personal-braun-straight-2026-10-22.png",
+      "legs": [
+        "Christian Braun over 10.5 points"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-22-maye-straight",
+      "league": "NFL",
+      "kind": "props",
+      "personalTicket": true,
+      "displayTitle": "My Drake Maye under 20.5 completions \u00b7 -125",
+      "title": "Drake Maye under 20.5 completions at FanDuel",
+      "odds": -125,
+      "book": "FanDuel",
+      "kickoff": "2026-10-23T00:16:00Z",
+      "status": "active",
+      "card": "img/tickets/personal-maye-straight-2026-10-22.png",
+      "legs": [
+        "Drake Maye under 20.5 pass completions"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-22-cfb-four",
+      "league": "CFB",
+      "kind": "parlays",
+      "parlayType": "community",
+      "personalTicket": true,
+      "displayTitle": "My 4-leg college parlay \u00b7 +381",
+      "title": "4-leg college personal parlay at FanDuel",
+      "odds": 381,
+      "book": "FanDuel",
+      "kickoff": "2026-10-22T23:00:00Z",
+      "status": "active",
+      "card": "img/tickets/mycard-cfb-four-2026-10-22.png",
+      "legs": [
+        "Memphis -6.5 alternate spread",
+        "Jaylin Carter 80+ rushing yards",
+        "James Madison -6.5 alternate spread",
+        "Liberty -5.5 alternate spread"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-22-tnf-ten",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "personalTicket": true,
+      "displayTitle": "My 10-leg TNF lotto \u00b7 +2013 with 30% boost",
+      "title": "10-leg TNF personal lotto at FanDuel \u00b7 boosted",
+      "odds": 2013,
+      "baseOdds": 1548,
+      "priceBoosted": true,
+      "book": "FanDuel",
+      "kickoff": "2026-10-23T00:16:00Z",
+      "status": "active",
+      "card": "img/tickets/mycard-tnf-ten-2026-10-22.png",
+      "legs": [
+        "Rhamondre Stevenson 30+ rushing yards",
+        "Rome Odunze 30+ receiving yards",
+        "TreVeyon Henderson 15+ rushing yards",
+        "Drake Maye 200+ passing yards",
+        "Caleb Williams 225+ passing yards",
+        "Luther Burden III 4+ receptions",
+        "Rome Odunze 3+ receptions",
+        "Hunter Henry 3+ receptions",
+        "DeMario Douglas 3+ receptions",
+        "Kalif Raymond 2+ receptions"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-22-tnf-seven",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "personalTicket": true,
+      "displayTitle": "My 7-leg TNF parlay \u00b7 +902",
+      "title": "7-leg TNF personal parlay at FanDuel",
+      "odds": 902,
+      "book": "FanDuel",
+      "kickoff": "2026-10-23T00:16:00Z",
+      "status": "active",
+      "card": "img/tickets/mycard-tnf-seven-2026-10-22.png",
+      "legs": [
+        "D'Andre Swift 50+ rushing yards",
+        "A.J. Brown 40+ receiving yards",
+        "Colston Loveland 40+ receiving yards",
+        "DeMario Douglas 25+ receiving yards",
+        "Caleb Williams 200+ passing yards",
+        "Chicago Bears moneyline",
+        "Luther Burden III 40+ receiving yards"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-22-tnf-q1",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "displayTitle": "TNF first-quarter receiving fun ticket \u00b7 +1399",
+      "title": "4-leg TNF first-quarter fun ticket at FanDuel",
+      "odds": 1399,
+      "book": "FanDuel",
+      "kickoff": "2026-10-23T00:15:00Z",
+      "status": "active",
+      "personalTicket": true,
+      "card": "img/tickets/personal-tnf-q1-2026-10-22.png",
+      "legs": [
+        "Hunter Henry over 0.5 first-quarter receiving yards",
+        "DeMario Douglas over 0.5 first-quarter receiving yards",
+        "Kalif Raymond over 0.5 first-quarter receiving yards",
+        "Rome Odunze over 3.5 first-quarter receiving yards"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-22-tnf-lotto",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "displayTitle": "5-leg TNF fun lotto \u00b7 +579 with 30% boost",
+      "title": "5-leg TNF fun lotto at FanDuel \u00b7 boosted",
+      "odds": 579,
+      "baseOdds": 446,
+      "book": "FanDuel",
+      "priceBoosted": true,
+      "kickoff": "2026-10-23T00:15:00Z",
+      "status": "active",
+      "personalTicket": true,
+      "card": "img/tickets/personal-tnf-lotto-2026-10-22.png",
+      "legs": [
+        "D'Andre Swift 50+ rushing yards",
+        "A.J. Brown 40+ receiving yards",
+        "Colston Loveland 40+ receiving yards",
+        "DeMario Douglas 25+ receiving yards",
+        "Caleb Williams 200+ passing yards"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-21-nba-lotto",
+      "league": "NBA",
+      "kind": "parlays",
+      "parlayType": "community",
+      "displayTitle": "4-leg NBA fun lotto \u00b7 +668 with 50% boost",
+      "title": "4-leg NBA fun lotto at FanDuel \u00b7 boosted",
+      "odds": 668,
+      "baseOdds": 446,
+      "book": "FanDuel",
+      "priceBoosted": true,
+      "stakeDollars": 25,
+      "protectionFeeDollars": 0.75,
+      "totalChargedDollars": 25.75,
+      "potentialReturnDollars": 192.12,
+      "unitDollars": 50,
+      "kickoff": "2026-10-21T23:00:00Z",
+      "status": "active",
+      "personalTicket": true,
+      "card": "img/tickets/personal-nba-lotto-2026-10-21.png",
+      "legs": [
+        "Jalen Johnson 15+ points",
+        "Paolo Banchero 8+ rebounds",
+        "Matas Buzelis 6+ rebounds",
+        "Scottie Barnes 6+ assists"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-19-mnf-eight",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "displayTitle": "8-leg MNF fun parlay",
+      "title": "8-leg MNF fun parlay at FanDuel",
+      "odds": 654,
+      "book": "FanDuel",
+      "kickoff": "2026-10-20T00:16:00Z",
+      "status": "active",
+      "personalTicket": true,
+      "card": "img/tickets/personal-mnf-eight-2026-10-19.png",
+      "legs": [
+        "Brock Purdy 200+ passing yards",
+        "Antonio Williams 2+ receptions",
+        "Mike Evans 40+ receiving yards",
+        "Stefon Diggs 3+ receptions",
+        "Terry McLaurin 30+ receiving yards",
+        "Chigoziem Okonkwo 2+ receptions",
+        "Christian McCaffrey 3+ receptions",
+        "George Kittle 4+ receptions"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-19-mnf-q1",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "displayTitle": "First-quarter receiving fun ticket",
+      "title": "First-quarter receiving fun ticket at FanDuel",
+      "odds": 1493,
+      "book": "FanDuel",
+      "priceBoosted": true,
+      "stakeDollars": 10,
+      "kickoff": "2026-10-20T00:16:00Z",
+      "status": "active",
+      "personalTicket": true,
+      "card": "img/tickets/personal-mnf-q1-2026-10-19.png",
+      "legs": [
+        "Stefon Diggs over 3.5 first-quarter receiving yards",
+        "Terry McLaurin over 4.5 first-quarter receiving yards",
+        "Mike Evans over 10.5 first-quarter receiving yards",
+        "Christian McCaffrey over 6.5 first-quarter receiving yards"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-19-juszczyk-first",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "displayTitle": "Kyle Juszczyk first-TD dart",
+      "title": "Kyle Juszczyk first touchdown scorer",
+      "odds": 3000,
+      "book": "FanDuel",
+      "stakeDollars": 5,
+      "kickoff": "2026-10-20T00:16:00Z",
+      "status": "active",
+      "personalTicket": true,
+      "card": "img/tickets/personal-juszczyk-first-2026-10-19.png",
+      "legs": [
+        "Kyle Juszczyk first touchdown scorer"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-15-sea-den",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "displayTitle": "7-leg boosted Fun Lotto",
+      "title": "7-leg boosted Fun Lotto at FanDuel",
+      "odds": 9023,
+      "book": "FanDuel",
+      "riskUnits": 0.25,
+      "kickoff": "2026-10-16T00:15:00Z",
+      "status": "active",
+      "personalTicket": true,
+      "priceBoosted": true,
+      "card": "img/tickets/personal-sea-den-2026-10-15.png",
+      "legs": [
+        "Seattle Seahawks -2.5",
+        "Marvin Mims Jr. 2+ receptions",
+        "AJ Barner anytime touchdown scorer",
+        "AJ Barner 2+ receptions",
+        "Emanuel Wilson 50+ rushing yards",
+        "Jaxon Smith-Njigba 80+ receiving yards",
+        "Tory Horton 1+ receptions"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-10-17-cfb-lotto",
+      "league": "CFB",
+      "kind": "parlays",
+      "parlayType": "community",
+      "displayTitle": "8-leg Saturday Fun Lotto",
+      "title": "8-leg Saturday Fun Lotto at FanDuel",
+      "odds": 2148,
+      "book": "FanDuel",
+      "riskUnits": 0.25,
+      "kickoff": "2026-10-17T16:00:00Z",
+      "status": "active",
+      "personalTicket": true,
+      "card": "img/tickets/personal-cfb-lotto-2026-10-17.png",
+      "legs": [
+        "Northwestern moneyline",
+        "Pittsburgh moneyline",
+        "Ole Miss moneyline",
+        "Texas Tech -5.5 alternate spread",
+        "UCLA moneyline",
+        "Wake Forest moneyline",
+        "Houston moneyline",
+        "Vanderbilt moneyline"
+      ]
+    },
+    {
+      "id": "community:personal-ticket:2026-11-09-mnf-two-leg",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "personalTicket": true,
+      "displayTitle": "MNF fun parlay \u00b7 Cook 50+ rushing / Hockenson 25+ receiving",
+      "title": "MNF 2-leg fun parlay at FanDuel",
+      "odds": -196,
+      "book": "FanDuel",
+      "kickoff": "2026-11-10T01:15:00Z",
+      "status": "active",
+      "riskUnits": 0.25,
+      "card": "img/tickets/mnf-two-leg-2026-11-09.png",
+      "legs": [
+        "James Cook 50+ rushing yards",
+        "T.J. Hockenson 25+ receiving yards"
+      ],
+      "quotedAt": "2026-11-09T17:54:07.975330+00:00",
+      "source": "https://in.sportsbook.fanduel.com/football/nfl/buffalo-bills-@-minnesota-vikings-36244880",
+      "note": "Owner-approved fun selection; separate from Best Bets and Climb. No wager placement inferred."
+    }
+  ]
 }
