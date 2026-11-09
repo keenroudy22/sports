@@ -279,5 +279,11 @@ test('the season units line highlights the month and the setter toggles a tapped
   const html = await views().record({ tab: 'official' });
   assert.match(html, /<rect x="[\d.]+" y="0" width="[\d.]+" height="\d+" fill="rgba\(242, 247, 244, \.08\)" rx="6"><title>October 2026<\/title><\/rect>/);
   assert.match(source, /rcal: v => \{ const \[k, x\] = v\.split\('='\); state\.record\.cal\[k\] = k === 'day' && state\.record\.cal\.day === x \? null : x;/);
-  assert.match(source, /case 'record': return \{ view: 'record', tab: \[.*\]\.includes\(a\) \? a : 'official', anchor: a === 'calendar' \? 'calendar' : null \}/);
+  assert.match(source, /case 'record': return \{ view: 'record', tab: \[.*\]\.includes\(a\) \? a : 'official', anchor: a === 'calendar' \? 'calendar' : null,[^}]+league: params\.get\('sport'\)/);
+});
+
+test('the main Results tab cannot silently inherit an NFL player-page filter', () => {
+  assert.match(source, /\['today', 'record'\]\.includes\(route\.view\) && location\.hash !== appliedHash[^\n]+setLeague\(route\.league \|\| 'ALL'\)/);
+  assert.match(source, /if \(route\.view === 'record'\) return `\$\{route\.tab === 'official' \? '#record'/);
+  assert.match(moreSource, /recordHref\('#record\/fun'\)/, 'an intentional header sport choice survives record sub-tabs');
 });

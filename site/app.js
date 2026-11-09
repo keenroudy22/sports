@@ -577,8 +577,9 @@
       case 'player': return { view: 'player', league: (a || 'NFL').toUpperCase() === 'CFB' ? 'CFB' : 'NFL', id: b,
         stat: params.get('stat') || null, season: params.get('season') || null, sample: params.get('sample') || null };
       case 'team': return { view: 'team', league: (a || 'NFL').toUpperCase() === 'CFB' ? 'CFB' : 'NFL', id: b };
-      case 'record': return { view: 'record', tab: ['fun', 'climb', 'model', 'trials'].includes(a) ? a : 'official', anchor: a === 'calendar' ? 'calendar' : null };
-      case 'results': return { view: 'record', tab: 'official', legacy: true };
+      case 'record': return { view: 'record', tab: ['fun', 'climb', 'model', 'trials'].includes(a) ? a : 'official', anchor: a === 'calendar' ? 'calendar' : null,
+        league: params.get('sport') ? params.get('sport').toUpperCase() : null };
+      case 'results': return { view: 'record', tab: 'official', league: params.get('sport') ? params.get('sport').toUpperCase() : null, legacy: true };
       case 'model': return { view: 'record', tab: 'model', legacy: true };
       case 'vegas': return { view: 'vegas', league: a ? a.toUpperCase() : null };
       case 'more': case 'tools': return { view: 'more' };
@@ -606,7 +607,7 @@
       return `#research/${route.mode}${tail ? '?' + tail : ''}`;
     }
     if (route.view === 'games') return `#games/live${route.league && route.league !== 'ALL' ? '?sport=' + route.league : ''}`;
-    if (route.view === 'record') return route.tab === 'official' ? '#record' : `#record/${route.tab}`;
+    if (route.view === 'record') return `${route.tab === 'official' ? '#record' : '#record/' + route.tab}${route.league && route.league !== 'ALL' ? '?sport=' + route.league : ''}`;
     if (route.view === 'more') return '#more';
     return null;
   };
@@ -2106,7 +2107,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-47bbd39ca4dc';
+  const MORE_ASSET = 'app-more.js?v=sha256-43158c0fd1f3';
   const GAMES_ASSET = 'app-games.js?v=sha256-4c1b90518d37';
   const KVB_ASSET = 'app-kvb.js?v=sha256-338cc9fd90bf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
@@ -2231,8 +2232,7 @@
     if (route.legacy && route.ctx) applyContext(route);
     const next = canonical(route);
     if (next && next !== location.hash) { try { history.replaceState(null, '', next); } catch (_) { /* rate limited */ } route = resolve(next); }
-    /* The bare Today tab is the whole football day. A sport-specific Today remains an explicit URL choice. */
-    if (route.view === 'today' && location.hash !== appliedHash) { appliedHash = location.hash; setLeague(route.league || 'ALL'); }
+    if (['today', 'record'].includes(route.view) && location.hash !== appliedHash) { appliedHash = location.hash; setLeague(route.league || 'ALL'); }
     chrome(route);
     const view = $('#view');
     const focusKey = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.input : null;
@@ -2285,6 +2285,7 @@
     if (route.view === 'game' || route.view === 'team') return '#games';
     if (route.view === 'player') return '#research/players';
     if (route.view === 'today') return state.league === 'ALL' ? '#today' : `#today?sport=${state.league}`;
+    if (route.view === 'record') return `${route.tab === 'official' ? '#record' : '#record/' + route.tab}${state.league === 'ALL' ? '' : '?sport=' + state.league}`;
     if (route.view === 'research' && (route.league || route.game)) return `#research/${route.mode}`;
     if (route.view === 'vegas' && route.league) return '#vegas';
     return null;

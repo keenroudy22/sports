@@ -52,3 +52,10 @@ test('canonical table rewrites legacy pages and never rewrites public deep links
   for (const [oldHash, nextHash] of table) assert.equal(M.canonical(M.resolve(oldHash)), nextHash, oldHash);
   for (const hash of ['#pick/a/b', '#game/CFB-1', '#player/NFL/9', '#team/CFB/3']) assert.equal(M.canonical(M.resolve(hash)), null, hash);
 });
+
+test('Results defaults to all sports and preserves only an explicit sport filter', () => {
+  assert.deepEqual(M.resolve('#record'), { view: 'record', tab: 'official', anchor: null, league: null });
+  assert.deepEqual(M.resolve('#record/calendar?sport=CFB'), { view: 'record', tab: 'official', anchor: 'calendar', league: 'CFB' });
+  assert.deepEqual(M.resolve('#record/fun?sport=NFL'), { view: 'record', tab: 'fun', anchor: null, league: 'NFL' });
+  assert.equal(M.canonical(M.resolve('#results?sport=CFB')), '#record?sport=CFB');
+});
