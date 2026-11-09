@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-09T10:03:51Z",
+  "updatedAt": "2026-11-09T13:32:02Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -4377,6 +4377,15 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4242512",
+              "name": "Malik Willis",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Groin",
+              "reportedAt": "2026-11-09T13:11Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242512/malik-willis"
+            },
+            {
               "id": "3043234",
               "name": "Zane Gonzalez",
               "position": "PK",
@@ -4411,15 +4420,6 @@
               "injury": null,
               "reportedAt": "2026-11-09T00:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/4869645/caleb-douglas"
-            },
-            {
-              "id": "4242512",
-              "name": "Malik Willis",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-08T23:46Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242512/malik-willis"
             },
             {
               "id": "4711533",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "34",
-          "name": "Nate Thomas",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-11-08T20:32:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4428656/nate-thomas"
-        },
-        {
           "teamId": "11",
           "name": "Jalen Travis",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-11-09T10:03:51Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426374/tyrique-stevenson-sr"
+        },
+        {
+          "teamId": "15",
+          "name": "Malik Willis",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-11-09T13:32:02Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242512/malik-willis"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-09T10:03:51Z",
-      "lastAttemptAt": "2026-11-09T10:03:51Z",
+      "checkedAt": "2026-11-09T13:32:02Z",
+      "lastAttemptAt": "2026-11-09T13:32:02Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-09T10:03:51Z",
-      "lastAttemptAt": "2026-11-09T10:03:51Z",
+      "checkedAt": "2026-11-09T13:32:02Z",
+      "lastAttemptAt": "2026-11-09T13:32:02Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
