@@ -128,14 +128,27 @@ test('matchup charts can filter by player or team name', () => {
   assert.match(source, /const nameMatch = pl =>/);
   assert.match(source, /data-input="pq"/);
   assert.match(source, /&& nameMatch\(pl\)/);
-  assert.match(source, /History is not a probability\. \$\{shareLink\('players'\)\}/);
+  assert.match(source, /History ≠ probability\. \$\{shareLink\('players'\)\}/);
 });
 
 test('matchup research is a scan-first prop board with Kookn and paid-tool comparison windows', () => {
   for (const label of ['Book line', 'Kook’n', 'L5', 'L10', 'Season', 'Vs defense']) assert.ok(source.includes(label), label);
   assert.match(source, /class="prop-explorer"/);
+  assert.match(source, /class="prop-rate-bar"/);
   assert.match(source, /defenseWords\(teams, String\(opponent\.id\), pl\.pos, key, league, dir\)/);
   assert.match(source, /#research\/trends\?period=1Q&amp;sport=NFL/);
-  assert.match(source, /Tap a player to open the chart/);
+  assert.match(source, /Tap a player for the chart/);
   assert.match(source, /includes\(route\.view\)\) await ensureResearchCss\(\)/);
+});
+
+test('mobile navigation leads with bettor tasks instead of internal research categories', () => {
+  assert.match(source, /\['research', 'Props'\]/);
+  assert.match(source, /\['record', 'Results'\]/);
+  assert.match(source, /Player props<\/b><small>Line · Kook’n · L5\/L10/);
+  assert.match(source, /First quarter<\/b><small>1Q history & matchups/);
+  assert.match(source, /class="research-quick"/);
+  assert.match(source, /'Player prop board'/);
+  assert.match(source, /'Player stats'/);
+  assert.match(source, /'Position vs\. defense'/);
+  assert.ok(source.indexOf('${proof}${spotlight}') > -1, 'the current NFL matchup appears before secondary Today sections');
 });

@@ -760,7 +760,7 @@
     check: '<path d="M5 12l5 5 9-10"/>',
   };
   const svg = (name, size = 22) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[name]}</svg>`;
-  const TABS = [['today', 'Today'], ['research', 'Research'], ['games', 'Games'], ['record', 'Record'], ['more', 'More']];
+  const TABS = [['today', 'Today'], ['research', 'Props'], ['games', 'Games'], ['record', 'Results'], ['more', 'More']];
   const head = (eyebrow, title, sub = '', back = '') => `${back}<div class="page-head">${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}<h1>${esc(title)}</h1>${sub ? `<p class="sub">${sub}</p>` : ''}</div>`;
   const section = (title, body, link = '', note = '') => `<section class="section"><div class="section-head"><h2>${esc(title)}</h2>${link}</div>${note ? `<p class="section-note">${note}</p>` : ''}${body}</section>`;
   const empty = (title, text, icon = 'clock') => `<div class="empty">${svg(icon, 34)}<div><h3>${esc(title)}</h3><p>${text}</p></div></div>`;
@@ -1219,7 +1219,7 @@
   const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
     const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today);
     return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <nav class="today-tools" aria-label="Betting data and research"><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&sport=NFL"><span aria-hidden="true">⌕</span><b>Players</b><small>Stats & game logs</small></a><a href="#research/lines"><span aria-hidden="true">↕</span><b>Lines</b><small>Book vs Kook’n</small></a><a href="#record"><span aria-hidden="true">✓</span><b>Results</b><small>Every graded play</small></a></nav>
+      <nav class="today-tools" aria-label="Betting data and research"><a href="#research/players?sport=NFL"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&amp;sport=NFL"><span aria-hidden="true">⌕</span><b>Find a player</b><small>Stats & logs</small></a></nav>
       ${postedSummary ? postedSummary.html : ''}
       <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Kook’n picks'}</h2><a href="#record">Track record ›</a></div>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card', quick: true }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
@@ -1544,14 +1544,16 @@
   };
   const shareLink = (mode, route) => `<a class="linkish" href="${esc(researchShare(mode, route))}" data-copy-link>Copy link</a>`;
   const RESEARCH_HEAD = {
-    trends: ['Hit-rate trends', 'How often a player cleared a line in recorded regular-season games. History, not a probability.'],
-    players: ['Player projections', "Book line, Kook’n projection, edge and recent results—then the deeper evidence."],
+    trends: ['Hit-rate trends', 'L5, L10 and season results against a line. History, not a probability.'],
     news: ['Injuries and news', 'ESPN injury list and status changes, newest first.'] };
   const researchHead = mode => {
-    const [title, sub] = RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
+    const playerHeads = { matchup: ['Player prop board', "Book line, Kook’n, L5/L10 and defense at a glance."], search: ['Player stats', 'Logs, averages & splits.'], defense: ['Position vs. defense', 'What defenses allow by position and stat.'] };
+    const [title, sub] = mode === 'players' ? (playerHeads[state.players.sub] || playerHeads.matchup) : RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
+    const active = mode === 'players' ? state.players.sub === 'search' ? 'players' : state.players.sub === 'defense' || state.players.sub === 'teams' ? 'defense' : 'props' : mode === 'trends' && state.trends.period === '1Q' ? 'first' : mode;
+    const tool = (href, label, key) => `<a href="${href}"${active === key ? ' aria-current="page"' : ''}><b>${label}</b></a>`;
     return `${head('Research', title, sub)}
-      <div class="toolbar"><div class="chip-scroll">${segLinks([['#research/lines', 'Projections & odds', 'lines'], ['#research/players', 'Player stats', 'players'], ['#research/trends', 'Hit rates', 'trends'], ['#research/news', 'News', 'news']], mode)}</div></div>
-      <details class="plain-fold research-more"><summary>More research tools</summary><div class="btn-row"><a class="btn small" href="#trends?period=1Q&sport=NFL">First-quarter trends</a><a class="btn small" href="#trends?period=full&kind=alternate&sport=ALL">Alternate lines</a></div></details>`;
+      <nav class="research-quick" aria-label="Research tools">${tool('#research/players?sport=NFL', 'Props', 'props')}${tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool('#research/players?view=search&amp;sport=NFL', 'Players', 'players')}${tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>
+      <details class="plain-fold research-more"><summary>More research</summary><div class="btn-row"><a class="btn small" href="#research/lines">Kook’n vs. book</a><a class="btn small" href="#research/trends?period=full">Full-game hit rates</a><a class="btn small" href="#research/news">Injuries & news</a><a class="btn small" href="#trends?period=full&amp;kind=alternate&amp;sport=ALL">Alternate lines</a></div></details>`;
   };
   /* A link's filters apply once, when it is opened. After that the reader's own choices win, even on refresh. */
   let appliedHash = null;
@@ -1778,13 +1780,15 @@
     }).join('')}</div>${rows.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-more-trends>Show ${Math.min(40, rows.length - shown.length)} more</button></p>` : ''}`
       : empty('No trends match', 'Try a lower hit rate, another history window or stat, or clear the search. Old and missing prices stay hidden.', 'research');
     const W = { season: 'Season', last10: 'Last 10', last5: 'Last 5' }, K = { main: 'Main lines', alternate: 'Alternates', milestone: 'Milestones' };
-    return `${seg('trendPeriod', [['full', 'Full game'], ['1Q', '1Q']], t.period || 'full')}${quarter ? '<p class="small muted">NFL first-quarter history · milestones, not sportsbook lines. Missing stats are excluded; no odds, projections or EV implied.</p>' : ''}<div class="toolbar"><div class="chip-scroll">${seg('trendRate', ['70', '80', '90', '100'].map(r => [r, `${r}${r === '100' ? '%' : '%+'} · ${pass(forRate(r)).length}`]), t.rate)}</div></div>
+    const method = quarter ? 'Opponent-supported trends first. Defense is season 1Q by position. Player windows do not change it. Missing stats stay out; hit rate alone is not value.' : 'Even a 4-of-4 run at −900 needs to win more than 90% of the time to profit.';
+    return `${seg('trendPeriod', [['full', 'Full game'], ['1Q', '1Q']], t.period || 'full')}${quarter ? '<p class="small muted">Historical 1Q milestones · no verified odds or projections.</p>' : ''}<div class="toolbar"><div class="chip-scroll">${seg('trendRate', ['70', '80', '90', '100'].map(r => [r, `${r}${r === '100' ? '%' : '%+'} · ${pass(forRate(r)).length}`]), t.rate)}</div></div>
       ${filtersFold('trends', [quarter ? '1Q' : 'Full game', W[t.window], quarter ? 'Milestones' : K[t.kind], (TREND_STATS.find(([k]) => k === (t.stat || 'all')) || [, 'All stats'])[1], day === 'today' ? 'Today' : '', t.heavy ? '' : 'No heavy favorites'].filter(Boolean).join(' · '),
         `${seg('trendWindow', Object.entries(W), t.window)}${quarter ? '' : seg('trendKind', Object.entries(K), t.kind)}<label class="sr" for="tstat">Stat</label><select id="tstat" class="select" data-select="trendStat">${TREND_STATS.map(([k, l]) => `<option value="${k}"${(t.stat || 'all') === k ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>
         ${route.game || !hasToday ? '' : seg('trendDay', [['all', 'All upcoming'], ['today', 'Today']], day)}
         ${heavyCount || !t.heavy ? `<button type="button" class="chip" data-flag-trend="heavy" aria-pressed="${!t.heavy}">Hide heavy favorites${heavyCount ? ` (${heavyCount})` : ''}</button>` : ''}`)}
       <div class="toolbar"><div class="grow"><label class="sr" for="tq">Search</label><input id="tq" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off" maxlength="160"></div></div>
-      <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} trend${rows.length === 1 ? '' : 's'} · updated ${esc(ago(data.generatedAt))}${quarter ? ' · Historical milestones; check the book for available 1Q lines.' : ' · verify prices.'}${fellBack ? ' No games today, so this shows every upcoming game.' : ''}${route.game ? ' <a href="#research/trends">Show all games →</a>' : ''} ${quarter ? 'Opponent-supported trends first, then player hit rate. Defense uses season-long 1Q totals by position; player window filters do not change it. A hit rate alone does not establish betting value.' : 'Even a 4-of-4 run at −900 needs to win more than 90% of the time to profit.'} Green cleared the line, red missed, gray tied or not recorded. ${shareLink('trends', route)}</p>${list}`;
+      <p class="small muted trend-summary">${shown.length} of ${rows.length} trend${rows.length === 1 ? '' : 's'} · updated ${esc(ago(data.generatedAt))}${quarter ? ' · check your book for available 1Q lines.' : ' · verify prices.'}${fellBack ? ' No games today, so every upcoming game is shown.' : ''}${route.game ? ' <a href="#research/trends">Show all games →</a>' : ''} ${shareLink('trends', route)}</p>
+      <details class="plain-fold trend-method"><summary>How this is ranked</summary><p class="small muted">${esc(method)} Green cleared the line, red missed, gray tied or not recorded.</p></details>${list}`;
   };
 
   /* Research · Players: the props.cash-style matchup charts (every player in a game, bars vs the line), search and
@@ -1833,7 +1837,7 @@
     const rateCell = (window, line, label) => {
       if (line == null) return `<span class="prop-rate neutral"><small>${esc(label)} avg</small><b>${window.avg == null ? '–' : esc(C.statValue(window.avg, key))}</b><em>${window.games} game${window.games === 1 ? '' : 's'}</em></span>`;
       const tone = window.pct == null ? 'neutral' : window.pct >= 70 ? 'hot' : window.pct <= 40 ? 'cold' : 'neutral';
-      return `<span class="prop-rate ${tone}"><small>${esc(label)}</small><b>${window.pct == null ? '–' : `${window.pct}%`}</b><em>${window.hits == null ? `${window.games} games` : `${window.hits}/${window.games}`}</em></span>`;
+      return `<span class="prop-rate ${tone}"><small>${esc(label)}</small><b>${window.pct == null ? '–' : `${window.pct}%`}</b><em>${window.hits == null ? `${window.games} games` : `${window.hits}/${window.games}`}</em>${window.pct == null ? '' : `<i class="prop-rate-bar" style="--rate:${esc(window.pct)}%" aria-hidden="true"></i>`}</span>`;
     };
     const boardFor = g => {
       const list = (data.players || []).filter(pl => pl.gameId === g.id && chartHas(pl, key) && inPos(pl) && nameMatch(pl));
@@ -1861,7 +1865,7 @@
         const l5 = rate(allValues, line, dir, 5), l10 = rate(allValues, line, dir, 10), season = rate(allValues, line, dir);
         const lineWords = line == null ? '–' : `${dir === 'under' ? 'U' : 'O'} ${C.statValue(line, key)}`;
         return `<details class="prop-explorer-row" data-box="prop:${esc(g.id)}:${esc(pl.id)}:${esc(key)}"><summary class="prop-explorer-main">
-          <span class="prop-player">${headshot(league, pl.id, 'sm', null, pl.pos)}<span><b>${esc(pl.name)}</b><small>${esc((g[pl.side] || {}).abbreviation || '')} · ${esc(pl.pos || '')}</small></span></span>
+          <span class="prop-player">${headshot(league, pl.id, 'sm', null, pl.pos)}<span><b>${esc(pl.name)}</b><small>${esc((g[pl.side] || {}).abbreviation || '')} · ${esc(pl.pos || '')} · tap for chart</small></span></span>
           <span class="prop-number"><small>Book line</small><b>${esc(lineWords)}</b><em>${cur?.book ? esc(bookLabel(cur.book) || cur.book) : ''}${cur && isNum(cur.odds) ? ` ${esc(oddsText(cur.odds))}` : ''}</em></span>
           <span class="prop-number"><small>Kook’n</small><b>${isNum(proj) ? esc(C.statValue(proj, key)) : '–'}</b><em>${delta == null ? 'No comparison' : `${delta > 0 ? '+' : ''}${esc(C.fixed(delta))} vs line`}</em></span>
           ${rateCell(l5, line, 'L5')}${rateCell(l10, line, 'L10')}${rateCell(season, line, 'Season')}
@@ -1880,12 +1884,11 @@
     };
     const blocks = chosen.map(g => [g, boardFor(g)]).filter(([, h]) => h);
     const gameOptions = `<option value="next"${p.game === 'next' ? ' selected' : ''}>Next slate · ${esc(dayLabel(games[0].kickoff))}</option><option value="all"${p.game === 'all' ? ' selected' : ''}>All upcoming · ${games.length} games</option>${days.slice(1).map(d => { const g0 = games.find(g => g.day === d); return `<option value="day:${esc(d)}"${p.game === 'day:' + d ? ' selected' : ''}>${esc(dayLabel(g0.kickoff))}</option>`; }).join('')}${games.map(g => `<option value="${esc(g.id)}"${p.game === g.id ? ' selected' : ''}>${esc(g.away.abbreviation)} at ${esc(g.home.abbreviation)} · ${esc(whenShort(g.kickoff))}</option>`).join('')}`;
-    const periodNav = league === 'NFL' ? `<nav class="prop-period" aria-label="Prop research period"><span aria-current="page">Full game</span><a href="#research/trends?period=1Q&amp;sport=NFL">1Q trends</a></nav>` : '';
-    return `${periodNav}<div class="toolbar"><div class="grow"><label class="sr" for="cq">Find a player</label><input id="cq" class="search" type="search" placeholder="Find a player or team" value="${esc(p.q)}" data-input="pq" autocomplete="off" maxlength="160"></div>
+    return `<div class="toolbar prop-toolbar"><div class="grow"><label class="sr" for="cq">Find a player</label><input id="cq" class="search" type="search" placeholder="Find a player or team" value="${esc(p.q)}" data-input="pq" autocomplete="off" maxlength="160"></div>
         <label class="sr" for="cstat">Stat</label><select id="cstat" class="select" data-select="chartStat">${(stats.length ? stats : CHART_STATS).map(([k, l]) => `<option value="${k}"${k === key ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>
         <label class="sr" for="cgame">Games</label><select id="cgame" class="select" data-select="chartGame">${gameOptions}</select>
 </div>${filtersFold('players', `${pos === 'all' ? 'All positions' : pos === 'PK' ? 'K' : pos} · chart: ${{ last5: 'Last 5', last10: 'Last 10', season: 'Season' }[p.chartWindow]}`, seg('cpos', [['all', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['PK', 'K']], pos) + seg('cwin', [['season', 'Season chart'], ['last10', 'Last 10 chart'], ['last5', 'Last 5 chart']], p.chartWindow))}
-      ${note ? `<p class="small" style="margin-bottom:6px">${esc(note)}</p>` : ''}<p class="small muted prop-board-note">${anyLine ? 'Tap a player to open the chart. L5, L10 and season always use recorded games through today. ' : `No recorded lines for ${esc((CHART_STATS.find(([k]) => k === key) || [, key])[1])}. Showing averages instead of hit rates. `}Position rank 1 allows the least. History is not a probability. ${shareLink('players')}</p>
+      ${note ? `<p class="small" style="margin-bottom:6px">${esc(note)}</p>` : ''}<p class="small muted prop-board-note">${anyLine ? 'Tap a player for the chart. L5/L10 use recorded games. ' : `No recorded lines for ${esc((CHART_STATS.find(([k]) => k === key) || [, key])[1])}; averages shown. `}Defense rank 1 allows the least. History ≠ probability. ${shareLink('players')}</p>
       ${blocks.length ? blocks.map(([g, h]) => `<section class="section" style="margin:14px 0"><div class="section-head"><h2>${esc(g.away.abbreviation)} at ${esc(g.home.abbreviation)}</h2><a class="more" href="#game/${esc(g.id)}">Game page →</a></div><p class="section-note">${esc(when(g.kickoff))}</p>${h}</section>`).join('') : empty('No players match', 'Try another name, team, stat or position.', 'research')}`;
   };
 
@@ -1894,18 +1897,17 @@
   const researchPlayers = async route => {
     const p = state.players, league = state.league === 'ALL' ? p.league : state.league === 'CFB' ? 'CFB' : 'NFL';
     /* Real links, so Back, refresh and sharing work. Teams stays reachable from old links. */
-    const subTabs = `<div class="chip-scroll">${segLinks([['#research/players', 'Matchups', 'matchup'], ['#research/players?view=search', 'Search', 'search'], ['#research/players?view=defense', 'Defenses', 'defense']], p.sub === 'teams' ? 'defense' : p.sub)}</div>`;
     const intro = state.league === 'ALL' ? `<div class="toolbar">${seg('plg', [['NFL', 'NFL'], ['CFB', 'College']], league)}</div>` : '';
-    if (p.sub === 'matchup') return `<div class="toolbar">${subTabs}</div>${intro}${await matchupCharts(league)}`;
+    if (p.sub === 'matchup') return `${intro}${await matchupCharts(league)}`;
     const [index, teams] = await Promise.all([get(`app/players/${league}.json`), teamDirectory(league)]);
     const teamOf = id => ((teams || {}).teams || {})[id] || {};
     if (p.sub === 'teams') {
       const list = Object.entries((teams || {}).teams || {}).filter(([, t]) => league === 'NFL' || t.fbs)
         .sort((a, b) => String(a[1].name || a[1].abbr).localeCompare(String(b[1].name || b[1].abbr)));
-      return `<div class="toolbar">${subTabs}</div>${intro}${list.length ? `<div class="list-links cols">${list.map(([id, t]) => `<a href="#team/${league}/${esc(id)}"><span class="with-art">${teamMark({ ...t, id }, 'sm', league)}<b>${esc(t.name || t.abbr)}</b></span><small>${esc(t.abbr || '')} →</small></a>`).join('')}</div>` : empty('Teams unavailable', 'Try again later.', 'research')}`;
+      return `${intro}${list.length ? `<div class="list-links cols">${list.map(([id, t]) => `<a href="#team/${league}/${esc(id)}"><span class="with-art">${teamMark({ ...t, id }, 'sm', league)}<b>${esc(t.name || t.abbr)}</b></span><small>${esc(t.abbr || '')} →</small></a>`).join('')}</div>` : empty('Teams unavailable', 'Try again later.', 'research')}`;
     }
     if (p.sub === 'defense') {
-      if (!teams || !teams.defense) return `<div class="toolbar">${subTabs}</div>${empty('Defense table unavailable', 'Try again later.', 'research')}`;
+      if (!teams || !teams.defense) return empty('Defense table unavailable', 'Try again later.', 'research');
       const stats = DEFENSE_STATS[p.pos] || DEFENSE_STATS.WR;
       const key = stats.includes(p.stat) ? p.stat : stats[0];
       const def = teams.defense;
@@ -1917,7 +1919,7 @@
       const ordered = p.order === 'soft' ? ranked.slice().reverse() : ranked;
       const max = Math.max(1, ...ranked.map(r => r.value));
       const season = scope === 'prior' ? prior.season : def.season;
-      return `<div class="toolbar">${subTabs}</div>${intro}
+      return `${intro}
         <div class="toolbar">${seg('pos', [['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE']], p.pos)}
           <label class="sr" for="dstat">Stat</label><select id="dstat" class="select" data-select="defStat">${stats.map(k => `<option value="${k}"${k === key ? ' selected' : ''}>${esc(C.LABEL[k] || k)}</option>`).join('')}</select>
           ${seg('dscope', [['season', String(def.season || 'Season')], ['last5', 'Last 5'], ...(prior.rows ? [['prior', String(prior.season)]] : [])], scope)}
@@ -1936,10 +1938,10 @@
         : empty('No players found', 'Check the spelling, try a team, or switch sport at the top.', 'research');
     } else {
       const leaders = index.leaders || {};
-      body = `<div class="grid two">${[['recYds', 'Receiving yards'], ['rushYds', 'Rushing yards'], ['passYds', 'Passing yards'], ['rec', 'Receptions']].filter(([k]) => leaders[k]).map(([k, label]) =>
+      body = `<div class="grid two player-leaders">${[['recYds', 'Receiving yards'], ['rushYds', 'Rushing yards'], ['passYds', 'Passing yards'], ['rec', 'Receptions']].filter(([k]) => leaders[k]).map(([k, label]) =>
         `<div class="card"><p class="eyebrow" style="margin-bottom:6px">Season leaders · ${esc(label)}</p><table class="t"><tbody>${leaders[k].slice(0, 8).map((r, i) => `<tr><td class="n muted" style="width:28px">${i + 1}</td><td><span class="with-art">${headshot(league, r[0], 'sm')}<span><a href="#player/${league}/${esc(r[0])}?stat=${k}">${esc(r[1])}</a> <span class="muted small">${esc(r[2])}</span></span></span></td><td class="n">${esc(C.fixed(r[3], 0))}${r[4] != null ? `<br><span class="tiny muted">${esc(r[4])} g</span>` : ''}</td></tr>`).join('')}</tbody></table></div>`).join('')}</div>`;
     }
-    return `<div class="toolbar">${subTabs}</div><div class="toolbar"><div class="grow"><label class="sr" for="pq">Find a player</label><input id="pq" class="search" type="search" placeholder="Find a ${league === 'CFB' ? 'college' : 'NFL'} player or team" value="${esc(p.q)}" data-input="pq" autocomplete="off" maxlength="160"></div></div>${intro}${body}`;
+    return `<div class="toolbar"><div class="grow"><label class="sr" for="pq">Find a player</label><input id="pq" class="search" type="search" placeholder="Find a ${league === 'CFB' ? 'college' : 'NFL'} player or team" value="${esc(p.q)}" data-input="pq" autocomplete="off" maxlength="160"></div></div>${intro}${body}`;
   };
 
   const researchNews = async () => {
@@ -2110,7 +2112,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-f15885d837eb';
   const GAMES_ASSET = 'app-games.js?v=sha256-4c1b90518d37';
-  const RESEARCH_CSS = 'research.css?v=sha256-d4d37726a402';
+  const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
       const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = RESEARCH_CSS; link.onload = ok;
@@ -2179,7 +2181,7 @@
   let lastHash = null;
   const chrome = route => {
     const active = TAB_OF[route.view] || 'today';
-    const tabHref = key => key === 'research' ? '#research/lines' : `#${key}`;
+    const tabHref = key => key === 'research' ? '#research/players?sport=NFL' : `#${key}`;
     /* Text-only tabs (Kitchen Ticket): the same links in the phone tab bar and the desktop header. */
     const links = TABS.map(([key, label]) => `<a href="${tabHref(key)}" ${key === active ? 'aria-current="page"' : ''}>${esc(label)}</a>`).join('');
     $('#tabbar').innerHTML = links;

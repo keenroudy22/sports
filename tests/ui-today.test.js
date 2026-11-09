@@ -158,12 +158,12 @@ test('the first paint and the full card draw the same top, so nothing moves when
   await settle();
 });
 
-test('Today leads with the card, games and research paths while secondary sections share one clear fold', async () => {
+test('Today leads with the card, current matchup and bettor tools while secondary sections share one clear fold', async () => {
   const todayOff = { ...total, id: 'CFB-today-off-fd', displayTitle: 'Moved Line Today under 56.5', status: 'expired',
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /aria-label="Betting data and research"[\s\S]*Games[\s\S]*Players[\s\S]*Lines[\s\S]*Results/);
+  assert.match(page, /aria-label="Betting data and research"[\s\S]*Player props[\s\S]*First quarter[\s\S]*Games[\s\S]*Find a player/);
   assert.match(page, /<h1>Today’s board<\/h1>[\s\S]*<h2>Kook’n picks<\/h2>[\s\S]*Today’s Climb/);
   assert.match(page, /class="decision-list"[^>]*aria-label="Today&#39;s best bet"/, 'Today uses the clean decision summary');
   assert.match(page, /class="decision-more" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>See stats, trends and full breakdown/, 'the summary opens the complete preserved play');
@@ -963,7 +963,7 @@ test('All-sports Today puts every published straight before research', async () 
  app.sandbox.KRGames=()=>({cbbPicks:()=>'<section id="cbb-picks">Published CBB ticket</section>',nbaSummary:()=>'<section id="nba-research">NBA research</section>'});
  await app.api.views.today({view:'today'});await settle();
  const page=await app.api.views.today({view:'today'});
- assert.match(page,/aria-label="Betting data and research"[\s\S]*Games[\s\S]*Players[\s\S]*Lines[\s\S]*Results/);
+ assert.match(page,/aria-label="Betting data and research"[\s\S]*Player props[\s\S]*First quarter[\s\S]*Games[\s\S]*Find a player/);
  assert.match(page,/<h1>Today’s board<\/h1><p class="today-summary">Today’s posted plays\.<\/p>/);
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
  assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);
