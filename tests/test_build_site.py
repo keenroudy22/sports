@@ -606,6 +606,28 @@ class PropRowTests(unittest.TestCase):
         self.assertEqual(row['grade']['tier'], 'pass', 'raw-only value is not a calibrated lean')
         self.assertEqual(row['observedAt'], '2026-09-19T12:40:00Z', 'the row is as fresh as the price on it')
 
+    def test_prop_price_shopping_never_crosses_the_projection_and_reverses_the_lean(self):
+        game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
+                'home': {'id': '1', 'abbreviation': 'BUF'}, 'away': {'id': '2', 'abbreviation': 'MIN'}}
+        snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.1', 'publishedAt': '2026-09-19T12:00:00Z',
+                    'players': {'home': {'players': [{'id': '10', 'pos': 'WR', 'receptions': [3.9, 1.0, 7.0]}]},
+                                'away': None}}
+        capture = {'retrievedAt': '2026-09-19T12:05:00Z', 'source': 'https://example.test/props',
+                   'lines': {'10': {'rec': [3.5, 3.5]}}}
+        prices = {'NFL-1': {'retrievedAt': '2026-09-19T12:40:00Z', 'source': 'https://example.test/odds', 'books': {
+            'draftkings': {'markets': {'rec': {'Player Ten': {'line': 3.5, 'over': -144, 'under': 110}}}},
+            'betmgm': {'markets': {'rec': {'Player Ten': {'line': 4.5, 'over': 145, 'under': -190}}}}}}}
+        row = build_site.prop_rows({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [snapshot]},
+                                   {'10': 'Player Ten'}, {'10': 7}, {},
+                                   datetime(2026, 9, 19, 13, tzinfo=timezone.utc), prices,
+                                   calibration={'NFL': (0.11, 0.0)})[0]
+        self.assertEqual((row['direction'], row['line'], row['book'], row['odds']),
+                         ('over', 3.5, 'DraftKings', -144))
+        self.assertEqual(row['books'], [{'book': 'DraftKings', 'line': 3.5, 'odds': -144}],
+                         'the plus-money 4.5 is above the 3.9 projection, so it cannot represent the Over lean')
+        self.assertEqual((row['grade']['view'], row['grade']['chanceDisplay']), ('pass', None),
+                         'a rejected candidate remains gradeable but exposes no public betting probability')
+
     def test_the_board_shows_the_calibrated_chance_the_desk_acts_on(self):
         game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
                 'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}

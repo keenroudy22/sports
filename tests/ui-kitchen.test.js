@@ -129,6 +129,18 @@ test('a player line with no hold puts the projection beside the book line and ke
   assert.match(page, /<details class="plain-fold kt-player-detail"[^>]*><summary>Why this number<\/summary>/);
 });
 
+test('a pass-tier prop keeps the line and projection but exposes no adjusted betting chance', async () => {
+  const page = await playerPage(false, files => {
+    for (const row of files['data/app/lines-CFB.json'].lines) {
+      row.grade = { ...row.grade, view: 'pass', tier: 'pass', chanceDisplay: null, raw: 0.39 };
+    }
+  });
+  assert.match(page, /<small>Book line<\/small><b class="num">261\.5<\/b>/);
+  assert.match(page, /<small>Kook’n projection<\/small><b class="num">167\.1<\/b>/);
+  assert.match(page, /No Kook’n lean at this line\.[\s\S]*The projection is below the over line\./);
+  assert.doesNotMatch(page, /I have over at|57\.0%|clears my price/);
+});
+
 test('a player without a current line leads with useful history instead of an unavailable betting grid', async () => {
   const page = await playerPage(false, files => {
     files['data/app/lines-CFB.json'].lines = [];

@@ -2682,6 +2682,14 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                        'opened': opening, 'stat': key}
                 side_quotes = [(book, line, over if lean == 'over' else under)
                                for book, line, over, under in quotes if (over if lean == 'over' else under) is not None]
+                # A price at a different book may carry a different main number. Never keep shopping the
+                # original direction after that number crosses our projection: "over 4.5" cannot be the
+                # public Kook'n lean when our own middle is 3.9, however tempting its plus-money price looks.
+                if player and pricing.PROJECTED[key] in player:
+                    middle = player[pricing.PROJECTED[key]][0]
+                    side_quotes = [quote for quote in side_quotes
+                                   if (lean == 'over' and quote[1] < middle)
+                                   or (lean == 'under' and quote[1] > middle)]
                 if side_quotes:
                     # Shop the adjusted expected return, as the desk does. Without a projection we can only
                     # order the reference quotes by line and price; they cannot become an official lean.
@@ -2710,21 +2718,23 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                             p = pricing.calibrated_prop(p, {'k': k})
                             chance, edge = p['chance'], p['edgePoints']
                             calibrated = p['calibrated'] or k is not None
+                            qualifies = (p['rawChance'] >= 0.6 and settled and not limited and k is not None
+                                         and edge > 0 and edge >= need)
                             row['grade'] = {'chance': chance, 'raw': p['rawChance'], 'calibrated': calibrated,
                                             'push': p['push'], 'needs': p['breakEven'], 'edge': edge,
                                             'projection': p['projection'], 'thin': not settled, 'limited': limited,
                                             'fairOdds': fair_american(chance) if calibrated else None,
                                             'ev': round(chance * (1 + pricing.payout(int(odds))) - 1, 3),
-                                            'chanceDisplay': chance if calibrated and settled and not limited else None,
+                                            # A failed candidate stays available for grading and learning, but a
+                                            # visitor does not see its adjusted chance as a betting recommendation.
+                                            'chanceDisplay': chance if calibrated and qualifies else None,
                                             'range80': p.get('range80'),
                                             'games': appearances[str(athlete)],
                                             'rawTier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited else 'pass',
                                             # Raw candidates still reach the gates for an auditable refusal.
                                             # Both public labels require positive learned value.
-                                            'tier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited
-                                                    and k is not None and edge > 0 and edge >= need else 'pass',
-                                            'view': 'lean' if p['rawChance'] >= 0.6 and settled and not limited
-                                                    and k is not None and edge > 0 and edge >= need else 'pass',
+                                            'tier': 'lean' if qualifies else 'pass',
+                                            'view': 'lean' if qualifies else 'pass',
                                             'model': p['model'], 'snapshotAt': p['snapshotAt']}
                             if k is None and game['league'] in PROP_OWN_CALIBRATION:
                                 row['grade']['unproven'] = True     # the site says it is being graded before it is played

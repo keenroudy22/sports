@@ -404,13 +404,14 @@
     const others = (row.books || []).filter(b => Number(b.line) !== Number(row.line) && bookLabel(b.displayBook || b.book));
     const best = row.bestSameLine || sameLine.slice().sort((a, b) => Number(b.odds) - Number(a.odds))[0];
     const age = quoteAge(row.observedAt, row.kickoff, now, { odds: row.odds, state: row.state, expiresAt: row.expiresAt });
+    const displayChance = Object.hasOwn(g, 'chanceDisplay') ? (isNum(g.chanceDisplay) ? g.chanceDisplay : null) : chance;
     return {
       id: row.id, title: niceTitle(row.title), league: row.league, gameId: row.gameId, athleteId: row.athleteId || null,
       player: row.player || null, stat: row.stat || (C ? C.marketKey(row) : null), market: marketLabel(row), direction: row.direction || row.side || null,
       line: row.line, odds: row.odds, book: bookLabel(row.displayBook || row.book), kickoff: row.kickoff, state: row.state,
       bestOdds: best ? Number(best.odds) : null, bestBook: best ? bookLabel(best.displayBook || best.book) : null, booksCount: sameLine.length,
       otherLines: others.map(b => ({ book: bookLabel(b.displayBook || b.book), line: b.line, odds: b.odds })),
-      chance: isNum(g.chanceDisplay) ? g.chanceDisplay : chance, needs, edge: isNum(g.edge) ? round1(g.edge) : edgePoints(chance, needs), fair: isNum(g.fairOdds) ? g.fairOdds : fairAmerican(chance),
+      chance: displayChance, needs, edge: isNum(g.edge) ? round1(g.edge) : edgePoints(displayChance, needs), fair: displayChance != null && isNum(g.fairOdds) ? g.fairOdds : fairAmerican(displayChance),
       position: row.position || null, tier: g.view || g.tier || 'none', thin: Boolean(g.thin), limited: Boolean(g.limited), calibrated: g.calibrated === true,
       caution: Boolean(g.performanceCaution), age, raw: g.raw, projection: g.projection, isProp: Boolean(row.athleteId || row.player),
       key: officialKey(row), opened: isNum(row.opened) ? row.opened : isNum(row.move) && isNum(row.line) ? round1(row.line - row.move) : null, src: row,
@@ -476,7 +477,7 @@
     return 'The price is positive, but the full reason, injury and release checks have not all cleared.';
   };
   const favoriteLook = (rows, gameIds, official = new Set()) => collapse(rows.filter(vm => gameIds.has(vm.gameId)
-    && onBoard(vm) && !heldRow(vm.src) && !official.has(vm.key)))
+    && onBoard(vm) && hasValue(vm) && !heldRow(vm.src) && !official.has(vm.key)))
     .sort((a, b) => Number(Boolean(b.calibrated && !b.thin && !b.limited)) - Number(Boolean(a.calibrated && !a.thin && !a.limited))
       || todayMarketRank(a) - todayMarketRank(b) || (b.edge ?? -99) - (a.edge ?? -99)
       || String(a.kickoff).localeCompare(String(b.kickoff)))[0] || null;
@@ -2105,7 +2106,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-f15885d837eb';
+  const MORE_ASSET = 'app-more.js?v=sha256-47bbd39ca4dc';
   const GAMES_ASSET = 'app-games.js?v=sha256-4c1b90518d37';
   const KVB_ASSET = 'app-kvb.js?v=sha256-338cc9fd90bf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';

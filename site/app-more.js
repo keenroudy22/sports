@@ -296,6 +296,12 @@
     const projectionDelta = projectionValue != null && line != null ? projectionValue - line : null;
     const projectionLabel = held ? 'Held' : projectionValue == null ? 'Not posted' : valueText(projectionValue);
     const edgeLabel = held || projectionDelta == null ? '–' : `${projectionDelta > 0 ? '+' : ''}${C.fixed(projectionDelta)}`;
+    const projectionAgrees = projectionDelta == null || (dir === 'under' ? projectionDelta < 0 : projectionDelta > 0);
+    const priceComparison = priced && priced.calibrated && priced.chance != null
+      ? `<p class="kt-lead kt-chance" style="margin-top:8px"><span>I have ${esc(priced.direction || dir)} at<b class="num">${pctOne(priced.chance)}</b></span><i></i><span>the price needs<b class="num">${pctOne(priced.needs)}</b></span></p>${hasValue(priced) ? '<p class="kt-prices">✓ clears my price</p>' : ''}`
+      : priced && projectionDelta != null
+        ? `<p class="kt-prices"><b>${projectionAgrees ? 'Direction only.' : 'No Kook’n lean at this line.'}</b> ${projectionAgrees ? `The projection points ${esc(dir)}, but this price did not clear the model checks.` : `The projection is ${projectionDelta < 0 ? 'below' : 'above'} the ${esc(dir)} line.`}</p>`
+        : '';
     const hitLabel = h && h.n ? `${h[dir]}/${h.n}` : '–';
     const unitFor = STAT_UNITS[isQuarter ? stat.slice(3) : stat] || [String(PLAYER_LABEL[stat] || stat).toUpperCase()];
     const shown = recent.slice(-8), sv = shown.map(r => read(r, stat));
@@ -316,7 +322,7 @@
       ${pricesText ? `<p class="kt-prices">${pricesText}</p>` : ''}
       ${!isQuarter && line == null ? `<p class="kt-prices"><b>Historical stats are available.</b> No current book line has been captured for ${next ? 'this matchup' : 'an upcoming game'} yet, so there is no line-based Kook’n projection to compare.</p>` : ''}
       ${held ? `<p class="kt-held">${esc(heldText)}</p>`
-        : `${priced && priced.calibrated && priced.chance != null ? `<p class="kt-lead kt-chance" style="margin-top:8px"><span>I have ${esc(priced.direction || dir)} at<b class="num">${pctOne(priced.chance)}</b></span><i></i><span>the price needs<b class="num">${pctOne(priced.needs)}</b></span></p>${hasValue(priced) ? '<p class="kt-prices">✓ clears my price</p>' : ''}` : ''}
+        : `${priceComparison}
           ${Array.isArray(projV) ? `<p class="kt-prices">Typical range ${esc(rangeText(projV[1]))}–${esc(rangeText(projV[2]))}.</p>` : ''}`}
       ${line != null ? '<div class="player-chart-legend" aria-label="Chart legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>' : ''}
       ${chart}<div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(!isQuarter && lineStatus ? `${lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></section>`;

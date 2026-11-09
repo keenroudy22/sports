@@ -788,9 +788,9 @@ test('the Prep List still favors props, then sides, then one total', () => {
   ['prop', 'side', 'total-a'], 'the Prep List uses the same category order and one-total cap');
 });
 
-test('an empty official rail names the strongest current look and the exact reason it is not a play', async () => {
+test('an empty official rail names a real price-clearing research lean and never promotes a pass', async () => {
   const closest = lineRow('Closest Look', { athleteId: '88', player: 'Closest Look', stat: 'recYds', marketType: null,
-    title: 'Closest Look over 42.5 receiving yards', line: 42.5 }, { view: 'pass', tier: 'pass', chance: 0.53, needs: 0.524, edge: 0.6 });
+    title: 'Closest Look over 42.5 receiving yards', line: 42.5 }, { view: 'lean', tier: 'lean', chance: 0.56, needs: 0.524, edge: 3.6 });
   const raw = lineRow('Raw Look', { athleteId: '89', player: 'Raw Look', stat: 'rec', marketType: null },
     { calibrated: false, view: 'pass', tier: 'pass', chance: 0.61, edge: 8 });
   const files = linesFor([closest, raw]);
@@ -805,9 +805,23 @@ test('an empty official rail names the strongest current look and the exact reas
   assert.match(favorite, /What I like most/);
   assert.match(favorite, /Strongest current lean · not a best bet/);
   assert.match(favorite, /Closest Look over 42\.5 receiving yards/);
-  assert.match(favorite, /Why it is not an official play:<\/b> It is positive value by 0\.6 points, but it still needs a strong verified reason and the final release checks before I call it Full Send\./);
+  assert.match(favorite, /Why it is not an official play:<\/b> The price is positive, but the full reason, injury and release checks have not all cleared\./);
   assert.doesNotMatch(favorite, /Raw Look/);
   assert.equal((page.match(/Closest Look over 42\.5 receiving yards/g) || []).length, 1, 'the favorite is not duplicated before the lazy comparison board loads');
+});
+
+test('pass-tier adjusted value never becomes What I like most', async () => {
+  const crossed = lineRow('Crossed Alternate', { athleteId: '90', player: 'Crossed Alternate', stat: 'rec', marketType: null,
+    title: 'Crossed Alternate over 4.5 receptions', direction: 'over', line: 4.5 },
+    { view: 'pass', tier: 'pass', chance: 0.49, chanceDisplay: null, raw: 0.392, projection: 3.9, needs: 0.408, edge: 8.2 });
+  const files = linesFor([crossed]);
+  const emptyToday = { ...TODAY, picks: [yesterday, ...rungs] };
+  const { api } = loadApp('#today', {}, { today: emptyToday, hero: { ...HERO, bets: [] }, extra: files });
+  await api.views.today({ view: 'today' });
+  await settle();
+  const page = await api.views.today({ view: 'today' });
+  assert.doesNotMatch(page, /What I like most|Crossed Alternate over 4\.5 receptions|positive value by 8\.2/);
+  assert.match(page, /Nothing cleared my bar today\./);
 });
 
 test('the Prep List rolls to the next game day once the first day\'s rows have kicked off', async () => {
