@@ -4349,6 +4349,17 @@ def precheck_due(log_book, now):
             and not e.get('deletedAt') and not e.get('precheck') and e.get('dueAt') and low <= gates.when(e['dueAt']) <= high]
 
 
+
+def hoops_precheck_due(log_book, now):
+    """Wake the existing pre-post job for NBA/CBB without using football review."""
+    low, high = now + PRECHECK_WINDOW[0], now + PRECHECK_WINDOW[1]
+    return any(e.get('kind') in ('buffer:nba-trial', 'buffer:cbb-pick')
+               and e.get('bufferPostId') and not any(e.get(k) for k in
+                   ('sentAt', 'cancelledAt', 'deletedAt', 'error'))
+               and e.get('dueAt') and low <= gates.when(e['dueAt']) <= high
+               for e in log_book.get('posts', []))
+
+
 def live_context(stored, now, fetch=None):
     """The injury report as ESPN has it right now, in memory; the stored one when the read fails."""
     import research_context
@@ -4455,7 +4466,8 @@ def precheck(args):
                 alert("Kook'n publication recovery", publication['issue'], priority='high')
         except Exception:
             log('publication supervisor unavailable; pre-post review continues')
-    if not precheck_due(x_post.load_log(), now):
+    pending_log = x_post.load_log()
+    if not precheck_due(pending_log, now) and not hoops_precheck_due(pending_log, now):
         return 0
     status = {'errors': [], 'llm': {'judged': 0}, 'research': {'asked': 0, 'verified': 0, 'dropped': 0}}
     try:

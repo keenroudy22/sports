@@ -1019,6 +1019,36 @@ class PrecheckTests(unittest.TestCase):
         log_book['posts'] += [post('past', -1), post('short', 1), post('checked-short', 1, precheck={'result':'clear'})]
         self.assertEqual([e['id'] for e in run.precheck_due(log_book, now)], ['soon','in','edge','lower','short'])
 
+    def test_hoops_only_queue_runs_its_precheck_without_football_review(self):
+        from types import SimpleNamespace
+        from unittest import mock
+        import x_post, nba_trial_runtime, cbb_picks
+        now = datetime(2026, 11, 10, 23, 5, tzinfo=timezone.utc)
+        for kind in ('buffer:nba-trial', 'buffer:cbb-pick'):
+            entry = {'id': 'hoops', 'kind': kind, 'bufferPostId': 'verified-provider-id',
+                     'dueAt': '2026-11-10T23:10:00Z'}
+            book = {'posts': [entry]}
+            self.assertTrue(run.hoops_precheck_due(book, now))
+            with mock.patch.object(x_post, 'load_log', return_value=book), \
+                    mock.patch.object(run, 'Lock'), mock.patch.object(run, 'sync'), \
+                    mock.patch.object(run, 'commit_log') as commit, \
+                    mock.patch.object(x_post, 'save_log'), \
+                    mock.patch.object(nba_trial_runtime, 'precheck', return_value=True) as nba, \
+                    mock.patch.object(cbb_picks, 'precheck', return_value=False) as cbb, \
+                    mock.patch.object(run, 'live_games') as football, \
+                    mock.patch('desk_health.summary', return_value={}), \
+                    mock.patch('desk_health.monitor'), mock.patch('publication_supervisor.supervise', return_value={}):
+                self.assertEqual(run.precheck(SimpleNamespace(now=now.isoformat(), dry_run=False,
+                                                             no_llm=True, no_push=True)), 0)
+                nba.assert_called_once_with(now, book)
+                cbb.assert_called_once_with(now, book)
+                commit.assert_called_once()
+                football.assert_not_called()
+            for flag in ('sentAt', 'cancelledAt', 'deletedAt', 'error'):
+                self.assertFalse(run.hoops_precheck_due({'posts': [dict(entry, **{flag: 'held'})]}, now))
+            self.assertFalse(run.hoops_precheck_due({'posts': [dict(entry, dueAt='2026-11-11T00:00:01Z')]}, now))
+            self.assertFalse(run.hoops_precheck_due({'posts': [dict(entry, dueAt='2026-11-10T23:04:00Z')]}, now))
+
     def test_quiet_when_nothing_is_due(self):
         from types import SimpleNamespace
         from unittest import mock
