@@ -652,7 +652,7 @@ def quote_source_id(guid):
     for prefix in ('cashed:', 'burnt:', 'ladder-loss:', 'ladder-push:', 'ladder-void:'):
         if str(guid).startswith(prefix):
             return str(guid)[len(prefix):]
-    match = re.fullmatch(r'receipt:cbb:(CBB-[A-Za-z0-9-]+):[0-9a-f]{10}', str(guid))
+    match = re.fullmatch(r'receipt:(?:cbb|nba):((?:CBB|NBA)-[A-Za-z0-9-]+):[0-9a-f]{10}', str(guid))
     return match.group(1) if match else None
 
 
@@ -733,7 +733,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         combined, combined_result = None, None
         native_quote_id = quote_tweet_id(log_book, guid)
-        if (kind == 'cashed' or guid.startswith('receipt:cbb:')) and not native_quote_id:
+        if (kind == 'cashed' or guid.startswith(('receipt:cbb:', 'receipt:nba:'))) and not native_quote_id:
             log(f'buffer: {guid} held: confirmed original X post is required for the native quote')
             continue
         if guid.startswith('receipt:cbb:'):
@@ -741,6 +741,12 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             original = next((p for p in cbb_picks.public_rows() if p.get('result') and cbb_picks.result_key(p) == guid), None)
             if not original or text != cbb_picks.result_text(original) or card_key != guid.replace(':','-').lower():
                 log(f'buffer: {guid} held: CBB result differs from its immutable ledger')
+                continue
+        if guid.startswith('receipt:nba:'):
+            import nba_results,nba_trial_runtime
+            original = next((p for p in nba_trial_runtime.public_rows() if p.get('result') and nba_results.key(p) == guid), None)
+            if not original or not nba_results.eligible(original,now) or text != nba_results.caption(original) or card_key != guid.replace(':','-').lower():
+                log(f'buffer: {guid} held: NBA result differs from its immutable ledger')
                 continue
         if guid.startswith('receipt:card:'):
             import daily_straight_card

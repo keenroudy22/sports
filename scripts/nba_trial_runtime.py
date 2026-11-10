@@ -341,17 +341,19 @@ def grade(now,root=nba_trial.STORE,boxroot=None):
 
 def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
  import buffer_post,x_post
- if not review_ready(now):return []
+ import nba_results
+ results=nba_results.plans(now,log_book,root,reserved)
+ if not review_ready(now):return results
  committed={e['id'] for e in log_book.get('posts',[]) if not e.get('nbaDiscordOnly')
             or e.get('bufferPostId') or e.get('sentAt') or e.get('cancelledAt') or e.get('deletedAt')}
  pending=[p for p in public_rows(root) if not p.get('result') and p['id'] not in committed
           and boxscores.instant(p['publishedAt'])<=now
           and boxscores.instant(p['kickoff'])>now+timedelta(minutes=15)
           and boxscores.instant(p['kickoff']).astimezone(nba_trial.EASTERN).date()==now.astimezone(nba_trial.EASTERN).date()]
- if not pending:return []
+ if not pending:return results
  if refresh:nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
  now=max(now,datetime.now(timezone.utc))
- busy=buffer_post.taken({'posts':[e for e in log_book.get('posts',[]) if not e.get('nbaDiscordOnly')]},now)+[p[3] for p in reserved]
+ busy=buffer_post.taken({'posts':[e for e in log_book.get('posts',[]) if not e.get('nbaDiscordOnly')]},now)+[p[3] for p in (*reserved,*results)]
  plans=[]
  for play in pending:
   if not current_match(play,now):continue
@@ -393,7 +395,7 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
     text=candidate;break
   if not text:continue
   plans.append((play['id'],'nba-trial',text,due,play['id'].lower()))
- return plans
+ return plans+results
 
 
 
@@ -446,6 +448,9 @@ def render_due(now,folder,log=print,root=nba_trial.STORE):
  visible=sorted(current_plays(root),key=lambda p:p['publishedAt'])[-20:]
  referenced={p['id'] for p in visible}
  for play in public_rows(root):
+  if play.get('marketType')=='player' and play.get('result'):
+   import nba_results
+   nba_results.render(play,folder)
   path=Path(folder)/(play['id'].lower()+'.png')
   if path.exists():continue
   if play['id'] in posted:
