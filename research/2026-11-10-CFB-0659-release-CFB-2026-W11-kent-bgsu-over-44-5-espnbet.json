@@ -1,0 +1,198 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-10T11:59:10Z",
+  "summary": "Released 1: Kent State at Bowling Green over 44.5 +100 at ESPN BET.",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 44.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401866459"
+      ],
+      "book": "ESPN BET",
+      "odds": 100,
+      "projection": 47.6,
+      "edge": "Price-checked chance 52.7% against the exact two-sided price; 50.0% needed at +100: +2.7 percentage points.",
+      "cutoff": "OVER 44.5 at +100 or better; off the card at 46+, or at -115 or worse at 44.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-08T09:19:38Z",
+      "quotedAt": "2026-11-10T11:45:06Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-10T13:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.576,
+        "chance": 0.527,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.5,
+        "edgePoints": 2.7,
+        "evPerUnit": 0.055,
+        "snapshotAt": "2026-11-08T09:19:38Z",
+        "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+        "evaluatedAt": "2026-11-10T11:48:59Z",
+        "fairChance": 0.478,
+        "anchoredChance": 0.527,
+        "gap": 4.9,
+        "calibrationFamily": "CFB/total",
+        "calibrationMethod": "neutral-centered-fitted"
+      },
+      "matchup": "Kent State Golden Flashes at Bowling Green Falcons",
+      "title": "Kent State at Bowling Green over 44.5",
+      "id": "CFB-2026-W11-kent-bgsu-over-44-5-espnbet",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401866459",
+        "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+        "https://bgsufalcons.com/news/2026/11/5/football-lights-cameras-maction-falcons-return-home-tuesday-night-to-host-kent-state"
+      ],
+      "why": "Model lean, our number only. We have the total at 47.6; the book is at 44.5. That makes the over 52.7%, and +100 needs 50.0%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Kent State says Dru DeShields continues to direct its offense entering the Bowling Green game. Checked before publishing: Bowling Green said running back Austyn Dendy was out against Western Michigan, its previous game. The market: 6 books span -5.5 to -4.5 on the spread; the middle is -5.5. Our spread is 3.7 points off, bigger than 54% of our past gaps. Gaps this size went 827-813 against the close in 3584 games. Our total is 3.1 points off, bigger than 53% of our past gaps. Gaps this size went 898-782 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: Bowling Green averages 17.8 points per game and 286.2 total yards per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Bowling Green allows 29.0 points per game and 377.9 total yards per game."
+        ],
+        "cautions": [
+          "Bowling Green averages 17.8 points per game and 286.2 total yards per game."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 44.5. I say 47.6.",
+            "numbers": {
+              "projection": 47.6,
+              "line": 44.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-08T09:19:38Z"
+          },
+          {
+            "text": "Bowling Green allows 29.0 points per game and 377.9 total yards per game.",
+            "numbers": {},
+            "source": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+            "time": "2026-11-10T11:48:59Z"
+          },
+          {
+            "text": "Bowling Green allows 29.0 points per game and 377.9 total yards per game.",
+            "numbers": {},
+            "source": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+            "time": "2026-11-10T11:48:59Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Bowling Green averages 17.8 points per game and 286.2 total yards per game.",
+            "numbers": {},
+            "source": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+            "time": "2026-11-10T11:48:59Z"
+          },
+          {
+            "text": "Bowling Green averages 17.8 points per game and 286.2 total yards per game.",
+            "numbers": {},
+            "source": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+            "time": "2026-11-10T11:48:59Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 50,
+          "windMph": 6,
+          "windDirection": "W",
+          "precipProb": 0,
+          "periodStart": "2026-11-10T19:00:00-05:00",
+          "issuedAt": "2026-11-09T23:31:54+00:00",
+          "source": "https://api.weather.gov/gridpoints/CLE/17,53/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 44.5,
+                "price": -110,
+                "time": "2026-11-08T11:42:31Z"
+              },
+              "now": {
+                "line": 44.5,
+                "price": -108,
+                "time": "2026-11-10T11:45:06Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 45.5,
+                "price": -110,
+                "time": "2026-11-06T11:45:07Z"
+              },
+              "now": {
+                "line": 44.5,
+                "price": -110,
+                "time": "2026-11-10T11:45:06Z"
+              }
+            }
+          },
+          "best": {
+            "book": "ESPN BET",
+            "line": 44.5,
+            "price": 100,
+            "time": "2026-11-10T11:45:06Z"
+          }
+        },
+        "ours": {
+          "projection": 47.6,
+          "line": 44.5,
+          "market": "total",
+          "text": "Book says 44.5. I say 47.6.",
+          "snapshotAt": "2026-11-08T09:19:38Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+            "time": "2026-11-10T11:48:59Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/CLE/17,53/forecast/hourly",
+            "time": "2026-11-09T23:31:54+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866459",
+            "time": "2026-11-10T11:48:59Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://bgsufalcons.com/news/2026/11/5/football-lights-cameras-maction-falcons-return-home-tuesday-night-to-host-kent-state",
+            "time": "2026-11-10T11:48:59Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-10T11:59:10Z"
+    }
+  ]
+}
