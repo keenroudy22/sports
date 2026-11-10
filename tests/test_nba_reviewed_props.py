@@ -102,6 +102,17 @@ class ReviewedNBAProps(unittest.TestCase):
         with patch.object(nba_trial_runtime,'rows',return_value=[]),patch.object(n,'refusal',return_value='new injury'):
             self.assertFalse(nba_trial_runtime.current_match(self.play,NOW))
 
+    def test_reviewed_morning_prop_does_not_wait_for_old_nine_thirty_clock(self):
+        now=datetime(2026,11,11,13,35,tzinfo=timezone.utc)
+        p=copy.deepcopy(self.play)
+        p.update(kickoff='2026-11-12T00:00:00Z',publishedAt='2026-11-11T13:34:00Z',
+            reasons=['He has played 34, 35 and 33 minutes in his last three starts.'])
+        p['game']['teams']={'home':{'id':'1','abbreviation':'NYK','name':'Knicks'},'away':{'id':'2','abbreviation':'MIL','name':'Bucks'}}
+        with patch.object(nba_trial_runtime,'review_ready',return_value=True),patch.object(nba_trial_runtime,'public_rows',return_value=[p]),patch.object(nba_trial_runtime,'current_match',return_value=True):
+            plans=nba_trial_runtime.social_plans(now,{'posts':[]},refresh=False)
+        self.assertEqual(len(plans),1)
+        self.assertEqual(plans[0][3],now+timedelta(minutes=15))
+
     def test_frozen_probability_adapter_hash_is_unchanged(self):
         self.assertEqual(nba_prop_release.implementation_hash(),
                          '432249595222a8c66cf336af85928d440fccd721da08596a2aef8cfc946f75ef')

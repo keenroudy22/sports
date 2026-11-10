@@ -357,6 +357,10 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
   if game_day!=now.astimezone(nba_trial.EASTERN).date():continue
   early=boxscores.instant(play['kickoff']).astimezone(nba_trial.EASTERN).hour<10 or (boxscores.instant(play['kickoff']).astimezone(nba_trial.EASTERN).hour==10 and boxscores.instant(play['kickoff']).astimezone(nba_trial.EASTERN).minute<30)
   target=datetime.combine(game_day,datetime.min.time(),nba_trial.EASTERN).replace(hour=8 if early else 9,minute=30)
+  # A reviewed prop must not age out waiting for the old preview clock.
+  # Preserve the existing Discord lead, spacing, caps and quote checks.
+  import nba_reviewed_props
+  if play.get('selectionMethod')==nba_reviewed_props.METHOD:target=now
   due=buffer_post.free_slot(max(target,now+timedelta(minutes=15)),busy)
   if due>=boxscores.instant(play['kickoff'])-timedelta(minutes=15):continue
   teams=play['game']['teams']

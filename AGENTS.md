@@ -1,5 +1,14 @@
 # November10 owner — sourced NBA prop selection, separate from model proof
 
+The existing Kook'n daily app task now reviews at7:35/8:35/13:35/17:35Eastern,
+using the already scheduled captures and the same free-feed/exposure budgets.
+7:35 retains the8AM recap duty; later windows own explicit sourced NBA research
+and real delivery receipts. No new feed or monitor job. Observe natural app
+runs before claiming reliability. Reviewed NBA props retain normal Discord lead
+and spacing but must not wait for the old9:30 preview clock; freshness, identity,
+role and participation checks still apply. The timing code needs its own tested
+canonical release before this is a shipped behavior.
+
 From16:30Z the collector may retain a newer actually reviewed browser discovery
 when its direct listing has only stale/absent published links. Require original
 canonical discovery/report/receipt clocks, current exact fixture/roster identity,
