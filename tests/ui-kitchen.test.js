@@ -129,6 +129,24 @@ test('a player line with no hold puts the projection beside the book line and ke
   assert.match(page, /<details class="plain-fold kt-player-detail"[^>]*><summary>Why this number<\/summary>/);
 });
 
+test('the player line ladder compares nearby thresholds without presenting them as offered markets', async () => {
+  const page = await playerPage(false);
+  const lab = page.split('<section class="line-lab"')[1].split('</section>')[0];
+  assert.match(lab, /What-if research[\s\S]*Line ladder/);
+  assert.match(lab, /211\.5[\s\S]*236\.5[\s\S]*261\.5<span class="line-lab-tag">Book<\/span>[\s\S]*286\.5[\s\S]*311\.5/);
+  assert.match(lab, /261\.5[\s\S]*75%<span>3\/4<\/span>/, 'the real line uses the stored four-game history');
+  assert.match(lab, /Kook’n projects 167\.1\./);
+  assert.match(lab, /hypothetical thresholds—not offered lines, prices, or betting probabilities/);
+  assert.equal((lab.match(/line-lab-tag/g) || []).length, 1, 'only the captured line is called a book line');
+});
+
+test('a held projection stays out of the line ladder while history remains available', async () => {
+  const page = await playerPage(true);
+  const lab = page.split('<section class="line-lab"')[1].split('</section>')[0];
+  assert.match(lab, /Line ladder/);
+  assert.doesNotMatch(lab, /Kook’n projects|167\.1|270\.1/);
+});
+
 test('a pass-tier prop keeps the line and projection but exposes no adjusted betting chance', async () => {
   const page = await playerPage(false, files => {
     for (const row of files['data/app/lines-CFB.json'].lines) {

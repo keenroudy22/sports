@@ -36,7 +36,23 @@
 .player-chart-legend .miss i { background: var(--burnt); }
 .player-board .kt-stubrow { margin: 12px 0 0; min-height: 0; }
 .player-board .kt-season { color: var(--dim); }
-@media (max-width: 520px) { .player-board { padding: 14px; } .player-board-head h2 { font-size: 22px; } .player-board .kt-chart { margin-left: -4px; margin-right: -4px; padding-left: 8px; padding-right: 8px; } }
+.line-lab { max-width: 720px; margin: 12px 0 0; padding: 15px 16px 13px; border: 1px solid rgba(169,192,179,.22); border-radius: 16px; background: rgba(5,15,10,.5); }
+.line-lab-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.line-lab-head h2 { margin-top: 3px; font: 700 22px/1.05 var(--font-body); letter-spacing: -.02em; }
+.line-lab-head p:last-child { margin-top: 4px; color: var(--dim); font: 500 13px/1.35 var(--font-body); }
+.line-lab-direction { flex: none; padding: 6px 9px; border-radius: 999px; background: var(--chalk); color: #07110b; font: 700 12px/1 var(--font-body); text-transform: uppercase; letter-spacing: .05em; }
+.line-lab-table { width: 100%; margin-top: 12px; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums; }
+.line-lab-table th, .line-lab-table td { padding: 9px 6px; border-top: 1px solid rgba(169,192,179,.14); text-align: center; }
+.line-lab-table thead th { padding-top: 0; border: 0; color: var(--dim); font: 700 11px/1 var(--font-body); text-transform: uppercase; letter-spacing: .06em; }
+.line-lab-table th:first-child, .line-lab-table td:first-child { width: 34%; padding-left: 0; text-align: left; }
+.line-lab-table tbody th { color: var(--chalk); font: 700 18px/1 var(--font-display); }
+.line-lab-table tbody td { color: var(--chalk); font: 700 15px/1 var(--font-body); }
+.line-lab-table tbody td span { display: block; margin-top: 3px; color: var(--dim); font: 500 11px/1 var(--font-body); }
+.line-lab-table tr.book { background: rgba(32,199,116,.08); }
+.line-lab-table tr.book th { color: #70e9aa; }
+.line-lab-tag { display: inline-block; margin-left: 5px; color: var(--kookd); font: 700 9px/1 var(--font-body); text-transform: uppercase; letter-spacing: .07em; vertical-align: 2px; }
+.line-lab-note { margin-top: 9px; color: var(--dim); font: 500 12px/1.4 var(--font-body); }
+@media (max-width: 520px) { .player-board { padding: 14px; } .player-board-head h2 { font-size: 22px; } .player-board .kt-chart { margin-left: -4px; margin-right: -4px; padding-left: 8px; padding-right: 8px; } .line-lab { padding: 14px 12px 12px; } .line-lab-head h2 { font-size: 20px; } .line-lab-table th, .line-lab-table td { padding-left: 3px; padding-right: 3px; } .line-lab-table th:first-child, .line-lab-table td:first-child { width: 31%; } }
 `;
   if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-more-css'))) {
     const style = document.createElement('style'); style.id = 'kr-more-css'; style.textContent = MORE_CSS + PLAYER_CHART_CSS; document.head.appendChild(style);
@@ -326,6 +342,23 @@
           ${Array.isArray(projV) ? `<p class="kt-prices">Typical range ${esc(rangeText(projV[1]))}–${esc(rangeText(projV[2]))}.</p>` : ''}`}
       ${line != null ? '<div class="player-chart-legend" aria-label="Chart legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>' : ''}
       ${chart}<div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(!isQuarter && lineStatus ? `${lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></section>`;
+    /* GameGrid-inspired what-if research, using only Kook'n's stored results. Alternate rows are not represented
+       as available book markets: only the exact captured quote gets the Book label. */
+    const ladderRows = C.playerHistory(rows, currentSeason, scope, 'all');
+    const ladderValues = ladderRows.map(r => read(r, stat)).filter(isNum);
+    const ladderStep = /passYds/.test(stat) ? 25 : /(?:rushYds|recYds)/.test(stat) ? 10 : /Long/.test(stat) ? 5
+      : /(?:cmp|att)/.test(stat) ? 2 : 1;
+    const ladderMiddle = line != null ? line : !held && projectionValue != null ? Math.max(.5, Math.round(projectionValue) - .5)
+      : summary && isNum(summary.median) ? Math.max(.5, Math.floor(summary.median) + .5) : null;
+    const ladderLines = ladderMiddle == null ? [] : [...new Set([-2, -1, 0, 1, 2].map(n => Math.max(.5, ladderMiddle + n * ladderStep)))].sort((a, b) => a - b);
+    const ladderWindow = (list, threshold) => { const sample = list.filter(isNum), counts = C.hits(sample, threshold), hits = counts[dir];
+      return { hits, games: counts.n, pct: counts.n ? Math.round(100 * hits / counts.n) : null }; };
+    const ladderCell = x => `<td>${x.pct == null ? '–' : `${x.pct}%`}<span>${x.games ? `${x.hits}/${x.games}` : 'no games'}</span></td>`;
+    const scopeHead = scope === 'current' ? 'Season' : scope === 'all' ? 'All' : String(scope);
+    const lineLab = ladderLines.length && ladderValues.length ? `<section class="line-lab" aria-labelledby="line-lab-h"><div class="line-lab-head"><div><p class="eyebrow">What-if research</p><h2 id="line-lab-h">Line ladder</h2><p>How often did ${esc(data.name)} ${dir === 'under' ? 'stay below' : 'clear'} nearby numbers?</p></div><span class="line-lab-direction">${esc(dir)}</span></div>
+      <table class="line-lab-table"><thead><tr><th scope="col">Line</th><th scope="col">L5</th><th scope="col">L10</th><th scope="col">${esc(scopeHead)}</th></tr></thead><tbody>${ladderLines.map(threshold => { const isBook = line != null && Number(threshold) === Number(line);
+        return `<tr${isBook ? ' class="book"' : ''}><th scope="row">${esc(valueText(threshold))}${isBook ? '<span class="line-lab-tag">Book</span>' : ''}</th>${ladderCell(ladderWindow(ladderValues.slice(-5), threshold))}${ladderCell(ladderWindow(ladderValues.slice(-10), threshold))}${ladderCell(ladderWindow(ladderValues, threshold))}</tr>`; }).join('')}</tbody></table>
+      <p class="line-lab-note">${projectionValue != null && !held ? `Kook’n projects ${esc(valueText(projectionValue))}. ` : ''}History at hypothetical thresholds—not offered lines, prices, or betting probabilities.</p></section>` : '';
     const tds = recent.reduce((n, r) => n + (read(r, 'passTD') || 0), 0), ints = recent.reduce((n, r) => n + (read(r, 'int') || 0), 0), any = recent.reduce((n, r) => n + (read(r, 'anyTD') || 0), 0);
     const big = summary ? `<div class="kt-big"><p><b class="num">${esc(valueText(summary.avg))}</b>${esc(word)} a game</p><p class="rest">Median ${esc(valueText(summary.median))}.${!isQuarter && pos === 'QB' ? ` ${tds} TD, ${ints} INT.` : !isQuarter && any ? ` ${any} TD.` : ''}</p></div>` : '';
     const matchup = allow ? `<p class="kt-matchup"><b>${esc(opp.abbr || opp.name)} allows ${esc(valueText(allow.value))} ${esc(word)} a game</b> to ${esc(group)}s, over ${esc(defGames(dRows, opp.id, group, stat))} games: ${allow.rank} of ${allow.of}${league === 'CFB' ? ' FBS defenses' : ''}, 1 allows the least.${verdict && !held ? ` That ${verdict === 'supports' ? 'supports' : 'works against'} the ${dir}.` : ''}${vs && vs.summary ? ` He averaged ${esc(valueText(vs.summary.avg))} in ${vs.summary.n} meeting${vs.summary.n === 1 ? '' : 's'} with them.` : ''}</p>` : '';
@@ -356,7 +389,7 @@
       </tbody></table>` : '<p class="kt-cap">Verified rushing and receiving stats will appear here as games are added.</p>'}
       <details class="plain-fold kt-quarter-source"><summary>Coverage &amp; sources</summary><p class="small muted">First quarter only. Passing, rushing and receiving. nflverse and ESPN play-by-play checked against full-game player and team totals. Missing stats show a dash, never zero. Averages use only available games for each stat; season and game filters apply. These are not projections or betting probabilities.${q1Rows.length ? ` Latest source check ${esc(clock(q1Rows[q1Rows.length - 1].checkedAt))}.` : ''}</p></details></section>` : '';
 
-    return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}
+    return `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>${hero}${tabs}${sheet}${lineLab}
       ${filtersFold('player', showing, `${seasonSelect}${seg('pwin', [['all', 'All games'], ['last5', 'Last 5'], ['last10', 'Last 10'], ['last20', 'Last 20']], win)}`)}
       ${!recent.length ? `<p class="btn-row">${seasons.filter(x => x !== Number(currentSeason)).slice(0, 1).map(x => `<button type="button" class="btn small" data-set="pseason:${x}">Show ${x}</button>`).join('')}<button type="button" class="btn small" data-set="pseason:all">All seasons</button></p>` : ''}
       <details class="plain-fold kt-player-detail" data-box="player-context"><summary>Why this number</summary>${big}${matchup}${opponentTrend && opponentTrendText(opponentTrend) ? `<p class="kt-matchup ${opponentTrend.opponentAdjustment?.against ? 'red' : ''}">${esc(opponentTrendText(opponentTrend))}</p>` : ''}</details>
