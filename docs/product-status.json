@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-10T01:08:38Z",
+  "updatedAt": "2026-11-10T16:48:56Z",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -401,11 +401,11 @@
     {
       "id": "O-20261019-STAKECOPY",
       "title": "Match generic play-page stake footer to the actual lane",
-      "status": "observing",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release historical unknown-stake footer fix through full canonical gates; verify known and unknown live play pages at375/1440, then close.",
+      "next": "Retain footer regressions; monitor new play pages for saved versus unknown stakes. No external gate remains for this display-only repair.",
       "doneWhen": "The Full Send detail page no longer says every play is graded at one unit; displayed stake matches saved lane accounting, with no public-record changes and verified release evidence.",
-      "evidence": "Nov10: unknown original stakes no longer presented as posted1u. Saved0.5/1/2u and explicit assumed-price wording retained; accounting untouched. Regressions cover unknown/null/zero, immutable inputs and saved/assumed stakes. Focused and323Node pass; full release pending. Original Oct19 observation: Kittle0.5u was labeled1u in the footer."
+      "evidence": "Nov10 before: missing historical stake labeled posted1u; after: unknown explicit, saved0.5/1/2u and assumed-price wording retained. 2205Python(2skip)/323Node normal+clean; build/feed/budget94184/94208,record167/NBA0,guard876,assets/SVG,1125offline ok/outside0/private0. Canonical4b1e93849; hosted42857265440SUCCESS. Live8checks375/1440: correct footers,0overflow/load/console errors. No accounting edits/external gate. Full receipts work/weekly-20261110/. Original Kittle0.5u issue retained."
     },
     {
       "id": "O-20261019-ALTFUN",
