@@ -166,8 +166,10 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
         prep.append({'name':recent[-1]['name'],'stat':stat,'statName':STAT_NAMES[stat],'line':row['line'],'over':row['over'],
                      'book':row['book'],'hits':hits,'games':5,'label':'Research','kickoff':row['kickoff']})
     trial_rows=[r for p in nba_trial.STORE.glob('*.jsonl') for r in boxscores.read_store(p)]
-    all_trial_plays=nba_trial_runtime.public_rows()
+    all_trial_plays=[p for p in nba_trial_runtime.public_rows() if boxscores.instant(p['publishedAt'])<=now]
     focused=nba_trial_runtime.current_plays()
+    visible_ids={p['id'] for p in all_trial_plays}
+    focused=[p for p in focused if p['id'] in visible_ids]
     focus_ids={p['id'] for p in focused}
     trial_record=nba_trial.snapshot([r for r in trial_rows if r.get('id') in focus_ids])
     plays=sorted(focused,key=lambda p:p['publishedAt'])[-20:]
