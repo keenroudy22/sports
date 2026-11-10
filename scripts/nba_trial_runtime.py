@@ -522,9 +522,11 @@ def precheck(now,log_book,refresh=True,delete=None):
     entry['nbaPrecheck']['result']='already-sent';continue
    if status.get('status')!='scheduled':raise buffer_post.BufferError('NBA cancellation needs confirmed private scheduled state')
    (delete or buffer_post.delete_post)(entry['bufferPostId'])
-   entry['cancelledAt']=boxscores.stamp(now)
-   entry['nbaCancellation']=dict(state='deleted-before-due',postId=entry['bufferPostId'],priorState='scheduled',
-      verifiedAt=boxscores.stamp(now),deletedAt=boxscores.stamp(now),textHash=entry.get('textHash'))
+   removed=max(now,datetime.now(timezone.utc))
+   entry['cancelledAt']=boxscores.stamp(removed)
+   entry['nbaCancellation']=dict(state='deleted-before-due' if removed<boxscores.instant(entry['dueAt']) else 'deleted',
+      postId=entry['bufferPostId'],priorState='scheduled',verifiedAt=boxscores.stamp(removed),
+      deletedAt=boxscores.stamp(removed),textHash=entry.get('textHash'))
    entry['nbaHold']='Role or exact-price check did not clear. The published play stays in its record.'
  return changed
 

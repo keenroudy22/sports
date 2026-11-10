@@ -173,6 +173,16 @@ class TrialRuntimeTests(unittest.TestCase):
    self.assertEqual(calls,[])
    self.assertNotIn('cancelledAt',book['posts'][0])
 
+ def test_slow_delete_after_due_is_not_a_retry_receipt(self):
+  book={'posts':[{'id':'NBA-1','kind':'buffer:nba-trial','bufferPostId':'123','dueAt':'2026-10-20T14:30:00Z'}]}
+  with patch.object(rt,'public_rows',return_value=[{'id':'NBA-1'}]),patch.object(rt,'review_ready',return_value=True), \
+       patch.object(rt,'current_match',return_value=False),patch('buffer_post.graphql',return_value={'post':{'status':'scheduled'}}), \
+       patch.object(rt,'datetime',wraps=datetime) as clock:
+   clock.now.return_value=datetime(2026,10,20,14,31,tzinfo=timezone.utc)
+   rt.precheck(NOW,book,refresh=False,delete=lambda *_:None)
+  self.assertEqual(book['posts'][0]['nbaCancellation']['state'],'deleted')
+  self.assertEqual(book['posts'][0]['cancelledAt'],'2026-10-20T14:31:00Z')
+
  def test_precheck_price_or_role_hold_cancels_without_erasing_record(self):
   book={'posts':[{'id':'NBA-1','kind':'buffer:nba-trial','bufferPostId':'123','dueAt':'2026-10-20T14:30:00Z'}]}
   calls=[]
