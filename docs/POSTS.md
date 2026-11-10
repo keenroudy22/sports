@@ -1,3 +1,21 @@
+## November 10 owner priority — relevance before artwork
+
+Graphics are optional for self-contained, sourced research and timely updates.
+Use text when a current role/injury change, an exact priced watch or a concise
+availability update is more useful now than a later graphic. Never reference
+numbers on an absent card. Give one or two meaningful facts tied to the market;
+omit generic hype, obvious mechanics and old information presented as current.
+
+The existing Buffer scheduler accepts text-only research with its normal caption,
+age, routing, budget and receipt checks. Four focused planner/scheduler regressions
+passed November10. This verifies the existing route, not a new automatic fallback
+or an actual public send. Morning and overnight review instructions now prioritize
+this choice; recurring content planners have not all been converted to text-first.
+Keep official pick admission, original terms, individual Final/native quote and
+full-slate result obligations intact. Text does not bypass Buffer's request limit.
+Use existing research slots and track actual Sent time, kickoff lead and format
+alongside comparable-age engagement; missing measurements remain unknown.
+
 ## November 8 owner priority — timely full-slate results
 
 The full-slate results graphic is the primary daily recap. Publish after all
