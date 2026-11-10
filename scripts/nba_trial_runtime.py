@@ -471,6 +471,11 @@ def render_due(now,folder,log=print,root=nba_trial.STORE):
 def current_match(play,now):
  import nba_reviewed_props
  if play.get('selectionMethod')==nba_reviewed_props.METHOD:
+  # The append-only ledger stores the reviewed evidence, not transient flags.
+  # Reconstruct them only from an audited original; evaluate still reruns all
+  # current role, exact quote and official participation checks below.
+  if not nba_reviewed_props.audit_original(play):return False
+  play=dict(play,sideVerified=True,exactLineVerified=True,roleChecked=True)
   other=[r for r in rows() if r.get('id')!=play['id']]
   return not nba_trial.evaluate(play,other,now,sourced_send_recheck=True)
  for candidate in candidates(now,lead_minutes=0):

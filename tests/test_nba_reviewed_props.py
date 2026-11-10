@@ -102,6 +102,19 @@ class ReviewedNBAProps(unittest.TestCase):
         with patch.object(nba_trial_runtime,'rows',return_value=[]),patch.object(n,'refusal',return_value='new injury'):
             self.assertFalse(nba_trial_runtime.current_match(self.play,NOW))
 
+    def test_immutable_original_without_transient_flags_rechecks_and_delivers(self):
+        p=copy.deepcopy(self.play);p['publishedAt']='2026-11-10T16:51:00Z'
+        for key in ('sideVerified','exactLineVerified','roleChecked'):p.pop(key)
+        original=copy.deepcopy(p)
+        with patch.object(nba_trial_runtime,'rows',return_value=[p]),patch.object(n,'refusal',return_value=None):
+            self.assertTrue(nba_trial_runtime.current_match(p,NOW))
+        self.assertEqual(p,original)
+        with patch.object(nba_trial_runtime,'rows',return_value=[p]),patch.object(n,'refusal',return_value='new injury'):
+            self.assertFalse(nba_trial_runtime.current_match(p,NOW))
+        p['sourceReview']['quote']['odds']=-120
+        with patch.object(nba_trial_runtime,'rows',return_value=[p]),patch.object(n,'refusal',return_value=None):
+            self.assertFalse(nba_trial_runtime.current_match(p,NOW))
+
     def test_reviewed_morning_prop_does_not_wait_for_old_nine_thirty_clock(self):
         now=datetime(2026,11,11,13,35,tzinfo=timezone.utc)
         p=copy.deepcopy(self.play)
