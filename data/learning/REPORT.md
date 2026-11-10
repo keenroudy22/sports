@@ -1,31 +1,24 @@
-# What the kitchen learned, 2026-11-03
+# What the kitchen learned, 2026-11-10
 
-5452 recorded candidate rows, 3895 distinct game/side/player observations, 5303 graded. Closing line value is how far the market moved toward our side by kickoff; it is the first thing learning trusts.
+6922 recorded candidate rows, 5027 distinct game/side/player observations, 6733 graded. Closing line value is how far the market moved toward our side by kickoff; it is the first thing learning trusts.
 
 ## Changes this week
 
 - **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
-- **CFB/prop** calibration: 0.15 to 0.16. Calibrated chances predicted the later record better than the raw ones.
-- **researcher** domains: {'avoidDomains': [], 'preferDomains': ['si.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'abqjournal.com', 'chicagobears.com', 'buffalobills.com', 'denverbroncos.com', 'seahawks.com']} to {'avoidDomains': ['startribune.com'], 'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'on3.com', 'seahawks.com', 'buffalobills.com']}. Which sites the researcher cites keep checking out.
-- **card** direction.weekendCap: 5 to 3. Cut the weekend card from 5 to 3 best bets until Nov 17 (last 60 straight plays 24-36, -11.8u). Weekdays unchanged. To undo, tell Codex: undo card.
-- **funTickets** direction.funTickets: standard to shorter. Fun tickets go shorter until Nov 17: +300 to +800, 3-4 legs (0 wins in the last 12). To undo, tell Codex: undo fun.
-- **CFB/moneyline** twoWay.trust: 1.0 to 0.971. CFB/moneyline trust 1.00 to 0.97.
-- **CFB/prop:passYds** twoWay.trust: 0.9 to 0.85. CFB/prop:passYds trust 0.90 to 0.85.
-- **CFB/spread** twoWay.trust: 0.95 to 0.909. CFB/spread trust 0.95 to 0.91.
-- **CFB/total** twoWay.trust: 0.9 to 0.878. CFB/total trust 0.90 to 0.88.
-- **CFB/total/plus_money** twoWay.trust: 1.0 to 0.953. CFB/total/plus_money trust 1.00 to 0.95.
-- **NFL/moneyline** twoWay.trust: 1.0 to 1.036. NFL/moneyline trust 1.00 to 1.04.
-- **NFL/moneyline/plus_money** twoWay.trust: 1.0 to 0.95. NFL/moneyline/plus_money trust 1.00 to 0.95.
-- **NFL/prop:att** twoWay.trust: 1.045 to 0.996. NFL/prop:att trust 1.04 to 1.00.
-- **NFL/prop:car** twoWay.trust: 1.0 to 0.95. NFL/prop:car trust 1.00 to 0.95.
-- **NFL/prop:cmp** twoWay.trust: 1.1 to 1.145. NFL/prop:cmp trust 1.10 to 1.15.
-- **NFL/prop:rec** twoWay.trust: 0.959 to 1.001. NFL/prop:rec trust 0.96 to 1.00.
-- **NFL/prop:recYds/plus_money** twoWay.trust: 1.0 to 1.05. NFL/prop:recYds/plus_money trust 1.00 to 1.05.
-- **NFL/prop:rushYds** twoWay.trust: 0.9 to 0.85. NFL/prop:rushYds trust 0.90 to 0.85.
-- **NFL/total** twoWay.trust: 0.9 to 0.868. NFL/total trust 0.90 to 0.87.
-- **NFL/total** twoWay.gap: 0.0 to 2.0. NFL/total gap floor +2 points.
-- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
-- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
+- **researcher** domains: {'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'on3.com', 'seahawks.com', 'buffalobills.com'], 'avoidDomains': ['startribune.com']} to {'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'on3.com', 'philadelphiaeagles.com', 'chicagobears.com', 'seahawks.com', 'buffalobills.com'], 'avoidDomains': ['startribune.com']}. Which sites the researcher cites keep checking out.
+- **CFB/moneyline/plus_money** twoWay.trust: 1.0 to 0.95. CFB/moneyline/plus_money trust 1.00 to 0.95.
+- **CFB/prop:passYds** twoWay.trust: 0.85 to 0.839. CFB/prop:passYds trust 0.85 to 0.84.
+- **CFB/prop:rec/plus_money** twoWay.trust: 1.0 to 0.966. CFB/prop:rec/plus_money trust 1.00 to 0.97.
+- **CFB/prop:rushYds** twoWay.trust: 0.965 to 1.009. CFB/prop:rushYds trust 0.96 to 1.01.
+- **NFL/moneyline/plus_money** twoWay.trust: 0.95 to 0.9. NFL/moneyline/plus_money trust 0.95 to 0.90.
+- **NFL/prop:car/plus_money** twoWay.trust: 1.0 to 0.95. NFL/prop:car/plus_money trust 1.00 to 0.95.
+- **NFL/prop:passYds** twoWay.trust: 0.923 to 0.954. NFL/prop:passYds trust 0.92 to 0.95.
+- **NFL/prop:recYds** twoWay.trust: 1.06 to 1.023. NFL/prop:recYds trust 1.06 to 1.02.
+- **NFL/prop:recYds/plus_money** twoWay.trust: 1.05 to 1.087. NFL/prop:recYds/plus_money trust 1.05 to 1.09.
+- **NFL/prop:rushYds** twoWay.trust: 0.85 to 0.8. NFL/prop:rushYds trust 0.85 to 0.80.
+- **NFL/spread** twoWay.trust: 0.95 to 0.975. NFL/spread trust 0.95 to 0.97.
+- **NFL/total** twoWay.gap: 2.0 to 4.0. NFL/total gap floor +2 points.
+- **NFL/total** twoWay.pause: False to True. Pause NFL/total; research and shadow continue.
 
 ## Direction changes
 
@@ -36,22 +29,22 @@ Applied:
 
 In force now:
 - NFL totals: paused as a best bet since 2026-10-08 (research and shadow only); edge bar +2 since None
-- Weekend card: 3 best bets until 2026-11-17
-- Fun tickets: +300 to +800, 3-4 legs until 2026-11-17
 
 ## Segments (published since their last change)
 
-- CFB/moneyline (min edge 1): published 0-2, -2.00u; near misses 0-0, +0.00u
-- CFB/moneyline/plus_money (min edge 1): published 0-3, -3.00u; near misses 0-0, +0.00u
+- CFB/moneyline (min edge 1): published 1-2, -1.38u; near misses 0-0, +0.00u
+- CFB/moneyline/plus_money (min edge 1): published 0-5, -5.00u; near misses 0-0, +0.00u
 - CFB/parlay/plus_money (min edge 1): published 0-0, +0.00u; near misses 0-0, +0.00u
 - CFB/prop:passYds (min edge 5): published 1-0, +1.00u; near misses 3-9, -6.37u
 - CFB/prop:rec (min edge 5): published 2-0, +2.20u; near misses 5-11, -6.56u
-- CFB/prop:rec/plus_money (min edge 5): published 2-3, -0.62u; near misses 0-0, +0.00u
+- CFB/prop:rec/plus_money (min edge 5): published 4-3, +1.74u; near misses 0-0, +0.00u
 - CFB/prop:recYds (min edge 5): published 1-1, -0.17u; near misses 12-10, +0.63u
-- CFB/prop:rushYds (min edge 5): published 1-1, -0.12u; near misses 13-11, +0.39u
+- CFB/prop:recYds/plus_money (min edge 5): published 0-0, +0.00u; near misses 0-0, +0.00u
+- CFB/prop:rushYds (min edge 5): published 1-2, -1.12u; near misses 13-11, +0.39u
+- CFB/prop:rushYds/plus_money (min edge 5): published 1-0, +1.00u; near misses 0-0, +0.00u
 - CFB/spread (min edge 1): published 1-1, -0.05u, closing line value -0.25 points (90% -0.50 to +0.00, n 2); near misses 0-0, +0.00u
 - CFB/spread/plus_money (min edge 1): published 0-0, +0.00u; near misses 0-0, +0.00u
-- CFB/total (min edge 1): published 11-16, -5.67u, closing line value +0.15 points (90% -0.30 to +0.63, n 27); near misses 0-0, +0.00u
+- CFB/total (min edge 1): published 14-17, -3.89u, closing line value +0.16 points (90% -0.21 to +0.58, n 31); near misses 0-0, +0.00u
 - CFB/total/plus_money (min edge 1): published 0-1, -1.00u, closing line value -2.00 points (90% -2.00 to -2.00, n 1); near misses 0-0, +0.00u
 - NFL/moneyline (min edge 1): published 1-0, +0.93u; near misses 0-0, +0.00u
 - NFL/moneyline/plus_money (min edge 1): published 0-1, -1.00u; near misses 0-0, +0.00u
@@ -60,111 +53,124 @@ In force now:
 - NFL/prop:att/plus_money (min edge 5): published 0-0, +0.00u; near misses 0-0, +0.00u
 - NFL/prop:car (min edge 5): published 1-2, -1.10u, closing line value +0.00 points (90% +0.00 to +0.00, n 3); near misses 0-0, +0.00u
 - NFL/prop:car/plus_money (min edge 5): published 0-0, +0.00u; near misses 0-0, +0.00u
-- NFL/prop:cmp (min edge 5): published 0-0, +0.00u; near misses 0-0, +0.00u
+- NFL/prop:cmp (min edge 5): published 0-1, -1.00u, closing line value +0.00 points (90% +0.00 to +0.00, n 1); near misses 0-0, +0.00u
 - NFL/prop:cmp/plus_money (min edge 5): published 0-2, -2.00u, closing line value +0.00 points (90% +0.00 to +0.00, n 2); near misses 0-0, +0.00u
 - NFL/prop:passYds (min edge 5): published 0-0, +0.00u; near misses 0-1, -1.00u, closing line value -8.00 points (90% -8.00 to -8.00, n 1)
 - NFL/prop:rec (min edge 5): published 4-2, +2.04u, closing line value +0.00 points (90% +0.00 to +0.00, n 5); near misses 0-1, -1.00u, closing line value +0.00 points (90% +0.00 to +0.00, n 1)
-- NFL/prop:rec/plus_money (min edge 5): published 2-6, -3.22u, closing line value +0.00 points (90% +0.00 to +0.00, n 8); near misses 0-0, +0.00u
-- NFL/prop:recYds (min edge 5): published 7-3, +3.47u, closing line value +0.78 points (90% -0.22 to +1.78, n 9); near misses 3-1, +1.76u, closing line value +0.75 points (90% -1.50 to +3.00, n 4)
+- NFL/prop:rec/plus_money (min edge 5): published 4-6, -1.10u, closing line value +0.00 points (90% +0.00 to +0.00, n 10); near misses 0-0, +0.00u
+- NFL/prop:recYds (min edge 5): published 8-3, +4.42u, closing line value +0.70 points (90% -0.20 to +1.70, n 10); near misses 3-1, +1.76u, closing line value +0.75 points (90% -1.50 to +3.00, n 4)
 - NFL/prop:recYds/plus_money (min edge 5): published 1-1, +0.05u, closing line value -2.00 points (90% -2.00 to -2.00, n 2); near misses 0-0, +0.00u
 - NFL/prop:rushYds (min edge 5): published 0-3, -3.00u, closing line value -1.33 points (90% -3.33 to +1.00, n 3); near misses 0-0, +0.00u
 - NFL/prop:rushYds/plus_money (min edge 5): published 0-0, +0.00u; near misses 0-0, +0.00u
 - NFL/spread (min edge 1): published 0-0, +0.00u; near misses 0-0, +0.00u
 - NFL/spread/plus_money (min edge 1): published 0-0, +0.00u; near misses 0-0, +0.00u
-- NFL/total (higher-bar caution): published 0-4, -4.00u, closing line value -0.50 points (90% -1.00 to +0.12, n 4); near misses 9-10, -1.65u, closing line value -0.05 points (90% -0.29 to +0.18, n 19)
+- NFL/total (higher-bar caution): published 0-4, -4.00u, closing line value -0.50 points (90% -1.00 to +0.12, n 4); near misses 15-18, -4.13u, closing line value +0.01 points (90% -0.14 to +0.17, n 33)
 - NFL/total/plus_money (min edge 1): published 0-0, +0.00u; near misses 0-0, +0.00u
 
 ## Two-way Autopilot learning
 
-- Waiting for a second Tuesday: gap:NFL/total (NFL/total gap floor +2 points).
-- Waiting for a second Tuesday: pause:NFL/total (Pause NFL/total; research and shadow continue).
-- Waiting for a second Tuesday: trust:CFB/moneyline/plus_money (CFB/moneyline/plus_money trust 1.00 to 0.96).
-- Waiting for a second Tuesday: trust:CFB/prop:passYds (CFB/prop:passYds trust 0.85 to 0.84).
-- Waiting for a second Tuesday: trust:CFB/prop:rec/plus_money (CFB/prop:rec/plus_money trust 1.00 to 0.97).
-- Waiting for a second Tuesday: trust:CFB/prop:rushYds (CFB/prop:rushYds trust 0.96 to 0.97).
-- Waiting for a second Tuesday: trust:CFB/spread/plus_money (CFB/spread/plus_money trust 1.00 to 1.04).
-- Waiting for a second Tuesday: trust:NFL/moneyline/plus_money (NFL/moneyline/plus_money trust 0.95 to 0.91).
-- Waiting for a second Tuesday: trust:NFL/prop:car/plus_money (NFL/prop:car/plus_money trust 1.00 to 0.97).
-- Waiting for a second Tuesday: trust:NFL/prop:passYds (NFL/prop:passYds trust 0.92 to 0.96).
-- Waiting for a second Tuesday: trust:NFL/prop:recYds (NFL/prop:recYds trust 1.06 to 1.02).
-- Waiting for a second Tuesday: trust:NFL/prop:recYds/plus_money (NFL/prop:recYds/plus_money trust 1.05 to 1.08).
-- Waiting for a second Tuesday: trust:NFL/prop:rushYds (NFL/prop:rushYds trust 0.85 to 0.80).
-- Waiting for a second Tuesday: trust:NFL/spread (NFL/spread trust 0.95 to 0.96).
-- Waiting for a second Tuesday: trust:NFL/spread/plus_money (NFL/spread/plus_money trust 1.00 to 1.01).
+- Applied trust:CFB/moneyline/plus_money: CFB/moneyline/plus_money trust 1.00 to 0.95.
+- Applied trust:CFB/prop:passYds: CFB/prop:passYds trust 0.85 to 0.84.
+- Applied trust:CFB/prop:rec/plus_money: CFB/prop:rec/plus_money trust 1.00 to 0.97.
+- Applied trust:CFB/prop:rushYds: CFB/prop:rushYds trust 0.96 to 1.01.
+- Applied trust:NFL/moneyline/plus_money: NFL/moneyline/plus_money trust 0.95 to 0.90.
+- Applied trust:NFL/prop:car/plus_money: NFL/prop:car/plus_money trust 1.00 to 0.95.
+- Applied trust:NFL/prop:passYds: NFL/prop:passYds trust 0.92 to 0.95.
+- Applied trust:NFL/prop:recYds: NFL/prop:recYds trust 1.06 to 1.02.
+- Applied trust:NFL/prop:recYds/plus_money: NFL/prop:recYds/plus_money trust 1.05 to 1.09.
+- Applied trust:NFL/prop:rushYds: NFL/prop:rushYds trust 0.85 to 0.80.
+- Applied trust:NFL/spread: NFL/spread trust 0.95 to 0.97.
+- Applied gap:NFL/total: NFL/total gap floor +2 points.
+- Applied pause:NFL/total: Pause NFL/total; research and shadow continue.
+- Waiting for a second Tuesday: trust:CFB/moneyline (CFB/moneyline trust 0.97 to 0.96).
+- Waiting for a second Tuesday: trust:CFB/prop:rec (CFB/prop:rec trust 0.90 to 0.91).
+- Waiting for a second Tuesday: trust:CFB/spread/plus_money (CFB/spread/plus_money trust 1.00 to 0.99).
+- Waiting for a second Tuesday: trust:CFB/total (CFB/total trust 0.88 to 0.89).
+- Waiting for a second Tuesday: trust:CFB/total/plus_money (CFB/total/plus_money trust 0.95 to 0.97).
+- Waiting for a second Tuesday: trust:NFL/moneyline (NFL/moneyline trust 1.04 to 1.08).
+- Waiting for a second Tuesday: trust:NFL/prop:att (NFL/prop:att trust 1.00 to 0.97).
+- Waiting for a second Tuesday: trust:NFL/prop:car (NFL/prop:car trust 0.95 to 0.92).
+- Waiting for a second Tuesday: trust:NFL/prop:cmp (NFL/prop:cmp trust 1.15 to 1.11).
+- Waiting for a second Tuesday: trust:NFL/prop:cmp/plus_money (NFL/prop:cmp/plus_money trust 1.00 to 0.95).
+- Waiting for a second Tuesday: trust:NFL/prop:rec (NFL/prop:rec trust 1.00 to 1.01).
+- Waiting for a second Tuesday: trust:NFL/total/plus_money (NFL/total/plus_money trust 1.00 to 0.98).
 
 ## Player chances
 
-- CFB/prop: 2871 graded projections; our favoured side came in 52.1% against a raw 60.5%; tested shrink k 0.16 (previous: 0.16).
-- NFL/prop: 3893 graded projections; our favoured side came in 51.4% against a raw 61.2%; tested shrink k 0.11 (previous: 0.09).
+- CFB/prop: 3504 graded projections; our favoured side came in 52.4% against a raw 60.5%; tested shrink k 0.18 (previous: 0.16).
+- NFL/prop: 4439 graded projections; our favoured side came in 51.4% against a raw 61.3%; tested shrink k 0.08 (previous: 0.09).
 
 ## What each rule refused
 
 - bar-4: 109 graded, 52-57, -12.39u, closing line value -0.01 points (90% -0.46 to +0.39, n 35)
-- best_quote_by_ev: 142 graded, 61-79-2, -26.03u, closing line value -0.03 points (90% -0.21 to +0.17, n 138)
-- card_cap: 1377 graded, 708-667-2, -42.05u, closing line value +0.15 points (90% +0.09 to +0.22, n 969)
+- best_quote_by_ev: 148 graded, 63-83-2, -28.39u, closing line value -0.05 points (90% -0.22 to +0.14, n 144)
+- card_cap: 1480 graded, 761-716-3, -41.38u, closing line value +0.13 points (90% +0.07 to +0.20, n 1060)
 - cfb_jurisdiction: 47 graded, 25-22, +1.20u, closing line value -0.37 points (90% -0.77 to +0.05, n 31)
-- daily_exposure: 750 graded, 376-374, -47.44u, closing line value -0.03 points (90% -0.11 to +0.05, n 599)
+- daily_exposure: 1224 graded, 608-613-3, -83.10u, closing line value +0.01 points (90% -0.05 to +0.08, n 1046)
 - expiry_ok: 20 graded, 12-8, +2.51u
-- fresh_quote: 149 graded, 81-68, -1.01u, closing line value +0.13 points (90% -0.08 to +0.34, n 61)
-- held: 1279 graded, 651-623-5, -50.84u, closing line value -0.08 points (90% -0.15 to -0.01, n 607)
+- fresh_quote: 177 graded, 94-83, -5.90u, closing line value +0.13 points (90% -0.08 to +0.34, n 61)
+- held: 1902 graded, 983-910-9, -58.14u, closing line value -0.09 points (90% -0.14 to -0.02, n 950)
 - lean_daily_cap: 26 graded, 11-15, -4.67u, closing line value -0.50 points (90% -0.86 to -0.14, n 26)
 - lean_edge: 8 graded, 3-5, -2.26u, closing line value -1.25 points (90% -2.62 to -0.12, n 8)
-- lean_nothing_against: 321 graded, 164-155-2, -8.20u, closing line value +0.20 points (90% +0.06 to +0.35, n 320)
-- learned_pause: 143 graded, 51-89-3, -41.55u, closing line value -0.20 points (90% -0.40 to -0.00, n 143)
+- lean_nothing_against: 408 graded, 199-207-2, -29.74u, closing line value +0.18 points (90% +0.05 to +0.31, n 406)
+- learned_pause: 187 graded, 72-111-4, -44.16u, closing line value -0.14 points (90% -0.31 to +0.01, n 187)
 - longshot_one_per_day: 0 graded, 0-0, +0.00u
-- moneyline_projection_agreement: 68 graded, 17-51, -15.37u
-- not_duplicate: 58 graded, 18-40, -22.23u, closing line value +0.11 points (90% -0.10 to +0.32, n 52)
-- one_book: 1831 graded, 910-917-4, -138.71u, closing line value +0.16 points (90% +0.07 to +0.24, n 987)
-- plan_selection: 1174 graded, 616-557-1, -14.43u, closing line value +0.15 points (90% +0.07 to +0.22, n 1104)
-- player_overlap: 68 graded, 39-29, +5.61u, closing line value +0.09 points (90% -0.26 to +0.42, n 57)
+- moneyline_projection_agreement: 145 graded, 41-104, -26.59u
+- not_duplicate: 64 graded, 24-40, -16.80u, closing line value +0.11 points (90% -0.10 to +0.32, n 57)
+- one_book: 2232 graded, 1120-1108-4, -168.01u, closing line value +0.15 points (90% +0.07 to +0.22, n 1266)
+- plan_selection: 1504 graded, 782-720-2, -33.11u, closing line value +0.13 points (90% +0.06 to +0.20, n 1409)
+- player_overlap: 75 graded, 45-30, +9.93u, closing line value +0.24 points (90% -0.13 to +0.66, n 62)
 - prop_calibrated_value: 1091 graded, 556-535, -66.78u, closing line value +0.47 points (90% +0.37 to +0.56, n 805)
-- prop_injury_clear: 23 graded, 15-8, +5.87u, closing line value +0.13 points (90% -0.39 to +0.74, n 23)
+- prop_injury_clear: 27 graded, 15-12, +1.87u, closing line value -0.11 points (90% -0.63 to +0.44, n 27)
 - prop_market_not_trailing: 723 graded, 371-352, +6.72u, closing line value +0.47 points (90% +0.37 to +0.58, n 719)
-- prop_not_in_longshot: 109 graded, 56-53, -2.76u, closing line value +0.05 points (90% -0.22 to +0.30, n 87)
+- prop_not_in_longshot: 116 graded, 62-54, +1.55u, closing line value +0.15 points (90% -0.14 to +0.45, n 92)
 - prop_one_per_player: 16 graded, 9-7, +1.09u, closing line value +0.00 points (90% -0.64 to +0.64, n 11)
 - prop_price_floor: 5 graded, 2-3, -2.15u, closing line value +0.67 points (90% +0.00 to +1.00, n 3)
 - prop_raw_edge: 127 graded, 62-65, -20.21u, closing line value +0.00 points (90% -0.06 to +0.06, n 84)
-- prop_settled_role: 52 graded, 23-29, -8.87u, closing line value -0.08 points (90% -0.48 to +0.31, n 52)
+- prop_settled_role: 63 graded, 24-39, -17.96u, closing line value -0.06 points (90% -0.38 to +0.24, n 63)
 - prop_window_cap: 160 graded, 78-82, -16.01u, closing line value +0.31 points (90% +0.12 to +0.50, n 160)
-- qb-change-recent: 3 graded, 2-1, +0.72u
-- qb_available: 19 graded, 3-15-1, -12.18u, closing line value +0.21 points (90% -0.05 to +0.50, n 19)
+- qb-change-recent: 25 graded, 8-17, -10.29u, closing line value -0.14 points (90% -0.55 to +0.23, n 22)
+- qb_available: 29 graded, 8-20-1, -12.55u, closing line value +0.21 points (90% -0.12 to +0.50, n 29)
 - ticket_research: 0 graded, 0-0, +0.00u
-- totals_policy: 123 graded, 58-65, -11.07u, closing line value +0.07 points (90% -0.11 to +0.25, n 123)
+- totals_policy: 156 graded, 74-82, -12.96u, closing line value +0.04 points (90% -0.11 to +0.18, n 156)
 - two_sided_straight: 22 graded, 9-13, -4.47u, closing line value +0.36 points (90% -0.04 to +0.73, n 22)
-- x_window: 424 graded, 217-204-3, -18.38u, closing line value +0.12 points (90% -0.03 to +0.26, n 190)
+- x_window: 591 graded, 307-281-3, -19.37u, closing line value +0.06 points (90% -0.05 to +0.17, n 246)
 
 ## The judge
 
-- published: 94 graded, 39-55, -16.48u, closing line value -0.01 points (90% -0.28 to +0.25, n 72)
-- argues against: 22 graded, 5-17, -12.43u, closing line value +0.25 points (90% -0.20 to +0.68, n 20)
-- rule of thumb: 700 graded, 359-336-5, -18.89u, closing line value -0.06 points (90% -0.15 to +0.03, n 407)
+- published: 109 graded, 49-60, -11.64u, closing line value +0.00 points (90% -0.24 to +0.24, n 80)
+- argues against: 27 graded, 9-18, -8.84u, closing line value +0.08 points (90% -0.28 to +0.46, n 25)
+- rule of thumb: 1126 graded, 584-533-9, -26.69u, closing line value -0.05 points (90% -0.12 to +0.01, n 651)
 - unsure: 10 graded, 4-6, -2.32u, closing line value -1.10 points (90% -1.70 to -0.50, n 10)
 
 ## Sources the researcher cited
 
-- 1069thefan.com: 3 of 4 checked out
+- 1069thefan.com: 7 of 8 checked out
 - 146.freechallenge.14.racing.cbssports.com: 0 of 2 checked out
 - 49ers.com: 6 of 7 checked out
-- abqjournal.com: 26 of 29 checked out
-- accsports.com: 3 of 3 checked out
-- ajc.com: 2 of 2 checked out
+- abcnews.com: 2 of 2 checked out
+- abqjournal.com: 30 of 34 checked out
+- accsports.com: 4 of 5 checked out
+- ajc.com: 3 of 3 checked out
 - amp.nfl.com: 5 of 7 checked out
 - aol.com: 3 of 3 checked out
 - appstatesports.com: 4 of 4 checked out
-- arizonasports.com: 9 of 9 checked out
-- arizonawildcats.com: 2 of 3 checked out
+- arizonasports.com: 10 of 10 checked out
+- arizonawildcats.com: 7 of 8 checked out
 - astateredwolves.com: 2 of 2 checked out
 - atlantafalcons.com: 2 of 2 checked out
 - attheroost.com: 3 of 3 checked out
 - azcardinals.com: 6 of 7 checked out
 - azdesertswarm.com: 2 of 2 checked out
+- ballstatesports.com: 10 of 12 checked out
 - baylorbears.com: 1 of 2 checked out
 - bceagles.com: 1 of 1 checked out
-- bengals.com: 1 of 1 checked out
-- bigten.org: 1 of 1 checked out
+- bengals.com: 3 of 4 checked out
+- bgsufalcons.com: 2 of 2 checked out
+- bigten.org: 2 of 2 checked out
 - bluehens.com: 3 of 3 checked out
 - boston.com: 3 of 3 checked out
-- buffalobills.com: 11 of 11 checked out
+- buffalobills.com: 15 of 15 checked out
 - bythebelt.com: 1 of 1 checked out
 - ca.sports.yahoo.com: 1 of 1 checked out
 - chicagobears.com: 17 of 18 checked out
@@ -178,55 +184,66 @@ In force now:
 - cuse.com: 3 of 4 checked out
 - d1hg55pco9dr97.cloudfront.net: 1 of 1 checked out
 - d1tacpi2k4cwvj.cloudfront.net: 2 of 3 checked out
+- d3h8hkdb4o069q.cloudfront.net: 2 of 2 checked out
+- dailyillini.com: 2 of 2 checked out
 - dailylobo.com: 1 of 1 checked out
 - dallascowboys.com: 7 of 9 checked out
 - davecampbells.com: 3 of 3 checked out
 - db5y6jlvyeaqj.cloudfront.net: 5 of 5 checked out
 - denverbroncos.com: 9 of 10 checked out
-- denvergazette.com: 1 of 1 checked out
-- deseret.com: 2 of 2 checked out
+- denvergazette.com: 10 of 10 checked out
+- deseret.com: 4 of 4 checked out
 - df5u1lzgdv707.cloudfront.net: 3 of 3 checked out
+- ecupirates.com: 2 of 2 checked out
 - espn.com: 2 of 2 checked out
 - evanscutchmorepress.com: 3 of 3 checked out
-- fausports.com: 10 of 10 checked out
+- expressnews.com: 2 of 3 checked out
+- fausports.com: 13 of 13 checked out
 - fightingillini.com: 1 of 1 checked out
 - fiusports.com: 4 of 4 checked out
 - floridagators.com: 2 of 3 checked out
 - fox11online.com: 1 of 1 checked out
+- fox32chicago.com: 1 of 1 checked out
 - fox34.com: 2 of 2 checked out
 - gamedaynd.com: 1 of 1 checked out
 - gazette.com: 3 of 4 checked out
+- georgiadogs.com: 1 of 1 checked out
 - georgiastatesports.com: 2 of 2 checked out
 - giants.com: 5 of 6 checked out
-- goairforcefalcons.com: 1 of 1 checked out
+- goairforcefalcons.com: 3 of 3 checked out
 - goarmywestpoint.com: 5 of 5 checked out
 - goaztecs.com: 5 of 6 checked out
 - gobearcats.com: 3 of 3 checked out
 - gobearkats.com: 9 of 9 checked out
 - gobison.com: 1 of 1 checked out
+- goblueraiders.com: 6 of 6 checked out
+- gobulldogs.com: 1 of 1 checked out
 - goccusports.com: 3 of 3 checked out
+- gofrogs.com: 1 of 1 checked out
 - goheels.com: 7 of 7 checked out
 - gohuskies.com: 2 of 2 checked out
 - golobos.com: 2 of 2 checked out
 - gophersports.com: 3 of 3 checked out
 - gotigersgo.com: 7 of 7 checked out
-- gousfbulls.com: 2 of 2 checked out
-- goutsa.com: 2 of 2 checked out
-- hawkeyesports.com: 2 of 3 checked out
+- gousfbulls.com: 9 of 10 checked out
+- goutsa.com: 4 of 4 checked out
+- gowyo.com: 2 of 2 checked out
+- hawkeyesports.com: 5 of 6 checked out
+- hokiesports.com: 1 of 1 checked out
 - hoosierhuddle.com: 5 of 6 checked out
 - hornetsports.com: 2 of 2 checked out
 - hottytoddy.com: 2 of 4 checked out
 - houstonchronicle.com: 4 of 4 checked out
 - houstontexans.com: 7 of 9 checked out
-- huskers.com: 1 of 1 checked out
+- huskers.com: 2 of 2 checked out
 - insidethehall.com: 5 of 7 checked out
 - iuhoosiers.com: 7 of 7 checked out
-- jaguars.com: 7 of 8 checked out
+- jaguars.com: 8 of 9 checked out
 - jaxstatesports.com: 4 of 4 checked out
 - jmusports.com: 1 of 1 checked out
 - kait8.com: 1 of 1 checked out
 - kcci.com: 1 of 1 checked out
-- kentstatesports.com: 7 of 7 checked out
+- kentstatesports.com: 12 of 13 checked out
 - kolotv.com: 3 of 3 checked out
 - kstatesports.com: 4 of 4 checked out
 - ksuowls.com: 3 of 3 checked out
@@ -239,21 +256,25 @@ In force now:
 - meangreensports.com: 2 of 4 checked out
 - mgoblue.com: 5 of 5 checked out
 - miamihurricanes.com: 3 of 3 checked out
-- miamiredhawks.com: 6 of 6 checked out
+- miamiredhawks.com: 13 of 13 checked out
 - miamistudent.net: 4 of 4 checked out
 - minutemancommand.com: 0 of 3 checked out
 - missouristatebears.com: 4 of 5 checked out
 - nationalfootballpost.com: 3 of 4 checked out
 - navysports.com: 8 of 8 checked out
 - nbcmiami.com: 0 of 2 checked out
-- nevadawolfpack.com: 1 of 1 checked out
+- ncfootballnews.com: 2 of 2 checked out
+- nevadawolfpack.com: 4 of 4 checked out
 - neworleanssaints.com: 2 of 3 checked out
 - newson6.com: 1 of 1 checked out
-- nfl.com: 5 of 6 checked out
+- nfl.com: 9 of 11 checked out
 - nmstatesports.com: 9 of 9 checked out
+- nusports.com: 1 of 1 checked out
 - odusports.com: 4 of 4 checked out
-- on3.com: 15 of 17 checked out
-- osubeavers.com: 1 of 2 checked out
+- ohiobobcats.com: 8 of 8 checked out
+- olemisssports.com: 2 of 2 checked out
+- on3.com: 21 of 26 checked out
+- osubeavers.com: 3 of 4 checked out
 - packers.com: 4 of 5 checked out
 - panthers.com: 2 of 2 checked out
 - patriots.com: 13 of 20 checked out
@@ -264,43 +285,57 @@ In force now:
 - riceowls.com: 1 of 1 checked out
 - s3.us-east-2.amazonaws.com: 2 of 2 checked out
 - seahawks.com: 15 of 17 checked out
-- si.com: 48 of 53 checked out
+- si.com: 66 of 72 checked out
 - sicem365.com: 3 of 3 checked out
 - sjsuspartans.com: 1 of 1 checked out
-- smumustangs.com: 4 of 4 checked out
+- smumustangs.com: 5 of 5 checked out
 - soflobulls.com: 2 of 4 checked out
 - southernmiss.com: 3 of 3 checked out
 - sports.ksl.com: 1 of 2 checked out
 - sports.mynorthwest.com: 1 of 1 checked out
-- sports.yahoo.com: 25 of 28 checked out
+- sports.yahoo.com: 28 of 31 checked out
 - staging-aws.sports.yahoo.com: 1 of 1 checked out
 - startribune.com: 0 of 5 checked out
 - statenews.com: 2 of 2 checked out
 - steelers.com: 5 of 7 checked out
+- storage.googleapis.com: 0 of 3 checked out
+- sundevildaily.com: 1 of 1 checked out
+- supertalk.fm: 3 of 3 checked out
+- techlunchpail.com: 2 of 3 checked out
 - temple-news.com: 0 of 2 checked out
 - tennesseetitans.com: 2 of 2 checked out
-- theacc.com: 5 of 5 checked out
+- theacc.com: 8 of 8 checked out
 - thedailyhoosier.com: 3 of 4 checked out
+- thekeyplay.com: 3 of 3 checked out
 - therams.com: 18 of 24 checked out
 - thescore.com: 4 of 4 checked out
+- thesundevils.com: 3 of 3 checked out
+- toledoblade.com: 0 of 2 checked out
 - troytrojans.com: 10 of 10 checked out
+- tucson.com: 2 of 2 checked out
 - tulanegreenwave.com: 2 of 2 checked out
 - tulsahurricane.com: 4 of 4 checked out
-- txst.com: 3 of 3 checked out
+- txst.com: 4 of 4 checked out
 - ubbulls.com: 2 of 2 checked out
 - ucfknights.com: 1 of 1 checked out
+- uclabruins.com: 3 of 3 checked out
 - uconnhuskies.com: 4 of 4 checked out
 - umassathletics.com: 1 of 1 checked out
 - underdogdynasty.com: 9 of 10 checked out
+- unlvrebels.com: 3 of 3 checked out
 - usajaguars.com: 2 of 2 checked out
 - usforacle.com: 1 of 2 checked out
+- utahstateaggies.com: 1 of 1 checked out
 - utahutes.com: 2 of 2 checked out
 - utepminers.com: 4 of 5 checked out
+- vikings.com: 2 of 2 checked out
 - wdrbwave.com: 2 of 2 checked out
 - whsv.com: 4 of 4 checked out
 - wjr.com: 2 of 2 checked out
-- wkusports.com: 4 of 4 checked out
+- wkusports.com: 8 of 8 checked out
+- wmubroncos.com: 2 of 3 checked out
 - wndu.com: 3 of 3 checked out
+- woub.org: 3 of 3 checked out
 - wsbtv.com: 1 of 1 checked out
 - wvmetronews.com: 5 of 5 checked out
 - wvusports.com: 1 of 1 checked out
@@ -345,44 +380,45 @@ In force now:
 
 ## Matchup-supported leans
 
-- 157 graded, distinct matchup-supported observations. Reporting only; this changes no gate.
+- 185 graded, distinct matchup-supported observations. Reporting only; this changes no gate.
 - NFL/CFB: player defense-vs-position and opponent-quality splits are active.
 - NBA/CBB: team projections are active; player defense-vs-position is not live yet.
 - EPL/MLS: team-level score and market shadows only.
 - MLB: scores and market collection only; no batter-vs-pitcher lean yet.
 - NHL: scores and market collection only; no skater/goalie lean yet.
+- NFL WR over rec vs bottom-half defense: 14-3, +9.76u (n 17).
 - NFL WR over recYds vs bottom-half defense: 9-8, +0.10u (n 17).
-- NFL WR over rec vs bottom-half defense: 13-3, +8.70u (n 16).
-- NFL TE over recYds vs bottom-half defense: 3-8, -5.33u (n 11).
-- NFL RB over rushYds vs bottom-half defense: 6-4, +1.33u (n 10).
+- NFL TE over recYds vs bottom-half defense: 7-8, -1.76u (n 15).
+- NFL RB over rushYds vs bottom-half defense: 6-6, -0.67u (n 12).
+- NFL WR under recYds vs top 10 defense: 8-3, +4.15u (n 11).
+- NFL WR under rec vs top 10 defense: 8-3, +3.13u (n 11).
+- NFL RB over recYds vs bottom-half defense: 6-3, +2.57u (n 9).
+- NFL QB over att vs bottom-half defense: 6-3, +2.16u (n 9).
 - NFL TE over rec vs bottom-half defense: 4-5, -1.50u (n 9).
-- NFL WR under recYds vs top 10 defense: 7-1, +5.26u (n 8).
-- NFL WR under rec vs top 10 defense: 6-2, +2.55u (n 8).
-- NFL RB over recYds vs bottom-half defense: 5-2, +2.62u (n 7).
-- NFL QB over att vs bottom-half defense: 5-2, +2.37u (n 7).
+- NFL QB over cmp vs bottom-half defense: 4-4, -0.54u (n 8).
+- NFL QB over passYds vs bottom-half defense: 3-5, -2.34u (n 8).
 - NFL RB under car vs top 10 defense: 5-2, +2.20u (n 7).
-- NFL QB over cmp vs bottom-half defense: 4-3, +0.46u (n 7).
+- NFL QB over rushYds vs bottom-half defense: 3-4, -1.38u (n 7).
 - NFL TE under rec vs top 10 defense: 4-2, +0.86u (n 6).
-- NFL QB over rushYds vs bottom-half defense: 3-3, -0.38u (n 6).
-- NFL QB over passYds vs bottom-half defense: 2-4, -2.22u (n 6).
 - NFL RB over rec vs bottom-half defense: 2-4, -2.48u (n 6).
-- NFL QB under att vs top 10 defense: 2-2, -0.16u (n 4).
+- NFL QB under att vs top 10 defense: 2-3, -1.16u (n 5).
+- NFL QB under passYds vs top 10 defense: 4-0, +3.57u (n 4).
+- NFL RB under rec vs top 10 defense: 2-2, -0.12u (n 4).
 - NFL QB under cmp vs top 10 defense: 2-2, -0.17u (n 4).
-- NFL QB under passYds vs top 10 defense: 3-0, +2.67u (n 3).
+- NFL RB over car vs bottom-half defense: 1-3, -2.21u (n 4).
+- CFB WR under rec vs top-half defense: 3-0, +3.58u (n 3).
 - NFL RB under rushYds vs top 10 defense: 2-1, +0.79u (n 3).
-- NFL RB over car vs bottom-half defense: 1-2, -1.21u (n 3).
-- CFB WR under rec vs top-half defense: 2-0, +2.38u (n 2).
-- NFL RB under rec vs top 10 defense: 1-1, -0.18u (n 2).
 - CFB WR over rec vs bottom-half defense: 1-0, +1.12u (n 1).
 - NFL QB under rushYds vs top 10 defense: 1-0, +0.88u (n 1).
 - NFL RB under recYds vs top 10 defense: 1-0, +0.88u (n 1).
 - NFL WR over rushYds vs bottom-half defense: 1-0, +0.88u (n 1).
+- NFL QB under car vs top 10 defense: 1-0, +0.72u (n 1).
 - CFB WR under recYds vs top-half defense: 0-1, -1.00u (n 1).
 
 ## Released multi-leg tickets
 
-- 12 released and graded tickets. Unreleased ideas are excluded.
-- Climb / 2-leg / all alternates: 4-2-0-0, +0.02u on 6 with stored units (n 6).
+- 13 released and graded tickets. Unreleased ideas are excluded.
+- Climb / 2-leg / all alternates: 5-2-0-0, +0.16u on 7 with stored units (n 7).
 - Climb / 1-leg / all alternates: 0-1-0-0, -0.25u on 1 with stored units (n 1).
 - Climb / 2-leg / main lines: 1-0-0-0, +0.18u on 1 with stored units (n 1).
 - Fun ticket / 3-leg / main lines: 0-1-0-0, -0.25u on 1 with stored units (n 1).
@@ -407,12 +443,12 @@ In force now:
 
 ## The number against the close (season to date)
 
-- CFB v1: 437 games, total miss 13.15 vs the close's 12.48
+- CFB v1: 500 games, total miss 13.3 vs the close's 12.55
 - CFB v2.0: 259 games, total miss 12.72 vs the close's 12.3
-- CFB v2.1: 174 games, total miss 13.79 vs the close's 12.89
-- NFL v1: 106 games, total miss 11.33 vs the close's 10.37
+- CFB v2.1: 237 games, total miss 13.88 vs the close's 12.91
+- NFL v1: 121 games, total miss 11.33 vs the close's 10.35
 - NFL v2.0: 60 games, total miss 11.34 vs the close's 10.1
-- NFL v2.1: 44 games, total miss 11.08 vs the close's 10.77
+- NFL v2.1: 59 games, total miss 10.95 vs the close's 10.64
 
 ## Prop formula review
 
@@ -420,27 +456,27 @@ Earlier 60% of kickoff dates train; later dates test. Both error scores must imp
 
 p = 0.5 + k * (raw - 0.5); k = w*k_market + (1-w)*k_league; w = n_train/(n_train+300)
 
-- CFB/prop:passYds: 272 earlier / 147 later observations; later-game squared probability error 0.2522 league / 0.2509 pooled; shadow candidate.
-- CFB/prop:rec: 364 earlier / 292 later observations; later-game squared probability error 0.2489 league / 0.2489 pooled; keep league formula.
-- CFB/prop:recYds: 640 earlier / 384 later observations; later-game squared probability error 0.2487 league / 0.2482 pooled; shadow candidate.
-- CFB/prop:rushYds: 491 earlier / 281 later observations; later-game squared probability error 0.2487 league / 0.2485 pooled; shadow candidate.
-- NFL/prop:att: 120 earlier / 77 later observations; later-game squared probability error 0.2514 league / 0.2509 pooled; shadow candidate.
-- NFL/prop:car: 222 earlier / 129 later observations; later-game squared probability error 0.2514 league / 0.2517 pooled; keep league formula.
-- NFL/prop:cmp: 120 earlier / 78 later observations; later-game squared probability error 0.2510 league / 0.2520 pooled; keep league formula.
-- NFL/prop:passYds: 117 earlier / 74 later observations; later-game squared probability error 0.2498 league / 0.2498 pooled; keep league formula.
-- NFL/prop:rec: 702 earlier / 484 later observations; later-game squared probability error 0.2482 league / 0.2476 pooled; shadow candidate.
-- NFL/prop:recYds: 701 earlier / 485 later observations; later-game squared probability error 0.2502 league / 0.2503 pooled; keep league formula.
-- NFL/prop:rushYds: 350 earlier / 234 later observations; later-game squared probability error 0.2530 league / 0.2513 pooled; shadow candidate.
+- CFB/prop:passYds: 289 earlier / 207 later observations; later-game squared probability error 0.2525 league / 0.2510 pooled; shadow candidate.
+- CFB/prop:rec: 406 earlier / 422 later observations; later-game squared probability error 0.2493 league / 0.2493 pooled; keep league formula.
+- CFB/prop:recYds: 688 earlier / 560 later observations; later-game squared probability error 0.2493 league / 0.2492 pooled; shadow candidate.
+- CFB/prop:rushYds: 528 earlier / 404 later observations; later-game squared probability error 0.2488 league / 0.2487 pooled; shadow candidate.
+- NFL/prop:att: 142 earlier / 81 later observations; later-game squared probability error 0.2500 league / 0.2500 pooled; shadow candidate.
+- NFL/prop:car: 262 earlier / 138 later observations; later-game squared probability error 0.2523 league / 0.2529 pooled; keep league formula.
+- NFL/prop:cmp: 142 earlier / 82 later observations; later-game squared probability error 0.2506 league / 0.2516 pooled; keep league formula.
+- NFL/prop:passYds: 137 earlier / 79 later observations; later-game squared probability error 0.2502 league / 0.2501 pooled; shadow candidate.
+- NFL/prop:rec: 848 earlier / 513 later observations; later-game squared probability error 0.2484 league / 0.2465 pooled; shadow candidate.
+- NFL/prop:recYds: 845 earlier / 514 later observations; later-game squared probability error 0.2495 league / 0.2494 pooled; shadow candidate.
+- NFL/prop:rushYds: 420 earlier / 236 later observations; later-game squared probability error 0.2513 league / 0.2505 pooled; shadow candidate.
 
 
 ## Silent results shadows
 
 - These observations changed no play, card, post, record, gate or request budget.
-- R0: 5443 raw rows, 3891 distinct
+- R0: 6913 raw rows, 5023 distinct
 - R1: observation active; public behavior unchanged
 - R2: observation active; public behavior unchanged
 - R3: 11 prop markets observed
 - R4: observation active; public behavior unchanged
-- R5: 92 heavy alternates observed; default unchanged
+- R5: 144 heavy alternates observed; default unchanged
 - R6: observation active; public behavior unchanged
 - R7: observation active; public behavior unchanged
