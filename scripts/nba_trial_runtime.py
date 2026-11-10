@@ -344,7 +344,10 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
  if not review_ready(now):return []
  committed={e['id'] for e in log_book.get('posts',[]) if not e.get('nbaDiscordOnly')
             or e.get('bufferPostId') or e.get('sentAt') or e.get('cancelledAt') or e.get('deletedAt')}
- pending=[p for p in public_rows(root) if not p.get('result') and p['id'] not in committed]
+ pending=[p for p in public_rows(root) if not p.get('result') and p['id'] not in committed
+          and boxscores.instant(p['publishedAt'])<=now
+          and boxscores.instant(p['kickoff'])>now+timedelta(minutes=15)
+          and boxscores.instant(p['kickoff']).astimezone(nba_trial.EASTERN).date()==now.astimezone(nba_trial.EASTERN).date()]
  if not pending:return []
  if refresh:nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
  now=max(now,datetime.now(timezone.utc))

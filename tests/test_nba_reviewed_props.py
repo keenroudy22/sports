@@ -115,6 +115,12 @@ class ReviewedNBAProps(unittest.TestCase):
         with patch.object(nba_trial_runtime,'rows',return_value=[p]),patch.object(n,'refusal',return_value=None):
             self.assertFalse(nba_trial_runtime.current_match(p,NOW))
 
+    def test_future_original_never_triggers_capture_in_dated_planner(self):
+        p=copy.deepcopy(self.play);p['publishedAt']='2026-11-10T16:51:00Z'
+        with patch.object(nba_trial_runtime,'review_ready',return_value=True),patch.object(nba_trial_runtime,'public_rows',return_value=[p]),patch.object(nba_trial_runtime.nba_capture,'step') as capture:
+            self.assertEqual(nba_trial_runtime.social_plans(NOW-timedelta(days=1),{'posts':[]}),[])
+        capture.assert_not_called()
+
     def test_reviewed_morning_prop_does_not_wait_for_old_nine_thirty_clock(self):
         now=datetime(2026,11,11,13,35,tzinfo=timezone.utc)
         p=copy.deepcopy(self.play)
