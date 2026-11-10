@@ -323,7 +323,14 @@ def capture(budget, games, root, now, clock=lambda:datetime.now(timezone.utc)):
             error.official_stage = stage
             raise
     if now >= PUBLISHED_LINKS_FROM:
-        listing=observed('listing', lambda: budget.report_index(index_url(now)))
+        try:listing=observed('listing', lambda: budget.report_index(index_url(now)))
+        except OSError as error:
+            checked=clock()
+            cached=newer_browser_discovery(root,games,checked,None)
+            if cached:
+                cached['directListingFailure']=failure(error,checked)
+                return cached
+            raise
         listed_at=clock()
         try:source,expected=published_report(listing,listed_at)
         except PublishedReportUnavailable as error:

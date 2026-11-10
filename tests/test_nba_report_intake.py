@@ -141,6 +141,12 @@ class BrowserCacheTests(unittest.TestCase):
                 self.assertEqual(cached['retrievedAt'],p['retrievedAt'])
                 self.assertEqual(cached['reportedAt'],boxscores.stamp(f.REPORTED))
                 self.assertTrue(cached['_from_verified_browser_cache'])
+                class FailedListing(Budget):
+                    def report_index(self,url_):raise TimeoutError('private diagnostic')
+                recovered=official.capture(FailedListing(),games,root,f.NOW,clock=lambda:f.NOW)
+                self.assertEqual(recovered['retrievedAt'],p['retrievedAt'])
+                self.assertEqual(recovered['directListingFailure']['state'],'unavailable')
+                self.assertNotIn('private diagnostic',json.dumps(recovered))
                 self.assertIsNone(official.newer_browser_discovery(root,games,f.NOW,f.REPORTED+timedelta(minutes=15)))
                 self.assertIsNone(official.newer_browser_discovery(root,games,f.NOW+timedelta(hours=2),old))
                 changed=copy.deepcopy(games);changed[0]['kickoff']='2026-10-27T23:45:00Z'
