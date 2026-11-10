@@ -1,11 +1,11 @@
 # What the kitchen learned, 2026-11-10
 
-6922 recorded candidate rows, 5027 distinct game/side/player observations, 6733 graded. Closing line value is how far the market moved toward our side by kickoff; it is the first thing learning trusts.
+6925 recorded candidate rows, 5027 distinct game/side/player observations, 6733 graded. Closing line value is how far the market moved toward our side by kickoff; it is the first thing learning trusts.
 
 ## Changes this week
 
 - **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
-- **researcher** domains: {'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'on3.com', 'seahawks.com', 'buffalobills.com'], 'avoidDomains': ['startribune.com']} to {'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'on3.com', 'philadelphiaeagles.com', 'chicagobears.com', 'seahawks.com', 'buffalobills.com'], 'avoidDomains': ['startribune.com']}. Which sites the researcher cites keep checking out.
+- **researcher** domains: {'avoidDomains': ['startribune.com'], 'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'on3.com', 'seahawks.com', 'buffalobills.com']} to {'avoidDomains': ['startribune.com'], 'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'on3.com', 'philadelphiaeagles.com', 'chicagobears.com', 'seahawks.com', 'buffalobills.com']}. Which sites the researcher cites keep checking out.
 - **CFB/moneyline/plus_money** twoWay.trust: 1.0 to 0.95. CFB/moneyline/plus_money trust 1.00 to 0.95.
 - **CFB/prop:passYds** twoWay.trust: 0.85 to 0.839. CFB/prop:passYds trust 0.85 to 0.84.
 - **CFB/prop:rec/plus_money** twoWay.trust: 1.0 to 0.966. CFB/prop:rec/plus_money trust 1.00 to 0.97.
@@ -19,6 +19,7 @@
 - **NFL/spread** twoWay.trust: 0.95 to 0.975. NFL/spread trust 0.95 to 0.97.
 - **NFL/total** twoWay.gap: 2.0 to 4.0. NFL/total gap floor +2 points.
 - **NFL/total** twoWay.pause: False to True. Pause NFL/total; research and shadow continue.
+- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
 
 ## Direction changes
 
@@ -28,7 +29,7 @@ Applied:
 - none
 
 In force now:
-- NFL totals: paused as a best bet since 2026-10-08 (research and shadow only); edge bar +2 since None
+- NFL totals: paused as a best bet since 2026-10-08 (research and shadow only); edge bar +4 since None
 
 ## Segments (published since their last change)
 
@@ -69,30 +70,22 @@ In force now:
 
 ## Two-way Autopilot learning
 
-- Applied trust:CFB/moneyline/plus_money: CFB/moneyline/plus_money trust 1.00 to 0.95.
-- Applied trust:CFB/prop:passYds: CFB/prop:passYds trust 0.85 to 0.84.
-- Applied trust:CFB/prop:rec/plus_money: CFB/prop:rec/plus_money trust 1.00 to 0.97.
-- Applied trust:CFB/prop:rushYds: CFB/prop:rushYds trust 0.96 to 1.01.
-- Applied trust:NFL/moneyline/plus_money: NFL/moneyline/plus_money trust 0.95 to 0.90.
-- Applied trust:NFL/prop:car/plus_money: NFL/prop:car/plus_money trust 1.00 to 0.95.
-- Applied trust:NFL/prop:passYds: NFL/prop:passYds trust 0.92 to 0.95.
-- Applied trust:NFL/prop:recYds: NFL/prop:recYds trust 1.06 to 1.02.
-- Applied trust:NFL/prop:recYds/plus_money: NFL/prop:recYds/plus_money trust 1.05 to 1.09.
-- Applied trust:NFL/prop:rushYds: NFL/prop:rushYds trust 0.85 to 0.80.
-- Applied trust:NFL/spread: NFL/spread trust 0.95 to 0.97.
-- Applied gap:NFL/total: NFL/total gap floor +2 points.
-- Applied pause:NFL/total: Pause NFL/total; research and shadow continue.
+- Waiting for a second Tuesday: gap:NFL/total (NFL/total gap floor +2 points).
 - Waiting for a second Tuesday: trust:CFB/moneyline (CFB/moneyline trust 0.97 to 0.96).
+- Waiting for a second Tuesday: trust:CFB/moneyline/plus_money (CFB/moneyline/plus_money trust 0.95 to 0.94).
 - Waiting for a second Tuesday: trust:CFB/prop:rec (CFB/prop:rec trust 0.90 to 0.91).
 - Waiting for a second Tuesday: trust:CFB/spread/plus_money (CFB/spread/plus_money trust 1.00 to 0.99).
 - Waiting for a second Tuesday: trust:CFB/total (CFB/total trust 0.88 to 0.89).
 - Waiting for a second Tuesday: trust:CFB/total/plus_money (CFB/total/plus_money trust 0.95 to 0.97).
 - Waiting for a second Tuesday: trust:NFL/moneyline (NFL/moneyline trust 1.04 to 1.08).
+- Waiting for a second Tuesday: trust:NFL/moneyline/plus_money (NFL/moneyline/plus_money trust 0.90 to 0.85).
 - Waiting for a second Tuesday: trust:NFL/prop:att (NFL/prop:att trust 1.00 to 0.97).
 - Waiting for a second Tuesday: trust:NFL/prop:car (NFL/prop:car trust 0.95 to 0.92).
+- Waiting for a second Tuesday: trust:NFL/prop:car/plus_money (NFL/prop:car/plus_money trust 0.95 to 0.94).
 - Waiting for a second Tuesday: trust:NFL/prop:cmp (NFL/prop:cmp trust 1.15 to 1.11).
 - Waiting for a second Tuesday: trust:NFL/prop:cmp/plus_money (NFL/prop:cmp/plus_money trust 1.00 to 0.95).
 - Waiting for a second Tuesday: trust:NFL/prop:rec (NFL/prop:rec trust 1.00 to 1.01).
+- Waiting for a second Tuesday: trust:NFL/prop:rushYds (NFL/prop:rushYds trust 0.80 to 0.75).
 - Waiting for a second Tuesday: trust:NFL/total/plus_money (NFL/total/plus_money trust 1.00 to 0.98).
 
 ## Player chances
@@ -256,7 +249,7 @@ In force now:
 - meangreensports.com: 2 of 4 checked out
 - mgoblue.com: 5 of 5 checked out
 - miamihurricanes.com: 3 of 3 checked out
-- miamiredhawks.com: 13 of 13 checked out
+- miamiredhawks.com: 8 of 8 checked out
 - miamistudent.net: 4 of 4 checked out
 - minutemancommand.com: 0 of 3 checked out
 - missouristatebears.com: 4 of 5 checked out
@@ -271,7 +264,7 @@ In force now:
 - nmstatesports.com: 9 of 9 checked out
 - nusports.com: 1 of 1 checked out
 - odusports.com: 4 of 4 checked out
-- ohiobobcats.com: 8 of 8 checked out
+- ohiobobcats.com: 5 of 5 checked out
 - olemisssports.com: 2 of 2 checked out
 - on3.com: 21 of 26 checked out
 - osubeavers.com: 3 of 4 checked out
@@ -333,9 +326,8 @@ In force now:
 - whsv.com: 4 of 4 checked out
 - wjr.com: 2 of 2 checked out
 - wkusports.com: 8 of 8 checked out
-- wmubroncos.com: 2 of 3 checked out
 - wndu.com: 3 of 3 checked out
-- woub.org: 3 of 3 checked out
+- woub.org: 2 of 2 checked out
 - wsbtv.com: 1 of 1 checked out
 - wvmetronews.com: 5 of 5 checked out
 - wvusports.com: 1 of 1 checked out
@@ -472,11 +464,11 @@ p = 0.5 + k * (raw - 0.5); k = w*k_market + (1-w)*k_league; w = n_train/(n_train
 ## Silent results shadows
 
 - These observations changed no play, card, post, record, gate or request budget.
-- R0: 6913 raw rows, 5023 distinct
+- R0: 6916 raw rows, 5023 distinct
 - R1: observation active; public behavior unchanged
 - R2: observation active; public behavior unchanged
 - R3: 11 prop markets observed
 - R4: observation active; public behavior unchanged
-- R5: 144 heavy alternates observed; default unchanged
+- R5: 126 heavy alternates observed; default unchanged
 - R6: observation active; public behavior unchanged
 - R7: observation active; public behavior unchanged
