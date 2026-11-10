@@ -1,3 +1,22 @@
+# November10 owner — sourced NBA prop selection, separate from model proof
+
+The owner requests completion of researched NBA props after delegating sourced
+judgment. From11AM Eastern November10, the distinct sourced-nba-primary-prop-v1
+method admits explicitly reviewed DraftKings full-game points/rebounds/assists
+straights through scripts/nba_reviewed_props.py. It never promotes the failing
+probability study, claims calibrated odds/EV, or changes its frozen protocol.
+Require exact visible two-sided main-price receipt, current stored quote/roster,
+fresh official participation, at least three current-role observations, meaningful
+minutes, role and opponent evidence from primary NBA/ESPN sources, a specific
+reason and countercase. Every send rechecks current terms and evidence. Ordinary1u,
+shared exposure/count caps, one NBA pick per game, original immutable NBA ledger,
+normal website/Discord/X routing and book-rule/injury-aware grading remain.
+Store selectionMethod and the reviewed source packet with each original; never
+report sourced-pick results as validation of the probability model. No new feed,
+spend, automatic model promotion, speculative workload redistribution, quarter/
+combo/alternate market, FanDuel admission or wager placement. Code and a packet
+are not evidence of release; actual website/X/Discord receipts are required.
+
 # November9 GameGrid review — preserve the honest Line Ladder
 
 Player pages now include a five-threshold Line Ladder for fast alternate-line

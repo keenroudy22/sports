@@ -19,9 +19,11 @@ def audit(payload,root=nba_trial.STORE):
   if ordinary and p.get('series')!='NBA Picks':issues.append('new NBA pick category mismatch')
   if p.get('riskUnits')!=nba_trial.staking.expected(p) or p.get('league')!='NBA':issues.append('stake/league mismatch')
   if p.get('marketType')=='player':
-   import nba_prop_release,nba_prop_probability
+   import nba_prop_release,nba_prop_probability,nba_reviewed_props
    proof=p.get('propEvidence') or {}
-   if (p.get('stat') not in nba_prop_release.STATS or p.get('period')!='full_game'
+   if p.get('selectionMethod')==nba_reviewed_props.METHOD:
+    if not nba_reviewed_props.audit_original(p):issues.append('NBA sourced admission evidence missing or invalid')
+   elif (p.get('stat') not in nba_prop_release.STATS or p.get('period')!='full_game'
        or p.get('book')!='DraftKings' or not p.get('athleteId') or not p.get('player')
        or p.get('model')!=nba_prop_probability.VERSION
        or proof.get('adapter')!=nba_prop_release.VERSION or not proof.get('specHash')

@@ -289,8 +289,11 @@ def injury_review(play, final, now, root=nba_capture.STORE, check=None):
 
 def grade(play, final, now, root=nba_capture.STORE, check=None):
     """Public, original-term grade; raw losses retain the desk's injury window."""
+    import nba_reviewed_props
+    sourced=(play.get('selectionMethod')==nba_reviewed_props.METHOD and play.get('model')==nba_reviewed_props.METHOD
+             and play.get('calibrated') is False and play.get('rawChance') is None and play.get('chance') is None)
     if (play.get('stat') not in STATS or play.get('period') != 'full_game'
-            or play.get('model') != probability.VERSION or play.get('book') != 'DraftKings'
+            or (play.get('model') != probability.VERSION and not sourced) or play.get('book') != 'DraftKings'
             or final.get('season') != play.get('season')
             or boxscores.instant(play['publishedAt']) > now):
         return None

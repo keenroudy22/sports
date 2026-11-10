@@ -63,16 +63,23 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if isinstance(offer.get('riskUnits'),bool) or offer.get('riskUnits')!=staking.expected(offer):problems.append('stake policy mismatch')
         if staking.active(now) and offer.get('stakingPolicy')!=staking.policy_for(now,offer.get('lane')):problems.append('current stake policy required')
         prop_verified=False
+        sourced=False
         if market=='player':
-            import nba_prop_release
-            prop_verified=nba_prop_release.verify(staking.prop_research_copy(offer,now),now)
-            if not prop_verified:problems.append('NBA prop evidence/current-source hold')
+            import nba_prop_release, nba_reviewed_props
+            if offer.get('selectionMethod')==nba_reviewed_props.METHOD:
+                reason=nba_reviewed_props.refusal(offer,now)
+                sourced=reason is None
+                if reason:problems.append(reason)
+            else:
+                prop_verified=nba_prop_release.verify(staking.prop_research_copy(offer,now),now)
+                if not prop_verified:problems.append('NBA prop evidence/current-source hold')
         calibrated=(prop_verified or calibration_verified is True) and offer.get('calibrated') is True
-        chance=offer['chance'] if calibrated else offer['rawChance']
-        if isinstance(chance,bool) or not isinstance(chance,(float,int)) or not math.isfinite(chance) or not 0<=chance<=1:
-            raise ValueError('missing probability')
-        if chance-espn_props.implied(odds) < (.04 if calibrated else .06)-1e-9:problems.append('edge hold')
-        if not calibrated and chance<.56:problems.append('chance hold')
+        if not sourced:
+            chance=offer['chance'] if calibrated else offer['rawChance']
+            if isinstance(chance,bool) or not isinstance(chance,(float,int)) or not math.isfinite(chance) or not 0<=chance<=1:
+                raise ValueError('missing probability')
+            if chance-espn_props.implied(odds) < (.04 if calibrated else .06)-1e-9:problems.append('edge hold')
+            if not calibrated and chance<.56:problems.append('chance hold')
         today=[]
         for row in rows:
             if row.get('type')=='publish' and row.get('id')==offer.get('id'):problems.append('published ID is immutable')
@@ -119,7 +126,8 @@ def record_publish(offer,now,root=STORE,preview_sent=None,calibration_verified=F
               'retrievedAt','rawChance','riskUnits','source')
     row={key:offer[key] for key in required}
     for key in ('eventId','game','reasons','projection','model','direction','stakingPolicy','modelSnapshot',
-                'athleteId','team','player','stat','period','chance','calibrated','propEvidence','roleReview','availabilitySource'):
+                'athleteId','team','player','stat','period','chance','calibrated','propEvidence','roleReview','availabilitySource',
+                'selectionMethod','sourceReview'):
         if key in offer:row[key]=offer[key]
     row.update(type='publish',series=nba_pick_policy.label(now),publishedAt=boxscores.stamp(now))
     return nba_capture.append_changed([row],root,lambda r:(r['type'],r['id']))
