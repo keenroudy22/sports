@@ -20,6 +20,7 @@
 - **NFL/total** twoWay.gap: 2.0 to 4.0. NFL/total gap floor +2 points.
 - **NFL/total** twoWay.pause: False to True. Pause NFL/total; research and shadow continue.
 - **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
+- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
 
 ## Direction changes
 
