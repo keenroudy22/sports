@@ -10405,6 +10405,69 @@
     "destination": "research",
     "image": "https://keenroudy.com/sports/data/cards/nba-projections-2026-11-10.png"
    }
+  },
+  {
+   "id": "research:td-hit:research:end-zone:2026-11-09",
+   "postedAt": "2026-11-10T05:28:35Z",
+   "dueAt": "2026-11-10T05:30:42Z",
+   "bufferPostId": "6af2ab8d223aa16048eef8b3",
+   "textHash": "6f9ad46ba1c2e3fa",
+   "kind": "buffer:research",
+   "card": false,
+   "cardTheme": "none",
+   "queuedText": "🎯 James Cook III found the end zone.\nThat was my End-Zone Work call this morning.\n#NFL\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 James Cook III found the end zone.\nThat was my End-Zone Work call this morning.\n#NFL\n\n21+ only",
+    "destination": "research"
+   }
+  },
+  {
+   "id": "research:end-zone:2026-11-10",
+   "postedAt": "2026-11-10T05:28:35Z",
+   "dueAt": "2026-11-10T15:31:00Z",
+   "bufferPostId": "6af2ab8ed35dff5701dee2f0",
+   "textHash": "0848e9c3c7efe206",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "🎯 END-ZONE WORK\nJordan Gant (first TD dart): 21 red-zone · 15 inside 10\nJalen Buckley (anytime TD lean): 27 red-zone · 14 inside 10\nBroc Lowry: 19 red-zone · 12 inside 10\nDuncan Brune: 13 red-zone · 8 inside 10\n#CFB\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nJordan Gant (first TD dart): 21 red-zone · 15 inside 10\nJalen Buckley (anytime TD lean): 27 red-zone · 14 inside 10\nBroc Lowry: 19 red-zone · 12 inside 10\nDuncan Brune: 13 red-zone · 8 inside 10\n#CFB\n\n21+ only",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-11-10.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "Jordan Gant",
+      "athleteId": "5084582",
+      "gameId": "CFB-401866458",
+      "league": "CFB",
+      "kickoff": "2026-11-11T00:00Z",
+      "anytime": false,
+      "firstTd": true
+     },
+     {
+      "player": "Jalen Buckley",
+      "athleteId": "5085006",
+      "gameId": "CFB-401866458",
+      "league": "CFB",
+      "kickoff": "2026-11-11T00:00Z",
+      "anytime": true,
+      "firstTd": false
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-11-10"
   }
  ]
 }
