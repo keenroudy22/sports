@@ -1,3 +1,30 @@
+# November10 actual NBA delivery receipt — do not restart completed selection work
+
+Sourced NBA props are live. Bennett Stirtz over7.5points, +101DraftKings,1u
+(`NBA-reviewed-401909965-5241364-pts-over-dk`) was admitted through the normal
+ledger and is visible on the live NBA Today page. Discord actually sent at
+17:36:34Z; X actually sent at17:51:46Z:
+https://x.com/1753110091912413184/status/2120212835577782561
+The pre-send twelve-read existing capture saved703pairedquotes, errors[], and
+exact-price precheck cleared at17:39:33Z. Do not duplicate or re-admit this play.
+Coverage/source recovery and immutable-original send fixes were canonically
+promoted as a6c585a73 and hosted successfully (42866644269); live phone/desktop
+comparison and original-term NBA publication were checked. Probability studies
+remain unapproved; sourced picks never claim calibrated chance/fair odds/EV.
+
+The individual NBA prop Final/native-quote adapter was canonically promoted as
+03a5c356061729e7a386511af4b1154ea1bb5ff8 after2212Python/323frontend tests in
+normal and clean exports, record/publication audits and offline rehearsal.
+It uses actual grades and confirmed original X posts; missing receipts block
+native quoting. Actual postgame grading/Final delivery remains unobserved until
+the real game finishes. Pages42872756238 timed out syncing_files, not in tests.
+Stored-data-only recovery42875578698 is in progress; verify that hosted receipt
+and the live payload before calling the Final addition fully shipped. No new
+feed job, paid service, cap increase or fabricated result. Preserve the separate
+work/nba-reviewed-props-20261110.json evidence receipt. The next natural capture
+and app review should research other qualifying games using the current source
+contract, not reopen the failing probability experiment or replay this pick.
+
 # November10 owner — sourced NBA prop selection, separate from model proof
 
 The existing Kook'n daily app task now reviews at7:35/8:35/13:35/17:35Eastern,
