@@ -1,3 +1,14 @@
+# November9 GameGrid review — preserve the honest Line Ladder
+
+Player pages now include a five-threshold Line Ladder for fast alternate-line
+research. Only the exact captured market quote may carry the `Book` label; the
+other thresholds are clearly hypothetical and must never imply offered odds,
+availability or model probabilities. Each row reports historical over rates for
+L5, L10 and the selected chart scope. Keep held projections out of the ladder.
+The GameGrid review inspired this interaction only; it is not evidence that
+Kook'n runs or may advertise simulations. Preserve these distinctions in every
+future player-page, line-source and marketing change.
+
 # November9 Results calendar routing continuity
 
 The bare Results route (`#record`) is an all-sports view. It must reset any

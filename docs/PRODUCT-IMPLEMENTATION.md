@@ -1,3 +1,27 @@
+### November 9 GameGrid review and player Line Ladder
+
+The owner shared GameGrid as product inspiration. Its useful public pattern is
+speed: a player board, recent-game windows and adjustable thresholds make it
+easy to scan what changes when the line moves. Kook'n already had the player
+board, L5/L10/season charts, game logs, first-quarter props, position-versus-
+defense context and Book vs Kook'n projections. The missing high-value piece was
+quick alternate-line research, so player pages now add a five-row Line Ladder
+directly beneath the main chart.
+
+The ladder is derived from stored game results and the actual captured line. It
+shows L5, L10 and selected-scope hit counts for nearby thresholds; only the exact
+captured quote is tagged `Book`. Every other row is explicitly a what-if line,
+not a sportsbook offering, price or probability. Held projections do not appear.
+Kook'n does not copy GameGrid's simulation claim because the current system does
+not run that simulation product. The feature changes research presentation only,
+not projections, selection rules, staking, prices or the public record.
+
+Candidate 4e8768442f3f699867e21cb038880fde4a07def3 passed 2,191 Python checks
+(2 skipped), 322 Node/interface checks, clean export, build 530/152, 165-pick
+record audit, NBA audit, 874-file public guard, asset/SVG gates and the 19:25
+stored-input rehearsal with zero outside writes or private reads. Hosted release
+and exact live 375px evidence are recorded with the final deployment receipt.
+
 ### November 9 Results calendar all-sports route repair — verified live
 
 The Results data and grading were correct, but navigation could hide them. When
