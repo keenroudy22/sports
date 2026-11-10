@@ -704,6 +704,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     for guid, kind, text, due, card_key in plans:
         cbb_regular = kind == 'cbb-pick'
         nba_regular = kind == 'nba-trial' and essential_kind(kind, now)
+        if nba_regular:
+            import nba_trial_runtime
         if cbb_regular:
             import cbb_picks
             original = next((p for p in cbb_picks.public_rows() if p['id'] == guid), None)
@@ -719,7 +721,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 continue
             text = saved
         prior = next((p for p in reversed(log_book.get('posts', []))
-                      if p.get('id') == guid and x_post.cancelled_private_draft(p)), None)
+                      if p.get('id') == guid and (x_post.cancelled_private_draft(p) or
+                          (nba_regular and nba_trial_runtime.retryable_cancelled(p, now)))), None)
+        if nba_regular and prior and nba_trial_runtime.retryable_cancelled(prior, now):
+            text = prior['queuedText']
         corrections = (prior or {}).get('captionCorrections') or []
         if (kind == 'play' and prior and (prior.get('discord') or {}).get('state') == 'sent'
                 and corrections and corrections[-1].get('observedText') == prior.get('queuedText')
@@ -833,7 +838,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         if kind == 'nba-trial':
             import nba_trial_runtime
-            if not nba_trial_runtime.reserve_delivery(guid, now):
+            reserved = (nba_trial_runtime.reserve_delivery(guid, now, cancelled=prior) if prior
+                        else nba_trial_runtime.reserve_delivery(guid, now))
+            if not reserved:
                 log(f'buffer: {guid} held: NBA delivery not cleared or already attempted; recheck before retry')
                 continue
         try:
@@ -863,6 +870,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             entry['nbaPick'] = True
             entry['discord'] = {'state':'pending','destination':'plays','text':without_playbook(text),
                                 'readyAt':gates.stamp(max(now,due-DISCORD_PLAY_LEAD))}
+        if nba_regular and prior and nba_trial_runtime.retryable_cancelled(prior, now):
+            entry['discord'] = dict(prior['discord'])
+            entry['replacesBufferPostId'] = prior['bufferPostId']
         if combined:
             entry['straightCard'] = combined['straightCard']
         if combined_result:

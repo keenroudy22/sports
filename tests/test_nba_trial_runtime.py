@@ -93,6 +93,27 @@ class TrialRuntimeTests(unittest.TestCase):
   coverage={};found=rt.candidates(NOW,root,lambda *a:Model(),history,diagnostics=coverage)
   self.assertEqual({row['marketType'] for row in found},{'moneyline'})
   self.assertEqual(coverage['holds']['spread pair has different thresholds'],1)
+ def test_verified_deleted_private_delivery_retries_once_preserving_original(self):
+  import x_post
+  play={**offer(),'eventId':'NBA-1','direction':'under'}
+  nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')
+  self.assertTrue(rt.reserve_delivery(play['id'],NOW,self.root))
+  text='Original checked pick'
+  entry=dict(id=play['id'],kind='buffer:nba-trial',nbaPick=True,bufferPostId='deleted-private',
+   cancelledAt=boxscores.stamp(NOW-timedelta(minutes=2)),dueAt=boxscores.stamp(NOW+timedelta(minutes=5)),
+   nbaHold='Official source unavailable',queuedText=text,textHash=x_post.text_hash(text),
+   discord=dict(state='sent',sentAt=boxscores.stamp(NOW-timedelta(minutes=20))))
+  self.assertFalse(rt.reserve_delivery(play['id'],NOW,self.root,cancelled=entry))
+  entry['nbaCancellation']=dict(state='deleted-before-due',priorState='scheduled',postId='deleted-private',
+   verifiedAt=boxscores.stamp(NOW),deletedAt=entry['cancelledAt'],textHash=entry['textHash'])
+  self.assertTrue(rt.retryable_cancelled(entry,NOW))
+  for changes in ({'link':'https://x.com/me/status/123'}, {'sentAt':boxscores.stamp(NOW)},
+                  {'deletedAt':boxscores.stamp(NOW)}, {'error':'unknown create'}, {'queuedText':'Different bet'}):
+   self.assertFalse(rt.retryable_cancelled(dict(entry,**changes),NOW))
+  self.assertTrue(rt.reserve_delivery(play['id'],NOW,self.root,cancelled=entry))
+  self.assertFalse(rt.reserve_delivery(play['id'],NOW,self.root,cancelled=entry))
+  self.assertEqual(len([r for r in rt.rows(self.root) if r['type']=='publish']),1)
+
  def test_reserve_delivery_is_once_even_without_buffer_ack(self):
   play={**offer(),'eventId':'NBA-1','direction':'under'}
   nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')
@@ -136,10 +157,26 @@ class TrialRuntimeTests(unittest.TestCase):
  def test_no_network_or_admission_before_opening(self):
   with patch.object(nba_capture,'step',side_effect=AssertionError('no call')):
    self.assertEqual(rt.admission(NOW-timedelta(days=11),root=self.root,review=self.review())['state'],'held')
+ def test_precheck_does_not_delete_public_or_unknown_provider_state(self):
+  import buffer_post
+  for status in ({'status':'sent','sentAt':NOW.isoformat(),'externalLink':'https://x.com/me/status/123'},
+                 {'status':'unknown'}):
+   book={'posts':[{'id':'NBA-1','kind':'buffer:nba-trial','bufferPostId':'123','dueAt':'2026-10-20T14:30:00Z'}]}
+   calls=[]
+   with patch.object(rt,'public_rows',return_value=[{'id':'NBA-1'}]),patch.object(rt,'review_ready',return_value=True), \
+        patch.object(rt,'current_match',return_value=False),patch.object(buffer_post,'graphql',return_value={'post':status}):
+    if status['status']=='sent':
+     rt.precheck(NOW,book,refresh=False,delete=calls.append)
+     self.assertEqual(book['posts'][0]['tweetId'],'123')
+    else:
+     with self.assertRaises(buffer_post.BufferError):rt.precheck(NOW,book,refresh=False,delete=calls.append)
+   self.assertEqual(calls,[])
+   self.assertNotIn('cancelledAt',book['posts'][0])
+
  def test_precheck_price_or_role_hold_cancels_without_erasing_record(self):
   book={'posts':[{'id':'NBA-1','kind':'buffer:nba-trial','bufferPostId':'123','dueAt':'2026-10-20T14:30:00Z'}]}
   calls=[]
-  with patch.object(rt,'public_rows',return_value=[{'id':'NBA-1'}]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=False):
+  with patch.object(rt,'public_rows',return_value=[{'id':'NBA-1'}]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=False),patch('buffer_post.graphql',return_value={'post':{'status':'scheduled'}}):
    self.assertTrue(rt.precheck(NOW,book,refresh=False,delete=calls.append))
   self.assertEqual(calls,['123']);self.assertIn('cancelledAt',book['posts'][0])
  def test_late_send_uses_reserved_football_slots_and_has_no_discord_payload(self):

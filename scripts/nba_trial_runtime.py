@@ -344,8 +344,8 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
  import nba_results
  results=nba_results.plans(now,log_book,root,reserved)
  if not review_ready(now):return results
- committed={e['id'] for e in log_book.get('posts',[]) if not e.get('nbaDiscordOnly')
-            or e.get('bufferPostId') or e.get('sentAt') or e.get('cancelledAt') or e.get('deletedAt')}
+ committed={e['id'] for e in log_book.get('posts',[]) if not retryable_cancelled(e,now) and
+            (not e.get('nbaDiscordOnly') or e.get('bufferPostId') or e.get('sentAt') or e.get('cancelledAt') or e.get('deletedAt'))}
  pending=[p for p in public_rows(root) if not p.get('result') and p['id'] not in committed
           and boxscores.instant(p['publishedAt'])<=now
           and boxscores.instant(p['kickoff'])>now+timedelta(minutes=15)
@@ -366,7 +366,9 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
   # Preserve the existing Discord lead, spacing, caps and quote checks.
   import nba_reviewed_props
   if play.get('selectionMethod')==nba_reviewed_props.METHOD:target=now
-  due=buffer_post.free_slot(max(target,now+timedelta(minutes=15)),busy)
+  retry=next((e for e in reversed(log_book.get('posts',[])) if e.get('id')==play['id'] and retryable_cancelled(e,now)),None)
+  earliest=(max(now+buffer_post.SOON,boxscores.instant(retry['discord']['sentAt'])+timedelta(minutes=15)) if retry else now+timedelta(minutes=15))
+  due=buffer_post.free_slot(max(target,earliest),busy)
   if due>=boxscores.instant(play['kickoff'])-timedelta(minutes=15):continue
   teams=play['game']['teams']
   name=lambda side: teams[side].get('displayName') or teams[side].get('name') or teams[side]['abbreviation']
@@ -512,21 +514,52 @@ def precheck(now,log_book,refresh=True,delete=None):
   okay=bool(play and review_ready(now) and current_match(play,now))
   entry['nbaPrecheck']={'at':boxscores.stamp(now),'result':'clear' if okay else 'held'};changed=True
   if not okay:
+   status=buffer_post.graphql(buffer_post.STATUS,{'id':entry['bufferPostId']}).get('post') or {}
+   if status.get('status')=='sent' or status.get('sentAt'):
+    link=status.get('externalLink') or ''
+    entry.update(sentAt=status.get('sentAt') or boxscores.stamp(now),link=link or None,
+                 tweetId=link.rsplit('/',1)[-1] if '/status/' in link else None)
+    entry['nbaPrecheck']['result']='already-sent';continue
+   if status.get('status')!='scheduled':raise buffer_post.BufferError('NBA cancellation needs confirmed private scheduled state')
    (delete or buffer_post.delete_post)(entry['bufferPostId'])
    entry['cancelledAt']=boxscores.stamp(now)
+   entry['nbaCancellation']=dict(state='deleted-before-due',postId=entry['bufferPostId'],priorState='scheduled',
+      verifiedAt=boxscores.stamp(now),deletedAt=boxscores.stamp(now),textHash=entry.get('textHash'))
    entry['nbaHold']='Role or exact-price check did not clear. The published play stays in its record.'
  return changed
 
 
-def reserve_delivery(guid,now,root=nba_trial.STORE):
- """At-most-once create attempt; an ambiguous Buffer reply waits for reconciliation."""
+def retryable_cancelled(entry,now):
+ """Only a verified private deletion can reopen the original delivery intent."""
+ import x_post
+ try:
+  proof=entry.get('nbaCancellation') or {}
+  return bool(entry.get('kind')=='buffer:nba-trial' and entry.get('nbaPick') is True
+   and entry.get('nbaHold') and not any(entry.get(k) for k in ('sentAt','link','tweetId','deletedAt','error'))
+   and proof.get('state')=='deleted-before-due' and proof.get('priorState')=='scheduled'
+   and proof.get('postId')==entry.get('bufferPostId') and proof.get('textHash')==entry.get('textHash')
+   and entry.get('textHash') and x_post.text_hash(entry.get('queuedText') or '')==entry['textHash']
+   and proof.get('deletedAt')==entry.get('cancelledAt')
+   and boxscores.instant(entry['cancelledAt'])<boxscores.instant(entry['dueAt'])
+   and boxscores.instant(entry['cancelledAt'])<=boxscores.instant(proof['verifiedAt'])<=now
+   and (entry.get('discord') or {}).get('state')=='sent' and entry['discord'].get('sentAt'))
+ except (KeyError,ValueError,TypeError):return False
+
+
+def reserve_delivery(guid,now,root=nba_trial.STORE,cancelled=None):
+ """Ambiguous creates stay held; a verified deleted private post may retry once."""
  saved=rows(root)
- if any(r.get('type')=='send-attempt' and r['id']==guid for r in saved):return False
+ retry=cancelled.get('bufferPostId') if cancelled and retryable_cancelled(cancelled,now) and cancelled.get('id')==guid else None
+ attempts=[r for r in saved if r.get('type')=='send-attempt' and r['id']==guid]
+ if attempts and (not retry or any(r.get('retryOf')==retry for r in attempts)):return False
+ if cancelled and not retry:return False
  play=next((r for r in saved if r.get('type')=='publish' and r['id']==guid),None)
  if not play:return False
  if play.get('marketType')=='player' and not current_match(play,now):return False
- nba_capture.append_changed([{'type':'send-attempt','id':guid,'season':play['season'],
-                             'retrievedAt':boxscores.stamp(now),'source':'Buffer create intent'}],root,lambda r:(r['type'],r['id']))
+ row={'type':'send-attempt','id':guid,'season':play['season'],
+      'retrievedAt':boxscores.stamp(now),'source':'Buffer create intent'}
+ if retry:row['retryOf']=retry
+ nba_capture.append_changed([row],root,lambda r:(r['type'],r['id'],r.get('retryOf')))
  return True
 
 

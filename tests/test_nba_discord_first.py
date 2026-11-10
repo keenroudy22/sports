@@ -84,6 +84,32 @@ class NBADiscordFirstTests(unittest.TestCase):
   self.assertEqual(book['posts'][0]['queuedText'],original['queuedText'])
   self.assertEqual(book['posts'][0]['textHash'],x_post.text_hash(original['queuedText']))
 
+ def test_known_private_cancellation_recovers_x_without_repeating_discord_or_its_lead(self):
+  book={'posts':[]}
+  with self.guards():rt.queue_discord_first(NOW,book,[PLAN])
+  prior=book['posts'][0]
+  prior.update(bufferPostId='removed',cancelledAt=(NOW-timedelta(minutes=2)).isoformat(),
+               nbaHold='Official source temporarily unavailable')
+  prior['discord'].update(state='sent',sentAt=(NOW-timedelta(minutes=20)).isoformat())
+  prior['nbaCancellation']=dict(state='deleted-before-due',postId='removed',priorState='scheduled',
+    verifiedAt=NOW.isoformat(),deletedAt=prior['cancelledAt'],textHash=prior['textHash'])
+  saved=copy.deepcopy(prior['discord'])
+  with self.guards(),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'reserve_delivery',return_value=True), \
+       patch.object(b,'create_post',return_value='replacement') as create:
+   plans=rt.social_plans(NOW,book,refresh=False)
+   self.assertEqual(len(plans),1)
+   self.assertLess(plans[0][3],NOW+timedelta(minutes=15))
+   b.schedule(plans,'channel',book,NOW,log=lambda *_:None)
+   self.assertEqual(len(book['posts']),2)
+   self.assertEqual(book['posts'][-1]['replacesBufferPostId'],'removed')
+   self.assertEqual(book['posts'][-1]['discord'],saved)
+   self.assertEqual(book['posts'][-1]['queuedText'],prior['queuedText'])
+   self.assertEqual(rt.social_plans(NOW,book,refresh=False),[])
+   with patch.object(d,'send_message') as send:
+    d.mirror_sent(book,NOW,url='https://discord.invalid/plays',wins_url='',research_url='',log=lambda *_:None)
+    send.assert_not_called()
+   create.assert_called_once()
+
  def test_no_new_discord_first_behavior_for_historical_trial(self):
   old=datetime(2026,10,20,17,tzinfo=timezone.utc)
   with self.guards():self.assertEqual(rt.queue_discord_first(old,{'posts':[]},[PLAN]),0)
