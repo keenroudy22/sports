@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 278,
+   "gamesGraded": 279,
    "gamesQuoted": 288,
-   "moneylineSnapshots": 1290,
+   "moneylineSnapshots": 1291,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 239,
+     "gamesGraded": 240,
      "gamesQuoted": 247,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1290,
+   "snapshots": 1291,
    "status": "capturing",
-   "totalSnapshots": 1290
+   "totalSnapshots": 1291
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "NYR",
+    "id": "13",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nyr.png",
+    "name": "New York Rangers",
+    "shortName": "Rangers"
+   },
+   "awayScore": 1,
+   "gameId": "NHL-401892680",
+   "gradedAt": "2026-11-10T04:25:12Z",
+   "home": {
+    "abbreviation": "EDM",
+    "id": "6",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/edm.png",
+    "name": "Edmonton Oilers",
+    "shortName": "Oilers"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-11-10T01:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "PIT",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "MIL",
-    "id": "8",
-    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/mil.png",
-    "name": "Milwaukee Brewers",
-    "shortName": "Brewers"
-   },
-   "awayScore": 10,
-   "gameId": "MLB-401908044",
-   "gradedAt": "2026-10-27T03:22:15Z",
-   "home": {
-    "abbreviation": "TB",
-    "id": "30",
-    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tb.png",
-    "name": "Tampa Bay Rays",
-    "shortName": "Rays"
-   },
-   "homeScore": 1,
-   "kickoff": "2026-10-27T00:00:00Z",
-   "league": "MLB",
-   "season": 2026,
-   "seasonType": "post-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-10T04:19:37Z"
+ "updatedAt": "2026-11-10T04:29:03Z"
 }
