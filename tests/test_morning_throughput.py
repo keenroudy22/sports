@@ -97,6 +97,20 @@ class MorningThroughputTests(unittest.TestCase):
         admission.assert_called_once_with(now, capture=True)
         self.assertEqual(len(status['errors']), 1)
 
+    def test_real_lunch_climb_worker_captures_nba_before_quiet_run_return(self):
+        now=datetime(2026,11,10,18,30,tzinfo=timezone.utc)
+        args=SimpleNamespace(command='ladder',dry_run=False)
+        status={'errors':[]}
+        with mock.patch.dict(os.environ,{'KEENROUDY_SPORTS_CAPTURE':'1'}), \
+             mock.patch.object(nba_capture,'step',return_value={}) as capture, \
+             mock.patch.object(nba_trial_runtime,'admission',return_value={'state':'held'}), \
+             mock.patch.object(run,'capture_nba_props_and_select') as props, \
+             mock.patch.object(run,'log'):
+            run.early_nba_selection(args,now,now.astimezone(run.EASTERN),status)
+        capture.assert_called_once_with(now,scheduled=True)
+        props.assert_called_once_with(args,now,status)
+        self.assertTrue(status['nbaPropsEarlyAttempted'])
+
     def test_rehearsal_and_non_run_workers_do_not_take_early_capture(self):
         now = datetime(2026, 10, 24, 10, 45, tzinfo=timezone.utc)
         with mock.patch.object(nba_capture, 'step') as capture:

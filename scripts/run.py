@@ -1550,7 +1550,9 @@ def early_nba_selection(args, now, slot, status):
     This moves work, not feed budgets,
     trial limits or evidence gates; admission itself uses the post-capture clock.
     """
-    if args.dry_run or args.command != 'run' or not nba_game_capture_due(slot):
+    lunch = (coverage_priority.active(now) and args.command == 'ladder'
+             and (slot.hour, slot.minute) == (13, 30))
+    if args.dry_run or (args.command != 'run' and not lunch) or not nba_game_capture_due(slot):
         return
     if os.environ.get('KEENROUDY_SPORTS_CAPTURE', '1') == '0':
         return
