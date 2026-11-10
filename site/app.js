@@ -574,7 +574,7 @@
       case 'scores': return { view: 'games', tab: 'live', league: a ? a.toUpperCase() : 'ALL', legacy: true };
       case 'sport': return { view: 'games', tab: 'live', league: (a || 'NBA').toUpperCase(), legacy: true };
       case 'game': return rest ? { view: 'game', id: rest.split('#')[0], anchor: rest.split('#')[1] || null } : { view: 'games', tab: 'upcoming' };
-      case 'player': return { view: 'player', league: (a || 'NFL').toUpperCase() === 'CFB' ? 'CFB' : 'NFL', id: b,
+      case 'player': return { view: 'player', league: ['NFL', 'CFB', 'NBA'].includes((a || 'NFL').toUpperCase()) ? (a || 'NFL').toUpperCase() : 'NFL', id: b,
         stat: params.get('stat') || null, season: params.get('season') || null, sample: params.get('sample') || null };
       case 'team': return { view: 'team', league: (a || 'NFL').toUpperCase() === 'CFB' ? 'CFB' : 'NFL', id: b };
       case 'record': return { view: 'record', tab: ['fun', 'climb', 'model', 'trials'].includes(a) ? a : 'official', anchor: a === 'calendar' ? 'calendar' : null,
@@ -784,12 +784,14 @@
   /* Team logos and player photos (owner's call, 2026-10-06): ESPN art as on the old site, with the team-color badge
      underneath as the fallback whenever an image is missing or fails to load. */
   const HEADSHOT = { NFL: id => `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png`,
-    CFB: id => `https://a.espncdn.com/i/headshots/college-football/players/full/${encodeURIComponent(id)}.png` };
+    CFB: id => `https://a.espncdn.com/i/headshots/college-football/players/full/${encodeURIComponent(id)}.png`,
+    NBA: id => `https://a.espncdn.com/i/headshots/nba/players/full/${encodeURIComponent(id)}.png` };
   const logoUrl = (team, league) => {
     if (!team) return null;
     if (/^https:\/\/a\.espncdn\.com\//.test(team.logo || '')) return team.logo;
     if (league === 'NFL' && (team.abbr || team.abbreviation)) return `https://a.espncdn.com/i/teamlogos/nfl/500/${encodeURIComponent(String(team.abbr || team.abbreviation).toLowerCase())}.png`;
     if (league === 'CFB' && /^\d+$/.test(String(team.id || ''))) return `https://a.espncdn.com/i/teamlogos/ncaa/500/${encodeURIComponent(team.id)}.png`;
+    if (league === 'NBA' && (team.abbr || team.abbreviation)) return `https://a.espncdn.com/i/teamlogos/nba/500/${encodeURIComponent(String(team.abbr || team.abbreviation).toLowerCase())}.png`;
     return null;
   };
   const teamMark = (team, size = '', league = null) => {
@@ -1381,7 +1383,7 @@
     for (const p of (state.league === 'ALL' ? nba?.trial?.plays || [] : []).filter(p => C.dayOf(p.kickoff) === etDay())) {
       const t = p.teams || {}, side = t[p.direction]?.abbreviation || '';
       const label = p.marketType === 'player' ? `${p.player} ${p.direction} ${p.line} ${{pts:'points',reb:'rebounds',ast:'assists'}[p.stat] || p.stat}` : p.marketType === 'total' ? `${t.away?.abbreviation || ''} at ${t.home?.abbreviation || ''} ${p.direction} ${p.line}` : p.marketType === 'moneyline' ? `${side} moneyline` : `${side} ${Number(p.line) > 0 ? '+' : ''}${p.line}`;
-      postedRows.push({ ...p, label, href: '#today?sport=NBA' });
+      postedRows.push({ ...p, label, href: p.athleteId ? `#player/NBA/${encodeURIComponent(p.athleteId)}${p.stat ? `?stat=${encodeURIComponent(p.stat)}` : ''}` : '#today?sport=NBA' });
     }
     const posted = [...new Map(postedRows.map(p => [p.id, p])).values()];
     const postedSummary = state.league === 'ALL' && posted.length && (cbbCount || (nba?.trial?.plays || []).some(p => C.dayOf(p.kickoff) === etDay())) ? { count: posted.length,
@@ -2105,8 +2107,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-b0d591a6bcf8';
-  const GAMES_ASSET = 'app-games.js?v=sha256-4c1b90518d37';
+  const MORE_ASSET = 'app-more.js?v=sha256-70b93dbbe881';
+  const GAMES_ASSET = 'app-games.js?v=sha256-913398630097';
   const KVB_ASSET = 'app-kvb.js?v=sha256-338cc9fd90bf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
   let researchCssLoading = null;
@@ -2163,10 +2165,12 @@
   VIEWS.game = async route => { if (route.id) get(`app/games/${route.id}.json`).catch(() => null); return (await ensureGames()).game(route); };
   /* The player page's data does not wait for the lazy bundle: start the same cached requests it makes, in parallel. */
   VIEWS.player = async route => {
-    if (route && FOOTBALL.includes(route.league) && route.id) {
+    if (route && [...FOOTBALL, 'NBA'].includes(route.league) && route.id) {
       const quiet = x => x && x.catch ? x.catch(() => null) : x;
       quiet(get(`app/players/${route.league}.json`).then(index => get(`app/players/${route.league}/${C.shardOf(route.id, index.shards)}.json`)));
-      [teamDirectory(route.league), get('app/today.json'), lineData(route.league)].forEach(quiet);
+      (route.league === 'NBA'
+        ? [get('app/nba.json'), get('app/nba-props.json')]
+        : [teamDirectory(route.league), get('app/today.json'), lineData(route.league)]).forEach(quiet);
     }
     return (await ensureMore()).player(route);
   };

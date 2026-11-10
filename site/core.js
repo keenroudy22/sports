@@ -188,6 +188,9 @@
     WR: ['recYds', 'rec', 'targets', 'anyTD', 'recTD', 'recLong', 'rushYds', 'car', 'rushTD', 'rzTgt', 'i10Tgt'],
     TE: ['recYds', 'rec', 'targets', 'anyTD', 'recTD', 'recLong', 'rzTgt', 'i10Tgt'],
     PK: ['kPts', 'fgm', 'fga', 'xpm'],
+    G: ['pts', 'reb', 'ast', 'fg3m', 'pra', 'pa', 'pr', 'ra', 'min'],
+    F: ['pts', 'reb', 'ast', 'fg3m', 'pra', 'pa', 'pr', 'ra', 'min'],
+    C: ['pts', 'reb', 'ast', 'fg3m', 'pra', 'pa', 'pr', 'ra', 'min'],
   };
   const LABEL = {
     q1_passYds: '1Q pass yds', q1_cmp: '1Q completions', q1_att: '1Q attempts',
@@ -197,6 +200,9 @@
     recYds: 'Rec yds', recTD: 'Rec TD', anyTD: 'Any TD', recLong: 'Long rec', rzTgt: 'RZ targets', i10Tgt: 'Inside-10 tgts',
     rzCar: 'RZ carries', i10Car: 'Inside-10 car', i5Car: 'Inside-5 car', scrambles: 'Scrambles', fumLost: 'Fum lost',
     fgm: 'FG made', fga: 'FG att', xpm: 'XP made', kPts: 'Kick pts', snaps: 'Snaps', snapPct: 'Snap %',
+    pts: 'Points', reb: 'Rebounds', ast: 'Assists', fg3m: 'Threes', pra: 'Pts + reb + ast',
+    pa: 'Points + assists', pr: 'Points + rebounds', ra: 'Rebounds + assists', min: 'Minutes',
+    ftm: 'FT made', fta: 'FT att', stl: 'Steals', blk: 'Blocks', tov: 'Turnovers', plusMinus: 'Plus/minus',
     receptions: 'Receptions', carries: 'Carries',
   };
   /* Projection stats and the prop market key each lines up with. */
@@ -672,7 +678,7 @@
   const pickResearchRoute = p => {
     if (isParlay(p)) return null;
     if (p.athleteId) {
-      return ['NFL', 'CFB'].includes(p.league)
+      return ['NFL', 'CFB', 'NBA'].includes(p.league)
         ? `#player/${p.league}/${encodeURIComponent(p.athleteId)}` : null;
     }
     if (p.kind === 'props') return null;

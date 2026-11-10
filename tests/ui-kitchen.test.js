@@ -116,6 +116,27 @@ test('Under review shows no projection, chance or edge, and quotes only the save
   assert.match(page, /<button type="button" data-set="pstat:passYds" aria-pressed="true">/);
 });
 
+test('NBA player page ties a posted prop to last 5, last 10, minutes and the full game log', async () => {
+  const nbaKeys = ['pts','reb','ast','fg3m','pra','pa','pr','ra','min','fgm','fga','ftm','fta','stl','blk','tov','plusMinus'];
+  const points = [0,0,2,7,8,11,9,16,12,11], minutes = [1,2,11,25,28,26,12,22,24,29];
+  const nbaRow = (i) => [`40190${900+i}`, `2026-${i < 6 ? '09' : '10'}-${String(10+i).padStart(2,'0')}`, 2027, 0, 2, '25', String(100+i), i%2, `OP${i}`,
+    ...nbaKeys.map(k => k === 'pts' ? points[i] : k === 'reb' ? (i === 9 ? 5 : 1) : k === 'ast' ? (i > 6 ? 2 : 0) : k === 'fg3m' ? (i > 4 ? 2 : 0) : k === 'min' ? minutes[i] : 0)];
+  const page = await playerPage(false, files => Object.assign(files, {
+    'data/app/players/NBA.json': { keys:nbaKeys, shards:32, season:2027, players:[['4870883','Bennett Stirtz','G','25','OKC','2026-10-19',10]] },
+    [`data/app/players/NBA/${4870883 % 32}.json`]: { keys:nbaKeys, players:{'4870883':{name:'Bennett Stirtz',pos:'G',rows:points.map((_,i)=>nbaRow(i))}} },
+    'data/app/nba.json': { games:[{providerId:'401909965',kickoff:'2026-10-08T23:00:00Z',status:'scheduled',teams:{away:{id:'25',abbreviation:'OKC',name:'Oklahoma City Thunder'},home:{id:'22',abbreviation:'POR',name:'Portland Trail Blazers'}}}], trial:{plays:[{id:'p',athleteId:'4870883',stat:'pts',line:7.5,direction:'over',odds:101,book:'DraftKings',riskUnits:1,kickoff:'2026-10-08T23:00:00Z',publishedAt:'2026-10-07T17:00:00Z'}]} },
+    'data/app/nba-props.json': { rows:[{athleteId:'4870883',eventId:'401909965',stat:'pts',line:7.5,side:'over',over:-102,under:-130,book:'FanDuel',kickoff:'2026-10-08T23:00:00Z',sourceAt:'2026-10-07T17:30:00Z',teamName:'Oklahoma City Thunder',projection:{value:11},currentRole:{games:3,minutes:[22,24,29]}}] },
+  }), 'NBA', 'pts');
+  assert.match(page, /Bennett Stirtz/);
+  assert.match(page, /Kook’n play:<\/b> over 7\.5 at \+101 DraftKings · 1u/);
+  assert.match(page, /Last 5 average<\/small><b class="num">11\.8/);
+  assert.match(page, /Recent hits<\/small><b class="num">5\/5/);
+  assert.match(page, /6 of 10 over 7\.5 in the last 10/);
+  assert.match(page, /22 \/ 24 \/ 29 minutes/);
+  assert.match(page, /Official box scores/);
+  assert.match(page, /Last 5, Last 10|Last 5/);
+});
+
 test('a player line with no hold puts the projection beside the book line and keeps its price check', async () => {
   const page = await playerPage(false);
   assert.doesNotMatch(page, /UNDER REVIEW|No grade from me/);

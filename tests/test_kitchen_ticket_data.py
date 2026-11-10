@@ -29,6 +29,29 @@ KING = {'id': 'CFB-2026-W6-king-over-49-5-recyds-dk', 'league': 'CFB', 'kind': '
 
 
 class TicketWordsTests(unittest.TestCase):
+    def test_nba_player_export_keeps_regular_game_stats_and_opponent_context(self):
+        boxes = [
+            {'eventId': 'NBA-1', 'kickoff': '2026-10-20T23:00Z', 'season': 2027, 'seasonType': 2,
+             'teams': {'25': {'abbr': 'OKC', 'home': False, 'score': 110},
+                       '22': {'abbr': 'POR', 'home': True, 'score': 105}},
+             'players': [{'id': '5241364', 'name': 'Bennett Stirtz', 'pos': 'G', 'team': '25', 'dnp': False,
+                          'stats': {'pts': 11, 'reb': 5, 'ast': 3, 'fg3m': 2, 'min': 29}}]},
+            {'eventId': 'NBA-2', 'kickoff': '2026-10-22T23:00Z', 'season': 2027, 'seasonType': 2,
+             'teams': {'25': {'abbr': 'OKC', 'home': True, 'score': 112},
+                       '5': {'abbr': 'CLE', 'home': False, 'score': 108}},
+             'players': [{'id': '5241364', 'name': 'Bennett Stirtz', 'pos': 'G', 'team': '25', 'dnp': False,
+                          'stats': {'pts': 16, 'reb': 1, 'ast': 1, 'fg3m': 4, 'min': 22}}]},
+        ]
+        index, shards, season = build_site.build_nba_players(boxes)
+        self.assertEqual(season, 2027)
+        self.assertEqual(index[0][:5], ['5241364', 'Bennett Stirtz', 'G', '25', 'OKC'])
+        player = shards[5241364 % build_site.SHARDS['NBA']]['5241364']
+        self.assertEqual(len(player['rows']), 2)
+        self.assertEqual(player['rows'][0][8], 'POR')
+        self.assertEqual(player['rows'][1][8], 'CLE')
+        stats = dict(zip(build_site.NBA_LOG_KEYS, player['rows'][1][9:]))
+        self.assertEqual((stats['pts'], stats['min'], stats['fg3m']), (16, 22, 4))
+
     def test_why_is_the_saved_reason_else_the_first_context_line_else_nothing(self):
         self.assertEqual(build_site.ticket_why({**KING, 'reason': 'Over 3.5 in 9 of his last 10 games.'}),
                          'Over 3.5 in 9 of his last 10 games.', 'the saved reason wins, verbatim')

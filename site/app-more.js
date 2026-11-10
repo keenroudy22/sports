@@ -192,9 +192,70 @@
   /* The mock's short tab words, so five tabs fit at 375 px; the full name stays the accessible label. */
   const TAB_SHORT = { cmp: 'Comp', att: 'Att', rec: 'Rec', car: 'Car', targets: 'Tgt' };
   const PLAYER_LABEL = { ...C.LABEL, q1_passYds: '1Q pass yds', q1_cmp: '1Q completions', q1_att: '1Q attempts', q1_rushYds: '1Q rush yds', q1_car: '1Q carries', q1_recYds: '1Q rec yds', q1_rec: '1Q receptions' };
+  const nbaPlayer = async route => {
+    const index = await get('app/players/NBA.json');
+    const entry = (index.players || []).find(player => String(player[0]) === String(route.id));
+    const back = '<a class="kt-back" href="#research/players?sport=NBA">‹ NBA research</a>';
+    if (!entry) return head('', 'Player not found', 'No stored NBA games for this player.', back);
+    const [shard, nba, props] = await Promise.all([
+      get(`app/players/NBA/${C.shardOf(route.id, index.shards)}.json`), get('app/nba.json'), get('app/nba-props.json')]);
+    const data = shard.players[route.id], rows = data.rows || [], keys = shard.keys || [];
+    const value = (row, stat) => { const i = keys.indexOf(stat); return i < 0 ? null : row[9 + i]; };
+    const available = (C.POSITION_STATS[data.pos] || C.POSITION_STATS.G).filter(stat => rows.some(row => isNum(value(row, stat))));
+    const pkey = `NBA:${route.id}`, carries = route.stat || route.season || route.sample;
+    if (state.player.key !== pkey || (carries && state.player.hash !== location.hash)) {
+      state.player.key = pkey; state.player.hash = location.hash; state.player.stat = route.stat || null;
+      state.player.season = route.season || 'current';
+      state.player.window = ['all', 'last5', 'last10', 'last20'].includes(route.sample) ? route.sample : 'last10';
+    }
+    const stat = available.includes(state.player.stat) ? state.player.stat : available.includes('pts') ? 'pts' : available[0];
+    const season = Number(index.season), scope = state.player.season;
+    const seasons = [...new Set(rows.filter(row => row[4] === 2).map(row => Number(row[2])))].sort((a, b) => b - a);
+    const regular = rows.filter(row => row[4] === 2 && (scope === 'all' || Number(row[2]) === Number(scope === 'current' ? season : scope)))
+      .sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+    const limit = state.player.window === 'all' ? regular.length : Number(state.player.window.replace('last', ''));
+    const recent = regular.slice(-limit), values = recent.map(row => value(row, stat)).filter(isNum);
+    const last5 = regular.slice(-5).map(row => value(row, stat)).filter(isNum);
+    const last10 = regular.slice(-10).map(row => value(row, stat)).filter(isNum);
+    const next = (nba.games || []).filter(game => game.status === 'scheduled' && Date.parse(game.kickoff) > Date.now()
+      && Object.values(game.teams || {}).some(team => String(team.id) === String(entry[3])))
+      .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
+    const side = next && Object.entries(next.teams || {}).find(([, team]) => String(team.id) === String(entry[3]));
+    const opponent = next && Object.values(next.teams || {}).find(team => String(team.id) !== String(entry[3]));
+    const posted = (nba.trial?.plays || []).filter(play => !play.result && String(play.athleteId) === String(route.id)
+      && play.stat === stat && Date.parse(play.kickoff) > Date.now()).sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))[0];
+    const comparisons = (props.rows || []).filter(row => String(row.athleteId) === String(route.id) && row.stat === stat
+      && Date.parse(row.kickoff) > Date.now()).sort((a, b) => String(b.sourceAt).localeCompare(String(a.sourceAt)));
+    const comparison = comparisons.find(row => !next || String(row.eventId) === String(next.providerId)) || comparisons[0];
+    const line = isNum(posted?.line) ? Number(posted.line) : isNum(comparison?.line) ? Number(comparison.line) : null;
+    const dir = String(posted?.direction || comparison?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
+    const projection = comparison?.projection?.value;
+    const hits = list => line == null ? { hits: null, games: list.length } : { hits: list.filter(v => dir === 'over' ? v > line : v < line).length, games: list.length };
+    const h5 = hits(last5), h10 = hits(last10), hs = hits(regular.map(row => value(row, stat)).filter(isNum));
+    const team = side ? side[1] : { id: entry[3], abbreviation: entry[4], name: comparison?.teamName || entry[4] };
+    const photo = HEADSHOT.NBA(route.id);
+    const metric = PLAYER_LABEL[stat] || stat;
+    const average = list => list.length ? list.reduce((sum, number) => sum + number, 0) / list.length : null;
+    const fmt = number => number == null ? '–' : C.statValue(number, stat, Number.isInteger(number) ? 0 : 1);
+    const quote = posted ? `<b>Kook’n play:</b> ${esc(dir)} ${esc(line)} at ${esc(oddsText(posted.odds))} ${esc(bookLabel(posted.book))} · ${esc(C.stakeOf(posted))}u`
+      : comparison ? `<b>Current comparison:</b> ${esc(dir)} ${esc(line)} at ${esc(oddsText(dir === 'over' ? comparison.over : comparison.under))} ${esc(bookLabel(comparison.book))}` : '';
+    const shown = recent.slice(-8), shownValues = shown.map(row => value(row, stat));
+    const top = Math.max(1, line || 0, ...shownValues.filter(isNum));
+    const result = number => line == null || !isNum(number) ? 'unknown' : number === line ? 'unknown' : dir === 'over' ? (number > line ? 'hit' : 'miss') : (number < line ? 'hit' : 'miss');
+    const chart = shown.length ? `<figure class="kt-chart" role="img" aria-label="${esc(`${metric}: ${shownValues.map(v => isNum(v) ? v : 'not recorded').join(', ')}${line != null ? ` against ${line}` : ''}`)}"><div class="kt-bars" aria-hidden="true">${shownValues.map(v => `<div class="col"><div class="bar ${result(v)}" style="height:${(Math.max(2, 132 * Math.max(0, v || 0) / top)).toFixed(1)}px"></div></div>`).join('')}${line != null ? `<div class="line" style="bottom:${(132 * line / top).toFixed(1)}px"><span>${esc(line)}</span></div>` : ''}</div><div class="kt-x" aria-hidden="true">${shown.map((row, i) => `<span><em class="${result(shownValues[i])}">${esc(fmt(shownValues[i]))}</em><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b>${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}))}</span>`).join('')}</div><figcaption class="kt-cap">${line == null ? 'Recorded NBA game results.' : `<b>${h10.hits} of ${h10.games} ${esc(dir)} ${esc(line)} in the last 10.</b> History, not a probability.`}</figcaption></figure>` : '';
+    const thresholds = line == null ? [] : [...new Set([-2, -1, 0, 1, 2].map(step => Math.max(.5, line + step)))];
+    const ladder = thresholds.length ? `<section class="line-lab" aria-labelledby="nba-ladder"><div class="line-lab-head"><div><p class="eyebrow">What-if research</p><h2 id="nba-ladder">Line ladder</h2><p>How often did ${esc(data.name)} ${dir === 'over' ? 'clear' : 'stay below'} nearby numbers?</p></div><span class="line-lab-direction">${esc(dir)}</span></div><table class="line-lab-table"><thead><tr><th>Line</th><th>L5</th><th>L10</th><th>Season</th></tr></thead><tbody>${thresholds.map(threshold => { const count = list => ({hits:list.filter(v => dir === 'over' ? v > threshold : v < threshold).length,games:list.length}); const a=count(last5),b=count(last10),c=count(regular.map(row => value(row,stat)).filter(isNum)); const cell=x=>`<td>${x.games ? Math.round(100*x.hits/x.games)+'%' : '–'}<span>${x.hits}/${x.games}</span></td>`; return `<tr${threshold===line?' class="book"':''}><th>${esc(threshold)}${threshold===line?'<span class="line-lab-tag">Book</span>':''}</th>${cell(a)}${cell(b)}${cell(c)}</tr>`; }).join('')}</tbody></table><p class="line-lab-note">${isNum(projection) ? `Kook’n projects ${esc(fmt(projection))}. ` : ''}Historical thresholds—not offered alternate prices or probabilities.</p></section>` : '';
+    const log = recent.slice().reverse();
+    const statCell = (row, key) => { const v = value(row, key); return v == null ? '–' : v; };
+    const hero = `<div class="page-head" style="display:flex;gap:14px;align-items:center;margin-top:28px"><span class="ava xl" style="--tc:#15301F" aria-hidden="true"><img src="${esc(photo)}" alt=""></span><div><p class="eyebrow">${teamMark(team, 'sm', 'NBA')} ${esc(team.name || team.displayName || team.abbreviation || entry[4])} · ${esc(data.pos || '')}</p><h1>${esc(data.name)}</h1><p class="sub">${next ? `${side && side[0] === 'home' ? 'vs' : 'at'} ${esc(opponent.name || opponent.displayName || opponent.abbreviation)} · ${esc(whenShort(next.kickoff))}` : `${esc(regular.length)} regular-season games recorded`}</p></div></div>`;
+    const tabs = `<nav class="kt-tabs" aria-label="Stat">${available.map(key => `<button type="button" data-set="pstat:${esc(key)}" aria-pressed="${key === stat}">${esc({pts:'PTS',reb:'REB',ast:'AST',fg3m:'3PM',pra:'PRA',pa:'P+A',pr:'P+R',ra:'R+A',min:'MIN'}[key] || PLAYER_LABEL[key] || key)}</button>`).join('')}</nav>`;
+    const seasonSelect = `<label class="sr" for="psea">Season</label><select id="psea" class="select" data-select="playerSeason"><option value="current"${scope === 'current' ? ' selected' : ''}>This season · ${esc(season)}</option>${seasons.filter(x => x !== season).map(x => `<option value="${x}"${String(x) === String(scope) ? ' selected' : ''}>${x}</option>`).join('')}<option value="all"${scope === 'all' ? ' selected' : ''}>All seasons</option></select>`;
+    return `${back}${hero}${tabs}${filtersFold('player', `${scope === 'all' ? 'All seasons' : season + ' season'} · ${recent.length} games · ${esc(metric)}`, `${seasonSelect}${seg('pwin', [['last5','Last 5'],['last10','Last 10'],['last20','Last 20'],['all','All games']], state.player.window)}`)}<section class="player-board" aria-labelledby="nba-stat"><div class="player-board-head"><div><p class="eyebrow">${line != null ? posted ? 'Posted line' : 'Current line' : 'Season snapshot'}</p><h2 id="nba-stat">${esc(metric)}</h2></div><span class="player-board-mode">Book vs Kook’n</span></div><div class="kt-number-grid kt-player-numbers"><span><small>Book line</small><b class="num">${esc(line == null ? '–' : line)}</b></span><span><small>Kook’n projection</small><b class="num">${esc(isNum(projection) ? fmt(projection) : 'Not posted')}</b></span><span><small>Last 5 average</small><b class="num">${esc(fmt(average(last5)))}</b></span><span><small>Recent hits</small><b class="num">${line == null ? '–' : `${h5.hits}/${h5.games}`}</b></span></div>${quote ? `<p class="kt-prices">${quote}</p>` : ''}${comparison?.currentRole?.games ? `<p class="kt-prices"><b>Role check:</b> ${comparison.currentRole.minutes.map(m => esc(m)).join(' / ')} minutes in his last ${esc(comparison.currentRole.games)} recorded games.</p>` : ''}<div class="player-chart-legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>${chart}</section>${ladder}<section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">Official box scores</span></div><div class="table-wrap"><table class="t"><thead><tr><th>Game</th><th class="n">MIN</th><th class="n">PTS</th><th class="n">REB</th><th class="n">AST</th><th class="n">3PM</th></tr></thead><tbody>${log.map(row => `<tr><td><a href="https://www.espn.com/nba/boxscore/_/gameId/${esc(row[0])}" target="_blank" rel="noopener"><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b></a><br><span class="tiny muted">${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}))}</span></td><td class="n">${esc(statCell(row,'min'))}</td><td class="n">${esc(statCell(row,'pts'))}</td><td class="n">${esc(statCell(row,'reb'))}</td><td class="n">${esc(statCell(row,'ast'))}</td><td class="n">${esc(statCell(row,'fg3m'))}</td></tr>`).join('')}</tbody></table></div><p class="small muted" style="margin-top:8px">Last 5, Last 10 and the full season use recorded regular-season appearances. A one-minute appearance counts as an appearance; minutes are shown so role changes stay visible.</p></section>`;
+  };
   views.player = async route => {
     const league = route.league;
     if (state.league !== league) state.league = league;
+    if (league === 'NBA') return nbaPlayer(route);
     const back = `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>`;
     const index = await get(`app/players/${league}.json`);
     const entry = (index.players || []).find(p => String(p[0]) === String(route.id));

@@ -62,11 +62,13 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'site' / 'data'
 OUT = DATA / 'app'
-SHARDS = {'NFL': 32, 'CFB': 128}
+SHARDS = {'NFL': 32, 'CFB': 128, 'NBA': 32}
 WINDOW_BACK, WINDOW_AHEAD = timedelta(days=3), timedelta(days=8)
 LOG_KEYS = ('cmp', 'att', 'passYds', 'passTD', 'int', 'sacks', 'car', 'rushYds', 'rushTD', 'rushLong',
             'targets', 'rec', 'recYds', 'recTD', 'recLong', 'rzTgt', 'i10Tgt', 'rzCar', 'i10Car', 'i5Car',
             'scrambles', 'fumLost', 'fgm', 'fga', 'xpm', 'kPts', 'snaps', 'snapPct')
+NBA_LOG_KEYS = ('pts', 'reb', 'ast', 'fg3m', 'pra', 'pa', 'pr', 'ra', 'min', 'fgm', 'fga', 'ftm', 'fta',
+                'stl', 'blk', 'tov', 'plusMinus')
 ALLOWED_KEYS = {'QB': ('att', 'cmp', 'passYds', 'passTD', 'int', 'sacks', 'car', 'rushYds', 'rushTD'),
                 'RB': ('car', 'rushYds', 'rushTD', 'targets', 'rec', 'recYds', 'recTD'),
                 'WR': ('targets', 'rec', 'recYds', 'recTD'), 'TE': ('targets', 'rec', 'recYds', 'recTD')}
@@ -781,6 +783,55 @@ def build_players(league, records, snaps, teams_meta, trends=None):
                                                   'firstQuarter': first_quarter.get(pid, [])}
     index.sort(key=lambda row: (row[1] or '', row[0]))
     return index, shards, season_leaders(logs, index, latest_season), latest_season
+
+
+def build_nba_players(records):
+    """Build the NBA player directory from the already stored official boxes.
+
+    NBA recommendations and comparison rows have always used this same box-score
+    store.  Exporting it here keeps the public player page tied to those inputs
+    instead of making a second network request or showing a prop without its
+    game log.
+    """
+    logs = defaultdict(list)
+    for game in sorted(records, key=lambda row: (row.get('kickoff') or '', row.get('eventId') or '')):
+        teams = {str(team): data for team, data in (game.get('teams') or {}).items()}
+        for player in game.get('players') or []:
+            team = str(player.get('team') or '')
+            if player.get('dnp') or team not in teams or not player.get('id'):
+                continue
+            opponent = next((other for other in teams if other != team), None)
+            if opponent is None:
+                continue
+            stats = {key: value for key, value in (player.get('stats') or {}).items()
+                     if key in NBA_LOG_KEYS and isinstance(value, (int, float)) and not isinstance(value, bool)}
+            logs[str(player['id'])].append({
+                'eventId': str(game.get('eventId') or '').removeprefix('NBA-'),
+                'kickoff': game.get('kickoff'), 'season': game.get('season'),
+                'seasonType': game.get('seasonType'), 'team': team, 'opp': opponent,
+                'home': bool(teams[team].get('home')), 'name': player.get('name'),
+                'pos': player.get('pos'), 'stats': stats,
+                'teamAbbr': teams[team].get('abbr'), 'oppAbbr': teams[opponent].get('abbr'),
+            })
+    latest_season = max((row.get('season') for rows in logs.values() for row in rows
+                         if isinstance(row.get('season'), int)), default=None)
+    index, shards = [], defaultdict(dict)
+    for pid, rows in logs.items():
+        rows.sort(key=lambda row: (row.get('kickoff') or '', row.get('eventId') or ''))
+        last = rows[-1]
+        if latest_season is not None and last.get('season', 0) < latest_season - 1:
+            continue
+        name = next((row.get('name') for row in reversed(rows) if row.get('name')), None) or f'Player {pid}'
+        pos = next((row.get('pos') for row in reversed(rows) if row.get('pos')), None)
+        table = [[row['eventId'], day(row['kickoff']), row.get('season'), 0, row.get('seasonType'),
+                  row['team'], row['opp'], 1 if row.get('home') else 0, row.get('oppAbbr')]
+                 + [row['stats'].get(key) for key in NBA_LOG_KEYS] for row in rows]
+        team = last['team']
+        team_abbr = next((row.get('teamAbbr') for row in reversed(rows) if row.get('teamAbbr')), None)
+        index.append([pid, name, pos, team, team_abbr, day(last['kickoff']), len(rows)])
+        shards[int(pid) % SHARDS['NBA']][pid] = {'name': name, 'pos': pos, 'rows': table}
+    index.sort(key=lambda row: (row[1] or '', row[0]))
+    return index, shards, latest_season
 
 
 def validate_player_coverage(league, charts, index, shards):
@@ -2188,9 +2239,17 @@ def build(now=None):
     for filename, svg in cbb_sheets.items():
         (OUT / filename).write_text(svg, encoding='utf-8')
     import nba_today
-    nba_overview, nba_props = nba_today.public_payloads(dict(nba_today.build(now),morningBrief=morning_brief.current(now)))
+    nba_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('nba-*.jsonl')
+                      for row in boxscores.read_store(path)}.values())
+    nba_overview, nba_props = nba_today.public_payloads(dict(
+        nba_today.build(now, boxes=nba_boxes), morningBrief=morning_brief.current(now)))
     write(OUT / 'nba.json', nba_overview)
     write(OUT / 'nba-props.json', nba_props)
+    nba_index, nba_shards, nba_season = build_nba_players(nba_boxes)
+    write(OUT / 'players' / 'NBA.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['NBA'],
+                                         'players': nba_index, 'season': nba_season})
+    for shard, players in nba_shards.items():
+        write(OUT / 'players' / 'NBA' / f'{shard}.json', {'keys': list(NBA_LOG_KEYS), 'players': players})
     import shutil as nba_copy
     nba_preview = ROOT / 'design/final/nba-trial-preview.png'
     if nba_preview.exists():
