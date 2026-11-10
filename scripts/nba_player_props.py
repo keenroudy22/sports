@@ -34,6 +34,8 @@ NAMES = {'pts':'points','reb':'rebounds','ast':'assists','fg3m':'threes',
          'pr':'points + rebounds','ra':'rebounds + assists'}
 BOOKS = {'draftkings':'DraftKings','fanduel':'FanDuel'}
 VERSION = 'nba-minutes-rate-v1'
+PRIMARY_FIRST_FROM = datetime(2026,11,10,16,30,tzinfo=timezone.utc)
+PRIMARY_MARKETS = 'player_points,player_rebounds,player_assists'
 
 
 def normal(name):
@@ -158,27 +160,36 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
             nba_capture.append_changed([row],root/'roster-history',lambda r:r['team'])
             boxscores.write_json(path,row);rosters[team]=row
         except (OSError,ValueError,KeyError,TypeError):errors.append('roster-unavailable')
-    fetch=fetch or sharp_odds.fetch; count=0; rows=[]; cursors={b:None for b in BOOKS};done=set()
+    fetch=fetch or sharp_odds.fetch; count=0; rows=[];partial=False;coverage=[]
     deadline=time.monotonic()+150
     # Main props keep the first ten reads (five pages per book). The final two
     # reads are exact-quarter inventory, not thousands of alternates mixed into
     # the main-line pagination. Twelve total remains the hard ceiling.
-    for _ in range(5):
+    # Exact documented market filters prevent unsupported markets/periods from
+    # consuming the whole board before later games. Preserve historical runs.
+    lanes=[('props',5)] if now<PRIMARY_FIRST_FROM else [
+        (PRIMARY_MARKETS,3),(','.join(k for k in MARKETS if k not in PRIMARY_MARKETS.split(',')),2)]
+    for market,pages in lanes:
+        cursors={b:None for b in BOOKS};done=set();failed=set()
+        for _ in range(pages):
+            for book in BOOKS:
+                if book in done:continue
+                if count>=10 or time.monotonic()+sharp_odds.GAP>=deadline:break
+                sleep(sharp_odds.GAP);count+=1
+                try:
+                    payload=fetch('/odds',key,league='nba',market=market,sportsbook=book,is_live='false',
+                                  is_main_line='true',limit=200,cursor=cursors[book])
+                    rows.extend(payload.get('data') or [])
+                    page=payload.get('pagination') or {};cursor=page.get('next_cursor')
+                    if not page.get('has_more') or not cursor or cursor==cursors[book]:done.add(book)
+                    cursors[book]=cursor
+                except (OSError,ValueError,KeyError,TypeError):
+                    errors.append('prop-feed-unavailable');done.add(book);failed.add(book)
+            if len(done)==len(BOOKS):break
         for book in BOOKS:
-            if book in done:continue
-            if time.monotonic()+sharp_odds.GAP>=deadline:break
-            sleep(sharp_odds.GAP)
-            count+=1
-            try:
-                payload=fetch('/odds',key,league='nba',market='props',sportsbook=book,is_live='false',
-                              is_main_line='true',limit=200,cursor=cursors[book])
-                rows.extend(payload.get('data') or [])
-                page=payload.get('pagination') or {};cursor=page.get('next_cursor')
-                if not page.get('has_more') or not cursor or cursor==cursors[book]:done.add(book)
-                cursors[book]=cursor
-            except (OSError,ValueError,KeyError,TypeError):
-                errors.append('prop-feed-unavailable');done.add(book)
-        if len(done)==len(BOOKS):break
+            complete=book in done and book not in failed
+            partial |= not complete
+            coverage.append(dict(book=book,market=market,complete=complete))
     quarter_rows=[]; quarter_partial=False
     for book in BOOKS:
         if count>=12 or time.monotonic()+sharp_odds.GAP>=deadline:
@@ -218,7 +229,7 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
             errors.append('prop-release-protocol-unavailable')
     return {'probabilityShadow': probability, 'requests':count,'espnRequests':budget.requests,'captured':captured,'paired':len(quotes),
             'quarterPaired':len(quarters),'quarterCaptured':quarter_captured,'quarterPartial':quarter_partial,
-            'partial':len(done)<len(BOOKS),'ignored':ignored,'errors':errors,'forwardRecorded':recorded,'forwardGraded':graded}
+            'partial':partial,'marketCoverage':coverage,'ignored':ignored,'errors':errors,'forwardRecorded':recorded,'forwardGraded':graded}
 
 
 def history(boxes, athlete, now):

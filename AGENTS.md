@@ -1,5 +1,14 @@
 # November10 owner — sourced NBA prop selection, separate from model proof
 
+From16:30Z November10, the existing twelve-read NBA prop capture prioritizes
+DraftKings/FanDuel main points/rebounds/assists with three pages per book, then
+two pages per book for the other supported full-game prop types, then the same
+two quarter reads. Use documented exact comma-separated market filters and
+independent cursors per market/book. Missing/failed/truncated lanes remain
+explicitly partial. No additional requests, jobs, alternate feeds, historical
+backfill, protocol promotion or price-clock renewal by parsing. Observe actual
+next-capture per-book/game coverage before claiming the coverage gap is closed.
+
 The owner requests completion of researched NBA props after delegating sourced
 judgment. From11AM Eastern November10, the distinct sourced-nba-primary-prop-v1
 method admits explicitly reviewed DraftKings full-game points/rebounds/assists

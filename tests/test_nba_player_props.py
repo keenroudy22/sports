@@ -177,6 +177,28 @@ class NBAPlayerPropTests(unittest.TestCase):
             self.assertEqual(boxscores.verify(root/'player-quotes'),[])
     def test_no_key_is_no_request(self):
         self.assertEqual(n.capture(NOW,key='')['requests'],0)
+    def test_primary_markets_get_first_reads_with_separate_cursors_and_same_budget(self):
+        g,r,rows,_=fixture();calls=[];waits=[]
+        def feed(path,key,**params):
+            calls.append(params)
+            return {'data':[dict(x,sportsbook=params['sportsbook']) for x in rows],
+                    'pagination':{'has_more':True,'next_cursor':str(len(calls))}}
+        with tempfile.TemporaryDirectory() as folder,patch.object(n,'PRIMARY_FIRST_FROM',NOW):
+            root=Path(folder);boxscores.write_json(root/'slate.json',{'retrievedAt':STAMP,'games':[g]})
+            (root/'rosters').mkdir()
+            for team,p in r.items():boxscores.write_json(root/'rosters'/f'{team}.json',p)
+            result=n.capture(NOW,root,fetch=feed,sleep=waits.append,key='fixture')
+            self.assertEqual(result['requests'],12)
+            self.assertEqual([c['market'] for c in calls[:6]],[n.PRIMARY_MARKETS]*6)
+            self.assertTrue(all(c['is_main_line']=='true' for c in calls[:10]))
+            self.assertEqual([c['sportsbook'] for c in calls[:10]],['draftkings','fanduel']*5)
+            self.assertEqual([c['cursor'] for c in calls[6:8]],[None,None])
+            self.assertTrue(all('player_points' not in c['market'].split(',') for c in calls[6:10]))
+            self.assertEqual(sum(c['market']=='1st_quarter_player_points' for c in calls),2)
+            self.assertEqual(waits,[5.2]*12)
+            self.assertTrue(result['partial'])
+            self.assertEqual(len(result['marketCoverage']),4)
+            self.assertEqual(boxscores.verify(root/'player-quotes'),[])
     def test_new_capture_cannot_be_read_with_run_start_time(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);b=self.write(root)
