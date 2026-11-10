@@ -10768,7 +10768,18 @@
     "state": "clear"
    },
    "cancelledAt": "2026-11-10T23:06:45Z",
-   "nbaHold": "Role or exact-price check did not clear. The published play stays in its record."
+   "nbaHold": "Role or exact-price check did not clear. The published play stays in its record.",
+   "nbaCancellation": {
+    "state": "deleted-before-due",
+    "postId": "6af3a0d17e3857cdadc6f756",
+    "priorState": "scheduled",
+    "verifiedAt": "2026-11-10T23:17:20.898794+00:00",
+    "deletedAt": "2026-11-10T23:06:51.725488+00:00",
+    "textHash": "dab9e544ea77f496",
+    "evidence": "Observed actual Buffer Queue one matching Carter scheduled post; normal final precheck successfully deleted it before dueAt. Completed precheck log supplies a conservative deletion upper bound. Actual Buffer Queue0 and Sent288 latest role-watch show no Carter publication.",
+    "deletionClockPrecision": "conservative upper bound from completed normal precheck log",
+    "proof": "/tmp/carter-unsent-buffer-proof-20261110.txt"
+   }
   }
  ]
 }
