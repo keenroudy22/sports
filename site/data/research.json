@@ -59731,5 +59731,418 @@
         "units": -1
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-10T11:59:10Z",
+    "summary": "Released 1: Dom Dorwart UNDER 49.5 receiving yards -114 at FanDuel.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "5193110",
+        "market": "recYds",
+        "line": 49.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401866460"
+        ],
+        "book": "FanDuel",
+        "odds": -114,
+        "projection": 33.4,
+        "edge": "Price-checked chance 53.6% against the exact two-sided price; 53.3% needed at -114: +0.3 percentage points.",
+        "cutoff": "UNDER 49.5 at -114 or better; off the card at 49 or lower, or at -129 or worse at 49.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-08T09:19:38Z",
+        "quotedAt": "2026-11-10T11:46:10Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 6:46 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-10T13:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.722,
+          "chance": 0.536,
+          "calibrated": true,
+          "calibration": 0.16,
+          "calibrationN": 2871,
+          "push": 0.0,
+          "breakEven": 0.533,
+          "edgePoints": 0.3,
+          "evPerUnit": 0.005,
+          "snapshotAt": "2026-11-08T09:19:38Z",
+          "probabilitySpec": "544d175465d1fc2682cfb47d08f4988f5634c56c665bd4e931fd7b6357181887",
+          "evaluatedAt": "2026-11-10T11:48:59Z",
+          "fairChance": 0.5,
+          "anchoredChance": 0.536,
+          "gap": 3.6,
+          "calibrationFamily": "CFB/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Ohio Bobcats at Miami (OH) RedHawks",
+        "title": "Dom Dorwart UNDER 49.5 receiving yards",
+        "id": "CFB-2026-W11-dorwart-under-49-5-recyds-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401866460",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://ohiobobcats.com/news/2026/11/8/ohio-football-set-for-battle-of-the-bricks",
+          "https://miamiredhawks.com/news/2026/11/5/football-redhawks-host-ohio-on-senior-night",
+          "https://woub.org/2026/11/09/preview-ohio-football-meets-miami-in-103rd-battle-of-the-bricks/"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 7 of 10 under 49.5.",
+          "context": [
+            "Role: 3rd of 3 OHIO WRs by projected targets, 3.4 a game.",
+            "Defense: M-OH allows 214.11 receiving yards a game to WRs, 135th-stingiest of 138 this season."
+          ],
+          "cautions": [
+            "The defense leans against this side (that's the whole position group, not just him).",
+            "Dom Dorwart had 233 receiving yards and two touchdowns in Ohio's last two games.",
+            "Miami is last in the MAC in passing yards allowed per game at just about 280."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 33.4 against 49.5. The under reads 53.6% after adjustment from the raw 72.2%; 53.3% is needed at -114. Last 10 games: 7 of 10 under 49.5. Role: 3rd of 3 OHIO WRs by projected targets, 3.4 a game. Defense: M-OH allows 214.11 receiving yards a game to WRs, 135th-stingiest of 138 this season.",
+        "risk": "The defense leans against this side (that's the whole position group, not just him). Dom Dorwart had 233 receiving yards and two touchdowns in Ohio's last two games. Miami is last in the MAC in passing yards allowed per game at just about 280. An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Under 49.5 in 7 of his last 10 games.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "text": "Book says 49.5. I say 33.4.",
+              "numbers": {
+                "projection": 33.4,
+                "line": 49.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-08T09:19:38Z"
+            },
+            {
+              "text": "3 of his last 5 games finished under 49.5 receiving yards.",
+              "numbers": {
+                "values": [
+                  11,
+                  42,
+                  12,
+                  125,
+                  108
+                ],
+                "hits": 3,
+                "games": 5,
+                "line": 49.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-11-04T00:00Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Dom Dorwart had 233 receiving yards and two touchdowns in Ohio's last two games.",
+              "numbers": {},
+              "source": "https://woub.org/2026/11/09/preview-ohio-football-meets-miami-in-103rd-battle-of-the-bricks/",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "text": "Miami is last in the MAC in passing yards allowed per game at just about 280.",
+              "numbers": {},
+              "source": "https://woub.org/2026/11/09/preview-ohio-football-meets-miami-in-103rd-battle-of-the-bricks/",
+              "time": "2026-11-10T11:48:59Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 50,
+            "windMph": 1,
+            "windDirection": "W",
+            "precipProb": 0,
+            "periodStart": "2026-11-10T20:00:00-05:00",
+            "issuedAt": "2026-11-09T17:08:10+00:00",
+            "source": "https://api.weather.gov/gridpoints/ILN/26,56/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": null,
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 54.5,
+                  "price": -114,
+                  "time": "2026-11-09T13:33:58Z"
+                },
+                "now": {
+                  "line": 49.5,
+                  "price": -114,
+                  "time": "2026-11-10T11:46:10Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 49.5,
+              "price": -114,
+              "time": "2026-11-10T11:46:10Z"
+            }
+          },
+          "ours": {
+            "projection": 33.4,
+            "line": 49.5,
+            "market": "recYds",
+            "text": "Under 49.5 in 7 of his last 10 games.",
+            "snapshotAt": "2026-11-08T09:19:38Z"
+          },
+          "history": "Last 10 games: 7 of 10 under 49.5.",
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://woub.org/2026/11/09/preview-ohio-football-meets-miami-in-103rd-battle-of-the-bricks/",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/ILN/26,56/forecast/hourly",
+              "time": "2026-11-09T17:08:10+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401866460",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://ohiobobcats.com/news/2026/11/8/ohio-football-set-for-battle-of-the-bricks",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://miamiredhawks.com/news/2026/11/5/football-redhawks-host-ohio-on-senior-night",
+              "time": "2026-11-10T11:48:59Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-10T11:59:10Z"
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-10T11:59:10Z",
+    "summary": "Released 1: Kent State at Bowling Green over 44.5 +100 at ESPN BET.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 44.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401866459"
+        ],
+        "book": "ESPN BET",
+        "odds": 100,
+        "projection": 47.6,
+        "edge": "Price-checked chance 52.7% against the exact two-sided price; 50.0% needed at +100: +2.7 percentage points.",
+        "cutoff": "OVER 44.5 at +100 or better; off the card at 46+, or at -115 or worse at 44.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-08T09:19:38Z",
+        "quotedAt": "2026-11-10T11:45:06Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-10T13:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.576,
+          "chance": 0.527,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.5,
+          "edgePoints": 2.7,
+          "evPerUnit": 0.055,
+          "snapshotAt": "2026-11-08T09:19:38Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-11-10T11:48:59Z",
+          "fairChance": 0.478,
+          "anchoredChance": 0.527,
+          "gap": 4.9,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Kent State Golden Flashes at Bowling Green Falcons",
+        "title": "Kent State at Bowling Green over 44.5",
+        "id": "CFB-2026-W11-kent-bgsu-over-44-5-espnbet",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401866459",
+          "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+          "https://bgsufalcons.com/news/2026/11/5/football-lights-cameras-maction-falcons-return-home-tuesday-night-to-host-kent-state"
+        ],
+        "why": "Model lean, our number only. We have the total at 47.6; the book is at 44.5. That makes the over 52.7%, and +100 needs 50.0%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Kent State says Dru DeShields continues to direct its offense entering the Bowling Green game. Checked before publishing: Bowling Green said running back Austyn Dendy was out against Western Michigan, its previous game. The market: 6 books span -5.5 to -4.5 on the spread; the middle is -5.5. Our spread is 3.7 points off, bigger than 54% of our past gaps. Gaps this size went 827-813 against the close in 3584 games. Our total is 3.1 points off, bigger than 53% of our past gaps. Gaps this size went 898-782 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Bowling Green averages 17.8 points per game and 286.2 total yards per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Bowling Green allows 29.0 points per game and 377.9 total yards per game."
+          ],
+          "cautions": [
+            "Bowling Green averages 17.8 points per game and 286.2 total yards per game."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 44.5. I say 47.6.",
+              "numbers": {
+                "projection": 47.6,
+                "line": 44.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-08T09:19:38Z"
+            },
+            {
+              "text": "Bowling Green allows 29.0 points per game and 377.9 total yards per game.",
+              "numbers": {},
+              "source": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "text": "Bowling Green allows 29.0 points per game and 377.9 total yards per game.",
+              "numbers": {},
+              "source": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+              "time": "2026-11-10T11:48:59Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Bowling Green averages 17.8 points per game and 286.2 total yards per game.",
+              "numbers": {},
+              "source": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "text": "Bowling Green averages 17.8 points per game and 286.2 total yards per game.",
+              "numbers": {},
+              "source": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+              "time": "2026-11-10T11:48:59Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 50,
+            "windMph": 6,
+            "windDirection": "W",
+            "precipProb": 0,
+            "periodStart": "2026-11-10T19:00:00-05:00",
+            "issuedAt": "2026-11-09T23:31:54+00:00",
+            "source": "https://api.weather.gov/gridpoints/CLE/17,53/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 44.5,
+                  "price": -110,
+                  "time": "2026-11-08T11:42:31Z"
+                },
+                "now": {
+                  "line": 44.5,
+                  "price": -108,
+                  "time": "2026-11-10T11:45:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 45.5,
+                  "price": -110,
+                  "time": "2026-11-06T11:45:07Z"
+                },
+                "now": {
+                  "line": 44.5,
+                  "price": -110,
+                  "time": "2026-11-10T11:45:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 44.5,
+              "price": 100,
+              "time": "2026-11-10T11:45:06Z"
+            }
+          },
+          "ours": {
+            "projection": 47.6,
+            "line": 44.5,
+            "market": "total",
+            "text": "Book says 44.5. I say 47.6.",
+            "snapshotAt": "2026-11-08T09:19:38Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://kentstatesports.com/news/2026/11/9/football-kent-state-heads-to-bowling-green-for-tuesdays-7-pm-midweek-maction-on-espnu",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/CLE/17,53/forecast/hourly",
+              "time": "2026-11-09T23:31:54+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401866459",
+              "time": "2026-11-10T11:48:59Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://bgsufalcons.com/news/2026/11/5/football-lights-cameras-maction-falcons-return-home-tuesday-night-to-host-kent-state",
+              "time": "2026-11-10T11:48:59Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-10T11:59:10Z"
+      }
+    ]
   }
 ]
