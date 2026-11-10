@@ -265,11 +265,15 @@ def public_rows(root=nba_trial.STORE):
 
 def queue_discord_results(log_book, now, plays=None):
  """Use actual NBA ledger grades for the original play's Discord update."""
- saved={p['id']:p for p in (public_rows() if plays is None else plays)};count=0
+ saved={p['id']:p for p in (public_rows() if plays is None else plays)};count=0;seen=set()
  for entry in log_book.get('posts',[]):
   mirror=entry.get('discord') or {};play=saved.get(entry.get('id'))
   if (entry.get('kind')!='buffer:nba-trial' or entry.get('nbaPick') is not True
       or mirror.get('state')!='sent' or not play):continue
+  # X recovery carries the same original Discord receipt on a second history
+  # row. Grade and correct that one public Discord play only once.
+  if entry['id'] in seen:continue
+  seen.add(entry['id'])
   try:
    result=play['result'];settled=boxscores.instant(play['settledAt'])
    if result not in ('win','loss','push','void') or not now-timedelta(days=3)<settled<=now:continue

@@ -110,6 +110,23 @@ class NBADiscordFirstTests(unittest.TestCase):
     send.assert_not_called()
    create.assert_called_once()
 
+ def test_recovered_history_receipts_get_one_final_and_one_correction(self):
+  settled=NOW+timedelta(hours=10)
+  mirror=dict(state='sent',sentAt=NOW.isoformat(),destination='plays',text=TEXT)
+  book={'posts':[dict(id=GUID,kind='buffer:nba-trial',nbaPick=True,cancelledAt=NOW.isoformat(),discord=copy.deepcopy(mirror)),
+                 dict(id=GUID,kind='buffer:nba-trial',nbaPick=True,sentAt=NOW.isoformat(),discord=copy.deepcopy(mirror))]}
+  final=dict(PLAY,marketType='player',player='Player',stat='reb',direction='over',line=8.5,
+             riskUnits=1,result='win',actual=11,settledAt=settled.isoformat())
+  with patch.object(d,'send_message') as send:
+   self.assertEqual(rt.queue_discord_results(book,settled,plays=[final]),1)
+   d.mirror_sent(book,settled,url='https://discord.invalid/plays',wins_url='',research_url='',log=lambda *_:None)
+   send.assert_called_once()
+   self.assertEqual(rt.queue_discord_results(book,settled,plays=[final]),0)
+   self.assertEqual(rt.queue_discord_results(book,settled,plays=[dict(final,actual=12)]),1)
+   d.mirror_sent(book,settled,url='https://discord.invalid/plays',wins_url='',research_url='',log=lambda *_:None)
+   self.assertEqual(send.call_count,2)
+   self.assertTrue(send.call_args.args[1].startswith('CORRECTION'))
+
  def test_no_new_discord_first_behavior_for_historical_trial(self):
   old=datetime(2026,10,20,17,tzinfo=timezone.utc)
   with self.guards():self.assertEqual(rt.queue_discord_first(old,{'posts':[]},[PLAN]),0)
