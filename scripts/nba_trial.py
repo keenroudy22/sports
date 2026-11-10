@@ -38,7 +38,7 @@ def snapshot(rows):
             'promotionReview':graded>=30 and net>=0}
 
 
-def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=False):
+def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=False, sourced_send_recheck=False):
     now=now or datetime.now(timezone.utc);problems=[]
     try:
         kickoff=boxscores.instant(offer['kickoff']);quoted=boxscores.instant(offer['retrievedAt'])
@@ -67,7 +67,7 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if market=='player':
             import nba_prop_release, nba_reviewed_props
             if offer.get('selectionMethod')==nba_reviewed_props.METHOD:
-                reason=nba_reviewed_props.refusal(offer,now)
+                reason=nba_reviewed_props.refusal(offer,now,send_recheck=sourced_send_recheck)
                 sourced=reason is None
                 if reason:problems.append(reason)
             else:

@@ -127,6 +127,25 @@ if __name__=='__main__':unittest.main()
 
 class BrowserCacheTests(unittest.TestCase):
     fixture=BrowserReportTests.fixture
+    def test_stale_index_reuses_only_newer_verified_browser_discovery_without_pdf_read(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root,games,p=self.fixture(folder);intake.ingest(p,f.NOW,root)
+            self.assertIsNone(official.newer_browser_discovery(root,games,f.NOW,None))
+            old=f.REPORTED-timedelta(hours=3)
+            url='https://ak-static.cms.nba.com/referee/injury/Injury-Report_'+old.astimezone(official.EASTERN).strftime('%Y-%m-%d_%I_%M%p')+'.pdf'
+            class Budget:
+                def report_index(self,url_):return f'<a href="{url}">old report</a>'
+                def raw(self,url_):raise AssertionError('No extra PDF request')
+            with patch.object(official,'BROWSER_LAG_FROM',f.NOW),patch.object(official,'PUBLISHED_LINKS_FROM',f.NOW):
+                cached=official.capture(Budget(),games,root,f.NOW,clock=lambda:f.NOW)
+                self.assertEqual(cached['retrievedAt'],p['retrievedAt'])
+                self.assertEqual(cached['reportedAt'],boxscores.stamp(f.REPORTED))
+                self.assertTrue(cached['_from_verified_browser_cache'])
+                self.assertIsNone(official.newer_browser_discovery(root,games,f.NOW,f.REPORTED+timedelta(minutes=15)))
+                self.assertIsNone(official.newer_browser_discovery(root,games,f.NOW+timedelta(hours=2),old))
+                changed=copy.deepcopy(games);changed[0]['kickoff']='2026-10-27T23:45:00Z'
+                self.assertIsNone(official.newer_browser_discovery(root,changed,f.NOW,old))
+
     def test_only_exact_newest_browser_observation_can_avoid_a_second_pdf_read(self):
         with tempfile.TemporaryDirectory() as folder:
             root,games,p=self.fixture(folder);intake.ingest(p,f.NOW,root)

@@ -77,6 +77,14 @@ class ReviewedNBAProps(unittest.TestCase):
         for key,value in [('book','FanDuel'),('period','1Q'),('stat','pra')]:
             self.assertIsNotNone(self.refusal({**self.play,key:value}))
 
+    def test_new_report_requires_initial_review_but_unchanged_send_still_checks_status(self):
+        (self.root/'injuries-current.json').write_text(json.dumps({'official':{'reportedAt':'2026-11-10T16:55:00Z'}}))
+        self.assertIsNotNone(self.refusal())
+        self.play['publishedAt']='2026-11-10T16:51:00Z'
+        self.assertIsNone(n.refusal(self.play,NOW,root=self.root,current=[self.current],send_recheck=True))
+        with patch.object(n.nba_capture,'availability_for_game',return_value=([{'athleteId':'7','status':'Questionable'}],{})):
+            self.assertIsNotNone(n.refusal(self.play,NOW,root=self.root,current=[self.current],send_recheck=True))
+
     def test_current_official_participation_required(self):
         with patch.object(n.nba_capture,'availability_for_game',return_value=([{'athleteId':'7','status':'Questionable'}],{})):
             self.assertIsNotNone(self.refusal())

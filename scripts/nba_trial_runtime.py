@@ -468,7 +468,7 @@ def current_match(play,now):
  import nba_reviewed_props
  if play.get('selectionMethod')==nba_reviewed_props.METHOD:
   other=[r for r in rows() if r.get('id')!=play['id']]
-  return not nba_trial.evaluate(play,other,now)
+  return not nba_trial.evaluate(play,other,now,sourced_send_recheck=True)
  for candidate in candidates(now,lead_minutes=0):
   nba_trial.staking.apply(candidate,now)
   if candidate['id']==play['id'] and all(candidate[k]==play[k] for k in ('book','line','odds','direction')):

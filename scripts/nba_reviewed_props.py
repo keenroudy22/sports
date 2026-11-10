@@ -29,7 +29,7 @@ def source(url):
         return False
 
 
-def refusal(play, now, *, root=nba_capture.STORE, current=None):
+def refusal(play, now, *, root=nba_capture.STORE, current=None, send_recheck=False):
     try:
         if now < EFFECTIVE or play.get('selectionMethod') != METHOD:
             return 'Sourced NBA method is not effective'
@@ -46,6 +46,8 @@ def refusal(play, now, *, root=nba_capture.STORE, current=None):
             return 'Primary unboosted straight terms only'
         review = play['sourceReview']
         at = boxscores.instant(review['checkedAt'])
+        if send_recheck and not at<=boxscores.instant(play['publishedAt'])<=now:
+            return 'Original reviewed publication clock required'
         kick = boxscores.instant(play['kickoff'])
         if (not timedelta(0) <= now-at <= timedelta(hours=1)
                 or kick <= now+timedelta(minutes=15)
@@ -108,7 +110,10 @@ def refusal(play, now, *, root=nba_capture.STORE, current=None):
         if holds or any(nba_capture.blocks_availability(a.get('status')) for a in rows if str(a.get('athleteId') or a.get('id')) == str(play['athleteId'])):
             return 'Official participation unresolved'
         reported = (injury.get('official') or {}).get('reportedAt')
-        if not reported or at < boxscores.instant(reported):
+        # Initial review follows its source report. A stored original may remain
+        # eligible after a newer report only because current identities/statuses,
+        # roles and exact prices have all passed the checks above again.
+        if not reported or (not send_recheck and at < boxscores.instant(reported)):
             return 'Review must follow the current official report'
         import social_style
         if social_style.issues(review['why']):

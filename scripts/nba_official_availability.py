@@ -23,6 +23,7 @@ import boxscores
 
 START = datetime(2026,10,27,12,tzinfo=timezone.utc)
 PUBLISHED_LINKS_FROM = datetime(2026,10,30,17,5,tzinfo=timezone.utc)
+BROWSER_LAG_FROM = datetime(2026,11,10,16,30,tzinfo=timezone.utc)
 EASTERN = ZoneInfo('America/New_York')
 STATUSES = ('Out','Doubtful','Questionable','Probable','Available')
 ALIASES = {'SA':'SAS','GS':'GSW','NY':'NYK','NO':'NOP','UTAH':'UTA','PHO':'PHX','WSH':'WAS'}
@@ -287,6 +288,33 @@ def browser_observation(root, source, expected, games, now):
     return None
 
 
+def newer_browser_discovery(root, games, now, latest):
+    """A stale direct index cannot erase a newer, actually reviewed discovery.
+
+    No guessed link, freshened clock or stale PDF. An equal/newer known direct
+    publication cannot inherit an older browser observation.
+    """
+    if now<BROWSER_LAG_FROM:return None
+    root=Path(root)
+    if boxscores.verify(root/'official-availability'):return None
+    reports=[r for p in (root/'official-availability').glob('*.jsonl') for r in boxscores.read_store(p)
+             if r.get('observedMethod')=='Reviewed ordinary-browser official PDF']
+    for report in sorted(reports,key=lambda r:r.get('reportedAt',''),reverse=True):
+        try:
+            reported=boxscores.instant(report['reportedAt']);discovery=report['discovery']
+            listed=boxscores.instant(discovery['retrievedAt']);received=boxscores.instant(report['retrievedAt'])
+            if (latest and reported<=latest or discovery['source'].rstrip('/')!=index_url(now)
+                    or not reported<=listed<=received<=now or now-listed>timedelta(minutes=90)):
+                continue
+            cached=browser_observation(root,report['source'],reported,games,now)
+            if cached:
+                cached['directListingLag']=dict(observedAt=boxscores.stamp(now),
+                    latestReportedAt=boxscores.stamp(latest) if latest else None)
+                return cached
+        except (OSError,ValueError,KeyError,TypeError):continue
+    return None
+
+
 def capture(budget, games, root, now, clock=lambda:datetime.now(timezone.utc)):
     def observed(stage, action):
         try:
@@ -297,7 +325,11 @@ def capture(budget, games, root, now, clock=lambda:datetime.now(timezone.utc)):
     if now >= PUBLISHED_LINKS_FROM:
         listing=observed('listing', lambda: budget.report_index(index_url(now)))
         listed_at=clock()
-        source,expected=published_report(listing,listed_at)
+        try:source,expected=published_report(listing,listed_at)
+        except PublishedReportUnavailable as error:
+            cached=newer_browser_discovery(root,games,listed_at,error.latest)
+            if cached:return cached
+            raise
         cached=browser_observation(root,source,expected,games,listed_at)
         if cached:return cached
     else:

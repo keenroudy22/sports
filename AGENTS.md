@@ -1,5 +1,15 @@
 # November10 owner — sourced NBA prop selection, separate from model proof
 
+From16:30Z the collector may retain a newer actually reviewed browser discovery
+when its direct listing has only stale/absent published links. Require original
+canonical discovery/report/receipt clocks, current exact fixture/roster identity,
+verified page evidence and the existing90-minute source limit. Never supersede
+an equal/newer known direct publication or call transport recovered. No extra
+request or clock renewal. Initial sourced admission still follows the latest
+report; sending an already published reviewed original may survive a newer
+report only after all current participation, role, exact-price and freshness
+checks pass again. Changed/unknown statuses still block; no initial-review bypass.
+
 From16:30Z November10, the existing twelve-read NBA prop capture prioritizes
 DraftKings/FanDuel main points/rebounds/assists with three pages per book, then
 two pages per book for the other supported full-game prop types, then the same
