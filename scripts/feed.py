@@ -55,7 +55,11 @@ def posted_card_keys(log_book, since=None):
     for entry in log_book.get('posts') or []:
         if not isinstance(entry, dict) or not entry.get('card'):
             continue
-        sent = entry.get('sentAt') or (entry.get('discord') or {}).get('sentAt')
+        mirror = entry.get('discord') or {}
+        # A reused text-only settlement receipt proves the message, not that
+        # this later Final graphic was ever attached. Preserve actual images.
+        discord_art_sent = mirror.get('sentAt') if (not mirror.get('reusedResultReceipt') or mirror.get('image')) else None
+        sent = entry.get('sentAt') or discord_art_sent
         if not sent:
             continue
         if since is not None:

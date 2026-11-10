@@ -149,6 +149,17 @@ class FeedTests(unittest.TestCase):
             record.write_text('{"generatedAt":"2026-10-08T14:00:00Z","climbRoute":{"rows":[]}}')
             self.assertEqual(feed.route_snapshot_time(NOW, record).isoformat(), '2026-10-08T14:00:00+00:00')
 
+    def test_reused_text_only_result_does_not_freeze_an_unpublished_final(self):
+        result = {'id': 'cashed:won', 'cardKey': 'cooked-won', 'card': True,
+                  'discord': {'state': 'sent', 'sentAt': '2026-11-08T04:00:00Z',
+                              'reusedResultReceipt': True, 'text': 'Final: 20-10'}}
+        self.assertEqual(feed.posted_card_keys({'posts': [result]}), set())
+        result['discord']['image'] = 'https://keenroudy.com/sports/data/cards/cooked-won.png'
+        self.assertEqual(feed.posted_card_keys({'posts': [result]}), {'cooked-won'})
+        del result['discord']['image']
+        result['sentAt'] = '2026-11-08T04:20:00Z'
+        self.assertEqual(feed.posted_card_keys({'posts': [result]}), {'cooked-won'})
+
     def test_confirmed_cards_keep_their_original_png_bytes_after_a_cache_miss(self):
         import tempfile
         posts = {'posts': [
