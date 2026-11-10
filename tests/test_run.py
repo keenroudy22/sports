@@ -1588,6 +1588,14 @@ class AbsorbTests(unittest.TestCase):
 class BufferPostsTests(unittest.TestCase):
     """Hosted art is checked without blocking the shared release lock."""
 
+    def setUp(self):
+        # These are football transport fixtures, not live NBA desk runs.
+        # The post-build clock advances to wall time; never read real pending
+        # NBA publications or trigger their free-feed refresh from this suite.
+        self.nba_rows = mock.patch('nba_trial_runtime.public_rows', return_value=[])
+        self.nba_rows.start()
+        self.addCleanup(self.nba_rows.stop)
+
     def assert_optional_line_catalog_does_not_block_play(self, prepare):
         import buffer_post
         import news_posts
