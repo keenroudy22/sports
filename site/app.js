@@ -1452,7 +1452,7 @@
     const sameGame = research === `#game/${pick.gameId}`;
     const isSaved = state.watchlist.some(r => r.key === 'pick:' + pick.id);
     const tape = (title, body) => `<section class="kt-page-sec"><h2 class="kt-tape">${esc(title)}</h2>${body}</section>`;
-    /* Fair price and edge live here, one tap from Today (decision 2). */
+    /* Saved price context. */
     const price = vm.kind === 'best' && !hold && vm.fair != null && vm.calibrated && vm.mode !== 'closed'
       ? tape('My price', `<div class="kt-figs"><p><b class="num">${esc(minus(oddsText(vm.fair)))}</b>Price matching our chance</p><p><b class="num">${vm.edge > 0 ? '+' : ''}${esc(vm.edge)} pts</b>Chance vs price's need</p></div>`) : '';
     const started = Date.parse(pick.kickoff) <= Date.now();
@@ -1460,7 +1460,7 @@
     const held = hold?.afterPosting ? tape('Since I posted', `<p class="kt-held-felt">I posted this at ${esc(clock(sentAt))} at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}. ${esc(afterPostingWords(hold))} It still counts at that price.</p>`)
       : hold ? tape('The hold', `<div class="kt-figs"><span class="kt-stamp hold kt-inline" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span></div>
       <p class="kt-held-felt">${C.dayOf(pick.kickoff) === etDay() ? 'No grade from me tonight. ' : ''}${esc(heldWords(hold))}</p><p class="small muted" style="margin-top:6px">It stays on the card and is graded at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}, the price we posted.</p>`) : '';
-    /* A Climb step or fun ticket keeps its saved words with its real stake and return, settled or not. */
+    /* Preserve saved ticket terms. */
     const saved = [pick.reason, pick.why].find(x => typeof x === 'string' && x.trim());
     const stake = vm.kind !== 'best' && saved ? tape(vm.kind === 'climb' ? 'The stake' : 'The ticket', `<p>${esc(saved.trim())}</p>`) : '';
     const chart = vm.kind === 'best' && pick.athleteId && FOOTBALL.includes(pick.league) && C.marketKey(pick)
@@ -1481,7 +1481,7 @@
       <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
       ${sources.length ? `<p class="small muted" style="margin-top:14px">Sources: ${sources.map((x, i) => `<a href="${esc(x)}" target="_blank" rel="noopener noreferrer">${esc(host(x, i))} ↗</a>`).join(' · ')}</p>` : ''}
       <p class="kt-social small">Best bets land in the <a href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener">free Kook'n Discord ↗</a> about 10–15 minutes before X. <a href="https://x.com/keenkooks" target="_blank" rel="noopener">Follow @keenkooks on X ↗</a></p>
-      <p class="small muted" style="margin-top:10px">${pick.accountingUnknown || (pick.historicalImport && !pick.priceAssumed && !(typeof pick.riskUnits === 'number' && Number.isFinite(pick.riskUnits) && pick.riskUnits > 0)) ? 'The original stake is unknown; historical unit assumptions are labeled separately.' : C.isParlay(pick) ? (C.isLadder(pick) ? 'A Climb step, tracked in dollars apart from the best-bet record.' : 'A fun ticket at a smaller stake, kept out of the best-bet record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : `Graded at the posted ${C.stakeOf(pick)}u stake, at the line and price we posted.`} The posted price is kept for grading even after the line moves.</p></div>`;
+      <p class="small muted" style="margin-top:10px">${pick.accountingUnknown || (pick.historicalImport && !pick.priceAssumed && !(isNum(pick.riskUnits) && pick.riskUnits > 0)) ? 'The original stake is unknown; historical unit assumptions are labeled separately.' : C.isParlay(pick) ? (C.isLadder(pick) ? 'A Climb step, tracked in dollars apart from the best-bet record.' : 'A fun ticket at a smaller stake, kept out of the best-bet record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : `Graded at the posted ${C.stakeOf(pick)}u stake, at the line and price we posted.`} The posted price is kept for grading even after the line moves.</p></div>`;
   };
 
   /* ---------- Research (B: one pro board) ---------- */
