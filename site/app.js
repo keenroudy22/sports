@@ -1452,7 +1452,6 @@
     const sameGame = research === `#game/${pick.gameId}`;
     const isSaved = state.watchlist.some(r => r.key === 'pick:' + pick.id);
     const tape = (title, body) => `<section class="kt-page-sec"><h2 class="kt-tape">${esc(title)}</h2>${body}</section>`;
-    /* Saved price context. */
     const price = vm.kind === 'best' && !hold && vm.fair != null && vm.calibrated && vm.mode !== 'closed'
       ? tape('My price', `<div class="kt-figs"><p><b class="num">${esc(minus(oddsText(vm.fair)))}</b>Price matching our chance</p><p><b class="num">${vm.edge > 0 ? '+' : ''}${esc(vm.edge)} pts</b>Chance vs price's need</p></div>`) : '';
     const started = Date.parse(pick.kickoff) <= Date.now();
@@ -1460,7 +1459,6 @@
     const held = hold?.afterPosting ? tape('Since I posted', `<p class="kt-held-felt">I posted this at ${esc(clock(sentAt))} at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}. ${esc(afterPostingWords(hold))} It still counts at that price.</p>`)
       : hold ? tape('The hold', `<div class="kt-figs"><span class="kt-stamp hold kt-inline" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span></div>
       <p class="kt-held-felt">${C.dayOf(pick.kickoff) === etDay() ? 'No grade from me tonight. ' : ''}${esc(heldWords(hold))}</p><p class="small muted" style="margin-top:6px">It stays on the card and is graded at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}, the price we posted.</p>`) : '';
-    /* Preserve saved ticket terms. */
     const saved = [pick.reason, pick.why].find(x => typeof x === 'string' && x.trim());
     const stake = vm.kind !== 'best' && saved ? tape(vm.kind === 'climb' ? 'The stake' : 'The ticket', `<p>${esc(saved.trim())}</p>`) : '';
     const chart = vm.kind === 'best' && pick.athleteId && FOOTBALL.includes(pick.league) && C.marketKey(pick)
