@@ -541,9 +541,8 @@ def retryable_cancelled(entry,now):
    and proof.get('state')=='deleted-before-due' and proof.get('priorState')=='scheduled'
    and proof.get('postId')==entry.get('bufferPostId') and proof.get('textHash')==entry.get('textHash')
    and entry.get('textHash') and x_post.text_hash(entry.get('queuedText') or '')==entry['textHash']
-   and proof.get('deletedAt')==entry.get('cancelledAt')
-   and boxscores.instant(entry['cancelledAt'])<boxscores.instant(entry['dueAt'])
-   and boxscores.instant(entry['cancelledAt'])<=boxscores.instant(proof['verifiedAt'])<=now
+   and boxscores.instant(entry['cancelledAt'])<=boxscores.instant(proof['deletedAt'])<boxscores.instant(entry['dueAt'])
+   and boxscores.instant(proof['deletedAt'])<=boxscores.instant(proof['verifiedAt'])<=now
    and (entry.get('discord') or {}).get('state')=='sent' and entry['discord'].get('sentAt'))
  except (KeyError,ValueError,TypeError):return False
 

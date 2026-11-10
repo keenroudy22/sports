@@ -107,6 +107,10 @@ class TrialRuntimeTests(unittest.TestCase):
   entry['nbaCancellation']=dict(state='deleted-before-due',priorState='scheduled',postId='deleted-private',
    verifiedAt=boxscores.stamp(NOW),deletedAt=entry['cancelledAt'],textHash=entry['textHash'])
   self.assertTrue(rt.retryable_cancelled(entry,NOW))
+  proof=dict(entry['nbaCancellation'],deletedAt=boxscores.stamp(NOW-timedelta(minutes=1)))
+  self.assertTrue(rt.retryable_cancelled(dict(entry,nbaCancellation=proof),NOW))
+  proof['deletedAt']=entry['dueAt']
+  self.assertFalse(rt.retryable_cancelled(dict(entry,nbaCancellation=proof),NOW))
   for changes in ({'link':'https://x.com/me/status/123'}, {'sentAt':boxscores.stamp(NOW)},
                   {'deletedAt':boxscores.stamp(NOW)}, {'error':'unknown create'}, {'queuedText':'Different bet'}):
    self.assertFalse(rt.retryable_cancelled(dict(entry,**changes),NOW))
