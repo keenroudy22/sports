@@ -195,3 +195,30 @@ slots. Keep a continuing Climb story only when an actual rung is ready. Record
 the actual caption, format, Sent receipt and observed measurement time. Missing
 clicks, follows or metrics remain unknown. Eight measured comparable posts are
 required before a format winner; never optimize selection for likes.
+
+## November10 live creator review and execution
+
+See `work/growth-20261110/review.json`, `manual-observations.jsonl` and
+`content-experiments.json`. Public Cody Brown, Alex Caruso and ThePropCPA posts
+were reviewed directly, including same-day metrics. Their scale, post ages,
+pinned posts and giveaways prevent causal comparisons. Adapt useful structure,
+never selections, certainty claims or like gates. Test original current role
+facts plus a countercase, denominated history, a readable combined card and
+prompt win/loss quotes. One relevant question; text-only research need not wait
+for artwork. Picks and results retain priority and existing category limits.
+
+The first role-count-text-v1 post actually Sent on X at19:08:45Z Nov10:
+https://x.com/keenkooks/status/2120232211509100672
+Discord Research actually sent at19:12:44Z. Normal caption/cap/spacing guards,
+Buffer attended reservation and exact observed text/time verification were used;
+no API create request or paid allowance. Buffer UI reported907/1,000 requests;
+optional API research remains held at900, essential reserve950 unchanged.
+
+Old saved analytics endOct23; do not present them as current. Three fresh browser
+observations retain their actual ages and approximate observation-minute precision.
+Self-likes/reposts, pinned distribution and unknown human replies are explicit.
+Clicks and attributed follows remain unknown. Use24–48h comparable observations
+and at least eight measured examples before declaring a winner. Existing daily
+7:35/8:35/13:35/17:35 and overnight00:45 prompts now consume these files, preserve
+8AM full-slate results and verify actual Sent. Prompt updates are saved; future
+natural execution and growth remain unproven. No new job, API budget or code release.
