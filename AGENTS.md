@@ -18,8 +18,13 @@ normal and clean exports, record/publication audits and offline rehearsal.
 It uses actual grades and confirmed original X posts; missing receipts block
 native quoting. Actual postgame grading/Final delivery remains unobserved until
 the real game finishes. Pages42872756238 timed out syncing_files, not in tests.
-Stored-data-only recovery42875578698 is in progress; verify that hosted receipt
-and the live payload before calling the Final addition fully shipped. No new
+Stored-only recovery42875578698 also timed out; successful descendant publish
+42876912168 verified the Final addition. Lunch-worker fix e360bc088 is now
+canonically promoted and hosted successfully as42879217246 (2213Python/323JS
+tests in normal/clean exports). The actualNovember10 13:30 Climb worker had
+skipped NBA capture; it now captures early in that same documented window.
+No new job or allowance. Preserve the missing historical receipt; verify the
+next natural13:30 execution rather than manufacturing a completion. No new
 feed job, paid service, cap increase or fabricated result. Preserve the separate
 work/nba-reviewed-props-20261110.json evidence receipt. The next natural capture
 and app review should research other qualifying games using the current source
