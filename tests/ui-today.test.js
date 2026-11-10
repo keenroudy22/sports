@@ -955,3 +955,25 @@ test('All-sports Today puts every published straight before research', async () 
  assert.doesNotMatch(summary,/cbb-tomorrow|Later Open/);
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('class="kt-sec kt-climb"'));
 });
+
+
+test('play footer retains unknown historical stakes without changing accounting', async () => {
+  for (const extra of [{accountingUnknown:true}, {historicalImport:true},
+    {historicalImport:true,riskUnits:null}, {historicalImport:true,riskUnits:0}]) {
+    const pick={...prop,...extra};
+    delete pick.riskUnits;
+    if ('riskUnits' in extra) pick.riskUnits=extra.riskUnits;
+    const before=JSON.stringify(pick);
+    const {api}=loadApp('#record',{}, {today:{...TODAY,picks:[pick]}});
+    const page=await api.views.pick({id:pick.id});
+    assert.match(page,/original stake is unknown; historical unit assumptions are labeled separately/);
+    assert.doesNotMatch(page,/Graded at the posted 1u stake/);
+    assert.equal(JSON.stringify(pick),before);
+  }
+  const assumed={...prop,historicalImport:true,priceAssumed:true};
+  const prior=loadApp('#record',{}, {today:{...TODAY,picks:[assumed]}});
+  assert.match(await prior.api.views.pick({id:assumed.id}),/Graded at one unit at an assumed/);
+  const pick={...prop,historicalImport:true,riskUnits:.5};
+  const {api}=loadApp('#record',{}, {today:{...TODAY,picks:[pick]}});
+  assert.match(await api.views.pick({id:pick.id}),/Graded at the posted 0.5u stake/);
+});
