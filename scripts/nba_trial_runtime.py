@@ -355,8 +355,9 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
           and boxscores.instant(p['kickoff'])>now+timedelta(minutes=15)
           and boxscores.instant(p['kickoff']).astimezone(nba_trial.EASTERN).date()==now.astimezone(nba_trial.EASTERN).date()]
  if not pending:return results
- if refresh:nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
- now=max(now,datetime.now(timezone.utc))
+ if refresh:
+  nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
+  now=max(now,datetime.now(timezone.utc))
  busy=buffer_post.taken({'posts':[e for e in log_book.get('posts',[]) if not e.get('nbaDiscordOnly')]},now)+[p[3] for p in (*reserved,*results)]
  plans=[]
  for play in pending:

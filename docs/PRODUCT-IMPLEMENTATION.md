@@ -7228,3 +7228,36 @@ becoming live. Push publishes now finish instead of being cancelled; GitHub
 keeps the newest pending run, and that queued run checks out current `main` when
 it starts. This preserves current-data convergence without abandoning a fully
 validated artifact seconds before deployment.
+
+
+## November 11 — all-sports Results reconciliation candidate
+
+The owner correctly reported that Results did not match the five posted and
+graded November10 straights. The main Results payload contained only the two
+CFB wins while Bennett Stirtz, Wendell Carter Jr. and Davion Mitchell remained
+in the separate NBA ledger. The daily social Final was repaired separately,
+so its5–0/+4.60u truth and the site's2–0 main calendar visibly disagreed.
+
+The month audit found the same structural omission in college basketball:
+receipt-backed South Dakota State+11.5 and Queens+8.5 wins were stranded in the
+CBB-only payload. `build_site.cbb_record_picks` and `nba_record_picks` now
+project only originals with an observed Discord or X send into separately
+audited `record.json` lanes. They preserve their immutable source stores and
+original terms, expose a grade only after its real settlement clock, and never
+treat an admission as public. The browser merges both lanes into the same
+all-sports headline, calendar, units chart, sport breakdown and Every result
+list. Sport filters use that exact set. `record_audit` rejects a missing,
+altered or cross-ledger duplicate basketball row.
+
+Local rebuilt November10 truth is five unique IDs, five wins, zero losses and
++4.601736691u from the original prices: CFB2–0/+1.877u and NBA3–0/+2.724737u.
+The complete November1–10 Best Bets reconciliation is27settled plays,18–9,
++8.500159051u. Daily truth is Nov1 1–1/+0.30u; Nov2 0–2/−2.00u; Nov3
+2–0/+1.779u; Nov4 2–0/+1.819u; Nov5 1–1/+0.16u; Nov6 0–3/−3.00u; Nov7
+4–1/+2.769u; Nov8 3–1/+2.072u; and Nov10 5–0/+4.602u. The separate Climb
+wins remain outside Best Bets. Every delivered November play has a matching
+row; the unmatched global receipt is an older October personal/community ticket
+that correctly remains outside official ledgers. Football, CBB and NBA audits
+are clean. Updated full-suite and clean-export evidence, canonical promotion,
+hosted success and live375/1440 Results verification remain required before
+this section is called shipped.

@@ -2197,6 +2197,11 @@ def build(now=None):
     route_state, route_games = ticket_climb_route.from_stores(ticket_climb_route.gates.Stores(), now)
     write(OUT / 'record.json', {'generatedAt': stamp(now),
                                 'picks': [{**pick, 'card': record_card(pick)} for pick in picks],
+                                # Basketball has immutable sport ledgers, but Results is the all-sports public
+                                # truth. Keep the football array byte-compatible for record_audit and publish only
+                                # rows with an observed Discord or X receipt in separately audited adapters.
+                                'cbbPicks': cbb_record_picks(now),
+                                'nbaPicks': nba_record_picks(now),
                                 'communityPicks': community_records,
                                 'climbRoute': ticket_climb_route.public_route(route_state, now, route_games)})
     generated = stamp(now)
@@ -2288,6 +2293,137 @@ def public_delivery(entry):
     return {'discordAt': discord.get('sentAt') if discord.get('state') == 'sent' else None,
             'xAt': entry.get('sentAt'),
             'restoredAt': entry.get('restoredAt'), 'cancelled': cancelled, 'failed': bool(entry.get('error'))}
+
+
+def cbb_record_picks(now=None, root=ROOT):
+    """Normalize delivered college-basketball picks for the shared Results surface."""
+    import cbb_picks
+
+    now = now or datetime.now(timezone.utc)
+    log = read(root / 'data' / 'x-posted.json', {'posts': []})
+    receipts_by_id = defaultdict(list)
+    for entry in log.get('posts') or []:
+        if entry.get('kind') == 'buffer:cbb-pick' and entry.get('cbbPick') is True and entry.get('id'):
+            receipts_by_id[entry['id']].append(entry)
+
+    rows = []
+    for play in cbb_picks.public_rows(root / 'data' / 'cbb-picks'):
+        published = instant(play.get('publishedAt'))
+        if not published or published > now:
+            continue
+        attempts = receipts_by_id.get(play['id'], [])
+        discord_at = max((instant((entry.get('discord') or {}).get('sentAt')) for entry in attempts
+                          if (entry.get('discord') or {}).get('state') == 'sent'), default=None)
+        x_at = max((instant(entry.get('sentAt')) for entry in attempts if entry.get('sentAt')), default=None)
+        if not discord_at and not x_at:
+            continue
+
+        row = dict(play)
+        settled = instant(row.get('settledAt'))
+        if not settled or settled > now:
+            for key in ('result', 'actual', 'settledAt', 'resultSource'):
+                row.pop(key, None)
+        game = row.get('game') if isinstance(row.get('game'), dict) else {}
+        review = row.get('review') if isinstance(row.get('review'), dict) else {}
+        sources = [source.get('url') for source in review.get('sources') or []
+                   if isinstance(source, dict) and str(source.get('url') or '').startswith('https://')]
+        title = cbb_picks.selection(row)
+        result_detail = None
+        if row.get('result') and row.get('actual') is not None:
+            margin = abs(float(row['actual']) + float(row['line'])) if row.get('marketType') == 'spread' else abs(float(row['actual']) - float(row['line']))
+            verb = 'cleared' if row['result'] == 'win' else 'missed' if row['result'] == 'loss' else 'landed'
+            result_detail = f"{cbb_picks.result_detail(row)} · {verb} by {margin:g}"
+        rows.append({
+            'id': row['id'], 'league': 'CBB', 'kind': 'gamePicks', 'lane': 'best_bet',
+            'title': title, 'displayTitle': title, 'marketType': row.get('marketType'),
+            'direction': row.get('direction'), 'line': row.get('line'), 'odds': row.get('odds'),
+            'book': row.get('book'), 'displayBook': row.get('book'), 'riskUnits': row.get('riskUnits'),
+            'kickoff': row.get('kickoff') or game.get('kickoff'), 'publishedAt': row.get('publishedAt'),
+            'quotedAt': (row.get('quote') or {}).get('checkedAt'), 'settledAt': row.get('settledAt'),
+            'result': row.get('result'), 'actual': row.get('actual'), 'resultDetail': result_detail,
+            'season': row.get('season') or game.get('season'), 'seasonType': row.get('seasonType') or game.get('seasonType'),
+            'gameId': row.get('eventId') or game.get('id'),
+            'gameIds': row.get('gameIds') or [row.get('eventId') or game.get('id')], 'posted': True,
+            'status': 'settled' if row.get('result') else 'active', 'modelLean': False,
+            'selectionPolicy': row.get('selectionMethod'), 'reason': review.get('why'), 'why': review.get('why'),
+            'risk': review.get('countercase'), 'sources': list(dict.fromkeys(sources)),
+            'delivery': {'discordAt': stamp(discord_at) if discord_at else None,
+                         'xAt': stamp(x_at) if x_at else None,
+                         'restoredAt': None, 'cancelled': False, 'failed': False},
+            'card': None,
+        })
+    return sorted(rows, key=lambda row: (str(row.get('kickoff') or ''), row['id']))
+
+
+def nba_record_picks(now=None, root=ROOT):
+    """Normalize actually delivered NBA picks for the shared Results surface.
+
+    NBA originals remain in their append-only NBA store.  This display adapter does
+    not copy a private admission into the public record: a real Discord or X receipt
+    is required, and a settlement is exposed only after its recorded settlement time.
+    """
+    import nba_prop_release
+    import nba_trial_runtime
+
+    now = now or datetime.now(timezone.utc)
+    log = read(root / 'data' / 'x-posted.json', {'posts': []})
+    receipts_by_id = defaultdict(list)
+    for entry in log.get('posts') or []:
+        if entry.get('kind') == 'buffer:nba-trial' and entry.get('nbaPick') is True and entry.get('id'):
+            receipts_by_id[entry['id']].append(entry)
+
+    labels = nba_prop_release.STATS
+    rows = []
+    for play in nba_trial_runtime.public_rows(root / 'data' / 'nba-trial'):
+        published = instant(play.get('publishedAt'))
+        if not published or published > now:
+            continue
+        attempts = receipts_by_id.get(play['id'], [])
+        discord_at = max((instant((entry.get('discord') or {}).get('sentAt')) for entry in attempts
+                          if (entry.get('discord') or {}).get('state') == 'sent'), default=None)
+        x_at = max((instant(entry.get('sentAt')) for entry in attempts if entry.get('sentAt')), default=None)
+        if not discord_at and not x_at:
+            continue
+
+        row = dict(play)
+        settled = instant(row.get('settledAt'))
+        if not settled or settled > now:
+            for key in ('result', 'actual', 'settledAt', 'settlementReason'):
+                row.pop(key, None)
+        stat_name = labels.get(row.get('stat'), row.get('stat') or 'result')
+        title = nba_prop_release.selection(row)
+        result_detail = None
+        if row.get('result') and row.get('actual') is not None:
+            margin = abs(float(row['actual']) - float(row['line']))
+            verb = 'cleared' if row['result'] == 'win' else 'missed'
+            result_detail = f"{row['actual']:g} {stat_name} · {verb} by {margin:g}"
+        review = row.get('sourceReview') if isinstance(row.get('sourceReview'), dict) else {}
+        game = row.get('game') if isinstance(row.get('game'), dict) else {}
+        sources = [source.get('url') for source in review.get('sources') or []
+                   if isinstance(source, dict) and str(source.get('url') or '').startswith('https://')]
+        if str(row.get('source') or '').startswith('https://'):
+            sources.insert(0, row['source'])
+        rows.append({
+            'id': row['id'], 'league': 'NBA', 'kind': 'props', 'lane': 'best_bet',
+            'title': title, 'displayTitle': title, 'player': row.get('player'),
+            'athleteId': row.get('athleteId'), 'market': row.get('stat'), 'marketType': 'prop',
+            'direction': row.get('direction'), 'line': row.get('line'), 'odds': row.get('odds'),
+            'book': row.get('book'), 'displayBook': row.get('book'), 'riskUnits': row.get('riskUnits'),
+            'kickoff': row.get('kickoff'), 'publishedAt': row.get('publishedAt'),
+            'quotedAt': row.get('retrievedAt'), 'settledAt': row.get('settledAt'),
+            'result': row.get('result'), 'actual': row.get('actual'), 'resultDetail': result_detail,
+            'settlementReason': row.get('settlementReason'), 'season': row.get('season'),
+            'seasonType': row.get('seasonType'), 'gameId': row.get('eventId') or game.get('id'),
+            'gameIds': [row.get('eventId') or game.get('id')], 'posted': True,
+            'status': 'settled' if row.get('result') else 'active', 'modelLean': False,
+            'selectionPolicy': row.get('selectionMethod'), 'reason': review.get('why') or (row.get('reasons') or [None])[0],
+            'why': review.get('why'), 'risk': review.get('countercase'), 'sources': list(dict.fromkeys(sources)),
+            'delivery': {'discordAt': stamp(discord_at) if discord_at else None,
+                         'xAt': stamp(x_at) if x_at else None,
+                         'restoredAt': None, 'cancelled': False, 'failed': False},
+            'card': None,
+        })
+    return sorted(rows, key=lambda row: (str(row.get('kickoff') or ''), row['id']))
 
 
 def public_sentences(*values, limit=4):

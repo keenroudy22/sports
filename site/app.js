@@ -519,7 +519,6 @@
     return Math.max(...values);
   };
 
-  /* Record: cumulative units at captured prices (same rule as recordBreakdown().captured: credits excluded). */
   const cumulativeUnits = (picks, unitsFor, includeParlays = false) => {
     const rows = picks.filter(p => (includeParlays || !isParlayLike(p)) && !p.priceAssumed && typeof p.odds === 'number' && ['win', 'loss', 'push'].includes(p.result))
       .map(p => !includeParlays && p.earlyExit && p.result === 'loss' ? { ...p, earlyExit: false, units: -1 * (Number(p.riskUnits) > 0 ? Number(p.riskUnits) : 1) } : p)
@@ -720,7 +719,7 @@
       (today.picks || []).forEach(p => byId.set(p.id, p));
       return [...byId.values()];
     }
-    const byId = new Map([...record.picks, ...(record.communityPicks || [])].map(p => [p.id, p]));
+    const byId = new Map([...record.picks, ...(record.cbbPicks || []), ...(record.nbaPicks || []), ...(record.communityPicks || [])].map(p => [p.id, p]));
     (today.picks || []).forEach(p => byId.set(p.id, p));
     previousEvery = [...byId.values()];
     return previousEvery;
@@ -2021,7 +2020,7 @@
     const price = p.odds == null ? 'no price recorded' : assumed ? `${oddsText(p.odds)} assumed · no price recorded` : `${oddsText(p.odds)} ${bookLabel(p.book) || ''}`;
     const actual = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${p.resultDetail}` : p.actual != null ? String(typeof p.actual === 'object' ? Object.entries(p.actual).map(([k, v]) => `${k} ${v}`).join(', ') : p.actual).split(/[.;]\s/)[0] : '';
     const lane = p.community ? 'Personal fun ticket' : p.lane === 'gut_call' ? 'Full Send' : C.isParlay(p) ? 'Fun ticket' : 'Best Bet';
-    const meta = [lane, withdrawalNotice(p), p.cashout ? 'Cashed out · not a sportsbook push' : '', price + (p.community ? ' original quote' : ''), whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? `early-exit credit (counts −${C.stakeOf(p)}u in the headline)` : ''].filter(Boolean).join(' · ');
+    const meta = [lane, withdrawalNotice(p), p.cashout ? 'Cashed out · not a sportsbook push' : '', price + (p.community ? ' original quote' : ''), `${C.stakeOf(p)}u`, whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? `early-exit credit (counts −${C.stakeOf(p)}u in the headline)` : ''].filter(Boolean).join(' · ');
     const right = p.result ? (u == null ? '' : assumed ? `<span class="u muted" title="${esc(p.priceNote || 'No price was recorded, so this counts at an assumed −115.')}">(${esc(units(u))})</span>` : `<span class="u ${u > 0 ? 'green' : u < 0 ? 'red' : 'muted'}">${esc(units(u))}</span>`)
       : '<span class="u muted small">Pending</span>';
     return `<div class="receipt"><span class="r-mark ${mark[0]}" aria-hidden="true">${mark[1]}</span><div><b><span class="sr">${esc(mark[2])}: </span><a href="${esc(vm.href)}" class="plain-link">${esc(niceTitle(p.displayTitle || p.title))}</a></b><span>${esc(meta)}</span></div>${right}</div>`;
@@ -2105,7 +2104,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-a3f9c219da7f';
+  const MORE_ASSET = 'app-more.js?v=sha256-fb95a7682cfb';
   const GAMES_ASSET = 'app-games.js?v=sha256-913398630097';
   const KVB_ASSET = 'app-kvb.js?v=sha256-338cc9fd90bf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';

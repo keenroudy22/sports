@@ -205,6 +205,67 @@ class PickTests(unittest.TestCase):
         self.assertNotIn('secret', str(row))
         self.assertNotIn('private', str(row))
 
+    def test_nba_results_require_real_delivery_and_keep_original_terms(self):
+        import tempfile
+        from unittest import mock
+        now = datetime(2026, 11, 11, 14, tzinfo=timezone.utc)
+        play = {'id': 'NBA-reviewed-1', 'type': 'publish', 'league': 'NBA', 'eventId': 'NBA-1',
+                'player': 'Example Player', 'athleteId': '12', 'stat': 'pts', 'direction': 'over',
+                'line': 7.5, 'odds': 101, 'book': 'DraftKings', 'riskUnits': 1,
+                'kickoff': '2026-11-11T04:00:00Z', 'publishedAt': '2026-11-10T17:00:00Z',
+                'settledAt': '2026-11-11T12:00:00Z', 'result': 'win', 'actual': 13,
+                'season': 2027, 'seasonType': 2, 'selectionMethod': 'sourced-nba-primary-prop-v1',
+                'retrievedAt': '2026-11-10T16:45:00Z',
+                'sourceReview': {'why': 'Verified role.', 'countercase': 'Minutes can fall.', 'sources': []}}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'data').mkdir()
+            (root / 'data' / 'x-posted.json').write_text(json.dumps({'posts': [
+                {'id': play['id'], 'kind': 'buffer:nba-trial', 'nbaPick': True,
+                 'discord': {'state': 'sent', 'sentAt': '2026-11-10T17:20:00Z'},
+                 'sentAt': '2026-11-10T17:35:00Z'}]}))
+            with mock.patch('nba_trial_runtime.public_rows', return_value=[play]):
+                [row] = build_site.nba_record_picks(now, root)
+            self.assertEqual(row['displayTitle'], 'Example Player OVER 7.5 points')
+            self.assertEqual(row['resultDetail'], '13 points · cleared by 5.5')
+            self.assertEqual(row['delivery']['discordAt'], '2026-11-10T17:20:00Z')
+            self.assertEqual(row['delivery']['xAt'], '2026-11-10T17:35:00Z')
+            self.assertTrue(row['posted'])
+            (root / 'data' / 'x-posted.json').write_text('{"posts": []}')
+            with mock.patch('nba_trial_runtime.public_rows', return_value=[play]):
+                self.assertEqual(build_site.nba_record_picks(now, root), [])
+
+    def test_cbb_results_require_real_delivery_and_keep_original_terms(self):
+        import tempfile
+        from unittest import mock
+        now = datetime(2026, 11, 11, 14, tzinfo=timezone.utc)
+        play = {'id': 'CBB-reviewed-1', 'type': 'publish', 'league': 'CBB', 'eventId': 'CBB-1',
+                'gameIds': ['CBB-1'], 'marketType': 'spread', 'direction': 'away', 'line': 8.5,
+                'odds': -112, 'book': 'DraftKings', 'riskUnits': 1,
+                'kickoff': '2026-11-11T04:00:00Z', 'publishedAt': '2026-11-10T17:00:00Z',
+                'settledAt': '2026-11-11T12:00:00Z', 'result': 'win', 'actual': 1, 'season': 2027,
+                'selectionMethod': 'sourced-cbb-straight-v1', 'quote': {'checkedAt': '2026-11-10T16:45:00Z'},
+                'game': {'id': 'CBB-1', 'season': 2027, 'seasonType': 'regular-season',
+                         'teams': {'away': {'abbreviation': 'QUC'}, 'home': {'abbreviation': 'LMU'}}},
+                'review': {'why': 'Verified continuity.', 'countercase': 'Road game.', 'sources': []}}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'data').mkdir()
+            (root / 'data' / 'x-posted.json').write_text(json.dumps({'posts': [
+                {'id': play['id'], 'kind': 'buffer:cbb-pick', 'cbbPick': True,
+                 'discord': {'state': 'sent', 'sentAt': '2026-11-10T17:20:00Z'},
+                 'sentAt': '2026-11-10T17:35:00Z'}]}))
+            with mock.patch('cbb_picks.public_rows', return_value=[play]):
+                [row] = build_site.cbb_record_picks(now, root)
+            self.assertEqual(row['displayTitle'], 'QUC +8.5')
+            self.assertEqual(row['resultDetail'], 'QUC scoring margin: +1 · cleared by 9.5')
+            self.assertEqual(row['delivery']['discordAt'], '2026-11-10T17:20:00Z')
+            self.assertEqual(row['delivery']['xAt'], '2026-11-10T17:35:00Z')
+            self.assertTrue(row['posted'])
+            (root / 'data' / 'x-posted.json').write_text('{"posts": []}')
+            with mock.patch('cbb_picks.public_rows', return_value=[play]):
+                self.assertEqual(build_site.cbb_record_picks(now, root), [])
+
     def test_a_restored_delivery_is_open_on_the_site_without_erasing_the_audit_note(self):
         import tempfile
         from unittest import mock

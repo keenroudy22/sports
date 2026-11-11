@@ -462,26 +462,7 @@
   };
 
   views.record = async route => {
-    if (state.league === 'CBB' && (!route.tab || route.tab === 'official')) {
-      const data = await get('app/cbb.json'), r = data.picks || {}, plays = (r.plays || []).slice().reverse();
-      return head('The record', 'CBB picks', 'Original terms and every result. Sourced desk decisions; separate from model accuracy and fun tickets.') + `<section class="card"><h2>${esc(r.win || 0)}–${esc(r.loss || 0)} · ${esc(units(Number(r.units || 0)))}</h2><p>${esc(r.push || 0)} pushes · ${esc(plays.filter(p => !p.result).length)} open</p></section>${plays.map(p => `<article class="card"><h3>${esc(p.game.teams.away.name)} at ${esc(p.game.teams.home.name)}</h3><p>${esc(p.marketType === 'total' ? p.direction.toUpperCase() + ' ' + p.line : p.game.teams[p.direction].abbreviation + ' ' + (p.line > 0 ? '+' : '') + p.line)} · ${esc(oddsText(p.odds))} ${esc(p.book)} · 1u</p><p>${esc(p.result || 'open')}${p.actual == null ? '' : ' · Actual: ' + esc(p.actual)}</p><p class="small">Posted ${esc(whenShort(p.publishedAt))}</p></article>`).join('') || '<p>No CBB straight posted yet.</p>'}<p><a href="#today?sport=CBB">CBB Today ›</a></p>`;
-    }
-
     const tab = route.tab || 'official';
-    if (state.league === 'NBA' && tab === 'official') {
-      const data = await get('app/nba.json'), trial = data.trial || {}, r = trial.record || {};
-      const plays = (trial.plays || []).slice().reverse();
-      return `${head('NBA record', 'NBA record', 'Posted NBA plays at their saved stakes, separate from football and paper projections.')}
-        <div class="kpis"><div class="kpi"><small>NBA picks</small><b class="num">${esc(r.win || 0)}–${esc(r.loss || 0)}</b><span>${esc(r.graded || 0)} graded</span></div><div class="kpi"><small>Net</small><b class="num">${esc(units(Number(r.units || 0)))}</b><span>at the posted stakes and prices</span></div></div>
-        ${plays.length ? `<div class="receipts">${plays.map(p => {
-          const teams = p.teams || {}, side = p.direction;
-          const team = teams[side]?.displayName || teams[side]?.name || teams[side]?.abbreviation || '';
-          const line = p.marketType === 'player' ? `${p.player} ${side} ${p.line} ${{pts:'points',reb:'rebounds',ast:'assists'}[p.stat] || ''}` : p.marketType === 'total' ? `${side} ${p.line}` : p.marketType === 'moneyline' ? `${team} moneyline` : `${team} ${C.signed(p.line)}`;
-          const matchup = `${teams.away?.displayName || teams.away?.name || teams.away?.abbreviation || ''} at ${teams.home?.displayName || teams.home?.name || teams.home?.abbreviation || ''}`;
-          return `<article class="receipt"><div><b>${esc(matchup)} · ${esc(line)}</b><span>${esc(oddsText(p.odds))} ${esc(bookLabel(p.book))} · ${C.stakeOf(p)}u · ${esc(whenShort(p.kickoff))}</span><span>${p.result ? `${esc(p.result)}${p.actual == null ? '' : ` · final ${esc(p.actual)}`}` : 'Not graded yet'}</span></div>${p.card ? `<a href="${esc(p.card)}">Ticket ↗</a>` : ''}</article>`;
-        }).join('')}</div>` : '<p class="muted small">No NBA play has been posted yet. Research projections and historical hit counts are not betting results.</p>'}
-        <p class="btn-row"><a class="btn small" href="#today?sport=NBA">NBA Today ›</a><a class="btn small" href="#record/trials">Paper-trial evidence ›</a></p>`;
-    }
     const [today, board, lab, trials, official, recordData] = await Promise.all([get('app/today.json'), maybe('scoreboard.json'), tab === 'trials' ? maybe('market-lab.json') : null, tab === 'trials' ? maybe('app/sport-research.json') : null, allPicks(), get('app/record.json')]);
     const every = [...new Map([...official, ...(recordData.communityPicks || [])].map(p => [p.id, p])).values()];
     const climbRoute = tab === 'climb' ? (await get('app/record.json')).climbRoute : null;
@@ -502,9 +483,7 @@
     const k = kpiStrip(all, board, rows, nonDefault ? kLabel : curPhases.length === 1 && curPhases[0] === 'playoffs' ? 'Playoff record' : 'Season record');
     const recordHref = path => `${path}${state.league === 'ALL' ? '' : `?sport=${encodeURIComponent(state.league)}`}`;
     const tabs = `<div class="toolbar"><div class="chip-scroll">${segLinks([[recordHref('#record'), 'Best bets', 'official'], [recordHref('#record/fun'), 'Fun', 'fun'], [recordHref('#record/climb'), 'Climb', 'climb'], [recordHref('#record/model'), 'Model', 'model'], [recordHref('#record/trials'), 'Trials', 'trials']], tab)}</div></div>`;
-    const nba = state.league === 'ALL' && ['official','model','trials'].includes(tab) ? await maybe('app/nba.json') : null;
-    const nbaRecord = nba ? `<section class="card" id="record-nba" style="margin-bottom:16px"><h2>NBA record</h2><p>${esc(nba.trial?.record?.win || 0)}–${esc(nba.trial?.record?.loss || 0)} · ${esc(units(Number(nba.trial?.record?.units || 0)))} · ${esc(nba.trial?.record?.graded || 0)} graded · ${esc((nba.trial?.plays || []).filter(p => !p.result).length)} open</p><p class="small muted">Posted NBA plays only. Separate from the football totals and paper-model results below.</p><a href="#record?sport=NBA">Every NBA play ›</a></section>` : state.league === 'ALL' && ['official','model','trials'].includes(tab) ? '<p class="small muted">NBA record is unavailable right now; it is not included in the football totals.</p>' : '';
-    const top = `${head('The record', 'Every play, graded in public', `Win or lose, at the price and book we posted.${state.league !== 'ALL' ? ` Showing ${esc(LEAGUE_NAME[state.league])}.` : ''}`)}${nbaRecord}`;
+    const top = head('The record', 'Every play, graded in public', `Win or lose, at the price and book we posted.${state.league !== 'ALL' ? ` Showing ${esc(LEAGUE_NAME[state.league])}.` : ' All posted sports are counted together; use the sport chips for the breakdown.'}`);
     const clvById = new Map(((board || {}).picks || {}).rows?.map(r => [r.id, r.clv]) || []);
     const pickers = !showSeason && !hasPlayoffs ? '' : `<div class="toolbar">${showSeason ? `<label class="sr" for="rs">Season</label><select id="rs" class="select" data-select="season">${[['current', curSeasonLabel], ...archive.seasons.filter(v => curSeasons.length !== 1 || String(v) !== String(curSeasons[0])).map(v => [String(v), String(v)]), ['all', 'All seasons']].map(([v, l]) => `<option value="${esc(v)}"${String(archive.selectedSeason) === v ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>` : ''}
       ${hasPlayoffs ? `<label class="sr" for="rp">Stage</label><select id="rp" class="select" data-select="phase">${[['current', curPhaseLabel], ['regular', 'Regular season'], ['playoffs', 'Playoffs'], ['all', 'Full season']].filter(([v]) => curPhases.length !== 1 || v !== curPhases[0]).map(([v, l]) => `<option value="${v}"${archive.selectedPhase === v ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>` : ''}</div>
@@ -573,7 +552,7 @@
         ${section('Every result', `${search}${settled.length ? weeksOf(settled, p => receipt(p, clvById)) : `<p class="muted">${rq ? 'No play matches. Try a player, a team or a market.' : 'Nothing settled yet. Plays show here once their games are final.'}</p>`}`)}
         ${imported.length ? `<details class="more-box"><summary>Week 1 hand-posted legs (no prices) · ${esc(wl(C.summaryOf(imported)))} · not counted</summary><div class="receipts">${imported.map(p => receipt(p, clvById)).join('')}</div></details>` : ''}
         <details class="more-box" data-box="more-numbers" style="margin-top:12px"><summary>More numbers</summary><div><p class="small muted" style="margin-bottom:8px">Same plays, cut different ways. These include assumed prices and promo credits; the units line above does not.</p>
-          <p class="eyebrow" style="margin:10px 0 6px">By sport</p>${tableOf('Sport', [['NFL', C.summaryOf(st.filter(p => p.league === 'NFL'))], ['College', C.summaryOf(st.filter(p => p.league === 'CFB'))]])}
+          <p class="eyebrow" style="margin:10px 0 6px">By sport</p>${tableOf('Sport', [['NFL', C.summaryOf(st.filter(p => p.league === 'NFL'))], ['College football', C.summaryOf(st.filter(p => p.league === 'CFB'))], ['College basketball', C.summaryOf(st.filter(p => p.league === 'CBB'))], ['NBA', C.summaryOf(st.filter(p => p.league === 'NBA'))]].filter(([, summary]) => summary.wins + summary.losses + summary.pushes + summary.pending))}
           <p class="eyebrow" style="margin:14px 0 6px">By kind</p>${tableOf('Kind', [['Researched plays', C.summaryOf(st.filter(p => !p.modelLean))], ['Model plays', C.summaryOf(st.filter(p => p.modelLean))], ['Fun tickets', C.summaryOf(counted.filter(p => C.isParlay(p) && !C.isLadder(p)))]])}
           <p class="small muted" style="margin-top:6px">Researched plays are backed by a checked news fact. Model plays go out on our number alone.</p>
           ${[...new Set(st.map(C.category))].length > 1 ? `<p class="eyebrow" style="margin:14px 0 6px">By market</p>${tableOf('Market', [...new Set(st.map(C.category))].map(n => [MARKET_NAME[n] || n, C.summaryOf(st.filter(p => C.category(p) === n))]))}` : ''}

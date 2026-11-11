@@ -1,3 +1,23 @@
+# November 11 owner — celebrate clean sweeps on X
+
+When the full graded official card sweeps, lead the X results recap with the
+record and a celebratory hook (e.g. 5–0 SWEEP 🍳🔥). Write in Kook’n’s voice,
+include verified net units and the usual 21+ notice, and attach the complete
+results card. Preserve all results and the ordinary recap schedule.
+
+# November 11 all-sports Results reconciliation
+
+The bare Results view is one public all-sports truth: its headline, calendar,
+units chart, sport breakdown and Every result list include every actually
+delivered straight from the football, college-basketball and NBA ledgers exactly
+once. CBB and NBA rows require a confirmed Discord or X delivery receipt; an
+admission alone is not public. Sport filters are breakdowns of that same set,
+never alternate totals. November10 is the regression: two CFB wins plus three
+NBA prop wins,5–0/+4.60u at the posted stakes and prices. The November1–10
+Best Bets regression is18–9/+8.50u, including the receipt-backed SDST+11.5 and
+Queens+8.5 CBB wins. Preserve each immutable source ledger and audit display
+adapters rather than copying basketball rows into football.
+
 # November 10 NBA player history — live receipt
 
 NBA player pages are now live from the stored official box-score history. Preserve

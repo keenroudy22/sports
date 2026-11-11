@@ -44,6 +44,29 @@ def audit(reports, public):
     return issues
 
 
+def audit_nba_public(public, expected):
+    """The Results adapter must be the exact receipt-backed NBA projection."""
+    actual = public.get('nbaPicks') if isinstance(public, dict) else None
+    if actual is None:
+        return ['NBA picks are missing from the all-sports Results payload'] if expected else []
+    return [] if actual == expected else ['NBA Results rows differ from the receipt-backed NBA ledger']
+
+
+def audit_cbb_public(public, expected):
+    """The Results adapter must be the exact receipt-backed CBB projection."""
+    actual = public.get('cbbPicks') if isinstance(public, dict) else None
+    if actual is None:
+        return ['CBB picks are missing from the all-sports Results payload'] if expected else []
+    return [] if actual == expected else ['CBB Results rows differ from the receipt-backed CBB ledger']
+
+
+def audit_all_sports(public):
+    """A play may appear in one sport ledger only; duplicates corrupt day and month totals."""
+    rows = [row for key in ('picks', 'cbbPicks', 'nbaPicks') for row in (public.get(key) or [])]
+    ids = [row.get('id') for row in rows]
+    return ['duplicate play id across all-sports Results ledgers'] if len(ids) != len(set(ids)) else []
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--research', type=Path, default=ROOT / 'site' / 'data' / 'research.json')
@@ -51,10 +74,14 @@ def main(argv=None):
     args = parser.parse_args(argv)
     public = load(args.today)
     issues = audit(load(args.research), public)
+    issues.extend(audit_all_sports(public))
+    issues.extend(audit_cbb_public(public, build_site.cbb_record_picks()))
+    issues.extend(audit_nba_public(public, build_site.nba_record_picks()))
     import community_record
     if public.get('communityPicks', []) != community_record.build(ROOT):
         issues.append('personal-ticket record differs from pregame receipts and append-only settlements')
-    print(json.dumps({'picksChecked': len(load(args.today).get('picks') or []), 'issues': issues}, sort_keys=True))
+    counts = {key: len(public.get(key) or []) for key in ('picks', 'cbbPicks', 'nbaPicks')}
+    print(json.dumps({'picksChecked': sum(counts.values()), 'byLedger': counts, 'issues': issues}, sort_keys=True))
     return 1 if issues else 0
 
 

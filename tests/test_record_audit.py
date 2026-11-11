@@ -34,6 +34,23 @@ class RecordAuditTests(unittest.TestCase):
     def test_missing_official_pick_fails(self):
         self.assertIn('missing public pick: official', record_audit.audit(self.reports, {'picks': []}))
 
+    def test_nba_results_payload_must_equal_the_receipt_backed_projection(self):
+        row = {'id': 'NBA-reviewed', 'posted': True, 'result': 'win'}
+        self.assertEqual(record_audit.audit_nba_public({'nbaPicks': [row]}, [row]), [])
+        self.assertIn('NBA Results rows differ', record_audit.audit_nba_public({'nbaPicks': []}, [row])[0])
+        self.assertIn('missing', record_audit.audit_nba_public({}, [row])[0])
+
+    def test_cbb_results_payload_must_equal_the_receipt_backed_projection(self):
+        row = {'id': 'CBB-reviewed', 'posted': True, 'result': 'win'}
+        self.assertEqual(record_audit.audit_cbb_public({'cbbPicks': [row]}, [row]), [])
+        self.assertIn('CBB Results rows differ', record_audit.audit_cbb_public({'cbbPicks': []}, [row])[0])
+        self.assertIn('missing', record_audit.audit_cbb_public({}, [row])[0])
+
+    def test_a_play_cannot_be_counted_in_two_sport_ledgers(self):
+        row = {'id': 'same'}
+        self.assertEqual(record_audit.audit_all_sports({'picks': [row], 'cbbPicks': [], 'nbaPicks': []}), [])
+        self.assertIn('duplicate play id', record_audit.audit_all_sports({'picks': [row], 'cbbPicks': [row]})[0])
+
 
 if __name__ == '__main__':
     unittest.main()

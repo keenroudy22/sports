@@ -58,26 +58,28 @@ const views = (overrides = {}) => {
   return factory(ctx);
 };
 const near = (a, b) => Math.abs(a - b) < 1e-9;
-test('All sports Record surfaces actual NBA picks separately without adding its profit to football',async()=>{
- const {api,factory}=load(),nba={trial:{record:{win:2,loss:1,graded:3,units:77},plays:[{}]}};
- const ctx=api.moreContext({get:async()=>({games:[],picks:[],communityPicks:[]}),maybe:async path=>path==='app/nba.json'?nba:null,allPicks:async()=>[]});
- ctx.state.league='ALL';const html=await factory(ctx).record({});
- assert.match(html,/id="record-nba"/);assert.match(html,/2–1 · \+77\.00u · 3 graded · 1 open/);
- assert.match(html,/Separate from the football totals/);assert.match(html,/#record\?sport=NBA/);
- assert.doesNotMatch(html.slice(html.indexOf('id="record-nba"')+html.slice(html.indexOf('id="record-nba"')).indexOf('</section>')),/77u/);
+test('NBA Record uses the same delivered rows as the all-sports calendar', async () => {
+  const {api,factory}=load();
+  const nba={id:'NBA-reviewed-real',league:'NBA',kind:'props',lane:'best_bet',posted:true,marketType:'prop',
+    player:'Example Player',athleteId:'12',market:'pts',direction:'over',line:7.5,odds:100,book:'DraftKings',
+    kickoff:'2026-10-20T23:00Z',publishedAt:'2026-10-20T18:00Z',settledAt:'2026-10-21T02:00Z',
+    season:2027,seasonType:2,result:'win',actual:10,title:'Example Player over 7.5 points',displayTitle:'Example Player over 7.5 points'};
+  const ctx=api.moreContext({get:async()=>({games:[],picks:[],communityPicks:[]}),maybe:async()=>null,allPicks:async()=>[nba]});
+  ctx.state.league='NBA';const html=await factory(ctx).record({});
+  assert.match(html,/Every play, graded in public/);assert.match(html,/1–0/);assert.match(html,/\+1\.00u/);
+  assert.match(html,/Example Player over 7\.5 points/i);assert.match(html,/NBA only/);
 });
 
-test('NBA Record uses the actual separate Trial ledger, not an empty football headline or paper wins', async () => {
+test('CBB Record uses the same delivered rows as the all-sports calendar', async () => {
   const {api,factory}=load();
-  const nba={trial:{record:{win:1,loss:0,graded:1,units:.75},plays:[{
-    id:'NBA-trial-real',marketType:'moneyline',direction:'home',odds:-133,book:'DraftKings',
-    kickoff:'2026-10-20T23:00Z',result:'win',actual:'110-100',card:'data/cards/nba-trial-real.png',
-    teams:{home:{name:'New York Knicks'},away:{name:'Philadelphia 76ers'}}}]}};
-  const ctx=api.moreContext({get:async path=>{assert.equal(path,'app/nba.json');return nba;}});
-  ctx.state.league='NBA';const html=await factory(ctx).record({});
-  assert.match(html,/NBA record/);assert.match(html,/1–0/);assert.match(html,/\+0\.75u/);
-  assert.match(html,/Philadelphia 76ers at New York Knicks/);
-  assert.match(html,/separate from football/);assert.doesNotMatch(html,/Every play, graded in public|Season record/);
+  const cbb={id:'CBB-reviewed-real',league:'CBB',kind:'gamePicks',lane:'best_bet',posted:true,
+    marketType:'spread',direction:'away',line:8.5,odds:-112,book:'DraftKings',riskUnits:1,
+    kickoff:'2026-10-20T23:00Z',publishedAt:'2026-10-20T18:00Z',settledAt:'2026-10-21T02:00Z',
+    season:2027,seasonType:'regular-season',result:'win',actual:1,title:'QUC +8.5',displayTitle:'QUC +8.5'};
+  const ctx=api.moreContext({get:async()=>({games:[],picks:[],communityPicks:[]}),maybe:async()=>null,allPicks:async()=>[cbb]});
+  ctx.state.league='CBB';const html=await factory(ctx).record({});
+  assert.match(html,/Every play, graded in public/);assert.match(html,/1–0/);assert.match(html,/\+0\.89u/);
+  assert.match(html,/QUC \+8\.5/);assert.match(html,/College hoops only/);
 });
 
 test('October19 confirmed $50-unit cash settlements restore both parlay profits without changing Best bets', () => {
