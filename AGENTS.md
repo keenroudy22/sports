@@ -1,4 +1,4 @@
-# November 11 NBA/CBB fast prop research — release candidate
+# November 11 NBA/CBB fast prop research — verified live
 
 Props now opens a basketball edge finder for NBA and CBB. NBA lists current
 verified comparisons when both the quote and role checks clear; when they do
@@ -10,8 +10,10 @@ unstable samples are held or labeled early. A player page accepts a manually
 checked CBB line and shows Kook'n, the directional gap, L5/L10/season history,
 minutes, line ladder and official game log. The typed line is not a captured
 price; projection gap and historical hit rates are not probabilities or picks.
-Candidate release and hosted 375/1440 receipts are still required before this
-is called shipped.
+Release `ff2f1153bb1fdf2f47e85a3ca28288ad783e4c46` shipped in successful hosted
+run `43119052040`. Live CBB and NBA boards, a CBB manual-line comparison and the
+season-linked game log passed 375/1440 checks with no horizontal overflow,
+console error or load-error state. Preserve this route and honesty contract.
 
 # November 11 player-prop visual expansion — release candidate
 

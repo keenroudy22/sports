@@ -1,4 +1,4 @@
-### November 11 NBA/CBB fast prop research — release candidate
+### November 11 NBA/CBB fast prop research — verified live
 
 Basketball Props now opens a search-first edge finder instead of a generic game
 page. NBA current comparisons retain the existing quote, role and availability
@@ -16,10 +16,12 @@ unverified until checked in the sportsbook; they are not stored quote evidence.
 No projection gap or historical rate is presented as a probability, price value
 or automatic pick. The current capture contains 1,174 CBB player identities and
 eight players with at least three usable 2027 appearances; earlier-season rows
-remain history and cannot become current projections. Candidate checks passed
-2,236 Python tests (2 skipped), 325 Node/interface tests, clean export, public
-payload and phone budgets, the 17:35 stored-input rehearsal, and local 375/1440
-checks without horizontal overflow. Hosted release and live receipts remain.
+remain history and cannot become current projections. Release
+`ff2f1153bb1fdf2f47e85a3ca28288ad783e4c46` passed 2,236 Python tests (2
+skipped), 325 Node/interface tests, clean export, public payload and phone
+budgets, stored-input rehearsal and successful hosted run `43119052040`. Live
+NBA/CBB boards and the CBB manual-line detail passed 375/1440 checks with no
+horizontal overflow, console errors or rendered load failures.
 
 ### November 11 player-prop visual expansion — release candidate
 
