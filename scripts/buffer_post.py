@@ -1231,6 +1231,9 @@ def reconcile(log_book, now, key=None, send=http_send, log=print):
             continue
         if not entry.get('dueAt') or gates.when(entry['dueAt']) > now:
             continue
+        checked_at = entry.get('deliveryCheckedAt')
+        if checked_at and now - gates.when(checked_at) < timedelta(minutes=15):
+            continue
         try:
             post = graphql(STATUS, {'id': entry['bufferPostId']}, key=key, send=send).get('post') or {}
         except BufferRateLimited as error:
@@ -1239,6 +1242,7 @@ def reconcile(log_book, now, key=None, send=http_send, log=print):
         except BufferError as error:
             log(f"buffer: could not check {entry['id']}: {error}")
             continue
+        entry['deliveryCheckedAt'] = gates.stamp(now)
         status = post.get('status')
         if status == 'sent':
             link = post.get('externalLink') or ''

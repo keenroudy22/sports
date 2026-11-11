@@ -721,7 +721,10 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(asked, ['bp-sent', 'bp-err', 'bp-pending'], 'future and cancelled posts are not asked about')
         bp.reconcile(log_book, NOW, key='t', send=fake, log=lambda *_: None)
         asked = [call['variables']['id'] for call in fake.calls if 'post(input' in call['query']]
-        self.assertEqual(asked[3:], ['bp-pending'], 'sent and failed entries are settled and not asked again')
+        self.assertEqual(asked[3:], [], 'repeated checks inside the polling interval are skipped')
+        bp.reconcile(log_book, NOW + timedelta(minutes=15), key='t', send=fake, log=lambda *_: None)
+        asked = [call['variables']['id'] for call in fake.calls if 'post(input' in call['query']]
+        self.assertEqual(asked[3:], ['bp-pending'], 'only the unresolved post is checked again')
 
     def test_cancel_closed_deletes_only_future_scheduled_posts(self):
         fake = FakeBuffer()
