@@ -308,6 +308,11 @@ class PrepListTests(unittest.TestCase):
         self.assertIn('prep_list(trends, lines, picks, league_data, now)', body)
         self.assertFalse(publication_guard.allowed_path(Path('data/app/prep-top.json')), 'no new file family')
 
+    def test_publication_guard_accepts_only_the_reviewed_nba_player_family(self):
+        self.assertTrue(publication_guard.allowed_path(Path('data/app/players/NBA.json')))
+        self.assertTrue(publication_guard.allowed_path(Path('data/app/players/NBA/31.json')))
+        self.assertFalse(publication_guard.allowed_path(Path('data/app/players/NBA/private/31.json')))
+
 
 class RoleHoldFieldTests(unittest.TestCase):
     def test_guard_names_the_hold_and_quotes_the_real_recent_volumes(self):
