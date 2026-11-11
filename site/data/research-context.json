@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-11T12:22:21Z",
+  "updatedAt": "2026-11-11T15:28:53Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1617,12 +1617,21 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "4432762",
+              "name": "Shedeur Sanders",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-11T14:44Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432762/shedeur-sanders"
+            },
+            {
               "id": "3122840",
               "name": "Deshaun Watson",
               "position": "QB",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-11-10T15:44Z",
+              "status": "Out",
+              "injury": null,
+              "reportedAt": "2026-11-11T14:38Z",
               "source": "https://www.espn.com/nfl/player/_/id/3122840/deshaun-watson"
             },
             {
@@ -1732,15 +1741,6 @@
               "injury": null,
               "reportedAt": "2026-11-09T00:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685702/quinshon-judkins"
-            },
-            {
-              "id": "4432762",
-              "name": "Shedeur Sanders",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-09T00:30Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432762/shedeur-sanders"
             },
             {
               "id": "2515270",
@@ -4147,6 +4147,15 @@
           "name": "Los Angeles Rams",
           "players": [
             {
+              "id": "4426515",
+              "name": "Puka Nacua",
+              "position": "WR",
+              "status": "Doubtful",
+              "injury": "Knee - MCL",
+              "reportedAt": "2026-11-11T14:34Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426515/puka-nacua"
+            },
+            {
               "id": "2573401",
               "name": "Tyler Higbee",
               "position": "TE",
@@ -4190,15 +4199,6 @@
               "injury": null,
               "reportedAt": "2026-11-11T00:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4386544/xavier-smith"
-            },
-            {
-              "id": "4426515",
-              "name": "Puka Nacua",
-              "position": "WR",
-              "status": "Doubtful",
-              "injury": "Knee - MCL",
-              "reportedAt": "2026-11-10T20:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426515/puka-nacua"
             },
             {
               "id": "4426405",
@@ -4377,6 +4377,15 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4242512",
+              "name": "Malik Willis",
+              "position": "QB",
+              "status": "Injured Reserve",
+              "injury": "Groin",
+              "reportedAt": "2026-11-11T14:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242512/malik-willis"
+            },
+            {
               "id": "4685307",
               "name": "Kevin Coleman Jr.",
               "position": "WR",
@@ -4393,15 +4402,6 @@
               "injury": null,
               "reportedAt": "2026-11-11T01:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4869961/chris-bell"
-            },
-            {
-              "id": "4242512",
-              "name": "Malik Willis",
-              "position": "QB",
-              "status": "Injured Reserve",
-              "injury": "Groin",
-              "reportedAt": "2026-11-11T01:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242512/malik-willis"
             },
             {
               "id": "3057956",
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4567156",
+              "name": "Treylon Burks",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Foot",
+              "reportedAt": "2026-11-11T14:59Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4567156/treylon-burks"
+            },
+            {
               "id": "4361088",
               "name": "Colson Yankoff",
               "position": "TE",
@@ -7144,15 +7153,6 @@
               "injury": "Knee",
               "reportedAt": "2026-11-11T01:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361088/colson-yankoff"
-            },
-            {
-              "id": "4567156",
-              "name": "Treylon Burks",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Foot",
-              "reportedAt": "2026-11-11T01:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4567156/treylon-burks"
             },
             {
               "id": "4360635",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "12",
-          "name": "Mansoor Delane",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-11-10T17:55:55Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4880124/mansoor-delane"
-        },
         {
           "teamId": "24",
           "name": "Kendall Williamson",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-11-11T03:05:51Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685369/gracen-halton"
+        },
+        {
+          "teamId": "5",
+          "name": "Deshaun Watson",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-11-11T15:28:53Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3122840/deshaun-watson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-11T12:22:21Z",
-      "lastAttemptAt": "2026-11-11T12:22:21Z",
+      "checkedAt": "2026-11-11T15:28:53Z",
+      "lastAttemptAt": "2026-11-11T15:28:53Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-11T12:22:21Z",
-      "lastAttemptAt": "2026-11-11T12:22:21Z",
+      "checkedAt": "2026-11-11T15:28:53Z",
+      "lastAttemptAt": "2026-11-11T15:28:53Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
