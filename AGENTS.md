@@ -1,3 +1,25 @@
+# November10 evening NBA delivery — actual five-play receipt
+
+All five November10 straights are live on Today and have actual Discord/X Sent
+receipts. Do not re-admit or duplicate them. Existing Kent/BGSU over44.5+100,
+Dorwart under49.5recyds-114 and Stirtz over7.5points+101 are joined by sourced
+Carter over8.5rebounds-138DK1u and Mitchell over13.5points-101DK1u.
+Carter X Sent23:31:31Z: https://x.com/1753110091912413184/status/2120298335344972117
+Mitchell X Sent00:00:11Z: https://twitter.com/keenkooks/status/2120305552110600663
+Mitchell Discord23:44:54Z; actual run.sh precheck cleared23:45:44Z. Preserve
+original terms and the cancelled unsent Carter attempt; no duplicate Discord.
+
+Canonical b60e190b3 shipped in successful hosted42923714636: corrected never-sent
+ASU Final artwork, NBA/CBB-only precheck wakeup and bounded verified private-X
+cancellation recovery. Follow-up7044e331d shipped in successful42926913043:
+one Discord Final/correction per NBA play despite recovered-X history rows.
+Normal/clean2220Python(2skip)/323Node, record/public/asset gates and stored-input
+rehearsal passed. Actual18:55results run completed23:59:18Z without odds calls.
+Tonight's real postgame grading/Final delivery is still future, not observed.
+NBA probability studies remain unapproved; sourced picks make no calibrated
+probability/EV claim. Historical missing original-X and morning receipts remain
+explicit; never reconstruct them. Full private receipt: work/tonight-20261110/outcome.json.
+
 # November10 actual NBA delivery receipt — do not restart completed selection work
 
 Sourced NBA props are live. Bennett Stirtz over7.5points, +101DraftKings,1u
