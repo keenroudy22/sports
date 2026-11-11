@@ -233,7 +233,7 @@
     const hits = list => line == null ? { hits: null, games: list.length } : { hits: list.filter(v => dir === 'over' ? v > line : v < line).length, games: list.length };
     const h5 = hits(last5), h10 = hits(last10), hs = hits(regular.map(row => value(row, stat)).filter(isNum));
     const team = side ? side[1] : { id: entry[3], abbreviation: entry[4], name: comparison?.teamName || entry[4] };
-    const photo = HEADSHOT.NBA(route.id);
+    const photo = `https://a.espncdn.com/i/headshots/nba/players/full/${encodeURIComponent(route.id)}.png`;
     const metric = PLAYER_LABEL[stat] || stat;
     const average = list => list.length ? list.reduce((sum, number) => sum + number, 0) / list.length : null;
     const fmt = number => number == null ? '–' : C.statValue(number, stat, Number.isInteger(number) ? 0 : 1);

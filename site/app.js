@@ -784,14 +784,12 @@
   /* Team logos and player photos (owner's call, 2026-10-06): ESPN art as on the old site, with the team-color badge
      underneath as the fallback whenever an image is missing or fails to load. */
   const HEADSHOT = { NFL: id => `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png`,
-    CFB: id => `https://a.espncdn.com/i/headshots/college-football/players/full/${encodeURIComponent(id)}.png`,
-    NBA: id => `https://a.espncdn.com/i/headshots/nba/players/full/${encodeURIComponent(id)}.png` };
+    CFB: id => `https://a.espncdn.com/i/headshots/college-football/players/full/${encodeURIComponent(id)}.png` };
   const logoUrl = (team, league) => {
     if (!team) return null;
     if (/^https:\/\/a\.espncdn\.com\//.test(team.logo || '')) return team.logo;
     if (league === 'NFL' && (team.abbr || team.abbreviation)) return `https://a.espncdn.com/i/teamlogos/nfl/500/${encodeURIComponent(String(team.abbr || team.abbreviation).toLowerCase())}.png`;
     if (league === 'CFB' && /^\d+$/.test(String(team.id || ''))) return `https://a.espncdn.com/i/teamlogos/ncaa/500/${encodeURIComponent(team.id)}.png`;
-    if (league === 'NBA' && (team.abbr || team.abbreviation)) return `https://a.espncdn.com/i/teamlogos/nba/500/${encodeURIComponent(String(team.abbr || team.abbreviation).toLowerCase())}.png`;
     return null;
   };
   const teamMark = (team, size = '', league = null) => {
@@ -2107,7 +2105,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-70b93dbbe881';
+  const MORE_ASSET = 'app-more.js?v=sha256-a3f9c219da7f';
   const GAMES_ASSET = 'app-games.js?v=sha256-913398630097';
   const KVB_ASSET = 'app-kvb.js?v=sha256-338cc9fd90bf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
@@ -2163,14 +2161,11 @@
   /* Games data does not wait for its bundle either. */
   VIEWS.games = async route => { if (route.tab !== 'live') get('app/today.json').catch(() => null); return (await ensureGames()).games(route); };
   VIEWS.game = async route => { if (route.id) get(`app/games/${route.id}.json`).catch(() => null); return (await ensureGames()).game(route); };
-  /* The player page's data does not wait for the lazy bundle: start the same cached requests it makes, in parallel. */
   VIEWS.player = async route => {
-    if (route && [...FOOTBALL, 'NBA'].includes(route.league) && route.id) {
+    if (route && FOOTBALL.includes(route.league) && route.id) {
       const quiet = x => x && x.catch ? x.catch(() => null) : x;
       quiet(get(`app/players/${route.league}.json`).then(index => get(`app/players/${route.league}/${C.shardOf(route.id, index.shards)}.json`)));
-      (route.league === 'NBA'
-        ? [get('app/nba.json'), get('app/nba-props.json')]
-        : [teamDirectory(route.league), get('app/today.json'), lineData(route.league)]).forEach(quiet);
+      [teamDirectory(route.league), get('app/today.json'), lineData(route.league)].forEach(quiet);
     }
     return (await ensureMore()).player(route);
   };
