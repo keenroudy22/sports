@@ -123,6 +123,18 @@ class TrialRuntimeTests(unittest.TestCase):
   nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')
   self.assertTrue(rt.reserve_delivery(play['id'],NOW,self.root))
   self.assertFalse(rt.reserve_delivery(play['id'],NOW,self.root))
+ def test_render_restores_a_confirmed_current_attachment_before_enforcing_history(self):
+  play={'id':'NBA-Reviewed-Player','publishedAt':boxscores.stamp(NOW),'marketType':'player'}
+  book={'posts':[{'id':play['id'],'cardKey':'nba-reviewed-player','sentAt':boxscores.stamp(NOW)}]}
+  restored=[]
+  def restore(folder,keys):
+   restored.extend(keys)
+   Path(folder).mkdir(parents=True,exist_ok=True)
+   (Path(folder)/'nba-reviewed-player.png').write_bytes(b'published attachment')
+  with patch.object(rt,'current_plays',return_value=[play]),patch.object(rt,'public_rows',return_value=[play]), \
+       patch('x_post.load_log',return_value=book):
+   rt.render_due(NOW,self.root,restore=restore)
+  self.assertEqual(restored,['nba-reviewed-player'])
  def test_admission_is_one_per_day_and_respects_football_queue_reserve(self):
   play={**offer(),'eventId':'NBA-1','direction':'under','game':{'teams':{}},'reasons':['Source 1','Source 2'],'projection':210.,'model':'hoops-v1'}
   # Admission advances to the real post-capture clock. Freeze that clock too:

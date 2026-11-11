@@ -448,11 +448,19 @@ def queue_discord_first(now,log_book,plans,root=nba_trial.STORE,opener=None):
  return added
 
 
-def render_due(now,folder,log=print,root=nba_trial.STORE):
+def render_due(now,folder,log=print,root=nba_trial.STORE,restore=None):
  import ticket_cards,ticket_kit,pick_card,x_post
- posted={e['id'] for e in x_post.load_log().get('posts',[]) if e.get('bufferPostId') or e.get('sentAt')}
+ post_rows=x_post.load_log().get('posts',[])
+ posted={e['id'] for e in post_rows if e.get('bufferPostId') or e.get('sentAt')}
  visible=sorted(current_plays(root),key=lambda p:p['publishedAt'])[-20:]
  referenced={p['id'] for p in visible}
+ # Confirmed attachments are immutable. A fresh checkout has no ignored card
+ # cache, so restore the exact live attachment before enforcing that invariant.
+ # This is the same recovery path used by the regular feed card renderers.
+ if restore:
+  keys={str(e.get('cardKey') or e['id']).lower() for e in post_rows
+        if e.get('id') in referenced and (e.get('bufferPostId') or e.get('sentAt'))}
+  restore(folder,keys)
  for play in public_rows(root):
   if play.get('marketType')=='player' and play.get('result'):
    import nba_results
