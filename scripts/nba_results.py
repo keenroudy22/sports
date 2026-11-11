@@ -48,7 +48,7 @@ def render(play,folder):
     if play['result'] in ('win','loss'):
         data=dict(player=play['player'],side=play['direction'].upper(),line=f"{play['line']:g}",
             market=play['stat'],odds=play['odds'],book=play['book'],final=f"{play['actual']:g}",
-            margin=f"{abs(play['actual']-play['line']):g}",photo=None,
+            margin=f"{abs(play['actual']-play['line']):g}",photo=nba_prop_release.player_headshot(play),
             team_logo=str(Path(__file__).resolve().parents[1]/'site/kookn-mark.png'),
             close_line='',chip='BEST BET · FINAL',
             **({'units_won':net(play)} if play['result']=='win' else {'units_lost':net(play)}))

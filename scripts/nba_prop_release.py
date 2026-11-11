@@ -239,6 +239,16 @@ def selection(play):
     return f"{play['player']} {play['direction'].upper()} {play['line']:g} {STATS[play['stat']]}"
 
 
+def player_headshot(play):
+    import pick_card
+
+    athlete = str(play.get('athleteId', ''))
+    if not athlete.isascii() or not athlete.isdecimal():
+        return None
+    uri = pick_card.fetch_data_uri(pick_card.HEADSHOT.format(sport='nba', athlete=athlete))
+    return uri if uri and uri.startswith('data:image/png;base64,') else None
+
+
 def card(play):
     import ticket_cards, ticket_kit
     teams = play['game']['teams']; home = teams['home']['abbreviation']; away = teams['away']['abbreviation']
@@ -248,7 +258,7 @@ def card(play):
         when=boxscores.instant(play['kickoff']).astimezone(EASTERN).strftime('%b %-d · %-I:%M %p'),
         side=play['direction'].upper(), line=f"{play['line']:g}", market=play['stat'],
         odds=play['odds'], book=play['book'], units=play['riskUnits'], reason=play['reasons'][0],
-        photo=None, team_logo=None, away_logo=None, home_logo=None, chance=None, needs=None)
+        photo=player_headshot(play), team_logo=None, away_logo=None, home_logo=None, chance=None, needs=None)
     rendered = ticket_cards.play_card(data)
     issues = ticket_kit.qa(rendered, 'NBA primary prop')
     if issues:
