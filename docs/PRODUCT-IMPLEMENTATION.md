@@ -7145,6 +7145,26 @@ Prior KA-R1 evidence retained verbatim: Staking40002353906,relevance40004097390,
 
 Evidence: work/overnight-20261104-outcomes.json, -release.log, -hosted-full.log, -selection-audit.json, -buffer-observation.json and private -pdf/.
 
+## November 10 — NBA player history shipped and verified
+
+Canonical `4ec35ded24c3a72aa0b0250b491888f3760c6a62` exports 691 NBA player
+profiles from the stored official box-score source and extends the existing
+player experience without changing selection, staking or grading. NBA player
+routes now provide stat tabs, Last 5/10/20/season filters, minutes, Book vs
+Kook'n, an honest historical line ladder and the complete recorded game log.
+Today and NBA cards use the same direct player route.
+
+The release passed 2,223 Python tests with two expected skips and 324 Node
+tests in normal and clean exports, then build, phone payload, record, NBA,
+869-file publication boundary, asset, SVG and stored-input rehearsal gates.
+Hosted run `42932611698` succeeded. Live Bennett Stirtz checks at 375 and 1440
+showed the original over 7.5 points at +101 DraftKings for 1u, Kook'n 11,
+Last 5 average 11.8 and 5/5, Last 10 6/10, recent minutes 22/24/29, the chart,
+ladder and official game log. There was no horizontal overflow or broken image.
+Both all-sports Today placements linked to that page. The older one- and
+two-minute appearances remain visible and counted; the UI explicitly labels
+history as history rather than a probability.
+
 
 ## November4 evening — actual NBA recovery and morning health shipped
 

@@ -1,3 +1,15 @@
+# November 10 NBA player history — live receipt
+
+NBA player pages are now live from the stored official box-score history. Preserve
+the direct `#player/NBA/<athlete>?stat=<stat>` route, Last 5/10/20/season controls,
+minutes, chart, honest line ladder and full game log. Today and NBA cards link to
+the same page. Bennett Stirtz is the verified example: posted over7.5points
++101DraftKings1u, Kook'n projection11, Last5 average11.8/5-of-5, Last10 6-of-10,
+and recent minutes22/24/29. One- and two-minute appearances remain counted and
+visible; history is not a probability. Canonical4ec35ded2 and hosted42932611698
+succeeded. Live375/1440 checks had no overflow or broken images. Do not duplicate
+his play or replace stored results with a third-party summary.
+
 # November10 evening NBA delivery — actual five-play receipt
 
 All five November10 straights are live on Today and have actual Discord/X Sent
