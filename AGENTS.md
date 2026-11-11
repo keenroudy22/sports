@@ -1,3 +1,18 @@
+# November 11 player-prop visual expansion — release candidate
+
+Player profiles now add three scan-first panels beneath the main result chart:
+L5/L10/selected-season hit rates against a captured line (or averages when no
+line exists), recent opportunity, and a same-scale comparison of the book,
+Kook'n projection, recent averages and available opponent-versus-position
+allowance. NBA opportunity is minutes. Football opportunity follows the market:
+passing attempts, targets, carries, field-goal attempts or snap share. First-
+quarter props use first-quarter attempts/carries/receptions and never borrow a
+full-game workload. Historical hit rates are context, not probabilities;
+opponent allowance is not a player projection. A held projection stays absent.
+Preserve the full game log, line ladder and existing selection/record rules.
+Candidate release and live mobile receipts are still required before calling
+this shipped.
+
 # November 11 owner — celebrate clean sweeps on X
 
 When the full graded official card sweeps, lead the X results recap with the

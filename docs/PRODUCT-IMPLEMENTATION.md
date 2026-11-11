@@ -1,3 +1,23 @@
+### November 11 player-prop visual expansion — release candidate
+
+NBA, NFL and CFB player pages now make the useful prop research scannable before
+the long game log. A new Trend windows panel shows L5, L10 and selected-season
+hit rates against the captured line, with both the percentage and exact count.
+With no line it shows recorded-game averages instead. A workload chart shows NBA
+minutes or the football opportunity behind the selected prop: attempts, targets,
+carries, field-goal attempts or snap share. First-quarter props use only first-
+quarter workload. A same-scale comparison puts the captured book line, usable
+Kook'n projection, L5/L10/season averages and available opponent position
+allowance in one view.
+
+The panels do not change projections, admission, stakes, results or the public
+record. Historical hit rates remain explicitly non-probabilistic, opponent
+allowance remains context rather than a player projection, and held projections
+remain hidden. The detailed result chart, line ladder, splits and game log remain.
+The candidate passed 2,230 Python checks (2 skipped), 324 Node/interface checks
+and the clean-export gate. Release, hosted publication and exact live 375/1440
+checks are still required before this section may be marked verified live.
+
 ### November10 evening NBA delivery — actual five-play receipt
 
 All five November10 straights are live on Today and have actual Discord/X Sent

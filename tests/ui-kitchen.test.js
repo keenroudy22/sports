@@ -133,6 +133,12 @@ test('NBA player page ties a posted prop to last 5, last 10, minutes and the ful
   assert.match(page, /Recent hits<\/small><b class="num">5\/5/);
   assert.match(page, /6 of 10 over 7\.5 in the last 10/);
   assert.match(page, /22 \/ 24 \/ 29 minutes/);
+  assert.match(page, /Trend windows/);
+  assert.match(page, /100% · 5\/5/);
+  assert.match(page, /60% · 6\/10/);
+  assert.match(page, /Minutes trend/);
+  assert.match(page, /Prop comparison/);
+  assert.match(page, /Book[\s\S]*Kook’n[\s\S]*L5 avg[\s\S]*L10 avg[\s\S]*Season/);
   assert.match(page, /Official box scores/);
   assert.match(page, /Last 5, Last 10|Last 5/);
 });
@@ -146,6 +152,10 @@ test('a player line with no hold puts the projection beside the book line and ke
   assert.match(page, /<section class="player-board"/);
   assert.match(page, /Book vs Kook’n/);
   assert.match(page, /Cleared line[\s\S]*Missed line/);
+  assert.match(page, /Trend windows[\s\S]*75% · 3\/4/);
+  assert.match(page, /Attempts trend/);
+  assert.match(page, /Prop comparison[\s\S]*Book[\s\S]*Kook’n[\s\S]*L5 avg[\s\S]*L10 avg[\s\S]*Season/);
+  assert.match(page, /Historical hit rates, not probabilities/);
   assert.doesNotMatch(page, /class="kt-paper"/, 'player research is a chart dashboard, not a ticket');
   assert.match(page, /<details class="plain-fold kt-player-detail"[^>]*><summary>Why this number<\/summary>/);
 });
@@ -189,6 +199,9 @@ test('a player without a current line leads with useful history instead of an un
   assert.match(page, /<p class="eyebrow">Season snapshot<\/p>[\s\S]*<span class="player-board-mode">Trend view<\/span>/);
   assert.match(page, /Season average[\s\S]*Last 5 average[\s\S]*Season high[\s\S]*Games recorded/);
   assert.match(page, /Historical stats are available\.[\s\S]*No current book line has been captured/);
+  assert.match(page, /Trend windows[\s\S]*Recorded-game averages for each window/);
+  assert.match(page, /Attempts trend/);
+  assert.match(page, /Prop comparison/);
   assert.doesNotMatch(page, /<small>Book line<\/small><b class="num">–<\/b>/);
 });
 
@@ -201,6 +214,7 @@ const softDefense = files => {
 test('Under review carries no directional verdict and never one side\'s price alone', async () => {
   const clean = await playerPage(false, softDefense);
   assert.match(clean, /NMSU allows 300 pass yds a game<\/b>[\s\S]*That supports the over\./, 'the fixture does produce a verdict when nothing is held');
+  assert.match(clean, /Prop comparison[\s\S]*Opp vs pos[\s\S]*300/);
   const held = await playerPage(true, files => {
     softDefense(files);
     files['data/app/lines-CFB.json'].lines[0].priceSuspect = true;      // the over's price failed: only the under is left

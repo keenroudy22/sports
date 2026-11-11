@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-10T22:41:26.049890+00:00",
+  "updatedAt": "2026-11-11T15:28:44+00:00",
   "items": [
     {
       "id": "O-20261028-NBAREGULAR",
@@ -1354,12 +1354,12 @@
     },
     {
       "id": "KP-T-SITE",
-      "title": "Website changes from the 2026-10-09 plan",
+      "title": "Add scan-first charts and workload data to player props",
       "status": "ready",
       "owner": "agent",
-      "next": "Build and verify in Release 3 after Releases 1 and 2 are live.",
-      "doneWhen": "The task's KOOKN-PLAN-CODEX.md tests pass, the complete release passes every AGENTS.md gate, and live behavior is verified and recorded.",
-      "evidence": "Owner-approved KOOKN-PLAN.md dated 2026-10-09; tracked until verified live."
+      "next": "Release the tested candidate, verify hosted publication, then check real NBA and football player profiles at 375 and 1440 without overflow or held-projection leakage.",
+      "doneWhen": "Trend windows, market-matched workload and same-scale Book vs Kook'n comparisons are live for NBA/NFL/CFB; history is not called probability; held data stays hidden; mobile checks pass.",
+      "evidence": "Candidate passed2230Python(2skip),324Node and clean export. NBA uses minutes; football uses attempts/targets/carries/FGA/snap share;1Q uses only1Q workload. Release/live receipt pending."
     },
     {
       "id": "KP-T-ART",
