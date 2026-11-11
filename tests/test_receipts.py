@@ -449,3 +449,43 @@ class DailyTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class CrossSportDailyTest(unittest.TestCase):
+    def test_published_nba_grade_is_required_and_loss_is_rendered(self):
+        import ticket_card
+        from datetime import date
+        now = datetime(2026, 11, 11, 12, 40, tzinfo=timezone.utc)
+        day = date(2026, 11, 10)
+        basketball = dict(id='NBA-reviewed-prop', marketType='player', league='NBA',
+                          player='Example Player', athleteId='123', stat='pts', odds=-110,
+                          riskUnits=1, direction='over', line=7.5, kickoff='2026-11-11T04:00Z',
+                          publishedAt='2026-11-10T20:00Z')
+        games = {'game': dict(GAMES['sun'], kickoff='2026-11-10T22:00Z')}
+        football = pick('game', 'game', posted=True, result='win', odds=100)
+        first = {football['id']: football}
+        with patch('nba_trial_runtime.public_rows', return_value=[basketball]):
+            self.assertIsNone(receipts.day_receipt(day, first, {}, games, set(first), now))
+            basketball.update(result='loss', actual=5, settledAt='2026-11-11T06:30Z')
+            recap = receipts.day_receipt(day, first, {}, games, set(first), now)
+        self.assertEqual(recap['key'], 'receipt:day:2026-11-10')
+        self.assertEqual(recap['due'].hour, 13)
+        self.assertEqual(recap['title'], '1-1')
+        self.assertIn('Example Player', recap['text'])
+        data = ticket_card.final_data(recap['nbaDailyRows'], str(day))
+        self.assertEqual(data['net_units'], 0)
+        self.assertEqual([r['result'] for r in data['rows']], ['hit', 'miss'])
+
+
+    def test_early_daily_receipt_reserves_eight_before_late_individual_or_research(self):
+        now = datetime(2026, 11, 11, 12, 50, tzinfo=timezone.utc)
+        deadline = now + timedelta(hours=4)
+        house = [
+            dict(key='cashed:prior', kind='cashed', text='Win', due=now, stale=deadline, card='win'),
+            dict(key='receipt:day:2026-11-10', kind='receipt', text='Tuesday: 5-0.',
+                 due=now + timedelta(minutes=10), stale=deadline, card='recap'),
+        ]
+        with patch.object(receipts, 'house_posts', return_value=house):
+            planned = buffer_post.plan({}, {}, {}, now, {'posts': []})
+        self.assertEqual(planned[0][:2], ('receipt:day:2026-11-10', 'receipt'))
+        self.assertEqual(planned[0][3], now + timedelta(minutes=10))
+        self.assertGreater(planned[1][3], planned[0][3])

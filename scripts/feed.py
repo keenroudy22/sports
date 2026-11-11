@@ -400,9 +400,9 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
         item = {'guid': r['card'], 'receipt': r}
         if r['card'].startswith('receipt-day-'):
             from datetime import date
-            day = date.fromisoformat(r['card'].removeprefix('receipt-day-'))
+            day = date.fromisoformat(r['key'].removeprefix('receipt:day:'))
             item['receiptDay'] = day.isoformat()
-            item['receiptPicks'] = receipts.plays_between(public_first, ctx.latest, ctx.games,
+            item['receiptPicks'] = r.get('nbaDailyRows') or receipts.plays_between(public_first, ctx.latest, ctx.games,
                                                            receipts.counted(public_first, ctx.latest), day, day)
             frozen = {row['id']: row for row in r.get('linkedStraightRows') or []}
             item['receiptPicks'] = [frozen.get(p['id'], p) for p in item['receiptPicks']]

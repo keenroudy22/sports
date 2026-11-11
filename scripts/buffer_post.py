@@ -438,6 +438,25 @@ def yield_optional(log_book, desired, now, channel_id, key=None, send=http_send)
     return moved
 
 
+PARTIAL_DAILY_CANCEL = ('Unsent partial football-only daily recap; three published NBA originals '
+                        'must remain in the November 10 recap scope')
+
+
+def replaced_partial_daily(entry):
+    """Only the acknowledged, pre-due removal of the incomplete recap can retry."""
+    return (entry.get('id') == 'receipt:day:2026-11-10'
+            and entry.get('kind') == 'buffer:receipt'
+            and entry.get('cancelReason') == PARTIAL_DAILY_CANCEL
+            and entry.get('bufferPostId') and entry.get('cancelledAt') and entry.get('dueAt')
+            and gates.when(entry['cancelledAt']) < gates.when(entry['dueAt'])
+            and not any(entry.get(k) for k in ('sentAt', 'sentUrl', 'deletedAt', 'discord')))
+
+
+def early_daily_receipt(key):
+    return (str(key).startswith('receipt:day:')
+            and str(key).removeprefix('receipt:day:') >= '2026-11-08')
+
+
 def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None, log=print, results_only=False):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
@@ -455,7 +474,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     import learning
     weights = learning.load_policy().get('reasonWeights')
     # Legacy merged receipt/menu ids remain recognized, but no new menu is made.
-    posted = {part for p in log_book.get('posts', []) if not x_post.cancelled_private_draft(p)
+    posted = {part for p in log_book.get('posts', []) if not x_post.cancelled_private_draft(p) and not replaced_partial_daily(p)
               for part in str(p['id']).split('+')}
     today = eastern_date(now)
     import featured as featured_store
@@ -543,7 +562,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     if latest_play_target is not None:
         plays = [(max(row[0], latest_play_target + SPACING), *row[1:]) if row[5] == 'research' and not row[3].startswith('nba-') else row
                  for row in plays]
-    plays.sort(key=lambda row: row)
+    plays.sort(key=lambda row: (not early_daily_receipt(row[3]), row))
     # The desk's own ceiling gets the same protection as Buffer's allowance. A research card is useful, but never
     # at the cost of a play, receipt or record post.
     room = max(0, MAX_PER_DAY - day_count(log_book, today))
@@ -559,8 +578,10 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
                     overflow -= 1
     out, last, busy, counts = [], None, taken(log_book, now), {}
     for target, _, deadline, key, text, kind, card in plays:
+        priority = early_daily_receipt(key)
         spacing = RESULT_SPACING if kind == 'cashed' else SPACING
-        target += post_windows.jitter(key)
+        if not priority:
+            target += post_windows.jitter(key)
         due = max(target, now + soon)
         if kind == 'play':
             due = max(due, post_windows.late_card_due(now) if key in late_card_recoveries else discord_first_due(now))
@@ -578,7 +599,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         out.append((key, kind, text, due, card))
         busy.append(due)
         counts[day] += 1
-        last = due
+        if not priority:
+            last = due
     return out
 
 
@@ -700,7 +722,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     pending = pending_scheduled(log_book, now)
     # Tickets and result follow-ups get queue capacity before optional updates,
     # even before pressure reaches the reserve threshold. Due times stay intact.
-    plans = sorted(plans, key=lambda plan: (not essential_kind(plan[1], now), plan[3], plan[0]))
+    plans = sorted(plans, key=lambda plan: (not early_daily_receipt(plan[0]), not essential_kind(plan[1], now), plan[3], plan[0]))
     for guid, kind, text, due, card_key in plans:
         cbb_regular = kind == 'cbb-pick'
         nba_regular = kind == 'nba-trial' and essential_kind(kind, now)
@@ -760,6 +782,16 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             combined = daily_straight_card.proposal(context.first, context.latest, context.games, log_book, now)
             if not combined or combined['key'] != guid or combined['card'] != card_key or combined['text'] != text:
                 log(f'buffer: {guid} held: combined card changed; rebuild from delivered plays')
+                continue
+        full_daily = None
+        if guid.startswith('receipt:day:') and (str(card_key).endswith('-all-sports') or
+                any(p.get('id') == guid and replaced_partial_daily(p) for p in log_book.get('posts', []))):
+            context = gates.Stores().as_of(now)
+            full_daily = next((p for p in receipts.ready(context.first, context.latest, context.games, log_book, now)
+                               if p['key'] == guid and p.get('nbaDailyRows')), None)
+            if (not full_daily or full_daily['text'] != text or full_daily['card'] != card_key
+                    or any(p.get('id') == guid and not replaced_partial_daily(p) for p in log_book.get('posts', []))):
+                log(f'buffer: {guid} held: complete daily receipt changed or already attempted')
                 continue
         if guid.startswith('receipt:day:') and any(p.get('id') == 'receipt:card:' + guid.removeprefix('receipt:day:') for p in log_book.get('posts', [])):
             import daily_straight_card
@@ -886,8 +918,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # & Results. Pregame personal tickets belong there too, while remaining
         # community content and separate from the official Best Bet record.
         # Approved research follows its X post into the dedicated research feed.
-        if combined or combined_result:
+        if combined or combined_result or full_daily:
             entry['discord'] = {'state': 'pending', 'text': without_playbook(text), 'destination': 'plays'}
+        if full_daily:
+            entry['fullDailyRecap'] = True
+            entry['discord']['readyAt'] = gates.stamp(due)
         if kind in ('play', 'community', 'research') or (kind == 'cashed' and guid.startswith(('cashed:', 'burnt:'))):
             entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
             # Replacing a private X draft is not a second Discord release. Carry

@@ -96,6 +96,8 @@ def label(pick, games=None):
     if pick_card.play_kind(pick) == 'parlay':
         odds = pick.get('odds')
         return f"{len(pick.get('legs') or [])}-leg {'lotto' if isinstance(odds, (int, float)) and odds >= x_post.LOTTO else 'parlay'}"
+    if pick.get("nbaDailySelection"):
+        return pick["nbaDailySelection"]
     return pick_card.short_title(pick, (games or {}).get((pick.get('gameIds') or [None])[0]))
 
 
@@ -133,6 +135,8 @@ def result_detail(pick):
     Parlays say how many live legs hit, identify protected voids, and call out a one-leg miss. Straight plays use
     the preserved final result.
     """
+    if pick.get("nbaDailySelection"):
+        return pick.get("nbaDailyActual", "")
     injury = injury_detail(pick)
     if pick_card.play_kind(pick) == 'parlay':
         results = leg_results(pick)
@@ -254,7 +258,7 @@ def settled(rows):
 
 def leagues(rows):
     found = {str(r.get('id', '')).split('-')[0] for r in rows}
-    return ' '.join(x_post.TAGS[l] for l in ('NFL', 'CFB') if l in found)
+    return ' '.join(x_post.TAGS.get(l, '#' + l) for l in ('NFL', 'CFB', 'NBA') if l in found)
 
 
 def fit(lines, head, tail, head_sep='\n\n'):
@@ -292,8 +296,31 @@ def fit_result_rows(rows, head, tail, games=None):
         kept.remove(wins[-1] if wins else kept[-1])
 
 
+def nba_daily_rows(day, as_of):
+    if day < date(2026, 11, 10) or as_of is None:
+        return []
+    import nba_trial_runtime
+    import nba_prop_release
+    published = []
+    for play in nba_trial_runtime.public_rows():
+        if (play.get('marketType') != 'player'
+                or eastern_date(gates.when(play['kickoff'])) != day
+                or gates.when(play['publishedAt']) > as_of):
+            continue
+        # The NBA ledger only creates a publish row after Discord releases.
+        # Keep the actual grade separate from the immutable offered terms.
+        row = dict(play, posted=True, nbaDailySelection=nba_prop_release.selection(play))
+        if not row.get('settledAt') or gates.when(row['settledAt']) > as_of:
+            row.pop('result', None)
+        if row.get('result') and row.get('actual') is not None:
+            row['nbaDailyActual'] = f"Final: {row['actual']:g} {nba_prop_release.STATS[row['stat']]}"
+        published.append(row)
+    return published
+
+
 def day_receipt(day, first, latest, games, ids, as_of=None):
-    rows = plays_between(first, latest, games, ids, day, day)
+    nba_rows = nba_daily_rows(day, as_of)
+    rows = plays_between(first, latest, games, ids, day, day) + nba_rows
     if not settled(rows):
         return None
     if not rows:
@@ -307,7 +334,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
     text = fit_result_rows(rows, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
-    return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
+    return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}' + ('-all-sports' if nba_rows else ''), 'kind': 'receipt',
             'title': headline(rows), 'label': 'FINAL',
             'when': f'{day:%A, %b %-d}',
             # Retained art keeps the record followers saw when the receipt became
@@ -316,6 +343,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
             'accounting': accounting(rows),
+            **({'nbaDailyRows': rows} if nba_rows else {}),
             'rows': [(r['result'], label(r, games), result_detail(r), pick_card.play_kind(r)) for r in rows], 'text': text,
             'due': due,
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
@@ -352,8 +380,6 @@ def ready(first, latest, games, log_book, now):
     the week's. Each only when every play it covers is settled, and none after its evening."""
     first = released_first(first, log_book, games)
     ids = counted(first, latest)
-    if not ids:
-        return []
     today = eastern_date(now)
     out = []
     for back in (2, 1):
