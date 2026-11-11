@@ -37,6 +37,7 @@ network calls and changes nothing. New file families require a reviewed allowlis
 | `card` on `record.json` picks | The `data/cards/<id>.png` path of a play that went out (X or Discord delivery evidence), so the results calendar can link the card; `null` otherwise. The path, not a new image, fact or count. |
 | `dossier` on new published play rows | The already-admitted play's bounded reasons, counterpoints, verified status reports, stored weather, DraftKings/FanDuel captured line history, original model-versus-line figure, existing history and public source links. The first captured price is labeled `firstCaptured`, not a sportsbook opener; `open` stays null without true opening evidence. Missing evidence remains absent or explicitly partial. It consumes no extra research or odds requests and changes no grade or record. |
 | `data/app/vegas.json` | Vegas vs reality (owner approved Oct 7): closing-line accuracy by league, computed at build time by `scripts/vegas.py` from the committed football, basketball and soccer stores. Counts, rates, average misses, seasons, sources and computed facts only; no picks, live prices or private fields. Exactly this one path; 64 KB warning budget. |
+| `data/app/players/CBB.json`, `data/app/players/CBB/<shard>.json` | College-basketball player finder and detail shards built only from captured official ESPN box scores. Public rows carry identity, team, dated game logs and, where the sample clears the named guardrails, a transparent minutes/rate research baseline for points, rebounds, assists, threes and common combinations. The baseline is labeled ready, early or held; it is not a calibrated probability, sportsbook quote or official pick. Raw capture journals, request diagnostics and the append-only box store remain outside `site/`. |
 
 The check rejects unknown paths, symlinks, known owner-only files, credential-bearing JSON fields and selected
 recognizable token/webhook patterns. It reports only file paths and reason codes, never matched values. Private
@@ -63,6 +64,13 @@ public JSON file and call it paid access. No accounts, billing, feed expansion o
   the research minutes input, preserving the old baseline and identifying the estimate, not a coach limit.
   Role-only reports never invent minutes; existing injury/price/roster holds win. Rate history and true
   hit counts remain separate. No public raw journal, new path, calibrated chance or official prop admission.
+
+- CBB player projections use observed regular-season minutes and box-score production only. Projected
+  minutes blend the last-three and last-five medians; per-minute production blends recent and season
+  rates. Fewer than three appearances or a projected role below ten minutes is held, and five-game
+  samples with stable minutes are distinguished from early/volatile samples. A manually entered book
+  line is local comparison input, not captured price evidence. The UI may show projection gap and exact
+  historical hit counts, but neither is a win probability or proof of value at an unverified price.
 
 - `data/cards/straight-card-YYYY-MM-DD-<16hex>.png`: the native Kitchen Ticket
   summary of two to ten individually X-confirmed official straights, with original

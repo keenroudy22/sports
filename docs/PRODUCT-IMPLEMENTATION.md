@@ -1,3 +1,26 @@
+### November 11 NBA/CBB fast prop research — release candidate
+
+Basketball Props now opens a search-first edge finder instead of a generic game
+page. NBA current comparisons retain the existing quote, role and availability
+holds; if none clear, the page still exposes the official player directory and
+L5/L10/minutes research instead of a blank state. CBB now has an official
+box-score-backed player directory and detail pages. Current-season baselines
+blend 60% recent with 40% season per-minute production at recent median minutes
+for points, rebounds, assists, threes and common combinations. Thin, low-minute
+and volatile roles are labeled early or held.
+
+The detail view puts a checked book line beside Kook'n, with a direction-aware
+gap, L5/L10/season hit counts, minutes chart, same-scale comparison, line ladder
+and official game log. CBB lines are entered by the reader and explicitly remain
+unverified until checked in the sportsbook; they are not stored quote evidence.
+No projection gap or historical rate is presented as a probability, price value
+or automatic pick. The current capture contains 1,174 CBB player identities and
+eight players with at least three usable 2027 appearances; earlier-season rows
+remain history and cannot become current projections. Candidate checks passed
+2,236 Python tests (2 skipped), 325 Node/interface tests, clean export, public
+payload and phone budgets, the 17:35 stored-input rehearsal, and local 375/1440
+checks without horizontal overflow. Hosted release and live receipts remain.
+
 ### November 11 player-prop visual expansion — release candidate
 
 NBA, NFL and CFB player pages now make the useful prop research scannable before

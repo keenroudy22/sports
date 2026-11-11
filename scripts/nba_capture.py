@@ -91,7 +91,7 @@ class Budget:
             raise
 
 
-def append_changed(rows, root, key, *, keep_observations=False):
+def append_changed(rows, root, key, *, keep_observations=False, prefix='nba'):
     problems = boxscores.verify(root)
     if problems:
         raise ValueError('; '.join(problems))
@@ -110,8 +110,10 @@ def append_changed(rows, root, key, *, keep_observations=False):
             newer_observation = prior is not None and observed > prior
         if newer_observation or boxscores.content_hash(row) != boxscores.content_hash(previous):
             changed.append(row); latest[key(row)] = row
+    if not re.fullmatch(r'[a-z][a-z0-9-]*', str(prefix)):
+        raise ValueError('Store prefix is invalid')
     for season in sorted({r['season'] for r in changed}):
-        boxscores.append(root / f'nba-{season}.jsonl', [r for r in changed if r['season']==season])
+        boxscores.append(root / f'{prefix}-{season}.jsonl', [r for r in changed if r['season']==season])
     if changed:
         boxscores.write_json(root / 'ledger.json', boxscores.ledger(root))
     return len(changed)

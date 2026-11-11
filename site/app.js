@@ -1,7 +1,3 @@
-/* Kook'n redesign prototype (Hybrid A + B, casino felt).
-   Plain-English best bets on Today, one sortable Research board, honest Record.
-   Every number comes from the build's payloads; this file lays them out and does small, tested math.
-   Works in the browser (window.Kookn) and in Node (require) so the model functions are unit tested. */
 (function (root, factory) {
   const api = factory(root.KRCore, root.KRLive, root.KRPersonal);
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -14,10 +10,6 @@
   }
 })(typeof self !== 'undefined' ? self : globalThis, function (C, L, P) {
   'use strict';
-
-  /* =====================================================================
-     MODEL: pure functions. No DOM. Unit tested in redesign/tests.
-     ===================================================================== */
 
   const round1 = x => Math.round(x * 10) / 10;
   const isNum = x => typeof x === 'number' && Number.isFinite(x);
@@ -39,9 +31,7 @@
     return average > 0 && Math.abs(projection - average) / average > .3 ? `Our average is ${round1(projection)}; his last ${values.length} games averaged ${round1(average)}. Wide range, low certainty.` : '';
   };
   const goodTo = pick => isNum(pick.cutoffOdds) && isNum(pick.cutoffLine) ? `Still a bet down to ${oddsText(pick.cutoffOdds)} at ${pick.cutoffLine}` : '';
-  /* A row the A-22/A-23 checks hold (role, quarterback change or price): never a live quote, never graded. */
   const heldRow = r => Boolean(r && (r.roleSuspect || r.priceSuspect || r.roleHold));
-  /* The hold on a player market from its board rows (any book, either side), as build_site.ticket_hold words it. */
   const holdOf = rows => {
     const held = (rows || []).filter(heldRow);
     if (!held.length) return null;
@@ -51,7 +41,6 @@
     return { kind: held.some(r => r.roleSuspect || r.roleHold) ? 'role' : 'price' };
   };
   const SAME_VOLUME = { recYds: 'targets', rec: 'targets', rushYds: 'carries', car: 'carries', passYds: 'att', att: 'att', cmp: 'att' };
-  /* A published play's hold: the build's (today.json and the hero carry it), else its market's board rows. */
   const pickHold = (pick, rows) => {
     if (!pick || pick.result || !pick.athleteId) return null;
     if (pick.held) return pick.held;
@@ -62,13 +51,11 @@
   };
   const VOLUME_WORD = { att: 'pass attempts', targets: 'targets', carries: 'carries' };
   const listWords = xs => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : String(xs[0] || '');
-  /* The plain held sentence (NOTES 4.4). Only real recent full-game volumes are quoted; never the held projection. */
   const heldWords = hold => !hold ? ''
     : hold.kind === 'workload' && (hold.recentFull || []).length === 3 ? `No usable projection: the workload estimate is far below his last three full games (${listWords(hold.recentFull)} ${VOLUME_WORD[hold.volume] || ''}).`.replace(' )', ')')
       : hold.kind === 'qb' ? "No usable projection: the quarterback role is not established in the model."
         : hold.kind === 'price' ? "That price failed our checks. No current price comparison is shown."
           : "No usable projection: the workload estimate doesn't match his recent full games.";
-  /* One short line for the Today ticket. */
   const HELD_WORDS = /\bproject|\bchance\b|\bedge\b|\bmodel\b|\bfair\b|\d%|^Role: /i;
   const heldShort = hold => hold.kind === 'price' ? 'Price unavailable.' : 'Projection unavailable.';
   const afterPostingWords = hold => hold.kind === 'qb' ? "His team's quarterback picture changed since I posted; no current projection is shown."
@@ -80,8 +67,6 @@
       .sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt));
     return same[0] || null;
   };
-  /* The latest fresh same-book quote for a play: the build's own (pick.quote, on the first paint and the full card
-     alike), or a current board row for the same market and side. A held market has none. */
   const latestPickQuote = (pick, rows, now = Date.now()) => {
     if (Date.parse(pick.kickoff) <= now || pick.held) return null;
     const own = pick.quote && isNum(pick.quote.odds) ? [{ ...pick.quote, own: true }] : [];
@@ -100,12 +85,10 @@
     const pastLine = !moneyline && isNum(pick.cutoffBoundary) && (pick.direction === 'under' ? current.line <= pick.cutoffBoundary : current.line >= pick.cutoffBoundary);
     return { current, pastPrice, pastLine, inside: isNum(pick.cutoffOdds) && !pastPrice && !pastLine };
   };
-  /* The Climb's status words, from the full rung ledger or today-hero.json's summary of it. */
   const climbWords = s => s.open ? `Step ${s.open.step || s.step} is live`
     : s.last && s.last.result === 'win' ? `Step ${s.last.step || s.step - 1} cashed · Step ${s.step} not posted yet`
       : s.last && s.last.result === 'loss' ? 'New $50 climb · Step 1 not posted yet'
         : s.settled ? `Step ${s.step} not posted yet` : 'The first step waits for two clean games';
-  /* Today's first paint is for today's bets only. Future tickets stay below the game-day view. */
   const OFF_RAIL = ['Line moved', 'Pulled', 'Withdrawn'];
   const heroBets = (hero, now = Date.now(), league = 'ALL') => {
     const today = C.dayOf(new Date(now).toISOString());
@@ -573,8 +556,9 @@
       case 'scores': return { view: 'games', tab: 'live', league: a ? a.toUpperCase() : 'ALL', legacy: true };
       case 'sport': return { view: 'games', tab: 'live', league: (a || 'NBA').toUpperCase(), legacy: true };
       case 'game': return rest ? { view: 'game', id: rest.split('#')[0], anchor: rest.split('#')[1] || null } : { view: 'games', tab: 'upcoming' };
-      case 'player': return { view: 'player', league: ['NFL', 'CFB', 'NBA'].includes((a || 'NFL').toUpperCase()) ? (a || 'NFL').toUpperCase() : 'NFL', id: b,
-        stat: params.get('stat') || null, season: params.get('season') || null, sample: params.get('sample') || null };
+      case 'player': return { view: 'player', league: ['NFL', 'CFB', 'NBA', 'CBB'].includes((a || 'NFL').toUpperCase()) ? (a || 'NFL').toUpperCase() : 'NFL', id: b,
+        stat: params.get('stat') || null, season: params.get('season') || null, sample: params.get('sample') || null,
+        line: params.get('line') || null, direction: params.get('direction') || null };
       case 'team': return { view: 'team', league: (a || 'NFL').toUpperCase() === 'CFB' ? 'CFB' : 'NFL', id: b };
       case 'record': return { view: 'record', tab: ['fun', 'climb', 'model', 'trials'].includes(a) ? a : 'official', anchor: a === 'calendar' ? 'calendar' : null,
         league: params.get('sport') ? params.get('sport').toUpperCase() : null };
@@ -639,7 +623,7 @@
     board: { type: ['all', 'props', 'games'].includes(bs.type) ? bs.type : 'all', sort: ['edge', 'chance', 'kickoff'].includes(bs.sort) ? bs.sort : 'edge', show: bs.show === 'all' || (bs.show == null && bs.value === false) ? 'all' : 'value', limit: 40 },
     q: '', trends: { period: 'full', rate: '80', window: 'season', kind: 'main', heavy: true, stat: 'all', day: 'all', limit: 40 },
     players: { q: '', pos: 'WR', stat: 'recYds', scope: 'season', order: 'soft', sub: 'matchup', game: 'next', chartStat: 'recYds', chartPos: 'all', chartWindow: 'season', league: 'NFL' },
-    games: { sort: 'bettable', all: false, q: '', day: null, status: 'all', upDay: null, nav: { window: 'all', close: false, conf: 'all' } }, player: { key: null, stat: null, season: 'current', window: 'all' },
+    games: { sort: 'bettable', all: false, q: '', day: null, status: 'all', upDay: null, nav: { window: 'all', close: false, conf: 'all' } }, player: { key: null, stat: null, season: 'current', window: 'all', line: '', direction: 'over' },
     record: { season: 'current', phase: 'current', q: '', cal: { month: null, league: 'ALL', ledger: 'all', day: null } },
     watchlist: (Array.isArray(saved.get('watchlist', [])) ? saved.get('watchlist', []) : []).filter(r => r && typeof r.key === 'string' && /^#(player|game)\//.test(r.href)).slice(0, 100),
     ticket: Array.isArray(saved.get('ticket', [])) ? saved.get('ticket', []).filter(r => r && typeof r.id === 'string').slice(0, 20) : [],
@@ -1545,8 +1529,10 @@
     const [title, sub] = mode === 'players' ? (playerHeads[state.players.sub] || playerHeads.matchup) : RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
     const active = mode === 'players' ? state.players.sub === 'search' ? 'players' : state.players.sub === 'defense' || state.players.sub === 'teams' ? 'defense' : 'props' : mode === 'trends' && state.trends.period === '1Q' ? 'first' : mode;
     const tool = (href, label, key) => `<a href="${href}"${active === key ? ' aria-current="page"' : ''}><b>${label}</b></a>`;
+    const researchSport = ['NBA','CBB'].includes(state.league) ? state.league : 'NFL';
+    const basketball = ['NBA','CBB'].includes(researchSport);
     return `${head('Research', title, sub)}
-      <nav class="research-quick" aria-label="Research tools">${tool('#research/players?sport=NFL', 'Props', 'props')}${tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool('#research/players?view=search&amp;sport=NFL', 'Players', 'players')}${tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>
+      <nav class="research-quick" aria-label="Research tools">${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? '' : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>
       <details class="plain-fold research-more"><summary>More research</summary><div class="btn-row"><a class="btn small" href="#research/lines">Kook’n vs. book</a><a class="btn small" href="#research/trends?period=full">Full-game hit rates</a><a class="btn small" href="#research/news">Injuries & news</a><a class="btn small" href="#trends?period=full&amp;kind=alternate&amp;sport=ALL">Alternate lines</a></div></details>`;
   };
   /* A link's filters apply once, when it is opened. After that the reader's own choices win, even on refresh. */
@@ -1566,7 +1552,10 @@
       if (route.rate && ['70', '80', '90', '100'].includes(route.rate)) state.trends.rate = route.rate;
       if (route.show === 'all' || route.show === 'value') state.board.show = route.show;
     }
-    if (state.league === 'NBA') return (await ensureGames()).nbaToday({ research: true });
+    if (state.league === 'NBA') return route.mode === 'players'
+      ? researchHead(route.mode) + await (await ensureMore()).basketballPlayers({ ...route, league: 'NBA' })
+      : (await ensureGames()).nbaToday({ research: true });
+    if (state.league === 'CBB' && route.mode === 'players') return researchHead(route.mode) + await (await ensureMore()).basketballPlayers({ ...route, league: 'CBB' });
     if (state.league === 'CBB' && route.mode === 'lines') return researchHead(route.mode) + await (await ensureGames()).cbbToday();
     const today = await get('app/today.json');
     indexGames(today);
@@ -2104,7 +2093,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-8c25efa34cec';
+  const MORE_ASSET = 'app-more.js?v=sha256-4984e7cc1f41';
   const GAMES_ASSET = 'app-games.js?v=sha256-913398630097';
   const KVB_ASSET = 'app-kvb.js?v=sha256-338cc9fd90bf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
@@ -2340,7 +2329,7 @@
           gnav: v => { const [k, x] = v.split('='); state.games.nav[k] = k === 'close' ? !state.games.nav.close : x; state.games.all = false; },
           rcal: v => { const [k, x] = v.split('='); state.record.cal[k] = k === 'day' && state.record.cal.day === x ? null : x; if (k !== 'day') state.record.cal.day = null; },
           gsort: v => { state.games.sort = v; state.games.all = false; }, gday: v => { state.games.day = v; }, gup: v => { state.games.upDay = v; state.games.all = false; }, gstatus: v => { state.games.status = v; },
-          pstat: v => { state.player.stat = v; }, pwin: v => { state.player.window = v; }, pseason: v => { state.player.season = v; }, stakeMode: v => { state.stake.mode = v; saved.set('stake', state.stake); },
+          pstat: v => { state.player.stat = v; }, pwin: v => { state.player.window = v; }, pseason: v => { state.player.season = v; }, pdir: v => { state.player.direction = v === 'under' ? 'under' : 'over'; }, stakeMode: v => { state.stake.mode = v; saved.set('stake', state.stake); },
         };
         if (SETTERS[key]) SETTERS[key](value);
         if (['trendPeriod', 'trendRate', 'trendWindow', 'trendKind', 'trendDay', 'cpos', 'cwin'].includes(key)) { state.trends.limit = 40; savePrefs(); }
@@ -2415,7 +2404,7 @@
       const el = event.target;
       if (el.dataset.input) {
         clearTimeout(inputTimer);
-        const SET = { q: v => { state.q = v; state.board.limit = 40; state.trends.limit = 40; }, pq: v => { state.players.q = v; }, gq: v => { state.games.q = v; }, rq: v => { state.record.q = v; } };
+        const SET = { q: v => { state.q = v; state.board.limit = 40; state.trends.limit = 40; }, pq: v => { state.players.q = v; }, gq: v => { state.games.q = v; }, rq: v => { state.record.q = v; }, playerLine: v => { state.player.line = v; } };
         inputTimer = setTimeout(() => { (SET[el.dataset.input] || (() => {}))(el.value); render(true); }, 220);
       }
       /* The calculators update only their result box, so typing is never interrupted. */

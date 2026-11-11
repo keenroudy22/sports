@@ -1095,6 +1095,47 @@ class QuarterTrendsTests(unittest.TestCase):
             self.assertNotEqual(full['files'][0]['file'],quarter['files'][0]['file'])
 
 
+class BasketballPlayerDirectoryTests(unittest.TestCase):
+    def games(self, count=5, minute_values=None):
+        minute_values = minute_values or [28, 30, 32, 31, 29]
+        rows = []
+        for i in range(count):
+            rows.append({'league':'CBB','season':2027,'seasonType':2,'eventId':f'CBB-{100+i}',
+                'kickoff':f'2026-11-{i+1:02d}T20:00:00Z','teams':{
+                    '1':{'abbr':'AAA','home':True,'score':80},'2':{'abbr':'BBB','home':False,'score':70}},
+                'players':[{'id':'101','name':'Test Guard','team':'1','pos':'G','dnp':False,
+                    'stats':{'min':minute_values[i],'pts':10+i,'reb':4,'ast':3,'pra':17+i,'pa':13+i,'pr':14+i,'ra':7,'fg3m':2}}]})
+        return rows
+
+    def test_cbb_directory_builds_a_transparent_role_aware_projection(self):
+        index, shards, season = build_site.build_basketball_players(self.games(), 'CBB')
+        projection = shards[101 % build_site.SHARDS['CBB']]['101']['projection']
+        self.assertEqual((season, index[0][1], projection['status'], projection['games']),
+                         (2027, 'Test Guard', 'ready', 5))
+        self.assertGreater(projection['values']['pts'], 10)
+        self.assertAlmostEqual(projection['minutes'], 30.7)
+        self.assertIn('per-minute', projection['method'])
+        self.assertEqual(index[0][7]['values'], projection['values'])
+
+    def test_cbb_projection_holds_thin_and_labels_volatile_roles(self):
+        _, thin, _ = build_site.build_basketball_players(self.games(2), 'CBB')
+        self.assertEqual(thin[101 % build_site.SHARDS['CBB']]['101']['projection']['status'], 'held')
+        _, shards, _ = build_site.build_basketball_players(self.games(minute_values=[12,31,10,34,11]), 'CBB')
+        self.assertEqual(shards[101 % build_site.SHARDS['CBB']]['101']['projection']['status'], 'early')
+
+    def test_cbb_does_not_call_last_season_a_current_projection(self):
+        old = self.games()
+        for game in old:
+            game['season'] = 2026
+        current = self.games(1)
+        current[0]['players'][0]['id'] = '202'
+        current[0]['players'][0]['name'] = 'Current Guard'
+        index, shards, season = build_site.build_basketball_players(old + current, 'CBB')
+        projection = shards[101 % build_site.SHARDS['CBB']]['101']['projection']
+        self.assertEqual((season, projection['status'], projection['games']), (2027, 'held', 0))
+        self.assertIsNone(next(row[7] for row in index if row[0] == '101'))
+
+
 class QuarterDefenseTests(unittest.TestCase):
     def records(self):
         rows=[]

@@ -1,3 +1,18 @@
+# November 11 NBA/CBB fast prop research — release candidate
+
+Props now opens a basketball edge finder for NBA and CBB. NBA lists current
+verified comparisons when both the quote and role checks clear; when they do
+not, the official player directory remains browsable instead of inventing an
+edge. CBB adds official ESPN box-score player directories and a transparent
+current-season minutes/rate baseline for points, rebounds, assists, threes and
+common combinations. Fewer than three appearances, sub-ten-minute roles and
+unstable samples are held or labeled early. A player page accepts a manually
+checked CBB line and shows Kook'n, the directional gap, L5/L10/season history,
+minutes, line ladder and official game log. The typed line is not a captured
+price; projection gap and historical hit rates are not probabilities or picks.
+Candidate release and hosted 375/1440 receipts are still required before this
+is called shipped.
+
 # November 11 player-prop visual expansion — release candidate
 
 Player profiles now add three scan-first panels beneath the main result chart:

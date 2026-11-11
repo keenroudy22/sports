@@ -678,7 +678,7 @@
   const pickResearchRoute = p => {
     if (isParlay(p)) return null;
     if (p.athleteId) {
-      return ['NFL', 'CFB', 'NBA'].includes(p.league)
+      return ['NFL', 'CFB', 'NBA', 'CBB'].includes(p.league)
         ? `#player/${p.league}/${encodeURIComponent(p.athleteId)}` : null;
     }
     if (p.kind === 'props') return null;
@@ -812,7 +812,7 @@
     const fields=RESEARCH_PARAMS[route.view];
     if(!fields) return null;
     const clean=researchPreferences(values);
-    const result={league:route.view==='player' ? (['NFL','CFB'].includes(route.league)?route.league:'NFL')
+    const result={league:route.view==='player' ? (['NFL','CFB','NBA','CBB'].includes(route.league)?route.league:'NFL')
       : RESEARCH_SPORTS.includes(values.league)?values.league:'ALL',researchQuery:clean.researchQuery};
     for(const key of Object.values(fields)) {
       if(key==='stat') result[key]=Object.hasOwn(LABEL,values.stat)?(PROJECTION_MARKET[values.stat] || values.stat):'';

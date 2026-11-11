@@ -33,6 +33,7 @@ import json
 import math
 import re
 import shutil
+import statistics
 import sys
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
@@ -62,7 +63,7 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'site' / 'data'
 OUT = DATA / 'app'
-SHARDS = {'NFL': 32, 'CFB': 128, 'NBA': 32}
+SHARDS = {'NFL': 32, 'CFB': 128, 'NBA': 32, 'CBB': 64}
 WINDOW_BACK, WINDOW_AHEAD = timedelta(days=3), timedelta(days=8)
 LOG_KEYS = ('cmp', 'att', 'passYds', 'passTD', 'int', 'sacks', 'car', 'rushYds', 'rushTD', 'rushLong',
             'targets', 'rec', 'recYds', 'recTD', 'recLong', 'rzTgt', 'i10Tgt', 'rzCar', 'i10Car', 'i5Car',
@@ -785,14 +786,58 @@ def build_players(league, records, snaps, teams_meta, trends=None):
     return index, shards, season_leaders(logs, index, latest_season), latest_season
 
 
-def build_nba_players(records):
-    """Build the NBA player directory from the already stored official boxes.
+def basketball_projection(rows, season=None):
+    """Transparent current-season player baseline for CBB research.
 
-    NBA recommendations and comparison rows have always used this same box-score
-    store.  Exporting it here keeps the public player page tied to those inputs
-    instead of making a second network request or showing a prop without its
-    game log.
+    The estimate is role-aware but intentionally simple: recent and season
+    per-minute production multiplied by recent median minutes. It is never a
+    win probability, price edge or automatic pick. Thin and unstable roles are
+    labeled so the browser can keep them out of an edge shortlist.
     """
+    if season is None:
+        season = max((row.get('season') for row in rows if row.get('seasonType') == 2
+                      and isinstance(row.get('season'), int)), default=None)
+    games = [row for row in rows if row.get('season') == season and row.get('seasonType') == 2
+             and isinstance(row.get('stats', {}).get('min'), (int, float))
+             and row['stats']['min'] > 0]
+    if len(games) < 3:
+        return {'status': 'held', 'reason': 'Fewer than three current-season appearances', 'games': len(games)}
+    recent = games[-5:]
+    minutes = [row['stats']['min'] for row in recent]
+    projected_minutes = .65 * statistics.median(minutes[-3:]) + .35 * statistics.median(minutes)
+    if projected_minutes < 10:
+        return {'status': 'held', 'reason': 'Recent role is below ten minutes', 'games': len(games)}
+    swing = max(minutes) - min(minutes)
+    status = 'ready' if len(games) >= 5 and swing <= 12 else 'early'
+    reason = None if status == 'ready' else ('Recent minutes are volatile' if swing > 12
+                                              else 'Only three or four current-season appearances')
+    estimates = {}
+    for key in ('pts', 'reb', 'ast', 'fg3m', 'pra', 'pa', 'pr', 'ra'):
+        season_rows = [row for row in games if isinstance(row.get('stats', {}).get(key), (int, float))]
+        recent_rows = [row for row in recent if isinstance(row.get('stats', {}).get(key), (int, float))]
+        season_minutes = sum(row['stats']['min'] for row in season_rows)
+        recent_minutes = sum(row['stats']['min'] for row in recent_rows)
+        if len(recent_rows) < 3 or season_minutes <= 0 or recent_minutes <= 0:
+            continue
+        season_rate = sum(row['stats'][key] for row in season_rows) / season_minutes
+        recent_rate = sum(row['stats'][key] for row in recent_rows) / recent_minutes
+        estimates[key] = round(projected_minutes * (.6 * recent_rate + .4 * season_rate), 1)
+    if not estimates:
+        return {'status': 'held', 'reason': 'Current box scores do not support a projection', 'games': len(games)}
+    return {'status': status, 'reason': reason, 'games': len(games),
+            'minutes': round(projected_minutes, 1), 'values': estimates,
+            'method': '60% recent and 40% season per-minute rate at recent median minutes'}
+
+
+def build_basketball_players(records, league='NBA'):
+    """Build an NBA or CBB player directory from stored official boxes.
+
+    Recommendations and comparison rows use these same box-score inputs. The
+    directory never makes a browser-side data request to a third party.
+    """
+    league = str(league).upper()
+    if league not in ('NBA', 'CBB'):
+        raise ValueError('Unsupported basketball player directory')
     logs = defaultdict(list)
     for game in sorted(records, key=lambda row: (row.get('kickoff') or '', row.get('eventId') or '')):
         teams = {str(team): data for team, data in (game.get('teams') or {}).items()}
@@ -806,7 +851,7 @@ def build_nba_players(records):
             stats = {key: value for key, value in (player.get('stats') or {}).items()
                      if key in NBA_LOG_KEYS and isinstance(value, (int, float)) and not isinstance(value, bool)}
             logs[str(player['id'])].append({
-                'eventId': str(game.get('eventId') or '').removeprefix('NBA-'),
+                'eventId': str(game.get('eventId') or '').removeprefix(league + '-'),
                 'kickoff': game.get('kickoff'), 'season': game.get('season'),
                 'seasonType': game.get('seasonType'), 'team': team, 'opp': opponent,
                 'home': bool(teams[team].get('home')), 'name': player.get('name'),
@@ -828,10 +873,17 @@ def build_nba_players(records):
                  + [row['stats'].get(key) for key in NBA_LOG_KEYS] for row in rows]
         team = last['team']
         team_abbr = next((row.get('teamAbbr') for row in reversed(rows) if row.get('teamAbbr')), None)
-        index.append([pid, name, pos, team, team_abbr, day(last['kickoff']), len(rows)])
-        shards[int(pid) % SHARDS['NBA']][pid] = {'name': name, 'pos': pos, 'rows': table}
+        projection = basketball_projection(rows, latest_season) if league == 'CBB' else None
+        summary = projection if projection and projection.get('status') != 'held' else None
+        index.append([pid, name, pos, team, team_abbr, day(last['kickoff']), len(rows), summary])
+        shards[int(pid) % SHARDS[league]][pid] = {'name': name, 'pos': pos, 'rows': table,
+                                                  **({'projection': projection} if projection else {})}
     index.sort(key=lambda row: (row[1] or '', row[0]))
     return index, shards, latest_season
+
+
+def build_nba_players(records):
+    return build_basketball_players(records, 'NBA')
 
 
 def validate_player_coverage(league, charts, index, shards):
@@ -2255,6 +2307,14 @@ def build(now=None):
                                          'players': nba_index, 'season': nba_season})
     for shard, players in nba_shards.items():
         write(OUT / 'players' / 'NBA' / f'{shard}.json', {'keys': list(NBA_LOG_KEYS), 'players': players})
+    cbb_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('cbb-*.jsonl')
+                      for row in boxscores.read_store(path)}.values())
+    cbb_index, cbb_shards, cbb_season = build_basketball_players(cbb_boxes, 'CBB')
+    write(OUT / 'players' / 'CBB.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['CBB'],
+                                         'players': cbb_index, 'season': cbb_season,
+                                         'projectionNote': 'Research baseline: 60% recent and 40% season per-minute production at recent median minutes. Not a probability or automatic pick.'})
+    for shard, players in cbb_shards.items():
+        write(OUT / 'players' / 'CBB' / f'{shard}.json', {'keys': list(NBA_LOG_KEYS), 'players': players})
     import shutil as nba_copy
     nba_preview = ROOT / 'design/final/nba-trial-preview.png'
     if nba_preview.exists():

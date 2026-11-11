@@ -59,5 +59,17 @@ class NBASummaryTests(unittest.TestCase):
         self.payload['header']['season'] = {'year': 2027, 'type': 1}
         self.assertEqual(self.extract()['seasonType'], 1)
 
+    def test_college_box_uses_the_same_verified_stat_contract(self):
+        self.payload['header']['league'] = {'id': '41', 'slug': 'mens-college-basketball'}
+        row = sport_box.extract(self.payload, '401859967', '2026-10-09T18:00:00Z', 'CBB')
+        self.assertEqual((row['league'], row['eventId']), ('CBB', 'CBB-401859967'))
+        self.assertIn('/mens-college-basketball/summary?', row['source'])
+        self.assertNotIn('quarterEvidence', row)
+        self.assertEqual(row['players'][0]['stats']['pts'], 11)
+
+    def test_college_box_rejects_an_nba_identity(self):
+        with self.assertRaises(ValueError):
+            sport_box.extract(self.payload, '401859967', '2026-10-09T18:00:00Z', 'CBB')
+
 
 if __name__ == '__main__': unittest.main()

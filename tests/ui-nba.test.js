@@ -108,7 +108,10 @@ test('NBA Research and Games expose stored projections instead of a football-onl
  const ctx=api.gamesContext({get:async path=>{assert.equal(path,'app/nba.json');return data;}});ctx.state.league='NBA';const views=s.KRGames(ctx);views.gamesLive=async()=>'';
  const games=await views.games({tab:'upcoming'});assert.ok(games.includes('Boston Celtics'));assert.ok(!games.includes('Football only for projections'));
  const research=await views.nbaToday({research:true});assert.ok(research.includes('NBA projections, props &amp; trends'));assert.ok(!research.includes('id="nba-plays"'));
- const source=fs.readFileSync('site/app.js','utf8');assert.ok(source.includes("if (state.league === 'NBA') return (await ensureGames()).nbaToday({ research: true })"));
+ const source=fs.readFileSync('site/app.js','utf8');
+ assert.ok(source.includes("if (state.league === 'NBA') return route.mode === 'players'"));
+ assert.ok(source.includes("basketballPlayers({ ...route, league: 'NBA' })"));
+ assert.ok(source.includes("(await ensureGames()).nbaToday({ research: true })"));
 });
 test('NBA posted play leads research, while older results stay in the record fold',async()=>{
  const s=load(),api=s.module.exports,stamp=new Date(Date.now()+86400000).toISOString();

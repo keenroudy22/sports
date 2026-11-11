@@ -143,6 +143,28 @@ test('NBA player page ties a posted prop to last 5, last 10, minutes and the ful
   assert.match(page, /Last 5, Last 10|Last 5/);
 });
 
+test('CBB player page shows an honest Kookn baseline and lets the reader check a book line', async () => {
+  const keys = ['pts','reb','ast','fg3m','pra','pa','pr','ra','min','fgm','fga','ftm','fta','stl','blk','tov','plusMinus'];
+  const stats = [11,14,9,18,16], minutes = [25,29,27,32,31];
+  const gameRow = i => [`40192${100+i}`, `2026-11-${String(2+i).padStart(2,'0')}`, 2027, 0, 2, '58', String(200+i), i%2, `OP${i}`,
+    ...keys.map(k => k === 'pts' ? stats[i] : k === 'reb' ? 6 : k === 'ast' ? 4 : k === 'fg3m' ? 2 : k === 'pra' ? stats[i]+10 : k === 'pa' ? stats[i]+4 : k === 'pr' ? stats[i]+6 : k === 'ra' ? 10 : k === 'min' ? minutes[i] : 0)];
+  const projection = {status:'ready',games:5,minutes:30.2,method:'60% recent and 40% season per-minute rate at recent median minutes',values:{pts:15.1,reb:6,ast:4,pra:25.1}};
+  const page = await playerPage(false, files => Object.assign(files, {
+    'data/app/players/CBB.json': {keys,shards:64,season:2027,players:[['4870883','College Guard','G','58','USF','2026-11-06',5,projection]]},
+    [`data/app/players/CBB/${4870883 % 64}.json`]: {keys,players:{'4870883':{name:'College Guard',pos:'G',rows:stats.map((_,i)=>gameRow(i)),projection}}},
+    'data/app/cbb.json': {games:[{id:'CBB-401999999',kickoff:'2026-11-12T23:00:00Z',season:2027,teams:{away:{id:'58',abbreviation:'USF',name:'South Florida Bulls'},home:{id:'2603',abbreviation:'JOES',name:"Saint Joseph's Hawks"}}}]},
+  }), 'CBB', 'pts');
+  assert.match(page, /College Guard/);
+  assert.match(page, /Check a book line/);
+  assert.match(page, /data-input="playerLine"/);
+  assert.match(page, /Kook’n projection<\/small><b class="num">15\.1/);
+  assert.match(page, /Kook’n baseline:<\/b> 5 current-season games · 30\.2 projected minutes/);
+  assert.match(page, /60% recent and 40% season per-minute rate/);
+  assert.match(page, /Projection gap<\/small><b class="num">–/);
+  assert.match(page, /mens-college-basketball\/boxscore/);
+  assert.match(page, /A projection gap is not a probability/);
+});
+
 test('a player line with no hold puts the projection beside the book line and keeps its price check', async () => {
   const page = await playerPage(false);
   assert.doesNotMatch(page, /UNDER REVIEW|No grade from me/);

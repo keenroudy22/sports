@@ -28,6 +28,13 @@ class PublicationGuardTests(unittest.TestCase):
         self.assertTrue(guard.allowed_path(Path('data/app/nba-props.json')))
         self.assertFalse(guard.allowed_path(Path('data/app/nba-quarter-quotes.json')))
         self.assertFalse(guard.allowed_path(Path('data/nba/player-forecasts.json')))
+
+    def test_reviewed_cbb_player_directories_are_public_not_box_journals(self):
+        for path in ('data/app/players/CBB.json', 'data/app/players/CBB/3.json'):
+            self.assertTrue(guard.allowed_path(Path(path)), path)
+        for path in ('data/app/players/CBB/private.json', 'data/sport-box/cbb-2027.jsonl'):
+            self.assertFalse(guard.allowed_path(Path(path)), path)
+
     def test_reviewed_paths_and_old_public_evidence_remain_allowed(self):
         for path in ('.nojekyll', 'index.html', 'app-more.js', 'app-games.js', 'app-kvb.js', 'kookn-mark.png', 'data/research.json', 'data/forecasts.json', 'data/app/today.json', 'data/app/today-hero.json',
                      'data/app/record.json', 'data/app/lines.json', 'data/app/lines-NFL.json',
