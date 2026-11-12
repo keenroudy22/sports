@@ -23,7 +23,7 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 290,
+   "gamesGraded": 291,
    "gamesQuoted": 305,
    "moneylineSnapshots": 1377,
    "seasons": [
@@ -34,7 +34,7 @@
      "season": 2027
     },
     {
-     "gamesGraded": 251,
+     "gamesGraded": 252,
      "gamesQuoted": 264,
      "phase": "regular",
      "season": 2027
@@ -46,6 +46,32 @@
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "PHI",
+    "id": "15",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/phi.png",
+    "name": "Philadelphia Flyers",
+    "shortName": "Flyers"
+   },
+   "awayScore": 2,
+   "gameId": "NHL-401892692",
+   "gradedAt": "2026-11-12T04:55:13Z",
+   "home": {
+    "abbreviation": "EDM",
+    "id": "6",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/edm.png",
+    "name": "Edmonton Oilers",
+    "shortName": "Oilers"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-11-12T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final/OT",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "NYR",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "VAN",
-    "id": "22",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
-    "name": "Vancouver Canucks",
-    "shortName": "Canucks"
-   },
-   "awayScore": 6,
-   "gameId": "NHL-401892594",
-   "gradedAt": "2026-10-28T15:25:15Z",
-   "home": {
-    "abbreviation": "ANA",
-    "id": "25",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ana.png",
-    "name": "Anaheim Ducks",
-    "shortName": "Ducks"
-   },
-   "homeScore": 5,
-   "kickoff": "2026-10-28T02:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final/OT",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-12T04:30:15Z"
+ "updatedAt": "2026-11-12T04:55:13Z"
 }
