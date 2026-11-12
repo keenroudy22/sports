@@ -20,7 +20,8 @@ class PrivateReleaseBufferHoldTests(unittest.TestCase):
         key = 'NFL-test-release'
         game = dict(id='NFL-game', kickoff='2026-10-27T00:15:00Z', league='NFL')
         pick = dict(id=key, title='Player over 2.5 receptions', odds=-110,
-                    book='FanDuel', gameIds=['NFL-game'], lane='best_bet')
+                    book='FanDuel', gameIds=['NFL-game'], lane='best_bet',
+                    expiresAt='2026-10-27T00:00:00Z')
         ctx = SimpleNamespace(games={'NFL-game': game}, first={}, latest={}, player_team={}, now=now)
         delivery_book = {'posts': []}
         with tempfile.TemporaryDirectory() as folder, ExitStack() as stack:

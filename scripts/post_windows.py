@@ -42,6 +42,13 @@ def public_release_open(now, target_time):
     return instant(now) >= instant(target_time) - DISCORD_PLAY_LEAD
 
 
+def play_due(now, target_time, discord_sent_at=None):
+    """Reuse the real Discord lead on retries."""
+    start = instant(now)
+    discord_at = instant(discord_sent_at) if discord_sent_at else start
+    return max(instant(target_time), start + SOON, discord_at + DISCORD_PLAY_LEAD)
+
+
 def jitter(post_id):
     """Stable zero-to-six-minute shift, so posts do not read like a clocked bot."""
     return timedelta(minutes=int(hashlib.sha1(str(post_id).encode('utf-8')).hexdigest(), 16) % 7)

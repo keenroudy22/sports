@@ -3571,7 +3571,7 @@ def release_private(now, log=log, only=None, review_only=False):
                 continue
         kickoff = starts[0]
         target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
-        due = max(target, now + post_windows.DISCORD_PLAY_LEAD)
+        due = post_windows.play_due(now, target, row.get('discordSentAt'))
         if not review_only and now >= target-post_windows.DISCORD_PLAY_LEAD and not row.get('bufferPostId'):
             try:
                 if channel_error:
@@ -3594,6 +3594,9 @@ def release_private(now, log=log, only=None, review_only=False):
             release_queue.update(CONF, key, held=True, heldAt=stamp(now),
                                  holdReason='no Discord-first X slot before kickoff')
             log(f'release: {key} moved to the near-miss log: no Discord-first X slot before kickoff')
+            continue
+        if due >= gates.when(pick['expiresAt']):
+            log(f'release: {key} waiting for an X slot before the saved quote expires')
             continue
         if not post_windows.public_release_open(now, target):
             continue

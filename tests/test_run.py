@@ -69,6 +69,12 @@ class SlotTests(unittest.TestCase):
         self.assertTrue(args.select_now)
         self.assertIsNone(args.publish_kinds)
 
+    def test_release_retry_reuses_discord_lead(self):
+        now = datetime(2026, 11, 12, 13, 20, tzinfo=timezone.utc)
+        sent = datetime(2026, 11, 12, 12, 58, tzinfo=timezone.utc)
+        self.assertEqual(run.post_windows.play_due(now, sent, sent), now.replace(minute=22))
+        self.assertEqual(run.post_windows.play_due(now, sent), now.replace(minute=35))
+
     def test_earlier_official_release_is_not_pushed_behind_later_research(self):
         due = datetime(2026, 10, 17, 13, 35, tzinfo=timezone.utc)
         busy = [datetime(2026, 10, 17, 13, 24, tzinfo=timezone.utc),
