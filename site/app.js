@@ -1391,7 +1391,7 @@
     const morningHtml = !rows.length && brief && (state.league === 'ALL' || state.league === brief.league)
       && C.dayOf(brief.kickoff) === etDay() && Date.parse(brief.kickoff) > now
       && now - Date.parse(brief.observedAt) >= 0 && now - Date.parse(brief.observedAt) <= 4 * 3600000
-      ? ktSec('morning', 'Strongest morning lean', `<p class="small" style="white-space:pre-line;overflow-wrap:anywhere">${esc(brief.text)}</p><p class="tiny muted">Checked ${esc(whenShort(brief.capturedAt))}</p>`, {kind:'Research · not a Best Bet'}) : '';
+      ? ktSec('morning', 'What I’m Watching', `<p><b>${esc(brief.title)}</b></p><p class="small">${esc(odd(brief.odds))} · ${esc(brief.book)} · Price checked ${esc(whenShort(brief.observedAt))}</p><p class="small muted">${esc(brief.missing)}</p>`, {kind:'Research watch'}) : '';
     const evaluated = today.generatedAt && C.dayOf(today.generatedAt) === etDay()
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
