@@ -956,6 +956,22 @@ test('All-sports Today puts every published straight before research', async () 
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('class="kt-sec kt-climb"'));
 });
 
+test('Today turns a current morning hold into a concise research watch', async () => {
+  const morningBrief = {
+    day: '2026-10-10', league: 'NFL', title: 'Fixture Receiver over 49.5 receiving yards',
+    odds: -110, book: 'FanDuel', observedAt: '2026-10-10T13:50:00Z', capturedAt: '2026-10-10T13:55:00Z',
+    kickoff: '2026-10-10T20:00:00Z', missing: 'Player availability still needs verification.',
+    text: 'Morning lean · not a Best Bet\nFixture Receiver over 49.5 receiving yards (-110, FanDuel)'
+  };
+  const page = await loadApp('#today', {}, { today: { ...TODAY, picks: [], morningBrief } }).api.views.today({ view: 'today' });
+  assert.match(page, /What I’m Watching/);
+  assert.match(page, /Fixture Receiver over 49\.5 receiving yards/);
+  assert.match(page, /−110 · FanDuel · Price checked/);
+  assert.match(page, /Player availability still needs verification\./);
+  assert.match(page, /Research watch/);
+  assert.doesNotMatch(page, /Morning lean · not a Best Bet/, 'Today does not dump the internal social caption');
+});
+
 
 test('play footer retains unknown historical stakes without changing accounting', async () => {
   for (const extra of [{accountingUnknown:true}, {historicalImport:true},

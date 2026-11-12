@@ -15,7 +15,7 @@ run `43119052040`. Live CBB and NBA boards, a CBB manual-line comparison and the
 season-linked game log passed 375/1440 checks with no horizontal overflow,
 console error or load-error state. Preserve this route and honesty contract.
 
-# November 11 player-prop visual expansion — release candidate
+# November 11 player-prop visual expansion — verified live
 
 Player profiles now add three scan-first panels beneath the main result chart:
 L5/L10/selected-season hit rates against a captured line (or averages when no
@@ -27,8 +27,12 @@ quarter props use first-quarter attempts/carries/receptions and never borrow a
 full-game workload. Historical hit rates are context, not probabilities;
 opponent allowance is not a player projection. A held projection stays absent.
 Preserve the full game log, line ladder and existing selection/record rules.
-Candidate release and live mobile receipts are still required before calling
-this shipped.
+Release `8429adad1e8142bf8b9ae2a72c2e7628b8d8a668` shipped through successful
+hosted run `43052214351`. Live Bennett Stirtz NBA and Jaxon Smith-Njigba NFL
+profiles passed 375/1440 checks with the three panels present, no horizontal
+overflow, console warning/error or rendered load failure. The football profile
+also showed the stored opponent-versus-position context; no missing book line
+was presented as captured.
 
 # November 11 owner — celebrate clean sweeps on X
 

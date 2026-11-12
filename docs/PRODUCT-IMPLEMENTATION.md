@@ -23,7 +23,7 @@ budgets, stored-input rehearsal and successful hosted run `43119052040`. Live
 NBA/CBB boards and the CBB manual-line detail passed 375/1440 checks with no
 horizontal overflow, console errors or rendered load failures.
 
-### November 11 player-prop visual expansion — release candidate
+### November 11 player-prop visual expansion — verified live
 
 NBA, NFL and CFB player pages now make the useful prop research scannable before
 the long game log. A new Trend windows panel shows L5, L10 and selected-season
@@ -40,8 +40,13 @@ record. Historical hit rates remain explicitly non-probabilistic, opponent
 allowance remains context rather than a player projection, and held projections
 remain hidden. The detailed result chart, line ladder, splits and game log remain.
 The candidate passed 2,230 Python checks (2 skipped), 324 Node/interface checks
-and the clean-export gate. Release, hosted publication and exact live 375/1440
-checks are still required before this section may be marked verified live.
+and the clean-export gate. Release `8429adad1e8142bf8b9ae2a72c2e7628b8d8a668`
+shipped through successful hosted run `43052214351`. Live Bennett Stirtz NBA and
+Jaxon Smith-Njigba NFL profiles passed 375/1440 checks with no horizontal
+overflow, console warning/error or rendered load failure. Trend windows,
+market-matched workload and same-scale comparison were present; the football
+profile included stored opponent-versus-position context and kept its missing
+book line explicit.
 
 ### November10 evening NBA delivery — actual five-play receipt
 

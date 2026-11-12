@@ -1355,11 +1355,11 @@
     {
       "id": "KP-T-SITE",
       "title": "Add scan-first charts and workload data to player props",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the tested candidate, verify hosted publication, then check real NBA and football player profiles at 375 and 1440 without overflow or held-projection leakage.",
+      "next": "Preserve the scan-first panels, honesty labels and real-profile mobile regressions while expanding current NBA/CBB coverage through the existing captures.",
       "doneWhen": "Trend windows, market-matched workload and same-scale Book vs Kook'n comparisons are live for NBA/NFL/CFB; history is not called probability; held data stays hidden; mobile checks pass.",
-      "evidence": "Candidate passed2230Python(2skip),324Node and clean export. NBA uses minutes; football uses attempts/targets/carries/FGA/snap share;1Q uses only1Q workload. Release/live receipt pending."
+      "evidence": "Release8429adad1 shipped in hosted43052214351. Candidate passed2230Python(2skip),324Node and clean export. Live Bennett Stirtz NBA and Jaxon Smith-Njigba NFL profiles passed375/1440 with panels present, no overflow, console errors or load failure. NBA uses minutes; football uses attempts/targets/carries/FGA/snap share;1Q uses only1Q workload."
     },
     {
       "id": "KP-T-ART",
