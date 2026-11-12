@@ -37,9 +37,9 @@
     const slip=pick.betslip||{}, legs=Number(slip.legsMatched)||(pick.legs||[]).length||1, book=slip.book||pick.book||'sportsbook';
     const note=compact?'':'<p class="small muted" style="margin-top:7px">Kook’n never places the wager. Confirm every leg, line and price in the sportsbook before submitting.</p>';
     if (/^https:\/\//.test(slip.url||'') && slip.status==='ready' && slip.legsMatched===slip.legsRequested)
-      return `<a class="btn primary${compact?' small':''}" href="${html(slip.url)}" target="_blank" rel="noopener noreferrer">Load ${legs>1?'parlay':'bet'} in ${html(book)} · ${legs}/${legs} matched ↗</a>${note}`;
+      return `<a class="betslip-action${compact?' compact':''}" href="${html(slip.url)}" target="_blank" rel="noopener noreferrer"><span><small>KOOK’N BETSLIP · ${legs}/${legs} MATCHED</small><strong>Open ${legs>1?'parlay':'bet'} in ${html(book)}</strong></span><b aria-hidden="true">↗</b></a>${note}`;
     if (pick.betslipPrompt)
-      return `<button type="button" class="btn${compact?' small':''}" data-gambly-prompt="${html(encodeURIComponent(pick.betslipPrompt))}">Build ${legs>1?`${legs}-leg parlay`:'bet'} in Gambly ↗</button>${note}`;
+      return `<button type="button" class="betslip-action${compact?' compact':''}" data-gambly-prompt="${html(encodeURIComponent(pick.betslipPrompt))}"><span><small>KOOK’N BETSLIP · EXACT ${legs>1?`${legs} LEGS`:'LINE'}</small><strong>Build in Gambly</strong></span><b aria-hidden="true">↗</b></button>${note}`;
     return '';
   }
   function installBetslipHandler(notify) {
