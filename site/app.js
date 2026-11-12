@@ -1267,6 +1267,7 @@
     const [today, notes] = await Promise.all([todayP, maybe('desk-notes.json'), heroP]);
     todayLanded = true;
     queueTodayExtras();
+    ensureGames().catch(() => {});
     const { board = null, lines = null, sports = null, every = today.picks || [], nba = null, charts = null, kvb = null, chartLeague = null } = todayExtras || {};
     indexGames(today);
     const now = Date.now(), all = every, picks = all.filter(inLeague), sched = C.cardSchedule(picks, now);
@@ -1290,13 +1291,9 @@
       last: ladder.history.length ? { result: ladder.history[ladder.history.length - 1].result, step: (ladder.history[ladder.history.length - 1].ladder || {}).step } : null };
     const games = (today.games || []).filter(inLeague);
     const hasGamesToday = games.some(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
-    /* On an active game day, every Today surface stays on today. Future bets, tickets and schedule cards return
-       only on an off-day, where their headings make them explicit prep rather than today's action. */
     const rest = hasGamesToday ? [] : later;
     const visibleDay = p => !hasGamesToday || C.dayOf(p.kickoff) === etDay();
     const off = allOff.filter(visibleDay), gone = allGone.filter(visibleDay), fun = allFun.filter(visibleDay);
-    /* Show the nearer football slate before a later posted ticket. A saved NFL-only filter must not make
-       Monday's ticket look like the next thing happening when Sunday has a full schedule. */
     const futureGames = games.filter(g => !g.completed && C.dayOf(g.kickoff) > etDay()).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
     const futureDays = [...new Set(futureGames.map(g => C.dayOf(g.kickoff)))].sort();
     const firstLaterDay = rest.map(p => C.dayOf(p.kickoff)).filter(Boolean).sort()[0];
@@ -1342,8 +1339,6 @@
     const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
     const todayGames = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
     const rank = g => g.state === 'in' ? 0 : !g.completed ? 1 : 2;
-    /* A game without an official play still belongs on Today. Put today's NFL matchup immediately after the
-       first ticket and Climb, ahead of future-day bets and research. Do not show it again in the games list. */
     const nflNow = todayGames.filter(g => g.league === 'NFL').sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 2);
     const spotlightIds = new Set(nflNow.map(g => g.id));
     const otherGames = todayGames.filter(g => !spotlightIds.has(g.id));
@@ -1967,8 +1962,6 @@
   };
 
   /* ---------- Games ---------- */
-  /* The projection card kept from the old site, front and center: projected score, total, team strength
-     ranks, the win-chance bar in team colors, then ours vs the market with our side (or "no lean"). */
   const barColor = t => {
     const c = /^#[0-9a-f]{6}$/i.test((t || {}).color || '') ? t.color : null;
     if (c && luminance(c) < 0.012 && /^#[0-9a-f]{6}$/i.test(t.alt || '') && luminance(t.alt) < 0.8) return t.alt;
@@ -2010,8 +2003,6 @@
       ${bar}${lines}${note ? `<p class="caution">${esc(note)}</p>` : ''}${linked ? '</a>' : '</div>'}${hasScore ? '' : opts.extra || ''}</div>`;
   };
 
-  /* Today is a decision page, not the full matchup board. Keep routine games to one
-     scannable row and leave the complete model/market comparison on the game route. */
   const todayGameRow = g => {
     const v2 = g.v2 || {}, market = g.market || {};
     const final = Boolean(g.completed), live = !final && g.state === 'in';
@@ -2121,7 +2112,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-1ca9dabda5f1';
-  const GAMES_ASSET = 'app-games.js?v=sha256-eb98fe33985e';
+  const GAMES_ASSET = 'app-games.js?v=sha256-ed329ef97330';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-ef142ba6eef5';
   let researchCssLoading = null;

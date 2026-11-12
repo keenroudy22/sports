@@ -655,30 +655,6 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-rest { margin-top: 34px; } .kt-rest > .kt-sec-head { margin-bottom: 12px; }
 .kt-rest .kt-head { font-size: 26px; } .kt-rest .grid.two { gap: 10px; } .kt-rest .projs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 .kt-nfl-now { margin-top: 26px; }
-.today-game-list { display: grid; gap: 8px; margin-top: 10px; }
-.today-game-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto 16px; align-items: center; gap: 10px; min-height: 82px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 13px; background: linear-gradient(135deg, rgba(20, 43, 30, .95), rgba(8, 22, 15, .98)); color: var(--chalk); }
-.today-game-row:hover { border-color: var(--line-strong); text-decoration: none; }
-.today-game-row.is-live { border-color: rgba(32, 199, 116, .55); }
-.today-game-matchup { display: grid; grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr); align-items: center; gap: 5px; min-width: 0; }
-.today-game-team { display: flex; align-items: center; gap: 7px; min-width: 0; }
-.today-game-team > span:last-child { display: grid; min-width: 0; }
-.today-game-team b { overflow: hidden; font-size: 14px; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
-.today-game-team small { margin-top: 2px; color: var(--dim); font-size: 12px; }
-.today-game-at { color: var(--dim); font: 700 12px/1 var(--font-display); text-align: center; text-transform: uppercase; }
-.today-game-read { display: grid; justify-items: end; min-width: 98px; text-align: right; }
-.today-game-read small { color: var(--dim); font-size: 12px; line-height: 1.2; }
-.today-game-read b { margin-top: 3px; font: 700 21px/1 var(--font-display); }
-.today-game-read > span { margin-top: 3px; color: var(--dim); font-size: 12px; line-height: 1.2; }
-.today-game-arrow { color: var(--kookd); font-size: 24px; }
-@media (max-width: 420px) {
-  .today-game-row { grid-template-columns: minmax(0, 1fr) auto 12px; gap: 6px; padding: 9px; }
-  .today-game-matchup { grid-template-columns: minmax(0, 1fr); gap: 4px; }
-  .today-game-at { display: none; }
-  .today-game-team .tm { width: 25px; height: 25px; }
-  .today-game-team b { font-size: 13px; }
-  .today-game-team small { display: none; }
-  .today-game-read { min-width: 88px; }
-}
 .kt-next-days { display: grid; gap: 8px; margin-top: 12px; }
 .kt-next-day { display: grid; gap: 3px; min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--felt); color: var(--chalk); }
 .kt-next-day:hover { border-color: var(--line-strong); text-decoration: none; }
