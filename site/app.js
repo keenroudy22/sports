@@ -599,9 +599,13 @@
   MORE_PAGES.forEach(p => { TAB_OF[p] = 'more'; });
   TAB_OF.lab = 'record';
 
+  const PROP_SPORTS = new Set(['NFL', 'CFB', 'NBA', 'CBB']);
+  const propSport = league => PROP_SPORTS.has(String(league || '').toUpperCase()) ? String(league).toUpperCase() : 'NFL';
+  const propsHref = league => `#research/players?sport=${propSport(league)}`;
+
   const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, favoriteHold, favoriteLook, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, opponentTrendText, gapScore,
-    cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
+    cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, propSport, propsHref, isParlayLike, climbWords, heroBets,
     teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, todayMarketRank, todayResearchOrder };
 
   if (typeof document === 'undefined') return { model };
@@ -1205,8 +1209,9 @@
   const KVB_WAIT = '<section class="kt-sec" id="today-kvb"><h2 class="kt-head">Kook vs. Book</h2><p class="small muted">Our number. Their line. Your call.</p><p class="loading" role="status">Checking lines…</p></section>';
   const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', market = KVB_WAIT, favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
     const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today);
+    const researchSport = propSport(state.league);
     return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <nav class="today-tools" aria-label="Betting data and research"><a href="#research/players?sport=NFL"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&amp;sport=NFL"><span aria-hidden="true">⌕</span><b>Find a player</b><small>Stats & logs</small></a></nav>
+      <nav class="today-tools" aria-label="Betting data and research"><a href="${propsHref(researchSport)}"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&amp;sport=${researchSport}"><span aria-hidden="true">⌕</span><b>Find a player</b><small>Stats & logs</small></a></nav>
       ${postedSummary ? postedSummary.html : ''}
       <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Kook’n picks'}</h2><a href="#record">Track record ›</a></div>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card', quick: true }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
@@ -1328,7 +1333,7 @@
     const favorite = !rows.length ? favoriteLook(lineRows, gameIdsToday, official) : null;
     const favoriteHtml = favorite ? ktSec('favorite', 'What I like most', `<div class="board">${boardRow(favorite, false)}</div><p class="kt-note"><b>Why it is not an official play:</b> ${esc(favoriteHold(favorite))}</p>`,
       { tape: true, kind: 'Strongest current lean · not a best bet', link: ktLink(`#game/${favorite.gameId}`, 'See the matchup') }) : '';
-    const market = kvb && charts ? kvb.home({ rows: lineRows.filter(vm => vm.league === chartLeague && (!hasGamesToday || C.dayOf(vm.kickoff) === etDay())), charts, games }) : KVB_WAIT;
+    const market = kvb && charts ? kvb.home({ rows: lineRows.filter(vm => vm.league === chartLeague && (!hasGamesToday || C.dayOf(vm.kickoff) === etDay())), charts, games, league: chartLeague }) : KVB_WAIT;
     /* Today's games: live first, scores refreshed from the free scoreboard, with our projected score. */
     const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
     const todayGames = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
@@ -1529,7 +1534,7 @@
     const [title, sub] = mode === 'players' ? (playerHeads[state.players.sub] || playerHeads.matchup) : RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
     const active = mode === 'players' ? state.players.sub === 'search' ? 'players' : state.players.sub === 'defense' || state.players.sub === 'teams' ? 'defense' : 'props' : mode === 'trends' && state.trends.period === '1Q' ? 'first' : mode;
     const tool = (href, label, key) => `<a href="${href}"${active === key ? ' aria-current="page"' : ''}><b>${label}</b></a>`;
-    const researchSport = ['NBA','CBB'].includes(state.league) ? state.league : 'NFL';
+    const researchSport = propSport(state.league);
     const basketball = ['NBA','CBB'].includes(researchSport);
     return `${head('Research', title, sub)}
       <nav class="research-quick" aria-label="Research tools">${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? '' : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>
@@ -2095,7 +2100,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-4984e7cc1f41';
   const GAMES_ASSET = 'app-games.js?v=sha256-913398630097';
-  const KVB_ASSET = 'app-kvb.js?v=sha256-338cc9fd90bf';
+  const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
@@ -2165,7 +2170,7 @@
   let lastHash = null;
   const chrome = route => {
     const active = TAB_OF[route.view] || 'today';
-    const tabHref = key => key === 'research' ? '#research/players?sport=NFL' : `#${key}`;
+    const tabHref = key => key === 'research' ? propsHref(state.league) : `#${key}`;
     /* Text-only tabs (Kitchen Ticket): the same links in the phone tab bar and the desktop header. */
     const links = TABS.map(([key, label]) => `<a href="${tabHref(key)}" ${key === active ? 'aria-current="page"' : ''}>${esc(label)}</a>`).join('');
     $('#tabbar').innerHTML = links;

@@ -61,3 +61,10 @@ test('Kook vs. Book omits fringe, thin, suspect and nonstandard props from the s
   assert.match(html, /Player good/);
   for (const hidden of ['Player thin', 'Player fringe', 'Player td', 'Player held', 'Player caution', 'Player wild']) assert.doesNotMatch(html, new RegExp(hidden));
 });
+
+test('Kook vs. Book footer keeps the selected sport on the full prop board', () => {
+  const api = setup();
+  assert.match(api.home({ league: 'NBA' }), /#research\/players\?sport=NBA/);
+  assert.match(api.home({ league: 'CBB' }), /#research\/players\?sport=CBB/);
+  assert.match(api.home(), /#research\/players\?sport=NFL/);
+});

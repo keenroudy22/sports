@@ -59,3 +59,12 @@ test('Results defaults to all sports and preserves only an explicit sport filter
   assert.deepEqual(M.resolve('#record/fun?sport=NFL'), { view: 'record', tab: 'fun', anchor: null, league: 'NFL' });
   assert.equal(M.canonical(M.resolve('#results?sport=CFB')), '#record?sport=CFB');
 });
+
+test('player-prop navigation follows every supported sport instead of falling back to NFL', () => {
+  for (const sport of ['NFL', 'CFB', 'NBA', 'CBB']) {
+    assert.equal(M.propSport(sport), sport);
+    assert.equal(M.propsHref(sport), `#research/players?sport=${sport}`);
+  }
+  assert.equal(M.propsHref('ALL'), '#research/players?sport=NFL');
+  assert.equal(M.propsHref('NHL'), '#research/players?sport=NFL');
+});
