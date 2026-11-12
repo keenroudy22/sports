@@ -235,8 +235,8 @@ test('all games show only usable projection rows and columns, including zero est
     assert.match(html, /player projections · 2 players/);
     assert.match(html, /Partial Player/);
     assert.match(html, /Usable Runner/);
-    assert.match(html, /K 0\.0/);
-    assert.match(html, /K 68\.0/);
+    assert.match(html, /Kook’n 0\.0/);
+    assert.match(html, /Kook’n 68\.0/);
     assert.doesNotMatch(html, /Held Only|Malformed|999|99\.5|under review|>Rec yds<|>Rec<|not enough recent games/i);
   }
 });
@@ -250,7 +250,7 @@ test('a comparison line never replaces the visible projection uncertainty range'
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [], freshness: {} } : detail });
   const html = unesc(await factory(ctx).game({ id: g.id }));
   assert.match(html, /Research estimates, not Best Bets/);
-  assert.match(html, /K 32\.9[\s\S]*Range 3–63[\s\S]*Book 44\.5/);
+  assert.match(html, /Kook’n 32\.9[\s\S]*Range 3–63[\s\S]*Book 44\.5/);
   assert.match(html, /#player\/CFB\/1\?stat=rushYds&amp;line=44\.5&amp;direction=over/);
   assert.match(html, /A big gap from the line is not proof of betting value/);
 });

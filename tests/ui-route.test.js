@@ -16,7 +16,7 @@ test('legacy route table lands on an equivalent preview view', () => {
     ['', 'today'], ['#sports', 'today'], ['#digest', 'today'], ['#board', 'research'], ['#board/props', 'research'],
     ['#board/favorites', 'research'], ['#lines', 'research'], ['#props', 'research'], ['#trends', 'research'],
     ['#stats', 'research'], ['#stats/defense', 'research'], ['#charts', 'research'], ['#players', 'research'],
-    ['#defense', 'research'], ['#games', 'games'], ['#scores/NHL', 'games'], ['#sport/NBA', 'games'],
+    ['#defense', 'research'], ['#edges', 'research'], ['#edges?sport=NBA', 'research'], ['#games', 'games'], ['#scores/NHL', 'games'], ['#sport/NBA', 'games'],
     ['#results', 'record'], ['#model', 'record'], ['#tools', 'more'], ['#responsible', 'more'], ['#parlays', 'ticket'],
   ];
   for (const [hash, view] of table) assert.equal(M.resolve(hash).view, view, hash);
@@ -37,6 +37,8 @@ test('bare Research preserves the old news desk and legacy player searches land 
   assert.equal(M.resolve('#research?type=props').mode, 'lines');
   assert.equal(M.resolve('#research?sort=edge&show=value&q=Bijan').mode, 'lines');
   assert.equal(M.resolve('#research/lines').mode, 'lines');
+  assert.deepEqual({ mode: M.resolve('#edges').mode, show: M.resolve('#edges').show, sort: M.resolve('#edges').sort, league: M.resolve('#edges').league },
+    { mode: 'lines', show: 'value', sort: 'edge', league: 'ALL' });
   assert.equal(M.resolve('#stats/search').sub, 'search');
   assert.equal(M.resolve('#stats/players').sub, 'search');
   assert.equal(M.resolve('#stats?stat=recYds&sample=last5&q=Bijan').sub, null,

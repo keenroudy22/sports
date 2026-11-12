@@ -20,8 +20,7 @@ test('Today leads with decisions and Kook vs. Book, then groups lower-priority r
   assert.doesNotMatch(view, /kt-fold|foldRow/);
   const top = body('const todayTop =', 'const firstPaint =');
   const t = s => { const i = top.indexOf(s); assert.ok(i >= 0, s); return i; };
-  assert.ok(t('rail(rows.slice(0, 1)') < t('rail([...more, ...rows.slice(1)]')
-    && t('rail([...more, ...rows.slice(1)]') < t('${postedSummary ? postedSummary.html')
+  assert.ok(t('rail(currentBets') < t('${postedSummary ? postedSummary.html')
     && t('${otherTickets}') < t('${postedSummary ? postedSummary.html')
     && t('${postedSummary ? postedSummary.html') < t('<nav class="today-tools"')
     && t('<nav class="today-tools"') < t('${market}')

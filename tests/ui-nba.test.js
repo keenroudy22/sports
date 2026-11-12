@@ -111,7 +111,7 @@ test('NBA Research and Games expose stored projections instead of a football-onl
  const source=fs.readFileSync('site/app.js','utf8');
  assert.ok(source.includes("if (state.league === 'NBA') return route.mode === 'players'"));
  assert.ok(source.includes("basketballPlayers({ ...route, league: 'NBA' })"));
- assert.ok(source.includes("(await ensureGames()).nbaToday({ research: true })"));
+ assert.ok(source.includes("(await ensureGames()).nbaToday({ research: true, embedded: true })"));
 });
 test('NBA posted play leads research, while older results stay in the record fold',async()=>{
  const s=load(),api=s.module.exports,stamp=new Date(Date.now()+86400000).toISOString();

@@ -540,6 +540,8 @@
         return { view: 'research', mode, ctx: mode === 'trends' && C.researchContext ? C.researchContext(`#trends?${params}`) : null, type: params.get('type') || null, sort: params.get('sort') || null, q, game: params.get('game') || null, sub: params.get('view') || null, rate: params.get('rate') || null, show: params.get('show') || null, pl: (params.get('pl') || '').toUpperCase() || null,
           league: params.get('sport') ? params.get('sport').toUpperCase() : null };
       }
+      case 'edges': return { view: 'research', mode: 'lines', type: params.get('type') || 'all', sort: params.get('sort') || 'edge',
+        show: params.get('show') || 'value', q, league: params.get('sport') ? params.get('sport').toUpperCase() : 'ALL', edges: true };
       /* Old board links carried their own filters (best, market, sport, sort); keep what still means something. */
       case 'board': return { view: 'research', mode: 'lines', type: a === 'props' ? 'props' : a === 'favorites' ? 'all' : 'games',
         sort: a === 'favorites' || params.get('best') ? 'edge' : (params.get('sort') === 'time' ? 'kickoff' : params.get('sort') === 'confidence' ? 'chance' : null),
@@ -936,7 +938,7 @@
       ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;
   };
   const rail = (rows, opts = {}) => opts.quick
-    ? `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="decision-list" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}">${rows.map(p => decisionCard(p, opts)).join('')}</section>`
+    ? `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="decision-list${opts.compact ? ' is-compact' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}">${rows.map(p => decisionCard(p, opts)).join('')}</section>`
     : `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="kt-pass${opts.onPage ? ' on-page' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
     <div class="kt-tickets">${rows.map((p, i) => ticket(p, { ...opts, card: p.card || (opts.cards && opts.cards.get(p.id)), clip: i === 0 && !opts.more, strip: i === 0 && !opts.more, compact: (i > 0 || opts.more) && !C.isLadder(p) })).join('')}</div></section>`;
   /* Today uses a familiar sportsbook-style summary. The full Kitchen Ticket is reserved for the play page and social art. */
@@ -1210,14 +1212,13 @@
   const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', market = KVB_WAIT, favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
     const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today);
     const researchSport = propSport(state.league);
+    const currentBets = [...new Map([...rows.slice(0, 1), ...more, ...rows.slice(1)].map(row => [row.id, row])).values()];
     return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Kook’n picks'}</h2><a href="#record">Track record ›</a></div>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card', quick: true }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
-      ${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
-      ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, quick: true, label: 'More best bets' })}</section>` : ''}
+      <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : currentBets.length > 1 ? `Today’s best bets · ${currentBets.length}` : 'Today’s best bet'}</h2><a href="#record">Track record ›</a></div>
+      ${currentBets.length ? rail(currentBets, { season, lines, cards, id: 'today-card', quick: true, compact: true, label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
       ${otherTickets}
       ${postedSummary ? postedSummary.html : ''}
-      <nav class="today-tools" aria-label="Betting data and research"><a href="${propsHref(researchSport)}"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&amp;sport=${researchSport}"><span aria-hidden="true">⌕</span><b>Find a player</b><small>Stats & logs</small></a></nav>
+      <nav class="today-tools" aria-label="Betting data and research"><a href="#edges"><span aria-hidden="true">K</span><b>Kook’n Edges</b><small>Best gaps across books</small></a><a href="${propsHref(researchSport)}"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a></nav>
       ${market}${favorite}${climbStub(climb, past)}${proof}${spotlight}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
       ${rail(later, { season, lines, cards, more: true, quick: true, label: 'Upcoming best bets' })}</section>` : ''}`;
   };
@@ -1483,18 +1484,18 @@
     const projection = isNum(vm.projection) ? C.fixed(vm.projection) : null;
     const comparable = projection !== null && isNum(vm.line) && (vm.isProp || /total/i.test(vm.market));
     const difference = comparable ? round1(vm.projection - vm.line) : null;
-    const verdict = clears ? 'Cook It' : current && projection !== null ? 'On the Skillet' : 'Leave It Alone';
+    const verdict = clears ? 'Kook’n edge · Research lean' : current && projection !== null ? 'Projection lean · Research only' : 'No current edge';
     const badge = vm.official ? `<span class="badge best">Best bet${vm.officialLine != null && Number(vm.officialLine) !== Number(vm.line) ? ` at ${esc(vm.officialLine)}` : ''}</span>`
       : vm.onCard ? `<span class="badge research" title="Posted at ${esc(oddsText(vm.onCard.odds))}${vm.onCard.line != null ? `, line ${esc(vm.onCard.line)}` : ''} and graded there">On the card${vm.onCard.line != null && Number(vm.onCard.line) !== Number(vm.line) ? ` at ${esc(vm.onCard.line)}` : ''}</span>` : '';
     const summary = `<div class="row-main">
       <div class="row-title with-art">${artFor(vm, 'sm')}<div><b>${esc(vm.title)}${badge}${vm.alternate ? '<span class="badge research">Alternate</span>' : ''}</b><span>${esc(vm.market)}${vm.position ? ` · ${esc(vm.position)}` : ''}${vm.matchup && !vm.isProp ? ` · ${esc(vm.matchup)}` : ''} · ${esc(vm.league === 'CFB' ? 'College' : vm.league)} · ${esc(whenShort(vm.kickoff))}</span>${vm.sub ? `<span>${esc(vm.sub)}</span>` : ''}
         <span>Kook’n projection <b>${esc(projection ?? 'Unavailable')}</b>${difference !== null ? ` · ${difference > 0 ? '+' : ''}${esc(difference)} vs book line ${esc(vm.line)}` : ''}</span>
-        <span>${verdict} · Research</span></div></div>
+        <span>${verdict}</span></div></div>
       <div class="row-price"><b class="num">${esc(price)}</b><span class="${ageCls}">${esc(book || '')}${vm.booksCount > 1 ? ` · ${vm.booksCount} books` : ''}${vm.age.kind !== 'fresh' ? ` · ${esc(vm.age.label)}` : ''}${isNum(vm.opened) && vm.opened !== Number(vm.line) ? ` · opened ${esc(vm.opened)}` : ''}</span></div>
       <div class="row-meter on-felt">${meter(vm.chance, vm.needs, true)}<span>${pctText(vm.chance)} our chance · ${pctText(vm.needs)} needed</span></div>
       <div class="row-edge ${clears ? 'clears' : vm.edge > 0 ? 'pos' : 'neg'}">${clears ? '<span aria-hidden="true">✓ </span>' : ''}${vm.edge != null ? `${vm.edge > 0 ? '+' : ''}${vm.edge}` : '–'}<small class="lbl"> pts vs price need</small>${clears ? '<span class="sr"> · passes our price check</span>' : ''}</div>
       <div class="row-fair num"><small class="lbl">our price </small>${esc(oddsText(current && vm.calibrated ? vm.fair : null))}</div></div>`;
-    if (!expandable) return `<a href="${vm.athleteId && FOOTBALL.includes(vm.league) ? `#player/${vm.league}/${encodeURIComponent(vm.athleteId)}${vm.stat ? `?stat=${encodeURIComponent(vm.stat)}` : ''}` : vm.gameId ? `#game/${encodeURIComponent(vm.gameId)}` : `#research/lines?q=${encodeURIComponent(vm.player || vm.title)}`}" style="color:inherit;display:block;border-bottom:1px solid var(--line)">${summary}</a>`;
+    if (!expandable) return `<a class="${clears ? 'edge-liked' : ''}" href="${vm.athleteId && FOOTBALL.includes(vm.league) ? `#player/${vm.league}/${encodeURIComponent(vm.athleteId)}${vm.stat ? `?stat=${encodeURIComponent(vm.stat)}` : ''}` : vm.gameId ? `#game/${encodeURIComponent(vm.gameId)}` : `#edges?q=${encodeURIComponent(vm.player || vm.title)}`}" style="color:inherit;display:block;border-bottom:1px solid var(--line)">${summary}</a>`;
     const fa = [...(vm.extraFa || [])];
     if (vm.chance != null && vm.needs != null) fa.push([vm.chance > vm.needs ? 'for' : 'against', vm.chance > vm.needs ? `Our chance ${pctText(vm.chance)} beats the ${pctText(vm.needs)} this price needs.` : `Our chance ${pctText(vm.chance)} does not clear the ${pctText(vm.needs)} this price needs.`]);
     if (vm.otherLines.length) fa.push(['against', `Books disagree on the number: ${vm.otherLines.slice(0, 3).map(b => `${b.book} ${b.line}`).join(', ')}.`]);
@@ -1502,7 +1503,7 @@
     if (vm.limited) fa.push(['against', 'Listed as questionable on the injury report.']);
     if (vm.caution) fa.push(['against', 'Recent results in this market raised the bar we use.']);
     if (vm.age.kind !== 'fresh') fa.push(['against', vm.age.label + '.']);
-    return `<details data-row="${esc(vm.id)}" data-market="${vm.isProp ? 'prop' : /total/i.test(vm.market) ? 'total' : 'spread'}" data-proj="${esc(vm.projection ?? '')}" data-game="${esc(vm.gameId || '')}" data-athlete="${esc(vm.athleteId || '')}" data-stat="${esc(vm.stat || '')}" data-line="${esc(vm.line)}" data-dir="${esc(vm.direction || '')}">
+    return `<details class="${clears ? 'edge-liked' : ''}" data-row="${esc(vm.id)}" data-market="${vm.isProp ? 'prop' : /total/i.test(vm.market) ? 'total' : 'spread'}" data-proj="${esc(vm.projection ?? '')}" data-game="${esc(vm.gameId || '')}" data-athlete="${esc(vm.athleteId || '')}" data-stat="${esc(vm.stat || '')}" data-line="${esc(vm.line)}" data-dir="${esc(vm.direction || '')}">
       <summary>${summary}</summary>
       <div class="row-detail"><div data-chart><p class="small muted">Loading history…</p></div>
         <div><ul class="fa">${fa.map(([c, t]) => `<li class="${c}">${esc(t)}</li>`).join('')}</ul>
@@ -1532,16 +1533,18 @@
   const RESEARCH_HEAD = {
     trends: ['Hit-rate trends', 'L5, L10 and season results against a line. History, not a probability.'],
     news: ['Injuries and news', 'ESPN injury list and status changes, newest first.'] };
-  const researchHead = mode => {
+  const researchHead = (mode, edges = false) => {
     const playerHeads = { matchup: ['Player prop board', "Book line, Kook’n, L5/L10 and defense at a glance."], search: ['Player stats', 'Logs, averages & splits.'], defense: ['Position vs. defense', 'What defenses allow by position and stat.'] };
-    const [title, sub] = mode === 'players' ? (playerHeads[state.players.sub] || playerHeads.matchup) : RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
-    const active = mode === 'players' ? state.players.sub === 'search' ? 'players' : state.players.sub === 'defense' || state.players.sub === 'teams' ? 'defense' : 'props' : mode === 'trends' && state.trends.period === '1Q' ? 'first' : mode;
+    const [title, sub] = edges ? ['Kook’n Edges', 'Verified projection gaps across current sportsbook prices. Green means research lean, not an official pick.']
+      : mode === 'players' ? (playerHeads[state.players.sub] || playerHeads.matchup) : RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
+    const active = edges ? 'edges' : mode === 'players' ? state.players.sub === 'search' ? 'players' : state.players.sub === 'defense' || state.players.sub === 'teams' ? 'defense' : 'props' : mode === 'trends' && state.trends.period === '1Q' ? 'first' : mode;
     const tool = (href, label, key) => `<a href="${href}"${active === key ? ' aria-current="page"' : ''}><b>${label}</b></a>`;
     const researchSport = propSport(state.league);
     const basketball = ['NBA','CBB'].includes(researchSport);
-    return `${head('Research', title, sub)}
-      <nav class="research-quick" aria-label="Research tools">${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? '' : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>
-      <details class="plain-fold research-more"><summary>More research</summary><div class="btn-row"><a class="btn small" href="#research/lines">Kook’n vs. book</a><a class="btn small" href="#research/trends?period=full">Full-game hit rates</a><a class="btn small" href="#research/news">Injuries & news</a><a class="btn small" href="#trends?period=full&amp;kind=alternate&amp;sport=ALL">Alternate lines</a></div></details>`;
+    const sportLanes = edges ? `<nav class="edge-sports" aria-label="Kook’n Edges sports"><a href="#edges"${state.league === 'ALL' ? ' aria-current="page"' : ''}>All priced</a><a href="#edges?sport=NFL"${state.league === 'NFL' ? ' aria-current="page"' : ''}>NFL</a><a href="#edges?sport=CFB"${state.league === 'CFB' ? ' aria-current="page"' : ''}>CFB</a><a href="#edges?sport=NBA"${state.league === 'NBA' ? ' aria-current="page"' : ''}>NBA</a><a href="#edges?sport=CBB"${state.league === 'CBB' ? ' aria-current="page"' : ''}>CBB</a></nav>` : '';
+    return `${head('Research', title, sub)}${sportLanes}
+      ${edges ? '' : `<nav class="research-quick" aria-label="Research tools">${tool('#edges', 'Edges', 'edges')}${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? '' : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>`}
+      <details class="plain-fold research-more"><summary>More research</summary><div class="btn-row"><a class="btn small" href="#edges">Kook’n Edges</a><a class="btn small" href="#research/trends?period=full">Full-game hit rates</a><a class="btn small" href="#research/news">Injuries & news</a><a class="btn small" href="#trends?period=full&amp;kind=alternate&amp;sport=ALL">Alternate lines</a></div></details>`;
   };
   /* A link's filters apply once, when it is opened. After that the reader's own choices win, even on refresh. */
   let appliedHash = null;
@@ -1561,16 +1564,16 @@
       if (route.show === 'all' || route.show === 'value') state.board.show = route.show;
     }
     if (state.league === 'NBA') return route.mode === 'players'
-      ? researchHead(route.mode) + await (await ensureMore()).basketballPlayers({ ...route, league: 'NBA' })
-      : (await ensureGames()).nbaToday({ research: true });
-    if (state.league === 'CBB' && route.mode === 'players') return researchHead(route.mode) + await (await ensureMore()).basketballPlayers({ ...route, league: 'CBB' });
-    if (state.league === 'CBB' && route.mode === 'lines') return researchHead(route.mode) + await (await ensureGames()).cbbToday();
+      ? researchHead(route.mode, route.edges) + await (await ensureMore()).basketballPlayers({ ...route, league: 'NBA' })
+      : researchHead(route.mode, route.edges) + await (await ensureGames()).nbaToday({ research: true, embedded: true });
+    if (state.league === 'CBB' && route.mode === 'players') return researchHead(route.mode, route.edges) + await (await ensureMore()).basketballPlayers({ ...route, league: 'CBB' });
+    if (state.league === 'CBB' && route.mode === 'lines') return researchHead(route.mode, route.edges) + await (await ensureGames()).cbbToday({ embedded: true });
     const today = await get('app/today.json');
     indexGames(today);
-    const top = researchHead(route.mode);
+    const top = researchHead(route.mode, route.edges);
     if (NOT_YET(state.league)) return top + notYet();
     const nbaCount = (today.games || []).filter(g => g.league === 'NBA' && C.dayOf(g.kickoff) === etDay()).length;
-    const researchStart = state.league === 'ALL' && (!route.mode || route.mode === 'lines') ? `<section class="research-start" aria-labelledby="research-start-h"><h2 id="research-start-h">Start with what you need</h2><div class="research-paths">
+    const researchStart = !route.edges && state.league === 'ALL' && (!route.mode || route.mode === 'lines') ? `<section class="research-start" aria-labelledby="research-start-h"><h2 id="research-start-h">Start with what you need</h2><div class="research-paths">
       <a href="#research/players?view=search&sport=NFL"><b>Find a player</b><span>Game logs, recent averages, splits and Kook’n projections.</span></a>
       <a href="#research/lines?type=props&sport=NFL"><b>NFL prop board</b><span>Book line, Kook’n projection, price and edge in one place.</span></a>
       <a href="#research/lines?sport=NBA"><b>NBA research${nbaCount ? ` · ${nbaCount} games` : ''}</b><span>Today’s matchups, player props and workload baselines.</span></a>
@@ -2102,9 +2105,9 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-7f52dddb72f5';
-  const GAMES_ASSET = 'app-games.js?v=sha256-93bd31562929';
+  const GAMES_ASSET = 'app-games.js?v=sha256-1cce16b8889c';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
-  const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
+  const RESEARCH_CSS = 'research.css?v=sha256-ef142ba6eef5';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
       const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = RESEARCH_CSS; link.onload = ok;

@@ -163,13 +163,13 @@ test('Today leads with the card, Kook vs. Book and current matchup while seconda
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /aria-label="Betting data and research"[\s\S]*Player props[\s\S]*First quarter[\s\S]*Games[\s\S]*Find a player/);
-  assert.match(page, /<h1>Today’s board<\/h1>[\s\S]*<h2>Kook’n picks<\/h2>[\s\S]*Today’s Climb/);
-  assert.match(page, /class="decision-list"[^>]*aria-label="Today&#39;s best bet"/, 'Today uses the clean decision summary');
+  assert.match(page, /aria-label="Betting data and research"[\s\S]*Kook’n Edges[\s\S]*Player props[\s\S]*First quarter[\s\S]*Games/);
+  assert.match(page, /<h1>Today’s board<\/h1>[\s\S]*<h2>Today’s best bets · 2<\/h2>[\s\S]*Today’s Climb/);
+  assert.match(page, /class="decision-list is-compact"[^>]*aria-label="Today’s best bets"/, 'Today uses one compact decision list');
   assert.match(page, /class="decision-more" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>See stats, trends and full breakdown/, 'the summary opens the complete preserved play');
   assert.doesNotMatch(page.slice(0, page.indexOf('class="kt-sec kt-left"')), /class="kt-order|class="kt-paper"/, 'Today no longer stacks branded paper tickets');
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="decision-list"', 'kt-bets"', 'id="today-kvb"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'class="kt-sec kt-left"',
+  const order = ['class="kt-lede', 'class="decision-list is-compact"', 'id="today-kvb"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'class="kt-sec kt-left"',
     'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
   assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'all official cards -> Kook vs. Book -> NFL -> results and games -> one secondary fold');
   assert.match(page, /<summary>More today<\/summary>/);
@@ -179,8 +179,8 @@ test('Today leads with the card, Kook vs. Book and current matchup while seconda
   const rails = page.slice(0, at('class="kt-sec kt-left"'));
   assert.doesNotMatch(rails, /Moved Line at Elsewhere/, 'Off the card stays outside the rail');
   assert.match(page.slice(at('kt-off-card"')), /Off the card · 1<\/h2>[\s\S]*Moved Line Today/);
-  const bets = page.slice(at('kt-bets"'), at('class="kt-sec kt-left"'));
-  assert.match(bets, /<h2 class="kt-head" id="bets-h">More best bets<\/h2>/);
+  const bets = page.slice(at('id="today-card"'), at('id="today-kvb"'));
+  assert.doesNotMatch(bets, /More best bets/, 'the second oversized best-bet section is gone');
   assert.match(bets, /Example Tech/, 'today\'s other best bet stays on the page');
   assert.doesNotMatch(bets, /80\/20 Climb step/, 'the dedicated Climb card is not repeated under More best bets');
   assert.doesNotMatch(bets, /Later Open/, 'future bets stay off an active game day');
@@ -944,7 +944,7 @@ test('All-sports Today puts every published straight before research', async () 
  app.sandbox.KRGames=()=>({cbbPicks:()=>'<section id="cbb-picks">Published CBB ticket</section>',nbaSummary:()=>'<section id="nba-research">NBA research</section>'});
  await app.api.views.today({view:'today'});await settle();
  const page=await app.api.views.today({view:'today'});
- assert.match(page,/aria-label="Betting data and research"[\s\S]*Player props[\s\S]*First quarter[\s\S]*Games[\s\S]*Find a player/);
+ assert.match(page,/aria-label="Betting data and research"[\s\S]*Kook’n Edges[\s\S]*Player props[\s\S]*First quarter[\s\S]*Games/);
  assert.match(page,/<h1>Today’s board<\/h1><p class="today-summary">Today’s posted plays\.<\/p>/);
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
  assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);
