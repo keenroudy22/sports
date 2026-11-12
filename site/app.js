@@ -1218,8 +1218,9 @@
       ${currentBets.length ? rail(currentBets, { season, lines, cards, id: 'today-card', quick: true, compact: true, label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
       ${otherTickets}
       ${postedSummary ? postedSummary.html : ''}
-      <nav class="today-tools" aria-label="Betting data and research"><a href="#edges"><span aria-hidden="true">K</span><b>Kook’n Edges</b><small>Best gaps across books</small></a><a href="${propsHref(researchSport)}"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a></nav>
-      ${market}${favorite}${climbStub(climb, past)}${proof}${spotlight}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
+      ${market}
+      <nav class="today-tools" aria-label="Betting data and research"><a href="#edges"><span aria-hidden="true">K</span><b>Kook’n Edges</b><small>Best gaps across books</small></a><a href="${propsHref(researchSport)}"><span aria-hidden="true">↕</span><b>Prop finder</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Matchups</b><small>Scores & projections</small></a></nav>
+      ${favorite}${climbStub(climb, past)}${proof}${spotlight}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
       ${rail(later, { season, lines, cards, more: true, quick: true, label: 'Upcoming best bets' })}</section>` : ''}`;
   };
   const firstPaint = (hero, now = Date.now()) => {
@@ -2106,7 +2107,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-1ca9dabda5f1';
-  const GAMES_ASSET = 'app-games.js?v=sha256-93b70542834c';
+  const GAMES_ASSET = 'app-games.js?v=sha256-5ecc0e0ae972';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-ef142ba6eef5';
   let researchCssLoading = null;
@@ -2310,7 +2311,6 @@
   const ticketLeg = row => ({ id: row.id, title: row.title, player: row.player || null, market: row.market || null, direction: row.direction || null, line: row.line,
     odds: row.odds, book: row.book, gameId: row.gameId, kickoff: row.kickoff, state: row.state, expiresAt: row.expiresAt, observedAt: row.observedAt });
   function boot() {
-    P.installBetslipHandler(toast);
     document.addEventListener('error', event => {
       const img = event.target;
       if (img instanceof HTMLImageElement && img.closest('.tm, .ava')) { const box = img.parentElement; img.remove(); box.classList.remove('has-logo'); box.classList.add('no-img'); }

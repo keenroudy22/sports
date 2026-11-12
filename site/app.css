@@ -131,8 +131,9 @@ main { max-width: var(--max); margin: 0 auto; padding: 14px var(--gutter) 0; }
 .betslip-action small { display: block; color: #70e9aa; font: 700 11px/1 var(--font-display); letter-spacing: .09em; }
 .betslip-action strong { display: block; margin-top: 5px; font-size: 15px; line-height: 1; }
 .betslip-action > b { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--kookd); color: var(--kookd-ink); font-size: 18px; }
-.betslip-action.compact { min-height: 48px; margin-top: 8px; padding-block: 7px; }
-.betslip-action.compact strong { margin-top: 4px; font-size: 14px; }
+.betslip-action.compact { min-height: 40px; margin-top: 7px; padding: 6px 8px 6px 11px; border-radius: 9px; }
+.betslip-action.compact strong { margin: 0; font-size: 13px; }
+.betslip-action.compact > b { width: 26px; height: 26px; font-size: 15px; }
 
 /* ---------- KPIs ---------- */
 .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 6px 0 16px; }

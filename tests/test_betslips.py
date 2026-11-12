@@ -99,6 +99,31 @@ class BetslipTests(unittest.TestCase):
         self.assertIsNone(betslips.safe_url('https://localhost/a'))
         self.assertEqual(betslips.safe_url('https://gambly.com/a'), 'https://gambly.com/a')
 
+    def test_exact_captured_prop_link_becomes_the_only_public_action(self):
+        row = pick(title='Saquon Barkley OVER 72.5 rushing yards', displayTitle='Saquon Barkley OVER 72.5 rushing yards')
+        props = {'NFL-1': {'retrievedAt': '2026-11-12T16:55:00Z', 'books': {'draftkings': {
+            'title': 'DraftKings', 'updatedAt': '2026-11-12T16:54:00Z', 'markets': {'rushYds': {
+                'Saquon Barkley': {'line': 72.5, 'over': -108,
+                                   'overLink': 'https://sportsbook.draftkings.com/event/fixture?outcome=1'}
+            }}}}}}
+        decorated = betslips.decorate(row, NOW, props=props)
+        self.assertEqual(decorated['betslip']['book'], 'DraftKings')
+        self.assertEqual(decorated['betslip']['currentOdds'], -108)
+        self.assertNotIn('betslipPrompt', decorated)
+        self.assertNotIn('betslip', betslips.decorate({**row, 'line': 73.5}, NOW, props=props))
+        self.assertNotIn('betslip', betslips.decorate({**row, 'book': 'FanDuel'}, NOW, props=props))
+
+    def test_exact_game_total_link_matches_book_side_and_line(self):
+        row = pick(marketType='total', market=None, title='Eagles at Giants under 44.5',
+                   displayTitle='Eagles at Giants under 44.5', line=44.5, direction='under')
+        odds = {'NFL-1': {'books': {'draftkings': {'updatedAt': '2026-11-12T16:54:00Z', 'total': {
+            'line': 44.5, 'over': -110, 'under': -110,
+            'underLink': 'https://sportsbook.draftkings.com/event/fixture?outcome=under'
+        }}}}}
+        direct = betslips.direct_from_odds(row, odds=odds)
+        self.assertEqual(direct['url'], odds['NFL-1']['books']['draftkings']['total']['underLink'])
+        self.assertIsNone(betslips.direct_from_odds({**row, 'direction': 'over', 'line': 45.5}, odds=odds))
+
 
 if __name__ == '__main__':
     unittest.main()

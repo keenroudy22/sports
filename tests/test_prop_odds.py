@@ -69,6 +69,14 @@ class ParseTests(unittest.TestCase):
                          {'line': 81.5, 'over': -110, 'under': -114})
         self.assertEqual(books['draftkings']['markets']['rec']['Drake London'], {'line': 5.5, 'over': 105})
 
+    def test_exact_prop_outcome_link_is_kept_with_the_matching_side(self):
+        linked = json.loads(json.dumps(self.event))
+        outcome = linked['bookmakers'][0]['markets'][0]['outcomes'][0]
+        outcome.update(link='https://sportsbook.draftkings.com/bijan-over', sid='bijan-over')
+        row = prop_odds.quotes_of(linked)['draftkings']['markets']['rushYds']['Bijan Robinson']
+        self.assertEqual(row['overLink'], 'https://sportsbook.draftkings.com/bijan-over')
+        self.assertEqual(row['overSid'], 'bijan-over')
+
     def test_the_best_side_takes_the_number_first_then_the_price(self):
         record = {'books': prop_odds.quotes_of(self.event)}
         self.assertEqual(prop_odds.best(record, 'rushYds', 'Bijan Robinson', 'over'), ('fanduel', 79.5, -108),

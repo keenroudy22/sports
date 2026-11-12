@@ -144,11 +144,23 @@ def books_of(event, home, away):
                 h = next((o for name, o in outcomes.items() if same_team(name, home)), None)
                 a = next((o for name, o in outcomes.items() if same_team(name, away)), None)
                 if h and a and isinstance(h.get('point'), (int, float)):
-                    entry['spread'] = {'home': h['point'], 'homePrice': h.get('price'), 'awayPrice': a.get('price')}
+                    spread = {'home': h['point'], 'homePrice': h.get('price'), 'awayPrice': a.get('price')}
+                    for label, outcome in (('home', h), ('away', a)):
+                        if outcome.get('link'):
+                            spread[f'{label}Link'] = outcome['link']
+                        if outcome.get('sid'):
+                            spread[f'{label}Sid'] = outcome['sid']
+                    entry['spread'] = spread
             elif market.get('key') == 'totals':
                 over, under = outcomes.get('over'), outcomes.get('under')
                 if over and under and isinstance(over.get('point'), (int, float)):
-                    entry['total'] = {'line': over['point'], 'over': over.get('price'), 'under': under.get('price')}
+                    total = {'line': over['point'], 'over': over.get('price'), 'under': under.get('price')}
+                    for label, outcome in (('over', over), ('under', under)):
+                        if outcome.get('link'):
+                            total[f'{label}Link'] = outcome['link']
+                        if outcome.get('sid'):
+                            total[f'{label}Sid'] = outcome['sid']
+                    entry['total'] = total
         if 'spread' in entry or 'total' in entry:
             out[book['key']] = entry
     return out
@@ -242,7 +254,8 @@ def due(league, games, status, now):
 
 def fetch(sport, key):
     query = urllib.parse.urlencode({'apiKey': key, 'markets': ','.join(MARKETS), 'bookmakers': ','.join(BOOKS),
-                                    'oddsFormat': 'american', 'dateFormat': 'iso'})
+                                    'oddsFormat': 'american', 'dateFormat': 'iso',
+                                    'includeLinks': 'true', 'includeSids': 'true'})
     request = urllib.request.Request(API.format(sport=sport) + '?' + query, headers={'User-Agent': 'keenroudy-sports'})
     return quota.guarded_json(request, COST, reserve=RESERVE)
 

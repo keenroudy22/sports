@@ -73,6 +73,15 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(books['draftkings']['spread'], {'home': -16.5, 'homePrice': -118, 'awayPrice': -102})
         self.assertEqual(books['fanduel']['total'], {'line': 50.5, 'over': -110, 'under': -110})
 
+    def test_exact_outcome_links_and_ids_are_retained_when_provider_returns_them(self):
+        linked = json.loads(json.dumps(EVENT))
+        outcomes = linked['bookmakers'][0]['markets'][1]['outcomes']
+        outcomes[0].update(link='https://sportsbook.draftkings.com/over', sid='over-1')
+        outcomes[1].update(link='https://sportsbook.draftkings.com/under', sid='under-1')
+        total = odds_api.books_of(linked, 'Texas A&M Aggies', 'Kentucky Wildcats')['draftkings']['total']
+        self.assertEqual(total['overLink'], 'https://sportsbook.draftkings.com/over')
+        self.assertEqual(total['underSid'], 'under-1')
+
     def test_best_price_prefers_the_number_then_the_price(self):
         record = {'books': odds_api.books_of(EVENT, 'Texas A&M Aggies', 'Kentucky Wildcats')}
         self.assertEqual(odds_api.best(record, 'home'), ('fanduel', -16.5, -110), 'same number as DK, better price')

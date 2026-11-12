@@ -40,6 +40,10 @@ BOOKS = {
     'espn bet': 'ESPN BET', 'thescore bet': 'ESPN BET',
     'fanatics': 'Fanatics', 'hard rock': 'Hard Rock', 'hard rock bet': 'Hard Rock',
 }
+BOOK_KEYS = {
+    'DraftKings': 'draftkings', 'FanDuel': 'fanduel', 'BetMGM': 'betmgm', 'Caesars': 'caesars',
+    'BetRivers': 'betrivers', 'ESPN BET': 'espnbet', 'Fanatics': 'fanatics', 'Hard Rock': 'hardrockbet',
+}
 
 
 class BetslipError(RuntimeError):
@@ -130,6 +134,71 @@ def safe_url(value):
     if parsed.hostname in {'localhost', '127.0.0.1', '::1'}:
         return None
     return parsed.geturl()
+
+
+def _same_number(left, right):
+    try:
+        return abs(float(left) - float(right)) < 0.0001
+    except (TypeError, ValueError):
+        return False
+
+
+def _player_name(pick):
+    name = str(pick.get('player') or '').strip()
+    if name:
+        return name
+    title = str(pick.get('displayTitle') or pick.get('title') or '')
+    return re.split(r'\s+(?:OVER|UNDER)\s+', title, maxsplit=1, flags=re.IGNORECASE)[0].strip()
+
+
+def _matched_link(book, side, line, row, checked_at=None):
+    if not isinstance(row, dict) or not _same_number(row.get('line'), line):
+        return None
+    url = safe_url(row.get(f'{side}Link'))
+    if not url:
+        return None
+    return {
+        'status': 'ready', 'provider': 'The Odds API', 'book': book, 'url': url,
+        'legsRequested': 1, 'legsMatched': 1, 'currentOdds': row.get(side),
+        'generatedAt': checked_at,
+        'note': 'Exact sportsbook, market, side and line matched. Review the current price before placing.',
+    }
+
+
+def direct_from_odds(pick, odds=None, props=None):
+    """Return one verified sportsbook deep link for an exact straight selection.
+
+    Captured URLs are never guessed. Parlays, missing links, a different line, player,
+    market, side or sportsbook all fail closed.
+    """
+    if not isinstance(pick, dict) or pick.get('legs') or not pick.get('gameId'):
+        return None
+    book = canonical_book(pick.get('book'))
+    book_key = BOOK_KEYS.get(book)
+    side = str(pick.get('direction') or '').casefold()
+    if not book_key or side not in {'home', 'away', 'over', 'under'}:
+        return None
+    game_id = str(pick['gameId'])
+    market_type = str(pick.get('marketType') or '').casefold()
+    if market_type == 'prop' or pick.get('market'):
+        record = (props or {}).get(game_id) or {}
+        entry = ((record.get('books') or {}).get(book_key) or {})
+        market = str(pick.get('market') or '')
+        players = (entry.get('markets') or {}).get(market) or {}
+        wanted = re.sub(r'[^a-z0-9]+', '', _player_name(pick).casefold())
+        player_row = next((row for name, row in players.items()
+                           if re.sub(r'[^a-z0-9]+', '', str(name).casefold()) == wanted), None)
+        return _matched_link(book, side, pick.get('line'), player_row, entry.get('updatedAt') or record.get('retrievedAt'))
+    record = (odds or {}).get(game_id) or {}
+    entry = ((record.get('books') or {}).get(book_key) or {})
+    if market_type == 'total' and side in {'over', 'under'}:
+        return _matched_link(book, side, pick.get('line'), entry.get('total'), entry.get('updatedAt') or record.get('retrievedAt'))
+    if market_type == 'spread' and side in {'home', 'away'}:
+        spread = entry.get('spread') or {}
+        selected_line = spread.get('home') if side == 'home' else -spread.get('home') if isinstance(spread.get('home'), (int, float)) else None
+        row = {'line': selected_line, side: spread.get(f'{side}Price'), f'{side}Link': spread.get(f'{side}Link')}
+        return _matched_link(book, side, pick.get('line'), row, entry.get('updatedAt') or record.get('retrievedAt'))
+    return None
 
 
 def load(path=STORE, fallback=None):
@@ -265,12 +334,11 @@ def public_for(pick, now=None, store=None):
                                            'legsMatched', 'overallOdds', 'generatedAt', 'note') if item.get(key) is not None}
 
 
-def decorate(pick, now=None, store=None):
-    """Add a direct link when verified and an exact Gambly handoff in every case."""
+def decorate(pick, now=None, store=None, odds=None, props=None):
+    """Add only an exact, captured sportsbook action; unsupported rows stay quiet."""
     row = dict(pick)
     if eligible(row, now):
-        row['betslipPrompt'] = prompt_for(row)
-        direct = public_for(row, now=now, store=store)
+        direct = direct_from_odds(row, odds=odds, props=props)
         if direct:
             row['betslip'] = direct
     return row

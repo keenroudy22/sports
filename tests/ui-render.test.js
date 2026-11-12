@@ -141,10 +141,18 @@ test('matchup research is a scan-first prop board with Kookn and paid-tool compa
   assert.match(source, /includes\(route\.view\)\) await ensureResearchCss\(\)/);
 });
 
+test('game prop tables become scan cards on phones without losing exact stat links', () => {
+  assert.match(gamesSource, /data-stat="\$\{esc\(label\)\}"/);
+  assert.match(gamesSource, /@media \(max-width:760px\)[\s\S]*\.prop-compare tr \{ display:grid; grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(gamesSource, /\.prop-compare thead \{ display:none; \}/);
+  assert.match(gamesSource, /content:attr\(data-stat\)/);
+  assert.match(gamesSource, /line=\$\{esc\(line\)\}&amp;direction=\$\{esc\(direction\)\}/);
+});
+
 test('mobile navigation leads with bettor tasks instead of internal research categories', () => {
   assert.match(source, /\['research', 'Props'\]/);
   assert.match(source, /\['record', 'Results'\]/);
-  assert.match(source, /Player props<\/b><small>Line · Kook’n · L5\/L10/);
+  assert.match(source, /Prop finder<\/b><small>Line · Kook’n · L5\/L10/);
   assert.match(source, /First quarter<\/b><small>1Q history & matchups/);
   assert.match(source, /class="research-quick"/);
   assert.match(source, /'Player prop board'/);

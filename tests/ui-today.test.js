@@ -163,13 +163,13 @@ test('Today leads with the card, Kook vs. Book and current matchup while seconda
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /aria-label="Betting data and research"[\s\S]*Kook’n Edges[\s\S]*Player props[\s\S]*First quarter[\s\S]*Games/);
+  assert.match(page, /aria-label="Betting data and research"[\s\S]*Kook’n Edges[\s\S]*Prop finder[\s\S]*First quarter[\s\S]*Matchups/);
   assert.match(page, /<h1>Today’s board<\/h1>[\s\S]*<h2>Today’s best bets · 2<\/h2>[\s\S]*Today’s Climb/);
   assert.match(page, /class="decision-list is-compact"[^>]*aria-label="Today’s best bets"/, 'Today uses one compact decision list');
   assert.match(page, /class="decision-more" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>See stats, trends and full breakdown/, 'the summary opens the complete preserved play');
   assert.doesNotMatch(page.slice(0, page.indexOf('class="kt-sec kt-left"')), /class="kt-order|class="kt-paper"/, 'Today no longer stacks branded paper tickets');
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="decision-list is-compact"', 'id="today-kvb"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'class="kt-sec kt-left"',
+  const order = ['class="kt-lede', 'class="decision-list is-compact"', 'id="today-kvb"', 'class="today-tools"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'class="kt-sec kt-left"',
     'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
   assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'all official cards -> Kook vs. Book -> NFL -> results and games -> one secondary fold');
   assert.match(page, /<summary>More today<\/summary>/);
@@ -208,23 +208,20 @@ test('Today drops a reason that merely repeats the visible book and projection n
   assert.doesNotMatch(first, /Why it made the card|Book says 49\.5/, 'the full play page keeps reasoning; Today stays concise');
 });
 
-test('official plays expose a full-match sportsbook slip and exact Gambly fallback without placing a wager', async () => {
-  const ready = { ...prop, betslipPrompt: 'Build this exact FanDuel single bet.', betslip: {
-    status: 'ready', provider: 'Gambly', book: 'FanDuel', legsRequested: 1, legsMatched: 1,
-    url: 'https://www.gambly.com/deeplink/slip/fixture', generatedAt: '2026-10-10T13:58:00Z' } };
+test('official plays expose only a verified exact sportsbook link and no Gambly fallback', async () => {
+  const ready = { ...prop, betslip: {
+    status: 'ready', provider: 'The Odds API', book: 'FanDuel', legsRequested: 1, legsMatched: 1,
+    url: 'https://sportsbook.fanduel.com/navigation/fixture', generatedAt: '2026-10-10T13:58:00Z' } };
   const direct = await loadApp('#record', {}, { today: { ...TODAY, picks: [ready, ...rungs] } }).api.views.today({ view: 'today' });
-  assert.match(direct, /class="betslip-action compact" href="https:\/\/www\.gambly\.com\/deeplink\/slip\/fixture"/);
-  assert.match(direct, /KOOK’N BETSLIP · 1\/1 MATCHED/);
-  assert.match(direct, /Open bet in FanDuel/);
-  assert.doesNotMatch(direct, /data-gambly-prompt/, 'a verified direct link replaces the copy-and-paste fallback');
+  assert.match(direct, /class="betslip-action compact" href="https:\/\/sportsbook\.fanduel\.com\/navigation\/fixture"/);
+  assert.match(direct, /Open exact line in FanDuel/);
+  assert.doesNotMatch(direct, /data-gambly-prompt|Build in Gambly|KOOK’N BETSLIP/);
 
   const parlay = { ...rung('parlay', 1, 3, null, { stake: 50, payout: 250 }, prop.kickoff),
     betslipPrompt: 'Build this exact FanDuel parlay.\n1. Leg A\n2. Leg B' };
   const fallback = await loadApp('#pick/parlay', {}, { today: { ...TODAY, picks: [parlay] } }).api.views.pick({ id: 'parlay' });
-  assert.match(fallback, /class="betslip-action" data-gambly-prompt="[^"]+"/);
-  assert.match(fallback, /KOOK’N BETSLIP · EXACT 2 LEGS/);
-  assert.match(fallback, /Build in Gambly/);
-  assert.doesNotMatch(await loadApp('#record', {}, { today: { ...TODAY, picks: [{ ...ready, result: 'win' }] } }).api.views.today({ view: 'today' }), /KOOK’N BETSLIP|Build in Gambly|Open bet in/,
+  assert.doesNotMatch(fallback, /betslip-action|data-gambly-prompt|Build in Gambly/, 'unsupported parlays do not get a misleading handoff');
+  assert.doesNotMatch(await loadApp('#record', {}, { today: { ...TODAY, picks: [{ ...ready, result: 'win' }] } }).api.views.today({ view: 'today' }), /betslip-action|Build in Gambly|Open exact line in/,
     'settled plays never offer a live slip');
 });
 
@@ -964,7 +961,7 @@ test('All-sports Today puts every published straight before research', async () 
  app.sandbox.KRGames=()=>({cbbPicks:()=>'<section id="cbb-picks">Published CBB ticket</section>',nbaSummary:()=>'<section id="nba-research">NBA research</section>'});
  await app.api.views.today({view:'today'});await settle();
  const page=await app.api.views.today({view:'today'});
- assert.match(page,/aria-label="Betting data and research"[\s\S]*Kook’n Edges[\s\S]*Player props[\s\S]*First quarter[\s\S]*Games/);
+ assert.match(page,/aria-label="Betting data and research"[\s\S]*Kook’n Edges[\s\S]*Prop finder[\s\S]*First quarter[\s\S]*Matchups/);
  assert.match(page,/<h1>Today’s board<\/h1><p class="today-summary">Today’s posted plays\.<\/p>/);
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
  assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);

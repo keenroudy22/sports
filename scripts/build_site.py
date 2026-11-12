@@ -2023,7 +2023,11 @@ def build(now=None):
     by_id.update({g['id']: g for g in slate.get('games', [])})
     first, latest = first_publications(reports)
     slip_store = betslips.load()
-    picks = [betslips.decorate(p, now=now, store=slip_store)
+    odds_store = load_store('odds')
+    books = {gid: rows[-1] for gid, rows in odds_store.items()}
+    prop_store = load_store('prop-odds')
+    prop_prices = {gid: rows[-1] for gid, rows in prop_store.items()}
+    picks = [betslips.decorate(p, now=now, store=slip_store, odds=books, props=prop_prices)
              for p in board_picks(first, latest, by_id, identities, now)]
     import result_display
     for row in picks:
@@ -2031,7 +2035,6 @@ def build(now=None):
             continue
         row['actual'] = result_display.clean_actual(row)
         row['resultDetail'] = result_display.detail(row, stored.get(row.get('gameId')))
-    books = {gid: rows[-1] for gid, rows in load_store('odds').items()}
     lines = catalog_lines(catalog, by_id, identities, now) + game_market_lines(slate, now, books)
 
     if OUT.exists():
@@ -2092,8 +2095,6 @@ def build(now=None):
             if (line['grade'].get('edge') or 0) < 3.0:
                 line['grade']['tier'] = 'pass'
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
-    prop_store = load_store('prop-odds')
-    prop_prices = {gid: rows[-1] for gid, rows in prop_store.items()}
     # College players have no ESPN feed of main lines: their board rows come from the priced feed's own main numbers.
     captures = {**feed_captures(prop_store, by_id, forecasts, names), **captures}
     # A stored capture can hold a line the game cannot produce; clean it before it reaches the board.

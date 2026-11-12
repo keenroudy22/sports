@@ -88,7 +88,8 @@ def fetch_events(sport, key, opener=urllib.request.urlopen):
 
 def fetch_odds(sport, event, key, opener=urllib.request.urlopen):
     query = urllib.parse.urlencode({'apiKey': key, 'markets': ','.join(MARKETS), 'bookmakers': ','.join(odds_api.BOOKS),
-                                    'oddsFormat': 'american', 'dateFormat': 'iso'})
+                                    'oddsFormat': 'american', 'dateFormat': 'iso',
+                                    'includeLinks': 'true', 'includeSids': 'true'})
     url = ODDS.format(sport=sport, event=event) + '?' + query
     request = urllib.request.Request(url, headers={'User-Agent': 'keenroudy-sports'})
     return quota.guarded_json(request, COST, reserve=RESERVE, opener=opener)
@@ -114,6 +115,10 @@ def quotes_of(event):
                 if entry['line'] != point:      # a book showing two numbers for one player: keep the main one
                     continue
                 entry[side] = int(price)
+                if outcome.get('link'):
+                    entry[f'{side}Link'] = outcome['link']
+                if outcome.get('sid'):
+                    entry[f'{side}Sid'] = outcome['sid']
             players = {n: e for n, e in players.items() if 'over' in e or 'under' in e}
             if players:
                 markets[key] = players

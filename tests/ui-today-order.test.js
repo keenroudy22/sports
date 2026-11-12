@@ -22,11 +22,11 @@ test('Today leads with decisions and Kook vs. Book, then groups lower-priority r
   const t = s => { const i = top.indexOf(s); assert.ok(i >= 0, s); return i; };
   assert.ok(t('rail(currentBets') < t('${postedSummary ? postedSummary.html')
     && t('${otherTickets}') < t('${postedSummary ? postedSummary.html')
-    && t('${postedSummary ? postedSummary.html') < t('<nav class="today-tools"')
-    && t('<nav class="today-tools"') < t('${market}')
-    && t('${market}') < t('${climbStub(climb, past)}') && t('${climbStub(climb, past)}') < t('${proof}')
+    && t('${postedSummary ? postedSummary.html') < t('${market}')
+    && t('${market}') < t('<nav class="today-tools"')
+    && t('<nav class="today-tools"') < t('${climbStub(climb, past)}') && t('${climbStub(climb, past)}') < t('${proof}')
     && t('${proof}') < t('${nextSlate}') && t('${nextSlate}') < t('rail(later,'),
-  'all current best bets lead, followed by research tools, Kook vs. Book, Climb, season line, then explicitly labeled off-day prep');
+  'all current best bets lead, followed by Kook vs. Book, research shortcuts, Climb, season line, then explicitly labeled off-day prep');
 });
 
 test('Off the card is the line-moved state only: its own visible section, never on the rail', () => {
