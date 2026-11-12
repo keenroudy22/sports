@@ -83,7 +83,7 @@
     const pastPrice = current.line === pick.line && isNum(pick.cutoffOdds) && cents(current.odds) < cents(pick.cutoffOdds);
     const moneyline = pick.marketType === 'moneyline' || pick.market === 'moneyline';
     const pastLine = !moneyline && isNum(pick.cutoffBoundary) && (pick.direction === 'under' ? current.line <= pick.cutoffBoundary : current.line >= pick.cutoffBoundary);
-    return { current, pastPrice, pastLine, inside: isNum(pick.cutoffOdds) && !pastPrice && !pastLine };
+    return { current, pastPrice, pastLine, inside: (moneyline || current.line === pick.line) && isNum(pick.cutoffOdds) && !pastPrice && !pastLine };
   };
   const climbWords = s => s.open ? `Step ${s.open.step || s.step} is live`
     : s.last && s.last.result === 'win' ? `Step ${s.last.step || s.step - 1} cashed · Step ${s.step} not posted yet`
