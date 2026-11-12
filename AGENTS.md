@@ -1,3 +1,21 @@
+# November 12 Today, Edges and unavailable-player props — verified live
+
+Today keeps every current official straight in one compact, front-and-center
+rail before research. Kook'n Edges is a dedicated all-sports route built from
+the existing verified line board; green means a desk research lean, never an
+official pick unless the cell explicitly says Official pick. Matchup prop
+tables keep listed Out, doubtful, suspended and reserve skill players visible
+instead of silently removing them. Their Kook'n projections and edges stay
+held, while captured reference lines still deep-link to exact recent-game
+charts. Player profiles apply the same availability hold and must say
+Unavailable · reference line, not Current line. Cam Skattebo is the live NFL
+regression: NYG RB, Out, held Kook'n number, visible carries/rushing/receiving
+reference lines and stored game history. Release
+`97bbce31e13207051d9ec4e2f562f8d0f7979f91` shipped through successful hosted
+run `43286675763`. Live Today, Edges, WSH–NYG and Cam's exact chart flow passed
+375/1440 checks with no page overflow, rendered load error or console warning.
+Preserve the unavailable-player row/profile contract across sports.
+
 # November 12 matchup prop tables and exact chart links
 
 Game pages use the NFL projection table pattern for NBA, CBB, NFL and CFB.
