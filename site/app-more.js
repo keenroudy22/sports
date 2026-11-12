@@ -350,13 +350,15 @@
     const read = (row, stat) => stat.startsWith('q1_') ? quarterByGame.get(String(row[0]))?.[stat.slice(3)] : C.observedStat(row, keys, stat);
     /* A new player starts fresh, unless the link carried a stat, season or sample. */
     const pkey = `${league}:${route.id}`;
-    const carries = route.stat || route.season || route.sample;
+    const carries = route.stat || route.season || route.sample || route.line || route.direction;
     if (state.player.key !== pkey || (carries && state.player.hash !== location.hash)) {
       state.player.key = pkey;
       state.player.hash = location.hash;
       state.player.stat = route.stat || null;
       state.player.season = route.season || 'current';
       state.player.window = ['all', 'last5', 'last10', 'last20'].includes(route.sample) ? route.sample : 'all';
+      state.player.line = route.line || '';
+      state.player.direction = route.direction === 'under' ? 'under' : 'over';
     }
     const options = [...new Set([...(C.POSITION_STATS[pos] || C.POSITION_STATS.WR), 'snapPct'])].filter(stat => rows.some(r => isNum(read(r, stat))));
     const quarterKeys = league === 'NFL' ? ['passYds','cmp','att','rushYds','car','recYds','rec'].filter(k => (data.firstQuarter || []).some(r => isNum(r.stats?.[k])) && (k === 'passYds' || k === 'cmp' || k === 'att' ? rows.some(r => isNum(C.observedCell(r, keys, k))) : (C.POSITION_STATS[pos] || []).includes(k))) .map(k => `q1_${k}`) : [];
@@ -388,11 +390,14 @@
     const latest = pricedRows.slice().sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt))[0];
     const captured = !isQuarter && (((nextDetail || {}).props || {}).lines || {})[route.id];
     const refLine = captured && isNum((captured[stat] || [])[0]) ? captured[stat][0] : null;
-    const quote = priced ? priced.src : latest || (refLine != null ? { line: refLine, state: 'reference', book: (((nextDetail || {}).props) || {}).provider || null, observedAt: (((nextDetail || {}).props) || {}).capturedAt || null } : null);
+    const linkedLine = !isQuarter && state.player.line !== '' && isNum(Number(state.player.line)) ? Number(state.player.line) : null;
+    const linkedQuote = linkedLine == null ? null : pricedRows.find(r => Number(r.line) === linkedLine
+      && String(r.direction || 'over').toLowerCase() === state.player.direction) || { line: linkedLine, state: 'reference' };
+    const quote = linkedQuote || priced ? (linkedQuote || priced.src) : latest || (refLine != null ? { line: refLine, state: 'reference', book: (((nextDetail || {}).props) || {}).provider || null, observedAt: (((nextDetail || {}).props) || {}).capturedAt || null } : null);
     const line = quote && isNum(Number(quote.line)) ? Number(quote.line) : null;
     const lineStatus = next ? C.quoteStatus(quote, next.kickoff) : null;
     /* The side a priced row is graded on; with no priced row the line reads as an over, never a held row's side. */
-    const dir = String((priced ? priced.src : {}).direction || 'over').toLowerCase() === 'under' ? 'under' : 'over';
+    const dir = linkedLine != null ? state.player.direction : String((priced ? priced.src : {}).direction || 'over').toLowerCase() === 'under' ? 'under' : 'over';
     const h = line != null ? C.hits(values, line) : null;
 
     const opp = next ? (side === 'home' ? next.away : next.home) : null;

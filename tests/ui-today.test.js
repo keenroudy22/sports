@@ -169,9 +169,9 @@ test('Today leads with the card, Kook vs. Book and current matchup while seconda
   assert.match(page, /class="decision-more" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>See stats, trends and full breakdown/, 'the summary opens the complete preserved play');
   assert.doesNotMatch(page.slice(0, page.indexOf('class="kt-sec kt-left"')), /class="kt-order|class="kt-paper"/, 'Today no longer stacks branded paper tickets');
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="decision-list"', 'id="today-kvb"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'class="kt-sec kt-left"',
+  const order = ['class="kt-lede', 'class="decision-list"', 'kt-bets"', 'id="today-kvb"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'class="kt-sec kt-left"',
     'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'official card -> Kook vs. Book -> NFL -> other bets -> results and games -> one secondary fold');
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'all official cards -> Kook vs. Book -> NFL -> results and games -> one secondary fold');
   assert.match(page, /<summary>More today<\/summary>/);
   for (const gone of ['kt-fold', 'class="onboard"', 'today-status']) assert.ok(!page.includes(gone), gone);
   const folds = [...page.matchAll(/<details[^>]*data-box="([^"]+)"/g)].map(m => m[1]);
@@ -949,7 +949,7 @@ test('All-sports Today puts every published straight before research', async () 
  assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
  assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);
  assert.match(page,/2 posted straights today/);
- const summary=page.slice(page.indexOf('id="today-posted-straights"'),page.indexOf('class="kt-focus-head"'));
+ const summary=page.slice(page.indexOf('id="today-posted-straights"'),page.indexOf('aria-label="Betting data and research"'));
  assert.match(summary,/Fixture Receiver OVER 49\.5/);
  assert.match(summary,/QUC \+8\.5[\s\S]*-112 · DraftKings · 1u/);
  assert.doesNotMatch(summary,/cbb-tomorrow|Later Open/);

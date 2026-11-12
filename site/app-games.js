@@ -19,6 +19,7 @@
     + ".nav-bar { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin: 0 0 12px; }\n.nav-bar .select { min-height: 38px; padding: 6px 10px; }\n"
     + ".kt-why .vs { grid-template-columns: auto 1fr 1fr auto; font-size: 15px; }\n.kt-why .vs .num { font-variant-numeric: tabular-nums; }\n.kt-drivers { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }\n.kt-drivers li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; font: 500 15px/1.45 var(--font-body); }\n.kt-drivers li::before { content: '↑'; color: var(--kookd); font-weight: 700; text-align: center; }\n.kt-drivers li.against::before { content: '↓'; color: var(--burnt-text); }\n.kt-drivers li small { display: inline; color: var(--dim); font-size: 13px; }\n.kt-drivers li.mk { display: block; font: 700 12px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin: 10px 0 2px; }\n.kt-drivers li.mk::before { content: none; }\n.kt-why:focus { outline: none; }\n.kt-why, .section[id] { scroll-margin-top: 64px; }\n"
     + ".kt-why-note { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--burnt); background: var(--burnt-soft); font: 500 14px/1.4 var(--font-body); }\n.kt-why-foot { margin-top: 12px; font: 500 14px/1.45 var(--font-body); color: var(--dim); }\n"
+    + ".prop-teams { display:grid; gap:14px; min-width:0; max-width:100%; }\n.prop-team { margin:0; min-width:0; max-width:100%; }\n.prop-team > .table-wrap, .prop-team > .prop-market-more { min-width:0; max-width:100%; }\n.prop-team > summary { min-height:48px; display:flex; align-items:center; gap:9px; font:700 17px/1.2 var(--font-display); }\n.prop-compare { min-width:720px; table-layout:fixed; }\n.prop-compare th:first-child { width:178px; position:sticky; left:0; z-index:2; background:var(--felt); }\n.prop-compare thead th:first-child { z-index:3; }\n.prop-compare td { width:170px; vertical-align:top; padding:9px 8px; }\n.prop-player b, .prop-player span { display:block; }\n.prop-player .badge { display:inline-flex; margin:4px 4px 0 0; }\n.prop-min { margin-top:5px; color:var(--dim); font:500 12px/1.35 var(--font-body); }\n.prop-cell { display:grid; gap:3px; min-height:86px; color:var(--chalk); }\n.prop-cell:hover { text-decoration:none; }\n.prop-cell b { font:700 17px/1.05 var(--font-display); }\n.prop-cell span { color:var(--dim); font:500 12px/1.3 var(--font-body); }\n.prop-cell .gap { color:var(--chalk); font-weight:700; }\n.prop-cell.liked { margin:-5px; padding:5px; border:1px solid var(--kookd); border-radius:8px; background:rgba(32,201,117,.07); }\n.prop-cell.official { border-color:var(--chalk); }\n.prop-market-more { margin-top:10px; }\n.prop-legend { display:flex; flex-wrap:wrap; gap:7px 14px; margin:8px 0 12px; color:var(--dim); font-size:12px; }\n.prop-legend b { color:var(--chalk); }\n@media (max-width: 520px) { .prop-compare { min-width:650px; } .prop-compare th:first-child { width:154px; } .prop-compare td { width:154px; } }\n"
     + "@media (max-width: 359px) { .pc-bet { grid-template-columns: 1fr 1fr; } }";
   if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-games-css'))) {
     const style = document.createElement('style'); style.id = 'kr-games-css'; style.textContent = GAMES_CSS; document.head.appendChild(style);
@@ -98,6 +99,68 @@
       ${quote ? `<p class="small muted">First recorded total · ${esc(quote.book)} · ${esc(whenShort(quote.capturedAt))}. Historical quote, not a live offer.</p>` : ''}`;
     const team=t=>({id:t.id,name:name(t),abbr:t.abbreviation || name(t),logo:t.logo});
     return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link,ranks:false,barLabel:'Baseline model win chance',extra:`${first}<details class="more-box"><summary>Team stats & model context</summary><p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${stats}</details>`});
+  };
+  const BBALL_PRIMARY = [['pts','PTS'],['reb','REB'],['ast','AST']];
+  const BBALL_EXTRA = [['fg3m','3PM'],['pra','PRA'],['pa','P+A'],['pr','P+R'],['ra','R+A']];
+  const basketballStat = row => row.stat || ({points:'pts',rebounds:'reb',assists:'ast',threes:'fg3m'}[String(row.statName || '').toLowerCase()]);
+  const basketballStatus = rows => {
+    const holds = rows.map(row => row.hold).filter(Boolean);
+    const availability = holds.map(text => /^Availability:\s*(.+)/i.exec(text)).find(Boolean);
+    if (availability) return { word: availability[1], warn: !/available|probable/i.test(availability[1]) };
+    if (holds.some(text => /report not submitted/i.test(text))) return { word: 'Report pending', warn: true };
+    if (holds.some(text => /identity needs verification/i.test(text))) return { word: 'Status unverified', warn: true };
+    if (holds.some(text => /role|minutes/i.test(text))) return { word: 'Role review', warn: true };
+    return rows.some(row => row.availabilityReportedAt) ? { word: 'Status checked', warn: false } : null;
+  };
+  const basketballMatchupProps = (league, game, data, index, props) => {
+    const gameRows = (props?.rows || []).filter(row => String(row.eventId) === String(game.providerId || String(game.id).replace(/^(?:NBA|CBB)-/, '')));
+    const official = new Set([...(data.trial?.plays || []), ...(data.picks?.plays || [])]
+      .filter(play => !play.result && play.athleteId && (!play.kickoff || C.dayOf(play.kickoff) === C.dayOf(game.kickoff)))
+      .map(play => `${play.athleteId}:${play.stat}`));
+    const teams = ['away','home'].map(side => game.teams[side]);
+    const teamPlayers = team => {
+      const members = new Map();
+      for (const entry of index.players || []) if (String(entry[3]) === String(team.id)) members.set(String(entry[0]), { id:String(entry[0]), name:entry[1], pos:entry[2], entry, stats:new Map() });
+      for (const row of gameRows) {
+        if (!(String(row.team) === String(team.id) || String(row.teamAbbr || '').toLowerCase() === String(team.abbreviation || '').toLowerCase()
+          || String(row.teamName || '').toLowerCase() === String(team.name || '').toLowerCase())) continue;
+        const key = String(row.athleteId || row.name);
+        const player = members.get(key) || { id:row.athleteId || null, name:row.name, pos:null, entry:null, stats:new Map() };
+        const stat = basketballStat(row);
+        if (stat) player.stats.set(stat, row);
+        members.set(key, player);
+      }
+      return [...members.values()].filter(player => player.stats.size || player.entry?.[7]?.values)
+        .sort((a,b) => Number(Boolean(b.stats.size))-Number(Boolean(a.stats.size))
+          || Number(b.entry?.[7]?.minutes || 0)-Number(a.entry?.[7]?.minutes || 0)
+          || String(b.entry?.[5] || '').localeCompare(String(a.entry?.[5] || '')) || String(a.name).localeCompare(String(b.name))).slice(0,12);
+    };
+    const playerLine = (player, stat) => {
+      const row = player.stats.get(stat), summary = player.entry?.[7] || null;
+      const projection = isNum(row?.projection?.value) ? Number(row.projection.value) : isNum(summary?.values?.[stat]) ? Number(summary.values[stat]) : null;
+      const line = isNum(row?.line) ? Number(row.line) : null;
+      const direction = String(row?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
+      const href = player.id ? `#player/${league}/${esc(player.id)}?stat=${esc(stat)}${line == null ? '' : `&amp;line=${esc(line)}&amp;direction=${esc(direction)}`}` : '';
+      const gap = projection != null && line != null ? projection-line : null;
+      const range = isNum(row?.projection?.low) && isNum(row?.projection?.high) ? `${C.fixed(row.projection.low)}–${C.fixed(row.projection.high)}` : null;
+      const recent = isNum(summary?.recent?.[stat]) ? `L5 avg ${C.fixed(summary.recent[stat])}` : row?.last5?.games ? `L5 ${row.last5.hits}/${row.last5.games} ${direction}` : null;
+      const prices = line == null ? 'Book line unavailable' : `Book ${line}${isNum(row.over) || isNum(row.under) ? ` · O ${isNum(row.over) ? oddsText(row.over) : '—'} / U ${isNum(row.under) ? oddsText(row.under) : '—'}` : ''}`;
+      const liked = Boolean(row?.favorite), isOfficial = official.has(`${player.id}:${stat}`);
+      const body = `<b>K ${projection == null ? 'Held' : esc(C.fixed(projection))}</b>${range ? `<span>Range ${esc(range)}</span>` : ''}<span>${esc(prices)}</span>${gap == null ? '' : `<span class="gap">${gap > 0 ? '+' : ''}${esc(C.fixed(gap))} vs line</span>`}${recent ? `<span>${esc(recent)}</span>` : ''}${row?.sourceAt ? `<span>Checked ${esc(ago(row.sourceAt))}${row.book ? ` · ${esc(bookLabel(row.book))}` : ''}</span>` : ''}${isOfficial ? '<span class="gap">Official pick</span>' : liked ? '<span class="gap">Desk research lean</span>' : ''}`;
+      return href ? `<a class="prop-cell${liked ? ' liked' : ''}${isOfficial ? ' official' : ''}" href="${href}">${body}</a>` : `<span class="prop-cell">${body}</span>`;
+    };
+    const table = (team, players, stats) => `<div class="table-wrap"><table class="t prop-compare"><thead><tr><th>Player · role</th>${stats.map(([,label]) => `<th>${esc(label)} · Kook vs Book</th>`).join('')}</tr></thead><tbody>${players.map(player => {
+      const rows = [...player.stats.values()], status = basketballStatus(rows), role = rows.find(row => row.currentRole)?.currentRole, summary = player.entry?.[7];
+      const projectedMinutes = rows.find(row => isNum(row.projection?.minutes))?.projection?.minutes ?? summary?.minutes;
+      const minuteList = role?.minutes || summary?.recentMinutes || [];
+      return `<tr><th class="prop-player"><a href="${player.id ? `#player/${league}/${esc(player.id)}?stat=pts` : '#research/players'}">${esc(player.name)}</a><span class="tiny muted">${esc(player.pos || 'Position unavailable')}</span>${status ? `<span class="badge ${status.warn ? 'warn' : 'research'}">${esc(status.word)}</span>` : ''}<span class="prop-min">MIN ${isNum(projectedMinutes) ? `K ${esc(C.fixed(projectedMinutes))}` : 'projection held'}${minuteList.length ? ` · recent ${minuteList.slice(-3).map(value => esc(C.fixed(value,0))).join('/')}` : ''}</span></th>${stats.map(([stat]) => `<td>${playerLine(player,stat)}</td>`).join('')}</tr>`;
+    }).join('')}</tbody></table></div>`;
+    const blocks = teams.map(team => {
+      const players = teamPlayers(team), extra = players.some(player => BBALL_EXTRA.some(([stat]) => player.stats.has(stat) || isNum(player.entry?.[7]?.values?.[stat])));
+      return `<details class="more-box prop-team" open><summary>${teamMark(team,'sm',league)} ${esc(team.name || team.abbreviation)} · ${players.length} players</summary>${players.length ? table(team,players,BBALL_PRIMARY) : '<p class="small muted">No verified player projection or price is stored for this team yet.</p>'}${extra ? `<details class="more-box prop-market-more"><summary>Threes & combo markets</summary>${table(team,players,BBALL_EXTRA)}</details>` : ''}</details>`;
+    }).join('');
+    const checked = gameRows.map(row => row.sourceAt).filter(Boolean).sort().pop();
+    return section('Player props & projections', `<p class="small">Tap any stat to open its recent-game chart at the exact displayed line.</p><div class="prop-legend"><span><b>K</b> Kook’n projection</span><span><b>Book</b> captured line and price</span><span><b>Green outline</b> desk research lean</span></div><div class="prop-teams">${blocks}</div>`, '', `${league === 'NBA' ? 'NBA positions, official availability, recent minutes and current captured markets are shown when verified.' : 'CBB uses official box scores and a transparent role baseline. A missing price is labeled unavailable, never treated as zero.'} ${checked ? `Latest matchup price checked ${esc(ago(checked))}.` : 'No verified player price is stored for this matchup.'} Research leans are not official picks.`);
   };
   views.cbbPicks = (data, onlyToday = false) => {
     const r = data.picks || {}, all = r.plays || [];
@@ -369,14 +432,19 @@
     const back = '<a class="back" href="#games">← Games</a>';
     const league = /^(NBA|CBB)-/.exec(route.id)?.[1];
     if (league) {
-      const data = await get(`app/${league.toLowerCase()}.json`).catch(() => null);
+      const [data, playerIndex, propPayload] = await Promise.all([
+        get(`app/${league.toLowerCase()}.json`).catch(() => null),
+        get(`app/players/${league}.json`).catch(() => ({players:[]})),
+        league === 'NBA' ? get('app/nba-props.json').catch(() => ({rows:[]})) : Promise.resolve({rows:[]})]);
       const game = data?.games?.find(g => g.id === route.id);
       if (!game) return head(league, 'Matchup unavailable', 'This game is outside the stored schedule.', back);
       const title = `${game.teams.away.name} at ${game.teams.home.name}`;
       const top = head(league, title, esc(whenShort(game.kickoff)), back);
-      if (league === 'NBA') return top + await views.nbaToday({ data, game, research: true });
-      return top + (game.projection ? cbbGameCard(game, false) : '<p>No projection available.</p>')
-        + '<section class="section"><h2>Player stats</h2><p>Player game logs are not available for this CBB matchup.</p></section>';
+      const card = league === 'NBA' ? nbaGameCard(game, false) : game.projection ? cbbGameCard(game, false) : '<p>No team projection available.</p>';
+      const rows = league === 'NBA' ? (Array.isArray(propPayload?.rows) ? propPayload
+        : Array.isArray(data.playerProps?.rows) ? data.playerProps
+          : Array.isArray(propPayload?.playerProps?.rows) ? propPayload.playerProps : {rows:[]}) : {rows:[]};
+      return top + card + basketballMatchupProps(league, game, data, playerIndex, rows);
     }
     let detail;
     try { detail = await get(`app/games/${route.id}.json`); } catch (e) {
@@ -589,22 +657,46 @@
       && Array.isArray(p[k]) && p[k].length === 3 && p[k].every(isNum);
     const projectionPlayers = side => (((((detail.forecast || {}).players || {})[side]) || {}).players || [])
       .filter(p => PROJ_COLS.some(([k]) => usableProjection(p, k)));
+    const POSITION_PROJ = {
+      QB: [['att','Att'],['cmp','Cmp'],['passYds','Pass yds']],
+      RB: [['carries','Car'],['rushYds','Rush yds'],['targets','Tgt'],['recYds','Rec yds']],
+      WR: [['targets','Tgt'],['receptions','Rec'],['recYds','Rec yds']],
+      TE: [['targets','Tgt'],['receptions','Rec'],['recYds','Rec yds']]
+    };
     const projTable = side => {
       const block = (((detail.forecast || {}).players || {})[side]) || {};
       const list = projectionPlayers(side);
       if (!list.length) return '';
-      const cols = PROJ_COLS.filter(([k]) => list.some(p => usableProjection(p, k)));
       const vol = block.volume || {};
-      return `<div class="table-wrap"><table class="t"><caption class="small muted" style="text-align:left;padding-bottom:6px">${esc(g[side].abbr)}${isNum(vol.plays) ? ` · ${C.fixed(vol.plays, 0)} plays, ${Math.round(100 * (vol.passRate || 0))}% pass` : ''}</caption>
-        <thead><tr><th>Player</th>${cols.map(([, l]) => `<th class="n">${esc(l)}</th>`).join('')}</tr></thead><tbody>${list.map(p => `<tr><td><span class="with-art">${headshot(g.league, p.id, 'sm')}<span><a href="#player/${esc(g.league)}/${esc(p.id)}">${esc(p.name)}</a> <span class="muted tiny">${esc(p.pos)}</span></span></span></td>${cols.map(([k]) => {
-          const v = p[k];
-          if (!usableProjection(p, k)) return '<td class="n muted">–</td>';
-          const market = (lines[p.id] || {})[C.PROJECTION_MARKET[k]];
-          const gapV = market ? v[0] - market[0] : null;
-          return `<td class="n" title="Model range estimate, not a guaranteed interval">${esc(C.fixed(v[0]))}<br><span class="tiny muted">Range ${esc(C.fixed(v[1], 0))}–${esc(C.fixed(v[2], 0))}</span>${market ? `<br><span class="tiny muted">line ${esc(market[0])} ${gapV > 0 ? '▲' : gapV < 0 ? '▼' : ''}${esc(C.signed(gapV))}</span>` : ''}</td>`;
-        }).join('')}</tr>`).join('')}</tbody></table></div>`;
+      const injuries = (((detail.teams || {})[side] || {}).injuries || []);
+      const inferredPos = player => player.pos || (usableProjection(player,'att') || usableProjection(player,'cmp') || usableProjection(player,'passYds') ? 'QB'
+        : usableProjection(player,'carries') || usableProjection(player,'rushYds') ? 'RB'
+          : usableProjection(player,'targets') || usableProjection(player,'receptions') || usableProjection(player,'recYds') ? 'WR' : null);
+      const group = pos => list.filter(player => (inferredPos(player) === 'FB' ? 'RB' : inferredPos(player)) === pos);
+      const statCell = (player, key) => {
+        const v = player[key], stat = C.PROJECTION_MARKET[key];
+        if (!usableProjection(player,key)) return '<span class="prop-cell"><b>Held</b><span>Projection unavailable</span></span>';
+        const market = (lines[player.id] || {})[stat], line = market && isNum(market[0]) ? Number(market[0]) : null;
+        const reads = (detail.modelReads || []).filter(row => String(row.athleteId) === String(player.id) && C.marketKey(row) === stat);
+        const read = reads.find(row => line == null || Number(row.line) === line) || reads[0];
+        const direction = String(read?.direction || 'over').toLowerCase() === 'under' ? 'under' : 'over';
+        const href = `#player/${esc(g.league)}/${esc(player.id)}?stat=${esc(stat)}${line == null ? '' : `&amp;line=${esc(line)}&amp;direction=${esc(direction)}`}`;
+        const gapV = line == null ? null : v[0]-line;
+        const liked = fav.some(row => String(row.athleteId) === String(player.id) && C.marketKey(row) === stat && (line == null || Number(row.line) === line));
+        const official = picks.some(row => String(row.athleteId) === String(player.id) && C.marketKey(row) === stat && (line == null || Number(row.line) === line));
+        return `<a class="prop-cell${liked ? ' liked' : ''}${official ? ' official' : ''}" href="${href}" title="Open the exact recent-game chart"><b>K ${esc(C.fixed(v[0]))}</b><span>Range ${esc(C.fixed(v[1],0))}–${esc(C.fixed(v[2],0))}</span><span>${line == null ? 'Book line unavailable' : `Book ${esc(line)}${isNum(read?.odds) ? ` · ${esc(oddsText(read.odds))}` : ''}${read?.book ? ` ${esc(bookLabel(read.book))}` : ''}`}</span>${gapV == null ? '' : `<span class="gap">${gapV > 0 ? '+' : ''}${esc(C.fixed(gapV))} vs line</span>`}${read?.observedAt ? `<span>Checked ${esc(ago(read.observedAt))}</span>` : ''}${official ? '<span class="gap">Official pick</span>' : liked ? '<span class="gap">Desk likes · research</span>' : ''}</a>`;
+      };
+      const table = (pos, players) => {
+        const cols = POSITION_PROJ[pos].filter(([key]) => players.some(player => usableProjection(player,key)));
+        if (!cols.length) return '';
+        return `<div class="table-wrap"><table class="t prop-compare"><caption class="small muted" style="text-align:left;padding-bottom:6px">${esc(pos)} · ${esc(players.length)} player${players.length === 1 ? '' : 's'}</caption><thead><tr><th>Player · status</th>${cols.map(([,label]) => `<th>${esc(label)} · Kook vs Book</th>`).join('')}</tr></thead><tbody>${players.map(player => {
+          const injury = injuries.find(row => String(row.id || '') === String(player.id) || String(row.name || '') === String(player.name));
+          return `<tr><th class="prop-player"><span class="with-art">${headshot(g.league,player.id,'sm')}<span><a href="#player/${esc(g.league)}/${esc(player.id)}">${esc(player.name)}</a><span class="tiny muted">${esc(inferredPos(player) || 'Position unavailable')}</span>${injury ? `<span class="badge ${HARD_INJURY.test(injury.status || '') ? 'warn' : 'research'}">${esc(injury.status || 'Listed')}</span>` : ''}</span></span></th>${cols.map(([key]) => `<td>${statCell(player,key)}</td>`).join('')}</tr>`;
+        }).join('')}</tbody></table></div>`;
+      };
+      return `<p class="small muted">${esc(g[side].abbr)}${isNum(vol.plays) ? ` · ${C.fixed(vol.plays,0)} projected plays · ${Math.round(100*(vol.passRate || 0))}% pass` : ''}</p>${['QB','RB','WR','TE'].map(pos => table(pos,group(pos))).join('')}`;
     };
-    const projHtml = ['away', 'home'].some(side => projectionPlayers(side).length) ? section('Player projections', `<div style="display:grid;gap:16px;grid-template-columns:minmax(0,1fr)">${['away', 'home'].map(side => { const n = projectionPlayers(side).length;
+    const projHtml = ['away', 'home'].some(side => projectionPlayers(side).length) ? section('Player props & projections', `<p class="small">Columns change by position. Tap a stat to open that player’s recent-game chart at the exact displayed line.</p><div class="prop-legend"><span><b>K</b> Kook’n projection</span><span><b>Book</b> captured line and price</span><span><b>Green outline</b> desk research lean</span></div><div style="display:grid;gap:16px;grid-template-columns:minmax(0,1fr)">${['away', 'home'].map(side => { const n = projectionPlayers(side).length;
       return n ? `<details class="more-box" style="min-width:0" data-box="proj:${side}"${typeof matchMedia === 'function' && matchMedia('(min-width: 760px)').matches ? ' open' : ''}><summary>${esc(g[side].abbr)} player projections · ${n} players</summary>${projTable(side)}</details>` : ''; }).join('')}</div>`, '', `Research estimates, not Best Bets. Only available projections are shown. The first number is my projected average; the range shows the model's uncertainty, not a guarantee. A big gap from the line is not proof of betting value: the price and the model's past accuracy still matter. ${detail.props && detail.props.capturedAt ? `Comparison lines checked ${esc(ago(detail.props.capturedAt))}; ▲ means I am above the line and ▼ below.` : 'No comparison lines recorded yet.'}${g.garbageTime ? ` <b class="red">${GARBAGE}</b> The spread is 21 points or more, so starters may sit early.` : ''}`)
       : '';
 

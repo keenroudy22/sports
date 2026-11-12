@@ -787,7 +787,7 @@ def build_players(league, records, snaps, teams_meta, trends=None):
 
 
 def basketball_projection(rows, season=None):
-    """Transparent current-season player baseline for CBB research.
+    """Transparent current-season player baseline for basketball research.
 
     The estimate is role-aware but intentionally simple: recent and season
     per-minute production multiplied by recent median minutes. It is never a
@@ -824,8 +824,15 @@ def basketball_projection(rows, season=None):
         estimates[key] = round(projected_minutes * (.6 * recent_rate + .4 * season_rate), 1)
     if not estimates:
         return {'status': 'held', 'reason': 'Current box scores do not support a projection', 'games': len(games)}
+    recent_values = {key: round(sum(row['stats'][key] for row in recent
+                                    if isinstance(row.get('stats', {}).get(key), (int, float))) /
+                                len([row for row in recent
+                                     if isinstance(row.get('stats', {}).get(key), (int, float))]), 1)
+                     for key in estimates
+                     if any(isinstance(row.get('stats', {}).get(key), (int, float)) for row in recent)}
     return {'status': status, 'reason': reason, 'games': len(games),
             'minutes': round(projected_minutes, 1), 'values': estimates,
+            'recent': recent_values, 'recentMinutes': [row['stats']['min'] for row in recent],
             'method': '60% recent and 40% season per-minute rate at recent median minutes'}
 
 
@@ -873,7 +880,7 @@ def build_basketball_players(records, league='NBA'):
                  + [row['stats'].get(key) for key in NBA_LOG_KEYS] for row in rows]
         team = last['team']
         team_abbr = next((row.get('teamAbbr') for row in reversed(rows) if row.get('teamAbbr')), None)
-        projection = basketball_projection(rows, latest_season) if league == 'CBB' else None
+        projection = basketball_projection(rows, latest_season)
         summary = projection if projection and projection.get('status') != 'held' else None
         index.append([pid, name, pos, team, team_abbr, day(last['kickoff']), len(rows), summary])
         shards[int(pid) % SHARDS[league]][pid] = {'name': name, 'pos': pos, 'rows': table,

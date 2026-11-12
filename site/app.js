@@ -1211,12 +1211,14 @@
     const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today);
     const researchSport = propSport(state.league);
     return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <nav class="today-tools" aria-label="Betting data and research"><a href="${propsHref(researchSport)}"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&amp;sport=${researchSport}"><span aria-hidden="true">⌕</span><b>Find a player</b><small>Stats & logs</small></a></nav>
-      ${postedSummary ? postedSummary.html : ''}
       <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : 'Kook’n picks'}</h2><a href="#record">Track record ›</a></div>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card', quick: true }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
-      ${market}${otherTickets}${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
-      ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, quick: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
+      ${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
+      ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, quick: true, label: 'More best bets' })}</section>` : ''}
+      ${otherTickets}
+      ${postedSummary ? postedSummary.html : ''}
+      <nav class="today-tools" aria-label="Betting data and research"><a href="${propsHref(researchSport)}"><span aria-hidden="true">↕</span><b>Player props</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Games</b><small>Scores & projections</small></a><a href="#research/players?view=search&amp;sport=${researchSport}"><span aria-hidden="true">⌕</span><b>Find a player</b><small>Stats & logs</small></a></nav>
+      ${market}${favorite}${climbStub(climb, past)}${proof}${spotlight}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
       ${rail(later, { season, lines, cards, more: true, quick: true, label: 'Upcoming best bets' })}</section>` : ''}`;
   };
   const firstPaint = (hero, now = Date.now()) => {
@@ -2098,8 +2100,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-4984e7cc1f41';
-  const GAMES_ASSET = 'app-games.js?v=sha256-913398630097';
+  const MORE_ASSET = 'app-more.js?v=sha256-7f52dddb72f5';
+  const GAMES_ASSET = 'app-games.js?v=sha256-93bd31562929';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-b5fcee0b00b7';
   let researchCssLoading = null;

@@ -86,7 +86,7 @@ const playerFiles = (held = true) => {
     'data/app/games/CFB-1.json': { forecast: { players: { home: { players: [{ id: athlete, att: [23.7, 15, 32], passYds: [167.1, 110, 230], ...(held ? { underReview: ['att', 'passYds', 'cmp'] } : {}) }] } } } },
   };
 };
-const playerPage = async (held, change = null, league = 'CFB', stat = null, core = C) => {
+const playerPage = async (held, change = null, league = 'CFB', stat = null, core = C, query = '') => {
   const files = playerFiles(held);
   if (change) change(files);
   const el = () => ({ innerHTML: '', options: [], value: '', dataset: {}, classList: { toggle() {}, add() {}, remove() {} }, querySelector: () => null, querySelectorAll: () => [], setAttribute() {}, focus() {} });
@@ -101,7 +101,8 @@ const playerPage = async (held, change = null, league = 'CFB', stat = null, core
   vm.runInNewContext(source, sandbox, { filename: 'site/app.js' });
   vm.runInNewContext(moreSource, sandbox, { filename: 'site/app-more.js' });
   const api = sandbox.module.exports;
-  return api.views.player(api.model.resolve(`#player/${league}/4870883${stat ? '?stat=' + stat : ''}`));
+  const params = [stat ? `stat=${stat}` : '', query].filter(Boolean).join('&');
+  return api.views.player(api.model.resolve(`#player/${league}/4870883${params ? '?' + params : ''}`));
 };
 
 test('Under review shows no projection, chance or edge, and quotes only the saved recent volumes', async () => {
@@ -180,6 +181,13 @@ test('a player line with no hold puts the projection beside the book line and ke
   assert.match(page, /Historical hit rates, not probabilities/);
   assert.doesNotMatch(page, /class="kt-paper"/, 'player research is a chart dashboard, not a ticket');
   assert.match(page, /<details class="plain-fold kt-player-detail"[^>]*><summary>Why this number<\/summary>/);
+});
+
+test('a matchup deep link keeps the exact football line and direction on the chart', async () => {
+  const page = await playerPage(false, null, 'CFB', 'passYds', C, 'line=199.5&direction=under');
+  assert.match(page, /<small>Book line<\/small><b class="num">199\.5<\/b>/);
+  assert.match(page, /199\.5 line/);
+  assert.match(page, /stay below nearby numbers/);
 });
 
 test('the player line ladder compares nearby thresholds without presenting them as offered markets', async () => {

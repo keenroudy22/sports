@@ -1,3 +1,20 @@
+# November 12 matchup prop tables and exact chart links
+
+Game pages use the NFL projection table pattern for NBA, CBB, NFL and CFB.
+Preserve team-grouped, position-aware tables, compact phone scrolling and the
+exact `player/<league>/<id>?stat=<stat>&line=<line>&direction=<side>` handoff.
+NBA leads with points, rebounds, assists and projected/recent minutes; threes
+and combo markets stay in an expanded view. CBB uses the same shape from
+official box-score history and labels unavailable book prices rather than
+inventing a market. Football columns follow role: QB attempts/completions/pass
+yards, RB carries/rush yards/targets/receiving, and WR/TE targets/receptions/
+receiving yards. Each supported cell keeps Kook'n, range when available, exact
+book line/odds, check time and gap together. Official picks and desk research
+leans remain distinct. Today shows every current official slip before research
+tools. These are presentation and navigation changes only; they do not approve
+new probability models, prices, picks or release rules. Hosted receipt follows
+only after the ordinary release and live phone/desktop checks complete.
+
 # November 11 NBA/CBB fast prop research — verified live
 
 Props now opens a basketball edge finder for NBA and CBB. NBA lists current

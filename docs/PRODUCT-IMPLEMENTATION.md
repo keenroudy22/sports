@@ -1,3 +1,22 @@
+### November 12 matchup prop tables and exact chart links
+
+NBA and CBB matchup routes now group players by team in scan-first tables.
+Points, rebounds, assists and projected/recent minutes lead basketball; threes
+and combination markets are collapsed until requested. A verified captured
+quote appears beside Kook'n, its range when supplied, the projection gap, book,
+odds and check age. Missing CBB prices and held projections are explicit states,
+not zeros or broken cells. Player status and role context sit beside the name.
+
+NFL and CFB keep their useful team projection tables but choose columns by
+position. Each available stat deep-links the exact player, market, line and
+direction into the existing recent-game chart. The chart keeps dated opponents,
+sample/hit counts, workload and matchup context. Today also places all current
+official slips before research modules so Best Bets remain the first decision
+surface. This release changes presentation and routing only; research leans are
+not official picks and it does not approve an NBA/CBB probability method or a
+new price feed. The hosted release receipt is recorded only after ordinary
+deployment and live phone/desktop verification.
+
 ### November 11 NBA/CBB fast prop research — verified live
 
 Basketball Props now opens a search-first edge finder instead of a generic game

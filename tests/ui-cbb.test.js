@@ -25,16 +25,26 @@ test('CBB posted picks retain exact terms, result and source separation',async()
 
 test('basketball cards open matchup details and NBA props stay in their own game', async () => {
   const kickoff = '2099-11-02T23:00Z';
-  const teams = {home:{name:'Home',abbreviation:'HOM'},away:{name:'Away',abbreviation:'AWY'}};
+  const teams = {home:{id:'1',name:'Home',abbreviation:'HOM'},away:{id:'2',name:'Away',abbreviation:'AWY'}};
   const cbb = {id:'CBB-1',kickoff,teams,projection:{home:72,away:68,total:140}};
   const nba = {id:'NBA-2',providerId:'2',kickoff,teams,status:'scheduled',projection:{home:112,away:108,total:220}};
-  const prop = {eventId:'2',name:'Matched player',kickoff,statName:'Points',line:15.5,over:-110,under:-110,sourceAt:new Date().toISOString()};
-  const v = views(async path => path === 'app/cbb.json' ? {games:[cbb],scheduleFresh:true} : {
-    games:[nba],playerProps:{rows:[prop,{...prop,eventId:'3',name:'Other game player'}]}
+  const prop = {eventId:'2',athleteId:'42',team:'1',teamName:'Home',name:'Matched player',kickoff,stat:'pts',statName:'Points',line:15.5,over:-110,under:-110,side:'over',sourceAt:new Date().toISOString(),projection:{value:17.2,low:11,high:23}};
+  const v = views(async path => {
+    if (path === 'app/cbb.json') return {games:[cbb],scheduleFresh:true};
+    if (path === 'app/nba.json') return {games:[nba]};
+    if (path === 'app/nba-props.json') return {rows:[prop,{...prop,eventId:'3',name:'Other game player'}]};
+    if (path === 'app/players/NBA.json') return {players:[['42','Matched player','G','1','HOM','2099-10-31',5,{minutes:31,values:{pts:17.2}}]]};
+    if (path === 'app/players/CBB.json') return {players:[['43','College player','G','2','AWY','2099-10-31',5,{minutes:30,recentMinutes:[28,31,30],values:{pts:14.1,reb:5.2,ast:3.1},recent:{pts:13.8}}]]};
+    throw Error(path);
   });
   assert.match(await v.cbbToday(), /href="#game\/CBB-1"/);
-  assert.match(await v.game({id:'CBB-1'}), /Away at Home/);
+  const college = await v.game({id:'CBB-1'});
+  assert.match(college, /Away at Home/);
+  assert.match(college, /College player[\s\S]*K 14\.1[\s\S]*Book line unavailable/);
+  assert.match(college, /#player\/CBB\/43\?stat=pts/);
   const matchup = await v.game({id:'NBA-2'});
   assert.match(matchup, /Matched player/);
+  assert.match(matchup, /K 17\.2[\s\S]*Range 11\.0–23\.0[\s\S]*Book 15\.5/);
+  assert.match(matchup, /#player\/NBA\/42\?stat=pts&amp;line=15\.5&amp;direction=over/);
   assert.doesNotMatch(matchup, /Other game player/);
 });
