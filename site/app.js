@@ -1347,10 +1347,10 @@
     const nflNow = todayGames.filter(g => g.league === 'NFL').sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 2);
     const spotlightIds = new Set(nflNow.map(g => g.id));
     const otherGames = todayGames.filter(g => !spotlightIds.has(g.id));
-    const shown = otherGames.slice().sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 6);
+    const shown = otherGames.slice().sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 3);
     const nflSpotlight = nflNow.length ? ktSec('nfl-now', nflNow.some(g => etHour(g.kickoff) >= 17) ? "Tonight's NFL" : "Today's NFL",
-      `<div class="projs">${nflNow.map(g => projCard(g, { ranks: false })).join('')}</div>`,
-      { kind: 'Matchup and lines · not a best bet', link: ktLink('#games', 'All games today') }) : '';
+      `<div class="today-game-list">${nflNow.map(todayGameRow).join('')}</div>`,
+      { kind: 'Quick slate · tap for Kook vs Book', link: ktLink('#games', 'All games today') }) : '';
     const slips = list => `<div class="kt-slips">${list.map(p => slip(p, { when: true })).join('')}</div>`;
     /* The season line counts every published play (record.json), so its units wait for that; the W-L shows at once. */
     const full = Boolean(todayExtras && todayExtras.every), s = (today.season || {})[state.league];
@@ -1390,8 +1390,8 @@
     ].filter(Boolean).join('');
     const rest2 = [
       leftovers(recent, awaiting.filter(p => C.dayOf(p.kickoff) === lastDay), (today.lastSlate || {})[state.league]),
-      shown.length ? ktSec('games', nflNow.length ? 'Other games today' : "Today's games", `${liveStamp(liveToday.refreshed)}<div class="projs">${shown.map(g => projCard(g, { ranks: false })).join('')}</div>`,
-        { link: ktLink(otherGames.length > shown.length ? '#games' : '#games/live', otherGames.length > shown.length ? `All ${todayGames.length} games today` : 'Live scores') }) : '',
+      shown.length ? ktSec('games', nflNow.length ? 'Other games today' : "Today's games", `${liveStamp(liveToday.refreshed)}<div class="today-game-list">${shown.map(todayGameRow).join('')}</div>`,
+        { kind: `${todayGames.length} game${todayGames.length === 1 ? '' : 's'} on today’s slate`, link: ktLink(otherGames.length > shown.length ? '#games' : '#games/live', otherGames.length > shown.length ? `See all ${todayGames.length} games` : 'Live scores') }) : '',
       nbaSummary,
       fun.length ? ktSec('fun', 'Fun tickets', slips(fun), { kind: 'Smaller stake, apart from best bets' }) : '',
       extraToday ? `<details class="today-more"><summary>More today</summary><p class="small muted">Prep lists, underdog research and sport links.</p>${extraToday}</details>` : ''
@@ -2010,6 +2010,20 @@
       ${bar}${lines}${note ? `<p class="caution">${esc(note)}</p>` : ''}${linked ? '</a>' : '</div>'}${hasScore ? '' : opts.extra || ''}</div>`;
   };
 
+  /* Today is a decision page, not the full matchup board. Keep routine games to one
+     scannable row and leave the complete model/market comparison on the game route. */
+  const todayGameRow = g => {
+    const v2 = g.v2 || {}, market = g.market || {};
+    const final = Boolean(g.completed), live = !final && g.state === 'in';
+    const hasScore = (final || live) && g.away?.score != null && g.home?.score != null;
+    const status = final ? 'Final' : live ? (g.status || 'Live') : whenShort(g.kickoff);
+    const score = hasScore ? `${g.away.score}–${g.home.score}` : isNum(v2.away) && isNum(v2.home) ? `${C.fixed(v2.away, 0)}–${C.fixed(v2.home, 0)}` : '—';
+    const label = hasScore ? (isNum(v2.away) ? `Kook’n had ${C.fixed(v2.away, 0)}–${C.fixed(v2.home, 0)}` : 'Score update')
+      : isNum(v2.total) ? `Kook’n total ${C.fixed(v2.total, 1)}${isNum(market.total) ? ` · Book ${C.fixed(market.total, 1)}` : ''}` : 'Projection pending';
+    const team = t => `<span class="today-game-team">${teamMark(t, 'sm', g.league)}<span><b>${esc(t.name || t.abbr)}</b><small>${esc(t.abbr || '')}</small></span></span>`;
+    return `<a class="today-game-row${live ? ' is-live' : ''}" href="#game/${esc(g.id)}"><span class="today-game-matchup">${team(g.away)}<span class="today-game-at">at</span>${team(g.home)}</span><span class="today-game-read"><small>${live ? '<span class="live-dot"></span>' : ''}${esc(status)} · ${esc(g.league === 'CFB' ? 'College' : g.league)}</small><b class="num">${esc(score)}</b><span>${esc(label)}</span></span><span class="today-game-arrow" aria-hidden="true">›</span></a>`;
+  };
+
 
   /* ---------- Record ---------- */
   const clvWords = clv => !isNum(clv) ? '' : clv > 0 ? `line moved our way by ${C.fixed(clv, 1)}` : clv < 0 ? `line moved against us by ${C.fixed(Math.abs(clv), 1)}` : 'closed at our number';
@@ -2107,7 +2121,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-1ca9dabda5f1';
-  const GAMES_ASSET = 'app-games.js?v=sha256-5ecc0e0ae972';
+  const GAMES_ASSET = 'app-games.js?v=sha256-eb98fe33985e';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-ef142ba6eef5';
   let researchCssLoading = null;
