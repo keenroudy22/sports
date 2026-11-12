@@ -408,6 +408,9 @@
     const verdict = allow && line != null ? defenseVerdict(C.rankTone(allow.rank, allow.of), dir, defGames(dRows, opp.id, group, stat)) : null;
     const vs = opp ? C.splits(recent, keys, stat, opp.id, (row, k, s2) => read(row, s2)).vs : null;
     const proj = side && nextDetail && nextDetail.forecast ? ((((nextDetail.forecast.players || {})[side] || {}).players || []).find(p => String(p.id) === String(route.id)) || null) : null;
+    const availability = side && nextDetail ? ((((nextDetail.teams || {})[side] || {}).injuries || [])
+      .find(player => String(player.id || '') === String(route.id) || String(player.name || '') === String(data.name)) || null) : null;
+    const availabilityHeld = Boolean(availability && /out|doubtful|suspension|reserve/i.test(availability.status || ''));
     const projectionField = PROJ_KEY[stat] || stat;
     const projectionReview = Boolean(proj && (proj.underReview || []).includes(projectionField));
     const projV = proj && !projectionReview ? proj[projectionField] : null;
@@ -432,12 +435,14 @@
        line on paper, one big figure, the matchup sentence and the game log in chalk on the felt. Unavailable
        (decision 9): no projection, chance or edge anywhere; only the real recent volumes the build saved. */
     const heldRow = pricedRows.find(r => r.roleSuspect || r.priceSuspect) || null;
-    const held = projectionReview || Boolean(heldRow);
+    const held = availabilityHeld || projectionReview || Boolean(heldRow);
     const opponentTrend = (data.upcomingTrends || []).find(row => row.gameId === next?.id && row.stat === stat
       && (line == null || Number(row.line) === Number(line)) && row.direction === dir)
       || (data.upcomingTrends || []).find(row => row.gameId === next?.id && row.stat === stat);
     /* The same words as the play page and the Today ticket (app.js heldWords), from the same hold rule. */
-    const heldText = held ? `No grade from me tonight. ${heldWords(holdOf(pricedRows) || { kind: 'role' })}` : '';
+    const heldText = availabilityHeld
+      ? `${data.name} is listed ${availability.status}. Kook’n projection and edge are held unless the official status changes.`
+      : held ? `No grade from me tonight. ${heldWords(holdOf(pricedRows) || { kind: 'role' })}` : '';
     const g = next ? GAMES.get(next.id) || next : null, mine = g ? g[side] : null;
     const colours = mine ? teamPanel(mine.color, mine.alt) : team.color ? teamPanel(team.color) : HOUSE;
     const photo = HEADSHOT[league] ? HEADSHOT[league](route.id) : null, img = photo ? `<img src="${esc(photo)}" alt="">` : '';
@@ -480,7 +485,7 @@
     const bettingNumbers = `<span><small>Book line</small><b class="num">${esc(valueText(line))}</b></span><span><small>Kook’n projection</small><b class="num">${esc(projectionLabel)}</b></span><span><small>Projection vs line</small><b class="num">${esc(edgeLabel)}</b></span><span><small>Recent hits</small><b class="num">${esc(hitLabel)}</b></span>`;
     const historyNumbers = `<span><small>Season average</small><b class="num">${seasonSummary ? esc(valueText(seasonSummary.avg)) : '–'}</b></span><span><small>Last 5 average</small><b class="num">${last5Summary ? esc(valueText(last5Summary.avg)) : '–'}</b></span><span><small>Season high</small><b class="num">${seasonHigh == null ? '–' : esc(valueText(seasonHigh))}</b></span><span><small>Games recorded</small><b class="num">${esc(seasonValues.length)}</b></span>`;
     const boardTitle = isQuarter ? `${PLAYER_LABEL[stat]} trend` : PLAYER_LABEL[stat] || stat;
-    const boardEyebrow = isQuarter ? `${PLAYER_LABEL[stat]} · history` : line != null ? (lineStatus && lineStatus.current ? 'Current line' : 'Reference line') : 'Season snapshot';
+    const boardEyebrow = isQuarter ? `${PLAYER_LABEL[stat]} · history` : line != null ? (held ? 'Unavailable · reference line' : lineStatus && lineStatus.current ? 'Current line' : 'Reference line') : 'Season snapshot';
     const sheet = `<section class="player-board" aria-labelledby="line-h"><div class="player-board-head"><div><p class="eyebrow">${esc(boardEyebrow)}</p><h2 id="line-h">${esc(boardTitle)}</h2></div><span class="player-board-mode">${line != null ? 'Book vs Kook’n' : 'Trend view'}</span></div>
       <div class="kt-number-grid kt-player-numbers">${line != null ? bettingNumbers : historyNumbers}</div>
       ${held ? `<span class="kt-stamp hold kt-player-hold" role="img" aria-label="Unavailable">${MARK.hold}UNAVAILABLE</span>` : ''}
@@ -490,7 +495,7 @@
         : `${priceComparison}
           ${Array.isArray(projV) ? `<p class="kt-prices">Typical range ${esc(rangeText(projV[1]))}–${esc(rangeText(projV[2]))}.</p>` : ''}`}
       ${line != null ? '<div class="player-chart-legend" aria-label="Chart legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>' : ''}
-      ${chart}<div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(!isQuarter && lineStatus ? `${lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></section>`;
+      ${chart}<div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(!isQuarter && lineStatus ? `${held ? 'Reference line checked' : lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></section>`;
     const insightRows = C.playerHistory(rows, currentSeason, scope, 'all');
     const insightValues = insightRows.map(row => read(row, stat)).filter(isNum);
     const insightScope = scope === 'all' ? 'All' : scope === 'current' ? 'Season' : String(scope);

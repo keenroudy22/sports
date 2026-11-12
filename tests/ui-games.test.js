@@ -241,6 +241,32 @@ test('all games show only usable projection rows and columns, including zero est
   }
 });
 
+test('listed unavailable skill players stay visible while their projections are held', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = { ...slate()[1], league: 'NFL', home: { ...slate()[1].home, abbr: 'NYG' } };
+  const detail = { ...g, picks: [], props: { capturedAt: new Date().toISOString(), lines: { '4696981': { car: [15.5], rushYds: [55.5] } } },
+    teams: { away: { injuries: [] }, home: { injuries: [{
+      id: '4696981', name: 'Cam Skattebo', position: 'RB', depthRole: 'starter', status: 'Out'
+    }] } },
+    forecast: { players: { away: { players: [] }, home: { players: [{
+      id: '4040761', name: 'Devin Singletary', pos: 'RB', carries: [14.2, 6.6, 21.8], rushYds: [52, 11.8, 92.2]
+    }] } } } };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
+  const html = unesc(await factory(ctx).game({ id: g.id }));
+  assert.match(html, /NYG player projections · 2 players/);
+  assert.match(html, /Cam Skattebo/);
+  assert.match(html, /<span class="badge warn">Out<\/span>/);
+  assert.match(html, /Kook’n held/);
+  assert.match(html, /Out · no edge/);
+  assert.match(html, /#player\/NFL\/4696981/);
+  assert.match(html, /Reference line 15\.5/);
+  assert.match(html, /Reference line 55\.5/);
+  assert.match(html, /#player\/NFL\/4696981\?stat=rushYds&amp;line=55\.5&amp;direction=over/);
+  assert.match(html, /Devin Singletary[\s\S]*Kook’n 14\.2[\s\S]*Kook’n 52\.0/);
+  const camRow = html.match(/<tr>[\s\S]*?Cam Skattebo[\s\S]*?<\/tr>/)?.[0] || '';
+  assert.doesNotMatch(camRow, /Kook’n \d/);
+});
+
 test('a comparison line never replaces the visible projection uncertainty range', async () => {
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];

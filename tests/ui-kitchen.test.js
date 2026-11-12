@@ -117,6 +117,21 @@ test('Under review shows no projection, chance or edge, and quotes only the save
   assert.match(page, /<button type="button" data-set="pstat:passYds" aria-pressed="true">/);
 });
 
+test('an unavailable player keeps the reference line and history without presenting a current projection or edge', async () => {
+  const page = await playerPage(false, files => {
+    files['data/app/games/CFB-1.json'].teams = { home: { injuries: [{
+      id: '4870883', name: 'JJ Kohl', position: 'QB', status: 'Out', depthRole: 'starter'
+    }] } };
+  });
+  assert.match(page, /Unavailable · reference line/);
+  assert.match(page, /UNAVAILABLE/);
+  assert.match(page, /JJ Kohl is listed Out\. Kook’n projection and edge are held/);
+  assert.match(page, /Book line<\/small><b class="num">261\.5/);
+  assert.match(page, /Kook’n projection<\/small><b class="num">Held/);
+  assert.match(page, /Reference line checked/);
+  assert.doesNotMatch(page, /<p class="eyebrow">Current line<\/p>|clears my price|Kook’n projection<\/small><b class="num">167\.1/);
+});
+
 test('NBA player page ties a posted prop to last 5, last 10, minutes and the full game log', async () => {
   const nbaKeys = ['pts','reb','ast','fg3m','pra','pa','pr','ra','min','fgm','fga','ftm','fta','stl','blk','tov','plusMinus'];
   const points = [0,0,2,7,8,11,9,16,12,11], minutes = [1,2,11,25,28,26,12,22,24,29];
