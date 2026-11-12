@@ -1452,6 +1452,25 @@ def relevant_facts(candidate, facts, ctx):
     return out
 
 
+UNRESOLVED_AVAILABILITY = re.compile(
+    r"\b(?:game[- ]time decision|status (?:is |remains )?(?:uncertain|unclear|unconfirmed)|"
+    r"availability (?:is |remains )?(?:uncertain|unclear|unconfirmed))\b", re.IGNORECASE,
+)
+
+
+def unresolved_availability(facts):
+    """Hold on relevant current availability evidence before asking the model."""
+    for fact in facts:
+        if fact.get('kind') not in AVAILABILITY or fact.get('direction') != 'against':
+            continue
+        claim = str(fact.get('claim') or '')
+        if not researcher.from_web(fact) or fact.get('verified') is True:
+            if (str(fact.get('status') or '').lower() in {'questionable', 'game-time decision'}
+                    or UNRESOLVED_AVAILABILITY.search(claim)):
+                return f"availability still open: {claim}"
+    return None
+
+
 def judge(candidate, facts, use_llm, status=None):
     """Why the run holds a candidate, or None. Only facts that can matter reach the judge (relevant_facts); with
     none there is nothing to weigh and nothing to hold on. A hold must name a fact: the model's answer counts
@@ -2655,7 +2674,7 @@ def _run(args, now, slot, kinds, status):
                 status['research']['reallocated'] = status['research'].get('reallocated', 0) + 1
             status['research']['verified'] += len(kept)
             status['research']['dropped'] += len(dropped)
-            facts += kept
+            facts += [dict(f, verified=True) for f in kept]
             researched = any(f.get('kind') in AVAILABILITY for f in kept)
             log(f"researched {candidate['title']}: {len(kept)} verified facts, {len(dropped)} dropped"
                 + ('' if researched else '; none about who is expected to play'))
@@ -2664,7 +2683,8 @@ def _run(args, now, slot, kinds, status):
         hold = None
         if needs_research(candidate) and not researched:
             hold = research_block or 'the news check returned no verified player-availability evidence; college plays stay held'
-        hold = hold or judge(candidate, relevant_facts(candidate, facts, ctx), use_llm, status)
+        material_facts = relevant_facts(candidate, facts, ctx)
+        hold = hold or unresolved_availability(material_facts) or judge(candidate, material_facts, use_llm, status)
         if hold:
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
                              'lineId': (candidate.get('_row') or {}).get('id'), 'line': candidate.get('line'), 'book': candidate.get('book'),
@@ -2678,6 +2698,10 @@ def _run(args, now, slot, kinds, status):
         # The case file is built from this run's already-checked facts and stored captures;
         # it spends no additional research or odds requests. A broken optional source
         # must not withhold an otherwise admitted play.
+        import morning_brief
+        change = morning_brief.promotion_note(morning_brief.current(now), candidate, facts)
+        if change:
+            candidate['whatChanged'] = change
         headline_reason = post_reason(candidate, facts, ctx, records, learning_weights())
         game = ctx.games[candidate['gameIds'][0]]
         try:
@@ -3591,7 +3615,10 @@ def release_private(now, log=log, only=None, review_only=False):
                             _team=ctx.player_team.get(str(pick.get('athleteId') or '')))
                 _, _, facts = last_look(case, game, ctx, context_file, False,
                                         check_status, now)
-                reason = release_pull_reason(case, relevant_facts(case, facts, ctx))
+                material_facts = relevant_facts(case, facts, ctx)
+                reason = release_pull_reason(case, material_facts)
+                if not row.get('discordSentAt') and not row.get('publicPath'):
+                    reason = reason or unresolved_availability(material_facts)
             if reason:
                 release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason=reason)
                 log(f'release: {key} held by hard news: {reason}')
@@ -4393,7 +4420,7 @@ def last_look(pick, game, ctx, context_file, use_llm, status, now):
                                             quarterbacks=quarterbacks(game, ctx))
         status['research']['asked'] += 1
         status['research']['verified'] += len(kept)
-        facts += kept
+        facts += [dict(f, verified=True) for f in kept]
     return judge(pick, relevant_facts(pick, facts, ctx), use_llm, status), kept, facts
 
 

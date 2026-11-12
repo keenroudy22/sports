@@ -1458,6 +1458,7 @@
       ${withdrawalNotice(pick) ? `<div class="card on-felt" style="margin-top:14px"><p><b>Recommendation withdrawn.</b> Original published result still counts.</p></div>` : ''}
       <div class="kt-page"><div style="margin-top:14px">${rail([pick], { onPage: true, lines: catalog?.lines, season: (today.season || {})[state.league] })}</div>
       ${result ? tape('Result', result) : ''}${price}${held}${stake}
+      ${pick.whatChanged ? tape('What changed', `<p>${esc(pick.whatChanged)}</p>`) : ''}
       ${notices.length ? `<div class="card on-felt" style="margin-top:14px;display:grid;gap:8px">${notices.map(n => `<p class="small">${n}</p>`).join('')}</div>` : ''}
       ${how.length ? tape(chanceTitle, `<div class="card"><ol class="steps">${how.map(x => `<li>${esc(x)}</li>`).join('')}</ol>${vm.chance != null ? `<p class="small muted" style="margin-top:6px">When we posted: we gave it ${(100 * vm.chance).toFixed(1)}% to win. At ${esc(oddsText(vm.odds))}, the price needed ${vm.needs != null ? `${(100 * vm.needs).toFixed(1)}%` : 'an unknown chance'} to win often enough.</p>` : ''}</div>`)
         : vm.kind === 'best' && !hold && !moneyline && isNum(pick.projection) ? tape('Our number', `<div class="card"><p>We project ${esc(C.fixed(pick.projection))} against the ${esc(pick.line)} line. No chance estimate checked against results was saved for this play.</p></div>`) : ''}

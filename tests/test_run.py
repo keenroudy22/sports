@@ -714,6 +714,14 @@ class HoldTests(unittest.TestCase):
         facts = run.evidence(candidate, ctx, context_file)
         backup = next(f for f in facts if f['id'] == 'injury-10-6')
         self.assertEqual(backup['direction'], 'neutral')
+    def test_unresolved_availability_requires_current_opposing_evidence(self):
+        report = {'kind': 'role', 'direction': 'against', 'origin': 'claude researcher',
+                  'verified': True, 'claim': 'The starter is a game-time decision.'}
+        self.assertIn('game-time decision', run.unresolved_availability([report]))
+        self.assertIsNone(run.unresolved_availability([dict(report, verified=False)]))
+        self.assertIsNone(run.unresolved_availability([dict(report, direction='for')]))
+        self.assertIsNone(run.unresolved_availability([dict(report, claim='The starter is active.')]))
+
     def test_holds_on_quarterback_listings(self):
         facts = [{'kind': 'injury', 'position': 'QB', 'team': '10', 'status': 'Questionable', 'claim': 'QB1 (QB, DET) is listed Questionable'}]
         self.assertIsNotNone(run.hold_reason({'marketType': 'total'}, facts))

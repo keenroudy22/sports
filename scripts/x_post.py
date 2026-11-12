@@ -629,6 +629,13 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         number = ''
         saved_reason = reason if reason is not None else load_reasons().get(pick.get('id'))
         reason = _choose_reason(pick, saved_reason, history, day)
+        change = pick.get('whatChanged')
+        if change:
+            from social_copy import projection_free_reason
+            clean_change = projection_free_reason(change)
+            if clean_change and plain(clean_change):
+                reason = f"What changed? {clean_change}"
+
         for salt in range(1, 5):
             if not voice_pick.five_word_overlap(' '.join(part for part in (number, reason) if part), history):
                 break

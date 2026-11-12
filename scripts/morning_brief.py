@@ -50,7 +50,9 @@ def choose(now,lines,screened,nba,official=False):
         if any(word in reason.lower() for word in ('ruled out','injured reserve','inactive','suspended')):continue
         missing=('Player/QB availability still needs verification.' if hold.get('rule')=='held'
                  else 'The daily total-play limit is already filled.' if hold.get('rule')=='totals_policy' else reason[:120])
-        if missing:options.append((float(grade['edge']),dict(league=row['league'],title=row['title'],line=row['line'],
+        if missing:options.append((float(grade['edge']),dict(league=row['league'],title=row['title'],line=row['line'],gameId=row['gameId'],
+            holdRule=hold.get('rule'),
+            availabilityConcern=reason.removeprefix('availability still open: ') if reason.startswith('availability still open: ') else None,
             odds=row['odds'],book=row['book'],projection=projection,observedAt=row['observedAt'],kickoff=row['kickoff'],missing=missing)))
     primary = [item for item in options if coverage_priority.tier(
         item[1]['league'], item[1]['kickoff'], now) == 0]
@@ -105,3 +107,24 @@ def post(now,root=STORE):
     if not row:return None
     return dict(key=f"research:morning:{row['day']}",kind='research',text=row['text'],due=boxscores.instant(row['capturedAt']),
         stale=min(boxscores.instant(row['observedAt'])+timedelta(hours=4),boxscores.instant(row['kickoff'])-timedelta(minutes=45)),card=None)
+
+
+def promotion_note(watch, pick, facts):
+    """Describe a confirmed change for the same watched selection."""
+    if not watch or not watch.get('gameId') or watch['gameId'] not in (pick.get('gameIds') or []):
+        return None
+    if (normal(watch.get('title')) != normal(pick.get('title'))
+            or watch.get('line') != pick.get('line') or watch.get('book') != pick.get('book')):
+        return None
+    if watch.get('holdRule') != 'held':
+        return None
+    concern = watch.get('availabilityConcern') or ''
+    for fact in facts:
+        claim = ' '.join(str(fact.get('claim') or '').split())
+        subject = re.match(r'^([\w.\x27-]+ [\w.\x27-]+)\s', claim)
+        if (subject and subject[1].casefold() in concern.casefold()
+                and fact.get('verified') is True and fact.get('direction') == 'for'
+                and fact.get('kind') in ('injury', 'role') and len(claim) <= 105
+                and re.search(r"\b(?:confirmed active|cleared to play|confirmed (?:as (?:the )?)?starter)\b", claim, re.I)):
+            return claim
+    return None
