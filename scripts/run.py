@@ -3294,7 +3294,7 @@ def private_release_ready(now):
         # kickoffs make this cheap check work without loading public stores.
         if starts:
             target = post_windows.target(row.get('league'), min(starts))
-            if now >= target - post_windows.DISCORD_PLAY_LEAD:
+            if now >= target - post_windows.discord_play_lead(now):
                 return True
         elif row.get('discordSentAt') or row.get('publicPath'):
             return True
@@ -3572,7 +3572,7 @@ def release_private(now, log=log, only=None, review_only=False):
         kickoff = starts[0]
         target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
         due = post_windows.play_due(now, target, row.get('discordSentAt'))
-        if not review_only and now >= target-post_windows.DISCORD_PLAY_LEAD and not row.get('bufferPostId'):
+        if not review_only and now >= target-post_windows.discord_play_lead(now) and not row.get('bufferPostId'):
             try:
                 if channel_error:
                     raise buffer_post.BufferError(channel_error)
@@ -4197,7 +4197,7 @@ def requote(entry, pick, game, ctx, now, log=log):
     mirror = entry.get('discord') or {}
     if mirror.get('state') == 'pending':
         mirror['text'] = buffer_post.without_playbook(text)
-        mirror['readyAt'] = stamp(max(now, due - buffer_post.DISCORD_PLAY_LEAD))
+        mirror['readyAt'] = stamp(max(now, due - post_windows.discord_play_lead(now)))
         if card:
             mirror['image'] = card
         entry['discord'] = mirror

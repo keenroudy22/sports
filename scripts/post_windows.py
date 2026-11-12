@@ -9,6 +9,7 @@ LEAD = timedelta(minutes=45)
 SPACING = timedelta(minutes=20)
 SOON = timedelta(minutes=2)
 DISCORD_PLAY_LEAD = timedelta(minutes=15)
+SAME_CYCLE_FROM = datetime(2026, 11, 12, 18, 6, tzinfo=timezone.utc)
 DISCORD_DELIVERY_CADENCE = timedelta(minutes=5)
 LATE_CARD_X_DELAY = timedelta(minutes=10)
 LATE_CARD_LEAD = timedelta(minutes=15)
@@ -17,6 +18,10 @@ EARLY_FROM = date(2026, 10, 21)
 
 def instant(value):
     return value if isinstance(value, datetime) else datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+
+
+def discord_play_lead(now):
+    return timedelta(0) if instant(now) >= SAME_CYCLE_FROM else DISCORD_PLAY_LEAD
 
 
 def international(league, kickoff):
@@ -39,14 +44,14 @@ def target(league, kickoff):
 
 def public_release_open(now, target_time):
     """Discord/site can release when the morning opens; X spacing is separate."""
-    return instant(now) >= instant(target_time) - DISCORD_PLAY_LEAD
+    return instant(now) >= instant(target_time) - discord_play_lead(now)
 
 
 def play_due(now, target_time, discord_sent_at=None):
     """Reuse the real Discord lead on retries."""
     start = instant(now)
     discord_at = instant(discord_sent_at) if discord_sent_at else start
-    return max(instant(target_time), start + SOON, discord_at + DISCORD_PLAY_LEAD)
+    return max(instant(target_time), start + SOON, discord_at + discord_play_lead(now))
 
 
 def jitter(post_id):
@@ -55,8 +60,8 @@ def jitter(post_id):
 
 
 def delivery_ready(now):
-    """First twenty-minute X slot that leaves time for the Discord-first delivery."""
-    earliest = instant(now).astimezone(timezone.utc) + DISCORD_PLAY_LEAD + DISCORD_DELIVERY_CADENCE + SOON
+    """First twenty-minute X slot with time for the delivery worker."""
+    earliest = instant(now).astimezone(timezone.utc) + discord_play_lead(now) + DISCORD_DELIVERY_CADENCE + SOON
     tick = int(SPACING.total_seconds())
     return datetime.fromtimestamp(((int(earliest.timestamp()) + tick - 1) // tick) * tick, tz=timezone.utc)
 

@@ -897,11 +897,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if cbb_regular:
             entry['cbbPick'] = True
             entry['discord'] = {'state':'pending','destination':'plays','text':without_playbook(text),
-                                'readyAt':gates.stamp(max(now,due-DISCORD_PLAY_LEAD))}
+                                'readyAt':gates.stamp(max(now,due-post_windows.discord_play_lead(now)))}
         if nba_regular:
             entry['nbaPick'] = True
             entry['discord'] = {'state':'pending','destination':'plays','text':without_playbook(text),
-                                'readyAt':gates.stamp(max(now,due-DISCORD_PLAY_LEAD))}
+                                'readyAt':gates.stamp(max(now,due-post_windows.discord_play_lead(now)))}
         if nba_regular and prior and nba_trial_runtime.retryable_cancelled(prior, now):
             entry['discord'] = dict(prior['discord'])
             entry['replacesBufferPostId'] = prior['bufferPostId']
@@ -955,7 +955,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if kind == 'play' and entry['discord'].get('state') != 'sent':
             # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs
             # every five minutes, so a 15-minute target gives members roughly 10-15 minutes before the X post.
-            entry['discord']['readyAt'] = gates.stamp(max(now, due - DISCORD_PLAY_LEAD))
+            entry['discord']['readyAt'] = gates.stamp(max(now, due - post_windows.discord_play_lead(now)))
         if image and 'discord' in entry and entry['discord'].get('state') != 'sent':
             entry['discord']['image'] = image
         if image and card_key and card_key != guid:

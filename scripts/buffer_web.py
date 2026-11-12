@@ -10,6 +10,7 @@ from datetime import timedelta
 
 import buffer_post as bp
 import gates
+import post_windows
 import x_post
 
 
@@ -146,7 +147,7 @@ def reserve_cbb_pick(guid, log_book, now, *, opener=None):
         raise WebHold('CBB original branded card is not verified live')
     # Replacing this play's unsent intent consumes no second queue slot.
     other_posts=dict(log_book,posts=[e for e in log_book.get('posts',[]) if e is not entry])
-    due=bp.free_slot(now+timedelta(minutes=15),bp.taken(other_posts,now))
+    due=bp.free_slot(post_windows.play_due(now,now),bp.taken(other_posts,now))
     if due>=min(gates.when(play['kickoff'])-timedelta(minutes=15),gates.when(play['quote']['checkedAt'])+timedelta(hours=1)):
         raise WebHold('No current reviewed CBB release window')
     if bp.day_count(other_posts,now.astimezone(gates.EASTERN).date())>=bp.MAX_PER_DAY:

@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 
 import boxscores
 import gates
+import post_windows
 import nba_capture
 import staking
 
@@ -153,7 +154,7 @@ def plans(now,log_book,root=STORE,reserved=()):
         if not current_match(p,now) or delivery_pending(p['id'],root):continue
         text=caption(p)
         if x_post.x_style(text) or x_post.tweet_length(text)>x_post.LIMIT:continue
-        due=buffer_post.free_slot(now+timedelta(minutes=15),busy)
+        due=buffer_post.free_slot(post_windows.play_due(now,now),busy)
         if due>=min(boxscores.instant(p['game']['kickoff'])-timedelta(minutes=15),boxscores.instant(p['quote']['checkedAt'])+timedelta(hours=1)):continue
         result.append((p['id'],'cbb-pick',text,due,p['id'].lower()));busy.append(due)
     for p in public_rows(root):

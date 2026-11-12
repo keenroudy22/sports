@@ -11,6 +11,7 @@ from pathlib import Path
 
 import boxscores
 import nba_capture
+import post_windows
 import nba_trial
 import paper
 import hoops_store
@@ -372,7 +373,7 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
   import nba_reviewed_props
   if play.get('selectionMethod')==nba_reviewed_props.METHOD:target=now
   retry=next((e for e in reversed(log_book.get('posts',[])) if e.get('id')==play['id'] and retryable_cancelled(e,now)),None)
-  earliest=(max(now+buffer_post.SOON,boxscores.instant(retry['discord']['sentAt'])+timedelta(minutes=15)) if retry else now+timedelta(minutes=15))
+  earliest=post_windows.play_due(now,now,retry['discord']['sentAt'] if retry else None)
   due=buffer_post.free_slot(max(target,earliest),busy)
   if due>=boxscores.instant(play['kickoff'])-timedelta(minutes=15):continue
   teams=play['game']['teams']
