@@ -268,6 +268,13 @@ class CashedTests(unittest.TestCase):
         log['posts'][0]['featured'] = True
         self.assertTrue(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)[0]['text'].startswith('✅ Player Seven'))
 
+    def test_total_final_preserves_a_double_digit_half_point_margin(self):
+        first, latest, log = self.world()
+        key = 'NFL-2026-W4-b'
+        first[key].update(line=59.5, marketType='total', direction='over')
+        posts = {p['key']: p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)}
+        self.assertIn('missed by 16.5', posts[f'burnt:{key}']['text'])
+
     def test_not_overnight_not_late_and_not_a_play_that_never_went_out(self):
         first, latest, log = self.world()
         self.assertEqual(receipts.cashed(first, latest, GAMES, log, datetime(2026, 9, 28, 6, 0, tzinfo=timezone.utc)), [], '2 AM: the receipt carries it')

@@ -602,7 +602,7 @@ def burnt_reaction(pick, games=None):
         return f'{play}. {overtime}. Pain.'
     detail = result_display.detail(pick)
     if not detail and isinstance(pick.get('actualValue'), (int, float)) and isinstance(pick.get('line'), (int, float)):
-        detail = f"missed by {pick_card.plain_number(abs(float(pick['actualValue']) - float(pick['line'])))}"
+        detail = f"missed by {abs(float(pick['actualValue']) - float(pick['line'])):g}"
     return f'{play}. {detail}. Pain.' if detail else f'{play}. One short. Pain.'
 
 
