@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 import coverage_priority
 import arbs
+import betslips
 import build_site
 import line_payload
 import desk
@@ -64,7 +65,7 @@ SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a sl
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
-WHITELIST = ('data/morning-brief/', 'data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
+WHITELIST = ('data/morning-brief/', 'data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/betslips.json', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
              'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
@@ -2587,6 +2588,19 @@ def _run(args, now, slot, kinds, status):
     release_queue.merge_context(ctx, CONF)
 
     build_site.build(now)
+    # Match already-public official plays to one-click slips. This optional
+    # transport never admits a play and never stops the desk or publication.
+    # A successful public-safe row is committed with the ordinary data push;
+    # the hosted network-free build attaches it by immutable selection hash.
+    if not args.dry_run and os.environ.get('UNABATED_API_KEY', '').strip():
+        try:
+            slip_status = betslips.refresh_current(now, logger=log, deadline=8)
+            status['betslips'] = slip_status
+            if slip_status.get('ready') or slip_status.get('processing') or slip_status.get('failed'):
+                log('betslips:', slip_status)
+        except betslips.BetslipError as error:
+            status['betslips'] = {'configured': True, 'failed': 1}
+            log(f'betslips unavailable; official plays continue: {error}')
     lines = load_candidate_lines(build_site.OUT / 'lines.json')
     selection_scope = official_selection_scope(slot, games, ctx, now, getattr(args, 'select_now', False))
     selection_run = selection_scope is None or bool(selection_scope)
@@ -3714,6 +3728,16 @@ def release_private(now, log=log, only=None, review_only=False):
                 featured_rows[eastern_date(now).isoformat()] = {'id': key, 'chosenAt': published_at,
                                                                  'score': (public_pick.get('kitchenScore') or {}).get('total')}
                 featured.save(featured_rows)
+            # Generate the exact slip before this release commit when the free
+            # partner API is configured. Eight seconds is intentionally short:
+            # a processing request is retained privately and the next ordinary
+            # run resumes it rather than delaying or duplicating publication.
+            if os.environ.get('UNABATED_API_KEY', '').strip():
+                try:
+                    slip = betslips.refresh_pick(public_pick, now=now, deadline=8)
+                    log(f'betslip: {key} {slip["state"]}')
+                except betslips.BetslipError as error:
+                    log(f'betslip: {key} unavailable; official release continues: {error}')
             result = commit_push(now, now.astimezone(EASTERN), {'published': 1, 'settled': 0, 'closed': 0})
             log('release record:', result)
             row = release_queue.update(CONF, key, publicPath=str(target_path.relative_to(ROOT)),

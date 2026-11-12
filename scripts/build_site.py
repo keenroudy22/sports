@@ -43,6 +43,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 import asset_versions
+import betslips
 import features
 import game_context
 import line_payload
@@ -2021,7 +2022,9 @@ def build(now=None):
     by_id = {key: {**game, 'id': key} for key, game in stored.items()}
     by_id.update({g['id']: g for g in slate.get('games', [])})
     first, latest = first_publications(reports)
-    picks = [p for p in board_picks(first, latest, by_id, identities, now)]
+    slip_store = betslips.load()
+    picks = [betslips.decorate(p, now=now, store=slip_store)
+             for p in board_picks(first, latest, by_id, identities, now)]
     import result_display
     for row in picks:
         if not row.get('result'):
@@ -2400,7 +2403,7 @@ def cbb_record_picks(now=None, root=ROOT):
             margin = abs(float(row['actual']) + float(row['line'])) if row.get('marketType') == 'spread' else abs(float(row['actual']) - float(row['line']))
             verb = 'cleared' if row['result'] == 'win' else 'missed' if row['result'] == 'loss' else 'landed'
             result_detail = f"{cbb_picks.result_detail(row)} · {verb} by {margin:g}"
-        rows.append({
+        rows.append(betslips.decorate({
             'id': row['id'], 'league': 'CBB', 'kind': 'gamePicks', 'lane': 'best_bet',
             'title': title, 'displayTitle': title, 'marketType': row.get('marketType'),
             'direction': row.get('direction'), 'line': row.get('line'), 'odds': row.get('odds'),
@@ -2418,7 +2421,7 @@ def cbb_record_picks(now=None, root=ROOT):
                          'xAt': stamp(x_at) if x_at else None,
                          'restoredAt': None, 'cancelled': False, 'failed': False},
             'card': None,
-        })
+        }, now=now))
     return sorted(rows, key=lambda row: (str(row.get('kickoff') or ''), row['id']))
 
 
@@ -2470,7 +2473,7 @@ def nba_record_picks(now=None, root=ROOT):
                    if isinstance(source, dict) and str(source.get('url') or '').startswith('https://')]
         if str(row.get('source') or '').startswith('https://'):
             sources.insert(0, row['source'])
-        rows.append({
+        rows.append(betslips.decorate({
             'id': row['id'], 'league': 'NBA', 'kind': 'props', 'lane': 'best_bet',
             'title': title, 'displayTitle': title, 'player': row.get('player'),
             'athleteId': row.get('athleteId'), 'market': row.get('stat'), 'marketType': 'prop',
@@ -2489,7 +2492,7 @@ def nba_record_picks(now=None, root=ROOT):
                          'xAt': stamp(x_at) if x_at else None,
                          'restoredAt': None, 'cancelled': False, 'failed': False},
             'card': None,
-        })
+        }, now=now))
     return sorted(rows, key=lambda row: (str(row.get('kickoff') or ''), row['id']))
 
 

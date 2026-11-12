@@ -208,6 +208,24 @@ test('Today drops a reason that merely repeats the visible book and projection n
   assert.doesNotMatch(first, /Why it made the card|Book says 49\.5/, 'the full play page keeps reasoning; Today stays concise');
 });
 
+test('official plays expose a full-match sportsbook slip and exact Gambly fallback without placing a wager', async () => {
+  const ready = { ...prop, betslipPrompt: 'Build this exact FanDuel single bet.', betslip: {
+    status: 'ready', provider: 'Gambly', book: 'FanDuel', legsRequested: 1, legsMatched: 1,
+    url: 'https://www.gambly.com/deeplink/slip/fixture', generatedAt: '2026-10-10T13:58:00Z' } };
+  const direct = await loadApp('#record', {}, { today: { ...TODAY, picks: [ready, ...rungs] } }).api.views.today({ view: 'today' });
+  assert.match(direct, /class="btn primary small" href="https:\/\/www\.gambly\.com\/deeplink\/slip\/fixture"/);
+  assert.match(direct, /Load bet in FanDuel · 1\/1 matched/);
+  assert.doesNotMatch(direct, /data-gambly-prompt/, 'a verified direct link replaces the copy-and-paste fallback');
+
+  const parlay = { ...rung('parlay', 1, 3, null, { stake: 50, payout: 250 }, prop.kickoff),
+    betslipPrompt: 'Build this exact FanDuel parlay.\n1. Leg A\n2. Leg B' };
+  const fallback = await loadApp('#pick/parlay', {}, { today: { ...TODAY, picks: [parlay] } }).api.views.pick({ id: 'parlay' });
+  assert.match(fallback, /class="btn" data-gambly-prompt="[^"]+"/);
+  assert.match(fallback, /Build 2-leg parlay in Gambly/);
+  assert.doesNotMatch(await loadApp('#record', {}, { today: { ...TODAY, picks: [{ ...ready, result: 'win' }] } }).api.views.today({ view: 'today' }), /Load bet in|Build bet in Gambly/,
+    'settled plays never offer a live slip');
+});
+
 test('an NFL game today stays prominent and a later best bet stays off Today', async () => {
   const future = [laterOpen, { ...laterOpen, id: 'later-more', kickoff: '2026-10-14T00:15:00Z' }];
   const nightGame = { ...GAMES[0], kickoff: '2026-10-11T00:15:00Z', v2: { away: 23.2, home: 26.9, total: 50.1, margin: 3.7, winProb: 0.61 }, market: { spread: -8.5, total: 48.5 } };

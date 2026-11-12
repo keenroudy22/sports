@@ -941,7 +941,6 @@
     ? `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="decision-list${opts.compact ? ' is-compact' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}">${rows.map(p => decisionCard(p, opts)).join('')}</section>`
     : `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="kt-pass${opts.onPage ? ' on-page' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
     <div class="kt-tickets">${rows.map((p, i) => ticket(p, { ...opts, card: p.card || (opts.cards && opts.cards.get(p.id)), clip: i === 0 && !opts.more, strip: i === 0 && !opts.more, compact: (i > 0 || opts.more) && !C.isLadder(p) })).join('')}</div></section>`;
-  /* Today uses a familiar sportsbook-style summary. The full Kitchen Ticket is reserved for the play page and social art. */
   const decisionCard = (pick, opts = {}) => {
     const vm = pickVM(pick), g = gameOf(pick), parts = betParts(pick, g), best = vm.kind === 'best';
     const laneChip = { gut_call: 'Full Send', upset: 'Upset pick', safer_combo: 'Safer combo', special: "Chef's Special",
@@ -981,6 +980,7 @@
       <div class="decision-price"><span><small>Posted price</small><b class="num">${esc(odd(vm.odds))}</b></span><strong>${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</strong></div>
       ${comparison}${current ? `<p class="decision-current">${esc(current)}</p>` : ''}
       ${best && summaryWhy ? `<p class="decision-why"><b>Why it made the card</b><span>${esc(summaryWhy)}</span></p>` : ''}
+      ${P.betslipAction(pick, Date.now(), Boolean(opts.compact))}
       <a class="decision-more" href="${esc(vm.href)}">See stats, trends and full breakdown <span aria-hidden="true">→</span></a>
     </article>`;
   };
@@ -1468,6 +1468,7 @@
       ${(pick.why || pick.risk) && !hold ? `<details class="more-box" data-box="fullread" style="margin-top:20px"><summary>Our notes when we posted it</summary><div class="grid two"><div class="card"><p class="eyebrow green">Why</p><p style="margin-top:6px">${esc(prose(pick.why))}</p>${(pick.reasoning || {}).historyNote ? `<p class="small muted" style="margin-top:6px">${esc(pick.reasoning.historyNote)}</p>` : ''}</div><div class="card"><p class="eyebrow">What could go wrong</p><p style="margin-top:6px">${esc(prose(pick.risk))}</p></div></div></details>` : ''}
       ${pick.cutoff ? tape(vm.mode === 'open' && !hold ? 'Good to' : vm.kind === 'best' ? 'Was good to' : 'Entry rule', `<p>${esc(prose(pick.cutoff))}</p>${vm.mode === 'open' && !hold && goodTo(pick) ? `<p class="small muted" style="margin-top:4px">${esc(goodTo(pick))}</p>` : ''}`) : ''}
       ${tape('Where it stands', `${vm.statusNote && !hold ? `<p class="small">${esc(vm.statusNote)}</p>` : ''}<p class="small muted" style="margin-top:4px">${esc(C.deliveryText(pick) || 'No delivery evidence recorded.')}</p>`)}
+      ${P.betslipAction(pick,Date.now())}
       <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
       ${sources.length ? `<p class="small muted" style="margin-top:14px">Sources: ${sources.map((x, i) => `<a href="${esc(x)}" target="_blank" rel="noopener noreferrer">${esc(host(x, i))} ↗</a>`).join(' · ')}</p>` : ''}
       <p class="kt-social small">Best bets land in the <a href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener">free Kook'n Discord ↗</a> about 10–15 minutes before X. <a href="https://x.com/keenkooks" target="_blank" rel="noopener">Follow @keenkooks on X ↗</a></p>
@@ -2309,6 +2310,7 @@
   const ticketLeg = row => ({ id: row.id, title: row.title, player: row.player || null, market: row.market || null, direction: row.direction || null, line: row.line,
     odds: row.odds, book: row.book, gameId: row.gameId, kickoff: row.kickoff, state: row.state, expiresAt: row.expiresAt, observedAt: row.observedAt });
   function boot() {
+    P.installBetslipHandler(toast);
     document.addEventListener('error', event => {
       const img = event.target;
       if (img instanceof HTMLImageElement && img.closest('.tm, .ava')) { const box = img.parentElement; img.remove(); box.classList.remove('has-logo'); box.classList.add('no-img'); }

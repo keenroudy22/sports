@@ -31,6 +31,26 @@
     if (route.view === 'trends' && route.id) return '#trends';
     return null;
   }
-  const api = {leagues,league,key,snapshot,changes,sportRoute};
+  const html = value => String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function betslipAction(pick, now = Date.now(), compact = false) {
+    if (!pick || pick.result || Date.parse(pick.kickoff) <= now || /withdr(?:ew|awn)|removed.*recommendation/i.test(pick.entryNote || '')) return '';
+    const slip=pick.betslip||{}, legs=Number(slip.legsMatched)||(pick.legs||[]).length||1, book=slip.book||pick.book||'sportsbook';
+    const note=compact?'':'<p class="small muted" style="margin-top:7px">Kook’n never places the wager. Confirm every leg, line and price in the sportsbook before submitting.</p>';
+    if (/^https:\/\//.test(slip.url||'') && slip.status==='ready' && slip.legsMatched===slip.legsRequested)
+      return `<a class="btn primary${compact?' small':''}" href="${html(slip.url)}" target="_blank" rel="noopener noreferrer">Load ${legs>1?'parlay':'bet'} in ${html(book)} · ${legs}/${legs} matched ↗</a>${note}`;
+    if (pick.betslipPrompt)
+      return `<button type="button" class="btn${compact?' small':''}" data-gambly-prompt="${html(encodeURIComponent(pick.betslipPrompt))}">Build ${legs>1?`${legs}-leg parlay`:'bet'} in Gambly ↗</button>${note}`;
+    return '';
+  }
+  function installBetslipHandler(notify) {
+    document.addEventListener('click', async event => {
+      const button=event.target.closest&&event.target.closest('[data-gambly-prompt]'); if(!button)return;
+      let text=''; try{text=decodeURIComponent(button.dataset.gamblyPrompt)}catch(_){text=button.dataset.gamblyPrompt}
+      const opened=window.open('https://gambly.com/chat','_blank','noopener,noreferrer');
+      try{await navigator.clipboard.writeText(text);notify('Exact ticket copied. Paste it in Gambly to match the slip.')}catch(_){window.prompt('Copy this exact ticket, then paste it in Gambly:',text)}
+      if(!opened)notify('Ticket copied. Open Gambly and paste it to build the slip.');
+    });
+  }
+  const api = {leagues,league,key,snapshot,changes,sportRoute,betslipAction,installBetslipHandler};
   if(typeof module !== 'undefined') module.exports=api; else root.KRPersonal=api;
 })(typeof window !== 'undefined' ? window : globalThis);
