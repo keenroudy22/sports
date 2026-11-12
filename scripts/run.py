@@ -3526,6 +3526,7 @@ def release_private(now, log=log, only=None, review_only=False):
     import learning
     import release_queue
     import x_post
+    import typefully_backup
 
     release_queue.retry_caption_guards(CONF, CAPTION_GUARD_VERSION, log=log)
     book = release_queue.load(CONF)
@@ -3546,6 +3547,22 @@ def release_private(now, log=log, only=None, review_only=False):
         key = row.get('id')
         if only is not None and key not in only:
             continue
+        existing = next((e for e in log_book['posts'] if e.get('id') == key), {})
+        settings = typefully_backup.config(CONF)
+        if existing.get('typefullyDelivery') and not review_only:
+            if existing.get('sentAt') or (settings and typefully_backup.deliver(
+                    existing, log_book, settings, now, x_post.save_log)):
+                commit_log(now, push=True)
+                release_queue.remove(CONF, key)
+                released.append(key)
+            continue
+        if existing.get('bufferAttemptAt') and not row.get('bufferPostId'):
+            continue
+        local_cap = buffer_post.quota.buffer_block_reason(now=now, essential=True) if settings else None
+        fallback = bool(settings and local_cap and 'cap reached' in local_cap
+                        and not buffer_post.rate_backoff(now)
+                        and not (row.get('pick') or {}).get('legs')
+                        and not (row.get('pick') or {}).get('parlayType'))
         web_attempt = next((e for e in log_book.get('posts', [])
                             if e.get('id') == key and e.get('webDelivery')), None)
         if web_attempt and not review_only:
@@ -3580,13 +3597,13 @@ def release_private(now, log=log, only=None, review_only=False):
             # must not rerun news/tests/builds under the posting lock every5min.
             # All ordinary checks run again once an actual X send is possible.
             blocked = buffer_post.rate_backoff(now) or buffer_post.quota.buffer_block_reason(now=now, essential=True)
-            if blocked:
+            if blocked and not fallback:
                 log(f'buffer: {key} already released on Discord/site; X transport held: {blocked}')
                 continue
         kickoff = starts[0]
         target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
         due = post_windows.play_due(now, target, row.get('discordSentAt'))
-        if not review_only and now >= target-post_windows.discord_play_lead(now) and not row.get('bufferPostId'):
+        if not fallback and not review_only and now >= target-post_windows.discord_play_lead(now) and not row.get('bufferPostId'):
             try:
                 if channel_error:
                     raise buffer_post.BufferError(channel_error)
@@ -3743,6 +3760,15 @@ def release_private(now, log=log, only=None, review_only=False):
             row = release_queue.update(CONF, key, publicPath=str(target_path.relative_to(ROOT)),
                                        publicPushedAt=stamp(datetime.now(timezone.utc)))
 
+        if fallback and not row.get('bufferPostId'):
+            if due <= now + post_windows.SOON and typefully_backup.deliver(
+                    entry, log_book, settings, now, x_post.save_log, text=text,
+                    expires=gates.when(pick['expiresAt'])):
+                commit_log(now, push=True)
+                release_queue.remove(CONF, key)
+                released.append(key)
+            continue
+
         if not row.get('bufferPostId'):
             if channel_error:
                 log(f'buffer: {key} released on Discord/site; X waits: {channel_error}')
@@ -3760,6 +3786,9 @@ def release_private(now, log=log, only=None, review_only=False):
                 if not buffer_post.reachable(image):
                     log(f'buffer: {key} waits for its released site card')
                     continue
+            if settings:
+                entry['bufferAttemptAt'] = stamp(now)
+                x_post.save_log(log_book)
             post_id = buffer_post.create_post(text, channel['id'], due, image, essential=True)
             row = release_queue.update(CONF, key, bufferPostId=post_id, dueAt=stamp(due), bufferImage=image)
 
