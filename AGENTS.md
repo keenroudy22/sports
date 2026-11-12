@@ -13,7 +13,12 @@ book line/odds, check time and gap together. Official picks and desk research
 leans remain distinct. Today shows every current official slip before research
 tools. These are presentation and navigation changes only; they do not approve
 new probability models, prices, picks or release rules. Hosted receipt follows
-only after the ordinary release and live phone/desktop checks complete.
+only after the ordinary release and live phone/desktop checks complete. Release
+`ceb56d97007c574b36d9b6fe744f77bf29e37341` shipped through successful hosted
+run `43241285788`. Live NBA, CBB, NFL and CFB matchup-to-chart flows passed at
+375/1440 with exact player/stat/line identity, no page overflow, load error or
+console warning/error. The bare Today page also put all three current official
+slips before research and Kook vs. Book. Preserve this shipped order and route.
 
 # November 11 NBA/CBB fast prop research — verified live
 

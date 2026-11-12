@@ -15,7 +15,15 @@ official slips before research modules so Best Bets remain the first decision
 surface. This release changes presentation and routing only; research leans are
 not official picks and it does not approve an NBA/CBB probability method or a
 new price feed. The hosted release receipt is recorded only after ordinary
-deployment and live phone/desktop verification.
+deployment and live phone/desktop verification. Release
+`ceb56d97007c574b36d9b6fe744f77bf29e37341` passed 2,237 Python tests (2
+skipped), 329 Node/interface tests, clean export, build, phone budget, record,
+NBA, public-boundary, asset/SVG and stored-input rehearsal gates. Hosted run
+`43241285788` succeeded. Live NBA, CBB, NFL and CFB matchup-to-chart flows
+passed at 375/1440 with the correct player, stat and exact displayed line, no
+page overflow, load error or console warning/error. CBB correctly retained an
+unavailable book line. Today put all three current official slips before the
+research tools and Kook vs. Book.
 
 ### November 11 NBA/CBB fast prop research — verified live
 
