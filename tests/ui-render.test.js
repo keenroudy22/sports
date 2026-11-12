@@ -101,7 +101,7 @@ test('suspect player projections and prices have no ranked board row or profile 
   const more = fs.readFileSync('site/app-more.js', 'utf8');
   assert.match(source, /filter\(r => !r\.roleSuspect && !r\.priceSuspect\)/);
   assert.doesNotMatch(source, /Lines under review|Projection under review/);
-  assert.match(more, /const held = projectionReview \|\| Boolean\(heldRow\)/);
+  assert.match(more, /const held = availabilityHeld \|\| projectionReview \|\| Boolean\(heldRow\)/);
   assert.match(more, /UNAVAILABLE/);
 });
 
