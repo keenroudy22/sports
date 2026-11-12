@@ -1,3 +1,27 @@
+# November 12 Today scan, mobile prop cards and exact book links — verified live
+
+The old Gambly copy-and-paste fallback is retired. Never show or restore a
+Gambly action merely because an official play exists. Today may show a direct
+sportsbook action only when the captured The Odds API outcome supplies an
+HTTPS link and its sportsbook, player or team, market, side and exact line all
+match the official single. Missing links, moved numbers, partial matches and
+parlays fail closed. Kook'n never places or confirms a wager.
+
+Today now reads in decision order: current official Best Bets, Kook vs Book,
+then the compact Kook'n Edges, Prop finder, First quarter and Matchups tools.
+NBA/CBB/NFL/CFB matchup prop tables remain desktop comparison tables, but at
+760px and below they become labeled player scan cards rather than a wide
+spreadsheet. Keep player, position, availability, projected/recent minutes,
+Kook'n, range, exact book quote, gap and research status legible. Green means
+Research lean, not an official pick. Every supported stat retains its exact
+player/stat/line chart deep link. Release
+`65070132d19654bbd55eff958592b9fc13d1084c` shipped through successful hosted
+run `43313498592`. It passed 2,249 Python tests (2 skipped), 333 Node/interface
+tests, clean export, build, record/NBA/publication audits, asset/SVG checks and
+stored-input rehearsal. Local 320/375/390/430/768/1440 and hosted 375/390/1440
+audits of Today, Props, Results and NBA/CBB/NFL/CFB game routes had no overflow,
+rendered load failure or console error. Preserve this contract.
+
 # November 12 Gambly betslip handoff — verified live
 
 Current official singles and parlays expose a compact Gambly action on Today
