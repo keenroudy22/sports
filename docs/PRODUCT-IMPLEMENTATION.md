@@ -1,3 +1,32 @@
+### November 12 Gambly betslip handoff — verified live
+
+Today cards and full pick pages now expose one compact action for each eligible
+current official straight or parlay. The no-key path copies a precise prompt
+containing the captured book, exact selection or legs, line, original odds and
+event time, then opens Gambly for review. Kook'n does not transmit a stake,
+account credential or personal wager amount and never places or confirms the
+wager.
+
+The optional direct-load path uses the Unabated betslip API from the private
+refresh job. A public deep link is emitted only when the response matches the
+requested book and all requested legs exactly. Partial matches, substituted
+markets, stale selection fingerprints and incomplete parlays are rejected.
+Pending API IDs remain private. `UNABATED_API_KEY` is absent from the current
+private environment, so the exact-prompt fallback is the live behavior and
+direct sportsbook loading is not yet activated.
+
+Release `fd518f76ed0791ae0c376d8cae146818cbd7dcc0` added the adapter, UI, safe
+public artifact and regression coverage. Follow-up
+`007de647b214083af4ec78a8f2dc1c588dd7a5d6` fingerprints eager browser helpers
+so a cached `personal.js` cannot strand Today on Loading; hosted run
+`43300719103` succeeded. The final release passed 2,245 Python tests, 332
+browser/interface tests, a 567-page build, zero-issue 176-pick record audit,
+zero-issue 941-file public guard, current asset checks and stored-input
+rehearsal. Live Today exposed three current official handoffs, the full pick
+page retained its safety disclosure, and the action opened Gambly with the exact
+book-specific prompt. True 390px mobile emulation and desktop verification had
+no horizontal overflow.
+
 ### November 12 matchup prop tables and exact chart links
 
 NBA and CBB matchup routes now group players by team in scan-first tables.

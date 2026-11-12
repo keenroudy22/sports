@@ -1,3 +1,21 @@
+# November 12 Gambly betslip handoff — verified live
+
+Current official singles and parlays expose a compact Gambly action on Today
+and the full pick route. Without an Unabated key, the action copies an exact,
+book-specific prompt and opens Gambly for the reader to review. With a private
+`UNABATED_API_KEY`, the existing refresh job may publish a direct sportsbook
+deep link only after the API returns the same book and every requested leg
+exactly; partial matches, substitutions, stale fingerprints and missing legs
+fail closed. Never publish the key, pending request IDs, stake, personal wager
+amounts or account data. Kook'n prepares the slip and never places or confirms a
+wager. The fallback is live in `fd518f76ed0791ae0c376d8cae146818cbd7dcc0`;
+eager helper fingerprints and the stale-cache regression are fixed in
+`007de647b214083af4ec78a8f2dc1c588dd7a5d6`, shipped through successful hosted
+run `43300719103`. Live Today and pick-page actions opened Gambly with the exact
+selection, and true 390px device emulation had no horizontal overflow. Direct
+book loading remains intentionally inactive until the owner installs the key in
+the private environment.
+
 # November 12 Today, Edges and unavailable-player props — verified live
 
 Today keeps every current official straight in one compact, front-and-center
