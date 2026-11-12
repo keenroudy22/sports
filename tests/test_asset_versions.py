@@ -76,6 +76,25 @@ class AssetVersionTests(unittest.TestCase):
             self.assertEqual(asset_versions.sync(site),['core.js'])
             self.assertIn('core.js?v=sha256-'+asset_versions.fingerprint(site/'core.js'),(site/'index.html').read_text())
 
+    def test_eager_helpers_are_invalidated_with_the_app_that_calls_them(self):
+        with tempfile.TemporaryDirectory() as folder:
+            site = Path(folder)
+            (site / 'app.js').write_text('app')
+            (site / 'live.js').write_text('live')
+            (site / 'personal.js').write_text('personal')
+            (site / 'index.html').write_text(
+                '<script src="live.js?v=1"></script>'
+                '<script src="personal.js?v=1"></script>'
+                '<script src="app.js?v=1"></script>'
+            )
+            self.assertEqual(asset_versions.sync(site), ['app.js', 'live.js', 'personal.js'])
+            html = (site / 'index.html').read_text()
+            for name in ('live.js', 'personal.js'):
+                self.assertIn(f'{name}?v=sha256-{asset_versions.fingerprint(site / name)}', html)
+            (site / 'personal.js').write_text('changed helper api')
+            with self.assertRaisesRegex(ValueError, 'personal.js content fingerprint is stale'):
+                asset_versions.sync(site, check=True)
+
     def test_stylesheet_is_invalidated_when_its_layout_changes(self):
         with tempfile.TemporaryDirectory() as folder:
             site = Path(folder)

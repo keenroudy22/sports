@@ -47,7 +47,10 @@ def sync(site=SITE, check=False):
     index = site / 'index.html'
     if index.is_file():
         html = index.read_text(encoding='utf-8')
-        for name, attribute in (('app.js', 'src'), ('core.js', 'src'), ('app.css', 'href')):
+        # Every eager browser module is an API boundary. A new app.js calling a
+        # cached helper can otherwise leave the whole shell on "Loading".
+        for name, attribute in (('app.js', 'src'), ('core.js', 'src'), ('live.js', 'src'),
+                                ('personal.js', 'src'), ('app.css', 'href')):
             asset=site/name
             if not asset.is_file():continue
             pattern = re.compile(re.escape(attribute)+r'="'+re.escape(name)+r'\?v=[^"]+"')
