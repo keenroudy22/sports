@@ -66,7 +66,7 @@ test('basketball cards open matchup details and NBA props stay in their own game
   const teams = {home:{id:'1',name:'Home',abbreviation:'HOM'},away:{id:'2',name:'Away',abbreviation:'AWY'}};
   const cbb = {id:'CBB-1',kickoff,teams,projection:{home:72,away:68,total:140}};
   const nba = {id:'NBA-2',providerId:'2',kickoff,teams,status:'scheduled',projection:{home:112,away:108,total:220}};
-  const prop = {eventId:'2',athleteId:'42',team:'1',teamName:'Home',name:'Matched player',kickoff,stat:'pts',statName:'Points',line:15.5,over:-110,under:-110,side:'over',sourceAt:new Date().toISOString(),projection:{value:17.2,low:11,high:23}};
+  const prop = {eventId:'2',athleteId:'42',team:'1',teamName:'Home',name:'Matched player',kickoff,stat:'pts',statName:'Points',line:15.5,over:-110,under:-110,book:'FanDuel',side:'over',sourceAt:new Date().toISOString(),projection:{value:17.2,low:11,high:23}};
   const v = views(async path => {
     if (path === 'app/cbb.json') return {games:[cbb],scheduleFresh:true};
     if (path === 'app/nba.json') return {games:[nba]};
@@ -83,6 +83,6 @@ test('basketball cards open matchup details and NBA props stay in their own game
   const matchup = await v.game({id:'NBA-2'});
   assert.match(matchup, /Matched player/);
   assert.match(matchup, /prop-vs-label">Book<\/span><b>15\.5[\s\S]*prop-vs-label">Kook’n<\/span><b>17\.2[\s\S]*Projection gap[\s\S]*Kook’n range 11\.0–23\.0/);
-  assert.match(matchup, /#player\/NBA\/42\?stat=pts&amp;line=15\.5&amp;direction=over/);
+  assert.match(matchup, /#player\/NBA\/42\?stat=pts&amp;line=15\.5&amp;direction=over&amp;book=FanDuel/);
   assert.doesNotMatch(matchup, /Other game player/);
 });

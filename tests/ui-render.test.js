@@ -146,7 +146,7 @@ test('game prop tables become scan cards on phones without losing exact stat lin
   assert.match(gamesSource, /@media \(max-width:760px\)[\s\S]*\.prop-compare tr \{ display:grid; grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(gamesSource, /\.prop-compare thead \{ display:none; \}/);
   assert.match(gamesSource, /content:attr\(data-stat\)/);
-  assert.match(gamesSource, /line=\$\{esc\(line\)\}&amp;direction=\$\{esc\(direction\)\}/);
+  assert.match(gamesSource, /C\.playerLineHref\(\{[^}]*stat, line, direction, book/);
   assert.match(gamesSource, /Priced lines, research leans and highest-minute roles first/);
   assert.match(gamesSource, /class="more-box prop-depth-more"/);
   assert.match(gamesSource, /const featured = players\.slice\(0,5\), depth = players\.slice\(5\)/);

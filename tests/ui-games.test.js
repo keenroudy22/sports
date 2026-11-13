@@ -318,10 +318,10 @@ test('football stat cells keep the displayed threshold, odds and chart side toge
     forecast: { players: { home: { players: [{ id: '1', name: 'Test Runner', pos: 'RB', rushYds: [48, 30, 70] }] } } } };
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
   const cell = async () => (await factory(ctx).game({ id: g.id })).match(/<a class="prop-cell[^>]*href="[^"]*stat=rushYds[^>]*>[\s\S]*?<\/a>/)?.[0] || '';
-  assert.match(await cell(), /line=44\.5&amp;direction=over[\s\S]*Odds unavailable · DraftKings/);
+  assert.match(await cell(), /line=44\.5&amp;direction=over&amp;book=DraftKings[\s\S]*Odds unavailable · DraftKings/);
   assert.doesNotMatch(await cell(), /FanDuel|-118|41\.5/);
   detail.lines = [matching];
-  assert.match(await cell(), /line=44\.5&amp;direction=over[\s\S]*O -109 · DraftKings/);
+  assert.match(await cell(), /line=44\.5&amp;direction=over&amp;book=DraftKings[\s\S]*O -109 · DraftKings/);
   matching.observedAt = new Date(Date.now() - 5 * 3600000).toISOString();
   assert.match(await cell(), /Earlier quote · checked/);
 });
