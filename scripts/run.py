@@ -3046,13 +3046,15 @@ def _run(args, now, slot, kinds, status):
                 nba_slate=json.loads(slate_path.read_text()) if slate_path.exists() else {}
                 sports_path=build_site.OUT.parent/'sports.json'
                 sports=json.loads(sports_path.read_text()) if sports_path.exists() else {}
+                import cbb_today
                 prep=next_day_prep.prepare(games,lines,nba_slate,nba_player_props.build(prep_now,limit=None),prep_now,
-                                           sports=sports)
+                                           sports=sports,cbb_research=cbb_today.build(prep_now))
                 next_day_prep.attach_team_context(prep, prep_now, ROOT/'data'/'nba-capture')
                 next_day_prep.attach_opportunities(prep, prep_now, ROOT/'data'/'nba-capture')
                 boxscores.write_json(ROOT/'work'/'next-day-prep.json',prep)
                 status['nextDayPrepared']={'targetDate':prep['targetDate'],'footballGames':prep['football']['games'],
-                                          'cbbGames':prep['cbb']['games'],'nbaGames':prep['nba']['games'],
+                                          'cbbGames':prep['cbb']['games'],'cbbWatches':len(prep['cbb']['watch']),
+                                          'nbaGames':prep['nba']['games'],
                                           'nbaPropRows':prep['nba']['freshPropRows']}
                 log(f"next-day prep: {status['nextDayPrepared']}")
             except Exception as error:

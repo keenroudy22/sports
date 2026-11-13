@@ -63,6 +63,24 @@ class PrepTests(unittest.TestCase):
         self.assertIn('exact two-sided DraftKings',report['cbb']['hold'])
         self.assertFalse(report['releaseReady'])
 
+    def test_fresh_cbb_comparisons_become_held_planning_rows_not_picks(self):
+        now=datetime(2026,11,13,23,30,tzinfo=timezone.utc)
+        sports={'leagues':{'CBB':{'checkedAt':'2026-11-13T23:25:00Z','games':[
+            {'id':'CBB-1','status':'scheduled','kickoff':'2026-11-14T17:00:00Z'}]}}}
+        research={'games':[{'id':'CBB-1','kickoff':'2026-11-14T17:00:00Z',
+            'teams':{'home':{'name':'Home'},'away':{'name':'Away'}},
+            'projection':{'margin':7.0},'spreadQuote':{'book':'DraftKings',
+                'observedAt':'2026-11-13T23:25:00Z','homeLine':-3.5,'awayLine':3.5,
+                'homeOdds':-108,'awayOdds':-112}}]}
+        report=prep.prepare({},[],{},{},now,sports=sports,cbb_research=research)
+        self.assertEqual(report['cbb']['games'],1)
+        self.assertEqual(len(report['cbb']['watch']),1)
+        row=report['cbb']['watch'][0]
+        self.assertEqual((row['kooknHomeMargin'],row['gapTowardHome']),(7.0,3.5))
+        self.assertTrue(row['planningOnly'])
+        self.assertIn('availability',row['holds'][0])
+        self.assertFalse(report['releaseReady'])
+
 
     def test_explicit_monday_target_preserves_true_clock_on_both_sides_of_midnight(self):
         games={'future':{'league':'NFL','state':'pre','kickoff':'2026-10-27T00:15:00Z'},

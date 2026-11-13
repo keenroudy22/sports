@@ -34,7 +34,37 @@ def attach_opportunities(packet, now, root, builder=None):
     return packet
 
 
-def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports=None):
+def cbb_watch_rows(research, target, now):
+    """Stage fresh priced comparisons without turning model gaps into picks."""
+    rows=[]
+    for game in (research or {}).get('games',[]):
+        try:
+            if gates.eastern_date(gates.when(game['kickoff'])) != target or gates.when(game['kickoff']) <= now:
+                continue
+            projection=game['projection']; quote=game['spreadQuote']
+            margin=projection['margin']; home_line=quote['homeLine']
+            if not all(type(value) in (int,float) and math.isfinite(value)
+                       for value in (margin,home_line,quote['homeOdds'],quote['awayOdds'])):
+                continue
+            home=game['teams']['home']; away=game['teams']['away']
+            # Positive model margin means home by N. The home book spread is
+            # negative when favored, so margin + homeLine is the same-side gap.
+            gap=round(margin+home_line,1)
+            rows.append(dict(id=game['id'],kickoff=game['kickoff'],book=quote['book'],
+                observedAt=quote['observedAt'],home=dict(name=home['name'],line=home_line,
+                    odds=quote['homeOdds']),away=dict(name=away['name'],line=quote['awayLine'],
+                    odds=quote['awayOdds']),kooknHomeMargin=margin,gapTowardHome=gap,
+                holds=['Both team source packets and current availability review are still required',
+                       'Exact live price and full sourced CBB admission must pass on game day'],
+                planningOnly=True))
+        except (KeyError,TypeError,ValueError):
+            continue
+    rows.sort(key=lambda row:(-abs(row['gapTowardHome']),row['kickoff'],row['id']))
+    return rows[:5]
+
+
+def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports=None,
+            cbb_research=None):
     target=date.fromisoformat(target_date) if isinstance(target_date,str) else target_date
     if target is None:target=gates.eastern_date(now)+timedelta(days=1)
     if target < gates.eastern_date(now):raise ValueError("Preparation target is in the past")
@@ -75,10 +105,11 @@ def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports
     sports=sports or {}
     cbb_block=(sports.get('leagues') or {}).get('CBB') or {}
     cbb_games=[g for g in cbb_block.get('games',[]) if g.get('status')=='scheduled' and tomorrow(g.get('kickoff'))]
+    cbb_watch=cbb_watch_rows(cbb_research,target,now)
     return dict(asOf=gates.stamp(now),targetDate=target.isoformat(),planningOnly=True,releaseReady=False,
         morningChecksEastern=['06:45','08:30'],
         football=dict(games=len(football),pricedRowsByFamily=dict(counts),watchByFamily=watches),
-        cbb=dict(games=len(cbb_games),checkedAt=cbb_block.get('checkedAt'),watch=[],
+        cbb=dict(games=len(cbb_games),checkedAt=cbb_block.get('checkedAt'),watch=cbb_watch,
                  hold=('Fresh exact two-sided DraftKings spreads/totals, both team source packets and '
                        'current availability review are required before a sourced CBB straight can release')),
         nba=dict(games=len(nba_games),freshPropRows=len(nba_rows),
@@ -92,7 +123,7 @@ if __name__=='__main__':
     import json
     from datetime import datetime,timezone
     from pathlib import Path
-    import boxscores,build_site,line_payload,nba_player_props
+    import boxscores,build_site,cbb_today,line_payload,nba_player_props
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',default='work/next-day-prep.json')
     parser.add_argument('--target-date',type=date.fromisoformat)
@@ -104,7 +135,8 @@ if __name__=='__main__':
     sports_path=build_site.OUT.parent/'sports.json'
     sports=json.loads(sports_path.read_text()) if sports_path.exists() else {}
     report=prepare(ctx.games,line_payload.load(build_site.OUT/'lines.json'),slate,
-                   nba_player_props.build(now,limit=None),now,target_date=args.target_date,sports=sports)
+                   nba_player_props.build(now,limit=None),now,target_date=args.target_date,sports=sports,
+                   cbb_research=cbb_today.build(now))
     attach_team_context(report, now, nba_player_props.STORE)
     attach_opportunities(report, now, nba_player_props.STORE)
     boxscores.write_json(Path(args.output),report)
