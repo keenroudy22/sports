@@ -130,6 +130,7 @@
       return (!game.status || game.status === 'scheduled') && tip > now && age >= 0 && age <= 4 * 3600000;
     };
     const isLean = row => Boolean(row?.favorite && !row.hold && isFresh(row));
+    const recentBoxCutoff = Number.isFinite(tip) ? new Date(tip - 30 * 86400000).toISOString().slice(0, 10) : '';
     const teams = ['away','home'].map(side => game.teams[side]);
     const teamPlayers = team => {
       const members = new Map();
@@ -144,10 +145,11 @@
         members.set(key, player);
       }
       const priority = player => [...player.stats.entries()].reduce((score,[stat,row]) => score + (isOfficialQuote(row, stat) ? 100 : 0) + (isLean(row) ? 50 : 0) + (isNum(row.line) ? 20 : 0), 0);
-      return [...members.values()].filter(player => player.stats.size || player.entry?.[7]?.values)
+      return [...members.values()].filter(player => player.stats.size || player.entry?.[7]?.values
+        || (league === 'CBB' && recentBoxCutoff && player.entry?.[5] >= recentBoxCutoff))
         .sort((a,b) => priority(b)-priority(a) || Number(Boolean(b.stats.size))-Number(Boolean(a.stats.size))
           || Number(b.entry?.[7]?.minutes || 0)-Number(a.entry?.[7]?.minutes || 0)
-          || String(b.entry?.[5] || '').localeCompare(String(a.entry?.[5] || '')) || String(a.name).localeCompare(String(b.name))).slice(0,12);
+          || String(b.entry?.[5] || '').localeCompare(String(a.entry?.[5] || '')) || String(a.name).localeCompare(String(b.name)));
     };
     const playerLine = (player, stat) => {
       const row = player.stats.get(stat), summary = player.entry?.[7] || null;

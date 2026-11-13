@@ -73,6 +73,19 @@ test('NBA matchup marks only the exact posted quote and removes stale research h
  assert.doesNotMatch(stale,/class="lean-tag"|class="pick-tag"/);
 });
 
+test('CBB matchup links recent player history even when the projection is held', async () => {
+ const s=load(), api=s.module.exports;
+ const kickoff=new Date(Date.now()+3600000).toISOString(), played=new Date(Date.now()-86400000).toISOString().slice(0,10);
+ const game={id:'CBB-1',kickoff,teams:{away:{id:'1',name:'Away',abbreviation:'AWY'},home:{id:'2',name:'Home',abbreviation:'HOM'}}};
+ const roster={players:[['11','Recent Player','G','1','AWY',played,1,null],['12','Old Player','G','1','AWY','2020-01-01',20,null]]};
+ const ctx=api.gamesContext({get:async path=>path==='app/cbb.json'?{games:[game]}:roster});
+ const html=await s.KRGames(ctx).game({id:game.id});
+ assert.match(html,/Recent Player/);
+ assert.match(html,/#player\/CBB\/11\?stat=pts/);
+ assert.match(html,/Minutes projection held/);
+ assert.doesNotMatch(html,/Old Player/);
+});
+
 test('All sports Games merges NBA into day counts, search and finals without college filters hiding it',async()=>{
  const s=load(),api=s.module.exports,stamp=new Date(Date.now()+3600000).toISOString();
  const n={id:'NBA-join',status:'scheduled',kickoff:stamp,teams:{away:{name:'Boston Celtics',abbreviation:'BOS'},home:{name:'Detroit Pistons',abbreviation:'DET'}},projection:{away:110,home:114,total:224,sparse:true}};
