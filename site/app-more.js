@@ -752,7 +752,8 @@
         const fresh = price && Date.now() - Date.parse(price.sourceAt) >= 0 && Date.now() - Date.parse(price.sourceAt) <= 4 * 3600000;
         const comparison = price ? `<b>${price.line === chartLine ? 'Book' : 'Book main line'} ${esc(price.line)} ${odds ? `· ${esc(odds)}` : ''}${isNum(projection) ? ` · Kook’n ${esc(C.statValue(projection, item.stat))}` : held ? ' · Projection held' : ''}</b><span>${price.line !== chartLine ? 'Milestone price not verified · ' : ''}${fresh ? `Checked ${esc(ago(price.sourceAt))}` : 'Earlier quote · recheck price'}</span>`
           : `<b>${isNum(projection) ? `Kook’n ${esc(C.statValue(projection, item.stat))}` : held ? 'Projection held' : 'No current comparison'}</b><span>Milestone price not verified</span>`;
-        const href = `#player/${league}/${encodeURIComponent(item.id)}?stat=${encodeURIComponent(item.stat)}&line=${encodeURIComponent(chartLine)}&direction=over`;
+        const href = esc(C.playerLineHref({ league, athleteId: item.id, stat: item.stat, line: chartLine, direction: 'over',
+          book: price?.line === chartLine && odds ? bookLabel(price.book) : null, gameId: game.id }));
         const role = `${item.entry[2] || ''}${isNum(item.minuteAvg) ? ` · L5 ${item.minuteAvg.toFixed(1)} MIN` : ''}`;
         return `<div class="milestone-row"><a class="milestone-player" href="${href}"><b>${esc(item.entry[1])} <span class="milestone-mark">${esc(item.threshold)}+ ${esc(item.meta.label)}</span></b><span>${esc(role)} · tap for game chart</span></a>${cell('L5', item.l5)}${cell('L10', item.l10)}${cell('Season', item.season)}<span class="milestone-compare">${comparison}</span></div>`;
       }).join('') : '<p class="small muted" style="padding:8px 0 12px">No 90% milestone cleared the role and sample checks.</p>'}</section>`;
@@ -794,7 +795,8 @@
       const odds = row[direction];
       const price = [isNum(odds) ? `${direction === 'under' ? 'Under' : 'Over'} ${oddsText(odds)}` : 'Odds unavailable', bookLabel(row.book)].filter(Boolean).join(' · ');
       const checked = quote.current ? `Checked ${ago(row.sourceAt)}` : quote.label;
-      const href = `#player/NBA/${esc(row.athleteId)}?stat=${esc(row.stat)}&amp;line=${esc(row.line)}&amp;direction=${direction}${row.book ? `&amp;book=${encodeURIComponent(row.book)}` : ''}`;
+      const href = esc(C.playerLineHref({ league, athleteId: row.athleteId, stat: row.stat, line: row.line, direction,
+        book: bookLabel(row.book), gameId: row.eventId ? `NBA-${row.eventId}` : null }));
       return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="${href}">${photo(row.athleteId, row.teamAbbr)}<div><b>${esc(row.name)} · ${esc(statName(row.stat))}</b><span>${esc(row.teamAbbr || '')} · ${esc(whenShort(row.kickoff))}</span><span>${esc(price)} · ${esc(checked)}</span>${held ? `<span>${esc(row.hold || 'Availability review')}</span>` : ''}${lean ? '<span class="green">Research lean</span>' : ''}</div><div class="n"><b class="num">${esc(row.line)}</b><span>${quote.current ? 'Book' : 'Saved line'}</span><b class="num">${isNum(projection) ? esc(C.statValue(projection, row.stat)) : 'Held'}</b><span>${gap == null ? 'Kook’n' : `${gap > 0 ? '+' : ''}${C.fixed(gap)} vs line`}</span></div></a>`;
     }).join('');
     const directory = players.slice().sort((a, b) => String(b[5]).localeCompare(String(a[5]))

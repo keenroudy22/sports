@@ -179,6 +179,7 @@ test('NBA milestone board groups verified history by matchup and keeps milestone
  assert.match(html,/Alpha Aces/);assert.match(html,/Example Guard/);assert.match(html,/10\+ PTS/);
  assert.match(html,/L5[\s\S]*5\/5/);assert.match(html,/Book main line 11\.5/);assert.match(html,/Kook’n 12/);
  assert.match(html,/line=9\.5/);assert.match(html,/Historical hit rate · not a probability/);
+ assert.match(html,/line=9\.5&amp;direction=over&amp;game=NBA-77/);
  assert.match(html,/Milestone price not verified/);assert.doesNotMatch(html,/90% chance|best bet/i);
  const views=factory(ctx);
  const chart=await views.player({league:'NBA',id:'1',stat:'pts',line:'9.5',direction:'over'});
@@ -195,6 +196,15 @@ test('NBA milestone board groups verified history by matchup and keeps milestone
  const selectedBook=await views.player({league:'NBA',id:'1',stat:'pts',line:'11.5',direction:'under',book:'FanDuel'});
  assert.match(selectedBook,/Under 11\.5 -115<\/b> at FanDuel/);
  props.rows.pop();
+ const laterKickoff = new Date(Date.parse(kickoff) + 86400000).toISOString();
+ games.games.push({ ...games.games[0], id:'NBA-78', providerId:'78', kickoff:laterKickoff });
+ props.rows.push({ ...props.rows[0], eventId:'78', kickoff:laterKickoff, under:-125, projection:{value:10} });
+ ctx.state.player.key=null;
+ const selectedGame=await views.player({league:'NBA',id:'1',stat:'pts',line:'11.5',direction:'under',book:'DraftKings',game:'NBA-78'});
+ assert.match(selectedGame,/Under 11\.5 -125<\/b> at DraftKings/);
+ assert.match(selectedGame,/<small>Kook’n projection<\/small><b class="num">10/);
+ props.rows.pop();
+ games.games.pop();
  props.rows[0].hold='Availability: Questionable';
  props.rows[0].projection=null;
  ctx.state.player.key=null;
@@ -224,7 +234,7 @@ test('basketball prop finder links short histories and exact saved prices withou
  assert.match(html, /#player\/CBB\/1\?stat=pts[\s\S]*1 recorded game[\s\S]*Game log/);
  assert.doesNotMatch(html, /Bench Guard|No recorded player/);
  html = await views.basketballPlayers({ league:'NBA' });
- assert.match(html, /stat=pts&amp;line=15\.5&amp;direction=under&amp;book=DraftKings/);
+ assert.match(html, /stat=pts&amp;line=15\.5&amp;direction=under&amp;book=DraftKings&amp;game=NBA-77/);
  assert.match(html, /Under -120 · DraftKings · Earlier quote/);
  assert.match(html, /Saved line/);
  assert.doesNotMatch(html, /Research lean/);
