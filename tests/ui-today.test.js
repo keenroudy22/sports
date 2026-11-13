@@ -1007,21 +1007,27 @@ test('withdrawn settled play shows its withdrawal on receipt, slip and detail wi
  });
 
 test('All-sports Today puts every published straight before research', async () => {
- const cbb={picks:{plays:[{id:'cbb-today',kickoff:prop.kickoff,marketType:'spread',direction:'away',line:8.5,odds:-112,book:'DraftKings',riskUnits:1,game:{teams:{away:{abbreviation:'QUC'},home:{abbreviation:'LMU'}}}},{id:'cbb-tomorrow',kickoff:laterOpen.kickoff}]}};
- const app=loadApp('#record',{}, {extra:{'data/app/cbb.json':cbb,'data/app/nba.json':{games:[]}}});
- app.sandbox.KRGames=()=>({cbbPicks:()=>'<section id="cbb-picks">Published CBB ticket</section>',nbaSummary:()=>'<section id="nba-research">NBA research</section>'});
+ const college={id:'cbb-today',league:'CBB',posted:true,displayTitle:'QUC +8.5',kickoff:prop.kickoff,marketType:'spread',direction:'away',line:8.5,odds:-112,book:'DraftKings',riskUnits:1};
+ const nba={id:'nba-today',league:'NBA',kickoff:prop.kickoff,displayTitle:'Example Guard over 5.5 assists',odds:-120,book:'FanDuel',riskUnits:1,posted:true,result:'win'};
+ const withLink={...prop,betslip:{status:'ready',book:'FanDuel',legsMatched:1,legsRequested:1,url:'https://sportsbook.fanduel.com/navigation/fixture'}};
+ const app=loadApp('#record',{}, {today:{...TODAY,historyFile:'record.json',picks:[withLink]},extra:{
+  'data/app/nba.json':{games:[],trial:{plays:[{...nba,player:'Example Guard',marketType:'player',direction:'over',line:5.5,stat:'ast'}]}},
+  'data/app/record.json':{picks:[withLink],nbaPicks:[nba],cbbPicks:[college,{...college,id:'cbb-tomorrow',kickoff:laterOpen.kickoff}]}}});
+ app.sandbox.KRGames=()=>({nbaSummary:(_, {showPicks})=>`<section id="nba-research">${showPicks?'Duplicate NBA ticket':'NBA matchups'}</section>`});
  await app.api.views.today({view:'today'});await settle();
  const page=await app.api.views.today({view:'today'});
  assert.match(page,/aria-label="Betting data and research"[\s\S]*Kook’n Edges[\s\S]*Prop finder[\s\S]*First quarter[\s\S]*Matchups/);
- assert.match(page,/<h1>Today’s board<\/h1><p class="today-summary">Today’s posted plays\.<\/p>/);
- assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('NBA research'));
- assert.equal((page.match(/id="cbb-picks"/g)||[]).length,1);
- assert.match(page,/2 posted straights today/);
+ assert.match(page,/<h1>Today’s board<\/h1><\/section>/);
+ assert.doesNotMatch(page,/Duplicate NBA ticket|id="cbb-picks"/);
+ assert.match(page,/3 posted straights today/);
  const summary=page.slice(page.indexOf('id="today-posted-straights"'),page.indexOf('aria-label="Betting data and research"'));
- assert.match(summary,/Fixture Receiver OVER 49\.5/);
- assert.match(summary,/QUC \+8\.5[\s\S]*-112 · DraftKings · 1u/);
+ assert.match(summary,/Fixture Receiver over 49\.5/);
+ assert.match(summary,/#pick\/cbb-today[\s\S]*QUC \+8\.5[\s\S]*-112[\s\S]*DraftKings · 1u/);
+ assert.match(summary,/#pick\/nba-today[\s\S]*Example Guard over 5\.5 assists[\s\S]*Hit[\s\S]*-120/);
+ assert.match(summary,/Open exact line in FanDuel/);
+ assert.equal((page.match(/Example Guard over 5\.5 assists/g)||[]).length,1);
  assert.doesNotMatch(summary,/cbb-tomorrow|Later Open/);
- assert.ok(page.indexOf('Published CBB ticket')<page.indexOf('class="kt-sec kt-climb"'));
+ assert.ok(page.indexOf('id="today-posted-straights"')<page.indexOf('class="kt-sec kt-climb"'));
 });
 
 test('Today turns a current morning hold into a concise research watch', async () => {

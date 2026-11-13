@@ -531,7 +531,8 @@
     const q = params.get('q') || '';
     switch (v) {
       case 'games-football': case 'games-college': case 'games-nba': case 'games-cbb': return { view: 'games', tab: 'upcoming', anchor: v };
-      case 'today-card': case 'today-climb': case 'today-posted-straights': case 'cbb-picks': return { view: 'today', anchor: v };
+      case 'cbb-picks': return { view: 'today', anchor: v, league: 'CBB' };
+      case 'today-card': case 'today-climb': case 'today-posted-straights': return { view: 'today', anchor: v };
       case '': case 'today': case 'sports': case 'home': case 'overview': case 'digest': return { view: 'today', league: params.get('sport') ? params.get('sport').toUpperCase() : null };
       case 'pick': return rest ? { view: 'pick', id: rest } : { view: 'today' };
       case 'research': {
@@ -1208,15 +1209,13 @@
   /* A painted hero belongs to football Today in the league it was painted for; anything else clears it at once. */
   const dropHero = () => { const view = $('#view'); if (view && view.querySelector('.hero-first')) view.innerHTML = LOADING; };
   /* The first paint and full card share this top. */
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', market = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
-    const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : !rows.length ? 'Games, projections and verified price checks.' : ledeTitle(rows, today);
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', market = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, postedSummary = '' }) => {
+    const title = postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : !rows.length ? 'Games, projections and verified price checks.' : ledeTitle(rows, today);
     const researchSport = propSport(state.league);
     const currentBets = [...new Map([...rows.slice(0, 1), ...more, ...rows.slice(1)].map(row => [row.id, row])).values()];
-    return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      ${currentBets.length ? `<div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : currentBets.length > 1 ? `Today’s best bets · ${currentBets.length}` : 'Today’s best bet'}</h2><a href="#record">Track record ›</a></div>
-      ${rail(currentBets, { season, lines, cards, id: 'today-card', quick: true, compact: true, label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' })}` : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'My strongest current research look is below.' : "See today’s matchups and research below.") : 'The board updates when a verified price clears every release check.', 'today-card', true)}
-      ${otherTickets}
-      ${postedSummary ? postedSummary.html : ''}
+    return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1>${postedSummary ? '' : `<p class="today-summary">${esc(title)}</p>`}${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
+      ${postedSummary || (currentBets.length ? `<div class="kt-focus-head"><h2>${currentBets.length > 1 ? `Today’s best bets · ${currentBets.length}` : 'Today’s best bet'}</h2><a href="#record">Track record ›</a></div>
+      ${rail(currentBets, { season, lines, cards, id: 'today-card', quick: true, compact: true, label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' })}` : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'My strongest current research look is below.' : "See today’s matchups and research below.") : 'The board updates when a verified price clears every release check.', 'today-card', true))}
       ${market}
       <nav class="today-tools" aria-label="Betting data and research"><a href="#edges"><span aria-hidden="true">K</span><b>Kook’n Edges</b><small>Best gaps across books</small></a><a href="${propsHref(researchSport)}"><span aria-hidden="true">↕</span><b>Prop finder</b><small>Line · Kook’n · L5/L10</small></a><a href="#research/trends?period=1Q&amp;sport=NFL"><span aria-hidden="true">1Q</span><b>First quarter</b><small>1Q history & matchups</small></a><a href="#games"><span aria-hidden="true">◉</span><b>Matchups</b><small>Scores & projections</small></a></nav>
       ${favorite}${climbStub(climb, past)}${proof}${spotlight}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
@@ -1351,26 +1350,14 @@
     const u = full ? publicUnits : null, wlText = full ? wl(publicSummary) : s ? wl(s) : '';
     const proof = wlText ? `<p class="kt-proof"><a href="#record">${full ? 'All posted football plays' : 'Best Bets'} · <b class="num">${esc(wlText.replace(/–/g, '-'))}</b>${isNum(u) ? ` · <span class="${u < 0 ? 'neg' : u > 0 ? 'pos' : ''}">${esc(units(u).replace(/u$/, ' units'))}</span> at posted prices` : ''} · <span class="go">Every result ›</span></a></p>` : '';
     const cards = new Map(((heroLoaded || {}).bets || []).map(b => [b.id, b.card]));
-    const cbbData = state.league === 'ALL' ? await maybe('app/cbb.json') : null;
-    const cbbSummary = cbbData ? (await ensureGames()).cbbPicks(cbbData, true) : '';
-    const cbbCount = ((cbbData?.picks || {}).plays || []).filter(p => C.dayOf(p.kickoff) === etDay()).length;
-    const otherPosted = cbbCount ? `<a href="#today?sport=CBB"><span>CBB picks</span><b>${cbbCount} posted</b></a>` : '';
-    const postedRows = state.league === 'ALL' ? picks.filter(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay())
-      .map(p => ({ ...p, label: p.displayTitle, href: `#pick/${p.id}` })) : [];
-    for (const p of (cbbData?.picks?.plays || []).filter(p => C.dayOf(p.kickoff) === etDay())) {
-      const t = p.game?.teams || {}, side = t[p.direction]?.name || t[p.direction]?.abbreviation || '';
-      const label = p.marketType === 'total' ? `${t.away?.abbreviation || ''} at ${t.home?.abbreviation || ''} ${p.direction} ${p.line}` : `${side} ${Number(p.line) > 0 ? '+' : ''}${p.line}`;
-      postedRows.push({ ...p, label, href: '#cbb-picks' });
-    }
-    for (const p of (state.league === 'ALL' ? nba?.trial?.plays || [] : []).filter(p => C.dayOf(p.kickoff) === etDay())) {
-      const t = p.teams || {}, side = t[p.direction]?.abbreviation || '';
-      const label = p.marketType === 'player' ? `${p.player} ${p.direction} ${p.line} ${{pts:'points',reb:'rebounds',ast:'assists'}[p.stat] || p.stat}` : p.marketType === 'total' ? `${t.away?.abbreviation || ''} at ${t.home?.abbreviation || ''} ${p.direction} ${p.line}` : p.marketType === 'moneyline' ? `${side} moneyline` : `${side} ${Number(p.line) > 0 ? '+' : ''}${p.line}`;
-      postedRows.push({ ...p, label, href: p.athleteId ? `#player/NBA/${encodeURIComponent(p.athleteId)}${p.stat ? `?stat=${encodeURIComponent(p.stat)}` : ''}` : '#today?sport=NBA' });
-    }
-    const posted = [...new Map(postedRows.map(p => [p.id, p])).values()];
-    const postedSummary = state.league === 'ALL' && posted.length && (cbbCount || (nba?.trial?.plays || []).some(p => C.dayOf(p.kickoff) === etDay())) ? { count: posted.length,
-      html: `<section id="today-posted-straights" aria-label="Today’s posted straights"><p><b>${posted.length} posted straight${posted.length === 1 ? '' : 's'} today</b> · All sports. Separate records.</p><ul>${posted.map(p => `<li><a href="${esc(p.href)}"><b>${esc(p.label)}</b></a><br>${esc(oddsText(p.odds))} · ${esc(bookLabel(p.book))} · ${esc(C.stakeOf(p))}u${p.result ? ` · ${esc(String(p.result).toUpperCase())}` : ''}</li>`).join('')}</ul><p class="tiny muted">Original posted prices; check your book. Climbs and fun tickets are separate.</p></section>` } : null;
-    const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba) : '';
+    const postedRows = state.league === 'ALL' ? picks.filter(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay()) : [];
+    const posted = postedRows.sort(order);
+    const postedSummary = posted.some(p => ['NBA', 'CBB'].includes(p.league)) ? `<section id="today-posted-straights" aria-labelledby="posted-straights-heading"><div class="kt-focus-head"><h2 id="posted-straights-heading">${posted.length} posted straight${posted.length === 1 ? '' : 's'} today</h2><a href="#record">Track record ›</a></div><ul class="today-straights" id="today-card">${posted.map(p => {
+      const vm = pickVM(p, now);
+      const status = p.result ? RESULT_WORD[p.result] || 'Final' : vm.mode === 'expired' ? 'Check price' : vm.state.word;
+      return `<li><a class="today-straight" href="${esc(vm.href)}"><span><strong>${esc(vm.title)}</strong><small>${esc(p.league)} · ${esc(ticketWhen(p.kickoff))}${status ? ` · ${esc(status)}` : ''}</small></span><span class="today-straight-price"><b class="num">${esc(oddsText(p.odds))}</b><small>${esc(vm.book)} · ${esc(C.stakeOf(p))}u</small></span><span aria-hidden="true">›</span></a>${P.betslipAction(p, now, true)}</li>`;
+    }).join('')}</ul></section>` : '';
+    const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba, { showPicks: !postedSummary }) : '';
     const extraToday = [
       prepList(today.prep, notesList, now),
       ktSec('upsets', 'Underdog watch', upsetHtml, { tape: true, kind: 'Upset research, not best bets' }),
@@ -1399,7 +1386,7 @@
     return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
       climb, lines: lines && lines.lines, more: [], past: ladder.history, later: rest, cards, proof, market, favorite: morningHtml || favoriteHtml, spotlight: nflSpotlight, nextSlate,
       postedToday: picks.some(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay()),
-      otherPosted, postedSummary, otherTickets: cbbSummary, nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
+      postedSummary, nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
   };
 
@@ -2120,7 +2107,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-ada0d6c74280';
-  const GAMES_ASSET = 'app-games.js?v=sha256-355fa65015d6';
+  const GAMES_ASSET = 'app-games.js?v=sha256-6eeaea34a5a3';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
   let researchCssLoading = null;

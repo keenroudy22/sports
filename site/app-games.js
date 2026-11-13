@@ -959,11 +959,12 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
     const team = side => { const t = g.teams[side]; return `<span class="today-game-team">${teamMark(t,'sm','NBA')}<span><b>${esc(t.name || t.displayName || t.abbreviation)}</b><small>${esc(t.abbreviation || '')}</small></span></span>`; };
     return `<a class="today-game-row${live ? ' is-live' : ''}" href="${delayed ? '#games/live?sport=NBA' : `#game/${esc(g.id)}`}"><span class="today-game-matchup">${team('away')}<span class="today-game-at">at</span>${team('home')}</span><span class="today-game-read"><small>${esc(label)}</small><b class="num">${esc(score)}</b><span>${esc(note)}</span></span><span class="today-game-arrow" aria-hidden="true">›</span></a>`;
   };
-  views.nbaSummary = data => {
+  views.nbaSummary = (data, { showPicks = true } = {}) => {
     const games = (data.games || []).filter(g => C.dayOf(g.kickoff) === etDay());
     const open = (data.trial?.plays || []).filter(p => !p.result && C.dayOf(p.kickoff) === etDay());
     if (!games.length && !open.length) return '';
-    return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${open.length ? `${open.length} posted NBA pick${open.length === 1 ? '' : 's'} today.` : 'No NBA play posted yet.'} ${games.length} game${games.length === 1 ? '' : 's'} · tap a matchup for Kook vs Book.</p>${open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}${games.length ? `<div class="today-game-list">${games.slice(0,3).map(nbaSummaryGame).join('')}</div>` : ''}<a class="more" href="#today?sport=NBA">${games.length > 3 ? `See all ${games.length} NBA games` : 'Open NBA Today'} ›</a></section>`;
+    const picks = showPicks ? (open.length ? `${open.length} posted NBA pick${open.length === 1 ? '' : 's'} today. ` : 'No NBA play posted yet. ') : '';
+    return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${picks}${games.length} game${games.length === 1 ? '' : 's'} · tap a matchup for Kook vs Book.</p>${showPicks && open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}${games.length ? `<div class="today-game-list">${games.slice(0,3).map(nbaSummaryGame).join('')}</div>` : ''}<a class="more" href="#today?sport=NBA">${games.length > 3 ? `See all ${games.length} NBA games` : 'Open NBA Today'} ›</a></section>`;
   };
   views.nbaToday = async (opts = {}) => {
     let data = opts.data || await get('app/nba.json');

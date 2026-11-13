@@ -568,6 +568,15 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-head { font: 700 25px/1.15 var(--font-body); letter-spacing: -.02em; }
 .kt-sec-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .today-summary { margin-top: 7px; color: var(--dim); font-size: 15px; }
+.today-straights { max-width: 560px; list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: rgba(9, 23, 16, .86); }
+.today-straights li + li { border-top: 1px solid var(--line); }
+.today-straight { display: grid; grid-template-columns: minmax(0, 1fr) minmax(72px, 27%) auto; align-items: center; gap: 10px; min-height: 58px; padding: 10px 12px; color: var(--chalk); border-radius: 10px; }
+.today-straight:hover { background: var(--kookd-soft); color: var(--chalk); text-decoration: none; }
+.today-straight strong { display: block; font-size: 15px; line-height: 1.2; overflow-wrap: anywhere; }
+.today-straight small { display: block; margin-top: 3px; color: var(--dim); font-size: 12px; line-height: 1.25; }
+.today-straight-price { text-align: right; }
+.today-straight > span:last-child { color: var(--kook); font-size: 20px; }
+.today-straights .betslip-action { margin: 0 12px 8px; }
 .today-tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 16px 0 24px; }
 .today-tools a { display: grid; grid-template-columns: 28px minmax(0, 1fr); grid-template-areas: 'icon title' 'icon note'; align-items: center; gap: 1px 8px; min-height: 64px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 12px; background: rgba(13, 31, 21, .8); color: var(--chalk); }
 .today-tools a:hover { border-color: var(--kookd); text-decoration: none; }

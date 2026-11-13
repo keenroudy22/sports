@@ -5,9 +5,10 @@ globalThis.KRCore = require('../site/core.js');
 const { model: M } = require('../site/app.js');
 
 test('Today shortcuts keep their scroll destination through the app router', () => {
-  for (const anchor of ['today-card','today-climb','today-posted-straights','cbb-picks']) {
+  for (const anchor of ['today-card','today-climb','today-posted-straights']) {
     assert.deepEqual(M.resolve('#'+anchor),{view:'today',anchor});
   }
+  assert.deepEqual(M.resolve('#cbb-picks'),{view:'today',anchor:'cbb-picks',league:'CBB'});
   assert.equal(M.resolve('#not-a-posted-ticket').anchor,undefined);
 });
 
