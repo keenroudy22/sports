@@ -14,11 +14,11 @@
     {
       "id": "O-20261113-NBAQUOTESHARDS",
       "title": "Verify the scheduled NBA daily quote files",
-      "status": "observing",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Check the next normal NBA prop capture that receives bookmaker rows. Compare dated-file append counts, the previous latest quotes, and hosted prop rows after publication.",
+      "next": "Keep writing by UTC observation date and checking the legacy and daily files together. Continue the ordinary capture schedule and track weekend price coverage separately.",
       "doneWhen": "The normal writer adds valid observations to the dated UTC files, the legacy file stays unchanged, and the latest exact prices reach the hosted prop view.",
-      "evidence": "Stored-data replay matched newest rows and the tested rebase retained both writers' daily appends. The first ordinary production write and hosted verification are still open."
+      "evidence": "The November 13 17:30 ET capture committed 957 full-game and 79 first-quarter quotes as 8d197cfa6. Both ledgers verified and both legacy files were unchanged. Pages 43521609538 succeeded. Fifty-five hosted rows matched exact matchup, player, stat, line, book, source time and both prices."
     },
     {
       "id": "O-20261113-BASKETBALL-RECEIPTS",
