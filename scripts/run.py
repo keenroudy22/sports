@@ -3885,6 +3885,37 @@ def stored_discord_work_due(now, log_book):
     return False
 
 
+def retry_typefully_recap(now, log_book, settings):
+    """Send the prior day's settled recap through the reserved backup."""
+    import receipts
+    import typefully_backup
+    import x_post
+    from social_copy import AGE_VERSION
+
+    ctx = gates.Stores().as_of(now)
+    slate = load_json(ROOT / 'site/data/slate.json', {})
+    games = {game['id']: game for game in slate.get('games', [])}
+    key = f"receipt:day:{eastern_date(now) - timedelta(days=1)}"
+    entry = next((row for row in log_book['posts'] if row.get('id') == key), None)
+    if entry is not None:
+        if entry.get('typefullyDelivery') and not entry.get('sentAt'):
+            typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log)
+        return
+    recap = next((row for row in receipts.ready(ctx.first, ctx.latest, games, log_book, now)
+                  if row['key'] == key and row['due'] <= now < row['stale']), None)
+    if not recap:
+        return
+    caption = recap['text'].rstrip() + '\n\n21+ only'
+    if x_post.tweet_length(caption) > x_post.LIMIT or x_post.x_style(caption):
+        return
+    entry = {'id': key, 'kind': 'buffer:receipt', 'postedAt': stamp(now),
+             'queuedText': caption, 'textHash': x_post.text_hash(caption),
+             'socialAgeVersion': AGE_VERSION}
+    log_book['posts'].append(entry)
+    typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log,
+                             text=caption, expires=recap['stale'])
+
+
 def retry_stored_results(now, log_book):
     """Retry public result delivery from stored evidence, never rebuild or grade."""
     import buffer_post
@@ -3954,7 +3985,20 @@ def mirror(args):
     result_transport_hold = result_transport_block(now)
     if missing_results and result_transport_hold:
         log(f'result recovery: X held without a desk rebuild: {result_transport_hold}; Discord remains independent')
-    retry_results = bool(missing_results and not result_transport_hold)
+    import typefully_backup
+    backup = (typefully_backup.config(CONF) if result_transport_hold
+              and 'cap reached' in str(result_transport_hold)
+              and not buffer_post.rate_backoff(now) else None)
+    recap_due = False
+    if backup:
+        import receipts
+        day = eastern_date(now)
+        key = f"receipt:day:{day - timedelta(days=1)}"
+        existing = next((entry for entry in x_post.load_log()['posts'] if entry.get('id') == key), None)
+        recap_due = (now >= receipts.daily_morning(day) and
+                     (existing is None or bool((existing.get('typefullyDelivery') or {}).get('draftId')
+                                               and not existing.get('sentAt'))))
+    retry_results = bool(recap_due or (missing_results and not result_transport_hold))
     # Recovery can refresh inputs minutes after this worker started. Use the
     # current clock so those valid captures are not mistaken for future data.
     if not args.now:
@@ -4001,7 +4045,13 @@ def mirror(args):
                 discord_post.queue_results(log_book, ctx.first, ctx.latest, games, now)
                 x_post.save_log(log_book)
             if retry_results:
-                retry_stored_results(now, log_book)
+                if backup:
+                    try:
+                        retry_typefully_recap(now, log_book, backup)
+                    except (OSError, ValueError) as error:
+                        log(f'Typefully recap awaits reconciliation: {type(error).__name__}')
+                else:
+                    retry_stored_results(now, log_book)
                 x_post.save_log(log_book)
                 commit_log(now, push=not args.no_push)
             if private_release_ready(now):
