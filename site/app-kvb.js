@@ -44,7 +44,13 @@
       const ranked = [...byMarket.values()].sort((a, b) => Number(Boolean(b.official)) - Number(Boolean(a.official)) || Number(hasValue(b)) - Number(hasValue(a))
         || (b.edge ?? -99) - (a.edge ?? -99) || COMMON[a.stat] - COMMON[b.stat] || String(a.kickoff).localeCompare(String(b.kickoff)));
       const picked = [], players = new Set();
-      for (const vm of ranked) if (!players.has(vm.athleteId) && picked.push(vm) && players.add(vm.athleteId) && picked.length === 3) break;
+      for (const vm of ranked) {
+        const player = `${vm.league}:${vm.athleteId}`;
+        if (players.has(player)) continue;
+        players.add(player);
+        picked.push(vm);
+        if (picked.length === 3) break;
+      }
       for (const vm of ranked) if (picked.length < 3 && !picked.includes(vm)) picked.push(vm);
       return picked;
     };

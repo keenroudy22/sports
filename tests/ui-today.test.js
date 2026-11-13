@@ -816,6 +816,36 @@ test('the research board badges the exact delivered quote and links its exact ch
   assert.doesNotMatch(unpublished, /class="badge best">Best bet|class="badge research"[^>]*>On the card/);
 });
 
+test('All Sports Today can show a qualifying college football prop and its stored history', async () => {
+  const collegeGame = GAMES[1];
+  const row = lineRow('college', {
+    league: 'CFB', gameId: collegeGame.id, kickoff: collegeGame.kickoff, athleteId: '77', player: 'College Receiver',
+    title: 'College Receiver over 44.5 receiving yards', stat: 'recYds', marketType: null,
+  }, { projection: 51 });
+  const chart = { gameId: collegeGame.id, id: '77', side: 'away', rows: [{ date: '2026-10-03', stats: { recYds: 52 } }] };
+  const extra = {
+    ...linesFor([]),
+    'data/app/lines-CFB.json': { league: 'CFB', lines: [row] },
+    'data/app/kvb-NFL.json': { players: [] },
+    'data/app/kvb-CFB.json': { players: [chart] },
+  };
+  for (const [league, visible] of [['ALL', true], ['CFB', true], ['NFL', false]]) {
+    const {api, sandbox} = loadApp(`#today?sport=${league}`, {}, {extra});
+    sandbox.document.getElementById = () => true;
+    vm.runInNewContext(fs.readFileSync('site/app-kvb.js', 'utf8'), sandbox);
+    const route = {view:'today', league};
+    await api.views.today(route);
+    await settle();
+    const page = await api.views.today(route);
+    const panel = page.match(/<section class="kt-kvb"[\s\S]*?<\/section>/)?.[0];
+    if (!visible) { assert.equal(panel, undefined); continue; }
+    assert.match(panel, /College Receiver/);
+    assert.match(panel, /100% · 1\/1/);
+    assert.match(panel, /player\/CFB\/77\?stat=recYds&amp;line=44.5&amp;direction=over/);
+    assert.ok(panel.includes(`#research/players?sport=${league}`));
+  }
+});
+
 test('the Prep List still favors props, then sides, then one total', () => {
   assert.deepEqual(M.todayResearchOrder([
     { id: 'total-a', marketType: 'total', hits: 10, games: 10 },

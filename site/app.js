@@ -1182,13 +1182,13 @@
   const DATA_TTL = 300000;
   let todayExtras = null, todayExtrasAt = 0, todayExtrasLoading = false;
   const queueTodayExtras = () => {
-    const chartLeague = state.league === 'CFB' ? 'CFB' : 'NFL';
-    if (todayExtrasLoading || (todayExtras && Date.now() - todayExtrasAt < DATA_TTL && todayExtras.chartLeague === chartLeague && (state.league !== 'ALL' || todayExtras.nbaRequested !== false))) return;
+    const league = state.league;
+    if (todayExtrasLoading || (todayExtras && Date.now() - todayExtrasAt < DATA_TTL && todayExtras.league === league)) return;
     todayExtrasLoading = true;
-    const nbaRequested = state.league === 'ALL';
-    Promise.all([maybe('scoreboard.json'), lineData(), maybe('sports.json'), allPicks(), nbaRequested ? maybe('app/nba.json') : null,
-      maybe(`app/kvb-${chartLeague}.json`)])
-      .then(([board, lines, sports, every, nba, charts]) => { todayExtras = { board, lines, sports, every, nba, charts, chartLeague, nbaRequested }; todayExtrasAt = Date.now(); })
+    const chartLeagues = league === 'ALL' ? FOOTBALL : [league];
+    Promise.all([maybe('scoreboard.json'), lineData(league), maybe('sports.json'), allPicks(), league === 'ALL' ? maybe('app/nba.json') : null,
+      Promise.all(chartLeagues.map(sport => maybe(`app/kvb-${sport}.json`)))])
+      .then(([board, lines, sports, every, nba, charts]) => { todayExtras = { board, lines, sports, every, nba, charts: { players: charts.flatMap(chart => chart?.players || []) }, league }; todayExtrasAt = Date.now(); })
       .catch(() => { todayExtras = {}; todayExtrasAt = Date.now(); })
       .finally(() => {
         todayExtrasLoading = false;
@@ -1267,7 +1267,7 @@
     todayLanded = true;
     queueTodayExtras();
     ensureGames().catch(() => {});
-    const { board = null, lines = null, sports = null, every = today.picks || [], nba = null, charts = null, kvb = null, chartLeague = null } = todayExtras || {};
+    const { board = null, lines = null, sports = null, every = today.picks || [], nba = null, charts = null, kvb = null } = todayExtras || {};
     indexGames(today);
     const now = Date.now(), all = every, picks = all.filter(inLeague), sched = C.cardSchedule(picks, now);
     const pulled = p => p.status === 'withdrawn' || /before its post went out|^Pulled before posting:/.test(p.entryNote || '');
@@ -1331,7 +1331,7 @@
     const favorite = !rows.length ? favoriteLook(lineRows, gameIdsToday, official) : null;
     const favoriteHtml = favorite ? ktSec('favorite', 'What I like most', `<div class="board">${boardRow(favorite, false)}</div><p class="kt-note"><b>Why it is not an official play:</b> ${esc(favoriteHold(favorite))}</p>`,
       { tape: true, kind: 'Strongest current lean · not a best bet', link: ktLink(`#game/${favorite.gameId}`, 'See the matchup') }) : '';
-    const market = kvb && charts ? kvb.home({ rows: lineRows.filter(vm => vm.league === chartLeague && (!hasGamesToday || C.dayOf(vm.kickoff) === etDay())), charts, games, league: chartLeague }) : '';
+    const market = kvb && charts && todayExtras.league === state.league ? kvb.home({ rows: lineRows.filter(visibleDay), charts, games, league: state.league }) : '';
     /* Today's games: live first, scores refreshed from the free scoreboard, with our projected score. */
     const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
     const todayGames = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
@@ -2121,7 +2121,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-69f7b55321d4';
   const GAMES_ASSET = 'app-games.js?v=sha256-d08234a84471';
-  const KVB_ASSET = 'app-kvb.js?v=sha256-ddf4fcb21f65';
+  const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
