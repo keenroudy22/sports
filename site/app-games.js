@@ -454,7 +454,10 @@
     try { detail = await get(`app/games/${route.id}.json`); } catch (e) {
       return head('', 'Game page not available', 'Game pages cover NFL and college football for games from about three days back to eight days ahead. <a href="#games/live">Live scores</a> cover every sport.', back);
     }
-    const [today, teams] = await Promise.all([get('app/today.json'), teamDirectory(detail.league)]);
+    const [today, teams, playerIndex] = await Promise.all([
+      get('app/today.json'),
+      teamDirectory(detail.league),
+      get(`app/players/${detail.league}.json`).catch(() => ({players:[]}))]);
     indexGames(today);
     const now = Date.now();
     const fromSlate = (today.games || []).find(x => x.id === detail.id) || {};
@@ -663,10 +666,19 @@
       .filter(p => PROJ_COLS.some(([k]) => usableProjection(p, k)));
     const unavailablePlayers = side => {
       const shown = new Set(projectionPlayers(side).flatMap(player => [String(player.id || ''), String(player.name || '').toLowerCase()]));
-      return (((detail.teams || {})[side] || {}).injuries || [])
+      const injuries = (((detail.teams || {})[side] || {}).injuries || [])
         .filter(player => HARD_INJURY.test(player.status || '') && /^(QB|RB|FB|WR|TE)$/.test(player.position || ''))
         .filter(player => !shown.has(String(player.id || '')) && !shown.has(String(player.name || '').toLowerCase()))
         .map(player => ({ ...player, pos: player.position, unavailable: true }));
+      const held = new Set(injuries.flatMap(player => [String(player.id || ''), String(player.name || '').toLowerCase()]));
+      const lineStats = new Set(['att','cmp','passYds','car','rushYds','tgt','rec','recYds']);
+      const linePlayers = (playerIndex?.players || [])
+        .filter(entry => String(entry[3] || '') === String(g[side].id || '') || String(entry[4] || '').toLowerCase() === String(g[side].abbr || '').toLowerCase())
+        .filter(entry => /^(QB|RB|FB|WR|TE)$/.test(entry[2] || '') && Object.keys(lines[String(entry[0])] || {}).some(stat => lineStats.has(stat)))
+        .filter(entry => !shown.has(String(entry[0])) && !shown.has(String(entry[1] || '').toLowerCase())
+          && !held.has(String(entry[0])) && !held.has(String(entry[1] || '').toLowerCase()))
+        .map(entry => ({ id:String(entry[0]), name:entry[1], pos:entry[2], status:'Projection unavailable', unavailable:true, lineOnly:true }));
+      return [...injuries, ...linePlayers];
     };
     const displayedPlayers = side => [...unavailablePlayers(side), ...projectionPlayers(side)];
     const POSITION_PROJ = {
@@ -726,7 +738,7 @@
         const ordered = active.slice().sort((a,b) => playerPriority(b)-playerPriority(a) || opportunity(b)-opportunity(a));
         const renderTable = (rows, caption, tableCols = shownCols) => `<div class="table-wrap"><table class="t prop-compare"><caption class="small muted" style="text-align:left;padding-bottom:6px">${esc(caption)}</caption><thead><tr><th>Player</th>${tableCols.map(([,label]) => `<th>${esc(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(player => {
           const injury = injuries.find(row => String(row.id || '') === String(player.id) || String(row.name || '') === String(player.name));
-          const playerHead = `<th class="prop-player"><span class="with-art">${headshot(g.league,player.id,'sm')}<span><span class="prop-player-head"><a href="#player/${esc(g.league)}/${esc(player.id)}">${esc(player.name)}</a><span class="prop-pos">${esc(inferredPos(player) || 'Position unavailable')}</span></span>${injury ? `<span class="badge ${HARD_INJURY.test(injury.status || '') ? 'warn' : 'research'}">${esc(injury.status || 'Listed')}</span>` : ''}</span></span></th>`;
+          const playerHead = `<th class="prop-player"><span class="with-art">${headshot(g.league,player.id,'sm')}<span><span class="prop-player-head"><a href="#player/${esc(g.league)}/${esc(player.id)}">${esc(player.name)}</a><span class="prop-pos">${esc(inferredPos(player) || 'Position unavailable')}</span></span>${injury ? `<span class="badge ${HARD_INJURY.test(injury.status || '') ? 'warn' : 'research'}">${esc(injury.status || 'Listed')}</span>` : player.lineOnly ? '<span class="badge research">Projection held</span>' : ''}</span></span></th>`;
           if (player.unavailable) return `<tr>${playerHead}${tableCols.map(([key]) => {
             const stat = projectionMarket(key), market = (lines[player.id] || {})[stat], line = market && isNum(market[0]) ? Number(market[0]) : null;
             const href = `#player/${esc(g.league)}/${esc(player.id)}?stat=${esc(stat)}${line == null ? '' : `&amp;line=${esc(line)}&amp;direction=over`}`;

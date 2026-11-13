@@ -270,6 +270,29 @@ test('listed unavailable skill players stay visible while their projections are 
   assert.doesNotMatch(camRow, /prop-vs-label">Kook’n<\/span><b>\d/);
 });
 
+test('a priced roster player stays visible when the injury feed drops him from the matchup', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = { ...slate()[1], league: 'NFL', home: { ...slate()[1].home, id: '19', abbr: 'NYG' } };
+  const detail = { ...g, picks: [], props: { capturedAt: new Date().toISOString(), lines: {
+      '4696981': { car: [16.5], rushYds: [63.5] }
+    } }, teams: { away: { injuries: [] }, home: { injuries: [] } },
+    forecast: { players: { away: { players: [] }, home: { players: [{
+      id: '4040761', name: 'Devin Singletary', pos: 'RB', carries: [14.2, 6.6, 21.8], rushYds: [52, 11.8, 92.2]
+    }] } } } };
+  const ctx = contextFor(api, [g], { get: async path => {
+    if (path === 'app/today.json') return { games: [g], picks: [] };
+    if (path === 'app/players/NFL.json') return { players: [['4696981','Cam Skattebo','RB','19','NYG','2026-10-25',14]] };
+    return detail;
+  } });
+  const html = unesc(await factory(ctx).game({ id: g.id }));
+  assert.match(html, /NYG player props · 2/);
+  const featuredRb = (html.split('RB · featured')[1] || '').split('</table>')[0];
+  assert.match(featuredRb, /Cam Skattebo/);
+  assert.match(featuredRb, /Projection held/);
+  assert.match(featuredRb, /Book<\/span><b>63\.5[\s\S]*Kook’n<\/span><b>Held/);
+  assert.match(html, /#player\/NFL\/4696981\?stat=rushYds&amp;line=63\.5&amp;direction=over/);
+});
+
 test('a comparison line never replaces the visible projection uncertainty range', async () => {
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];
