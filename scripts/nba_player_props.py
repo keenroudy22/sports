@@ -203,10 +203,10 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
             errors.append('quarter-feed-unavailable');quarter_partial=True
     stamp=datetime.now(timezone.utc) if fetch is sharp_odds.fetch else now
     quotes,ignored=fold(rows,games,rosters,stamp)
-    captured=nba_capture.append_changed(quotes,root/'player-quotes',lambda r:(r['eventId'],r['athleteId'],r['stat'],r['book']),keep_observations=True)
+    captured=nba_capture.append_changed(quotes,root/'player-quotes',lambda r:(r['eventId'],r['athleteId'],r['stat'],r['book']),keep_observations=True,daily=True)
     quarters=nba_quarters.fold(quarter_rows,games,rosters,stamp)
     quarter_captured=nba_capture.append_changed(quarters,root/'quarter-quotes',
-        lambda r:(r['eventId'],r['athleteId'],r['quarter'],r['stat'],r['book'],r['line'],r['kind']),keep_observations=True)
+        lambda r:(r['eventId'],r['athleteId'],r['quarter'],r['stat'],r['book'],r['line'],r['kind']),keep_observations=True,daily=True)
     recorded=record_forward(stamp,root)
     graded=grade(stamp,root)
     probability = {'admissionReady': False, 'recorded': 0}
@@ -323,9 +323,8 @@ def build(now, root=STORE, boxes=None, limit=60, *, _forward_capture=False):
     slate=read(root/'slate.json',{});injury=read(root/'injuries-current.json',{})
     if boxes is None:
         boxes=[r for p in (ROOT/'data/sport-box').glob('nba-*.jsonl') for r in boxscores.read_store(p)]
-    quotes={}
-    for p in (root/'player-quotes').glob('*.jsonl'):
-        for r in boxscores.read_store(p):quotes[(r['eventId'],r['athleteId'],r['stat'],r['book'])]=r
+    quotes = {key: row for key, (_, row) in nba_capture.latest_quotes(root/'player-quotes',
+        lambda r: (r['eventId'], r['athleteId'], r['stat'], r['book'])).items()}
     games={str(g['providerId']):g for g in slate.get('games',[]) if g['status']=='scheduled'
            and g['seasonType']=='regular-season' and now<boxscores.instant(g['kickoff'])<=now+timedelta(days=2)}
     import nba_opportunities

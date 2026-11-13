@@ -91,32 +91,49 @@ class Budget:
             raise
 
 
-def append_changed(rows, root, key, *, keep_observations=False, prefix='nba'):
+def latest_quotes(root, key):
+    """Select the newest observation per market across legacy and dated files."""
+    latest = {}
+    for path in sorted(root.glob('*.jsonl')):
+        for row in boxscores.read_store(path):
+            identity = key(row)
+            observed = boxscores.instant(row['retrievedAt'])
+            prior = latest.get(identity)
+            if prior is None or observed >= prior[0]:
+                latest[identity] = observed, row
+    return latest
+
+
+def append_changed(rows, root, key, *, keep_observations=False, prefix='nba', daily=False):
     problems = boxscores.verify(root)
     if problems:
         raise ValueError('; '.join(problems))
-    latest = {key(r): r for p in root.glob('*.jsonl') for r in boxscores.read_store(p)}
-    changed = []
-    for row in rows:
-        previous = latest.get(key(row), {})
-        newer_observation = False
-        if keep_observations:
-            observed = boxscores.instant(row['retrievedAt'])
-            if observed.tzinfo is None:
-                raise ValueError('Quote observation needs a timezone')
-            prior = boxscores.instant(previous['retrievedAt']) if previous else None
-            if prior and observed < prior:
-                continue  # A delayed response must not roll the latest quote backward.
-            newer_observation = prior is not None and observed > prior
-        if newer_observation or boxscores.content_hash(row) != boxscores.content_hash(previous):
-            changed.append(row); latest[key(row)] = row
+    if daily and not keep_observations:
+        raise ValueError('Dated quote files require observation clocks')
     if not re.fullmatch(r'[a-z][a-z0-9-]*', str(prefix)):
         raise ValueError('Store prefix is invalid')
-    for season in sorted({r['season'] for r in changed}):
-        boxscores.append(root / f'{prefix}-{season}.jsonl', [r for r in changed if r['season']==season])
-    if changed:
+    latest = latest_quotes(root, key) if keep_observations else {
+        key(r): (None, r) for p in root.glob('*.jsonl') for r in boxscores.read_store(p)}
+    batches = {}
+    for row in rows:
+        identity = key(row)
+        prior, previous = latest.get(identity, (None, {}))
+        observed = boxscores.instant(row['retrievedAt']) if keep_observations else None
+        if observed is not None:
+            if observed.tzinfo is None:
+                raise ValueError('Quote observation needs a timezone')
+            if prior and observed < prior:
+                continue  # A delayed response must not roll the latest quote backward.
+        if (prior is not None and observed > prior) or boxscores.content_hash(row) != boxscores.content_hash(previous):
+            suffix = f"-{observed.astimezone(timezone.utc).date()}" if daily else ''
+            filename = f"{prefix}-{row['season']}{suffix}.jsonl"
+            batches.setdefault(filename, []).append(row)
+            latest[identity] = observed, row
+    for filename, batch in sorted(batches.items()):
+        boxscores.append(root / filename, batch)
+    if batches:
         boxscores.write_json(root / 'ledger.json', boxscores.ledger(root))
-    return len(changed)
+    return sum(map(len, batches.values()))
 
 
 def injuries(payload, season, retrieved):

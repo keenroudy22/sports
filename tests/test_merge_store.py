@@ -111,6 +111,33 @@ class RebaseTests(unittest.TestCase):
         log = git(self.root, 'log', '--format=%s').stdout.split()
         self.assertEqual(log[0], 'desk')
 
+    def test_nba_daily_quotes_survive_when_two_writers_create_the_same_day(self):
+        root = self.root / 'data/nba-capture/player-quotes'
+        legacy = root / 'nba-2027.jsonl'
+        boxscores.append(legacy, [{'retrievedAt': '2026-11-12T19:00:00Z', 'line': 19.5}])
+        boxscores.write_json(root / 'ledger.json', boxscores.ledger(root))
+        original = legacy.read_bytes()
+        commit(self.root, 'legacy quotes')
+        git(self.root, 'checkout', '-q', '-b', 'desk')
+        shard = root / 'nba-2027-2026-11-13.jsonl'
+        desk = {'retrievedAt': '2026-11-13T19:05:00Z', 'line': 20.5}
+        hosted = {'retrievedAt': '2026-11-13T19:10:00Z', 'line': 21.5}
+        boxscores.append(shard, [desk])
+        boxscores.write_json(root / 'ledger.json', boxscores.ledger(root))
+        commit(self.root, 'desk quote')
+        git(self.root, 'checkout', '-q', 'main')
+        boxscores.append(shard, [hosted])
+        boxscores.write_json(root / 'ledger.json', boxscores.ledger(root))
+        commit(self.root, 'hosted quote')
+        git(self.root, 'checkout', '-q', 'desk')
+        stopped = subprocess.run(['git', 'rebase', 'main'], cwd=self.root, capture_output=True, env=ENV)
+        self.assertNotEqual(stopped.returncode, 0)
+        self.assertEqual(ms.resolve(self.root, log=lambda *_: None)[1], [])
+        git(self.root, '-c', 'core.editor=true', 'rebase', '--continue')
+        self.assertEqual(boxscores.read_store(shard), [desk, hosted])
+        self.assertEqual(legacy.read_bytes(), original)
+        self.assertEqual(boxscores.verify(root), [])
+
     def test_a_conflict_outside_the_stores_is_left_for_the_caller(self):
         git(self.root, 'checkout', '-q', '-b', 'desk')
         (self.root / 'note.txt').write_text('desk\n')

@@ -34,6 +34,26 @@ def fixture():
 
 
 class NBAPlayerPropTests(unittest.TestCase):
+    def test_new_quote_files_roll_daily_and_keep_the_legacy_bytes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            identity = lambda row: row['athleteId']
+            initial = {'season': 2027, 'athleteId': '123', 'retrievedAt': '2026-11-13T22:00:00Z', 'line': 19.5}
+            legacy = root / 'nba-2027.jsonl'
+            boxscores.append(legacy, [initial])
+            original = legacy.read_bytes()
+            boxscores.write_json(root / 'ledger.json', boxscores.ledger(root))
+            before_midnight = dict(initial, retrievedAt='2026-11-13T23:50:00Z', line=20.5)
+            after_midnight = dict(initial, retrievedAt='2026-11-13T19:05:00-05:00', line=21.5)
+            append = lambda rows: nba_capture.append_changed(rows, root, identity, keep_observations=True, daily=True)
+            self.assertEqual(append([before_midnight, after_midnight]), 2)
+            self.assertEqual(append([after_midnight, before_midnight]), 0)
+            self.assertEqual(legacy.read_bytes(), original)
+            self.assertEqual(boxscores.read_store(root / 'nba-2027-2026-11-13.jsonl'), [before_midnight])
+            self.assertEqual(boxscores.read_store(root / 'nba-2027-2026-11-14.jsonl'), [after_midnight])
+            self.assertEqual(nba_capture.latest_quotes(root, identity)['123'][1], after_midnight)
+            self.assertEqual(boxscores.verify(root), [])
+
     def test_verified_clippers_alias_does_not_relax_player_or_other_team_identity(self):
         game,rosters,rows,_=fixture()
         game['teams']['home']['name']='LA Clippers'
