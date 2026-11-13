@@ -1416,11 +1416,13 @@ def favorite_needs_reason(candidate, ctx):
 
 
 def longshot_one_per_day(candidate, ctx):
-    """One fun parlay of each kind a day: the longshot (game lines) and the easy parlay (easier player lines)."""
+    """One fun parlay of each explicit style a day; a short card and lotto may coexist."""
     kind = candidate.get('parlayType') or 'longshot'
+    style = candidate.get('parlayStyle') or kind
     today = [k for k, p in published_today(ctx, candidate.get('id'))
-             if (p.get('parlayType') or ('longshot' if p.get('legs') else None)) == kind and not pulled_before_post(k, ctx)]
-    word = 'easy parlay' if kind == 'easyProps' else 'longshot'
+             if (p.get('parlayStyle') or p.get('parlayType') or ('longshot' if p.get('legs') else None)) == style
+             and not pulled_before_post(k, ctx)]
+    word = {'easyProps': 'easy parlay', 'short': 'short parlay', 'lotto': 'lotto'}.get(style, 'longshot')
     if len(today) >= LONGSHOTS_PER_DAY:
         return Decision(False, 'longshot_one_per_day', f"{today[0]} is already today's {word}")
     return Decision(True, 'longshot_one_per_day', f'first {word} today')
@@ -1431,8 +1433,17 @@ def longshot_shape(candidate, ctx):
     if ctx.now.date().isoformat() < '2026-10-23' or candidate.get('parlayType') not in (None, 'longshot'):
         return Decision(True, 'longshot_shape', 'historical or separate ticket category')
     legs, odds = candidate.get('legs') or [], candidate.get('odds')
-    ok = 4 <= len(legs) <= 8 and isinstance(odds, (int, float)) and 400 <= odds <= 1000
-    return Decision(ok, 'longshot_shape', 'new fun lotto needs 4–8 legs and +400 to +1000; no forced ticket')
+    style = candidate.get('parlayStyle')
+    if style == 'short':
+        ok = 3 <= len(legs) <= 4 and isinstance(odds, (int, float)) and 200 <= odds <= 1500
+        reason = 'short parlay needs 3–4 legs and +200 to +1500; no forced ticket'
+    elif style == 'lotto':
+        ok = 6 <= len(legs) <= 8 and isinstance(odds, (int, float)) and 1500 <= odds <= 20000
+        reason = 'lotto needs 6–8 legs and +1500 to +20000; no forced ticket'
+    else:
+        ok = 4 <= len(legs) <= 8 and isinstance(odds, (int, float)) and 400 <= odds <= 1000
+        reason = 'legacy fun ticket needs 4–8 legs and +400 to +1000; no forced ticket'
+    return Decision(ok, 'longshot_shape', reason)
 
 
 def longshot_exact_ticket(candidate, ctx):

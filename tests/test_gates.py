@@ -588,6 +588,25 @@ class FavoriteLongshotRevisionTests(unittest.TestCase):
         self.assertFalse(gates.longshot_one_per_day(new, context(first={'ls': ticket}, latest={'ls': ticket})).ok)
         self.assertTrue(gates.longshot_one_per_day(new, context()).ok)
 
+    def test_short_parlay_and_lotto_are_separate_daily_categories(self):
+        short = {'id': 'short', 'parlayType': 'longshot', 'parlayStyle': 'short',
+                 'publishedAt': '2026-09-27T12:00:00Z', 'legs': [{}, {}, {}]}
+        ctx = context(first={'short': short}, latest={'short': short})
+        self.assertFalse(gates.longshot_one_per_day(dict(short, id='short2', publishedAt=None), ctx).ok)
+        lotto = {'id': 'lotto', 'parlayType': 'longshot', 'parlayStyle': 'lotto', 'legs': [{}] * 6}
+        self.assertTrue(gates.longshot_one_per_day(lotto, ctx).ok)
+
+    def test_new_short_and_lotto_shapes_are_explicit(self):
+        ctx = context(now=datetime(2026, 11, 13, 15, 0, tzinfo=timezone.utc))
+        self.assertTrue(gates.longshot_shape({'parlayType': 'longshot', 'parlayStyle': 'short',
+                                              'legs': [{}] * 3, 'odds': 900}, ctx).ok)
+        self.assertFalse(gates.longshot_shape({'parlayType': 'longshot', 'parlayStyle': 'short',
+                                               'legs': [{}] * 6, 'odds': 900}, ctx).ok)
+        self.assertTrue(gates.longshot_shape({'parlayType': 'longshot', 'parlayStyle': 'lotto',
+                                              'legs': [{}] * 8, 'odds': 5000}, ctx).ok)
+        self.assertFalse(gates.longshot_shape({'parlayType': 'longshot', 'parlayStyle': 'lotto',
+                                               'legs': [{}] * 8, 'odds': 900}, ctx).ok)
+
     def test_new_longshot_requires_exact_combined_sportsbook_ticket(self):
         now = datetime(2026, 11, 13, 15, 0, tzinfo=timezone.utc)
         draft = {'id': 'draft', 'parlayType': 'longshot', 'legs': [{}, {}, {}, {}],
