@@ -1,3 +1,24 @@
+### November 13 exact player chart lines and CBB collection order
+
+Player charts preserve the selected stat, side and threshold. Basketball uses
+the linked number even when the same player has a different captured main line.
+Football ties its price comparison to the selected side and number. The recent
+chart plots up to ten games and counts only the games shown in its caption.
+Today retains the exact sportsbook link and full breakdown below the price.
+
+Release `fce5a7378b183fcb76700cae779d2aa058dd46fe` passed 2,254 Python
+tests and 337 interface tests in both the worktree and clean export, plus the
+build, record audit, public-file checks and offline rehearsal. Hosted run
+`43456009994` succeeded. NBA, NFL, CFB and CBB matchup-to-chart checks passed
+at 375 and 1440 CSS pixels without clipping or console errors. Bennett Stirtz
+showed 9 of 10 at the 4.5 chart threshold and 6 of 10 at the 8.5 book line.
+
+The CBB collector now spreads its existing 40 requests across upcoming teams
+with the thinnest recent box-score coverage. Stored-slate replay reached 51
+teams playing that day, up from 21. Verify new player rows after the first
+scheduled capture that includes this release. No live Upset Watch card was
+available during verification. Its revised break-even copy passed fixtures.
+
 ### November 13 basketball popular thresholds — verified live
 
 NBA research now includes a scan-first Popular thresholds board grouped by
