@@ -47,6 +47,29 @@ test('NBA matchups show spread total and moneyline pairs without inventing picks
  g.status='final';g.scores={home:112,away:111};html=await views.games({tab:'final'});
  assert.doesNotMatch(html,/Moneyline: HOM|nba-comparison|Book total/);
 });
+test('NBA matchup marks only the exact posted quote and removes stale research highlights', async () => {
+ const s=load(), api=s.module.exports;
+ const kickoff=new Date(Date.now()+3600000).toISOString(), sourceAt=new Date().toISOString();
+ const game={id:'NBA-1',providerId:'1',status:'scheduled',kickoff,
+   teams:{away:{id:'1',name:'Away',abbreviation:'AWY'},home:{id:'2',name:'Home',abbreviation:'HOM'}}};
+ const play={athleteId:'11',stat:'pts',line:15.5,direction:'over',odds:-110,book:'DraftKings',kickoff};
+ const row={...play,eventId:'1',team:'1',name:'Example Player',sourceAt,over:-110,under:-110,favorite:true};
+ const data={games:[game],trial:{plays:[play]}}, props={rows:[row]};
+ const ctx=api.gamesContext({get:async path=>path==='app/nba.json'?data:path==='app/nba-props.json'?props:{players:[]}});
+ const views=s.KRGames(ctx);
+ const page=()=>views.game({id:game.id});
+ assert.match(await page(), /class="pick-tag">Official pick/);
+ for(const changes of [{line:16.5},{book:'FanDuel'},{side:'under'},{over:-115}]){
+   props.rows=[{...row,...changes}];
+   assert.doesNotMatch(await page(), /class="pick-tag"/);
+ }
+ props.rows=[{...row,line:16.5,sourceAt:new Date(Date.now()-5*3600000).toISOString()}];
+ const stale=await page();
+ assert.match(stale,/Earlier quote · checked/);
+ assert.match(stale,/line=16\.5/);
+ assert.doesNotMatch(stale,/class="lean-tag"|class="pick-tag"/);
+});
+
 test('All sports Games merges NBA into day counts, search and finals without college filters hiding it',async()=>{
  const s=load(),api=s.module.exports,stamp=new Date(Date.now()+3600000).toISOString();
  const n={id:'NBA-join',status:'scheduled',kickoff:stamp,teams:{away:{name:'Boston Celtics',abbreviation:'BOS'},home:{name:'Detroit Pistons',abbreviation:'DET'}},projection:{away:110,home:114,total:224,sparse:true}};
