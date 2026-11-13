@@ -40,11 +40,11 @@ test('basketball cards open matchup details and NBA props stay in their own game
   assert.match(await v.cbbToday(), /href="#game\/CBB-1"/);
   const college = await v.game({id:'CBB-1'});
   assert.match(college, /Away at Home/);
-  assert.match(college, /College player[\s\S]*Kook’n 14\.1[\s\S]*Book line unavailable/);
+  assert.match(college, /College player[\s\S]*prop-vs-label">Book<\/span><b>—<\/b>[\s\S]*prop-vs-label">Kook’n<\/span><b>14\.1[\s\S]*Book line unavailable/);
   assert.match(college, /#player\/CBB\/43\?stat=pts/);
   const matchup = await v.game({id:'NBA-2'});
   assert.match(matchup, /Matched player/);
-  assert.match(matchup, /Kook’n 17\.2[\s\S]*Range 11\.0–23\.0[\s\S]*Book 15\.5/);
+  assert.match(matchup, /prop-vs-label">Book<\/span><b>15\.5[\s\S]*prop-vs-label">Kook’n<\/span><b>17\.2[\s\S]*Projection gap[\s\S]*Kook’n range 11\.0–23\.0/);
   assert.match(matchup, /#player\/NBA\/42\?stat=pts&amp;line=15\.5&amp;direction=over/);
   assert.doesNotMatch(matchup, /Other game player/);
 });

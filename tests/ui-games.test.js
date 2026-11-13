@@ -235,8 +235,8 @@ test('all games show only usable projection rows and columns, including zero est
     assert.match(html, /PITT player props/);
     assert.match(html, /Partial Player/);
     assert.match(html, /Usable Runner/);
-    assert.match(html, /Kook’n 0\.0/);
-    assert.match(html, /Kook’n 68\.0/);
+    assert.match(html, /prop-vs-label">Book<\/span><b>—<\/b>[\s\S]*prop-vs-label">Kook’n<\/span><b>0\.0/);
+    assert.match(html, /prop-vs-label">Kook’n<\/span><b>68\.0/);
     assert.doesNotMatch(html, /Held Only|Malformed|999|99\.5|under review|>Rec yds<|>Rec<|not enough recent games/i);
   }
 });
@@ -256,15 +256,15 @@ test('listed unavailable skill players stay visible while their projections are 
   assert.match(html, /NYG player props/);
   assert.match(html, /Cam Skattebo/);
   assert.match(html, /<span class="badge warn">Out<\/span>/);
-  assert.match(html, /Kook’n held/);
+  assert.match(html, /prop-vs-label">Kook’n<\/span><b>Held/);
   assert.match(html, /Out · no edge/);
   assert.match(html, /#player\/NFL\/4696981/);
-  assert.match(html, /Reference line 15\.5/);
-  assert.match(html, /Reference line 55\.5/);
+  assert.match(html, /prop-vs-label">Book<\/span><b>15\.5/);
+  assert.match(html, /prop-vs-label">Book<\/span><b>55\.5/);
   assert.match(html, /#player\/NFL\/4696981\?stat=rushYds&amp;line=55\.5&amp;direction=over/);
-  assert.match(html, /Devin Singletary[\s\S]*Kook’n 52\.0[\s\S]*Kook’n 14\.2/);
+  assert.match(html, /Devin Singletary[\s\S]*prop-vs-label">Kook’n<\/span><b>52\.0[\s\S]*prop-vs-label">Kook’n<\/span><b>14\.2/);
   const camRow = (html.split('Cam Skattebo')[1] || '').split('</tr>')[0];
-  assert.doesNotMatch(camRow, /Kook’n \d/);
+  assert.doesNotMatch(camRow, /prop-vs-label">Kook’n<\/span><b>\d/);
 });
 
 test('a comparison line never replaces the visible projection uncertainty range', async () => {
@@ -276,7 +276,7 @@ test('a comparison line never replaces the visible projection uncertainty range'
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [], freshness: {} } : detail });
   const html = unesc(await factory(ctx).game({ id: g.id }));
   assert.match(html, /Research only/);
-  assert.match(html, /Kook’n 32\.9[\s\S]*Range 3–63[\s\S]*Book 44\.5/);
+  assert.match(html, /prop-vs-label">Book<\/span><b>44\.5[\s\S]*prop-vs-label">Kook’n<\/span><b>32\.9[\s\S]*Projection gap[\s\S]*-11\.6[\s\S]*Kook’n range 3–63/);
   assert.match(html, /#player\/CFB\/1\?stat=rushYds&amp;line=44\.5&amp;direction=over/);
   assert.match(html, /Range means model uncertainty/);
 });
