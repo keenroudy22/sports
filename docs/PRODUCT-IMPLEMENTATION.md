@@ -1,3 +1,22 @@
+### November 13 responsive player charts — verified live
+
+Player L5/L10 result charts now keep their bars and opponent/date labels on the
+same responsive eight-column grid. The former 52px minimum label column escaped
+the player card at 320–430px and made the newest games look cut off even though
+the document itself did not overflow. Phone labels now use fluid columns with
+compact, wrapping opponent/date text. The Kook'n Edges sport selector wraps at
+phone widths instead of clipping its final CBB control.
+
+Release `973341e5c0e07a853c259aca1ca53daf1cf9450d` passed 2,251 Python tests
+(2 skipped), 335 Node/interface tests, clean export, a 582-page build, zero-
+issue 176-pick and NBA record audits, zero-issue 964-file public guard, current
+asset checks and stored-input rehearsal. Hosted run `43430987227` succeeded.
+The hosted browser audit passed 42 ordinary combinations across Today, Edges,
+Props, NBA/NFL player pages, an NFL matchup and Results at 320, 375, 390, 430,
+768 and 1440px. Twelve additional NBA/NFL player and Edges checks at 320–430px
+with text enlarged 15% also passed. There was no clipped element, page overflow,
+rendered-load failure or console error.
+
 ### November 12 priced-roster player coverage — verified live
 
 Matchup prop tables no longer depend on the injury feed to keep a priced player
