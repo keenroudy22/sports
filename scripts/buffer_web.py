@@ -126,7 +126,7 @@ def confirm_sent(entry, *, observed_text, link, sent_at, now):
     web.update(state='sent', verifiedAt=gates.stamp(now), evidence='Buffer Sent UI')
 
 
-def reserve_cbb_pick(guid, log_book, now, *, opener=None):
+def reserve_cbb_pick(guid, log_book, now, *, opener=None, validate_only=False):
     """Attended recovery for an admitted, delivered CBB pick; no API call."""
     import cbb_picks, social_style
     if bp.rate_backoff(now):
@@ -134,7 +134,7 @@ def reserve_cbb_pick(guid, log_book, now, *, opener=None):
     entry=next((e for e in log_book.get('posts',[]) if e.get('id')==guid),None)
     if (not entry or entry.get('kind')!='buffer:cbb-pick' or not entry.get('cbbPick')
             or (entry.get('discord') or {}).get('state')!='sent'
-            or any(entry.get(k) for k in ('bufferPostId','sentAt','webDelivery','error','cancelledAt','deletedAt'))):
+            or any(entry.get(k) for k in ('bufferPostId','sentAt','webDelivery','typefullyDelivery','bufferAttemptAt','error','cancelledAt','deletedAt'))):
         raise WebHold('Requires one public CBB play with no prior or ambiguous X attempt')
     play=next((p for p in cbb_picks.public_rows() if p['id']==guid),None)
     if not play or not cbb_picks.current_match(play,now):
@@ -152,13 +152,15 @@ def reserve_cbb_pick(guid, log_book, now, *, opener=None):
         raise WebHold('No current reviewed CBB release window')
     if bp.day_count(other_posts,now.astimezone(gates.EASTERN).date())>=bp.MAX_PER_DAY:
         raise WebHold('Daily social cap reached')
+    if validate_only:
+        return entry
     entry.update(dueAt=gates.stamp(due),queuedText=text)
     entry['webDelivery']=dict(state='reserved',reservedAt=gates.stamp(now),reviewedAt=gates.stamp(now),image=image,
                                evidence='CBB original ledger, current source/quote, caption and hosted-card checks')
     return entry
 
 
-def reserve_nba_pick(guid, log_book, now, *, opener=None):
+def reserve_nba_pick(guid, log_book, now, *, opener=None, validate_only=False):
     """Attended handoff for an admitted NBA pick already delivered to Discord.
 
     Reuse the actual NBA planner with capture disabled and its final-send
@@ -172,7 +174,7 @@ def reserve_nba_pick(guid, log_book, now, *, opener=None):
     if (not entry or entry.get('kind')!='buffer:nba-trial' or entry.get('nbaPick') is not True
             or entry.get('nbaDiscordOnly') is not True
             or (entry.get('discord') or {}).get('state')!='sent'
-            or any(entry.get(k) for k in ('bufferPostId','sentAt','webDelivery','error','cancelledAt','deletedAt'))):
+            or any(entry.get(k) for k in ('bufferPostId','sentAt','webDelivery','typefullyDelivery','bufferAttemptAt','error','cancelledAt','deletedAt'))):
         raise WebHold('Requires one public NBA play with no prior or ambiguous X attempt')
     play=next((p for p in nba.public_rows() if p['id']==guid),None)
     if not play or play.get('result') or not nba.review_ready(now) or not nba.current_match(play,now):
@@ -201,8 +203,10 @@ def reserve_nba_pick(guid, log_book, now, *, opener=None):
         raise WebHold('No current NBA release capacity or quote window')
     # Same append-only at-most-once intent used by the API publisher. An old
     # unknown create attempt cannot become a second attempt through the UI.
-    if not nba.reserve_delivery(guid,now):
+    if not validate_only and not nba.reserve_delivery(guid,now):
         raise WebHold('Existing or ambiguous NBA delivery intent')
+    if validate_only:
+        return entry
     entry.update(dueAt=gates.stamp(due),queuedText=text)
     entry['webDelivery']=dict(state='reserved',reservedAt=gates.stamp(now),reviewedAt=gates.stamp(now),
         image=image,evidence='NBA original ledger, frozen proof, current sources, caption and hosted-card checks')

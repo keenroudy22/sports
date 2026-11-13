@@ -3885,6 +3885,66 @@ def stored_discord_work_due(now, log_book):
     return False
 
 
+def retry_typefully_basketball(now, book, settings):
+    """Use stored, freshly revalidated originals; never create a second X attempt."""
+    import buffer_web
+    import buffer_post
+    import cbb_picks
+    import nba_trial_runtime
+    import typefully_backup
+    import x_post
+
+    for entry in book['posts']:
+        kind = entry.get('kind')
+        if kind not in ('buffer:nba-trial', 'buffer:cbb-pick') or entry.get('sentAt'):
+            continue
+        if entry.get('typefullyDelivery'):
+            if entry['typefullyDelivery'].get('draftId'):
+                typefully_backup.deliver(entry, book, settings, now, x_post.save_log)
+            continue
+        guid = entry['id']
+        if not basketball_backup_due(entry, now):
+            continue
+        others = {'posts': [row for row in book['posts'] if row is not entry]}
+        busy = buffer_post.taken(others, now)
+        busy.extend(gates.when(row['typefullyDelivery']['at'])
+                    for row in others['posts'] if row.get('typefullyDelivery'))
+        if buffer_post.free_slot(now, busy) > now:
+            continue
+        is_nba = kind == 'buffer:nba-trial'
+        reviewer = buffer_web.reserve_nba_pick if is_nba else buffer_web.reserve_cbb_pick
+        try:
+            reviewer(guid, book, now, validate_only=True)
+        except buffer_web.WebHold:
+            continue
+        if not is_nba and cbb_picks.delivery_pending(guid):
+            continue
+        if is_nba and any(row.get('type') == 'send-attempt' and row.get('id') == guid
+                          for row in nba_trial_runtime.rows()):
+            continue
+        source = nba_trial_runtime if is_nba else cbb_picks
+        play = next(row for row in source.public_rows() if row['id'] == guid)
+        expires = min(gates.when(play['kickoff'] if is_nba else play['game']['kickoff']) - timedelta(minutes=15),
+                      gates.when(play['retrievedAt'] if is_nba else play['quote']['checkedAt'])
+                      + timedelta(hours=2 if is_nba else 1))
+        if typefully_backup.deliver(entry, book, settings, now, x_post.save_log,
+                                   text=entry['queuedText'], expires=expires):
+            break
+
+
+def basketball_backup_due(entry, now):
+    if entry.get('kind') not in ('buffer:nba-trial', 'buffer:cbb-pick') or any(
+            entry.get(key) for key in ('sentAt', 'bufferPostId', 'bufferAttemptAt',
+                                       'webDelivery', 'error', 'cancelledAt', 'deletedAt')):
+        return False
+    if entry.get('typefullyDelivery'):
+        return bool(entry['typefullyDelivery'].get('draftId'))
+    discord = entry.get('discord') or {}
+    return bool(discord.get('state') == 'sent' and discord.get('sentAt')
+                and entry.get('dueAt') and gates.when(entry['dueAt']) <= now
+                and gates.when(discord['sentAt']) + post_windows.discord_play_lead(now) <= now)
+
+
 def retry_typefully_recap(now, log_book, settings):
     """Send the prior day's settled recap through the reserved backup."""
     import receipts
@@ -3998,6 +4058,8 @@ def mirror(args):
         recap_due = (now >= receipts.daily_morning(day) and
                      (existing is None or bool((existing.get('typefullyDelivery') or {}).get('draftId')
                                                and not existing.get('sentAt'))))
+    basketball_due = bool(backup and any(basketball_backup_due(entry, now)
+                                         for entry in x_post.load_log()['posts']))
     retry_results = bool(recap_due or (missing_results and not result_transport_hold))
     # Recovery can refresh inputs minutes after this worker started. Use the
     # current clock so those valid captures are not mistaken for future data.
@@ -4013,7 +4075,7 @@ def mirror(args):
     nba_discord_waiting = (nba_trial_runtime.discord_delivery_due(now, x_post.load_log())
                            or cbb_picks.discord_delivery_due(now, x_post.load_log()))
     private_waiting = private_release_ready(now)
-    if not chef_waiting and not nba_discord_waiting and not private_waiting and not retry_results:
+    if not chef_waiting and not nba_discord_waiting and not private_waiting and not retry_results and not basketball_due:
         if result_transport_hold:
             if not stored_discord_work_due(now, x_post.load_log()):
                 return 0
@@ -4061,6 +4123,13 @@ def mirror(args):
                 plans = nba_trial_runtime.social_plans(now, log_book, refresh=False)
                 nba_trial_runtime.queue_discord_first(now, log_book, plans)
             cbb_picks.queue_discord(now, log_book)
+            if basketball_due:
+                try:
+                    retry_typefully_basketball(now, log_book, backup)
+                except (OSError, ValueError) as error:
+                    log(f'Typefully basketball awaits reconciliation: {type(error).__name__}')
+                x_post.save_log(log_book)
+                commit_log(now, push=not args.no_push)
             if not mirror_due(log_book, now):
                 x_post.save_log(log_book)
                 return 0

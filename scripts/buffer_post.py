@@ -724,6 +724,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     # even before pressure reaches the reserve threshold. Due times stay intact.
     plans = sorted(plans, key=lambda plan: (not early_daily_receipt(plan[0]), not essential_kind(plan[1], now), plan[3], plan[0]))
     for guid, kind, text, due, card_key in plans:
+        if any(e.get('id') == guid and e.get('typefullyDelivery')
+               for e in log_book.get('posts', [])):
+            continue
         cbb_regular = kind == 'cbb-pick'
         nba_regular = kind == 'nba-trial' and essential_kind(kind, now)
         if nba_regular:
