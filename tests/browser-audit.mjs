@@ -1,6 +1,7 @@
 // Optional real-Chrome audit. Run a local site server and Chrome with --remote-debugging-port=9234.
 // No dependencies, no production writes. Artifacts are outside the repository.
 // Set AUDIT_CHARTS=1 with AUDIT_ROUTES containing player links to check L5/L10 geometry and line identity.
+// Use AUDIT_CHARTS=full with known long histories to require exactly five and ten bars.
 import fs from 'node:fs';
 const base = process.env.AUDIT_URL || 'http://localhost:8765/';
 const out = process.env.AUDIT_OUT || '/tmp/kookn-overnight-qa';
@@ -30,6 +31,7 @@ const scaleText = () => textScale === 1 ? null : ev(`document.querySelectorAll('
 })`);
 const chartWindow = async (size, expectedLine) => {
   const control = JSON.stringify(`[data-set="pwin:last${size}"]`);
+  const minimumBars = process.env.AUDIT_CHARTS === 'full' ? size : 1;
   await until(`!!document.querySelector(${control})`, `missing Last ${size} control`);
   await ev(`(() => {
     const button = document.querySelector(${control});
@@ -53,7 +55,7 @@ const chartWindow = async (size, expectedLine) => {
     const line = chart.querySelector('.line span')?.textContent.trim() ?? null;
     const expectedLine = ${JSON.stringify(expectedLine)};
     return {size:${size},bars:bars.length,labels:labels.length,line,
-      error:!fits || !bars.length || bars.length > ${size} || bars.length !== labels.length
+      error:!fits || bars.length < ${minimumBars} || bars.length > ${size} || bars.length !== labels.length
         || (expectedLine !== null && (line === null || Number(expectedLine) !== Number(line)))};
   })()`);
 };
