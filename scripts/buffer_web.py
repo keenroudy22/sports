@@ -33,8 +33,11 @@ def reserve_receipt(guid, first, latest, games, log_book, now, *, opener=None):
         raise WebHold('Provider backoff active; do not route around it')
     if any(p.get('id') == guid for p in log_book.get('posts', [])):
         raise WebHold('Existing or ambiguous attempt; reconcile instead of retrying')
-    plans = bp.plan(first, latest, games, now, log_book, log=lambda *_: None)
-    chosen = next((p for p in plans if p[0] == guid and p[1] == 'receipt'), None)
+    individual_final = guid.startswith(('cashed:', 'burnt:'))
+    kind = 'cashed' if individual_final else 'receipt'
+    plans = bp.plan(first, latest, games, now, log_book, log=lambda *_: None,
+                    results_only=individual_final)
+    chosen = next((p for p in plans if p[0] == guid and p[1] == kind), None)
     if chosen is None:
         raise WebHold('No current qualifying receipt in the normal plan')
     def stage(url, body, headers):
@@ -56,6 +59,11 @@ def reserve_receipt(guid, first, latest, games, log_book, now, *, opener=None):
                  dueAt=value['dueAt'], queuedText=text, textHash=x_post.text_hash(text),
                  card=bool(image), webDelivery=dict(state='reserved',
                  reservedAt=gates.stamp(now), image=image))
+    if individual_final:
+        quote_id = value.get('metadata', {}).get('twitter', {}).get('retweet', {}).get('id')
+        if not quote_id or not image:
+            raise WebHold('Individual Final requires the original X quote and result card')
+        entry.update(kind='buffer:cashed', quoteTweetId=quote_id, quoteSourceId=bp.quote_source_id(guid))
     log_book.setdefault('posts', []).append(entry)
     return entry
 
