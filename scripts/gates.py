@@ -1435,6 +1435,16 @@ def longshot_shape(candidate, ctx):
     return Decision(ok, 'longshot_shape', 'new fun lotto needs 4–8 legs and +400 to +1000; no forced ticket')
 
 
+def longshot_exact_ticket(candidate, ctx):
+    """A multiplied leg estimate may prepare a lotto, but may not become a public sportsbook ticket."""
+    if ctx.now.date().isoformat() < '2026-11-13' or candidate.get('publishedAt'):
+        return Decision(True, 'longshot_exact_ticket', 'historical ticket or publication replay')
+    exact = (candidate.get('priceEstimated') is False and candidate.get('quoteType') == 'sportsbook'
+             and bool(candidate.get('ticketReceipt') or candidate.get('receipt')))
+    return Decision(exact, 'longshot_exact_ticket',
+                    'exact sportsbook combined price and private ticket receipt required before release')
+
+
 def ladder_one_rung(candidate, ctx):
     """The ladder climbs one rung at a time: no new rung while one is ungraded, including a rung pulled before its
     post. Once a rung settles, the next scheduled scan may advance or restart it the same day. A pulled rung counts
@@ -1519,7 +1529,7 @@ RULES = {
                                  prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),
     'favorite': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'longshot': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_shape, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
+    'longshot': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_shape, longshot_exact_ticket, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
     'ladder': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, ladder_selective, ladder_supported, player_overlap),
     'revision': (revision_frozen,),
 }

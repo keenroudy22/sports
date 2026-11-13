@@ -588,6 +588,17 @@ class FavoriteLongshotRevisionTests(unittest.TestCase):
         self.assertFalse(gates.longshot_one_per_day(new, context(first={'ls': ticket}, latest={'ls': ticket})).ok)
         self.assertTrue(gates.longshot_one_per_day(new, context()).ok)
 
+    def test_new_longshot_requires_exact_combined_sportsbook_ticket(self):
+        now = datetime(2026, 11, 13, 15, 0, tzinfo=timezone.utc)
+        draft = {'id': 'draft', 'parlayType': 'longshot', 'legs': [{}, {}, {}, {}],
+                 'odds': 650, 'priceEstimated': True, 'quoteType': 'capture'}
+        refused = gates.longshot_exact_ticket(draft, context(now=now))
+        self.assertFalse(refused.ok)
+        self.assertIn('exact sportsbook combined price', refused.reason)
+        exact = dict(draft, priceEstimated=False, quoteType='sportsbook', ticketReceipt='private-receipt')
+        self.assertTrue(gates.longshot_exact_ticket(exact, context(now=now)).ok)
+        self.assertIn('longshot_exact_ticket', [rule.__name__ for rule in gates.RULES['longshot']])
+
     def test_a_published_ticket_is_never_written_again(self):
         """The 6:45 and 8:30 runs both wrote the Sep 25 longshot: its id is fixed by the date and the book."""
         ticket = {'id': 'CFB-2026-W4-longshot-0925-espnbet', 'parlayType': 'longshot', 'legs': [{}, {}, {}],
