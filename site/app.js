@@ -2118,7 +2118,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-10e768b22dab';
-  const GAMES_ASSET = 'app-games.js?v=sha256-c3963e11766d';
+  const GAMES_ASSET = 'app-games.js?v=sha256-48c4d3de2006';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
   let researchCssLoading = null;

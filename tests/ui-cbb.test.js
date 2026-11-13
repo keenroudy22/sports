@@ -8,6 +8,20 @@ test('CBB research separates prior season stats and historical quote from live b
  const html=await v.cbbToday();for(const t of ['CBB projections &amp; stats','2026–27','2025–26','No recorded games','Historical quote, not a live offer','Neutral court','Sheet 1/1','pc-bar','Baseline model win chance','38%','62%'])assert.ok(html.includes(t),t);
  assert.doesNotMatch(html,/Best Bet|positive EV|\b0 scored/);
 });
+test('CBB cards show the projected favorite and keep missing book spreads explicit', async () => {
+ const teams={home:{name:'Butler',abbreviation:'BTLR'},away:{name:'Pitt',abbreviation:'PITT'}};
+ const game={id:'CBB-1',kickoff:'2099-11-02T23:00Z',teams,projection:{home:82.5,away:75.5,total:157.9,margin:7.1},
+   firstTotal:{line:157.5,book:'DraftKings',capturedAt:'2026-11-12T23:00Z'}};
+ const v=views(async path=>path==='app/cbb.json'?{games:[game],scheduleFresh:true}:{players:[]});
+ for (const [margin, expected] of [[7.1,'BTLR -7.1'],[-3.2,'PITT -3.2'],[0,'Even']]) {
+   game.projection.margin=margin;
+   for (const html of [await v.cbbToday(),await v.game({id:game.id})]) {
+     assert.ok(html.includes(`<span class="k">Spread</span><span>${expected}</span><span>Unavailable</span><span>—</span>`));
+     assert.match(html, /Total<\/span><span>157\.9<\/span><span>157\.5/);
+   }
+ }
+});
+
 test('CBB research handles missing payload instead of football fallback',async()=>{const html=await views(async()=>{throw Error('offline');}).cbbToday();assert.match(html,/CBB research could not be loaded/);assert.doesNotMatch(html,/NFL/);});
 
 test('CBB score-only payload does not fabricate a probability bar',async()=>{
