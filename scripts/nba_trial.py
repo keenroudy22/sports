@@ -45,7 +45,16 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         game_day=kickoff.astimezone(EASTERN).date()
         if now.astimezone(EASTERN).date()<OPENING or game_day<OPENING:problems.append('opening-night hold')
         if game_day!=now.astimezone(EASTERN).date() or kickoff<=now:problems.append('game-day hold')
-        if not timedelta(0)<=now-quoted<=timedelta(hours=4) or quoted>=kickoff:problems.append('price freshness hold')
+        # A sourced delayed send retains the immutable original quote clock,
+        # while nba_reviewed_props.refusal(..., send_recheck=True) separately
+        # requires a fresh current paired quote at the same line and no worse
+        # price.  Do not let the old publication clock contradict that newer
+        # release evidence.
+        sourced_recheck = (sourced_send_recheck and offer.get('selectionMethod') ==
+                            'sourced-nba-primary-prop-v1')
+        if ((not sourced_recheck and not timedelta(0) <= now-quoted <= timedelta(hours=4))
+                or quoted >= kickoff):
+            problems.append('price freshness hold')
         if offer.get('league')!='NBA' or offer.get('seasonType') not in (2,'regular-season'):problems.append('NBA regular-season only')
         if nba_pick_policy.active(now) and not offer.get('eventId'):problems.append('verified game identity required')
         if offer.get('marketType') not in ('total','spread','moneyline','player') or offer.get('book')!='DraftKings':problems.append('market/book hold')

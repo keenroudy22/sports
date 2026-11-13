@@ -3939,9 +3939,14 @@ def retry_typefully_basketball(now, book, settings):
             continue
         source = nba_trial_runtime if is_nba else cbb_picks
         play = next(row for row in source.public_rows() if row['id'] == guid)
-        expires = min(gates.when(play['kickoff'] if is_nba else play['game']['kickoff']) - timedelta(minutes=15),
-                      gates.when(play['retrievedAt'] if is_nba else play['quote']['checkedAt'])
-                      + timedelta(hours=2 if is_nba else 1))
+        kickoff = gates.when(play['kickoff'] if is_nba else play['game']['kickoff'])
+        # reserve_nba_pick/current_match just proved a fresh current paired
+        # quote for a sourced delayed send.  The stored play keeps its original
+        # immutable retrievedAt, so that old clock must not expire the immediate
+        # Typefully handoff after the fresh recheck.
+        expires = (kickoff - timedelta(minutes=15) if is_nba else
+                   min(kickoff - timedelta(minutes=15),
+                       gates.when(play['quote']['checkedAt']) + timedelta(hours=1)))
         if typefully_backup.deliver(entry, book, settings, now, x_post.save_log,
                                    text=entry['queuedText'], expires=expires):
             break

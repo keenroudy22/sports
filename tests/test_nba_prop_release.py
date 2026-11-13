@@ -237,6 +237,14 @@ class PropReleaseTests(unittest.TestCase):
   self.assertNotIn('sentAt',entry)
   web.confirm_sent(entry,observed_text=entry['queuedText'],link='https://x.com/keenkooks/status/123',sent_at=boxscores.stamp(NOW+timedelta(minutes=16)),now=NOW+timedelta(minutes=17))
   self.assertEqual(entry['webDelivery']['state'],'sent');self.assertEqual(entry['discord']['messageId'],'original-discord')
+ def test_immediate_backup_validation_uses_fresh_recheck_not_expired_plan_clock(self):
+  import buffer_web as web,buffer_post as bp
+  offer,plans,entry=self.web_fixture();book={'posts':[entry]}
+  offer['retrievedAt']=boxscores.stamp(NOW-timedelta(hours=5))
+  plans=[(plans[0][0],plans[0][1],plans[0][2],NOW-timedelta(minutes=5),plans[0][4])]
+  with patch.object(bp,'rate_backoff',return_value=None),patch.object(rt,'public_rows',return_value=[offer]),patch.object(rt,'review_ready',return_value=True),patch.object(rt,'current_match',return_value=True),patch.object(rt,'social_plans',return_value=plans),patch.object(bp,'live_card_url',return_value='https://keenroudy.com/sports/data/cards/'+offer['id'].lower()+'.png'),patch.object(bp,'ticket_art_live',return_value=True),patch.object(bp,'plain_art_live',return_value=True),patch.object(rt,'reserve_delivery') as intent:
+   self.assertIs(web.reserve_nba_pick(offer['id'],book,NOW,validate_only=True),entry)
+  intent.assert_not_called();self.assertNotIn('webDelivery',entry)
  def test_attended_nba_rejects_unproven_changed_stale_or_ambiguous_attempts(self):
   import buffer_web as web,buffer_post as bp
   offer,plans,base=self.web_fixture()

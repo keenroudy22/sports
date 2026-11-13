@@ -204,8 +204,14 @@ def reserve_nba_pick(guid, log_book, now, *, opener=None, validate_only=False):
     web_slots=sum(1 for e in others['posts'] if not e.get('bufferPostId')
                   and not any(e.get(k) for k in ('sentAt','cancelledAt','deletedAt','error'))
                   and (e.get('webDelivery') or {}).get('state') in ('reserved','scheduled'))
-    if (due<=now or due>=min(gates.when(play['kickoff'])-timedelta(minutes=15),
-                            gates.when(play['retrievedAt'])+timedelta(hours=2))
+    expiry = min(gates.when(play['kickoff'])-timedelta(minutes=15),
+                 # Typefully validation is an immediate attended backup after
+                 # a fresh sourced recheck; its current quote clock is enforced
+                 # by nba.current_match rather than the immutable original.
+                 (gates.when(play['kickoff']) if validate_only
+                  else gates.when(play['retrievedAt'])+timedelta(hours=2)))
+    release_time = now if validate_only else due
+    if ((not validate_only and due<=now) or release_time>=expiry
             or bp.day_count(others,now.astimezone(gates.EASTERN).date())>=bp.MAX_PER_DAY
             or bp.pending_scheduled(others,now)+web_slots>=bp.BUFFER_NORMAL_LIMIT):
         raise WebHold('No current NBA release capacity or quote window')
