@@ -49,7 +49,11 @@ def refusal(play, now, *, root=nba_capture.STORE, current=None, send_recheck=Fal
         if send_recheck and not at<=boxscores.instant(play['publishedAt'])<=now:
             return 'Original reviewed publication clock required'
         kick = boxscores.instant(play['kickoff'])
-        if (not timedelta(0) <= now-at <= timedelta(hours=1)
+        # Initial admission needs a recent human review. A delayed send keeps
+        # that immutable original review and proves the current exact price,
+        # role and official availability again below. A deployment delay must
+        # not make an unchanged original permanently impossible to deliver.
+        if ((not send_recheck and not timedelta(0) <= now-at <= timedelta(hours=1))
                 or kick <= now+timedelta(minutes=15)
                 or kick.astimezone(ZoneInfo('America/New_York')).date() != now.astimezone(ZoneInfo('America/New_York')).date()):
             return 'Current-day review or release window expired'
@@ -75,7 +79,8 @@ def refusal(play, now, *, root=nba_capture.STORE, current=None, send_recheck=Fal
         if host != 'draftkings.com' and not host.endswith('.draftkings.com'):
             return 'DraftKings quote source required'
         seen = boxscores.instant(quote['checkedAt'])
-        if not timedelta(0) <= now-seen <= timedelta(hours=1) or seen > at:
+        if ((not send_recheck and not timedelta(0) <= now-seen <= timedelta(hours=1))
+                or seen > at):
             return 'Visible quote needs renewal'
         for key in ('athleteId', 'stat', 'line', 'direction', 'odds', 'oppositeOdds'):
             if quote.get(key) != play.get(key):
