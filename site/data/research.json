@@ -61744,5 +61744,205 @@
         "publishedAt": "2026-11-12T11:58:57Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-12T23:51:46Z",
+    "targetWeek": 11,
+    "summary": "Research update for Nov 12: Nothing to settle. Closed 1: Memphis at South Florida over 50.5. Nothing published. Screened and passed on 15: JJ Garner UNDER 63.5 rushing yards (one_book); Memphis at South Florida over 50.5 (not_duplicate); Steven Blanco UNDER 54.5 rushing yards (one_book); Lunch Winfield UNDER 63.5 rushing yards (one_book); Nic Trujillo OVER 29.5 receiving yards (one_book); Jermane Hayes UNDER 44.5 receiving yards (one_book); Aidan Armenta OVER 145.5 passing yards (one_book); Lunch Winfield UNDER 191.5 passing yards (one_book); and 7 more. odds_api.py: CFB: skipped (8 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent) sharp_odds.py: sharp: 3 records appended",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "expired",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 50.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401862824"
+        ],
+        "book": "ESPN BET",
+        "odds": -105,
+        "projection": 53.3,
+        "edge": "Price-checked chance 52.5% against the exact two-sided price; 51.2% needed at -105: +1.3 percentage points.",
+        "cutoff": "OVER 50.5 at -105 or better; off the card at 52+, or at -120 or worse at 50.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-07T11:30:34Z",
+        "quotedAt": "2026-11-12T11:45:06Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-12T13:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.569,
+          "chance": 0.525,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.512,
+          "edgePoints": 1.3,
+          "evPerUnit": 0.025,
+          "snapshotAt": "2026-11-07T11:30:34Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-11-12T11:48:41Z",
+          "fairChance": 0.489,
+          "anchoredChance": 0.525,
+          "gap": 3.6,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Memphis Tigers at South Florida Bulls",
+        "title": "Memphis at South Florida over 50.5",
+        "id": "CFB-2026-W11-mem-usf-over-50-5-espnbet",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862824",
+          "https://gotigersgo.com/news/2026/11/11/football-tigers-set-for-thursday-night-matchup-at-south-florida",
+          "https://gousfbulls.com/news/2026/11/10/football-south-florida-readies-for-thursday-night-contest-vs-memphis"
+        ],
+        "why": "Model lean, our number only. We have the total at 53.3; the book is at 50.5. That makes the over 52.5%, and -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Memphis lists Marcus Stokes as its quarterback for the South Florida game. Checked before publishing: Coach Brian Hartline did not disclose the status of South Florida's leading rusher D.J. Crowther after he was injured in the fourth quarter at East Carolina. The market: The spread opened +6 and is +3.5 at DraftKings, a move of 2.5 toward the home. The total opened 49.5 and is 50.5 at DraftKings, 1 toward the over. Our spread is 3.7 points off, bigger than 55% of our past gaps. Gaps this size went 818-808 against the close in 3584 games. Our total is 2.8 points off, bigger than 51% of our past gaps. Gaps this size went 944-831 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: South Florida allows 15.1 points per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Memphis averages 37.6 points and 513.3 yards of total offense per game."
+          ],
+          "cautions": [
+            "South Florida allows 15.1 points per game."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 50.5. I say 53.3.",
+              "numbers": {
+                "projection": 53.3,
+                "line": 50.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-07T11:30:34Z"
+            },
+            {
+              "text": "Memphis averages 37.6 points and 513.3 yards of total offense per game.",
+              "numbers": {},
+              "source": "https://gotigersgo.com/news/2026/11/11/football-tigers-set-for-thursday-night-matchup-at-south-florida",
+              "time": "2026-11-12T11:48:41Z"
+            },
+            {
+              "text": "Memphis averages 37.6 points and 513.3 yards of total offense per game.",
+              "numbers": {},
+              "source": "https://gotigersgo.com/news/2026/11/11/football-tigers-set-for-thursday-night-matchup-at-south-florida",
+              "time": "2026-11-12T11:48:41Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "South Florida allows 15.1 points per game.",
+              "numbers": {},
+              "source": "https://gotigersgo.com/news/2026/11/11/football-tigers-set-for-thursday-night-matchup-at-south-florida",
+              "time": "2026-11-12T11:48:41Z"
+            },
+            {
+              "text": "South Florida allows 15.1 points per game.",
+              "numbers": {},
+              "source": "https://gotigersgo.com/news/2026/11/11/football-tigers-set-for-thursday-night-matchup-at-south-florida",
+              "time": "2026-11-12T11:48:41Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 73,
+            "windMph": 5,
+            "windDirection": "W",
+            "precipProb": 4,
+            "periodStart": "2026-11-12T20:00:00-05:00",
+            "issuedAt": "2026-11-11T20:02:25+00:00",
+            "source": "https://api.weather.gov/gridpoints/TBW/71,97/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 49.5,
+                  "price": -110,
+                  "time": "2026-11-08T11:42:31Z"
+                },
+                "now": {
+                  "line": 50.5,
+                  "price": -108,
+                  "time": "2026-11-12T11:45:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 48.5,
+                  "price": -110,
+                  "time": "2026-11-08T11:42:31Z"
+                },
+                "now": {
+                  "line": 50.5,
+                  "price": -110,
+                  "time": "2026-11-12T11:45:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 50.5,
+              "price": -105,
+              "time": "2026-11-12T11:45:06Z"
+            }
+          },
+          "ours": {
+            "projection": 53.3,
+            "line": 50.5,
+            "market": "total",
+            "text": "Book says 50.5. I say 53.3.",
+            "snapshotAt": "2026-11-07T11:30:34Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://gotigersgo.com/news/2026/11/11/football-tigers-set-for-thursday-night-matchup-at-south-florida",
+              "time": "2026-11-12T11:48:41Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/TBW/71,97/forecast/hourly",
+              "time": "2026-11-11T20:02:25+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401862824",
+              "time": "2026-11-12T11:48:41Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://gousfbulls.com/news/2026/11/10/football-south-florida-readies-for-thursday-night-contest-vs-memphis",
+              "time": "2026-11-12T11:48:41Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-12T11:58:57Z",
+        "entryNote": "Off the card: price moved 15 cents against, from -105 to -120. Published cutoff: OVER 50.5 at -105 or better; off the card at 52+, or at -120 or worse at 50.5. Stays in the record at 50.5 and -105 and is graded as posted."
+      }
+    ]
   }
 ]
