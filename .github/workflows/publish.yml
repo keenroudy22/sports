@@ -28,20 +28,20 @@ on:
     # Weekend mornings, so the plays feed opens its 9:00 window before the noon kickoffs
     - cron: '7 9,10 * * 0,6'
       timezone: America/New_York
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+permissions: {}
 concurrency:
-  # Finish the active publish before starting the newest pending push. A full
-  # artifact build can outlast the five-minute record writer; cancelling it at
-  # Deploy leaves the public site stale indefinitely. GitHub retains the newest
-  # pending run, and each run checks out current main when it actually starts.
+  # A capture can run alongside Pages. Every Pages deployment uses the push
+  # group and checks out main after that group starts it. Keep the active
+  # publisher running and coalesce pending builds into the newest request.
   group: ${{ (github.event_name == 'push' || inputs.publish_only) && 'football-pages-push' || 'football-pages-refresh' }}
   cancel-in-progress: false
 jobs:
   push-publish:
     if: github.event_name == 'push' || inputs.publish_only
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -116,10 +116,11 @@ jobs:
 
   publish:
     if: github.event_name != 'push' && !inputs.publish_only
+    permissions:
+      contents: write
+      actions: write
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    environment: github-pages
     steps:
       - uses: actions/checkout@v6
         with:
@@ -229,23 +230,6 @@ jobs:
         run: python scripts/scoreboard.py
       - name: Compile sourced line catalog
         run: python scripts/market_lines.py
-      - name: Build the page payloads (site/data/app, not committed)
-        run: python scripts/build_site.py
-      - name: Enforce phone-first payload budgets
-        run: python scripts/payload_budget.py
-      - name: Reconcile the public record with official publications
-        run: python scripts/record_audit.py --today site/data/app/record.json
-      - name: Reconcile the separate NBA Trial record
-        run: python scripts/nba_trial_audit.py
-      - name: Restore immutable card renders
-        uses: actions/cache@v4
-        with:
-          path: site/data/cards
-          key: kookn-cards-${{ runner.os }}-${{ hashFiles('research/*.json', 'data/nba-trial/*.jsonl') }}
-          restore-keys: |
-            kookn-cards-${{ runner.os }}-
-      - name: Build the plays feed and its cards (site/data/feed.xml and cards, not committed)
-        run: python scripts/feed.py
       - name: Preserve the public record
         run: |
           python scripts/integrity.py --verify-base HEAD
@@ -255,7 +239,6 @@ jobs:
           git add site/data tests/integrity-ledger.json data/sport-box data/boxscores data/nflverse data/forecasts data/props data/odds data/prop-odds data/model data/venues.json data/venues-review.json data/weather
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh schedules, finals and pregame forecasts'
-            artifact_base=$(git rev-parse HEAD)
             # The desk on the owner's machine pushes too. A rejected push is rebased, and a stop on the
             # price stores (both sides captured) is resolved by scripts/merge_store.py; never forced.
             pushed=
@@ -268,18 +251,11 @@ jobs:
               fi
             done
             [ -n "$pushed" ] || { echo 'push rejected three times'; exit 1; }
-            # A successful rebase can bring in new code/research after the first
-            # build. Rebuild from merged inputs, and repeat suites if source changed.
-            python scripts/hosted_rebase_verify.py "$artifact_base"
           fi
-      - name: Verify the public artifact boundary
-        run: python scripts/publication_guard.py
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: site
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
-        with:
-          timeout: '1200000'
+      - name: Queue Pages publish from committed main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        # The repository token's push does not trigger workflows. An explicit
+        # publish-only dispatch joins the same queue as ordinary desk pushes.
+        run: gh workflow run publish.yml --ref main -f publish_only=true

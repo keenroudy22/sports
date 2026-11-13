@@ -35,10 +35,3 @@ class HostedRebaseTests(unittest.TestCase):
                 verify.verify('a'*40,folder,lambda *a,**k:'scripts/run.py\n',run)
             self.assertEqual(len(calls),1)
         with self.assertRaises(ValueError):verify.verify('--bad-ref')
-
-    def test_workflow_revalidates_after_push_and_before_publication_guard(self):
-        text=(Path(__file__).resolve().parents[1]/'.github/workflows/publish.yml').read_text()
-        section=text[text.index('- name: Preserve the public record'):]
-        self.assertLess(section.index('artifact_base=$(git rev-parse HEAD)'),section.index('for attempt'))
-        self.assertLess(section.index('[ -n "$pushed" ]'),section.index('python scripts/hosted_rebase_verify.py'))
-        self.assertLess(section.index('python scripts/hosted_rebase_verify.py'),section.index('- name: Verify the public artifact boundary'))

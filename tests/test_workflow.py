@@ -37,6 +37,20 @@ class WorkflowTests(unittest.TestCase):
         self.assertIn("if: github.event_name == 'push' && github.event.before !=", fast)
         self.assertIn('tests.test_publication_supervisor', fast)
 
+    def test_only_the_serialized_current_main_lane_can_publish_pages(self):
+        fast, refresh = WORKFLOW.split('  publish:', 1)
+        self.assertEqual(WORKFLOW.count('uses: actions/deploy-pages@'), 1)
+        self.assertEqual(WORKFLOW.count('uses: actions/upload-pages-artifact@'), 1)
+        self.assertIn('pages: write', fast)
+        self.assertNotIn('pages: write', refresh)
+        self.assertIn('environment: github-pages', refresh)
+        self.assertIn('actions: write', refresh)
+        self.assertIn('GH_TOKEN: ${{ github.token }}', refresh)
+        self.assertIn("(github.event_name == 'push' || inputs.publish_only) && 'football-pages-push'", fast)
+        self.assertLess(refresh.index('python scripts/integrity.py --verify-base HEAD'), refresh.index('git push'))
+        self.assertLess(refresh.index('[ -n "$pushed" ]'), refresh.index('gh workflow run publish.yml --ref main -f publish_only=true'))
+        self.assertNotIn('if:', refresh.split('      - name: Queue Pages publish from committed main', 1)[1])
+
     def test_ticket_push_does_not_wait_for_new_capture(self):
         capture = ('refresh', 'sports_refresh', 'boxscores', 'research_context',
                    'depth_charts', 'forecast', 'venues', 'weather', 'prop_lines',
@@ -46,7 +60,6 @@ class WorkflowTests(unittest.TestCase):
                 self.assertIn("if: github.event_name != 'push'", step)
         self.assertIn('python -m unittest discover -s tests', WORKFLOW)
         self.assertIn('python scripts/publication_guard.py', WORKFLOW)
-        self.assertIn('python scripts/hosted_rebase_verify.py', WORKFLOW)
 
     def test_every_publish_materializes_reports_before_reading_them(self):
         steps = WORKFLOW.split('      - name: ')
