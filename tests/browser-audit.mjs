@@ -22,6 +22,12 @@ const until = async (expression, description) => {
   }
   throw new Error(`${activeRoute}: ${description}`);
 };
+const textScale = Number(process.env.AUDIT_TEXT_SCALE) || 1;
+const scaleText = () => textScale === 1 ? null : ev(`document.querySelectorAll('#view *').forEach(element => {
+  if (element.children.length || element.dataset.auditTextScaled) return;
+  element.style.fontSize = (parseFloat(getComputedStyle(element).fontSize) * ${textScale}) + 'px';
+  element.dataset.auditTextScaled = '1';
+})`);
 const chartWindow = async (size, expectedLine) => {
   const control = JSON.stringify(`[data-set="pwin:last${size}"]`);
   await until(`!!document.querySelector(${control})`, `missing Last ${size} control`);
@@ -32,13 +38,18 @@ const chartWindow = async (size, expectedLine) => {
   })()`);
   await until(`document.querySelector(${control})?.getAttribute('aria-pressed') === 'true'
     && !!document.querySelector('.player-board .kt-chart')`, `Last ${size} did not show a chart`);
+  await scaleText();
   return await ev(`(() => {
     const chart = document.querySelector('.player-board .kt-chart');
     const rect = chart.getBoundingClientRect();
     const bars = [...chart.querySelectorAll('.kt-bars > .col')];
     const labels = [...chart.querySelectorAll('.kt-x > span')];
     const within = ({left,right,width}) => width > 0 && left >= Math.max(0,rect.left) - 1 && right <= Math.min(innerWidth,rect.right) + 1;
-    const fits = [...bars,...labels].every(element => within(element.getBoundingClientRect()));
+    const fits = [...bars,...labels].every(element => within(element.getBoundingClientRect())) && labels.every(label => {
+      const range = document.createRange();
+      range.selectNodeContents(label);
+      return within(range.getBoundingClientRect());
+    });
     const line = chart.querySelector('.line span')?.textContent.trim() ?? null;
     const expectedLine = ${JSON.stringify(expectedLine)};
     return {size:${size},bars:bars.length,labels:labels.length,line,
@@ -64,7 +75,7 @@ try {
       await pause(250);
       await ev('document.fonts.ready.then(()=>true)');
       if(process.env.AUDIT_EXPAND) await ev(`document.querySelectorAll('details').forEach(e=>e.open=true)`);
-      if(process.env.AUDIT_TEXT_SCALE) await ev(`document.querySelectorAll('#view *').forEach(e=>{if(!e.children.length) e.style.fontSize=(parseFloat(getComputedStyle(e).fontSize)*${Number(process.env.AUDIT_TEXT_SCALE)})+'px'})`);
+      await scaleText();
       await pause(100);
       const result = await ev(`(() => {
         // These containers scroll horizontally by design; document-level overflow still fails below.
