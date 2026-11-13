@@ -101,7 +101,11 @@ def refusal(play, now, *, root=nba_capture.STORE, current=None, send_recheck=Fal
         role = r.get('currentRole') or {}
         if role.get('games', 0) < 3 or type(role.get('medianMinutes')) not in (int, float) or role['medianMinutes'] < 15:
             return 'Three current role observations and meaningful minutes required'
-        if role.get('receivedAt') and at < boxscores.instant(role['receivedAt']):
+        # Initial admission must follow the latest stored role observation. A
+        # delayed send intentionally refreshes that role below; a newer fresh
+        # observation is evidence for the recheck, not a reason to invalidate
+        # the immutable original human review.
+        if role.get('receivedAt') and not send_recheck and at < boxscores.instant(role['receivedAt']):
             return 'Review must follow the latest observed role'
         if not nba_player_props.fresh(r.get('sourceAt'), now, 1):
             return 'Stored exact price needs renewal'

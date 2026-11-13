@@ -88,7 +88,8 @@ class ReviewedNBAProps(unittest.TestCase):
     def test_delayed_send_uses_fresh_current_evidence_without_rewriting_original_review(self):
         later=NOW+timedelta(hours=2)
         self.play['publishedAt']='2026-11-10T16:51:00Z'
-        current={**self.current,'sourceAt':'2026-11-10T18:55:00Z'}
+        current={**self.current,'sourceAt':'2026-11-10T18:55:00Z',
+                 'currentRole':{**self.current['currentRole'],'receivedAt':'2026-11-10T18:54:00Z'}}
         self.assertIsNone(n.refusal(self.play,later,root=self.root,current=[current],send_recheck=True))
         self.assertIsNotNone(n.refusal(self.play,later,root=self.root,current=[current],send_recheck=False))
 
