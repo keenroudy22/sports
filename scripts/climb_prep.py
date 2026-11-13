@@ -140,9 +140,14 @@ def prepare(ctx, now, day=None):
                 projection=desk['projection'] if desk else None,holds=holds)
             quotes.append(row)
             if ladder.LEG_PRICES[0]<=price<=ladder.LEG_PRICES[1]:
+                main_spread = ((((ctx.odds.get(game['id']) or {}).get('books') or {}).get(book) or {})
+                               .get('spread') or {}).get('home')
+                main_line = ((main_spread if side == 'home' else -main_spread)
+                             if isinstance(main_spread, (int, float)) else None)
                 review_legs.append(dict(team=game[side]['short'],line=line,odds=price,
                     book=ladder.BOOKS.get(book),observedAt=at,gameId=game['id'],league=game['league'],
                     kickoff=game['kickoff'],title=f"{game[side]['short']} {pricing.signed(line)}",alternate=True,
+                    marketType='spread',direction=side,mainLine=main_line,marketWindow='Full game',
                     holds=['Unreviewed price option; current matchup/news research and exact final ticket price required']+
                           (['Quote needs refresh'] if 'Quote needs refresh' in holds else [])))
             if desk and desk['rawChance']>=ladder.MANUAL_RAW_CHANCE:
