@@ -1,3 +1,32 @@
+### November 13 basketball popular thresholds — verified live
+
+NBA research now includes a scan-first Popular thresholds board grouped by
+matchup and team. It surfaces common points, rebounds, assists and three-point
+milestones only after a player has at least five current-season appearances,
+recent activity and a recent or projected role of at least 12 minutes. Each row
+shows exact L5, L10 and season hit counts, recent minutes, the Kook'n projection
+and a matching captured book line and price when one is actually available.
+Milestones without a verified price say so plainly. Green identifies the
+historical milestone, not a pick, and every surface says historical hit rate is
+not a probability.
+
+The board keeps the first matchup open and the remaining matchups collapsed so
+198 current NBA rows do not become an unreadable wall. Every milestone links to
+the existing player research page at the exact equivalent half-line: for
+example, Jalen Brunson 15+ points opens Points at 14.5. CBB uses the same route
+and eligibility rules; the current slate has no qualifying five-game samples,
+so it renders a compact, explicit empty state rather than sparse or invented
+data.
+
+Release `c36ff5acb7f76fb651a5cfa23177105b02e53f29` passed 2,251
+Python tests (2 skipped), 337 Node/interface tests, clean export, a 582-page
+build, zero-issue 177-pick and NBA record audits, the zero-issue 965-file public
+guard, current asset/SVG checks and stored-input rehearsal. Hosted run
+`43448176378` succeeded on the exact tested commit. Live desktop and phone-width
+checks confirmed nine NBA matchups, one initially open matchup, no page overflow
+and no console errors. The live Brunson deep link rendered the correct player,
+stat and 14.5 line with both charts and the official game log intact.
+
 ### November 13 Today and matchup hierarchy cleanup — verified live
 
 Today now gives an empty official-pick state one compact status strip instead
