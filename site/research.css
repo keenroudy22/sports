@@ -46,6 +46,7 @@
 .edge-sports::-webkit-scrollbar { display: none; }
 .edge-sports a { flex: none; min-height: 38px; padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--felt); color: var(--dim); font-size: 13px; font-weight: 700; text-decoration: none; }
 .edge-sports a:hover, .edge-sports a[aria-current="page"] { border-color: var(--kookd); background: var(--kookd-soft); color: #70e9aa; }
+@media (max-width:520px) { .edge-sports { flex-wrap: wrap; overflow: visible; } .edge-sports a { flex: 1 1 auto; text-align: center; } }
 @media (max-width:520px) { .research-paths, .kt-number-grid { grid-template-columns: 1fr; } .research-paths a { min-height: 0; } .kt-number-grid > span { flex-direction: row; align-items: baseline; justify-content: space-between; } .kt-player-numbers { grid-template-columns: repeat(2,minmax(0,1fr)); } .kt-player-numbers > span { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; } }
 .trend-summary { margin-bottom: 0; }
 .trend-method { margin: 0 0 10px; }

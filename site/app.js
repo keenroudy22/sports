@@ -2111,10 +2111,10 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-1ca9dabda5f1';
+  const MORE_ASSET = 'app-more.js?v=sha256-77d241e3d2ee';
   const GAMES_ASSET = 'app-games.js?v=sha256-5919d358305b';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
-  const RESEARCH_CSS = 'research.css?v=sha256-ef142ba6eef5';
+  const RESEARCH_CSS = 'research.css?v=sha256-c2a4a31d6da5';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
       const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = RESEARCH_CSS; link.onload = ok;

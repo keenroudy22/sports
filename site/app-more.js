@@ -81,7 +81,26 @@
 .player-insight-note { margin-top: 10px; color: var(--dim); font: 500 12px/1.4 var(--font-body); }
 .player-insight-note b { color: var(--chalk); font-weight: 600; }
 @media (min-width: 680px) { .player-insights { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-@media (max-width: 520px) { .player-board { padding: 14px; } .player-board-head h2 { font-size: 22px; } .player-line-entry { grid-template-columns: 1fr; } .player-line-entry p { grid-column: 1; } .player-board .kt-chart { margin-left: -4px; margin-right: -4px; padding-left: 8px; padding-right: 8px; } .line-lab, .player-insight { padding: 14px 12px 12px; } .line-lab-head h2 { font-size: 20px; } .line-lab-table th, .line-lab-table td { padding-left: 3px; padding-right: 3px; } .line-lab-table th:first-child, .line-lab-table td:first-child { width: 31%; } .player-window-row, .player-compare-row { grid-template-columns: 50px minmax(0,1fr) auto; gap: 7px; } }
+@media (max-width: 520px) {
+  .player-board { padding: 14px; }
+  .player-board-head h2 { font-size: 22px; }
+  .player-line-entry { grid-template-columns: 1fr; }
+  .player-line-entry p { grid-column: 1; }
+  .player-board .kt-chart { margin-left: -4px; margin-right: -4px; padding-left: 8px; padding-right: 8px; }
+  /* Bars and their opponent/date labels must use the same eight fluid columns.
+     The old 52px label minimum escaped 320–430px cards and looked cut off. */
+  .player-board .kt-chart .kt-bars,
+  .player-board .kt-chart .kt-x { width: 100%; grid-auto-columns: minmax(0,1fr); gap: 4px; }
+  .player-board .kt-chart .kt-x { overflow: visible; font-size: 9px; line-height: 1.15; }
+  .player-board .kt-chart .kt-x span { min-width: 0; overflow: visible; overflow-wrap: anywhere; }
+  .player-board .kt-chart .kt-x em { font-size: 16px; }
+  .player-board .kt-chart .kt-x b { font-size: 10px; line-height: 1.05; letter-spacing: 0; }
+  .line-lab, .player-insight { padding: 14px 12px 12px; }
+  .line-lab-head h2 { font-size: 20px; }
+  .line-lab-table th, .line-lab-table td { padding-left: 3px; padding-right: 3px; }
+  .line-lab-table th:first-child, .line-lab-table td:first-child { width: 31%; }
+  .player-window-row, .player-compare-row { grid-template-columns: 50px minmax(0,1fr) auto; gap: 7px; }
+}
 `;
   if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-more-css'))) {
     const style = document.createElement('style'); style.id = 'kr-more-css'; style.textContent = MORE_CSS + PLAYER_CHART_CSS; document.head.appendChild(style);
