@@ -2265,13 +2265,15 @@ def build(now=None):
                                               ticket_teams))
     import ticket_climb_route  # ladder/gates use build_site constants; import after this module is initialized
     route_state, route_games = ticket_climb_route.from_stores(ticket_climb_route.gates.Stores(), now)
+    cbb_public = cbb_record_picks(now)
+    nba_public = nba_record_picks(now)
     write(OUT / 'record.json', {'generatedAt': stamp(now),
                                 'picks': [{**pick, 'card': record_card(pick)} for pick in picks],
                                 # Basketball has immutable sport ledgers, but Results is the all-sports public
                                 # truth. Keep the football array byte-compatible for record_audit and publish only
                                 # rows with an observed Discord or X receipt in separately audited adapters.
-                                'cbbPicks': cbb_record_picks(now),
-                                'nbaPicks': nba_record_picks(now),
+                                'cbbPicks': cbb_public,
+                                'nbaPicks': nba_public,
                                 'communityPicks': community_records,
                                 'climbRoute': ticket_climb_route.public_route(route_state, now, route_games)})
     generated = stamp(now)
@@ -2308,7 +2310,7 @@ def build(now=None):
     import cbb_today
     cbb = cbb_today.build(now)
     import cbb_picks
-    cbb['picks'] = cbb_picks.payload()
+    cbb['picks'] = cbb_picks.payload(delivered=cbb_public)
     cbb_sheets, cbb['sheets'] = cbb_today.exports(cbb)
     write(OUT / 'cbb.json', cbb)
     for filename, svg in cbb_sheets.items():
@@ -2317,7 +2319,7 @@ def build(now=None):
     nba_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('nba-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
     nba_overview, nba_props = nba_today.public_payloads(dict(
-        nba_today.build(now, boxes=nba_boxes), morningBrief=morning_brief.current(now)))
+        nba_today.build(now, boxes=nba_boxes, delivered=nba_public), morningBrief=morning_brief.current(now)))
     write(OUT / 'nba.json', nba_overview)
     write(OUT / 'nba-props.json', nba_props)
     nba_index, nba_shards, nba_season = build_nba_players(nba_boxes)

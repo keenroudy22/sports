@@ -69,8 +69,11 @@ def matchup_quotes(quote, now):
     return out
 
 
-def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
+def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, delivered=None):
     now=now or datetime.now(timezone.utc); root=Path(root)
+    if delivered is None:
+        from build_site import nba_record_picks
+        delivered = nba_record_picks(now)
     slate=read_json(root/'slate.json',{})
     if boxes is None:
         boxes=list({r['eventId']:r for p in BOX.glob('nba-*.jsonl') for r in boxscores.read_store(p)}.values())
@@ -165,11 +168,12 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
         if not boxscores.instant(row['kickoff'])>now: continue
         prep.append({'name':recent[-1]['name'],'stat':stat,'statName':STAT_NAMES[stat],'line':row['line'],'over':row['over'],
                      'book':row['book'],'hits':hits,'games':5,'label':'Research','kickoff':row['kickoff']})
-    trial_rows=[r for p in nba_trial.STORE.glob('*.jsonl') for r in boxscores.read_store(p)]
-    all_trial_plays=[p for p in nba_trial_runtime.public_rows() if boxscores.instant(p['publishedAt'])<=now]
-    focused=nba_trial_runtime.current_plays()
-    visible_ids={p['id'] for p in all_trial_plays}
-    focused=[p for p in focused if p['id'] in visible_ids]
+    receipts = {row['id']: row for row in delivered}
+    trial_rows = [row for row in nba_trial_runtime.rows() if row['id'] in receipts
+                  and (row['type'] != 'settle' or boxscores.instant(row['settledAt']) <= now)]
+    all_trial_plays = [{**play, **{key: receipts[play['id']].get(key) for key in ('result', 'actual')}}
+                      for play in nba_trial_runtime.public_rows() if play['id'] in receipts]
+    focused = nba_trial_runtime.current_plays(plays=all_trial_plays)
     focus_ids={p['id'] for p in focused}
     trial_record=nba_trial.snapshot([r for r in trial_rows if r.get('id') in focus_ids])
     plays=sorted(focused,key=lambda p:p['publishedAt'])[-20:]

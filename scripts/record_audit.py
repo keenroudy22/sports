@@ -67,6 +67,14 @@ def audit_all_sports(public):
     return ['duplicate play id across all-sports Results ledgers'] if len(ids) != len(set(ids)) else []
 
 
+def audit_cbb_today(public, today):
+    fields = ('line', 'odds', 'book', 'riskUnits', 'result', 'actual', 'settledAt')
+    def terms(rows):
+        return sorted((row['id'], *(row.get(key) for key in fields)) for row in rows)
+    return [] if terms(public['cbbPicks']) == terms(today['picks']['plays']) else [
+        'CBB Today and Results differ on delivered picks or their terms']
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--research', type=Path, default=ROOT / 'site' / 'data' / 'research.json')
@@ -77,6 +85,9 @@ def main(argv=None):
     issues.extend(audit_all_sports(public))
     issues.extend(audit_cbb_public(public, build_site.cbb_record_picks()))
     issues.extend(audit_nba_public(public, build_site.nba_record_picks()))
+    cbb_today = args.today.with_name('cbb.json')
+    if cbb_today.is_file():
+        issues.extend(audit_cbb_today(public, load(cbb_today)))
     import community_record
     if public.get('communityPicks', []) != community_record.build(ROOT):
         issues.append('personal-ticket record differs from pregame receipts and append-only settlements')

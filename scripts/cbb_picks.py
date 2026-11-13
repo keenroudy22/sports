@@ -226,8 +226,10 @@ def grade(now,root=STORE,finals=None):
     return count
 
 
-def payload(root=STORE):
-    plays=public_rows(root)
+def payload(root=STORE, *, delivered):
+    receipts = {row['id']: row for row in delivered}
+    plays = [{**play, **{key: receipts[play['id']].get(key) for key in ('result', 'actual', 'settledAt')}}
+             for play in public_rows(root) if play['id'] in receipts]
     net=sum((100/-p['odds'] if p['odds']<0 else p['odds']/100) if p.get('result')=='win' else -1 if p.get('result')=='loss' else 0 for p in plays)
     public=[{k:p[k] for k in ('id','eventId','game','publishedAt','kickoff','marketType','direction','line','odds','oppositeOdds','book','riskUnits','series','result','actual','settledAt','resultSource') if k in p} | dict(reason=p['review']['why'],countercase=p['review']['countercase'],sources=[dict(url=f['url'],fact=f['fact']) for f in p['review']['sources']]) for p in plays]
     return dict(plays=public,win=sum(p.get('result')=='win' for p in plays),loss=sum(p.get('result')=='loss' for p in plays),

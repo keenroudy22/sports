@@ -578,8 +578,8 @@ def reserve_delivery(guid,now,root=nba_trial.STORE,cancelled=None):
  return True
 
 
-def current_plays(root=nba_trial.STORE):
- plays=public_rows(root)
+def current_plays(root=nba_trial.STORE, *, plays=None):
+ if plays is None:plays=public_rows(root)
  if not plays:return []
  latest=max(plays,key=lambda p:(p['season'],boxscores.instant(p['kickoff'])))
  return [p for p in plays if (p['season'],p['seasonType'])==(latest['season'],latest['seasonType'])]

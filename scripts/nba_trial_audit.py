@@ -6,7 +6,7 @@ import nba_trial
 import nba_trial_runtime as runtime
 
 
-def audit(payload,root=nba_trial.STORE):
+def audit(payload,root=nba_trial.STORE, *, delivered):
  issues=list(boxscores.verify(root));saved=runtime.rows(root)
  pub=[r for r in saved if r.get('type')=='publish'];ids=set();days={};events=set()
  for p in pub:
@@ -35,16 +35,23 @@ def audit(payload,root=nba_trial.STORE):
  for day,plays in days.items():
   limit=max(nba_trial.nba_pick_policy.daily_cap(boxscores.instant(p['publishedAt'])) for p in plays)
   if len(plays)>limit:issues.append('NBA daily pick cap exceeded')
- focus=runtime.current_plays(root);focusids={p['id'] for p in focus}
- expected=nba_trial.snapshot([r for r in saved if r.get('id') in focusids])
+ receipts={row['id']:row for row in delivered}
+ focus=runtime.current_plays(plays=[p for p in pub if p['id'] in receipts]);focusids={p['id'] for p in focus}
+ expected=nba_trial.snapshot([r for r in saved if r.get('id') in focusids
+                              and (r['type']!='settle' or r.get('settledAt')==receipts[r['id']].get('settledAt'))])
  actual=payload.get('trial',{}).get('record',{})
  for key in ('win','loss','push','graded','units'):
   if actual.get(key)!=expected[key]:issues.append('public NBA Trial '+key+' differs')
- visible={p['id'] for p in sorted(focus,key=lambda p:p['publishedAt'])[-20:]}
- if {p['id'] for p in payload.get('trial',{}).get('plays',[])}!=visible:issues.append('public NBA Trial IDs differ')
+ visible=[p['id'] for p in sorted(focus,key=lambda p:p['publishedAt'])[-20:]]
+ plays=payload.get('trial',{}).get('plays',[])
+ if sorted(p['id'] for p in plays)!=sorted(visible):issues.append('public NBA Trial IDs differ')
+ fields=('line','odds','book','riskUnits','result','actual')
+ if any(any(p.get(field)!=receipts[p['id']].get(field) for field in fields)
+        for p in plays if p['id'] in receipts):issues.append('NBA Today and Results pick terms differ')
  return {'publicationsChecked':len(pub),'issues':issues}
 
 
 if __name__=='__main__':
- path=Path(__file__).resolve().parents[1]/'site/data/app/nba.json'
- result=audit(json.loads(path.read_text()));print(json.dumps(result));raise SystemExit(bool(result['issues']))
+ folder=Path(__file__).resolve().parents[1]/'site/data/app'
+ delivered=json.loads((folder/'record.json').read_text())['nbaPicks']
+ result=audit(json.loads((folder/'nba.json').read_text()),delivered=delivered);print(json.dumps(result));raise SystemExit(bool(result['issues']))

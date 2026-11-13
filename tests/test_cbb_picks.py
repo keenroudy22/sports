@@ -94,17 +94,19 @@ class CBBPicksTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);p=fixture();self.assertEqual(cbb.admit(p,context(),NOW,root),1)
             with self.assertRaises(ValueError):cbb.admit(p,context(),NOW,root)
-            public=json.dumps(cbb.payload(root));self.assertNotIn('/private/',public)
+            self.assertEqual(cbb.payload(root,delivered=[])['plays'],[])
+            payload=lambda: cbb.payload(root,delivered=cbb.public_rows(root))
+            public=json.dumps(payload());self.assertNotIn('/private/',public)
             final=dict(eventId='123',type=2,season=2027,kickoff=p['game']['kickoff'],home={'id':'1'},away={'id':'2'},
                        homeScore=80,awayScore=75,source='https://www.espn.com/final',retrievedAt='2026-11-04T03:00:00Z')
             later=datetime(2026,11,4,4,tzinfo=timezone.utc)
             self.assertEqual(cbb.grade(later,root,[final]),1)
             self.assertEqual(cbb.grade(later,root,[final]),0)
-            self.assertEqual(cbb.payload(root)['loss'],1)
-            self.assertEqual(cbb.payload(root)['units'],-1)
+            self.assertEqual(payload()['loss'],1)
+            self.assertEqual(payload()['units'],-1)
             final['awayScore']=65
             self.assertEqual(cbb.grade(later,root,[final]),1)
-            self.assertEqual(cbb.payload(root)['win'],1)
+            self.assertEqual(payload()['win'],1)
             self.assertEqual(len([r for r in cbb.rows(root) if r['type']=='settle']),2)
             self.assertEqual(cbb.public_rows(root)[0]['odds'],-110)
 

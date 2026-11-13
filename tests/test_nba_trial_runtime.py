@@ -154,9 +154,10 @@ class TrialRuntimeTests(unittest.TestCase):
   nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')
   record=nt.snapshot(rt.rows(self.root))
   good={'trial':{'record':record,'plays':[{'id':play['id']}]}}
-  self.assertEqual(nba_trial_audit.audit(good,self.root)['issues'],[])
-  good['trial']['plays']=[];self.assertTrue(nba_trial_audit.audit(good,self.root)['issues'])
-  good['trial']['record']['units']=4;self.assertTrue(nba_trial_audit.audit(good,self.root)['issues'])
+  self.assertEqual(nba_trial_audit.audit(good,self.root,delivered=good['trial']['plays'])['issues'],[])
+  self.assertIn('public NBA Trial IDs differ',nba_trial_audit.audit(good,self.root,delivered=[])['issues'])
+  good['trial']['plays']=[];self.assertTrue(nba_trial_audit.audit(good,self.root,delivered=[{'id':play['id']}])['issues'])
+  good['trial']['record']['units']=4;self.assertTrue(nba_trial_audit.audit(good,self.root,delivered=[])['issues'])
  def test_regular_nba_audit_accepts_distinct_games_without_recounting_football(self):
   import nba_trial_audit
   plays=[]
@@ -165,11 +166,11 @@ class TrialRuntimeTests(unittest.TestCase):
        publishedAt='2026-10-28T19:00:00Z',kickoff='2026-10-28T23:00:00Z',
        riskUnits=.5,stakingPolicy=nt.staking.VERSION,game={'teams':{}}))
   nba_capture.append_changed(plays,self.root,lambda r:(r['type'],r['id']))
-  good={'trial':{'record':nt.snapshot(plays),'plays':[{'id':p['id']} for p in plays]}}
-  self.assertEqual(nba_trial_audit.audit(good,self.root)['issues'],[])
+  good={'trial':{'record':nt.snapshot(plays),'plays':plays}}
+  self.assertEqual(nba_trial_audit.audit(good,self.root,delivered=plays)['issues'],[])
   self.assertEqual((good['trial']['record']['graded'],good['trial']['record']['units']),(0,0))
   with patch.object(rt,'rows',return_value=[plays[0],dict(plays[1],eventId=plays[0]['eventId'])]):
-   self.assertIn('more than one NBA pick per game',nba_trial_audit.audit(good,self.root)['issues'])
+   self.assertIn('more than one NBA pick per game',nba_trial_audit.audit(good,self.root,delivered=plays)['issues'])
  def test_no_network_or_admission_before_opening(self):
   with patch.object(nba_capture,'step',side_effect=AssertionError('no call')):
    self.assertEqual(rt.admission(NOW-timedelta(days=11),root=self.root,review=self.review())['state'],'held')

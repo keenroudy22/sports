@@ -44,6 +44,16 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertEqual(data['trial']['note'],'NBA Trial is open. No play has been released yet.')
  def setUp(self):
   self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
+ def test_today_shows_only_receipt_backed_plays_and_grades(self):
+  play={'id':'delivered','season':2027,'seasonType':'regular-season','type':'publish',
+        'kickoff':boxscores.stamp(NOW+timedelta(hours=1)),'publishedAt':boxscores.stamp(NOW),
+        'game':{'teams':{}},'result':'win','actual':9}
+  private={**play,'id':'private'}
+  with patch.object(nba_today.nba_trial_runtime,'rows',return_value=[play,private]), \
+       patch.object(nba_today.nba_trial_runtime,'public_rows',return_value=[play,private]):
+   result=nba_today.build(NOW,root=self.root,boxes=[],delivered=[{'id':'delivered','result':None,'actual':None}])
+  self.assertEqual([row['id'] for row in result['trial']['plays']],['delivered'])
+  self.assertIsNone(result['trial']['plays'][0]['result'])
  def test_injury_id_comes_from_espn_link_and_comments_never_enter_store(self):
   payload={'injuries':[{'id':'1','injuries':[{'status':'Out','shortComment':'private prose','athlete':{'displayName':'Real Player','links':[{'href':'https://www.espn.com/nba/player/_/id/123/real-player'}]}}]}]}
   rows=nba_capture.injuries(payload,2027,'2026-10-09T00:00:00Z')
