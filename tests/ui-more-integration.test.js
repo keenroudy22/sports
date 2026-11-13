@@ -177,9 +177,9 @@ test('NBA milestone board groups verified history by matchup and keeps milestone
  ctx.state.league='NBA';
  const html=await factory(ctx).basketballMilestones({league:'NBA'});
  assert.match(html,/Alpha Aces/);assert.match(html,/Example Guard/);assert.match(html,/10\+ PTS/);
- assert.match(html,/L5[\s\S]*5\/5/);assert.match(html,/Book 11\.5/);assert.match(html,/Kook’n 12/);
+ assert.match(html,/L5[\s\S]*5\/5/);assert.match(html,/Book main line 11\.5/);assert.match(html,/Kook’n 12/);
  assert.match(html,/line=9\.5/);assert.match(html,/Historical hit rate · not a probability/);
- assert.match(html,/Milestone price not verified|Book 11\.5/);assert.doesNotMatch(html,/90% chance|best bet/i);
+ assert.match(html,/Milestone price not verified/);assert.doesNotMatch(html,/90% chance|best bet/i);
  const views=factory(ctx);
  const chart=await views.player({league:'NBA',id:'1',stat:'pts',line:'9.5',direction:'over'});
  assert.match(chart,/<small>Chart line<\/small><b class="num">9\.5/);
@@ -190,4 +190,14 @@ test('NBA milestone board groups verified history by matchup and keeps milestone
  assert.match(exact,/<small>Book line<\/small><b class="num">11\.5/);
  assert.match(exact,/Under 11\.5 \+100<\/b> at DraftKings/);
  assert.match(exact,/0 of 6 under 11\.5 in the games shown/);
+ props.rows[0].hold='Availability: Questionable';
+ props.rows[0].projection=null;
+ ctx.state.player.key=null;
+ const held=await views.player({league:'NBA',id:'1',stat:'pts',line:'11.5',direction:'under'});
+ assert.match(held,/<small>Kook’n projection<\/small><b class="num">Held/);
+ assert.match(held,/Projection held:<\/b> Availability: Questionable/);
+ assert.match(held,/0 of 6 under 11\.5 in the games shown/);
+ const milestoneHold=await views.basketballMilestones({league:'NBA'});
+ assert.match(milestoneHold,/Book main line 11\.5[^<]*Projection held/);
+ assert.doesNotMatch(milestoneHold,/Kook’n 12|Kook’n 3/);
 });

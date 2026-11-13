@@ -372,9 +372,10 @@
     const posted = (basketball.trial?.plays || []).filter(play => !play.result && String(play.athleteId) === String(route.id)
       && (typedLine == null || (play.line === typedLine && String(play.direction || 'over').toLowerCase() === selectedSide))
       && play.stat === stat && Date.parse(play.kickoff) > Date.now()).sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))[0];
-    const comparisons = (props.rows || []).filter(row => String(row.athleteId) === String(route.id) && row.stat === stat
-      && Date.parse(row.kickoff) > Date.now()).sort((a, b) => String(b.sourceAt).localeCompare(String(a.sourceAt)));
-    const gameComparisons = next ? comparisons.filter(row => String(row.eventId) === String(next.providerId || String(next.id).replace(/^(NBA|CBB)-/, ''))) : [];
+    const eventId = next?.providerId || String(next?.id || '').replace(/^(NBA|CBB)-/, '');
+    const gameRows = next ? (props.rows || []).filter(row => String(row.athleteId) === String(route.id)
+      && String(row.eventId) === String(eventId) && Date.parse(row.kickoff) > Date.now()) : [];
+    const gameComparisons = gameRows.filter(row => row.stat === stat).sort((a, b) => String(b.sourceAt).localeCompare(String(a.sourceAt)));
     const comparison = gameComparisons[0];
     const dir = typedLine != null ? selectedSide : String(posted?.direction || comparison?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
     const quoteRow = gameComparisons.find(row => isNum(row.line) && isNum(row[dir]) && Math.abs(row[dir]) >= 100
@@ -384,8 +385,8 @@
     const lineLabel = capturedLine != null ? 'Book line' : 'Chart line';
     const quoteStatus = quoteRow && C.quoteStatus({ state: 'open', ...quoteRow, observedAt: quoteRow.sourceAt, odds: quoteRow[dir] }, next?.kickoff);
     const projectionInfo = data.projection || null;
-    const projection = isNum(comparison?.projection?.value) ? Number(comparison.projection.value)
-      : isNum(projectionInfo?.values?.[stat]) ? Number(projectionInfo.values[stat]) : null;
+    const hold = comparison?.hold || gameRows.find(C.basketballAvailabilityHold)?.hold;
+    const projection = hold ? null : comparison ? comparison.projection?.value : projectionInfo?.values?.[stat];
     const hits = list => line == null ? { hits: null, games: list.length } : { hits: list.filter(v => dir === 'over' ? v > line : v < line).length, games: list.length };
     const h5 = hits(last5);
     const team = side ? side[1] : { id: entry[3], abbreviation: entry[4], name: comparison?.teamName || entry[4] };
@@ -421,7 +422,7 @@
        flipping the sign for unders made the same two numbers disagree between matchup and player pages. */
     const projectionGap = isNum(projection) && isNum(line) ? projection - line : null;
     const lineEntry = capturedLine == null ? `<div class="player-line-entry"><label>Set chart line<input class="search" type="number" inputmode="decimal" min="0" step="0.5" value="${esc(state.player.line || '')}" placeholder="e.g. 14.5" data-input="playerLine"></label>${seg('pdir', [['over','Over'],['under','Under']], dir)}<p class="small muted">Choose a number to compare with past games.</p></div>` : '';
-    const estimateNote = projectionInfo?.status ? `<p class="kt-prices"><b>${projectionInfo.status === 'ready' ? 'Kook’n baseline' : projectionInfo.status === 'early' ? 'Early Kook’n baseline' : 'Projection held'}:</b> ${projectionInfo.status === 'held' ? esc(projectionInfo.reason || 'Not enough stable role evidence') : `${esc(projectionInfo.games)} current-season games · ${esc(projectionInfo.minutes)} projected minutes · ${esc(projectionInfo.method)}.`} ${projectionInfo.status === 'early' && projectionInfo.reason ? esc(projectionInfo.reason) + '.' : ''}</p>` : '';
+    const estimateNote = hold ? `<p class="kt-prices"><b>Projection held:</b> ${esc(hold)}</p>` : !comparison && projectionInfo?.status ? `<p class="kt-prices"><b>${projectionInfo.status === 'ready' ? 'Kook’n baseline' : projectionInfo.status === 'early' ? 'Early Kook’n baseline' : 'Projection held'}:</b> ${projectionInfo.status === 'held' ? esc(projectionInfo.reason || 'Not enough stable role evidence') : `${esc(projectionInfo.games)} current-season games · ${esc(projectionInfo.minutes)} projected minutes · ${esc(projectionInfo.method)}.`} ${projectionInfo.status === 'early' && projectionInfo.reason ? esc(projectionInfo.reason) + '.' : ''}</p>` : '';
     const boxPath = league === 'NBA' ? 'nba' : 'mens-college-basketball';
     return `${back}${hero}${tabs}${filtersFold('player', `${scope === 'all' ? 'All seasons' : season + ' season'} · ${recent.length} games · ${esc(metric)}`, `${seasonSelect}${seg('pwin', [['last5','Last 5'],['last10','Last 10'],['last20','Last 20'],['all','All games']], state.player.window)}`)}<section class="player-board" aria-labelledby="nba-stat"><div class="player-board-head"><div><p class="eyebrow">${capturedLine != null ? posted ? 'Posted line' : quoteStatus?.current ? 'Current line' : 'Earlier line' : line != null ? 'Chart line' : 'Season snapshot'}</p><h2 id="nba-stat">${esc(metric)}</h2></div><span class="player-board-mode">${capturedLine != null ? 'Kook vs Book' : 'Player history'}</span></div>${lineEntry}<div class="kt-number-grid kt-player-numbers"><span><small>${lineLabel}</small><b class="num">${esc(line == null ? '–' : line)}</b></span><span><small>Kook’n projection</small><b class="num">${esc(isNum(projection) ? fmt(projection) : 'Held')}</b></span><span><small>Kook’n − line</small><b class="num">${projectionGap == null ? '–' : `${projectionGap > 0 ? '+' : ''}${esc(fmt(projectionGap))}`}</b></span><span><small>Last 5 average</small><b class="num">${esc(fmt(average(last5)))}</b></span><span><small>Last 5 hits</small><b class="num">${line == null ? '–' : `${h5.hits}/${h5.games}`}</b></span></div>${quote ? `<p class="kt-prices">${quote}</p>` : ''}${estimateNote}${comparison?.currentRole?.games ? `<p class="kt-prices"><b>Role check:</b> ${comparison.currentRole.minutes.map(m => esc(m)).join(' / ')} minutes in his last ${esc(comparison.currentRole.games)} recorded games.</p>` : ''}<div class="player-chart-legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>${chart}</section>${nbaInsights}${ladder}<section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">Official box scores</span></div><div class="table-wrap"><table class="t"><thead><tr><th>Game</th><th class="n">MIN</th><th class="n">PTS</th><th class="n">REB</th><th class="n">AST</th><th class="n">3PM</th></tr></thead><tbody>${log.map(row => `<tr><td><a href="https://www.espn.com/${boxPath}/boxscore/_/gameId/${esc(row[0])}" target="_blank" rel="noopener"><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b></a><br><span class="tiny muted">${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}))}</span></td><td class="n">${esc(statCell(row,'min'))}</td><td class="n">${esc(statCell(row,'pts'))}</td><td class="n">${esc(statCell(row,'reb'))}</td><td class="n">${esc(statCell(row,'ast'))}</td><td class="n">${esc(statCell(row,'fg3m'))}</td></tr>`).join('')}</tbody></table></div><p class="small muted" style="margin-top:8px">Last 5, Last 10 and the full season use recorded regular-season appearances. A one-minute appearance counts as an appearance; minutes are shown so role changes stay visible. Kook’n minus the book is not a probability or proof that a price is valuable.</p></section>`;
   };
@@ -697,6 +698,7 @@
     };
     const priced = (props?.rows || []).filter(row => Date.parse(row.kickoff) > Date.now());
     const prices = new Map(priced.map(row => [`${row.eventId}|${row.athleteId}|${row.stat}`, row]));
+    const availabilityHolds = new Set(priced.filter(C.basketballAvailabilityHold).map(row => `${row.eventId}|${row.athleteId}`));
     const count = (values, threshold) => ({ hits: values.filter(value => isNum(value) && value >= threshold).length, games: values.filter(isNum).length });
     const cell = (label, result) => `<span class="milestone-rate"><small>${label}</small><b>${result.hits}/${result.games}</b></span>`;
     const playerRows = new Map();
@@ -735,13 +737,16 @@
       const sides = ['away', 'home'].map(side => ({ side, team: game.teams?.[side], rows: teamRows(game.teams?.[side]?.id) }));
       if (!sides.some(side => side.rows.length)) return '';
       const teamBlock = ({ team, rows }) => `<section class="milestone-team"><h3>${teamMark(team, 'sm', league)} ${esc(team?.name || team?.abbreviation || 'Team')}</h3>${rows.length ? rows.map(item => {
-        const price = prices.get(`${game.providerId || String(game.id || '').replace(/^\w+-/, '')}|${item.id}|${item.stat}`);
-        const projection = isNum(price?.projection?.value) ? Number(price.projection.value) : item.projection;
+        const playerKey = `${game.providerId || String(game.id || '').replace(/^\w+-/, '')}|${item.id}`;
+        const price = prices.get(`${playerKey}|${item.stat}`);
+        const held = price?.hold || availabilityHolds.has(playerKey);
+        const projection = held ? null : price ? price.projection?.value : item.projection;
+        const chartLine = item.threshold - .5;
         const odds = isNum(price?.over) ? oddsText(price.over) : null;
         const fresh = price && Date.now() - Date.parse(price.sourceAt) >= 0 && Date.now() - Date.parse(price.sourceAt) <= 4 * 3600000;
-        const comparison = price ? `<b>Book ${esc(price.line)} ${odds ? `· ${esc(odds)}` : ''}${isNum(projection) ? ` · Kook’n ${esc(C.statValue(projection, item.stat))}` : ''}</b><span>${fresh ? `Checked ${esc(ago(price.sourceAt))}` : 'Earlier quote · recheck price'}</span>`
-          : `<b>${isNum(projection) ? `Kook’n ${esc(C.statValue(projection, item.stat))}` : 'No current comparison'}</b><span>Milestone price not verified</span>`;
-        const href = `#player/${league}/${encodeURIComponent(item.id)}?stat=${encodeURIComponent(item.stat)}&line=${encodeURIComponent(item.threshold - .5)}&direction=over`;
+        const comparison = price ? `<b>${price.line === chartLine ? 'Book' : 'Book main line'} ${esc(price.line)} ${odds ? `· ${esc(odds)}` : ''}${isNum(projection) ? ` · Kook’n ${esc(C.statValue(projection, item.stat))}` : held ? ' · Projection held' : ''}</b><span>${price.line !== chartLine ? 'Milestone price not verified · ' : ''}${fresh ? `Checked ${esc(ago(price.sourceAt))}` : 'Earlier quote · recheck price'}</span>`
+          : `<b>${isNum(projection) ? `Kook’n ${esc(C.statValue(projection, item.stat))}` : held ? 'Projection held' : 'No current comparison'}</b><span>Milestone price not verified</span>`;
+        const href = `#player/${league}/${encodeURIComponent(item.id)}?stat=${encodeURIComponent(item.stat)}&line=${encodeURIComponent(chartLine)}&direction=over`;
         const role = `${item.entry[2] || ''}${isNum(item.minuteAvg) ? ` · L5 ${item.minuteAvg.toFixed(1)} MIN` : ''}`;
         return `<div class="milestone-row"><a class="milestone-player" href="${href}"><b>${esc(item.entry[1])} <span class="milestone-mark">${esc(item.threshold)}+ ${esc(item.meta.label)}</span></b><span>${esc(role)} · tap for game chart</span></a>${cell('L5', item.l5)}${cell('L10', item.l10)}${cell('Season', item.season)}<span class="milestone-compare">${comparison}</span></div>`;
       }).join('') : '<p class="small muted" style="padding:8px 0 12px">No 90% milestone cleared the role and sample checks.</p>'}</section>`;

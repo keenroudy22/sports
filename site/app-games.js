@@ -132,7 +132,6 @@
       const age = now - Date.parse(row?.sourceAt);
       return (!game.status || game.status === 'scheduled') && tip > now && age >= 0 && age <= 4 * 3600000;
     };
-    const blocksPlayerProjection = row => /^(Availability:|Official team report not submitted|Official report player\/roster identity)/i.test(row.hold || '');
     const isLean = row => Boolean(row?.favorite && !row.hold && isFresh(row));
     const recentBoxCutoff = Number.isFinite(tip) ? new Date(tip - 30 * 86400000).toISOString().slice(0, 10) : '';
     const teams = ['away','home'].map(side => game.teams[side]);
@@ -157,7 +156,7 @@
     };
     const playerLine = (player, stat) => {
       const row = player.stats.get(stat), summary = player.entry?.[7] || null;
-      const held = Boolean(row?.hold) || [...player.stats.values()].some(blocksPlayerProjection);
+      const held = Boolean(row?.hold) || [...player.stats.values()].some(C.basketballAvailabilityHold);
       const projection = held ? null : row ? row.projection?.value : summary?.values?.[stat];
       const line = isNum(row?.line) ? Number(row.line) : null;
       const direction = String(row?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
@@ -172,7 +171,7 @@
     };
     const table = (team, players, stats) => `<div class="table-wrap"><table class="t prop-compare"><thead><tr><th>Player · role</th>${stats.map(([,label]) => `<th>${esc(label)}</th>`).join('')}</tr></thead><tbody>${players.map(player => {
       const rows = [...player.stats.values()], status = basketballStatus(rows), role = rows.find(row => row.currentRole)?.currentRole, summary = player.entry?.[7];
-      const projectedMinutes = rows.some(blocksPlayerProjection) ? null
+      const projectedMinutes = rows.some(C.basketballAvailabilityHold) ? null
         : rows.find(row => !row.hold && isNum(row.projection?.minutes))?.projection?.minutes ?? summary?.minutes;
       const minuteList = role?.minutes || summary?.recentMinutes || [];
       return `<tr><th class="prop-player"><span class="prop-player-head"><a href="${player.id ? `#player/${league}/${esc(player.id)}?stat=pts` : '#research/players'}">${esc(player.name)}</a><span class="prop-pos">${esc(player.pos || 'Position unavailable')}</span>${status ? `<span class="badge ${status.warn ? 'warn' : 'research'}">${esc(status.word)}</span>` : ''}</span><span class="prop-min"><b>${isNum(projectedMinutes) ? `Kook’n minutes ${esc(C.fixed(projectedMinutes))}` : 'Minutes projection held'}</b>${minuteList.length ? `<span>Recent ${minuteList.slice(-3).map(value => esc(C.fixed(value,0))).join(' · ')}</span>` : ''}</span></th>${stats.map(([stat,label]) => `<td data-stat="${esc(label)}">${playerLine(player,stat)}</td>`).join('')}</tr>`;
