@@ -69,7 +69,8 @@ def evaluate(evidence,send=None):
     try:
         chosen=llm.draft_json(SYSTEM,json.dumps(evidence),SCHEMA,max_tokens=160,
             timeout=30,temperature=0,kind='nba-research-review',send=send,
-            model=llm.fast_model_name())
+            # Evidence ranking is judgment work, not optional caption polish.
+            model=llm.model_name())
         if not isinstance(chosen,dict) or set(chosen)!=set(('support','challenge')):raise ValueError('Invalid review')
         for kind,ids in chosen.items():
             if not isinstance(ids,list) or len(ids)!=len(set(ids)) or any(not isinstance(k,str) or k not in facts or facts[k]['kind']!=kind for k in ids):
