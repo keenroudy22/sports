@@ -16,6 +16,12 @@ NFL, CFB = 'nfl-401872656.json', 'cfb-401858213.json'
 NOW = datetime(2026, 9, 18, 21, 0, tzinfo=timezone.utc)
 
 
+class TimestampTests(unittest.TestCase):
+    def test_provider_nanoseconds_preserve_real_quote_clock(self):
+        observed = bx.instant('2026-11-13T16:45:32.597711338Z')
+        self.assertEqual(observed.isoformat(), '2026-11-13T16:45:32.597711+00:00')
+
+
 def bundle(name):
     return json.loads((FIXTURES / name).read_text(encoding='utf-8'))
 

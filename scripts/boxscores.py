@@ -85,7 +85,14 @@ def stamp(moment):
 
 
 def instant(value):
-    return datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    text = str(value).replace('Z', '+00:00')
+    # RFC3339 permits nanosecond precision, while Python's datetime parser
+    # accepts at most microseconds. Preserve the real observation second and
+    # timezone and discard only unsupported sub-microsecond digits. SharpAPI
+    # started returning nine fractional digits for NBA quote clocks; treating
+    # those valid timestamps as malformed made every fresh prop look stale.
+    text = re.sub(r'(\.\d{6})\d+(?=[+-]\d\d:\d\d$)', r'\1', text)
+    return datetime.fromisoformat(text)
 
 
 def urls(league, event_id):
