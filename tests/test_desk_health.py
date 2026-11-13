@@ -178,6 +178,19 @@ class DeskHealthTests(unittest.TestCase):
         result = H.result_timeliness(record, posts, NOW)
         self.assertEqual(result['pendingScheduled'], 0)
         self.assertEqual(result['missing'], 1)
+
+    def test_complete_daily_recap_counts_without_duplicate_individual_final(self):
+        record = {'picks': [
+            {'id': 'win', 'posted': True, 'result': 'win',
+             'settledAt': '2026-10-05T12:00:00Z'}]}
+        posts = [
+            {'id': 'win', 'sentAt': '2026-10-05T10:00:00Z', 'tweetId': '1'},
+            {'id': 'receipt:day:2026-10-05', 'sentAt': '2026-10-05T14:00:00Z',
+             'tweetId': '2', 'resultPickIds': ['win']}]
+        result = H.result_timeliness(record, posts, NOW)
+        self.assertEqual(result['posted'], 1)
+        self.assertEqual(result['missing'], 0)
+        self.assertEqual(result['maxMinutesFromFinalToPost'], 120.0)
     def write(self, root, name, value):
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)

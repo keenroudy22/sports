@@ -787,11 +787,15 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} held: combined card changed; rebuild from delivered plays')
                 continue
         full_daily = None
+        daily_receipt = None
+        if guid.startswith('receipt:day:'):
+            context = gates.Stores().as_of(now)
+            daily_receipt = next((p for p in receipts.ready(
+                context.first, context.latest, context.games, log_book, now)
+                if p['key'] == guid and p.get('text') == text and p.get('card') == card_key), None)
         if guid.startswith('receipt:day:') and (str(card_key).endswith('-all-sports') or
                 any(p.get('id') == guid and replaced_partial_daily(p) for p in log_book.get('posts', []))):
-            context = gates.Stores().as_of(now)
-            full_daily = next((p for p in receipts.ready(context.first, context.latest, context.games, log_book, now)
-                               if p['key'] == guid and p.get('nbaDailyRows')), None)
+            full_daily = daily_receipt if daily_receipt and daily_receipt.get('nbaDailyRows') else None
             if (not full_daily or full_daily['text'] != text or full_daily['card'] != card_key
                     or any(p.get('id') == guid and not replaced_partial_daily(p) for p in log_book.get('posts', []))):
                 log(f'buffer: {guid} held: complete daily receipt changed or already attempted')
@@ -912,6 +916,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             entry['straightCard'] = combined['straightCard']
         if combined_result:
             entry['straightCardResult'] = combined_result
+        if daily_receipt and daily_receipt.get('pickIds'):
+            entry['resultPickIds'] = list(daily_receipt['pickIds'])
         if social_style.active(now):
             entry.update(queuedText=text, socialStyleVersion=social_style.VERSION,
                          socialVoiceVersion=social_voice.VERSION, socialAgeVersion=AGE_VERSION)

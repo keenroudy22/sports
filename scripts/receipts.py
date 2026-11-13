@@ -343,6 +343,9 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
             'accounting': accounting(rows),
+            # Stable identities let health recognize a complete daily recap as
+            # result delivery without parsing prose or demanding duplicate Finals.
+            'pickIds': [r['id'] for r in rows],
             **({'nbaDailyRows': rows} if nba_rows else {}),
             'rows': [(r['result'], label(r, games), result_detail(r), pick_card.play_kind(r)) for r in rows], 'text': text,
             'due': due,

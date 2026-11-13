@@ -310,11 +310,15 @@ def result_timeliness(record, posts, now):
         return {'state': 'unknown', 'source': 'settledAt', 'eligible': 0, 'posted': 0,
                 'within30Minutes': 0, 'over30Minutes': 0, 'pendingScheduled': 0, 'missing': 0,
                 'latestMinutesFromFinalToPost': None, 'maxMinutesFromFinalToPost': None}
-    sent, pending, originals = {}, {}, set()
+    sent, pending, originals, recap_sent = {}, {}, set(), {}
     for post in posts:
         if not isinstance(post, dict):
             continue
         key = str(post.get('id') or '')
+        if (key.startswith('receipt:day:') and post.get('sentAt')
+                and not post.get('cancelledAt') and not post.get('deletedAt')):
+            for pick_id in post.get('resultPickIds') or []:
+                recap_sent[str(pick_id)] = moment(post['sentAt'])
         if (post.get('sentAt') and post.get('tweetId') and not post.get('cancelledAt')
                 and not post.get('deletedAt') and not key.startswith(('cashed:', 'burnt:'))):
             originals.add(key)
@@ -351,7 +355,7 @@ def result_timeliness(record, posts, now):
         if pick_id not in originals:
             quote_blocked.append(pick_id)
             continue
-        delivered = sent.get(pick_id)
+        delivered = sent.get(pick_id) or recap_sent.get(pick_id)
         if delivered is None:
             due = pending.get(str(pick.get('id') or ''))
             if due and due >= now - timedelta(minutes=15):
