@@ -83,6 +83,6 @@ test('basketball cards open matchup details and NBA props stay in their own game
   const matchup = await v.game({id:'NBA-2'});
   assert.match(matchup, /Matched player/);
   assert.match(matchup, /prop-vs-label">Book<\/span><b>15\.5[\s\S]*prop-vs-label">Kook’n<\/span><b>17\.2[\s\S]*Projection gap[\s\S]*Kook’n range 11\.0–23\.0/);
-  assert.match(matchup, /#player\/NBA\/42\?stat=pts&amp;line=15\.5&amp;direction=over&amp;book=FanDuel/);
+  assert.match(matchup, /#player\/NBA\/42\?stat=pts&amp;line=15\.5&amp;direction=over&amp;book=FanDuel&amp;game=NBA-2/);
   assert.doesNotMatch(matchup, /Other game player/);
 });

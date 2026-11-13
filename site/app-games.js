@@ -168,7 +168,7 @@
       const projection = held ? null : row ? row.projection?.value : summary?.values?.[stat];
       const line = isNum(row?.line) ? Number(row.line) : null;
       const direction = String(row?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
-      const href = player.id ? esc(C.playerLineHref({ league, athleteId: player.id, stat, line, direction, book: bookLabel(row?.book) })) : '';
+      const href = player.id ? esc(C.playerLineHref({ league, athleteId: player.id, stat, line, direction, book: bookLabel(row?.book), gameId: game.id })) : '';
       const gap = isNum(projection) && line != null ? projection-line : null;
       const range = !held && isNum(row?.projection?.low) && isNum(row?.projection?.high) ? `${C.fixed(row.projection.low)}–${C.fixed(row.projection.high)}` : null;
       const recent = isNum(summary?.recent?.[stat]) ? `L5 avg ${C.fixed(summary.recent[stat])}` : row?.last5?.games ? `L5 ${row.last5.hits}/${row.last5.games} ${direction}` : null;
@@ -749,7 +749,7 @@
         const official = isNum(read?.odds) && picks.some(row => exact(row) && row.posted === true && !row.result
           && row.direction === direction && row.odds === read.odds && bookLabel(row.book) === bookLabel(read.book));
         const book = bookLabel(read?.book || detail.props?.provider);
-        const href = esc(C.playerLineHref({ league: g.league, athleteId: player.id, stat, line, direction, book }));
+        const href = esc(C.playerLineHref({ league: g.league, athleteId: player.id, stat, line, direction, book, gameId: g.id }));
         const price = line == null ? 'Book line unavailable' : [isNum(read?.odds) ? `${direction === 'under' ? 'U' : 'O'} ${oddsText(read.odds)}` : 'Odds unavailable', book].filter(Boolean).join(' · ');
         const saved = isNum(read?.odds) && !C.quoteStatus({ ...read, state: read.state || 'open' }, g.kickoff, now).current;
         return `<a class="prop-cell${liked ? ' liked' : ''}${official ? ' official' : ''}" href="${href}" title="Open the exact recent-game chart"><span class="prop-vs"><span><span class="prop-vs-label">Book</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>${esc(C.fixed(v[0]))}</b></span></span>${gapV == null ? '' : `<span class="prop-gap">Projection gap <b>${gapV > 0 ? '+' : ''}${esc(C.fixed(gapV))}</b></span>`}${price ? `<span class="prop-price${line == null ? ' is-missing' : ''}">${esc(price)}</span>` : ''}<span class="prop-range">Kook’n range ${esc(C.fixed(v[1],0))}–${esc(C.fixed(v[2],0))}</span>${checked ? `<span class="prop-checked">${saved ? 'Earlier quote · checked' : 'Checked'} ${esc(ago(checked))}</span>` : ''}${official ? '<span class="pick-tag">Official pick</span>' : liked ? '<span class="lean-tag">Research lean</span>' : ''}</a>`;
@@ -778,7 +778,7 @@
           if (player.unavailable) return `<tr>${playerHead}${tableCols.map(([key]) => {
             const stat = projectionMarket(key), market = (lines[player.id] || {})[stat], line = market && isNum(market[0]) ? Number(market[0]) : null;
             const href = esc(C.playerLineHref({ league: g.league, athleteId: player.id, stat, line, direction: 'over',
-              book: bookLabel(detail.props?.provider) }));
+              book: bookLabel(detail.props?.provider), gameId: g.id }));
             const label = tableCols.find(([candidate]) => candidate === key)?.[1] || key;
             return `<td data-stat="${esc(label)}"><a class="prop-cell prop-held" href="${href}" title="Open recent-game history"><span class="prop-vs"><span><span class="prop-vs-label">Book</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>Held</b></span></span><span class="prop-price${line == null ? ' is-missing' : ''}">${line == null ? 'Book line unavailable' : 'Reference line · no active projection'}</span><span>${esc(player.status || 'Unavailable')} · no edge</span>${line != null && detail.props?.capturedAt ? `<span class="prop-checked">Checked ${esc(ago(detail.props.capturedAt))}</span>` : ''}</a></td>`;
           }).join('')}</tr>`;

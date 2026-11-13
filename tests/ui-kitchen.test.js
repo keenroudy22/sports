@@ -223,6 +223,24 @@ test('a football chart link keeps the selected book even when another has a stro
   assert.doesNotMatch(missing, /at FanDuel/);
 });
 
+test('a football chart never uses a different game’s same-book quote', async () => {
+  const anotherGame = files => {
+    const games = files['data/app/today.json'].games;
+    const kickoff = '2026-10-08T23:30:00Z';
+    games.push({ ...games[0], id: 'CFB-2', kickoff, away: { id:'33', abbr:'OTHER', name:'Other opponent' } });
+    const quotes = files['data/app/lines-CFB.json'].lines;
+    quotes.push({ ...quotes[0], gameId:'CFB-2', kickoff, odds:-120 });
+  };
+  const query = 'line=261.5&direction=over&book=FanDuel&game=CFB-2';
+  const page = await playerPage(false, anotherGame, 'CFB', 'passYds', C, query);
+  assert.match(page, /Other opponent/);
+  assert.match(page, /Over 261\.5 [−-]120 at FanDuel/);
+  assert.doesNotMatch(page, /at FanDuel[\s\S]*261\.5 [−-]114 at FanDuel/);
+  const missing = await playerPage(false, null, 'CFB', 'passYds', C, query);
+  assert.match(missing, /<small>Chart line<\/small><b class="num">261\.5/);
+  assert.doesNotMatch(missing, /at FanDuel/);
+});
+
 test('the player line ladder compares nearby thresholds without presenting them as offered markets', async () => {
   const page = await playerPage(false);
   const lab = page.split('<section class="line-lab"')[1].split('</section>')[0];

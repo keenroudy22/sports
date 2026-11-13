@@ -560,7 +560,7 @@
       case 'game': return rest ? { view: 'game', id: rest.split('#')[0], anchor: rest.split('#')[1] || null } : { view: 'games', tab: 'upcoming' };
       case 'player': return { view: 'player', league: ['NFL', 'CFB', 'NBA', 'CBB'].includes((a || 'NFL').toUpperCase()) ? (a || 'NFL').toUpperCase() : 'NFL', id: b,
         stat: params.get('stat') || null, season: params.get('season') || null, sample: params.get('sample') || null,
-        line: params.get('line') || null, direction: params.get('direction') || null, ...(params.has('book') ? { book: params.get('book') } : {}) };
+        line: params.get('line') || null, direction: params.get('direction') || null, ...(params.has('book') ? { book: params.get('book') } : {}), ...(params.has('game') ? { game: params.get('game') } : {}) };
       case 'team': return { view: 'team', league: (a || 'NFL').toUpperCase() === 'CFB' ? 'CFB' : 'NFL', id: b };
       case 'record': return { view: 'record', tab: ['fun', 'climb', 'model', 'trials'].includes(a) ? a : 'official', anchor: a === 'calendar' ? 'calendar' : null,
         league: params.get('sport') ? params.get('sport').toUpperCase() : null };
@@ -2119,8 +2119,8 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-69f7b55321d4';
-  const GAMES_ASSET = 'app-games.js?v=sha256-7fde3f4e0c3c';
+  const MORE_ASSET = 'app-more.js?v=sha256-7d268e82ab05';
+  const GAMES_ASSET = 'app-games.js?v=sha256-355fa65015d6';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
   let researchCssLoading = null;

@@ -694,7 +694,7 @@
     return new Set(byMarket.keys());
   };
 
-  const playerLineHref = ({ league, athleteId, stat, line, direction, book }) => {
+  const playerLineHref = ({ league, athleteId, stat, line, direction, book, gameId }) => {
     const link = `#player/${encodeURIComponent(league)}/${encodeURIComponent(athleteId)}`;
     if (!stat) return link;
     const query = new URLSearchParams({ stat });
@@ -703,6 +703,7 @@
       query.set('direction', direction);
       if (book) query.set('book', book);
     }
+    if (gameId) query.set('game', gameId);
     return `${link}?${query}`;
   };
 

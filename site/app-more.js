@@ -362,7 +362,7 @@
     const recent = regular.slice(-limit), values = recent.map(row => value(row, stat)).filter(isNum);
     const last5 = regular.slice(-5).map(row => value(row, stat)).filter(isNum);
     const last10 = regular.slice(-10).map(row => value(row, stat)).filter(isNum);
-    const next = (basketball.games || []).filter(game => (!game.status || game.status === 'scheduled') && Date.parse(game.kickoff) > Date.now()
+    const next = (basketball.games || []).filter(game => (!route.game || game.id === route.game) && (!game.status || game.status === 'scheduled') && Date.parse(game.kickoff) > Date.now()
       && Object.values(game.teams || {}).some(team => String(team.id) === String(entry[3])))
       .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
     const side = next && Object.entries(next.teams || {}).find(([, team]) => String(team.id) === String(entry[3]));
@@ -370,7 +370,7 @@
     const typedLine = state.player.line !== '' && isNum(Number(state.player.line)) && Number(state.player.line) >= 0 ? Number(state.player.line) : null;
     const selectedSide = state.player.direction === 'under' ? 'under' : 'over';
     const linkedBook = typedLine != null && route.stat === stat && Number(route.line) === typedLine ? bookLabel(route.book) : null;
-    const posted = (basketball.trial?.plays || []).filter(play => !play.result && String(play.athleteId) === String(route.id)
+    const posted = (basketball.trial?.plays || []).filter(play => (!route.game || String(play.gameId || `${league}-${play.eventId}`) === route.game) && !play.result && String(play.athleteId) === String(route.id)
       && (typedLine == null || (play.line === typedLine && String(play.direction || 'over').toLowerCase() === selectedSide))
       && (!linkedBook || bookLabel(play.book) === linkedBook)
       && play.stat === stat && Date.parse(play.kickoff) > Date.now()).sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))[0];
@@ -463,7 +463,7 @@
     const team = ((teams || {}).teams || {})[entry[3]] || { name: entry[4] };
     const abbr = id => (((teams || {}).teams || {})[id] || {}).abbr || id;
     const now = Date.now();
-    const next = (today.games || []).filter(g => g.league === league && !g.completed && Date.parse(g.kickoff) > now && [g.home.id, g.away.id].includes(String(entry[3])))
+    const next = (today.games || []).filter(g => (!route.game || g.id === route.game) && g.league === league && !g.completed && Date.parse(g.kickoff) > now && [g.home.id, g.away.id].includes(String(entry[3])))
       .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
     const side = next ? (String(next.home.id) === String(entry[3]) ? 'home' : 'away') : null;
     const nextDetail = next ? await maybe(`app/games/${next.id}.json`) : null;
