@@ -425,9 +425,9 @@ test('with nothing on the card the rail does not reveal desk timing', async () =
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [yesterday, ...rungs] } });
   const page = await api.views.today({ view: 'today' });
   assert.match(page, /<h1>Today’s board<\/h1><p class="today-summary">Nothing cleared my bar today\.<\/p>/);
-  assert.match(page, /class="decision-empty"[\s\S]*No official pick[\s\S]*Nothing forced\./);
+  assert.match(page, /class="decision-empty is-compact"[\s\S]*No official pick[\s\S]*Nothing forced\./);
   assert.match(page, /Nothing cleared my bar today\./);
-  assert.match(page, /No best bet today\. Tonight's games are below\./);
+  assert.match(page, /Tonight's games and Kook vs Book numbers are below\./);
   assert.doesNotMatch(page, /I look again|desk run|11:45 AM/i);
   assert.doesNotMatch(page, /<article class="decision-card/, 'no blank card and no forced pick');
 });
@@ -817,7 +817,7 @@ test('an empty official rail names a real price-clearing research lean and never
   await settle();
   const page = await api.views.today({ view: 'today' });
   assert.match(page, /<h1>Today’s board<\/h1><p class="today-summary">Here’s what I like most today\.<\/p>/);
-  assert.match(page, /No official best bet yet\. My strongest current look is below\./);
+  assert.match(page, /No official pick[\s\S]*Nothing forced\.[\s\S]*My strongest current research look is below\./);
   const favorite = page.slice(page.indexOf('kt-favorite"'), page.indexOf('class="kt-sec kt-climb"'));
   assert.match(favorite, /What I like most/);
   assert.match(favorite, /Strongest current lean · not a best bet/);
