@@ -162,8 +162,8 @@
     const band = inRange.length ? `<rect x="${(x(inRange[0]) - 6).toFixed(1)}" y="0" width="${(x(inRange[inRange.length - 1]) - x(inRange[0]) + 12).toFixed(1)}" height="${h}" fill="rgba(242, 247, 244, .08)" rx="6"><title>${esc(range.label || 'This month')}</title></rect>` : '';
     return `<svg class="units-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Units over the season, ending at ${units(end)}${inRange.length ? `; ${esc(range.label || 'this month')} highlighted` : ''}">${band}<line x1="${padL}" x2="${w - pad}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}" stroke="#3D7356" stroke-dasharray="4 4"/><path d="${path}" fill="none" stroke="${end < 0 ? '#FF6B75' : '#20C774'}" stroke-width="3" stroke-linejoin="round"/><circle cx="${x(points.length - 1).toFixed(1)}" cy="${y(end).toFixed(1)}" r="5" fill="${end < 0 ? '#FF6B75' : '#20C774'}"/><text x="${(x(points.length - 1) - 6).toFixed(1)}" y="${(y(end) - 10).toFixed(1)}" text-anchor="end" fill="#F2F7F4" font-size="14" font-family="DM Sans, sans-serif">${esc(units(end))}</text><text x="4" y="${(y(0) + 4).toFixed(1)}" fill="#A9C0B3" font-size="12" font-family="DM Sans, sans-serif">0u</text></svg>`;
   };
-  const tableOf = (first, rows) => `<div class="table-wrap"><table class="t"><thead><tr><th>${esc(first)}</th><th class="n">W–L–P</th><th class="n">Units</th><th class="n">Pending</th></tr></thead><tbody>${rows.map(([name, t]) =>
-    `<tr><td>${esc(name)}</td><td class="n">${t.wins}–${t.losses}–${t.pushes}</td><td class="n ${t.units < 0 ? 'red' : t.units > 0 ? 'green' : ''}">${esc(units(t.units))}</td><td class="n">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
+  const tableOf = (first, rows, showVoids = false) => `<div class="table-wrap"><table class="t"><thead><tr><th>${esc(first)}</th><th class="n">W–L–P</th><th class="n">Units</th><th class="n">Pending</th>${showVoids ? '<th class="n">Void</th>' : ''}</tr></thead><tbody>${rows.map(([name, t]) =>
+    `<tr><td>${esc(name)}</td><td class="n">${t.wins}–${t.losses}–${t.pushes}</td><td class="n ${t.units < 0 ? 'red' : t.units > 0 ? 'green' : ''}">${esc(units(t.units))}</td><td class="n">${t.pending}</td>${showVoids ? `<td class="n">${t.voids}</td>` : ''}</tr>`).join('')}</tbody></table></div>`;
   const postedChanceResults = picks => {
     const buckets = new Map();
     for (const pick of picks) {
@@ -862,7 +862,7 @@
       const MARKET_NAME = { Totals: 'Game totals', Straights: 'Player props', 'Risky lines': 'Risky player lines' };
       const marketRows = [...new Set(straight.map(C.category))].sort()
         .map(market => [MARKET_NAME[market] || market, C.recordBreakdown(straight.filter(p => C.category(p) === market)).captured])
-        .filter(([, stats]) => stats.priced || stats.pending);
+        .filter(([, stats]) => stats.wins || stats.losses || stats.pushes || stats.voids || stats.pending);
       const byWeek = [...new Set(st.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse().map(w => [weekLabel(w), C.summaryOf(st.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
       const archiveGroups = new Map();
       for (const p of all) { if (!Number.isInteger(Number(p.season))) continue; const key = [p.league, p.season, C.recordPhaseOf(p)].join('|'); if (!archiveGroups.has(key)) archiveGroups.set(key, []); archiveGroups.get(key).push(p); }
@@ -875,7 +875,7 @@
         ${notPosted.length ? section('Not posted', `<div class="receipts">${notPosted.map(p => `<p><a href="#pick/${esc(p.id)}">${esc(niceTitle(p.displayTitle || p.title))}</a> · Not posted; excluded from the record.</p>`).join('')}</div>`) : ''}
         ${laneResults}
         ${section('Every result', `${search}${settled.length ? weeksOf(settled, p => receipt(p, clvById)) : `<p class="muted">${rq ? 'No play matches. Try a player, a team or a market.' : 'Nothing settled yet. Plays show here once their games are final.'}</p>`}`)}
-        ${marketRows.length ? section('Results by market', tableOf('Market', marketRows), '', 'Official straights at recorded prices. Units exclude promotional credits.') : ''}
+        ${marketRows.length ? section('Results by market', tableOf('Market', marketRows, marketRows.some(([, stats]) => stats.voids)), '', 'Official straights at recorded prices. Units exclude promotional credits.') : ''}
         ${postedChanceResults(straight)}
         ${imported.length ? `<details class="more-box"><summary>Week 1 hand-posted legs (no prices) · ${esc(wl(C.summaryOf(imported)))} · not counted</summary><div class="receipts">${imported.map(p => receipt(p, clvById)).join('')}</div></details>` : ''}
         <details class="more-box" data-box="more-numbers" style="margin-top:12px"><summary>More numbers</summary><div><p class="small muted" style="margin-bottom:8px">Same plays, cut different ways. These include assumed prices and promo credits; the units line above does not.</p>
