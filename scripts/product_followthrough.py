@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATES = ('shipped', 'ready', 'owner-needed', 'observing', 'gated')
 OWNERS = ('agent', 'owner', 'desk', 'provider')
 MAX_BYTES = 256 * 1024
-MAX_ITEMS = 179                       # retain prior IDs plus Nov3 weekly owner-reset repair; byte/text limits unchanged
+MAX_ITEMS = 182                       # retain the existing queue and three November 13 verification items
 BRIEF_LIMIT = 1200
 ITEM_FIELDS = {'id', 'title', 'status', 'owner', 'next', 'doneWhen', 'evidence'}
 
