@@ -38,6 +38,12 @@ def build(now=None, root=ROOT, records=None, model_factory=None):
         for q in boxscores.read_store(p):
             if q.get('type') == 'record' and q.get('capturedAt') and boxscores.instant(q['capturedAt']) <= now:
                 quotes.setdefault(q['gameId'],q)
+    try:
+        local_spreads = json.loads((root/'data/paper/cbb-spreads.json').read_text())
+        if not isinstance(local_spreads, dict):
+            local_spreads = {}
+    except (OSError, ValueError):
+        local_spreads = {}
     def summary(season, team):
         s = stats[(season,team)]
         return dict(season=season, games=s['games'], wins=s['wins'], losses=s['losses'],
@@ -77,15 +83,27 @@ def build(now=None, root=ROOT, records=None, model_factory=None):
                     if type(chance) in (float,int) and math.isfinite(chance) and 0 <= chance <= 1:
                         row['projection']['winProb']=round(chance,6)
             except (ValueError,KeyError,TypeError,ArithmeticError):row['hold']='Projection unavailable'
-        spread = g.get('spreadQuote')
-        if fresh and g.get('timeConfirmed', True) and isinstance(spread, dict):
-            try:
-                observed = timestamp(spread['observedAt'])
-                if timedelta(0) <= now - observed <= timedelta(hours=4):
-                    row['spreadQuote'] = {key: spread[key] for key in
-                                          ('book', 'observedAt', 'homeLine', 'awayLine', 'homeOdds', 'awayOdds')}
-            except (AttributeError, KeyError, ValueError):
-                pass
+        if fresh and g.get('timeConfirmed', True):
+            spreads = [g.get('spreadQuote')]
+            local = local_spreads.get(g['id'])
+            if isinstance(local, dict):
+                try:
+                    if timestamp(local['kickoff']) == timestamp(g['kickoff']) and all(
+                        local['teams'][side] == g['teams'][side]['id'] for side in ('home', 'away')
+                    ):
+                        spreads.append(local.get('spreadQuote'))
+                except (AttributeError, KeyError, TypeError, ValueError):
+                    pass
+            latest = None
+            for spread in spreads:
+                try:
+                    observed = timestamp(spread['observedAt'])
+                    if timedelta(0) <= now - observed <= timedelta(hours=4) and (latest is None or observed > latest):
+                        row['spreadQuote'] = {key: spread[key] for key in
+                                              ('book', 'observedAt', 'homeLine', 'awayLine', 'homeOdds', 'awayOdds')}
+                        latest = observed
+                except (AttributeError, KeyError, TypeError, ValueError):
+                    pass
         q=quotes.get(g['id'])
         if q and boxscores.instant(q['capturedAt']) < boxscores.instant(g['kickoff']):
             row['firstTotal']=dict(line=q['line'],book=q['book'],capturedAt=q['capturedAt'])

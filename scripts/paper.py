@@ -31,6 +31,7 @@ import hoops_model
 import hoops_store
 import learning
 from boxscores import line as parse_line
+from sports_refresh import normalize as normalize_scoreboard
 
 ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / 'data' / 'paper'
@@ -62,15 +63,25 @@ def append(league, season, rows, root=STORE):
 
 # ------------------------------------------------------------------ upcoming games and their lines
 
-def upcoming(league, now, fetch=hoops_store.fetch_json):
+def upcoming(league, now, fetch=hoops_store.fetch_json, *, spreads=None):
     """Regular-season and postseason games tipping off within AHEAD, as {id, eventId, season, kickoff, neutral, home, away}."""
     out = []
     days = sorted({(now + timedelta(hours=h)).date() for h in (0, 12, 24, 36)})
     for day in days:
         try:
-            payload = fetch(hoops_store.scoreboard_url(league, day))
+            url = hoops_store.scoreboard_url(league, day)
+            payload = fetch(url)
         except Exception:
             continue
+        if league == 'CBB' and spreads is not None:
+            observed = datetime.now(timezone.utc) if fetch is hoops_store.fetch_json else now
+            try:
+                for game in normalize_scoreboard(payload, league, boxscores.stamp(observed), url):
+                    if 'spreadQuote' in game:
+                        spreads[game['id']] = {'kickoff': game['kickoff'], 'spreadQuote': game['spreadQuote'],
+                                               'teams': {side: team['id'] for side, team in game['teams'].items()}}
+            except (ValueError, TypeError, KeyError, IndexError):
+                pass  # Market capture is optional. The paper totals still use the same response.
         for event in payload.get('events') or []:
             competition = (event.get('competitions') or [{}])[0]
             status = (competition.get('status') or event.get('status') or {}).get('type') or {}
@@ -149,7 +160,12 @@ def record(now, fetch=hoops_store.fetch_json, root=STORE, models=None, log=print
     """The first line the desk sees for each upcoming game, our number, and whether it is a paper play."""
     written = 0
     for league in LEAGUES:
-        games = upcoming(league, now, fetch)
+        spreads = {} if league == 'CBB' else None
+        games = upcoming(league, now, fetch, spreads=spreads)
+        if spreads:
+            folder = Path(root)
+            folder.mkdir(parents=True, exist_ok=True)
+            boxscores.write_json(folder / 'cbb-spreads.json', spreads)
         if not games:
             continue
         seasons = {g['season'] for g in games}

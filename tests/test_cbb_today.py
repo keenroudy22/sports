@@ -17,10 +17,13 @@ class Model:
         assert neutral is True
         return dict(margin=4,total=140,sparse=True,homeWinProb=.62)
 class CbbTests(unittest.TestCase):
-    def build(self,games=None,records=None,checked='2026-11-02T14:00Z',factory=None):
+    def build(self,games=None,records=None,checked='2026-11-02T14:00Z',factory=None,local_spreads=None):
         with tempfile.TemporaryDirectory() as t:
             p=Path(t)/'site/data';p.mkdir(parents=True)
             (p/'sports.json').write_text(json.dumps({'leagues':{'CBB':dict(status='ok',checkedAt=checked,games=games or [G])}}))
+            if local_spreads is not None:
+                paper=Path(t)/'data/paper';paper.mkdir(parents=True)
+                (paper/'cbb-spreads.json').write_text(json.dumps(local_spreads))
             return c.build(NOW,Path(t),records=records or [],model_factory=factory or (lambda *a,**k:Model()))
     def test_neutral_projection_and_unknown_stats_are_not_zero(self):
         g=self.build()['games'][0]
@@ -46,6 +49,21 @@ class CbbTests(unittest.TestCase):
             game['spreadQuote']['observedAt'] = observed
             self.assertNotIn('spreadQuote', self.build([game])['games'][0])
         self.assertNotIn('spreadQuote', self.build([dict(game, timeConfirmed=False)])['games'][0])
+
+    def test_local_spread_matches_the_schedule_and_keeps_the_newest_quote(self):
+        local = dict(book='DraftKings', observedAt='2026-11-02T14:55Z', homeLine=-4.5,
+                     awayLine=4.5, homeOdds=-115, awayOdds=-105)
+        hosted = dict(local, observedAt='2026-11-02T14:00Z', homeLine=-3.5, awayLine=3.5)
+        game = dict(G, spreadQuote=hosted)
+        captured = dict(kickoff='2026-11-02T23:00:00Z', teams={'home':'1','away':'2'}, spreadQuote=local)
+        def quote(offer, schedule=game):
+            return self.build([schedule],local_spreads={G['id']:offer})['games'][0].get('spreadQuote')
+        self.assertEqual(quote(captured),local)
+        self.assertEqual(quote(captured,G),local)
+        self.assertEqual(quote(dict(captured,teams={'home':'2','away':'1'})),hosted)
+        self.assertEqual(quote(dict(captured,kickoff='2026-11-02T22:00Z')),hosted)
+        self.assertEqual(quote(dict(captured,spreadQuote=dict(local,observedAt='2026-11-02T10:55Z'))),hosted)
+        self.assertEqual(quote(dict(captured,spreadQuote=dict(local,observedAt='2026-11-02T15:01Z'))),hosted)
 
     def test_sparse_unmapped_school_is_not_average_division_one(self):
         class Unknown(Model):

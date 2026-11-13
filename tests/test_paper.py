@@ -1,3 +1,4 @@
+import json
 import sys
 import tempfile
 import unittest
@@ -54,6 +55,26 @@ class PaperTests(unittest.TestCase):
     def test_the_line_is_draftkings_now_with_its_opener_and_prices(self):
         quote = paper.current_line('NBA', '1', FakeFetch([], odds_payload()))
         self.assertEqual(quote, {'book': 'DraftKings', 'open': 219.5, 'now': 221.5, 'over': -112, 'under': -108})
+
+    def test_cbb_spreads_reuse_the_existing_scoreboard_requests_even_if_total_is_already_recorded(self):
+        item = event('1', '2026-10-21T23:30Z')
+        item['competitions'][0]['odds'] = [{
+            'provider': {'id':'100','name':'DraftKings'}, 'spread':-4.5,
+            'homeTeamOdds': {'team':{'id':'2'}}, 'awayTeamOdds': {'team':{'id':'18'}},
+            'pointSpread': {'home':{'close':{'line':'-4.5','odds':'-105'}},
+                            'away':{'close':{'line':'+4.5','odds':'-115'}}}}]
+        for competitor in item['competitions'][0]['competitors']:
+            competitor['team']['displayName'] = competitor['team']['abbreviation']
+        def fetch(url):
+            return {'leagues':[{'abbreviation':'NCAAM'}], 'events':[item]} if 'groups=50' in url else {'events':[]}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            paper.append('CBB',2027,[{'type':'record','gameId':'CBB-1'}],root)
+            self.assertEqual(paper.record(NOW,fetch,root),0)
+            row = json.loads((root/'cbb-spreads.json').read_text())['CBB-1']
+            self.assertEqual(row['teams'],{'home':'2','away':'18'})
+            self.assertEqual(row['spreadQuote']['homeOdds'],-105)
+            self.assertEqual(len(paper.read('CBB',2027,root)),1)
 
     def test_a_game_is_recorded_once_and_is_a_paper_play_past_the_lean(self):
         with tempfile.TemporaryDirectory() as folder:
