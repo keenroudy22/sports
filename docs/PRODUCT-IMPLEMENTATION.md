@@ -1,3 +1,20 @@
+### November 13 basketball Prop Finder — verified live
+
+CBB search includes every player with a stored game log. Short samples remain
+visible with the model projection held. NBA retains its searchable directory
+alongside captured props, shows the exact side, odds, book and price age, and
+labels research leans only while the underlying quote and role checks pass.
+NBA links open the chart at the same stat, line, side and sportsbook.
+
+Source `b42309781a4094243045cf0d3bb8c5a5c681e0` passed 2,271 Python tests
+(2 skipped), 346 interface tests, clean export, the 609-page build, record and
+public-file audits, and offline rehearsal. Hosted run `43500647211` succeeded.
+At 320, 375 and 1440 CSS pixels, Aidan McDowell opened his one-game CBB log and
+Isaiah Stewart opened the same 5.5 rebounds under at DraftKings -127. Both
+flows were checked for clipping, overflow and browser errors. The NBA capture
+store produced a 61.14 MB GitHub size warning. Sharding future appends while
+preserving existing immutable rows is a separate reliability task.
+
 ### November 13 single Pages publisher — hosted push verified
 
 Scheduled refreshes still use the existing providers and request caps. They
