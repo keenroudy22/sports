@@ -481,7 +481,10 @@
     /* The line: the board's priced quote first, else the captured reference line from the game feed. */
     const pricedRows = !isQuarter && next && lines ? (lines.lines || []).filter(r => String(r.athleteId) === String(route.id) && r.gameId === next.id && C.marketKey(r) === stat) : [];
     const linkedLine = !isQuarter && state.player.line !== '' && isNum(Number(state.player.line)) && Number(state.player.line) >= 0 ? Number(state.player.line) : null;
-    const matchesLink = r => linkedLine == null || (Number(r.line) === linkedLine && String(r.direction || 'over').toLowerCase() === state.player.direction);
+    const linkedBook = linkedLine != null && route.stat === stat && Number(route.line) === linkedLine
+      && (!route.direction || route.direction === state.player.direction) ? bookLabel(route.book) : null;
+    const sameBook = row => !linkedBook || linkedBook === bookLabel(row.displayBook || row.book);
+    const matchesLink = r => linkedLine == null || (Number(r.line) === linkedLine && String(r.direction || 'over').toLowerCase() === state.player.direction && sameBook(r));
     const priced = pricedRows.filter(r => matchesLink(r) && !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && (vm.age.kind === 'fresh' || vm.age.kind === 'aging')).sort((a, b) => (b.edge ?? -99) - (a.edge ?? -99))[0] || null;
     const latest = pricedRows.slice().sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt))[0];
     const captured = !isQuarter && (((nextDetail || {}).props || {}).lines || {})[route.id];
@@ -489,7 +492,7 @@
     const capturedReference = refLine != null ? { line: refLine, state: 'reference', book: nextDetail?.props?.provider || null, observedAt: nextDetail?.props?.capturedAt || null } : null;
     const quote = priced?.src || (linkedLine != null
       ? pricedRows.filter(r => matchesLink(r) && !r.priceSuspect).sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt))[0]
-        || (refLine === linkedLine ? capturedReference : { line: linkedLine, state: 'reference' })
+        || (refLine === linkedLine && sameBook(capturedReference) ? capturedReference : { line: linkedLine, state: 'reference' })
       : latest || capturedReference);
     const line = quote && isNum(Number(quote.line)) ? Number(quote.line) : null;
     const lineStatus = quote ? C.quoteStatus(quote, next?.kickoff, now) : null;
@@ -552,7 +555,7 @@
       ${photo ? `<div class="kt-ph kt-photo" aria-hidden="true">${img}</div>` : ''}</section>`;
     const tabs = `<nav class="kt-tabs" aria-label="Stat">${options.filter(k => !k.startsWith('q1_')).map(k => `<button type="button" data-set="pstat:${esc(k)}" aria-pressed="${k === stat}"${TAB_SHORT[k] ? ` aria-label="${esc(PLAYER_LABEL[k] || k)}"` : ''}>${esc(TAB_SHORT[k] || PLAYER_LABEL[k] || k)}</button>`).join('')}</nav>${quarterKeys.length ? `<nav class="kt-tabs kt-quarter-tabs" aria-label="First-quarter stat">${quarterKeys.map(k => `<button type="button" data-set="pstat:${esc(k)}" aria-pressed="${k === stat}">${esc(PLAYER_LABEL[k])}</button>`).join('')}</nav>` : ''}`;
     /* Best price per side at the shown line, never from a row whose price failed the sanity check. */
-    const sides = ['over', 'under'].map(d => pricedRows.filter(r => !r.priceSuspect && Number(r.line) === line && String(r.direction).toLowerCase() === d && C.quoteStatus(r, next?.kickoff, now).current)
+    const sides = ['over', 'under'].map(d => pricedRows.filter(r => sameBook(r) && !r.priceSuspect && Number(r.line) === line && String(r.direction).toLowerCase() === d && C.quoteStatus(r, next?.kickoff, now).current)
       .sort((a, b) => b.odds - a.odds)[0]).map((r, i) => r && { dir: i ? 'under' : 'over', odds: r.odds, book: bookLabel(r.book), observedAt: r.observedAt });
     /* Unavailable, one side's price alone would read as a lean: print both sides at one price, else the line only. */
     const quoteBook = bookLabel((quote || {}).book) || (sides.find(Boolean) || {}).book;

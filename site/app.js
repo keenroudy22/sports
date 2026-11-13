@@ -427,7 +427,7 @@
       const prev = groups.get(key);
       if (!prev) groups.set(key, { ...r, alternates: 0 });
       else {
-        const better = (r.edge ?? -99) > (prev.edge ?? -99) ? r : prev;
+        const better = (Number(!!r.official) - Number(!!prev.official) || (r.edge ?? -99) - (prev.edge ?? -99)) > 0 ? r : prev;
         groups.set(key, { ...better, alternates: prev.alternates + 1 });
       }
     }
@@ -1326,9 +1326,7 @@
     const upsetHtml = upsets.length || spreadRows.length ? `<p class="eyebrow" style="margin-bottom:8px">Outright upset candidates</p>${upsets.length ? `<div class="grid two">${upsets.map((g, i) => upsetRow(g, i + 1)).join('')}</div>` : '<p class="muted small">No fresh outright candidate.</p>'}
       ${spreadRows.length ? `<p class="eyebrow" style="margin:16px 0 4px">Underdog spread value</p><p class="small muted" style="margin-bottom:8px">Covering does not mean winning outright.</p><div class="board">${spreadRows.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="muted small" style="margin-top:10px">Underdog spreads: none highlighted right now.</p>'}`
       : '<p class="muted small">No current outright-upset or underdog-spread highlight.</p>';
-    const officialPicks = new Map(picks.filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(p => [officialKey(p), p]));
-    const official = new Set(officialPicks.keys());
-    lineRows.forEach(vm => { const pick = officialPicks.get(vm.key); vm.official = Boolean(pick && C.isOpen(pick)); vm.officialLine = pick ? pick.line : null; });
+    const official = C.labelBoardPicks(lineRows, picks, now, officialKey, bookLabel);
     const gameIdsToday = new Set(games.filter(g => C.dayOf(g.kickoff) === etDay() && !g.completed).map(g => g.id));
     const favorite = !rows.length ? favoriteLook(lineRows, gameIdsToday, official) : null;
     const favoriteHtml = favorite ? ktSec('favorite', 'What I like most', `<div class="board">${boardRow(favorite, false)}</div><p class="kt-note"><b>Why it is not an official play:</b> ${esc(favoriteHold(favorite))}</p>`,
@@ -1483,8 +1481,8 @@
     const comparable = projection !== null && isNum(vm.line) && (vm.isProp || /total/i.test(vm.market));
     const difference = comparable ? round1(vm.projection - vm.line) : null;
     const verdict = clears ? 'Kook’n edge · Research lean' : current && projection !== null ? 'Projection lean · Research only' : 'No current edge';
-    const badge = vm.official ? `<span class="badge best">Best bet${vm.officialLine != null && Number(vm.officialLine) !== Number(vm.line) ? ` at ${esc(vm.officialLine)}` : ''}</span>`
-      : vm.onCard ? `<span class="badge research" title="Posted at ${esc(oddsText(vm.onCard.odds))}${vm.onCard.line != null ? `, line ${esc(vm.onCard.line)}` : ''} and graded there">On the card${vm.onCard.line != null && Number(vm.onCard.line) !== Number(vm.line) ? ` at ${esc(vm.onCard.line)}` : ''}</span>` : '';
+    const badge = vm.official ? `<span class="badge best">Best bet</span>`
+      : vm.onCard ? `<span class="badge research" title="Posted ${esc(oddsText(vm.onCard.odds))} at ${esc(bookLabel(vm.onCard.book))}${vm.onCard.line != null ? `, line ${esc(vm.onCard.line)}` : ''} and graded there">On the card${vm.onCard.line != null && Number(vm.onCard.line) !== Number(vm.line) ? ` at ${esc(vm.onCard.line)}` : ''}</span>` : '';
     const summary = `<div class="row-main">
       <div class="row-title with-art">${artFor(vm, 'sm')}<div><b>${esc(vm.title)}${badge}${vm.alternate ? '<span class="badge research">Alternate</span>' : ''}</b><span>${esc(vm.market)}${vm.position ? ` · ${esc(vm.position)}` : ''}${vm.matchup && !vm.isProp ? ` · ${esc(vm.matchup)}` : ''} · ${esc(vm.league === 'CFB' ? 'College' : vm.league)} · ${esc(whenShort(vm.kickoff))}</span>${vm.sub ? `<span>${esc(vm.sub)}</span>` : ''}
         <span>Kook’n projection <b>${esc(projection ?? 'Unavailable')}</b>${difference !== null ? ` · ${difference > 0 ? '+' : ''}${esc(difference)} vs book line ${esc(vm.line)}` : ''}</span>
@@ -1493,7 +1491,8 @@
       <div class="row-meter on-felt">${meter(vm.chance, vm.needs, true)}<span>${pctText(vm.chance)} our chance · ${pctText(vm.needs)} needed</span></div>
       <div class="row-edge ${clears ? 'clears' : vm.edge > 0 ? 'pos' : 'neg'}">${clears ? '<span aria-hidden="true">✓ </span>' : ''}${vm.edge != null ? `${vm.edge > 0 ? '+' : ''}${vm.edge}` : '–'}<small class="lbl"> pts vs price need</small>${clears ? '<span class="sr"> · passes our price check</span>' : ''}</div>
       <div class="row-fair num"><small class="lbl">our price </small>${esc(oddsText(current && vm.calibrated ? vm.fair : null))}</div></div>`;
-    if (!expandable) return `<a class="${clears ? 'edge-liked' : ''}" href="${vm.athleteId && FOOTBALL.includes(vm.league) ? `#player/${vm.league}/${encodeURIComponent(vm.athleteId)}${vm.stat ? `?stat=${encodeURIComponent(vm.stat)}` : ''}` : vm.gameId ? `#game/${encodeURIComponent(vm.gameId)}` : `#edges?q=${encodeURIComponent(vm.player || vm.title)}`}" style="color:inherit;display:block;border-bottom:1px solid var(--line)">${summary}</a>`;
+    const playerChart = vm.athleteId && C.playerLineHref(vm);
+    if (!expandable) return `<a class="${clears ? 'edge-liked' : ''}" href="${playerChart && FOOTBALL.includes(vm.league) ? esc(playerChart) : vm.gameId ? `#game/${encodeURIComponent(vm.gameId)}` : `#edges?q=${encodeURIComponent(vm.player || vm.title)}`}" style="color:inherit;display:block;border-bottom:1px solid var(--line)">${summary}</a>`;
     const fa = [...(vm.extraFa || [])];
     if (vm.chance != null && vm.needs != null) fa.push([vm.chance > vm.needs ? 'for' : 'against', vm.chance > vm.needs ? `Our chance ${pctText(vm.chance)} beats the ${pctText(vm.needs)} this price needs.` : `Our chance ${pctText(vm.chance)} does not clear the ${pctText(vm.needs)} this price needs.`]);
     if (vm.otherLines.length) fa.push(['against', `Books disagree on the number: ${vm.otherLines.slice(0, 3).map(b => `${b.book} ${b.line}`).join(', ')}.`]);
@@ -1507,7 +1506,7 @@
         <div><ul class="fa">${fa.map(([c, t]) => `<li class="${c}">${esc(t)}</li>`).join('')}</ul>
           ${vm.src && (vm.src.books || []).filter(b => bookLabel(b.book)).length > 1 ? `<p class="small" style="margin-top:8px"><b>Prices we saw at other books:</b> ${(vm.src.books || []).filter(b => bookLabel(b.book) && isNum(Number(b.odds))).sort((a, b) => Number(b.odds) - Number(a.odds)).map(b => `${esc(bookLabel(b.book))} ${esc(oddsText(b.odds))}${Number(b.line) !== Number(vm.line) ? ` at ${esc(b.line)}` : ''}${/hard ?rock/i.test(b.book) ? ' (comparison only)' : ''}`).join(' · ')}</p>` : ''}
           <p class="small muted" style="margin-top:8px">${esc(vm.age.label)}.${vm.alternates ? ` ${vm.alternates} other line${vm.alternates === 1 ? '' : 's'} for this market hidden.` : ''}</p>
-          <div class="btn-row" style="margin-top:10px">${vm.athleteId ? `<a class="btn small" href="#player/${esc(vm.league)}/${esc(vm.athleteId)}${vm.stat ? `?stat=${esc(vm.stat)}` : ''}">Player page</a>` : ''}${vm.gameId ? `<a class="btn small" href="#game/${esc(vm.gameId)}">Game page</a>` : ''}${vm.src ? ticketButton(vm.id, vm.title) : ''}${vm.src ? watchButton(P.snapshot({ ...vm.src, direction: vm.src.direction || vm.src.side || null })) : ''}</div></div></div>
+          <div class="btn-row" style="margin-top:10px">${vm.athleteId ? `<a class="btn small" href="${esc(playerChart)}">Player chart</a>` : ''}${vm.gameId ? `<a class="btn small" href="#game/${esc(vm.gameId)}">Game page</a>` : ''}${vm.src ? ticketButton(vm.id, vm.title) : ''}${vm.src ? watchButton(P.snapshot({ ...vm.src, direction: vm.src.direction || vm.src.side || null })) : ''}</div></div></div>
     </details>`;
   };
   /* A link that reopens this exact view, in the old site's shareable format (the resolver maps it back). */
@@ -1586,11 +1585,15 @@
     const lines = await lineData();
     if (!lines) return top + researchStart + empty('Football lines did not load', 'The current football line files are unavailable right now. <button type="button" class="btn small" data-retry>Try again</button>', 'clock');
     const now = Date.now();
-    const posted = new Map((today.picks || []).filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(p => [officialKey(p), p]));
     const b = state.board;
     let rows = (lines.lines || []).filter(r => !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && inLeague(vm));
     const gameIndex = new Map((today.games || []).map(g => [g.id, g]));
-    rows.forEach(vm => { const pk = posted.get(vm.key); vm.official = Boolean(pk && C.isOpen(pk)); vm.officialLine = pk ? pk.line : null; vm.onCard = pk && !vm.official ? pk : null; const g = gameIndex.get(vm.gameId); vm.matchup = g ? `${g.away.abbr} at ${g.home.abbr}` : null; vm.teams = g ? [g.away.name, g.home.name, g.away.abbr, g.home.abbr] : []; });
+    C.labelBoardPicks(rows, today.picks || [], now, officialKey, bookLabel);
+    rows.forEach(vm => {
+      const g = gameIndex.get(vm.gameId);
+      vm.matchup = g ? `${g.away.abbr} at ${g.home.abbr}` : null;
+      vm.teams = g ? [g.away.name, g.home.name, g.away.abbr, g.home.abbr] : [];
+    });
     if (b.type === 'props') rows = rows.filter(vm => vm.isProp);
     if (b.type === 'games') rows = rows.filter(vm => !vm.isProp);
     if (state.q) rows = rows.filter(vm => C.researchMatches(state.q, vm.title, vm.player, vm.market, vm.league, vm.matchup, ...vm.teams));
@@ -2116,9 +2119,9 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-0370b34d5031';
+  const MORE_ASSET = 'app-more.js?v=sha256-69f7b55321d4';
   const GAMES_ASSET = 'app-games.js?v=sha256-d08234a84471';
-  const KVB_ASSET = 'app-kvb.js?v=sha256-13e5df1d6e49';
+  const KVB_ASSET = 'app-kvb.js?v=sha256-ddf4fcb21f65';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {

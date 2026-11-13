@@ -209,6 +209,20 @@ test('a matchup deep link keeps the exact football line and direction on the cha
   assert.doesNotMatch(page, /Break-even win rate|57\.0%/);
 });
 
+test('a football chart link keeps the selected book even when another has a stronger edge', async () => {
+  const quote = (files, book) => {
+    const rows = files['data/app/lines-CFB.json'].lines;
+    rows.push({ ...rows[0], id: 'other-book', odds: -102, book, grade: { ...rows[0].grade, edge: 9 } });
+  };
+  const link = 'line=261.5&direction=over&book=FanDuel';
+  const page = await playerPage(false, files => quote(files, 'DraftKings'), 'CFB', 'passYds', C, link);
+  assert.match(page, /Over 261\.5 [−-]114 at FanDuel/);
+  assert.doesNotMatch(page, /at DraftKings/);
+  const missing = await playerPage(false, null, 'CFB', 'passYds', C, 'line=261.5&direction=over&book=DraftKings');
+  assert.match(missing, /<small>Chart line<\/small><b class="num">261\.5/);
+  assert.doesNotMatch(missing, /at FanDuel/);
+});
+
 test('the player line ladder compares nearby thresholds without presenting them as offered markets', async () => {
   const page = await playerPage(false);
   const lab = page.split('<section class="line-lab"')[1].split('</section>')[0];

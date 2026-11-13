@@ -796,6 +796,26 @@ const OBS = '2026-10-10T13:40:00Z';
 const lineRow = (id, extra = {}, grade = {}) => ({ id, league: 'NFL', gameId: 'NFL-1', kickoff: prop.kickoff, state: 'open', odds: -110, book: 'draftkings',
   observedAt: OBS, title: `${id} over 44.5`, marketType: 'total', direction: 'over', line: 44.5,
   grade: { calibrated: true, view: 'lean', chance: 0.58, needs: 0.524, edge: 5, ...grade }, ...extra });
+test('the research board badges the exact delivered quote and links its exact chart', async () => {
+  const row = lineRow('market', { athleteId: prop.athleteId, player: 'Fixture Receiver', stat: 'recYds',
+    marketType: null, line: prop.line, book: 'fanduel' }, { view: 'pass' });
+  const renderBoard = (quotes, picks) => {
+    const { api } = loadApp('#edges?sport=NFL&show=all', {}, { today: { ...TODAY, picks }, extra: linesFor(quotes) });
+    return api.views.research({ view: 'research', mode: 'lines', edges: true, league: 'NFL', show: 'all' });
+  };
+  const betterResearch = { ...row, id: 'other-price', odds: -105, grade: { ...row.grade, edge: 99 } };
+  const exact = await renderBoard([row, betterResearch], [prop, { ...prop, odds: -118 }]);
+  assert.match(exact, /data-row="market"[\s\S]*class="badge best">Best bet/);
+  assert.match(exact, /stat=recYds&amp;line=49.5&amp;direction=over&amp;book=FanDuel/);
+  for (const other of [{ line: 51.5 }, { book: 'draftkings' }, { odds: -105 }]) {
+    const page = await renderBoard([{ ...row, ...other }], [prop]);
+    assert.match(page, /class="badge research"[^>]*>On the card/);
+    assert.doesNotMatch(page, /class="badge best">Best bet/);
+  }
+  const unpublished = await renderBoard([row], [{ ...prop, posted: false }]);
+  assert.doesNotMatch(unpublished, /class="badge best">Best bet|class="badge research"[^>]*>On the card/);
+});
+
 test('the Prep List still favors props, then sides, then one total', () => {
   assert.deepEqual(M.todayResearchOrder([
     { id: 'total-a', marketType: 'total', hits: 10, games: 10 },

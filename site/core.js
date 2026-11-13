@@ -676,6 +676,36 @@
 
   /* ---------- routes ---------- */
 
+  const labelBoardPicks = (rows, picks, now, marketKeyOf, normalizeBook) => {
+    const byMarket = new Map();
+    for (const pick of picks) {
+      if (pick.community || pick.result || pick.historicalImport || isParlay(pick) || !headlineDeliveryEligible(pick)) continue;
+      const key = marketKeyOf(pick);
+      if (!byMarket.has(key)) byMarket.set(key, []);
+      byMarket.get(key).push(pick);
+    }
+    for (const row of rows) {
+      const candidates = byMarket.get(row.key) || [];
+      row.official = candidates.some(pick => (pick.line ?? null) === (row.line ?? null)
+        && Number.isFinite(pick.odds) && pick.odds === row.odds && row.book && normalizeBook(pick.book) === row.book
+        && isOpen(pick, now));
+      row.onCard = row.official ? null : candidates[0] || null;
+    }
+    return new Set(byMarket.keys());
+  };
+
+  const playerLineHref = ({ league, athleteId, stat, line, direction, book }) => {
+    const link = `#player/${encodeURIComponent(league)}/${encodeURIComponent(athleteId)}`;
+    if (!stat) return link;
+    const query = new URLSearchParams({ stat });
+    if (Number.isFinite(line) && ['over', 'under'].includes(direction)) {
+      query.set('line', line);
+      query.set('direction', direction);
+      if (book) query.set('book', book);
+    }
+    return `${link}?${query}`;
+  };
+
   /* Straight cards lead to their research; multi-game tickets and incomplete imports keep their receipt. */
   const pickResearchRoute = p => {
     if (isParlay(p)) return null;
@@ -924,5 +954,5 @@
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, basketballAvailabilityHold, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, quarterMatchupOrder, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, nbaTicketLines, compareTicketLeg, ticketText,
-    unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, labelBoardPicks, playerLineHref, shardOf, BASE };
 });

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import core from '../site/core.js';
 
 const source = fs.readFileSync(new URL('../site/app-kvb.js', import.meta.url), 'utf8');
 
@@ -11,6 +12,7 @@ const setup = () => {
   const isNum = value => typeof value === 'number' && Number.isFinite(value);
   return sandbox.window.KRKvb({
     C: {
+      playerLineHref: core.playerLineHref,
       statValue: value => Number(value).toFixed(Number.isInteger(value) ? 0 : 1),
       thresholdResult: (value, line, direction) => direction === 'under' ? value < line ? 'hit' : value > line ? 'miss' : 'push' : value > line ? 'hit' : value < line ? 'miss' : 'push',
     },
@@ -44,6 +46,7 @@ test('Kook vs. Book puts common props, three comparison numbers and hit-rate cha
   assert.match(html, /Official play/);
   assert.match(html, /L5[\s\S]*L10[\s\S]*Season/);
   assert.match(html, /chart-stub/);
+  assert.match(html, /#player\/NFL\/a\?stat=recYds&amp;line=49.5&amp;direction=over&amp;book=DraftKings/);
   assert.match(html, /Research unless marked Official/);
   assert.match(html, /stat=rec&amp;line=4\.5&amp;direction=over/);
 });
