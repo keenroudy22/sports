@@ -279,7 +279,9 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         cbb_pick = kind == 'buffer:cbb-pick' and entry.get('cbbPick') is True and destination == 'plays'
         full_daily = (entry.get('fullDailyRecap') is True and kind == 'buffer:receipt'
                       and destination == 'plays' and str(entry.get('id', '')).startswith('receipt:day:')
-                      and entry.get('cardKey') == 'receipt-day-' + entry['id'].split(':')[-1] + '-all-sports')
+                      and entry.get('cardKey') in {
+                          'receipt-day-' + entry['id'].split(':')[-1] + suffix
+                          for suffix in ('', '-all-sports')})
         allowed = (combined or full_daily or nba_pick or cbb_pick or (kind == 'buffer:play' and destination != 'wins')
                    or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith(('cashed:', 'burnt:'))
                        and destination != 'wins')

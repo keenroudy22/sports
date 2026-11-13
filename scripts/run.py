@@ -3960,7 +3960,9 @@ def retry_typefully_recap(now, log_book, settings):
     if entry is not None:
         if entry.get('typefullyDelivery') and not entry.get('sentAt'):
             typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log)
-        return
+            return
+        if not entry.get('discordRecapPrepared') or entry.get('sentAt'):
+            return
     recap = next((row for row in receipts.ready(ctx.first, ctx.latest, games, log_book, now)
                   if row['key'] == key and row['due'] <= now < row['stale']), None)
     if not recap:
@@ -3968,10 +3970,15 @@ def retry_typefully_recap(now, log_book, settings):
     caption = recap['text'].rstrip() + '\n\n21+ only'
     if x_post.tweet_length(caption) > x_post.LIMIT or x_post.x_style(caption):
         return
-    entry = {'id': key, 'kind': 'buffer:receipt', 'postedAt': stamp(now),
-             'queuedText': caption, 'textHash': x_post.text_hash(caption),
-             'socialAgeVersion': AGE_VERSION}
-    log_book['posts'].append(entry)
+    if entry is None:
+        entry = {'id': key, 'kind': 'buffer:receipt', 'postedAt': stamp(now),
+                 'queuedText': caption, 'textHash': x_post.text_hash(caption),
+                 'socialAgeVersion': AGE_VERSION, 'cardKey': recap['card'],
+                 'fullDailyRecap': True, 'discordRecapPrepared': True,
+                 'discord': {'state': 'pending', 'text': caption, 'destination': 'plays',
+                             'readyAt': gates.stamp(recap['due'])}}
+        log_book['posts'].append(entry)
+        x_post.save_log(log_book)
     typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log,
                              text=caption, expires=recap['stale'])
 
