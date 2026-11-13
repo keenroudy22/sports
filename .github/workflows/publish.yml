@@ -65,7 +65,8 @@ jobs:
           tests.test_integrity tests.test_build_site tests.test_feed
           tests.test_payload_budget tests.test_record_audit
           tests.test_publication_guard tests.test_publication_supervisor
-          tests.test_workflow
+          tests.test_workflow tests.test_gates tests.test_game_alternates
+          tests.test_fun_ticket_review
       - name: Compare complete reports with the pre-push record
         if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
         env:
