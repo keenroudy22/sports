@@ -37,6 +37,8 @@ test('bare Research preserves the old news desk and legacy player searches land 
   assert.equal(M.resolve('#research?type=props').mode, 'lines');
   assert.equal(M.resolve('#research?sort=edge&show=value&q=Bijan').mode, 'lines');
   assert.equal(M.resolve('#research/lines').mode, 'lines');
+  assert.deepEqual({ mode: M.resolve('#research/milestones?sport=NBA').mode, league: M.resolve('#research/milestones?sport=NBA').league },
+    { mode: 'milestones', league: 'NBA' });
   assert.deepEqual({ mode: M.resolve('#edges').mode, show: M.resolve('#edges').show, sort: M.resolve('#edges').sort, league: M.resolve('#edges').league },
     { mode: 'lines', show: 'value', sort: 'edge', league: 'ALL' });
   assert.equal(M.resolve('#stats/search').sub, 'search');

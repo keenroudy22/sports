@@ -143,3 +143,21 @@ test('NBA record keeps posted player terms and voids separate from team margins'
  const html=await views.record({tab:'official'});
  assert.match(html,/Real Player over 5.5 assists/);assert.match(html,/void/);assert.match(html,/0.5u/);assert.doesNotMatch(html,/final null|undefined/);
 });
+
+test('NBA milestone board groups verified history by matchup and keeps milestones separate from prices', async()=>{
+ const {api,factory}=loadBrowserApi(), kickoff=new Date(Date.now()+3600000).toISOString(), checked=new Date().toISOString();
+ const keys=['pts','reb','ast','fg3m','pra','pa','pr','ra','min','fgm','fga','ftm','fta','stl','blk','tov','plusMinus'];
+ const values=[12,4,3,1,19,15,16,7,30,4,8,3,4,1,0,1,5];
+ const rows=Array.from({length:6},(_,i)=>[`g${i}`,`2026-11-${String(i+1).padStart(2,'0')}`,2027,0,2,'1','2',i%2,'BBB',...values]);
+ const index={season:2027,shards:2,players:[['1','Example Guard','G','1','AAA','2026-11-12',6,{games:6,minutes:30,values:{pts:12,ast:3}}]]};
+ const games={games:[{id:'NBA-77',providerId:'77',kickoff,status:'scheduled',teams:{away:{id:'1',name:'Alpha Aces',shortName:'Aces',abbreviation:'AAA'},home:{id:'2',name:'Beta Bears',shortName:'Bears',abbreviation:'BBB'}}}]};
+ const props={rows:[{eventId:'77',athleteId:'1',stat:'pts',kickoff,line:11.5,over:-110,book:'DraftKings',sourceAt:checked,projection:{value:12}}]};
+ const ctx=api.moreContext({get:async path=>path==='app/players/NBA.json'?index:path==='app/nba.json'?games:path==='app/players/NBA/1.json'?{keys,players:{1:{name:'Example Guard',pos:'G',projection:index.players[0][7],rows}}}:null,
+   maybe:async path=>path==='app/nba-props.json'?props:null});
+ ctx.state.league='NBA';
+ const html=await factory(ctx).basketballMilestones({league:'NBA'});
+ assert.match(html,/Alpha Aces/);assert.match(html,/Example Guard/);assert.match(html,/10\+ PTS/);
+ assert.match(html,/L5[\s\S]*5\/5/);assert.match(html,/Book 11\.5/);assert.match(html,/Kook’n 12/);
+ assert.match(html,/line=9\.5/);assert.match(html,/Historical hit rate · not a probability/);
+ assert.match(html,/Milestone price not verified|Book 11\.5/);assert.doesNotMatch(html,/90% chance|best bet/i);
+});

@@ -536,7 +536,7 @@
       case 'pick': return rest ? { view: 'pick', id: rest } : { view: 'today' };
       case 'research': {
         const lineParams = ['type', 'sort', 'show', 'q'].some(key => params.has(key));
-        const mode = a === '' ? (lineParams ? 'lines' : 'news') : ['lines', 'trends', 'players', 'news'].includes(a) ? a : 'lines';
+        const mode = a === '' ? (lineParams ? 'lines' : 'news') : ['lines', 'trends', 'milestones', 'players', 'news'].includes(a) ? a : 'lines';
         return { view: 'research', mode, ctx: mode === 'trends' && C.researchContext ? C.researchContext(`#trends?${params}`) : null, type: params.get('type') || null, sort: params.get('sort') || null, q, game: params.get('game') || null, sub: params.get('view') || null, rate: params.get('rate') || null, show: params.get('show') || null, pl: (params.get('pl') || '').toUpperCase() || null,
           league: params.get('sport') ? params.get('sport').toUpperCase() : null };
       }
@@ -1529,6 +1529,7 @@
   const shareLink = (mode, route) => `<a class="linkish" href="${esc(researchShare(mode, route))}" data-copy-link>Copy link</a>`;
   const RESEARCH_HEAD = {
     trends: ['Hit-rate trends', 'L5, L10 and season results against a line. History, not a probability.'],
+    milestones: ['Popular thresholds', 'Common player milestones grouped by matchup, with exact L5, L10 and season results. History, not a probability.'],
     news: ['Injuries and news', 'ESPN injury list and status changes, newest first.'] };
   const researchHead = (mode, edges = false) => {
     const playerHeads = { matchup: ['Player prop board', "Book line, Kook’n, L5/L10 and defense at a glance."], search: ['Player stats', 'Logs, averages & splits.'], defense: ['Position vs. defense', 'What defenses allow by position and stat.'] };
@@ -1540,10 +1541,9 @@
     const basketball = ['NBA','CBB'].includes(researchSport);
     const sportLanes = edges ? `<nav class="edge-sports" aria-label="Kook’n Edges sports"><a href="#edges"${state.league === 'ALL' ? ' aria-current="page"' : ''}>All priced</a><a href="#edges?sport=NFL"${state.league === 'NFL' ? ' aria-current="page"' : ''}>NFL</a><a href="#edges?sport=CFB"${state.league === 'CFB' ? ' aria-current="page"' : ''}>CFB</a><a href="#edges?sport=NBA"${state.league === 'NBA' ? ' aria-current="page"' : ''}>NBA</a><a href="#edges?sport=CBB"${state.league === 'CBB' ? ' aria-current="page"' : ''}>CBB</a></nav>` : '';
     return `${head('Research', title, sub)}${sportLanes}
-      ${edges ? '' : `<nav class="research-quick" aria-label="Research tools">${tool('#edges', 'Edges', 'edges')}${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? '' : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>`}
+      ${edges ? '' : `<nav class="research-quick" aria-label="Research tools">${tool('#edges', 'Edges', 'edges')}${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? tool(`#research/milestones?sport=${researchSport}`, 'Milestones', 'milestones') : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>`}
       <details class="plain-fold research-more"><summary>More research</summary><div class="btn-row"><a class="btn small" href="#edges">Kook’n Edges</a><a class="btn small" href="#research/trends?period=full">Full-game hit rates</a><a class="btn small" href="#research/news">Injuries & news</a><a class="btn small" href="#trends?period=full&amp;kind=alternate&amp;sport=ALL">Alternate lines</a></div></details>`;
   };
-  /* A link's filters apply once, when it is opened. After that the reader's own choices win, even on refresh. */
   let appliedHash = null;
   const NOT_YET = l => !FOOTBALL.includes(l) && l !== 'ALL';
   const notYet = () => empty(`${LEAGUE_NAME[state.league]} research is not available yet`, `Lines, trends and player research cover the NFL and college football. <a href="#games/live">Live scores</a> cover every sport, and new sports collect evidence in <a href="#record/trials">trials</a>.`, 'research');
@@ -1562,7 +1562,10 @@
     }
     if (state.league === 'NBA') return route.mode === 'players'
       ? researchHead(route.mode, route.edges) + await (await ensureMore()).basketballPlayers({ ...route, league: 'NBA' })
-      : researchHead(route.mode, route.edges) + await (await ensureGames()).nbaToday({ research: true, embedded: true });
+      : route.mode === 'milestones'
+        ? researchHead(route.mode, route.edges) + await (await ensureMore()).basketballMilestones({ ...route, league: 'NBA' })
+        : researchHead(route.mode, route.edges) + await (await ensureGames()).nbaToday({ research: true, embedded: true });
+    if (state.league === 'CBB' && route.mode === 'milestones') return researchHead(route.mode, route.edges) + await (await ensureMore()).basketballMilestones({ ...route, league: 'CBB' });
     if (state.league === 'CBB' && route.mode === 'players') return researchHead(route.mode, route.edges) + await (await ensureMore()).basketballPlayers({ ...route, league: 'CBB' });
     if (state.league === 'CBB' && route.mode === 'lines') return researchHead(route.mode, route.edges) + await (await ensureGames()).cbbToday({ embedded: true });
     const today = await get('app/today.json');
@@ -2112,7 +2115,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-eafd7dca8c79';
+  const MORE_ASSET = 'app-more.js?v=sha256-d64428935ca0';
   const GAMES_ASSET = 'app-games.js?v=sha256-dcc12ceb24d3';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';

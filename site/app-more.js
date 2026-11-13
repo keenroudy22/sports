@@ -101,6 +101,46 @@
   .line-lab-table th:first-child, .line-lab-table td:first-child { width: 31%; }
   .player-window-row, .player-compare-row { grid-template-columns: 50px minmax(0,1fr) auto; gap: 7px; }
 }
+/* Matchup-grouped basketball milestones. One compact row answers what hit, how often,
+   how large the role was, and whether Kook'n has a current comparison. */
+.milestone-intro { max-width: 920px; display: grid; gap: 10px; margin: 0 0 16px; padding: 14px 16px; border: 1px solid rgba(32,199,116,.3); border-radius: 14px; background: rgba(32,199,116,.055); }
+.milestone-intro p { margin: 0; }
+.milestone-games { max-width: 920px; display: grid; gap: 14px; }
+.milestone-game { overflow: hidden; border: 1px solid rgba(169,192,179,.22); border-radius: 16px; background: rgba(5,15,10,.48); }
+.milestone-game-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 15px; background: rgba(24,49,35,.72); cursor: pointer; list-style: none; }
+.milestone-game-head::-webkit-details-marker { display: none; }
+.milestone-game-head::after { content: '+'; flex: none; color: var(--kookd); font: 800 20px/1 var(--font-body); }
+.milestone-game[open] .milestone-game-head { border-bottom: 1px solid rgba(169,192,179,.18); }
+.milestone-game[open] .milestone-game-head::after { content: '−'; }
+.milestone-game-head h2 { font: 700 19px/1.1 var(--font-body); letter-spacing: -.01em; }
+.milestone-game-head span { margin-left: auto; color: var(--dim); font: 600 12px/1.2 var(--font-body); }
+.milestone-team { padding: 12px 14px 4px; }
+.milestone-team + .milestone-team { border-top: 1px solid rgba(169,192,179,.16); }
+.milestone-team h3 { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; font: 700 15px/1.2 var(--font-body); }
+.milestone-row { display: grid; grid-template-columns: minmax(180px,1.35fr) repeat(3,minmax(54px,.48fr)) minmax(145px,.9fr); align-items: center; gap: 8px; min-height: 58px; padding: 9px 0; border-top: 1px solid rgba(169,192,179,.12); font-variant-numeric: tabular-nums; }
+.milestone-row:first-of-type { border-top: 0; }
+.milestone-player { min-width: 0; color: var(--chalk); text-decoration: none; }
+.milestone-player b { display: block; overflow: hidden; font: 700 15px/1.15 var(--font-body); text-overflow: ellipsis; white-space: nowrap; }
+.milestone-player span { display: block; margin-top: 3px; color: var(--dim); font: 500 11px/1.25 var(--font-body); }
+.milestone-player b .milestone-mark { display: inline; color: #70e9aa; font: 800 17px/1 var(--font-body); }
+.milestone-rate { text-align: center; }
+.milestone-rate small { display: block; color: var(--dim); font: 700 9px/1 var(--font-body); letter-spacing: .06em; text-transform: uppercase; }
+.milestone-rate b { display: block; margin-top: 4px; color: var(--chalk); font: 700 13px/1 var(--font-body); }
+.milestone-compare { min-width: 0; text-align: right; }
+.milestone-compare b, .milestone-compare span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.milestone-compare b { color: var(--chalk); font: 700 12px/1.2 var(--font-body); }
+.milestone-compare span { margin-top: 4px; color: var(--dim); font: 500 10px/1.2 var(--font-body); }
+.milestone-foot { max-width: 920px; margin-top: 14px; }
+@media (max-width: 620px) {
+  .milestone-game-head { align-items: flex-start; padding: 12px; }
+  .milestone-game-head h2 { font-size: 17px; }
+  .milestone-team { padding: 10px 11px 3px; }
+  .milestone-row { grid-template-columns: minmax(0,1fr) repeat(3,47px); gap: 5px; padding: 10px 0; }
+  .milestone-player b { font-size: 14px; white-space: normal; }
+  .milestone-mark { font-size: 15px; }
+  .milestone-compare { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 8px; padding: 0 0 2px; text-align: left; }
+  .milestone-compare span { margin: 0; text-align: right; white-space: normal; }
+}
 `;
   if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-more-css'))) {
     const style = document.createElement('style'); style.id = 'kr-more-css'; style.textContent = MORE_CSS + PLAYER_CHART_CSS; document.head.appendChild(style);
@@ -596,6 +636,88 @@
       <details class="plain-fold" data-box="player-every"><summary>${isQuarter ? 'Every full-game stat' : 'Every stat'}</summary>${log.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${cols.map(k => `<th class="n">${esc(PLAYER_LABEL[k] || k)}</th>`).join('')}</tr></thead><tbody>${log.map(r =>
         `<tr><td><a href="#game/${esc(league)}-${esc(r[0])}">${esc(r[1])}</a><br><span class="tiny muted">${esc(where(r))} ${esc(abbr(r[6]))}${r[4] === 3 ? ' · postseason' : ''}</span></td>${cols.map(k => { const v = C.observedStat(r, keys, k); return `<td class="n">${v == null ? '<span class="muted">–</span>' : k === 'snapPct' ? Math.round(100 * v) + '%' : esc(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div><p class="small muted" style="margin-top:6px">A dash means not recorded, never zero.</p>` : ''}</details>
       <details class="plain-fold" data-box="player-splits"><summary>Splits</summary><div class="kpis"><div class="kpi"><small>Home</small><b class="num">${esc(split.home ? valueText(split.home.avg) : '–')}</b><span>${split.home ? split.home.n : 0} game${split.home && split.home.n === 1 ? '' : 's'}</span></div><div class="kpi"><small>Away</small><b class="num">${esc(split.away ? valueText(split.away.avg) : '–')}</b><span>${split.away ? split.away.n : 0} game${split.away && split.away.n === 1 ? '' : 's'}</span></div>${split.neutral ? `<div class="kpi"><small>Neutral site</small><b class="num">${esc(valueText(split.neutral.avg))}</b><span>${split.neutral.n} game${split.neutral.n === 1 ? '' : 's'}</span></div>` : ''}</div></details></section>${q1}`;
+  };
+
+  views.basketballMilestones = async route => {
+    const league = route.league === 'CBB' || state.league === 'CBB' ? 'CBB' : 'NBA';
+    const [index, basketball, props] = await Promise.all([
+      get(`app/players/${league}.json`),
+      get(league === 'NBA' ? 'app/nba.json' : 'app/cbb.json'),
+      league === 'NBA' ? maybe('app/nba-props.json') : Promise.resolve(null)
+    ]);
+    const future = (basketball.games || []).filter(game => (!game.status || game.status === 'scheduled') && Date.parse(game.kickoff) > Date.now())
+      .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
+    const slateDay = future.length ? C.dayOf(future[0].kickoff) : null;
+    const slate = future.filter(game => !slateDay || C.dayOf(game.kickoff) === slateDay);
+    if (!slate.length) return empty(`No ${league} matchups are on the current board`, 'The threshold board appears when the next scheduled slate and current-season player histories are available.', 'research');
+    const teamIds = new Set(slate.flatMap(game => Object.values(game.teams || {}).map(team => String(team.id))));
+    const slateAt = Date.parse(slate[0].kickoff), activeAfter = new Date(slateAt - 21 * 86400000).toISOString().slice(0, 10);
+    const eligible = (index.players || []).filter(entry => teamIds.has(String(entry[3])) && Number(entry[6]) >= 5 && String(entry[5] || '') >= activeAfter);
+    const shardIds = [...new Set(eligible.map(entry => C.shardOf(entry[0], index.shards)))];
+    const shards = await Promise.all(shardIds.map(id => get(`app/players/${league}/${id}.json`)));
+    const shardById = new Map(shardIds.map((id, i) => [id, shards[i]]));
+    const entryById = new Map(eligible.map(entry => [String(entry[0]), entry]));
+    const STAT = {
+      pts: { label: 'PTS', word: 'points', steps: [5, 10, 15, 20, 25, 30] },
+      reb: { label: 'REB', word: 'rebounds', steps: [2, 4, 6, 8, 10, 12] },
+      ast: { label: 'AST', word: 'assists', steps: [2, 4, 6, 8, 10, 12] },
+      fg3m: { label: '3PM', word: 'threes', steps: [1, 2, 3, 4, 5] }
+    };
+    const priced = (props?.rows || []).filter(row => Date.parse(row.kickoff) > Date.now());
+    const prices = new Map(priced.map(row => [`${row.eventId}|${row.athleteId}|${row.stat}`, row]));
+    const count = (values, threshold) => ({ hits: values.filter(value => isNum(value) && value >= threshold).length, games: values.filter(isNum).length });
+    const cell = (label, result) => `<span class="milestone-rate"><small>${label}</small><b>${result.hits}/${result.games}</b></span>`;
+    const playerRows = new Map();
+    for (const entry of eligible) {
+      const id = String(entry[0]), shard = shardById.get(C.shardOf(id, index.shards)), data = shard?.players?.[id];
+      if (!data) continue;
+      const rows = (data.rows || []).filter(row => Number(row[2]) === Number(index.season) && Number(row[4]) === 2)
+        .sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+      if (rows.length < 5) continue;
+      /* Basketball rows carry an opponent abbreviation after the shared eight-field
+         prefix, so their stat payload starts at 9 (the player page uses the same schema). */
+      const value = (row, stat) => { const i = (shard.keys || []).indexOf(stat); return i < 0 || !isNum(row[9 + i]) ? null : Number(row[9 + i]); };
+      const recentMinutes = rows.slice(-5).map(row => value(row, 'min')).filter(isNum);
+      const minuteAvg = recentMinutes.length ? recentMinutes.reduce((sum, number) => sum + number, 0) / recentMinutes.length : null;
+      const projectedMinutes = isNum(data.projection?.minutes) ? Number(data.projection.minutes) : null;
+      if (Math.max(minuteAvg || 0, projectedMinutes || 0) < 12) continue;
+      const candidates = [];
+      for (const [stat, meta] of Object.entries(STAT)) {
+        const season = rows.map(row => value(row, stat)).filter(isNum);
+        if (season.length < 5) continue;
+        const threshold = meta.steps.filter(step => count(season, step).hits / season.length >= .9).pop();
+        if (threshold == null) continue;
+        const seasonResult = count(season, threshold), l10 = count(season.slice(-10), threshold), l5 = count(season.slice(-5), threshold);
+        candidates.push({ id, entry, data, stat, meta, threshold, season: seasonResult, l10, l5, minuteAvg, projectedMinutes,
+          projection: isNum(data.projection?.values?.[stat]) ? Number(data.projection.values[stat]) : null });
+      }
+      candidates.sort((a, b) => (b.threshold / b.meta.steps[b.meta.steps.length - 1]) - (a.threshold / a.meta.steps[a.meta.steps.length - 1])
+        || b.season.hits / b.season.games - a.season.hits / a.season.games);
+      playerRows.set(id, candidates.slice(0, 2));
+    }
+    const teamRows = teamId => eligible.filter(entry => String(entry[3]) === String(teamId)).flatMap(entry => playerRows.get(String(entry[0])) || [])
+      .sort((a, b) => (b.projectedMinutes || b.minuteAvg || 0) - (a.projectedMinutes || a.minuteAvg || 0)
+        || String(a.entry[1]).localeCompare(String(b.entry[1]))).slice(0, 14);
+    let firstRendered = true;
+    const renderedGames = slate.map(game => {
+      const sides = ['away', 'home'].map(side => ({ side, team: game.teams?.[side], rows: teamRows(game.teams?.[side]?.id) }));
+      if (!sides.some(side => side.rows.length)) return '';
+      const teamBlock = ({ team, rows }) => `<section class="milestone-team"><h3>${teamMark(team, 'sm', league)} ${esc(team?.name || team?.abbreviation || 'Team')}</h3>${rows.length ? rows.map(item => {
+        const price = prices.get(`${game.providerId || String(game.id || '').replace(/^\w+-/, '')}|${item.id}|${item.stat}`);
+        const projection = isNum(price?.projection?.value) ? Number(price.projection.value) : item.projection;
+        const odds = isNum(price?.over) ? oddsText(price.over) : null;
+        const fresh = price && Date.now() - Date.parse(price.sourceAt) >= 0 && Date.now() - Date.parse(price.sourceAt) <= 4 * 3600000;
+        const comparison = price ? `<b>Book ${esc(price.line)} ${odds ? `· ${esc(odds)}` : ''}${isNum(projection) ? ` · Kook’n ${esc(C.statValue(projection, item.stat))}` : ''}</b><span>${fresh ? `Checked ${esc(ago(price.sourceAt))}` : 'Earlier quote · recheck price'}</span>`
+          : `<b>${isNum(projection) ? `Kook’n ${esc(C.statValue(projection, item.stat))}` : 'No current comparison'}</b><span>Milestone price not verified</span>`;
+        const href = `#player/${league}/${encodeURIComponent(item.id)}?stat=${encodeURIComponent(item.stat)}&line=${encodeURIComponent(item.threshold - .5)}&direction=over`;
+        const role = `${item.entry[2] || ''}${isNum(item.minuteAvg) ? ` · L5 ${item.minuteAvg.toFixed(1)} MIN` : ''}`;
+        return `<div class="milestone-row"><a class="milestone-player" href="${href}"><b>${esc(item.entry[1])} <span class="milestone-mark">${esc(item.threshold)}+ ${esc(item.meta.label)}</span></b><span>${esc(role)} · tap for game chart</span></a>${cell('L5', item.l5)}${cell('L10', item.l10)}${cell('Season', item.season)}<span class="milestone-compare">${comparison}</span></div>`;
+      }).join('') : '<p class="small muted" style="padding:8px 0 12px">No 90% milestone cleared the role and sample checks.</p>'}</section>`;
+      const open = firstRendered; firstRendered = false;
+      return `<details class="milestone-game"${open ? ' open' : ''}><summary class="milestone-game-head"><h2>${esc(game.teams?.away?.shortName || game.teams?.away?.name || 'Away')} at ${esc(game.teams?.home?.shortName || game.teams?.home?.name || 'Home')}</h2><span>${esc(whenShort(game.kickoff))}</span></summary>${sides.map(teamBlock).join('')}</details>`;
+    }).filter(Boolean);
+    if (!renderedGames.length) return empty(`No ${league} 90% thresholds passed the checks`, 'Players need at least five current-season games and a recent role of 12 or more minutes. The board will fill in as the sample grows.', 'research');
+    return `<div class="milestone-intro"><p><b>Historical hit rate · not a probability.</b> Each row shows the highest common threshold that landed in at least 90% of this season’s recorded games.</p><p class="small muted">A 10+ milestone is charted against 9.5 so an exact 10 counts correctly. Book lines are separate current comparisons—not prices for the milestone. Verify every line, price, injury and role in your sportsbook.</p></div><div class="milestone-games">${renderedGames.join('')}</div><div class="card on-felt milestone-foot"><p class="small"><b>How to use this:</b> Tap any threshold for the player’s recent-game bar chart, exact line, game log, minutes trend and Kook’n projection. Trivial low-minute results are filtered out; a player still appearing here does not make the next game certain.</p></div>`;
   };
 
   views.basketballPlayers = async route => {
