@@ -168,3 +168,18 @@ class SourceReviewPrepTests(unittest.TestCase):
         self.assertEqual(climb_prep.source_review_options(same,NOW),[])
         mixed=[dict(legs[0]),dict(legs[1],book='FanDuel')]
         self.assertEqual(climb_prep.source_review_options(mixed,NOW),[])
+
+    def test_big_slate_fun_and_lotto_drafts_are_separate_and_never_claim_exact_price(self):
+        legs=[dict(team=f'T{i}',gameId=f'g{i}',league='CFB',book='DraftKings',odds=-180,
+                   line=6.5,title=f'T{i} +6.5',alternate=True,kickoff=f'2026-10-24T{12+i:02d}:00:00Z',
+                   holds=['Fresh review required']) for i in range(8)]
+        short=climb_prep.multi_leg_drafts(legs,(3,4),(200,1500),ideal_leg=-250)
+        lotto=climb_prep.multi_leg_drafts(legs,(6,7,8),(1500,20000),ideal_leg=-190)
+        self.assertTrue(short);self.assertTrue(lotto)
+        self.assertTrue(all(row['legCount'] in (3,4) for row in short))
+        self.assertTrue(all(row['legCount'] in (6,7,8) for row in lotto))
+        for row in short+lotto:
+            self.assertTrue(row['planningOnly'])
+            self.assertNotIn('odds',row)
+            self.assertIn('exact sportsbook ticket',row['priceBasis'])
+            self.assertEqual(len({leg['gameId'] for leg in row['legs']}),row['legCount'])

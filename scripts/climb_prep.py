@@ -65,6 +65,49 @@ def source_review_options(legs, now, limit=8):
     return result
 
 
+def multi_leg_drafts(legs, counts, target, *, ideal_leg=-225, limit=4):
+    """Separate big-slate fun-ticket drafts from the two-leg Climb.
+
+    These are price-shape research only. Separate cross-game prices are
+    multiplied for sorting, but the sportsbook's visible combined ticket is
+    still required before anything can be released.
+    """
+    grouped={}
+    for leg in legs:
+        if (leg.get('alternate') is not True or leg.get('book') not in ladder.SLUGS
+                or not ladder.LEG_PRICES[0] <= leg.get('odds',0) <= ladder.LEG_PRICES[1]):
+            continue
+        grouped.setdefault((leg['league'],leg['book']),{}).setdefault(leg['gameId'],[]).append(leg)
+    options=[]
+    for (league,book),games in grouped.items():
+        # One leg per game keeps the derived cross-game price meaningful. Keep
+        # the bounded pool diverse and near the requested ticket shape.
+        pool=[]
+        for rows in games.values():
+            rows.sort(key=lambda row:(len(row.get('holds',[])),abs(row['odds']-ideal_leg),row['title']))
+            pool.append(rows[0])
+        pool.sort(key=lambda row:(len(row.get('holds',[])),abs(row['odds']-ideal_leg),row['kickoff'],row['title']))
+        pool=pool[:12]
+        for count in counts:
+            if len(pool)<count:continue
+            for chosen in combinations(pool,count):
+                dec=1.0
+                for leg in chosen:dec*=parlay.decimal(leg['odds'])
+                price=parlay.american(dec)
+                if not target[0] <= price <= target[1]:continue
+                holds=sorted(set(sum((leg.get('holds',[]) for leg in chosen),[])))
+                options.append(dict(book=book,league=league,legs=list(chosen),derivedOdds=price,
+                    legCount=count,planningOnly=True,status='source-review-needed',
+                    priceBasis='Product of separate cross-game prices; exact sportsbook ticket price required',
+                    holds=holds,releaseChecks=['Fresh game-day prices and news',
+                        'Exact same-book combined ticket price','Current role and availability review per leg',
+                        'Normal fun-ticket admission and delivery; no probability/EV claim']))
+    midpoint=sum(target)/2
+    options.sort(key=lambda row:(len(row['holds']),abs(row['derivedOdds']-midpoint),row['legCount'],
+                                 row['book'],tuple(leg['title'] for leg in row['legs'])))
+    return options[:limit]
+
+
 def prepare(ctx, now, day=None):
     day = day or gates.eastern_date(now)+timedelta(days=1)
     out=[];supported_legs=[];watch_legs=[];review_legs=[]
@@ -124,10 +167,13 @@ def prepare(ctx, now, day=None):
             supportedPropLegs=len(props),roleEligiblePropWatch=len(raw_props),
             coverageHold=None if quotes else 'No complete current two-sided alternate spread ladder captured'))
     supported_options=two_leg_options(supported_legs,now,supported=True)
+    big_slate=len(out)>=8
     return dict(asOf=gates.stamp(now),targetDate=day.isoformat(),planningOnly=True,games=out,
                 twoLegOptions=supported_options,
                 evidenceHeldOptions=two_leg_options(watch_legs,now) if not supported_options else [],
                 sourceReviewOptions=source_review_options(review_legs,now),
+                shortParlayDrafts=multi_leg_drafts(review_legs,(3,4),(200,1500),ideal_leg=-250) if big_slate else [],
+                lottoDrafts=multi_leg_drafts(review_legs,(6,7,8),(1500,20000),ideal_leg=-190) if big_slate else [],
                 releaseReady=False,
                 nextAction='Refresh prices, news and models at existing game-day morning checks; release only through normal admission and delivery.')
 
