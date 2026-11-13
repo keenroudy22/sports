@@ -1,3 +1,30 @@
+### November 13 Today and matchup hierarchy cleanup — verified live
+
+Today now gives an empty official-pick state one compact status strip instead
+of a large empty card, while a live Best Bet still leads the page. Matchup pages
+put the factual official selection, price, actual result and Book/Kook'n gap
+ahead of decorative ticket art; the original ticket remains available behind a
+single disclosure. Football matchup headers use full team names on desktop and
+unambiguous abbreviations on phones. Repeated Book-vs-Kook comparison blocks
+were removed, and the research navigation now balances cleanly at phone widths.
+
+Basketball player comparisons now use the literal `Kook'n projection - book
+line` convention for both overs and unders. A projection below the book is
+therefore negative everywhere instead of being flipped by wager direction.
+This is a comparison number, not a pick. Release
+`0c7fba8303486bb444cb276fe315f4d993e10dbe` passed 2,251 Python tests (2
+skipped), 336 Node/interface tests, clean export, a 582-page build, zero-issue
+177-pick and NBA record audits, zero-issue 965-file public guard, current asset
+checks and stored-input rehearsal. Hosted run `43441068980` succeeded.
+
+Before release, 280 local browser combinations passed across the public shell,
+Today, player research, trends and NBA/CBB/NFL/CFB game-to-chart flows. After
+release, 60 hosted page/width combinations passed at 320, 375, 390, 430, 768
+and 1440px, plus 20 phone checks with text enlarged 15%. The hosted checks found
+no page overflow, clipped headings, rendered-load failures or console errors.
+Representative Today, player and NBA/CBB/NFL/CFB matchup screenshots were also
+visually inspected.
+
 ### November 13 responsive player charts — verified live
 
 Player L5/L10 result charts now keep their bars and opponent/date labels on the
