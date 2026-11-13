@@ -60,6 +60,8 @@ def build(site, base_url):
     picks = {pick['id']: pick for ledger in ('picks', 'nbaPicks', 'cbbPicks')
              for pick in data.get(ledger, []) if shareable(pick)}
     folder = site / 'p'
+    if folder.is_symlink():
+        raise ValueError('Generated share directory cannot be a symlink')
     folder.mkdir(exist_ok=True)
     for file in folder.glob('*.html'):
         if (PICK_ID.fullmatch(file.stem) and file.stem not in picks and not file.is_symlink()
