@@ -1,9 +1,11 @@
 import copy
 import sys
+import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import fun_ticket_review as review
@@ -97,6 +99,29 @@ class FunTicketReviewTests(unittest.TestCase):
         changed = copy.deepcopy(row)
         changed['pick']['priceEstimated'] = True
         self.assertIsNotNone(run.private_release_refusal(changed, ctx, NOW))
+
+    def test_exact_review_uses_normal_private_queue_without_capture_or_board_rebuild(self):
+        import release_queue
+        import x_post
+        spec, ctx = fixture()
+        ctx.first, ctx.latest = {}, {}
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(gates, 'admit', return_value=(True, [])) as admit, \
+             patch.object(x_post, 'do_draft') as draft, \
+             patch.object(run, 'render_private_play_card') as render, \
+             patch.object(run, 'capture', side_effect=AssertionError('no capture')), \
+             patch.object(run.build_site, 'build', side_effect=AssertionError('no board rebuild')):
+            pick, held = review.enqueue(spec, ctx, NOW, Path(folder))
+            self.assertIsNone(held)
+            admit.assert_called_once()
+            draft.assert_called_once()
+            render.assert_called_once()
+            row = release_queue.load(folder)['plays'][0]
+            self.assertEqual((row['id'], row['pick']['odds'], row['pick']['priceEstimated']),
+                             (pick['id'], spec['odds'], False))
+            self.assertNotIn('discordSentAt', row)
+            self.assertNotIn('publicPath', row)
+            self.assertIsNone(review.enqueue(spec, ctx, NOW, Path(folder))[0])
 
 
 if __name__ == '__main__':
