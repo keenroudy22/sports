@@ -13,6 +13,7 @@ import climb_validation as v
 import ladder
 import climb_prep
 import sharp_odds
+import features
 
 NOW=datetime(2026,10,22,18,tzinfo=timezone.utc)
 GAME=dict(id='CFB-1', league='CFB', season=2026, kickoff='2026-10-22T23:00:00Z',
@@ -36,6 +37,10 @@ def record():
 
 
 class GameAlternateTests(unittest.TestCase):
+    def test_provider_nanosecond_clock_remains_a_real_quote_time(self):
+        exact = features.when('2026-11-13T13:29:47.000187293Z')
+        self.assertEqual(exact.isoformat(), '2026-11-13T13:29:47.000187+00:00')
+
     def test_capture_uses_completion_time_for_later_live_quotes(self):
         game=dict(GAME,state='pre')
         data=[dict(r,timestamp='2026-10-22T18:00:30Z') for _,r in rows()]

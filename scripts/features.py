@@ -14,6 +14,7 @@ Stdlib only.
 """
 import statistics
 import sys
+import re
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -37,7 +38,12 @@ ALLOWED = {'QB': ('cmp', 'att', 'passYds', 'passTD', 'int', 'sacks', 'car', 'rus
 
 
 def when(value):
-    return datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    text = str(value).replace('Z', '+00:00')
+    # Some verified providers emit RFC3339 nanoseconds. Python's ISO parser
+    # accepts microseconds, so discard only unsupported sub-microsecond digits;
+    # the actual observation second and timezone remain unchanged.
+    text = re.sub(r'(\.\d{6})\d+(?=[+-]\d\d:\d\d$)', r'\1', text)
+    return datetime.fromisoformat(text)
 
 
 SPREAD_MAX, TOTAL_RANGE = 60.0, (20.0, 100.0)
