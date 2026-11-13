@@ -990,6 +990,16 @@ test('Today turns a current morning hold into a concise research watch', async (
 });
 
 
+test('play details expose the verified original X post and a shareable play link', async () => {
+  for (const originalX of ['https://x.com/keenkooks/status/2121249607384736117', 'https://example.com/status/2121249607384736117', undefined]) {
+    const pick = {...prop, delivery: {originalX}};
+    const {api} = loadApp('#record', {}, {today: {...TODAY, picks: [pick]}});
+    const page = await api.views.pick({id: pick.id});
+    assert.match(page, /href="#pick\/[^"]+" data-copy-link>Copy play link/);
+    assert.equal(page.includes('Original pick on X'), Boolean(originalX?.startsWith('https://x.com/')));
+  }
+});
+
 test('play footer retains unknown historical stakes without changing accounting', async () => {
   for (const extra of [{accountingUnknown:true}, {historicalImport:true},
     {historicalImport:true,riskUnits:null}, {historicalImport:true,riskUnits:0}]) {

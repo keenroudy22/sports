@@ -205,6 +205,23 @@ class PickTests(unittest.TestCase):
         self.assertNotIn('secret', str(row))
         self.assertNotIn('private', str(row))
 
+    def test_original_x_link_requires_a_sent_matching_public_status(self):
+        now = build_site.instant('2026-11-13T15:00:00Z')
+        original = {'kind': 'buffer:nba-trial', 'sentAt': '2026-11-13T14:00:00Z',
+                    'link': 'https://twitter.com/1753110091912413184/status/2121249607384736117',
+                    'tweetId': '2121249607384736117', 'bufferPostId': 'private'}
+        self.assertEqual(build_site.original_x_post([original], now),
+                         'https://x.com/keenkooks/status/2121249607384736117')
+        for changes in (
+            {'kind': 'buffer:cashed'}, {'sentAt': None}, {'sentAt': '2026-11-13T16:00:00Z'},
+            {'cancelledAt': original['sentAt']}, {'deletedAt': original['sentAt']},
+            {'tweetId': 'wrong'}, {'link': original['link'] + '?token=private'},
+            {'link': original['link'].replace('twitter.com', 'other.example')},
+            {'link': original['link'].replace('1753110091912413184', 'anotheraccount')},
+        ):
+            with self.subTest(changes=changes):
+                self.assertIsNone(build_site.original_x_post([dict(original, **changes)], now))
+
     def test_nba_results_require_real_delivery_and_keep_original_terms(self):
         import tempfile
         from unittest import mock

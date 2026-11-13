@@ -2357,8 +2357,29 @@ def first_of(pick, recent, field):
     return pick.get(field) if pick.get(field) is not None else recent.get(field)
 
 
+def original_x_post(attempts, now):
+    """Return the first verified public status URL for this pick's own attempts."""
+    matches = []
+    for entry in attempts:
+        if entry.get('kind') not in ('buffer:play', 'buffer:nba-trial', 'buffer:cbb-pick'):
+            continue
+        if entry.get('cancelledAt') or entry.get('deletedAt'):
+            continue
+        sent = instant(entry.get('sentAt'))
+        if sent is None or sent > now:
+            continue
+        match = re.fullmatch(r'https://(?:x\.com|twitter\.com)/'
+                             r'(?:keenkooks|1753110091912413184)/status/([0-9]{15,22})/?',
+                             str(entry.get('link') or ''), re.IGNORECASE)
+        if match and match[1] == str(entry.get('tweetId') or ''):
+            matches.append((sent, match[1]))
+    if matches:
+        return f'https://x.com/keenkooks/status/{min(matches)[1]}'
+    return None
+
+
 def public_delivery(entry):
-    """Only public delivery clocks, never captions, webhook URLs or platform IDs."""
+    """Public delivery clocks only; pick links are validated separately."""
     discord = entry.get('discord') or {}
     cancelled = bool(entry.get('cancelledAt') or entry.get('deletedAt'))
     return {'discordAt': discord.get('sentAt') if discord.get('state') == 'sent' else None,
@@ -2420,6 +2441,7 @@ def cbb_record_picks(now=None, root=ROOT):
             'risk': review.get('countercase'), 'sources': list(dict.fromkeys(sources)),
             'delivery': {'discordAt': stamp(discord_at) if discord_at else None,
                          'xAt': stamp(x_at) if x_at else None,
+                         'originalX': original_x_post(attempts, now),
                          'restoredAt': None, 'cancelled': False, 'failed': False},
             'card': None,
         }, now=now))
@@ -2491,6 +2513,7 @@ def nba_record_picks(now=None, root=ROOT):
             'why': review.get('why'), 'risk': review.get('countercase'), 'sources': list(dict.fromkeys(sources)),
             'delivery': {'discordAt': stamp(discord_at) if discord_at else None,
                          'xAt': stamp(x_at) if x_at else None,
+                         'originalX': original_x_post(attempts, now),
                          'restoredAt': None, 'cancelled': False, 'failed': False},
             'card': None,
         }, now=now))
@@ -2564,7 +2587,12 @@ def board_picks(first, latest, by_id, identities, now=None):
         import receipts
         post_log = json.loads((ROOT / 'data' / 'x-posted.json').read_text(encoding='utf-8'))
         went_out = receipts.served(post_log)
-        deliveries = {entry['id']: public_delivery(entry) for entry in post_log.get('posts', []) if entry.get('id')}
+        attempts = defaultdict(list)
+        for entry in post_log.get('posts', []):
+            if entry.get('id'):
+                attempts[entry['id']].append(entry)
+        deliveries = {key: dict(public_delivery(entries[-1]), originalX=original_x_post(entries, now))
+                      for key, entries in attempts.items()}
     except (OSError, ValueError):
         went_out = set()
         deliveries = {}
