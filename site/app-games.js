@@ -116,11 +116,11 @@
     if (holds.some(text => /role|minutes/i.test(text))) return { word: 'Role review', warn: true };
     return rows.some(row => row.availabilityReportedAt) ? { word: 'Status checked', warn: false } : null;
   };
-  const basketballMatchupProps = (league, game, data, index, props) => {
+  const basketballMatchupProps = (league, game, picks, index, props) => {
     const gameRows = (props?.rows || []).filter(row => String(row.eventId) === String(game.providerId || String(game.id).replace(/^(?:NBA|CBB)-/, '')));
     const now = Date.now(), tip = Date.parse(game.kickoff);
-    const posted = [...(data.trial?.plays || []), ...(data.picks?.plays || [])]
-      .filter(play => !play.result && play.athleteId && Date.parse(play.kickoff) === tip);
+    const posted = picks.filter(play => play.league === league && play.gameId === game.id
+      && play.posted === true && !play.result && play.athleteId);
     const isOfficialQuote = (row, stat) => row && posted.some(play => String(play.athleteId) === String(row.athleteId)
       && play.stat === stat && play.line === row.line && bookLabel(play.book) === bookLabel(row.book)
       && ['over', 'under'].includes(play.direction) && play.direction === (row.side || 'over')
@@ -447,10 +447,11 @@
     const back = '<a class="back" href="#games">← Games</a>';
     const league = /^(NBA|CBB)-/.exec(route.id)?.[1];
     if (league) {
-      const [data, playerIndex, propPayload] = await Promise.all([
+      const [data, playerIndex, propPayload, picks] = await Promise.all([
         get(`app/${league.toLowerCase()}.json`).catch(() => null),
         get(`app/players/${league}.json`).catch(() => ({players:[]})),
-        league === 'NBA' ? get('app/nba-props.json').catch(() => ({rows:[]})) : Promise.resolve({rows:[]})]);
+        league === 'NBA' ? get('app/nba-props.json').catch(() => ({rows:[]})) : Promise.resolve({rows:[]}),
+        league === 'NBA' ? ctx.allPicks().catch(() => []) : Promise.resolve([])]);
       const game = data?.games?.find(g => g.id === route.id);
       if (!game) return head(league, 'Matchup unavailable', 'This game is outside the stored schedule.', back);
       const title = `${game.teams.away.name} at ${game.teams.home.name}`;
@@ -459,7 +460,7 @@
       const rows = league === 'NBA' ? (Array.isArray(propPayload?.rows) ? propPayload
         : Array.isArray(data.playerProps?.rows) ? data.playerProps
           : Array.isArray(propPayload?.playerProps?.rows) ? propPayload.playerProps : {rows:[]}) : {rows:[]};
-      return top + card + basketballMatchupProps(league, game, data, playerIndex, rows);
+      return top + card + basketballMatchupProps(league, game, picks, playerIndex, rows);
     }
     let detail;
     try { detail = await get(`app/games/${route.id}.json`); } catch (e) {

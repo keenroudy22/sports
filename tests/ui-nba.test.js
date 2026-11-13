@@ -52,13 +52,16 @@ test('NBA matchup marks only the exact posted quote and removes stale research h
  const kickoff=new Date(Date.now()+3600000).toISOString(), sourceAt=new Date().toISOString();
  const game={id:'NBA-1',providerId:'1',status:'scheduled',kickoff,
    teams:{away:{id:'1',name:'Away',abbreviation:'AWY'},home:{id:'2',name:'Home',abbreviation:'HOM'}}};
- const play={athleteId:'11',stat:'pts',line:15.5,direction:'over',odds:-110,book:'DraftKings',kickoff};
+ const play={athleteId:'11',stat:'pts',line:15.5,direction:'over',odds:-110,book:'DraftKings',kickoff,league:'NBA',gameId:'NBA-1',posted:true};
  const row={...play,eventId:'1',team:'1',name:'Example Player',sourceAt,over:-110,under:-110,favorite:true};
  const data={games:[game],trial:{plays:[play]}}, props={rows:[row]};
- const ctx=api.gamesContext({get:async path=>path==='app/nba.json'?data:path==='app/nba-props.json'?props:{players:[]}});
+ const ctx=api.gamesContext({allPicks:async()=>[play],get:async path=>path==='app/nba.json'?data:path==='app/nba-props.json'?props:{players:[]}});
  const views=s.KRGames(ctx);
  const page=()=>views.game({id:game.id});
  assert.match(await page(), /class="pick-tag">Official pick/);
+ play.posted=false;
+ assert.doesNotMatch(await page(), /class="pick-tag"/);
+ play.posted=true;
  for(const changes of [{line:16.5},{book:'FanDuel'},{side:'under'},{over:-115}]){
    props.rows=[{...row,...changes}];
    assert.doesNotMatch(await page(), /class="pick-tag"/);
