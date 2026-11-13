@@ -1956,6 +1956,11 @@ def verified_opposition(candidate, facts=()):
 def write_prose(candidate, ctx, records):
     """Template why and risk from the pick's own numbers. A model may polish these later; it never adds a number."""
     if candidate.get('legs'):       # a parlay has no single line or side: its words come first, before any are read
+        if candidate.get('selectionMethod') == 'sourced-fun-ticket-review-v1':
+            candidate['why'] = ' '.join(leg['researchCase']['why'] for leg in candidate['legs'])
+            candidate['risk'] = (' '.join(leg['researchCase']['risk'] for leg in candidate['legs']) +
+                                 ' Every leg must hit. This is a fun ticket, not a validated probability or positive-EV claim.')
+            return candidate
         if candidate.get('selectionMethod') == 'sourced-climb-review-v1':
             candidate['why'] = ' '.join(leg['researchCase']['why'] for leg in candidate['legs'])
             candidate['risk'] = ' '.join(leg['researchCase']['risk'] for leg in candidate['legs']) + ' Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.'
@@ -3493,9 +3498,15 @@ def private_release_refusal(row, ctx, now):
     if not policy.ok:
         return policy.reason
     if pick.get('legs') and pick.get('parlayType') in (None, 'longshot'):
-        policy = gates.longshot_shape(pick, ctx)
-        if not policy.ok:
-            return policy.reason
+        for rule in (gates.longshot_shape, gates.longshot_exact_ticket):
+            policy = rule(pick, ctx)
+            if not policy.ok:
+                return policy.reason
+        if pick.get('selectionMethod') == 'sourced-fun-ticket-review-v1':
+            import fun_ticket_review
+            held = fun_ticket_review.refusal(pick, ctx)
+            if held:
+                return held
     if pick.get('parlayType') == 'ladder':
         for rule in (gates.ladder_selective, gates.ladder_supported):
             policy = rule(pick, ctx)
