@@ -14,7 +14,8 @@ class LocalNBAReviewTests(unittest.TestCase):
             result=review.evaluate(self.packet)
         self.assertEqual(result['status'],'local-reviewed')
         self.assertEqual(result['support'][0],self.packet['facts'][0])
-        self.assertEqual(call.call_args.kwargs['timeout'],12)
+        self.assertEqual(call.call_args.kwargs['timeout'],30)
+        self.assertEqual(call.call_args.kwargs['model'],llm.fast_model_name())
     def test_unknown_mistyped_or_wrong_direction_ids_cannot_clear_holds(self):
         for bad in ({'support':['f1'],'challenge':[]},{'support':['invented'],'challenge':[]},
                     {'support':[],'challenge':[],'odds':-110},{'support':[['f0']],'challenge':[]}):
