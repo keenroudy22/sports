@@ -503,6 +503,9 @@ test('a board line leads with a plain word and backs it with its numbers', () =>
 test('pick types match the old results page', () => {
   assert.equal(C.category({ kind: 'gamePicks', marketType: 'total' }), 'Totals');
   assert.equal(C.category({ kind: 'gamePicks', marketType: 'spread' }), 'Spreads');
+  assert.equal(C.category({ kind: 'gamePicks', marketType: 'moneyline' }), 'Moneylines');
+  assert.equal(C.category({ kind: 'gamePicks', marketType: 'teamTotal' }), 'Team totals');
+  assert.equal(C.category({ kind: 'gamePicks' }), 'Other game markets');
   assert.equal(C.category({ kind: 'props' }), 'Straights');
   assert.equal(C.category({ kind: 'riskyProps' }), 'Risky lines');
   assert.equal(C.category({ kind: 'parlays', parlayType: 'longshot' }), 'Longshots');

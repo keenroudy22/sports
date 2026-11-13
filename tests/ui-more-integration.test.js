@@ -122,6 +122,26 @@ test('official record always renders the separate Chef record without changing o
 });
 
 
+test('Results splits moneylines from spreads and uses saved graded estimates', async () => {
+  const { api, factory } = loadBrowserApi();
+  const pick = {league:'CFB', season:2026, kind:'gamePicks', lane:'best_bet',
+    posted:true, riskUnits:1, odds:100, kickoff:'2026-10-28T00:00Z', title:'Example'};
+  const picks = [
+    {...pick,id:'ml',marketType:'moneyline',result:'win',probabilityAtPublication:{calibrated:true,chance:.55}},
+    {...pick,id:'spread',marketType:'spread',result:'loss',earlyExit:true,probabilityAtPublication:{calibrated:true,chance:.56}},
+    {...pick,id:'push',marketType:'spread',result:'push',probabilityAtPublication:{calibrated:true,chance:.65}},
+    {...pick,id:'held',marketType:'total',result:'win',probabilityAtPublication:{calibrated:false,chance:.66}},
+  ];
+  const ctx = api.moreContext({allPicks:async()=>picks,get:async()=>({}),maybe:async()=>null});
+  Object.assign(ctx.state,{league:'CFB',record:{season:'current',phase:'current',q:''}});
+  const html = await factory(ctx).record({tab:'official'});
+  assert.match(html, /Results by market[\s\S]*Moneylines<\/td><td class="n">1–0–0/);
+  assert.match(html, /Spreads<\/td><td class="n">0–1–1<\/td><td class="n red">−1\.00u/);
+  const calibration = html.split('Posted win chances vs results')[1].split('</details>')[0];
+  assert.match(calibration, /50–&lt;60%[\s\S]*55\.5%[\s\S]*1\/2 · 50\.0%/);
+  assert.doesNotMatch(calibration, /60–&lt;70%/);
+});
+
 test('the Chef record survives a rolling release with an older cached core', async () => {
   const {api,factory}=loadBrowserApi();
   const ctx=api.moreContext({allPicks:async()=>[],get:async()=>({}),maybe:async()=>null});

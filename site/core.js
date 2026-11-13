@@ -431,7 +431,9 @@
     const ranks = new Map(ordered.map((row, index) => [row.id, index + 1]));
     return rows.map(row => ranks.has(row.id) ? { ...row, confidenceRank: ranks.get(row.id), confidencePool: ordered.length } : row);
   };
-  const category = p => p.kind === 'gamePicks' ? (p.marketType === 'total' ? 'Totals' : 'Spreads')
+  const category = p => p.kind === 'gamePicks' ? ({
+    total: 'Totals', teamTotal: 'Team totals', spread: 'Spreads', moneyline: 'Moneylines',
+  }[p.marketType] || 'Other game markets')
     : p.kind === 'props' ? 'Straights' : p.kind === 'riskyProps' ? 'Risky lines'
       : p.parlayType === 'longshot' ? 'Longshots' : p.parlayType === 'ladder' ? 'Ladder' : 'Parlays';
   const summarizePicks = (picks, minimum) => {

@@ -164,6 +164,27 @@
   };
   const tableOf = (first, rows) => `<div class="table-wrap"><table class="t"><thead><tr><th>${esc(first)}</th><th class="n">W–L–P</th><th class="n">Units</th><th class="n">Pending</th></tr></thead><tbody>${rows.map(([name, t]) =>
     `<tr><td>${esc(name)}</td><td class="n">${t.wins}–${t.losses}–${t.pushes}</td><td class="n ${t.units < 0 ? 'red' : t.units > 0 ? 'green' : ''}">${esc(units(t.units))}</td><td class="n">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
+  const postedChanceResults = picks => {
+    const buckets = new Map();
+    for (const pick of picks) {
+      const saved = pick.probabilityAtPublication;
+      if (saved?.calibrated !== true || !isNum(saved.chance) || saved.chance <= 0 || saved.chance >= 1
+          || !['win', 'loss'].includes(pick.result)) continue;
+      const bucket = Math.floor(saved.chance * 10) * 10;
+      const counts = buckets.get(bucket) || { wins: 0, plays: 0, sum: 0 };
+      counts.wins += Number(pick.result === 'win');
+      counts.plays++;
+      counts.sum += saved.chance;
+      buckets.set(bucket, counts);
+    }
+    if (!buckets.size) return '';
+    const pct = value => `${(100 * value).toFixed(1)}%`;
+    return `<details class="more-box" style="margin-top:12px"><summary>Posted win chances vs results</summary>
+      <p class="small muted">Uses the estimates saved when picks were published. The sample counts wins and losses. Small samples can swing widely.</p>
+      <div class="table-wrap"><table class="t"><thead><tr><th scope="col">Posted chance</th><th scope="col" class="n">Average estimate</th><th scope="col" class="n">Actual wins</th></tr></thead><tbody>
+      ${[...buckets].sort(([a], [b]) => a - b).map(([low, counts]) => `<tr><th scope="row">${low}–&lt;${low + 10}%</th><td class="n">${pct(counts.sum / counts.plays)}</td><td class="n">${counts.wins}/${counts.plays} · ${pct(counts.wins / counts.plays)}</td></tr>`).join('')}
+      </tbody></table></div></details>`;
+  };
   const weekLabel = w => { const d = new Date(w + 'T12:00:00'); const e = new Date(d); e.setDate(d.getDate() + 6);
     return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} to ${e.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`; };
   const MODEL_NAME = { 'v2.0': 'Our model', v1: 'First model', 'v1 replay': 'First model replay' };
@@ -838,7 +859,10 @@
       const settled = straight.filter(p => p.result && !C.isUnpricedImport(p) && matches(p)).sort((a, b) => String(b.kickoff || b.settledAt).localeCompare(String(a.kickoff || a.settledAt)));
       const counted = rows.filter(p => !C.isUnpricedImport(p) && C.countsPublic(p));
       const st = counted.filter(p => !C.isParlay(p) && C.isHeadline(p));
-      const MARKET_NAME = { Totals: 'Game totals', Spreads: 'Spreads', Straights: 'Player props', 'Risky lines': 'Risky player lines' };
+      const MARKET_NAME = { Totals: 'Game totals', Straights: 'Player props', 'Risky lines': 'Risky player lines' };
+      const marketRows = [...new Set(straight.map(C.category))].sort()
+        .map(market => [MARKET_NAME[market] || market, C.recordBreakdown(straight.filter(p => C.category(p) === market)).captured])
+        .filter(([, stats]) => stats.priced || stats.pending);
       const byWeek = [...new Set(st.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse().map(w => [weekLabel(w), C.summaryOf(st.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
       const archiveGroups = new Map();
       for (const p of all) { if (!Number.isInteger(Number(p.season))) continue; const key = [p.league, p.season, C.recordPhaseOf(p)].join('|'); if (!archiveGroups.has(key)) archiveGroups.set(key, []); archiveGroups.get(key).push(p); }
@@ -851,12 +875,13 @@
         ${notPosted.length ? section('Not posted', `<div class="receipts">${notPosted.map(p => `<p><a href="#pick/${esc(p.id)}">${esc(niceTitle(p.displayTitle || p.title))}</a> · Not posted; excluded from the record.</p>`).join('')}</div>`) : ''}
         ${laneResults}
         ${section('Every result', `${search}${settled.length ? weeksOf(settled, p => receipt(p, clvById)) : `<p class="muted">${rq ? 'No play matches. Try a player, a team or a market.' : 'Nothing settled yet. Plays show here once their games are final.'}</p>`}`)}
+        ${marketRows.length ? section('Results by market', tableOf('Market', marketRows), '', 'Official straights at recorded prices. Units exclude promotional credits.') : ''}
+        ${postedChanceResults(straight)}
         ${imported.length ? `<details class="more-box"><summary>Week 1 hand-posted legs (no prices) · ${esc(wl(C.summaryOf(imported)))} · not counted</summary><div class="receipts">${imported.map(p => receipt(p, clvById)).join('')}</div></details>` : ''}
         <details class="more-box" data-box="more-numbers" style="margin-top:12px"><summary>More numbers</summary><div><p class="small muted" style="margin-bottom:8px">Same plays, cut different ways. These include assumed prices and promo credits; the units line above does not.</p>
           <p class="eyebrow" style="margin:10px 0 6px">By sport</p>${tableOf('Sport', [['NFL', C.summaryOf(st.filter(p => p.league === 'NFL'))], ['College football', C.summaryOf(st.filter(p => p.league === 'CFB'))], ['College basketball', C.summaryOf(st.filter(p => p.league === 'CBB'))], ['NBA', C.summaryOf(st.filter(p => p.league === 'NBA'))]].filter(([, summary]) => summary.wins + summary.losses + summary.pushes + summary.pending))}
           <p class="eyebrow" style="margin:14px 0 6px">By kind</p>${tableOf('Kind', [['Researched plays', C.summaryOf(st.filter(p => !p.modelLean))], ['Model plays', C.summaryOf(st.filter(p => p.modelLean))], ['Fun tickets', C.summaryOf(counted.filter(p => C.isParlay(p) && !C.isLadder(p)))]])}
           <p class="small muted" style="margin-top:6px">Researched plays are backed by a checked news fact. Model plays go out on our number alone.</p>
-          ${[...new Set(st.map(C.category))].length > 1 ? `<p class="eyebrow" style="margin:14px 0 6px">By market</p>${tableOf('Market', [...new Set(st.map(C.category))].map(n => [MARKET_NAME[n] || n, C.summaryOf(st.filter(p => C.category(p) === n))]))}` : ''}
           ${byWeek.length ? `<p class="eyebrow" style="margin:14px 0 6px">By week</p>${tableOf('Week', byWeek)}` : ''}</div></details>
         ${archiveRows.length ? `<details class="more-box" data-box="archive" style="margin-top:12px"><summary>Season archive</summary><div><p class="small muted" style="margin-bottom:8px">Official posted results only. Personal tickets never enter these totals.</p><div class="table-wrap"><table class="t"><thead><tr><th>Season</th><th class="n">Best bets</th><th class="n">Fun tickets</th><th class="n">Climb steps</th></tr></thead><tbody>${archiveRows.map(r => `<tr><td>${esc(r[0])}</td><td class="n">${esc(r[1])}</td><td class="n">${esc(r[2])}</td><td class="n">${esc(r[3])}</td></tr>`).join('')}</tbody></table></div></div></details>` : ''}`;
     }
