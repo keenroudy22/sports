@@ -21,7 +21,14 @@ or add facts. These are research priorities, not calibrated odds or approved pic
 
 
 def packet(data, now):
-    facts=[]
+    support=[];challenge=[];seen=set()
+    def add(kind,text,sources,row):
+        key=(kind,str(row.get('eventId')),str(row.get('athleteId')),row.get('stat'),text)
+        if key in seen:return
+        seen.add(key)
+        (support if kind=='support' else challenge).append(dict(
+            kind=kind,text=text,sources=sources,eventId=row['eventId'],
+            athleteId=row['athleteId'],stat=row['stat'],name=row['name']))
     for row in data.get('rows',[]):
         if row.get('stat') not in ('pts','reb','ast'):
             continue
@@ -34,14 +41,24 @@ def packet(data, now):
         observed=row.get('currentRole') or {}
         if role.get('headline') and role.get('sources'):
             own.append(('support',role['headline'],role['sources']))
-        if observed.get('source') and observed.get('note'):
-            own.append(('support',observed['note'],[observed['source']]))
+        minutes=observed.get('minutes') or []
+        if observed.get('source') and minutes and isinstance(observed.get('starts'),int):
+            values=', '.join(f'{float(value):g}' for value in minutes if isinstance(value,(int,float)))
+            own.append(('support',f"Observed current-role minutes: {values}; {observed['starts']} starts "
+                        f"in {observed.get('games',len(minutes))} games; median {observed.get('medianMinutes')} minutes.",
+                        [observed['source']]))
         if row.get('hold'):
             own.append(('challenge',row['hold'],[row.get('availabilitySource') or 'stored source hold']))
         for kind,text,sources in own:
-            facts.append(dict(id=f'f{len(facts)}',kind=kind,text=text,sources=sources,
-                eventId=row['eventId'],athleteId=row['athleteId'],stat=row['stat'],name=row['name']))
-        if len(facts)>=24:break
+            add(kind,text,sources,row)
+    # Challenges cannot disappear behind duplicated book rows or a long list of
+    # clean roles. Keep half the bounded packet available for each direction,
+    # then use any unused space for the other side.
+    picked=challenge[:12]+support[:12]
+    if len(picked)<24:
+        used={id(row) for row in picked}
+        picked += [row for row in challenge[12:]+support[12:] if id(row) not in used][:24-len(picked)]
+    facts=[dict(row,id=f'f{i}') for i,row in enumerate(picked)]
     return dict(asOf=boxscores.stamp(now),facts=facts[:24],researchOnly=True)
 
 

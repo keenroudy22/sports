@@ -44,3 +44,17 @@ class LocalNBAReviewTests(unittest.TestCase):
     def test_future_or_non_primary_prop_is_not_a_packet_fact(self):
         data={'rows':[{'stat':'pra'},{'stat':'pts','kickoff':'2026-10-27T00:00:00Z','sourceAt':'2026-10-27T00:00:00Z'}]}
         self.assertEqual(review.packet(data,datetime(2026,10,28,tzinfo=timezone.utc))['facts'],[])
+    def test_packet_deduplicates_books_and_preserves_challenges(self):
+        base={'stat':'pts','kickoff':'2026-10-29T00:00:00Z','sourceAt':'2026-10-28T12:00:00Z',
+              'eventId':'g','athleteId':'p','name':'Player','currentRole':{
+                  'source':'https://www.espn.com/game','minutes':[31,34,36],
+                  'starts':3,'games':3,'medianMinutes':34}}
+        data={'rows':[dict(base,book='DraftKings'),dict(base,book='FanDuel'),
+                      dict(base,book='DraftKings',hold='Availability: Questionable',
+                           availabilitySource='https://www.nba.com/report')]}
+        facts=review.packet(data,datetime(2026,10,28,13,tzinfo=timezone.utc))['facts']
+        self.assertEqual(len(facts),2)
+        self.assertEqual({f['kind'] for f in facts},{'support','challenge'})
+        role=next(f for f in facts if f['kind']=='support')
+        self.assertIn('31, 34, 36',role['text'])
+        self.assertIn('3 starts',role['text'])
