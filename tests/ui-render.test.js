@@ -165,6 +165,9 @@ test('mobile navigation leads with bettor tasks instead of internal research cat
   assert.match(source, /'Player stats'/);
   assert.match(source, /'Position vs\. defense'/);
   assert.ok(source.indexOf('${proof}${spotlight}') > -1, 'the current NFL matchup appears before secondary Today sections');
+  const research = fs.readFileSync('site/research.css', 'utf8');
+  assert.match(research, /\.research-quick \{ display: grid; grid-template-columns: repeat\(5, minmax\(0, 1fr\)\)/);
+  assert.match(research, /@media \(max-width: 520px\)[\s\S]*\.research-quick \{ grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
 });
 
 test('player result charts and edge sports stay inside phone cards', () => {
@@ -174,4 +177,19 @@ test('player result charts and edge sports stay inside phone cards', () => {
   assert.match(more, /\.player-board \.kt-chart \.kt-x \{ width: 100%; grid-auto-columns: minmax\(0,1fr\); gap: 4px; \}/);
   assert.match(more, /\.player-board \.kt-chart \.kt-x span \{ min-width: 0; overflow: visible; overflow-wrap: anywhere; \}/);
   assert.match(research, /@media \(max-width:520px\) \{ \.edge-sports \{ flex-wrap: wrap; overflow: visible; \}/);
+  assert.match(more, /const projectionGap = isNum\(projection\) && isNum\(line\) \? projection - line : null/);
+  assert.match(more, /Kook’n − book/);
+});
+
+test('Today and matchup pages keep the useful decision data ahead of decorative tickets', () => {
+  const css = fs.readFileSync('site/app.css', 'utf8');
+  assert.match(source, /emptyRail\([^\n]+, 'today-card', true\)/, 'an empty Today rail uses the compact status');
+  assert.match(css, /\.decision-empty\.is-compact \{ display: grid;/);
+  assert.match(gamesSource, /Official picks in this game/);
+  assert.match(gamesSource, /class="matchup-pick-list"/);
+  assert.match(gamesSource, /<summary>View original ticket/);
+  assert.match(gamesSource, /Kook vs Book · current research/);
+  assert.doesNotMatch(gamesSource, /Book lines vs my numbers/);
+  assert.match(source, /class="pc-team-abbr"/);
+  assert.ok(gamesSource.indexOf("${header}${postedHtml}${linePreview}") > -1, 'the matchup header and compact official rows lead the research stack');
 });

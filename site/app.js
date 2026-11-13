@@ -984,7 +984,7 @@
       <a class="decision-more" href="${esc(vm.href)}">See stats, trends and full breakdown <span aria-hidden="true">→</span></a>
     </article>`;
   };
-  const emptyRail = (note, id = '') => `<section${id ? ` id="${esc(id)}"` : ''} class="decision-empty" aria-label="No best bet yet"><span>No official pick</span><h3>Nothing forced.</h3><p>${note}</p></section>`;
+  const emptyRail = (note, id = '', compact = false) => `<section${id ? ` id="${esc(id)}"` : ''} class="decision-empty${compact ? ' is-compact' : ''}" aria-label="No best bet yet"><div class="decision-empty-head"><span>No official pick</span><h3>Nothing forced.</h3></div><p>${note}</p></section>`;
   const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
   /* The 80/20 Climb stub: the chip carries the real stake; done steps get a check, the current one is outlined, the
      $1,000 flag stays visible. Never a guessed return or a promised step count. */
@@ -1210,12 +1210,12 @@
   /* The first paint and full card share this top. */
   const KVB_WAIT = '<section class="kt-sec" id="today-kvb"><h2 class="kt-head">Kook vs. Book</h2><p class="small muted">Our number. Their line. Your call.</p><p class="loading" role="status">Checking lines…</p></section>';
   const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', market = KVB_WAIT, favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
-    const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today);
+    const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : !rows.length ? 'Games, projections and verified price checks.' : ledeTitle(rows, today);
     const researchSport = propSport(state.league);
     const currentBets = [...new Map([...rows.slice(0, 1), ...more, ...rows.slice(1)].map(row => [row.id, row])).values()];
     return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : currentBets.length > 1 ? `Today’s best bets · ${currentBets.length}` : 'Today’s best bet'}</h2><a href="#record">Track record ›</a></div>
-      ${currentBets.length ? rail(currentBets, { season, lines, cards, id: 'today-card', quick: true, compact: true, label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' }) : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
+      ${currentBets.length ? `<div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : currentBets.length > 1 ? `Today’s best bets · ${currentBets.length}` : 'Today’s best bet'}</h2><a href="#record">Track record ›</a></div>
+      ${rail(currentBets, { season, lines, cards, id: 'today-card', quick: true, compact: true, label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' })}` : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'My strongest current research look is below.' : "Tonight's games and Kook vs Book numbers are below.") : 'The board updates when a verified price clears every release check.', 'today-card', true)}
       ${otherTickets}
       ${postedSummary ? postedSummary.html : ''}
       ${market}
@@ -1974,7 +1974,7 @@
     const label = final ? 'Final' : live ? 'Live' : 'Projected';
     const score = hasScore ? `${esc(g.away.score)}<i> – </i>${esc(g.home.score)}` : isNum(v2.away) ? `${C.fixed(v2.away, 1)}<i> – </i>${C.fixed(v2.home, 1)}` : '–';
     const sub = hasScore ? (isNum(v2.away) ? `We had ${C.fixed(v2.away, 0)}–${C.fixed(v2.home, 0)}` : '') : isNum(v2.total) ? `Total ${C.fixed(v2.total, 1)}` : 'No number yet';
-    const team = t => `<div class="pc-team">${teamMark(t, opts.big ? 'lg' : 'md', g.league)}<b>${esc(t.name || t.abbr)}</b>${t.strength && opts.ranks !== false ? `<span title="Our model's offense and defense ranks${t.strength.teams ? ` out of ${esc(t.strength.teams)}` : ''}. #1 is best.">Off #${esc(t.strength.offense)} · Def #${esc(t.strength.defense)}</span>` : ''}</div>`;
+    const team = t => `<div class="pc-team">${teamMark(t, opts.big ? 'lg' : 'md', g.league)}<b class="pc-team-name">${esc(t.name || t.abbr)}</b><b class="pc-team-abbr">${esc(t.abbr || t.name)}</b>${t.strength && opts.ranks !== false ? `<span title="Our model's offense and defense ranks${t.strength.teams ? ` out of ${esc(t.strength.teams)}` : ''}. #1 is best.">Off #${esc(t.strength.offense)} · Def #${esc(t.strength.defense)}</span>` : ''}</div>`;
     const home = isNum(v2.winProb) && v2.winProb >= 0 && v2.winProb <= 1 ? v2.winProb : null;
     const barLabel = opts.barLabel || 'Estimated win chance';
     let colors = [barColor(g.away), barColor(g.home)];
@@ -1990,7 +1990,8 @@
     const totalGap = isNum(m.total) && isNum(v2.total) ? v2.total - m.total : null;
     const spreadDiff = spreadGap == null ? '—' : Math.abs(spreadGap) < .05 ? 'Same' : `${C.fixed(Math.abs(spreadGap), 1)} toward ${spreadGap > 0 ? g.home.abbr : g.away.abbr}`;
     const totalDiff = totalGap == null ? '—' : Math.abs(totalGap) < .05 ? 'Same' : C.signed(totalGap, 1);
-    const lines = hasScore || g.fcs || !isNum(v2.margin) ? '' : `<div class="pc-lines"><span class="h"></span><span class="h">${opts.compact ? 'Kook’n' : 'Mine'}</span><span class="h">${opts.compact ? 'Book' : 'Market'}</span><span class="h">${esc(opts.compact ? 'Difference' : opts.sideLabel || 'My side')}</span>
+    const directCompare = opts.compact || opts.big;
+    const lines = hasScore || g.fcs || !isNum(v2.margin) ? '' : `<div class="pc-lines"><span class="h"></span><span class="h">${directCompare ? 'Kook’n' : 'Mine'}</span><span class="h">${directCompare ? 'Book' : 'Market'}</span><span class="h">${esc(opts.compact ? 'Difference' : opts.sideLabel || 'My side')}</span>
       <span class="k">Spread</span><span class="num">${esc(C.modelSpread(g.home.abbr, g.away.abbr, v2.margin))}</span><span class="num">${esc(favSpread(g.home.abbr, g.away.abbr, m.spread))}</span><span>${opts.compact ? esc(spreadDiff) : lean.side ? ourSide(`${sideTeam.abbr}${sideLine}`, lean.side.chance, raw.spreadCaution) : '<span class="muted">No lean</span>'}</span>
       <span class="k">Total</span><span class="num">${esc(C.fixed(v2.total, 1))}</span><span class="num">${esc(C.fixed(m.total, 1))}</span><span>${opts.compact ? esc(totalDiff) : lean.total ? ourSide(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalCaution) : '<span class="muted">No lean</span>'}</span></div>`;
     const gap = gapScore(g);
@@ -2111,10 +2112,10 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-77d241e3d2ee';
-  const GAMES_ASSET = 'app-games.js?v=sha256-5919d358305b';
+  const MORE_ASSET = 'app-more.js?v=sha256-eafd7dca8c79';
+  const GAMES_ASSET = 'app-games.js?v=sha256-dcc12ceb24d3';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
-  const RESEARCH_CSS = 'research.css?v=sha256-c2a4a31d6da5';
+  const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
       const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = RESEARCH_CSS; link.onload = ok;
@@ -2125,7 +2126,7 @@
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
     GAMES, HEADSHOT, MARK, STAT_UNITS, clock, defGames, defenseVerdict, disc, favoriteHold, favoriteLook, filtersFold, hasValue, lineVM, logoImg, minus, nameSize, odd, onBoard, panelVars, pctOne, teamPanel, ticketWhen, toneFor, watchButton, HOUSE, rail, holdOf, heldWords, slip, etDay, opponentTrendText, ...overrides });
   const gamesContext = (overrides = {}) => moreContext({ setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican,
-    boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, ticketButton, luminance, ...overrides });
+    boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, ticketButton, resultLine, luminance, ...overrides });
   const BUNDLES = { more: { asset: MORE_ASSET, global: 'KRMore', context: moreContext, word: 'More pages' },
     games: { asset: GAMES_ASSET, global: 'KRGames', context: gamesContext, word: 'Games pages' },
     kvb: { asset: KVB_ASSET, global: 'KRKvb', context: () => moreContext({ historyChart, pctText }), word: 'Kook vs. Book' } };

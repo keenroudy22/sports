@@ -176,9 +176,9 @@ test('CBB player page shows an honest Kookn baseline and lets the reader check a
   assert.match(page, /Kook’n projection<\/small><b class="num">15\.1/);
   assert.match(page, /Kook’n baseline:<\/b> 5 current-season games · 30\.2 projected minutes/);
   assert.match(page, /60% recent and 40% season per-minute rate/);
-  assert.match(page, /Projection gap<\/small><b class="num">–/);
+  assert.match(page, /Kook’n − book<\/small><b class="num">–/);
   assert.match(page, /mens-college-basketball\/boxscore/);
-  assert.match(page, /A projection gap is not a probability/);
+  assert.match(page, /Kook’n minus the book is not a probability/);
 });
 
 test('a player line with no hold puts the projection beside the book line and keeps its price check', async () => {
