@@ -130,6 +130,7 @@
   const basketballMatchupProps = (league, game, picks, index, props) => {
     const gameRows = (props?.rows || []).filter(row => String(row.eventId) === String(game.providerId || String(game.id).replace(/^(?:NBA|CBB)-/, '')));
     const now = Date.now(), tip = Date.parse(game.kickoff);
+    const pregame = (!game.status || game.status === 'scheduled') && tip > now;
     const posted = picks.filter(play => play.league === league && play.gameId === game.id
       && play.posted === true && !play.result && play.athleteId);
     const isOfficialQuote = (row, stat) => row && posted.some(play => String(play.athleteId) === String(row.athleteId)
@@ -138,7 +139,7 @@
       && isNum(play.odds) && play.odds === row[play.direction]);
     const isFresh = row => {
       const age = now - Date.parse(row?.sourceAt);
-      return (!game.status || game.status === 'scheduled') && tip > now && age >= 0 && age <= 4 * 3600000;
+      return pregame && age >= 0 && age <= 4 * 3600000;
     };
     const isLean = row => Boolean(row?.favorite && !row.hold && isFresh(row));
     const recentBoxCutoff = Number.isFinite(tip) ? new Date(tip - 30 * 86400000).toISOString().slice(0, 10) : '';
@@ -164,7 +165,7 @@
     };
     const playerLine = (player, stat) => {
       const row = player.stats.get(stat), summary = player.entry?.[7] || null;
-      const held = Boolean(row?.hold) || [...player.stats.values()].some(C.basketballAvailabilityHold);
+      const held = !pregame || Boolean(row?.hold) || [...player.stats.values()].some(C.basketballAvailabilityHold);
       const projection = held ? null : row ? row.projection?.value : summary?.values?.[stat];
       const line = isNum(row?.line) ? Number(row.line) : null;
       const direction = String(row?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
@@ -179,7 +180,7 @@
     };
     const table = (team, players, stats) => `<div class="table-wrap"><table class="t prop-compare"><thead><tr><th>Player · role</th>${stats.map(([,label]) => `<th>${esc(label)}</th>`).join('')}</tr></thead><tbody>${players.map(player => {
       const rows = [...player.stats.values()], status = basketballStatus(rows), role = rows.find(row => row.currentRole)?.currentRole, summary = player.entry?.[7];
-      const projectedMinutes = rows.some(C.basketballAvailabilityHold) ? null
+      const projectedMinutes = !pregame || rows.some(C.basketballAvailabilityHold) ? null
         : rows.find(row => !row.hold && isNum(row.projection?.minutes))?.projection?.minutes ?? summary?.minutes;
       const minuteList = role?.minutes || summary?.recentMinutes || [];
       return `<tr><th class="prop-player"><span class="prop-player-head"><a href="${player.id ? `#player/${league}/${esc(player.id)}?stat=pts` : '#research/players'}">${esc(player.name)}</a><span class="prop-pos">${esc(player.pos || 'Position unavailable')}</span>${status ? `<span class="badge ${status.warn ? 'warn' : 'research'}">${esc(status.word)}</span>` : ''}</span><span class="prop-min"><b>${isNum(projectedMinutes) ? `Kook’n minutes ${esc(C.fixed(projectedMinutes))}` : 'Minutes projection held'}</b>${minuteList.length ? `<span>Recent ${minuteList.slice(-3).map(value => esc(C.fixed(value,0))).join(' · ')}</span>` : ''}</span></th>${stats.map(([stat,label]) => `<td data-stat="${esc(label)}">${playerLine(player,stat)}</td>`).join('')}</tr>`;
@@ -458,6 +459,21 @@
       <p class="kt-number-status ${clears ? 'green' : ''}"><b>${esc(status)}</b></p>${chance ? `<div class="kt-number-chance">${chance}</div>` : ''}
       <p class="small" style="margin-top:8px"><a href="#game/${esc(g.id)}#why">See why the numbers differ ›</a></p></div></section>`;
   };
+  const basketballScoreCard = (game, league) => {
+    const final = game.status === 'final';
+    const live = ['in_progress', 'delayed', 'suspended'].includes(game.status);
+    const pastTip = Date.parse(game.kickoff) <= Date.now();
+    const word = final || live || game.status && game.status !== 'scheduled'
+      ? game.statusDetail || LIVE_WORD[game.status] || (final ? 'Final' : 'Live')
+      : pastTip ? 'Score update pending' : game.hold || 'Team projection unavailable';
+    const team = side => {
+      const t = game.teams[side];
+      return { ...t, abbr:t.abbreviation, score:final || live ? game.scores?.[side] ?? t.score : null };
+    };
+    return projCard({id:game.id, league, kickoff:game.kickoff, home:team('home'), away:team('away'),
+      state:live ? 'in' : 'pre', completed:final, status:live ? word : ''}, {link:false, ranks:false})
+      + `<p class="small muted">${esc(word)} · <a href="#games/live?sport=${league}">Live &amp; scores ›</a></p>`;
+  };
   views.game = async route => {
     const back = '<a class="back" href="#games">← Games</a>';
     const league = /^(NBA|CBB)-/.exec(route.id)?.[1];
@@ -467,11 +483,14 @@
         get(`app/players/${league}.json`).catch(() => ({players:[]})),
         league === 'NBA' ? get('app/nba-props.json').catch(() => ({rows:[]})) : Promise.resolve({rows:[]}),
         league === 'NBA' ? ctx.allPicks().catch(() => []) : Promise.resolve([])]);
-      const game = data?.games?.find(g => g.id === route.id);
+      const research = data?.games?.find(g => g.id === route.id);
+      const stored = research ? null : (await maybe('sports.json'))?.leagues?.[league]?.games?.find(g => g.id === route.id);
+      const game = research || stored;
       if (!game) return head(league, 'Matchup unavailable', 'This game is outside the stored schedule.', back);
       const title = `${game.teams.away.name} at ${game.teams.home.name}`;
       const top = head(league, title, esc(whenShort(game.kickoff)), back);
-      const card = league === 'NBA' ? nbaGameCard(game, false) : game.projection ? cbbGameCard(game, false) : '<p>No team projection available.</p>';
+      const card = research && league === 'NBA' ? nbaGameCard(research, false)
+        : research?.projection ? cbbGameCard(research, false) : basketballScoreCard(game, league);
       const rows = league === 'NBA' ? (Array.isArray(propPayload?.rows) ? propPayload
         : Array.isArray(data.playerProps?.rows) ? data.playerProps
           : Array.isArray(propPayload?.playerProps?.rows) ? propPayload.playerProps : {rows:[]}) : {rows:[]};

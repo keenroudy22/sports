@@ -1,7 +1,7 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const C=require('../site/core.js'),L=require('../site/live.js'),P=require('../site/personal.js');
-function views(get){const s={module:{exports:{}},exports:{},KRCore:C,KRLive:L,KRPersonal:P,document:{querySelector:()=>null},localStorage:{getItem:()=>null,setItem:()=>{}},console,URL,URLSearchParams,Intl,Date,Math,Map,Set,Promise,AbortController,TextEncoder,TextDecoder,setTimeout,clearTimeout,setInterval,clearInterval};s.window=s;s.self=s;s.globalThis=s;vm.runInNewContext(fs.readFileSync('site/app.js','utf8'),s);vm.runInNewContext(fs.readFileSync('site/app-games.js','utf8'),s);return s.KRGames(s.module.exports.gamesContext({get}));}
+function views(get){const s={module:{exports:{}},exports:{},KRCore:C,KRLive:L,KRPersonal:P,document:{querySelector:()=>null},localStorage:{getItem:()=>null,setItem:()=>{}},console,URL,URLSearchParams,Intl,Date,Math,Map,Set,Promise,AbortController,TextEncoder,TextDecoder,setTimeout,clearTimeout,setInterval,clearInterval};s.window=s;s.self=s;s.globalThis=s;vm.runInNewContext(fs.readFileSync('site/app.js','utf8'),s);vm.runInNewContext(fs.readFileSync('site/app-games.js','utf8'),s);return s.KRGames(s.module.exports.gamesContext({get,maybe:path=>get(path).catch(()=>null)}));}
 test('CBB research separates prior season stats and historical quote from live bets',async()=>{
  const g={id:'CBB-1',date:'2099-11-02',kickoff:'2099-11-02T23:00Z',teams:{home:{name:'Home'},away:{name:'Away'}},projection:{home:72,away:68,total:140,winProb:.62,neutral:true,sparse:true},stats:{home:{current:{season:2027,games:0},prior:{season:2026,games:30,wins:20,losses:10,ppg:80,allowed:70}}},firstTotal:{line:145.5,book:'DraftKings',capturedAt:'2026-11-01T15:00Z'}};
  const v=views(async path=>{assert.equal(path,'app/cbb.json');return {scheduleFresh:true,note:'Research, not picks.',games:[g],sheets:[{file:'cbb-sheet-2099-11-02-1.svg',date:g.date,page:1,pages:1}]};});
@@ -85,4 +85,26 @@ test('basketball cards open matchup details and NBA props stay in their own game
   assert.match(matchup, /prop-vs-label">Book<\/span><b>15\.5[\s\S]*prop-vs-label">Kook’n<\/span><b>17\.2[\s\S]*Projection gap[\s\S]*Kook’n range 11\.0–23\.0/);
   assert.match(matchup, /#player\/NBA\/42\?stat=pts&amp;line=15\.5&amp;direction=over&amp;book=FanDuel&amp;game=NBA-2/);
   assert.doesNotMatch(matchup, /Other game player/);
+});
+
+test('basketball matchup links retain verified scores and charts when a game leaves pregame research', async () => {
+  const kickoff = new Date(Date.now() - 4 * 3600000).toISOString();
+  const teams = {home:{id:'1',name:'Home',abbreviation:'HOM'},away:{id:'2',name:'Away',abbreviation:'AWY'}};
+  const game = {id:'CBB-3',providerId:'3',status:'final',kickoff,teams,scores:{home:82,away:74}};
+  const heldGame = {id:'CBB-4',status:'scheduled',kickoff,teams,scores:{home:0,away:0}};
+  const v = views(async path => {
+    if (path === 'app/cbb.json') return {games:[]};
+    if (path === 'sports.json') return {leagues:{CBB:{games:[game,heldGame]}}};
+    if (path === 'app/players/CBB.json') return {players:[['43','College player','G','2','AWY',kickoff.slice(0,10),5,{minutes:30,values:{pts:14.1},recent:{pts:13.8}}]]};
+    throw Error(path);
+  });
+  const final = await v.game({id:game.id});
+  assert.match(final, /Away at Home/);
+  assert.match(final, /Final<\/small><b class="num">74<i> – <\/i>82/);
+  assert.match(final, /#player\/CBB\/43\?stat=pts&amp;game=CBB-3/);
+  assert.match(final, /L5 avg 13\.8/);
+  assert.doesNotMatch(final, /14\.1|Kook’n minutes 30|Matchup unavailable/);
+  const waiting = await v.game({id:heldGame.id});
+  assert.match(waiting, /Score update pending/);
+  assert.doesNotMatch(waiting, />0<i> – /);
 });

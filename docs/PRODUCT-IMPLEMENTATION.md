@@ -1,3 +1,13 @@
+### November 13 compact All Sports Today — verified live
+
+One compact Best Bets list leads All Sports Today on mixed slates. Each row
+keeps the receipt-backed selection, price, book, stake and breakdown link.
+Research tools follow the list and NBA's lower matchup summary skips duplicate
+pick cards. Source `acfd9dd5e` deployed in Pages run `43529325260`. Live
+checks from 320 to 1440 CSS pixels matched both official rows and the full
+pick route. The November calendar again matched 33 delivered Best Bets over
+12 populated dates on phone and desktop.
+
 ### November 13 basketball Today and Results — verified live
 
 NBA and CBB Today now use the same receipt-backed public pick rows as Results.

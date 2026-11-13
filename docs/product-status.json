@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T22:19:00+00:00",
+  "updatedAt": "2026-11-13T23:55:00+00:00",
   "items": [
     {
       "id": "O-20261113-CBBSPREAD",
       "title": "Verify hosted College Hoops spread coverage",
       "status": "observing",
       "owner": "agent",
-      "next": "Compare paired spreads in the next regular hosted scoreboard snapshot with the source response. Verify the same team, line, both prices, book and capture time on College Hoops Today and a matchup after Pages publishes.",
+      "next": "Check the existing 9 PM Eastern desk run for the first tracked paired quote file. After Pages publishes it, compare the same team, line, both prices, book and capture time on College Hoops Today and a matchup.",
       "doneWhen": "An ordinary committed refresh exposes at least one fresh paired DraftKings spread and the public phone and desktop views match it. Missing or expired book quotes stay unavailable.",
-      "evidence": "Scheduled refresh 43514942723 checked 177 CBB games and committed zero paired spreads as 2afb8af74. It successfully dispatched publish-only run 43517539167. A separate direct read at 22:14Z parsed 52 Friday and three Saturday DraftKings spread pairs. The cause of the hosted coverage difference is unverified."
+      "evidence": "Scheduled refresh 43514942723 committed no paired spreads. The existing Mac scoreboard capture was promoted in 4b3a25516, Pages run 43530340376. A local replay matched 74 projected matchups and six phone/desktop checks matched both DraftKings prices plus the displayed spread. The first regular desk write and public quote remain to be verified."
     },
     {
       "id": "O-20261113-NBAQUOTESHARDS",
@@ -23,11 +23,11 @@
     {
       "id": "O-20261113-BASKETBALL-RECEIPTS",
       "title": "Reconcile public basketball Today with Results",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Ship the receipt-backed display fix through the standard release, then compare NBA and CBB Today, All Sports Today and Results on phone and desktop. Verify the pending Coward example against any actual delivery receipt present by the check.",
+      "next": "Keep the same receipt-backed record as the source for All Sports, NBA and CBB Today. Continue checking exact terms and delivery confirmations after ordinary publishes.",
       "doneWhen": "Visible basketball official rows and their original terms match the receipt-backed record. Card preparation stays available before delivery, and no private admission is labeled as posted.",
-      "evidence": "November 13 All Sports Today listed Cedric Coward in the posted count before the Results adapter observed a send. Candidate d134e6366 passed 57 targeted checks. Full release and live checks are pending."
+      "evidence": "Release 24b3c4348 and Pages 43526334347 matched four NBA and two CBB public rows in 12 live phone/desktop checks. The private Coward admission stayed out of public counts without delivery. Pages 43529325260 also confirmed that the compact All Sports Today list shows each receipt-backed play once, above research."
     },
     {
       "id": "O-20261028-NBAREGULAR",
