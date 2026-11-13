@@ -1,3 +1,15 @@
+### November 13 basketball Today and Results — verified live
+
+NBA and CBB Today now use the same receipt-backed public pick rows as Results.
+Private admissions can still prepare art for the existing publisher. The live
+November 13 check excluded an NBA admission with no delivery receipt and
+matched original terms and grades on four NBA and two college basketball rows.
+The November calendar reconciled 33 eligible Best Bets across 12 dates.
+Source `24b3c4348` shipped in Pages run `43526334347`; 12 live checks passed
+at 320, 375 and 1440 CSS pixels. The standard release ran 2,280 Python tests
+(two skipped), 351 interface tests, clean export, record and asset checks, and
+the offline rehearsal.
+
 ### November 13 basketball Prop Finder — verified live
 
 CBB search includes every player with a stored game log. Short samples remain
@@ -30,10 +42,11 @@ through the sole Pages job. Live checks covered 23 routes and four player-chart
 L5/L10 flows at 320, 375 and 1440 CSS pixels. The hosted CBB index kept 5,093
 players, including nine each for Pitt and Butler.
 
-On the next ordinary scheduled refresh, record its dispatch step, the
-resulting publish-only run, and the published player index after deployment.
-The hosted push verifies the shared publisher. The scheduled handoff still
-needs its first live receipt under this workflow revision.
+The next ordinary refresh `43514942723` successfully dispatched the separate
+publisher `43517539167`. The live CBB scoreboard advanced to the 22:03 UTC
+snapshot, and the player directory advanced from 5,093 to 5,502 players after
+40 new box scores. The hosted snapshot had zero paired DraftKings spreads.
+The remaining price-coverage check lives in `O-20261113-CBBSPREAD`.
 
 ### November 13 Today comparison visibility and matchup quote integrity — verified live
 
