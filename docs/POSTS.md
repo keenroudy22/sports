@@ -244,6 +244,16 @@ legs use the relevant team logo or both matchup logos. Three deterministic navy/
 ticket ID, so a published card never changes on rerender. A small chef badge and price/book in the header replace
 the oversized mascot. The ladder and straight-play renderers stay separate. Existing Discord/X attachments are not replaced.
 
+**Big-slate fun tickets (effective 2026-11-13):** preparation keeps two separate
+lanes: a 3–4 leg short parlay (+200 to +1500) and a 6–8 leg lotto (+1500 to
++20000). Each lane may publish at most once per day. A planning draft or a
+product of individual leg prices is never a public ticket. Before release,
+`scripts/fun_ticket_review.py` requires the exact visible same-book combined
+price, a private receipt, fresh current-day lines, one game per leg, and sourced
+matchup, countercase and availability review for every leg. The route makes no
+probability or positive-EV claim, never places a wager, and hands an approved
+ticket to the ordinary private release queue for site, Discord and X delivery.
+
 Drawn as SVG and rendered to PNG by headless Chrome (`pick_card.render`). New straight cards and Climb cards use
 1080x1350; tickets and research may grow vertically to keep full rows legible. Older house templates retain their
 own dimensions. The hosted build draws needed assets on deploy (`scripts/feed.py`) into `site/data/cards/`,
