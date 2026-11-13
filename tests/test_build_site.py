@@ -945,11 +945,13 @@ class TableTests(unittest.TestCase):
         kicker = next(p for p in payload['players'] if p['id'] == '11')
         self.assertEqual(kicker['rows'][0]['stats']['kPts'], 9, 'unprojected kickers still reach the all-stat chart')
 
-    def test_kvb_charts_keep_only_honest_shortlist_players_and_common_stats(self):
+    def test_kvb_charts_keep_history_only_for_each_players_qualifying_markets(self):
         now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)
         charts = {'players': [
             {'gameId': 'NFL-next', 'id': '10', 'side': 'home', 'rows': [
-                {'date': '2026-09-20', 'stats': {'rec': 5, 'recYds': 72, 'recTD': 1, 'rzTgt': 2}}]},
+                {'date': '2026-09-13', 'stats': {'recYds': 80}},
+                {'date': '2026-09-20', 'stats': {'rec': 5, 'recYds': 72, 'recTD': 1, 'rzTgt': 2}},
+                {'date': '2026-09-27', 'stats': {'rec': 0, 'recYds': 0}}]},
             {'gameId': 'NFL-next', 'id': '11', 'side': 'away', 'rows': [
                 {'date': '2026-09-20', 'stats': {'rushYds': 90, 'rushTD': 2}}]},
         ]}
@@ -962,7 +964,10 @@ class TableTests(unittest.TestCase):
         ]
         payload = build_site.build_kvb_charts(charts, lines, [], now)
         self.assertEqual([p['id'] for p in payload['players']], ['10'])
-        self.assertEqual(payload['players'][0]['rows'][0]['stats'], {'rec': 5, 'recYds': 72})
+        self.assertEqual(payload['players'][0]['rows'], [
+            {'date': '2026-09-20', 'stats': {'rec': 5}},
+            {'date': '2026-09-27', 'stats': {'rec': 0}},
+        ])
 
     def test_kvb_charts_always_keep_an_open_official_prop(self):
         now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)

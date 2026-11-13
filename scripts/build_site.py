@@ -1024,12 +1024,12 @@ def build_kvb_charts(charts, lines, picks, now):
     The full player-chart payload can be hundreds of kilobytes (and much larger
     for college). Today must not download that directory to draw three small
     charts. Keep every player who can honestly enter the shortlist plus any open
-    official prop, then retain only the seven common stats used by the cards.
+    official prop, then retain only stats each player can show on a card.
     """
     official = {(p.get('gameId'), str(p.get('athleteId'))) for p in picks
                 if p.get('athleteId') and not p.get('result') and not p.get('historicalImport')
                 and features.when(p.get('kickoff')) > now}
-    eligible = set(official)
+    eligible = defaultdict(set)
     for row in lines:
         stat, grade = row.get('stat'), row.get('grade') or {}
         key = (row.get('gameId'), str(row.get('athleteId') or ''))
@@ -1037,12 +1037,16 @@ def build_kvb_charts(charts, lines, picks, now):
                 or row.get('roleSuspect') or row.get('priceSuspect')):
             continue
         if key in official:
-            eligible.add(key)
+            eligible[key].add(stat)
             continue
         line, projection = row.get('line'), grade.get('projection')
         if (grade.get('calibrated') is not True or grade.get('thin') or grade.get('limited')
-                or grade.get('performanceCaution') or not isinstance(line, (int, float))
-                or line < KVB_FLOORS[stat] or not isinstance(projection, (int, float))):
+                or not isinstance(line, (int, float)) or line < KVB_FLOORS[stat]):
+            continue
+        if not isinstance(projection, (int, float)):
+            eligible[key].add(stat)
+            continue
+        if grade.get('performanceCaution'):
             continue
         direction = str(row.get('direction') or '').lower()
         if (direction == 'under' and projection >= line) or (direction != 'under' and projection <= line):
@@ -1052,14 +1056,17 @@ def build_kvb_charts(charts, lines, picks, now):
         has_value = tier in {'lean', 'strong'} and isinstance(edge, (int, float)) and edge > 0
         if ratio > 1 or (ratio > .5 and not has_value):
             continue
-        eligible.add(key)
+        eligible[key].add(stat)
     players = []
     for player in charts.get('players') or []:
-        if (player.get('gameId'), str(player.get('id'))) not in eligible:
+        stats = eligible.get((player.get('gameId'), str(player.get('id'))))
+        if not stats:
             continue
-        rows = [{'date': row.get('date'),
-                 'stats': {key: value for key, value in (row.get('stats') or {}).items() if key in KVB_STATS}}
-                for row in player.get('rows') or []]
+        rows = []
+        for row in player.get('rows') or []:
+            values = {stat: value for stat, value in (row.get('stats') or {}).items() if stat in stats}
+            if values:
+                rows.append({'date': row.get('date'), 'stats': values})
         players.append({key: player.get(key) for key in ('gameId', 'id', 'side')} | {'rows': rows})
     return {'generatedAt': stamp(now), 'players': players}
 
