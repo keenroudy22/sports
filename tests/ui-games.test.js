@@ -307,6 +307,25 @@ test('a comparison line never replaces the visible projection uncertainty range'
   assert.match(html, /Range means model uncertainty/);
 });
 
+test('football stat cells keep the displayed threshold, odds and chart side together', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = { ...slate()[1], kickoff: new Date(Date.now() + 3600000).toISOString() };
+  const observedAt = new Date().toISOString();
+  const different = { athleteId: '1', stat: 'rushYds', line: 41.5, direction: 'under', odds: -118, book: 'FanDuel', observedAt };
+  const matching = { ...different, line: 44.5, direction: 'over', odds: -109, book: 'DraftKings', state: 'open' };
+  const detail = { ...g, teams: {}, modelReads: [different], lines: [],
+    props: { capturedAt: observedAt, provider: 'DraftKings', lines: { '1': { rushYds: [44.5] } } },
+    forecast: { players: { home: { players: [{ id: '1', name: 'Test Runner', pos: 'RB', rushYds: [48, 30, 70] }] } } } };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
+  const cell = async () => (await factory(ctx).game({ id: g.id })).match(/<a class="prop-cell[^>]*href="[^"]*stat=rushYds[^>]*>[\s\S]*?<\/a>/)?.[0] || '';
+  assert.match(await cell(), /line=44\.5&amp;direction=over[\s\S]*Odds unavailable · DraftKings/);
+  assert.doesNotMatch(await cell(), /FanDuel|-118|41\.5/);
+  detail.lines = [matching];
+  assert.match(await cell(), /line=44\.5&amp;direction=over[\s\S]*O -109 · DraftKings/);
+  matching.observedAt = new Date(Date.now() - 5 * 3600000).toISOString();
+  assert.match(await cell(), /Earlier quote · checked/);
+});
+
 test('a game opens with its posted bet and honest book/model lines, even when Today has dropped that bet', async () => {
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];

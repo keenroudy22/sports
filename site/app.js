@@ -2118,7 +2118,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-10e768b22dab';
-  const GAMES_ASSET = 'app-games.js?v=sha256-48c4d3de2006';
+  const GAMES_ASSET = 'app-games.js?v=sha256-e4544b0767e2';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
   let researchCssLoading = null;
@@ -2172,7 +2172,7 @@
   GAMES_VIEW_NAMES.forEach(name => { VIEWS[name] = async route => (await ensureGames())[name](route); });
   /* Games data does not wait for its bundle either. */
   VIEWS.games = async route => { if (route.tab !== 'live') get('app/today.json').catch(() => null); return (await ensureGames()).games(route); };
-  VIEWS.game = async route => { if (route.id) get(`app/games/${route.id}.json`).catch(() => null); return (await ensureGames()).game(route); };
+  VIEWS.game = async route => { if (route.id && !/^(NBA|CBB)-/.test(route.id)) get(`app/games/${route.id}.json`).catch(() => null); return (await ensureGames()).game(route); };
   VIEWS.player = async route => {
     if (route && FOOTBALL.includes(route.league) && route.id) {
       const quiet = x => x && x.catch ? x.catch(() => null) : x;

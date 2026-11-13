@@ -73,6 +73,25 @@ test('NBA matchup marks only the exact posted quote and removes stale research h
  assert.doesNotMatch(stale,/class="lean-tag"|class="pick-tag"/);
 });
 
+test('NBA matchup preserves availability holds across the player’s markets', async () => {
+ const s=load(), api=s.module.exports;
+ const kickoff=new Date(Date.now()+3600000).toISOString(), sourceAt=new Date().toISOString();
+ const game={id:'NBA-1',kickoff,teams:{away:{id:'1',name:'Away'},home:{id:'2',name:'Home'}}};
+ const roster={players:[['11','Held Player','G','1','AWY',sourceAt.slice(0,10),12,
+   {minutes:31,recentMinutes:[32,29,28],values:{pts:19.2,reb:4.5},recent:{pts:17.6}}]]};
+ const row={eventId:'1',athleteId:'11',team:'1',name:'Held Player',stat:'pts',line:18.5,
+   book:'DraftKings',over:-110,under:-110,sourceAt,hold:'Availability: Unavailable',projection:null};
+ const ctx=api.gamesContext({allPicks:async()=>[],get:async path=>path==='app/nba.json'?{games:[game]}:
+   path==='app/nba-props.json'?{rows:[row]}:roster});
+ const html=await s.KRGames(ctx).game({id:game.id});
+ assert.match(html,/class="badge warn">Unavailable/);
+ assert.match(html,/Minutes projection held/);
+ assert.match(html,/Recent 32 · 29 · 28/);
+ assert.match(html,/#player\/NBA\/11\?stat=pts&amp;line=18\.5&amp;direction=over/);
+ assert.match(html,/L5 avg 17\.6/);
+ assert.doesNotMatch(html,/19\.2|4\.5|Projection gap|Research lean<\/span>/);
+});
+
 test('CBB matchup links recent player history even when the projection is held', async () => {
  const s=load(), api=s.module.exports;
  const kickoff=new Date(Date.now()+3600000).toISOString(), played=new Date(Date.now()-86400000).toISOString().slice(0,10);
