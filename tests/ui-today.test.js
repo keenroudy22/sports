@@ -995,9 +995,12 @@ test('play details expose the verified original X post and a shareable play link
     const pick = {...prop, delivery: {originalX}};
     const {api} = loadApp('#record', {}, {today: {...TODAY, picks: [pick]}});
     const page = await api.views.pick({id: pick.id});
-    assert.match(page, /href="#pick\/[^"]+" data-copy-link>Copy play link/);
+    assert.match(page, /href="p\/NFL-2026-W5-fixture-rec-fd\.html" data-copy-link>Share pick/);
     assert.equal(page.includes('Original pick on X'), Boolean(originalX?.startsWith('https://x.com/')));
   }
+  const pick = {...prop, id:'NFL-share-example', posted:false};
+  const {api} = loadApp('#record', {}, {today:{...TODAY,picks:[pick]}});
+  assert.match(await api.views.pick({id:pick.id}), /href="#pick\/NFL-share-example" data-copy-link>Share pick/);
 });
 
 test('play footer retains unknown historical stakes without changing accounting', async () => {

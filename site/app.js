@@ -1436,7 +1436,8 @@
     ].filter(Boolean);
     const result = pick.result ? `<div class="card"><p><b>${esc(vm.status)}</b>${pick.resultDetail || pick.actual ? ` · ${esc(prose(pick.resultDetail ? `${pick.player || niceTitle(pick.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${pick.resultDetail}` : pick.actual))}` : ''}</p>${pick.settlementReason ? `<p class="small muted" style="margin-top:4px">${esc(prose(pick.settlementReason))}</p>` : ''}${pick.settledAt ? `<p class="small muted" style="margin-top:4px">Settled ${esc(when(pick.settledAt))}</p>` : ''}</div>` : '';
     const chanceTitle = vm.chance != null ? `How we got ${pctOne(vm.chance)}` : 'How we got this';
-    const projected = game && !hold && !C.isParlay(pick) && !pick.athleteId ? section('Our projected score now', `<p class="small muted" style="margin-bottom:8px">When posted: ${moneyline ? (vm.chance != null ? `${pctText(vm.chance)} estimated win chance at ${esc(oddsText(pick.odds))}` : 'no saved win-chance estimate') : `our number ${isNum(pick.projection) ? esc(C.fixed(pick.projection)) : '–'} against the ${esc(pick.line ?? '–')} line${vm.chance != null ? ` (${pctText(vm.chance)} our chance)` : ''}`}. The card below is today's model and market.</p>${projCard(game, { link: true, sideLabel: 'Current lean' })}`) : '';
+    const projected = game && !hold && !C.isParlay(pick) && !pick.athleteId
+      ? section('Current projection', projCard(game, { link: true, sideLabel: 'Current lean' })) : '';
     const sameGame = research === `#game/${pick.gameId}`;
     const isSaved = state.watchlist.some(r => r.key === 'pick:' + pick.id);
     const tape = (title, body) => `<section class="kt-page-sec"><h2 class="kt-tape">${esc(title)}</h2>${body}</section>`;
@@ -1466,10 +1467,10 @@
       ${pick.cutoff ? tape(vm.mode === 'open' && !hold ? 'Good to' : vm.kind === 'best' ? 'Was good to' : 'Entry rule', `<p>${esc(prose(pick.cutoff))}</p>${vm.mode === 'open' && !hold && goodTo(pick) ? `<p class="small muted" style="margin-top:4px">${esc(goodTo(pick))}</p>` : ''}`) : ''}
       ${tape('Where it stands', `${vm.statusNote && !hold ? `<p class="small">${esc(vm.statusNote)}</p>` : ''}<p class="small muted" style="margin-top:4px">${esc(C.deliveryText(pick) || 'No delivery evidence recorded.')}</p>${/^https:\/\/x\.com\/keenkooks\/status\/[0-9]{15,22}$/.test(originalX) ? `<p class="small"><a href="${esc(originalX)}" target="_blank" rel="noopener noreferrer">Original pick on X ↗</a></p>` : ''}`)}
       ${P.betslipAction(pick,Date.now())}
-      <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><a class="btn" href="${esc(vm.href)}" data-copy-link>Copy play link</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
+      <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><a class="btn" href="${pick.posted === true && !pick.historicalImport && /^(NFL|CFB|NBA|CBB)-[A-Za-z0-9_-]{1,140}$/.test(pick.id) ? `p/${esc(pick.id)}.html` : esc(vm.href)}" data-copy-link>Share pick</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
       ${sources.length ? `<p class="small muted" style="margin-top:14px">Sources: ${sources.map((x, i) => `<a href="${esc(x)}" target="_blank" rel="noopener noreferrer">${esc(host(x, i))} ↗</a>`).join(' · ')}</p>` : ''}
       <p class="kt-social small"><a href="https://discord.gg/ZnjubjsBPM">Discord</a> · <a href="https://x.com/keenkooks">Kook’n on X</a></p>
-      <p class="small muted" style="margin-top:10px">${pick.accountingUnknown || (pick.historicalImport && !pick.priceAssumed && !(isNum(pick.riskUnits) && pick.riskUnits > 0)) ? 'The original stake is unknown; historical unit assumptions are labeled separately.' : C.isParlay(pick) ? (C.isLadder(pick) ? 'A Climb step, tracked in dollars apart from the best-bet record.' : 'A fun ticket at a smaller stake, kept out of the best-bet record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : `Graded at the posted ${C.stakeOf(pick)}u stake, at the line and price we posted.`} The posted price is kept for grading even after the line moves.</p></div>`;
+      <p class="small muted" style="margin-top:10px">${pick.accountingUnknown || (pick.historicalImport && !pick.priceAssumed && !(isNum(pick.riskUnits) && pick.riskUnits > 0)) ? 'The original stake is unknown; historical unit assumptions are labeled separately.' : C.isParlay(pick) ? (C.isLadder(pick) ? 'Climb · tracked in dollars.' : 'Fun ticket · separate record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : `Graded at the posted ${C.stakeOf(pick)}u stake, at the line and price we posted.`} The posted price is kept for grading even after the line moves.</p></div>`;
   };
 
   /* ---------- Research (B: one pro board) ---------- */
@@ -2414,7 +2415,7 @@
       const link = event.target.closest('[data-copy-link]');
       if (!link) return;
       event.preventDefault();
-      const url = `${location.origin}${location.pathname}${link.getAttribute('href')}`;
+      const url = new URL(link.getAttribute('href'), location.href).href;
       try { await navigator.clipboard.writeText(url); toast('Link copied'); } catch (_) { window.prompt('Copy this link:', url); }
     });
     document.addEventListener('toggle', event => {

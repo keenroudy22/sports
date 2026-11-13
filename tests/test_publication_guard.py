@@ -11,6 +11,35 @@ import publication_guard as guard
 
 
 class PublicationGuardTests(unittest.TestCase):
+    def test_pick_share_paths_are_narrow_and_generated_from_public_picks(self):
+        import pick_share
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'index.html').write_text('<title>Site</title>')
+            (root / 'data/app').mkdir(parents=True)
+            (root / 'data/cards').mkdir()
+            record = root / 'data/app/record.json'
+            pick = {'id': 'NBA-share-example', 'posted': True, 'title': 'Player <example>',
+                    'odds': 105, 'book': 'DraftKings', 'card': 'data/cards/share.png'}
+            record.write_text(json.dumps({'nbaPicks': [pick, dict(pick, id='NBA-pending', posted=False),
+                                                       dict(pick, id='NBA-../../private')]}))
+            (root / pick['card']).write_bytes(pick_share.PNG)
+            base = 'https://keenroudy.com/sports/'
+            self.assertEqual(pick_share.build(root, base), 1)
+            path = root / 'p/NBA-share-example.html'
+            html = path.read_text()
+            self.assertIn(base + '#pick/NBA-share-example', html)
+            self.assertIn(base + pick['card'], html)
+            self.assertIn('Player &lt;example&gt;', html)
+            self.assertEqual(guard.audit(root)['issues'], [])
+            self.assertFalse(guard.allowed_path(Path('p/private.html')))
+            self.assertFalse(guard.allowed_path(Path('p/NBA-share-example.json')))
+            self.assertFalse((root / 'p/NBA-pending.html').exists())
+            record.write_text('{}')
+            self.assertEqual(pick_share.build(root, base), 0)
+            self.assertFalse(path.exists())
+
     def test_cbb_public_research_does_not_expose_raw_model_stores(self):
         for path in ('data/app/cbb.json','data/app/cbb-sheet-2026-11-02-1.svg'):
             self.assertTrue(guard.allowed_path(Path(path)))

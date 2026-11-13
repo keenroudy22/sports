@@ -49,6 +49,9 @@ def allowed_path(relative):
     if any(p.lower() in PRIVATE_NAMES or p.lower().startswith(('review-packet-', 'review-20')) for p in parts):
         return False
     value = relative.as_posix()
+    if parts[0] == 'p':
+        from pick_share import PICK_ID
+        return len(parts) == 2 and relative.suffix == '.html' and bool(PICK_ID.fullmatch(relative.stem))
     if parts[0] == 'img':
         return relative.suffix.lower() in {'.png', '.jpg', '.jpeg', '.webp', '.svg'}
     if len(parts) == 2 and parts[0] == 'data':

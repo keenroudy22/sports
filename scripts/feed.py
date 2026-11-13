@@ -467,6 +467,9 @@ def main(argv=None):
     parser.add_argument('--no-cards', action='store_true')
     args = parser.parse_args(argv)
     build(out=Path(args.out), with_cards=not args.no_cards)
+    if Path(args.out).resolve() == OUT:
+        import pick_share
+        pick_share.build(ROOT / 'site', SITE)
     return 0
 
 
