@@ -1,3 +1,21 @@
+### November 13 CBB projected spread — verified live
+
+College Hoops cards and CBB matchup pages show a Spread row in Kook vs Book.
+The model number uses the stored home margin. The book spread is marked
+Unavailable because the public slate feed supplies first recorded totals.
+Pitt at Butler displayed BTLR -7.0 and a projected total of 157.9 beside the
+first recorded DraftKings total of 157.5. The Games card and matchup page
+matched the public payload at 375 and 1440 CSS pixels. Both showed the complete
+row without page overflow, a rendered load failure, or a console error.
+
+Source `dbce8bd846a9dc075358cb6b0ad73118fddf0777` shipped through hosted run
+`43470698867`. The release passed 2,269 Python tests (2 skipped), 342 interface
+tests, clean export, the 592-page build, record audits, the public-file guard,
+asset and SVG checks, and the stored-input rehearsal. The retry passed after
+space was recovered from temporary rehearsal input copies. The same release
+includes Results market summaries, exact quote badges on NBA matchups,
+recent CBB chart links for held projections, and static pick-share previews.
+
 ### November 13 exact player chart lines and CBB collection order
 
 Player charts preserve the selected stat, side and threshold. Basketball uses
