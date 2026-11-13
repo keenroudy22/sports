@@ -150,7 +150,9 @@ test('game prop tables become scan cards on phones without losing exact stat lin
   assert.match(gamesSource, /Priced lines, research leans and highest-minute roles first/);
   assert.match(gamesSource, /class="more-box prop-depth-more"/);
   assert.match(gamesSource, /const featured = players\.slice\(0,5\), depth = players\.slice\(5\)/);
-  assert.match(gamesSource, /const featured = ordered\.slice\(0,3\), depth = ordered\.slice\(3\)/);
+  assert.match(gamesSource, /const featured = ordered\.filter[\s\S]*?\.slice\(0,2\)/);
+  assert.match(gamesSource, /More \$\{esc\(pos\)\} players &amp; markets/);
+  assert.match(gamesSource, /PRIMARY_POSITION_PROJ/);
 });
 
 test('mobile navigation leads with bettor tasks instead of internal research categories', () => {

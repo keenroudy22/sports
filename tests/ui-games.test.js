@@ -232,7 +232,7 @@ test('all games show only usable projection rows and columns, including zero est
       forecast: { players: { home: { players }, away: { players: [players[0]] } } } };
     const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
     const html = unesc(await factory(ctx).game({ id: g.id }));
-    assert.match(html, /player projections · 2 players/);
+    assert.match(html, /PITT player props/);
     assert.match(html, /Partial Player/);
     assert.match(html, /Usable Runner/);
     assert.match(html, /Kook’n 0\.0/);
@@ -253,7 +253,7 @@ test('listed unavailable skill players stay visible while their projections are 
     }] } } } };
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
   const html = unesc(await factory(ctx).game({ id: g.id }));
-  assert.match(html, /NYG player projections · 2 players/);
+  assert.match(html, /NYG player props/);
   assert.match(html, /Cam Skattebo/);
   assert.match(html, /<span class="badge warn">Out<\/span>/);
   assert.match(html, /Kook’n held/);
@@ -262,8 +262,8 @@ test('listed unavailable skill players stay visible while their projections are 
   assert.match(html, /Reference line 15\.5/);
   assert.match(html, /Reference line 55\.5/);
   assert.match(html, /#player\/NFL\/4696981\?stat=rushYds&amp;line=55\.5&amp;direction=over/);
-  assert.match(html, /Devin Singletary[\s\S]*Kook’n 14\.2[\s\S]*Kook’n 52\.0/);
-  const camRow = html.match(/<tr>[\s\S]*?Cam Skattebo[\s\S]*?<\/tr>/)?.[0] || '';
+  assert.match(html, /Devin Singletary[\s\S]*Kook’n 52\.0[\s\S]*Kook’n 14\.2/);
+  const camRow = (html.split('Cam Skattebo')[1] || '').split('</tr>')[0];
   assert.doesNotMatch(camRow, /Kook’n \d/);
 });
 
@@ -275,10 +275,10 @@ test('a comparison line never replaces the visible projection uncertainty range'
     forecast: { players: { home: { players: [{ id: '1', name: 'White fixture', pos: 'RB', rushYds: [32.9, 2.9, 62.9] }] }, away: { players: [] } } } };
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [], freshness: {} } : detail });
   const html = unesc(await factory(ctx).game({ id: g.id }));
-  assert.match(html, /Research estimates, not Best Bets/);
+  assert.match(html, /Research only/);
   assert.match(html, /Kook’n 32\.9[\s\S]*Range 3–63[\s\S]*Book 44\.5/);
   assert.match(html, /#player\/CFB\/1\?stat=rushYds&amp;line=44\.5&amp;direction=over/);
-  assert.match(html, /A big gap from the line is not proof of betting value/);
+  assert.match(html, /Range means model uncertainty/);
 });
 
 test('a game opens with its posted bet and honest book/model lines, even when Today has dropped that bet', async () => {
