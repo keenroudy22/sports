@@ -1,5 +1,6 @@
 // Optional real-Chrome audit. Run a local site server and Chrome with --remote-debugging-port=9234.
 // No dependencies, no production writes. Artifacts are outside the repository.
+// Set AUDIT_CHARTS=1 with AUDIT_ROUTES containing player links to check L5/L10 geometry and line identity.
 import fs from 'node:fs';
 const base = process.env.AUDIT_URL || 'http://localhost:8765/';
 const out = process.env.AUDIT_OUT || '/tmp/kookn-overnight-qa';
@@ -14,59 +15,106 @@ ws.onmessage = ({data}) => { const p = JSON.parse(data); if(p.id) { const [ok,no
 const call = (method,params={}) => new Promise((ok,no) => { waiting.set(++id,[ok,no]);ws.send(JSON.stringify({id,method,params})); });
 const ev = async expression => (await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true})).result?.value;
 const pause = ms => new Promise(r => setTimeout(r, ms));
+const until = async (expression, description) => {
+  for (let attempt = 0; attempt < 80; attempt++) {
+    if (await ev(expression)) return;
+    await pause(150);
+  }
+  throw new Error(`${activeRoute}: ${description}`);
+};
+const chartWindow = async (size, expectedLine) => {
+  const control = JSON.stringify(`[data-set="pwin:last${size}"]`);
+  await until(`!!document.querySelector(${control})`, `missing Last ${size} control`);
+  await ev(`(() => {
+    const button = document.querySelector(${control});
+    if (button.closest('details')) button.closest('details').open = true;
+    button.click();
+  })()`);
+  await until(`document.querySelector(${control})?.getAttribute('aria-pressed') === 'true'
+    && !!document.querySelector('.player-board .kt-chart')`, `Last ${size} did not show a chart`);
+  return await ev(`(() => {
+    const chart = document.querySelector('.player-board .kt-chart');
+    const rect = chart.getBoundingClientRect();
+    const bars = [...chart.querySelectorAll('.kt-bars > .col')];
+    const labels = [...chart.querySelectorAll('.kt-x > span')];
+    const within = ({left,right,width}) => width > 0 && left >= Math.max(0,rect.left) - 1 && right <= Math.min(innerWidth,rect.right) + 1;
+    const fits = [...bars,...labels].every(element => within(element.getBoundingClientRect()));
+    const line = chart.querySelector('.line span')?.textContent.trim() ?? null;
+    const expectedLine = ${JSON.stringify(expectedLine)};
+    return {size:${size},bars:bars.length,labels:labels.length,line,
+      error:!fits || !bars.length || bars.length > ${size} || bars.length !== labels.length
+        || (expectedLine !== null && (line === null || Number(expectedLine) !== Number(line)))};
+  })()`);
+};
 await call('Page.enable'); await call('Runtime.enable'); await call('Network.enable');
 await call('Network.setCacheDisabled',{cacheDisabled:true});
 const widths = (process.env.AUDIT_WIDTHS || '320,375,390,430,768,1440').split(',').map(Number);
 const routes = (process.env.AUDIT_ROUTES || 'today,board,board/props,board/favorites,games,player/NFL/4568490,stats,stats/search,trends,record,model,scores/MLB,scores/NHL,lab,schedule,ticket,more,research,arbs').split(',');
 const results = [];
-for (const width of widths) {
-  await call('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:width<600});
-  for (const route of routes) {
-    activeRoute = `${route}@${width}`;
-    await call('Page.navigate',{url:base+'#'+route});
-    for(let i=0;i<80;i++) { await pause(150); if(await ev(`!!document.querySelector('#view h1')`)) break; }
-    await pause(250);
-    await ev('document.fonts.ready.then(()=>true)');
-    if(process.env.AUDIT_EXPAND) await ev(`document.querySelectorAll('details').forEach(e=>e.open=true)`);
-    if(process.env.AUDIT_TEXT_SCALE) await ev(`document.querySelectorAll('#view *').forEach(e=>{if(!e.children.length) e.style.fontSize=(parseFloat(getComputedStyle(e).fontSize)*${Number(process.env.AUDIT_TEXT_SCALE)})+'px'})`);
-    await pause(100);
-    const result = await ev(`(() => {
-      // These containers scroll horizontally by design; document-level overflow still fails below.
-      const allowed = '.chart-wrap,.table-wrap,.seg,.filters,.board-tabs,.depth-line,.chip-scroll,.kt-tabs';
-      const bad = [...document.querySelectorAll('#view *')].filter(e => {
-        // Screen-reader-only headings intentionally occupy a clipped 1 px box. They are not visual overflow.
-        if(e.closest(allowed) || e.closest('.sr') || !e.getClientRects().length) return false;
-        const r=e.getBoundingClientRect(); let left=r.left,right=r.right;
-        // Judge the pixels a person can actually see. Kitchen Ticket portraits deliberately extend past
-        // their own frame and are clipped by an overflow-hidden photo well; their raw image box is not
-        // document overflow. Still fail when the visible intersection escapes the viewport.
-        for(let p=e.parentElement;p && p.id !== 'view';p=p.parentElement) {
-          if(['hidden','clip'].includes(getComputedStyle(p).overflowX)) {
-            const b=p.getBoundingClientRect(); left=Math.max(left,b.left);right=Math.min(right,b.right);
+try {
+  for (const width of widths) {
+    await call('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:width<600});
+    for (const route of routes) {
+      activeRoute = `${route}@${width}`;
+      const url = new URL(base);
+      url.hash = route;
+      url.searchParams.set('audit', activeRoute);
+      await call('Page.navigate',{url:url.href});
+      await until(`location.href === ${JSON.stringify(url.href)} && !!document.querySelector('#view h1')`, 'page heading did not load');
+      await pause(250);
+      await ev('document.fonts.ready.then(()=>true)');
+      if(process.env.AUDIT_EXPAND) await ev(`document.querySelectorAll('details').forEach(e=>e.open=true)`);
+      if(process.env.AUDIT_TEXT_SCALE) await ev(`document.querySelectorAll('#view *').forEach(e=>{if(!e.children.length) e.style.fontSize=(parseFloat(getComputedStyle(e).fontSize)*${Number(process.env.AUDIT_TEXT_SCALE)})+'px'})`);
+      await pause(100);
+      const result = await ev(`(() => {
+        // These containers scroll horizontally by design; document-level overflow still fails below.
+        const allowed = '.chart-wrap,.table-wrap,.seg,.filters,.board-tabs,.depth-line,.chip-scroll,.kt-tabs';
+        const bad = [...document.querySelectorAll('#view *')].filter(e => {
+          // Screen-reader-only headings intentionally occupy a clipped 1 px box. They are not visual overflow.
+          if(e.closest(allowed) || e.closest('.sr') || !e.getClientRects().length) return false;
+          const r=e.getBoundingClientRect(); let left=r.left,right=r.right;
+          // Judge the pixels a person can actually see. Kitchen Ticket portraits deliberately extend past
+          // their own frame and are clipped by an overflow-hidden photo well; their raw image box is not
+          // document overflow. Still fail when the visible intersection escapes the viewport.
+          for(let p=e.parentElement;p && p.id !== 'view';p=p.parentElement) {
+            if(['hidden','clip'].includes(getComputedStyle(p).overflowX)) {
+              const b=p.getBoundingClientRect(); left=Math.max(left,b.left);right=Math.min(right,b.right);
+            }
           }
-        }
-        return right>innerWidth+1 || left < -1;
-      }).slice(0,10).map(e=>({tag:e.tagName,cls:e.className,text:e.textContent.slice(0,80)}));
-      const clipped = [...document.querySelectorAll('#view .eyebrow,#view h1,#view h2,#view h3,#view .empty p')].filter(e=>{
-        if(e.closest('.sr') || !e.getClientRects().length) return false;
-        const range=document.createRange();range.selectNodeContents(e);const r=range.getBoundingClientRect();
-        for(let p=e.parentElement;p && p.id !== 'view';p=p.parentElement) {
-          if(['hidden','clip'].includes(getComputedStyle(p).overflowX)) {const b=p.getBoundingClientRect();if(r.right>b.right+2 || r.left<b.left-2) return true;}
-        }
-        return false;
-      }).map(e=>e.textContent.slice(0,80));
-      const text=document.querySelector('#view')?.textContent || '';
-      const error=/did not load/i.test(text) || ['Could not load this page','The data for this page is unavailable right now'].some(message=>text.includes(message));
-      return {width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bad,clipped,title:document.querySelector('h1')?.textContent,error};
-    })()`);
-    results.push({route,...result});
-    if((route.startsWith('game/') || route.startsWith('player/') || ['today','schedule','scores/MLB','stats','trends','record/climb'].includes(route)) && [375,1440].includes(width)) {
-      const shot = await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
-      fs.writeFileSync(`${out}/${route.replaceAll('/','-')}-${width}.png`,Buffer.from(shot.data,'base64'));
+          return right>innerWidth+1 || left < -1;
+        }).slice(0,10).map(e=>({tag:e.tagName,cls:e.className,text:e.textContent.slice(0,80)}));
+        const clipped = [...document.querySelectorAll('#view .eyebrow,#view h1,#view h2,#view h3,#view .empty p')].filter(e=>{
+          if(e.closest('.sr') || !e.getClientRects().length) return false;
+          const range=document.createRange();range.selectNodeContents(e);const r=range.getBoundingClientRect();
+          for(let p=e.parentElement;p && p.id !== 'view';p=p.parentElement) {
+            if(['hidden','clip'].includes(getComputedStyle(p).overflowX)) {const b=p.getBoundingClientRect();if(r.right>b.right+2 || r.left<b.left-2) return true;}
+          }
+          return false;
+        }).map(e=>e.textContent.slice(0,80));
+        const text=document.querySelector('#view')?.textContent || '';
+        const error=/did not load/i.test(text) || ['Could not load this page','The data for this page is unavailable right now'].some(message=>text.includes(message));
+        return {width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bad,clipped,title:document.querySelector('h1')?.textContent,error};
+      })()`);
+      const charts = [];
+      if (process.env.AUDIT_CHARTS && route.startsWith('player/')) {
+        const expectedLine = new URLSearchParams(route.split('?')[1]).get('line');
+        for (const size of [5,10]) charts.push(await chartWindow(size, expectedLine));
+      }
+      results.push({route,...result,charts});
+      if((route.startsWith('game/') || route.startsWith('player/') || ['today','schedule','scores/MLB','stats','trends','record/climb'].includes(route)) && [375,1440].includes(width)) {
+        const shot = await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+        fs.writeFileSync(`${out}/${route.replaceAll('/','-')}-${width}.png`,Buffer.from(shot.data,'base64'));
+      }
     }
   }
+} catch (error) {
+  errors.push({route:activeRoute,description:error.message});
+} finally {
+  await fetch(`http://localhost:${port}/json/close/${target.id}`);
+  ws.close();
 }
+const issues = results.filter(row => row.bad.length || row.clipped.length || row.error || row.scrollWidth > row.width + 1
+  || row.charts.some(chart => chart.error));
 fs.writeFileSync(`${out}/audit.json`,JSON.stringify({base,results,errors},null,2));
-console.log(JSON.stringify({pages:results.length,issues:results.filter(r=>r.bad?.length || r.clipped?.length || r.error),errors},null,2));
-await fetch(`http://localhost:${port}/json/close/${target.id}`); ws.close();
-if(errors.length || results.some(r=>r.bad?.length || r.clipped?.length || r.error || r.scrollWidth>r.width+1)) process.exitCode=1;
+console.log(JSON.stringify({pages:results.length,chartChecks:results.reduce((count,row) => count + row.charts.length,0),issues,errors},null,2));
+if (errors.length || issues.length) process.exitCode = 1;
