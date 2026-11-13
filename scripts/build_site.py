@@ -2318,8 +2318,10 @@ def build(now=None):
     import nba_today
     nba_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('nba-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
+    nba_scoreboard = (read(ROOT / 'site/data/sports.json', {}).get('leagues') or {}).get('NBA')
     nba_overview, nba_props = nba_today.public_payloads(dict(
-        nba_today.build(now, boxes=nba_boxes, delivered=nba_public), morningBrief=morning_brief.current(now)))
+        nba_today.build(now, boxes=nba_boxes, delivered=nba_public, scoreboard=nba_scoreboard),
+        morningBrief=morning_brief.current(now)))
     write(OUT / 'nba.json', nba_overview)
     write(OUT / 'nba-props.json', nba_props)
     nba_index, nba_shards, nba_season = build_nba_players(nba_boxes)

@@ -44,6 +44,20 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertEqual(data['trial']['note'],'NBA Trial is open. No play has been released yet.')
  def setUp(self):
   self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
+ def test_public_schedule_includes_verified_upcoming_games_beyond_the_price_capture(self):
+  g=game();g.update(id='NBA-1',seasonType='regular-season',teams={'home':{'id':'1'},'away':{'id':'2'}},scores={},timeConfirmed=True)
+  (self.root/'slate.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(NOW),'games':[g]}))
+  tomorrow={**g,'id':'NBA-2','providerId':'2','kickoff':boxscores.stamp(NOW+timedelta(days=2))}
+  scoreboard={'status':'ok','checkedAt':boxscores.stamp(NOW),'games':[dict(g,kickoff=tomorrow['kickoff']),tomorrow,
+               dict(tomorrow,id='NBA-3',timeConfirmed=False)]}
+  class Model:
+   def predict(self,*args):return {'margin':4,'total':224}
+  data=nba_today.build(NOW,root=self.root,boxes=[],model_factory=lambda *args:Model(),delivered=[],scoreboard=scoreboard)
+  self.assertEqual([(r['id'],r['kickoff']) for r in data['games']],[(g['id'],g['kickoff']),(tomorrow['id'],tomorrow['kickoff'])])
+  self.assertEqual(data['games'][1]['projection']['margin'],4)
+  self.assertNotIn('spreadQuote',data['games'][1]);self.assertEqual(data['playerProps']['rows'],[])
+  scoreboard['checkedAt']=boxscores.stamp(NOW-timedelta(hours=25))
+  self.assertEqual(len(nba_today.build(NOW,root=self.root,boxes=[],delivered=[],scoreboard=scoreboard)['games']),1)
  def test_today_shows_only_receipt_backed_plays_and_grades(self):
   play={'id':'delivered','season':2027,'seasonType':'regular-season','type':'publish',
         'kickoff':boxscores.stamp(NOW+timedelta(hours=1)),'publishedAt':boxscores.stamp(NOW),

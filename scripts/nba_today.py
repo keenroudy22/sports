@@ -69,21 +69,28 @@ def matchup_quotes(quote, now):
     return out
 
 
-def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, delivered=None):
+def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, delivered=None, scoreboard=None):
     now=now or datetime.now(timezone.utc); root=Path(root)
     if delivered is None:
         from build_site import nba_record_picks
         delivered = nba_record_picks(now)
     slate=read_json(root/'slate.json',{})
+    scoreboard = scoreboard or {}
+    captured_games = {game['id']: game for game in slate.get('games', [])}
+    scoreboard_fresh = scoreboard.get('status') == 'ok' and fresh(scoreboard.get('checkedAt'), now, 24)
+    if scoreboard_fresh:
+        for game in scoreboard.get('games', []):
+            if game.get('status') == 'scheduled' and game.get('timeConfirmed') is True and boxscores.instant(game['kickoff']) > now:
+                captured_games.setdefault(game['id'], game)
     if boxes is None:
         boxes=list({r['eventId']:r for p in BOX.glob('nba-*.jsonl') for r in boxscores.read_store(p)}.values())
     injury_snapshot=read_json(root/'injuries-current.json',{})
-    season=max((g.get('season',now.year+1) for g in slate.get('games',[])),default=now.year+1)
+    season=max((g.get('season',now.year+1) for g in captured_games.values()),default=now.year+1)
     latest={}
     for p in (root/'quotes').glob('*.jsonl'):
         for row in boxscores.read_store(p): latest[(row['eventId'],row['book'])]=row
     games=[]; models={}
-    for game in sorted(slate.get('games',[]),key=lambda g:g['kickoff']):
+    for game in sorted(captured_games.values(),key=lambda g:g['kickoff']):
         row={k:game[k] for k in ('id','providerId','season','seasonType','kickoff','status','teams','scores') if k in game}
         if game.get('status')=='scheduled' and game.get('seasonType') in ('regular-season','post-season'):
             try:
@@ -201,7 +208,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, d
     player_props['note']+=' Minutes × own per-minute rate, not opponent-adjusted. Teammate absences are not redistributed.'
     return {'league':'NBA','generatedAt':boxscores.stamp(now),'season':season,'playerProps':player_props,
             'heading':'Opening night · October 20' if nba_capture.sports_refresh.eastern_date(now).isoformat() < '2026-10-20' else 'NBA Today',
-            'sourceAt':slate.get('retrievedAt'),'scheduleFresh':fresh(slate.get('retrievedAt'),now,24),
+            'sourceAt':slate.get('retrievedAt'),'scheduleFresh':fresh(slate.get('retrievedAt'),now,24) or scoreboard_fresh,
             'games':games,'trends':trends[:12],'teamTrends':team_trends,'editorial':editorial,'prep':prep[:10],
             'prepNote':'Current-season games, fresh prices and player availability must clear before a row appears.',
             'readiness':readiness,
