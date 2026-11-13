@@ -110,7 +110,15 @@ def refusal(play, now, *, root=nba_capture.STORE, current=None, send_recheck=Fal
         if not nba_player_props.fresh(r.get('sourceAt'), now, 1):
             return 'Stored exact price needs renewal'
         side = play['direction']
-        if r[side] != play['odds'] or r['under' if side == 'over' else 'over'] != play['oppositeOdds']:
+        other_side = 'under' if side == 'over' else 'over'
+        if (not send_recheck and (r[side] != play['odds'] or r[other_side] != play['oppositeOdds'])):
+            return 'Current exact two-sided prices changed'
+        # Preserve the immutable reviewed terms, but do not strand an unsent
+        # original when the same line is now offered at a better price.  The
+        # current paired quote is still required and a worse price still holds.
+        if send_recheck and (type(r.get(side)) not in (int, float)
+                             or type(r.get(other_side)) not in (int, float)
+                             or r[side] < play['odds']):
             return 'Current exact two-sided prices changed'
         if any(type(play[k]) not in (int, float) or not math.isfinite(play[k]) for k in ('line', 'odds', 'oppositeOdds')):
             return 'Finite terms required'

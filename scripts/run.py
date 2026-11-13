@@ -1462,9 +1462,11 @@ UNRESOLVED_AVAILABILITY = re.compile(
 def unresolved_availability(facts):
     """Hold on relevant current availability evidence before asking the model."""
     for fact in facts:
-        if fact.get('kind') not in AVAILABILITY or fact.get('direction') != 'against':
+        if fact.get('kind') not in AVAILABILITY or fact.get('direction') == 'for':
             continue
         claim = str(fact.get('claim') or '')
+        if researcher.from_web(fact) and fact.get('verified') is True and hard(fact):
+            return f"availability impact is not cleared: {claim}"
         if not researcher.from_web(fact) or fact.get('verified') is True:
             if (str(fact.get('status') or '').lower() in {'questionable', 'game-time decision'}
                     or UNRESOLVED_AVAILABILITY.search(claim)):
@@ -3658,10 +3660,12 @@ def release_private(now, log=log, only=None, review_only=False):
             else:
                 case = dict(pick, _league=row.get('league'),
                             _team=ctx.player_team.get(str(pick.get('athleteId') or '')))
-                _, _, facts = last_look(case, game, ctx, context_file, False,
-                                        check_status, now)
+                flag, kept, facts = last_look(case, game, ctx, context_file, False,
+                                              check_status, now)
                 material_facts = relevant_facts(case, facts, ctx)
-                reason = release_pull_reason(case, material_facts)
+                reason = release_pull_reason(case, material_facts) or flag
+                if needs_research(case) and not lineup_confirmed(kept):
+                    reason = reason or 'the last look found no verified player-availability evidence'
                 if not row.get('discordSentAt') and not row.get('publicPath'):
                     reason = reason or unresolved_availability(material_facts)
             if reason:
@@ -4618,16 +4622,17 @@ def last_look(pick, game, ctx, context_file, use_llm, status, now):
 
 
 def release_pull_reason(pick, facts):
-    """A released play is pulled only by the typed injury feed.
-
-    Research and the local judge may flag a concern for the log, but they do not
-    erase an admitted play. The only release-stopping facts are deterministic
-    hard news on the player himself or his starting quarterback.
-    """
+    """Hard current news is a release veto, regardless of which source found it."""
     athlete = str(pick.get('athleteId') or '')
     for fact in facts or []:
-        if researcher.from_web(fact) or fact.get('kind') != 'injury' or fact.get('direction') != 'against' or not hard(fact):
+        if fact.get('direction') == 'for' or not hard(fact):
             continue
+        if fact.get('kind') == 'weather':
+            return f"weather check: {fact.get('claim')}"
+        if fact.get('kind') not in AVAILABILITY:
+            continue
+        if researcher.from_web(fact) and fact.get('verified') is True:
+            return f"verified availability report: {fact.get('claim')}"
         fact_player = str(fact.get('id') or '').rsplit('-', 1)[-1]
         if fact.get('position') == 'QB' or (athlete and fact_player == athlete):
             return f"typed injury report: {fact.get('claim')}"
@@ -4651,9 +4656,7 @@ def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), 
             continue
         single['_team'] = ctx.player_team.get(str(single.get('athleteId') or ''))
         flag, _, facts = look(single, game, ctx, context_file, use_llm, status, now)
-        reason = release_pull_reason(single, relevant_facts(single, facts, ctx))
-        if flag and not reason:
-            log(f"precheck: {pick.get('id')}: its {leg.get('title')} leg stands; model flag logged: {flag}")
+        reason = release_pull_reason(single, relevant_facts(single, facts, ctx)) or flag
         if reason:
             return f"its {leg.get('title')} leg: {reason}"
     return None
@@ -4732,11 +4735,9 @@ def precheck(args):
                 game = ctx.games.get((pick.get('gameIds') or [None])[0])
                 pick['_team'] = ctx.player_team.get(str(pick.get('athleteId') or ''))
                 flag, kept, facts = last_look(pick, game, ctx, context_file, use_llm, status, now)
-                reason = release_pull_reason(pick, relevant_facts(pick, facts, ctx))
-                if flag and not reason:
-                    log(f"precheck: {key} stands; model flag logged: {flag}")
+                reason = release_pull_reason(pick, relevant_facts(pick, facts, ctx)) or flag
                 if needs_research(pick) and not lineup_confirmed(kept):
-                    log(f"precheck: {key} has no new lineup confirmation; the admitted play stands")
+                    reason = reason or 'the last look found no verified player-availability evidence'
                 if reason:
                     kind_key, original = raw_first[key]
                     closures.append((pick['_league'], kind_key, dict(original, status='expired', entryNote=precheck_note(now, reason, original))))

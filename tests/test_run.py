@@ -727,6 +727,9 @@ class HoldTests(unittest.TestCase):
         self.assertIsNone(run.unresolved_availability([dict(report, verified=False)]))
         self.assertIsNone(run.unresolved_availability([dict(report, direction='for')]))
         self.assertIsNone(run.unresolved_availability([dict(report, claim='The starter is active.')]))
+        hard_neutral = dict(report, kind='injury', direction='neutral', status='Out',
+                            claim='The leading receiver is out for the season.')
+        self.assertIn('not cleared', run.unresolved_availability([hard_neutral]))
 
     def test_holds_on_quarterback_listings(self):
         facts = [{'kind': 'injury', 'position': 'QB', 'team': '10', 'status': 'Questionable', 'claim': 'QB1 (QB, DET) is listed Questionable'}]
@@ -1357,12 +1360,12 @@ class ParlayGuardTests(unittest.TestCase):
             looked.append(single['title'])
             return ('the evidence argues against it: rain and 25 mph wind', [], [wind]) if game['id'] == 'army' else (None, [], [])
         reason = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, look=look)
-        self.assertIsNone(reason, 'weather may flag the ticket but only typed hard injury news may pull it')
+        self.assertEqual(reason, 'its Army at Temple over 47.5 leg: weather check: rain and 25 mph wind')
         soft = {'id': 'r1', 'kind': 'role', 'direction': 'against', 'origin': 'claude researcher', 'verified': True,
                 'claim': "Quentin Johnston remains in the Chargers' receiver rotation while Ladd McConkey is the clearest fantasy option."}
         stands = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW,
                                       look=lambda single, game, *rest: (f"verified reporting argues against it: {soft['claim']}", [], [soft]))
-        self.assertIsNone(stands, 'Sunday 2026-09-27: a rotation note pulled the ladder; soft news never pulls a fun ticket')
+        self.assertIn('verified reporting argues against it', stands)
         qb = {'id': 'injury-1-9', 'kind': 'injury', 'direction': 'against', 'position': 'QB',
               'status': 'Out', 'claim': 'The starting quarterback is listed Out.'}
         pulled_for_qb = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW,
@@ -1375,12 +1378,14 @@ class ParlayGuardTests(unittest.TestCase):
         pulled = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, closing=closing, look=lambda *a: self.fail('pulled first'))
         self.assertTrue(pulled.startswith('its Navy at UAB over 51.5 leg was pulled'))
 
-    def test_release_pull_reason_ignores_model_and_web_flags(self):
+    def test_release_pull_reason_blocks_verified_web_hard_news_and_weather(self):
         pick = {'athleteId': '77'}
         web = {'id': 'web-1', 'origin': 'claude researcher', 'kind': 'injury', 'direction': 'against',
-               'position': 'QB', 'status': 'Out', 'claim': 'The quarterback was ruled out.'}
+               'position': 'QB', 'status': 'Out', 'verified': True, 'claim': 'The quarterback was ruled out.'}
         weather = {'id': 'weather-1', 'kind': 'weather', 'direction': 'against', 'claim': 'Wind 25 mph.'}
-        self.assertIsNone(run.release_pull_reason(pick, [web, weather]))
+        self.assertEqual(run.release_pull_reason(pick, [web, weather]),
+                         'verified availability report: The quarterback was ruled out.')
+        self.assertEqual(run.release_pull_reason(pick, [weather]), 'weather check: Wind 25 mph.')
         player = {'id': 'injury-10-77', 'kind': 'injury', 'direction': 'against', 'position': 'WR',
                   'status': 'Inactive', 'claim': 'Player 77 is listed Inactive.'}
         self.assertEqual(run.release_pull_reason(pick, [player]), 'typed injury report: Player 77 is listed Inactive.')

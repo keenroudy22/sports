@@ -93,6 +93,14 @@ class ReviewedNBAProps(unittest.TestCase):
         self.assertIsNone(n.refusal(self.play,later,root=self.root,current=[current],send_recheck=True))
         self.assertIsNotNone(n.refusal(self.play,later,root=self.root,current=[current],send_recheck=False))
 
+    def test_delayed_send_accepts_same_line_at_a_better_price_but_not_worse(self):
+        self.play['publishedAt']='2026-11-10T16:51:00Z'
+        better={**self.current,'over':-109,'under':-111}
+        self.assertIsNone(n.refusal(self.play,NOW,root=self.root,current=[better],send_recheck=True))
+        self.assertIsNotNone(n.refusal(self.play,NOW,root=self.root,current=[better],send_recheck=False))
+        worse={**self.current,'over':-111,'under':-109}
+        self.assertIsNotNone(n.refusal(self.play,NOW,root=self.root,current=[worse],send_recheck=True))
+
     def test_current_official_participation_required(self):
         with patch.object(n.nba_capture,'availability_for_game',return_value=([{'athleteId':'7','status':'Questionable'}],{})):
             self.assertIsNotNone(self.refusal())
