@@ -3044,12 +3044,16 @@ def _run(args, now, slot, kinds, status):
                 prep_now=datetime.now(timezone.utc)
                 slate_path=ROOT/'data'/'nba-capture'/'slate.json'
                 nba_slate=json.loads(slate_path.read_text()) if slate_path.exists() else {}
-                prep=next_day_prep.prepare(games,lines,nba_slate,nba_player_props.build(prep_now,limit=None),prep_now)
+                sports_path=build_site.OUT.parent/'sports.json'
+                sports=json.loads(sports_path.read_text()) if sports_path.exists() else {}
+                prep=next_day_prep.prepare(games,lines,nba_slate,nba_player_props.build(prep_now,limit=None),prep_now,
+                                           sports=sports)
                 next_day_prep.attach_team_context(prep, prep_now, ROOT/'data'/'nba-capture')
                 next_day_prep.attach_opportunities(prep, prep_now, ROOT/'data'/'nba-capture')
                 boxscores.write_json(ROOT/'work'/'next-day-prep.json',prep)
                 status['nextDayPrepared']={'targetDate':prep['targetDate'],'footballGames':prep['football']['games'],
-                                          'nbaGames':prep['nba']['games'],'nbaPropRows':prep['nba']['freshPropRows']}
+                                          'cbbGames':prep['cbb']['games'],'nbaGames':prep['nba']['games'],
+                                          'nbaPropRows':prep['nba']['freshPropRows']}
                 log(f"next-day prep: {status['nextDayPrepared']}")
             except Exception as error:
                 status['errors'].append(f'next-day prep: {type(error).__name__}: {error}')

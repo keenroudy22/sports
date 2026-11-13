@@ -34,7 +34,7 @@ def attach_opportunities(packet, now, root, builder=None):
     return packet
 
 
-def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None):
+def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports=None):
     target=date.fromisoformat(target_date) if isinstance(target_date,str) else target_date
     if target is None:target=gates.eastern_date(now)+timedelta(days=1)
     if target < gates.eastern_date(now):raise ValueError("Preparation target is in the past")
@@ -72,9 +72,15 @@ def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None):
         watches[family]=chosen
     nba_games=[g for g in nba_slate.get('games',[]) if g.get('status')=='scheduled' and tomorrow(g.get('kickoff'))]
     nba_rows=[r for r in nba_props.get('rows',[]) if tomorrow(r.get('kickoff'))]
+    sports=sports or {}
+    cbb_block=(sports.get('leagues') or {}).get('CBB') or {}
+    cbb_games=[g for g in cbb_block.get('games',[]) if g.get('status')=='scheduled' and tomorrow(g.get('kickoff'))]
     return dict(asOf=gates.stamp(now),targetDate=target.isoformat(),planningOnly=True,releaseReady=False,
         morningChecksEastern=['06:45','08:30'],
         football=dict(games=len(football),pricedRowsByFamily=dict(counts),watchByFamily=watches),
+        cbb=dict(games=len(cbb_games),checkedAt=cbb_block.get('checkedAt'),watch=[],
+                 hold=('Fresh exact two-sided DraftKings spreads/totals, both team source packets and '
+                       'current availability review are required before a sourced CBB straight can release')),
         nba=dict(games=len(nba_games),freshPropRows=len(nba_rows),
                  watch=nba_rows[:12],availabilityAt=nba_props.get('availabilityAt'),
                  hold='NBA props remain research only; current role and forward validation required'),
@@ -95,11 +101,14 @@ if __name__=='__main__':
     ctx=gates.Stores().as_of(now)
     slate_path=nba_player_props.STORE/'slate.json'
     slate=json.loads(slate_path.read_text()) if slate_path.exists() else {}
+    sports_path=build_site.OUT.parent/'sports.json'
+    sports=json.loads(sports_path.read_text()) if sports_path.exists() else {}
     report=prepare(ctx.games,line_payload.load(build_site.OUT/'lines.json'),slate,
-                   nba_player_props.build(now,limit=None),now,target_date=args.target_date)
+                   nba_player_props.build(now,limit=None),now,target_date=args.target_date,sports=sports)
     attach_team_context(report, now, nba_player_props.STORE)
     attach_opportunities(report, now, nba_player_props.STORE)
     boxscores.write_json(Path(args.output),report)
     print(json.dumps(dict(path=args.output,targetDate=report['targetDate'],
         footballGames=report['football']['games'],footballPrices=report['football']['pricedRowsByFamily'],
+        cbbGames=report['cbb']['games'],
         nbaGames=report['nba']['games'],nbaPropRows=report['nba']['freshPropRows'],releaseReady=False)))

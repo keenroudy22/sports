@@ -17,6 +17,7 @@ class PrepTests(unittest.TestCase):
         self.assertIs(prep.attach_team_context(packet,now,Path('/isolated'),unavailable),packet)
         self.assertEqual(packet['targetDate'],'2026-10-26')
         self.assertIn('football',packet)
+        self.assertIn('cbb',packet)
         self.assertEqual(packet['nba']['teamRoleContext']['state'],'unavailable')
         self.assertFalse(packet['nba']['teamRoleContext']['admissionReady'])
         self.assertEqual(calls,[(now,dict(root=Path('/isolated'),target_date='2026-10-26'))])
@@ -38,6 +39,7 @@ class PrepTests(unittest.TestCase):
         self.assertIn('Price needs refresh',report['football']['watchByFamily']['sides'][0]['holds'])
         self.assertEqual(report['nba']['freshPropRows'],1)
         self.assertEqual(report['nba']['watch'][0]['hold'],'Role review needed')
+        self.assertEqual(report['cbb']['games'],0)
         self.assertFalse(report['releaseReady'])
         self.assertEqual(report['morningChecksEastern'],['06:45','08:30'])
 
@@ -48,6 +50,18 @@ class PrepTests(unittest.TestCase):
         report=prep.prepare(games,lines,{}, {},now)
         self.assertEqual(report['football']['watchByFamily'],{})
         self.assertEqual(report['nba']['watch'],[])
+
+    def test_cbb_schedule_is_visible_but_never_promoted_from_schedule_alone(self):
+        now=datetime(2026,10,24,2,tzinfo=timezone.utc)
+        sports={'leagues':{'CBB':{'checkedAt':'2026-10-24T01:55:00Z','games':[
+            {'id':'CBB-1','status':'scheduled','kickoff':'2026-10-24T16:00:00Z'},
+            {'id':'CBB-2','status':'final','kickoff':'2026-10-24T17:00:00Z'},
+            {'id':'CBB-3','status':'scheduled','kickoff':'2026-10-25T16:00:00Z'}]}}}
+        report=prep.prepare({},[],{},{},now,sports=sports)
+        self.assertEqual(report['cbb']['games'],1)
+        self.assertEqual(report['cbb']['watch'],[])
+        self.assertIn('exact two-sided DraftKings',report['cbb']['hold'])
+        self.assertFalse(report['releaseReady'])
 
 
     def test_explicit_monday_target_preserves_true_clock_on_both_sides_of_midnight(self):
