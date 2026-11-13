@@ -2119,7 +2119,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-7d268e82ab05';
+  const MORE_ASSET = 'app-more.js?v=sha256-ada0d6c74280';
   const GAMES_ASSET = 'app-games.js?v=sha256-355fa65015d6';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
