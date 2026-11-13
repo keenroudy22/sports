@@ -1,3 +1,26 @@
+### November 13 Today comparison visibility and matchup quote integrity — verified live
+
+Today omits Kook vs. Book whenever no common prop passes the existing shortlist
+checks, including during initial loading. Prop Finder stays visible. Qualifying
+cards link to the chart with the exact displayed stat, line and side.
+
+Basketball availability holds persist from matchup to player chart and Popular
+Thresholds. History stays available. Football player comparisons attach odds
+only to a matching player, market and threshold, and label earlier quotes.
+Mobile matchup cards retain projection ranges and capture times when available.
+
+Source `848564fe76014d5c1ca5f4bd753628329a0afa5f` passed 2,270 Python tests
+(2 skipped), 345 interface tests, clean export, the 598-page build, release
+audits and offline rehearsal. Hosted run `43486246529` succeeded. Today showed
+no empty panel or loading flash at 320, 375 or 1440 CSS pixels, with Prop Finder
+available and no overflow or browser error. NBA, CBB, NFL and CFB matchup-to-chart
+checks passed at all three widths, including Jalen Suggs held at 3.5 assists.
+
+The scheduled CBB collector added 40 box scores in run `43475538917`. A later
+push artifact briefly served the older index. Run `43483494666` restored the
+updated public index with nine players each for Pitt and Butler. The Pages
+ordering race remains a release follow-up.
+
 ### November 13 CBB projected spread — verified live
 
 College Hoops cards and CBB matchup pages show a Spread row in Kook vs Book.
