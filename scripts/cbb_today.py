@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 import boxscores
 import hoops_store
 import paper
+from sports_refresh import timestamp
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -76,13 +77,22 @@ def build(now=None, root=ROOT, records=None, model_factory=None):
                     if type(chance) in (float,int) and math.isfinite(chance) and 0 <= chance <= 1:
                         row['projection']['winProb']=round(chance,6)
             except (ValueError,KeyError,TypeError,ArithmeticError):row['hold']='Projection unavailable'
+        spread = g.get('spreadQuote')
+        if fresh and g.get('timeConfirmed', True) and isinstance(spread, dict):
+            try:
+                observed = timestamp(spread['observedAt'])
+                if timedelta(0) <= now - observed <= timedelta(hours=4):
+                    row['spreadQuote'] = {key: spread[key] for key in
+                                          ('book', 'observedAt', 'homeLine', 'awayLine', 'homeOdds', 'awayOdds')}
+            except (AttributeError, KeyError, ValueError):
+                pass
         q=quotes.get(g['id'])
         if q and boxscores.instant(q['capturedAt']) < boxscores.instant(g['kickoff']):
             row['firstTotal']=dict(line=q['line'],book=q['book'],capturedAt=q['capturedAt'])
         games.append(row)
     games.sort(key=lambda g:(g['kickoff'],g['id']))
     return dict(generatedAt=boxscores.stamp(now),checkedAt=checked,scheduleFresh=fresh,games=games,
-                note="Team-rating research, not picks. Early-season scores rely on prior-season ratings; no current roster, injury or transfer adjustment. Stats are regular-season finals received before this update. First recorded book totals are dated history, not live offers.")
+                note="Team-rating research, not picks. Early-season scores rely on prior-season ratings; no current roster, injury or transfer adjustment. Stats are regular-season finals received before this update. DraftKings spreads are time-stamped scoreboard quotes. First recorded totals are historical.")
 
 
 def sheet(rows, day, page, pages, as_of=""):

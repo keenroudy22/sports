@@ -1,10 +1,11 @@
 """Refresh read-only schedules and scores for Kook'n's multi-sport score center.
 
-This snapshot supplies no odds, forecasts, recommended picks, or betting results.
+CBB can include paired pregame spread quotes. No forecasts or picks are produced.
 A failed league keeps its entire last successful snapshot and its original time.
 Calendar dates use America/Indianapolis; event IDs distinguish doubleheaders.
 """
 import json
+import re
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -96,6 +97,38 @@ def score_value(raw):
     return value
 
 
+def cbb_spread_quote(competition, teams, observed_at):
+    """Read the scoreboard's pregame DraftKings pair and discard its links."""
+    markets = competition.get('odds')
+    if not isinstance(markets, list):
+        return None
+    quotes = []
+    for market in markets:
+        try:
+            provider = market['provider']
+            if str(provider['id']) != '100' or provider['name'] != 'DraftKings':
+                continue
+            if any(str(market[f'{side}TeamOdds']['team']['id']) != teams[side]['id']
+                   for side in ('home', 'away')):
+                continue
+            sides = market['pointSpread']
+            home, away = (sides[side]['close'] for side in ('home', 'away'))
+            lines = [str(quote['line']) for quote in (home, away)]
+            prices = [str(quote['odds']) for quote in (home, away)]
+            if not all(re.fullmatch(r'[+-]?\d{1,2}(?:\.[05])?', line) for line in lines):
+                continue
+            if not all(re.fullmatch(r'[+-]?[1-9]\d{2,4}', price) for price in prices):
+                continue
+            home_line, away_line = map(float, lines)
+            if home_line != -away_line or market['spread'] != home_line:
+                continue
+            quotes.append(dict(book='DraftKings', observedAt=observed_at, homeLine=home_line,
+                               awayLine=away_line, homeOdds=int(prices[0]), awayOdds=int(prices[1])))
+        except (KeyError, TypeError):
+            continue
+    return quotes[0] if quotes and all(q == quotes[0] for q in quotes) else None
+
+
 def normalize(payload, league, now, url):
     if not isinstance(payload, dict) or not isinstance(payload.get('events'), list):
         raise ValueError('Provider did not supply an event list')
@@ -134,7 +167,7 @@ def normalize(payload, league, now, url):
         if status == 'final' and any(value is None for value in scores.values()):
             raise ValueError('Final game missing a score')
         season = event.get('season', {})
-        games.append({
+        game = {
             'id': f'{league}-{provider_id}', 'providerId': provider_id,
             'league': league, 'sport': LEAGUES[league]['sport'],
             'season': season.get('year'), 'seasonType': season.get('slug'),
@@ -147,7 +180,13 @@ def normalize(payload, league, now, url):
             'teams': teams, 'scores': scores,
             'source': {'name': 'ESPN', 'url': source_link(event, url)},
             'updatedAt': now,
-        })
+        }
+        if (league == 'CBB' and status == 'scheduled' and game['timeConfirmed']
+                and timestamp(now) < timestamp(kickoff)):
+            quote = cbb_spread_quote(competition, teams, now)
+            if quote:
+                game['spreadQuote'] = quote
+        games.append(game)
     return games
 
 

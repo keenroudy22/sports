@@ -97,12 +97,19 @@
     const p=g.projection,h=g.teams.home,a=g.teams.away;
     const stats=['away','home'].map(side=>{const t=g.teams[side],s=(g.stats || {})[side] || {},c=s.current || {},prior=s.prior || {};return `<div><b>${esc(name(t))}</b><p class="small">This season · ${esc(season(c.season))}: ${stat(c)}</p><p class="small muted">Prior season · ${esc(season(prior.season))}: ${stat(prior)}</p></div>`;}).join('');
     const quote = g.firstTotal;
+    const home = h.abbreviation || name(h), away = a.abbreviation || name(a);
     const margin = isNum(p.margin) ? p.margin : isNum(p.home) && isNum(p.away) ? p.home - p.away : null;
-    const spread = C.modelSpread(h.abbreviation || name(h), a.abbreviation || name(a), margin);
+    const now = Date.now(), age = now - Date.parse(g.spreadQuote?.observedAt);
+    const book = age >= 0 && age <= 14400000 && Date.parse(g.kickoff) > now ? g.spreadQuote : null;
+    const bookSpread = book ? C.modelSpread(home, away, -book.homeLine) : 'Unavailable';
+    const spreadGap = book && margin != null ? margin + book.homeLine : null;
+    const spreadDifference = spreadGap == null ? '—' : Math.abs(spreadGap) < .05 ? 'Same number'
+      : `${C.fixed(Math.abs(spreadGap), 1)} toward ${spreadGap > 0 ? home : away}`;
     const difference = isNum(p.total) && isNum(quote?.line) ? C.fixed(p.total - quote.line, 1) : null;
     const first = `<div class="pc-lines nba-comparison"><span class="h"></span><span class="h">Kook’n</span><span class="h">Book</span><span class="h">Difference</span>
-      <span class="k">Spread</span><span>${esc(spread)}</span><span>Unavailable</span><span>—</span>
+      <span class="k">Spread</span><span>${esc(C.modelSpread(home, away, margin))}</span><span>${esc(bookSpread)}</span><span>${esc(spreadDifference)}</span>
       <span class="k">Total</span><span>${esc(C.fixed(p.total, 1))}</span><span>${quote ? esc(quote.line) : 'Unavailable'}</span><span>${difference === null ? '—' : esc(difference)}</span></div>
+      ${book ? `<p class="small muted">Spread · ${esc(book.book)} via ESPN · checked ${esc(whenShort(book.observedAt))}<br>${esc(C.spreadText(home, book.homeLine))} (${esc(oddsText(book.homeOdds))}) · ${esc(C.spreadText(away, book.awayLine))} (${esc(oddsText(book.awayOdds))})</p>` : ''}
       ${quote ? `<p class="small muted">First recorded total · ${esc(quote.book)} · ${esc(whenShort(quote.capturedAt))}. Historical quote, not a live offer.</p>` : ''}`;
     const team=t=>({id:t.id,name:name(t),abbr:t.abbreviation || name(t),logo:t.logo});
     return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link,ranks:false,barLabel:'Baseline model win chance',extra:`${first}<details class="more-box"><summary>Team stats & model context</summary><p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${stats}</details>`});
@@ -271,7 +278,7 @@
     const nbaList = filtered.filter(g => g.league === 'NBA');
     const nbaSection = nbaList.length ? `<section class="section" id="games-nba"><h2>NBA</h2><p class="small muted">Team projections and current book totals.</p>${nbaProjectionContext(nbaList.map(g => g.nbaSource))}${projectionCards(nbaList, navCard, 'NBA', q ? nbaList.length : 6)}<p><a href="#research/lines?sport=NBA">NBA player lines & trends ›</a></p></section>` : '';
     const cbbList = filtered.filter(g => g.cbbSource);
-    const cbbSection = cbbList.length ? `<section class="section" id="games-cbb"><h2>College hoops</h2><p class="small muted">Projected spreads and totals · first recorded book totals.</p>${projectionCards(cbbList, navCard, 'CBB', q ? cbbList.length : 6)}</section>` : '';
+    const cbbSection = cbbList.length ? `<section class="section" id="games-cbb"><h2>College hoops</h2><p class="small muted">Kook vs Book spreads and totals.</p>${projectionCards(cbbList, navCard, 'CBB', q ? cbbList.length : 6)}</section>` : '';
     const sportJumps = state.league === 'ALL' ? `<nav class="chip-scroll" aria-label="Jump to sport">${filtered.some(g => g.league === 'NFL') ? '<a class="btn small" href="#games-football">NFL</a>' : ''}${college ? '<a class="btn small" href="#games-college">College football</a>' : ''}${nbaList.length ? '<a class="btn small" href="#games-nba">NBA</a>' : ''}${cbbList.length ? '<a class="btn small" href="#games-cbb">College hoops</a>' : ''}</nav>` : '';
     const stamp = liveStamp(merged.refreshed) + (state.league === 'ALL' && !nba ? '<p class="small muted">NBA data is unavailable right now. Football remains available.</p>' : '');
     if (!filtered.length) return `${top}${toolbar}${controls}${stamp}${empty('No game matches these filters', 'Try another window or conference, or turn off close games only.', 'games')}${nextBtn}`;

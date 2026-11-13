@@ -42,6 +42,41 @@ class SportsRefreshTests(unittest.TestCase):
         self.assertNotIn('week', game)
         self.assertEqual(game['source']['url'], 'https://www.espn.com/mlb/game/_/gameId/123')
 
+    def test_cbb_spread_uses_only_verified_pregame_draftkings_pair(self):
+        item = event()
+        market = {
+            'provider': {'id': '100', 'name': 'DraftKings'}, 'spread': -3.5,
+            'homeTeamOdds': {'team': {'id': '2'}}, 'awayTeamOdds': {'team': {'id': '1'}},
+            'pointSpread': {
+                'home': {'close': {'line': '-3.5', 'odds': '-108', 'link': {'href': 'ignored'}}},
+                'away': {'close': {'line': '+3.5', 'odds': '-112'}},
+            },
+        }
+        item['competitions'][0]['odds'] = [market]
+        def normalize(source=item, league='CBB', at=NOW):
+            return sports.normalize(payload([source], league), league, at, 'url')[0]
+        self.assertEqual(normalize()['spreadQuote'], {
+            'book': 'DraftKings', 'observedAt': NOW, 'homeLine': -3.5, 'awayLine': 3.5,
+            'homeOdds': -108, 'awayOdds': -112,
+        })
+        for patch in (
+            {'spread': 3.5},
+            {'awayTeamOdds': {'team': {'id': '3'}}},
+            {'provider': {'id': '100', 'name': 'Different book'}},
+            {'pointSpread': {'home': market['pointSpread']['home']}},
+            {'pointSpread': {'home': market['pointSpread']['home'],
+                             'away': {'close': {'line': '+4.5', 'odds': '-112'}}}},
+            {'pointSpread': {'home': market['pointSpread']['home'],
+                             'away': {'close': {'line': '+3.5', 'odds': '-10'}}}},
+        ):
+            modified = deepcopy(item)
+            modified['competitions'][0]['odds'] = [dict(market, **patch)]
+            self.assertNotIn('spreadQuote', normalize(modified))
+        self.assertNotIn('spreadQuote', normalize(league='NBA'))
+        self.assertNotIn('spreadQuote', normalize(at='2026-09-17T23:00:00Z'))
+        item['competitions'][0]['timeValid'] = False
+        self.assertNotIn('spreadQuote', normalize())
+
     def test_a_human_espn_link_beats_the_api_fallback_even_without_summary_rel(self):
         item = event()
         item['links'] = [{'rel': ['preview'], 'href': 'https://www.espn.com/mlb/preview/_/gameId/123'}]

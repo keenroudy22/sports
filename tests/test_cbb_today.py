@@ -37,6 +37,16 @@ class CbbTests(unittest.TestCase):
         for g,checked in [(dict(G,neutral=None),'2026-11-02T14:00Z'),(G,'2026-10-30T14:00Z')]:
             self.assertNotIn('projection',self.build([g],checked=checked)['games'][0])
         self.assertEqual(self.build([dict(G,kickoff='2026-11-02T14:00Z')])['games'],[])
+    def test_cbb_spread_uses_its_own_observation_time(self):
+        spread = dict(book='DraftKings', observedAt='2026-11-02T12:00Z', homeLine=-3.5,
+                      awayLine=3.5, homeOdds=-108, awayOdds=-112)
+        game = dict(G, spreadQuote=dict(spread, link='ignored'))
+        self.assertEqual(self.build([game])['games'][0]['spreadQuote'], spread)
+        for observed in ('2026-11-02T10:59Z', '2026-11-02T15:01Z', '2026-11-02T14:00', None):
+            game['spreadQuote']['observedAt'] = observed
+            self.assertNotIn('spreadQuote', self.build([game])['games'][0])
+        self.assertNotIn('spreadQuote', self.build([dict(game, timeConfirmed=False)])['games'][0])
+
     def test_sparse_unmapped_school_is_not_average_division_one(self):
         class Unknown(Model):
             def key(self,k):return '~small'
