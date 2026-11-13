@@ -909,7 +909,7 @@
       return {kind:'stale', label:'Earlier quote · recheck price', current:false};
     return {kind:'current', label:'Current line we checked', current:true};
   };
-  const basketballAvailabilityHold = row => /^(Availability:|Official team report not submitted|Official report player\/roster identity)/i.test(row?.hold || '');
+  const basketballAvailabilityHold = row => /^(Availability[: ]|Official NBA availability|Official team report|Official report player\/roster identity|Current roster verification|Schedule update needed)/i.test(row?.hold || '');
   const shardOf = (id, shards) => Number(id) % shards;
 
   const deliveryText = (pick, now = Date.now()) => {

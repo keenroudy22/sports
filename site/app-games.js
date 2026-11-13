@@ -113,10 +113,11 @@
   const basketballStatus = rows => {
     const holds = rows.map(row => row.hold).filter(Boolean);
     const availability = holds.map(text => /^Availability:\s*(.+)/i.exec(text)).find(Boolean);
-    if (availability) return { word: availability[1], warn: !/^(available|probable)$/i.test(availability[1].trim()) };
+    if (availability) return { word: availability[1], warn: !/^(available|active)$/i.test(availability[1].trim()) };
     if (holds.some(text => /report not submitted/i.test(text))) return { word: 'Report pending', warn: true };
     if (holds.some(text => /identity needs verification/i.test(text))) return { word: 'Status unverified', warn: true };
     if (holds.some(text => /role|minutes/i.test(text))) return { word: 'Role review', warn: true };
+    if (rows.some(C.basketballAvailabilityHold)) return { word: 'Status unverified', warn: true };
     return rows.some(row => row.availabilityReportedAt) ? { word: 'Status checked', warn: false } : null;
   };
   const basketballMatchupProps = (league, game, picks, index, props) => {
