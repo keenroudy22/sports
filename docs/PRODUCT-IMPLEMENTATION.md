@@ -1,3 +1,27 @@
+### November 12 priced-roster player coverage — verified live
+
+Matchup prop tables no longer depend on the injury feed to keep a priced player
+visible. Football game pages now join forecast players, material injury listings
+and the league player directory for any roster player with a captured primary
+prop line. The sources are deduplicated by athlete identity before position
+grouping. A player who has a book line but no active Kook'n projection remains
+in the default position table as `Projection held`; the exact reference line and
+recent-game chart link stay available, while projection gap, range and edge are
+withheld rather than invented. Team headers now state the full reachable player
+count and secondary players and markets remain behind the compact More control.
+
+Cam Skattebo exposed the original failure: his rushing and carries lines and NFL
+player-directory identity survived, but the latest injury refresh no longer
+listed him and the current forecast had no usable projection. Release
+`f4c920816127af865d398b4228c6de59005404a4` passed 2,249 Python tests (2
+skipped), 334 Node/interface tests, clean export, the 567-page build, zero-issue
+176-pick and NBA record audits, zero-issue 941-file public guard, current asset
+checks and stored-input rehearsal. Hosted run `43360007889` succeeded. On the
+live Giants matchup, Cam appears in the featured RB table with book lines 63.5
+rushing yards and 16.5 carries and an explicit held projection. Hosted 375px and
+1440px checks both reported all 13 Giants prop players, no horizontal overflow,
+no rendered-load failure and no console error.
+
 ### November 12 Today scan, mobile prop cards and exact book links — verified live
 
 The misleading Gambly copy/paste fallback is removed. Eligible official singles
