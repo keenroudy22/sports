@@ -466,6 +466,35 @@ class DeskHealthTests(unittest.TestCase):
             self.assertEqual(result['days'][-1]['desk']['unknown'], 1)
             self.assertEqual(result['days'][-1]['latestSelection'], 'unknown')
 
+    def test_seven_day_operational_proof_is_distinct_from_model_readiness(self):
+        today = NOW.astimezone(H.gates.EASTERN).date()
+        days = []
+        for offset in range(7, 0, -1):
+            days.append({'date': (today - timedelta(days=offset)).isoformat(),
+                         'observedWindows': 48, 'freshPercent': 100,
+                         'desk': {'ok': 48, 'late': 0, 'failed': 0, 'unknown': 0},
+                         'latestSelection': 'no-new-play',
+                         'latestDeliverySnapshot48h': {
+                             'xOverdue': 0, 'xFailed': 0,
+                             'discordOverdue': 0, 'discordFailed': 0}})
+        proof = H.operational_proof(days, NOW)
+        self.assertEqual((proof['state'], proof['passedDays']), ('demonstrated', 7))
+        self.assertIn('not betting-model validation', proof['meaning'])
+        view = H.reliability_view({}, NOW)
+        self.assertEqual(view['readiness'], 'not-assessed')
+
+        days[-1]['freshPercent'] = 89
+        days[-1]['latestDeliverySnapshot48h']['xOverdue'] = 1
+        proof = H.operational_proof(days, NOW)
+        self.assertEqual((proof['state'], proof['passedDays']), ('failures-recorded', 6))
+        self.assertEqual(proof['days'][-1]['reasons'],
+                         ['required-source freshness 89% below 90%', 'X overdue: 1'])
+
+    def test_seven_day_operational_proof_keeps_missing_or_unknown_evidence_failed(self):
+        proof = H.operational_proof([], NOW)
+        self.assertEqual((proof['state'], proof['passedDays']), ('collecting', 0))
+        self.assertTrue(all(row['reasons'] == ['no observed monitor evidence'] for row in proof['days']))
+
     def test_reliability_missing_delivery_log_is_unknown_not_zero_success(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

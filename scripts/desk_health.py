@@ -21,6 +21,9 @@ CONF = Path.home() / '.config/keenroudy'
 LOGS = Path.home() / 'Library/Logs/KeenRoudy'
 LEAGUES = ('NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS')
 RELIABILITY_DAYS = 56
+OPERATIONAL_PROOF_DAYS = 7
+OPERATIONAL_MIN_WINDOWS = 46
+OPERATIONAL_MIN_FRESH_PERCENT = 90
 JSON_LIMIT = 8 * 1024 * 1024
 # The full-season football slate includes stored forecasts for nearly 1,000
 # games. Give this known input its own bound without widening private readers.
@@ -145,7 +148,8 @@ def reliability_view(journal, now=None):
     samples = journal.get('samples') or []
     if not samples:
         return {'state': 'not-started', 'days': [], 'observedWindows': 0, 'eligibleSourceChecks': 0,
-                'fresh': 0, 'freshPercent': None, 'readiness': 'not-assessed'}
+                'fresh': 0, 'freshPercent': None, 'readiness': 'not-assessed',
+                'operationalProof7d': operational_proof([], now)}
     days = {}
     for sample in samples:
         day = moment(sample['window']).astimezone(gates.EASTERN).date().isoformat()
@@ -174,6 +178,7 @@ def reliability_view(journal, now=None):
         expected += 1  # Include the current partial window only once actually observed.
     eligible = sum(row['eligibleSourceChecks'] for row in days.values())
     fresh = sum(row['fresh'] for row in days.values())
+    day_rows = list(days.values())
     return {'state': 'collecting', 'startedAt': journal['startedAt'],
             'retainedFrom': samples[0]['observedAt'], 'lastObservedAt': samples[-1]['observedAt'],
             'retentionDays': RELIABILITY_DAYS, 'daysObserved': len(days),
@@ -181,7 +186,59 @@ def reliability_view(journal, now=None):
             'unobservedWindows': max(0, expected - len(samples)),
             'eligibleSourceChecks': eligible, 'fresh': fresh,
             'freshPercent': round(100 * fresh / eligible, 2) if eligible else None,
-            'readiness': 'not-assessed', 'days': list(days.values())}
+            'readiness': 'not-assessed', 'operationalProof7d': operational_proof(day_rows, now),
+            'days': day_rows}
+
+
+def operational_proof(days, now):
+    """Seven completed Eastern days of operations, never model validation.
+
+    This is deliberately strict and descriptive. Missing monitor coverage,
+    stale required sources, an unknown desk decision, or unclear delivery
+    evidence stays a recorded gap rather than becoming a successful day.
+    """
+    today = now.astimezone(gates.EASTERN).date()
+    expected = [(today - timedelta(days=offset)).isoformat()
+                for offset in range(OPERATIONAL_PROOF_DAYS, 0, -1)]
+    by_date = {row.get('date'): row for row in days if isinstance(row, dict)}
+    proof_days = []
+    for day in expected:
+        row = by_date.get(day)
+        reasons = []
+        if row is None:
+            reasons.append('no observed monitor evidence')
+            proof_days.append({'date': day, 'passed': False, 'reasons': reasons})
+            continue
+        if row.get('observedWindows', 0) < OPERATIONAL_MIN_WINDOWS:
+            reasons.append(f"only {row.get('observedWindows', 0)}/{OPERATIONAL_MIN_WINDOWS} required monitor windows")
+        if row.get('freshPercent') is None or row['freshPercent'] < OPERATIONAL_MIN_FRESH_PERCENT:
+            reasons.append(f"required-source freshness {row.get('freshPercent')}% below {OPERATIONAL_MIN_FRESH_PERCENT}%")
+        desk = row.get('desk') or {}
+        for state in ('late', 'failed', 'unknown'):
+            if desk.get(state, 0):
+                reasons.append(f"{desk[state]} desk {state} observation(s)")
+        if row.get('latestSelection') not in ('published', 'no-new-play'):
+            reasons.append('latest selection outcome unknown')
+        delivery = row.get('latestDeliverySnapshot48h') or {}
+        for key, label in (('xOverdue', 'X overdue'), ('xFailed', 'X failed'),
+                           ('discordOverdue', 'Discord overdue'), ('discordFailed', 'Discord failed')):
+            value = delivery.get(key)
+            if value is None:
+                reasons.append(f'{label} evidence unknown')
+            elif value:
+                reasons.append(f'{label}: {value}')
+        proof_days.append({'date': day, 'passed': not reasons, 'reasons': reasons,
+                           'observedWindows': row.get('observedWindows'),
+                           'freshPercent': row.get('freshPercent')})
+    passed = sum(1 for row in proof_days if row['passed'])
+    complete = all(row['date'] in by_date for row in proof_days)
+    state = ('demonstrated' if passed == OPERATIONAL_PROOF_DAYS else
+             'failures-recorded' if complete else 'collecting')
+    return {'state': state, 'passedDays': passed, 'requiredDays': OPERATIONAL_PROOF_DAYS,
+            'minimumObservedWindowsPerDay': OPERATIONAL_MIN_WINDOWS,
+            'minimumRequiredSourceFreshPercent': OPERATIONAL_MIN_FRESH_PERCENT,
+            'days': proof_days,
+            'meaning': 'operational coverage and delivery evidence only; not betting-model validation'}
 
 
 def reliability_history(path):
@@ -783,6 +840,13 @@ def markdown(data):
     lines.append(f"Live Discord pilot: {data['livePilot']['state']}; {data['livePilot']['attempts']} attempts. X remains off.")
     evidence = data.get('reliability') or {}
     lines.append('Reliability history: ' + str(evidence.get('state', 'not-started')) + '. Readiness is not assessed.')
+    proof = evidence.get('operationalProof7d') or {}
+    lines.append(f"Seven-day operational proof: {proof.get('state', 'collecting')}; "
+                 f"{proof.get('passedDays', 0)}/{proof.get('requiredDays', OPERATIONAL_PROOF_DAYS)} completed days passed. "
+                 'This is operations evidence, not betting-model validation.')
+    for row in proof.get('days') or []:
+        lines.append(f"{row.get('date')}: {'passed' if row.get('passed') else 'not passed'}; "
+                     f"{'; '.join(row.get('reasons') or []) or 'no recorded gaps'}.")
     if evidence.get('state') == 'collecting':
         lines.append(f"Sampled required-source freshness: {evidence['fresh']}/{evidence['eligibleSourceChecks']} "
                      f"({evidence['freshPercent']}%); {evidence['observedWindows']} observed half-hours, "
@@ -835,6 +899,12 @@ pulled on that channel. Zero eligible events has no success rate. A no-new-play 
 Unconfirmed is not proof a send failed. Approximate confirmation times cannot establish on-time performance.
 This reports only the available log, not complete historical coverage, audience retention or membership readiness.</p></section>'''
     evidence = data.get('reliability') or {}
+    proof = evidence.get('operationalProof7d') or {}
+    proof_rows = ''.join('<tr>' + ''.join(f'<td>{text(value)}</td>' for value in (
+        row.get('date'), 'yes' if row.get('passed') else 'no',
+        row.get('observedWindows'), row.get('freshPercent'),
+        '; '.join(row.get('reasons') or []) or 'none')) + '</tr>'
+        for row in proof.get('days') or [])
     evidence_rows = ''.join('<tr>' + ''.join(f'<td>{text(value)}</td>' for value in (
         row.get('date'), row.get('observedWindows'),
         f"{row.get('fresh')}/{row.get('eligibleSourceChecks')}", row.get('stale'), row.get('failed'),
@@ -852,6 +922,14 @@ observed or finished. These are cached freshness checks, not feed latency, uptim
 <div class="scroll"><table><thead><tr><th>Eastern date</th><th>Samples</th><th>Fresh/required</th><th>Stale</th><th>Failed</th><th>Unknown</th><th>Invalid time</th></tr></thead><tbody>{evidence_rows}</tbody></table></div>
 <p>Delivery figures remain last-48-hour snapshots, never added across observations. No-new-play and withheld decisions
 are not technical failures. Display incidents and grading reconciliation still need separate review.</p></section>'''
+    reliability += f'''<section><h2>Seven-day operational proof</h2>
+<p>{text(proof.get('state', 'collecting'))} · {text(proof.get('passedDays', 0))}/{text(proof.get('requiredDays', 7))}
+completed Eastern days passed. This measures observable coverage and delivery only, never betting-model validity.</p>
+<div class="scroll"><table><thead><tr><th>Eastern date</th><th>Passed</th><th>Observed windows</th><th>Required-source freshness</th><th>Recorded gaps</th></tr></thead><tbody>{proof_rows}</tbody></table></div>
+<p>A day requires at least {text(proof.get('minimumObservedWindowsPerDay'))} observed half-hours,
+{text(proof.get('minimumRequiredSourceFreshPercent'))}% required-source freshness, a known selection outcome,
+no late/failed/unknown desk observation, and zero known or unknown X/Discord overdue or failed evidence.
+Missing evidence cannot pass.</p></section>'''
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
