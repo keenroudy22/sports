@@ -2,6 +2,7 @@ import copy
 import json
 import sys
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import sport_box
@@ -70,6 +71,24 @@ class NBASummaryTests(unittest.TestCase):
     def test_college_box_rejects_an_nba_identity(self):
         with self.assertRaises(ValueError):
             sport_box.extract(self.payload, '401859967', '2026-10-09T18:00:00Z', 'CBB')
+
+    def test_college_capture_covers_later_matchups_before_deepening_early_ones(self):
+        now = datetime(2026, 11, 13, 15, tzinfo=timezone.utc)
+        games = [
+            {'id': str(i), 'season': 2027, 'status': 'scheduled', 'kickoff': '2026-11-14T00:00:00Z',
+             'teams': {'away': {'id': str(i)}, 'home': {'id': str(100 + i)}}}
+            for i in range(10)
+        ]
+        history = [
+            {'eventId': f'{depth}{i}', 'season': 2027, 'away': {'id': str(i)}, 'home': {'id': str(100 + i)}}
+            for depth in range(3) for i in range(10)
+        ]
+        history.insert(0, {**history[0], 'eventId': 'old', 'season': 2026})
+        ordered = sport_box.cbb_capture_order(games, history, {'CBB-00': {}}, now)
+        self.assertEqual(ordered[:9], [f'0{i}' for i in range(1, 10)])
+        self.assertEqual(ordered[9], '10')
+        self.assertNotIn('old', ordered)
+        self.assertEqual(len(ordered), len(set(ordered)))
 
 
 if __name__ == '__main__': unittest.main()

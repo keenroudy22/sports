@@ -116,6 +116,38 @@ def extract(payload, event_id, retrieved_at, league='NBA'):
     return result
 
 
+def cbb_capture_order(games, history, saved, now):
+    """Give upcoming teams comparable recent-game coverage within the request cap."""
+    from collections import defaultdict
+    from datetime import timedelta
+
+    horizon = now + timedelta(days=2)
+    upcoming = sorted((game for game in games if game.get('status') == 'scheduled'
+                       and game.get('kickoff') and now < boxscores.instant(game['kickoff']) <= horizon),
+                      key=lambda game: (game['kickoff'], game['id']))
+    team_order = {}
+    for game in upcoming:
+        for side in ('away', 'home'):
+            team = (game.get('teams', {}).get(side) or {}).get('id')
+            if team and game.get('season') is not None:
+                team_order.setdefault((game['season'], str(team)), len(team_order))
+
+    by_team = defaultdict(list)
+    for row in history:
+        for side in ('away', 'home'):
+            team = (row['season'], str((row.get(side) or {}).get('id')))
+            if team in team_order and len(by_team[team]) < 5:
+                by_team[team].append(str(row['eventId']))
+
+    priority = []
+    for team, events in by_team.items():
+        remaining = [event for event in events if f'CBB-{event}' not in saved]
+        covered = len(events) - len(remaining)
+        priority.extend((covered + position, team_order[team], event)
+                        for position, event in enumerate(remaining))
+    return list(dict.fromkeys(event for _, _, event in sorted(priority)))
+
+
 def refresh(root=None, fetch=None, now=None, limit=20, league='NBA'):
     """Hosted scheduled-only bounded writer: current finals then recent regular boxes."""
     import json
@@ -147,26 +179,8 @@ def refresh(root=None, fetch=None, now=None, limit=20, league='NBA'):
             games = []
         final_ids = [str(g['id']).removeprefix('CBB-') for g in games if g.get('status')=='final']
     history = sorted((r for r in hoops_store.load(league) if r['type']==2),key=lambda r:r['kickoff'],reverse=True)
-    if league == 'CBB':
-        # Seed useful depth, not one box for forty unrelated teams. The nearest
-        # scheduled teams each get up to five recent finals before the broad
-        # archive resumes. Saved events cost no request on later runs.
-        upcoming = sorted((g for g in games if g.get('status') == 'scheduled'
-                           and g.get('kickoff') and boxscores.instant(g['kickoff']) > now),
-                          key=lambda g: (g['kickoff'], g['id']))
-        target_teams = []
-        for game in upcoming[:8]:
-            for side in ('away', 'home'):
-                team = str((game.get('teams', {}).get(side) or {}).get('id') or '')
-                if team and team not in target_teams:
-                    target_teams.append(team)
-        priority = []
-        for team in target_teams:
-            priority.extend(row for row in history
-                            if team in {str((row.get('away') or {}).get('id')),
-                                        str((row.get('home') or {}).get('id'))})
-        history = list({row['eventId']: row for row in priority + history}.values())
-    final_ids += [r['eventId'] for r in history]
+    priority = cbb_capture_order(games, history, old, now) if league == 'CBB' else []
+    final_ids = priority + final_ids + [r['eventId'] for r in history]
     result={'captured':0,'errors':0,'requests':0}
     for event in dict.fromkeys(final_ids):
         saved=old.get(f'{league}-{event}')
