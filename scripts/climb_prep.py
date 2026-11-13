@@ -65,7 +65,7 @@ def source_review_options(legs, now, limit=8):
     return result
 
 
-def multi_leg_drafts(legs, counts, target, *, ideal_leg=-225, limit=4):
+def multi_leg_drafts(legs, counts, target, *, style, ideal_leg=-225, limit=4):
     """Separate big-slate fun-ticket drafts from the two-leg Climb.
 
     These are price-shape research only. Separate cross-game prices are
@@ -98,6 +98,7 @@ def multi_leg_drafts(legs, counts, target, *, ideal_leg=-225, limit=4):
                 holds=sorted(set(sum((leg.get('holds',[]) for leg in chosen),[])))
                 options.append(dict(book=book,league=league,legs=list(chosen),derivedOdds=price,
                     legCount=count,planningOnly=True,status='source-review-needed',
+                    parlayType='longshot',parlayStyle=style,reviewRoute='sourced-fun-ticket-review-v1',
                     priceBasis='Product of separate cross-game prices; exact sportsbook ticket price required',
                     holds=holds,releaseChecks=['Fresh game-day prices and news',
                         'Exact same-book combined ticket price','Current role and availability review per leg',
@@ -172,8 +173,8 @@ def prepare(ctx, now, day=None):
                 twoLegOptions=supported_options,
                 evidenceHeldOptions=two_leg_options(watch_legs,now) if not supported_options else [],
                 sourceReviewOptions=source_review_options(review_legs,now),
-                shortParlayDrafts=multi_leg_drafts(review_legs,(3,4),(200,1500),ideal_leg=-250) if big_slate else [],
-                lottoDrafts=multi_leg_drafts(review_legs,(6,7,8),(1500,20000),ideal_leg=-190) if big_slate else [],
+                shortParlayDrafts=multi_leg_drafts(review_legs,(3,4),(200,1500),style='short',ideal_leg=-250) if big_slate else [],
+                lottoDrafts=multi_leg_drafts(review_legs,(6,7,8),(1500,20000),style='lotto',ideal_leg=-190) if big_slate else [],
                 releaseReady=False,
                 nextAction='Refresh prices, news and models at existing game-day morning checks; release only through normal admission and delivery.')
 
