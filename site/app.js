@@ -2116,7 +2116,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-61507a324416';
+  const MORE_ASSET = 'app-more.js?v=sha256-320d7d135c80';
   const GAMES_ASSET = 'app-games.js?v=sha256-0f0cc681f3bf';
   const KVB_ASSET = 'app-kvb.js?v=sha256-13e5df1d6e49';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';

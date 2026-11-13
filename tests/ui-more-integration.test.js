@@ -201,3 +201,32 @@ test('NBA milestone board groups verified history by matchup and keeps milestone
  assert.match(milestoneHold,/Book main line 11\.5[^<]*Projection held/);
  assert.doesNotMatch(milestoneHold,/Kook’n 12|Kook’n 3/);
 });
+
+
+test('basketball prop finder links short histories and exact saved prices without false lean styling', async () => {
+ const { api, factory } = loadBrowserApi();
+ const now = Date.now(), kickoff = new Date(now + 3600000).toISOString();
+ const index = { players: [['1','Aidan McDowell','G','10','SHSU','2026-11-11',1,null],
+   ['2','Bench Guard','G','10','SHSU','2026-11-10',2,null]] };
+ const row = { eventId:'77', athleteId:'1', name:'Aidan McDowell', teamAbbr:'SHSU', kickoff, stat:'pts', line:15.5,
+   over:102, under:-120, side:'under', book:'DraftKings', sourceAt:new Date(now - 5 * 3600000).toISOString(),
+   projection:{value:13.2}, favorite:true };
+ const props = { rows:[row] };
+ const ctx = api.moreContext({ get:async () => index, maybe:async () => props });
+ ctx.state.players.q = 'mcdowell aidan';
+ const views = factory(ctx);
+ let html = await views.basketballPlayers({ league:'CBB' });
+ assert.match(html, /#player\/CBB\/1\?stat=pts[\s\S]*1 recorded games[\s\S]*Game log/);
+ assert.doesNotMatch(html, /Bench Guard|No recorded player/);
+ html = await views.basketballPlayers({ league:'NBA' });
+ assert.match(html, /stat=pts&amp;line=15\.5&amp;direction=under/);
+ assert.match(html, /Under -120 · DraftKings · Earlier quote/);
+ assert.match(html, /Saved line/);
+ assert.doesNotMatch(html, /Research lean/);
+ row.sourceAt = new Date(now).toISOString();
+ assert.match(await views.basketballPlayers({ league:'NBA' }), /Research lean/);
+ props.rows.push({ ...row, stat:'ast', hold:'Availability: Questionable', projection:null });
+ html = await views.basketballPlayers({ league:'NBA' });
+ assert.match(html, /Player directory/);
+ assert.doesNotMatch(html, /13\.2|Research lean/);
+});

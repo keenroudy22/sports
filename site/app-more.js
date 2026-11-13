@@ -764,28 +764,44 @@
       league === 'NBA' ? maybe('app/nba-props.json') : Promise.resolve(null)
     ]);
     const query = String(state.players.q || '').trim().toLowerCase();
-    const matches = entry => !query || [entry[1], entry[4], entry[2]].some(value => String(value || '').toLowerCase().includes(query));
-    const players = (index.players || []).filter(matches);
+    const players = (index.players || []).filter(entry => C.researchMatches(query, entry[1], entry[4], entry[2]));
     const statName = key => ({ pts:'Points', reb:'Rebounds', ast:'Assists', fg3m:'Threes', pra:'Pts + reb + ast', pa:'Pts + assists', pr:'Pts + rebounds', ra:'Rebounds + assists' }[key] || key);
     const search = `<div class="toolbar prop-toolbar"><div class="grow"><label class="sr" for="bpq">Find a player or team</label><input id="bpq" class="search" type="search" placeholder="Find a ${league} player or team" value="${esc(state.players.q)}" data-input="pq" autocomplete="off" maxlength="160"></div></div>`;
-    let board = '';
-    if (league === 'NBA') {
-      const common = new Set(['pts','reb','ast','fg3m','pra','pa','pr','ra']);
-      const rows = (props?.rows || []).filter(row => common.has(row.stat) && Date.parse(row.kickoff) > Date.now()
-        && (!query || [row.name,row.teamAbbr,row.teamName,row.statName].some(value => String(value || '').toLowerCase().includes(query))))
-        .sort((a,b) => Number(Boolean(b.projection)) - Number(Boolean(a.projection))
-          || Math.abs(Number(b.projection?.value || b.line) - Number(b.line)) - Math.abs(Number(a.projection?.value || a.line) - Number(a.line))
-          || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0,18);
-      const browse = players.slice().sort((a,b) => String(b[5]).localeCompare(String(a[5])) || String(a[1]).localeCompare(String(b[1]))).slice(0,24);
-      board = rows.length ? `<div class="receipts">${rows.map(row => { const value = row.projection?.value; const gap = isNum(value) && isNum(row.line) ? Number(value) - Number(row.line) : null; return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="#player/NBA/${esc(row.athleteId)}?stat=${esc(row.stat)}"><span class="ava sm"><img src="${esc(row.photo || '')}" alt=""></span><div><b>${esc(row.name)} · ${esc(statName(row.stat))}</b><span>${esc(row.teamAbbr || '')} · ${esc(whenShort(row.kickoff))} · ${esc(row.book || '')}</span><span>${row.hold ? esc(row.hold) : 'Current role and availability checks passed'}</span></div><div class="n"><b class="num">${esc(row.line)}</b><span>Book</span><b class="num ${gap > 0 ? 'green' : ''}">${isNum(value) ? esc(C.statValue(value,row.stat)) : 'Held'}</b><span>${gap == null ? 'Kook’n' : `${gap > 0 ? '+' : ''}${C.fixed(gap)} vs line`}</span></div></a>`; }).join('')}</div>`
-        : `${empty('No verified NBA prop comparisons right now', 'Current book lines or role evidence have not cleared the checks. Player histories are still available below.', 'research')}<div class="receipts">${browse.map(entry => `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="#player/NBA/${esc(entry[0])}?stat=pts"><span class="ava sm"><img src="https://a.espncdn.com/i/headshots/nba/players/full/${esc(entry[0])}.png" alt=""></span><div><b>${esc(entry[1])}</b><span>${esc(entry[4] || 'NBA')} · ${esc(entry[2] || '')}</span><span>${esc(entry[6])} official games stored · through ${esc(entry[5] || '–')}</span></div><div class="n"><b>Research</b><span>L5/L10 + minutes</span></div></a>`).join('')}</div>`;
-    } else {
-      const projected = players.filter(entry => entry[7]?.values).sort((a,b) => String(b[5]).localeCompare(String(a[5])) || String(a[1]).localeCompare(String(b[1]))).slice(0,40);
-      board = projected.length ? `<div class="receipts">${projected.map(entry => { const p = entry[7], values = p.values || {}; return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="#player/CBB/${esc(entry[0])}?stat=pts"><span class="ava sm"><img src="https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/${esc(entry[0])}.png" alt=""></span><div><b>${esc(entry[1])}</b><span>${esc(entry[4] || 'CBB')} · ${esc(entry[2] || '')} · ${esc(p.games)} current-season games</span><span>${p.status === 'early' ? `Early baseline · ${esc(p.reason || 'small sample')}` : `Role baseline · ${esc(p.minutes)} projected minutes`}</span></div><div class="n"><b class="num">${isNum(values.pts) ? esc(C.statValue(values.pts,'pts')) : '–'}</b><span>PTS</span><b>${isNum(values.reb) ? esc(C.statValue(values.reb,'reb')) : '–'} REB · ${isNum(values.ast) ? esc(C.statValue(values.ast,'ast')) : '–'} AST</b></div></a>`; }).join('')}</div>`
-        : empty(query ? 'No CBB player matches that search' : 'CBB player baselines are still collecting', 'A player appears after at least three current-season appearances with usable minutes and box-score data.', 'research');
-    }
-    return `${search}<section class="kt-sec"><div class="kt-sec-head"><div><p class="eyebrow green">Fast prop research</p><h2 class="kt-head">${league} edge finder</h2></div><span class="kt-kind">${esc(players.length)} players</span></div><p class="small muted" style="margin:6px 0 14px">Open a player to compare the Kook’n projection, your book line, L5/L10 history and recent minutes on one screen.</p>${board}</section>
-      <div class="card on-felt"><p class="small"><b>${league === 'NBA' ? 'NBA projections use the existing current-role research model.' : 'CBB projections are an early transparent baseline.'}</b> ${league === 'NBA' ? 'Held role or availability evidence means no number is shown.' : 'They use recent and season per-minute production at recent median minutes. Small or volatile roles are labeled early or held.'} A projection gap is not a win probability, and a line without a verified price is not a bet.</p></div>`;
+    const now = Date.now();
+    const available = (props?.rows || []).filter(row => Date.parse(row.kickoff) > now);
+    const playerGameKey = row => `${row.eventId}|${row.athleteId}`;
+    const holds = new Set(available.filter(C.basketballAvailabilityHold).map(playerGameKey));
+    const common = new Set(['pts','reb','ast','fg3m','pra','pa','pr','ra']);
+    const comparisons = available.filter(row => common.has(row.stat) && isNum(row.line)
+      && C.researchMatches(query, row.name, row.teamAbbr, row.teamName, statName(row.stat))).map(row => {
+      const held = Boolean(row.hold || holds.has(playerGameKey(row)));
+      const projection = held ? null : row.projection?.value;
+      const direction = row.side === 'under' ? 'under' : 'over';
+      const quote = C.quoteStatus({ ...row, observedAt: row.sourceAt, odds: row[direction], state: 'open' }, row.kickoff, now);
+      const gap = isNum(projection) ? projection - row.line : null;
+      return { row, held, projection, gap, direction, quote, lean: Boolean(row.favorite && !held && quote.current && gap != null) };
+    }).sort((a, b) => Number(b.lean) - Number(a.lean) || Number(b.quote.current) - Number(a.quote.current)
+      || Number(b.gap != null) - Number(a.gap != null) || Math.abs(b.gap ?? 0) - Math.abs(a.gap ?? 0)
+      || String(a.row.kickoff).localeCompare(String(b.row.kickoff))).slice(0, 18);
+    const board = comparisons.map(({ row, held, projection, gap, direction, quote, lean }) => {
+      const odds = row[direction];
+      const price = [isNum(odds) ? `${direction === 'under' ? 'Under' : 'Over'} ${oddsText(odds)}` : 'Odds unavailable', bookLabel(row.book)].filter(Boolean).join(' · ');
+      const checked = quote.current ? `Checked ${ago(row.sourceAt)}` : quote.label;
+      const href = `#player/NBA/${esc(row.athleteId)}?stat=${esc(row.stat)}&amp;line=${esc(row.line)}&amp;direction=${direction}`;
+      return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="${href}">${headshot(league, row.athleteId, 'sm')}<div><b>${esc(row.name)} · ${esc(statName(row.stat))}</b><span>${esc(row.teamAbbr || '')} · ${esc(whenShort(row.kickoff))}</span><span>${esc(price)} · ${esc(checked)}</span>${held ? `<span>${esc(row.hold || 'Availability review')}</span>` : ''}${lean ? '<span class="green">Research lean</span>' : ''}</div><div class="n"><b class="num">${esc(row.line)}</b><span>${quote.current ? 'Book' : 'Saved line'}</span><b class="num">${isNum(projection) ? esc(C.statValue(projection, row.stat)) : 'Held'}</b><span>${gap == null ? 'Kook’n' : `${gap > 0 ? '+' : ''}${C.fixed(gap)} vs line`}</span></div></a>`;
+    }).join('');
+    const directory = players.slice().sort((a, b) => String(b[5]).localeCompare(String(a[5]))
+      || String(a[1]).localeCompare(String(b[1]))).slice(0, 24);
+    const browse = directory.map(entry => {
+      const baseline = league === 'CBB' ? entry[7] : null;
+      const values = baseline?.values;
+      return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="#player/${league}/${esc(entry[0])}?stat=pts">${headshot(league, entry[0], 'sm')}<div><b>${esc(entry[1])}</b><span>${esc(entry[4] || league)} · ${esc(entry[2] || 'Position unavailable')}</span><span>${esc(entry[6])} recorded games · through ${esc(entry[5] || '–')}</span></div><div class="n">${values ? `<b>${baseline.status === 'early' ? 'Early Kook’n' : 'Kook’n'}</b>${['pts','reb','ast'].filter(stat => isNum(values[stat])).map(stat => `<span>${esc(C.statValue(values[stat], stat))} ${stat.toUpperCase()}</span>`).join('')}` : '<b>Game log</b><span>L5/L10 · minutes</span>'}</div></a>`;
+    }).join('');
+    const directoryBody = browse ? `<div class="receipts">${browse}</div>${players.length > directory.length ? `<p class="small muted">Showing ${directory.length} of ${players.length}. Search to narrow the list.</p>` : ''}`
+      : '<p class="small muted">No recorded player matches this search.</p>';
+    const playerDirectory = board && !query ? `<details class="more-box"><summary>Player directory · ${players.length}</summary>${directoryBody}</details>`
+      : `<section class="kt-sec"><h2>Player directory</h2>${directoryBody}</section>`;
+    return `${search}<section class="kt-sec"><div class="kt-sec-head"><h2 class="kt-head">${league} prop finder</h2></div>${board ? `<div class="receipts">${board}</div>` : league === 'NBA' && !query ? '<p class="small muted">No captured comparisons for upcoming games. Browse recorded player games below.</p>' : ''}</section>${playerDirectory}`;
   };
 
   views.record = async route => {
