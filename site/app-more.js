@@ -369,16 +369,19 @@
     const opponent = next && Object.values(next.teams || {}).find(team => String(team.id) !== String(entry[3]));
     const typedLine = state.player.line !== '' && isNum(Number(state.player.line)) && Number(state.player.line) >= 0 ? Number(state.player.line) : null;
     const selectedSide = state.player.direction === 'under' ? 'under' : 'over';
+    const linkedBook = typedLine != null && route.stat === stat && Number(route.line) === typedLine ? bookLabel(route.book) : null;
     const posted = (basketball.trial?.plays || []).filter(play => !play.result && String(play.athleteId) === String(route.id)
       && (typedLine == null || (play.line === typedLine && String(play.direction || 'over').toLowerCase() === selectedSide))
+      && (!linkedBook || bookLabel(play.book) === linkedBook)
       && play.stat === stat && Date.parse(play.kickoff) > Date.now()).sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))[0];
     const eventId = next?.providerId || String(next?.id || '').replace(/^(NBA|CBB)-/, '');
     const gameRows = next ? (props.rows || []).filter(row => String(row.athleteId) === String(route.id)
       && String(row.eventId) === String(eventId) && Date.parse(row.kickoff) > Date.now()) : [];
     const gameComparisons = gameRows.filter(row => row.stat === stat).sort((a, b) => String(b.sourceAt).localeCompare(String(a.sourceAt)));
-    const comparison = gameComparisons[0];
+    const bookComparisons = linkedBook ? gameComparisons.filter(row => bookLabel(row.book) === linkedBook) : gameComparisons;
+    const comparison = bookComparisons.find(row => typedLine == null || row.line === typedLine) || gameComparisons[0];
     const dir = typedLine != null ? selectedSide : String(posted?.direction || comparison?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
-    const quoteRow = gameComparisons.find(row => isNum(row.line) && isNum(row[dir]) && Math.abs(row[dir]) >= 100
+    const quoteRow = bookComparisons.find(row => isNum(row.line) && isNum(row[dir]) && Math.abs(row[dir]) >= 100
       && (typedLine == null || row.line === typedLine));
     const capturedLine = isNum(posted?.line) ? posted.line : quoteRow?.line ?? null;
     const line = typedLine ?? capturedLine;
@@ -766,7 +769,7 @@
     const query = String(state.players.q || '').trim().toLowerCase();
     const players = (index.players || []).filter(entry => C.researchMatches(query, entry[1], entry[4], entry[2]));
     const statName = key => ({ pts:'Points', reb:'Rebounds', ast:'Assists', fg3m:'Threes', pra:'Pts + reb + ast', pa:'Pts + assists', pr:'Pts + rebounds', ra:'Rebounds + assists' }[key] || key);
-    const search = `<div class="toolbar prop-toolbar"><div class="grow"><label class="sr" for="bpq">Find a player or team</label><input id="bpq" class="search" type="search" placeholder="Find a ${league} player or team" value="${esc(state.players.q)}" data-input="pq" autocomplete="off" maxlength="160"></div></div>`;
+    const search = `<div class="toolbar prop-toolbar"><div class="grow"><label class="sr" for="bpq">Find a player or team</label><input id="bpq" class="search" type="search" placeholder="Find ${league} players or teams" value="${esc(state.players.q)}" data-input="pq" autocomplete="off" maxlength="160"></div></div>`;
     const now = Date.now();
     const available = (props?.rows || []).filter(row => Date.parse(row.kickoff) > now);
     const playerGameKey = row => `${row.eventId}|${row.athleteId}`;
@@ -783,19 +786,20 @@
     }).sort((a, b) => Number(b.lean) - Number(a.lean) || Number(b.quote.current) - Number(a.quote.current)
       || Number(b.gap != null) - Number(a.gap != null) || Math.abs(b.gap ?? 0) - Math.abs(a.gap ?? 0)
       || String(a.row.kickoff).localeCompare(String(b.row.kickoff))).slice(0, 18);
+    const photo = (id, label) => `<span class="ava sm" aria-hidden="true"><img src="https://a.espncdn.com/i/headshots/${league === 'NBA' ? 'nba' : 'mens-college-basketball'}/players/full/${encodeURIComponent(id)}.png" loading="lazy" alt=""><em>${esc(label || '')}</em></span>`;
     const board = comparisons.map(({ row, held, projection, gap, direction, quote, lean }) => {
       const odds = row[direction];
       const price = [isNum(odds) ? `${direction === 'under' ? 'Under' : 'Over'} ${oddsText(odds)}` : 'Odds unavailable', bookLabel(row.book)].filter(Boolean).join(' · ');
       const checked = quote.current ? `Checked ${ago(row.sourceAt)}` : quote.label;
-      const href = `#player/NBA/${esc(row.athleteId)}?stat=${esc(row.stat)}&amp;line=${esc(row.line)}&amp;direction=${direction}`;
-      return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="${href}">${headshot(league, row.athleteId, 'sm')}<div><b>${esc(row.name)} · ${esc(statName(row.stat))}</b><span>${esc(row.teamAbbr || '')} · ${esc(whenShort(row.kickoff))}</span><span>${esc(price)} · ${esc(checked)}</span>${held ? `<span>${esc(row.hold || 'Availability review')}</span>` : ''}${lean ? '<span class="green">Research lean</span>' : ''}</div><div class="n"><b class="num">${esc(row.line)}</b><span>${quote.current ? 'Book' : 'Saved line'}</span><b class="num">${isNum(projection) ? esc(C.statValue(projection, row.stat)) : 'Held'}</b><span>${gap == null ? 'Kook’n' : `${gap > 0 ? '+' : ''}${C.fixed(gap)} vs line`}</span></div></a>`;
+      const href = `#player/NBA/${esc(row.athleteId)}?stat=${esc(row.stat)}&amp;line=${esc(row.line)}&amp;direction=${direction}${row.book ? `&amp;book=${encodeURIComponent(row.book)}` : ''}`;
+      return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="${href}">${photo(row.athleteId, row.teamAbbr)}<div><b>${esc(row.name)} · ${esc(statName(row.stat))}</b><span>${esc(row.teamAbbr || '')} · ${esc(whenShort(row.kickoff))}</span><span>${esc(price)} · ${esc(checked)}</span>${held ? `<span>${esc(row.hold || 'Availability review')}</span>` : ''}${lean ? '<span class="green">Research lean</span>' : ''}</div><div class="n"><b class="num">${esc(row.line)}</b><span>${quote.current ? 'Book' : 'Saved line'}</span><b class="num">${isNum(projection) ? esc(C.statValue(projection, row.stat)) : 'Held'}</b><span>${gap == null ? 'Kook’n' : `${gap > 0 ? '+' : ''}${C.fixed(gap)} vs line`}</span></div></a>`;
     }).join('');
     const directory = players.slice().sort((a, b) => String(b[5]).localeCompare(String(a[5]))
       || String(a[1]).localeCompare(String(b[1]))).slice(0, 24);
     const browse = directory.map(entry => {
       const baseline = league === 'CBB' ? entry[7] : null;
       const values = baseline?.values;
-      return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="#player/${league}/${esc(entry[0])}?stat=pts">${headshot(league, entry[0], 'sm')}<div><b>${esc(entry[1])}</b><span>${esc(entry[4] || league)} · ${esc(entry[2] || 'Position unavailable')}</span><span>${esc(entry[6])} recorded games · through ${esc(entry[5] || '–')}</span></div><div class="n">${values ? `<b>${baseline.status === 'early' ? 'Early Kook’n' : 'Kook’n'}</b>${['pts','reb','ast'].filter(stat => isNum(values[stat])).map(stat => `<span>${esc(C.statValue(values[stat], stat))} ${stat.toUpperCase()}</span>`).join('')}` : '<b>Game log</b><span>L5/L10 · minutes</span>'}</div></a>`;
+      return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="#player/${league}/${esc(entry[0])}?stat=pts">${photo(entry[0], entry[4])}<div><b>${esc(entry[1])}</b><span>${esc(entry[4] || league)} · ${esc(entry[2] || 'Position unavailable')}</span><span>${esc(entry[6])} recorded game${entry[6] === 1 ? '' : 's'} · through ${esc(entry[5] || '–')}</span></div><div class="n">${values ? `<b>${baseline.status === 'early' ? 'Early Kook’n' : 'Kook’n'}</b>${['pts','reb','ast'].filter(stat => isNum(values[stat])).map(stat => `<span>${esc(C.statValue(values[stat], stat))} ${stat.toUpperCase()}</span>`).join('')}` : '<b>Game log</b><span>L5/L10 · minutes</span>'}</div></a>`;
     }).join('');
     const directoryBody = browse ? `<div class="receipts">${browse}</div>${players.length > directory.length ? `<p class="small muted">Showing ${directory.length} of ${players.length}. Search to narrow the list.</p>` : ''}`
       : '<p class="small muted">No recorded player matches this search.</p>';
