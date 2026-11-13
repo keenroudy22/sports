@@ -772,7 +772,7 @@ test('Underdog watch is its own visible research section: outright upsets apart 
   const sec = page.slice(page.indexOf('kt-upsets"'), page.indexOf('kt-community"'));
   assert.match(sec, /<h2 class="kt-tape" id="upsets-h">Underdog watch<\/h2><span class="kt-kind">Upset research, not best bets<\/span>/);
   assert.match(sec, /Arizona · \+150 to win outright<\/b><\/a> <span class="badge research">Top upset signal<\/span>/);
-  assert.match(sec, /We give them 53% to win\. Vegas has them at 38% once you take out the book&#39;s cut\. At \+150 you need 40\.0% to profit\./);
+  assert.match(sec, /Kook’n gives them 53% to win\. The book implies 38% after removing its margin\. At \+150, they need to win 40\.0% of the time to break even\./);
   assert.match(sec, /Our score has Arizona 27\.1, West Virginia 24\.0/, 'the projected score');
   assert.match(sec, /DraftKings · other team −180|DraftKings · other team -180/);
   assert.match(sec, /price checked/);

@@ -29,10 +29,12 @@
 .player-board .kt-chance { color: var(--dim); }
 .player-board .kt-chance b { color: var(--chalk); }
 .player-board .kt-chart { margin: 18px 0 0; padding: 14px 10px 10px; border: 1px solid rgba(169,192,179,.15); border-radius: 12px; background: rgba(5,15,10,.42); }
+.player-board .kt-chart .kt-bars,
+.player-board .kt-chart .kt-x { width: 100%; grid-auto-columns: minmax(0,1fr); gap: 6px; }
 .player-board .kt-chart .kt-bars { height: 138px; border-bottom-color: rgba(242,247,244,.7); }
 .player-board .kt-chart .kt-bars .line { border-top-color: var(--chalk); }
 .player-board .kt-chart .kt-bars .line span { top: -20px; background: #0b1c14; color: var(--chalk); }
-.player-board .kt-x { color: var(--dim); overflow-x: auto; grid-auto-columns: minmax(52px,1fr); }
+.player-board .kt-x { color: var(--dim); }
 .player-board .kt-x b { color: var(--chalk); }
 .player-chart-legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin: 12px 0 0; color: var(--dim); font-size: 12px; }
 .player-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
@@ -87,7 +89,7 @@
   .player-line-entry { grid-template-columns: 1fr; }
   .player-line-entry p { grid-column: 1; }
   .player-board .kt-chart { margin-left: -4px; margin-right: -4px; padding-left: 8px; padding-right: 8px; }
-  /* Bars and their opponent/date labels must use the same eight fluid columns.
+  /* Bars and their opponent/date labels must use the same fluid columns.
      The old 52px label minimum escaped 320–430px cards and looked cut off. */
   .player-board .kt-chart .kt-bars,
   .player-board .kt-chart .kt-x { width: 100%; grid-auto-columns: minmax(0,1fr); gap: 4px; }
@@ -344,21 +346,27 @@
       .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
     const side = next && Object.entries(next.teams || {}).find(([, team]) => String(team.id) === String(entry[3]));
     const opponent = next && Object.values(next.teams || {}).find(team => String(team.id) !== String(entry[3]));
+    const typedLine = state.player.line !== '' && isNum(Number(state.player.line)) && Number(state.player.line) >= 0 ? Number(state.player.line) : null;
+    const selectedSide = state.player.direction === 'under' ? 'under' : 'over';
     const posted = (basketball.trial?.plays || []).filter(play => !play.result && String(play.athleteId) === String(route.id)
+      && (typedLine == null || (play.line === typedLine && String(play.direction || 'over').toLowerCase() === selectedSide))
       && play.stat === stat && Date.parse(play.kickoff) > Date.now()).sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))[0];
     const comparisons = (props.rows || []).filter(row => String(row.athleteId) === String(route.id) && row.stat === stat
       && Date.parse(row.kickoff) > Date.now()).sort((a, b) => String(b.sourceAt).localeCompare(String(a.sourceAt)));
-    const comparison = comparisons.find(row => !next || String(row.eventId) === String(next.providerId)) || comparisons[0];
-    const capturedLine = isNum(posted?.line) ? Number(posted.line) : isNum(comparison?.line) ? Number(comparison.line) : null;
-    const typedLine = state.player.line !== '' && Number.isFinite(Number(state.player.line)) ? Number(state.player.line) : null;
-    const line = capturedLine == null ? typedLine : capturedLine;
-    const dir = capturedLine == null ? (state.player.direction === 'under' ? 'under' : 'over')
-      : String(posted?.direction || comparison?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
+    const gameComparisons = next ? comparisons.filter(row => String(row.eventId) === String(next.providerId || String(next.id).replace(/^(NBA|CBB)-/, ''))) : [];
+    const comparison = gameComparisons[0];
+    const dir = typedLine != null ? selectedSide : String(posted?.direction || comparison?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
+    const quoteRow = gameComparisons.find(row => isNum(row.line) && isNum(row[dir]) && Math.abs(row[dir]) >= 100
+      && (typedLine == null || row.line === typedLine));
+    const capturedLine = isNum(posted?.line) ? posted.line : quoteRow?.line ?? null;
+    const line = typedLine ?? capturedLine;
+    const lineLabel = capturedLine != null ? 'Book line' : 'Chart line';
+    const quoteStatus = quoteRow && C.quoteStatus({ state: 'open', ...quoteRow, observedAt: quoteRow.sourceAt, odds: quoteRow[dir] }, next?.kickoff);
     const projectionInfo = data.projection || null;
     const projection = isNum(comparison?.projection?.value) ? Number(comparison.projection.value)
       : isNum(projectionInfo?.values?.[stat]) ? Number(projectionInfo.values[stat]) : null;
     const hits = list => line == null ? { hits: null, games: list.length } : { hits: list.filter(v => dir === 'over' ? v > line : v < line).length, games: list.length };
-    const h5 = hits(last5), h10 = hits(last10), hs = hits(regular.map(row => value(row, stat)).filter(isNum));
+    const h5 = hits(last5);
     const team = side ? side[1] : { id: entry[3], abbreviation: entry[4], name: comparison?.teamName || entry[4] };
     const photoLeague = league === 'NBA' ? 'nba' : 'mens-college-basketball';
     const photo = `https://a.espncdn.com/i/headshots/${photoLeague}/players/full/${encodeURIComponent(route.id)}.png`;
@@ -366,23 +374,23 @@
     const average = list => list.length ? list.reduce((sum, number) => sum + number, 0) / list.length : null;
     const fmt = number => number == null ? '–' : C.statValue(number, stat, Number.isInteger(number) ? 0 : 1);
     const quote = posted ? `<b>Kook’n play:</b> ${esc(dir)} ${esc(line)} at ${esc(oddsText(posted.odds))} ${esc(bookLabel(posted.book))} · ${esc(C.stakeOf(posted))}u`
-      : comparison ? `<b>Current comparison:</b> ${esc(dir)} ${esc(line)} at ${esc(oddsText(dir === 'over' ? comparison.over : comparison.under))} ${esc(bookLabel(comparison.book))}` : '';
-    const shown = recent.slice(-8), shownValues = shown.map(row => value(row, stat));
+      : quoteRow ? `<b>${esc(dir === 'over' ? 'Over' : 'Under')} ${esc(line)} ${esc(oddsText(quoteRow[dir]))}</b> at ${esc(bookLabel(quoteRow.book))} · ${quoteStatus.current ? `checked ${esc(ago(quoteRow.sourceAt))}` : 'earlier quote · recheck price'}` : '';
+    const shown = recent.slice(-10), shownValues = shown.map(row => value(row, stat));
     const top = Math.max(1, line || 0, ...shownValues.filter(isNum));
     const result = number => line == null || !isNum(number) ? 'unknown' : number === line ? 'unknown' : dir === 'over' ? (number > line ? 'hit' : 'miss') : (number < line ? 'hit' : 'miss');
-    const chart = shown.length ? `<figure class="kt-chart" role="img" aria-label="${esc(`${metric}: ${shownValues.map(v => isNum(v) ? v : 'not recorded').join(', ')}${line != null ? ` against ${line}` : ''}`)}"><div class="kt-bars" aria-hidden="true">${shownValues.map(v => `<div class="col"><div class="bar ${result(v)}" style="height:${(Math.max(2, 132 * Math.max(0, v || 0) / top)).toFixed(1)}px"></div></div>`).join('')}${line != null ? `<div class="line" style="bottom:${(132 * line / top).toFixed(1)}px"><span>${esc(line)}</span></div>` : ''}</div><div class="kt-x" aria-hidden="true">${shown.map((row, i) => `<span><em class="${result(shownValues[i])}">${esc(fmt(shownValues[i]))}</em><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b>${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}))}</span>`).join('')}</div><figcaption class="kt-cap">${line == null ? 'Recorded NBA game results.' : `<b>${h10.hits} of ${h10.games} ${esc(dir)} ${esc(line)} in the last 10.</b> History, not a probability.`}</figcaption></figure>` : '';
+    const chart = shown.length ? `<figure class="kt-chart" role="img" aria-label="${esc(`${metric}: ${shownValues.map(v => isNum(v) ? v : 'not recorded').join(', ')}${line != null ? ` against ${line}` : ''}`)}"><div class="kt-bars" aria-hidden="true">${shownValues.map(v => `<div class="col"><div class="bar ${result(v)}" style="height:${(Math.max(2, 132 * Math.max(0, v || 0) / top)).toFixed(1)}px"></div></div>`).join('')}${line != null ? `<div class="line" style="bottom:${(132 * line / top).toFixed(1)}px"><span>${esc(line)}</span></div>` : ''}</div><div class="kt-x" aria-hidden="true">${shown.map((row, i) => `<span><em class="${result(shownValues[i])}">${esc(fmt(shownValues[i]))}</em><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b>${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}))}</span>`).join('')}</div><figcaption class="kt-cap">${line == null ? 'Recorded game results.' : `<b>${shownValues.filter(v => result(v) === 'hit').length} of ${shownValues.filter(isNum).length} ${esc(dir)} ${esc(line)} in the games shown.</b> History, not a probability.`}</figcaption></figure>` : '';
     const seasonStatValues = regular.map(row => value(row, stat)).filter(isNum);
     const nbaWindow = playerWindowChart({ values: seasonStatValues, line, dir, format: fmt, scopeLabel: scope === 'all' ? 'All' : 'Season' });
     const minuteEntries = regular.slice(-8).map(row => ({ value: value(row, 'min'), label: `${row[7] ? 'vs' : '@'} ${row[8] || row[6]}`, short: row[8] || row[6] }));
     const minuteTrend = stat === 'min' ? '' : playerRoleChart({ title: 'Minutes trend', entries: minuteEntries,
       format: number => C.statValue(number, 'min', Number.isInteger(number) ? 0 : 1), note: 'Minutes show whether the recent role is holding.' });
     const nbaComparison = playerComparisonChart({ items: [
-      { label: 'Book', value: line, kind: 'book' }, { label: 'Kook’n', value: isNum(projection) ? Number(projection) : null, kind: 'kookn' },
+      { label: capturedLine != null ? 'Book' : 'Chart line', value: line, kind: 'book' }, { label: 'Kook’n', value: isNum(projection) ? Number(projection) : null, kind: 'kookn' },
       { label: 'L5 avg', value: average(last5) }, { label: 'L10 avg', value: average(last10) }, { label: scope === 'all' ? 'All avg' : 'Season', value: average(seasonStatValues) }
     ], format: fmt });
     const nbaInsights = `<div class="player-insights">${nbaWindow}${minuteTrend}${nbaComparison}</div>`;
-    const thresholds = line == null ? [] : [...new Set([-2, -1, 0, 1, 2].map(step => Math.max(.5, line + step)))];
-    const ladder = thresholds.length ? `<section class="line-lab" aria-labelledby="nba-ladder"><div class="line-lab-head"><div><p class="eyebrow">What-if research</p><h2 id="nba-ladder">Line ladder</h2><p>How often did ${esc(data.name)} ${dir === 'over' ? 'clear' : 'stay below'} nearby numbers?</p></div><span class="line-lab-direction">${esc(dir)}</span></div><table class="line-lab-table"><thead><tr><th>Line</th><th>L5</th><th>L10</th><th>Season</th></tr></thead><tbody>${thresholds.map(threshold => { const count = list => ({hits:list.filter(v => dir === 'over' ? v > threshold : v < threshold).length,games:list.length}); const a=count(last5),b=count(last10),c=count(regular.map(row => value(row,stat)).filter(isNum)); const cell=x=>`<td>${x.games ? Math.round(100*x.hits/x.games)+'%' : '–'}<span>${x.hits}/${x.games}</span></td>`; return `<tr${threshold===line?' class="book"':''}><th>${esc(threshold)}${threshold===line?'<span class="line-lab-tag">Book</span>':''}</th>${cell(a)}${cell(b)}${cell(c)}</tr>`; }).join('')}</tbody></table><p class="line-lab-note">${isNum(projection) ? `Kook’n projects ${esc(fmt(projection))}. ` : ''}Historical thresholds—not offered alternate prices or probabilities.</p></section>` : '';
+    const thresholds = line == null ? [] : [...new Set([-2, -1, 0, 1, 2].map(step => Math.max(0, line + step)))];
+    const ladder = thresholds.length ? `<section class="line-lab" aria-labelledby="nba-ladder"><div class="line-lab-head"><div><p class="eyebrow">What-if research</p><h2 id="nba-ladder">Line ladder</h2><p>How often did ${esc(data.name)} ${dir === 'over' ? 'clear' : 'stay below'} nearby numbers?</p></div><span class="line-lab-direction">${esc(dir)}</span></div><table class="line-lab-table"><thead><tr><th>Line</th><th>L5</th><th>L10</th><th>Season</th></tr></thead><tbody>${thresholds.map(threshold => { const count = list => ({hits:list.filter(v => dir === 'over' ? v > threshold : v < threshold).length,games:list.length}); const a=count(last5),b=count(last10),c=count(regular.map(row => value(row,stat)).filter(isNum)); const cell=x=>`<td>${x.games ? Math.round(100*x.hits/x.games)+'%' : '–'}<span>${x.hits}/${x.games}</span></td>`; return `<tr${threshold===line?' class="book"':''}><th>${esc(threshold)}${threshold===line?`<span class="line-lab-tag">${capturedLine != null ? 'Book' : 'Chart'}</span>`:''}</th>${cell(a)}${cell(b)}${cell(c)}</tr>`; }).join('')}</tbody></table><p class="line-lab-note">${isNum(projection) ? `Kook’n projects ${esc(fmt(projection))}. ` : ''}Historical thresholds—not offered alternate prices or probabilities.</p></section>` : '';
     const log = recent.slice().reverse();
     const statCell = (row, key) => { const v = value(row, key); return v == null ? '–' : v; };
     const hero = `<div class="page-head" style="display:flex;gap:14px;align-items:center;margin-top:28px"><span class="ava xl" style="--tc:#15301F" aria-hidden="true"><img src="${esc(photo)}" alt=""></span><div><p class="eyebrow">${teamMark(team, 'sm', league)} ${esc(team.name || team.displayName || team.abbreviation || entry[4])} · ${esc(data.pos || '')}</p><h1>${esc(data.name)}</h1><p class="sub">${next ? `${side && side[0] === 'home' ? 'vs' : 'at'} ${esc(opponent.name || opponent.displayName || opponent.abbreviation)} · ${esc(whenShort(next.kickoff))}` : `${esc(regular.length)} regular-season games recorded`}</p></div></div>`;
@@ -391,10 +399,10 @@
     /* A displayed gap is always Kook'n minus the book. Direction belongs in the price and hit-rate rows;
        flipping the sign for unders made the same two numbers disagree between matchup and player pages. */
     const projectionGap = isNum(projection) && isNum(line) ? projection - line : null;
-    const lineEntry = capturedLine == null ? `<div class="player-line-entry"><label>Check a book line<input class="search" type="number" inputmode="decimal" min="0" step="0.5" value="${esc(state.player.line || '')}" placeholder="e.g. 14.5" data-input="playerLine"></label>${seg('pdir', [['over','Over'],['under','Under']], dir)}<p class="small muted">Enter the line you see. Kook’n does not claim its price or availability; verify both in your sportsbook.</p></div>` : '';
-    const estimateNote = projectionInfo ? `<p class="kt-prices"><b>${projectionInfo.status === 'ready' ? 'Kook’n baseline' : projectionInfo.status === 'early' ? 'Early Kook’n baseline' : 'Projection held'}:</b> ${projectionInfo.status === 'held' ? esc(projectionInfo.reason || 'Not enough stable role evidence') : `${esc(projectionInfo.games)} current-season games · ${esc(projectionInfo.minutes)} projected minutes · ${esc(projectionInfo.method)}.`} ${projectionInfo.status === 'early' && projectionInfo.reason ? esc(projectionInfo.reason) + '.' : ''}</p>` : '';
+    const lineEntry = capturedLine == null ? `<div class="player-line-entry"><label>Set chart line<input class="search" type="number" inputmode="decimal" min="0" step="0.5" value="${esc(state.player.line || '')}" placeholder="e.g. 14.5" data-input="playerLine"></label>${seg('pdir', [['over','Over'],['under','Under']], dir)}<p class="small muted">Choose a number to compare with past games.</p></div>` : '';
+    const estimateNote = projectionInfo?.status ? `<p class="kt-prices"><b>${projectionInfo.status === 'ready' ? 'Kook’n baseline' : projectionInfo.status === 'early' ? 'Early Kook’n baseline' : 'Projection held'}:</b> ${projectionInfo.status === 'held' ? esc(projectionInfo.reason || 'Not enough stable role evidence') : `${esc(projectionInfo.games)} current-season games · ${esc(projectionInfo.minutes)} projected minutes · ${esc(projectionInfo.method)}.`} ${projectionInfo.status === 'early' && projectionInfo.reason ? esc(projectionInfo.reason) + '.' : ''}</p>` : '';
     const boxPath = league === 'NBA' ? 'nba' : 'mens-college-basketball';
-    return `${back}${hero}${tabs}${filtersFold('player', `${scope === 'all' ? 'All seasons' : season + ' season'} · ${recent.length} games · ${esc(metric)}`, `${seasonSelect}${seg('pwin', [['last5','Last 5'],['last10','Last 10'],['last20','Last 20'],['all','All games']], state.player.window)}`)}<section class="player-board" aria-labelledby="nba-stat"><div class="player-board-head"><div><p class="eyebrow">${capturedLine != null ? posted ? 'Posted line' : 'Current line' : line != null ? 'Your line check' : 'Season snapshot'}</p><h2 id="nba-stat">${esc(metric)}</h2></div><span class="player-board-mode">Kook vs Book</span></div>${lineEntry}<div class="kt-number-grid kt-player-numbers"><span><small>Book line</small><b class="num">${esc(line == null ? '–' : line)}</b></span><span><small>Kook’n projection</small><b class="num">${esc(isNum(projection) ? fmt(projection) : 'Held')}</b></span><span><small>Kook’n − book</small><b class="num">${projectionGap == null ? '–' : `${projectionGap > 0 ? '+' : ''}${esc(fmt(projectionGap))}`}</b></span><span><small>Last 5 average</small><b class="num">${esc(fmt(average(last5)))}</b></span><span><small>Recent hits</small><b class="num">${line == null ? '–' : `${h5.hits}/${h5.games}`}</b></span></div>${quote ? `<p class="kt-prices">${quote}</p>` : ''}${estimateNote}${comparison?.currentRole?.games ? `<p class="kt-prices"><b>Role check:</b> ${comparison.currentRole.minutes.map(m => esc(m)).join(' / ')} minutes in his last ${esc(comparison.currentRole.games)} recorded games.</p>` : ''}<div class="player-chart-legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>${chart}</section>${nbaInsights}${ladder}<section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">Official box scores</span></div><div class="table-wrap"><table class="t"><thead><tr><th>Game</th><th class="n">MIN</th><th class="n">PTS</th><th class="n">REB</th><th class="n">AST</th><th class="n">3PM</th></tr></thead><tbody>${log.map(row => `<tr><td><a href="https://www.espn.com/${boxPath}/boxscore/_/gameId/${esc(row[0])}" target="_blank" rel="noopener"><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b></a><br><span class="tiny muted">${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}))}</span></td><td class="n">${esc(statCell(row,'min'))}</td><td class="n">${esc(statCell(row,'pts'))}</td><td class="n">${esc(statCell(row,'reb'))}</td><td class="n">${esc(statCell(row,'ast'))}</td><td class="n">${esc(statCell(row,'fg3m'))}</td></tr>`).join('')}</tbody></table></div><p class="small muted" style="margin-top:8px">Last 5, Last 10 and the full season use recorded regular-season appearances. A one-minute appearance counts as an appearance; minutes are shown so role changes stay visible. Kook’n minus the book is not a probability or proof that a price is valuable.</p></section>`;
+    return `${back}${hero}${tabs}${filtersFold('player', `${scope === 'all' ? 'All seasons' : season + ' season'} · ${recent.length} games · ${esc(metric)}`, `${seasonSelect}${seg('pwin', [['last5','Last 5'],['last10','Last 10'],['last20','Last 20'],['all','All games']], state.player.window)}`)}<section class="player-board" aria-labelledby="nba-stat"><div class="player-board-head"><div><p class="eyebrow">${capturedLine != null ? posted ? 'Posted line' : quoteStatus?.current ? 'Current line' : 'Earlier line' : line != null ? 'Chart line' : 'Season snapshot'}</p><h2 id="nba-stat">${esc(metric)}</h2></div><span class="player-board-mode">${capturedLine != null ? 'Kook vs Book' : 'Player history'}</span></div>${lineEntry}<div class="kt-number-grid kt-player-numbers"><span><small>${lineLabel}</small><b class="num">${esc(line == null ? '–' : line)}</b></span><span><small>Kook’n projection</small><b class="num">${esc(isNum(projection) ? fmt(projection) : 'Held')}</b></span><span><small>Kook’n − line</small><b class="num">${projectionGap == null ? '–' : `${projectionGap > 0 ? '+' : ''}${esc(fmt(projectionGap))}`}</b></span><span><small>Last 5 average</small><b class="num">${esc(fmt(average(last5)))}</b></span><span><small>Last 5 hits</small><b class="num">${line == null ? '–' : `${h5.hits}/${h5.games}`}</b></span></div>${quote ? `<p class="kt-prices">${quote}</p>` : ''}${estimateNote}${comparison?.currentRole?.games ? `<p class="kt-prices"><b>Role check:</b> ${comparison.currentRole.minutes.map(m => esc(m)).join(' / ')} minutes in his last ${esc(comparison.currentRole.games)} recorded games.</p>` : ''}<div class="player-chart-legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>${chart}</section>${nbaInsights}${ladder}<section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">Official box scores</span></div><div class="table-wrap"><table class="t"><thead><tr><th>Game</th><th class="n">MIN</th><th class="n">PTS</th><th class="n">REB</th><th class="n">AST</th><th class="n">3PM</th></tr></thead><tbody>${log.map(row => `<tr><td><a href="https://www.espn.com/${boxPath}/boxscore/_/gameId/${esc(row[0])}" target="_blank" rel="noopener"><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b></a><br><span class="tiny muted">${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}))}</span></td><td class="n">${esc(statCell(row,'min'))}</td><td class="n">${esc(statCell(row,'pts'))}</td><td class="n">${esc(statCell(row,'reb'))}</td><td class="n">${esc(statCell(row,'ast'))}</td><td class="n">${esc(statCell(row,'fg3m'))}</td></tr>`).join('')}</tbody></table></div><p class="small muted" style="margin-top:8px">Last 5, Last 10 and the full season use recorded regular-season appearances. A one-minute appearance counts as an appearance; minutes are shown so role changes stay visible. Kook’n minus the book is not a probability or proof that a price is valuable.</p></section>`;
   };
   views.player = async route => {
     const league = route.league;
@@ -447,16 +455,20 @@
 
     /* The line: the board's priced quote first, else the captured reference line from the game feed. */
     const pricedRows = !isQuarter && next && lines ? (lines.lines || []).filter(r => String(r.athleteId) === String(route.id) && r.gameId === next.id && C.marketKey(r) === stat) : [];
-    const priced = pricedRows.filter(r => !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && (vm.age.kind === 'fresh' || vm.age.kind === 'aging')).sort((a, b) => (b.edge ?? -99) - (a.edge ?? -99))[0] || null;
+    const linkedLine = !isQuarter && state.player.line !== '' && isNum(Number(state.player.line)) && Number(state.player.line) >= 0 ? Number(state.player.line) : null;
+    const matchesLink = r => linkedLine == null || (Number(r.line) === linkedLine && String(r.direction || 'over').toLowerCase() === state.player.direction);
+    const priced = pricedRows.filter(r => matchesLink(r) && !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && (vm.age.kind === 'fresh' || vm.age.kind === 'aging')).sort((a, b) => (b.edge ?? -99) - (a.edge ?? -99))[0] || null;
     const latest = pricedRows.slice().sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt))[0];
     const captured = !isQuarter && (((nextDetail || {}).props || {}).lines || {})[route.id];
     const refLine = captured && isNum((captured[stat] || [])[0]) ? captured[stat][0] : null;
-    const linkedLine = !isQuarter && state.player.line !== '' && isNum(Number(state.player.line)) ? Number(state.player.line) : null;
-    const linkedQuote = linkedLine == null ? null : pricedRows.find(r => Number(r.line) === linkedLine
-      && String(r.direction || 'over').toLowerCase() === state.player.direction) || { line: linkedLine, state: 'reference' };
-    const quote = linkedQuote || priced ? (linkedQuote || priced.src) : latest || (refLine != null ? { line: refLine, state: 'reference', book: (((nextDetail || {}).props) || {}).provider || null, observedAt: (((nextDetail || {}).props) || {}).capturedAt || null } : null);
+    const capturedReference = refLine != null ? { line: refLine, state: 'reference', book: nextDetail?.props?.provider || null, observedAt: nextDetail?.props?.capturedAt || null } : null;
+    const quote = priced?.src || (linkedLine != null
+      ? pricedRows.filter(r => matchesLink(r) && !r.priceSuspect).sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt))[0]
+        || (refLine === linkedLine ? capturedReference : { line: linkedLine, state: 'reference' })
+      : latest || capturedReference);
     const line = quote && isNum(Number(quote.line)) ? Number(quote.line) : null;
-    const lineStatus = next ? C.quoteStatus(quote, next.kickoff) : null;
+    const lineStatus = quote ? C.quoteStatus(quote, next?.kickoff, now) : null;
+    const lineLabel = quote?.book ? 'Book line' : 'Chart line';
     /* The side a priced row is graded on; with no priced row the line reads as an over, never a held row's side. */
     const dir = linkedLine != null ? state.player.direction : String((priced ? priced.src : {}).direction || 'over').toLowerCase() === 'under' ? 'under' : 'over';
     const h = line != null ? C.hits(values, line) : null;
@@ -498,8 +510,7 @@
     const heldRow = pricedRows.find(r => r.roleSuspect || r.priceSuspect) || null;
     const held = availabilityHeld || projectionReview || Boolean(heldRow);
     const opponentTrend = (data.upcomingTrends || []).find(row => row.gameId === next?.id && row.stat === stat
-      && (line == null || Number(row.line) === Number(line)) && row.direction === dir)
-      || (data.upcomingTrends || []).find(row => row.gameId === next?.id && row.stat === stat);
+      && (line == null || Number(row.line) === Number(line)) && row.direction === dir);
     /* The same words as the play page and the Today ticket (app.js heldWords), from the same hold rule. */
     const heldText = availabilityHeld
       ? `${data.name} is listed ${availability.status}. Kook’n projection and edge are held unless the official status changes.`
@@ -516,8 +527,8 @@
       ${photo ? `<div class="kt-ph kt-photo" aria-hidden="true">${img}</div>` : ''}</section>`;
     const tabs = `<nav class="kt-tabs" aria-label="Stat">${options.filter(k => !k.startsWith('q1_')).map(k => `<button type="button" data-set="pstat:${esc(k)}" aria-pressed="${k === stat}"${TAB_SHORT[k] ? ` aria-label="${esc(PLAYER_LABEL[k] || k)}"` : ''}>${esc(TAB_SHORT[k] || PLAYER_LABEL[k] || k)}</button>`).join('')}</nav>${quarterKeys.length ? `<nav class="kt-tabs kt-quarter-tabs" aria-label="First-quarter stat">${quarterKeys.map(k => `<button type="button" data-set="pstat:${esc(k)}" aria-pressed="${k === stat}">${esc(PLAYER_LABEL[k])}</button>`).join('')}</nav>` : ''}`;
     /* Best price per side at the shown line, never from a row whose price failed the sanity check. */
-    const sides = ['over', 'under'].map(d => pricedRows.filter(r => !r.priceSuspect && Number(r.line) === line && String(r.direction).toLowerCase() === d && isNum(r.odds) && r.state === 'open')
-      .sort((a, b) => b.odds - a.odds)[0]).map((r, i) => r && { dir: i ? 'under' : 'over', odds: r.odds, book: bookLabel(r.book) });
+    const sides = ['over', 'under'].map(d => pricedRows.filter(r => !r.priceSuspect && Number(r.line) === line && String(r.direction).toLowerCase() === d && C.quoteStatus(r, next?.kickoff, now).current)
+      .sort((a, b) => b.odds - a.odds)[0]).map((r, i) => r && { dir: i ? 'under' : 'over', odds: r.odds, book: bookLabel(r.book), observedAt: r.observedAt });
     /* Unavailable, one side's price alone would read as a lean: print both sides at one price, else the line only. */
     const quoteBook = bookLabel((quote || {}).book) || (sides.find(Boolean) || {}).book;
     const pricesText = sides[0] && sides[1] && sides[0].odds === sides[1].odds && sides[0].book === sides[1].book ? `Both sides <b class="num">${esc(odd(sides[0].odds))}</b> at ${esc(sides[0].book)}.`
@@ -528,14 +539,14 @@
     const projectionLabel = held ? 'Held' : projectionValue == null ? 'Not posted' : valueText(projectionValue);
     const edgeLabel = held || projectionDelta == null ? '–' : `${projectionDelta > 0 ? '+' : ''}${C.fixed(projectionDelta)}`;
     const projectionAgrees = projectionDelta == null || (dir === 'under' ? projectionDelta < 0 : projectionDelta > 0);
-    const priceComparison = priced && priced.calibrated && priced.chance != null
-      ? `<p class="kt-lead kt-chance" style="margin-top:8px"><span>I have ${esc(priced.direction || dir)} at<b class="num">${pctOne(priced.chance)}</b></span><i></i><span>the price needs<b class="num">${pctOne(priced.needs)}</b></span></p>${hasValue(priced) ? '<p class="kt-prices">✓ clears my price</p>' : ''}`
+    const priceComparison = priced && priced.calibrated && priced.chance != null && priced.needs != null
+      ? `<p class="kt-prices">${esc(dir === 'over' ? 'Over' : 'Under')} ${esc(valueText(line))} ${esc(odd(priced.odds))} at ${esc(priced.book)} · checked ${esc(ago(priced.src.observedAt))}</p><p class="kt-lead kt-chance" style="margin-top:8px"><span>Kook’n chance<b class="num">${pctOne(priced.chance)}</b></span><i></i><span>Break-even win rate<b class="num">${pctOne(priced.needs)}</b></span></p>${hasValue(priced) ? '<p class="kt-prices">✓ clears my price</p>' : ''}`
       : priced && projectionDelta != null
         ? `<p class="kt-prices"><b>${projectionAgrees ? 'Direction only.' : 'No Kook’n lean at this line.'}</b> ${projectionAgrees ? `The projection points ${esc(dir)}, but this price did not clear the model checks.` : `The projection is ${projectionDelta < 0 ? 'below' : 'above'} the ${esc(dir)} line.`}</p>`
         : '';
     const hitLabel = h && h.n ? `${h[dir]}/${h.n}` : '–';
     const unitFor = STAT_UNITS[isQuarter ? stat.slice(3) : stat] || [String(PLAYER_LABEL[stat] || stat).toUpperCase()];
-    const shown = recent.slice(-8), sv = shown.map(r => read(r, stat));
+    const shown = recent.slice(-10), sv = shown.map(r => read(r, stat));
     const top = Math.max(...sv.filter(isNum), line || 0) || 1;
     const res = v => line == null || !isNum(v) ? 'unknown' : C.thresholdResult(v, line, dir, false);
     const md = r => new Date(`${r[1]}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
@@ -543,7 +554,7 @@
       <div class="kt-bars" aria-hidden="true">${sv.map(v => `<div class="col"><div class="bar ${res(v)}" style="height:${(isNum(v) ? Math.max(2, 112 * Math.max(0, v) / top) : 2).toFixed(1)}px"></div></div>`).join('')}${line != null ? `<div class="line" style="bottom:${(112 * line / top).toFixed(1)}px"><span>${esc(line)}</span></div>` : ''}</div>
       <div class="kt-x" aria-hidden="true">${shown.map((r, i) => `<span><em class="${res(sv[i])}">${isNum(sv[i]) ? esc(valueText(sv[i])) : '–'}</em><b>${r[7] === 0 ? '@' : ''}${esc(abbr(r[6]))}</b>${res(sv[i]) === 'hit' ? '✓ ' : res(sv[i]) === 'miss' ? '✗ ' : ''}${esc(md(r))}</span>`).join('')}</div>
       <figcaption class="kt-cap">${h && h.n ? `<b>${h[dir]} of ${h.n} ${dir} ${esc(valueText(line))}.</b> ` : ''}${recent.length > shown.length ? `The last ${shown.length} of ${recent.length} games shown.` : ''}</figcaption></figure>` : '<p class="kt-cap">No stored games in this selection.</p>';
-    const bettingNumbers = `<span><small>Book line</small><b class="num">${esc(valueText(line))}</b></span><span><small>Kook’n projection</small><b class="num">${esc(projectionLabel)}</b></span><span><small>Projection vs line</small><b class="num">${esc(edgeLabel)}</b></span><span><small>Recent hits</small><b class="num">${esc(hitLabel)}</b></span>`;
+    const bettingNumbers = `<span><small>${lineLabel}</small><b class="num">${esc(valueText(line))}</b></span><span><small>Kook’n projection</small><b class="num">${esc(projectionLabel)}</b></span><span><small>Projection vs line</small><b class="num">${esc(edgeLabel)}</b></span><span><small>Recent hits</small><b class="num">${esc(hitLabel)}</b></span>`;
     const historyNumbers = `<span><small>Season average</small><b class="num">${seasonSummary ? esc(valueText(seasonSummary.avg)) : '–'}</b></span><span><small>Last 5 average</small><b class="num">${last5Summary ? esc(valueText(last5Summary.avg)) : '–'}</b></span><span><small>Season high</small><b class="num">${seasonHigh == null ? '–' : esc(valueText(seasonHigh))}</b></span><span><small>Games recorded</small><b class="num">${esc(seasonValues.length)}</b></span>`;
     const boardTitle = isQuarter ? `${PLAYER_LABEL[stat]} trend` : PLAYER_LABEL[stat] || stat;
     const boardEyebrow = isQuarter ? `${PLAYER_LABEL[stat]} · history` : line != null ? (held ? 'Unavailable · reference line' : lineStatus && lineStatus.current ? 'Current line' : 'Reference line') : 'Season snapshot';
@@ -554,9 +565,9 @@
       ${!isQuarter && line == null ? `<p class="kt-prices"><b>Historical stats are available.</b> No current book line has been captured for ${next ? 'this matchup' : 'an upcoming game'} yet, so there is no line-based Kook’n projection to compare.</p>` : ''}
       ${held ? `<p class="kt-held">${esc(heldText)}</p>`
         : `${priceComparison}
-          ${Array.isArray(projV) ? `<p class="kt-prices">Typical range ${esc(rangeText(projV[1]))}–${esc(rangeText(projV[2]))}.</p>` : ''}`}
+          ${Array.isArray(projV) && isNum(projV[1]) && isNum(projV[2]) ? `<p class="kt-prices">Projected range ${esc(rangeText(projV[1]))}–${esc(rangeText(projV[2]))}.</p>` : ''}`}
       ${line != null ? '<div class="player-chart-legend" aria-label="Chart legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>' : ''}
-      ${chart}<div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(!isQuarter && lineStatus ? `${held ? 'Reference line checked' : lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></section>`;
+      ${chart}<div class="kt-stubrow"><p class="kt-season" style="font-size:13px">${esc(!isQuarter && lineStatus ? `${held && quote?.observedAt ? 'Reference line checked' : lineStatus.label}${quote && quote.observedAt ? ` · ${clock(quote.observedAt)}` : ''}` : showing)}</p></div></section>`;
     const insightRows = C.playerHistory(rows, currentSeason, scope, 'all');
     const insightValues = insightRows.map(row => read(row, stat)).filter(isNum);
     const insightScope = scope === 'all' ? 'All' : scope === 'current' ? 'Season' : String(scope);
@@ -574,7 +585,7 @@
     const footballRole = roleKey && roleKey !== stat ? playerRoleChart({ title: roleTitles[roleKey], entries: roleEntries, format: roleFormat,
       note: isQuarter ? 'First-quarter workload only.' : 'Recent opportunity helps separate role changes from box-score noise.' }) : '';
     const footballComparison = playerComparisonChart({ items: [
-      { label: 'Book', value: line, kind: 'book' }, { label: 'Kook’n', value: held ? null : projectionValue, kind: 'kookn' },
+      { label: quote?.book ? 'Book' : 'Chart line', value: line, kind: 'book' }, { label: 'Kook’n', value: held ? null : projectionValue, kind: 'kookn' },
       { label: 'L5 avg', value: meanOf(insightValues.slice(-5)) }, { label: 'L10 avg', value: meanOf(insightValues.slice(-10)) },
       { label: scope === 'all' ? 'All avg' : scope === 'current' ? 'Season' : String(scope), value: meanOf(insightValues) },
       { label: 'Opp vs pos', value: !isQuarter && allow ? allow.value : null }

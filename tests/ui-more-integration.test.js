@@ -13,7 +13,7 @@ const moreSource = fs.readFileSync('site/app-more.js', 'utf8');
 const loadBrowserApi = () => {
   const sandbox = {
     module: { exports: {} }, exports: {}, KRCore: C, KRLive: L, KRPersonal: P,
-    document: { querySelector: () => null },
+    document: { querySelector: () => null }, location: { hash: '' },
     localStorage: { getItem: () => null, setItem: () => {} },
     console, URL, URLSearchParams, Intl, Date, Math, Map, Set, Promise,
     AbortController, TextEncoder, TextDecoder, setTimeout, clearTimeout, setInterval, clearInterval,
@@ -151,8 +151,8 @@ test('NBA milestone board groups verified history by matchup and keeps milestone
  const rows=Array.from({length:6},(_,i)=>[`g${i}`,`2026-11-${String(i+1).padStart(2,'0')}`,2027,0,2,'1','2',i%2,'BBB',...values]);
  const index={season:2027,shards:2,players:[['1','Example Guard','G','1','AAA','2026-11-12',6,{games:6,minutes:30,values:{pts:12,ast:3}}]]};
  const games={games:[{id:'NBA-77',providerId:'77',kickoff,status:'scheduled',teams:{away:{id:'1',name:'Alpha Aces',shortName:'Aces',abbreviation:'AAA'},home:{id:'2',name:'Beta Bears',shortName:'Bears',abbreviation:'BBB'}}}]};
- const props={rows:[{eventId:'77',athleteId:'1',stat:'pts',kickoff,line:11.5,over:-110,book:'DraftKings',sourceAt:checked,projection:{value:12}}]};
- const ctx=api.moreContext({get:async path=>path==='app/players/NBA.json'?index:path==='app/nba.json'?games:path==='app/players/NBA/1.json'?{keys,players:{1:{name:'Example Guard',pos:'G',projection:index.players[0][7],rows}}}:null,
+ const props={rows:[{eventId:'77',athleteId:'1',stat:'pts',kickoff,line:11.5,over:-110,under:100,book:'DraftKings',sourceAt:checked,projection:{value:12}}]};
+ const ctx=api.moreContext({get:async path=>path==='app/players/NBA.json'?index:path==='app/nba.json'?games:path==='app/nba-props.json'?props:path==='app/players/NBA/1.json'?{keys,players:{1:{name:'Example Guard',pos:'G',projection:index.players[0][7],rows}}}:null,
    maybe:async path=>path==='app/nba-props.json'?props:null});
  ctx.state.league='NBA';
  const html=await factory(ctx).basketballMilestones({league:'NBA'});
@@ -160,4 +160,14 @@ test('NBA milestone board groups verified history by matchup and keeps milestone
  assert.match(html,/L5[\s\S]*5\/5/);assert.match(html,/Book 11\.5/);assert.match(html,/Kook’n 12/);
  assert.match(html,/line=9\.5/);assert.match(html,/Historical hit rate · not a probability/);
  assert.match(html,/Milestone price not verified|Book 11\.5/);assert.doesNotMatch(html,/90% chance|best bet/i);
+ const views=factory(ctx);
+ const chart=await views.player({league:'NBA',id:'1',stat:'pts',line:'9.5',direction:'over'});
+ assert.match(chart,/<small>Chart line<\/small><b class="num">9\.5/);
+ assert.match(chart,/6 of 6 over 9\.5 in the games shown/);
+ assert.doesNotMatch(chart,/DraftKings|11\.5 -110/);
+ ctx.state.player.key=null;
+ const exact=await views.player({league:'NBA',id:'1',stat:'pts',line:'11.5',direction:'under'});
+ assert.match(exact,/<small>Book line<\/small><b class="num">11\.5/);
+ assert.match(exact,/Under 11\.5 \+100<\/b> at DraftKings/);
+ assert.match(exact,/0 of 6 under 11\.5 in the games shown/);
 });

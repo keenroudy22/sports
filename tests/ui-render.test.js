@@ -173,12 +173,12 @@ test('mobile navigation leads with bettor tasks instead of internal research cat
 test('player result charts and edge sports stay inside phone cards', () => {
   const more = fs.readFileSync('site/app-more.js', 'utf8');
   const research = fs.readFileSync('site/research.css', 'utf8');
-  assert.match(more, /Bars and their opponent\/date labels must use the same eight fluid columns/);
+  assert.match(more, /\.player-board \.kt-chart \.kt-bars,\s+\.player-board \.kt-chart \.kt-x \{ width: 100%; grid-auto-columns: minmax\(0,1fr\); gap: 4px; \}/);
   assert.match(more, /\.player-board \.kt-chart \.kt-x \{ width: 100%; grid-auto-columns: minmax\(0,1fr\); gap: 4px; \}/);
   assert.match(more, /\.player-board \.kt-chart \.kt-x span \{ min-width: 0; overflow: visible; overflow-wrap: anywhere; \}/);
   assert.match(research, /@media \(max-width:520px\) \{ \.edge-sports \{ flex-wrap: wrap; overflow: visible; \}/);
   assert.match(more, /const projectionGap = isNum\(projection\) && isNum\(line\) \? projection - line : null/);
-  assert.match(more, /Kook’n − book/);
+  assert.match(more, /Kook’n − line/);
 });
 
 test('Today and matchup pages keep the useful decision data ahead of decorative tickets', () => {

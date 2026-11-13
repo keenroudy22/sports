@@ -146,8 +146,11 @@ test('NBA player page ties a posted prop to last 5, last 10, minutes and the ful
   assert.match(page, /Bennett Stirtz/);
   assert.match(page, /Kook’n play:<\/b> over 7\.5 at \+101 DraftKings · 1u/);
   assert.match(page, /Last 5 average<\/small><b class="num">11\.8/);
-  assert.match(page, /Recent hits<\/small><b class="num">5\/5/);
-  assert.match(page, /6 of 10 over 7\.5 in the last 10/);
+  assert.match(page, /Last 5 hits<\/small><b class="num">5\/5/);
+  assert.match(page, /6 of 10 over 7\.5 in the games shown/);
+  const chart = page.split('<figure class="kt-chart"')[1].split('</figure>')[0];
+  assert.equal((chart.match(/class="col"/g) || []).length, 10);
+  assert.match(chart, /OP0[\s\S]*OP9/);
   assert.match(page, /22 \/ 24 \/ 29 minutes/);
   assert.match(page, /Trend windows/);
   assert.match(page, /100% · 5\/5/);
@@ -171,12 +174,12 @@ test('CBB player page shows an honest Kookn baseline and lets the reader check a
     'data/app/cbb.json': {games:[{id:'CBB-401999999',kickoff:'2026-11-12T23:00:00Z',season:2027,teams:{away:{id:'58',abbreviation:'USF',name:'South Florida Bulls'},home:{id:'2603',abbreviation:'JOES',name:"Saint Joseph's Hawks"}}}]},
   }), 'CBB', 'pts');
   assert.match(page, /College Guard/);
-  assert.match(page, /Check a book line/);
+  assert.match(page, /Set chart line/);
   assert.match(page, /data-input="playerLine"/);
   assert.match(page, /Kook’n projection<\/small><b class="num">15\.1/);
   assert.match(page, /Kook’n baseline:<\/b> 5 current-season games · 30\.2 projected minutes/);
   assert.match(page, /60% recent and 40% season per-minute rate/);
-  assert.match(page, /Kook’n − book<\/small><b class="num">–/);
+  assert.match(page, /Kook’n − line<\/small><b class="num">–/);
   assert.match(page, /mens-college-basketball\/boxscore/);
   assert.match(page, /Kook’n minus the book is not a probability/);
 });
@@ -184,7 +187,7 @@ test('CBB player page shows an honest Kookn baseline and lets the reader check a
 test('a player line with no hold puts the projection beside the book line and keeps its price check', async () => {
   const page = await playerPage(false);
   assert.doesNotMatch(page, /UNDER REVIEW|No grade from me/);
-  assert.match(page, /I have over at<b class="num">57\.0%<\/b>/);
+  assert.match(page, /Kook’n chance<b class="num">57\.0%<\/b>/);
   assert.match(page, /<small>Kook’n projection<\/small><b class="num">167\.1<\/b>/);
   assert.match(page, /<small>Projection vs line<\/small><b class="num">-94\.4<\/b>/);
   assert.match(page, /<section class="player-board"/);
@@ -200,9 +203,10 @@ test('a player line with no hold puts the projection beside the book line and ke
 
 test('a matchup deep link keeps the exact football line and direction on the chart', async () => {
   const page = await playerPage(false, null, 'CFB', 'passYds', C, 'line=199.5&direction=under');
-  assert.match(page, /<small>Book line<\/small><b class="num">199\.5<\/b>/);
+  assert.match(page, /<small>Chart line<\/small><b class="num">199\.5<\/b>/);
   assert.match(page, /199\.5 line/);
   assert.match(page, /stay below nearby numbers/);
+  assert.doesNotMatch(page, /Break-even win rate|57\.0%/);
 });
 
 test('the player line ladder compares nearby thresholds without presenting them as offered markets', async () => {

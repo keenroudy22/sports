@@ -19,7 +19,7 @@
     const chance = g.calibrated === false ? null : g.chance;
     if (!isNum(chance) || !isNum(needs)) return 'No price check available';
     const clear = row.clearsPrice === true || (g.calibrated === true && ['lean', 'strong'].includes(g.view || g.tier) && !g.thin && !g.limited && !g.unproven && g.edge > 0);
-    return `We give it ${pctText(chance)}. This price needs ${pctText(needs)} to win often enough. ${clear ? 'The chance is high enough for our price check.' : 'Our chance is not high enough at this price.'}`;
+    return `Kook’n chance ${pctText(chance)}. Break-even win rate ${pctText(needs)}. ${clear ? 'Passes the price check.' : 'Price check did not pass.'}`;
   };
   const matchupSignals = (row, trend, defense) => Number(row.clearsPrice === true) + Number(Boolean(trend)) + Number(Boolean(defense));
   const priceMatch = (row, lines, now = Date.now()) => (lines || []).find(line => officialKey(line) === officialKey(row) && Number(line.line) === Number(row.line)
@@ -220,7 +220,7 @@
   const pctText = x => isNum(x) ? `${Math.round(100 * x)}%` : '–';
   const pctOne = x => isNum(x) ? `${(100 * x).toFixed(1)}%` : '–';
   const oddsText = x => x == null || x === '' || !Number.isFinite(Number(x)) ? '–' : Number(x) > 0 ? `+${Number(x)}` : String(Number(x));
-  const upsetChanceLine = w => `We give them ${pctText(w.modelChance)} to win. Vegas has them at ${pctText(w.marketChanceNoVig)} once you take out the book's cut. At ${oddsText(w.odds)} you need ${pctOne(breakEven(w.odds))} to profit.`;
+  const upsetChanceLine = w => `Kook’n gives them ${pctText(w.modelChance)} to win. The book implies ${pctText(w.marketChanceNoVig)} after removing its margin. At ${oddsText(w.odds)}, they need to win ${pctOne(breakEven(w.odds))} of the time to break even.`;
 
   /* Price age in plain words. Fresh ≤ 60 min, aging ≤ 4 h (the site's existing current-quote limit), else stale. */
   const quoteAge = (observedAt, kickoff, now = Date.now(), extra = {}) => {
@@ -2115,7 +2115,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-d64428935ca0';
+  const MORE_ASSET = 'app-more.js?v=sha256-1ca1d7f4b46b';
   const GAMES_ASSET = 'app-games.js?v=sha256-dcc12ceb24d3';
   const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
@@ -2351,7 +2351,7 @@
           gnav: v => { const [k, x] = v.split('='); state.games.nav[k] = k === 'close' ? !state.games.nav.close : x; state.games.all = false; },
           rcal: v => { const [k, x] = v.split('='); state.record.cal[k] = k === 'day' && state.record.cal.day === x ? null : x; if (k !== 'day') state.record.cal.day = null; },
           gsort: v => { state.games.sort = v; state.games.all = false; }, gday: v => { state.games.day = v; }, gup: v => { state.games.upDay = v; state.games.all = false; }, gstatus: v => { state.games.status = v; },
-          pstat: v => { state.player.stat = v; }, pwin: v => { state.player.window = v; }, pseason: v => { state.player.season = v; }, pdir: v => { state.player.direction = v === 'under' ? 'under' : 'over'; }, stakeMode: v => { state.stake.mode = v; saved.set('stake', state.stake); },
+          pstat: v => { if (state.player.stat !== v) state.player.line = ''; state.player.stat = v; }, pwin: v => { state.player.window = v; }, pseason: v => { state.player.season = v; }, pdir: v => { state.player.direction = v === 'under' ? 'under' : 'over'; }, stakeMode: v => { state.stake.mode = v; saved.set('stake', state.stake); },
         };
         if (SETTERS[key]) SETTERS[key](value);
         if (['trendPeriod', 'trendRate', 'trendWindow', 'trendKind', 'trendDay', 'cpos', 'cwin'].includes(key)) { state.trends.limit = 40; savePrefs(); }

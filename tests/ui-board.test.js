@@ -54,16 +54,16 @@ test('history and defense cannot manufacture Model support below the price bar',
   const hurst = { chance: .52, needs: .533, edge: -1.3, clearsPrice: false };
   assert.equal(M.matchupSignals(hurst, true, true), 2);
   assert.equal(M.matchupSignals({...hurst, clearsPrice:true}, true, true), 3);
-  assert.match(M.researchPrice(hurst), /We give it 52%\. This price needs 53%.*not high enough/);
+  assert.match(M.researchPrice(hurst), /Kook’n chance 52%\. Break-even win rate 53%\. Price check did not pass/);
   assert.match(gamesSource, /x\.r\.clearsPrice === true/);
   assert.match(gamesSource, /History only · our chance does not beat this price/);
 });
 
 test('Upset Watch explains the book cut and computes the price threshold', () => {
   assert.equal(M.upsetChanceLine({ modelChance: .57, marketChanceNoVig: .45, odds: 114 }),
-    "We give them 57% to win. Vegas has them at 45% once you take out the book's cut. At +114 you need 46.7% to profit.");
-  assert.equal(M.upsetChanceLine({ modelChance: .55, marketChanceNoVig: .5, odds: -110 }).split('At -110 ')[1],
-    'you need 52.4% to profit.');
+    'Kook’n gives them 57% to win. The book implies 45% after removing its margin. At +114, they need to win 46.7% of the time to break even.');
+  assert.match(M.upsetChanceLine({ modelChance: .55, marketChanceNoVig: .5, odds: -110 }),
+    /At -110, they need to win 52\.4% of the time to break even\./);
 });
 
 test('a research price check matches the exact market, side, number, book and fresh quote', () => {
