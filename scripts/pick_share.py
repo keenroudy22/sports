@@ -31,13 +31,14 @@ def page(pick, url, destination, image):
     price = pick.get('odds')
     price = f'{price:+g}' if type(price) in (int, float) and not pick.get('priceAssumed') else ''
     book = str(pick.get('displayBook') or pick.get('book') or '') if price else ''
-    description = escape(' · '.join(filter(None, (price, book, 'Kook’n Sports public record'))))
+    result = {'win': 'Won', 'loss': 'Lost', 'push': 'Push', 'void': 'Void'}.get(pick.get('result'))
+    description = escape(' · '.join(filter(None, (price, book, result, 'Kook’n Sports public record'))))
     return f"""<!doctype html>
 {MARKER}
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title} | Kook’n</title>
-<link rel="canonical" href="{escape(destination)}">
+<link rel="canonical" href="{escape(url)}">
 <meta name="description" content="{description}">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{title} | Kook’n">
@@ -68,5 +69,8 @@ def build(site, base_url):
         path = f'p/{pick_id}.html'
         destination = f'{base_url}#pick/{pick_id}'
         html = page(pick, base_url + path, destination, base_url + preview_image(site, pick))
-        (site / path).write_text(html, encoding='utf-8')
+        target = site / path
+        if target.is_symlink():
+            raise ValueError(f'Unexpected link in generated share pages: {path}')
+        target.write_text(html, encoding='utf-8')
     return len(picks)
