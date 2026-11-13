@@ -1208,14 +1208,13 @@
   /* A painted hero belongs to football Today in the league it was painted for; anything else clears it at once. */
   const dropHero = () => { const view = $('#view'); if (view && view.querySelector('.hero-first')) view.innerHTML = LOADING; };
   /* The first paint and full card share this top. */
-  const KVB_WAIT = '<section class="kt-sec" id="today-kvb"><h2 class="kt-head">Kook vs. Book</h2><p class="small muted">Our number. Their line. Your call.</p><p class="loading" role="status">Checking lines…</p></section>';
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', market = KVB_WAIT, favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', market = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false, postedToday = false, otherPosted = '', postedSummary = null, otherTickets = '' }) => {
     const title = otherPosted || postedSummary ? 'Today’s posted plays.' : postedToday && !rows.length ? 'Today’s posted plays are below.' : nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : !rows.length ? 'Games, projections and verified price checks.' : ledeTitle(rows, today);
     const researchSport = propSport(state.league);
     const currentBets = [...new Map([...rows.slice(0, 1), ...more, ...rows.slice(1)].map(row => [row.id, row])).values()];
     return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1><p class="today-summary">${esc(title)}</p>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
       ${currentBets.length ? `<div class="kt-focus-head"><h2>${postedSummary ? 'Today’s posted plays' : currentBets.length > 1 ? `Today’s best bets · ${currentBets.length}` : 'Today’s best bet'}</h2><a href="#record">Track record ›</a></div>
-      ${rail(currentBets, { season, lines, cards, id: 'today-card', quick: true, compact: true, label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' })}` : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'My strongest current research look is below.' : "Tonight's games and Kook vs Book numbers are below.") : 'The board updates when a verified price clears every release check.', 'today-card', true)}
+      ${rail(currentBets, { season, lines, cards, id: 'today-card', quick: true, compact: true, label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' })}` : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'My strongest current research look is below.' : "See today’s matchups and research below.") : 'The board updates when a verified price clears every release check.', 'today-card', true)}
       ${otherTickets}
       ${postedSummary ? postedSummary.html : ''}
       ${market}
@@ -1334,7 +1333,7 @@
     const favorite = !rows.length ? favoriteLook(lineRows, gameIdsToday, official) : null;
     const favoriteHtml = favorite ? ktSec('favorite', 'What I like most', `<div class="board">${boardRow(favorite, false)}</div><p class="kt-note"><b>Why it is not an official play:</b> ${esc(favoriteHold(favorite))}</p>`,
       { tape: true, kind: 'Strongest current lean · not a best bet', link: ktLink(`#game/${favorite.gameId}`, 'See the matchup') }) : '';
-    const market = kvb && charts ? kvb.home({ rows: lineRows.filter(vm => vm.league === chartLeague && (!hasGamesToday || C.dayOf(vm.kickoff) === etDay())), charts, games, league: chartLeague }) : KVB_WAIT;
+    const market = kvb && charts ? kvb.home({ rows: lineRows.filter(vm => vm.league === chartLeague && (!hasGamesToday || C.dayOf(vm.kickoff) === etDay())), charts, games, league: chartLeague }) : '';
     /* Today's games: live first, scores refreshed from the free scoreboard, with our projected score. */
     const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
     const todayGames = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
@@ -2119,7 +2118,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-61507a324416';
   const GAMES_ASSET = 'app-games.js?v=sha256-0f0cc681f3bf';
-  const KVB_ASSET = 'app-kvb.js?v=sha256-957f7b34cdbf';
+  const KVB_ASSET = 'app-kvb.js?v=sha256-13e5df1d6e49';
   const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {

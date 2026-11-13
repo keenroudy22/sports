@@ -62,13 +62,14 @@
       const chart = sample.length ? historyChart(sample, dates, Number(vm.line), String(vm.direction).toLowerCase(), { legend: false, format: value => number(value, vm.stat) }) : '<p class="small muted">No recorded game log for this market yet.</p>';
       return `<article class="kvb-card"><div class="kvb-top"><div class="kvb-player">${headshot(vm.league, vm.athleteId, 'sm', null, vm.position)}<span><b>${esc(vm.player || vm.title)}</b><small>${esc([team, vm.position, LABEL[vm.stat]].filter(Boolean).join(' · '))}</small></span></div><span class="kvb-status ${tone}">${word}</span></div>
         <div class="kvb-body"><div><div class="kvb-numbers"><span class="kvb-number"><small>Book line</small><b>${esc(direction.toUpperCase().slice(0,1))} ${esc(number(vm.line, vm.stat))}</b><em>${esc(oddsText(vm.odds))}</em></span><span class="kvb-number kook"><small>Kook’n</small><b>${esc(number(vm.projection, vm.stat))}</b><em>${gap == null ? 'No gap' : `${esc(number(gap, vm.stat))} difference`}</em></span><span class="kvb-number"><small>Chance gap</small><b>${vm.edge == null ? '–' : `${vm.edge > 0 ? '+' : ''}${esc(vm.edge)}%`}</b><em>${esc(pctText(vm.chance))} vs ${esc(pctText(vm.needs))}</em></span></div><p class="kvb-price"><b>${esc(vm.book || '')} ${esc(oddsText(vm.odds))}</b> · ${esc(vm.age.label)} · ${esc(whenShort(vm.kickoff))}</p><div class="kvb-rates">${rate('L5', l5)}${rate('L10', l10)}${rate('Season', season)}</div><div class="kvb-read"><p><b>Kook read:</b> ${esc(direction === 'under' ? 'Projection is below the line.' : 'Projection is above the line.')}</p><p class="risk">${esc(priceRead)}</p></div></div><div>${chart}</div></div>
-        <div class="kvb-actions"><span>Research unless marked Official</span><a href="#player/${esc(vm.league)}/${esc(vm.athleteId)}?stat=${esc(vm.stat)}">Full player chart →</a></div></article>`;
+        <div class="kvb-actions"><span>Research unless marked Official</span><a href="#player/${esc(vm.league)}/${esc(vm.athleteId)}?stat=${esc(vm.stat)}&amp;line=${esc(vm.line)}&amp;direction=${esc(direction)}">Full player chart →</a></div></article>`;
     };
     const home = ({ rows = [], charts = {}, games = [], league = 'NFL' } = {}) => {
-      const selected = choose(rows), gameMap = new Map(games.map(game => [game.id, game]));
+      const selected = choose(rows);
+      if (!selected.length) return '';
+      const gameMap = new Map(games.map(game => [game.id, game]));
       const clears = selected.filter(vm => vm.official || hasValue(vm)).length;
-      const content = selected.length ? `<div class="kvb-grid">${selected.map(vm => card(vm, charts, gameMap)).join('')}</div>`
-        : '<div class="card"><p><b>No common player prop clears the data checks right now.</b></p><p class="small muted" style="margin-top:5px">The full chart board remains available; missing prices, thin roles and unverified probabilities stay out of this shortlist.</p></div>';
+      const content = `<div class="kvb-grid">${selected.map(vm => card(vm, charts, gameMap)).join('')}</div>`;
       return `<section class="kt-kvb" id="today-kvb" aria-labelledby="kvb-h"><div class="kvb-head"><div><p class="eyebrow green">Common player props first</p><h2 id="kvb-h">Kook vs. Book</h2><p>Our number. Their line. Your call.</p></div><div class="kvb-count"><b>${selected.length}</b>shortlisted · ${clears} clear</div></div>${content}<div class="kvb-foot"><p>Prices move. A projection gap alone is not value; the price still has to clear.</p><a href="#research/players?sport=${esc(String(league).toUpperCase())}">All player props →</a></div></section>`;
     };
     return { home };

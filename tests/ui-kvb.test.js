@@ -45,6 +45,7 @@ test('Kook vs. Book puts common props, three comparison numbers and hit-rate cha
   assert.match(html, /L5[\s\S]*L10[\s\S]*Season/);
   assert.match(html, /chart-stub/);
   assert.match(html, /Research unless marked Official/);
+  assert.match(html, /stat=rec&amp;line=4\.5&amp;direction=over/);
 });
 
 test('Kook vs. Book omits fringe, thin, suspect and nonstandard props from the shortlist', () => {
@@ -64,7 +65,13 @@ test('Kook vs. Book omits fringe, thin, suspect and nonstandard props from the s
 
 test('Kook vs. Book footer keeps the selected sport on the full prop board', () => {
   const api = setup();
-  assert.match(api.home({ league: 'NBA' }), /#research\/players\?sport=NBA/);
-  assert.match(api.home({ league: 'CBB' }), /#research\/players\?sport=CBB/);
-  assert.match(api.home(), /#research\/players\?sport=NFL/);
+  assert.match(api.home({ league: 'NBA', rows: [row('a')] }), /#research\/players\?sport=NBA/);
+  assert.match(api.home({ league: 'CBB', rows: [row('a')] }), /#research\/players\?sport=CBB/);
+  assert.match(api.home({ rows: [row('a')] }), /#research\/players\?sport=NFL/);
+});
+
+test('Today omits the Kook vs. Book panel when no prop qualifies', () => {
+  const api = setup();
+  assert.equal(api.home(), '');
+  assert.equal(api.home({ rows: [row('thin', { thin: true }), row('fringe', { line: .5 })] }), '');
 });

@@ -158,7 +158,7 @@ test('the first paint and the full card draw the same top, so nothing moves when
   await settle();
 });
 
-test('Today leads with the card, Kook vs. Book and current matchup while secondary sections share one clear fold', async () => {
+test('Today skips an empty Kook vs. Book panel and keeps the card, research and matchups in order', async () => {
   const todayOff = { ...total, id: 'CFB-today-off-fd', displayTitle: 'Moved Line Today under 56.5', status: 'expired',
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
@@ -169,9 +169,9 @@ test('Today leads with the card, Kook vs. Book and current matchup while seconda
   assert.match(page, /class="decision-more" href="#pick\/NFL-2026-W5-fixture-rec-fd"[^>]*>See stats, trends and full breakdown/, 'the summary opens the complete preserved play');
   assert.doesNotMatch(page.slice(0, page.indexOf('class="kt-sec kt-left"')), /class="kt-order|class="kt-paper"/, 'Today no longer stacks branded paper tickets');
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="decision-list is-compact"', 'id="today-kvb"', 'class="today-tools"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'class="kt-sec kt-left"',
+  const order = ['class="kt-lede', 'class="decision-list is-compact"', 'class="today-tools"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'class="kt-sec kt-left"',
     'kt-games"', 'class="today-more"', 'class="kt-sec kt-prep"', 'kt-upsets"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'all official cards -> Kook vs. Book -> NFL -> results and games -> one secondary fold');
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'official cards -> research -> NFL -> results and games -> one secondary fold');
   assert.match(page, /<summary>More today<\/summary>/);
   for (const gone of ['kt-fold', 'class="onboard"', 'today-status']) assert.ok(!page.includes(gone), gone);
   const folds = [...page.matchAll(/<details[^>]*data-box="([^"]+)"/g)].map(m => m[1]);
@@ -179,7 +179,8 @@ test('Today leads with the card, Kook vs. Book and current matchup while seconda
   const rails = page.slice(0, at('class="kt-sec kt-left"'));
   assert.doesNotMatch(rails, /Moved Line at Elsewhere/, 'Off the card stays outside the rail');
   assert.match(page.slice(at('kt-off-card"')), /Off the card · 1<\/h2>[\s\S]*Moved Line Today/);
-  const bets = page.slice(at('id="today-card"'), at('id="today-kvb"'));
+  assert.doesNotMatch(page, /id="today-kvb"|Checking lines…|No common player prop clears/);
+  const bets = page.slice(at('id="today-card"'), at('class="today-tools"'));
   assert.doesNotMatch(bets, /More best bets/, 'the second oversized best-bet section is gone');
   assert.match(bets, /Example Tech/, 'today\'s other best bet stays on the page');
   assert.doesNotMatch(bets, /80\/20 Climb step/, 'the dedicated Climb card is not repeated under More best bets');
@@ -427,7 +428,7 @@ test('with nothing on the card the rail does not reveal desk timing', async () =
   assert.match(page, /<h1>Today’s board<\/h1><p class="today-summary">Nothing cleared my bar today\.<\/p>/);
   assert.match(page, /class="decision-empty is-compact"[\s\S]*No official pick[\s\S]*Nothing forced\./);
   assert.match(page, /Nothing cleared my bar today\./);
-  assert.match(page, /Tonight's games and Kook vs Book numbers are below\./);
+  assert.match(page, /See today’s matchups and research below\./);
   assert.doesNotMatch(page, /I look again|desk run|11:45 AM/i);
   assert.doesNotMatch(page, /<article class="decision-card/, 'no blank card and no forced pick');
 });
