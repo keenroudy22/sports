@@ -20,7 +20,7 @@ def fixture(count=3, style='short'):
     legs = []
     price = -200 if style == 'short' else -150
     for index in range(count):
-        game_id = f'g{index}'
+        game_id = f'CFB-{index}'
         kickoff = f'2026-11-13T2{index}:00:00Z' if index < 4 else '2026-11-13T23:30:00Z'
         games[game_id] = {'id': game_id, 'league': 'CFB', 'season': 2026, 'week': 11,
                           'state': 'pre', 'kickoff': kickoff,
@@ -71,11 +71,38 @@ class FunTicketReviewTests(unittest.TestCase):
         self.assertEqual((len(pick['legs']), pick['parlayStyle']), (6, 'lotto'))
         self.assertTrue(gates.longshot_shape(pick, ctx).ok)
 
+    def test_short_and_lotto_tickets_settle_from_official_game_finals(self):
+        for count, style in ((3, 'short'), (6, 'lotto')):
+            spec, ctx = fixture(count, style)
+            pick, held = review.candidate(ctx, NOW, spec)
+            self.assertIsNone(held)
+            pick['league'] = 'CFB'
+            finals = {}
+            for game_id, game in ctx.games.items():
+                finals[game_id] = dict(game, state='post', completed=True,
+                    home=dict(game['home'], score=24), away=dict(game['away'], score=21))
+            settle_ctx = SimpleNamespace(first={pick['id']: copy.deepcopy(pick)}, latest={})
+            settled, unclear = run.settle(
+                settle_ctx, {pick['id']: ('parlays', copy.deepcopy(pick))}, finals, [], NOW)
+            with self.subTest(style=style):
+                self.assertEqual(unclear, [])
+                self.assertEqual(settled[0][2]['result'], 'win')
+                self.assertEqual(settled[0][2]['actual'], f'all {count} legs won')
+
+            finals['CFB-0']['home']['score'] = 14
+            finals['CFB-0']['away']['score'] = 21
+            settled, unclear = run.settle(
+                settle_ctx, {pick['id']: ('parlays', copy.deepcopy(pick))}, finals, [], NOW)
+            with self.subTest(style=style, result='loss'):
+                self.assertEqual(unclear, [])
+                self.assertEqual(settled[0][2]['result'], 'loss')
+                self.assertIn('legs: loss', settled[0][2]['actual'])
+
     def test_estimated_wrong_shape_same_game_and_missing_research_are_held(self):
         mutations = (
             lambda spec: spec.update(odds=999),
             lambda spec: spec.update(parlayStyle='lotto'),
-            lambda spec: spec['legs'][1].update(gameId='g0'),
+            lambda spec: spec['legs'][1].update(gameId='CFB-0'),
             lambda spec: spec['legs'][0]['researchCase'].update(risk=''),
             lambda spec: spec['researchReview'].update(receipt=''),
             lambda spec: spec['researchReview'].update(ticketSource='https://draftkings.com.evil.invalid/'),
