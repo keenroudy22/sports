@@ -253,7 +253,7 @@ test('listed unavailable skill players stay visible while their projections are 
     }] } } } };
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
   const html = unesc(await factory(ctx).game({ id: g.id }));
-  assert.match(html, /NYG player props/);
+  assert.match(html, /NYG player props · 2/);
   assert.match(html, /Cam Skattebo/);
   assert.match(html, /<span class="badge warn">Out<\/span>/);
   assert.match(html, /prop-vs-label">Kook’n<\/span><b>Held/);
@@ -263,6 +263,9 @@ test('listed unavailable skill players stay visible while their projections are 
   assert.match(html, /prop-vs-label">Book<\/span><b>55\.5/);
   assert.match(html, /#player\/NFL\/4696981\?stat=rushYds&amp;line=55\.5&amp;direction=over/);
   assert.match(html, /Devin Singletary[\s\S]*prop-vs-label">Kook’n<\/span><b>52\.0[\s\S]*prop-vs-label">Kook’n<\/span><b>14\.2/);
+  const featuredRb = (html.split('RB · featured')[1] || '').split('</table>')[0];
+  assert.match(featuredRb, /Devin Singletary/);
+  assert.match(featuredRb, /Cam Skattebo/);
   const camRow = (html.split('Cam Skattebo')[1] || '').split('</tr>')[0];
   assert.doesNotMatch(camRow, /prop-vs-label">Kook’n<\/span><b>\d/);
 });
