@@ -1,3 +1,23 @@
+### November 13 single Pages publisher — hosted push verified
+
+Scheduled refreshes still use the existing providers and request caps. They
+verify and commit their captured inputs before requesting a publish-only run.
+Both desk pushes and publish-only requests enter the same Pages queue. Every
+publisher checks out current main after entering that queue. The refresh job
+has no Pages deployment permission and cannot upload its own artifact.
+
+Source `ee958cb2d57b51fc69699e6f4b6f7374cabba39f` passed 2,271 Python tests
+(2 skipped), 345 interface tests, clean export, the 606-page build, record and
+public-file audits, and offline rehearsal. Hosted push `43494735982` deployed
+through the sole Pages job. Live checks covered 23 routes and four player-chart
+L5/L10 flows at 320, 375 and 1440 CSS pixels. The hosted CBB index kept 5,093
+players, including nine each for Pitt and Butler.
+
+On the next ordinary scheduled refresh, record its dispatch step, the
+resulting publish-only run, and the published player index after deployment.
+The hosted push verifies the shared publisher. The scheduled handoff still
+needs its first live receipt under this workflow revision.
+
 ### November 13 Today comparison visibility and matchup quote integrity — verified live
 
 Today omits Kook vs. Book whenever no common prop passes the existing shortlist
