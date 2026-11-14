@@ -177,6 +177,24 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual([body['content'] for body in sent], ['Pulled after confirmed news\n\n21+ only'])
         self.assertEqual(entry['discord']['followup']['state'], 'sent')
 
+    def test_a_daily_recap_correction_sends_the_corrected_card_once(self):
+        sent = []
+        entry = {'id': 'receipt:day:2026-11-13', 'kind': 'buffer:receipt',
+                 'fullDailyRecap': True, 'discord': {'state': 'sent', 'destination': 'plays',
+                 'followup': {'state': 'pending', 'correction': True,
+                              'text': 'Correction: Friday was 0-2, not 1-2.',
+                              'image': 'https://keenroudy.com/corrected.png'}}}
+        send = lambda url, body, headers: (sent.append(body) or (204, b''))
+        fetch = lambda _url: ('image/png', b'png')
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send,
+                                 fetch=fetch, log=lambda *_: None)
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send,
+                                 fetch=fetch, log=lambda *_: None)
+        self.assertEqual(len(sent), 1)
+        self.assertIn('Correction: Friday was 0-2, not 1-2.',
+                      sent[0].decode() if isinstance(sent[0], bytes) else str(sent[0]))
+        self.assertEqual(entry['discord']['followup']['state'], 'sent')
+
     def test_already_pending_climb_repairs_after_queue_window(self):
         old = '✅ FINAL · HIT: 80/20 Climb step 1 ($50 → $77)\nall 2 legs won'
         result = {'state': 'pending', 'text': old, 'attempts': 95}

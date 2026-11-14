@@ -4015,6 +4015,42 @@ def basketball_backup_due(entry, now):
                 and gates.when(discord['sentAt']) + post_windows.discord_play_lead(now) <= now)
 
 
+def recap_record_correction(previous, current):
+    """Explain a changed daily record without exposing desk internals.
+
+    A researched/admitted play is not part of the public record until an
+    original social receipt exists.  If an early recap accidentally included
+    one, the correction names the removed selection and then repeats the
+    complete corrected card.  The original Discord receipt remains immutable.
+    """
+    old_lines = str(previous or '').splitlines()
+    new_lines = str(current or '').splitlines()
+    old_head = old_lines[0].rstrip('.') if old_lines else 'the earlier card'
+    new_head = new_lines[0].rstrip('.') if new_lines else 'the corrected card'
+    old_record = old_head.split(':', 1)[-1].strip()
+    day = new_head.split(':', 1)[0].strip()
+    new_record = new_head.split(':', 1)[-1].strip()
+    new_results = {line for line in new_lines if line.startswith(('✅', '❌', '➖'))}
+    removed = []
+    for line in old_lines:
+        if not line.startswith(('✅', '❌', '➖')) or line in new_results:
+            continue
+        selection = line[1:].strip().split(' · ', 1)[0].strip()
+        if selection:
+            removed.append(selection)
+    opener = f'Correction: {day} was {new_record}, not {old_record}.'
+    if removed:
+        named = removed[0] if len(removed) == 1 else ', '.join(removed[:-1]) + f' and {removed[-1]}'
+        if len(removed) == 1:
+            opener += f'\n{named} was never posted as an official play, so it does not count in the record.'
+        else:
+            opener += f'\n{named} were never posted as official plays, so they do not count in the record.'
+    else:
+        opener += '\nThe earlier recap included a play that was not part of the official public card.'
+    body = '\n'.join(new_lines[1:]).lstrip()
+    return opener + (f'\n\n{body}' if body else '')
+
+
 def retry_typefully_recap(now, log_book, settings):
     """Send the prior day's settled recap through the reserved backup."""
     import buffer_post
@@ -4033,22 +4069,51 @@ def retry_typefully_recap(now, log_book, settings):
     recap = next((row for row in receipts.ready(ctx.first, ctx.latest, games, log_book, now)
                   if row['key'] == key and now < row['stale']), None)
     caption = recap['text'].rstrip() + '\n\n21+ only' if recap else None
-    attempt = (entry or {}).get('typefullyDelivery')
-    if attempt and attempt.get('draftId'):
-        # The provider already owns this submission. Read its status only.
-        typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log)
-        return
     if not recap:
         return
+    attempt = (entry or {}).get('typefullyDelivery')
     if entry is not None:
         pick_ids = entry.get('resultPickIds')
         # The caption's late opener can change while the same delivered card
         # is waiting for media. Recheck identities and keep its original copy.
-        if (entry.get('cardKey') != recap['card'] or
-                (pick_ids != recap.get('pickIds') if pick_ids is not None else entry.get('queuedText') != caption)):
-            log(f'Typefully recap held: {key} delivery no longer matches the public record')
-            return
+        mismatch = (entry.get('cardKey') != recap['card'] or
+                    (pick_ids != recap.get('pickIds') if pick_ids is not None else entry.get('queuedText') != caption))
+        if mismatch:
+            if attempt and attempt.get('draftId'):
+                # A provider-owned create cannot be rewritten safely. Keep it
+                # duplicate-protected for explicit reconciliation.
+                log(f'Typefully recap held: {key} provider draft no longer matches the public record')
+                return
+            old_caption = entry.get('queuedText') or ''
+            entry.setdefault('supersededRecaps', []).append({
+                'at': gates.stamp(now), 'queuedText': old_caption,
+                'textHash': entry.get('textHash'), 'cardKey': entry.get('cardKey'),
+                'resultPickIds': entry.get('resultPickIds'),
+                'reason': 'Official public-card membership changed before X delivery',
+            })
+            entry.update(queuedText=caption, textHash=x_post.text_hash(caption),
+                         cardKey=recap['card'], resultPickIds=list(recap.get('pickIds') or []),
+                         reconciledAt=gates.stamp(now))
+            discord = entry.get('discord') or {}
+            if discord.get('state') == 'sent' and old_caption != caption:
+                followup = discord.get('followup') or {}
+                if followup.get('state') not in ('pending', 'sent'):
+                    discord['followup'] = {
+                        'state': 'pending', 'correction': True,
+                        'text': recap_record_correction(old_caption, caption),
+                        'image': buffer_post.card_url(recap['card']),
+                    }
+                entry['discord'] = discord
+            if attempt is not None:
+                attempt.update(reconciledAt=gates.stamp(now),
+                               reason='Official public-card membership changed before X delivery')
+            x_post.save_log(log_book)
+            log(f'Typefully recap reconciled: {key} now matches the public record')
         caption = entry['queuedText']
+    if attempt and attempt.get('draftId'):
+        # The provider already owns this exact submission. Read its status only.
+        typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log)
+        return
     if x_post.tweet_length(caption) > x_post.LIMIT or x_post.x_style(caption):
         return
     if entry is None:

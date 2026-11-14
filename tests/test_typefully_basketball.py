@@ -123,22 +123,35 @@ class BasketballBackupTests(unittest.TestCase):
         self.assertEqual(book['posts'][0]['discord']['readyAt'], '2026-11-14T05:15:00Z')
         self.assertEqual(deliver.call_args.kwargs['media_url'], 'https://keenroudy.com/card.png')
 
-    def test_owned_recap_with_incorrect_record_cannot_create_a_draft(self):
+    def test_owned_recap_with_incorrect_record_is_reconciled_before_draft(self):
         now = datetime(2026, 11, 14, 8, tzinfo=timezone.utc)
         key = 'receipt:day:2026-11-13'
-        entry = {'id': key, 'discordRecapPrepared': True, 'cardKey': 'receipt-card',
-                 'queuedText': 'Friday: 1-2.\n\n21+ only',
+        entry = {'id': key, 'kind': 'buffer:receipt', 'discordRecapPrepared': True,
+                 'fullDailyRecap': True, 'cardKey': 'receipt-card',
+                 'queuedText': 'Friday: 1-2.\n✅ Cedric Coward OVER 6.5 rebounds · Final: 7 rebounds\n\n21+ only',
+                 'discord': {'state': 'sent', 'sentAt': '2026-11-14T07:33:07Z'},
                  'typefullyDelivery': {'at': '2026-11-14T07:33:07Z'}}
-        recap = {'key': key, 'card': 'receipt-card', 'text': 'Friday: 0-2.',
+        recap = {'key': key, 'card': 'receipt-card', 'text': 'Friday: 0-2.\n❌ Sengun OVER 6.5 assists · Final: 5 assists',
+                 'pickIds': ['sengun'],
                  'stale': now + timedelta(hours=5)}
         book = {'posts': [entry]}
         stores = SimpleNamespace(first={}, latest={})
         with patch.object(run.gates, 'Stores', return_value=SimpleNamespace(as_of=lambda _now: stores)), \
              patch.object(run, 'load_json', return_value={'games': []}), \
              patch('receipts.ready', return_value=[recap]), \
-             patch.object(typefully_backup, 'deliver') as deliver:
+             patch('x_post.save_log') as save, \
+             patch('buffer_post.card_url', return_value='https://keenroudy.com/card.png'), \
+             patch.object(typefully_backup, 'deliver', return_value=False) as deliver:
             run.retry_typefully_recap(now, book, {})
-        deliver.assert_not_called()
+        self.assertEqual(entry['queuedText'], 'Friday: 0-2.\n❌ Sengun OVER 6.5 assists · Final: 5 assists\n\n21+ only')
+        self.assertEqual(entry['resultPickIds'], ['sengun'])
+        self.assertEqual(entry['discord']['followup']['state'], 'pending')
+        self.assertIn('Coward OVER 6.5 rebounds was never posted as an official play',
+                      entry['discord']['followup']['text'])
+        self.assertEqual(entry['discord']['followup']['image'], 'https://keenroudy.com/card.png')
+        self.assertTrue(entry['supersededRecaps'])
+        save.assert_called()
+        deliver.assert_called_once()
 
     def test_settled_prior_day_recap_wakes_mirror_before_morning_clock(self):
         now = datetime(2026, 11, 14, 5, 15, tzinfo=timezone.utc)

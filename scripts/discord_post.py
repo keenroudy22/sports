@@ -367,13 +367,17 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         followup = mirror.get('followup') or {}
         if followup.get('state') != 'pending':
             continue
-        if entry.get('kind') not in ('buffer:play', 'buffer:community') or mirror.get('state') != 'sent':
+        recap_correction = (entry.get('kind') == 'buffer:receipt'
+                            and entry.get('fullDailyRecap') is True
+                            and followup.get('correction') is True)
+        if (entry.get('kind') not in ('buffer:play', 'buffer:community') and not recap_correction) \
+                or mirror.get('state') != 'sent':
             continue
         target = wins_url if mirror.get('destination') == 'wins' else url
         if not target:
             continue
         try:
-            send_message(target, followup.get('text') or '', send=send)
+            send_message(target, followup.get('text') or '', followup.get('image'), send=send)
         except DiscordError as error:
             message = str(error)
             changed = followup.get('error') != message
