@@ -35,3 +35,11 @@ class NBAResults(unittest.TestCase):
   with patch.object(rt,'public_rows',return_value=[PLAY]),patch.object(rt,'review_ready',return_value=False),patch.object(rt.nba_capture,'step') as capture:
    self.assertEqual(len(rt.social_plans(NOW,book)),1)
    capture.assert_not_called()
+
+ def test_individual_finals_use_existing_result_spacing_after_reserved_posts(self):
+  other=dict(PLAY,id='NBA-reviewed-2-8-pts-over-dk')
+  book={'posts':[dict(id=p['id'],sentAt='2026-11-10T17:52:00Z',tweetId='123456789') for p in (PLAY,other)]}
+  reserved=[('morning','receipt','morning',NOW+timedelta(minutes=5),'morning')]
+  with patch.object(rt,'public_rows',return_value=[PLAY,other]):
+   due=[row[3] for row in n.plans(NOW,book,Path('/unused'),reserved=reserved)]
+  self.assertEqual(due,[NOW+timedelta(minutes=15),NOW+timedelta(minutes=25)])

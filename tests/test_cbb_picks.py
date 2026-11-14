@@ -50,6 +50,17 @@ class CBBPicksTests(unittest.TestCase):
         with patch.object(cbb,'public_rows',return_value=[p]),patch.object(cbb,'current_match',return_value=False):
             self.assertEqual(cbb.plans(NOW,{'posts':[entry]}),[])
 
+    def test_individual_final_fits_between_reserved_posts_at_result_spacing(self):
+        pick=fixture()
+        pick.update(result='win',actual=144,book='DraftKings',settledAt=boxscores.stamp(NOW))
+        original=dict(id=pick['id'],sentAt=boxscores.stamp(NOW-timedelta(hours=2)),tweetId='123456789')
+        reserved=[('one','receipt','text',NOW+timedelta(minutes=5),'one'),
+                  ('two','receipt','text',NOW+timedelta(minutes=26),'two')]
+        with patch.object(cbb,'public_rows',return_value=[pick]):
+            plans=cbb.plans(NOW,{'posts':[original]},reserved=reserved)
+        self.assertEqual(len(plans),1)
+        self.assertEqual(plans[0][3],NOW+timedelta(minutes=15))
+
     def test_long_college_names_render_without_rewriting_fixture(self):
         import nba_trial,pick_card
         p=fixture();p['marketType']='spread';p['direction']='away';p['line']=11.5

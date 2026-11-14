@@ -36,7 +36,7 @@ def plans(now,book,root,reserved=()):
         if any(e.get('id')==guid for e in book.get('posts',[])):continue
         # Native quote can only target a confirmed, still-live original.
         if not buffer_post.quote_tweet_id(book,guid):continue
-        due=buffer_post.free_slot(now,busy)
+        due=buffer_post.free_slot(now + buffer_post.SOON, busy, spacing=buffer_post.RESULT_SPACING)
         out.append((guid,'receipt',caption(play),due,guid.replace(':','-').lower()));busy.append(due)
     return out
 

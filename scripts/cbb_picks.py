@@ -165,7 +165,7 @@ def plans(now,log_book,root=STORE,reserved=()):
         if not original:continue
         guid=result_key(p)
         if any(e['id']==guid for e in log_book.get('posts',[])):continue
-        due=buffer_post.free_slot(now,busy)
+        due=buffer_post.free_slot(now + buffer_post.SOON, busy, spacing=buffer_post.RESULT_SPACING)
         result.append((guid,'receipt',result_text(p),due,guid.replace(':','-').lower()));busy.append(due)
     return result
 
