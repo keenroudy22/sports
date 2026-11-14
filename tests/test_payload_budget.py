@@ -17,6 +17,7 @@ class PayloadBudgetTests(unittest.TestCase):
         for name in payload_budget.SHELL_FILES:
             (root / name).write_bytes(b'ok')
         (root / 'app-more.js').write_bytes(b'ok')
+        (root / 'app-player.js').write_bytes(b'ok')
         (root / 'app-games.js').write_bytes(b'ok')
         (root / 'app-kvb.js').write_bytes(b'ok')
         app = root / 'data/app'

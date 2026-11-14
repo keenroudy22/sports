@@ -40,7 +40,7 @@ def stage(root, workspace):
     # The site build verifies the lazy-bundle content fingerprint before writing
     # generated payloads.  Stage the source files that establish that
     # contract without copying any generated app data.
-    for name in ('app.js', 'app-more.js', 'app-games.js', 'app-kvb.js'):
+    for name in ('app.js', 'app-more.js', 'app-player.js', 'app-games.js', 'app-kvb.js'):
         source = root / 'site' / name
         if source.is_file():
             target = snapshot / 'site' / name

@@ -14,6 +14,7 @@ SITE = ROOT / 'site'
 LIMITS = {
     'shell-gzip': 92 * 1024,
     'lazy-more-gzip': 32 * 1024,
+    'lazy-player-gzip': 32 * 1024,
     'lazy-games-gzip': 32 * 1024,
     'lazy-kvb-gzip': 16 * 1024,
     'kvb': 32 * 1024,
@@ -52,7 +53,8 @@ def check(site=SITE):
     if shell > LIMITS['shell-gzip']:
         issues.append(f'shell-gzip:{shell}>{LIMITS["shell-gzip"]}')
     lazy = {}
-    for key, name in (('lazy-more-gzip', 'app-more.js'), ('lazy-games-gzip', 'app-games.js'), ('lazy-kvb-gzip', 'app-kvb.js')):
+    for key, name in (('lazy-more-gzip', 'app-more.js'), ('lazy-player-gzip', 'app-player.js'),
+                      ('lazy-games-gzip', 'app-games.js'), ('lazy-kvb-gzip', 'app-kvb.js')):
         path = site / name
         lazy[key] = 0
         if not path.is_file():
@@ -100,7 +102,8 @@ def check(site=SITE):
             warning = size_warning(f'trend-shard:{path.name}', path.stat().st_size, LIMITS['trend-shard'])
             if warning:
                 warnings.append(warning)
-    return {'shellGzip': shell, 'lazyMoreGzip': lazy['lazy-more-gzip'], 'lazyGamesGzip': lazy['lazy-games-gzip'], 'lazyKvbGzip': lazy['lazy-kvb-gzip'],
+    return {'shellGzip': shell, 'lazyMoreGzip': lazy['lazy-more-gzip'], 'lazyPlayerGzip': lazy['lazy-player-gzip'],
+            'lazyGamesGzip': lazy['lazy-games-gzip'], 'lazyKvbGzip': lazy['lazy-kvb-gzip'],
             'issues': issues, 'warnings': warnings}
 
 

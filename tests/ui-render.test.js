@@ -6,11 +6,13 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const source = fs.readFileSync('site/app.js', 'utf8');
 const moreSource = fs.readFileSync('site/app-more.js', 'utf8');
+const playerSource = fs.readFileSync('site/app-player.js', 'utf8');
 const gamesSource = fs.readFileSync('site/app-games.js', 'utf8');
 
 test('production JavaScript parses as a standalone browser script', () => {
   assert.doesNotThrow(() => new vm.Script(source, { filename: 'site/app.js' }));
   assert.doesNotThrow(() => new vm.Script(moreSource, { filename: 'site/app-more.js' }));
+  assert.doesNotThrow(() => new vm.Script(playerSource, { filename: 'site/app-player.js' }));
   assert.doesNotThrow(() => new vm.Script(gamesSource, { filename: 'site/app-games.js' }));
 });
 
@@ -24,6 +26,19 @@ test('secondary pages load on demand and stay out of the first-load shell', () =
   assert.match(moreSource, /views\.record = async/);
   assert.match(moreSource, /views\.more = async/);
   assert.doesNotMatch(source, /VIEWS\.record = async/);
+});
+
+test('player pages and basketball research use their own fingerprinted bundle', () => {
+  const html = fs.readFileSync('site/index.html', 'utf8');
+  assert.doesNotMatch(html, /<script[^>]+app-player\.js/);
+  const hash = crypto.createHash('sha256').update(playerSource).digest('hex').slice(0, 12);
+  assert.ok(source.includes(`const PLAYER_ASSET = 'app-player.js?v=sha256-${hash}'`));
+  for (const view of ['player', 'basketballPlayers', 'basketballMilestones']) {
+    const call = new RegExp(`ensurePlayer\\(\\)\\)\\.${view}\\(`);
+    assert.match(source, call);
+    assert.ok(playerSource.includes(`views.${view} = async`));
+    assert.ok(!moreSource.includes(`views.${view} = async`));
+  }
 });
 
 test('Games pages load on demand from their own fingerprinted bundle', () => {
@@ -98,7 +113,7 @@ test('replacement UI keeps the owner-mandated wording and shared labels', () => 
 });
 
 test('suspect player projections and prices have no ranked board row or profile chance', () => {
-  const more = fs.readFileSync('site/app-more.js', 'utf8');
+  const more = playerSource;
   assert.match(source, /filter\(r => !r\.roleSuspect && !r\.priceSuspect\)/);
   assert.doesNotMatch(source, /Lines under review|Projection under review/);
   assert.match(more, /const held = availabilityHeld \|\| projectionReview \|\| Boolean\(heldRow\)/);
@@ -171,7 +186,7 @@ test('mobile navigation leads with bettor tasks instead of internal research cat
 });
 
 test('player result charts and edge sports stay inside phone cards', () => {
-  const more = fs.readFileSync('site/app-more.js', 'utf8');
+  const more = playerSource;
   const research = fs.readFileSync('site/research.css', 'utf8');
   assert.match(more, /\.player-board \.kt-chart \.kt-bars,\s+\.player-board \.kt-chart \.kt-x \{ width: 100%; grid-auto-columns: minmax\(0,1fr\); gap: 4px; \}/);
   assert.match(more, /\.player-board \.kt-chart \.kt-x \{ width: 100%; grid-auto-columns: minmax\(0,1fr\); gap: 4px; \}/);

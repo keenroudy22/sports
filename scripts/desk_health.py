@@ -38,6 +38,7 @@ COHORT_OUTCOMES = ('confirmed', 'recordedFailure', 'overdueUnconfirmed', 'pendin
 COHORT_EXCLUSIONS = ('withheld', 'cancelled', 'unknownEligibility')
 PAYLOAD_PATHS = {
     'lazy-more-gzip': 'site/app-more.js',
+    'lazy-player-gzip': 'site/app-player.js',
     'today': 'site/data/app/today.json',
     'lines-NFL': 'site/data/app/lines-NFL.json',
     'lines-CFB': 'site/data/app/lines-CFB.json',

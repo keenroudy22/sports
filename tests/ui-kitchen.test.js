@@ -9,7 +9,7 @@ const C = require('../site/core.js');
 globalThis.KRCore = C;
 const { model: M } = require('../site/app.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
-const moreSource = fs.readFileSync('site/app-more.js', 'utf8');
+const playerSource = fs.readFileSync('site/app-player.js', 'utf8');
 
 test('teamPanel matches ticket_kit.team_panel for every stored NFL and college colour pair', () => {
   const fixture = JSON.parse(fs.readFileSync('tests/fixtures/team-panels.json', 'utf8'));
@@ -63,7 +63,7 @@ test('a settled slip prints the margin only when it agrees with the graded resul
   assert.equal(M.resultLine({ result: 'win' }), '');
 });
 
-/* The player page runs from the lazy bundle; load both files in one browser-shaped sandbox. */
+/* The player page runs from the player bundle; load both files in one browser-shaped sandbox. */
 const KEYS = ['cmp', 'att', 'passYds', 'passTD', 'int', 'sacks', 'car', 'rushYds', 'rushTD', 'rushLong', 'targets', 'rec', 'recYds', 'recTD', 'recLong',
   'rzTgt', 'i10Tgt', 'rzCar', 'i10Car', 'i5Car', 'scrambles', 'fumLost', 'fgm', 'fga', 'xpm', 'kPts', 'snaps', 'snapPct'];
 const row = (event, date, opp, home, stats) => [event, date, 2026, 1, 2, '2229', opp, home, ...KEYS.map(k => stats[k] ?? null)];
@@ -99,7 +99,7 @@ const playerPage = async (held, change = null, league = 'CFB', stat = null, core
     console, URL, URLSearchParams, Intl, Date: FixedDate, Math, Map, Set, Promise, JSON, setTimeout, clearTimeout, setInterval, clearInterval };
   sandbox.globalThis = sandbox; sandbox.self = sandbox; sandbox.window = sandbox;
   vm.runInNewContext(source, sandbox, { filename: 'site/app.js' });
-  vm.runInNewContext(moreSource, sandbox, { filename: 'site/app-more.js' });
+  vm.runInNewContext(playerSource, sandbox, { filename: 'site/app-player.js' });
   const api = sandbox.module.exports;
   const params = [stat ? `stat=${stat}` : '', query].filter(Boolean).join('&');
   return api.views.player(api.model.resolve(`#player/${league}/4870883${params ? '?' + params : ''}`));
@@ -336,7 +336,7 @@ test('held words are shared by the Today ticket, the play page and the player pa
   assert.deepEqual(M.holdOf([{ roleSuspect: true, priceSuspect: true, roleHold: 'qb' }]), { kind: 'qb' });
   assert.deepEqual(M.holdOf([{ priceSuspect: true }]), { kind: 'price' });
   assert.equal(M.holdOf([{ odds: -110 }]), null);
-  assert.match(moreSource, /heldWords\(holdOf\(pricedRows\)/, 'the player page uses the same words');
+  assert.match(playerSource, /heldWords\(holdOf\(pricedRows\)/, 'the player page uses the same words');
 });
 
 test('the split panel never draws two teams of one hue as one slab', () => {

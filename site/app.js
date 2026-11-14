@@ -1567,12 +1567,12 @@
       <div class="grow"><label class="sr" for="q">Search</label><input id="q" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off"></div></div>`;
     if (basketballEdgeView && state.league !== 'ALL') return researchHead(route.mode, true) + marketToolbar + await basketballEdges();
     if (state.league === 'NBA') return route.mode === 'players'
-      ? researchHead(route.mode, route.edges) + await (await ensureMore()).basketballPlayers({ ...route, league: 'NBA' })
+      ? researchHead(route.mode, route.edges) + await (await ensurePlayer()).basketballPlayers({ ...route, league: 'NBA' })
       : route.mode === 'milestones'
-        ? researchHead(route.mode, route.edges) + await (await ensureMore()).basketballMilestones({ ...route, league: 'NBA' })
+        ? researchHead(route.mode, route.edges) + await (await ensurePlayer()).basketballMilestones({ ...route, league: 'NBA' })
         : researchHead(route.mode, route.edges) + await (await ensureGames()).nbaToday({ research: true, embedded: true });
-    if (state.league === 'CBB' && route.mode === 'milestones') return researchHead(route.mode, route.edges) + await (await ensureMore()).basketballMilestones({ ...route, league: 'CBB' });
-    if (state.league === 'CBB' && route.mode === 'players') return researchHead(route.mode, route.edges) + await (await ensureMore()).basketballPlayers({ ...route, league: 'CBB' });
+    if (state.league === 'CBB' && route.mode === 'milestones') return researchHead(route.mode, route.edges) + await (await ensurePlayer()).basketballMilestones({ ...route, league: 'CBB' });
+    if (state.league === 'CBB' && route.mode === 'players') return researchHead(route.mode, route.edges) + await (await ensurePlayer()).basketballPlayers({ ...route, league: 'CBB' });
     if (state.league === 'CBB' && route.mode === 'lines') return researchHead(route.mode, route.edges) + await (await ensureGames()).cbbToday({ embedded: true });
     const today = await get('app/today.json');
     indexGames(today);
@@ -2123,10 +2123,11 @@
 
   /* ---------- Lazy bundles ---------- */
   /* Record, More, player and Games pages are not part of the first paint. Each bundle is one fingerprinted file. */
-  const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
+  const MORE_VIEW_NAMES = ['record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-cecacc563a61';
+  const MORE_ASSET = 'app-more.js?v=sha256-f6ee7cd5eb09';
+  const PLAYER_ASSET = 'app-player.js?v=sha256-72b3d5f38514';
   const GAMES_ASSET = 'app-games.js?v=sha256-2e9c3b366c29';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
   const RESEARCH_CSS = 'research.css?v=sha256-e15b02c3446c';
@@ -2142,6 +2143,7 @@
   const gamesContext = (overrides = {}) => moreContext({ setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican,
     boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, ticketButton, resultLine, luminance, ...overrides });
   const BUNDLES = { more: { asset: MORE_ASSET, global: 'KRMore', context: moreContext, word: 'More pages' },
+    player: { asset: PLAYER_ASSET, global: 'KRPlayer', context: moreContext, word: 'Player research' },
     games: { asset: GAMES_ASSET, global: 'KRGames', context: gamesContext, word: 'Games pages' },
     kvb: { asset: KVB_ASSET, global: 'KRKvb', context: () => moreContext({ historyChart, pctText }), word: 'Kook vs. Book' } };
   const ensureBundle = key => {
@@ -2177,6 +2179,7 @@
     return b.loading;
   };
   const ensureMore = () => ensureBundle('more'), ensureGames = () => ensureBundle('games'), ensureKvb = () => ensureBundle('kvb');
+  const ensurePlayer = () => ensureBundle('player');
   MORE_VIEW_NAMES.forEach(name => { VIEWS[name] = async route => (await ensureMore())[name](route); });
   GAMES_VIEW_NAMES.forEach(name => { VIEWS[name] = async route => (await ensureGames())[name](route); });
   /* Games data does not wait for its bundle either. */
@@ -2188,7 +2191,7 @@
       quiet(get(`app/players/${route.league}.json`).then(index => get(`app/players/${route.league}/${C.shardOf(route.id, index.shards)}.json`)));
       [teamDirectory(route.league), get('app/today.json'), lineData(route.league)].forEach(quiet);
     }
-    return (await ensureMore()).player(route);
+    return (await ensurePlayer()).player(route);
   };
 
   /* =====================================================================

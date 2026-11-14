@@ -9,6 +9,7 @@ const L = require('../site/live.js');
 const P = require('../site/personal.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
 const moreSource = fs.readFileSync('site/app-more.js', 'utf8');
+const playerSource = fs.readFileSync('site/app-player.js', 'utf8');
 
 const loadBrowserApi = () => {
   const sandbox = {
@@ -23,7 +24,8 @@ const loadBrowserApi = () => {
   sandbox.window = sandbox;
   vm.runInNewContext(source, sandbox, { filename: 'site/app.js' });
   vm.runInNewContext(moreSource, sandbox, { filename: 'site/app-more.js' });
-  return { api: sandbox.module.exports, factory: sandbox.KRMore };
+  vm.runInNewContext(playerSource, sandbox, { filename: 'site/app-player.js' });
+  return { api: sandbox.module.exports, factory: ctx => ({ ...sandbox.KRMore(ctx), ...sandbox.KRPlayer(ctx) }) };
 };
 
 test('the real app shared interface renders every lazy view with fixture data', async () => {
