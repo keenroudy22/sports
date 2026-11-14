@@ -35,13 +35,34 @@ def public_payloads(data):
     return overview, board
 
 
+# Full quote identities and the fields used by matchup tables, search and charts.
+MATCHUP_PROP_FIELDS = ('eventId', 'athleteId', 'name', 'team', 'teamName', 'teamAbbr',
+                       'kickoff', 'stat', 'statName', 'line', 'book', 'over', 'under',
+                       'sourceAt', 'availabilityReportedAt', 'hold', 'side', 'favorite')
+MATCHUP_PROP_DETAIL = {
+    'projection': ('value', 'minutes', 'low', 'high', 'window'),
+    'currentRole': ('games', 'minutes'),
+    'last5': ('hits', 'games'),
+    'last10': ('hits', 'games'),
+}
+
+
+def matchup_prop_row(row):
+    summary = {key: row[key] for key in MATCHUP_PROP_FIELDS if key in row}
+    for key, fields in MATCHUP_PROP_DETAIL.items():
+        value = row.get(key)
+        if isinstance(value, dict):
+            summary[key] = {field: value[field] for field in fields if field in value}
+    return summary
+
+
 def matchup_prop_payloads(props):
     """Group all eligible comparison rows by matchup before the slate-board cap."""
     by_event = defaultdict(list)
     for row in props.get('rows', []):
         event = str(row.get('eventId', ''))
         if event.isascii() and event.isdecimal():
-            by_event[event].append(row)
+            by_event[event].append(matchup_prop_row(row))
     return {event: {'generatedAt': props['generatedAt'], 'rows': rows}
             for event, rows in sorted(by_event.items())}
 

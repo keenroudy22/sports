@@ -38,6 +38,24 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertEqual(board['rows'],rows[:60])
   self.assertEqual(nba_today.matchup_prop_payloads({'generatedAt':'now','rows':rows})['22']['rows'],rows[60:])
   self.assertEqual(len(data['playerProps']['rows']),61)
+ def test_matchup_payload_keeps_public_quote_and_chart_fields(self):
+  row = {'eventId':'11','athleteId':'22','stat':'ast','line':4.5,'side':'under','under':-114,'over':102,
+         'book':'DraftKings','sourceAt':'checked','kickoff':'tip','hold':None,'favorite':True,
+         'photo':'large URL','availabilitySource':'report URL',
+         'projection':{'value':3.9,'minutes':29,'low':1,'high':7,'window':'Last season','rate':.13},
+         'currentRole':{'games':3,'minutes':[29,26,31],'source':'box URL'},
+         'last5':{'hits':2,'games':4,'values':[3,4,6,8]},'last10':{'hits':4,'games':9,'push':0}}
+  copied = json.dumps(row, sort_keys=True)
+  output = nba_today.matchup_prop_payloads({'generatedAt':'now','rows':[row]})['11']['rows'][0]
+  for key in ('eventId','athleteId','stat','line','side','under','over','book','sourceAt','kickoff','hold','favorite'):
+   self.assertEqual(output[key],row[key])
+  self.assertEqual(output['projection'],{'value':3.9,'minutes':29,'low':1,'high':7,'window':'Last season'})
+  self.assertEqual(output['currentRole'],{'games':3,'minutes':[29,26,31]})
+  self.assertEqual(output['last5'],{'hits':2,'games':4})
+  self.assertEqual(output['last10'],{'hits':4,'games':9})
+  self.assertNotIn('photo',output)
+  self.assertNotIn('availabilitySource',output)
+  self.assertEqual(json.dumps(row,sort_keys=True),copied)
  def test_matchup_pairs_validate_independently_without_new_requests(self):
   q={'book':'DraftKings','retrievedAt':boxscores.stamp(NOW),'current':{
    'home':{'spreadLine':-3.5,'spreadPrice':-110,'moneyline':-150},
