@@ -3051,6 +3051,8 @@ def _run(args, now, slot, kinds, status):
                                            sports=sports,cbb_research=cbb_today.build(prep_now))
                 next_day_prep.attach_team_context(prep, prep_now, ROOT/'data'/'nba-capture')
                 next_day_prep.attach_opportunities(prep, prep_now, ROOT/'data'/'nba-capture')
+                next_day_prep.attach_cbb_review_context(
+                    prep, ROOT/'work'/f"cbb-watch-research-{prep['targetDate'].replace('-', '')}.json")
                 boxscores.write_json(ROOT/'work'/'next-day-prep.json',prep)
                 status['nextDayPrepared']={'targetDate':prep['targetDate'],'footballGames':prep['football']['games'],
                                           'cbbGames':prep['cbb']['games'],'cbbWatches':len(prep['cbb']['watch']),

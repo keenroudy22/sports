@@ -1,4 +1,6 @@
 import sys
+import json
+import tempfile
 import unittest
 from datetime import datetime,timezone
 from pathlib import Path
@@ -80,6 +82,33 @@ class PrepTests(unittest.TestCase):
         self.assertTrue(row['planningOnly'])
         self.assertIn('availability',row['holds'][0])
         self.assertFalse(report['releaseReady'])
+
+    def test_dated_cbb_review_context_matches_only_the_same_fixture_and_side(self):
+        now=datetime(2026,11,14,5,tzinfo=timezone.utc)
+        research={'games':[{'id':'CBB-1','kickoff':'2026-11-14T17:00:00Z',
+            'teams':{'home':{'name':'Home'},'away':{'name':'Away'}},
+            'projection':{'margin':7.0},'spreadQuote':{'book':'DraftKings',
+                'observedAt':'2026-11-14T04:55:00Z','homeLine':-3.5,'awayLine':3.5,
+                'homeOdds':-108,'awayOdds':-112}}]}
+        report=prep.prepare({},[],{},{},now,target_date='2026-11-14',cbb_research=research)
+        review={'asOf':'2026-11-14T04:50:00Z','targetDate':'2026-11-14',
+            'planningOnly':True,'releaseReady':False,'games':[{'eventId':'CBB-1',
+                'watchSide':'home','boardWatch':'Home -3.5','reasonToKeepWatching':['Reason'],
+                'countercase':['Risk'],'sources':['https://home.example/release'],
+                'morningHold':'Recheck availability and price.'}]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'review.json';path.write_text(json.dumps(review))
+            self.assertIs(prep.attach_cbb_review_context(report,path),report)
+            row=report['cbb']['watch'][0]
+            self.assertEqual(row['reviewContext']['countercase'],['Risk'])
+            self.assertFalse(row['reviewContext']['admissionReady'])
+            self.assertEqual(report['cbb']['reviewCoverage'],
+                             {'matched':1,'watched':1,'state':'complete'})
+            review['games'][0]['watchSide']='away';path.write_text(json.dumps(review))
+            fresh=prep.prepare({},[],{},{},now,target_date='2026-11-14',cbb_research=research)
+            prep.attach_cbb_review_context(fresh,path)
+            self.assertNotIn('reviewContext',fresh['cbb']['watch'][0])
+            self.assertEqual(fresh['cbb']['reviewCoverage']['state'],'partial')
 
 
     def test_explicit_monday_target_preserves_true_clock_on_both_sides_of_midnight(self):

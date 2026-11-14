@@ -1,7 +1,9 @@
 """Private overnight coverage/watch packet; no future-clock admission or posting."""
 from collections import Counter, defaultdict
 from datetime import date, timedelta
+import json
 import math
+from pathlib import Path
 
 import gates
 
@@ -61,6 +63,54 @@ def cbb_watch_rows(research, target, now):
             continue
     rows.sort(key=lambda row:(-abs(row['gapTowardHome']),row['kickoff'],row['id']))
     return rows[:5]
+
+
+def attach_cbb_review_context(packet, path):
+    """Attach dated, sourced desk notes to matching private CBB watch rows.
+
+    The notes do not refresh the quote, clear availability, or admit a play.
+    A stale date, changed side, malformed source list, or missing countercase is
+    ignored so overnight prose cannot silently follow a different market.
+    """
+    try:
+        review = json.loads(Path(path).read_text())
+    except (OSError, ValueError, TypeError):
+        packet['cbb']['reviewCoverage'] = {'matched': 0, 'watched': len(packet['cbb']['watch']),
+                                           'state': 'unavailable'}
+        return packet
+    if review.get('targetDate') != packet.get('targetDate') or review.get('releaseReady') is not False:
+        packet['cbb']['reviewCoverage'] = {'matched': 0, 'watched': len(packet['cbb']['watch']),
+                                           'state': 'stale-or-unsafe'}
+        return packet
+    indexed = {row.get('eventId'): row for row in review.get('games', [])
+               if isinstance(row, dict) and row.get('eventId')}
+    matched = 0
+    for watch in packet['cbb']['watch']:
+        row = indexed.get(watch.get('id'))
+        side = 'home' if watch.get('gapTowardHome', 0) > 0 else 'away'
+        if not row or row.get('watchSide') != side:
+            continue
+        reasons = row.get('reasonToKeepWatching')
+        counter = row.get('countercase')
+        sources = row.get('sources')
+        hold = row.get('morningHold')
+        if not (isinstance(reasons, list) and reasons and all(isinstance(x, str) and x for x in reasons)
+                and isinstance(counter, list) and counter and all(isinstance(x, str) and x for x in counter)
+                and isinstance(sources, list) and sources and all(isinstance(x, str) and x.startswith('https://') for x in sources)
+                and isinstance(hold, str) and hold):
+            continue
+        watch['reviewContext'] = {
+            'sourceAsOf': review.get('asOf'), 'boardWatch': row.get('boardWatch'),
+            'reasonToKeepWatching': reasons, 'countercase': counter,
+            'sources': sources, 'morningHold': hold,
+            'planningOnly': True, 'admissionReady': False,
+        }
+        matched += 1
+    packet['cbb']['reviewCoverage'] = {
+        'matched': matched, 'watched': len(packet['cbb']['watch']),
+        'state': 'complete' if matched == len(packet['cbb']['watch']) else 'partial',
+    }
+    return packet
 
 
 def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports=None,
@@ -139,6 +189,8 @@ if __name__=='__main__':
                    cbb_research=cbb_today.build(now))
     attach_team_context(report, now, nba_player_props.STORE)
     attach_opportunities(report, now, nba_player_props.STORE)
+    attach_cbb_review_context(
+        report, Path('work') / f"cbb-watch-research-{report['targetDate'].replace('-', '')}.json")
     boxscores.write_json(Path(args.output),report)
     print(json.dumps(dict(path=args.output,targetDate=report['targetDate'],
         footballGames=report['football']['games'],footballPrices=report['football']['pricedRowsByFamily'],
