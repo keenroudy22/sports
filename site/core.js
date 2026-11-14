@@ -976,6 +976,24 @@
   };
   const basketballAvailabilityHold = row => /^(Availability[: ]|Official NBA availability|Official team report|Official report player\/roster identity|Current roster verification|Schedule update needed)/i.test(row?.hold || '');
   const shardOf = (id, shards) => Number(id) % shards;
+  const chartPlayer = async (get, league, id) => {
+    if (!/^\d+$/.test(String(id))) return null;
+    const defaults = { NFL: 32, CFB: 128, NBA: 32, CBB: 64 };
+    const directoryPath = `app/players/${league}.json`;
+    const shardPath = count => `app/players/${league}/${shardOf(id, count)}.json`;
+    const shard = await get(shardPath(defaults[league])).catch(() => null);
+    const data = shard?.players?.[id];
+    const team = shard?.directory?.[id];
+    if (data && Array.isArray(team)) return { data, keys: shard.keys, season: shard.season, team };
+
+    // A chart can load during a deploy with the previous shard format or count.
+    const index = await get(directoryPath);
+    const entry = (index.players || []).find(player => String(player[0]) === String(id));
+    if (!entry) return null;
+    const legacy = shard && index.shards === defaults[league] ? shard : await get(shardPath(index.shards));
+    if (!legacy?.players?.[id]) return null;
+    return { data: legacy.players[id], keys: legacy.keys, season: index.season, team: [entry[3], entry[4]] };
+  };
 
   const deliveryText = (pick, now = Date.now()) => {
     if (pick.historicalImport) return '';
@@ -1017,5 +1035,5 @@
   return { matchupCardExtras, TIER_WORD, RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, basketballAvailabilityHold, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, quarterMatchupOrder, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, nbaTicketLines, compareTicketLeg, ticketText,
-    unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, labelBoardPicks, playerLineHref, nbaMatchupProps, nbaUpcomingProps, nbaPropHistory, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, labelBoardPicks, playerLineHref, nbaMatchupProps, nbaUpcomingProps, nbaPropHistory, chartPlayer, shardOf, BASE };
 });

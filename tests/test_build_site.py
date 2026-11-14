@@ -3,6 +3,7 @@ import sys
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -1116,7 +1117,6 @@ class QuarterTrendsTests(unittest.TestCase):
 
     def test_quarter_manifest_is_invisible_to_previous_full_game_app(self):
         from tempfile import TemporaryDirectory
-        from unittest.mock import patch
         now=datetime(2026,10,29,18,tzinfo=timezone.utc)
         row={'league':'NFL','kickoff':'2026-10-30T00:00:00Z','kind':'milestone',
              'athleteId':'1','stat':'rec','line':1,'history':[{'date':'2026-10-20','value':1}]}
@@ -1152,6 +1152,16 @@ class BasketballPlayerDirectoryTests(unittest.TestCase):
         self.assertAlmostEqual(projection['minutes'], 30.7)
         self.assertIn('per-minute', projection['method'])
         self.assertEqual(index[0][7]['values'], projection['values'])
+
+    def test_chart_shards_include_the_same_team_and_season_as_the_directory(self):
+        index, shards, season = build_site.build_basketball_players(self.games(), 'CBB')
+        with patch.object(build_site, 'write') as write:
+            build_site.write_player_shards('CBB', index, shards, season, build_site.NBA_LOG_KEYS)
+        path, payload = write.call_args.args
+        self.assertEqual(path.parts[-3:], ('players', 'CBB', '37.json'))
+        self.assertEqual(payload['season'], 2027)
+        self.assertEqual(payload['directory'], {'101': index[0][3:5]})
+        self.assertEqual(payload['players'], shards[37])
 
     def test_cbb_projection_holds_thin_and_labels_volatile_roles(self):
         index, thin, _ = build_site.build_basketball_players(self.games(2), 'CBB')

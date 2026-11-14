@@ -904,6 +904,16 @@ def build_nba_players(records):
     return build_basketball_players(records, 'NBA')
 
 
+def write_player_shards(league, index, shards, season, keys):
+    """Include the directory fields a direct player chart needs in each history shard."""
+    directory = {str(player[0]): [player[3], player[4]] for player in index}
+    for shard, players in shards.items():
+        write(OUT / 'players' / league / f'{shard}.json', {
+            'keys': list(keys), 'players': players, 'season': season,
+            'directory': {pid: directory[pid] for pid in players},
+        })
+
+
 def validate_player_coverage(league, charts, index, shards):
     """Every linked matchup-chart athlete with history must have a player page.
 
@@ -2310,8 +2320,7 @@ def build(now=None):
               [pick for pick in picks if pick.get('league') == league], now))
         write(OUT / 'players' / f'{league}.json', {'keys': list(LOG_KEYS), 'shards': SHARDS[league], 'players': index,
                                                    'leaders': leaders, 'season': leader_season})
-        for shard, players in shards.items():
-            write(OUT / 'players' / league / f'{shard}.json', {'keys': list(LOG_KEYS), 'players': players})
+        write_player_shards(league, index, shards, leader_season, LOG_KEYS)
         directory, files = build_teams(league, info['records'], info['team_logs'], info['defense_logs'], teams_meta,
                                        identities, info['current'])
         if league == 'CFB':
@@ -2350,16 +2359,14 @@ def build(now=None):
     nba_index, nba_shards, nba_season = build_nba_players(nba_boxes)
     write(OUT / 'players' / 'NBA.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['NBA'],
                                          'players': nba_index, 'season': nba_season})
-    for shard, players in nba_shards.items():
-        write(OUT / 'players' / 'NBA' / f'{shard}.json', {'keys': list(NBA_LOG_KEYS), 'players': players})
+    write_player_shards('NBA', nba_index, nba_shards, nba_season, NBA_LOG_KEYS)
     cbb_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('cbb-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
     cbb_index, cbb_shards, cbb_season = build_basketball_players(cbb_boxes, 'CBB')
     write(OUT / 'players' / 'CBB.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['CBB'],
                                          'players': cbb_index, 'season': cbb_season,
                                          'projectionNote': 'Research baseline: 60% recent and 40% season per-minute production at recent median minutes. Not a probability or automatic pick.'})
-    for shard, players in cbb_shards.items():
-        write(OUT / 'players' / 'CBB' / f'{shard}.json', {'keys': list(NBA_LOG_KEYS), 'players': players})
+    write_player_shards('CBB', cbb_index, cbb_shards, cbb_season, NBA_LOG_KEYS)
     import shutil as nba_copy
     nba_preview = ROOT / 'design/final/nba-trial-preview.png'
     if nba_preview.exists():

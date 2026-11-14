@@ -3,6 +3,24 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const C = require('../site/core.js');
 
+test('individual charts load only the requested player shard and support the older file format', async () => {
+  const id = '101', player = { name: 'Example Guard', rows: [] };
+  const paths = [];
+  const shard = { keys: ['pts'], season: 2027, players: { [id]: player }, directory: { [id]: ['1', 'AAA'] } };
+  const get = async path => {
+    paths.push(path);
+    return path === 'app/players/CBB.json' ? { season: 2027, shards: 64, players: [[id, 'Example Guard', 'G', '1', 'AAA']] } : shard;
+  };
+  const expected = { data: player, keys: ['pts'], season: 2027, team: ['1', 'AAA'] };
+  assert.deepEqual(await C.chartPlayer(get, 'CBB', id), expected);
+  assert.deepEqual(paths, ['app/players/CBB/37.json']);
+  delete shard.directory;
+  paths.length = 0;
+  assert.deepEqual(await C.chartPlayer(get, 'CBB', id), expected);
+  assert.deepEqual(paths, ['app/players/CBB/37.json', 'app/players/CBB.json']);
+  assert.equal(await C.chartPlayer(get, 'CBB', '33x'), null);
+});
+
 test('new chef picks use their actual two-unit stake without changing legacy Full Sends', () => {
   const base = {id:'new',posted:true,kickoff:'2026-10-20T00:15Z',odds:110,result:'win'};
   const chef={...base,lane:'chef_pick',riskUnits:2};

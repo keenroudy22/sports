@@ -2127,7 +2127,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-f6ee7cd5eb09';
-  const PLAYER_ASSET = 'app-player.js?v=sha256-72b3d5f38514';
+  const PLAYER_ASSET = 'app-player.js?v=sha256-88848595856f';
   const GAMES_ASSET = 'app-games.js?v=sha256-ca361f7f0042';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-1bf6aa0aab20';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
@@ -2193,10 +2193,11 @@
     return (await ensureBundle('footballGame')).game(route);
   };
   VIEWS.player = async route => {
-    if (route && FOOTBALL.includes(route.league) && route.id) {
-      const quiet = x => x && x.catch ? x.catch(() => null) : x;
-      quiet(get(`app/players/${route.league}.json`).then(index => get(`app/players/${route.league}/${C.shardOf(route.id, index.shards)}.json`)));
-      [teamDirectory(route.league), get('app/today.json'), lineData(route.league)].forEach(quiet);
+    if (route?.id) {
+      const league = route.league;
+      const context = FOOTBALL.includes(league)
+        ? [teamDirectory(league), get('app/today.json'), lineData(league)] : [get(`app/${league.toLowerCase()}.json`)];
+      [C.chartPlayer(get, league, route.id), ...context].forEach(request => request.catch(() => null));
     }
     return (await ensurePlayer()).player(route);
   };

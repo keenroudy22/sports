@@ -245,15 +245,13 @@
     `Games ${start + 1}–${start + count} of ${total}`;
   const basketballPlayer = async route => {
     const league = route.league === 'CBB' ? 'CBB' : 'NBA';
-    const index = await get(`app/players/${league}.json`);
-    const entry = (index.players || []).find(player => String(player[0]) === String(route.id));
+    const profile = await C.chartPlayer(get, league, route.id);
     const matchupBack = new RegExp(`^${league}-[0-9]+$`).test(route.game || '') ? route.game : null;
     const back = `<a class="kt-back" href="${matchupBack ? `#game/${esc(matchupBack)}` : `#research/players?sport=${league}`}">‹ ${matchupBack ? 'Matchup' : `${league} player research`}</a>`;
-    if (!entry) return head('', 'Player not found', `No stored ${league} games for this player.`, back);
-    const [shard, basketball] = await Promise.all([
-      get(`app/players/${league}/${C.shardOf(route.id, index.shards)}.json`),
-      get(league === 'NBA' ? 'app/nba.json' : 'app/cbb.json').catch(() => ({ games: [] }))]);
-    const belongs = game => Object.values(game.teams || {}).some(team => String(team.id) === String(entry[3]));
+    if (!profile) return head('', 'Player not found', `No stored ${league} games for this player.`, back);
+    const { data, season: baseSeason, team: [teamId, teamAbbr] } = profile;
+    const basketball = await get(league === 'NBA' ? 'app/nba.json' : 'app/cbb.json').catch(() => ({ games: [] }));
+    const belongs = game => Object.values(game.teams || {}).some(team => String(team.id) === String(teamId));
     const now = Date.now();
     const upcoming = game => (!game.status || game.status === 'scheduled') && Date.parse(game.kickoff) > now;
     const linkedGame = matchupBack && ((basketball.games || []).find(game => game.id === matchupBack)
@@ -263,12 +261,10 @@
         .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
     const next = matchup && upcoming(matchup) ? matchup : null;
     const props = league === 'NBA' && next ? await C.nbaMatchupProps(get, basketball, next.id) : { rows: [] };
-    const data = shard.players[route.id];
-    if (!data) return head('', 'Player not found', `No stored ${league} games for this player.`, back);
     const cutoff = linkedGame?.kickoff && C.dayOf(linkedGame.kickoff);
     // Matchup links show the pregame sample. Stored box rows carry Eastern dates.
     const rows = (data.rows || []).filter(row => !cutoff || row[1] < cutoff);
-    const keys = shard.keys || [];
+    const keys = profile.keys || [];
     const value = (row, stat) => { const i = keys.indexOf(stat); return i < 0 ? null : row[9 + i]; };
     const available = C.POSITION_STATS.G.filter(stat => stat === route.stat || rows.some(row => isNum(value(row, stat))));
     const pkey = `${league}:${route.id}`, carries = route.stat || route.season || route.sample || route.line;
@@ -280,7 +276,7 @@
       state.player.direction = route.direction === 'under' ? 'under' : 'over';
     }
     const stat = available.includes(state.player.stat) ? state.player.stat : available.includes('pts') ? 'pts' : available[0];
-    const season = Number(index.season), scope = state.player.season;
+    const season = Number(baseSeason), scope = state.player.season;
     const seasons = [...new Set(rows.filter(row => row[4] === 2).map(row => Number(row[2])))].sort((a, b) => b - a);
     const regular = rows.filter(row => row[4] === 2 && (scope === 'all' || Number(row[2]) === Number(scope === 'current' ? season : scope)))
       .sort((a, b) => String(a[1]).localeCompare(String(b[1])));
@@ -288,7 +284,7 @@
     const recent = regular.slice(-limit), values = recent.map(row => value(row, stat)).filter(isNum);
     const last5 = regular.slice(-5).map(row => value(row, stat)).filter(isNum);
     const last10 = regular.slice(-10).map(row => value(row, stat)).filter(isNum);
-    const side = matchup && Object.entries(matchup.teams).find(([, team]) => String(team.id) === String(entry[3]));
+    const side = matchup && Object.entries(matchup.teams).find(([, team]) => String(team.id) === String(teamId));
     const opponent = matchup && matchup.teams[side?.[0] === 'home' ? 'away' : 'home'];
     const typedLine = state.player.line !== '' && isNum(Number(state.player.line)) && Number(state.player.line) >= 0 ? Number(state.player.line) : null;
     const selectedSide = state.player.direction === 'under' ? 'under' : 'over';
@@ -318,7 +314,7 @@
     const projection = hold ? null : comparison ? comparison.projection?.value : projectionInfo?.values?.[stat];
     const hits = list => line == null ? { hits: null, games: list.length } : { hits: list.filter(v => dir === 'over' ? v > line : v < line).length, games: list.length };
     const h5 = hits(last5);
-    const team = side ? side[1] : { id: entry[3], abbreviation: entry[4], name: comparison?.teamName || entry[4] };
+    const team = side ? side[1] : { id: teamId, abbreviation: teamAbbr, name: comparison?.teamName || teamAbbr };
     const photoLeague = league === 'NBA' ? 'nba' : 'mens-college-basketball';
     const photo = `https://a.espncdn.com/i/headshots/${photoLeague}/players/full/${encodeURIComponent(route.id)}.png`;
     const metric = PLAYER_LABEL[stat] || 'Player stats';
@@ -350,7 +346,7 @@
     const ladder = thresholds.length ? `<section class="line-lab" aria-labelledby="nba-ladder"><div class="line-lab-head"><div><p class="eyebrow">What-if research</p><h2 id="nba-ladder">Line ladder</h2><p>How often did ${esc(data.name)} ${dir === 'over' ? 'clear' : 'stay below'} nearby numbers?</p></div><span class="line-lab-direction">${esc(dir)}</span></div><table class="line-lab-table"><thead><tr><th>Line</th><th>L5</th><th>L10</th><th>Season</th></tr></thead><tbody>${thresholds.map(threshold => { const count = list => ({hits:list.filter(v => dir === 'over' ? v > threshold : v < threshold).length,games:list.length}); const a=count(last5),b=count(last10),c=count(regular.map(row => value(row,stat)).filter(isNum)); const cell=x=>`<td>${x.games ? Math.round(100*x.hits/x.games)+'%' : '–'}<span>${x.hits}/${x.games}</span></td>`; return `<tr${threshold===line?' class="book"':''}><th>${esc(threshold)}${threshold===line?`<span class="line-lab-tag">${capturedLine != null ? 'Book' : 'Chart'}</span>`:''}</th>${cell(a)}${cell(b)}${cell(c)}</tr>`; }).join('')}</tbody></table><p class="line-lab-note">${isNum(projection) ? `Kook’n projects ${esc(fmt(projection))}. ` : ''}Historical thresholds—not offered alternate prices or probabilities.</p></section>` : '';
     const log = recent.slice().reverse();
     const statCell = (row, key) => { const v = value(row, key); return v == null ? '–' : v; };
-    const hero = `<div class="page-head" style="display:flex;gap:14px;align-items:center;margin-top:28px"><span class="ava xl" style="--tc:#15301F" aria-hidden="true"><img src="${esc(photo)}" alt=""></span><div><p class="eyebrow">${teamMark(team, 'sm', league)} ${esc(team.name || team.displayName || team.abbreviation || entry[4])} · ${esc(data.pos || '')}</p><h1>${esc(data.name)}</h1><p class="sub">${opponent ? `${side[0] === 'home' ? 'vs' : 'at'} ${esc(opponent.name || opponent.displayName || opponent.abbreviation)} · ${esc(whenShort(matchup.kickoff))}` : `${esc(regular.length)} regular-season games recorded`}</p></div></div>`;
+    const hero = `<div class="page-head" style="display:flex;gap:14px;align-items:center;margin-top:28px"><span class="ava xl" style="--tc:#15301F" aria-hidden="true"><img src="${esc(photo)}" alt=""></span><div><p class="eyebrow">${teamMark(team, 'sm', league)} ${esc(team.name || team.displayName || team.abbreviation || teamAbbr)} · ${esc(data.pos || '')}</p><h1>${esc(data.name)}</h1><p class="sub">${opponent ? `${side[0] === 'home' ? 'vs' : 'at'} ${esc(opponent.name || opponent.displayName || opponent.abbreviation)} · ${esc(whenShort(matchup.kickoff))}` : `${esc(regular.length)} regular-season games recorded`}</p></div></div>`;
     const tabs = `<nav class="kt-tabs" aria-label="Stat">${available.map(key => `<button type="button" data-set="pstat:${esc(key)}" aria-pressed="${key === stat}">${esc({pts:'PTS',reb:'REB',ast:'AST',fg3m:'3PM',pra:'PRA',pa:'P+A',pr:'P+R',ra:'R+A',min:'MIN'}[key] || PLAYER_LABEL[key] || key)}</button>`).join('')}</nav>`;
     const seasonSelect = `<label class="sr" for="psea">Season</label><select id="psea" class="select" data-select="playerSeason"><option value="current"${scope === 'current' ? ' selected' : ''}>This season · ${esc(season)}</option>${seasons.filter(x => x !== season).map(x => `<option value="${x}"${String(x) === String(scope) ? ' selected' : ''}>${x}</option>`).join('')}<option value="all"${scope === 'all' ? ' selected' : ''}>All seasons</option></select>`;
     /* A displayed gap is always Kook'n minus the book. Direction belongs in the price and hit-rate rows;
@@ -370,12 +366,11 @@
     if (state.league !== league) state.league = league;
     if (league === 'NBA' || league === 'CBB') return basketballPlayer(route);
     const back = `<a class="kt-back" href="#research/players?pl=${esc(league)}">‹ Research</a>`;
-    const index = await get(`app/players/${league}.json`);
-    const entry = (index.players || []).find(p => String(p[0]) === String(route.id));
-    if (!entry) return head('', 'Player not found', 'No stored games for this player in this league.', back);
-    const [shard, teams, today, lines] = await Promise.all([get(`app/players/${league}/${C.shardOf(route.id, index.shards)}.json`), teamDirectory(league), get('app/today.json'), lineData(league)]);
-    const data = shard.players[route.id];
-    const keys = shard.keys, rows = data.rows, pos = data.pos;
+    const profile = await C.chartPlayer(get, league, route.id);
+    if (!profile) return head('', 'Player not found', 'No stored games for this player in this league.', back);
+    const [teams, today, lines] = await Promise.all([teamDirectory(league), get('app/today.json'), lineData(league)]);
+    const { data, keys, season: baseSeason, team: [teamId, teamAbbr] } = profile;
+    const { rows, pos } = data;
     const quarterByGame = new Map((data.firstQuarter || []).map(r => [String(r.eventId), r.stats || {}]));
     const read = (row, stat) => stat.startsWith('q1_') ? quarterByGame.get(String(row[0]))?.[stat.slice(3)] : C.observedStat(row, keys, stat);
     /* A new player starts fresh, unless the link carried a stat, season or sample. */
@@ -396,16 +391,16 @@
     if (state.player.stat && PLAYER_LABEL[state.player.stat] && !options.includes(state.player.stat)) options.push(state.player.stat);
     const stat = options.includes(state.player.stat) ? state.player.stat : options[0] || (C.POSITION_STATS[pos] || C.POSITION_STATS.WR)[0];
     const isQuarter = stat.startsWith('q1_');
-    const team = ((teams || {}).teams || {})[entry[3]] || { name: entry[4] };
+    const team = ((teams || {}).teams || {})[teamId] || { name: teamAbbr };
     const abbr = id => (((teams || {}).teams || {})[id] || {}).abbr || id;
     const now = Date.now();
-    const next = (today.games || []).filter(g => (!route.game || g.id === route.game) && g.league === league && !g.completed && Date.parse(g.kickoff) > now && [g.home.id, g.away.id].includes(String(entry[3])))
+    const next = (today.games || []).filter(g => (!route.game || g.id === route.game) && g.league === league && !g.completed && Date.parse(g.kickoff) > now && [g.home.id, g.away.id].includes(String(teamId)))
       .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
-    const side = next ? (String(next.home.id) === String(entry[3]) ? 'home' : 'away') : null;
+    const side = next ? (String(next.home.id) === String(teamId) ? 'home' : 'away') : null;
     const nextDetail = next ? await maybe(`app/games/${next.id}.json`) : null;
 
     /* Season and sample: Last 5/10/20 always count inside the chosen season. */
-    const currentSeason = (next && next.season) || index.season || ((teams || {}).defense || {}).season;
+    const currentSeason = (next && next.season) || baseSeason || ((teams || {}).defense || {}).season;
     const seasons = [...new Set(rows.filter(r => r[4] === 2).map(r => Number(r[2])))].sort((a, b) => b - a);
     if (!['current', 'all'].includes(state.player.season) && !seasons.includes(Number(state.player.season))) state.player.season = 'current';
     const scope = state.player.season, win = state.player.window;
@@ -483,9 +478,9 @@
     const colours = mine ? teamPanel(mine.color, mine.alt) : team.color ? teamPanel(team.color) : HOUSE;
     const photo = HEADSHOT[league] ? HEADSHOT[league](route.id) : null, img = photo ? `<img src="${esc(photo)}" alt="">` : '';
     const spread = next && next.market && isNum(Number(next.market.spread)) && next.market.spread !== null ? (side === 'home' ? 1 : -1) * Number(next.market.spread) : null;
-    const hero = `<section class="kt-hero kt-order" style="${panelVars(colours)}" aria-label="${esc(`${data.name}, ${team.name || entry[4] || ''} ${pos || ''}`)}">
-      <div class="kt-panel">${photo ? `<div class="kt-ph" aria-hidden="true">${img}</div>` : ''}<span class="kt-logo" aria-hidden="true">${logoImg({ ...team, id: entry[3] }, league)}</span>
-      <p class="kt-kick"><a href="#team/${esc(league)}/${esc(entry[3])}">${esc(team.abbr || team.name || entry[4] || '')}</a> ${esc(pos || '')} · ${thisSeason.length} game${thisSeason.length === 1 ? '' : 's'}</p>
+    const hero = `<section class="kt-hero kt-order" style="${panelVars(colours)}" aria-label="${esc(`${data.name}, ${team.name || teamAbbr || ''} ${pos || ''}`)}">
+      <div class="kt-panel">${photo ? `<div class="kt-ph" aria-hidden="true">${img}</div>` : ''}<span class="kt-logo" aria-hidden="true">${logoImg({ ...team, id: teamId }, league)}</span>
+      <p class="kt-kick"><a href="#team/${esc(league)}/${esc(teamId)}">${esc(team.abbr || team.name || teamAbbr || '')}</a> ${esc(pos || '')} · ${thisSeason.length} game${thisSeason.length === 1 ? '' : 's'}</p>
       <h1 class="kt-name" style="--name-size:${nameSize(data.name, 56)}px">${esc(data.name)}</h1>
       <p class="kt-meta">${next ? `<span class="kt-discs">${disc(mine || team, league)}${disc(opp, league)}</span><span><b>${side === 'home' ? 'vs' : 'at'} ${esc(opp.name)}</b>${esc(ticketWhen(next.kickoff))}${spread != null ? `, ${esc(team.abbr || '')} ${esc(minus(`${spread > 0 ? '+' : ''}${spread}`))}` : ''}</span>` : '<span>No game scheduled in the window</span>'}</p></div>
       ${photo ? `<div class="kt-ph kt-photo" aria-hidden="true">${img}</div>` : ''}</section>`;
