@@ -42,7 +42,9 @@ class EditorTests(unittest.TestCase):
         self.assertIn('FanDuel -110 captured', rows[0]['text'])
         self.assertEqual(len(rows), 1, 'one note per game on Today')
         self.assertEqual(ask.call_count, 1)
-        self.assertEqual(ask.call_args.kwargs['timeout'], 180)
+        self.assertEqual(ask.call_args.kwargs['timeout'], 45)
+        self.assertLessEqual(ask.call_args.kwargs['timeout'], 45,
+                             'optional homepage work must not hold the desk lock for minutes')
         self.assertEqual(ask.call_args.kwargs['kind'], 'homepage-editor')
 
     def test_bad_ids_or_model_failure_cannot_publish(self):

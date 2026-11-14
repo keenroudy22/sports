@@ -13,6 +13,12 @@ from pathlib import Path
 
 import gates
 import llm
+
+
+# This optional selector runs after official scheduling but still holds the
+# shared desk lock. A cold or unhealthy local model must not occupy that lock
+# through the next delivery worker.
+EDITOR_TIMEOUT_SECONDS = 45
 import sports_refresh
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -126,7 +132,7 @@ def select(rows, ask=None):
               'These notes are not bets or official plays.')
     try:
         result = (ask or llm.draft_json)(prompt, json.dumps(rows), schema, max_tokens=100,
-                                       timeout=180, num_ctx=8192, kind='homepage-editor')
+                                       timeout=EDITOR_TIMEOUT_SECONDS, num_ctx=8192, kind='homepage-editor')
         ids = result.get('stories') if isinstance(result, dict) else None
         if not isinstance(ids, list) or not 1 <= len(ids) <= 3 or any(not isinstance(k, str) or k not in facts for k in ids):
             return None
