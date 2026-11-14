@@ -3601,7 +3601,9 @@ def release_private(now, log=log, only=None, review_only=False):
         settings = typefully_backup.config(CONF)
         if existing.get('typefullyDelivery') and not review_only:
             if existing.get('sentAt') or (settings and typefully_backup.deliver(
-                    existing, log_book, settings, now, x_post.save_log)):
+                    existing, log_book, settings, now, x_post.save_log,
+                    media_url=existing.get('bufferImage') or
+                    buffer_post.card_url(existing.get('cardKey') or key))):
                 commit_log(now, push=True)
                 release_queue.remove(CONF, key)
                 released.append(key)
@@ -3815,7 +3817,9 @@ def release_private(now, log=log, only=None, review_only=False):
         if fallback and not row.get('bufferPostId'):
             if due <= now + post_windows.SOON and typefully_backup.deliver(
                     entry, log_book, settings, now, x_post.save_log, text=text,
-                    expires=gates.when(pick['expiresAt'])):
+                    expires=gates.when(pick['expiresAt']),
+                    media_url=entry.get('bufferImage') or
+                    buffer_post.card_url(entry.get('cardKey') or key)):
                 commit_log(now, push=True)
                 release_queue.remove(CONF, key)
                 released.append(key)
@@ -3951,8 +3955,10 @@ def retry_typefully_basketball(now, book, settings):
         if kind not in ('buffer:nba-trial', 'buffer:cbb-pick') or entry.get('sentAt'):
             continue
         if entry.get('typefullyDelivery'):
-            if entry['typefullyDelivery'].get('draftId'):
-                typefully_backup.deliver(entry, book, settings, now, x_post.save_log)
+            typefully_backup.deliver(
+                entry, book, settings, now, x_post.save_log,
+                media_url=entry.get('bufferImage') or
+                buffer_post.card_url(entry.get('cardKey') or entry['id']))
             continue
         guid = entry['id']
         if not basketball_backup_due(entry, now):
@@ -3985,7 +3991,9 @@ def retry_typefully_basketball(now, book, settings):
                    min(kickoff - timedelta(minutes=15),
                        gates.when(play['quote']['checkedAt']) + timedelta(hours=1)))
         if typefully_backup.deliver(entry, book, settings, now, x_post.save_log,
-                                   text=entry['queuedText'], expires=expires):
+                                   text=entry['queuedText'], expires=expires,
+                                   media_url=entry.get('bufferImage') or
+                                   buffer_post.card_url(entry.get('cardKey') or guid)):
             break
 
 
@@ -3995,7 +4003,7 @@ def basketball_backup_due(entry, now):
                                        'webDelivery', 'error', 'cancelledAt', 'deletedAt')):
         return False
     if entry.get('typefullyDelivery'):
-        return bool(entry['typefullyDelivery'].get('draftId'))
+        return True
     discord = entry.get('discord') or {}
     return bool(discord.get('state') == 'sent' and discord.get('sentAt')
                 and entry.get('dueAt') and gates.when(entry['dueAt']) <= now
@@ -4004,6 +4012,7 @@ def basketball_backup_due(entry, now):
 
 def retry_typefully_recap(now, log_book, settings):
     """Send the prior day's settled recap through the reserved backup."""
+    import buffer_post
     import receipts
     import typefully_backup
     import x_post
@@ -4016,12 +4025,14 @@ def retry_typefully_recap(now, log_book, settings):
     entry = next((row for row in log_book['posts'] if row.get('id') == key), None)
     if entry is not None:
         if entry.get('typefullyDelivery') and not entry.get('sentAt'):
-            typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log)
+            typefully_backup.deliver(
+                entry, log_book, settings, now, x_post.save_log,
+                media_url=buffer_post.card_url(entry.get('cardKey') or entry['id']))
             return
         if not entry.get('discordRecapPrepared') or entry.get('sentAt'):
             return
     recap = next((row for row in receipts.ready(ctx.first, ctx.latest, games, log_book, now)
-                  if row['key'] == key and row['due'] <= now < row['stale']), None)
+                  if row['key'] == key and now < row['stale']), None)
     if not recap:
         return
     caption = recap['text'].rstrip() + '\n\n21+ only'
@@ -4033,11 +4044,12 @@ def retry_typefully_recap(now, log_book, settings):
                  'socialAgeVersion': AGE_VERSION, 'cardKey': recap['card'],
                  'fullDailyRecap': True, 'discordRecapPrepared': True,
                  'discord': {'state': 'pending', 'text': caption, 'destination': 'plays',
-                             'readyAt': gates.stamp(recap['due'])}}
+                             'readyAt': gates.stamp(now)}}
         log_book['posts'].append(entry)
         x_post.save_log(log_book)
     typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log,
-                             text=caption, expires=recap['stale'])
+                             text=caption, expires=recap['stale'],
+                             media_url=buffer_post.card_url(recap['card']))
 
 
 def retry_stored_results(now, log_book):
