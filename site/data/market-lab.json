@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 306,
-   "gamesQuoted": 321,
-   "moneylineSnapshots": 1450,
+   "gamesGraded": 307,
+   "gamesQuoted": 322,
+   "moneylineSnapshots": 1465,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 267,
-     "gamesQuoted": 280,
+     "gamesGraded": 268,
+     "gamesQuoted": 281,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1450,
+   "snapshots": 1465,
    "status": "capturing",
-   "totalSnapshots": 1450
+   "totalSnapshots": 1465
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "NSH",
+    "id": "27",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nsh.png",
+    "name": "Nashville Predators",
+    "shortName": "Predators"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401892707",
+   "gradedAt": "2026-11-14T16:25:13Z",
+   "home": {
+    "abbreviation": "VGK",
+    "id": "37",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/vgk.png",
+    "name": "Vegas Golden Knights",
+    "shortName": "Golden Knights"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-11-14T03:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final/SO",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "NYR",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final/OT",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "VAN",
-    "id": "22",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
-    "name": "Vancouver Canucks",
-    "shortName": "Canucks"
-   },
-   "awayScore": 2,
-   "gameId": "NHL-401892610",
-   "gradedAt": "2026-10-30T15:25:11Z",
-   "home": {
-    "abbreviation": "SJ",
-    "id": "18",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/sj.png",
-    "name": "San Jose Sharks",
-    "shortName": "Sharks"
-   },
-   "homeScore": 3,
-   "kickoff": "2026-10-30T02:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-14T14:26:30Z"
+ "updatedAt": "2026-11-14T16:25:13Z"
 }
