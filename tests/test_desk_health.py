@@ -191,6 +191,34 @@ class DeskHealthTests(unittest.TestCase):
         self.assertEqual(result['posted'], 1)
         self.assertEqual(result['missing'], 0)
         self.assertEqual(result['maxMinutesFromFinalToPost'], 120.0)
+
+    def test_basketball_individual_finals_measure_only_matching_confirmed_results(self):
+        import cbb_picks
+        import nba_results
+
+        def pick(id, result='win', actual=8):
+            return dict(id=id, posted=True, result=result, actual=actual, settledAt='2026-10-05T13:00:00Z')
+
+        def original(id):
+            return dict(id=id, tweetId='1234567890123456789', sentAt='2026-10-05T11:00:00Z')
+
+        timely, late, lost = pick('NBA-good'), pick('NBA-late','void',None), pick('NBA-lost','loss',3)
+        queued, blocked = pick('CBB-queued','push'), pick('CBB-blocked')
+        posts = [original(p['id']) for p in (timely, late, lost, queued)]
+        posts += [
+            dict(original(nba_results.key(timely)), sentAt='2026-10-05T13:30:00Z'),
+            dict(original(nba_results.key(late)), sentAt='2026-10-05T13:40:00Z'),
+            dict(original(nba_results.key(lost)), sentAt='2026-10-05T13:20:00Z', deletedAt='2026-10-05T13:22:00Z'),
+            dict(original(nba_results.key(dict(lost, actual=4))), sentAt='2026-10-05T13:20:00Z'),
+            dict(id=cbb_picks.result_key(queued), bufferPostId='scheduled', dueAt='2026-10-05T14:07:00Z'),
+            dict(original('receipt:day:2026-10-05'), sentAt='2026-10-05T13:25:00Z', resultPickIds=[lost['id'], blocked['id']]),
+        ]
+        record = {'nbaPicks': [timely, late, lost], 'cbbPicks': [queued, blocked]}
+        nba, cbb = (H.basketball_final_timeliness(record, posts, NOW)[league] for league in ('NBA','CBB'))
+        self.assertEqual((nba['within30Minutes'], nba['over30Minutes'], nba['missing']), (1,1,1))
+        self.assertEqual((cbb['pendingScheduled'], cbb['quoteBlocked'], cbb['missing']), (1,1,0))
+        self.assertEqual(H.basketball_final_timeliness({}, [], NOW)['NBA']['state'], 'unknown')
+
     def write(self, root, name, value):
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)

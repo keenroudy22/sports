@@ -432,6 +432,50 @@ def result_timeliness(record, posts, now):
             'maxMinutesFromFinalToPost': max(delays) if delays else None}
 
 
+def basketball_final_timeliness(record, posts, now):
+    """Measure individual Finals by the same IDs used by the NBA and CBB publishers."""
+    import buffer_post
+    import cbb_picks
+    import nba_results
+
+    by_id = {}
+    for post in posts:
+        if isinstance(post, dict) and post.get('id'):
+            by_id.setdefault(post['id'], []).append(post)
+    views = {}
+    for league, field, result_key in (('NBA', 'nbaPicks', nba_results.key), ('CBB', 'cbbPicks', cbb_picks.result_key)):
+        picks = record.get(field) if isinstance(record, dict) else None
+        counts = dict(state='available' if isinstance(picks, list) else 'unknown',
+                      within30Minutes=0, over30Minutes=0, pendingScheduled=0, missing=0, quoteBlocked=0)
+        views[league] = counts
+        if not isinstance(picks, list):
+            continue
+        for pick in picks:
+            if not isinstance(pick, dict) or not pick.get('posted') or not pick.get('id'):
+                continue
+            settled = moment(pick.get('settledAt'))
+            if not settled or not now - timedelta(hours=72) <= settled <= now:
+                continue
+            if pick.get('result') not in ('win', 'loss', 'push', 'void') or 'actual' not in pick:
+                continue
+            key = result_key(pick)
+            available = [post for post in by_id.get(key, []) if not any(
+                post.get(field) for field in ('cancelledAt', 'deletedAt', 'error'))]
+            sent = [at for post in available if post.get('tweetId') and (at := moment(post.get('sentAt')))
+                    and settled <= at <= now]
+            if sent:
+                bucket = 'within30Minutes' if min(sent) - settled <= timedelta(minutes=30) else 'over30Minutes'
+            elif not buffer_post.quote_tweet_id({'posts': by_id.get(pick['id'], [])}, key):
+                bucket = 'quoteBlocked'
+            elif any(post.get('bufferPostId') and (due := moment(post.get('dueAt')))
+                     and due >= now - timedelta(minutes=15) for post in available):
+                bucket = 'pendingScheduled'
+            else:
+                bucket = 'missing'
+            counts[bucket] += 1
+    return views
+
+
 def delivery_outcome(post, channel, now):
     """Current saved evidence only; never infer an actual publication minute."""
     mirror = post.get('discord')
@@ -631,13 +675,22 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     for field, label in labels.items():
         if counts[field]:
             issue('delivery-' + field, label)
-    result_speed = result_timeliness(read(root / 'site/data/app/record.json'), posts, now)
+    record = read(root / 'site/data/app/record.json')
+    result_speed = result_timeliness(record, posts, now)
+    basketball_finals = basketball_final_timeliness(record, posts, now)
     if result_speed['state'] == 'available' and result_speed['missing']:
         issue('result-post-missing', f"{result_speed['missing']} settled win or near miss with a confirmed original X post has no individual Final in the last 72 hours.")
     if result_speed['state'] == 'available' and result_speed.get('quoteBlocked'):
         issue('result-quote-blocked', f"{result_speed['quoteBlocked']} settled result cannot be quoted because its original X delivery was never confirmed.")
     if result_speed['state'] == 'available' and result_speed['over30Minutes']:
-        issue('result-post-late', f"{result_speed['over30Minutes']} result post took more than 30 minutes from the first verified final.")
+        issue('result-post-late', f"{result_speed['over30Minutes']} football result(s) took more than 30 minutes from the stored final.")
+    for league, finals in basketball_finals.items():
+        for field, suffix, label in (
+                ('missing', 'missing', 'missing an individual Final'),
+                ('over30Minutes', 'late', 'posted over 30 minutes after the stored final'),
+                ('quoteBlocked', 'quote-blocked', 'missing a confirmed original X post')):
+            if finals[field]:
+                issue(f'{league.lower()}-final-{suffix}', f"{finals[field]} {league} result(s) {label}.")
     watch = read(conf / 'live-watch.json')
     pilot = read(conf / 'live-progress.json')
     attempts = pilot.get('attempts') or []
@@ -757,6 +810,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
             'deliveryCohorts': delivery_cohorts(post_book, now),
             'resultTimeliness': result_speed,
+            'basketballFinalTimeliness': basketball_finals,
             'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
             'chosenNotPosted': chosen_not_posted,
             'privateReleases': private_release,
@@ -807,6 +861,13 @@ def markdown(data):
                  f"{speed.get('pendingScheduled', 0)} queued; {speed.get('missing', 0)} missing; "
                  f"max {speed.get('maxMinutesFromFinalToPost') if speed.get('maxMinutesFromFinalToPost') is not None else 'unknown'}. "
                  'Final means the first saved final observation (settledAt).')
+    for league, finals in (data.get('basketballFinalTimeliness') or {}).items():
+        if finals['state'] != 'available':
+            lines.append(f'{league} individual Finals: evidence unavailable.')
+            continue
+        lines.append(f"{league} individual Finals (72h): {finals['within30Minutes']} within 30 minutes, "
+                     f"{finals['over30Minutes']} late, {finals['pendingScheduled']} queued, "
+                     f"{finals['missing']} missing, {finals['quoteBlocked']} missing an original X post.")
     cohorts = data.get('deliveryCohorts') or {}
     lines.append('Distinct delivery cohorts: ' + str(cohorts.get('state', 'unknown')) + '.')
     for cohort in cohorts.get('cohorts') or []:
@@ -944,7 +1005,7 @@ Missing evidence cannot pass.</p></section>'''
 <section><h2>Source observations</h2><p>Age is time since the stored observation, not measured feed latency.</p><div class="scroll"><table><thead><tr><th>Source</th><th>Status</th><th>Observed at</th><th>Age (minutes)</th><th>Required now</th></tr></thead><tbody>{source_rows}</tbody></table></div></section>
 {reliability}
 <section><h2>Delivery evidence · last 48 hours</h2><p>Stored log: {text(data.get('deliveryLogState', 'unknown'))}. Missing evidence is not a successful delivery.</p><table>{rows((label, deliveries.get(key)) for key, label in delivery_labels.items())}</table></section>
-<section><h2>Result speed · last 48 hours</h2><table>{rows([
+<section><h2>Football result speed · last 72 hours</h2><table>{rows([
 ('Eligible wins and near misses', (data.get('resultTimeliness') or {}).get('eligible')),
 ('Posted within 30 minutes', (data.get('resultTimeliness') or {}).get('within30Minutes')),
 ('Over 30 minutes', (data.get('resultTimeliness') or {}).get('over30Minutes')),
@@ -952,6 +1013,12 @@ Missing evidence cannot pass.</p></section>'''
 ('Missing result post', (data.get('resultTimeliness') or {}).get('missing')),
 ('Maximum minutes from final to post', (data.get('resultTimeliness') or {}).get('maxMinutesFromFinalToPost'))])}</table>
 <p>Final means the first durable final observation saved as settledAt; no exact stadium final time is invented.</p></section>
+<section><h2>Basketball individual Finals · last 72 hours</h2><table>{rows(
+    (league, 'Evidence unavailable' if counts['state'] != 'available' else
+     f"{counts['within30Minutes']} on time, {counts['over30Minutes']} late, {counts['pendingScheduled']} queued, "
+     f"{counts['missing']} missing, {counts['quoteBlocked']} missing an original X post")
+    for league, counts in (data.get('basketballFinalTimeliness') or {}).items()
+)}</table></section>
 {cohort_html}
 <section><h2>Stored free odds budget</h2><table>{rows([('Verified stored balance', 'Yes' if budget.get('verifiedFromStoredSnapshot') else 'No'), ('Observed at', budget.get('observedAt')), ('Used', budget.get('used')), ('Remaining', budget.get('remaining'))])}</table></section>
 <section><h2>Local model · last run</h2><table>{rows([('Used', 'Yes' if local.get('usedLastRun') else 'No'), ('Calls', local.get('calls')), ('Failures', local.get('failures')), ('Homepage stories', local.get('homepageStories'))])}</table></section>
