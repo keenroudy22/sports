@@ -435,6 +435,40 @@ def result_timeliness(record, posts, now):
             'maxMinutesFromFinalToPost': max(delays) if delays else None}
 
 
+def basketball_missing_originals(root, posts, now):
+    """Find admitted basketball picks whose original delivery never got a receipt."""
+    import cbb_picks
+    import nba_trial_runtime
+
+    missing = {}
+    leagues = (
+        ('NBA', 'nba-trial', 'buffer:nba-trial', 'nbaPick', nba_trial_runtime.public_rows),
+        ('CBB', 'cbb-picks', 'buffer:cbb-pick', 'cbbPick', cbb_picks.public_rows),
+    )
+    for league, directory, kind, pick_flag, read_plays in leagues:
+        confirmed = set()
+        for entry in posts:
+            if not isinstance(entry, dict) or entry.get('kind') != kind:
+                continue
+            if entry.get(pick_flag) is not True:
+                continue
+            mirror = entry.get('discord') or {}
+            times = [moment(entry.get('sentAt')),
+                     moment(mirror.get('sentAt')) if mirror.get('state') == 'sent' else None]
+            if any(at is not None and at <= now for at in times):
+                confirmed.add(entry.get('id'))
+        for play in read_plays(root / 'data' / directory):
+            admitted = moment(play.get('publishedAt'))
+            kickoff = moment(play.get('kickoff'))
+            pick_id = play.get('id')
+            if (pick_id and kickoff and now - timedelta(hours=72) <= kickoff
+                    and admitted and admitted + timedelta(minutes=30) <= now
+                    and pick_id not in confirmed):
+                missing[pick_id] = {'league': league, 'kickoff': stamp(play['kickoff']),
+                                    'state': 'expired' if kickoff <= now else 'awaiting'}
+    return missing
+
+
 def basketball_final_timeliness(record, posts, now):
     """Measure individual Finals by the same IDs used by the NBA and CBB publishers."""
     import buffer_post
@@ -678,6 +712,14 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     for field, label in labels.items():
         if counts[field]:
             issue('delivery-' + field, label)
+    try:
+        basketball_missing = basketball_missing_originals(root, posts, now)
+    except (OSError, ValueError, TypeError, AttributeError):
+        basketball_missing = None
+        issue('basketball-originals-unavailable', 'Basketball original delivery could not be checked.')
+    if basketball_missing:
+        ids = ', '.join(sorted(basketball_missing))
+        issue('basketball-originals-unconfirmed', f'Basketball picks without an original Discord or X receipt: {ids}.')
     record = read(root / 'site/data/app/record.json')
     result_speed = result_timeliness(record, posts, now)
     basketball_finals = basketball_final_timeliness(record, posts, now)
@@ -814,6 +856,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'deliveryCohorts': delivery_cohorts(post_book, now),
             'resultTimeliness': result_speed,
             'basketballFinalTimeliness': basketball_finals,
+            'basketballMissingOriginals': basketball_missing,
             'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
             'chosenNotPosted': chosen_not_posted,
             'privateReleases': private_release,

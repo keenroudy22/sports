@@ -23,6 +23,29 @@ class DeskHealthTests(unittest.TestCase):
         self.assertTrue(plan[0]['climbResearchWindow'])
         self.assertEqual(plan[-1]['storedUpcomingGames'],{})
 
+    def test_basketball_originals_require_direct_receipts_even_with_a_recap(self):
+        def play(pick_id, minutes=40):
+            return {'id': pick_id, 'publishedAt': (NOW-timedelta(minutes=minutes)).isoformat(),
+                    'kickoff': (NOW-timedelta(minutes=5)).isoformat(), 'result': 'win'}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            posts = [
+                {'id': 'receipt:day:2026-10-05', 'sentAt': NOW.isoformat(), 'resultPickIds': ['missing']},
+                {'id': 'confirmed', 'kind': 'buffer:nba-trial', 'nbaPick': True,
+                 'discord': {'state': 'sent', 'sentAt': NOW.isoformat()}},
+                {'id': 'wrong-kind', 'kind': 'buffer:play', 'sentAt': NOW.isoformat()},
+                {'id': 'college', 'kind': 'buffer:cbb-pick', 'cbbPick': True, 'sentAt': NOW.isoformat()},
+                {'id': 'college-unmarked', 'kind': 'buffer:cbb-pick', 'sentAt': NOW.isoformat()},
+            ]
+            with mock.patch('nba_trial_runtime.public_rows', return_value=[
+                    play('missing'), play('confirmed'), play('wrong-kind'), play('new', 10)]), \
+                 mock.patch('cbb_picks.public_rows', return_value=[play('college'), play('college-unmarked')]):
+                result = H.summary(root, root/'private', root, NOW, {'posts': posts})
+            self.assertEqual(set(result['basketballMissingOriginals']), {'missing', 'wrong-kind', 'college-unmarked'})
+            self.assertEqual(result['basketballMissingOriginals']['missing']['state'], 'expired')
+            self.assertIn('basketball-originals-unconfirmed', {i['code'] for i in result['issues']})
+
     def test_private_delayed_admission_is_not_reported_as_zero_delivery_work(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);self.fixture(root)
