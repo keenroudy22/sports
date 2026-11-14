@@ -117,6 +117,26 @@ test('Under review shows no projection, chance or edge, and quotes only the save
   assert.match(page, /<button type="button" data-set="pstat:passYds" aria-pressed="true">/);
 });
 
+test('Last 20 graphs the full football sample in order on a shared line scale', async () => {
+  const page = await playerPage(false, files => {
+    const player = files[`data/app/players/CFB/${4870883 % 128}.json`].players['4870883'];
+    player.rows = Array.from({ length: 22 }, (_, i) => row(
+      `game-${i}`, `2026-09-${String(i + 1).padStart(2, '0')}`, '58', 1,
+      { att: 30, passYds: i === 2 ? 500 : i < 12 ? 280 : 220 }
+    ));
+  }, 'CFB', 'passYds', C, 'sample=last20&line=261.5&direction=over');
+  const charts = [...page.matchAll(/<figure class="kt-chart".*?<\/figure>/gs)].map(match => match[0]);
+  assert.equal(charts.length, 2);
+  for (const chart of charts) {
+    assert.equal([...chart.matchAll(/class="col"/g)].length, 10);
+    assert.match(chart, /class="line" style="bottom:58\.6px"><span>261\.5<\/span>/);
+  }
+  assert.match(charts[0], /Games 1–10 of 20/);
+  assert.match(charts[0], /10 of 10 over 261\.5/);
+  assert.match(charts[1], /Games 11–20 of 20/);
+  assert.match(charts[1], /0 of 10 over 261\.5/);
+});
+
 test('an unavailable player keeps the reference line and history without presenting a current projection or edge', async () => {
   const page = await playerPage(false, files => {
     files['data/app/games/CFB-1.json'].teams = { home: { injuries: [{

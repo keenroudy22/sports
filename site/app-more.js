@@ -332,6 +332,13 @@
     const top = Math.max(1, ...clean.map(item => Math.max(0, item.value)));
     return `<section class="player-insight wide" aria-labelledby="player-compare"><div class="player-insight-head"><div><p class="eyebrow">Same scale</p><h2 id="player-compare">Prop comparison</h2></div><span>${clean.length} numbers</span></div>${clean.map(item => `<div class="player-compare-row ${esc(item.kind || '')}"><span>${esc(item.label)}</span><div class="player-compare-track" aria-hidden="true"><i style="width:${Math.max(2, Math.min(100, 100 * Math.max(0, item.value) / top)).toFixed(1)}%"></i></div><b>${esc(format(item.value))}</b></div>`).join('')}<p class="player-insight-note">Book and Kook’n numbers are current only when labeled above. Recent averages and opponent allowance are historical context.</p></section>`;
   };
+  const chartWindows = (rows, window) => {
+    if (!rows.length) return [];
+    if (window !== 'last20') return [rows.slice(-10)];
+    return rows.length <= 10 ? [rows] : [rows.slice(0, -10), rows.slice(-10)];
+  };
+  const chartWindowLabel = (start, count, total) =>
+    `Games ${start + 1}–${start + count} of ${total}`;
   const basketballPlayer = async route => {
     const league = route.league === 'CBB' ? 'CBB' : 'NBA';
     const index = await get(`app/players/${league}.json`);
@@ -415,10 +422,16 @@
     const fmt = number => number == null ? '–' : C.statValue(number, stat, Number.isInteger(number) ? 0 : 1);
     const quote = posted ? `<b>Kook’n play:</b> ${esc(dir)} ${esc(line)} at ${esc(oddsText(posted.odds))} ${esc(bookLabel(posted.book))} · ${esc(C.stakeOf(posted))}u`
       : quoteRow ? `<b>${esc(dir === 'over' ? 'Over' : 'Under')} ${esc(line)} ${esc(oddsText(quoteRow[dir]))}</b> at ${esc(bookLabel(quoteRow.book))} · ${quoteStatus.current ? `checked ${esc(ago(quoteRow.sourceAt))}` : 'earlier quote · recheck price'}` : '';
-    const shown = recent.slice(-10), shownValues = shown.map(row => value(row, stat));
-    const top = Math.max(1, line || 0, ...shownValues.filter(isNum));
+    const windows = chartWindows(recent, state.player.window);
+    const top = Math.max(1, line || 0, ...windows.flat().map(row => value(row, stat)).filter(isNum));
+    const multiplePanels = windows.length > 1;
     const result = number => line == null || !isNum(number) ? 'unknown' : number === line ? 'unknown' : dir === 'over' ? (number > line ? 'hit' : 'miss') : (number < line ? 'hit' : 'miss');
-    const chart = shownValues.some(isNum) ? `<figure class="kt-chart" role="img" aria-label="${esc(`${metric}: ${shownValues.map(v => isNum(v) ? v : 'not recorded').join(', ')}${line != null ? ` against ${line}` : ''}`)}"><div class="kt-bars" aria-hidden="true">${shownValues.map(v => `<div class="col"><div class="bar ${result(v)}" style="height:${(Math.max(2, 132 * Math.max(0, v || 0) / top)).toFixed(1)}px"></div></div>`).join('')}${line != null ? `<div class="line" style="bottom:${(132 * line / top).toFixed(1)}px"><span>${esc(line)}</span></div>` : ''}</div><div class="kt-x" aria-hidden="true">${shown.map((row, i) => `<span><em class="${result(shownValues[i])}">${esc(fmt(shownValues[i]))}</em><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b>${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}))}</span>`).join('')}</div><figcaption class="kt-cap">${line == null ? 'Recorded game results.' : `<b>${shownValues.filter(v => result(v) === 'hit').length} of ${shownValues.filter(isNum).length} ${esc(dir)} ${esc(line)} in the games shown.</b> History, not a probability.`}</figcaption></figure>` : '<p class="small muted">No recorded values for this stat in the selected games.</p>';
+    const chart = windows.flat().some(row => isNum(value(row, stat))) ? windows.map((shown, i) => {
+      const shownValues = shown.map(row => value(row, stat));
+      const label = multiplePanels ? chartWindowLabel(i ? windows[0].length : 0, shown.length, recent.length)
+        : recent.length > shown.length ? `Last ${shown.length} of ${recent.length} games` : '';
+      return `<figure class="kt-chart" role="img" aria-label="${esc(`${metric}: ${shownValues.map(v => isNum(v) ? v : 'not recorded').join(', ')}${line != null ? ` against ${line}` : ''}`)}"><div class="kt-bars" aria-hidden="true">${shownValues.map(v => `<div class="col"><div class="bar ${result(v)}" style="height:${(Math.max(2, 132 * Math.max(0, v || 0) / top)).toFixed(1)}px"></div></div>`).join('')}${line != null ? `<div class="line" style="bottom:${(132 * line / top).toFixed(1)}px"><span>${esc(line)}</span></div>` : ''}</div><div class="kt-x" aria-hidden="true">${shown.map((row, i) => `<span><em class="${result(shownValues[i])}">${esc(fmt(shownValues[i]))}</em><b>${row[7] ? 'vs' : '@'} ${esc(row[8] || row[6])}</b>${esc(new Date(`${row[1]}T12:00:00Z`).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}))}</span>`).join('')}</div><figcaption class="kt-cap">${label ? `${esc(label)}. ` : ''}${line == null ? 'Recorded game results.' : `<b>${shownValues.filter(v => result(v) === 'hit').length} of ${shownValues.filter(isNum).length} ${esc(dir)} ${esc(line)} in the games shown.</b> History, not a probability.`}</figcaption></figure>`;
+    }).join('') : '<p class="small muted">No recorded values for this stat in the selected games.</p>';
     const seasonStatValues = regular.map(row => value(row, stat)).filter(isNum);
     const nbaWindow = playerWindowChart({ values: seasonStatValues, line, dir, format: fmt, scopeLabel: scope === 'all' ? 'All' : 'Season' });
     const minuteEntries = regular.slice(-8).map(row => ({ value: value(row, 'min'), label: `${row[7] ? 'vs' : '@'} ${row[8] || row[6]}`, short: row[8] || row[6] }));
@@ -593,14 +606,22 @@
         : '';
     const hitLabel = h && h.n ? `${h[dir]}/${h.n}` : '–';
     const unitFor = STAT_UNITS[isQuarter ? stat.slice(3) : stat] || [String(PLAYER_LABEL[stat] || stat).toUpperCase()];
-    const shown = recent.slice(-10), sv = shown.map(r => read(r, stat));
-    const top = Math.max(...sv.filter(isNum), line || 0) || 1;
+    const windows = chartWindows(recent, win);
+    const top = Math.max(1, line || 0, ...windows.flat().map(row => read(row, stat)).filter(isNum));
+    const multiplePanels = windows.length > 1;
     const res = v => line == null || !isNum(v) ? 'unknown' : C.thresholdResult(v, line, dir, false);
     const md = r => new Date(`${r[1]}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
-    const chart = shown.length ? `<figure class="kt-chart" role="img" aria-label="${esc(`${PLAYER_LABEL[stat] || stat}: ${sv.map(v => isNum(v) ? v : 'not recorded').join(', ')}${line != null ? ` against the ${line} line` : ''}.`)}">
+    const chart = windows.length ? windows.map((shown, i) => {
+      const sv = shown.map(row => read(row, stat));
+      const label = multiplePanels ? chartWindowLabel(i ? windows[0].length : 0, shown.length, recent.length)
+        : recent.length > shown.length ? `Last ${shown.length} of ${recent.length} games shown.` : '';
+      const hits = multiplePanels ? sv.filter(v => res(v) === 'hit').length : h?.[dir];
+      const sample = multiplePanels ? sv.filter(isNum).length : h?.n;
+      return `<figure class="kt-chart" role="img" aria-label="${esc(`${PLAYER_LABEL[stat] || stat}: ${sv.map(v => isNum(v) ? v : 'not recorded').join(', ')}${line != null ? ` against the ${line} line` : ''}.`)}">
       <div class="kt-bars" aria-hidden="true">${sv.map(v => `<div class="col"><div class="bar ${res(v)}" style="height:${(isNum(v) ? Math.max(2, 112 * Math.max(0, v) / top) : 2).toFixed(1)}px"></div></div>`).join('')}${line != null ? `<div class="line" style="bottom:${(112 * line / top).toFixed(1)}px"><span>${esc(line)}</span></div>` : ''}</div>
       <div class="kt-x" aria-hidden="true">${shown.map((r, i) => `<span><em class="${res(sv[i])}">${isNum(sv[i]) ? esc(valueText(sv[i])) : '–'}</em><b>${r[7] === 0 ? '@' : ''}${esc(abbr(r[6]))}</b>${res(sv[i]) === 'hit' ? '✓ ' : res(sv[i]) === 'miss' ? '✗ ' : ''}${esc(md(r))}</span>`).join('')}</div>
-      <figcaption class="kt-cap">${h && h.n ? `<b>${h[dir]} of ${h.n} ${dir} ${esc(valueText(line))}.</b> ` : ''}${recent.length > shown.length ? `The last ${shown.length} of ${recent.length} games shown.` : ''}</figcaption></figure>` : '<p class="kt-cap">No stored games in this selection.</p>';
+      <figcaption class="kt-cap">${sample && line != null ? `<b>${hits} of ${sample} ${dir} ${esc(valueText(line))}.</b> ` : ''}${esc(label)}</figcaption></figure>`;
+    }).join('') : '<p class="kt-cap">No stored games in this selection.</p>';
     const bettingNumbers = `<span><small>${lineLabel}</small><b class="num">${esc(valueText(line))}</b></span><span><small>Kook’n projection</small><b class="num">${esc(projectionLabel)}</b></span><span><small>Projection vs line</small><b class="num">${esc(edgeLabel)}</b></span><span><small>Recent hits</small><b class="num">${esc(hitLabel)}</b></span>`;
     const historyNumbers = `<span><small>Season average</small><b class="num">${seasonSummary ? esc(valueText(seasonSummary.avg)) : '–'}</b></span><span><small>Last 5 average</small><b class="num">${last5Summary ? esc(valueText(last5Summary.avg)) : '–'}</b></span><span><small>Season high</small><b class="num">${seasonHigh == null ? '–' : esc(valueText(seasonHigh))}</b></span><span><small>Games recorded</small><b class="num">${esc(seasonValues.length)}</b></span>`;
     const boardTitle = isQuarter ? `${PLAYER_LABEL[stat]} trend` : PLAYER_LABEL[stat] || stat;
