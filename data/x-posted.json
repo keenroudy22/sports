@@ -11398,8 +11398,8 @@
    "id": "receipt:day:2026-11-13",
    "kind": "buffer:receipt",
    "postedAt": "2026-11-14T07:33:07Z",
-   "queuedText": "Friday: 1-2.\n❌ Florida State/Pittsburgh over 52.5 · Final: Florida St 16, Pitt 10\n❌ Alperen Sengun OVER 6.5 assists · Final: 5 assists\n✅ Cedric Coward OVER 6.5 rebounds · Final: 7 rebounds\n\n#CFB #NBA\n\n21+ only",
-   "textHash": "6abb92a1d3c5339d",
+   "queuedText": "Friday: 0-2.\n❌ Florida State/Pittsburgh over 52.5 · Final: Florida St 16, Pitt 10\n❌ Alperen Sengun OVER 6.5 assists · Final: 5 assists\n\n#CFB #NBA\n\n21+ only",
+   "textHash": "060b988c9a8132fc",
    "socialAgeVersion": "age-20261023",
    "cardKey": "receipt-day-2026-11-13-all-sports",
    "fullDailyRecap": true,
@@ -11410,11 +11410,34 @@
     "destination": "plays",
     "readyAt": "2026-11-14T07:33:07Z",
     "sentAt": "2026-11-14T07:33:07Z",
-    "beforeX": true
+    "beforeX": true,
+    "followup": {
+     "state": "pending",
+     "correction": true,
+     "text": "Correction: Friday was 0-2, not 1-2.\nCedric Coward OVER 6.5 rebounds was never posted as an official play, so it does not count in the record.\n\n❌ Florida State/Pittsburgh over 52.5 · Final: Florida St 16, Pitt 10\n❌ Alperen Sengun OVER 6.5 assists · Final: 5 assists\n\n#CFB #NBA\n\n21+ only",
+     "image": "https://keenroudy.com/sports/data/cards/receipt-day-2026-11-13-all-sports.png"
+    }
    },
    "typefullyDelivery": {
-    "at": "2026-11-14T07:33:07Z"
-   }
+    "at": "2026-11-14T07:33:07Z",
+    "reconciledAt": "2026-11-14T08:39:42Z",
+    "reason": "Official public-card membership changed before X delivery"
+   },
+   "supersededRecaps": [
+    {
+     "at": "2026-11-14T08:39:42Z",
+     "queuedText": "Friday: 1-2.\n❌ Florida State/Pittsburgh over 52.5 · Final: Florida St 16, Pitt 10\n❌ Alperen Sengun OVER 6.5 assists · Final: 5 assists\n✅ Cedric Coward OVER 6.5 rebounds · Final: 7 rebounds\n\n#CFB #NBA\n\n21+ only",
+     "textHash": "6abb92a1d3c5339d",
+     "cardKey": "receipt-day-2026-11-13-all-sports",
+     "resultPickIds": null,
+     "reason": "Official public-card membership changed before X delivery"
+    }
+   ],
+   "resultPickIds": [
+    "CFB-2026-W11-fsu-pitt-over-52-5-espnbet",
+    "NBA-reviewed-401909301-4871144-ast-over-dk"
+   ],
+   "reconciledAt": "2026-11-14T08:39:42Z"
   }
  ]
 }
