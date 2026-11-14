@@ -146,12 +146,49 @@ class BasketballBackupTests(unittest.TestCase):
         self.assertEqual(entry['queuedText'], 'Friday: 0-2.\n❌ Sengun OVER 6.5 assists · Final: 5 assists\n\n21+ only')
         self.assertEqual(entry['resultPickIds'], ['sengun'])
         self.assertEqual(entry['discord']['followup']['state'], 'pending')
-        self.assertIn('Coward OVER 6.5 rebounds was never posted as an official play',
+        self.assertIn("Coward OVER 6.5 rebounds wasn't on the card",
                       entry['discord']['followup']['text'])
+        self.assertFalse(x_post.x_style(entry['discord']['followup']['text']))
         self.assertEqual(entry['discord']['followup']['image'], 'https://keenroudy.com/card.png')
         self.assertTrue(entry['supersededRecaps'])
         save.assert_called()
         deliver.assert_called_once()
+
+    def test_reconciled_recap_refreshes_rejected_pending_correction(self):
+        now = datetime(2026, 11, 14, 9, tzinfo=timezone.utc)
+        key = 'receipt:day:2026-11-13'
+        old = 'Friday: 1-2.\n✅ Coward OVER 6.5 rebounds · Final: 7 rebounds\n\n21+ only'
+        current = 'Friday: 0-2.\n❌ Sengun OVER 6.5 assists · Final: 5 assists\n\n21+ only'
+        entry = {'id': key, 'kind': 'buffer:receipt', 'discordRecapPrepared': True,
+                 'fullDailyRecap': True, 'cardKey': 'receipt-card',
+                 'queuedText': current, 'resultPickIds': ['sengun'],
+                 'supersededRecaps': [{'queuedText': old}],
+                 'discord': {'state': 'sent', 'sentAt': '2026-11-14T07:33:07Z',
+                             'followup': {'state': 'pending', 'correction': True,
+                                          'text': 'old rejected copy',
+                                          'image': 'https://keenroudy.com/card.png',
+                                          'error': 'outgoing copy fails the public voice check',
+                                          'lastAttemptAt': '2026-11-14T08:00:00Z'}},
+                 'typefullyDelivery': {'at': '2026-11-14T07:33:07Z'}}
+        recap = {'key': key, 'card': 'receipt-card',
+                 'text': current.removesuffix('\n\n21+ only'), 'pickIds': ['sengun'],
+                 'stale': now + timedelta(hours=5)}
+        book = {'posts': [entry]}
+        stores = SimpleNamespace(first={}, latest={})
+        with patch.object(run.gates, 'Stores', return_value=SimpleNamespace(as_of=lambda _now: stores)), \
+             patch.object(run, 'load_json', return_value={'games': []}), \
+             patch('receipts.ready', return_value=[recap]), \
+             patch('x_post.save_log') as save, \
+             patch('buffer_post.card_url', return_value='https://keenroudy.com/card.png'), \
+             patch.object(typefully_backup, 'deliver', return_value=False):
+            run.retry_typefully_recap(now, book, {})
+        followup = entry['discord']['followup']
+        self.assertIn('Quick Friday correction: 0-2, not 1-2.', followup['text'])
+        self.assertIn("Coward OVER 6.5 rebounds wasn't on the card", followup['text'])
+        self.assertNotIn('error', followup)
+        self.assertNotIn('lastAttemptAt', followup)
+        self.assertFalse(x_post.x_style(followup['text']))
+        save.assert_called()
 
     def test_settled_prior_day_recap_wakes_mirror_before_morning_clock(self):
         now = datetime(2026, 11, 14, 5, 15, tzinfo=timezone.utc)

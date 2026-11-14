@@ -4024,6 +4024,8 @@ def recap_record_correction(previous, current):
     original social receipt exists.  If an early recap accidentally included
     one, the correction names the removed selection and then repeats the
     complete corrected card.  The original Discord receipt remains immutable.
+    Keep the public wording casual and outside the retired "official play"
+    phrase used by internal publishing policy.
     """
     old_lines = str(previous or '').splitlines()
     new_lines = str(current or '').splitlines()
@@ -4040,15 +4042,15 @@ def recap_record_correction(previous, current):
         selection = line[1:].strip().split(' · ', 1)[0].strip()
         if selection:
             removed.append(selection)
-    opener = f'Correction: {day} was {new_record}, not {old_record}.'
+    opener = f'Quick {day} correction: {new_record}, not {old_record}.'
     if removed:
         named = removed[0] if len(removed) == 1 else ', '.join(removed[:-1]) + f' and {removed[-1]}'
         if len(removed) == 1:
-            opener += f'\n{named} was never posted as an official play, so it does not count in the record.'
+            opener += f"\n{named} wasn't on the card, so it stays out of the record."
         else:
-            opener += f'\n{named} were never posted as official plays, so they do not count in the record.'
+            opener += f"\n{named} weren't on the card, so they stay out of the record."
     else:
-        opener += '\nThe earlier recap included a play that was not part of the official public card.'
+        opener += '\nThe earlier recap included an extra play that was not on the card.'
     body = '\n'.join(new_lines[1:]).lstrip()
     return opener + (f'\n\n{body}' if body else '')
 
@@ -4111,6 +4113,26 @@ def retry_typefully_recap(now, log_book, settings):
                                reason='Official public-card membership changed before X delivery')
             x_post.save_log(log_book)
             log(f'Typefully recap reconciled: {key} now matches the public record')
+        # A correction may already be pending when its copy rules change.  It
+        # has not been delivered yet, so refresh that queued follow-up from the
+        # immutable superseded caption instead of leaving a rejected message
+        # stuck forever.  Never alter a sent correction.
+        discord = entry.get('discord') or {}
+        followup = discord.get('followup') or {}
+        superseded = entry.get('supersededRecaps') or []
+        if (followup.get('state') == 'pending' and followup.get('correction')
+                and superseded):
+            expected = recap_record_correction(
+                superseded[-1].get('queuedText') or '', entry.get('queuedText') or caption)
+            expected_image = buffer_post.card_url(entry.get('cardKey') or recap['card'])
+            if followup.get('text') != expected or followup.get('image') != expected_image:
+                followup.update(text=expected, image=expected_image)
+                for field in ('error', 'lastAttemptAt'):
+                    followup.pop(field, None)
+                discord['followup'] = followup
+                entry['discord'] = discord
+                x_post.save_log(log_book)
+                log(f'Discord recap correction refreshed: {key}')
         caption = entry['queuedText']
     if attempt and attempt.get('draftId'):
         # The provider already owns this exact submission. Read its status only.
