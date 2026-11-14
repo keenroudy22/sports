@@ -137,6 +137,19 @@ test('Last 20 graphs the full football sample in order on a shared line scale', 
   assert.match(charts[1], /0 of 10 over 261\.5/);
 });
 
+test('football All games chart counts only the ten bars it displays', async () => {
+  const page = await playerPage(false, files => {
+    const player = files[`data/app/players/CFB/${4870883 % 128}.json`].players['4870883'];
+    player.rows = Array.from({ length: 12 }, (_, i) => row(
+      `game-${i}`, `2026-09-${String(i + 1).padStart(2, '0')}`, '58', 1,
+      { att:30, passYds:i < 2 ? 300 : 220 }
+    ));
+  }, 'CFB', 'passYds', C, 'sample=all&line=261.5&direction=over');
+  const chart = page.match(/<figure class="kt-chart".*?<\/figure>/s)?.[0];
+  assert.match(chart, /0 of 10 over 261\.5[\s\S]*Last 10 of 12 games shown/);
+  assert.equal([...chart.matchAll(/class="col"/g)].length, 10);
+});
+
 test('an unavailable player keeps the reference line and history without presenting a current projection or edge', async () => {
   const page = await playerPage(false, files => {
     files['data/app/games/CFB-1.json'].teams = { home: { injuries: [{
@@ -202,6 +215,35 @@ test('CBB player page shows an honest Kookn baseline and lets the reader check a
   assert.match(page, /Kook’n − line<\/small><b class="num">–/);
   assert.match(page, /mens-college-basketball\/boxscore/);
   assert.match(page, /Kook’n minus the book is not a probability/);
+});
+
+test('basketball game logs use the chart market, sample, minutes and exact side', async () => {
+  const keys = ['min', 'fg3m', 'pra'];
+  const sample = [[20,1,10], [26,2,15], [27,3,20], [28,null,null], [29,0,9], [30,4,30]];
+  for (const [league, stat, label, line, column] of [
+    ['NBA','fg3m','Threes',2,1], ['CBB','pra','Pts + reb + ast',15,2]
+  ]) {
+    const count = league === 'NBA' ? 32 : 64;
+    const change = files => {
+      files[`data/app/players/${league}/${4870883 % count}.json`] = { keys, season:2027,
+        directory:{'4870883':['58','USF']}, players:{'4870883':{name:'Example Player',pos:'G',rows:sample.map((values, i) =>
+          [String(401900000 + i), `2026-09-0${i + 1}`, 2027, 0, 2, '58', '4', i%2, `OP${i}`, ...values])}} };
+    };
+    const page = await playerPage(false, change, league, stat, C, `line=${line}&direction=under&sample=last5`);
+    const log = page.match(/<table class="kt-log basketball-log">[\s\S]*?<\/table>/)?.[0];
+    assert.ok(log, league);
+    assert.match(log, new RegExp(`<th scope="col">${label.replaceAll('+', '\\+')}</th><th scope="col">Min</th><th scope="col">U ${line}</th>`));
+    assert.doesNotMatch(log, /OP0/);
+    const rows = [...log.matchAll(/<tr><th scope="row">[\s\S]*?OP(\d)[\s\S]*?<td class="y">([^<]+)<\/td><td>([^<]+)<\/td><td class="log-result (\w+)">([^<]+)<\/td><\/tr>/g)];
+    const outcomes = [['miss','Miss'],['hit','Hit'],['unknown','—'],['miss','Miss'],['push','Push']];
+    assert.deepEqual(rows.map(r => r.slice(1)), outcomes.map(([outcome, word], i) => {
+      const idx = 5-i, values = sample[idx];
+      return [String(idx), String(values[column] ?? '–'), String(values[0]), outcome, word];
+    }));
+    assert.match(page, /1 of 4 under/);
+    const noLine = await playerPage(false, change, league, stat, C, 'sample=last5');
+    assert.doesNotMatch(noLine, /class="log-result/);
+  }
 });
 
 test('a player line with no hold puts the projection beside the book line and keeps its price check', async () => {
