@@ -753,6 +753,20 @@
 
     /* Player projections with the captured line and our gap. */
     const lines = (detail.props || {}).lines || {};
+    const validComparison = row => isNum(row.line) && !row.alternate && !row.roleSuspect && !row.priceSuspect && !row.roleHold;
+    const hasCurrentPrice = row => pregame && validComparison(row)
+      && C.quoteStatus({ ...row, state: row.state || 'open' }, g.kickoff, now).current;
+    const propMarkets = new Map();
+    for (const row of [...(detail.lines || []), ...(detail.modelReads || [])]) {
+      const stat = C.marketKey(row);
+      if (!row.athleteId || !stat || !validComparison(row)) continue;
+      const key = `${row.athleteId}:${stat}`;
+      if (!propMarkets.has(key)) propMarkets.set(key, []);
+      propMarkets.get(key).push(row);
+    }
+    const propRows = (id, stat) => propMarkets.get(`${id}:${stat}`) || [];
+    const referenceLine = (id, stat) => (lines[id] || {})[stat]?.[0];
+    const hasComparison = (id, stat) => isNum(referenceLine(id, stat)) || propRows(id, stat).some(hasCurrentPrice);
     const usableProjection = (p, k) => !(p.underReview || []).includes(k)
       && Array.isArray(p[k]) && p[k].length === 3 && p[k].every(isNum);
     const projectionPlayers = side => (((((detail.forecast || {}).players || {})[side]) || {}).players || [])
@@ -767,7 +781,7 @@
       const lineStats = new Set(['att','cmp','passYds','car','rushYds','tgt','rec','recYds']);
       const linePlayers = (playerIndex?.players || [])
         .filter(entry => String(entry[3] || '') === String(g[side].id || '') || String(entry[4] || '').toLowerCase() === String(g[side].abbr || '').toLowerCase())
-        .filter(entry => /^(QB|RB|FB|WR|TE)$/.test(entry[2] || '') && Object.keys(lines[String(entry[0])] || {}).some(stat => lineStats.has(stat)))
+        .filter(entry => /^(QB|RB|FB|WR|TE)$/.test(entry[2] || '') && [...lineStats].some(stat => hasComparison(entry[0], stat)))
         .filter(entry => !shown.has(String(entry[0])) && !shown.has(String(entry[1] || '').toLowerCase())
           && !held.has(String(entry[0])) && !held.has(String(entry[1] || '').toLowerCase()))
         .map(entry => ({ id:String(entry[0]), name:entry[1], pos:entry[2], status:'Projection unavailable', unavailable:true, lineOnly:true }));
@@ -798,34 +812,40 @@
       const group = pos => list.filter(player => (inferredPos(player) === 'FB' ? 'RB' : inferredPos(player)) === pos);
       const projectionMarket = key => key === 'targets' ? 'tgt' : C.PROJECTION_MARKET[key];
       const statCell = (player, key) => {
-        const v = player[key], stat = projectionMarket(key);
-        if (!usableProjection(player,key)) return '<span class="prop-cell prop-held"><span class="prop-vs"><span><span class="prop-vs-label">Book</span><b>—</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>Held</b></span></span><span>Projection unavailable</span></span>';
-        const market = (lines[player.id] || {})[stat], line = market && isNum(market[0]) ? Number(market[0]) : null;
-        const exact = row => line != null && String(row.athleteId) === String(player.id)
-          && C.marketKey(row) === stat && row.line === line;
-        const reads = (detail.modelReads || []).filter(exact);
-        const catalog = (detail.lines || []).filter(exact);
-        const read = fav.find(exact) || reads.find(currentQuote) || catalog.find(currentQuote)
-          || reads.find(row => isNum(row.odds)) || catalog.find(row => isNum(row.odds)) || reads[0] || catalog[0];
+        const stat = projectionMarket(key);
+        const v = player.unavailable || !usableProjection(player,key) ? null : player[key];
+        const reference = v || player.unavailable ? referenceLine(player.id, stat) : null;
+        const exactMarket = row => String(row.athleteId) === String(player.id) && C.marketKey(row) === stat;
+        const exactPick = row => picks.some(p => exactMarket(p) && p.posted === true
+          && !p.result && p.line === row.line && p.direction === row.direction
+          && p.odds === row.odds && bookLabel(p.book) === bookLabel(row.book));
+        const rows = propRows(player.id, stat);
+        const current = rows.filter(hasCurrentPrice).sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt)
+          || Number(b.line === reference) - Number(a.line === reference));
+        const likedQuote = v && fav.find(row => exactMarket(row) && hasCurrentPrice(row));
+        const read = (!player.unavailable || player.lineOnly ? current.find(exactPick) || likedQuote || current[0] : null)
+          || (v && rows.find(row => row.line === reference && isNum(row.odds)));
+        const line = read ? read.line : isNum(reference) ? reference : null;
         const checked = read?.observedAt || (line != null ? detail.props?.capturedAt : null);
         const direction = String(read?.direction || 'over').toLowerCase() === 'under' ? 'under' : 'over';
-        const gapV = line == null ? null : v[0]-line;
-        const liked = fav.includes(read);
-        const official = isNum(read?.odds) && picks.some(row => exact(row) && row.posted === true && !row.result
-          && row.direction === direction && row.odds === read.odds && bookLabel(row.book) === bookLabel(read.book));
+        const gap = v && line != null ? v[0]-line : null;
+        const official = Boolean(read && hasCurrentPrice(read) && exactPick(read));
+        const liked = !official && Boolean(read && read === likedQuote);
         const book = bookLabel(read?.book || detail.props?.provider);
-        const href = esc(C.playerLineHref({ league: g.league, athleteId: player.id, stat, line, direction, book, gameId: g.id }));
-        const price = line == null ? 'Book line unavailable' : [isNum(read?.odds) ? `${direction === 'under' ? 'U' : 'O'} ${oddsText(read.odds)}` : 'Odds unavailable', book].filter(Boolean).join(' · ');
-        const saved = isNum(read?.odds) && !C.quoteStatus({ ...read, state: read.state || 'open' }, g.kickoff, now).current;
-        return `<a class="prop-cell${liked ? ' liked' : ''}${official ? ' official' : ''}" href="${href}" title="Open the exact recent-game chart"><span class="prop-vs"><span><span class="prop-vs-label">Book</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>${esc(C.fixed(v[0]))}</b></span></span>${gapV == null ? '' : `<span class="prop-gap">Projection gap <b>${gapV > 0 ? '+' : ''}${esc(C.fixed(gapV))}</b></span>`}${price ? `<span class="prop-price${line == null ? ' is-missing' : ''}">${esc(price)}</span>` : ''}<span class="prop-range">Kook’n range ${esc(C.fixed(v[1],0))}–${esc(C.fixed(v[2],0))}</span>${checked ? `<span class="prop-checked">${saved ? 'Earlier quote · checked' : 'Checked'} ${esc(ago(checked))}</span>` : ''}${official ? '<span class="pick-tag">Official pick</span>' : liked ? '<span class="lean-tag">Research lean</span>' : ''}</a>`;
+        const href = esc(C.playerLineHref({ league:g.league, athleteId:player.id, stat, line, direction, book, gameId:g.id }));
+        const price = line == null ? 'Book line unavailable' : [isNum(read?.odds) ? `${direction === 'under' ? 'U' : 'O'} ${oddsText(read.odds)}`
+          : player.unavailable && !player.lineOnly ? 'Reference line · no active projection' : 'Odds unavailable', book].filter(Boolean).join(' · ');
+        const earlier = read && !hasCurrentPrice(read);
+        return `<a class="prop-cell${v ? '' : ' prop-held'}${liked ? ' liked' : ''}${official ? ' official' : ''}" href="${href}" title="Open recent-game chart"><span class="prop-vs"><span><span class="prop-vs-label">${earlier ? 'Earlier line' : 'Book'}</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>${v ? esc(C.fixed(v[0])) : 'Held'}</b></span></span>${gap == null ? '' : `<span class="prop-gap">Projection gap <b>${gap > 0 ? '+' : ''}${esc(C.fixed(gap))}</b></span>`}<span class="prop-price${line == null ? ' is-missing' : ''}">${esc(price)}</span>${v ? `<span class="prop-range">Kook’n range ${esc(C.fixed(v[1],0))}–${esc(C.fixed(v[2],0))}</span>` : `<span>${esc(player.reviewReasons?.[key] ? 'Projection under review' : player.status || 'Projection unavailable')}${player.unavailable ? ' · no edge' : ''}</span>`}${checked ? `<span class="prop-checked">${earlier ? 'Earlier quote · checked' : 'Checked'} ${esc(ago(checked))}</span>` : ''}${official ? '<span class="pick-tag">Official pick</span>' : liked ? '<span class="lean-tag">Research lean</span>' : ''}</a>`;
       };
       const table = (pos, players) => {
         if (!players.length) return '';
         const hasLine = (player, key) => {
-          const market = (lines[player.id] || {})[projectionMarket(key)];
-          return market && isNum(market[0]);
+          const stat = projectionMarket(key);
+          return (player.unavailable && isNum(referenceLine(player.id, stat)))
+            || ((!player.unavailable || player.lineOnly) && propRows(player.id, stat).some(hasCurrentPrice));
         };
-        const cols = POSITION_PROJ[pos].filter(([key]) => players.some(player => usableProjection(player,key) || player.unavailable && hasLine(player,key)));
+        const cols = POSITION_PROJ[pos].filter(([key]) => players.some(player => usableProjection(player,key) || hasLine(player,key)));
         const active = players.filter(player => !player.unavailable && cols.some(([key]) => usableProjection(player,key) || hasLine(player,key)));
         const unavailable = players.filter(player => player.unavailable);
         if (!active.length && !unavailable.length) return '';
@@ -840,25 +860,19 @@
         const renderTable = (rows, caption, tableCols = shownCols) => `<div class="table-wrap"><table class="t prop-compare"><caption class="small muted" style="text-align:left;padding-bottom:6px">${esc(caption)}</caption><thead><tr><th>Player</th>${tableCols.map(([,label]) => `<th>${esc(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(player => {
           const injury = injuries.find(row => String(row.id || '') === String(player.id) || String(row.name || '') === String(player.name));
           const playerHead = `<th class="prop-player"><span class="with-art">${headshot(g.league,player.id,'sm')}<span><span class="prop-player-head"><a href="#player/${esc(g.league)}/${esc(player.id)}">${esc(player.name)}</a><span class="prop-pos">${esc(inferredPos(player) || 'Position unavailable')}</span></span>${injury ? `<span class="badge ${HARD_INJURY.test(injury.status || '') ? 'warn' : 'research'}">${esc(injury.status || 'Listed')}</span>` : player.lineOnly ? '<span class="badge research">Projection held</span>' : ''}</span></span></th>`;
-          if (player.unavailable) return `<tr>${playerHead}${tableCols.map(([key]) => {
-            const stat = projectionMarket(key), market = (lines[player.id] || {})[stat], line = market && isNum(market[0]) ? Number(market[0]) : null;
-            const href = esc(C.playerLineHref({ league: g.league, athleteId: player.id, stat, line, direction: 'over',
-              book: bookLabel(detail.props?.provider), gameId: g.id }));
-            const label = tableCols.find(([candidate]) => candidate === key)?.[1] || key;
-            return `<td data-stat="${esc(label)}"><a class="prop-cell prop-held" href="${href}" title="Open recent-game history"><span class="prop-vs"><span><span class="prop-vs-label">Book</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>Held</b></span></span><span class="prop-price${line == null ? ' is-missing' : ''}">${line == null ? 'Book line unavailable' : 'Reference line · no active projection'}</span><span>${esc(player.status || 'Unavailable')} · no edge</span>${line != null && detail.props?.capturedAt ? `<span class="prop-checked">Checked ${esc(ago(detail.props.capturedAt))}</span>` : ''}</a></td>`;
-          }).join('')}</tr>`;
           return `<tr>${playerHead}${tableCols.map(([key,label]) => `<td data-stat="${esc(label)}">${statCell(player,key)}</td>`).join('')}</tr>`;
         }).join('')}</tbody></table></div>`;
-        const featured = ordered.filter(player => shownCols.some(([key]) => usableProjection(player,key))).slice(0,2);
+        const featured = ordered.filter(player => shownCols.some(([key]) => usableProjection(player,key) || hasLine(player,key))).slice(0,2);
         const featuredIds = new Set(featured.map(player => String(player.id || player.name)));
         const depth = ordered.filter(player => !featuredIds.has(String(player.id || player.name)));
         const visibleUnavailable = unavailable.filter(player => shownCols.some(([key]) => hasLine(player,key))).slice(0,1);
         const visibleUnavailableIds = new Set(visibleUnavailable.map(player => String(player.id || player.name)));
         const hiddenUnavailable = unavailable.filter(player => !visibleUnavailableIds.has(String(player.id || player.name)));
         const primaryRows = [...featured, ...visibleUnavailable];
-        const extras = secondaryCols.length || depth.length || hiddenUnavailable.length;
+        const extraFeatured = primaryRows.filter(player => secondaryCols.some(([key]) => usableProjection(player,key) || hasLine(player,key)));
+        const extras = extraFeatured.length || depth.length || hiddenUnavailable.length;
         const extraRows = depth.length + hiddenUnavailable.length;
-        return `<div class="prop-position">${primaryRows.length ? renderTable(primaryRows, `${pos} · featured`) : ''}${extras ? `<details class="more-box prop-depth-more"><summary>More ${esc(pos)} players &amp; markets${extraRows ? ` · ${extraRows}` : ''}</summary>${secondaryCols.length && featured.length ? renderTable(featured, `${pos} · more markets`, secondaryCols) : ''}${depth.length ? renderTable(depth, `${pos} · depth`, cols) : ''}${hiddenUnavailable.length ? renderTable(hiddenUnavailable, `${pos} · unavailable`, cols) : ''}</details>` : ''}</div>`;
+        return `<div class="prop-position">${primaryRows.length ? renderTable(primaryRows, `${pos} · featured`) : ''}${extras ? `<details class="more-box prop-depth-more"><summary>More ${esc(pos)} players &amp; markets${extraRows ? ` · ${extraRows}` : ''}</summary>${extraFeatured.length ? renderTable(extraFeatured, `${pos} · more markets`, secondaryCols) : ''}${depth.length ? renderTable(depth, `${pos} · depth`, cols) : ''}${hiddenUnavailable.length ? renderTable(hiddenUnavailable, `${pos} · unavailable`, cols) : ''}</details>` : ''}</div>`;
       };
       return `<p class="small muted">${esc(g[side].abbr)}${isNum(vol.plays) ? ` · ${C.fixed(vol.plays,0)} projected plays · ${Math.round(100*(vol.passRate || 0))}% pass` : ''} · featured players and popular markets first</p>${['QB','RB','WR','TE'].map(pos => table(pos,group(pos))).join('')}`;
     };

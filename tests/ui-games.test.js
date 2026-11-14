@@ -318,12 +318,34 @@ test('football stat cells keep the displayed threshold, odds and chart side toge
     forecast: { players: { home: { players: [{ id: '1', name: 'Test Runner', pos: 'RB', rushYds: [48, 30, 70] }] } } } };
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
   const cell = async () => (await factory(ctx).game({ id: g.id })).match(/<a class="prop-cell[^>]*href="[^"]*stat=rushYds[^>]*>[\s\S]*?<\/a>/)?.[0] || '';
-  assert.match(await cell(), /line=44\.5&amp;direction=over&amp;book=DraftKings[\s\S]*Odds unavailable · DraftKings/);
-  assert.doesNotMatch(await cell(), /FanDuel|-118|41\.5/);
+  assert.match(await cell(), /line=41\.5&amp;direction=under&amp;book=FanDuel[\s\S]*U -118 · FanDuel/);
+  assert.doesNotMatch(await cell(), /44\.5|Odds unavailable/);
+  different.priceSuspect = true;
+  assert.match(await cell(), /line=44\.5&amp;direction=over&amp;book=DraftKings[\s\S]*Odds unavailable/);
+  delete different.priceSuspect;
   detail.lines = [matching];
   assert.match(await cell(), /line=44\.5&amp;direction=over&amp;book=DraftKings[\s\S]*O -109 · DraftKings/);
   matching.observedAt = new Date(Date.now() - 5 * 3600000).toISOString();
+  assert.match(await cell(), /line=41\.5/);
+  detail.modelReads = [];
   assert.match(await cell(), /Earlier quote · checked/);
+});
+
+test('a football pricing-only player stays visible and opens the captured market', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = { ...slate()[1], kickoff: new Date(Date.now() + 3600000).toISOString() };
+  const quote = { athleteId:'42', stat:'rushYds', line:27.5, direction:'under', odds:-112, book:'FanDuel',
+    observedAt:new Date().toISOString(), state:'open' };
+  const detail = { ...g, teams:{}, picks:[], lines:[quote] };
+  const ctx = contextFor(api, [g], { get:async path => {
+    if (path === 'app/today.json') return {games:[g],picks:[]};
+    if (path === 'app/players/CFB.json') return {players:[['42','Catalog Runner','RB',g.home.id,g.home.abbr]]};
+    return detail;
+  } });
+  const html = await factory(ctx).game({id:g.id});
+  assert.match(html, /Catalog Runner[\s\S]*line=27\.5&amp;direction=under&amp;book=FanDuel[\s\S]*Kook’n<\/span><b>Held[\s\S]*U -112 · FanDuel/);
+  quote.state='closed';
+  assert.doesNotMatch(await factory(ctx).game({id:g.id}), /Catalog Runner/);
 });
 
 test('a game opens with its posted bet and honest book/model lines, even when Today has dropped that bet', async () => {
