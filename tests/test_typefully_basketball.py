@@ -85,6 +85,36 @@ class BasketballBackupTests(unittest.TestCase):
         post = request.call_args.kwargs['payload']['platforms']['x']['posts'][0]
         self.assertEqual(post, {'text': 'Original', 'media_ids': ['media-1']})
 
+    def test_confirmed_original_can_be_quoted_with_final_card(self):
+        entry = {'id': 'receipt:nba:pick:grade', 'queuedText': 'Final'}
+        book = {'posts': [entry]}
+        published = {'id': 17, 'status': 'published',
+                     'x_post_published_at': '2026-11-13T18:00:00Z',
+                     'x_published_url': 'https://x.com/keenkooks/status/2123456789012345699'}
+        with patch.object(typefully_backup, 'upload_media', return_value='media-final'), \
+             patch.object(typefully_backup, 'media_request', return_value={'status': 'ready'}), \
+             patch.object(typefully_backup, 'request', return_value=published) as request:
+            self.assertTrue(typefully_backup.deliver(
+                entry, book, {}, self.now, lambda _: None,
+                expires=self.now + timedelta(days=1),
+                media_url='https://keenroudy.com/sports/data/cards/final.png',
+                quote_post_url='https://x.com/keenkooks/status/2123000000000000000'))
+        post = request.call_args.kwargs['payload']['platforms']['x']['posts'][0]
+        self.assertEqual(post['quote_post_url'],
+                         'https://x.com/keenkooks/status/2123000000000000000')
+        self.assertEqual(post['media_ids'], ['media-final'])
+
+    def test_quote_rejects_unconfirmed_account(self):
+        entry = {'id': 'receipt:nba:pick:grade', 'queuedText': 'Final'}
+        book = {'posts': [entry]}
+        with patch.object(typefully_backup, 'request') as request:
+            with self.assertRaises(ValueError):
+                typefully_backup.deliver(
+                    entry, book, {}, self.now, lambda _: None,
+                    expires=self.now + timedelta(days=1),
+                    quote_post_url='https://x.com/someoneelse/status/2123000000000000000')
+        request.assert_not_called()
+
     def test_processing_media_retries_without_creating_a_second_post(self):
         entry = {'id': 'pick', 'queuedText': 'Original'}
         book = {'posts': [entry]}
@@ -266,6 +296,46 @@ class BasketballBackupTests(unittest.TestCase):
              patch.object(run, 'load_json', return_value={'games': []}), \
              patch('receipts.ready', return_value=[recap]):
             self.assertTrue(run.typefully_recap_due(now, book))
+
+    def test_nba_final_backup_owns_one_quote_post(self):
+        play = {'id': 'nba-pick', 'result': 'loss',
+                'settledAt': '2026-11-13T17:30:00Z'}
+        guid = 'receipt:nba:nba-pick:grade'
+        book = {'posts': []}
+        plan = (guid, 'receipt', 'Final copy', self.now, guid.replace(':', '-'))
+        with patch('nba_results.plans', return_value=[plan]), \
+             patch('nba_trial_runtime.public_rows', return_value=[play]), \
+             patch('nba_results.key', return_value=guid), \
+             patch('nba_results.eligible', return_value=True), \
+             patch('buffer_post.quote_tweet_id', return_value='2123000000000000000'), \
+             patch('buffer_post.card_url', return_value='https://keenroudy.com/final.png'), \
+             patch('x_post.save_log') as save, \
+             patch.object(typefully_backup, 'deliver', return_value=True) as deliver:
+            run.retry_typefully_nba_results(self.now, book, {})
+        self.assertEqual(len(book['posts']), 1)
+        self.assertEqual(book['posts'][0]['discord']['state'], 'not-required')
+        self.assertEqual(deliver.call_args.kwargs['quote_post_url'],
+                         'https://x.com/keenkooks/status/2123000000000000000')
+        self.assertEqual(deliver.call_args.kwargs['media_url'],
+                         'https://keenroudy.com/final.png')
+        save.assert_called()
+
+    def test_owned_nba_final_retries_without_replanning(self):
+        entry = {'id': 'receipt:nba:nba-pick:grade', 'nbaResult': True,
+                 'queuedText': 'Final copy', 'cardKey': 'final-card',
+                 'expiresAt': '2026-11-16T18:00:00Z',
+                 'quotePostUrl': 'https://x.com/keenkooks/status/2123000000000000000',
+                 'typefullyDelivery': {'at': '2026-11-13T17:59:00Z',
+                                       'mediaId': 'media-final'}}
+        book = {'posts': [entry]}
+        self.assertTrue(run.typefully_nba_results_due(self.now, book))
+        with patch('nba_results.plans') as plans, \
+             patch('buffer_post.card_url', return_value='https://keenroudy.com/final.png'), \
+             patch.object(typefully_backup, 'deliver', return_value=False) as deliver:
+            run.retry_typefully_nba_results(self.now, book, {})
+        plans.assert_not_called()
+        self.assertEqual(deliver.call_args.kwargs['quote_post_url'],
+                         entry['quotePostUrl'])
 
     def test_incomplete_prior_day_recap_does_not_wake_mirror_early(self):
         now = datetime(2026, 11, 14, 5, 15, tzinfo=timezone.utc)

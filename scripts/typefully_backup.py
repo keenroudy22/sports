@@ -120,7 +120,8 @@ def confirm_attended_sent(entry, *, observed_text, link, sent_at, now,
     return entry
 
 
-def deliver(entry, book, settings, now, save, *, text=None, expires=None, media_url=None):
+def deliver(entry, book, settings, now, save, *, text=None, expires=None,
+            media_url=None, quote_post_url=None):
     """Persist ownership before sending. An unknown response requires reconciliation."""
     text = text or entry.get('queuedText')
     attempt = entry.get('typefullyDelivery')
@@ -194,6 +195,11 @@ def deliver(entry, book, settings, now, save, *, text=None, expires=None, media_
         post = {'text': text}
         if attempt.get('mediaId'):
             post['media_ids'] = [attempt['mediaId']]
+        if quote_post_url:
+            if not re.fullmatch(r'https://(?:x|twitter)\.com/keenkooks/status/\d+',
+                                quote_post_url, re.I):
+                raise ValueError('Typefully quote must target a confirmed Kookn X post')
+            post['quote_post_url'] = quote_post_url
         result = request(settings, payload={
             'draft_title': entry['id'],
             'platforms': {'x': {'enabled': True, 'posts': [post]}},

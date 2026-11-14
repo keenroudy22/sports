@@ -3023,7 +3023,7 @@ def _run(args, now, slot, kinds, status):
             if settle_only and not args.dry_run and not getattr(args, 'now', None):
                 try:
                     status['nbaFinalBoxes'] = nba_trial_runtime.refresh_published_finals(current_run_time(args, now))
-                except (OSError, ValueError) as error:
+                except (OSError, ValueError, RuntimeError) as error:
                     status['errors'].append(f'NBA final boxes: {type(error).__name__}: {error}')
             nba_grade_now = current_run_time(args, now)
             status['nbaTrialGraded'] = nba_trial_runtime.grade(nba_grade_now)
@@ -4017,6 +4017,73 @@ def basketball_backup_due(entry, now):
                 and gates.when(discord['sentAt']) + post_windows.discord_play_lead(now) <= now)
 
 
+def typefully_nba_results_due(now, book):
+    """Stored-only check for an NBA Final blocked by Buffer's free cap."""
+    import nba_results
+    if any(entry.get('nbaResult') and entry.get('typefullyDelivery')
+           and not entry.get('sentAt') for entry in book.get('posts', [])):
+        return True
+    try:
+        return bool(nba_results.plans(now, book, ROOT / 'data/nba-trial'))
+    except (OSError, ValueError, KeyError, TypeError):
+        return False
+
+
+def retry_typefully_nba_results(now, book, settings):
+    """Quote confirmed NBA originals with their immutable individual Final.
+
+    Ownership is saved before Typefully is called.  An unknown provider response
+    therefore remains duplicate-protected, just like the play and recap paths.
+    """
+    import buffer_post
+    import nba_results
+    import nba_trial_runtime
+    import typefully_backup
+    import x_post
+
+    for entry in book.get('posts', []):
+        if not (entry.get('nbaResult') and entry.get('typefullyDelivery')
+                and not entry.get('sentAt')):
+            continue
+        expires = gates.when(entry['expiresAt'])
+        typefully_backup.deliver(
+            entry, book, settings, now, x_post.save_log,
+            text=entry['queuedText'], expires=expires,
+            media_url=buffer_post.card_url(entry['cardKey']),
+            quote_post_url=entry['quotePostUrl'])
+        return
+
+    plans = nba_results.plans(now, book, ROOT / 'data/nba-trial')
+    rows = {nba_results.key(play): play for play in nba_trial_runtime.public_rows()
+            if play.get('result')}
+    for guid, kind, text, _due, card_key in plans:
+        if kind != 'receipt':
+            continue
+        play = rows.get(guid)
+        tweet_id = buffer_post.quote_tweet_id(book, guid)
+        if not play or not tweet_id or not nba_results.eligible(play, now):
+            continue
+        expires = gates.when(play['settledAt']) + timedelta(days=3)
+        quote_url = f'https://x.com/keenkooks/status/{tweet_id}'
+        entry = {
+            'id': guid, 'kind': 'buffer:receipt', 'postedAt': stamp(now),
+            'queuedText': text, 'textHash': x_post.text_hash(text),
+            'card': True, 'cardKey': card_key, 'nbaResult': True,
+            'expiresAt': stamp(expires), 'quotePostUrl': quote_url,
+            # The original result already has its own immutable Discord receipt.
+            # This row owns only the missing X Final.
+            'discord': {'state': 'not-required', 'reason': 'NBA result already sent'},
+        }
+        book['posts'].append(entry)
+        x_post.save_log(book)
+        typefully_backup.deliver(
+            entry, book, settings, now, x_post.save_log,
+            text=text, expires=expires,
+            media_url=buffer_post.card_url(card_key),
+            quote_post_url=quote_url)
+        break
+
+
 def recap_record_correction(previous, current):
     """Explain a changed daily record without exposing desk internals.
 
@@ -4257,6 +4324,7 @@ def mirror(args):
         recap_due = typefully_recap_due(now, x_post.load_log())
     basketball_due = bool(backup and any(basketball_backup_due(entry, now)
                                          for entry in x_post.load_log()['posts']))
+    nba_result_due = bool(backup and typefully_nba_results_due(now, x_post.load_log()))
     retry_results = bool(recap_due or (missing_results and not result_transport_hold))
     # Recovery can refresh inputs minutes after this worker started. Use the
     # current clock so those valid captures are not mistaken for future data.
@@ -4272,7 +4340,7 @@ def mirror(args):
     nba_discord_waiting = (nba_trial_runtime.discord_delivery_due(now, x_post.load_log())
                            or cbb_picks.discord_delivery_due(now, x_post.load_log()))
     private_waiting = private_release_ready(now)
-    if not chef_waiting and not nba_discord_waiting and not private_waiting and not retry_results and not basketball_due:
+    if not chef_waiting and not nba_discord_waiting and not private_waiting and not retry_results and not basketball_due and not nba_result_due:
         if result_transport_hold:
             if not stored_discord_work_due(now, x_post.load_log()):
                 return 0
@@ -4325,6 +4393,13 @@ def mirror(args):
                     retry_typefully_basketball(now, log_book, backup)
                 except (OSError, ValueError) as error:
                     log(f'Typefully basketball awaits reconciliation: {type(error).__name__}')
+                x_post.save_log(log_book)
+                commit_log(now, push=not args.no_push)
+            if nba_result_due:
+                try:
+                    retry_typefully_nba_results(now, log_book, backup)
+                except (OSError, ValueError, RuntimeError) as error:
+                    log(f'Typefully NBA Final awaits reconciliation: {type(error).__name__}')
                 x_post.save_log(log_book)
                 commit_log(now, push=not args.no_push)
             if not mirror_due(log_book, now):
