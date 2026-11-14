@@ -30,8 +30,9 @@ test('NBA and CBB games share navigation/search and isolate team filtering',asyn
   const file=league==='NBA'?'app/nba.json':'app/cbb.json';
   const data={scheduleFresh:true,generatedAt:'2026-11-02T19:00:00Z',games:[{...game(),projection:{home:72,away:68,total:140,winProb:.6}}],sheets:[]};
   const {ctx,views}=desk(league,{[file]:data});let html=await views.games({tab:'upcoming'});
-  for(const text of ['Upcoming','Live &amp; scores','Finals','Find a team','Home Club','pc-bar'])assert.ok(html.includes(text),`${league}: ${text}`);
-  ctx.state.games.q='not-a-team';html=await views.games({tab:'upcoming'});assert.doesNotMatch(html,/Home Club|class="pc-bar"/);
+  const listing = league === 'NBA' ? 'pc-bar' : 'cbb-slate-row';
+  for(const text of ['Upcoming','Live &amp; scores','Finals','Find a team','Home Club',listing])assert.ok(html.includes(text),`${league}: ${text}`);
+  ctx.state.games.q='not-a-team';html=await views.games({tab:'upcoming'});assert.doesNotMatch(html,/Home Club|class="pc-bar"|class="cbb-slate-row"/);
  }
 });
 test('All sports includes supported CBB cards; sheet links change with source version',async()=>{
