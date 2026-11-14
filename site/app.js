@@ -2128,8 +2128,8 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-f6ee7cd5eb09';
   const PLAYER_ASSET = 'app-player.js?v=sha256-88848595856f';
-  const GAMES_ASSET = 'app-games.js?v=sha256-ca361f7f0042';
-  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-1bf6aa0aab20';
+  const GAMES_ASSET = 'app-games.js?v=sha256-ba175c628587';
+  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-b9a77c13be4f';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
   let researchCssLoading = null;
@@ -2188,8 +2188,8 @@
   VIEWS.games = async route => { if (route.tab !== 'live') get('app/today.json').catch(() => null); return (await ensureGames()).games(route); };
   const isFootballGame = id => id && !/^(NBA|CBB)-/.test(id);
   VIEWS.game = async route => {
+    if (route.id) get(`app/games/${route.id}.json`).catch(() => null);
     if (!isFootballGame(route.id)) return (await ensureGames()).game(route);
-    get(`app/games/${route.id}.json`).catch(() => null);
     return (await ensureBundle('footballGame')).game(route);
   };
   VIEWS.player = async route => {

@@ -914,6 +914,40 @@ def write_player_shards(league, index, shards, season, keys):
         })
 
 
+def matchup_player_rows(index):
+    by_team = defaultdict(list)
+    for player in index:
+        by_team[str(player[3])].append(player)
+    return by_team
+
+
+def write_basketball_matchups(league, overview, scoreboard, index, picks):
+    by_team = matchup_player_rows(index)
+    open_picks = defaultdict(list)
+    for pick in picks:
+        if pick.get('posted') and not pick.get('result') and pick.get('athleteId'):
+            open_picks[pick['gameId']].append({
+                field: pick[field] for field in ('league', 'gameId', 'posted', 'athleteId',
+                                                 'market', 'line', 'book', 'direction', 'odds')
+            })
+    games = {game['id']: (game, False) for game in (scoreboard or {}).get('games', []) if game.get('id')}
+    games.update({game['id']: (game, True) for game in overview['games']})
+    priced = set(overview.get('matchupPropEvents', []))
+    for game_id, (game, research) in games.items():
+        if not re.fullmatch(fr'{league}-[0-9]+', game_id):
+            continue
+        teams = game.get('teams') or {}
+        if not all(teams.get(side) for side in ('away', 'home')):
+            continue
+        team_ids = {str(teams[side].get('id')) for side in ('away', 'home')}
+        write(OUT / 'games' / f'{game_id}.json', {
+            'game': game, 'research': research, 'generatedAt': overview['generatedAt'],
+            'players': [entry for team in sorted(team_ids) for entry in by_team[team]],
+            'picks': open_picks[game_id],
+            'matchupPropEvents': [game_id[4:]] if game_id[4:] in priced else [],
+        })
+
+
 def validate_player_coverage(league, charts, index, shards):
     """Every linked matchup-chart athlete with history must have a player page.
 
@@ -2224,6 +2258,11 @@ def build(now=None):
     nfl_info = league_data['NFL']
     quarter_charts = build_player_charts('NFL', window, forecasts, nfl_info['player_logs'], nfl_info['current'], [], now)
     write_trends(trends + quarter_trends(quarter_charts, nfl_info['records'], now), now)
+    football_players = {league: build_players(
+        league, league_data[league]['records'], snaps if league == 'NFL' else {}, teams_meta, trends)
+        for league in ('NFL', 'CFB')}
+    football_indexes = {league: {str(entry[0]): entry for entry in data[0]}
+                        for league, data in football_players.items()}
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
@@ -2245,8 +2284,7 @@ def build(now=None):
                       'marketRead': {'ourGap': card['marketRead'].get('ourGap', {})}
                       if card.get('marketRead') else None})
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
-        write(OUT / 'games' / f"{game['id']}.json",
-              game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
+        detail = game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
                           names, info['team_logs'], info['defense'], injuries, depth_charts, info['records'],
                           snap_players, now, grading, favorites,
                           [r for r in trends if r['gameId'] == game['id']],
@@ -2255,7 +2293,14 @@ def build(now=None):
                           archived_model_reads(game, latest_snap, captures.get(game['id'], []), names,
                                                now, info['player_logs']),
                           alternate_research(game, latest_snap, prop_prices.get(game['id']), names,
-                                             info['player_logs'], now, [r for r in lines if r.get('gameId') == game['id']])))
+                                             info['player_logs'], now, [r for r in lines if r.get('gameId') == game['id']]))
+        market_players = {str(pid) for pid in (detail.get('props') or {}).get('lines', {})}
+        market_players.update(str(row['athleteId']) for row in detail['lines'] + detail['modelReads']
+                              if row.get('athleteId'))
+        player_index = football_indexes[game['league']]
+        market_entries = [player_index[pid][:5] for pid in market_players if pid in player_index]
+        detail['marketPlayers'] = sorted(market_entries, key=lambda entry: (entry[1] or '', entry[0]))
+        write(OUT / 'games' / f"{game['id']}.json", detail)
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],
                'picks': (scoreboard.get('picks') or {}).get('summary')}
@@ -2311,8 +2356,7 @@ def build(now=None):
     for league in ('NFL', 'CFB'):
         info = league_data[league]
         charts = build_player_charts(league, window, forecasts, info['player_logs'], info['current'], lines, now)
-        index, shards, leaders, leader_season = build_players(
-            league, info['records'], snaps if league == 'NFL' else {}, teams_meta, trends)
+        index, shards, leaders, leader_season = football_players[league]
         validate_player_coverage(league, charts, index, shards)
         write(OUT / 'player-charts' / f'{league}.json', charts)
         write(OUT / f'kvb-{league}.json', build_kvb_charts(charts,
@@ -2343,7 +2387,8 @@ def build(now=None):
     import nba_today
     nba_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('nba-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
-    nba_scoreboard = (read(ROOT / 'site/data/sports.json', {}).get('leagues') or {}).get('NBA')
+    sports_scoreboard = read(DATA / 'sports.json', {}).get('leagues') or {}
+    nba_scoreboard = sports_scoreboard.get('NBA')
     nba = nba_today.build(now, boxes=nba_boxes, delivered=nba_public, scoreboard=nba_scoreboard,
                           team_finals=nba_finals, prop_limit=None)
     nba['morningBrief'] = morning_brief.current(now)
@@ -2360,6 +2405,7 @@ def build(now=None):
     write(OUT / 'players' / 'NBA.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['NBA'],
                                          'players': nba_index, 'season': nba_season})
     write_player_shards('NBA', nba_index, nba_shards, nba_season, NBA_LOG_KEYS)
+    write_basketball_matchups('NBA', nba_overview, nba_scoreboard, nba_index, nba_public)
     cbb_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('cbb-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
     cbb_index, cbb_shards, cbb_season = build_basketball_players(cbb_boxes, 'CBB')
@@ -2367,6 +2413,7 @@ def build(now=None):
                                          'players': cbb_index, 'season': cbb_season,
                                          'projectionNote': 'Research baseline: 60% recent and 40% season per-minute production at recent median minutes. Not a probability or automatic pick.'})
     write_player_shards('CBB', cbb_index, cbb_shards, cbb_season, NBA_LOG_KEYS)
+    write_basketball_matchups('CBB', cbb, sports_scoreboard.get('CBB'), cbb_index, [])
     import shutil as nba_copy
     nba_preview = ROOT / 'design/final/nba-trial-preview.png'
     if nba_preview.exists():

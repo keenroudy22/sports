@@ -48,6 +48,24 @@ def slate_game(game_id, kickoff, state='pre', **market):
                        'total': 44.5, 'totalOpen': 'o45.5', 'overOdds': '-108', 'underOdds': '-112', **market}}
 
 
+class MatchupPayloadTests(unittest.TestCase):
+    def test_basketball_payload_keeps_only_the_two_teams_and_receipt_backed_market_terms(self):
+        game = {'id': 'NBA-1', 'teams': {'home': {'id': '1'}, 'away': {'id': '2'}}}
+        index = [['11', 'Home Player', 'G', '1'], ['22', 'Away Player', 'F', '2'],
+                 ['33', 'Other Player', 'G', '3']]
+        pick = {'league': 'NBA', 'gameId': 'NBA-1', 'posted': True, 'athleteId': '11',
+                'market': 'pts', 'line': 19.5, 'book': 'DraftKings', 'direction': 'over', 'odds': -108}
+        overview = {'games': [game], 'generatedAt': '2026-11-14T08:00Z', 'matchupPropEvents': ['1', '2']}
+        with patch.object(build_site, 'write') as write:
+            build_site.write_basketball_matchups('NBA', overview, {}, index,
+                                                 [pick, dict(pick, posted=False), dict(pick, result='win')])
+        path, payload = write.call_args.args
+        self.assertEqual(path.parts[-2:], ('games', 'NBA-1.json'))
+        self.assertEqual(payload['players'], index[:2])
+        self.assertEqual(payload['picks'], [pick])
+        self.assertEqual(payload['matchupPropEvents'], ['1'])
+
+
 class LeagueInjuryIsolationTests(unittest.TestCase):
     def test_overlapping_espn_ids_keep_injuries_and_depth_charts_in_their_league(self):
         now = datetime(2026, 10, 10, 12, tzinfo=timezone.utc)

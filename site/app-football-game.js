@@ -134,10 +134,11 @@
     try { detail = await get(`app/games/${route.id}.json`); } catch (e) {
       return head('', 'Game page not available', 'Game pages cover NFL and college football for games from about three days back to eight days ahead. <a href="#games/live">Live scores</a> cover every sport.', back);
     }
-    const [today, teams, playerIndex] = await Promise.all([
+    const [today, teams, marketPlayers] = await Promise.all([
       get('app/today.json'),
       teamDirectory(detail.league),
-      get(`app/players/${detail.league}.json`).catch(() => ({players:[]}))]);
+      Array.isArray(detail.marketPlayers) ? detail.marketPlayers
+        : get(`app/players/${detail.league}.json`).then(index => index.players || [], () => [])]);
     indexGames(today);
     const now = Date.now();
     const fromSlate = (today.games || []).find(x => x.id === detail.id) || {};
@@ -367,7 +368,7 @@
         .map(player => ({ ...player, pos: player.position, unavailable: true }));
       const held = new Set(injuries.flatMap(player => [String(player.id || ''), String(player.name || '').toLowerCase()]));
       const lineStats = new Set(['att','cmp','passYds','car','rushYds','tgt','rec','recYds']);
-      const linePlayers = (playerIndex?.players || [])
+      const linePlayers = marketPlayers
         .filter(entry => String(entry[3] || '') === String(g[side].id || '') || String(entry[4] || '').toLowerCase() === String(g[side].abbr || '').toLowerCase())
         .filter(entry => /^(QB|RB|FB|WR|TE)$/.test(entry[2] || '') && [...lineStats].some(stat => hasComparison(entry[0], stat)))
         .filter(entry => !shown.has(String(entry[0])) && !shown.has(String(entry[1] || '').toLowerCase())

@@ -101,10 +101,14 @@ test('NBA matchup marks only the exact posted quote and removes stale research h
  const kickoff=new Date(Date.now()+3600000).toISOString(), sourceAt=new Date().toISOString();
  const game={id:'NBA-1',providerId:'1',status:'scheduled',kickoff,
    teams:{away:{id:'1',name:'Away',abbreviation:'AWY'},home:{id:'2',name:'Home',abbreviation:'HOM'}}};
- const play={athleteId:'11',stat:'pts',line:15.5,direction:'over',odds:-110,book:'DraftKings',kickoff,league:'NBA',gameId:'NBA-1',posted:true};
- const row={...play,eventId:'1',team:'1',name:'Example Player',sourceAt,over:-110,under:-110,favorite:true};
- const data={games:[game],trial:{plays:[play]}}, props={rows:[row]};
- const ctx=api.gamesContext({allPicks:async()=>[play],get:async path=>path==='app/nba.json'?data:path==='app/nba-props.json'?props:{players:[]}});
+ const play={athleteId:'11',market:'pts',line:15.5,direction:'over',odds:-110,book:'DraftKings',kickoff,league:'NBA',gameId:'NBA-1',posted:true};
+ const row={...play,stat:'pts',eventId:'1',team:'1',name:'Example Player',sourceAt,over:-110,under:-110,favorite:true};
+ const ctx=api.gamesContext({get:async path=>{
+   if (path==='app/games/NBA-1.json') return {game,research:true,generatedAt:sourceAt,players:[],picks:[play],matchupPropEvents:['1']};
+   assert.equal(path,'app/nba-props/1.json');
+   return {...props,generatedAt:sourceAt};
+ }});
+ const props={rows:[row]};
  const views=s.KRGames(ctx);
  const page=()=>views.game({id:game.id});
  assert.match(await page(), /class="pick-tag">Official pick/);
@@ -137,8 +141,15 @@ test('NBA matchup loads its own current prop file, with a full board fallback wh
   const row={eventId:'1',athleteId:'11',team:'1',name:'Exact Player',stat:'pts',line:15.5,
     book:'DraftKings',over:-110,under:-110,sourceAt:generatedAt};
   let shard={generatedAt,rows:[row]};
-  const views=s.KRGames(api.gamesContext({allPicks:async()=>[],get:async path=>{
-    if (path==='app/nba.json') return data;
+  let local = true;
+  const views=s.KRGames(api.gamesContext({allPicks:async()=>{ assert.equal(local,false); return []; },get:async path=>{
+    if (path.startsWith('app/games/')) {
+      if (!local) return null;
+      const game = data.games.find(game => path === `app/games/${game.id}.json`);
+      return {game, research:true, generatedAt, players:[], picks:[],
+        matchupPropEvents:game.id==='NBA-1'?['1']:[]};
+    }
+    if (path==='app/nba.json') { assert.equal(local,false); return data; }
     if (path==='app/players/NBA.json') return {players:[]};
     seen.push(path);
     return path==='app/nba-props/1.json' ? shard : {rows:[row]};
@@ -150,7 +161,9 @@ test('NBA matchup loads its own current prop file, with a full board fallback wh
   assert.deepEqual(seen,[]);
   shard={generatedAt:'stale',rows:[]};
   assert.equal(await views.game({id:'NBA-1'}),page);
-  assert.deepEqual(seen,['app/nba-props/1.json','app/nba-props.json']);
+  assert.deepEqual(seen.splice(0),['app/nba-props/1.json','app/nba-props.json']);
+  local = false;
+  assert.equal(await views.game({id:'NBA-1'}),page);
 });
 
 test('NBA matchup preserves availability holds across the player’s markets', async () => {
