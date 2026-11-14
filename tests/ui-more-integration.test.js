@@ -224,7 +224,7 @@ test('NBA charts use the selected matchup file and keep an unrecorded stat on it
   const index={season:2027,shards:2,players:[['1','Example Guard','G','1','AAA']]};
   const game={id:'NBA-77',providerId:'77',kickoff,teams:{away:{id:'1',name:'Alpha'},home:{id:'2',name:'Beta'}}};
   const row={eventId:'77',athleteId:'1',stat:'ast',line:4.5,over:-114,under:100,book:'FanDuel',sourceAt:generatedAt,kickoff,
-    projection:{value:5.2,low:2,high:8}};
+    projection:{value:5.2,low:2,high:8,minutes:27.5},currentRole:{minutes:[22,28,27]}};
   const ctx=api.moreContext({get:async path=>{
     seen.push(path);
     if (path==='app/players/NBA.json') return index;
@@ -240,15 +240,43 @@ test('NBA charts use the selected matchup file and keep an unrecorded stat on it
   assert.match(linked,/id="nba-stat">Assists/);
   assert.match(linked,/Over 4\.5 -114<\/b> at FanDuel/);
   assert.match(linked,/Kook’n range:<\/b> 2–8/);
+  assert.match(linked,/Kook’n minutes:<\/b> 27\.5/);
+  assert.match(linked,/Recent workload:<\/b> 22 \/ 28 \/ 27 minutes/);
+  ctx.state.player.key=null;
+  const moved=await views.player({league:'NBA',id:'1',stat:'ast',line:'4.5',direction:'over',book:'DraftKings',game:'NBA-77'});
+  assert.match(moved,/The exact matchup quote and projection are unavailable/);
+  assert.doesNotMatch(moved,/Kook’n range:|5\.2|Over 4\.5 -114/);
   assert.match(linked,/No recorded values for this stat/);
   assert.doesNotMatch(linked,/figcaption|0 of 0/);
-  assert.deepEqual(seen.filter(path=>path.includes('nba-props')),['app/nba-props/77.json']);
+  assert.deepEqual(seen.filter(path=>path.includes('nba-props')),['app/nba-props/77.json','app/nba-props/77.json']);
   seen.length=0;
   ctx.state.player.key=null;
   const history=await views.player({league:'NBA',id:'1',stat:'pts',game:'NBA-88'});
   assert.match(history,/id="nba-stat">Points/);
   assert.match(history,/Recorded game results/);
   assert.ok(!seen.some(path=>path.includes('nba-props')));
+});
+
+test('a completed matchup chart uses the pregame sample and holds the current projection', async () => {
+  const {api,factory}=loadBrowserApi();
+  const game={id:'CBB-77',kickoff:'2026-11-10T03:00:00Z',status:'final',
+    teams:{away:{id:'1',name:'Alpha'},home:{id:'2',name:'Beta'}}};
+  const keys=['pts'], entry=['1','Example Guard','G','1','AAA'];
+  const rows=[['5','2026-11-08',2027,0,2,'1','2',0,'BBB',12],
+    ['77','2026-11-09',2027,0,2,'1','2',0,'BBB',40],
+    ['81','2026-11-12',2027,0,2,'1','3',0,'CCC',36]];
+  const files={
+    'app/players/CBB.json':{season:2027,shards:2,players:[entry]},
+    'app/players/CBB/1.json':{keys,players:{'1':{name:'Example Guard',pos:'G',rows,projection:{status:'ready',values:{pts:22}}}}},
+    'app/cbb.json':{games:[]},
+    'sports.json':{leagues:{CBB:{games:[game]}}}
+  };
+  const views=factory(api.moreContext({get:async path=>files[path],maybe:async path=>files[path]}));
+  const html=await views.player({league:'CBB',id:'1',stat:'pts',line:'16.5',game:'CBB-77'});
+  assert.match(html,/at Beta/);
+  assert.match(html,/Pregame projection is unavailable for this matchup/);
+  assert.match(html,/Points: 12 against 16\.5/);
+  assert.doesNotMatch(html,/gameId\/(77|81)|<b class="num">22<\/b>/);
 });
 
 test('NBA Prop Finder search uses the complete matchup quotes and keeps the unfiltered preview small', async () => {
