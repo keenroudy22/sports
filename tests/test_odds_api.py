@@ -130,6 +130,18 @@ class BudgetTests(unittest.TestCase):
         self.assertIn('evening CFB', odds_api.due('NFL', games, status, now))
         self.assertIsNone(odds_api.due('CFB', games, status, now))
 
+    def test_friday_nfl_cannot_spend_saturdays_big_college_call(self):
+        now = datetime(2026, 11, 13, 21, 0, tzinfo=timezone.utc)  # Friday, 4 PM Eastern
+        games = [game('nfl', 'NFL', '2026-11-15T18:00:00Z', 'Home', 'Away')]
+        games.extend(game(f'college-{i}', 'CFB', '2026-11-14T17:00:00Z', f'Home {i}', f'Away {i}')
+                     for i in range(odds_api.NEXT_DAY_COLLEGE_MIN_GAMES))
+        status = {'leagues': {
+            'NFL': {'day': '2026-11-13', 'count': 1, 'lastAt': '2026-11-13T15:00:00Z'},
+            'CFB': {'day': '2026-11-13', 'count': 2, 'lastAt': '2026-11-13T15:00:00Z'},
+        }}
+        self.assertIn('next-day CFB', odds_api.due('NFL', games, status, now))
+        self.assertIsNone(odds_api.due('CFB', games, status, now))
+
     def test_stale_month_reserve_reaches_guarded_fetch_and_november_cap_holds(self):
         self.assertIsNone(odds_api.due('CFB', SLATE, {'usage': {'remaining': 24, 'at': '2026-08-31T23:59:00Z'}}, NOW))
         november = NOW.replace(month=11, day=1)

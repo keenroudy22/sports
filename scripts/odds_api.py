@@ -52,6 +52,7 @@ DEFAULT_CAP = 3
 RESERVE = 24                              # credits kept back for the month's last days
 DAILY_CREDITS = 8                         # weekday ceiling across football
 WEEKEND_CREDITS = 6                       # SharpAPI supplies broad weekend prop coverage
+NEXT_DAY_COLLEGE_MIN_GAMES = 8            # protect Friday's last call for a real Saturday board
 
 
 def capped_month_projection(status, now):
@@ -238,8 +239,15 @@ def due(league, games, status, now):
         and eastern_date(features.when(g['kickoff'])) == today
         and features.when(g['kickoff']).astimezone(ZoneInfo('America/New_York')).hour >= 18
         for g in games)
-    if college_evening and spent_today + 2 * COST > credit_cap:
-        return 'keeping the last shared daily capture for the evening CFB slate'
+    next_day = today + timedelta(days=1)
+    next_day_college = league == 'NFL' and today.weekday() == 4 and sum(
+        1 for g in games
+        if g.get('league') == 'CFB' and g.get('state') == 'pre'
+        and eastern_date(features.when(g['kickoff'])) == next_day
+    ) >= NEXT_DAY_COLLEGE_MIN_GAMES
+    if (college_evening or next_day_college) and spent_today + 2 * COST > credit_cap:
+        slate = 'next-day CFB slate' if next_day_college else 'evening CFB slate'
+        return f'keeping the last shared daily capture for the {slate}'
     cap = DAILY_CAP[league].get(today.weekday(), DEFAULT_CAP) if soon else EARLY_CAP
     cap = min(cap, credit_cap // COST)
     late = any(eastern_date(features.when(g['kickoff'])) == today and
