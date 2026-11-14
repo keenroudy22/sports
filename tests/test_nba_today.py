@@ -93,6 +93,23 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertNotIn('spreadQuote',data['games'][1]);self.assertEqual(data['playerProps']['rows'],[])
   scoreboard['checkedAt']=boxscores.stamp(NOW-timedelta(hours=25))
   self.assertEqual(len(nba_today.build(NOW,root=self.root,boxes=[],delivered=[],scoreboard=scoreboard)['games']),1)
+ def test_saved_team_final_overlays_stale_live_score_without_player_box(self):
+  tip=boxscores.stamp(NOW-timedelta(hours=3))
+  g={**game(),'id':'NBA-1','kickoff':tip,'seasonType':'regular-season','status':'in_progress',
+     'teams':{'away':{'id':'26'},'home':{'id':'10'}},'scores':{'away':16,'home':23}}
+  (self.root/'slate.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(NOW),'games':[g]}))
+  final={'eventId':'1','state':'post','kickoff':tip,'retrievedAt':boxscores.stamp(NOW),
+         'away':{'id':'26'},'home':{'id':'10'},'awayScore':118,'homeScore':125}
+  def published(row):
+   return nba_today.build(NOW,root=self.root,boxes=[],delivered=[],team_finals=[row])['games'][0]
+  self.assertEqual(published(final),{k:v for k,v in dict(g,status='final',scores={'away':118,'home':125}).items()
+                                   if k in ('id','providerId','season','seasonType','kickoff','status','teams','scores')})
+  for wrong in ({'away':{'id':'11'}}, {'eventId':'2'}, {'kickoff':boxscores.stamp(NOW)},
+                {'retrievedAt':boxscores.stamp(NOW+timedelta(seconds=1))}, {'state':'in'},
+                {'homeScore':118}, {'awayScore':True}):
+   with self.subTest(wrong=wrong):
+    self.assertEqual(published(dict(final,**wrong))['status'],'in_progress')
+
  def test_today_shows_only_receipt_backed_plays_and_grades(self):
   play={'id':'delivered','season':2027,'seasonType':'regular-season','type':'publish',
         'kickoff':boxscores.stamp(NOW+timedelta(hours=1)),'publishedAt':boxscores.stamp(NOW),

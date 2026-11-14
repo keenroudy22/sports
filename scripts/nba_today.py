@@ -106,7 +106,33 @@ def matchup_quotes(quote, now):
     return out
 
 
-def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, delivered=None, scoreboard=None, prop_limit=60):
+def reconcile_final_scores(games, finals, now):
+    """Advance matching slate games from the saved team-results feed."""
+    for final in finals:
+        game_id = f"NBA-{final.get('eventId')}"
+        game = games.get(game_id)
+        if not game or final.get('state') != 'post':
+            continue
+        try:
+            tip = boxscores.instant(game['kickoff'])
+            received = boxscores.instant(final['retrievedAt'])
+            if not (tip == boxscores.instant(final['kickoff']) < received <= now):
+                continue
+            sides = ('away', 'home')
+            if any(not final[side]['id'] or str(final[side]['id']) != str(game['teams'][side]['id'])
+                   for side in sides):
+                continue
+            scores = {side: final[f'{side}Score'] for side in sides}
+        except (KeyError, TypeError, ValueError):
+            continue
+        if any(type(score) is not int or score < 0 for score in scores.values()):
+            continue
+        if scores['away'] == scores['home']:
+            continue
+        games[game_id] = dict(game, status='final', scores=scores)
+
+
+def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, delivered=None, scoreboard=None, team_finals=(), prop_limit=60):
     now=now or datetime.now(timezone.utc); root=Path(root)
     if delivered is None:
         from build_site import nba_record_picks
@@ -119,6 +145,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, d
         for game in scoreboard.get('games', []):
             if game.get('status') == 'scheduled' and game.get('timeConfirmed') is True and boxscores.instant(game['kickoff']) > now:
                 captured_games.setdefault(game['id'], game)
+    reconcile_final_scores(captured_games, team_finals, now)
     if boxes is None:
         boxes=list({r['eventId']:r for p in BOX.glob('nba-*.jsonl') for r in boxscores.read_store(p)}.values())
     injury_snapshot=read_json(root/'injuries-current.json',{})

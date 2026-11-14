@@ -2333,7 +2333,9 @@ def build(now=None):
     nba_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('nba-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
     nba_scoreboard = (read(ROOT / 'site/data/sports.json', {}).get('leagues') or {}).get('NBA')
-    nba = nba_today.build(now, boxes=nba_boxes, delivered=nba_public, scoreboard=nba_scoreboard, prop_limit=None)
+    import hoops_store
+    nba = nba_today.build(now, boxes=nba_boxes, delivered=nba_public, scoreboard=nba_scoreboard,
+                          team_finals=hoops_store.load('NBA'), prop_limit=None)
     nba['morningBrief'] = morning_brief.current(now)
     nba_overview, nba_props = nba_today.public_payloads(nba)
     nba_matchup_props = nba_today.matchup_prop_payloads({
