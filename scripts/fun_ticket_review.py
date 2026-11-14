@@ -138,6 +138,8 @@ def candidate(ctx, now, spec):
     ticket.update(id=f"{ctx.games[ticket['gameIds'][0]]['league']}-{gates.eastern_date(now)}-{style}-{ticket['book'].lower().replace(' ', '-')}",
                   title=f"{len(ticket['legs'])}-leg {'parlay' if style == 'short' else 'lotto'} at {ticket['book']}",
                   firstKickoff=gates.stamp(first), ticketReceipt=ticket['researchReview']['receipt'],
+                  confidence=1,
+                  cutoff='A fun ticket is not re-entered. It stands or falls as posted.',
                   expiresAt=gates.stamp(min(first - timedelta(minutes=30),
                                             gates.when(ticket['quotedAt']) + timedelta(hours=1))),
                   sources=sorted({ticket['researchReview']['ticketSource']} |

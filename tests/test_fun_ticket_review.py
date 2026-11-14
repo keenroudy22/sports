@@ -56,6 +56,8 @@ class FunTicketReviewTests(unittest.TestCase):
         self.assertIsNone(held)
         self.assertEqual((pick['parlayStyle'], pick['quoteType'], pick['priceEstimated']),
                          ('short', 'sportsbook', False))
+        self.assertEqual(pick['confidence'], 1)
+        self.assertIn('stands or falls as posted', pick['cutoff'])
         self.assertEqual(pick['ticketReceipt'], spec['researchReview']['receipt'])
         self.assertNotIn('chance', pick)
         self.assertIn('No validated win probability', pick['edge'])
