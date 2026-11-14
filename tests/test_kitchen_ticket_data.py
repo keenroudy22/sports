@@ -505,6 +505,6 @@ class TicketQuoteAndHoldTests(unittest.TestCase):
         body = inspect.getsource(build_site.build)
         today = body.index("write(OUT / 'today.json'")
         self.assertLess(body.index('cbb_public = cbb_record_picks(now)'), today)
-        self.assertLess(body.index('nba_public = nba_record_picks(now)'), today)
+        self.assertLess(body.index('nba_public = nba_record_picks(now, team_finals=nba_finals)'), today)
         merge = "picks + cbb_public + nba_public + community_records"
         self.assertIn(merge, body[:today])

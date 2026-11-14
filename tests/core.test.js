@@ -476,7 +476,8 @@ test('a pick says where it stands in words, and red is only for a loss', () => {
   assert.equal(word({ ...pick, expiresAt: '2026-09-20T11:00:00Z' }), 'Price expired');
   assert.equal(word({ ...pick, kickoff: '2026-09-20T11:00:00Z' }), 'In play');
   assert.deepEqual(C.pickState({ ...pick, result: 'win' }, now), { word: 'Won', tone: 'win' });
-  assert.deepEqual(C.pickState({ ...pick, result: 'loss' }, now), { word: 'Lost', tone: 'loss' });
+  assert.equal(word({ ...pick, gameFinal: true }), 'Final · grade pending');
+  assert.deepEqual(C.pickState({ ...pick, result: 'loss', gameFinal: true }, now), { word: 'Lost', tone: 'loss' });
   assert.equal(C.pickState({ ...pick, entryNote: 'x' }, now).tone, 'closed', 'a closed pick is grey, not red');
   assert.equal(C.isLongshot({ kind: 'riskyProps' }), true);
   assert.equal(C.isLongshot({ kind: 'parlays', parlayType: 'longshot' }), true);

@@ -364,6 +364,7 @@
     if (p.status === 'withdrawn') return { word: 'Withdrawn', tone: 'closed' };
     /* Pulled over news before its post went out: that stays the word through kickoff, until it is graded. */
     if (/before its post went out|^Pulled before posting:/.test(p.entryNote || '')) return { word: 'Pulled', tone: 'closed' };
+    if (p.gameFinal === true) return { word: 'Final · grade pending', tone: 'reference' };
     if (p.kickoff && Date.parse(p.kickoff) <= now) return { word: 'In play', tone: 'reference' };
     if (p.community && p.posted) return { word: 'Posted ticket', tone: 'reference' };
     if (p.entryNote) return { word: 'Line moved', tone: 'closed' };

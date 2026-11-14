@@ -2264,7 +2264,9 @@ def build(now=None):
     # ledgers remain the immutable sources; these receipt-backed adapters are
     # merged only for presentation and de-duplicated by original play id.
     cbb_public = cbb_record_picks(now)
-    nba_public = nba_record_picks(now)
+    import hoops_store
+    nba_finals = hoops_store.load('NBA')
+    nba_public = nba_record_picks(now, team_finals=nba_finals)
     posted_records = list({p['id']: p for p in picks + cbb_public + nba_public + community_records}.values())
     import morning_brief
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
@@ -2333,9 +2335,8 @@ def build(now=None):
     nba_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('nba-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
     nba_scoreboard = (read(ROOT / 'site/data/sports.json', {}).get('leagues') or {}).get('NBA')
-    import hoops_store
     nba = nba_today.build(now, boxes=nba_boxes, delivered=nba_public, scoreboard=nba_scoreboard,
-                          team_finals=hoops_store.load('NBA'), prop_limit=None)
+                          team_finals=nba_finals, prop_limit=None)
     nba['morningBrief'] = morning_brief.current(now)
     nba_overview, nba_props = nba_today.public_payloads(nba)
     nba_matchup_props = nba_today.matchup_prop_payloads({
@@ -2481,7 +2482,7 @@ def cbb_record_picks(now=None, root=ROOT):
     return sorted(rows, key=lambda row: (str(row.get('kickoff') or ''), row['id']))
 
 
-def nba_record_picks(now=None, root=ROOT):
+def nba_record_picks(now=None, root=ROOT, *, team_finals=()):
     """Normalize actually delivered NBA picks for the shared Results surface.
 
     NBA originals remain in their append-only NBA store.  This display adapter does
@@ -2489,6 +2490,7 @@ def nba_record_picks(now=None, root=ROOT):
     is required, and a settlement is exposed only after its recorded settlement time.
     """
     import nba_prop_release
+    from nba_today import matched_final_scores
     import nba_trial_runtime
 
     now = now or datetime.now(timezone.utc)
@@ -2498,6 +2500,7 @@ def nba_record_picks(now=None, root=ROOT):
         if entry.get('kind') == 'buffer:nba-trial' and entry.get('nbaPick') is True and entry.get('id'):
             receipts_by_id[entry['id']].append(entry)
 
+    finals = {str(final.get('eventId')): final for final in team_finals}
     labels = nba_prop_release.STATS
     rows = []
     for play in nba_trial_runtime.public_rows(root / 'data' / 'nba-trial'):
@@ -2525,6 +2528,11 @@ def nba_record_picks(now=None, root=ROOT):
             result_detail = f"{row['actual']:g} {stat_name} · {verb} by {margin:g}"
         review = row.get('sourceReview') if isinstance(row.get('sourceReview'), dict) else {}
         game = row.get('game') if isinstance(row.get('game'), dict) else {}
+        event_id = row.get('eventId') or game.get('id')
+        final = finals.get(str(event_id).removeprefix('NBA-'))
+        # This reports game status separately from the official prop grade.
+        game_final = not row.get('result') and final and matched_final_scores(
+            {**game, 'kickoff': row.get('kickoff')}, final, now)
         sources = [source.get('url') for source in review.get('sources') or []
                    if isinstance(source, dict) and str(source.get('url') or '').startswith('https://')]
         if str(row.get('source') or '').startswith('https://'):
@@ -2538,7 +2546,8 @@ def nba_record_picks(now=None, root=ROOT):
             'kickoff': row.get('kickoff'), 'publishedAt': row.get('publishedAt'),
             'quotedAt': row.get('retrievedAt'), 'settledAt': row.get('settledAt'),
             'result': row.get('result'), 'actual': row.get('actual'), 'resultDetail': result_detail,
-            'settlementReason': row.get('settlementReason'), 'season': row.get('season'),
+            'settlementReason': row.get('settlementReason'),
+            **({'gameFinal': True} if game_final else {}), 'season': row.get('season'),
             'seasonType': row.get('seasonType'), 'gameId': row.get('eventId') or game.get('id'),
             'gameIds': [row.get('eventId') or game.get('id')], 'posted': True,
             'status': 'settled' if row.get('result') else 'active', 'modelLean': False,

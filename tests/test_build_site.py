@@ -248,6 +248,20 @@ class PickTests(unittest.TestCase):
             self.assertEqual(row['delivery']['discordAt'], '2026-11-10T17:20:00Z')
             self.assertEqual(row['delivery']['xAt'], '2026-11-10T17:35:00Z')
             self.assertTrue(row['posted'])
+            pending = dict(play, game={'teams': {'away': {'id': '1'}, 'home': {'id': '2'}}},
+                           result=None, actual=None, settledAt=None)
+            final = {'eventId': str(play['eventId']).removeprefix('NBA-'), 'state': 'post',
+                     'kickoff': play['kickoff'], 'retrievedAt': '2026-11-11T08:00:00Z',
+                     'away': {'id': '1'}, 'home': {'id': '2'}, 'awayScore': 108, 'homeScore': 112}
+            with mock.patch('nba_trial_runtime.public_rows', return_value=[pending]):
+                [ungraded] = build_site.nba_record_picks(now, root, team_finals=[final])
+                [wrong] = build_site.nba_record_picks(now, root, team_finals=[dict(final, home={'id': '3'})])
+            self.assertTrue(ungraded['gameFinal'])
+            self.assertIsNone(ungraded['result'])
+            self.assertIsNone(ungraded['actual'])
+            self.assertEqual(ungraded['odds'], row['odds'])
+            self.assertNotIn('gameFinal', wrong)
+
             (root / 'data' / 'x-posted.json').write_text('{"posts": []}')
             with mock.patch('nba_trial_runtime.public_rows', return_value=[play]):
                 self.assertEqual(build_site.nba_record_picks(now, root), [])

@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 import build_site
+import hoops_store
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -84,7 +85,7 @@ def main(argv=None):
     issues = audit(load(args.research), public)
     issues.extend(audit_all_sports(public))
     issues.extend(audit_cbb_public(public, build_site.cbb_record_picks()))
-    issues.extend(audit_nba_public(public, build_site.nba_record_picks()))
+    issues.extend(audit_nba_public(public, build_site.nba_record_picks(team_finals=hoops_store.load('NBA'))))
     cbb_today = args.today.with_name('cbb.json')
     if cbb_today.is_file():
         issues.extend(audit_cbb_today(public, load(cbb_today)))

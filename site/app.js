@@ -352,11 +352,12 @@
         : `${pick.entryNote ? String(pick.entryNote).trim() + ' ' : 'Off the card. '}It is still graded at ${pick.line != null && !moneyline && !isParlayLike(pick) ? `${pick.line} ` : ''}${at}, the price we posted.`)
         : word === 'Pulled' ? (/graded/i.test(pick.entryNote || '') ? String(pick.entryNote).replace(/\.\.+/g, '.').trim() : `${pick.entryNote ? String(pick.entryNote).replace(/\.\.+/g, '.').trim() : 'Pulled over news before its post went out.'} It still counts and is graded at ${at}.`)
           : word === 'Withdrawn' ? `Withdrawn before kickoff.${pick.entryNote ? ' ' + pick.entryNote : ''}`
+            : pick.gameFinal ? `Game final. Prop grade pending at the posted price of ${at}.`
             : word === 'In play' ? (Date.parse(pick.kickoff) < now - 4 * 3600000 ? `Game over or running late · awaiting the result. Graded at ${at}, the price we posted.` : `In play. Graded at ${at}, the price we posted.`) : '';
     /* One line for compact tickets. */
     const graded = `graded at ${pick.line != null && !moneyline && !isParlayLike(pick) && word === 'Line moved' ? `${pick.line} ` : ''}${at}`;
     const awaitingResult = word === 'In play' && Date.parse(pick.kickoff) < now - 4 * 3600000;
-    const statusShort = awaitingResult ? `Awaiting result · ${graded}` : mode === 'expired' ? 'Posted price expired · check your book' : word === 'Line moved' ? `Off the card · ${graded}` : word === 'Pulled' ? `Pulled before posting · ${graded}`
+    const statusShort = word === 'Final · grade pending' ? word : awaitingResult ? `Awaiting result · ${graded}` : mode === 'expired' ? 'Posted price expired · check your book' : word === 'Line moved' ? `Off the card · ${graded}` : word === 'Pulled' ? `Pulled before posting · ${graded}`
       : word === 'Withdrawn' ? 'Withdrawn before kickoff' : word === 'Posted ticket' ? 'Posted ticket · not settled' : word === 'In play' ? `In play · ${graded}` : '';
     const stub = result === 'win' ? { cls: 'hit', big: '✓', small: 'Hit' }
       : result === 'loss' ? { cls: 'miss', big: '✗', small: 'Miss' }
@@ -2043,7 +2044,7 @@
     const lane = p.community ? 'Personal fun ticket' : p.lane === 'gut_call' ? 'Full Send' : C.isParlay(p) ? 'Fun ticket' : 'Best Bet';
     const meta = [lane, withdrawalNotice(p), p.cashout ? 'Cashed out · not a sportsbook push' : '', price + (p.community ? ' original quote' : ''), `${C.stakeOf(p)}u`, whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? `early-exit credit (counts −${C.stakeOf(p)}u in the headline)` : ''].filter(Boolean).join(' · ');
     const right = p.result ? (u == null ? '' : assumed ? `<span class="u muted" title="${esc(p.priceNote || 'No price was recorded, so this counts at an assumed −115.')}">(${esc(units(u))})</span>` : `<span class="u ${u > 0 ? 'green' : u < 0 ? 'red' : 'muted'}">${esc(units(u))}</span>`)
-      : '<span class="u muted small">Pending</span>';
+      : `<span class="u muted small">${p.gameFinal ? 'Final · grade pending' : 'Pending'}</span>`;
     return `<div class="receipt"><span class="r-mark ${mark[0]}" aria-hidden="true">${mark[1]}</span><div><b><span class="sr">${esc(mark[2])}: </span><a href="${esc(vm.href)}" class="plain-link">${esc(niceTitle(p.displayTitle || p.title))}</a></b><span>${esc(meta)}</span></div>${right}</div>`;
   };
   /* The Climb in dollars: stake to payout, the bank after a win, and the running total. */

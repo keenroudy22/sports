@@ -106,30 +106,34 @@ def matchup_quotes(quote, now):
     return out
 
 
+def matched_final_scores(game, final, now):
+    """Return the team score only when the stored final matches this matchup."""
+    if final.get('state') != 'post':
+        return None
+    try:
+        tip = boxscores.instant(game['kickoff'])
+        received = boxscores.instant(final['retrievedAt'])
+        if not (tip == boxscores.instant(final['kickoff']) < received <= now):
+            return None
+        sides = ('away', 'home')
+        if any(not final[side]['id'] or str(final[side]['id']) != str(game['teams'][side]['id'])
+               for side in sides):
+            return None
+        scores = {side: final[f'{side}Score'] for side in sides}
+    except (KeyError, TypeError, ValueError):
+        return None
+    if any(type(score) is not int or score < 0 for score in scores.values()):
+        return None
+    return scores if scores['away'] != scores['home'] else None
+
+
 def reconcile_final_scores(games, finals, now):
     """Advance matching slate games from the saved team-results feed."""
     for final in finals:
         game_id = f"NBA-{final.get('eventId')}"
         game = games.get(game_id)
-        if not game or final.get('state') != 'post':
-            continue
-        try:
-            tip = boxscores.instant(game['kickoff'])
-            received = boxscores.instant(final['retrievedAt'])
-            if not (tip == boxscores.instant(final['kickoff']) < received <= now):
-                continue
-            sides = ('away', 'home')
-            if any(not final[side]['id'] or str(final[side]['id']) != str(game['teams'][side]['id'])
-                   for side in sides):
-                continue
-            scores = {side: final[f'{side}Score'] for side in sides}
-        except (KeyError, TypeError, ValueError):
-            continue
-        if any(type(score) is not int or score < 0 for score in scores.values()):
-            continue
-        if scores['away'] == scores['home']:
-            continue
-        games[game_id] = dict(game, status='final', scores=scores)
+        if game and (scores := matched_final_scores(game, final, now)):
+            games[game_id] = dict(game, status='final', scores=scores)
 
 
 def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, delivered=None, scoreboard=None, team_finals=(), prop_limit=60):
