@@ -982,7 +982,7 @@
       <div class="decision-price"><span><small>Posted price</small><b class="num">${esc(odd(vm.odds))}</b></span><strong>${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</strong></div>
       ${comparison}${current ? `<p class="decision-current">${esc(current)}</p>` : ''}
       ${best && summaryWhy ? `<p class="decision-why"><b>Why it made the card</b><span>${esc(summaryWhy)}</span></p>` : ''}
-      ${P.betslipAction(pick, Date.now(), Boolean(opts.compact))}
+      ${hold ? '' : P.betslipAction(pick, Date.now(), Boolean(opts.compact))}
       <a class="decision-more" href="${esc(vm.href)}">See stats, trends and full breakdown <span aria-hidden="true">→</span></a>
     </article>`;
   };
@@ -1451,7 +1451,7 @@
       ${(pick.why || pick.risk) && !hold ? `<details class="more-box" data-box="fullread" style="margin-top:20px"><summary>Our notes when we posted it</summary><div class="grid two"><div class="card"><p class="eyebrow green">Why</p><p style="margin-top:6px">${esc(prose(pick.why))}</p>${(pick.reasoning || {}).historyNote ? `<p class="small muted" style="margin-top:6px">${esc(pick.reasoning.historyNote)}</p>` : ''}</div><div class="card"><p class="eyebrow">What could go wrong</p><p style="margin-top:6px">${esc(prose(pick.risk))}</p></div></div></details>` : ''}
       ${pick.cutoff ? tape(vm.mode === 'open' && !hold ? 'Good to' : vm.kind === 'best' ? 'Was good to' : 'Entry rule', `<p>${esc(prose(pick.cutoff))}</p>${vm.mode === 'open' && !hold && goodTo(pick) ? `<p class="small muted" style="margin-top:4px">${esc(goodTo(pick))}</p>` : ''}`) : ''}
       ${tape('Where it stands', `${vm.statusNote && !hold ? `<p class="small">${esc(vm.statusNote)}</p>` : ''}<p class="small muted" style="margin-top:4px">${esc(C.deliveryText(pick) || 'No delivery evidence recorded.')}</p>${/^https:\/\/x\.com\/keenkooks\/status\/[0-9]{15,22}$/.test(originalX) ? `<p class="small"><a href="${esc(originalX)}" target="_blank" rel="noopener noreferrer">Original pick on X ↗</a></p>` : ''}`)}
-      ${P.betslipAction(pick,Date.now())}
+      ${hold ? '' : P.betslipAction(pick,Date.now())}
       <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><a class="btn" href="${pick.posted === true && !pick.historicalImport && /^(NFL|CFB|NBA|CBB)-[A-Za-z0-9_-]{1,140}$/.test(pick.id) ? `p/${esc(pick.id)}.html` : esc(vm.href)}" data-copy-link>Share pick</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
       ${sources.length ? `<p class="small muted" style="margin-top:14px">Sources: ${sources.map((x, i) => `<a href="${esc(x)}" target="_blank" rel="noopener noreferrer">${esc(host(x, i))} ↗</a>`).join(' · ')}</p>` : ''}
       <p class="kt-social small"><a href="https://discord.gg/ZnjubjsBPM">Discord</a> · <a href="https://x.com/keenkooks">Kook’n on X</a></p>
@@ -2416,6 +2416,11 @@
       }
       if (d.removeLeg != null) { state.ticket.splice(Number(d.removeLeg), 1); saved.set('ticket', state.ticket); render(true); return; }
       if ('clearTicket' in d) { state.ticket = []; saved.set('ticket', state.ticket); render(true); return; }
+      if ('copyBet' in d) {
+        try { await navigator.clipboard.writeText(d.copyBet); toast('Posted bet copied'); }
+        catch (_) { window.prompt('Copy the posted bet:', d.copyBet); }
+        return;
+      }
       if ('copyTicket' in d) {
         const checked = await ticketRows();
         const text = C.ticketText(checked.map(r => ({ ...r, book: bookLabel(r.book) || r.book, title: `${r.title || r.player || 'Line'}${r.missing ? ' [gone]' : r.started ? ' [started]' : r.closed ? ' [closed]' : r.changed ? ' [price changed]' : r.unchecked ? ' [not re-checked]' : ''}` })));

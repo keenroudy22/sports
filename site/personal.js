@@ -33,14 +33,19 @@
   }
   const html = value => String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function betslipAction(pick, now = Date.now(), compact = false) {
-    if (!pick || pick.result || Date.parse(pick.kickoff) <= now || /withdr(?:ew|awn)|removed.*recommendation/i.test(pick.entryNote || '')) return '';
+    const kickoff = Date.parse(pick?.kickoff);
+    if (!pick || pick.result || !Number.isFinite(kickoff) || kickoff <= now || /withdr(?:ew|awn)|removed.*recommendation/i.test(pick.entryNote || '')) return '';
     const slip=pick.betslip||{}, legs=Number(slip.legsMatched)||(pick.legs||[]).length||1, book=slip.book||pick.book||'sportsbook';
     const note=compact?'':'<p class="small muted" style="margin-top:7px">Kook’n never places the wager. Confirm every leg, line and price in the sportsbook before submitting.</p>';
     if (/^https:\/\//.test(slip.url||'') && slip.status==='ready' && slip.legsMatched===slip.legsRequested) {
       if (compact) return `<a class="betslip-action compact" href="${html(slip.url)}" target="_blank" rel="noopener noreferrer"><strong>Open exact line in ${html(book)}</strong><b aria-hidden="true">↗</b></a>`;
       return `<a class="betslip-action" href="${html(slip.url)}" target="_blank" rel="noopener noreferrer"><span><small>EXACT LINE FOUND · ${html(book)}</small><strong>Open ${legs>1?'parlay':'bet'} in sportsbook</strong></span><b aria-hidden="true">↗</b></a>${note}`;
     }
-    return '';
+    const title = pick.displayTitle || pick.title;
+    if (pick.posted !== true || pick.community || pick.historicalImport || pick.parlayType || legs !== 1
+        || pick.priceAssumed || !title || !pick.book || !Number.isFinite(pick.odds) || Math.abs(pick.odds) < 100) return '';
+    const price = pick.odds > 0 ? '+' + pick.odds : String(pick.odds);
+    return `<button type="button" class="btn small" data-copy-bet="${html(`${title} · ${price} at ${pick.book}`)}" aria-label="Copy posted bet: ${html(title)}">Copy posted bet</button>`;
   }
   const api = {leagues,league,key,snapshot,changes,sportRoute,betslipAction};
   if(typeof module !== 'undefined') module.exports=api; else root.KRPersonal=api;

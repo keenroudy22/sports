@@ -26,3 +26,14 @@ test('sport changes preserve the selected section, with detail pages returning t
  assert.equal(P.sportRoute({view:'game'},'NBA'),'#games');
  assert.equal(P.league('bogus'),'ALL');
 });
+
+test('an active posted straight has an exact-link action or copies the original sportsbook terms',()=>{
+ const pick={...row,posted:true,title:'Receiver UNDER 4.5 receptions',direction:'under',odds:106};
+ assert.match(P.betslipAction(pick,now,true),/data-copy-bet="Receiver UNDER 4\.5 receptions · \+106 at FanDuel"/);
+ const linked={...pick,betslip:{status:'ready',book:'FanDuel',url:'https://sportsbook.fanduel.com/exact',legsMatched:1,legsRequested:1}};
+ assert.match(P.betslipAction(linked,now,true),/Open exact line in FanDuel/);
+ assert.doesNotMatch(P.betslipAction(linked,now,true),/data-copy-bet/);
+ for(const excluded of [{posted:false},{result:'win'},{priceAssumed:true},{parlayType:'fun'},{entryNote:'Recommendation withdrawn'},{kickoff:'invalid'}])
+  assert.equal(P.betslipAction({...pick,...excluded},now,true),'');
+ assert.equal(P.betslipAction(pick,Date.parse(pick.kickoff),true),'');
+});
