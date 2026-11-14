@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-14T16:46:17Z",
+  "updatedAt": "2026-11-14T17:27:46Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -2997,6 +2997,24 @@
           "name": "Indianapolis Colts",
           "players": [
             {
+              "id": "4362523",
+              "name": "Will Mallory",
+              "position": "TE",
+              "status": "Out",
+              "injury": "Hamstring",
+              "reportedAt": "2026-11-14T17:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362523/will-mallory"
+            },
+            {
+              "id": "3843843",
+              "name": "Arden Key",
+              "position": "DE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-14T17:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3843843/arden-key"
+            },
+            {
               "id": "4892240",
               "name": "Jalen Travis",
               "position": "OT",
@@ -3033,19 +3051,10 @@
               "source": "https://www.espn.com/nfl/player/_/id/2566045/luke-rhodes"
             },
             {
-              "id": "4362523",
-              "name": "Will Mallory",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-11-14T00:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362523/will-mallory"
-            },
-            {
               "id": "3917142",
               "name": "Akeem Davis-Gaither",
               "position": "LB",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Knee",
               "reportedAt": "2026-11-13T22:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/3917142/akeem-davis-gaither"
@@ -3054,7 +3063,7 @@
               "id": "2998565",
               "name": "Mo Alie-Cox",
               "position": "TE",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Groin",
               "reportedAt": "2026-11-13T22:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/2998565/mo-alie-cox"
@@ -3121,15 +3130,6 @@
               "injury": null,
               "reportedAt": "2026-11-11T20:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/4683151/deion-burks"
-            },
-            {
-              "id": "3843843",
-              "name": "Arden Key",
-              "position": "DE",
-              "status": "Injured Reserve",
-              "injury": "Hamstring",
-              "reportedAt": "2026-11-11T19:36Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3843843/arden-key"
             },
             {
               "id": "4360078",
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "16",
-          "name": "Carson Wentz",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-11-13T22:06:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2573079/carson-wentz"
-        },
-        {
-          "teamId": "18",
-          "name": "CJ Donaldson",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-11-13T22:06:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5081999/cj-donaldson"
-        },
-        {
-          "teamId": "18",
-          "name": "Quincy Riley",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-11-13T22:06:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4428350/quincy-riley"
-        },
-        {
-          "teamId": "18",
-          "name": "Christen Miller",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-11-13T22:06:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685479/christen-miller"
-        },
-        {
           "teamId": "18",
           "name": "Erik McCoy",
           "from": "Doubtful",
@@ -7764,11 +7732,43 @@
           "to": "Out",
           "observedAt": "2026-11-14T16:46:17Z",
           "source": "https://www.espn.com/nfl/player/_/id/4567048/kenneth-walker-iii"
+        },
+        {
+          "teamId": "11",
+          "name": "Will Mallory",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-11-14T17:27:46Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4362523/will-mallory"
+        },
+        {
+          "teamId": "11",
+          "name": "Arden Key",
+          "from": "Injured Reserve",
+          "to": "Active",
+          "observedAt": "2026-11-14T17:27:46Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3843843/arden-key"
+        },
+        {
+          "teamId": "11",
+          "name": "Akeem Davis-Gaither",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-11-14T17:27:46Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3917142/akeem-davis-gaither"
+        },
+        {
+          "teamId": "11",
+          "name": "Mo Alie-Cox",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-11-14T17:27:46Z",
+          "source": "https://www.espn.com/nfl/player/_/id/2998565/mo-alie-cox"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-14T16:46:17Z",
-      "lastAttemptAt": "2026-11-14T16:46:17Z",
+      "checkedAt": "2026-11-14T17:27:46Z",
+      "lastAttemptAt": "2026-11-14T17:27:46Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-14T16:46:17Z",
-      "lastAttemptAt": "2026-11-14T16:46:17Z",
+      "checkedAt": "2026-11-14T17:27:46Z",
+      "lastAttemptAt": "2026-11-14T17:27:46Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
