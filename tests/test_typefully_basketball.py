@@ -28,3 +28,22 @@ class BasketballBackupTests(unittest.TestCase):
                 typefully_backup.deliver(entry, book, {}, self.now, lambda _: None, **kwargs)
             self.assertFalse(typefully_backup.deliver(entry, book, {}, self.now, lambda _: None, **kwargs))
             self.assertEqual(request.call_count, 1)
+
+    def test_private_backup_reserves_six_slots_for_straights_and_recaps(self):
+        straight = {'id': 'straight'}
+        climb = {'id': 'climb', 'parlayType': 'ladder', 'legs': [{'title': 'A'}, {'title': 'B'}]}
+        fun = {'id': 'fun', 'parlayType': 'longshot', 'legs': [{'title': 'A'}] * 4}
+        unknown = {'id': 'unknown', 'parlayType': 'community', 'legs': [{'title': 'A'}]}
+        book = {'posts': []}
+        self.assertTrue(run.typefully_private_fallback_eligible(straight, book, self.now))
+        self.assertTrue(run.typefully_private_fallback_eligible(climb, book, self.now))
+        self.assertTrue(run.typefully_private_fallback_eligible(fun, book, self.now))
+        self.assertFalse(run.typefully_private_fallback_eligible(unknown, book, self.now))
+        book['posts'] = [
+            {'typefullyDelivery': {'at': f'2026-11-{day:02d}T18:00:00Z'}}
+            for day in range(10, 14)
+        ]
+        self.assertFalse(run.typefully_private_fallback_eligible(climb, book, self.now))
+        self.assertTrue(run.typefully_private_fallback_eligible(straight, book, self.now))
+        self.assertFalse(run.typefully_private_fallback_eligible(
+            climb, {'posts': [{'typefullyDelivery': {'at': 'not-a-time'}}]}, self.now))

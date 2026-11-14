@@ -3538,6 +3538,30 @@ def private_release_refusal(row, ctx, now):
     return None
 
 
+def typefully_private_fallback_eligible(pick, log_book, now):
+    """Reserve Typefully capacity for straights while allowing key tickets.
+
+    The free plan permits ten posts in a rolling month. Singles and recaps own
+    six of those slots. At most four total attempts may therefore be consumed
+    by the explicitly supported Climb/fun-ticket families. Unknown/community
+    ticket shapes stay on the attended Buffer path.
+    """
+    if not (pick.get('legs') or pick.get('parlayType')):
+        return True
+    if pick.get('parlayType') not in ('ladder', 'longshot', 'easyProps') or not pick.get('legs'):
+        return False
+    used = 0
+    for row in log_book.get('posts', []):
+        attempt = row.get('typefullyDelivery')
+        if not attempt:
+            continue
+        try:
+            used += gates.when(attempt['at']) > now - timedelta(days=31)
+        except (KeyError, TypeError, ValueError):
+            return False
+    return used < 4
+
+
 def release_private(now, log=log, only=None, review_only=False):
     """Release due admissions Discord → public record → Buffer/X.
 
@@ -3585,8 +3609,8 @@ def release_private(now, log=log, only=None, review_only=False):
         local_cap = buffer_post.quota.buffer_block_reason(now=now, essential=True) if settings else None
         fallback = bool(settings and local_cap and 'cap reached' in local_cap
                         and not buffer_post.rate_backoff(now)
-                        and not (row.get('pick') or {}).get('legs')
-                        and not (row.get('pick') or {}).get('parlayType'))
+                        and typefully_private_fallback_eligible(
+                            row.get('pick') or {}, log_book, now))
         web_attempt = next((e for e in log_book.get('posts', [])
                             if e.get('id') == key and e.get('webDelivery')), None)
         if web_attempt and not review_only:
