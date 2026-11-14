@@ -55,6 +55,9 @@ class PublicationGuardTests(unittest.TestCase):
 
     def test_exact_lazy_nba_prop_payload_is_public_not_capture_journals(self):
         self.assertTrue(guard.allowed_path(Path('data/app/nba-props.json')))
+        self.assertTrue(guard.allowed_path(Path('data/app/nba-props/401909301.json')))
+        self.assertFalse(guard.allowed_path(Path('data/app/nba-props/raw.json')))
+        self.assertFalse(guard.allowed_path(Path('data/app/nba-props/401909301/history.json')))
         self.assertFalse(guard.allowed_path(Path('data/app/nba-quarter-quotes.json')))
         self.assertFalse(guard.allowed_path(Path('data/nba/player-forecasts.json')))
 

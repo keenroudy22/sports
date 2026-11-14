@@ -30,6 +30,17 @@ def public_payloads(data):
     return overview, {'generatedAt': data.get('generatedAt'), **props}
 
 
+def matchup_prop_payloads(props):
+    """Reuse the public comparison rows in one small file per covered matchup."""
+    by_event = defaultdict(list)
+    for row in props.get('rows', []):
+        event = str(row.get('eventId', ''))
+        if event.isascii() and event.isdecimal():
+            by_event[event].append(row)
+    return {event: {'generatedAt': props['generatedAt'], 'rows': rows}
+            for event, rows in sorted(by_event.items())}
+
+
 def read_json(path, fallback):
     try:
         return json.loads(path.read_text())

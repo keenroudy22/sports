@@ -21,6 +21,14 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertEqual(props['holds'],original['playerProps']['holds'])
   self.assertEqual(len(overview['teamTrends']),1)
   self.assertEqual(json.dumps(original,sort_keys=True),saved)
+ def test_matchup_shards_reuse_exact_rows_in_original_order(self):
+  rows=[{'eventId':'22','line':12.5},{'eventId':'11','line':4.5},
+        {'eventId':22,'line':13.5},{'eventId':'../raw','line':2.5}]
+  props={'generatedAt':'now','rows':rows,'holds':[{'reason':'Out'}]}
+  shards=nba_today.matchup_prop_payloads(props)
+  self.assertEqual(shards,{'11':{'generatedAt':'now','rows':[rows[1]]},
+                           '22':{'generatedAt':'now','rows':[rows[0],rows[2]]}})
+  self.assertEqual(len(props['rows']),4)
  def test_matchup_pairs_validate_independently_without_new_requests(self):
   q={'book':'DraftKings','retrievedAt':boxscores.stamp(NOW),'current':{
    'home':{'spreadLine':-3.5,'spreadPrice':-110,'moneyline':-150},

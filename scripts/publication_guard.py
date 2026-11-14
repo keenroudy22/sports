@@ -62,7 +62,7 @@ def allowed_path(relative):
         return False
     if len(parts) == 3:
         return parts[2] in APP_FILES or bool(re.fullmatch(r'cbb-sheet-\d{4}-\d{2}-\d{2}-[1-9]\d?\.svg', parts[2]))
-    return bool(re.fullmatch(r'data/app/(?:games/(?:NFL|CFB)-[A-Za-z0-9_-]+|'
+    return bool(re.fullmatch(r'data/app/(?:games/(?:NFL|CFB)-[A-Za-z0-9_-]+|nba-props/[0-9]+|'
                              r'player-charts/(?:NFL|CFB)|players/(?:NFL|CFB|NBA|CBB)(?:/\d+)?|'
                              r'teams/(?:NFL|CFB)(?:/\d+)?|teams/CFB-defense|'
                              r'trends/(?:index|quarter-index|NFL-\d{4}-\d{2}-\d{2}-1Q-milestones(?:-part-[1-9]\d*)?|(?:NFL|CFB)-\d{4}-\d{2}-\d{2}(?:-milestones)?(?:-part-[1-9]\d*)?))\.json', value))

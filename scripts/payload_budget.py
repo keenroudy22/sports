@@ -83,6 +83,12 @@ def check(site=SITE):
             warning = size_warning(name, path.stat().st_size, limit)
             if warning:
                 warnings.append(warning)
+    nba_props = site / 'data/app/nba-props'
+    if nba_props.is_dir():
+        for path in sorted(nba_props.glob('*.json')):
+            warning = size_warning(f'nba-matchup-props:{path.stem}', path.stat().st_size, LIMITS['nba-props'])
+            if warning:
+                warnings.append(warning)
     trends = site / 'data/app/trends'
     index = trends / 'index.json'
     if not index.is_file():

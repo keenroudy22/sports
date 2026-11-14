@@ -73,6 +73,30 @@ test('NBA matchup marks only the exact posted quote and removes stale research h
  assert.doesNotMatch(stale,/class="lean-tag"|class="pick-tag"/);
 });
 
+test('NBA matchup loads its own current prop file, with a full board fallback when needed', async () => {
+  const s=load(), api=s.module.exports, seen=[];
+  const kickoff=new Date(Date.now()+3600000).toISOString(), generatedAt=new Date().toISOString();
+  const teams={away:{id:'1',name:'Away'},home:{id:'2',name:'Home'}};
+  const data={games:[{id:'NBA-1',kickoff,teams},{id:'NBA-2',kickoff,teams}],generatedAt,matchupPropEvents:['1']};
+  const row={eventId:'1',athleteId:'11',team:'1',name:'Exact Player',stat:'pts',line:15.5,
+    book:'DraftKings',over:-110,under:-110,sourceAt:generatedAt};
+  let shard={generatedAt,rows:[row]};
+  const views=s.KRGames(api.gamesContext({allPicks:async()=>[],get:async path=>{
+    if (path==='app/nba.json') return data;
+    if (path==='app/players/NBA.json') return {players:[]};
+    seen.push(path);
+    return path==='app/nba-props/1.json' ? shard : {rows:[row]};
+  }}));
+  const page=await views.game({id:'NBA-1'});
+  assert.match(page,/#player\/NBA\/11\?stat=pts&amp;line=15\.5/);
+  assert.deepEqual(seen.splice(0),['app/nba-props/1.json']);
+  assert.doesNotMatch(await views.game({id:'NBA-2'}),/Exact Player/);
+  assert.deepEqual(seen,[]);
+  shard={generatedAt:'stale',rows:[]};
+  assert.equal(await views.game({id:'NBA-1'}),page);
+  assert.deepEqual(seen,['app/nba-props/1.json','app/nba-props.json']);
+});
+
 test('NBA matchup preserves availability holds across the player’s markets', async () => {
  const s=load(), api=s.module.exports;
  const kickoff=new Date(Date.now()+3600000).toISOString(), sourceAt=new Date().toISOString();

@@ -6,7 +6,11 @@ comparisons, exact prices, history, role reviews, holds and source times formerl
 embedded in nba.json. No private capture journals are exposed. Failed detail
 loads show a retry message, never invented estimates. Today game cards retain
 the `marketRead.ourGap` summary; full source comparisons remain in game details.
-This separates downloads without removing any game or prop coverage.
+Individual NBA game pages use `app/nba-props/<numeric-event-id>.json` when listed
+in the schedule build. Each file contains only the matching rows copied from the
+public board. Games outside that index use the existing player directory. The
+full board remains the fallback if the schedule and matchup files are out of
+sync and remains available to cross-game tools.
 
 `app/record.json` Climb route includes a public weekly summary (Eastern week dates,
 posted count, remaining allowance, maximum steps and legs). It omits private reservation

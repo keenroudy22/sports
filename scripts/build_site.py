@@ -2322,8 +2322,12 @@ def build(now=None):
     nba_overview, nba_props = nba_today.public_payloads(dict(
         nba_today.build(now, boxes=nba_boxes, delivered=nba_public, scoreboard=nba_scoreboard),
         morningBrief=morning_brief.current(now)))
+    nba_matchup_props = nba_today.matchup_prop_payloads(nba_props)
+    nba_overview['matchupPropEvents'] = list(nba_matchup_props)
     write(OUT / 'nba.json', nba_overview)
     write(OUT / 'nba-props.json', nba_props)
+    for event, payload in nba_matchup_props.items():
+        write(OUT / 'nba-props' / f'{event}.json', payload)
     nba_index, nba_shards, nba_season = build_nba_players(nba_boxes)
     write(OUT / 'players' / 'NBA.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['NBA'],
                                          'players': nba_index, 'season': nba_season})

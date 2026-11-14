@@ -474,14 +474,27 @@
       state:live ? 'in' : 'pre', completed:final, status:live ? word : ''}, {link:false, ranks:false})
       + `<p class="small muted">${esc(word)} · <a href="#games/live?sport=${league}">Live &amp; scores ›</a></p>`;
   };
+  const nbaMatchupProps = async (data, id) => {
+    const event = id.slice('NBA-'.length);
+    if (Array.isArray(data?.matchupPropEvents)) {
+      if (!data.matchupPropEvents.includes(event)) return {rows:[]};
+      const shard = /^\d+$/.test(event) ? await get(`app/nba-props/${event}.json`).catch(() => null) : null;
+      if (shard?.generatedAt === data.generatedAt && Array.isArray(shard?.rows)) return shard;
+    }
+    const payload = await get('app/nba-props.json').catch(() => null);
+    if (Array.isArray(payload?.rows)) return payload;
+    if (Array.isArray(data?.playerProps?.rows)) return data.playerProps;
+    return Array.isArray(payload?.playerProps?.rows) ? payload.playerProps : {rows:[]};
+  };
   views.game = async route => {
     const back = '<a class="back" href="#games">← Games</a>';
     const league = /^(NBA|CBB)-/.exec(route.id)?.[1];
     if (league) {
-      const [data, playerIndex, propPayload, picks] = await Promise.all([
-        get(`app/${league.toLowerCase()}.json`).catch(() => null),
+      const dataRequest = get(`app/${league.toLowerCase()}.json`).catch(() => null);
+      const [data, playerIndex, rows, picks] = await Promise.all([
+        dataRequest,
         get(`app/players/${league}.json`).catch(() => ({players:[]})),
-        league === 'NBA' ? get('app/nba-props.json').catch(() => ({rows:[]})) : Promise.resolve({rows:[]}),
+        league === 'NBA' ? dataRequest.then(data => nbaMatchupProps(data, route.id)) : Promise.resolve({rows:[]}),
         league === 'NBA' ? ctx.allPicks().catch(() => []) : Promise.resolve([])]);
       const research = data?.games?.find(g => g.id === route.id);
       const stored = research ? null : (await maybe('sports.json'))?.leagues?.[league]?.games?.find(g => g.id === route.id);
@@ -491,9 +504,6 @@
       const top = head(league, title, esc(whenShort(game.kickoff)), back);
       const card = research && league === 'NBA' ? nbaGameCard(research, false)
         : research?.projection ? cbbGameCard(research, false) : basketballScoreCard(game, league);
-      const rows = league === 'NBA' ? (Array.isArray(propPayload?.rows) ? propPayload
-        : Array.isArray(data.playerProps?.rows) ? data.playerProps
-          : Array.isArray(propPayload?.playerProps?.rows) ? propPayload.playerProps : {rows:[]}) : {rows:[]};
       return top + card + basketballMatchupProps(league, game, picks, playerIndex, rows);
     }
     let detail;
