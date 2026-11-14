@@ -1045,7 +1045,7 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
     const picks = showPicks ? (open.length ? `${open.length} posted NBA pick${open.length === 1 ? '' : 's'} today. ` : 'No NBA play posted yet. ') : '';
     return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${picks}${games.length} game${games.length === 1 ? '' : 's'} · tap a matchup for Kook vs Book.</p>${showPicks && open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}${games.length ? `<div class="today-game-list">${games.slice(0,3).map(nbaSummaryGame).join('')}</div>` : ''}<a class="more" href="#today?sport=NBA">${games.length > 3 ? `See all ${games.length} NBA games` : 'Open NBA Today'} ›</a></section>`;
   };
-  views.basketballEdges = async (league, { type, q, preview = false } = {}) => {
+  views.basketballEdges = async (league, { type, q, preview = false, limit = 40 } = {}) => {
     const [schedule, props] = await Promise.all([
       maybe(`app/${league.toLowerCase()}.json`),
       league === 'NBA' && type !== 'games' ? maybe('app/nba-props.json') : null,
@@ -1086,8 +1086,22 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
       }
     }
     const gameById = new Map(games.map(g => [String(g.providerId || g.id?.replace(/^NBA-/, '')), g]));
+    let quotes = props?.rows || [];
+    // The slate preview stays small. Search and the NBA tab use the same
+    // matchup files as player charts so the preview cap cannot hide a match.
+    if (league === 'NBA' && type !== 'games' && (!preview || q)
+        && Array.isArray(schedule?.matchupPropEvents)) {
+      const covered = schedule.matchupPropEvents.filter(id => {
+        const game = gameById.get(id);
+        return game && Date.parse(game.kickoff) > now;
+      });
+      if (covered.length) {
+        const files = await Promise.all(covered.map(id => C.nbaMatchupProps(get, schedule, `NBA-${id}`)));
+        quotes = files.flatMap((file, index) => file.rows.filter(row => String(row.eventId) === covered[index]));
+      }
+    }
     const playerRows = [];
-    for (const row of props?.rows || []) {
+    for (const row of quotes) {
       const game = gameById.get(String(row.eventId)), dir = row.side;
       if (!game || !row.athleteId || !row.stat || !row.book || !['over','under'].includes(dir) || row.hold
           || !isNum(row.line) || !isNum(row.projection?.value) || !validOdds(row[dir])
@@ -1106,10 +1120,10 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
       <span><small>Projection gap</small><b>${esc(r.difference)}</b></span></a></li>`).join('')}</ul>` : '';
     const group = (heading, rows) => {
       if (!rows.length) return '';
-      const limit = preview ? 3 : 15;
-      return `<h3>${heading} · ${rows.length}</h3>${list(rows.slice(0,limit))}${rows.length > limit ? preview
+      const shown = preview ? 3 : limit;
+      return `<h3>${heading} · ${rows.length}</h3>${list(rows.slice(0,shown))}${rows.length > shown ? preview
         ? `<p><a href="#edges?sport=${league}&amp;type=${heading === 'Player props' ? 'props' : 'games'}${q ? `&amp;q=${esc(encodeURIComponent(q))}` : ''}">View all ${rows.length} ${heading.toLowerCase()} ›</a></p>`
-        : `<details class="more-box"><summary>Show ${rows.length-limit} more ${heading.toLowerCase()}</summary>${list(rows.slice(limit))}</details>` : ''}`;
+        : `<p><button class="btn small" type="button" data-more-rows>Show ${Math.min(40, rows.length-shown)} more ${heading.toLowerCase()}</button></p>` : ''}`;
     };
     const matchups = group('Matchup lines', comparisons.sort((a,b) => b.gap-a.gap));
     const players = group('Player props', playerRows.sort((a,b) => Number(b.liked)-Number(a.liked) || b.gap-a.gap));

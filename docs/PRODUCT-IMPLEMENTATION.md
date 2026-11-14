@@ -1,3 +1,19 @@
+### November 13 verified matchup coverage and basketball Edges
+
+Pages `43550922146` shipped the full NBA matchup payloads and exact football
+market linking. The public Oklahoma City–Clippers file held all 220 qualifying
+rows while the slate board kept 60. Darian Mensah’s 264.5 passing yards under
+at FanDuel -114 opened the same threshold on 320, 375 and 1440 CSS pixels.
+The normal and clean exports passed 2,294 Python tests (two skips) and 356
+interface tests. The public record audit matched 178 plays.
+
+Pages `43551911395` added NBA and CBB to Kook’n Edges and passed 357 interface
+tests plus the other standard gates. The hosted Edges search for Akron matched
+the current DraftKings -12.5 (-108) and the Kook’n -16.6 on all three widths.
+All 35 fresh CBB spread pairs matched stored inputs. The 69 route checks and
+33 confirmed November calendar plays reconciled on the hosted revision.
+Live NBA Edges search coverage remains open in `O-20261113-EDGES-SEARCH`.
+
 ### November 13 college basketball sportsbook spreads — verified live
 
 The ordinary 9 PM Eastern desk captured 32 paired DraftKings spreads via its

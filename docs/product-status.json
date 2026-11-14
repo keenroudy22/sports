@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T02:16:00+00:00",
+  "updatedAt": "2026-11-14T03:38:17+00:00",
   "items": [
+    {
+      "id": "O-20261113-EDGES-SEARCH",
+      "title": "Find all eligible NBA quotes from Edges",
+      "status": "observing",
+      "owner": "agent",
+      "next": "After the standard release and next ordinary NBA price capture, verify a player omitted from the slate preview appears in NBA Edges and All Sports search. Check the exact line, side, book and chart on phone and desktop.",
+      "doneWhen": "Live search finds an eligible matchup-file row outside the slate preview and displays the same quote in the matchup and exact player chart. The All Sports overview remains compact.",
+      "evidence": "The dedicated NBA Edges view and typed All Sports search use the existing per-game files. A regression fixture proves a row missing from the featured payload can open its exact sportsbook chart."
+    },
+    {
+      "id": "O-20261113-MATCHUP-EDGES",
+      "title": "Verify full matchup coverage and basketball Edges",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve exact quote identity and watch the next ordinary NBA capture. Keep unpriced or suspect quotes out of research leans.",
+      "doneWhen": "The NBA game file preserves every eligible row. Football prop cells and basketball Edges match their sourced lines on hosted phone and desktop views.",
+      "evidence": "Pages 43550922146 carried all 220 eligible Oklahoma City\u2013Clippers prop rows with 60 on the featured board. Darian Mensah under 264.5 at FanDuel -114 opened the exact chart at 320, 375 and 1440px. Pages 43551911395 added basketball Edges and matched Akron -12.5 at -108 and 35 CBB spread pairs. Across both releases, 69 live route checks had no browser errors, and the calendar matched 33 confirmed plays."
+    },
     {
       "id": "O-20261113-CBBSPREAD",
       "title": "Verify hosted College Hoops spread coverage",

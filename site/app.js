@@ -1554,7 +1554,7 @@
       const leagues = state.league === 'ALL' ? ['NBA','CBB'] : [state.league];
       const views = await ensureGames();
       return (await Promise.all(leagues.map(league => views.basketballEdges(league, {
-        type:state.board.type, q:state.q, preview:leagues.length > 1,
+        type:state.board.type, q:state.q, preview:leagues.length > 1, limit:state.board.limit,
       })))).join('');
     };
     if (basketballEdgeView && state.league !== 'ALL') return researchHead(route.mode, true)
@@ -2122,7 +2122,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-407c2bdcaacb';
-  const GAMES_ASSET = 'app-games.js?v=sha256-5f72e216bcbe';
+  const GAMES_ASSET = 'app-games.js?v=sha256-60d1a923f31b';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
   const RESEARCH_CSS = 'research.css?v=sha256-e15b02c3446c';
   let researchCssLoading = null;

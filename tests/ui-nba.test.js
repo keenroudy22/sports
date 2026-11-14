@@ -44,6 +44,26 @@ test('basketball Edges uses exact fresh prices, respects holds and market filter
  assert.doesNotMatch(games, /123\.5|player prices/i);
  assert.doesNotMatch(await views.basketballEdges('NBA',{type:'props',q:'not in slate'}), /Verified Guard/);
 });
+test('NBA Edges search finds matchup prices beyond the compact slate preview', async () => {
+ const s=load(),api=s.module.exports,now=Date.now();
+ const kickoff=new Date(now+3600000).toISOString(), sourceAt=new Date(now-60000).toISOString();
+ const teams={home:{name:'Home',abbreviation:'HOM'},away:{name:'Away',abbreviation:'AWY'}};
+ const game={id:'NBA-41',providerId:'41',kickoff,status:'scheduled',teams};
+ const featured={eventId:'41',athleteId:'1',name:'Featured Guard',stat:'pts',statName:'Points',side:'over',
+   line:12.5,over:-110,book:'FanDuel',kickoff,sourceAt,projection:{value:13}};
+ const extra={...featured,athleteId:'2',name:'Bench Guard',line:8.5,book:'DraftKings'};
+ const files={'app/nba.json':{generatedAt:sourceAt,matchupPropEvents:['41'],games:[game]},
+   'app/nba-props.json':{generatedAt:sourceAt,rows:[featured]},
+   'app/nba-props/41.json':{generatedAt:sourceAt,rows:[featured,extra]}};
+ const paths=[];
+ const read=async path=>{paths.push(path);return files[path];};
+ const views=s.KRGames(api.gamesContext({get:read,maybe:read}));
+ assert.doesNotMatch(await views.basketballEdges('NBA',{preview:true}),/Bench Guard/);
+ assert.ok(!paths.includes('app/nba-props/41.json'));
+ assert.match(await views.basketballEdges('NBA',{type:'props',preview:true,q:'Bench'}),
+   /Bench Guard[\s\S]*DraftKings[\s\S]*8\.5/);
+ assert.match(await views.basketballEdges('NBA',{type:'props'}),/#player\/NBA\/2\?stat=pts&amp;line=8\.5&amp;direction=over&amp;book=DraftKings&amp;game=NBA-41/);
+});
 test('NBA delayed schedule snapshots never show past-tip projections or fabricated live scores',async()=>{
  const s=load(),api=s.module.exports,kickoff=new Date().toISOString(),stamp=new Date().toISOString();
  const g={id:'NBA-lag',status:'scheduled',kickoff,teams:{home:{name:'Home',abbreviation:'HOM'},away:{name:'Away',abbreviation:'AWY'}},scores:{home:0,away:0},projection:{home:114,away:110,total:224},totalQuote:{line:220.5,over:-110,under:-110,book:'DraftKings',retrievedAt:stamp}};
