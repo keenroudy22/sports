@@ -1,7 +1,9 @@
 import unittest
 from datetime import datetime, timedelta, timezone
+from io import BytesIO
 from types import SimpleNamespace
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 import run
 import typefully_backup
@@ -66,6 +68,32 @@ class BasketballBackupTests(unittest.TestCase):
                 entry, book, {}, self.now + timedelta(seconds=10), lambda _: None, **kwargs))
         self.assertEqual(upload.call_count, 1)
         self.assertEqual(request.call_count, 1)
+
+    def test_media_upload_failure_records_safe_status_and_can_retry(self):
+        entry = {'id': 'pick', 'queuedText': 'Original'}
+        book = {'posts': [entry]}
+        saved = []
+        denied = HTTPError('https://signed.example/secret', 403, 'forbidden', {}, BytesIO(b'secret'))
+        kwargs = dict(expires=self.now + timedelta(minutes=30),
+                      media_url='https://keenroudy.com/sports/data/cards/pick.png')
+        with patch.object(typefully_backup, 'upload_media', side_effect=denied):
+            self.assertFalse(typefully_backup.deliver(
+                entry, book, {}, self.now, lambda value: saved.append(value), **kwargs))
+        attempt = entry['typefullyDelivery']
+        self.assertEqual(attempt['mediaError'], 'HTTP 403')
+        self.assertEqual(attempt['mediaLastAttemptAt'], '2026-11-13T18:00:00Z')
+        self.assertNotIn('secret', str(attempt))
+        published = {'id': 9, 'status': 'published',
+                     'x_post_published_at': '2026-11-13T18:01:00Z',
+                     'x_published_url': 'https://x.com/keenkooks/status/2123456789012345689'}
+        with patch.object(typefully_backup, 'upload_media', return_value='media-3'), \
+             patch.object(typefully_backup, 'media_request', return_value={'status': 'ready'}), \
+             patch.object(typefully_backup, 'request', return_value=published):
+            self.assertTrue(typefully_backup.deliver(
+                entry, book, {}, self.now + timedelta(minutes=1),
+                lambda value: saved.append(value), **kwargs))
+        self.assertNotIn('mediaError', attempt)
+        self.assertNotIn('mediaLastAttemptAt', attempt)
 
     def test_attended_x_receipt_requires_owned_exact_observation(self):
         entry = {

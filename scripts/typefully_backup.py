@@ -8,7 +8,7 @@ import json
 import re
 from datetime import timedelta
 from pathlib import Path
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
@@ -125,10 +125,25 @@ def deliver(entry, book, settings, now, save, *, text=None, expires=None, media_
         try:
             attempt['mediaId'] = upload_media(settings, media_url)
             attempt['mediaUrl'] = media_url
+            attempt.pop('mediaError', None)
+            attempt.pop('mediaLastAttemptAt', None)
             save(book)
-        except (OSError, URLError, ValueError):
+        except HTTPError as error:
+            # Keep provider bodies, URLs and credentials out of the public
+            # delivery ledger.  The status is enough to distinguish access,
+            # endpoint and transient failures on the next repair pass.
+            attempt['mediaError'] = f'HTTP {error.code}'
+            attempt['mediaLastAttemptAt'] = gates.stamp(now)
+            save(book)
+            return False
+        except (OSError, URLError, ValueError) as error:
             # The hosted card may still be deploying.  Keep the owned post
             # attempt and retry the image later; never fall back to text-only.
+            # Store only the exception class so a response body, local path or
+            # credential can never leak into the append-only receipt.
+            attempt['mediaError'] = type(error).__name__
+            attempt['mediaLastAttemptAt'] = gates.stamp(now)
+            save(book)
             return False
     if attempt.get('mediaId') and not attempt.get('mediaReadyAt'):
         try:
