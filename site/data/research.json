@@ -63145,5 +63145,222 @@
         "units": -1
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-14T13:00:14Z",
+    "summary": "Released 1: Lotzeir Brooks UNDER 2.5 receptions +106 at FanDuel.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "5141394",
+        "market": "rec",
+        "line": 2.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401856889"
+        ],
+        "book": "FanDuel",
+        "odds": 106,
+        "projection": 2.4,
+        "edge": "Price-checked chance 50.4% against the exact two-sided price; 48.5% needed at +106: +1.8 percentage points.",
+        "cutoff": "UNDER 2.5 at +106 or better; off the card at 2 or lower, or at -109 or worse at 2.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-08T09:19:38Z",
+        "quotedAt": "2026-11-14T12:05:34Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 7:05 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-14T13:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.523,
+          "chance": 0.504,
+          "calibrated": true,
+          "calibration": 0.16,
+          "calibrationN": 2871,
+          "push": 0.0,
+          "breakEven": 0.485,
+          "edgePoints": 1.8,
+          "evPerUnit": 0.038,
+          "snapshotAt": "2026-11-08T09:19:38Z",
+          "probabilitySpec": "4b30839467196db56d323e2080229944120920dacd52ba965b672a412623da03",
+          "evaluatedAt": "2026-11-14T12:42:48Z",
+          "fairChance": 0.454,
+          "anchoredChance": 0.504,
+          "gap": 4.9,
+          "calibrationFamily": "CFB/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Alabama Crimson Tide at Vanderbilt Commodores",
+        "title": "Lotzeir Brooks UNDER 2.5 receptions",
+        "id": "CFB-2026-W11-brooks-under-2-5-rec-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856889",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://tide1009.com/friday-availability-alabama-vanderbilt-football-2026/",
+          "https://www.on3.com/teams/alabama-crimson-tide/news/initial-availability-report-keelon-russells-status-revealed-for-vanderbilt-game/",
+          "https://www.on3.com/teams/alabama-crimson-tide/news/how-to-watch-listen-to-alabama-crimson-tide-football-vs-vanderbilt-commodores-2026/",
+          "https://www.on3.com/teams/alabama-crimson-tide/news/injury-updates-on-two-alabama-starters-to-kick-off-vanderbilt-game-week/",
+          "https://www.on3.com/teams/alabama-crimson-tide/news/photo-gallery-alabama-holds-wednesday-practice-of-vanderbilt-week/",
+          "https://rolltide.com/documents/download/2026/11/9/11.14.26_Vanderbilt.pdf"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 5 of 10 under 2.5.",
+          "context": [
+            "Role: 3rd of 3 ALA WRs by projected targets, 3.5 a game.",
+            "Defense: VAN allows 12.56 receptions a game to WRs, 86th-stingiest of 138 this season."
+          ],
+          "cautions": [],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 2.4 against 2.5. The under reads 50.4% after adjustment from the raw 52.3%; 48.5% is needed at +106. Last 10 games: 5 of 10 under 2.5. Role: 3rd of 3 ALA WRs by projected targets, 3.5 a game. Defense: VAN allows 12.56 receptions a game to WRs, 86th-stingiest of 138 this season.",
+        "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 2.5. I say 2.4.",
+              "numbers": {
+                "projection": 2.4,
+                "line": 2.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-08T09:19:38Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "2 of his last 5 games finished under 2.5 receptions.",
+              "numbers": {
+                "values": [
+                  4,
+                  2,
+                  3,
+                  3,
+                  1
+                ],
+                "hits": 2,
+                "games": 5,
+                "line": 2.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-11-07T20:30Z"
+            },
+            {
+              "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-14T12:42:48Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 48,
+            "windMph": 5,
+            "windDirection": "N",
+            "precipProb": 0,
+            "periodStart": "2026-11-14T11:00:00-06:00",
+            "issuedAt": "2026-11-14T10:16:32+00:00",
+            "source": "https://api.weather.gov/gridpoints/OHX/50,57/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": null,
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": 106,
+                  "time": "2026-11-12T18:35:29Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": 106,
+                  "time": "2026-11-14T12:05:34Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 2.5,
+              "price": 106,
+              "time": "2026-11-14T12:05:34Z"
+            }
+          },
+          "ours": {
+            "projection": 2.4,
+            "line": 2.5,
+            "market": "rec",
+            "text": "Book says 2.5. I say 2.4.",
+            "snapshotAt": "2026-11-08T09:19:38Z"
+          },
+          "history": "Last 10 games: 5 of 10 under 2.5.",
+          "sources": [
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/OHX/50,57/forecast/hourly",
+              "time": "2026-11-14T10:16:32+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856889",
+              "time": "2026-11-14T12:42:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-11-14T12:42:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://tide1009.com/friday-availability-alabama-vanderbilt-football-2026/",
+              "time": "2026-11-14T12:42:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.on3.com/teams/alabama-crimson-tide/news/initial-availability-report-keelon-russells-status-revealed-for-vanderbilt-game/",
+              "time": "2026-11-14T12:42:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.on3.com/teams/alabama-crimson-tide/news/how-to-watch-listen-to-alabama-crimson-tide-football-vs-vanderbilt-commodores-2026/",
+              "time": "2026-11-14T12:42:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.on3.com/teams/alabama-crimson-tide/news/injury-updates-on-two-alabama-starters-to-kick-off-vanderbilt-game-week/",
+              "time": "2026-11-14T12:42:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.on3.com/teams/alabama-crimson-tide/news/photo-gallery-alabama-holds-wednesday-practice-of-vanderbilt-week/",
+              "time": "2026-11-14T12:42:48Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://rolltide.com/documents/download/2026/11/9/11.14.26_Vanderbilt.pdf",
+              "time": "2026-11-14T12:42:48Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-14T13:00:14Z"
+      }
+    ]
   }
 ]
