@@ -31,11 +31,15 @@ class BasketballBackupTests(unittest.TestCase):
 
     def test_private_backup_reserves_six_slots_for_straights_and_recaps(self):
         straight = {'id': 'straight'}
+        nba_straight = {'id': 'nba', 'league': 'NBA', 'selectionMethod': 'sourced-nba-primary-prop-v1'}
+        cbb_straight = {'id': 'cbb', 'league': 'CBB', 'selectionMethod': 'sourced-cbb-straight-v1'}
         climb = {'id': 'climb', 'parlayType': 'ladder', 'legs': [{'title': 'A'}, {'title': 'B'}]}
         fun = {'id': 'fun', 'parlayType': 'longshot', 'legs': [{'title': 'A'}] * 4}
         unknown = {'id': 'unknown', 'parlayType': 'community', 'legs': [{'title': 'A'}]}
         book = {'posts': []}
         self.assertTrue(run.typefully_private_fallback_eligible(straight, book, self.now))
+        self.assertTrue(run.typefully_private_fallback_eligible(nba_straight, book, self.now))
+        self.assertTrue(run.typefully_private_fallback_eligible(cbb_straight, book, self.now))
         self.assertTrue(run.typefully_private_fallback_eligible(climb, book, self.now))
         self.assertTrue(run.typefully_private_fallback_eligible(fun, book, self.now))
         self.assertFalse(run.typefully_private_fallback_eligible(unknown, book, self.now))

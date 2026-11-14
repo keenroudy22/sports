@@ -1,4 +1,9 @@
-"""Typefully delivery for checked football straights during a local Buffer cap."""
+"""Duplicate-safe X backup for revalidated releases during a local Buffer cap.
+
+Eligibility remains with the calling release path: reviewed football, NBA and
+CBB straights may use the reserved straight/recap capacity, while only the
+explicitly supported Climb and fun-ticket families may use ticket capacity.
+"""
 import json
 import re
 from datetime import timedelta
