@@ -110,3 +110,14 @@ class NBASummaryTests(unittest.TestCase):
 
 
 if __name__ == '__main__': unittest.main()
+
+
+class NBACaptureOrderTests(unittest.TestCase):
+    def test_confirmed_ungraded_game_and_missing_finals_precede_rechecks(self):
+        final_ids = ['41', '42', '41']
+        history = [{'eventId': '43'}, {'eventId': '44'}, {'eventId': '42'}]
+        saved = {'NBA-41': {}, 'NBA-44': {}}
+        plays = [{'eventId': 'NBA-41'}, {'eventId': 'NBA-43'}, {'eventId': 'NBA-80'},
+                 {'eventId': 'NBA-42', 'result': 'win'}]
+        self.assertEqual(sport_box.nba_capture_order(final_ids, history, saved, plays),
+                         ['43', '42', '41', '44'])

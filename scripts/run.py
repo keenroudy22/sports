@@ -66,7 +66,7 @@ PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('data/morning-brief/', 'data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/betslips.json', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
+             'data/paper/', 'data/hoops/', 'data/sport-box/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -153,7 +153,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/',
+LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/sport-box/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 

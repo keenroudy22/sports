@@ -802,6 +802,22 @@ class GitTests(unittest.TestCase):
         self.assertEqual(log[1], 'Capture odds 2026-09-27')
         self.assertEqual(self.sh('status', '--porcelain').stdout, '')
 
+    def test_commit_preserves_captured_basketball_final_and_ledger(self):
+        box = self.repo / 'data' / 'sport-box' / 'nba-2027.jsonl'
+        box.parent.mkdir()
+        box.write_text('{}\n')
+        ledger = box.parent / 'ledger.json'
+        ledger.write_text('{}')
+        self.sh('add', 'data/sport-box')
+        self.sh('commit', '-q', '-m', 'old box store')
+        box.write_text('{}\n{"eventId":"NBA-1"}\n')
+        ledger.write_text('{"changed":true}')
+        now = datetime(2026, 11, 14, 6, 55, tzinfo=timezone.utc)
+        result = run.commit_push(now, run.slot_for(now), {}, push=False, runner=self.runner, cwd=self.repo)
+        self.assertTrue(result['committed'])
+        paths = self.sh('diff-tree', '--no-commit-id', '--name-only', '-r', 'HEAD').stdout.splitlines()
+        self.assertEqual(paths, ['data/sport-box/ledger.json', 'data/sport-box/nba-2027.jsonl'])
+
     def test_push_rejected_by_the_other_writer_is_rebased_and_the_store_merged(self):
         """The hosted workflow and the desk both appended to the odds store; the desk's push is rejected,
         rebased, the store merged with every record kept, and pushed. Nothing is forced."""

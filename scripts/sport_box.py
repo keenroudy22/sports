@@ -188,6 +188,16 @@ def refresh_events(events, root=None, fetch=None, now=None, league='NBA', limit=
     return result
 
 
+def nba_capture_order(final_ids, history, saved, plays):
+    """Spend the existing budget on missing finals before archive rechecks."""
+    confirmed = list(dict.fromkeys([*final_ids, *(str(row['eventId']) for row in history)]))
+    pending = {str(play.get('eventId')).removeprefix('NBA-') for play in plays if not play.get('result')}
+    return sorted(confirmed, key=lambda event: (
+        f'NBA-{event}' in saved,
+        event not in pending,
+    ))
+
+
 def refresh(root=None, fetch=None, now=None, limit=20, league='NBA'):
     """Hosted scheduled-only bounded writer: current finals then recent regular boxes."""
     import json
@@ -207,20 +217,20 @@ def refresh(root=None, fetch=None, now=None, limit=20, league='NBA'):
     if problems:
         raise ValueError('; '.join(problems))
     old = {r['eventId']:r for p in root.glob('*.jsonl') for r in boxscores.read_store(p)}
+    try:
+        score_games = json.loads((project/'site/data/sports.json').read_text())['leagues'][league]['games']
+    except (OSError, ValueError, KeyError):
+        score_games = []
+    final_ids = [str(g['id']).removeprefix(f'{league}-') for g in score_games if g.get('status') == 'final']
+    history = sorted((r for r in hoops_store.load(league) if r['type']==2),key=lambda r:r['kickoff'],reverse=True)
     if league == 'NBA':
+        import nba_trial_runtime
         slate = nba_capture.STORE/'slate.json'
         games = json.loads(slate.read_text()).get('games',[]) if slate.exists() else []
-        final_ids = [str(g['providerId']) for g in games if g['status']=='final']
+        final_ids.extend(str(g['providerId']) for g in games if g['status'] == 'final')
+        final_ids = nba_capture_order(final_ids, history, old, nba_trial_runtime.public_rows())
     else:
-        slate = project/'site/data/sports.json'
-        try:
-            games = json.loads(slate.read_text())['leagues']['CBB']['games']
-        except (OSError, ValueError, KeyError):
-            games = []
-        final_ids = [str(g['id']).removeprefix('CBB-') for g in games if g.get('status')=='final']
-    history = sorted((r for r in hoops_store.load(league) if r['type']==2),key=lambda r:r['kickoff'],reverse=True)
-    priority = cbb_capture_order(games, history, old, now) if league == 'CBB' else []
-    final_ids = priority + final_ids + [r['eventId'] for r in history]
+        final_ids = cbb_capture_order(score_games, history, old, now) + final_ids + [r['eventId'] for r in history]
     result={'captured':0,'errors':0,'requests':0}
     for event in dict.fromkeys(final_ids):
         saved=old.get(f'{league}-{event}')
