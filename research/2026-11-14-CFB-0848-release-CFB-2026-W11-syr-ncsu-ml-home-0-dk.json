@@ -1,0 +1,251 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-14T13:48:51Z",
+  "summary": "Released 1: NC State MONEYLINE +124 at DraftKings.",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "moneyline",
+      "line": 0.0,
+      "direction": "home",
+      "gameIds": [
+        "CFB-401858300"
+      ],
+      "book": "DraftKings",
+      "odds": 124,
+      "projection": 0.5,
+      "edge": "Price-checked chance 46.8% against the exact two-sided price; 44.6% needed at +124: +2.1 percentage points.",
+      "cutoff": "HOME 0 at +124 or better; off the card at -0.5 or lower, or at +109 or worse at 0.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-07T21:10:44Z",
+      "quotedAt": "2026-11-14T11:58:07Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 6:58 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-14T16:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.542,
+        "chance": 0.468,
+        "calibrated": true,
+        "calibration": 0.35,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.446,
+        "edgePoints": 2.1,
+        "evPerUnit": 0.048,
+        "snapshotAt": "2026-11-07T21:10:44Z",
+        "probabilitySpec": "86501e656367347803fb02a3ccc597a2b371a110db94f9c60ed9af388cc9e5de",
+        "evaluatedAt": "2026-11-14T13:33:30Z",
+        "fairChance": 0.428,
+        "anchoredChance": 0.468,
+        "gap": 4.0,
+        "calibrationFamily": "CFB/moneyline"
+      },
+      "matchup": "Syracuse Orange at NC State Wolfpack",
+      "title": "NC State MONEYLINE",
+      "id": "CFB-2026-W11-syr-ncsu-ml-home-0-dk",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858300",
+        "https://cfb-model-lab.vercel.app/availability/acc-10003096"
+      ],
+      "why": "Price-checked win chance 46.8%; +124 needs 44.6%. Checked before publishing: Steve Angeli is Syracuse's starting quarterback and is listed as available for the game against NC State. Checked before publishing: Malachi Nelson is listed as questionable for the game against NC State. The market: The spread opened +1.5 and is +3 at DraftKings, a move of 1.5 toward the away. The total opened 56.5 and is 53.5 at DraftKings, 3 toward the under. 6 books span 2.5 to 3 on the spread; the middle is 2.5. Our spread is 4.7 points off, bigger than 63% of our past gaps. Gaps this size went 666-653 against the close in 3584 games. Our total is 1.2 points off, bigger than 20% of our past gaps. Gaps this size went 1535-1362 against the close in 3602 games.",
+      "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Amari Odom is listed as out for the game against NC State.",
+          "NC State is 4-2 at home this season, while Syracuse is 4-5 overall."
+        ],
+        "cautions": [
+          "NC State listed starting linebacker Popo Aguirre and safety Ronnie Royal III as out against Syracuse.",
+          "NC State listed outside linebacker Harvey Dyson III, wide receiver Keenan Jackson, center Daniel Cruz and offensive lineman Rico Jackson as questionable in its initial availability report.",
+          "Syracuse guard Jayden Mann is sidelined for the NC State game after suffering a lower-body sprain against Clemson."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Amari Odom is listed as out for the game against NC State.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "Price-checked win chance 46.8%; this price needs 44.6%.",
+            "numbers": {
+              "chance": 0.468,
+              "breakEven": 0.446
+            },
+            "source": "Kook'n exact-price check",
+            "time": "2026-11-14T11:58:07Z"
+          },
+          {
+            "text": "Amari Odom is listed as out for the game against NC State.",
+            "numbers": {},
+            "source": "https://cfb-model-lab.vercel.app/availability/acc-10003096",
+            "time": "2026-11-14T13:33:30Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "NC State listed starting linebacker Popo Aguirre and safety Ronnie Royal III as out against Syracuse.",
+            "numbers": {},
+            "source": "https://www.on3.com/teams/abilene-christian-wildcats/news/nc-state-availability-report-4-starters-questionable-vs-syracuse/",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "NC State listed outside linebacker Harvey Dyson III, wide receiver Keenan Jackson, center Daniel Cruz and offensive lineman Rico Jackson as questionable in its initial availability report.",
+            "numbers": {},
+            "source": "https://www.on3.com/teams/abilene-christian-wildcats/news/nc-state-availability-report-4-starters-questionable-vs-syracuse/",
+            "time": "2026-11-14T13:33:30Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Amari Odom is listed as out for the game against NC State.",
+            "numbers": {},
+            "source": "https://cfb-model-lab.vercel.app/availability/acc-10003096",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "NC State listed starting linebacker Popo Aguirre and safety Ronnie Royal III as out against Syracuse.",
+            "numbers": {},
+            "source": "https://www.on3.com/teams/abilene-christian-wildcats/news/nc-state-availability-report-4-starters-questionable-vs-syracuse/",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "NC State listed outside linebacker Harvey Dyson III, wide receiver Keenan Jackson, center Daniel Cruz and offensive lineman Rico Jackson as questionable in its initial availability report.",
+            "numbers": {},
+            "source": "https://www.on3.com/teams/abilene-christian-wildcats/news/nc-state-availability-report-4-starters-questionable-vs-syracuse/",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "Syracuse guard Jayden Mann is sidelined for the NC State game after suffering a lower-body sprain against Clemson.",
+            "numbers": {},
+            "source": "https://www.si.com/college/syracuse/football/syracuse-nc-state-preview-01m78kg503ch",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "Amari Odom is listed as out for the game against NC State.",
+            "numbers": {},
+            "source": "https://cfb-model-lab.vercel.app/availability/acc-10003096",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "NC State listed starting linebacker Popo Aguirre and safety Ronnie Royal III as out against Syracuse.",
+            "numbers": {},
+            "source": "https://www.on3.com/teams/abilene-christian-wildcats/news/nc-state-availability-report-4-starters-questionable-vs-syracuse/",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "NC State listed outside linebacker Harvey Dyson III, wide receiver Keenan Jackson, center Daniel Cruz and offensive lineman Rico Jackson as questionable in its initial availability report.",
+            "numbers": {},
+            "source": "https://www.on3.com/teams/abilene-christian-wildcats/news/nc-state-availability-report-4-starters-questionable-vs-syracuse/",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "text": "Syracuse guard Jayden Mann is sidelined for the NC State game after suffering a lower-body sprain against Clemson.",
+            "numbers": {},
+            "source": "https://www.si.com/college/syracuse/football/syracuse-nc-state-preview-01m78kg503ch",
+            "time": "2026-11-14T13:33:30Z"
+          }
+        ],
+        "weather": {
+          "tempF": 52,
+          "windMph": 9,
+          "windDirection": "NW",
+          "precipProb": 0,
+          "periodStart": "2026-11-14T12:00:00-05:00",
+          "issuedAt": "2026-11-14T06:24:57+00:00",
+          "source": "https://api.weather.gov/gridpoints/RAH/75,57/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.0,
+                "price": -115,
+                "time": "2026-11-09T11:45:06Z"
+              },
+              "now": {
+                "line": 3.0,
+                "price": -115,
+                "time": "2026-11-14T12:00:05Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 2.5,
+                "price": -112,
+                "time": "2026-11-08T11:42:31Z"
+              },
+              "now": {
+                "line": 2.5,
+                "price": 100,
+                "time": "2026-11-14T12:00:05Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 0.0,
+            "price": 124,
+            "time": "2026-11-14T11:58:07Z"
+          }
+        },
+        "ours": {
+          "projection": 0.5,
+          "line": 0.0,
+          "market": "moneyline",
+          "text": "Amari Odom is listed as out for the game against NC State.",
+          "snapshotAt": "2026-11-07T21:10:44Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://cfb-model-lab.vercel.app/availability/acc-10003096",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "label": "injury",
+            "url": "https://www.on3.com/teams/abilene-christian-wildcats/news/nc-state-availability-report-4-starters-questionable-vs-syracuse/",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "label": "injury",
+            "url": "https://www.si.com/college/syracuse/football/syracuse-nc-state-preview-01m78kg503ch",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://theacc.com/news/2026/11/13/football-week-11-saturday-preview-saturday-slate-features-championship-implications-across-the-acc.aspx",
+            "time": "2026-11-14T13:33:30Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/RAH/75,57/forecast/hourly",
+            "time": "2026-11-14T06:24:57+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858300",
+            "time": "2026-11-14T13:33:30Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-14T13:48:51Z"
+    }
+  ]
+}
