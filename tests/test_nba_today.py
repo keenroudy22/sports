@@ -78,11 +78,12 @@ class NBAEvidenceTests(unittest.TestCase):
  def test_today_shows_only_receipt_backed_plays_and_grades(self):
   play={'id':'delivered','season':2027,'seasonType':'regular-season','type':'publish',
         'kickoff':boxscores.stamp(NOW+timedelta(hours=1)),'publishedAt':boxscores.stamp(NOW),
-        'game':{'teams':{}},'result':'win','actual':9}
+        'game':{'teams':{}},'eventId':'NBA-1','result':'win','actual':9}
   private={**play,'id':'private'}
   with patch.object(nba_today.nba_trial_runtime,'rows',return_value=[play,private]), \
        patch.object(nba_today.nba_trial_runtime,'public_rows',return_value=[play,private]):
    result=nba_today.build(NOW,root=self.root,boxes=[],delivered=[{'id':'delivered','result':None,'actual':None}])
+  self.assertEqual(result['trial']['plays'][0]['gameId'],'NBA-1')
   self.assertEqual([row['id'] for row in result['trial']['plays']],['delivered'])
   self.assertIsNone(result['trial']['plays'][0]['result'])
  def test_injury_id_comes_from_espn_link_and_comments_never_enter_store(self):
