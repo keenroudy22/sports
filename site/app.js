@@ -2416,15 +2416,10 @@
       }
       if (d.removeLeg != null) { state.ticket.splice(Number(d.removeLeg), 1); saved.set('ticket', state.ticket); render(true); return; }
       if ('clearTicket' in d) { state.ticket = []; saved.set('ticket', state.ticket); render(true); return; }
-      if ('copyBet' in d) {
-        try { await navigator.clipboard.writeText(d.copyBet); toast('Posted bet copied'); }
-        catch (_) { window.prompt('Copy the posted bet:', d.copyBet); }
-        return;
-      }
-      if ('copyTicket' in d) {
-        const checked = await ticketRows();
-        const text = C.ticketText(checked.map(r => ({ ...r, book: bookLabel(r.book) || r.book, title: `${r.title || r.player || 'Line'}${r.missing ? ' [gone]' : r.started ? ' [started]' : r.closed ? ' [closed]' : r.changed ? ' [price changed]' : r.unchecked ? ' [not re-checked]' : ''}` })));
-        try { await navigator.clipboard.writeText(text); toast('Ticket copied'); } catch (_) { window.prompt('Copy the ticket text:', text); }
+      if (d.copyBet != null || 'copyTicket' in d) {
+        const text = d.copyBet ?? C.ticketText((await ticketRows()).map(r => ({ ...r, book: bookLabel(r.book) || r.book, title: `${r.title || r.player || 'Line'}${r.missing ? ' [gone]' : r.started ? ' [started]' : r.closed ? ' [closed]' : r.changed ? ' [price changed]' : r.unchecked ? ' [not re-checked]' : ''}` })));
+        try { await navigator.clipboard.writeText(text); toast('Copied'); }
+        catch (_) { window.prompt('Copy this selection:', text); }
         return;
       }
       if ('prepareFeedback' in d) {
