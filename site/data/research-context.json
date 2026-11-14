@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-14T14:26:32Z",
+  "updatedAt": "2026-11-14T16:46:17Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4047365",
+              "name": "Josh Jacobs",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Finger",
+              "reportedAt": "2026-11-14T14:26Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
+            },
+            {
               "id": "14931",
               "name": "Kevin Zeitler",
               "position": "G",
@@ -2688,15 +2697,6 @@
               "injury": null,
               "reportedAt": "2026-11-12T22:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/4869461/trey-smack"
-            },
-            {
-              "id": "4047365",
-              "name": "Josh Jacobs",
-              "position": "RB",
-              "status": "Out",
-              "injury": "Finger",
-              "reportedAt": "2026-11-12T17:02Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
             },
             {
               "id": "4428863",
@@ -3457,6 +3457,24 @@
           "name": "Kansas City Chiefs",
           "players": [
             {
+              "id": "4832955",
+              "name": "Emmett Johnson",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-14T16:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4832955/emmett-johnson"
+            },
+            {
+              "id": "4567048",
+              "name": "Kenneth Walker III",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Groin",
+              "reportedAt": "2026-11-14T16:33Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4567048/kenneth-walker-iii"
+            },
+            {
               "id": "4043041",
               "name": "Jaylon Moore",
               "position": "OT",
@@ -3502,15 +3520,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3139477/patrick-mahomes"
             },
             {
-              "id": "4567048",
-              "name": "Kenneth Walker III",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Groin",
-              "reportedAt": "2026-11-13T20:32Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4567048/kenneth-walker-iii"
-            },
-            {
               "id": "4688813",
               "name": "Josh Downs",
               "position": "WR",
@@ -3518,15 +3527,6 @@
               "injury": null,
               "reportedAt": "2026-11-13T19:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4688813/josh-downs"
-            },
-            {
-              "id": "4832955",
-              "name": "Emmett Johnson",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-13T19:30Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4832955/emmett-johnson"
             },
             {
               "id": "3044859",
@@ -5067,6 +5067,15 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4239996",
+              "name": "Travis Etienne Jr.",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Hamstring",
+              "reportedAt": "2026-11-14T16:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4239996/travis-etienne-jr"
+            },
+            {
               "id": "3917660",
               "name": "David Edwards",
               "position": "G",
@@ -5137,15 +5146,6 @@
               "injury": null,
               "reportedAt": "2026-11-13T19:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428350/quincy-riley"
-            },
-            {
-              "id": "4239996",
-              "name": "Travis Etienne Jr.",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Hamstring",
-              "reportedAt": "2026-11-13T19:38Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4239996/travis-etienne-jr"
             },
             {
               "id": "4036131",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "16",
-          "name": "Blake Cashman",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-11-13T22:06:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3728281/blake-cashman"
-        },
-        {
-          "teamId": "16",
           "name": "Carson Wentz",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-11-14T02:37:52Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426376/charles-cross"
+        },
+        {
+          "teamId": "12",
+          "name": "Kenneth Walker III",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-11-14T16:46:17Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4567048/kenneth-walker-iii"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-14T14:26:32Z",
-      "lastAttemptAt": "2026-11-14T14:26:32Z",
+      "checkedAt": "2026-11-14T16:46:17Z",
+      "lastAttemptAt": "2026-11-14T16:46:17Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-14T14:26:32Z",
-      "lastAttemptAt": "2026-11-14T14:26:32Z",
+      "checkedAt": "2026-11-14T16:46:17Z",
+      "lastAttemptAt": "2026-11-14T16:46:17Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
