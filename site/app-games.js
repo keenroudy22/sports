@@ -1100,14 +1100,14 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
       const gap = row.projection.value-row.line;
       playerRows.push({ name:row.name, market:row.statName || row.stat, model:C.fixed(row.projection.value), line:row.line,
         price:`${dir==='under' ? 'U' : 'O'} ${oddsText(row[dir])}`, book:row.book, observedAt:row.sourceAt,
-        gap:Math.abs(gap), difference:`${gap>0 ? '+' : ''}${C.fixed(gap)}`, liked:row.favorite === true,
+        gap:Math.abs(gap), difference:`${gap>0 ? '+' : ''}${C.fixed(gap)}`, liked:row.favorite === true, history:C.nbaPropHistory(row, dir),
         href:C.playerLineHref({league,athleteId:row.athleteId,stat:row.stat,line:row.line,direction:dir,book:bookLabel(row.book),gameId:game.id}) });
     }
     const list = rows => rows.length ? `<ul class="edge-comparisons">${rows.map(r => `<li><a class="edge-comparison${r.liked ? ' is-lean' : ''}" href="${esc(r.href)}">
       <span><b>${esc(r.name)}</b><small>${esc(r.market)}${r.liked ? ' · Research lean' : ''}</small></span>
       <span><small>Kook’n</small><b>${esc(r.model)}</b></span>
       <span><small>Book · ${esc(bookLabel(r.book))}</small><b>${esc(r.line)} · ${esc(r.price)}</b><small>Checked ${esc(ago(r.observedAt))}</small></span>
-      <span><small>Projection gap</small><b>${esc(r.difference)}</b></span></a></li>`).join('')}</ul>` : '';
+      <span><small>Projection gap</small><b>${esc(r.difference)}</b>${r.history ? `<small>History · ${esc(r.history)}</small>` : ''}</span></a></li>`).join('')}</ul>` : '';
     const group = (heading, rows) => {
       if (!rows.length) return '';
       const shown = preview ? 3 : limit;

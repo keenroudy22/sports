@@ -719,6 +719,15 @@
     return [board, schedule?.playerProps, board?.playerProps].find(value => Array.isArray(value?.rows)) || { rows: [] };
   };
 
+  const nbaPropHistory = (row, direction) => {
+    if (direction !== row.side) return '';
+    const season = row.projection?.window;
+    const history = [['L5', row.last5], ['L10', row.last10]].filter(([, sample]) => Number.isInteger(sample?.games)
+      && Number.isInteger(sample?.hits) && sample.games > 0 && sample.hits >= 0 && sample.hits <= sample.games)
+      .map(([label, sample]) => `${label} ${sample.hits}/${sample.games}`).join(' · ');
+    return history && season ? `${history} · ${season.toLowerCase()}` : history;
+  };
+
   const nbaUpcomingProps = async (get, schedule, now = Date.now()) => {
     if (!Array.isArray(schedule?.matchupPropEvents)) return null;
     const events = new Set(schedule.matchupPropEvents);
@@ -979,5 +988,5 @@
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, basketballAvailabilityHold, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, quarterMatchupOrder, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, nbaTicketLines, compareTicketLeg, ticketText,
-    unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, labelBoardPicks, playerLineHref, nbaMatchupProps, nbaUpcomingProps, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, labelBoardPicks, playerLineHref, nbaMatchupProps, nbaUpcomingProps, nbaPropHistory, shardOf, BASE };
 });

@@ -26,7 +26,8 @@ test('basketball Edges uses exact fresh prices, respects holds and market filter
  const cbb={...common,id:'CBB-1',spreadQuote:{homeLine:-3.5,homeOdds:-108,awayOdds:-112,book:'DraftKings',observedAt:stamp},
    firstTotal:{line:123.5,book:'DraftKings',capturedAt:stamp}};
  const row={eventId:'1',athleteId:'42',name:'Verified Guard',stat:'ast',statName:'Assists',line:4.5,side:'under',
-   under:-114,book:'FanDuel',sourceAt:stamp,kickoff,projection:{value:3},favorite:true};
+   under:-114,book:'FanDuel',sourceAt:stamp,kickoff,projection:{value:3,window:'Last season'},favorite:true,
+   last5:{hits:3,games:4},last10:{hits:6,games:8}};
  const feeds={'app/nba.json':{games:[nba]},'app/cbb.json':{games:[cbb]},'app/nba-props.json':{rows:[row,
    {...row,name:'Held Guard',hold:'Questionable'}, {...row,name:'Stale Guard',sourceAt:new Date(now-18000000).toISOString()},
    {...row,name:'Wrong Matchup',eventId:'99'}]}};
@@ -36,6 +37,7 @@ test('basketball Edges uses exact fresh prices, respects holds and market filter
  assert.match(html, /NBA\/42\?stat=ast&amp;line=4\.5&amp;direction=under&amp;book=FanDuel&amp;game=NBA-1/);
  assert.match(html, /is-lean[\s\S]*Verified Guard[\s\S]*4\.5 · U -114/);
  assert.match(html, /217\.5/);
+ assert.match(html, /History · L5 3\/4 · L10 6\/8 · last season/);
  assert.doesNotMatch(html, /Held Guard|Stale Guard|Wrong Matchup|chance|expected value/i);
  paths.length=0;
  const games=await views.basketballEdges('CBB',{type:'games',q:'Home Club'});

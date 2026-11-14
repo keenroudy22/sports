@@ -801,9 +801,10 @@
       const odds = row[direction];
       const price = [isNum(odds) ? `${direction === 'under' ? 'Under' : 'Over'} ${oddsText(odds)}` : 'Odds unavailable', bookLabel(row.book)].filter(Boolean).join(' · ');
       const checked = quote.current ? `Checked ${ago(row.sourceAt)}` : quote.label;
+      const history = held ? '' : C.nbaPropHistory(row, direction);
       const href = esc(C.playerLineHref({ league, athleteId: row.athleteId, stat: row.stat, line: row.line, direction,
         book: bookLabel(row.book), gameId: row.eventId ? `NBA-${row.eventId}` : null }));
-      return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="${href}">${photo(row.athleteId, row.teamAbbr)}<div><b>${esc(row.name)} · ${esc(statName(row.stat))}</b><span>${esc(row.teamAbbr || '')} · ${esc(whenShort(row.kickoff))}</span><span>${esc(price)} · ${esc(checked)}</span>${held ? `<span>${esc(row.hold || 'Availability review')}</span>` : ''}${lean ? '<span class="green">Research lean</span>' : ''}</div><div class="n"><b class="num">${esc(row.line)}</b><span>${quote.current ? 'Book' : 'Saved line'}</span><b class="num">${isNum(projection) ? esc(C.statValue(projection, row.stat)) : 'Held'}</b><span>${gap == null ? 'Kook’n' : `${gap > 0 ? '+' : ''}${C.fixed(gap)} vs line`}</span></div></a>`;
+      return `<a class="receipt plain-link" style="grid-template-columns:42px minmax(0,1fr) auto" href="${href}">${photo(row.athleteId, row.teamAbbr)}<div><b>${esc(row.name)} · ${esc(statName(row.stat))}</b><span>${esc(row.teamAbbr || '')} · ${esc(whenShort(row.kickoff))}</span><span>${esc(price)} · ${esc(checked)}</span>${history ? `<span>History · ${esc(history)}</span>` : ''}${held ? `<span>${esc(row.hold || 'Availability review')}</span>` : ''}${lean ? '<span class="green">Research lean</span>' : ''}</div><div class="n"><b class="num">${esc(row.line)}</b><span>${quote.current ? 'Book' : 'Saved line'}</span><b class="num">${isNum(projection) ? esc(C.statValue(projection, row.stat)) : 'Held'}</b><span>${gap == null ? 'Kook’n' : `${gap > 0 ? '+' : ''}${C.fixed(gap)} vs line`}</span></div></a>`;
     }).join('');
     const directory = players.slice().sort((a, b) => String(b[5]).localeCompare(String(a[5]))
       || String(a[1]).localeCompare(String(b[1]))).slice(0, 24);
