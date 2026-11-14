@@ -264,6 +264,24 @@ class TicketCardTests(unittest.TestCase):
         self.assertNotIn('BOOK SAYS', svg)
         self.assertNotIn('I HAVE IT AT', svg)
 
+    def test_away_moneyline_card_uses_the_selected_away_team(self):
+        game = {
+            'league': 'CFB', 'kickoff': '2026-11-14T17:00:00Z',
+            'away': {'id': '154', 'abbreviation': 'WAKE', 'name': 'Wake Forest'},
+            'home': {'id': '2567', 'abbreviation': 'SMU', 'name': 'SMU'},
+        }
+        pick = {'id': 'CFB-2026-W11-wake-smu-ml-away-0-dk',
+                'title': 'Wake Forest MONEYLINE', 'marketType': 'moneyline',
+                'direction': 'away', 'line': 0, 'odds': -102,
+                'book': 'DraftKings', 'riskUnits': 1}
+        data = ticket_card.straight_data(pick, game, fetch=lambda _: self.image)
+        self.assertEqual(data['team'], 'WAKE')
+        self.assertEqual(data['side'], 'WAKE TO WIN')
+        self.assertEqual(data['team_logo'], self.image)
+        svg = ticket_card.straight_svg(pick, game, fetch=lambda _: self.image)
+        self.assertIn('WAKE TO WIN', svg)
+        self.assertNotIn('SMU TO WIN', svg)
+
     def test_climb_map_uses_ledger_rows_and_labels_the_future_plan(self):
         first = {'r1': {'id': 'r1', 'parlayType': 'ladder', 'publishedAt': '2026-10-01T15:00:00Z',
                         'ladder': {'run': 1, 'step': 1, 'stake': 50, 'payout': 81, 'banked': 0},

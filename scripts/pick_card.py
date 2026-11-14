@@ -204,7 +204,7 @@ def side_for(pick, game, player_side=None):
     if pick.get('athleteId'):
         return player_side or 'home'
     direction = str(pick.get('direction') or '').lower()
-    if pick.get('marketType') == 'spread' and direction in ('home', 'away'):
+    if pick.get('marketType') in ('spread', 'moneyline') and direction in ('home', 'away'):
         return direction
     return 'home'
 
@@ -289,7 +289,8 @@ def artwork(pick, game, fetch=None, player_side=None):
     if not game:
         return None
     direction = str(pick.get('direction') or '').lower()
-    sides = [direction] if pick.get('marketType') == 'spread' and direction in ('home', 'away') else ['away', 'home']
+    sides = ([direction] if pick.get('marketType') in ('spread', 'moneyline') and direction in ('home', 'away')
+             else ['away', 'home'])
     urls = [logo_url(game.get(side) or {}, league) for side in sides]
     uris = [fetch(url) for url in urls if url]
     return {'kind': 'logos', 'uris': uris} if len(uris) == len(sides) and all(uris) else None
