@@ -61,6 +61,16 @@ class PublicationGuardTests(unittest.TestCase):
         self.assertFalse(guard.allowed_path(Path('data/app/nba-quarter-quotes.json')))
         self.assertFalse(guard.allowed_path(Path('data/nba/player-forecasts.json')))
 
+    def test_nba_prop_columns_receive_the_same_private_field_check_as_objects(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'index.html').write_text('<title>Site</title>')
+            path = root / 'data/app/nba-props/123.json'
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps({'columns': ['line', 'apiKey'], 'values': [[4.5, None]]}))
+            self.assertEqual(guard.audit(root)['issues'],
+                             [{'file': 'data/app/nba-props/123.json', 'reason': 'private-payload-field'}])
+
     def test_reviewed_cbb_player_directories_are_public_not_box_journals(self):
         for path in ('data/app/players/CBB.json', 'data/app/players/CBB/3.json'):
             self.assertTrue(guard.allowed_path(Path(path)), path)

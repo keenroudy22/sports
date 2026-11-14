@@ -714,7 +714,14 @@
     if (Array.isArray(index)) {
       if (!event || !index.includes(event)) return { rows: [] };
       const file = await get(`app/nba-props/${event}.json`).catch(() => null);
-      if (file?.generatedAt === schedule.generatedAt && Array.isArray(file?.rows)) return file;
+      if (file && file.generatedAt === schedule.generatedAt) {
+        if (Array.isArray(file.rows)) return file;
+        if (Array.isArray(file.columns) && Array.isArray(file.values)
+            && file.values.every(row => Array.isArray(row) && row.length === file.columns.length)) {
+          const rows = file.values.map(row => Object.fromEntries(file.columns.map((key, i) => [key, row[i]])));
+          return { generatedAt: file.generatedAt, rows };
+        }
+      }
     }
     const board = await get('app/nba-props.json').catch(() => null);
     return [board, schedule?.playerProps, board?.playerProps].find(value => Array.isArray(value?.rows)) || { rows: [] };

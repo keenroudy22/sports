@@ -5,14 +5,19 @@ NBA game-only views load `app/nba.json`; player views additionally load
 comparisons, exact prices, history, role reviews, holds and source times formerly
 embedded in nba.json. No private capture journals are exposed. Failed detail
 loads show a retry message, never invented estimates. Today game cards retain
-the `marketRead.ourGap` summary; full source comparisons remain in game details.
+the historical gap percentiles and comparison counts, plus the prices used by
+the football projection sheets. Model ranges and full source comparisons live
+in game details.
 Individual NBA game pages use `app/nba-props/<numeric-event-id>.json` when listed
 in the schedule build. Each file contains every qualifying comparison for that
 matchup, including rows outside the slate preview. The matchup files carry
 quote identities and terms, holds, projection ranges, minutes and exact-line
-history counts. The slate preview retains its fuller editorial details.
-Games outside the index use the existing player directory. The featured slate
-board is the fallback if the schedule and matchup files are out of sync.
+history counts. Each matchup file lists field names once in `columns` and
+stores values in the same order in each row. The browser also reads older
+object rows and uses the featured board if the matchup file is missing,
+malformed or from a different build. The slate preview retains its fuller
+editorial details and source links.
+Games outside the index use the existing player directory.
 
 `app/record.json` Climb route includes a public weekly summary (Eastern week dates,
 posted count, remaining allowance, maximum steps and legs). It omits private reservation

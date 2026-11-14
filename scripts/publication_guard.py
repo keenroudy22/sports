@@ -126,7 +126,11 @@ def audit(folder):
                 if path.suffix.lower() == '.json':
                     try:
                         payload = json.loads(text)
-                        if contains_private_key(payload):
+                        columns = payload.get('columns', []) if isinstance(payload, dict) else []
+                        packed_fields = (dict.fromkeys(key for key in columns if isinstance(key, str))
+                                         if relative.parts[:3] == ('data', 'app', 'nba-props')
+                                         and isinstance(columns, list) else {})
+                        if contains_private_key(payload) or contains_private_key(packed_fields):
                             issue(relative, 'private-payload-field')
                         if public_text and public_copy.timing_keys(payload):
                             issue(relative, 'schedule-or-automation-field')

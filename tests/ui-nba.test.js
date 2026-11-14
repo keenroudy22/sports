@@ -140,7 +140,8 @@ test('NBA matchup loads its own current prop file, with a full board fallback wh
   const data={games:[{id:'NBA-1',kickoff,teams},{id:'NBA-2',kickoff,teams}],generatedAt,matchupPropEvents:['1']};
   const row={eventId:'1',athleteId:'11',team:'1',name:'Exact Player',stat:'pts',line:15.5,
     book:'DraftKings',over:-110,under:-110,sourceAt:generatedAt};
-  let shard={generatedAt,rows:[row]};
+  const columns=Object.keys(row);
+  let shard={generatedAt,columns,values:[columns.map(key=>row[key])]};
   let local = true;
   const views=s.KRGames(api.gamesContext({allPicks:async()=>{ assert.equal(local,false); return []; },get:async path=>{
     if (path.startsWith('app/games/')) {
@@ -159,6 +160,9 @@ test('NBA matchup loads its own current prop file, with a full board fallback wh
   assert.deepEqual(seen.splice(0),['app/nba-props/1.json']);
   assert.doesNotMatch(await views.game({id:'NBA-2'}),/Exact Player/);
   assert.deepEqual(seen,[]);
+  shard={generatedAt,columns,values:[['incomplete']]};
+  assert.equal(await views.game({id:'NBA-1'}),page);
+  assert.deepEqual(seen.splice(0),['app/nba-props/1.json','app/nba-props.json']);
   shard={generatedAt:'stale',rows:[]};
   assert.equal(await views.game({id:'NBA-1'}),page);
   assert.deepEqual(seen.splice(0),['app/nba-props/1.json','app/nba-props.json']);

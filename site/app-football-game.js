@@ -144,7 +144,7 @@
     const fromSlate = (today.games || []).find(x => x.id === detail.id) || {};
     const liveNow = withLive([{ ...fromSlate, ...detail }]);
     const g = liveNow.games[0];
-    const model = fromSlate.v2 || detail.v2 || {};
+    const model = { ...detail.v2, ...fromSlate.v2 };
     const m = g.market || {};
     const final = Boolean(g.completed);
     const pregame = !final && g.state !== 'in' && Date.parse(g.kickoff) > now;

@@ -300,6 +300,7 @@ test('a comparison line never replaces the visible projection uncertainty range'
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];
   const detail = { ...g, picks: [], teams: { home: { injuries: [], form: [] }, away: { injuries: [], form: [] } },
+    v2: { ...g.v2, range: { margin: [-3, 13], total: [41, 63] } },
     favoriteLines: [], modelReads: [], seasonTrends: [], props: { lines: { '1': { rushYds: [44.5] } } },
     forecast: { players: { home: { players: [{ id: '1', name: 'White fixture', pos: 'RB', rushYds: [32.9, 2.9, 62.9] }] }, away: { players: [] } } } };
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [], freshness: {} } : detail });
@@ -308,6 +309,7 @@ test('a comparison line never replaces the visible projection uncertainty range'
   assert.match(html, /prop-vs-label">Book<\/span><b>44\.5[\s\S]*prop-vs-label">Kook’n<\/span><b>32\.9[\s\S]*Projection gap[\s\S]*-11\.6[\s\S]*Kook’n range 3–63/);
   assert.match(html, /#player\/CFB\/1\?stat=rushYds&amp;line=44\.5&amp;direction=over/);
   assert.match(html, /Range means model uncertainty/);
+  assert.match(html, /80% range:[^<]+total 41 to 63 points/);
 });
 
 test('football stat cells keep the displayed threshold, odds and chart side together', async () => {

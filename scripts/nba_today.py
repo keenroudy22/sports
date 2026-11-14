@@ -32,7 +32,17 @@ def public_payloads(data):
     board = {'generatedAt': data.get('generatedAt'), **props}
     if len(props.get('rows', [])) > 60:
         board['rows'] = display_rows(props['rows'], 60)
+    board['rows'] = [slate_prop_row(row) for row in board.get('rows', [])]
     return overview, board
+
+
+def slate_prop_row(row):
+    summary = {key: value for key, value in row.items() if value is not None}
+    if row.get('currentRole'):
+        summary['currentRole'] = {key: row['currentRole'][key]
+                                  for key in ('games', 'minutes', 'starts', 'asOf', 'source')
+                                  if key in row['currentRole']}
+    return summary
 
 
 # Full quote identities and the fields used by matchup tables, search and charts.
@@ -63,8 +73,13 @@ def matchup_prop_payloads(props):
         event = str(row.get('eventId', ''))
         if event.isascii() and event.isdecimal():
             by_event[event].append(matchup_prop_row(row))
-    return {event: {'generatedAt': props['generatedAt'], 'rows': rows}
-            for event, rows in sorted(by_event.items())}
+    files = {}
+    for event, rows in sorted(by_event.items()):
+        # Each column comes from the public per-matchup field list above.
+        columns = sorted({key for row in rows for key in row})
+        files[event] = {'generatedAt': props['generatedAt'], 'columns': columns,
+                        'values': [[row.get(key) for key in columns] for row in rows]}
+    return files
 
 
 def read_json(path, fallback):

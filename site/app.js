@@ -2129,7 +2129,7 @@
   const MORE_ASSET = 'app-more.js?v=sha256-f6ee7cd5eb09';
   const PLAYER_ASSET = 'app-player.js?v=sha256-a3d5787e6fed';
   const GAMES_ASSET = 'app-games.js?v=sha256-7a753f8ade5f';
-  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-b9a77c13be4f';
+  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-d0c8ba8cf2a2';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
   let researchCssLoading = null;

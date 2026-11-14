@@ -3,7 +3,7 @@
 Each page loads only what it shows:
 
   app/today.json              games from three days back to eight ahead, with the
-                              market, v1 and the latest v2 forecast; recent/open picks
+                              market and latest v2 slate forecast; recent/open picks
   app/today-hero.json         Today's first paint (under 4 KB): today's best bets with
                               price, book, kickoff and card, the Climb status, last W-L
   app/record.json             the complete public pick history
@@ -519,6 +519,27 @@ def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None
             'value': values or None,
             # The market as evidence beside our number, never inside it (scripts/market_read.py).
             'marketRead': market_block}
+
+
+def slate_card(card):
+    """Keep slate and projection-sheet fields. Matchup files own the detailed model evidence."""
+    summary = {key: value for key, value in card.items() if key != 'v1'}
+    summary['whyDiffer'] = game_context.card_summary(card['whyDiffer'])
+    if card['v2']:
+        summary['v2'] = {key: value for key, value in card['v2'].items()
+                         if key not in ('range', 'model')}
+    if card['marketRead']:
+        summary['marketRead'] = {'ourGap': {
+            market: {key: value for key, value in read.items()
+                     if key in ('percentile', 'gapsThisLargeVsClose')}
+            for market, read in (card['marketRead'].get('ourGap') or {}).items() if read
+        }}
+    if card['value']:
+        summary['value'] = {
+            market: {key: value for key, value in read.items() if key not in ('chance', 'needs')}
+            for market, read in card['value'].items()
+        }
+    return summary
 
 
 def recent_form(team, league, logs, before, count=5):
@@ -2278,11 +2299,7 @@ def build(now=None):
         card['whyDiffer'] = game_context.why_differ(game, card, latest_snap, info['team_logs'],
                                                      info['strength'], injuries, lines, now,
                                                      weather_rows.get(game['id']))
-        # today.json carries the card's sentence; every driver and both markets live on the game page.
-        cards.append({**card, 'whyDiffer': game_context.card_summary(card['whyDiffer']),
-                      # Cards use only ourGap; complete evidence stays on the game page.
-                      'marketRead': {'ourGap': card['marketRead'].get('ourGap', {})}
-                      if card.get('marketRead') else None})
+        cards.append(slate_card(card))
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
         detail = game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
                           names, info['team_logs'], info['defense'], injuries, depth_charts, info['records'],

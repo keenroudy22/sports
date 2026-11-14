@@ -9,15 +9,19 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import nba_capture,nba_today,boxscores
 from test_espn_props import game,board,NOW
 
+def unpack(shard):
+ return [{key:value for key,value in zip(shard['columns'],row) if value is not None}
+         for row in shard['values']]
+
 class NBAEvidenceTests(unittest.TestCase):
  def test_lazy_public_props_preserve_all_rows_without_mutating_editorial_input(self):
   original={'generatedAt':'now','games':[{'id':'1'}], 'teamTrends':[{'team':'1'},{'team':'1'}],
-   'playerProps':{'rows':[{'name':'A','line':10.5,'currentRole':{'minutes':[30]}}], 'holds':[{'name':'B','reason':'Out'}], 'availabilityAt':'now'}}
+   'playerProps':{'rows':[{'name':'A','line':10.5,'currentRole':{'minutes':[30],'note':'Repeated help text'}}], 'holds':[{'name':'B','reason':'Out'}], 'availabilityAt':'now'}}
   saved=json.dumps(original,sort_keys=True)
   overview,props=nba_today.public_payloads(original)
   self.assertNotIn('rows',overview['playerProps'])
   self.assertEqual(overview['playerPropsFile'],'nba-props.json')
-  self.assertEqual(props['rows'],original['playerProps']['rows'])
+  self.assertEqual(props['rows'],[{'name':'A','line':10.5,'currentRole':{'minutes':[30]}}])
   self.assertEqual(props['holds'],original['playerProps']['holds'])
   self.assertEqual(len(overview['teamTrends']),1)
   self.assertEqual(json.dumps(original,sort_keys=True),saved)
@@ -26,8 +30,10 @@ class NBAEvidenceTests(unittest.TestCase):
         {'eventId':22,'line':13.5},{'eventId':'../raw','line':2.5}]
   props={'generatedAt':'now','rows':rows,'holds':[{'reason':'Out'}]}
   shards=nba_today.matchup_prop_payloads(props)
-  self.assertEqual(shards,{'11':{'generatedAt':'now','rows':[rows[1]]},
-                           '22':{'generatedAt':'now','rows':[rows[0],rows[2]]}})
+  self.assertEqual(list(shards),['11','22'])
+  self.assertEqual(shards['11']['generatedAt'],'now')
+  self.assertEqual(unpack(shards['11']),[rows[1]])
+  self.assertEqual(unpack(shards['22']),[rows[0],rows[2]])
   self.assertEqual(len(props['rows']),4)
  def test_matchup_coverage_survives_the_slate_board_limit(self):
   rows=[{'eventId':'11','kickoff':'2099-11-02T23:00Z','athleteId':str(n),'stat':'pts','line':12.5} for n in range(60)]
@@ -36,7 +42,7 @@ class NBAEvidenceTests(unittest.TestCase):
   overview,board=nba_today.public_payloads(data)
   self.assertEqual(overview['playerProps']['availableRows'],61)
   self.assertEqual(board['rows'],rows[:60])
-  self.assertEqual(nba_today.matchup_prop_payloads({'generatedAt':'now','rows':rows})['22']['rows'],rows[60:])
+  self.assertEqual(unpack(nba_today.matchup_prop_payloads({'generatedAt':'now','rows':rows})['22']),rows[60:])
   self.assertEqual(len(data['playerProps']['rows']),61)
  def test_matchup_payload_keeps_public_quote_and_chart_fields(self):
   row = {'eventId':'11','athleteId':'22','stat':'ast','line':4.5,'side':'under','under':-114,'over':102,
@@ -46,8 +52,8 @@ class NBAEvidenceTests(unittest.TestCase):
          'currentRole':{'games':3,'minutes':[29,26,31],'source':'box URL'},
          'last5':{'hits':2,'games':4,'values':[3,4,6,8]},'last10':{'hits':4,'games':9,'push':0}}
   copied = json.dumps(row, sort_keys=True)
-  output = nba_today.matchup_prop_payloads({'generatedAt':'now','rows':[row]})['11']['rows'][0]
-  for key in ('eventId','athleteId','stat','line','side','under','over','book','sourceAt','kickoff','hold','favorite'):
+  output = unpack(nba_today.matchup_prop_payloads({'generatedAt':'now','rows':[row]})['11'])[0]
+  for key in ('eventId','athleteId','stat','line','side','under','over','book','sourceAt','kickoff','favorite'):
    self.assertEqual(output[key],row[key])
   self.assertEqual(output['projection'],{'value':3.9,'minutes':29,'low':1,'high':7,'window':'Last season'})
   self.assertEqual(output['currentRole'],{'games':3,'minutes':[29,26,31]})

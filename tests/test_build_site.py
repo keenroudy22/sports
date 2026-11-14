@@ -49,6 +49,23 @@ def slate_game(game_id, kickoff, state='pre', **market):
 
 
 class MatchupPayloadTests(unittest.TestCase):
+    def test_slate_retains_price_terms_and_ranking_while_matchup_keeps_model_detail(self):
+        card = {'id': 'NFL-1', 'v1': {'home': 21}, 'v2': {'publishedAt': 'now', 'range': [10, 30], 'model': 'v2.1'},
+                'whyDiffer': {'text': 'Source comparison', 'drivers': ['evidence']},
+                'marketRead': {'ourGap': {'margin': {'percentile': 94, 'gapsThisLargeVsClose': [12, 8], 'line': -3.5}}},
+                'value': {'spread': {'side': 'home', 'line': -3.5, 'book': 'DraftKings', 'odds': -105,
+                                     'observedAt': 'now', 'tier': 'lean', 'edge': 4, 'thin': False,
+                                     'chance': .55, 'needs': .51}}}
+        summary = build_site.slate_card(card)
+        self.assertNotIn('v1', summary)
+        self.assertEqual(summary['v2'], {'publishedAt': 'now'})
+        self.assertEqual(summary['whyDiffer'], {'text': 'Source comparison'})
+        self.assertEqual(summary['marketRead']['ourGap']['margin'], {'percentile': 94, 'gapsThisLargeVsClose': [12, 8]})
+        self.assertEqual(summary['value']['spread'], {k: v for k, v in card['value']['spread'].items()
+                                                      if k not in ('chance', 'needs')})
+        self.assertIn('range', card['v2'])
+        self.assertIn('chance', card['value']['spread'])
+
     def test_basketball_payload_keeps_only_the_two_teams_and_receipt_backed_market_terms(self):
         game = {'id': 'NBA-1', 'teams': {'home': {'id': '1'}, 'away': {'id': '2'}}}
         index = [['11', 'Home Player', 'G', '1'], ['22', 'Away Player', 'F', '2'],
