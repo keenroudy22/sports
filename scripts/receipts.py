@@ -296,18 +296,28 @@ def fit_result_rows(rows, head, tail, games=None):
         kept.remove(wins[-1] if wins else kept[-1])
 
 
-def nba_daily_rows(day, as_of):
+def nba_daily_rows(day, as_of, log_book):
     if day < date(2026, 11, 10) or as_of is None:
         return []
     import nba_trial_runtime
     import nba_prop_release
+    delivered = set()
+    for entry in log_book.get('posts', []):
+        if entry.get('kind') != 'buffer:nba-trial' or entry.get('nbaPick') is not True:
+            continue
+        discord = entry.get('discord') or {}
+        clocks = [entry.get('sentAt')]
+        if discord.get('state') == 'sent':
+            clocks.append(discord.get('sentAt'))
+        if any(clock and gates.when(clock) <= as_of for clock in clocks):
+            delivered.add(entry['id'])
+
     published = []
     for play in nba_trial_runtime.public_rows():
-        if (play.get('marketType') != 'player'
+        if (play['id'] not in delivered or play.get('marketType') != 'player'
                 or eastern_date(gates.when(play['kickoff'])) != day
                 or gates.when(play['publishedAt']) > as_of):
             continue
-        # The NBA ledger only creates a publish row after Discord releases.
         # Keep the actual grade separate from the immutable offered terms.
         row = dict(play, posted=True, nbaDailySelection=nba_prop_release.selection(play))
         if not row.get('settledAt') or gates.when(row['settledAt']) > as_of:
@@ -318,8 +328,8 @@ def nba_daily_rows(day, as_of):
     return published
 
 
-def day_receipt(day, first, latest, games, ids, as_of=None):
-    nba_rows = nba_daily_rows(day, as_of)
+def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
+    nba_rows = nba_daily_rows(day, as_of, log_book or {})
     rows = plays_between(first, latest, games, ids, day, day) + nba_rows
     if not settled(rows):
         return None
@@ -386,7 +396,7 @@ def ready(first, latest, games, log_book, now):
     today = eastern_date(now)
     out = []
     for back in (2, 1):
-        receipt = day_receipt(today - timedelta(days=back), first, latest, games, ids, now)
+        receipt = day_receipt(today - timedelta(days=back), first, latest, games, ids, now, log_book)
         if receipt:
             out.append(receipt)
     if today.weekday() == WEEKDAY:
@@ -403,16 +413,18 @@ def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS, log_book=Non
     Discord now uploads cards, but this short public history also repairs an embed when Discord had to fall back
     to the image URL and gives Buffer a stable retry window.
     """
-    try:
-        first = released_first(first, log_book if log_book is not None else x_post.load_log(), games)
-    except (OSError, ValueError):
-        first = released_first(first, {'posts': []}, games)
+    if log_book is None:
+        try:
+            log_book = x_post.load_log()
+        except (OSError, ValueError):
+            log_book = {}
+    first = released_first(first, log_book, games)
     ids = counted(first, latest)
     today = eastern_date(now)
     out = []
     for back in range(days + 1):
         day = today - timedelta(days=back)
-        receipt = day_receipt(day, first, latest, games, ids, now)
+        receipt = day_receipt(day, first, latest, games, ids, now, log_book)
         if receipt:
             out.append(receipt)
         if day.weekday() == WEEKDAY:

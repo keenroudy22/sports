@@ -470,14 +470,24 @@ class CrossSportDailyTest(unittest.TestCase):
         games = {'game': dict(GAMES['sun'], kickoff='2026-11-10T22:00Z')}
         football = pick('game', 'game', posted=True, result='win', odds=100)
         first = {football['id']: football}
-        with patch('nba_trial_runtime.public_rows', return_value=[basketball]):
-            self.assertIsNone(receipts.day_receipt(day, first, {}, games, set(first), now))
+        nba_receipt = {'id': basketball['id'], 'kind': 'buffer:nba-trial', 'nbaPick': True,
+                       'discord': {'state': 'sent', 'sentAt': '2026-11-10T20:01Z'}}
+        log = {'posts': [nba_receipt]}
+        undelivered = dict(basketball, id='undelivered', player='Private NBA admission',
+                           result='win', actual=9, settledAt='2026-11-11T06:30Z')
+        log['posts'].append(dict(nba_receipt, id=undelivered['id'],
+                                 discord={'state': 'pending', 'sentAt': '2026-11-10T20:01Z'},
+                                 sentAt='2026-11-11T13:00Z'))
+        with patch('nba_trial_runtime.public_rows', return_value=[basketball, undelivered]):
+            self.assertIsNone(receipts.day_receipt(day, first, {}, games, set(first), now, log))
             basketball.update(result='loss', actual=5, settledAt='2026-11-11T06:30Z')
-            recap = receipts.day_receipt(day, first, {}, games, set(first), now)
+            recap = receipts.day_receipt(day, first, {}, games, set(first), now, log)
         self.assertEqual(recap['key'], 'receipt:day:2026-11-10')
         self.assertEqual(recap['due'].hour, 13)
         self.assertEqual(recap['title'], '1-1')
         self.assertIn('Example Player', recap['text'])
+        self.assertNotIn('Private NBA admission', recap['text'])
+        self.assertEqual(recap['pickIds'], [football['id'], basketball['id']])
         data = ticket_card.final_data(recap['nbaDailyRows'], str(day))
         self.assertEqual(data['net_units'], 0)
         self.assertEqual([r['result'] for r in data['rows']], ['hit', 'miss'])

@@ -4028,19 +4028,27 @@ def retry_typefully_recap(now, log_book, settings):
     games = {game['id']: game for game in slate.get('games', [])}
     key = f"receipt:day:{eastern_date(now) - timedelta(days=1)}"
     entry = next((row for row in log_book['posts'] if row.get('id') == key), None)
-    if entry is not None:
-        if entry.get('typefullyDelivery') and not entry.get('sentAt'):
-            typefully_backup.deliver(
-                entry, log_book, settings, now, x_post.save_log,
-                media_url=buffer_post.card_url(entry.get('cardKey') or entry['id']))
-            return
-        if not entry.get('discordRecapPrepared') or entry.get('sentAt'):
-            return
+    if entry is not None and (entry.get('sentAt') or not entry.get('discordRecapPrepared')):
+        return
     recap = next((row for row in receipts.ready(ctx.first, ctx.latest, games, log_book, now)
                   if row['key'] == key and now < row['stale']), None)
+    caption = recap['text'].rstrip() + '\n\n21+ only' if recap else None
+    attempt = (entry or {}).get('typefullyDelivery')
+    if attempt and attempt.get('draftId'):
+        # The provider already owns this submission. Read its status only.
+        typefully_backup.deliver(entry, log_book, settings, now, x_post.save_log)
+        return
     if not recap:
         return
-    caption = recap['text'].rstrip() + '\n\n21+ only'
+    if entry is not None:
+        pick_ids = entry.get('resultPickIds')
+        # The caption's late opener can change while the same delivered card
+        # is waiting for media. Recheck identities and keep its original copy.
+        if (entry.get('cardKey') != recap['card'] or
+                (pick_ids != recap.get('pickIds') if pick_ids is not None else entry.get('queuedText') != caption)):
+            log(f'Typefully recap held: {key} delivery no longer matches the public record')
+            return
+        caption = entry['queuedText']
     if x_post.tweet_length(caption) > x_post.LIMIT or x_post.x_style(caption):
         return
     if entry is None:
@@ -4048,6 +4056,7 @@ def retry_typefully_recap(now, log_book, settings):
                  'queuedText': caption, 'textHash': x_post.text_hash(caption),
                  'socialAgeVersion': AGE_VERSION, 'cardKey': recap['card'],
                  'fullDailyRecap': True, 'discordRecapPrepared': True,
+                 'resultPickIds': list(recap.get('pickIds') or []),
                  'discord': {'state': 'pending', 'text': caption, 'destination': 'plays',
                              'readyAt': gates.stamp(now)}}
         log_book['posts'].append(entry)
