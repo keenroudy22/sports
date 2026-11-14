@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 305,
+   "gamesGraded": 306,
    "gamesQuoted": 321,
-   "moneylineSnapshots": 1449,
+   "moneylineSnapshots": 1450,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 266,
+     "gamesGraded": 267,
      "gamesQuoted": 280,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1449,
+   "snapshots": 1450,
    "status": "capturing",
-   "totalSnapshots": 1449
+   "totalSnapshots": 1450
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "NYR",
+    "id": "13",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nyr.png",
+    "name": "New York Rangers",
+    "shortName": "Rangers"
+   },
+   "awayScore": 5,
+   "gameId": "NHL-401892706",
+   "gradedAt": "2026-11-14T04:55:12Z",
+   "home": {
+    "abbreviation": "VAN",
+    "id": "22",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
+    "name": "Vancouver Canucks",
+    "shortName": "Canucks"
+   },
+   "homeScore": 1,
+   "kickoff": "2026-11-14T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "NYI",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "BOS",
-    "id": "1",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/bos.png",
-    "name": "Boston Bruins",
-    "shortName": "Bruins"
-   },
-   "awayScore": 1,
-   "gameId": "NHL-401892604",
-   "gradedAt": "2026-10-30T03:25:11Z",
-   "home": {
-    "abbreviation": "STL",
-    "id": "19",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/stl.png",
-    "name": "St. Louis Blues",
-    "shortName": "Blues"
-   },
-   "homeScore": 4,
-   "kickoff": "2026-10-30T00:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-14T04:30:25Z"
+ "updatedAt": "2026-11-14T04:55:12Z"
 }
