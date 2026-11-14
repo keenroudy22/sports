@@ -873,6 +873,14 @@ class GitTests(unittest.TestCase):
         self.assertEqual(run.commit_log(now,push=False,runner=self.runner,cwd=self.repo),{'committed':True,'pushed':False})
         self.assertEqual(self.sh('show','--name-only','--format=','HEAD').stdout.split(),['data/cbb-picks/2027.jsonl'])
 
+    def test_commit_log_preserves_exact_nba_final_boxes(self):
+        folder=self.repo/'data/sport-box';folder.mkdir(parents=True)
+        (folder/'nba-2027.jsonl').write_text('{"eventId":"NBA-401909301"}\n')
+        now=datetime(2026,11,14,6,55,tzinfo=timezone.utc)
+        self.assertEqual(run.commit_log(now,push=False,runner=self.runner,cwd=self.repo),{'committed':True,'pushed':False})
+        self.assertEqual(self.sh('show','--name-only','--format=','HEAD').stdout.split(),
+                         ['data/sport-box/nba-2027.jsonl'])
+
     def test_sync_commits_captures_a_stopped_run_left_behind(self):
         (self.repo / 'data' / 'odds' / 'nfl.jsonl').write_text('{}\n{"x": 1}\n')
         with self.assertRaises(run.RunError) as caught:        # no remote here, so the rebase step fails after the commit

@@ -15,6 +15,10 @@ import nba_player_props
 import nba_trial_runtime
 
 class SettlementScopeTests(unittest.TestCase):
+    def test_exact_final_store_is_release_whitelisted(self):
+        self.assertTrue(run.allowed('data/sport-box/nba-2027.jsonl'))
+        self.assertTrue(run.allowed('data/sport-box/ledger.json'))
+
     def test_recovery_grades_without_pregame_capture_or_admission(self):
         tree=ast.parse(inspect.getsource(run._run))
         background=next(n for n in tree.body[0].body if isinstance(n,ast.If) and
