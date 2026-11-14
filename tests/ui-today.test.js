@@ -856,6 +856,31 @@ test('the Prep List still favors props, then sides, then one total', () => {
   ['prop', 'side', 'total-a'], 'the Prep List uses the same category order and one-total cap');
 });
 
+test('Edges applies market and search to all sports and scopes football-only filters', async () => {
+  const app = loadApp('#edges?type=games&show=all&q=Home+Club', {}, { extra: linesFor([]) });
+  const rendered = [];
+  app.sandbox.KRGames = () => ({ basketballEdges: async (league, options) => {
+    rendered.push([league, options.type, options.q]);
+    return `<h2>${league} comparisons</h2>`;
+  } });
+  const page = await app.api.views.research(M.resolve(app.sandbox.location.hash));
+  assert.deepEqual(rendered, [['NBA', 'games', 'Home Club'], ['CBB', 'games', 'Home Club']]);
+  assert.match(page, /data-set="type:games"[\s\S]*value="Home Club"[\s\S]*<h2>NBA comparisons<\/h2>[\s\S]*<h2>CBB comparisons<\/h2>[\s\S]*<h2>Football<\/h2>[\s\S]*Every current line · 0/);
+  assert.match(page, /href="#edges\?type=games&amp;show=all&amp;q=Home\+Club&amp;sport=CBB">CBB/);
+  app.sandbox.location.hash = '#edges?type=games&show=all&q=Home+Club&sport=CBB';
+  const cbb = await app.api.views.research(M.resolve(app.sandbox.location.hash));
+  assert.match(cbb, /value="Home Club"[\s\S]*<h2>CBB comparisons<\/h2>/);
+  assert.doesNotMatch(cbb, /NBA comparisons|Every current line|Sort football lines/);
+});
+
+test('Edges keeps basketball search and markets available when football files fail', async () => {
+  const app = loadApp('#edges?type=props&q=Guard');
+  app.sandbox.KRGames = () => ({ basketballEdges: async league => `<h2>${league} comparisons</h2>` });
+  const page = await app.api.views.research(M.resolve(app.sandbox.location.hash));
+  assert.match(page, /data-set="type:props"[\s\S]*value="Guard"[\s\S]*<h2>NBA comparisons<\/h2>[\s\S]*Football lines did not load/);
+  assert.doesNotMatch(page, /Every current line/);
+});
+
 test('an empty official rail names a real price-clearing research lean and never promotes a pass', async () => {
   const closest = lineRow('Closest Look', { athleteId: '88', player: 'Closest Look', stat: 'recYds', marketType: null,
     title: 'Closest Look over 42.5 receiving yards', line: 42.5 }, { view: 'lean', tier: 'lean', chance: 0.56, needs: 0.524, edge: 3.6 });

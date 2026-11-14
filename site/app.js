@@ -1505,13 +1505,17 @@
       return C.researchHash(state.players.sub === 'defense' ? '#stats/defense' : state.players.sub === 'teams' ? '#stats/teams' : '#stats', { ...base, researchQuery: state.players.q, chartStat: state.players.chartStat, chartPos: state.players.chartPos, chartWindow: state.players.chartWindow,
         chartDay: pg.startsWith('day:') ? pg.slice(4) : pg === 'all' ? 'all' : 'next' });
     }
+    const path = route.edges ? '#edges' : `#research/${mode === 'news' ? 'news' : 'lines'}`;
+    return path + lineQuery(state.league);
+  };
+  const lineQuery = league => {
     const q = new URLSearchParams();
     if (state.board.type !== 'all') q.set('type', state.board.type);
     if (state.board.sort !== 'edge') q.set('sort', state.board.sort);
     if (state.board.show === 'all') q.set('show', 'all');
     if (state.q) q.set('q', state.q);
-    if (state.league !== 'ALL') q.set('sport', state.league);
-    return `${route?.edges ? '#edges' : `#research/${mode === 'news' ? 'news' : 'lines'}`}${String(q) ? '?' + q : ''}`;
+    if (league !== 'ALL') q.set('sport', league);
+    return q.size ? '?' + String(q) : '';
   };
   const shareLink = (mode, route) => `<a class="linkish" href="${esc(researchShare(mode, route))}" data-copy-link>Copy link</a>`;
   const RESEARCH_HEAD = {
@@ -1526,7 +1530,8 @@
     const tool = (href, label, key) => `<a href="${href}"${active === key ? ' aria-current="page"' : ''}><b>${label}</b></a>`;
     const researchSport = propSport(state.league);
     const basketball = ['NBA','CBB'].includes(researchSport);
-    const sportLanes = edges ? `<nav class="edge-sports" aria-label="Kook’n Edges sports"><a href="#edges"${state.league === 'ALL' ? ' aria-current="page"' : ''}>All priced</a><a href="#edges?sport=NFL"${state.league === 'NFL' ? ' aria-current="page"' : ''}>NFL</a><a href="#edges?sport=CFB"${state.league === 'CFB' ? ' aria-current="page"' : ''}>CFB</a><a href="#edges?sport=NBA"${state.league === 'NBA' ? ' aria-current="page"' : ''}>NBA</a><a href="#edges?sport=CBB"${state.league === 'CBB' ? ' aria-current="page"' : ''}>CBB</a></nav>` : '';
+    const edgeTab = (league, label) => `<a href="#edges${esc(lineQuery(league))}"${state.league === league ? ' aria-current="page"' : ''}>${label}</a>`;
+    const sportLanes = edges ? `<nav class="edge-sports" aria-label="Kook’n Edges sports">${edgeTab('ALL', 'All sports')}${['NFL','CFB','NBA','CBB'].map(l => edgeTab(l,l)).join('')}</nav>` : '';
     return `${head('Research', title, sub)}${sportLanes}
       ${edges ? '' : `<nav class="research-quick" aria-label="Research tools">${tool('#edges', 'Edges', 'edges')}${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? tool(`#research/milestones?sport=${researchSport}`, 'Milestones', 'milestones') : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>`}
       <details class="plain-fold research-more"><summary>More research</summary><div class="btn-row"><a class="btn small" href="#edges">Kook’n Edges</a><a class="btn small" href="#research/trends?period=full">Full-game hit rates</a><a class="btn small" href="#research/news">Injuries & news</a><a class="btn small" href="#trends?period=full&amp;kind=alternate&amp;sport=ALL">Alternate lines</a></div></details>`;
@@ -1539,7 +1544,7 @@
       appliedHash = location.hash;
       if (route.ctx) applyContext(route);
       if (route.league) setLeague(route.league);
-      if (route.type) state.board.type = route.type;
+      if (['all', 'props', 'games'].includes(route.type)) state.board.type = route.type;
       if (route.sort && SORTS[route.sort]) state.board.sort = route.sort;
       if (route.edges) state.q = route.q || '';
       if (route.q) { if (route.mode === 'players') { state.players.q = route.q; state.players.sub = 'search'; } else state.q = route.q; }
@@ -1557,10 +1562,9 @@
         type:state.board.type, q:state.q, preview:leagues.length > 1, limit:state.board.limit,
       })))).join('');
     };
-    if (basketballEdgeView && state.league !== 'ALL') return researchHead(route.mode, true)
-      + `<div class="toolbar">${seg('type', [['all','All'],['props','Props'],['games','Games']], state.board.type)}
-        <div class="grow"><label class="sr" for="q">Search</label><input id="q" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off"></div></div>`
-      + await basketballEdges();
+    const marketToolbar = `<div class="toolbar">${seg('type', [['all','All'],['props','Props'],['games','Games']], state.board.type)}
+      <div class="grow"><label class="sr" for="q">Search</label><input id="q" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off"></div></div>`;
+    if (basketballEdgeView && state.league !== 'ALL') return researchHead(route.mode, true) + marketToolbar + await basketballEdges();
     if (state.league === 'NBA') return route.mode === 'players'
       ? researchHead(route.mode, route.edges) + await (await ensureMore()).basketballPlayers({ ...route, league: 'NBA' })
       : route.mode === 'milestones'
@@ -1584,7 +1588,7 @@
     if (route.mode === 'players') return top + await researchPlayers(route);
     if (route.mode === 'news') return top + await researchNews();
     const lines = await lineData();
-    if (!lines) return top + researchStart + await basketballEdges() + empty('Football lines did not load', 'The current football line files are unavailable right now. <button type="button" class="btn small" data-retry>Try again</button>', 'clock');
+    if (!lines) return top + researchStart + (route.edges ? marketToolbar : '') + await basketballEdges() + empty('Football lines did not load', '<button type="button" class="btn small" data-retry>Try again</button>', 'clock');
     const now = Date.now();
     const b = state.board;
     let rows = (lines.lines || []).filter(r => !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && inLeague(vm));
@@ -1617,13 +1621,13 @@
     const list = shown.length ? `<div class="board"><div class="board-head"><span>Line</span><span>Best price</span><span>Our chance vs needed</span><span>Chance gap</span><span>Our price</span></div>${grouped}</div>
       ${rows.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-more-rows>Show ${Math.min(40, rows.length - shown.length)} more</button></p>` : ''}`
       : empty('No lines match', b.show === 'value' ? 'Nothing passes our price check right now. Tap "Every current line" to see every current price.' : 'Try another sport or clear the search.', 'research');
-    return `${top}${researchStart}
-      <div class="toolbar">${seg('type', [['all', 'All'], ['props', 'Props'], ['games', 'Games']], b.type)}${seg('show', [['value', `Clears our bar · ${nValue}`], ['all', `Every current line · ${nAll}`]], b.show)}
-        <div class="find-row"><label class="sr" for="sort">Sort</label><select id="sort" class="select" data-select="sort"><option value="edge"${b.sort === 'edge' ? ' selected' : ''}>Sort: biggest chance gap</option><option value="chance"${b.sort === 'chance' ? ' selected' : ''}>Sort: most likely</option><option value="kickoff"${b.sort === 'kickoff' ? ' selected' : ''}>Sort: kickoff</option></select>
-        <div class="grow"><label class="sr" for="q">Search</label><input id="q" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off"></div></div></div>
-      <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} lines${older ? ` · ${older} older prices hidden` : ''} · ✓ passes our price check · ${shareLink('lines', route)}</p>
+    const footballFilters = `<div class="toolbar">${seg('show', [['value', `Clears our bar · ${nValue}`], ['all', `Every current line · ${nAll}`]], b.show)}
+      <label class="sr" for="sort">Sort football lines</label><select id="sort" class="select" data-select="sort"><option value="edge"${b.sort === 'edge' ? ' selected' : ''}>Sort: biggest chance gap</option><option value="chance"${b.sort === 'chance' ? ' selected' : ''}>Sort: most likely</option><option value="kickoff"${b.sort === 'kickoff' ? ' selected' : ''}>Sort: kickoff</option></select></div>`;
+    return `${top}${researchStart}${marketToolbar}
       ${await basketballEdges()}
-      ${basketballEdgeView ? '<h2>Football</h2>' : ''}${spreadResearch}${list}
+      ${basketballEdgeView ? '<h2>Football</h2>' : ''}${footballFilters}
+      <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} lines${older ? ` · ${older} older prices hidden` : ''} · ${shareLink('lines', route)}</p>
+      ${spreadResearch}${list}
       ${b.show === 'value' && rows.length < 5 && nAll > rows.length ? `<p class="small" style="margin-top:10px"><button type="button" class="linkish" data-set="show:all">See all ${nAll} current lines →</button></p>` : ''}
       ${unpriced.length ? `<details class="more-box" data-box="unpriced" style="margin-top:12px"><summary>Player lines with no price yet · ${unpriced.length}</summary><div class="receipts">${unpriced.slice(0, 60).map(r => `<div class="receipt" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${r.athleteId ? `<a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a>` : esc(niceTitle(r.title))}</b><span>${esc(marketLabel(r))} · ${esc(whenShort(r.kickoff))}${isNum((r.grade || {}).projection) ? ` · our middle estimate ${esc(C.fixed(r.grade.projection))}` : ''}</span></div><span class="small muted">No price yet</span></div>`).join('')}</div><p class="small muted" style="margin-top:8px">The book lists these lines, but we have not seen a price, so we cannot compare our chance with what the price needs.</p></details>` : ''}
       `;
