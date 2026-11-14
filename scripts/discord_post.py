@@ -172,8 +172,6 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
 
 
 ARB_QUIET = timedelta(hours=6)
-RESULT_QUIET_START = 60       # 1:00 AM Eastern
-RESULT_QUIET_END = 8 * 60     # late finals join the morning delivery after 8:00
 RESULT_UPDATE_FRESH = timedelta(hours=12)
 
 
@@ -183,10 +181,6 @@ def queue_results(log_book, first, latest, games, now):
     The original play and its result stay together in Plays & Results. This is
     independent of the later X receipt, so a delayed card cannot hide a grade.
     """
-    local = now.astimezone(gates.EASTERN)
-    minute = local.hour * 60 + local.minute
-    if RESULT_QUIET_START <= minute < RESULT_QUIET_END:
-        return 0
     import receipts
     import result_display
     queued = 0

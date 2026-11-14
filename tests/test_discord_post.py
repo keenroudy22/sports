@@ -245,13 +245,19 @@ class DiscordPostTests(unittest.TestCase):
         self.assertIn('FINAL · HIT', sent[0])
         self.assertEqual(entry['discord']['result']['state'], 'sent')
 
-    def test_settled_updates_wait_during_result_quiet_hours(self):
-        entry = {'id': 'NFL-ty', 'kind': 'buffer:play', 'discord': {'state': 'sent'}}
-        first = {'NFL-ty': {'id': 'NFL-ty', 'title': 'Ty Johnson OVER 13.5 receiving yards'}}
-        latest = {'NFL-ty': {'result': 'win', 'settledAt': '2026-09-28T05:05:00Z'}}
-        quiet = datetime(2026, 9, 28, 6, 0, tzinfo=timezone.utc)  # 2 AM Eastern
-        self.assertEqual(discord_post.queue_results({'posts': [entry]}, first, latest, {}, quiet), 0)
-        self.assertNotIn('result', entry['discord'])
+    def test_late_nba_final_does_not_wait_until_eight_am(self):
+        # Sengun settled at 2:29 AM Eastern on Nov 14. Results used to be
+        # suppressed from 1–8 AM, which made the individual Final stale even
+        # though the full-card recap could publish earlier. A verified grade is
+        # now eligible on the next result cycle regardless of the local hour.
+        entry = {'id': 'NBA-sengun', 'kind': 'buffer:play', 'discord': {'state': 'sent'}}
+        first = {'NBA-sengun': {'id': 'NBA-sengun', 'title': 'Alperen Sengun OVER 6.5 assists'}}
+        settled = '2026-11-14T07:29:29Z'
+        latest = {'NBA-sengun': {'result': 'loss', 'settledAt': settled, 'actualValue': 5}}
+        next_cycle = datetime(2026, 11, 14, 7, 30, tzinfo=timezone.utc)
+        self.assertEqual(discord_post.queue_results({'posts': [entry]}, first, latest, {}, next_cycle), 1)
+        self.assertEqual(entry['discord']['result']['settledAt'], settled)
+        self.assertIn('FINAL · MISS', entry['discord']['result']['text'])
 
     def test_an_overtime_flip_is_sent_as_a_bad_beat_not_a_plain_miss(self):
         entry = {'id': 'NFL-kyren', 'kind': 'buffer:play', 'discord': {'state': 'sent'}}
