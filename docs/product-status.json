@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T23:55:00+00:00",
+  "updatedAt": "2026-11-14T02:16:00+00:00",
   "items": [
     {
       "id": "O-20261113-CBBSPREAD",
       "title": "Verify hosted College Hoops spread coverage",
-      "status": "observing",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Check the existing 9 PM Eastern desk run for the first tracked paired quote file. After Pages publishes it, compare the same team, line, both prices, book and capture time on College Hoops Today and a matchup.",
+      "next": "Track the next regular capture and keep quotes labeled with the sportsbook and capture time. Preserve the four-hour expiry and tipoff guard.",
       "doneWhen": "An ordinary committed refresh exposes at least one fresh paired DraftKings spread and the public phone and desktop views match it. Missing or expired book quotes stay unavailable.",
-      "evidence": "Scheduled refresh 43514942723 committed no paired spreads. The existing Mac scoreboard capture was promoted in 4b3a25516, Pages run 43530340376. A local replay matched 74 projected matchups and six phone/desktop checks matched both DraftKings prices plus the displayed spread. The first regular desk write and public quote remain to be verified."
+      "evidence": "The Nov 13 9 PM ET desk committed 32 DraftKings pairs as 68e6bc429. Pages 43544674817 published all 32 and their exact times, teams, spreads and prices. Six live checks at 320, 375 and 1440px matched Tulane–Akron on College Hoops Today and its matchup page with no overflow or errors."
     },
     {
       "id": "O-20261113-NBAQUOTESHARDS",
@@ -70,7 +70,7 @@
       "title": "Self-heal publication drift and remove per-ticket delay",
       "status": "observing",
       "owner": "agent",
-      "next": "Release the bounded hosted-Today supervisor and observe the first natural mismatch or recovery. Then continue the autonomy queue with X transport and individual result follow-through.",
+      "next": "Observe the next eligible NBA or CBB Final. Check the new result spacing, the posted X receipt and minutes from settlement. Continue observing the hosted-Today supervisor and free transport limits.",
       "doneWhen": "The 30-minute precheck detects exact ticket drift after deployment grace, retries stored-evidence publishing at most twice per revision without provider capture, and records natural recovery plus site/Discord/X receipts.",
       "evidence": "Nov6 Today expiry fix 4d85eb53e/42174139755 SUCCESS, verified03191bc58f and live375/1440. New supervisor compares exact posted unsettled terms, waits15m, retries after45m, caps at2/revision and uses change-only alerts. Focused tests pass; full release and natural recovery proof remain."
     },

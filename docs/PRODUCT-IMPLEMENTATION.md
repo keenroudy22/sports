@@ -1,3 +1,24 @@
+### November 13 college basketball sportsbook spreads — verified live
+
+The ordinary 9 PM Eastern desk captured 32 paired DraftKings spreads via its
+existing scoreboard request at 9:07 PM, committed as `68e6bc429`. Pages
+`43544674817` published all 32 with exact event, teams, tip, line, price and
+time. College Hoops Today and the Tulane–Akron matchup matched at 320, 375 and
+1440 CSS pixels. Kook’n Akron -16.8 appeared alongside DraftKings Akron -13.5
+(-102) and Tulane +13.5 (-118). The existing four-hour and tipoff guards expire
+quotes, and the historical first total retains its own label and timestamp.
+
+### November 13 individual basketball result recovery and timing
+
+The existing five-minute worker uses the NBA Final planner when an eligible
+result still needs delivery. It requires the original X receipt, hosted art
+and the same posting budget. Source `0b13d6631` shipped through Pages
+`43539615414`. Sources `e2372770d` and `bd4e97c2a` added private NBA/CBB time
+and missing-receipt checks and applied the existing 10-minute result cadence.
+Pages `43541757683` and `43542577914` succeeded. The 9:13 PM private health
+receipt reported all three recent NBA Finals sent after 30 minutes. The next
+eligible individual Final is the test of the new timing and recovery.
+
 ### November 13 compact All Sports Today — verified live
 
 One compact Best Bets list leads All Sports Today on mixed slates. Each row
