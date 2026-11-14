@@ -62940,5 +62940,210 @@
         "publishedAt": "2026-11-13T13:40:59Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-14T03:36:19Z",
+    "targetWeek": 11,
+    "summary": "Research update for Nov 13: Settled 1: Florida State at Pittsburgh over 52.5 loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 52.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401858293"
+        ],
+        "book": "ESPN BET",
+        "odds": -105,
+        "projection": 54.8,
+        "edge": "Price-checked chance 52.0% against the exact two-sided price; 51.2% needed at -105: +0.8 percentage points.",
+        "cutoff": "OVER 52.5 at -105 or better; off the card at 54+, or at -120 or worse at 52.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-08T09:19:38Z",
+        "quotedAt": "2026-11-13T11:45:06Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-13T16:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.556,
+          "chance": 0.52,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.512,
+          "edgePoints": 0.8,
+          "evPerUnit": 0.016,
+          "snapshotAt": "2026-11-08T09:19:38Z",
+          "probabilitySpec": "801ed704c6f45cdfabc72901efdd863716b0eb047a8698691d2b26db8e3709ce",
+          "evaluatedAt": "2026-11-13T13:34:10Z",
+          "fairChance": 0.489,
+          "anchoredChance": 0.52,
+          "gap": 3.1,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Florida State Seminoles at Pittsburgh Panthers",
+        "title": "Florida State at Pittsburgh over 52.5",
+        "id": "CFB-2026-W11-fsu-pitt-over-52-5-espnbet",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858293",
+          "https://theacc.com/news/2026/11/12/football-week-11-friday-preview-florida-state-travels-to-pitt-for-acc-primetime-matchup.aspx",
+          "https://pittsburghpanthers.com/news/2026/11/9/football-game-week-panthers-welcome-the-seminoles-on-senior-night"
+        ],
+        "why": "Model lean, our number only. We have the total at 54.8; the book is at 52.5. That makes the over 52.0%, and -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Florida State quarterback Ashton Daniels enters Friday's game with 2,146 passing yards, 413 rushing yards and 27 touchdowns accounted for. Checked before publishing: Holden Geriner started Pitt's most recent game against Georgia Tech, passing for 180 yards and a touchdown without an interception. The market: The spread opened -3 and is -3.5 at DraftKings, a move of 0.5 toward the home. The total opened 53.5 and is 52.5 at DraftKings, 1 toward the under. Our spread is 1.6 points off, bigger than 29% of our past gaps. Gaps this size went 1271-1270 against the close in 3584 games. Our total is 2.3 points off, bigger than 38% of our past gaps. Gaps this size went 1179-1063 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Pitt allows 19.8 points and 68.3 rushing yards per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Florida State averages 30.7 points per game and Pitt averages 31.9 points per game."
+          ],
+          "cautions": [
+            "Pitt allows 19.8 points and 68.3 rushing yards per game."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 52.5. I say 54.8.",
+              "numbers": {
+                "projection": 54.8,
+                "line": 52.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-08T09:19:38Z"
+            },
+            {
+              "text": "Florida State averages 30.7 points per game and Pitt averages 31.9 points per game.",
+              "numbers": {},
+              "source": "https://theacc.com/news/2026/11/12/football-week-11-friday-preview-florida-state-travels-to-pitt-for-acc-primetime-matchup.aspx",
+              "time": "2026-11-13T13:34:10Z"
+            },
+            {
+              "text": "Florida State averages 30.7 points per game and Pitt averages 31.9 points per game.",
+              "numbers": {},
+              "source": "https://theacc.com/news/2026/11/12/football-week-11-friday-preview-florida-state-travels-to-pitt-for-acc-primetime-matchup.aspx",
+              "time": "2026-11-13T13:34:10Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Pitt allows 19.8 points and 68.3 rushing yards per game.",
+              "numbers": {},
+              "source": "https://theacc.com/news/2026/11/12/football-week-11-friday-preview-florida-state-travels-to-pitt-for-acc-primetime-matchup.aspx",
+              "time": "2026-11-13T13:34:10Z"
+            },
+            {
+              "text": "Pitt allows 19.8 points and 68.3 rushing yards per game.",
+              "numbers": {},
+              "source": "https://theacc.com/news/2026/11/12/football-week-11-friday-preview-florida-state-travels-to-pitt-for-acc-primetime-matchup.aspx",
+              "time": "2026-11-13T13:34:10Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 39,
+            "windMph": 8,
+            "windDirection": "NW",
+            "precipProb": 4,
+            "periodStart": "2026-11-13T19:00:00-05:00",
+            "issuedAt": "2026-11-13T10:26:35+00:00",
+            "source": "https://api.weather.gov/gridpoints/PBZ/78,66/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 53.5,
+                  "price": -110,
+                  "time": "2026-11-08T11:42:31Z"
+                },
+                "now": {
+                  "line": 52.5,
+                  "price": -112,
+                  "time": "2026-11-13T11:45:06Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 54.5,
+                  "price": -110,
+                  "time": "2026-11-08T11:42:31Z"
+                },
+                "now": {
+                  "line": 52.5,
+                  "price": -110,
+                  "time": "2026-11-13T11:45:06Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 52.5,
+              "price": -105,
+              "time": "2026-11-13T11:45:06Z"
+            }
+          },
+          "ours": {
+            "projection": 54.8,
+            "line": 52.5,
+            "market": "total",
+            "text": "Book says 52.5. I say 54.8.",
+            "snapshotAt": "2026-11-08T09:19:38Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://theacc.com/news/2026/11/12/football-week-11-friday-preview-florida-state-travels-to-pitt-for-acc-primetime-matchup.aspx",
+              "time": "2026-11-13T13:34:10Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/PBZ/78,66/forecast/hourly",
+              "time": "2026-11-13T10:26:35+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401858293",
+              "time": "2026-11-13T13:34:10Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://pittsburghpanthers.com/news/2026/11/9/football-game-week-panthers-welcome-the-seminoles-on-senior-night",
+              "time": "2026-11-13T13:34:10Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-13T13:40:59Z",
+        "result": "loss",
+        "actual": "Florida St 16, Pitt 10",
+        "settledAt": "2026-11-14T03:36:19Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401858293",
+        "actualValue": 26,
+        "units": -1
+      }
+    ]
   }
 ]
