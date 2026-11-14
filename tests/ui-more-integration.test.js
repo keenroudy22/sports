@@ -218,6 +218,38 @@ test('NBA milestone board groups verified history by matchup and keeps milestone
 });
 
 
+test('NBA charts use the selected matchup file and keep an unrecorded stat on its own line', async () => {
+  const {api,factory}=loadBrowserApi(), seen=[];
+  const generatedAt=new Date().toISOString(), kickoff=new Date(Date.now()+3600000).toISOString();
+  const index={season:2027,shards:2,players:[['1','Example Guard','G','1','AAA']]};
+  const game={id:'NBA-77',providerId:'77',kickoff,teams:{away:{id:'1',name:'Alpha'},home:{id:'2',name:'Beta'}}};
+  const row={eventId:'77',athleteId:'1',stat:'ast',line:4.5,over:-114,under:100,book:'FanDuel',sourceAt:generatedAt,kickoff,
+    projection:{value:5.2,low:2,high:8}};
+  const ctx=api.moreContext({get:async path=>{
+    seen.push(path);
+    if (path==='app/players/NBA.json') return index;
+    if (path==='app/players/NBA/1.json') return {keys:['pts'],players:{'1':{name:'Example Guard',pos:'G',
+      rows:[['5','2026-11-11',2027,0,2,'1','2',0,'BBB',12]]}}};
+    if (path==='app/nba.json') return {generatedAt,games:[game],matchupPropEvents:['77']};
+    if (path==='app/nba-props/77.json') return {generatedAt,rows:[row]};
+    throw Error(path);
+  }});
+  const views=factory(ctx);
+  const linked=await views.player({league:'NBA',id:'1',stat:'ast',line:'4.5',direction:'over',book:'FanDuel',game:'NBA-77'});
+  assert.match(linked,/id="nba-stat">Assists/);
+  assert.match(linked,/Over 4\.5 -114<\/b> at FanDuel/);
+  assert.match(linked,/Kook’n range:<\/b> 2–8/);
+  assert.match(linked,/No recorded values for this stat/);
+  assert.doesNotMatch(linked,/figcaption|0 of 0/);
+  assert.deepEqual(seen.filter(path=>path.includes('nba-props')),['app/nba-props/77.json']);
+  seen.length=0;
+  ctx.state.player.key=null;
+  const history=await views.player({league:'NBA',id:'1',stat:'pts',game:'NBA-88'});
+  assert.match(history,/id="nba-stat">Points/);
+  assert.match(history,/Recorded game results/);
+  assert.ok(!seen.some(path=>path.includes('nba-props')));
+});
+
 test('basketball prop finder links short histories and exact saved prices without false lean styling', async () => {
  const { api, factory } = loadBrowserApi();
  const now = Date.now(), kickoff = new Date(now + 3600000).toISOString();

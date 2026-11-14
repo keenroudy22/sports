@@ -474,18 +474,6 @@
       state:live ? 'in' : 'pre', completed:final, status:live ? word : ''}, {link:false, ranks:false})
       + `<p class="small muted">${esc(word)} · <a href="#games/live?sport=${league}">Live &amp; scores ›</a></p>`;
   };
-  const nbaMatchupProps = async (data, id) => {
-    const event = id.slice('NBA-'.length);
-    if (Array.isArray(data?.matchupPropEvents)) {
-      if (!data.matchupPropEvents.includes(event)) return {rows:[]};
-      const shard = /^\d+$/.test(event) ? await get(`app/nba-props/${event}.json`).catch(() => null) : null;
-      if (shard?.generatedAt === data.generatedAt && Array.isArray(shard?.rows)) return shard;
-    }
-    const payload = await get('app/nba-props.json').catch(() => null);
-    if (Array.isArray(payload?.rows)) return payload;
-    if (Array.isArray(data?.playerProps?.rows)) return data.playerProps;
-    return Array.isArray(payload?.playerProps?.rows) ? payload.playerProps : {rows:[]};
-  };
   views.game = async route => {
     const back = '<a class="back" href="#games">← Games</a>';
     const league = /^(NBA|CBB)-/.exec(route.id)?.[1];
@@ -494,7 +482,7 @@
       const [data, playerIndex, rows, picks] = await Promise.all([
         dataRequest,
         get(`app/players/${league}.json`).catch(() => ({players:[]})),
-        league === 'NBA' ? dataRequest.then(data => nbaMatchupProps(data, route.id)) : Promise.resolve({rows:[]}),
+        league === 'NBA' ? dataRequest.then(data => C.nbaMatchupProps(get, data, route.id)) : Promise.resolve({rows:[]}),
         league === 'NBA' ? ctx.allPicks().catch(() => []) : Promise.resolve([])]);
       const research = data?.games?.find(g => g.id === route.id);
       const stored = research ? null : (await maybe('sports.json'))?.leagues?.[league]?.games?.find(g => g.id === route.id);
