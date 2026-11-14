@@ -83,6 +83,26 @@ class BasketballBackupTests(unittest.TestCase):
         self.assertEqual(book['posts'][0]['discord']['readyAt'], '2026-11-14T05:15:00Z')
         self.assertEqual(deliver.call_args.kwargs['media_url'], 'https://keenroudy.com/card.png')
 
+    def test_settled_prior_day_recap_wakes_mirror_before_morning_clock(self):
+        now = datetime(2026, 11, 14, 5, 15, tzinfo=timezone.utc)
+        recap = {'key': 'receipt:day:2026-11-13',
+                 'stale': datetime(2026, 11, 15, 1, tzinfo=timezone.utc)}
+        book = {'posts': []}
+        stores = SimpleNamespace(first={}, latest={})
+        with patch.object(run.gates, 'Stores', return_value=SimpleNamespace(as_of=lambda _now: stores)), \
+             patch.object(run, 'load_json', return_value={'games': []}), \
+             patch('receipts.ready', return_value=[recap]):
+            self.assertTrue(run.typefully_recap_due(now, book))
+
+    def test_incomplete_prior_day_recap_does_not_wake_mirror_early(self):
+        now = datetime(2026, 11, 14, 5, 15, tzinfo=timezone.utc)
+        book = {'posts': []}
+        stores = SimpleNamespace(first={}, latest={})
+        with patch.object(run.gates, 'Stores', return_value=SimpleNamespace(as_of=lambda _now: stores)), \
+             patch.object(run, 'load_json', return_value={'games': []}), \
+             patch('receipts.ready', return_value=[]):
+            self.assertFalse(run.typefully_recap_due(now, book))
+
     def test_private_backup_reserves_six_slots_for_straights_and_recaps(self):
         straight = {'id': 'straight'}
         nba_straight = {'id': 'nba', 'league': 'NBA', 'selectionMethod': 'sourced-nba-primary-prop-v1'}

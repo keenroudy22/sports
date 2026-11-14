@@ -4052,6 +4052,28 @@ def retry_typefully_recap(now, log_book, settings):
                              media_url=buffer_post.card_url(recap['card']))
 
 
+def typefully_recap_due(now, log_book):
+    """Wake the backup as soon as the prior public card is fully settled.
+
+    This is a stored-evidence check only.  It neither grades a play nor calls a
+    provider, and receipts.ready keeps incomplete slates from becoming recaps.
+    """
+    import receipts
+
+    key = f"receipt:day:{eastern_date(now) - timedelta(days=1)}"
+    entry = next((row for row in log_book['posts'] if row.get('id') == key), None)
+    if entry is not None:
+        if entry.get('sentAt'):
+            return False
+        if entry.get('typefullyDelivery') or entry.get('discordRecapPrepared'):
+            return True
+    ctx = gates.Stores().as_of(now)
+    slate = load_json(ROOT / 'site/data/slate.json', {})
+    games = {game['id']: game for game in slate.get('games', [])}
+    return any(row['key'] == key and now < row['stale']
+               for row in receipts.ready(ctx.first, ctx.latest, games, log_book, now))
+
+
 def retry_stored_results(now, log_book):
     """Retry public result delivery from stored evidence, never rebuild or grade."""
     import buffer_post
@@ -4129,13 +4151,7 @@ def mirror(args):
               and not buffer_post.rate_backoff(now) else None)
     recap_due = False
     if backup:
-        import receipts
-        day = eastern_date(now)
-        key = f"receipt:day:{day - timedelta(days=1)}"
-        existing = next((entry for entry in x_post.load_log()['posts'] if entry.get('id') == key), None)
-        recap_due = (now >= receipts.daily_morning(day) and
-                     (existing is None or bool((existing.get('typefullyDelivery') or {}).get('draftId')
-                                               and not existing.get('sentAt'))))
+        recap_due = typefully_recap_due(now, x_post.load_log())
     basketball_due = bool(backup and any(basketball_backup_due(entry, now)
                                          for entry in x_post.load_log()['posts']))
     retry_results = bool(recap_due or (missing_results and not result_transport_hold))
