@@ -351,7 +351,7 @@ def refresh_published_finals(now, root=nba_trial.STORE, boxroot=None, fetch=None
  due=[]
  for play in public_rows(Path(root)):
   event=str(play['eventId']);kickoff=boxscores.instant(play['kickoff'])
-  if event not in known and kickoff+timedelta(hours=3)<=now:due.append(event)
+  if not play.get('result') and event not in known and kickoff+timedelta(hours=3)<=now:due.append(event)
  if not due:return {'captured':0,'errors':0,'requests':0,'events':[]}
  import sport_box
  return sport_box.refresh_events(due,root=boxroot,fetch=fetch,now=now,league='NBA',limit=5)

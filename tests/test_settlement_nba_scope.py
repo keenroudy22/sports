@@ -4,7 +4,7 @@ import inspect
 import os
 import sys
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -44,6 +44,27 @@ class SettlementScopeTests(unittest.TestCase):
                     props.assert_not_called();admit.assert_not_called()
                 else:
                     props.assert_called_once();admit.assert_called_once()
+
+    def test_live_grading_reads_clock_again_after_exact_final_capture(self):
+        tree = ast.parse(inspect.getsource(run._run))
+        guard = next(n for n in ast.walk(tree) if isinstance(n, ast.Try)
+                     and "status['nbaTrialGraded']" in ast.unparse(n))
+        code = compile(ast.Module(body=[guard], type_ignores=[]), '<live NBA results>', 'exec')
+        now = datetime(2026, 11, 14, 6, 55, tzinfo=timezone.utc)
+        received = now + timedelta(seconds=2)
+        args = SimpleNamespace(command='results', dry_run=False, no_push=True)
+        for failure in (None, OSError('offline')):
+            with self.subTest(failure=failure), \
+                 patch.object(run, 'current_run_time', side_effect=[now, received]), \
+                 patch.object(nba_trial_runtime, 'refresh_published_finals', side_effect=failure) as capture, \
+                 patch.object(nba_trial_runtime, 'grade') as grade, \
+                 patch.object(nba_player_props, 'grade') as prop_grade, patch('cbb_picks.grade'):
+                status = {'errors': []}
+                exec(code, dict(run.__dict__, args=args, settle_only=True, now=now, status=status))
+                capture.assert_called_once_with(now)
+                grade.assert_called_once_with(received)
+                prop_grade.assert_called_once_with(received)
+                self.assertEqual(bool(status['errors']), bool(failure))
 
     def test_actual_results_command_retains_grading_and_climb_without_pregame_feeds(self):
         # Replay the production dispatch and effectful branches, with all external

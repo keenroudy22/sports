@@ -3020,9 +3020,12 @@ def _run(args, now, slot, kinds, status):
             log(f'NBA editorial unavailable: {type(error).__name__}: {error}')
         try:
             import nba_trial_runtime
-            nba_grade_now=current_run_time(args,now)
-            if settle_only:
-                status['nbaFinalBoxes'] = nba_trial_runtime.refresh_published_finals(nba_grade_now)
+            if settle_only and not args.dry_run and not getattr(args, 'now', None):
+                try:
+                    status['nbaFinalBoxes'] = nba_trial_runtime.refresh_published_finals(current_run_time(args, now))
+                except (OSError, ValueError) as error:
+                    status['errors'].append(f'NBA final boxes: {type(error).__name__}: {error}')
+            nba_grade_now = current_run_time(args, now)
             status['nbaTrialGraded'] = nba_trial_runtime.grade(nba_grade_now)
             import cbb_picks
             status['cbbPicksGraded'] = cbb_picks.grade(nba_grade_now)
