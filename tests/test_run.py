@@ -1837,6 +1837,8 @@ class DiscordMirrorTests(unittest.TestCase):
         self.assertFalse(run.mirror_due({'posts': [post(cancelledAt=run.stamp(now))]}, now))
         self.assertTrue(run.mirror_due({'posts': [post(cancelledAt=run.stamp(now), discord={
             'state': 'sent', 'followup': {'state': 'pending', 'text': 'pulled'}})]}, now))
+        self.assertTrue(run.mirror_due({'posts': [post(discord={
+            'state': 'sent', 'followup': {'state': 'pending', 'correction': True}})]}, now))
 
     def test_a_live_final_wakes_a_no_spend_official_settlement_run(self):
         now = datetime(2026, 10, 11, 2, 45, tzinfo=timezone.utc)

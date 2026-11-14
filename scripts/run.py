@@ -3304,6 +3304,8 @@ def mirror_due(log_book, now):
                 return True
             continue
         mirror = entry.get('discord') or {}
+        if (mirror.get('followup') or {}).get('state') == 'pending':
+            return True
         if (mirror.get('result') or {}).get('state') == 'pending':
             return True
         if mirror.get('state') == 'pending' and mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now:
