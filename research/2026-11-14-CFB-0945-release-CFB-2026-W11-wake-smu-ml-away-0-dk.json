@@ -1,0 +1,222 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-14T14:45:53Z",
+  "summary": "Released 1: Wake Forest MONEYLINE -102 at DraftKings.",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "moneyline",
+      "line": 0.0,
+      "direction": "away",
+      "gameIds": [
+        "CFB-401858301"
+      ],
+      "book": "DraftKings",
+      "odds": -102,
+      "projection": 0.6,
+      "edge": "Price-checked chance 54.0% against the exact two-sided price; 50.5% needed at -102: +3.5 percentage points.",
+      "cutoff": "AWAY 0 at -102 or better; off the card at -0.5 or lower, or at -117 or worse at 0.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-08T01:36:34Z",
+      "quotedAt": "2026-11-14T14:25:23Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 9:25 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-14T16:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.647,
+        "chance": 0.54,
+        "calibrated": true,
+        "calibration": 0.35,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.505,
+        "edgePoints": 3.5,
+        "evPerUnit": 0.07,
+        "snapshotAt": "2026-11-08T01:36:34Z",
+        "probabilitySpec": "86501e656367347803fb02a3ccc597a2b371a110db94f9c60ed9af388cc9e5de",
+        "evaluatedAt": "2026-11-14T14:37:24Z",
+        "fairChance": 0.483,
+        "anchoredChance": 0.54,
+        "gap": 5.8,
+        "calibrationFamily": "CFB/moneyline"
+      },
+      "matchup": "Wake Forest Demon Deacons at SMU Mustangs",
+      "title": "Wake Forest MONEYLINE",
+      "id": "CFB-2026-W11-wake-smu-ml-away-0-dk",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858301",
+        "https://www.on3.com/sites/deacons-illustrated/news/positive-update-on-the-deacons-injury-front/",
+        "https://smumustangs.com/news/2026/11/10/football-mustangs-ready-for-top-25-matchup-with-wake-forest-saturday-at-11-am-ct"
+      ],
+      "why": "Price-checked win chance 54.0%; -102 needs 50.5%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Wake Forest coach Jake Dickert said Gio Lopez would be ready to play at SMU after missing the Merrimack game with a leg injury. Checked before publishing: Wake Forest coach Jake Dickert said tight end Will Loerzel would play against SMU after missing the Merrimack game. The market: The spread opened +3.5 and is -1.5 at DraftKings, a move of 5 toward the home. The total opened 55.5 and is 60.5 at DraftKings, 5 toward the over. 6 books span 59.5 to 60.5 on the total; the middle is 60.5. Our spread is 7.6 points off, bigger than 79% of our past gaps. Gaps this size went 372-374 against the close in 3584 games. Our total is 3.4 points off, bigger than 55% of our past gaps. Gaps this size went 864-752 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: SMU says Kevin Jennings is 16-1 as a starter at home. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Wake Forest coach Jake Dickert said Gio Lopez would be ready to play at SMU after missing the Merrimack game with a leg injury.",
+          "The ACC says Wake Forest has won six straight games and has four Power Four road wins."
+        ],
+        "cautions": [
+          "Wake Forest left tackle Tolu Olajide left the Virginia game with an apparent injury and did not play against Merrimack.",
+          "SMU says Kevin Jennings is 16-1 as a starter at home."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Wake Forest coach Jake Dickert said Gio Lopez would be ready to play at SMU after missing the Merrimack game with a leg injury.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-14T14:37:24Z"
+          },
+          {
+            "text": "Price-checked win chance 54.0%; this price needs 50.5%.",
+            "numbers": {
+              "chance": 0.54,
+              "breakEven": 0.505
+            },
+            "source": "Kook'n exact-price check",
+            "time": "2026-11-14T14:25:23Z"
+          },
+          {
+            "text": "Wake Forest coach Jake Dickert said Gio Lopez would be ready to play at SMU after missing the Merrimack game with a leg injury.",
+            "numbers": {},
+            "source": "https://www.on3.com/sites/deacons-illustrated/news/positive-update-on-the-deacons-injury-front/",
+            "time": "2026-11-14T14:37:24Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Wake Forest left tackle Tolu Olajide left the Virginia game with an apparent injury and did not play against Merrimack.",
+            "numbers": {},
+            "source": "https://www.on3.com/sites/deacons-illustrated/news/positive-update-on-the-deacons-injury-front/",
+            "time": "2026-11-14T14:37:24Z"
+          },
+          {
+            "text": "SMU says Kevin Jennings is 16-1 as a starter at home.",
+            "numbers": {},
+            "source": "https://smumustangs.com/news/2026/11/10/football-mustangs-ready-for-top-25-matchup-with-wake-forest-saturday-at-11-am-ct",
+            "time": "2026-11-14T14:37:24Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Wake Forest coach Jake Dickert said Gio Lopez would be ready to play at SMU after missing the Merrimack game with a leg injury.",
+            "numbers": {},
+            "source": "https://www.on3.com/sites/deacons-illustrated/news/positive-update-on-the-deacons-injury-front/",
+            "time": "2026-11-14T14:37:24Z"
+          },
+          {
+            "text": "Wake Forest left tackle Tolu Olajide left the Virginia game with an apparent injury and did not play against Merrimack.",
+            "numbers": {},
+            "source": "https://www.on3.com/sites/deacons-illustrated/news/positive-update-on-the-deacons-injury-front/",
+            "time": "2026-11-14T14:37:24Z"
+          },
+          {
+            "text": "Wake Forest coach Jake Dickert said Gio Lopez would be ready to play at SMU after missing the Merrimack game with a leg injury.",
+            "numbers": {},
+            "source": "https://www.on3.com/sites/deacons-illustrated/news/positive-update-on-the-deacons-injury-front/",
+            "time": "2026-11-14T14:37:24Z"
+          },
+          {
+            "text": "Wake Forest left tackle Tolu Olajide left the Virginia game with an apparent injury and did not play against Merrimack.",
+            "numbers": {},
+            "source": "https://www.on3.com/sites/deacons-illustrated/news/positive-update-on-the-deacons-injury-front/",
+            "time": "2026-11-14T14:37:24Z"
+          }
+        ],
+        "weather": {
+          "tempF": 57,
+          "windMph": 15,
+          "windDirection": "ESE",
+          "precipProb": 1,
+          "periodStart": "2026-11-14T11:00:00-06:00",
+          "issuedAt": "2026-11-14T06:26:08+00:00",
+          "source": "https://api.weather.gov/gridpoints/FWD/89,104/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": -3.5,
+                "price": -105,
+                "time": "2026-11-05T11:45:06Z"
+              },
+              "now": {
+                "line": 1.5,
+                "price": -110,
+                "time": "2026-11-14T12:00:05Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": -2.5,
+                "price": -108,
+                "time": "2026-11-08T11:42:31Z"
+              },
+              "now": {
+                "line": 1.5,
+                "price": -110,
+                "time": "2026-11-14T12:00:05Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 0.0,
+            "price": -102,
+            "time": "2026-11-14T14:25:23Z"
+          }
+        },
+        "ours": {
+          "projection": 0.6,
+          "line": 0.0,
+          "market": "moneyline",
+          "text": "Wake Forest coach Jake Dickert said Gio Lopez would be ready to play at SMU after missing the Merrimack game with a leg injury.",
+          "snapshotAt": "2026-11-08T01:36:34Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "role",
+            "url": "https://www.on3.com/sites/deacons-illustrated/news/positive-update-on-the-deacons-injury-front/",
+            "time": "2026-11-14T14:37:24Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://smumustangs.com/news/2026/11/10/football-mustangs-ready-for-top-25-matchup-with-wake-forest-saturday-at-11-am-ct",
+            "time": "2026-11-14T14:37:24Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://admin.theacc.com/news/2026/11/13/football-week-11-saturday-preview-saturday-slate-features-championship-implications-across-the-acc.aspx",
+            "time": "2026-11-14T14:37:24Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/FWD/89,104/forecast/hourly",
+            "time": "2026-11-14T06:26:08+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858301",
+            "time": "2026-11-14T14:37:24Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-14T14:45:53Z"
+    }
+  ]
+}
