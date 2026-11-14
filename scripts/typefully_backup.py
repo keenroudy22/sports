@@ -7,6 +7,7 @@ explicitly supported Climb and fun-ticket families may use ticket capacity.
 import json
 import re
 from datetime import timedelta
+from http.client import HTTPException, HTTPSConnection
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
@@ -70,11 +71,25 @@ def upload_media(settings, url):
     allocated = media_request(settings, '/upload', {'file_name': name})
     media_id = allocated.get('media_id') or allocated.get('id')
     upload_url = allocated.get('upload_url')
-    if not media_id or not isinstance(upload_url, str) or not upload_url.startswith('https://'):
+    target = urlparse(upload_url) if isinstance(upload_url, str) else None
+    if not media_id or not target or target.scheme != 'https' or not target.hostname:
         raise ValueError('Typefully returned no usable media upload')
-    # Typefully's signed upload explicitly requires raw bytes and no headers.
-    with urlopen(Request(upload_url, data=fetch_media(url), method='PUT'), timeout=20):
-        pass
+    body = fetch_media(url)
+    # urllib.request adds a form Content-Type to PUT bodies. Send the signed
+    # request with only the HTTP framing headers so the provider accepts it.
+    connection = HTTPSConnection(target.hostname, target.port, timeout=20)
+    try:
+        connection.putrequest('PUT', target._replace(scheme='', netloc='', fragment='').geturl(),
+                              skip_accept_encoding=True)
+        connection.putheader('Content-Length', str(len(body)))
+        connection.endheaders(body)
+        with connection.getresponse() as response:
+            if response.status not in (200, 204):
+                raise HTTPError(None, response.status, 'Typefully signed upload failed', {}, None)
+    except HTTPException as error:
+        raise OSError('Typefully signed upload did not complete') from error
+    finally:
+        connection.close()
     return media_id
 
 
@@ -122,6 +137,14 @@ def deliver(entry, book, settings, now, save, *, text=None, expires=None, media_
         attempt = entry['typefullyDelivery'] = {'at': gates.stamp(now)}
         save(book)
     if media_url and not attempt.get('draftId') and not attempt.get('mediaId'):
+        last_upload = attempt.get('mediaLastAttemptAt')
+        if last_upload and attempt.get('mediaError') in {'HTTP 401', 'HTTP 403'}:
+            try:
+                elapsed = now - gates.when(last_upload)
+            except (TypeError, ValueError):
+                elapsed = None
+            if elapsed is not None and timedelta(0) <= elapsed < timedelta(minutes=30):
+                return False
         try:
             attempt['mediaId'] = upload_media(settings, media_url)
             attempt['mediaUrl'] = media_url
@@ -133,6 +156,7 @@ def deliver(entry, book, settings, now, save, *, text=None, expires=None, media_
             # delivery ledger.  The status is enough to distinguish access,
             # endpoint and transient failures on the next repair pass.
             attempt['mediaError'] = f'HTTP {error.code}'
+            error.close()
             attempt['mediaLastAttemptAt'] = gates.stamp(now)
             save(book)
             return False

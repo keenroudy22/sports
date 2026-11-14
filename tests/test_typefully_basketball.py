@@ -1,6 +1,9 @@
 import unittest
 from datetime import datetime, timedelta, timezone
+from http.client import HTTPConnection
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from io import BytesIO
+from threading import Thread
 from types import SimpleNamespace
 from unittest.mock import patch
 from urllib.error import HTTPError
@@ -33,6 +36,38 @@ class BasketballBackupTests(unittest.TestCase):
                 typefully_backup.deliver(entry, book, {}, self.now, lambda _: None, **kwargs)
             self.assertFalse(typefully_backup.deliver(entry, book, {}, self.now, lambda _: None, **kwargs))
             self.assertEqual(request.call_count, 1)
+
+    def test_signed_media_upload_sends_raw_bytes_without_form_headers(self):
+        card = b'\x89PNG\r\n\x1a\ncard'
+        target = '/bucket/card.png?test-signature=ab%2Bcd&preserve=1'
+        captured = []
+
+        class CapturePut(BaseHTTPRequestHandler):
+            def do_PUT(self):
+                captured.append((self.path, self.headers, self.rfile.read(int(self.headers['Content-Length']))))
+                self.send_response(204)
+                self.end_headers()
+
+            def log_message(self, *_args):
+                return
+
+        with HTTPServer(('127.0.0.1', 0), CapturePut) as server:
+            server.timeout = 2
+            worker = Thread(target=server.handle_request)
+            worker.start()
+            try:
+                with patch.object(typefully_backup, 'HTTPSConnection', HTTPConnection), \
+                     patch.object(typefully_backup, 'media_request', return_value={
+                         'media_id': 'media-1', 'upload_url': f'https://127.0.0.1:{server.server_port}{target}'}), \
+                     patch.object(typefully_backup, 'fetch_media', return_value=card):
+                    result = typefully_backup.upload_media({}, 'https://keenroudy.com/sports/data/cards/pick.png')
+            finally:
+                worker.join()
+        self.assertEqual(result, 'media-1')
+        [(path, headers, body)] = captured
+        self.assertEqual(path, target)
+        self.assertEqual(body, card)
+        self.assertEqual({name.lower() for name in headers.keys()}, {'host', 'content-length'})
 
     def test_media_is_ready_and_attached_before_draft_creation(self):
         entry = {'id': 'pick', 'queuedText': 'Original'}
@@ -74,11 +109,14 @@ class BasketballBackupTests(unittest.TestCase):
         book = {'posts': [entry]}
         saved = []
         denied = HTTPError('https://signed.example/secret', 403, 'forbidden', {}, BytesIO(b'secret'))
-        kwargs = dict(expires=self.now + timedelta(minutes=30),
+        kwargs = dict(expires=self.now + timedelta(hours=2),
                       media_url='https://keenroudy.com/sports/data/cards/pick.png')
-        with patch.object(typefully_backup, 'upload_media', side_effect=denied):
+        with patch.object(typefully_backup, 'upload_media', side_effect=denied) as upload:
             self.assertFalse(typefully_backup.deliver(
                 entry, book, {}, self.now, lambda value: saved.append(value), **kwargs))
+            self.assertFalse(typefully_backup.deliver(
+                entry, book, {}, self.now + timedelta(minutes=5), lambda _: self.fail('unnecessary write'), **kwargs))
+            self.assertEqual(upload.call_count, 1)
         attempt = entry['typefullyDelivery']
         self.assertEqual(attempt['mediaError'], 'HTTP 403')
         self.assertEqual(attempt['mediaLastAttemptAt'], '2026-11-13T18:00:00Z')
@@ -90,7 +128,7 @@ class BasketballBackupTests(unittest.TestCase):
              patch.object(typefully_backup, 'media_request', return_value={'status': 'ready'}), \
              patch.object(typefully_backup, 'request', return_value=published):
             self.assertTrue(typefully_backup.deliver(
-                entry, book, {}, self.now + timedelta(minutes=1),
+                entry, book, {}, self.now + timedelta(minutes=31),
                 lambda value: saved.append(value), **kwargs))
         self.assertNotIn('mediaError', attempt)
         self.assertNotIn('mediaLastAttemptAt', attempt)
