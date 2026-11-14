@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import run
 import typefully_backup
+import x_post
 
 
 class BasketballBackupTests(unittest.TestCase):
@@ -65,6 +66,45 @@ class BasketballBackupTests(unittest.TestCase):
                 entry, book, {}, self.now + timedelta(seconds=10), lambda _: None, **kwargs))
         self.assertEqual(upload.call_count, 1)
         self.assertEqual(request.call_count, 1)
+
+    def test_attended_x_receipt_requires_owned_exact_observation(self):
+        entry = {
+            'id': 'receipt:day:2026-11-13',
+            'queuedText': 'Friday: 1-2.',
+            'textHash': x_post.text_hash('Friday: 1-2.'),
+            'typefullyDelivery': {'at': '2026-11-13T17:55:00Z'},
+        }
+        observed = self.now - timedelta(minutes=1)
+        link = 'https://x.com/keenkooks/status/2123456789012345680'
+        typefully_backup.confirm_attended_sent(
+            entry, observed_text='Friday: 1-2.', link=link,
+            sent_at=observed, now=self.now)
+        self.assertEqual(entry['link'], link)
+        self.assertEqual(entry['tweetId'], '2123456789012345680')
+        self.assertEqual(entry['typefullyDelivery']['state'], 'sent')
+        self.assertEqual(entry['typefullyDelivery']['evidence'], 'X Composer UI')
+        with self.assertRaises(ValueError):
+            typefully_backup.confirm_attended_sent(
+                entry, observed_text='Friday: 1-2.', link=link,
+                sent_at=observed, now=self.now)
+
+    def test_attended_x_receipt_rejects_caption_or_account_mismatch(self):
+        base = {
+            'id': 'receipt:day:2026-11-13',
+            'textHash': x_post.text_hash('Friday: 1-2.'),
+            'typefullyDelivery': {'at': '2026-11-13T17:55:00Z'},
+        }
+        observed = self.now - timedelta(minutes=1)
+        with self.assertRaises(ValueError):
+            typefully_backup.confirm_attended_sent(
+                dict(base), observed_text='Friday: 2-1.',
+                link='https://x.com/keenkooks/status/2123456789012345681',
+                sent_at=observed, now=self.now)
+        with self.assertRaises(ValueError):
+            typefully_backup.confirm_attended_sent(
+                dict(base), observed_text='Friday: 1-2.',
+                link='https://x.com/notkookn/status/2123456789012345681',
+                sent_at=observed, now=self.now)
 
     def test_settled_prior_day_recap_can_release_before_morning_clock(self):
         now = datetime(2026, 11, 14, 5, 15, tzinfo=timezone.utc)

@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 import gates
+import x_post
 
 
 def config(conf):
@@ -75,6 +76,33 @@ def upload_media(settings, url):
     with urlopen(Request(upload_url, data=fetch_media(url), method='PUT'), timeout=20):
         pass
     return media_id
+
+
+def confirm_attended_sent(entry, *, observed_text, link, sent_at, now,
+                          evidence='X Composer UI'):
+    """Reconcile one owned attended fallback with an actual observed X post.
+
+    The attended browser is a last-resort transport when the free schedulers
+    cannot upload the required card.  Reserving the post still happens before
+    the browser opens; this function only turns that existing ownership record
+    into a Sent receipt after the exact caption and public X URL are visible.
+    Unknown clicks remain owned and therefore duplicate-protected.
+    """
+    attempt = entry.get('typefullyDelivery') or {}
+    if not attempt.get('at') or entry.get('sentAt'):
+        raise ValueError('Not an unresolved attended X reservation')
+    if x_post.text_hash(observed_text) != entry.get('textHash'):
+        raise ValueError('Observed caption does not match the checked release')
+    if not re.fullmatch(r'https://(?:x|twitter)\.com/keenkooks/status/\d+', link, re.I):
+        raise ValueError('Missing actual Kookn X publication link')
+    at = gates.when(sent_at)
+    reserved = gates.when(attempt['at'])
+    if not reserved <= at <= now or now - at > timedelta(days=1):
+        raise ValueError('Invalid actual publication time')
+    entry.update(sentAt=gates.stamp(at), link=link,
+                 tweetId=link.rsplit('/', 1)[-1])
+    attempt.update(state='sent', verifiedAt=gates.stamp(now), evidence=evidence)
+    return entry
 
 
 def deliver(entry, book, settings, now, save, *, text=None, expires=None, media_url=None):
