@@ -62,10 +62,17 @@ test('NBA matchup marks only the exact posted quote and removes stale research h
  play.posted=false;
  assert.doesNotMatch(await page(), /class="pick-tag"/);
  play.posted=true;
- for(const changes of [{line:16.5},{book:'FanDuel'},{side:'under'},{over:-115}]){
+ for(const changes of [{line:16.5},{book:'FanDuel'},{over:-115}]){
    props.rows=[{...row,...changes}];
    assert.doesNotMatch(await page(), /class="pick-tag"/);
  }
+ play.direction='under';
+ props.rows=[{...row,line:17.5},{...row,side:'over',last5:{hits:3,games:5}}];
+ const official=await page();
+ assert.match(official,/line=15\.5&amp;direction=under&amp;book=DraftKings/);
+ assert.match(official,/class="pick-tag">Official pick/);
+ assert.doesNotMatch(official,/line=17\.5|L5 3\/5 under/);
+ play.direction='over';
  props.rows=[{...row,line:16.5,sourceAt:new Date(Date.now()-5*3600000).toISOString()}];
  const stale=await page();
  assert.match(stale,/Earlier quote · checked/);

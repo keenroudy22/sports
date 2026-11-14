@@ -29,6 +29,15 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertEqual(shards,{'11':{'generatedAt':'now','rows':[rows[1]]},
                            '22':{'generatedAt':'now','rows':[rows[0],rows[2]]}})
   self.assertEqual(len(props['rows']),4)
+ def test_matchup_coverage_survives_the_slate_board_limit(self):
+  rows=[{'eventId':'11','kickoff':'2099-11-02T23:00Z','athleteId':str(n),'stat':'pts','line':12.5} for n in range(60)]
+  rows.append({'eventId':'22','kickoff':'2099-11-03T23:00Z','athleteId':'61','stat':'ast','line':4.5})
+  data={'generatedAt':'now','playerProps':{'rows':rows,'availableRows':61}}
+  overview,board=nba_today.public_payloads(data)
+  self.assertEqual(overview['playerProps']['availableRows'],61)
+  self.assertEqual(board['rows'],rows[:60])
+  self.assertEqual(nba_today.matchup_prop_payloads({'generatedAt':'now','rows':rows})['22']['rows'],rows[60:])
+  self.assertEqual(len(data['playerProps']['rows']),61)
  def test_matchup_pairs_validate_independently_without_new_requests(self):
   q={'book':'DraftKings','retrievedAt':boxscores.stamp(NOW),'current':{
    'home':{'spreadLine':-3.5,'spreadPrice':-110,'moneyline':-150},

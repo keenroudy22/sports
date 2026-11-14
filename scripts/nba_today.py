@@ -21,17 +21,22 @@ FLOORS={'pts':15,'reb':5,'ast':4,'fg3m':2}
 
 
 def public_payloads(data):
-    """Keep game-only views light; preserve every comparison in a lazy payload."""
+    """Keep the slate board short while the individual matchups carry full coverage."""
+    from nba_player_props import display_rows
+
     props = data.get('playerProps', {})
     overview = {k: v for k, v in data.items() if k != 'playerProps'}
     overview['playerPropsFile'] = 'nba-props.json'
     overview['playerProps'] = {k: props[k] for k in ('availabilityAt', 'availableRows', 'note') if k in props}
     overview['teamTrends'] = list({json.dumps(r, sort_keys=True): r for r in data.get('teamTrends', [])}.values())
-    return overview, {'generatedAt': data.get('generatedAt'), **props}
+    board = {'generatedAt': data.get('generatedAt'), **props}
+    if len(props.get('rows', [])) > 60:
+        board['rows'] = display_rows(props['rows'], 60)
+    return overview, board
 
 
 def matchup_prop_payloads(props):
-    """Reuse the public comparison rows in one small file per covered matchup."""
+    """Group all eligible comparison rows by matchup before the slate-board cap."""
     by_event = defaultdict(list)
     for row in props.get('rows', []):
         event = str(row.get('eventId', ''))
@@ -80,7 +85,7 @@ def matchup_quotes(quote, now):
     return out
 
 
-def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, delivered=None, scoreboard=None):
+def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, delivered=None, scoreboard=None, prop_limit=60):
     now=now or datetime.now(timezone.utc); root=Path(root)
     if delivered is None:
         from build_site import nba_record_picks
@@ -197,7 +202,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, d
     plays=sorted(focused,key=lambda p:p['publishedAt'])[-20:]
     periods=sorted({(p['season'],p['seasonType']) for p in all_trial_plays},reverse=True)
     trial_seasons=[{'season':s,'stage':stage,'record':nba_trial.snapshot([r for r in trial_rows if r.get('id') in {p['id'] for p in all_trial_plays if (p['season'],p['seasonType'])==(s,stage)}])} for s,stage in periods]
-    public_plays=[{k:p.get(k) for k in ('id','kickoff','publishedAt','marketType','direction','line','odds','book','riskUnits','projection','result','actual','reasons','player','athleteId','stat','period','selectionMethod')} | {'teams':p['game']['teams'],'card':f"data/cards/{p['id'].lower()}.png"} for p in plays]
+    public_plays=[{k:p.get(k) for k in ('id','kickoff','publishedAt','marketType','direction','line','odds','book','riskUnits','projection','result','actual','reasons','player','athleteId','stat','period','selectionMethod')} | {'gameId':p.get('gameId') or p['game'].get('id') or f"NBA-{p.get('eventId')}",'teams':p['game']['teams'],'card':f"data/cards/{p['id'].lower()}.png"} for p in plays]
     readiness=nba_readiness.status(now, capture_root=root)
     started=nba_trial_runtime.review_ready(now, readiness=readiness['readyForLiveTrial'])
     import nba_editorial
@@ -208,7 +213,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, d
                for r in nba_editorial.stored() if not r.get('preview') and r['day']>=nba_capture.sports_refresh.eastern_date(now).isoformat()
                and boxscores.instant(r['capturedAt'])<=now]
     import nba_player_props
-    player_props=nba_player_props.build(now,root,boxes)
+    player_props=nba_player_props.build(now,root,boxes,limit=prop_limit)
     # Shared caveats and deterministic explanation text need not be repeated in
     # every lazy-payload row. Counts retain their true denominators; L10 values
     # remain available without duplicating the season/L5 arrays.

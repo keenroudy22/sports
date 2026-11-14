@@ -94,6 +94,26 @@ test('basketball cards open matchup details and NBA props stay in their own game
   assert.doesNotMatch(matchup, /Other game player/);
 });
 
+test('NBA matchup stat keeps the first ranked comparison and checks team IDs', async () => {
+  const kickoff = new Date(Date.now()+3600000).toISOString(), sourceAt = new Date().toISOString();
+  const nba = {id:'NBA-2',providerId:'2',kickoff,status:'scheduled',teams:{
+    home:{id:'1',name:'Home',abbreviation:'HOM'},away:{id:'2',name:'Away',abbreviation:'AWY'}}};
+  const quote = {eventId:'2',athleteId:'42',team:'1',name:'Matched player',kickoff,sourceAt,stat:'pts',
+    line:15.5,book:'FanDuel',over:-110,under:-110,side:'over',projection:{value:17.2}};
+  const rows = [quote,{...quote,line:17.5,book:'DraftKings',under:-115},
+    {...quote,athleteId:'43',team:'999',teamName:'Home',name:'Wrong roster'},
+    {...quote,athleteId:'44',team:'1',name:'Research player'},
+    {...quote,athleteId:'44',team:'1',name:'Research player',line:30.5,book:'DraftKings'}];
+  const v = views(async path => {
+    if (path === 'app/nba.json') return {games:[nba],generatedAt:'same',matchupPropEvents:['2']};
+    if (path === 'app/nba-props/2.json') return {rows,generatedAt:'same'};
+    if (path === 'app/players/NBA.json') return {players:[]};
+    throw Error(path);
+  });
+  const first = await v.game({id:nba.id});
+  assert.match(first, /NBA\/42\?stat=pts&amp;line=15\.5&amp;direction=over&amp;book=FanDuel/);
+  assert.doesNotMatch(first,/Wrong roster|line=30\.5/);
+});
 test('basketball matchup links retain verified scores and charts when a game leaves pregame research', async () => {
   const kickoff = new Date(Date.now() - 4 * 3600000).toISOString();
   const teams = {home:{id:'1',name:'Home',abbreviation:'HOM'},away:{id:'2',name:'Away',abbreviation:'AWY'}};

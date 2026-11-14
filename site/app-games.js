@@ -151,6 +151,11 @@
   const BBALL_PRIMARY = [['pts','PTS'],['reb','REB'],['ast','AST']];
   const BBALL_EXTRA = [['fg3m','3PM'],['pra','PRA'],['pa','P+A'],['pr','P+R'],['ra','R+A']];
   const basketballStat = row => row.stat || ({points:'pts',rebounds:'reb',assists:'ast',threes:'fg3m'}[String(row.statName || '').toLowerCase()]);
+  const isBasketballTeam = (row, team) => {
+    if (row.team && team.id) return String(row.team) === String(team.id);
+    return (row.teamAbbr && team.abbreviation && row.teamAbbr.toLowerCase() === team.abbreviation.toLowerCase())
+      || (row.teamName && team.name && row.teamName.toLowerCase() === team.name.toLowerCase());
+  };
   const basketballStatus = rows => {
     const holds = rows.map(row => row.hold).filter(Boolean);
     const availability = holds.map(text => /^Availability:\s*(.+)/i.exec(text)).find(Boolean);
@@ -167,10 +172,9 @@
     const pregame = (!game.status || game.status === 'scheduled') && tip > now;
     const posted = picks.filter(play => play.league === league && play.gameId === game.id
       && play.posted === true && !play.result && play.athleteId);
-    const isOfficialQuote = (row, stat) => row && posted.some(play => String(play.athleteId) === String(row.athleteId)
+    const officialQuote = (row, stat) => row && posted.find(play => String(play.athleteId) === String(row.athleteId)
       && play.stat === stat && play.line === row.line && bookLabel(play.book) === bookLabel(row.book)
-      && ['over', 'under'].includes(play.direction) && play.direction === (row.side || 'over')
-      && isNum(play.odds) && play.odds === row[play.direction]);
+      && ['over', 'under'].includes(play.direction) && isNum(play.odds) && play.odds === row[play.direction]);
     const isFresh = row => {
       const age = now - Date.parse(row?.sourceAt);
       return pregame && age >= 0 && age <= 4 * 3600000;
@@ -182,15 +186,17 @@
       const members = new Map();
       for (const entry of index.players || []) if (String(entry[3]) === String(team.id)) members.set(String(entry[0]), { id:String(entry[0]), name:entry[1], pos:entry[2], entry, stats:new Map() });
       for (const row of gameRows) {
-        if (!(String(row.team) === String(team.id) || String(row.teamAbbr || '').toLowerCase() === String(team.abbreviation || '').toLowerCase()
-          || String(row.teamName || '').toLowerCase() === String(team.name || '').toLowerCase())) continue;
+        if (!isBasketballTeam(row, team)) continue;
         const key = String(row.athleteId || row.name);
         const player = members.get(key) || { id:row.athleteId || null, name:row.name, pos:null, entry:null, stats:new Map() };
         const stat = basketballStat(row);
-        if (stat) player.stats.set(stat, row);
+        const previous = player.stats.get(stat);
+        if (stat && (!previous || (!officialQuote(previous, stat) && officialQuote(row, stat)))) {
+          player.stats.set(stat, row);
+        }
         members.set(key, player);
       }
-      const priority = player => [...player.stats.entries()].reduce((score,[stat,row]) => score + (isOfficialQuote(row, stat) ? 100 : 0) + (isLean(row) ? 50 : 0) + (isNum(row.line) ? 20 : 0), 0);
+      const priority = player => [...player.stats.entries()].reduce((score,[stat,row]) => score + (officialQuote(row, stat) ? 100 : 0) + (isLean(row) ? 50 : 0) + (isNum(row.line) ? 20 : 0), 0);
       return [...members.values()].filter(player => player.stats.size || player.entry?.[7]?.values
         || (league === 'CBB' && recentBoxCutoff && player.entry?.[5] >= recentBoxCutoff))
         .sort((a,b) => priority(b)-priority(a) || Number(Boolean(b.stats.size))-Number(Boolean(a.stats.size))
@@ -202,15 +208,16 @@
       const held = !pregame || Boolean(row?.hold) || [...player.stats.values()].some(C.basketballAvailabilityHold);
       const projection = held ? null : row ? row.projection?.value : summary?.values?.[stat];
       const line = isNum(row?.line) ? Number(row.line) : null;
-      const direction = String(row?.side || 'over').toLowerCase() === 'under' ? 'under' : 'over';
+      const official = officialQuote(row, stat);
+      const direction = (official?.direction || row?.side) === 'under' ? 'under' : 'over';
       const href = player.id ? esc(C.playerLineHref({ league, athleteId: player.id, stat, line, direction, book: bookLabel(row?.book), gameId: game.id })) : '';
       const gap = isNum(projection) && line != null ? projection-line : null;
       const range = !held && isNum(row?.projection?.low) && isNum(row?.projection?.high) ? `${C.fixed(row.projection.low)}–${C.fixed(row.projection.high)}` : null;
-      const recent = isNum(summary?.recent?.[stat]) ? `L5 avg ${C.fixed(summary.recent[stat])}` : row?.last5?.games ? `L5 ${row.last5.hits}/${row.last5.games} ${direction}` : null;
+      const recent = isNum(summary?.recent?.[stat]) ? `L5 avg ${C.fixed(summary.recent[stat])}` : row?.last5?.games && (row.side || 'over') === direction ? `L5 ${row.last5.hits}/${row.last5.games} ${direction}` : null;
       const price = line == null ? 'Book line unavailable' : [isNum(row.over) || isNum(row.under) ? `O ${isNum(row.over) ? oddsText(row.over) : '—'} / U ${isNum(row.under) ? oddsText(row.under) : '—'}` : '', row.book ? bookLabel(row.book) : ''].filter(Boolean).join(' · ');
-      const liked = !held && isLean(row), isOfficial = isOfficialQuote(row, stat);
-      const body = `<span class="prop-vs"><span><span class="prop-vs-label">${line != null && !isFresh(row) ? 'Earlier line' : 'Book'}</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>${isNum(projection) ? esc(C.fixed(projection)) : 'Held'}</b></span></span>${gap == null ? '' : `<span class="prop-gap">Projection gap <b>${gap > 0 ? '+' : ''}${esc(C.fixed(gap))}</b></span>`}${price ? `<span class="prop-price${line == null ? ' is-missing' : ''}">${esc(price)}</span>` : ''}${range ? `<span class="prop-range">Kook’n range ${esc(range)}</span>` : ''}${recent ? `<span class="prop-recent">${esc(recent)}</span>` : ''}${row?.sourceAt ? `<span class="prop-checked">${isFresh(row) ? 'Checked' : 'Earlier quote · checked'} ${esc(ago(row.sourceAt))}</span>` : ''}${isOfficial ? '<span class="pick-tag">Official pick</span>' : liked ? '<span class="lean-tag">Research lean</span>' : ''}`;
-      return href ? `<a class="prop-cell${liked ? ' liked' : ''}${isOfficial ? ' official' : ''}" href="${href}">${body}</a>` : `<span class="prop-cell">${body}</span>`;
+      const liked = !official && !held && isLean(row);
+      const body = `<span class="prop-vs"><span><span class="prop-vs-label">${line != null && !isFresh(row) ? 'Earlier line' : 'Book'}</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>${isNum(projection) ? esc(C.fixed(projection)) : 'Held'}</b></span></span>${gap == null ? '' : `<span class="prop-gap">Projection gap <b>${gap > 0 ? '+' : ''}${esc(C.fixed(gap))}</b></span>`}${price ? `<span class="prop-price${line == null ? ' is-missing' : ''}">${esc(price)}</span>` : ''}${range ? `<span class="prop-range">Kook’n range ${esc(range)}</span>` : ''}${recent ? `<span class="prop-recent">${esc(recent)}</span>` : ''}${row?.sourceAt ? `<span class="prop-checked">${isFresh(row) ? 'Checked' : 'Earlier quote · checked'} ${esc(ago(row.sourceAt))}</span>` : ''}${official ? '<span class="pick-tag">Official pick</span>' : liked ? '<span class="lean-tag">Research lean</span>' : ''}`;
+      return href ? `<a class="prop-cell${liked ? ' liked' : ''}${official ? ' official' : ''}" href="${href}">${body}</a>` : `<span class="prop-cell">${body}</span>`;
     };
     const table = (team, players, stats) => `<div class="table-wrap"><table class="t prop-compare"><thead><tr><th>Player · role</th>${stats.map(([,label]) => `<th>${esc(label)}</th>`).join('')}</tr></thead><tbody>${players.map(player => {
       const rows = [...player.stats.values()], status = basketballStatus(rows), role = rows.find(row => row.currentRole)?.currentRole, summary = player.entry?.[7];
