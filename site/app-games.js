@@ -221,11 +221,16 @@
     }
     const sheets = [...groups].map(([day, list], i) => `<details><summary>${esc(day)} · ${esc(list.length)} sheets</summary><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0">${list.map(s => `<a class="btn" style="white-space:normal" href="data/app/${esc(s.file)}?v=${esc(encodeURIComponent(data.generatedAt || data.checkedAt || 'current'))}" target="_blank" rel="noopener">Sheet ${esc(s.page)}/${esc(s.pages)}</a>`).join('')}</div></details>`).join('');
     const availableCount = rows.filter(game => freshCbbSpread(game)).length;
+    const browsing = Boolean(String(state.games.q || '').trim());
+    const shown = opts.preview && !browsing ? rows.slice(0, 6) : rows;
+    const slateLabel = shown.length < rows.length ? `View all ${rows.length} matchups` : 'Full college hoops slate';
+    const tools = opts.preview ? `<div class="btn-row"><a class="btn small" href="#games/upcoming?sport=CBB">${slateLabel}</a><a class="btn small" href="#edges?sport=CBB&amp;type=games">Compare spreads</a><a class="btn small" href="#research/players?sport=CBB">Player charts</a></div>` : '';
     return head('College basketball', 'CBB projections & stats', `${rows.length} game${rows.length === 1 ? '' : 's'} · ${projected.length} projected · ${availableCount} with a fresh spread`)
       + `${opts.gamesPage ? gameTabs('upcoming') : views.cbbPicks(data, true)}
+        ${tools}
         ${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}
         ${window.html}
-        ${rows.length ? `<ul class="cbb-slate" aria-label="College basketball matchups">${rows.map(cbbSlateRow).join('')}</ul>` : '<p>No upcoming games match this view.</p>'}
+        ${rows.length ? `<ul class="cbb-slate" aria-label="College basketball matchups">${shown.map(cbbSlateRow).join('')}</ul>` : '<p>No upcoming games match this view.</p>'}
         ${sheets ? `<details class="more-box"><summary>Projection sheets</summary>${sheets}</details>` : ''}
         ${data.note ? `<details class="more-box"><summary>About these projections</summary><p class="small muted">${esc(data.note)}</p></details>` : ''}
         <p><a href="#games/live?sport=CBB">Live scores & finals ›</a> · <a href="#record?sport=CBB">CBB Results ›</a></p>`;

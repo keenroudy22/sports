@@ -53,6 +53,20 @@ test('fresh CBB spreads compare the same side and show exact odds on Today and g
  }
 });
 
+test('CBB Today previews six matchups and Games keeps the complete slate', async () => {
+ const kickoff = '2099-11-02T23:00:00Z';
+ const games = Array.from({length: 9}, (_, i) => ({id: `CBB-${i+1}`, kickoff,
+   teams:{home:{name: `Home ${i}`}, away:{name: `Away ${i}`}}}));
+ const v = views(async () => ({games, scheduleFresh:true}));
+ const today = await v.cbbToday({preview:true});
+ assert.equal((today.match(/class="cbb-slate-row"/g) || []).length, 6);
+ assert.match(today, /#games\/upcoming\?sport=CBB">View all 9 matchups/);
+ assert.match(today, /Compare spreads[\s\S]*Player charts[\s\S]*class="cbb-slate-row"/);
+ assert.doesNotMatch(today, /#game\/CBB-9/);
+ const complete = await v.cbbToday({gamesPage:true});
+ assert.equal((complete.match(/class="cbb-slate-row"/g) || []).length, 9);
+ assert.match(complete, /#game\/CBB-9/);
+});
 test('CBB research handles missing payload instead of football fallback',async()=>{const html=await views(async()=>{throw Error('offline');}).cbbToday();assert.match(html,/CBB research could not be loaded/);assert.doesNotMatch(html,/NFL/);});
 
 test('CBB score-only payload does not fabricate a probability bar',async()=>{
