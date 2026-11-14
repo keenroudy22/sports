@@ -1045,6 +1045,81 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
     const picks = showPicks ? (open.length ? `${open.length} posted NBA pick${open.length === 1 ? '' : 's'} today. ` : 'No NBA play posted yet. ') : '';
     return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${picks}${games.length} game${games.length === 1 ? '' : 's'} · tap a matchup for Kook vs Book.</p>${showPicks && open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}${games.length ? `<div class="today-game-list">${games.slice(0,3).map(nbaSummaryGame).join('')}</div>` : ''}<a class="more" href="#today?sport=NBA">${games.length > 3 ? `See all ${games.length} NBA games` : 'Open NBA Today'} ›</a></section>`;
   };
+  views.basketballEdges = async (league, { type, q, preview = false } = {}) => {
+    const [schedule, props] = await Promise.all([
+      maybe(`app/${league.toLowerCase()}.json`),
+      league === 'NBA' && type !== 'games' ? maybe('app/nba-props.json') : null,
+    ]);
+    const now = Date.now();
+    const matches = (...fields) => !q || C.researchMatches(q, ...fields);
+    const upcoming = (kickoff, observedAt) => Date.parse(kickoff) > now
+      && now - Date.parse(observedAt) >= 0 && now - Date.parse(observedAt) <= 14400000;
+    const validOdds = value => isNum(value) && Math.abs(value) >= 100;
+    const games = (schedule?.games || []).filter(g => !g.status || g.status === 'scheduled');
+    const teams = g => [g.teams.away, g.teams.home].map(t => t.abbreviation || t.name);
+    const title = g => teams(g).join(' at ');
+    const comparisons = [];
+    for (const g of games) {
+      if (type === 'props' || !g.projection) continue;
+      const [away,home] = teams(g), p = g.projection;
+      const margin = p.margin ?? (isNum(p.home) && isNum(p.away) ? p.home-p.away : null);
+      const spread = league === 'NBA' ? g.spreadQuote : freshCbbSpread(g, now);
+      const observedAt = spread?.observedAt || spread?.retrievedAt;
+      if (spread?.book && upcoming(g.kickoff, observedAt) && isNum(margin) && isNum(spread.homeLine)
+          && validOdds(spread.homeOdds ?? spread.home) && validOdds(spread.awayOdds ?? spread.away)
+          && matches(title(g), ...Object.values(g.teams).map(t => t.name), league, 'spread')) {
+        const gap = margin + spread.homeLine;
+        const homePrice = oddsText(spread.homeOdds ?? spread.home), awayPrice = oddsText(spread.awayOdds ?? spread.away);
+        const price = spread.homeLine === 0 ? `${home} ${homePrice} / ${away} ${awayPrice}` : spread.homeLine < 0 ? homePrice : awayPrice;
+        comparisons.push({ name:title(g), market:'Spread', model:C.modelSpread(home,away,margin),
+          line:C.modelSpread(home,away,-spread.homeLine), price, book:spread.book, observedAt,
+          gap:Math.abs(gap), difference:Math.abs(gap)<.05 ? 'Same line' : `${C.fixed(Math.abs(gap))} toward ${gap>0 ? home : away}`, href:`#game/${g.id}` });
+      }
+      const total = league === 'NBA' && g.totalQuote;
+      if (total?.book && upcoming(g.kickoff, total.retrievedAt) && isNum(total.line) && isNum(p.total)
+          && validOdds(total.over) && validOdds(total.under)
+          && matches(title(g), ...Object.values(g.teams).map(t => t.name), league, 'total')) {
+        const gap = p.total-total.line;
+        comparisons.push({ name:title(g), market:'Total', model:C.fixed(p.total), line:total.line,
+          price:`O ${oddsText(total.over)} / U ${oddsText(total.under)}`, book:total.book, observedAt:total.retrievedAt,
+          gap:Math.abs(gap), difference:`${gap>0 ? '+' : ''}${C.fixed(gap)}`, href:`#game/${g.id}` });
+      }
+    }
+    const gameById = new Map(games.map(g => [String(g.providerId || g.id?.replace(/^NBA-/, '')), g]));
+    const playerRows = [];
+    for (const row of props?.rows || []) {
+      const game = gameById.get(String(row.eventId)), dir = row.side;
+      if (!game || !row.athleteId || !row.stat || !row.book || !['over','under'].includes(dir) || row.hold
+          || !isNum(row.line) || !isNum(row.projection?.value) || !validOdds(row[dir])
+          || Date.parse(game.kickoff) !== Date.parse(row.kickoff) || !upcoming(game.kickoff, row.sourceAt)
+          || !matches(row.name,row.teamName,row.teamAbbr,row.statName,title(game),league)) continue;
+      const gap = row.projection.value-row.line;
+      playerRows.push({ name:row.name, market:row.statName || row.stat, model:C.fixed(row.projection.value), line:row.line,
+        price:`${dir==='under' ? 'U' : 'O'} ${oddsText(row[dir])}`, book:row.book, observedAt:row.sourceAt,
+        gap:Math.abs(gap), difference:`${gap>0 ? '+' : ''}${C.fixed(gap)}`, liked:row.favorite === true,
+        href:C.playerLineHref({league,athleteId:row.athleteId,stat:row.stat,line:row.line,direction:dir,book:bookLabel(row.book),gameId:game.id}) });
+    }
+    const list = rows => rows.length ? `<ul class="edge-comparisons">${rows.map(r => `<li><a class="edge-comparison${r.liked ? ' is-lean' : ''}" href="${esc(r.href)}">
+      <span><b>${esc(r.name)}</b><small>${esc(r.market)}${r.liked ? ' · Research lean' : ''}</small></span>
+      <span><small>Kook’n</small><b>${esc(r.model)}</b></span>
+      <span><small>Book · ${esc(bookLabel(r.book))}</small><b>${esc(r.line)} · ${esc(r.price)}</b><small>Checked ${esc(ago(r.observedAt))}</small></span>
+      <span><small>Projection gap</small><b>${esc(r.difference)}</b></span></a></li>`).join('')}</ul>` : '';
+    const group = (heading, rows) => {
+      if (!rows.length) return '';
+      const limit = preview ? 3 : 15;
+      return `<h3>${heading} · ${rows.length}</h3>${list(rows.slice(0,limit))}${rows.length > limit ? preview
+        ? `<p><a href="#edges?sport=${league}&amp;type=${heading === 'Player props' ? 'props' : 'games'}${q ? `&amp;q=${esc(encodeURIComponent(q))}` : ''}">View all ${rows.length} ${heading.toLowerCase()} ›</a></p>`
+        : `<details class="more-box"><summary>Show ${rows.length-limit} more ${heading.toLowerCase()}</summary>${list(rows.slice(limit))}</details>` : ''}`;
+    };
+    const matchups = group('Matchup lines', comparisons.sort((a,b) => b.gap-a.gap));
+    const players = group('Player props', playerRows.sort((a,b) => Number(b.liked)-Number(a.liked) || b.gap-a.gap));
+    const missing = type !== 'games' && !players ? league === 'CBB' ? 'CBB player prices are unavailable.' : 'No verified NBA player prices and projections match this view.' : '';
+    return section(league === 'NBA' ? 'NBA' : 'College Hoops', `${matchups}${players}
+      ${!matchups && type !== 'props' ? '<p class="small muted">No fresh matchup comparisons match this view.</p>' : ''}
+      ${missing ? `<p class="small muted">${missing} <a href="#research/players?sport=${league}">Browse player charts ›</a></p>` : ''}
+      ${(!schedule || league === 'NBA' && type !== 'games' && !props) ? '<p class="small muted">Some comparison data is unavailable. Refresh to retry.</p>' : ''}`,
+      '', 'Research · projection gaps in stat units.');
+  };
   views.nbaToday = async (opts = {}) => {
     let data = opts.data || await get('app/nba.json');
     const matches = (...values) => !opts.q || C.researchMatches(opts.q, ...values);
@@ -1073,8 +1148,10 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
     const propAvailability = data.playerProps?.availabilityAt ? `<p class="small muted">Player availability checked ${esc(whenShort(data.playerProps.availabilityAt))}. Recheck before playing; these are research baselines.</p>` : '';
     const readiness = ready ? `<details class="more-box"><summary>NBA picks · model research</summary><p class="small">${esc(ready.cleanCaptureDays)}/${esc(ready.cleanCaptureDaysRequired)} clean capture days · ${esc(ready.paperGraded)}/${esc(ready.paperGradesRequired)} paper grades</p><p class="small muted">Saved pregame forecasts and later outcomes are tracked separately from posted picks. Player approval is checked separately for points, rebounds and assists.</p></details>` : '';
     const live = opts.embedded || opts.game ? '' : await views.gamesLive({day:etDay()});
-    const playerProps = (data.playerProps?.rows || []).filter(r => (!opts.game || String(r.eventId) === String(opts.game.providerId)) && matches(r.name,r.teamName,r.statName) && (opts.game || !focusDay || C.dayOf(r.kickoff) === focusDay) && Date.now() < Date.parse(r.kickoff) && Date.now()-Date.parse(r.sourceAt) >= 0 && Date.now()-Date.parse(r.sourceAt) <= 14400000).map(r => `<article class="card" style="margin-top:12px;min-width:0;overflow-wrap:anywhere">
-      <p class="eyebrow">${esc(r.teamName)} · ${esc(whenShort(r.kickoff))}${r.favorite ? ' · FAVORITE PROP · RESEARCH' : ''}</p>${String(r.photo || '').startsWith('https://a.espncdn.com/') ? `<img src="${esc(r.photo)}" alt="" loading="lazy" style="float:right;width:48px;height:48px;object-fit:cover;border-radius:50%;margin:0 0 8px 8px">` : ''}<h3><a href="#player/NBA/${esc(r.athleteId)}?stat=${esc(r.stat)}">${esc(r.name)} · ${esc(r.statName)}</a></h3>
+    const playerProps = (data.playerProps?.rows || []).filter(r => (!opts.game || String(r.eventId) === String(opts.game.providerId)) && matches(r.name,r.teamName,r.statName) && (opts.game || !focusDay || C.dayOf(r.kickoff) === focusDay) && Date.now() < Date.parse(r.kickoff) && Date.now()-Date.parse(r.sourceAt) >= 0 && Date.now()-Date.parse(r.sourceAt) <= 14400000).map(r => {
+      const chartHref = C.playerLineHref({league:'NBA',athleteId:r.athleteId,stat:r.stat,line:r.line,direction:r.side || 'over',book:bookLabel(r.book),gameId:r.eventId ? `NBA-${r.eventId}` : null});
+      return `<article class="card" style="margin-top:12px;min-width:0;overflow-wrap:anywhere">
+      <p class="eyebrow">${esc(r.teamName)} · ${esc(whenShort(r.kickoff))}${r.favorite ? ' · FAVORITE PROP · RESEARCH' : ''}</p>${String(r.photo || '').startsWith('https://a.espncdn.com/') ? `<img src="${esc(r.photo)}" alt="" loading="lazy" style="float:right;width:48px;height:48px;object-fit:cover;border-radius:50%;margin:0 0 8px 8px">` : ''}<h3><a href="${esc(chartHref)}">${esc(r.name)} · ${esc(r.statName)}</a></h3>
       <p>Book line ${esc(r.line)} · over ${esc(oddsText(r.over))} / under ${esc(oddsText(r.under))} · ${esc(bookLabel(r.book))}</p>
       ${r.currentRole?.games ? `<p class="small"><b>This season’s workload:</b> ${r.currentRole.minutes.map(m => esc(m)).join(' / ')} minutes in the last ${esc(r.currentRole.games)} recorded game${r.currentRole.games === 1 ? '' : 's'}${Number.isInteger(r.currentRole.starts) ? ` · ${esc(r.currentRole.starts)} start${r.currentRole.starts === 1 ? '' : 's'}` : ''}.</p><p class="tiny muted">${String(r.currentRole.source || '').startsWith('https://') ? `<a href="${esc(r.currentRole.source)}" target="_blank" rel="noopener">Latest game ${esc(whenShort(r.currentRole.asOf))}</a>` : esc(whenShort(r.currentRole.asOf))}. Observed workload, not tonight’s confirmed minutes.</p>` : '<p class="small muted">No current-season workload recorded yet.</p>'}
       ${(r.opportunityContext || []).filter(c => c.analysisOnly === true && c.admissionReady === false && ['passing','rebounding'].includes(c.kind) && isNum(c.season?.games) && isNum(c.recent?.games)).map(c => {
@@ -1092,7 +1169,7 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
       <p class="small">Exact-line ${esc(r.side)} hits: last 5 ${esc(r.last5.hits)}/${esc(r.last5.games)} · last 10 ${esc(r.last10.hits)}/${esc(r.last10.games)} · recorded season ${esc(r.seasonHistory.hits)}/${esc(r.seasonHistory.games)}</p>
       <p class="small">${esc(r.projection.minutes)} ${r.projection.minutesBasis ? 'reviewed' : 'baseline'} minutes × ${esc(r.projection.rate)} ${esc(r.statName)} per minute from ${esc(r.projection.sample)} full-role games.</p>` : `<p class="small" style="margin-top:8px">${esc(r.hold || 'Projection unavailable')}</p>`}
       ${C.nbaTicketLines && ticketButton ? `<div class="btn-row" style="margin-top:10px">${C.nbaTicketLines([r]).filter(l => l.state === 'open').map(l => ticketButton(l.id, l.title, l.direction)).join('')}<a class="btn small" href="#ticket">Compare my ticket →</a></div><p class="tiny muted">Personal draft only; no validated NBA EV estimate.</p>` : ''}
-      <p><a href="#player/NBA/${esc(r.athleteId)}?stat=${esc(r.stat)}">Last 5, Last 10 & full player chart →</a></p><p class="tiny muted">Prices seen ${esc(whenShort(r.sourceAt))}${r.rosterAt ? ` · Roster checked ${esc(whenShort(r.rosterAt))}` : ''} · <a href="https://sharpapi.io">SharpAPI</a> / ESPN game logs</p></article>`);
+      <p><a href="${esc(chartHref)}">Last 5, Last 10 & full player chart →</a></p><p class="tiny muted">Prices seen ${esc(whenShort(r.sourceAt))}${r.rosterAt ? ` · Roster checked ${esc(whenShort(r.rosterAt))}` : ''} · <a href="https://sharpapi.io">SharpAPI</a> / ESPN game logs</p></article>`; });
     if (opts.game) return `${nbaGameCard(opts.game, false)}<section class="section"><h2>Player projections vs lines</h2>
       ${propAvailability}${playerProps.join('') || '<p>No fresh player prices for this matchup.</p>'}</section>`;
     const trial = nbaTrialSection(data, readiness);

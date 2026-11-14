@@ -17,6 +17,33 @@ test('NBA games do not fetch player details; player views retain every row and h
 });
 test('NBA Today uses the actual lazy app interface and separates historical research from picks',async()=>{const s=load(),api=s.module.exports;const data={heading:'Opening night · October 20',scheduleFresh:true,games:[{seasonType:'regular-season',status:'scheduled',kickoff:'2026-10-20T23:00:00Z',teams:{home:{abbreviation:'NY'},away:{abbreviation:'SA'}},projection:{home:115,away:110,total:225,sparse:true},totalQuote:{line:221.5,over:-110,under:-110,book:'DraftKings',retrievedAt:'2026-10-09T21:00:00Z'}}],trends:[{window:'Last season · regular season',season:2026,name:'Real player',statName:'points',average:20,games:3,values:[18,20,22],dates:['2026-04-01','2026-04-03','2026-04-05']}],prep:[],prepNote:'Current-season games and fresh prices are required.',readiness:{stage:'log',cleanCaptureDays:1,cleanCaptureDaysRequired:14,paperGraded:0,paperGradesRequired:50},trial:{note:'No NBA play has been posted.'}};const ctx=api.gamesContext({get:async path=>{assert.equal(path,'app/nba.json');return data;}});ctx.state.league='NBA';const views=s.KRGames(ctx);views.gamesLive=async()=>'<h2>NBA live scores</h2>';const html=await views.nbaToday();for(const text of ['NBA Today','October 20','Research projection','Last season','Prep List','NBA picks','No NBA play has been posted','NBA live scores','Saved pregame forecasts and later outcomes are tracked separately from posted picks'])assert.ok(html.includes(text),text);assert.doesNotMatch(html,/moves forward only when both evidence gates clear|NFL|College football|did not load/);});
 test('NBA-only renderer is selected before generic other-sport cards without touching NHL or MLB',()=>{const source=fs.readFileSync('site/app.js','utf8');assert.match(source,/if \(state\.league === 'NBA'\) return \(await ensureGames\(\)\)\.nbaToday\(\)/);});
+test('basketball Edges uses exact fresh prices, respects holds and market filters, and keeps historical totals out', async () => {
+ const s=load(),api=s.module.exports, now=Date.now();
+ const stamp=new Date(now-60000).toISOString(), kickoff=new Date(now+3600000).toISOString();
+ const teams={home:{name:'Home Club',abbreviation:'HOM'},away:{name:'Away Club',abbreviation:'AWY'}};
+ const common={teams,kickoff,status:'scheduled',projection:{margin:6,total:220}};
+ const nba={...common,id:'NBA-1',providerId:'1',totalQuote:{line:217.5,over:-110,under:-115,book:'FanDuel',retrievedAt:stamp}};
+ const cbb={...common,id:'CBB-1',spreadQuote:{homeLine:-3.5,homeOdds:-108,awayOdds:-112,book:'DraftKings',observedAt:stamp},
+   firstTotal:{line:123.5,book:'DraftKings',capturedAt:stamp}};
+ const row={eventId:'1',athleteId:'42',name:'Verified Guard',stat:'ast',statName:'Assists',line:4.5,side:'under',
+   under:-114,book:'FanDuel',sourceAt:stamp,kickoff,projection:{value:3},favorite:true};
+ const feeds={'app/nba.json':{games:[nba]},'app/cbb.json':{games:[cbb]},'app/nba-props.json':{rows:[row,
+   {...row,name:'Held Guard',hold:'Questionable'}, {...row,name:'Stale Guard',sourceAt:new Date(now-18000000).toISOString()},
+   {...row,name:'Wrong Matchup',eventId:'99'}]}};
+ const paths=[];
+ const views=s.KRGames(api.gamesContext({maybe:async path=>{paths.push(path);return feeds[path];}}));
+ const html=await views.basketballEdges('NBA');
+ assert.match(html, /NBA\/42\?stat=ast&amp;line=4\.5&amp;direction=under&amp;book=FanDuel&amp;game=NBA-1/);
+ assert.match(html, /is-lean[\s\S]*Verified Guard[\s\S]*4\.5 · U -114/);
+ assert.match(html, /217\.5/);
+ assert.doesNotMatch(html, /Held Guard|Stale Guard|Wrong Matchup|chance|expected value/i);
+ paths.length=0;
+ const games=await views.basketballEdges('CBB',{type:'games',q:'Home Club'});
+ assert.deepEqual(paths,['app/cbb.json']);
+ assert.match(games, /HOM -6\.0[\s\S]*HOM -3\.5 · -108/);
+ assert.doesNotMatch(games, /123\.5|player prices/i);
+ assert.doesNotMatch(await views.basketballEdges('NBA',{type:'props',q:'not in slate'}), /Verified Guard/);
+});
 test('NBA delayed schedule snapshots never show past-tip projections or fabricated live scores',async()=>{
  const s=load(),api=s.module.exports,kickoff=new Date().toISOString(),stamp=new Date().toISOString();
  const g={id:'NBA-lag',status:'scheduled',kickoff,teams:{home:{name:'Home',abbreviation:'HOM'},away:{name:'Away',abbreviation:'AWY'}},scores:{home:0,away:0},projection:{home:114,away:110,total:224},totalQuote:{line:220.5,over:-110,under:-110,book:'DraftKings',retrievedAt:stamp}};

@@ -1511,7 +1511,7 @@
     if (state.board.show === 'all') q.set('show', 'all');
     if (state.q) q.set('q', state.q);
     if (state.league !== 'ALL') q.set('sport', state.league);
-    return `#research/${mode === 'news' ? 'news' : 'lines'}${String(q) ? '?' + q : ''}`;
+    return `${route?.edges ? '#edges' : `#research/${mode === 'news' ? 'news' : 'lines'}`}${String(q) ? '?' + q : ''}`;
   };
   const shareLink = (mode, route) => `<a class="linkish" href="${esc(researchShare(mode, route))}" data-copy-link>Copy link</a>`;
   const RESEARCH_HEAD = {
@@ -1520,7 +1520,7 @@
     news: ['Injuries and news', 'ESPN injury list and status changes, newest first.'] };
   const researchHead = (mode, edges = false) => {
     const playerHeads = { matchup: ['Player prop board', "Book line, Kook’n, L5/L10 and defense at a glance."], search: ['Player stats', 'Logs, averages & splits.'], defense: ['Position vs. defense', 'What defenses allow by position and stat.'] };
-    const [title, sub] = edges ? ['Kook’n Edges', 'Verified projection gaps across current sportsbook prices. Green means research lean, not an official pick.']
+    const [title, sub] = edges ? ['Kook’n Edges', 'Current book prices alongside Kook’n numbers. Green marks a research lean.']
       : mode === 'players' ? (playerHeads[state.players.sub] || playerHeads.matchup) : RESEARCH_HEAD[mode] || ['Kook’n vs. the Book', 'Compare our projection and win chance with the book’s line and price.'];
     const active = edges ? 'edges' : mode === 'players' ? state.players.sub === 'search' ? 'players' : state.players.sub === 'defense' || state.players.sub === 'teams' ? 'defense' : 'props' : mode === 'trends' && state.trends.period === '1Q' ? 'first' : mode;
     const tool = (href, label, key) => `<a href="${href}"${active === key ? ' aria-current="page"' : ''}><b>${label}</b></a>`;
@@ -1541,12 +1541,26 @@
       if (route.league) setLeague(route.league);
       if (route.type) state.board.type = route.type;
       if (route.sort && SORTS[route.sort]) state.board.sort = route.sort;
+      if (route.edges) state.q = route.q || '';
       if (route.q) { if (route.mode === 'players') { state.players.q = route.q; state.players.sub = 'search'; } else state.q = route.q; }
       if (route.mode === 'players') state.players.sub = ['defense', 'teams', 'search', 'matchup'].includes(route.sub) ? route.sub : route.q ? 'search' : 'matchup';
       if (route.pl === 'NFL' || route.pl === 'CFB') state.players.league = route.pl;
       if (route.rate && ['70', '80', '90', '100'].includes(route.rate)) state.trends.rate = route.rate;
       if (route.show === 'all' || route.show === 'value') state.board.show = route.show;
     }
+    const basketballEdgeView = route.edges && ['ALL','NBA','CBB'].includes(state.league);
+    const basketballEdges = async () => {
+      if (!basketballEdgeView) return '';
+      const leagues = state.league === 'ALL' ? ['NBA','CBB'] : [state.league];
+      const views = await ensureGames();
+      return (await Promise.all(leagues.map(league => views.basketballEdges(league, {
+        type:state.board.type, q:state.q, preview:leagues.length > 1,
+      })))).join('');
+    };
+    if (basketballEdgeView && state.league !== 'ALL') return researchHead(route.mode, true)
+      + `<div class="toolbar">${seg('type', [['all','All'],['props','Props'],['games','Games']], state.board.type)}
+        <div class="grow"><label class="sr" for="q">Search</label><input id="q" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off"></div></div>`
+      + await basketballEdges();
     if (state.league === 'NBA') return route.mode === 'players'
       ? researchHead(route.mode, route.edges) + await (await ensureMore()).basketballPlayers({ ...route, league: 'NBA' })
       : route.mode === 'milestones'
@@ -1570,7 +1584,7 @@
     if (route.mode === 'players') return top + await researchPlayers(route);
     if (route.mode === 'news') return top + await researchNews();
     const lines = await lineData();
-    if (!lines) return top + researchStart + empty('Football lines did not load', 'The current football line files are unavailable right now. <button type="button" class="btn small" data-retry>Try again</button>', 'clock');
+    if (!lines) return top + researchStart + await basketballEdges() + empty('Football lines did not load', 'The current football line files are unavailable right now. <button type="button" class="btn small" data-retry>Try again</button>', 'clock');
     const now = Date.now();
     const b = state.board;
     let rows = (lines.lines || []).filter(r => !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && inLeague(vm));
@@ -1608,7 +1622,8 @@
         <div class="find-row"><label class="sr" for="sort">Sort</label><select id="sort" class="select" data-select="sort"><option value="edge"${b.sort === 'edge' ? ' selected' : ''}>Sort: biggest chance gap</option><option value="chance"${b.sort === 'chance' ? ' selected' : ''}>Sort: most likely</option><option value="kickoff"${b.sort === 'kickoff' ? ' selected' : ''}>Sort: kickoff</option></select>
         <div class="grow"><label class="sr" for="q">Search</label><input id="q" class="search" type="search" placeholder="Player, team or market" value="${esc(state.q)}" data-input="q" autocomplete="off"></div></div></div>
       <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} lines${older ? ` · ${older} older prices hidden` : ''} · ✓ passes our price check · ${shareLink('lines', route)}</p>
-      ${spreadResearch}${list}
+      ${await basketballEdges()}
+      ${basketballEdgeView ? '<h2>Football</h2>' : ''}${spreadResearch}${list}
       ${b.show === 'value' && rows.length < 5 && nAll > rows.length ? `<p class="small" style="margin-top:10px"><button type="button" class="linkish" data-set="show:all">See all ${nAll} current lines →</button></p>` : ''}
       ${unpriced.length ? `<details class="more-box" data-box="unpriced" style="margin-top:12px"><summary>Player lines with no price yet · ${unpriced.length}</summary><div class="receipts">${unpriced.slice(0, 60).map(r => `<div class="receipt" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${r.athleteId ? `<a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a>` : esc(niceTitle(r.title))}</b><span>${esc(marketLabel(r))} · ${esc(whenShort(r.kickoff))}${isNum((r.grade || {}).projection) ? ` · our middle estimate ${esc(C.fixed(r.grade.projection))}` : ''}</span></div><span class="small muted">No price yet</span></div>`).join('')}</div><p class="small muted" style="margin-top:8px">The book lists these lines, but we have not seen a price, so we cannot compare our chance with what the price needs.</p></details>` : ''}
       `;
@@ -2107,9 +2122,9 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-407c2bdcaacb';
-  const GAMES_ASSET = 'app-games.js?v=sha256-036d899cca0d';
+  const GAMES_ASSET = 'app-games.js?v=sha256-5f72e216bcbe';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
-  const RESEARCH_CSS = 'research.css?v=sha256-7f21f1a8f783';
+  const RESEARCH_CSS = 'research.css?v=sha256-e15b02c3446c';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
       const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = RESEARCH_CSS; link.onload = ok;

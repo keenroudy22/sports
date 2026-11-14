@@ -42,6 +42,19 @@
 .research-paths b { font: 700 18px/1.05 var(--font-display); }
 .research-paths span { color: var(--dim); font: 500 13px/1.35 var(--font-body); }
 .board .edge-liked { background: linear-gradient(90deg, rgba(32,199,116,.1), rgba(32,199,116,.025)); box-shadow: inset 3px 0 0 var(--kookd); }
+.edge-comparisons { list-style: none; margin: 8px 0 16px; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--felt); }
+.edge-comparisons li + li { border-top: 1px solid var(--line); }
+.edge-comparison { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1.4fr) minmax(0,1fr); gap: 8px; padding: 10px 12px; color: var(--chalk); text-decoration: none; }
+.edge-comparison:hover { background: var(--felt-high); }
+.edge-comparison:focus-visible { outline-offset: -3px; }
+.edge-comparison.is-lean { box-shadow: inset 3px 0 var(--kookd); }
+.edge-comparison > span { min-width: 0; display: grid; align-content: start; gap: 3px; overflow-wrap: anywhere; }
+.edge-comparison small { color: var(--dim); font-size: 12px; }
+.edge-comparison.is-lean > span:first-child small { color: #70e9aa; }
+@media (max-width:600px) {
+  .edge-comparison { grid-template-columns: minmax(0,.7fr) minmax(0,1.3fr) minmax(0,1fr); }
+  .edge-comparison > span:first-child { grid-column: 1 / -1; }
+}
 .edge-sports { display: flex; gap: 7px; margin: 14px 0 10px; padding-bottom: 3px; overflow-x: auto; scrollbar-width: none; }
 .edge-sports::-webkit-scrollbar { display: none; }
 .edge-sports a { flex: none; min-height: 38px; padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--felt); color: var(--dim); font-size: 13px; font-weight: 700; text-decoration: none; }
