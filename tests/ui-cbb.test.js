@@ -4,8 +4,12 @@ const C=require('../site/core.js'),L=require('../site/live.js'),P=require('../si
 function views(get){const s={module:{exports:{}},exports:{},KRCore:C,KRLive:L,KRPersonal:P,document:{querySelector:()=>null},localStorage:{getItem:()=>null,setItem:()=>{}},console,URL,URLSearchParams,Intl,Date,Math,Map,Set,Promise,AbortController,TextEncoder,TextDecoder,setTimeout,clearTimeout,setInterval,clearInterval};s.window=s;s.self=s;s.globalThis=s;vm.runInNewContext(fs.readFileSync('site/app.js','utf8'),s);vm.runInNewContext(fs.readFileSync('site/app-games.js','utf8'),s);return s.KRGames(s.module.exports.gamesContext({get,maybe:path=>get(path).catch(()=>null)}));}
 test('CBB research separates prior season stats and historical quote from live bets',async()=>{
  const g={id:'CBB-1',date:'2099-11-02',kickoff:'2099-11-02T23:00Z',teams:{home:{name:'Home'},away:{name:'Away'}},projection:{home:72,away:68,total:140,winProb:.62,neutral:true,sparse:true},stats:{home:{current:{season:2027,games:0},prior:{season:2026,games:30,wins:20,losses:10,ppg:80,allowed:70}}},firstTotal:{line:145.5,book:'DraftKings',capturedAt:'2026-11-01T15:00Z'}};
- const v=views(async path=>{assert.equal(path,'app/cbb.json');return {scheduleFresh:true,note:'Research, not picks.',games:[g],sheets:[{file:'cbb-sheet-2099-11-02-1.svg',date:g.date,page:1,pages:1}]};});
- const html=await v.cbbToday();for(const t of ['CBB projections &amp; stats','2026–27','2025–26','No recorded games','Historical quote, not a live offer','Neutral court','Sheet 1/1','pc-bar','Baseline model win chance','38%','62%'])assert.ok(html.includes(t),t);
+ const v=views(async path=>path==='app/cbb.json'?{scheduleFresh:true,note:'Research, not picks.',games:[g],sheets:[{file:'cbb-sheet-2099-11-02-1.svg',date:g.date,page:1,pages:1}]}:{players:[]});
+ const slate=await v.cbbToday();
+ assert.match(slate,/cbb-slate[\s\S]*Projection sheets[\s\S]*Sheet 1\/1/);
+ assert.doesNotMatch(slate,/Historical quote|pc-bar/);
+ const html=await v.game({id:g.id});
+ for(const t of ['2026–27','2025–26','No recorded games','Historical quote, not a live offer','Neutral court','pc-bar','Baseline model win chance','38%','62%'])assert.ok(html.includes(t),t);
  assert.doesNotMatch(html,/Best Bet|positive EV|\b0 scored/);
 });
 test('CBB cards show the projected favorite and keep missing book spreads explicit', async () => {
@@ -15,10 +19,11 @@ test('CBB cards show the projected favorite and keep missing book spreads explic
  const v=views(async path=>path==='app/cbb.json'?{games:[game],scheduleFresh:true}:{players:[]});
  for (const [margin, expected] of [[7.1,'BTLR -7.1'],[-3.2,'PITT -3.2'],[0,'Even']]) {
    game.projection.margin=margin;
-   for (const html of [await v.cbbToday(),await v.game({id:game.id})]) {
-     assert.ok(html.includes(`<span class="k">Spread</span><span>${expected}</span><span>Unavailable</span><span>—</span>`));
-     assert.match(html, /Total<\/span><span>157\.9<\/span><span>157\.5/);
-   }
+   const slate=await v.cbbToday();
+   assert.ok(slate.includes(`<small>Kook’n spread</small><b>${expected}</b>`));
+   const html=await v.game({id:game.id});
+   assert.ok(html.includes(`<span class="k">Spread</span><span>${expected}</span><span>Unavailable</span><span>—</span>`));
+   assert.match(html, /Total<\/span><span>157\.9<\/span><span>157\.5/);
  }
 });
 
@@ -32,17 +37,19 @@ test('fresh CBB spreads compare the same side and show exact odds on Today and g
  const v=views(async path=>path==='app/cbb.json'?{games:[game],scheduleFresh:true}:{players:[]});
  for (const [margin, difference] of [[7, '3.5 toward BTLR'], [0, '3.5 toward PITT'], [3.5, 'Same number']]) {
    game.projection.margin = margin;
-   for (const html of [await v.cbbToday(),await v.game({id:game.id})]) {
-     assert.ok(html.includes(`<span>BTLR -3.5</span><span>${difference}</span>`));
-     assert.match(html, /DraftKings via ESPN · checked/);
-     assert.match(html, /BTLR -3\.5 \([−-]108\) · PITT \+3\.5 \([−-]112\)/);
-   }
+   const slate=await v.cbbToday();
+   assert.match(slate, /Book spread<\/small><b>BTLR -3\.5 · [−-]108/);
+   const html=await v.game({id:game.id});
+   assert.ok(html.includes(`<span>BTLR -3.5</span><span>${difference}</span>`));
+   assert.match(html, /DraftKings via ESPN · checked/);
+   assert.match(html, /BTLR -3\.5 \([−-]108\) · PITT \+3\.5 \([−-]112\)/);
  }
  for (const observedAt of [now - 14460000, now + 60000]) {
    game.spreadQuote.observedAt = new Date(observedAt).toISOString();
    const html = await v.game({id:game.id});
    assert.match(html, /<span>Unavailable<\/span>/);
    assert.doesNotMatch(html, /DraftKings via ESPN|PITT \+3\.5/);
+   assert.match(await v.cbbToday(), /Book spread<\/small><b>Unavailable/);
  }
 });
 
@@ -50,7 +57,7 @@ test('CBB research handles missing payload instead of football fallback',async()
 
 test('CBB score-only payload does not fabricate a probability bar',async()=>{
  const g={id:'CBB-old',kickoff:'2099-11-02T23:00Z',teams:{home:{name:'Home'},away:{name:'Away'}},projection:{home:72,away:68,total:140,neutral:false},stats:{}};
- const html=await views(async()=>({scheduleFresh:true,games:[g]})).cbbToday();
+ const html=await views(async()=>({scheduleFresh:true,games:[g]})).game({id:g.id});
  assert.doesNotMatch(html,/class="pc-bar"|NaN%|undefined%/);assert.match(html,/72.0/);
 });
 

@@ -24,7 +24,21 @@
     + ".matchup-pick-list { display:grid; gap:8px; }\n.matchup-pick { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:'title state' 'terms state' 'numbers numbers'; gap:4px 12px; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:rgba(9,23,16,.86); }\n.matchup-pick-title { grid-area:title; min-width:0; font:700 17px/1.2 var(--font-body); color:var(--chalk); }\n.matchup-pick-terms { grid-area:terms; color:var(--dim); font-size:13px; }\n.matchup-pick-state { grid-area:state; align-self:center; padding:4px 8px; border-radius:999px; background:rgba(242,247,244,.1); color:var(--chalk); font:700 12px/1 var(--font-body); }\n.matchup-pick.is-win .matchup-pick-state { background:var(--kookd-soft); color:#70e9aa; }\n.matchup-pick.is-loss .matchup-pick-state { background:var(--burnt-soft); color:var(--burnt-text); }\n.matchup-pick-numbers { grid-area:numbers; display:flex; flex-wrap:wrap; gap:5px 14px; margin-top:4px; padding-top:7px; border-top:1px solid rgba(169,192,179,.13); color:var(--dim); font-size:12px; }\n.matchup-pick-numbers b { color:var(--chalk); }\n.matchup-ticket-more { margin-top:8px; }\n.matchup-ticket-more .tickets { margin-top:10px; }\n@media(max-width:420px){.matchup-pick{grid-template-columns:minmax(0,1fr) auto;padding:11px}.matchup-pick-title{font-size:16px}.matchup-pick-numbers{gap:4px 10px}}\n"
     + ".prop-teams { display:grid; gap:14px; min-width:0; max-width:100%; }\n.prop-team { margin:0; min-width:0; max-width:100%; }\n.prop-team > .table-wrap, .prop-team > .prop-market-more { min-width:0; max-width:100%; }\n.prop-team > summary { min-height:48px; display:flex; align-items:center; gap:9px; font:700 17px/1.2 var(--font-display); }\n.prop-compare { min-width:630px; table-layout:fixed; }\n.prop-compare th:first-child { width:220px; position:sticky; left:0; z-index:2; background:var(--felt); }\n.prop-compare thead th:first-child { z-index:3; }\n.prop-compare th.prop-player { width:220px; padding:12px; overflow:hidden; white-space:normal; }\n.prop-compare td { width:190px; vertical-align:top; padding:10px; }\n.prop-player-head { display:flex; align-items:baseline; gap:7px; min-width:0; }\n.prop-player-head a { min-width:0; overflow-wrap:anywhere; font-weight:700; line-height:1.2; }\n.prop-player-head .prop-pos { flex:none; color:var(--dim); font-size:12px; }\n.prop-player .badge { display:inline-flex; max-width:100%; margin:6px 0 0; overflow:hidden; text-overflow:ellipsis; }\n.prop-min { display:grid; gap:2px; margin-top:7px; color:var(--dim); font:500 12px/1.3 var(--font-body); }\n.prop-min b { color:var(--chalk); font-size:12px; }\n.prop-min span { display:block; overflow-wrap:anywhere; }\n.prop-cell { display:grid; gap:5px; min-height:74px; padding:2px; color:var(--chalk); }\n.prop-cell:hover { text-decoration:none; }\n.prop-cell span { color:var(--dim); font:500 12px/1.3 var(--font-body); }\n.prop-vs { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:7px; padding-bottom:5px; border-bottom:1px solid rgba(169,192,179,.14); }\n.prop-vs > span:not(.prop-vs-mark) { display:grid; gap:2px; min-width:0; }\n.prop-vs > span:last-child { text-align:right; }\n.prop-vs .prop-vs-label { color:var(--dim); font:700 10px/1 var(--font-display); letter-spacing:.08em; text-transform:uppercase; }\n.prop-vs b { color:var(--chalk); font:700 20px/1 var(--font-display); font-variant-numeric:tabular-nums; }\n.prop-vs .prop-vs-mark { color:var(--dim); font:700 10px/1 var(--font-display); text-transform:uppercase; }\n.prop-cell.prop-held .prop-vs > span:last-child b { color:var(--burnt-text); }\n.prop-cell .prop-gap { display:flex; align-items:baseline; justify-content:space-between; gap:6px; color:var(--dim); }\n.prop-cell .prop-gap b { color:var(--chalk); font:700 14px/1 var(--font-display); }\n.prop-cell .prop-price { color:#d8e4dd; }\n.prop-cell .prop-price.is-missing { color:var(--dim); }\n.prop-cell .lean-tag, .prop-cell .pick-tag { justify-self:start; margin-top:2px; padding:3px 6px; border-radius:999px; color:#70e9aa; background:var(--kookd-soft); font-weight:700; }\n.prop-cell .pick-tag { color:var(--chalk); background:rgba(242,247,244,.12); }\n.prop-cell.liked { margin:-6px; padding:7px; border:1px solid var(--kookd); border-radius:8px; background:rgba(32,201,117,.07); }\n.prop-cell.official { border-color:var(--chalk); }\n.prop-market-more { margin-top:10px; }\n.prop-team-note { margin:0 0 9px; color:var(--dim); font-size:12px; }\n.prop-position + .prop-position { margin-top:10px; }\n.prop-depth-more { margin:6px 0 2px; border:0; background:transparent; }\n.prop-depth-more > summary { min-height:38px; color:var(--kookd); font-size:13px; }\n.prop-depth-more[open] > summary { margin-bottom:8px; }\n.prop-depth-more .prop-compare { min-width:820px; }\n.prop-legend { display:flex; flex-wrap:wrap; gap:7px 14px; margin:8px 0 12px; color:var(--dim); font-size:12px; }\n.prop-legend b { color:var(--chalk); }\n.prop-legend .lean-key { padding:3px 7px; border:1px solid var(--kookd); border-radius:999px; color:#70e9aa; background:rgba(32,201,117,.07); }\n@media (max-width: 520px) { .prop-compare { min-width:0; } .prop-compare th:first-child, .prop-compare th.prop-player { width:168px; } .prop-compare td { width:184px; } }\n"
     + ".prop-player-head { flex-wrap:wrap; }\n@media (max-width:760px) { .prop-team > .table-wrap, .prop-position > .table-wrap, .prop-depth-more > .table-wrap { overflow:visible; } .prop-team > summary { position:sticky; top:52px; z-index:4; margin:0 -4px 8px; padding:0 7px; border-radius:8px; background:rgba(9,24,16,.97); } .prop-compare { display:block; min-width:0; width:100%; } .prop-compare caption { padding:5px 2px 7px !important; color:var(--kookd); font-weight:700; text-transform:uppercase; letter-spacing:.06em; } .prop-compare thead { display:none; } .prop-compare tbody { display:grid; gap:10px; } .prop-compare tr { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border:1px solid var(--line); border-radius:12px; background:rgba(7,18,13,.7); overflow:hidden; } .prop-compare th:first-child, .prop-compare th.prop-player { position:static; grid-column:1/-1; width:auto; padding:11px 12px; border:0; border-bottom:1px solid var(--line); background:rgba(20,43,30,.92); } .prop-compare td { display:block; width:auto; min-width:0; padding:9px 8px; border:0; border-right:1px solid rgba(169,192,179,.12); } .prop-compare td:last-child { border-right:0; } .prop-compare td::before { content:attr(data-stat); display:block; margin-bottom:6px; color:var(--kookd); font:700 11px/1 var(--font-display); letter-spacing:.08em; text-transform:uppercase; } .prop-cell { min-height:0; gap:4px; } .prop-cell span { font-size:11px; line-height:1.25; } .prop-vs { gap:4px; padding-bottom:5px; } .prop-vs b { font-size:18px; } .prop-vs .prop-vs-label, .prop-vs .prop-vs-mark { font-size:9px; } .prop-cell.liked { margin:-4px; padding:5px; box-shadow:inset 3px 0 0 var(--kookd); } .prop-player .badge { margin:0 0 0 7px; } .prop-min { display:flex; flex-wrap:wrap; justify-content:space-between; gap:3px 10px; margin-top:7px; } .prop-min b, .prop-min span { flex:0 1 auto; min-width:0; text-align:left; overflow-wrap:normal; } }\n@media (max-width:420px) { .prop-compare tr { grid-template-columns:repeat(2,minmax(0,1fr)); } .prop-compare td:nth-child(4) { grid-column:1/-1; border-top:1px solid rgba(169,192,179,.12); } }\n"
-    + "@media (max-width: 359px) { .pc-bet { grid-template-columns: 1fr 1fr; } }";
+    + `.cbb-slate { list-style:none; padding:0; margin:12px 0; border:1px solid var(--line); border-radius:var(--radius); background:var(--felt); }
+      .cbb-slate li + li { border-top:1px solid var(--line); }
+      .cbb-slate-row { display:grid; grid-template-columns:minmax(0,1.75fr) minmax(0,1fr) minmax(0,1.3fr) minmax(0,.85fr);
+        gap:12px; align-items:start; padding:12px 14px; color:var(--chalk); font-variant-numeric:tabular-nums; }
+      .cbb-slate-row:hover { background:var(--felt-high); text-decoration:none; }
+      .cbb-slate-row:hover .cbb-slate-matchup b { text-decoration:underline; }
+      .cbb-slate-row:focus-visible { outline-offset:-3px; }
+      .cbb-slate-row span { display:grid; gap:3px; min-width:0; overflow-wrap:anywhere; }
+      .cbb-slate-row small { font-size:12px; line-height:1.25; color:var(--dim); }
+      .cbb-slate-row b { font-size:14px; line-height:1.25; }
+      @media (max-width:600px) {
+        .cbb-slate-row { grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,.8fr); gap:8px; padding:11px; }
+        .cbb-slate-matchup { grid-column:1/-1; }
+      }
+      @media (max-width:359px) { .pc-bet { grid-template-columns:1fr 1fr; } }`;
   if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-games-css'))) {
     const style = document.createElement('style'); style.id = 'kr-games-css'; style.textContent = GAMES_CSS; document.head.appendChild(style);
   }
@@ -90,6 +104,10 @@
     const labels=days.map(d=>[d,`${dayLabel(matches.find(g=>C.dayOf(g.kickoff)===d).kickoff)} · ${matches.filter(g=>C.dayOf(g.kickoff)===d).length}`]);
     return {rows:q || day==='all' ? matches : matches.filter(g=>C.dayOf(g.kickoff)===day),html:`<div class="toolbar">${days.length>1 ? `<div class="chip-scroll">${seg('gup',[...labels,['all',`All · ${matches.length}`]],day)}</div>`:''}${teamSearch()}</div>`};
   };
+  const freshCbbSpread = (game, now = Date.now()) => {
+    const age = now - Date.parse(game.spreadQuote?.observedAt);
+    return age >= 0 && age <= 14400000 && Date.parse(game.kickoff) > now ? game.spreadQuote : null;
+  };
   const cbbGameCard = (g, link = true) => {
     const name=t=>t.shortName || t.name || t.abbreviation;
     const season=y=>Number.isInteger(y) ? `${y-1}–${String(y).slice(-2)}` : '';
@@ -99,8 +117,7 @@
     const quote = g.firstTotal;
     const home = h.abbreviation || name(h), away = a.abbreviation || name(a);
     const margin = isNum(p.margin) ? p.margin : isNum(p.home) && isNum(p.away) ? p.home - p.away : null;
-    const now = Date.now(), age = now - Date.parse(g.spreadQuote?.observedAt);
-    const book = age >= 0 && age <= 14400000 && Date.parse(g.kickoff) > now ? g.spreadQuote : null;
+    const book = freshCbbSpread(g);
     const bookSpread = book ? C.modelSpread(home, away, -book.homeLine) : 'Unavailable';
     const spreadGap = book && margin != null ? margin + book.homeLine : null;
     const spreadDifference = spreadGap == null ? '—' : Math.abs(spreadGap) < .05 ? 'Same number'
@@ -113,6 +130,23 @@
       ${quote ? `<p class="small muted">First recorded total · ${esc(quote.book)} · ${esc(whenShort(quote.capturedAt))}. Historical quote, not a live offer.</p>` : ''}`;
     const team=t=>({id:t.id,name:name(t),abbr:t.abbreviation || name(t),logo:t.logo});
     return projCard({id:g.id,league:'CBB',kickoff:g.kickoff,neutral:p.neutral,state:'pre',home:team(h),away:team(a),v2:{home:p.home,away:p.away,total:p.total,sparse:p.sparse,winProb:p.winProb}}, {link,ranks:false,barLabel:'Baseline model win chance',extra:`${first}<details class="more-box"><summary>Team stats & model context</summary><p class="small muted">${p.neutral ? 'Neutral court' : 'Home court included'} · Not roster/injury adjusted</p>${stats}</details>`});
+  };
+  const cbbSlateRow = game => {
+    const {away, home} = game.teams;
+    const abbr = team => team.abbreviation || team.shortName || team.name;
+    const name = team => team.shortName || team.name || abbr(team);
+    const margin = game.projection?.margin ?? (isNum(game.projection?.home) && isNum(game.projection?.away)
+      ? game.projection.home - game.projection.away : null);
+    const spread = number => C.modelSpread(abbr(home), abbr(away), number);
+    const quote = freshCbbSpread(game);
+    const bookSpread = quote ? spread(-quote.homeLine) : 'Unavailable';
+    const favoriteOdds = quote && (quote.homeLine < 0 ? quote.homeOdds : quote.awayLine < 0 ? quote.awayOdds : null);
+    const total = isNum(game.projection?.total) ? C.fixed(game.projection.total, 1) : '—';
+    return `<li><a class="cbb-slate-row" href="#game/${esc(game.id)}">
+      <span class="cbb-slate-matchup"><b>${esc(name(away))} at ${esc(name(home))}</b><small>${esc(whenShort(game.kickoff))}</small></span>
+      <span><small>Kook’n spread</small><b>${esc(spread(margin))}</b></span>
+      <span><small>Book spread</small><b>${esc(bookSpread)}${isNum(favoriteOdds) ? ` · ${esc(oddsText(favoriteOdds))}` : ''}</b>${quote ? `<small>${esc(bookLabel(quote.book))}</small>` : ''}</span>
+      <span><small>Kook’n total</small><b>${esc(total)}</b></span></a></li>`;
   };
   const BBALL_PRIMARY = [['pts','PTS'],['reb','REB'],['ast','AST']];
   const BBALL_EXTRA = [['fg3m','3PM'],['pra','PRA'],['pa','P+A'],['pr','P+R'],['ra','R+A']];
@@ -208,14 +242,21 @@
     catch (_) { return head('College basketball', 'CBB projections & stats', 'Research, not picks.') + (opts.gamesPage ? gameTabs('upcoming') : '') + '<p>CBB research could not be loaded. Please try again.</p>'; }
     const available=(data.games || []).filter(g=>g.kickoff && Date.parse(g.kickoff)>Date.now());
     const window=projectionWindow(available),rows=window.rows,projected=rows.filter(g=>g.projection);
-    const cards=projected.map(g => cbbGameCard(g)).join('');
     const groups = new Map();
     for (const s of data.sheets || []) if (rows.some(g => g.date === s.date)) {
       if (!groups.has(s.date)) groups.set(s.date, []);
       groups.get(s.date).push(s);
     }
     const sheets = [...groups].map(([day, list], i) => `<details><summary>${esc(day)} · ${esc(list.length)} sheets</summary><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0">${list.map(s => `<a class="btn" style="white-space:normal" href="data/app/${esc(s.file)}?v=${esc(encodeURIComponent(data.generatedAt || data.checkedAt || 'current'))}" target="_blank" rel="noopener">Sheet ${esc(s.page)}/${esc(s.pages)}</a>`).join('')}</div></details>`).join('');
-    return head('College basketball', 'CBB projections & stats', `${projected.length} projected matchups · ${rows.length} upcoming games across three days · Research, not picks.`) + `${opts.gamesPage ? gameTabs('upcoming') : views.cbbPicks(data)}<p class="small muted">${esc(data.note || '')}</p>${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}<section class="section"><h2>Projection sheets</h2><p class="small">Save or share up to 12 matchups per sheet.</p><div>${sheets || '<p>No supported future projections available yet.</p>'}</div></section>${window.html}<p class="small muted">${rows.length - projected.length} matchups without a verified projection are omitted.</p><div class="projs">${cards}</div>${rows.length ? '' : '<p>No upcoming CBB games stored.</p>'}<p><a href="#games/live?sport=CBB">Live scores & finals ›</a></p>`;
+    const availableCount = rows.filter(game => freshCbbSpread(game)).length;
+    return head('College basketball', 'CBB projections & stats', `${rows.length} game${rows.length === 1 ? '' : 's'} · ${projected.length} projected · ${availableCount} with a fresh spread`)
+      + `${opts.gamesPage ? gameTabs('upcoming') : views.cbbPicks(data, true)}
+        ${!data.scheduleFresh ? '<p>Schedule update needed. Projections are held.</p>' : ''}
+        ${window.html}
+        ${rows.length ? `<ul class="cbb-slate" aria-label="College basketball matchups">${rows.map(cbbSlateRow).join('')}</ul>` : '<p>No upcoming games match this view.</p>'}
+        ${sheets ? `<details class="more-box"><summary>Projection sheets</summary>${sheets}</details>` : ''}
+        ${data.note ? `<details class="more-box"><summary>About these projections</summary><p class="small muted">${esc(data.note)}</p></details>` : ''}
+        <p><a href="#games/live?sport=CBB">Live scores & finals ›</a> · <a href="#record?sport=CBB">CBB Results ›</a></p>`;
   };
   views.games = async route => {
     const tab = route.tab || 'upcoming';
