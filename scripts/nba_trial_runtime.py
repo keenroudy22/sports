@@ -344,6 +344,19 @@ def grade(now,root=nba_trial.STORE,boxroot=None):
  return added
 
 
+def refresh_published_finals(now, root=nba_trial.STORE, boxroot=None, fetch=None):
+ """Fetch only ended, still-unboxed games containing a published NBA play."""
+ boxroot=Path(boxroot or ROOT/'data'/'sport-box')
+ known={str(r['eventId']) for p in boxroot.glob('*.jsonl') for r in boxscores.read_store(p)}
+ due=[]
+ for play in public_rows(Path(root)):
+  event=str(play['eventId']);kickoff=boxscores.instant(play['kickoff'])
+  if event not in known and kickoff+timedelta(hours=3)<=now:due.append(event)
+ if not due:return {'captured':0,'errors':0,'requests':0,'events':[]}
+ import sport_box
+ return sport_box.refresh_events(due,root=boxroot,fetch=fetch,now=now,league='NBA',limit=5)
+
+
 def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
  import buffer_post,x_post
  import nba_results

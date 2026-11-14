@@ -1,6 +1,7 @@
 import copy
 import json
 import sys
+import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
@@ -89,6 +90,23 @@ class NBASummaryTests(unittest.TestCase):
         self.assertEqual(ordered[9], '10')
         self.assertNotIn('old', ordered)
         self.assertEqual(len(ordered), len(set(ordered)))
+
+    def test_exact_final_refresh_reads_only_the_published_event(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            calls = []
+            def fetch(url):
+                calls.append(url)
+                return self.payload
+            result = sport_box.refresh_events(
+                ['NBA-401859967', 'NBA-401859967'], root=root, fetch=fetch,
+                now=datetime(2026, 10, 9, 20, tzinfo=timezone.utc))
+            self.assertEqual((result['captured'], result['requests'], result['events']),
+                             (1, 1, ['NBA-401859967']))
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(sport_box.refresh_events(
+                ['NBA-401859967'], root=root, fetch=fetch,
+                now=datetime(2026, 10, 9, 21, tzinfo=timezone.utc))['requests'], 0)
 
 
 if __name__ == '__main__': unittest.main()

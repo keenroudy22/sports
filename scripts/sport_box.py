@@ -148,6 +148,46 @@ def cbb_capture_order(games, history, saved, now):
     return list(dict.fromkeys(event for _, _, event in sorted(priority)))
 
 
+def refresh_events(events, root=None, fetch=None, now=None, league='NBA', limit=5):
+    """Capture exact known finals without walking historical schedules.
+
+    Event ids come from immutable published plays. This settlement helper does
+    not discover markets, prices or additional games.
+    """
+    from datetime import datetime, timezone
+    from pathlib import Path
+    import nba_capture
+
+    league = str(league).upper()
+    spec = LEAGUES.get(league)
+    if not spec:
+        raise ValueError('Unsupported basketball league')
+    root = Path(root) if root is not None else Path(__file__).resolve().parents[1]/'data'/'sport-box'
+    now = now or datetime.now(timezone.utc)
+    problems = boxscores.verify(root)
+    if problems:
+        raise ValueError('; '.join(problems))
+    old = {r['eventId']: r for p in root.glob('*.jsonl') for r in boxscores.read_store(p)}
+    budget = nba_capture.Budget(requests=min(max(int(limit), 0), 5), seconds=45, fetch=fetch)
+    result = {'captured': 0, 'errors': 0, 'requests': 0, 'events': []}
+    for raw in dict.fromkeys(str(value).removeprefix(f'{league}-') for value in events):
+        if not raw or f'{league}-{raw}' in old or budget.requests >= budget.limit:
+            continue
+        try:
+            url = (f'https://site.api.espn.com/apis/site/v2/sports/basketball/'
+                   f'{spec["slug"]}/summary?event={raw}')
+            row = extract(budget(url), raw, boxscores.stamp(datetime.now(timezone.utc)), league)
+            result['captured'] += nba_capture.append_changed(
+                [row], root, lambda record: record['eventId'], prefix=league.lower())
+            result['events'].append(f'{league}-{raw}')
+        except (OSError, ValueError, KeyError, TypeError):
+            result['errors'] += 1
+        if budget.errors >= 3 or budget.clock() >= budget.deadline:
+            break
+    result['requests'] = budget.requests
+    return result
+
+
 def refresh(root=None, fetch=None, now=None, limit=20, league='NBA'):
     """Hosted scheduled-only bounded writer: current finals then recent regular boxes."""
     import json

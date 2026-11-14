@@ -47,6 +47,21 @@ class TrialRuntimeTests(unittest.TestCase):
   boxscores.append(boxes/'nba-2027.jsonl',[{**final,'teams':{'1':{'score':120},'2':{'score':121}}}])
   self.assertEqual(rt.grade(NOW+timedelta(days=2),self.root,boxes),1)
   self.assertEqual(nt.snapshot(rt.rows(self.root))['loss'],1)
+ def test_settlement_refresh_targets_only_ended_published_games_without_boxes(self):
+  play={**offer(),'eventId':'NBA-1','direction':'under','game':{'teams':{}},'reasons':['Source 1','Source 2'],'projection':210.,'model':'hoops-v1'}
+  nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')
+  boxes=self.root/'boxes';boxes.mkdir()
+  kickoff=boxscores.instant(play['kickoff'])
+  with patch('sport_box.refresh_events',return_value={'captured':1}) as refresh:
+   self.assertEqual(rt.refresh_published_finals(kickoff+timedelta(hours=2),self.root,boxes),
+                    {'captured':0,'errors':0,'requests':0,'events':[]})
+   refresh.assert_not_called()
+   self.assertEqual(rt.refresh_published_finals(kickoff+timedelta(hours=4),self.root,boxes),{'captured':1})
+   self.assertEqual(refresh.call_args.args[0],['NBA-1'])
+  boxscores.append(boxes/'nba-2027.jsonl',[{'eventId':'NBA-1'}])
+  with patch('sport_box.refresh_events') as refresh:
+   rt.refresh_published_finals(kickoff+timedelta(hours=5),self.root,boxes)
+   refresh.assert_not_called()
  def test_candidates_require_known_variance_support_and_clear_current_injuries(self):
   root=self.root/'capture';root.mkdir()
   game={'id':'NBA-1','providerId':'1','league':'NBA','season':2027,'seasonType':'regular-season','kickoff':'2026-10-20T23:00:00Z','status':'scheduled','timeConfirmed':True,'teams':{'home':{'id':'1','abbreviation':'A'},'away':{'id':'2','abbreviation':'B'}}}
