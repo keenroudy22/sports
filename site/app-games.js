@@ -180,6 +180,7 @@
       return pregame && age >= 0 && age <= 4 * 3600000;
     };
     const isLean = row => Boolean(row?.favorite && !row.hold && isFresh(row));
+    const matchupDay = Number.isFinite(tip) ? C.dayOf(game.kickoff) : '';
     const recentBoxCutoff = Number.isFinite(tip) ? new Date(tip - 30 * 86400000).toISOString().slice(0, 10) : '';
     const teams = ['away','home'].map(side => game.teams[side]);
     const teamPlayers = team => {
@@ -198,7 +199,7 @@
       }
       const priority = player => [...player.stats.entries()].reduce((score,[stat,row]) => score + (officialQuote(row, stat) ? 100 : 0) + (isLean(row) ? 50 : 0) + (isNum(row.line) ? 20 : 0), 0);
       return [...members.values()].filter(player => player.stats.size || player.entry?.[7]?.values
-        || (league === 'CBB' && recentBoxCutoff && player.entry?.[5] >= recentBoxCutoff))
+        || (recentBoxCutoff && player.entry?.[5] >= recentBoxCutoff && player.entry?.[5] <= matchupDay))
         .sort((a,b) => priority(b)-priority(a) || Number(Boolean(b.stats.size))-Number(Boolean(a.stats.size))
           || Number(b.entry?.[7]?.minutes || 0)-Number(a.entry?.[7]?.minutes || 0)
           || String(b.entry?.[5] || '').localeCompare(String(a.entry?.[5] || '')) || String(a.name).localeCompare(String(b.name)));
@@ -214,25 +215,26 @@
       const gap = isNum(projection) && line != null ? projection-line : null;
       const range = !held && isNum(row?.projection?.low) && isNum(row?.projection?.high) ? `${C.fixed(row.projection.low)}–${C.fixed(row.projection.high)}` : null;
       const recent = isNum(summary?.recent?.[stat]) ? `L5 avg ${C.fixed(summary.recent[stat])}` : row?.last5?.games && (row.side || 'over') === direction ? `L5 ${row.last5.hits}/${row.last5.games} ${direction}` : null;
-      const price = line == null ? 'Book line unavailable' : [isNum(row.over) || isNum(row.under) ? `O ${isNum(row.over) ? oddsText(row.over) : '—'} / U ${isNum(row.under) ? oddsText(row.under) : '—'}` : '', row.book ? bookLabel(row.book) : ''].filter(Boolean).join(' · ');
+      const price = line == null ? '' : [isNum(row.over) || isNum(row.under) ? `O ${isNum(row.over) ? oddsText(row.over) : '—'} / U ${isNum(row.under) ? oddsText(row.under) : '—'}` : '', row.book ? bookLabel(row.book) : ''].filter(Boolean).join(' · ');
       const liked = !official && !held && isLean(row);
-      const body = `<span class="prop-vs"><span><span class="prop-vs-label">${line != null && !isFresh(row) ? 'Earlier line' : 'Book'}</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>${isNum(projection) ? esc(C.fixed(projection)) : 'Held'}</b></span></span>${gap == null ? '' : `<span class="prop-gap">Projection gap <b>${gap > 0 ? '+' : ''}${esc(C.fixed(gap))}</b></span>`}${price ? `<span class="prop-price${line == null ? ' is-missing' : ''}">${esc(price)}</span>` : ''}${range ? `<span class="prop-range">Kook’n range ${esc(range)}</span>` : ''}${recent ? `<span class="prop-recent">${esc(recent)}</span>` : ''}${row?.sourceAt ? `<span class="prop-checked">${isFresh(row) ? 'Checked' : 'Earlier quote · checked'} ${esc(ago(row.sourceAt))}</span>` : ''}${official ? '<span class="pick-tag">Official pick</span>' : liked ? '<span class="lean-tag">Research lean</span>' : ''}`;
+      const body = `<span class="prop-vs"><span><span class="prop-vs-label">${line != null && !isFresh(row) ? 'Earlier line' : 'Book'}</span><b${line == null ? ' aria-label="Book line unavailable"' : ''}>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>${isNum(projection) ? esc(C.fixed(projection)) : 'Held'}</b></span></span>${gap == null ? '' : `<span class="prop-gap">Projection gap <b>${gap > 0 ? '+' : ''}${esc(C.fixed(gap))}</b></span>`}${price ? `<span class="prop-price">${esc(price)}</span>` : ''}${range ? `<span class="prop-range">Kook’n range ${esc(range)}</span>` : ''}${recent ? `<span class="prop-recent">${esc(recent)}</span>` : ''}${row?.sourceAt ? `<span class="prop-checked">${isFresh(row) ? 'Checked' : 'Earlier quote · checked'} ${esc(ago(row.sourceAt))}</span>` : ''}${official ? '<span class="pick-tag">Official pick</span>' : liked ? '<span class="lean-tag">Research lean</span>' : ''}`;
       return href ? `<a class="prop-cell${liked ? ' liked' : ''}${official ? ' official' : ''}" href="${href}">${body}</a>` : `<span class="prop-cell">${body}</span>`;
     };
-    const table = (team, players, stats) => `<div class="table-wrap"><table class="t prop-compare"><thead><tr><th>Player · role</th>${stats.map(([,label]) => `<th>${esc(label)}</th>`).join('')}</tr></thead><tbody>${players.map(player => {
+    const table = (players, stats) => `<div class="table-wrap"><table class="t prop-compare"><thead><tr><th>Player · role</th>${stats.map(([,label]) => `<th>${esc(label)}</th>`).join('')}</tr></thead><tbody>${players.map(player => {
       const rows = [...player.stats.values()], status = basketballStatus(rows), role = rows.find(row => row.currentRole)?.currentRole, summary = player.entry?.[7];
       const projectedMinutes = !pregame || rows.some(C.basketballAvailabilityHold) ? null
         : rows.find(row => !row.hold && isNum(row.projection?.minutes))?.projection?.minutes ?? summary?.minutes;
-      const minuteList = role?.minutes || summary?.recentMinutes || [];
+      const minuteList = role?.minutes?.length ? role.minutes : summary?.recentMinutes || player.entry?.[8] || [];
       return `<tr><th class="prop-player"><span class="prop-player-head"><a href="${player.id ? `#player/${league}/${esc(player.id)}?stat=pts` : '#research/players'}">${esc(player.name)}</a><span class="prop-pos">${esc(player.pos || 'Position unavailable')}</span>${status ? `<span class="badge ${status.warn ? 'warn' : 'research'}">${esc(status.word)}</span>` : ''}</span><span class="prop-min"><b>${isNum(projectedMinutes) ? `Kook’n minutes ${esc(C.fixed(projectedMinutes))}` : 'Minutes projection held'}</b>${minuteList.length ? `<span>Recent ${minuteList.slice(-3).map(value => esc(C.fixed(value,0))).join(' · ')}</span>` : ''}</span></th>${stats.map(([stat,label]) => `<td data-stat="${esc(label)}">${playerLine(player,stat)}</td>`).join('')}</tr>`;
     }).join('')}</tbody></table></div>`;
     const blocks = teams.map(team => {
-      const players = teamPlayers(team), extra = players.some(player => BBALL_EXTRA.some(([stat]) => player.stats.has(stat) || isNum(player.entry?.[7]?.values?.[stat])));
+      const players = teamPlayers(team);
       const featured = players.slice(0,5), depth = players.slice(5);
-      return `<details class="more-box prop-team" open><summary>${teamMark(team,'sm',league)} ${esc(team.name || team.abbreviation)} · ${players.length} players</summary>${players.length ? `<p class="prop-team-note">Priced lines, research leans and highest-minute roles first.</p>${table(team,featured,BBALL_PRIMARY)}${depth.length ? `<details class="more-box prop-depth-more"><summary>Show ${depth.length} more ${esc(team.abbreviation || '')} player${depth.length === 1 ? '' : 's'}</summary>${table(team,depth,BBALL_PRIMARY)}</details>` : ''}` : '<p class="small muted">No verified player projection or price is stored for this team yet.</p>'}${extra ? `<details class="more-box prop-market-more"><summary>Threes & combo markets</summary>${table(team,players,BBALL_EXTRA)}</details>` : ''}</details>`;
+      const extraPlayers = players.filter(player => BBALL_EXTRA.some(([stat]) => player.stats.has(stat) || isNum(player.entry?.[7]?.values?.[stat])));
+      return `<details class="more-box prop-team" open><summary>${teamMark(team,'sm',league)} ${esc(team.name || team.abbreviation)} · ${players.length} players</summary>${players.length ? `<p class="prop-team-note">Priced lines, research leans and highest-minute roles first.</p>${table(featured,BBALL_PRIMARY)}${depth.length ? `<details class="more-box prop-depth-more"><summary>Show ${depth.length} more ${esc(team.abbreviation || '')} player${depth.length === 1 ? '' : 's'}</summary>${table(depth,BBALL_PRIMARY)}</details>` : ''}` : '<p class="small muted">No recent player logs, projections or prices are available for this team.</p>'}${extraPlayers.length ? `<details class="more-box prop-market-more"><summary>Threes & combo markets</summary>${table(extraPlayers,BBALL_EXTRA)}</details>` : ''}</details>`;
     }).join('');
     const checked = gameRows.map(row => row.sourceAt).filter(Boolean).sort().pop();
-    return section('Player props & projections', `<p class="small"><b>Book line vs Kook’n projection.</b> Tap a stat to open its recent-game chart at that exact line.</p><div class="prop-legend"><span>Gap = Kook’n minus the book</span><span class="lean-key"><b>Green</b> research lean · not a pick</span></div><div class="prop-teams">${blocks}</div>`, '', `${league === 'NBA' ? 'Availability, minutes and current prices appear only when verified.' : 'Official box scores power the CBB baseline; unavailable prices stay unavailable.'} ${checked ? `Latest price check ${esc(ago(checked))}.` : 'No verified player price is stored for this matchup.'}`);
+    return section('Player props & projections', `<p class="small"><b>Book line vs Kook’n projection.</b> Tap a stat to open its recent-game chart at that exact line.</p><div class="prop-legend"><span>Gap = Kook’n minus the book</span><span class="lean-key"><b>Green</b> research lean · not a pick</span></div><div class="prop-teams">${blocks}</div>`, '', `${league === 'NBA' ? 'A dash under Book means no captured line.' : 'Official box scores power the CBB baseline. A dash under Book means no captured line.'} ${checked ? `Latest price check ${esc(ago(checked))}.` : 'No verified player price is stored for this matchup.'}`);
   };
   views.cbbPicks = (data, onlyToday = false) => {
     const r = data.picks || {}, all = r.plays || [];
@@ -833,7 +835,7 @@
         const liked = !official && Boolean(read && read === likedQuote);
         const book = bookLabel(read?.book || detail.props?.provider);
         const href = esc(C.playerLineHref({ league:g.league, athleteId:player.id, stat, line, direction, book, gameId:g.id }));
-        const price = line == null ? 'Book line unavailable' : [isNum(read?.odds) ? `${direction === 'under' ? 'U' : 'O'} ${oddsText(read.odds)}`
+        const price = line == null ? '' : [isNum(read?.odds) ? `${direction === 'under' ? 'U' : 'O'} ${oddsText(read.odds)}`
           : player.unavailable && !player.lineOnly ? 'Reference line · no active projection' : 'Odds unavailable', book].filter(Boolean).join(' · ');
         const earlier = read && !hasCurrentPrice(read);
         return `<a class="prop-cell${v ? '' : ' prop-held'}${liked ? ' liked' : ''}${official ? ' official' : ''}" href="${href}" title="Open recent-game chart"><span class="prop-vs"><span><span class="prop-vs-label">${earlier ? 'Earlier line' : 'Book'}</span><b>${line == null ? '—' : esc(line)}</b></span><span class="prop-vs-mark">vs</span><span><span class="prop-vs-label">Kook’n</span><b>${v ? esc(C.fixed(v[0])) : 'Held'}</b></span></span>${gap == null ? '' : `<span class="prop-gap">Projection gap <b>${gap > 0 ? '+' : ''}${esc(C.fixed(gap))}</b></span>`}<span class="prop-price${line == null ? ' is-missing' : ''}">${esc(price)}</span>${v ? `<span class="prop-range">Kook’n range ${esc(C.fixed(v[1],0))}–${esc(C.fixed(v[2],0))}</span>` : `<span>${esc(player.reviewReasons?.[key] ? 'Projection under review' : player.status || 'Projection unavailable')}${player.unavailable ? ' · no edge' : ''}</span>`}${checked ? `<span class="prop-checked">${earlier ? 'Earlier quote · checked' : 'Checked'} ${esc(ago(checked))}</span>` : ''}${official ? '<span class="pick-tag">Official pick</span>' : liked ? '<span class="lean-tag">Research lean</span>' : ''}</a>`;

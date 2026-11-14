@@ -172,6 +172,27 @@ test('NBA matchup preserves availability holds across the player’s markets', a
  assert.doesNotMatch(html,/19\.2|4\.5|Projection gap|Research lean<\/span>/);
 });
 
+test('NBA matchup keeps recent history-only players and their workload in the rotation list', async () => {
+ const s=load(), api=s.module.exports;
+ const kickoff=new Date(Date.now()+3600000).toISOString(), played=new Date(Date.now()-86400000).toISOString().slice(0,10);
+ const game={id:'NBA-1',kickoff,teams:{away:{id:'1',name:'Away'},home:{id:'2',name:'Home'}}};
+ const roster={players:[
+   ['11','Recent Guard','G','1','AWY',played,2,null,[4,8]],
+   ['12','Old Guard','G','1','AWY','2020-01-01',20,null,[15]],
+   ['13','Combo Guard','F','1','AWY',played,6,{minutes:24,values:{pts:11,pra:17}}],
+ ]};
+ const ctx=api.gamesContext({allPicks:async()=>[],get:async path=>path==='app/nba.json'?{games:[game]}:
+   path==='app/nba-props.json'?{rows:[]}:roster});
+ const html=await s.KRGames(ctx).game({id:game.id});
+ const chart='#player/NBA/11?stat=pts&amp;game=NBA-1';
+ assert.ok(html.includes(chart));
+ assert.match(html,/Recent Guard[\s\S]*Minutes projection held[\s\S]*Recent 4 · 8/);
+ assert.doesNotMatch(html,/Old Guard/);
+ const extras=html.slice(html.indexOf('Threes & combo markets'));
+ assert.match(extras,/Combo Guard/);
+ assert.doesNotMatch(extras,/Recent Guard/);
+});
+
 test('CBB matchup links recent player history even when the projection is held', async () => {
  const s=load(), api=s.module.exports;
  const kickoff=new Date(Date.now()+3600000).toISOString(), played=new Date(Date.now()-86400000).toISOString().slice(0,10);

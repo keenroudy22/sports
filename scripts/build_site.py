@@ -868,6 +868,8 @@ def build_basketball_players(records, league='NBA'):
             })
     latest_season = max((row.get('season') for rows in logs.values() for row in rows
                          if isinstance(row.get('season'), int)), default=None)
+    latest_game = max((row['kickoff'] for rows in logs.values() for row in rows), default=None)
+    history_cutoff = boxscores.instant(latest_game) - timedelta(days=30) if latest_game else None
     index, shards = [], defaultdict(dict)
     for pid, rows in logs.items():
         rows.sort(key=lambda row: (row.get('kickoff') or '', row.get('eventId') or ''))
@@ -883,7 +885,15 @@ def build_basketball_players(records, league='NBA'):
         team_abbr = next((row.get('teamAbbr') for row in reversed(rows) if row.get('teamAbbr')), None)
         projection = basketball_projection(rows, latest_season)
         summary = projection if projection and projection.get('status') != 'held' else None
-        index.append([pid, name, pos, team, team_abbr, day(last['kickoff']), len(rows), summary])
+        entry = [pid, name, pos, team, team_abbr, day(last['kickoff']), len(rows), summary]
+        # Recent history can still be useful when the projection is held.
+        if summary is None and history_cutoff and boxscores.instant(last['kickoff']) >= history_cutoff:
+            minutes = [row['stats']['min'] for row in rows if row['team'] == team
+                       and row['season'] == latest_season and row['seasonType'] == 2
+                       and row['stats'].get('min', 0) > 0]
+            if minutes:
+                entry.append(minutes[-3:])
+        index.append(entry)
         shards[int(pid) % SHARDS[league]][pid] = {'name': name, 'pos': pos, 'rows': table,
                                                   **({'projection': projection} if projection else {})}
     index.sort(key=lambda row: (row[1] or '', row[0]))

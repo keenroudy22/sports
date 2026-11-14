@@ -1140,7 +1140,9 @@ class BasketballPlayerDirectoryTests(unittest.TestCase):
         self.assertEqual(index[0][7]['values'], projection['values'])
 
     def test_cbb_projection_holds_thin_and_labels_volatile_roles(self):
-        _, thin, _ = build_site.build_basketball_players(self.games(2), 'CBB')
+        index, thin, _ = build_site.build_basketball_players(self.games(2), 'CBB')
+        self.assertIsNone(index[0][7])
+        self.assertEqual(index[0][8], [28, 30])
         self.assertEqual(thin[101 % build_site.SHARDS['CBB']]['101']['projection']['status'], 'held')
         _, shards, _ = build_site.build_basketball_players(self.games(minute_values=[12,31,10,34,11]), 'CBB')
         self.assertEqual(shards[101 % build_site.SHARDS['CBB']]['101']['projection']['status'], 'early')
