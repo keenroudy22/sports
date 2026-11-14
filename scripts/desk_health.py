@@ -39,6 +39,8 @@ COHORT_EXCLUSIONS = ('withheld', 'cancelled', 'unknownEligibility')
 PAYLOAD_PATHS = {
     'lazy-more-gzip': 'site/app-more.js',
     'lazy-player-gzip': 'site/app-player.js',
+    'lazy-games-gzip': 'site/app-games.js',
+    'lazy-football-game-gzip': 'site/app-football-game.js',
     'today': 'site/data/app/today.json',
     'lines-NFL': 'site/data/app/lines-NFL.json',
     'lines-CFB': 'site/data/app/lines-CFB.json',

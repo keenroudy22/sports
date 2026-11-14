@@ -5,7 +5,7 @@ const fs = require('node:fs');
 globalThis.KRCore = require('../site/core.js');
 const { model: M } = require('../site/app.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
-const gamesSource = fs.readFileSync('site/app-games.js', 'utf8');
+const footballSource = fs.readFileSync('site/app-football-game.js', 'utf8');
 
 test('positive spread comparisons remain research when below the two-point filter', () => {
   const row={id:'spread',title:'IU -7.5',gameId:'CFB-1',league:'CFB',market:'point spread',side:'away',line:-7.5,odds:-102,book:'DraftKings',state:'open',kickoff:'2099-01-01T00:00:00Z',observedAt:new Date().toISOString(),grade:{chance:.518,needs:.505,edge:1.3,tier:'pass',calibrated:true,thin:false}};
@@ -55,8 +55,8 @@ test('history and defense cannot manufacture Model support below the price bar',
   assert.equal(M.matchupSignals(hurst, true, true), 2);
   assert.equal(M.matchupSignals({...hurst, clearsPrice:true}, true, true), 3);
   assert.match(M.researchPrice(hurst), /Kook’n chance 52%\. Break-even win rate 53%\. Price check did not pass/);
-  assert.match(gamesSource, /x\.r\.clearsPrice === true/);
-  assert.match(gamesSource, /History only · our chance does not beat this price/);
+  assert.match(footballSource, /x\.r\.clearsPrice === true/);
+  assert.match(footballSource, /History only · our chance does not beat this price/);
 });
 
 test('Upset Watch explains the book cut and computes the price threshold', () => {

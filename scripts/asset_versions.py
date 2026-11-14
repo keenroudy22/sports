@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
-BUNDLES = (('MORE_ASSET', 'app-more.js'), ('PLAYER_ASSET', 'app-player.js'), ('GAMES_ASSET', 'app-games.js'), ('KVB_ASSET', 'app-kvb.js'), ('RESEARCH_CSS', 'research.css'))
+BUNDLES = (('MORE_ASSET', 'app-more.js'), ('PLAYER_ASSET', 'app-player.js'), ('GAMES_ASSET', 'app-games.js'), ('FOOTBALL_GAME_ASSET', 'app-football-game.js'), ('KVB_ASSET', 'app-kvb.js'), ('RESEARCH_CSS', 'research.css'))
 
 
 def fingerprint(path):

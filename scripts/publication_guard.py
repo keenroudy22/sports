@@ -12,7 +12,7 @@ from pathlib import Path
 
 import public_copy
 
-ROOT_FILES = {'.nojekyll', 'index.html', 'app.css', 'research.css', 'app.js', 'app-more.js', 'app-player.js', 'app-games.js', 'app-kvb.js', 'core.js', 'live.js', 'personal.js',
+ROOT_FILES = {'.nojekyll', 'index.html', 'app.css', 'research.css', 'app.js', 'app-more.js', 'app-player.js', 'app-games.js', 'app-football-game.js', 'app-kvb.js', 'core.js', 'live.js', 'personal.js',
               'favicon.svg', 'kookn-chef.png', 'kookn-chef-clip.png', 'kookn.jpg', 'kookn-mark.png'}
 DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.json',
               'research.json', 'scoreboard.json', 'player-history.json', 'opponent-history.json',

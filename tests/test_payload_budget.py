@@ -19,6 +19,7 @@ class PayloadBudgetTests(unittest.TestCase):
         (root / 'app-more.js').write_bytes(b'ok')
         (root / 'app-player.js').write_bytes(b'ok')
         (root / 'app-games.js').write_bytes(b'ok')
+        (root / 'app-football-game.js').write_bytes(b'ok')
         (root / 'app-kvb.js').write_bytes(b'ok')
         app = root / 'data/app'
         (app / 'teams').mkdir(parents=True)

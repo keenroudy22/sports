@@ -11,11 +11,12 @@ const L = require('../site/live.js');
 const P = require('../site/personal.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
 const gamesSource = fs.readFileSync('site/app-games.js', 'utf8');
+const footballSource = fs.readFileSync('site/app-football-game.js', 'utf8');
 
 const unesc = html => String(html).replace(/&#39;/g, "'");
 
 test('game trend charts can scroll inside their cards without widening the phone page', () => {
-  assert.match(gamesSource, /grid two game-trend-grid/);
+  assert.match(footballSource, /grid two game-trend-grid/);
   assert.match(fs.readFileSync('site/app.css', 'utf8'), /\.game-trend-grid\s*>\s*\.card\s*\{\s*min-width:\s*0;/);
 });
 const loadBrowserApi = () => {
@@ -29,7 +30,8 @@ const loadBrowserApi = () => {
   sandbox.globalThis = sandbox; sandbox.self = sandbox; sandbox.window = sandbox;
   vm.runInNewContext(source, sandbox, { filename: 'site/app.js' });
   vm.runInNewContext(gamesSource, sandbox, { filename: 'site/app-games.js' });
-  return { api: sandbox.module.exports, factory: sandbox.KRGames };
+  vm.runInNewContext(footballSource, sandbox, { filename: 'site/app-football-game.js' });
+  return { api: sandbox.module.exports, factory: ctx => ({ ...sandbox.KRGames(ctx), ...sandbox.KRFootballGame(ctx) }) };
 };
 
 const SOON = new Date(Date.now() + 36 * 3600000);
@@ -94,9 +96,10 @@ test('the college slate sorts by bettability, shows tiers and keeps NFL in kicko
   assert.match(html, /Competitive · gap 0\.6/);
   assert.match(html, /title="Tier by the book spread \(BAMA -28\): competitive to 7, lean to 14, mismatch to 21, blowout past that\. Gap 4: how far my number sits from that line\."/);
   assert.doesNotMatch(gamesSource, /#E0A23A|amber/i, 'no amber accent on the mismatch tier (palette rule)');
-  assert.match(gamesSource, /\.tier\.mismatch::before \{ background: var\(--dim\); \}/);
-  assert.match(gamesSource, /\.kt-why, \.section\[id\] \{ scroll-margin-top: 64px; \}/, 'landing on #why clears the sticky header');
-  assert.match(gamesSource, /\.pc-why a \{[^}]*min-height: var\(--tap\)/, 'Dig deeper is a full-height tap target');
+  const researchCss = fs.readFileSync('site/research.css', 'utf8');
+  assert.match(researchCss, /\.tier\.mismatch::before \{ background: var\(--dim\); \}/);
+  assert.match(footballSource, /\.kt-why, \.section\[id\] \{ scroll-margin-top: 64px; \}/, 'landing on #why clears the sticky header');
+  assert.match(researchCss, /\.pc-why a \{[^}]*min-height: var\(--tap\)/, 'Dig deeper is a full-height tap target');
   assert.match(html, /Worth your time/);
   assert.match(html, /Total 53\.5 vs my 50\.5/);
   assert.match(html, /What.s bettable/);

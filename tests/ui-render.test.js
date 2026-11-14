@@ -8,12 +8,15 @@ const source = fs.readFileSync('site/app.js', 'utf8');
 const moreSource = fs.readFileSync('site/app-more.js', 'utf8');
 const playerSource = fs.readFileSync('site/app-player.js', 'utf8');
 const gamesSource = fs.readFileSync('site/app-games.js', 'utf8');
+const footballSource = fs.readFileSync('site/app-football-game.js', 'utf8');
+const researchCss = fs.readFileSync('site/research.css', 'utf8');
 
 test('production JavaScript parses as a standalone browser script', () => {
   assert.doesNotThrow(() => new vm.Script(source, { filename: 'site/app.js' }));
   assert.doesNotThrow(() => new vm.Script(moreSource, { filename: 'site/app-more.js' }));
   assert.doesNotThrow(() => new vm.Script(playerSource, { filename: 'site/app-player.js' }));
   assert.doesNotThrow(() => new vm.Script(gamesSource, { filename: 'site/app-games.js' }));
+  assert.doesNotThrow(() => new vm.Script(footballSource, { filename: 'site/app-football-game.js' }));
 });
 
 test('secondary pages load on demand and stay out of the first-load shell', () => {
@@ -54,6 +57,16 @@ test('Games pages load on demand from their own fingerprinted bundle', () => {
   assert.match(source, /a\[href\^="#game"\], a\[href\^="#team\/"\]/, 'Games links warm the bundle on hover, focus or touch');
   assert.doesNotMatch(source, /far from the book line/);
   assert.doesNotMatch(gamesSource, /far from the book line/);
+});
+
+test('football matchup details load independently of the Games and basketball bundle', () => {
+  const html = fs.readFileSync('site/index.html', 'utf8');
+  assert.doesNotMatch(html, /<script[^>]+app-football-game\.js/);
+  const hash = crypto.createHash('sha256').update(footballSource).digest('hex').slice(0, 12);
+  assert.ok(source.includes(`const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-${hash}'`));
+  assert.match(source, /ensureBundle\('footballGame'\)\).game\(route\)/);
+  assert.match(footballSource, /app\/games\/\$\{route.id\}\.json/);
+  assert.doesNotMatch(gamesSource, /const PROJ_COLS/);
 });
 
 test('a lazy bundle factory error rejects and allows a clean retry', async () => {
@@ -153,21 +166,21 @@ test('matchup research is a scan-first prop board with Kookn and paid-tool compa
   assert.match(source, /defenseWords\(teams, String\(opponent\.id\), pl\.pos, key, league, dir\)/);
   assert.match(source, /#research\/trends\?period=1Q&amp;sport=NFL/);
   assert.match(source, /Tap a player for the chart/);
-  assert.match(source, /includes\(route\.view\)\) await ensureResearchCss\(\)/);
+  assert.match(source, /includes\(route\.view\) && ensureResearchCss\(\)/);
 });
 
 test('game prop tables become scan cards on phones without losing exact stat links', () => {
   assert.match(gamesSource, /data-stat="\$\{esc\(label\)\}"/);
-  assert.match(gamesSource, /@media \(max-width:760px\)[\s\S]*\.prop-compare tr \{ display:grid; grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
-  assert.match(gamesSource, /\.prop-compare thead \{ display:none; \}/);
-  assert.match(gamesSource, /content:attr\(data-stat\)/);
-  assert.match(gamesSource, /C\.playerLineHref\(\{[^}]*stat, line, direction, book/);
+  assert.match(researchCss, /@media \(max-width:760px\)[\s\S]*\.prop-compare tr \{ display:grid; grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(researchCss, /\.prop-compare thead \{ display:none; \}/);
+  assert.match(researchCss, /content:attr\(data-stat\)/);
+  assert.match(footballSource + gamesSource, /C\.playerLineHref\(\{[^}]*stat, line, direction, book/);
   assert.match(gamesSource, /Priced lines, research leans and highest-minute roles first/);
   assert.match(gamesSource, /class="more-box prop-depth-more"/);
   assert.match(gamesSource, /const featured = players\.slice\(0,5\), depth = players\.slice\(5\)/);
-  assert.match(gamesSource, /const featured = ordered\.filter[\s\S]*?\.slice\(0,2\)/);
-  assert.match(gamesSource, /More \$\{esc\(pos\)\} players &amp; markets/);
-  assert.match(gamesSource, /PRIMARY_POSITION_PROJ/);
+  assert.match(footballSource, /const featured = ordered\.filter[\s\S]*?\.slice\(0,2\)/);
+  assert.match(footballSource, /More \$\{esc\(pos\)\} players &amp; markets/);
+  assert.match(footballSource, /PRIMARY_POSITION_PROJ/);
 });
 
 test('mobile navigation leads with bettor tasks instead of internal research categories', () => {
@@ -200,11 +213,11 @@ test('Today and matchup pages keep the useful decision data ahead of decorative 
   const css = fs.readFileSync('site/app.css', 'utf8');
   assert.match(source, /emptyRail\([^\n]+, 'today-card', true\)/, 'an empty Today rail uses the compact status');
   assert.match(css, /\.decision-empty\.is-compact \{ display: grid;/);
-  assert.match(gamesSource, /Official picks in this game/);
-  assert.match(gamesSource, /class="matchup-pick-list"/);
-  assert.match(gamesSource, /<summary>View original ticket/);
-  assert.match(gamesSource, /Kook vs Book · current research/);
+  assert.match(footballSource, /Official picks in this game/);
+  assert.match(footballSource, /class="matchup-pick-list"/);
+  assert.match(footballSource, /<summary>View original ticket/);
+  assert.match(footballSource, /Kook vs Book · current research/);
   assert.doesNotMatch(gamesSource, /Book lines vs my numbers/);
   assert.match(source, /class="pc-team-abbr"/);
-  assert.ok(gamesSource.indexOf("${header}${postedHtml}${linePreview}") > -1, 'the matchup header and compact official rows lead the research stack');
+  assert.ok(footballSource.indexOf("${header}${postedHtml}${linePreview}") > -1, 'the matchup header and compact official rows lead the research stack');
 });

@@ -986,7 +986,35 @@
     return parts.join(' · ');
   };
 
-  return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, basketballAvailabilityHold, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, quarterMatchupOrder, deskNotes,
+  const TIER_WORD = { competitive: 'Competitive', lean: 'Lean', mismatch: 'Mismatch', blowout: 'Blowout' };
+  /* The tier comes from the book's spread; the number is the model gap: how far my number sits from that line. */
+  const isNum = Number.isFinite;
+  const gapNum = n => fixed(Math.abs(n), Math.abs(n) % 1 ? 1 : 0);
+  const tierBadge = (g, favSpread) => {
+    if (!g.tier || !isNum(Number((g.market || {}).spread))) return '';
+    const gap = g.gap && isNum(Number(g.gap.difference)) ? Number(g.gap.difference) : null;
+    return `<span class="tier ${esc(g.tier)}" title="Tier by the book spread (${esc(favSpread(g.home.abbr, g.away.abbr, g.market.spread))}): competitive to 7, lean to 14, mismatch to 21, blowout past that.${gap == null ? '' : ` Gap ${esc(gapNum(gap))}: how far my number sits from that line.`}">${esc(TIER_WORD[g.tier])}${gap == null ? '' : ` · gap ${esc(gapNum(gap))}`}</span>`;
+  };
+  /* The same lean the card's My side column shows: a side or total only when its chance clears the price bar. */
+  const leanWord = (g, which) => {
+    const lean = leanText(g) || {}, m = g.market || {}, thin = Boolean((g.v2 || {}).sparse);
+    const live = part => Boolean(part && part.chance != null && leanTone(part.chance, thin));
+    if (which === 'spread') return live(lean.side) ? `${lean.side.team} ${signed(lean.side.team === g.home.abbr ? m.spread : -m.spread, 1).replace(/\.0$/, '')}` : 'no lean';
+    return live(lean.total) && m.total != null ? `${lean.total.direction} ${m.total}` : 'no lean';
+  };
+  /* The research rows under a projection card: tier, the plain strength gap, what is bettable, and the specific reason. */
+  const matchupCardExtras = (g, { quoteAge, favSpread }, now = Date.now()) => {
+    if (g.completed || g.state === 'in') return {};
+    const m = g.market || {}, parts = g.bettableParts || {};
+    const fresh = m.retrievedAt ? quoteAge(m.retrievedAt, g.kickoff, now, { odds: -110, state: 'open' }) : null;
+    const props = Number(parts.props) || 0;
+    const bet = m.spread == null && m.total == null ? '' : `<div class="pc-bet"><span class="pc-bet-h">What's bettable · research</span><span><b>Spread</b><span class="v">${esc(leanWord(g, 'spread'))}</span></span><span><b>Total</b><span class="v">${esc(leanWord(g, 'total'))}</span></span><span><b>Props</b><span class="v">${props ? `${props} priced` : 'none priced'}</span>${g.garbageTime ? '<span class="flag">Garbage-time risk</span>' : ''}</span>${fresh ? `<span class="age">${esc(fresh.label)}</span>` : ''}</div>`;
+    const w = g.whyDiffer;
+    const why = !w ? '' : w.stale ? `<p class="pc-why muted">${esc(w.text)}</p>` : w.text ? `<p class="pc-why">${esc(w.text)} <a href="#game/${esc(g.id)}#why">Dig deeper ›</a></p>` : '';
+    return { badge: tierBadge(g, favSpread), extra: `${g.plainGap ? `<p class="pc-plain">${esc(g.plainGap)}</p>` : ''}${bet}${why}` };
+  };
+
+  return { matchupCardExtras, TIER_WORD, RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, basketballAvailabilityHold, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, quarterMatchupOrder, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, nbaTicketLines, compareTicketLeg, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, labelBoardPicks, playerLineHref, nbaMatchupProps, nbaUpcomingProps, nbaPropHistory, shardOf, BASE };

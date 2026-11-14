@@ -2128,9 +2128,10 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-f6ee7cd5eb09';
   const PLAYER_ASSET = 'app-player.js?v=sha256-72b3d5f38514';
-  const GAMES_ASSET = 'app-games.js?v=sha256-2e9c3b366c29';
+  const GAMES_ASSET = 'app-games.js?v=sha256-ca361f7f0042';
+  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-1bf6aa0aab20';
   const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
-  const RESEARCH_CSS = 'research.css?v=sha256-e15b02c3446c';
+  const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {
       const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = RESEARCH_CSS; link.onload = ok;
@@ -2145,6 +2146,7 @@
   const BUNDLES = { more: { asset: MORE_ASSET, global: 'KRMore', context: moreContext, word: 'More pages' },
     player: { asset: PLAYER_ASSET, global: 'KRPlayer', context: moreContext, word: 'Player research' },
     games: { asset: GAMES_ASSET, global: 'KRGames', context: gamesContext, word: 'Games pages' },
+    footballGame: { asset: FOOTBALL_GAME_ASSET, global: 'KRFootballGame', context: gamesContext, word: 'Football matchup' },
     kvb: { asset: KVB_ASSET, global: 'KRKvb', context: () => moreContext({ historyChart, pctText }), word: 'Kook vs. Book' } };
   const ensureBundle = key => {
     const b = BUNDLES[key];
@@ -2184,7 +2186,12 @@
   GAMES_VIEW_NAMES.forEach(name => { VIEWS[name] = async route => (await ensureGames())[name](route); });
   /* Games data does not wait for its bundle either. */
   VIEWS.games = async route => { if (route.tab !== 'live') get('app/today.json').catch(() => null); return (await ensureGames()).games(route); };
-  VIEWS.game = async route => { if (route.id && !/^(NBA|CBB)-/.test(route.id)) get(`app/games/${route.id}.json`).catch(() => null); return (await ensureGames()).game(route); };
+  const isFootballGame = id => id && !/^(NBA|CBB)-/.test(id);
+  VIEWS.game = async route => {
+    if (!isFootballGame(route.id)) return (await ensureGames()).game(route);
+    get(`app/games/${route.id}.json`).catch(() => null);
+    return (await ensureBundle('footballGame')).game(route);
+  };
   VIEWS.player = async route => {
     if (route && FOOTBALL.includes(route.league) && route.id) {
       const quiet = x => x && x.catch ? x.catch(() => null) : x;
@@ -2269,8 +2276,8 @@
     const slow = soft ? null : setTimeout(() => { if (token === renderToken && !(route.view === 'today' && view.querySelector('.hero-first'))) view.innerHTML = LOADING; }, 150);
     let html;
     try {
-      if (['research', 'player', 'game', 'pick'].includes(route.view)) await ensureResearchCss();
-      html = await (VIEWS[route.view] || VIEWS.today)(route);
+      const style = ['research', 'player', 'games', 'game', 'team', 'pick'].includes(route.view) && ensureResearchCss();
+      [html] = await Promise.all([(VIEWS[route.view] || VIEWS.today)(route), style]);
     } catch (e) {
       html = empty('Something did not load', `The data for this page is unavailable right now (${esc(e.message || e)}). <button type="button" class="btn small" data-retry>Try again</button>`, 'clock');
     }
@@ -2342,7 +2349,12 @@
       if (img instanceof HTMLImageElement && img.closest('.kt-face, .kt-disc, .kt-logo')) img.remove();
     }, true);
     window.addEventListener('hashchange', () => { appliedHash = null; state.player.hash = null; render(); });
-    const warm = event => { const a = event.target.closest && event.target.closest('a[href^="#game"], a[href^="#team/"]'); if (a) ensureGames().catch(() => {}); };
+    const warm = event => {
+      const a = event.target.closest && event.target.closest('a[href^="#game"], a[href^="#team/"]');
+      if (!a) return;
+      const route = resolve(a.hash);
+      (route.view === 'game' && isFootballGame(route.id) ? ensureBundle('footballGame') : ensureGames()).catch(() => {});
+    };
     ['pointerover', 'focusin', 'touchstart'].forEach(type => document.addEventListener(type, warm, { passive: true }));
     const skip = document.querySelector('.skip');
     if (skip) skip.addEventListener('click', e => { e.preventDefault(); const v = $('#view'); v.setAttribute('tabindex', '-1'); v.focus(); });
