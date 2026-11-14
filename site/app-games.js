@@ -1086,20 +1086,10 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
       }
     }
     const gameById = new Map(games.map(g => [String(g.providerId || g.id?.replace(/^NBA-/, '')), g]));
-    let quotes = props?.rows || [];
-    // The slate preview stays small. Search and the NBA tab use the same
-    // matchup files as player charts so the preview cap cannot hide a match.
-    if (league === 'NBA' && type !== 'games' && (!preview || q)
-        && Array.isArray(schedule?.matchupPropEvents)) {
-      const covered = schedule.matchupPropEvents.filter(id => {
-        const game = gameById.get(id);
-        return game && Date.parse(game.kickoff) > now;
-      });
-      if (covered.length) {
-        const files = await Promise.all(covered.map(id => C.nbaMatchupProps(get, schedule, `NBA-${id}`)));
-        quotes = files.flatMap((file, index) => file.rows.filter(row => String(row.eventId) === covered[index]));
-      }
-    }
+    // Search and the dedicated NBA tab share the same complete data as the charts.
+    const fullQuotes = league === 'NBA' && type !== 'games' && (!preview || q)
+      ? await C.nbaUpcomingProps(get, schedule, now) : null;
+    const quotes = fullQuotes ?? props?.rows ?? [];
     const playerRows = [];
     for (const row of quotes) {
       const game = gameById.get(String(row.eventId)), dir = row.side;

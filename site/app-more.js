@@ -336,7 +336,8 @@
     const league = route.league === 'CBB' ? 'CBB' : 'NBA';
     const index = await get(`app/players/${league}.json`);
     const entry = (index.players || []).find(player => String(player[0]) === String(route.id));
-    const back = `<a class="kt-back" href="#research/players?sport=${league}">‹ ${league} player research</a>`;
+    const matchupBack = new RegExp(`^${league}-[0-9]+$`).test(route.game || '') ? route.game : null;
+    const back = `<a class="kt-back" href="${matchupBack ? `#game/${esc(matchupBack)}` : `#research/players?sport=${league}`}">‹ ${matchupBack ? 'Matchup' : `${league} player research`}</a>`;
     if (!entry) return head('', 'Player not found', `No stored ${league} games for this player.`, back);
     const [shard, basketball] = await Promise.all([
       get(`app/players/${league}/${C.shardOf(route.id, index.shards)}.json`),
@@ -769,16 +770,18 @@
 
   views.basketballPlayers = async route => {
     const league = route.league === 'CBB' || state.league === 'CBB' ? 'CBB' : 'NBA';
-    const [index, props] = await Promise.all([
-      get(`app/players/${league}.json`),
-      league === 'NBA' ? maybe('app/nba-props.json') : Promise.resolve(null)
-    ]);
     const query = String(state.players.q || '').trim().toLowerCase();
+    const [index, props, schedule] = await Promise.all([
+      get(`app/players/${league}.json`),
+      league === 'NBA' ? maybe('app/nba-props.json') : null,
+      league === 'NBA' && query ? maybe('app/nba.json') : null,
+    ]);
     const players = (index.players || []).filter(entry => C.researchMatches(query, entry[1], entry[4], entry[2]));
     const statName = key => ({ pts:'Points', reb:'Rebounds', ast:'Assists', fg3m:'Threes', pra:'Pts + reb + ast', pa:'Pts + assists', pr:'Pts + rebounds', ra:'Rebounds + assists' }[key] || key);
     const search = `<div class="toolbar prop-toolbar"><div class="grow"><label class="sr" for="bpq">Find a player or team</label><input id="bpq" class="search" type="search" placeholder="Find ${league} players or teams" value="${esc(state.players.q)}" data-input="pq" autocomplete="off" maxlength="160"></div></div>`;
     const now = Date.now();
-    const available = (props?.rows || []).filter(row => Date.parse(row.kickoff) > now);
+    const complete = await C.nbaUpcomingProps(get, schedule, now);
+    const available = (complete ?? props?.rows ?? []).filter(row => Date.parse(row.kickoff) > now);
     const playerGameKey = row => `${row.eventId}|${row.athleteId}`;
     const holds = new Set(available.filter(C.basketballAvailabilityHold).map(playerGameKey));
     const common = new Set(['pts','reb','ast','fg3m','pra','pa','pr','ra']);

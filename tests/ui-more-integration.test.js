@@ -236,6 +236,7 @@ test('NBA charts use the selected matchup file and keep an unrecorded stat on it
   }});
   const views=factory(ctx);
   const linked=await views.player({league:'NBA',id:'1',stat:'ast',line:'4.5',direction:'over',book:'FanDuel',game:'NBA-77'});
+  assert.match(linked,/href="#game\/NBA-77">‹ Matchup/);
   assert.match(linked,/id="nba-stat">Assists/);
   assert.match(linked,/Over 4\.5 -114<\/b> at FanDuel/);
   assert.match(linked,/Kook’n range:<\/b> 2–8/);
@@ -248,6 +249,25 @@ test('NBA charts use the selected matchup file and keep an unrecorded stat on it
   assert.match(history,/id="nba-stat">Points/);
   assert.match(history,/Recorded game results/);
   assert.ok(!seen.some(path=>path.includes('nba-props')));
+});
+
+test('NBA Prop Finder search uses the complete matchup quotes and keeps the unfiltered preview small', async () => {
+ const {api,factory}=loadBrowserApi(), now=Date.now();
+ const kickoff=new Date(now+3600000).toISOString(), generatedAt=new Date(now-60000).toISOString();
+ const game={id:'NBA-77',providerId:'77',kickoff,status:'scheduled'};
+ const featured={eventId:'77',athleteId:'1',name:'Featured Guard',stat:'pts',kickoff,line:10.5,over:-110,
+   side:'over',book:'FanDuel',sourceAt:generatedAt,projection:{value:12}};
+ const quote={...featured,athleteId:'2',name:'Rotation Guard',line:8.5,book:'DraftKings'};
+ const files={'app/players/NBA.json':{players:[]},'app/nba.json':{games:[game],matchupPropEvents:['77'],generatedAt},
+   'app/nba-props.json':{rows:[featured],generatedAt},'app/nba-props/77.json':{rows:[featured,quote],generatedAt}};
+ const paths=[];
+ const read=async path=>{paths.push(path);return files[path];};
+ const ctx=api.moreContext({get:read,maybe:read}),views=factory(ctx);
+ assert.doesNotMatch(await views.basketballPlayers({league:'NBA'}),/Rotation Guard/);
+ assert.ok(!paths.includes('app/nba-props/77.json'));
+ ctx.state.players.q='Rotation Guard';
+ assert.match(await views.basketballPlayers({league:'NBA'}),/line=8\.5&amp;direction=over&amp;book=DraftKings&amp;game=NBA-77/);
+ assert.ok(paths.includes('app/nba-props/77.json'));
 });
 
 test('basketball prop finder links short histories and exact saved prices without false lean styling', async () => {
