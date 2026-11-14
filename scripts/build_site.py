@@ -2249,7 +2249,13 @@ def build(now=None):
     write(ROOT / 'work' / 'desk-status.json', {'generatedAt': stamp(now), 'deskRuns': desk_runs(),
                                                'afterPostingHolds': [p['id'] for p in picks if (p.get('held') or {}).get('afterPosting')]})
     community_records = __import__('community_record').build(ROOT)
-    posted_records = list({p['id']: p for p in picks + community_records}.values())
+    # Today is a complete all-sports publication feed, not a football feed that
+    # depends on a second browser request to reconstruct basketball.  The sport
+    # ledgers remain the immutable sources; these receipt-backed adapters are
+    # merged only for presentation and de-duplicated by original play id.
+    cbb_public = cbb_record_picks(now)
+    nba_public = nba_record_picks(now)
+    posted_records = list({p['id']: p for p in picks + cbb_public + nba_public + community_records}.values())
     import morning_brief
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'morningBrief': morning_brief.current(now),
@@ -2265,8 +2271,6 @@ def build(now=None):
                                               ticket_teams))
     import ticket_climb_route  # ladder/gates use build_site constants; import after this module is initialized
     route_state, route_games = ticket_climb_route.from_stores(ticket_climb_route.gates.Stores(), now)
-    cbb_public = cbb_record_picks(now)
-    nba_public = nba_record_picks(now)
     write(OUT / 'record.json', {'generatedAt': stamp(now),
                                 'picks': [{**pick, 'card': record_card(pick)} for pick in picks],
                                 # Basketball has immutable sport ledgers, but Results is the all-sports public

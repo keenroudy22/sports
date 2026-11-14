@@ -498,3 +498,13 @@ class TicketQuoteAndHoldTests(unittest.TestCase):
         import inspect
         body = inspect.getsource(build_site.build)
         self.assertLess(body.index('annotate_quotes(picks, lines, by_id, now)'), body.index("write(OUT / 'today.json'"))
+
+    def test_today_merges_receipt_backed_basketball_before_it_is_written(self):
+        """Today must not rely on record.json to recover a current NBA/CBB slip."""
+        import inspect
+        body = inspect.getsource(build_site.build)
+        today = body.index("write(OUT / 'today.json'")
+        self.assertLess(body.index('cbb_public = cbb_record_picks(now)'), today)
+        self.assertLess(body.index('nba_public = nba_record_picks(now)'), today)
+        merge = "picks + cbb_public + nba_public + community_records"
+        self.assertIn(merge, body[:today])
