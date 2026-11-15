@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-15T12:36:36Z",
+  "updatedAt": "2026-11-15T15:07:25Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 177,
+    "lines": 178,
     "current": 0,
-    "references": 0
+    "references": 1
   },
   "lines": [
     {
@@ -10152,6 +10152,69 @@
           "source": "https://www.espn.com/college-football/game/_/gameId/401856889",
           "marketWindow": "Full game",
           "cutoff": "UNDER 2.5 at +106 or better; off the card at 2 or lower, or at -109 or worse at 2.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401873058",
+      "player": "Drake London",
+      "athleteId": null,
+      "position": "WR",
+      "reportId": "NFL-2026-W10-london-under-5-5-rec-dk",
+      "identityVerified": false,
+      "direction": "UNDER",
+      "line": 5.5,
+      "market": "receptions",
+      "book": "DraftKings",
+      "odds": 104,
+      "observedAt": "2026-11-15T12:36:32Z",
+      "expiresAt": "2026-11-15T16:45:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401873058",
+      "marketWindow": "Full game",
+      "cutoff": "UNDER 5.5 at +104 or better; off the card at 5 or lower, or at -111 or worse at 5.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-11-15T12:36:32Z",
+      "kickoff": "2026-11-15T18:00Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Drake London UNDER 5.5 receptions",
+      "id": "line-2f0fe96e992cc698a539",
+      "observations": [
+        {
+          "line": 5.5,
+          "odds": 104,
+          "observedAt": "2026-11-15T12:36:32Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873058",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401873058",
+          "player": "Drake London",
+          "athleteId": null,
+          "position": "WR",
+          "reportId": "NFL-2026-W10-london-under-5-5-rec-dk",
+          "identityVerified": false,
+          "direction": "UNDER",
+          "line": 5.5,
+          "market": "receptions",
+          "book": "DraftKings",
+          "odds": 104,
+          "observedAt": "2026-11-15T12:36:32Z",
+          "expiresAt": "2026-11-15T16:45:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873058",
+          "marketWindow": "Full game",
+          "cutoff": "UNDER 5.5 at +104 or better; off the card at 5 or lower, or at -111 or worse at 5.5.",
           "quoteType": "source reference"
         }
       ]
