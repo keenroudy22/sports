@@ -368,3 +368,22 @@ class BasketballBackupTests(unittest.TestCase):
         self.assertTrue(run.typefully_private_fallback_eligible(straight, book, self.now))
         self.assertFalse(run.typefully_private_fallback_eligible(
             climb, {'posts': [{'typefullyDelivery': {'at': 'not-a-time'}}]}, self.now))
+
+    def test_attended_absent_check_cannot_race_typefully_into_duplicate(self):
+        entry = {
+            'id': 'fun-ticket',
+            'queuedText': 'Fun ticket',
+            'textHash': typefully_backup.x_post.text_hash('Fun ticket'),
+            'bufferWebVerification': {
+                'state': 'absent',
+                'verifiedAt': '2026-11-14T17:45:22Z',
+                'evidence': 'Attended UI check',
+            },
+        }
+        book = {'posts': [entry]}
+        with patch.object(typefully_backup, 'request') as request:
+            self.assertFalse(typefully_backup.deliver(
+                entry, book, {}, self.now, lambda _: None,
+                expires=self.now + timedelta(hours=1)))
+        request.assert_not_called()
+        self.assertNotIn('typefullyDelivery', entry)

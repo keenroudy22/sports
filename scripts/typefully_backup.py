@@ -128,7 +128,13 @@ def deliver(entry, book, settings, now, save, *, text=None, expires=None,
     if not attempt:
         if not text or any(entry.get(k) for k in (
                 'sentAt', 'bufferPostId', 'bufferAttemptAt', 'webDelivery',
-                'error', 'cancelledAt', 'deletedAt')):
+                # An attended Buffer/X inspection is transport work too.  It
+                # can race an eventually-consistent X profile: on Nov 14 the
+                # first post was already live while the attended check called
+                # it absent, and Typefully created a duplicate five seconds
+                # later.  Fail closed until that attended attempt is
+                # reconciled to a real X URL or explicitly cleared.
+                'bufferWebVerification', 'error', 'cancelledAt', 'deletedAt')):
             return False
         if expires is None or expires <= now + timedelta(minutes=2):
             return False
