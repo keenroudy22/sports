@@ -1,58 +1,72 @@
 {
- "at": "2026-11-15T21:13:27Z",
+ "at": "2026-11-15T22:30:09Z",
  "confirmed": {
-  "NFL-401873063": "2026-11-15T21:15:23Z",
-  "NFL-401873064": "2026-11-15T21:15:23Z",
-  "NFL-401873065": "2026-11-15T21:15:23Z"
+  "NFL-401873064": "2026-11-15T22:31:09Z",
+  "NFL-401873065": "2026-11-15T22:31:09Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 2455,
-    "fanduel": 1301
+    "draftkings": 1326,
+    "fanduel": 452
    },
    "eventsListed": 5,
-   "eventsMatched": 3,
-   "games": 3,
+   "eventsMatched": 2,
+   "games": 2,
    "marketTypes": {
-    "player_assists": 42,
-    "player_defensive_interceptions": 72,
-    "player_extra_points_made": 12,
-    "player_fantasy_score": 36,
-    "player_field_goals_made": 12,
-    "player_interceptions": 12,
-    "player_kicking_points": 12,
-    "player_longest_passing_completion": 12,
-    "player_longest_reception": 60,
-    "player_longest_rush": 34,
-    "player_passing_+_rushing_yards": 12,
-    "player_passing_attempts": 12,
-    "player_passing_completions": 12,
-    "player_passing_touchdowns": 42,
-    "player_passing_yards": 228,
-    "player_passing_yards_combo_": 41,
-    "player_receiving_yards": 919,
-    "player_receiving_yards_combo_": 52,
-    "player_receptions": 540,
-    "player_rushing_+_receiving_yards": 52,
-    "player_rushing_attempts": 26,
-    "player_rushing_yards": 459,
-    "player_rushing_yards_combo_": 27,
-    "player_sacks": 37,
-    "player_tackles": 42,
-    "player_tackles_+_assists": 42,
-    "player_touchdowns": 131,
-    "player_touchdowns_combo_": 265,
-    "point_spread": 513
+    "player_assists": 30,
+    "player_defensive_interceptions": 50,
+    "player_extra_points_made": 8,
+    "player_fantasy_score": 24,
+    "player_field_goals_made": 8,
+    "player_interceptions": 8,
+    "player_kicking_points": 8,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 36,
+    "player_longest_rush": 24,
+    "player_passing_+_rushing_yards": 8,
+    "player_passing_attempts": 8,
+    "player_passing_completions": 8,
+    "player_passing_touchdowns": 17,
+    "player_passing_yards": 127,
+    "player_passing_yards_combo_": 27,
+    "player_receiving_yards": 469,
+    "player_receiving_yards_combo_": 35,
+    "player_receptions": 275,
+    "player_rushing_+_receiving_yards": 28,
+    "player_rushing_attempts": 16,
+    "player_rushing_yards": 144,
+    "player_rushing_yards_combo_": 10,
+    "player_sacks": 20,
+    "player_tackles": 20,
+    "player_tackles_+_assists": 20,
+    "player_touchdowns": 44,
+    "player_touchdowns_combo_": 123,
+    "point_spread": 175
    },
-   "requestsLeft": 39,
-   "rows": 3756,
+   "requestsLeft": 0,
+   "rows": 1778,
    "slateGames": [
-    "San Francisco 49ers at Dallas Cowboys 2026-11-15T21:25Z",
     "Pittsburgh Steelers at Cincinnati Bengals 2026-11-16T01:20Z",
     "Los Angeles Chargers at Baltimore Ravens 2026-11-17T01:15Z"
    ],
    "unmatchedEvents": [
+    {
+     "away": null,
+     "external": {
+      "fanduel": "28297422"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "rookie_of_the_year"
+      ]
+     },
+     "start": "2026-11-22T18:01:00Z",
+     "type": "outright"
+    },
     {
      "away": "Cincinnati Bengals",
      "external": {
@@ -63,6 +77,7 @@
       "onexbet": "769939018",
       "polymarket": "nfl_bengals_commanders_2026-11-23_b3",
       "polymarket_us": "nfl-cin-was-2026-11-23",
+      "rebet": "sr:match:71516056",
       "stake": "5652a954-5244-4233-84f6-3b46d52eaa42"
      },
      "home": "Washington Commanders",
