@@ -357,7 +357,7 @@ def delivery(posts, now):
     return counts
 
 
-def result_timeliness(record, posts, now):
+def result_timeliness(record, posts, now, *, individual_only=False):
     """Measure the saved final-observation-to-result-send delay.
 
     ``settledAt`` is the first durable observation that the game was final. It is
@@ -371,6 +371,7 @@ def result_timeliness(record, posts, now):
                 'within30Minutes': 0, 'over30Minutes': 0, 'pendingScheduled': 0, 'missing': 0,
                 'latestMinutesFromFinalToPost': None, 'maxMinutesFromFinalToPost': None}
     sent, pending, originals, recap_sent = {}, {}, set(), {}
+    suppressed_finals = set()
     for post in posts:
         if not isinstance(post, dict):
             continue
@@ -385,10 +386,14 @@ def result_timeliness(record, posts, now):
         for prefix in ('cashed:', 'burnt:'):
             if key.startswith(prefix):
                 source_id = key[len(prefix):]
-                if post.get('sentAt'):
+                if individual_only and post.get('deletedAt'):
+                    suppressed_finals.add(source_id)
+                if post.get('sentAt') and (not individual_only or (post.get('tweetId')
+                        and not post.get('cancelledAt') and not post.get('deletedAt'))):
                     sent[source_id] = moment(post['sentAt'])
                     originals.add(source_id)
-                elif (post.get('bufferPostId') and not any(post.get(field) for field in
+                elif (post.get('bufferPostId') and (not individual_only or not post.get('sentAt'))
+                      and not any(post.get(field) for field in
                       ('cancelledAt', 'deletedAt', 'error')) and moment(post.get('dueAt'))):
                     pending[source_id] = moment(post['dueAt'])
                     originals.add(source_id)
@@ -403,7 +408,9 @@ def result_timeliness(record, posts, now):
             continue
         result = str(pick.get('result') or '').lower()
         eligible = result == 'win'
-        if result == 'loss':
+        if result == 'loss' and individual_only:
+            eligible = True
+        elif result == 'loss':
             actual, line = pick.get('actualValue'), pick.get('line')
             if isinstance(actual, (int, float)) and isinstance(line, (int, float)):
                 market = str(pick.get('market') or pick.get('marketType') or '').lower()
@@ -412,10 +419,12 @@ def result_timeliness(record, posts, now):
         if not eligible:
             continue
         pick_id = str(pick.get('id') or '')
+        if pick_id in suppressed_finals:
+            continue
         if pick_id not in originals:
             quote_blocked.append(pick_id)
             continue
-        delivered = sent.get(pick_id) or recap_sent.get(pick_id)
+        delivered = sent.get(pick_id) or (None if individual_only else recap_sent.get(pick_id))
         if delivered is None:
             due = pending.get(str(pick.get('id') or ''))
             if due and due >= now - timedelta(minutes=15):

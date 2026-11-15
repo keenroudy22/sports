@@ -3362,7 +3362,7 @@ RESULT_RECOVERY_GAP = timedelta(minutes=15)
 
 
 def result_recovery_needed(now, root=ROOT, conf=CONF):
-    """Retry a settled win/near miss whose Cooked/Burnt post was never queued.
+    """Retry a settled play whose individual Cooked/Burnt post was never queued.
 
     The ordinary result job remains the primary path.  This is the five-minute
     mirror's bounded recovery path: a future scheduled post is healthy, an
@@ -3383,7 +3383,7 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
                    else receipts.RESULT_RECOVERY_FRESH) < desk_health.moment(p['settledAt']) <= now])
     result = desk_health.result_timeliness(
         record,
-        log_book.get('posts', []) if isinstance(log_book, dict) else [], now)
+        log_book.get('posts', []) if isinstance(log_book, dict) else [], now, individual_only=True)
     import cbb_picks
     try:
         cbb_missing = len([p for p in cbb_picks.plans(
@@ -4304,7 +4304,7 @@ def retry_stored_results(now, log_book):
     plans = plans + nba_results.plans(now, log_book, ROOT / 'data/nba-trial', reserved=plans)
     # No discovery for missing hosted art. The existing five-minute mirror
     # retries; scheduling still rechecks reachability and duplicate/cap guards.
-    plans = [p for p in plans if not p[4] or buffer_post.reachable(buffer_post.card_url(p[4]))]
+    plans = [p for p in plans if p[4] and buffer_post.reachable(buffer_post.card_url(p[4]))]
     if not plans:
         return
     mark_result_recovery(now, len(plans))

@@ -1826,6 +1826,30 @@ class DiscordMirrorTests(unittest.TestCase):
             with mock.patch.object(x_post, 'load_log', return_value=queued):
                 self.assertEqual(run.result_recovery_needed(now + timedelta(minutes=16), root, conf), 0)
 
+    def test_daily_recap_does_not_complete_individual_final_recovery(self):
+        now = datetime(2026, 11, 15, 17, 35, tzinfo=timezone.utc)
+        record = {'picks': [{'id': 'loss', 'posted': True, 'result': 'loss',
+                             'settledAt': '2026-11-15T01:00:00Z'}]}
+        posts = [
+            {'id': 'loss', 'kind': 'buffer:play', 'tweetId': '1234567890123456789',
+             'sentAt': '2026-11-14T22:00:00Z'},
+            {'id': 'receipt:day:2026-11-14', 'sentAt': '2026-11-15T13:00:00Z',
+             'resultPickIds': ['loss']},
+        ]
+        import x_post
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            path = root / 'site/data/app/record.json'
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps(record))
+            with mock.patch.object(x_post, 'load_log', return_value={'posts': posts}):
+                self.assertEqual(run.result_recovery_needed(now, root, root / 'private'), 1)
+                posts.append({'id': 'burnt:loss', 'sentAt': '2026-11-15T17:00:00Z',
+                              'tweetId': '1234567890123456790'})
+                self.assertEqual(run.result_recovery_needed(now, root, root / 'private'), 0)
+                posts[-1]['deletedAt'] = '2026-11-15T17:20:00Z'
+                self.assertEqual(run.result_recovery_needed(now, root, root / 'private'), 0)
+
     def test_only_due_or_sent_pending_entries_wake_the_mirror(self):
         now = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
         post = lambda **over: dict({'id': 'a', 'bufferPostId': 'b', 'dueAt': run.stamp(now + timedelta(minutes=5)),
