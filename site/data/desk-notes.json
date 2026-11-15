@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-11-15T19:45:14Z",
+  "selectedAt": "2026-11-15T22:34:08Z",
   "mode": "local",
   "rows": [
     {
@@ -9,14 +9,18 @@
       "kickoff": "2026-11-16T01:20:00Z",
       "matchup": "PIT at CIN",
       "href": "#game/NFL-401873064",
-      "kind": "usage",
-      "label": "Red-zone work",
-      "player": "Ja'Marr Chase",
-      "title": "Ja'Marr Chase",
-      "text": "13 red-zone carries + targets; 5 inside the 10 across 8 observed team games this season. Not a TD prediction.",
-      "observedAt": "2026-11-15T17:19:52Z",
+      "kind": "trend",
+      "label": "Season trend",
+      "player": "Drew Sample",
+      "stat": "rec",
+      "title": "Drew Sample \u00b7 Over 0.5 receptions",
+      "text": "9/10 recorded games this season. DraftKings -221 captured; history, not a prediction.",
+      "observedAt": "2026-11-15T22:31:09Z",
       "expiresAt": "2026-11-16T01:20:00Z",
-      "id": "E1"
+      "rate": 0.9,
+      "sample": 10,
+      "price": -221,
+      "id": "E0"
     },
     {
       "gameId": "NFL-401873065",
@@ -24,18 +28,14 @@
       "kickoff": "2026-11-17T01:15:00Z",
       "matchup": "LAC at BAL",
       "href": "#game/NFL-401873065",
-      "kind": "trend",
-      "label": "Season trend",
-      "player": "Mark Andrews",
-      "stat": "rec",
-      "title": "Mark Andrews \u00b7 Over 2.5 receptions",
-      "text": "7/9 recorded games this season. FanDuel -148 captured; history, not a prediction.",
-      "observedAt": "2026-11-15T18:11:17Z",
-      "expiresAt": "2026-11-15T22:11:17Z",
-      "rate": 0.7777777777777778,
-      "sample": 9,
-      "price": -148,
-      "id": "E2"
+      "kind": "usage",
+      "label": "Red-zone work",
+      "player": "Derrick Henry",
+      "title": "Derrick Henry",
+      "text": "40 red-zone carries + targets; 25 inside the 10 across 9 observed team games this season. Not a TD prediction.",
+      "observedAt": "2026-11-15T21:12:36Z",
+      "expiresAt": "2026-11-16T06:34:08Z",
+      "id": "E6"
     },
     {
       "gameId": "NHL-401892721",
@@ -46,10 +46,10 @@
       "matchup": "EDM at PHI",
       "title": "EDM at PHI",
       "text": "Sun 7:30 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-11-15T18:08:05Z",
-      "expiresAt": "2026-11-15T22:08:05Z",
+      "observedAt": "2026-11-15T21:10:02Z",
+      "expiresAt": "2026-11-16T00:30:00Z",
       "href": "#scores/NHL",
-      "id": "E6"
+      "id": "E10"
     }
   ]
 }
