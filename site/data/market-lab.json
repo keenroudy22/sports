@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 318,
+   "gamesGraded": 321,
    "gamesQuoted": 326,
-   "moneylineSnapshots": 1490,
+   "moneylineSnapshots": 1494,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,96 @@
      "season": 2027
     },
     {
-     "gamesGraded": 279,
+     "gamesGraded": 282,
      "gamesQuoted": 285,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1490,
+   "snapshots": 1494,
    "status": "capturing",
-   "totalSnapshots": 1490
+   "totalSnapshots": 1494
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "NYI",
+    "id": "12",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nyi.png",
+    "name": "New York Islanders",
+    "shortName": "Islanders"
+   },
+   "awayScore": 6,
+   "gameId": "NHL-401892719",
+   "gradedAt": "2026-11-15T16:25:10Z",
+   "home": {
+    "abbreviation": "ANA",
+    "id": "25",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ana.png",
+    "name": "Anaheim Ducks",
+    "shortName": "Ducks"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-11-15T03:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "CGY",
+    "id": "3",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/cgy.png",
+    "name": "Calgary Flames",
+    "shortName": "Flames"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401892720",
+   "gradedAt": "2026-11-15T16:25:10Z",
+   "home": {
+    "abbreviation": "LA",
+    "id": "8",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/la.png",
+    "name": "Los Angeles Kings",
+    "shortName": "Kings"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-11-15T03:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "SJ",
+    "id": "18",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/sj.png",
+    "name": "San Jose Sharks",
+    "shortName": "Sharks"
+   },
+   "awayScore": 6,
+   "gameId": "NHL-401892718",
+   "gradedAt": "2026-11-15T16:25:10Z",
+   "home": {
+    "abbreviation": "UTA",
+    "id": "129764",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/uta.png",
+    "name": "Utah Mammoth",
+    "shortName": "Mammoth"
+   },
+   "homeScore": 5,
+   "kickoff": "2026-11-15T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final/SO",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "BUF",
@@ -2567,85 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "CBJ",
-    "id": "29",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/cbj.png",
-    "name": "Columbus Blue Jackets",
-    "shortName": "Blue Jackets"
-   },
-   "awayScore": 1,
-   "gameId": "NHL-401892622",
-   "gradedAt": "2026-11-01T03:25:48Z",
-   "home": {
-    "abbreviation": "DAL",
-    "id": "9",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/dal.png",
-    "name": "Dallas Stars",
-    "shortName": "Stars"
-   },
-   "homeScore": 3,
-   "kickoff": "2026-11-01T00:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "PIT",
-    "id": "16",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/pit.png",
-    "name": "Pittsburgh Penguins",
-    "shortName": "Penguins"
-   },
-   "awayScore": 4,
-   "gameId": "NHL-401892620",
-   "gradedAt": "2026-11-01T01:55:11Z",
-   "home": {
-    "abbreviation": "MTL",
-    "id": "10",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/mtl.png",
-    "name": "Montreal Canadiens",
-    "shortName": "Canadiens"
-   },
-   "homeScore": 5,
-   "kickoff": "2026-10-31T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "TOR",
-    "id": "21",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tor.png",
-    "name": "Toronto Maple Leafs",
-    "shortName": "Maple Leafs"
-   },
-   "awayScore": 4,
-   "gameId": "NHL-401892621",
-   "gradedAt": "2026-11-01T01:55:11Z",
-   "home": {
-    "abbreviation": "VAN",
-    "id": "22",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
-    "name": "Vancouver Canucks",
-    "shortName": "Canucks"
-   },
-   "homeScore": 2,
-   "kickoff": "2026-10-31T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-15T15:00:27Z"
+ "updatedAt": "2026-11-15T16:25:10Z"
 }
