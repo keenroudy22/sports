@@ -941,6 +941,14 @@
       supported.find(key=>key.toLowerCase()===word.slice(1))).filter(Boolean))];
     return keys.length===1?keys[0]:null;
   };
+  const trendGameFilter = (rows, selected = '') => {
+    const games=[...new Map((rows||[]).filter(row=>row.gameId&&row.matchup&&row.kickoff)
+      .map(row=>[String(row.gameId),row])).values()]
+      .sort((a,b)=>String(a.kickoff).localeCompare(String(b.kickoff))||String(a.matchup).localeCompare(String(b.matchup)));
+    const label=games.find(game=>String(game.gameId)===selected)?.matchup||'';
+    const html=games.length?`<label class="sr" for="tgame">Game</label><select id="tgame" class="select trend-game-select" style="max-width:100%;flex:1 1 260px" data-select="trendGame"><option value=""${selected?'':' selected'}>All upcoming · ${games.length} game${games.length===1?'':'s'}</option>${games.map(game=>`<option value="${esc(game.gameId)}"${selected===String(game.gameId)?' selected':''}>${esc(game.matchup)} · ${esc(whenShort(game.kickoff))}</option>`).join('')}</select>`:'';
+    return {label,html};
+  };
   const chartHistory = (rows, key, filters = {}) => {
     const count=filters.chartWindow==='last5'?5:filters.chartWindow==='last10'?10:Infinity;
     return (rows || []).filter(row=>Number.isFinite(row.stats?.[key]) &&
@@ -1039,7 +1047,7 @@
     return { badge: tierBadge(g, favSpread), extra: `${g.plainGap ? `<p class="pc-plain">${esc(g.plainGap)}</p>` : ''}${bet}${why}` };
   };
 
-  return { matchupCardExtras, TIER_WORD, RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, basketballAvailabilityHold, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, quarterMatchupOrder, deskNotes,
+  return { matchupCardExtras, TIER_WORD, RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, trendGameFilter, chartHistory, chartGeometry, thresholdResult, quoteStatus, basketballAvailabilityHold, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, quarterMatchupOrder, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, nbaTicketLines, compareTicketLeg, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, chefRecord, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, labelBoardPicks, playerLineHref, nbaMatchupProps, nbaUpcomingProps, nbaPropHistory, chartPlayer, shardOf, BASE };

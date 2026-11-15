@@ -881,6 +881,36 @@ test('Edges keeps basketball search and markets available when football files fa
   assert.doesNotMatch(page, /Every current line/);
 });
 
+test('first-quarter trends can filter one matchup from the upcoming slate', async () => {
+  const context = (key, gameId, matchup, kickoff, player) => ({
+    [key]: { league: 'NFL', season: 2026, period: '1Q', athleteId: key, player,
+      team: { abbr: matchup.split(' at ')[0] }, gameId, kickoff, matchup, stat: 'att' },
+  });
+  const history = [6, 8, 7, 9, 5].map((value, i) => ({ date: `2026-09-${String(i + 1).padStart(2, '0')}`, value }));
+  const file = 'NFL-2026-10-10-1Q-milestones.json';
+  const extra = {
+    'data/app/trends/quarter-index.json': { generatedAt: '2026-10-10T13:50:00Z', files: [
+      { league: 'NFL', date: '2026-10-10', kind: 'milestone', period: '1Q', file },
+    ] },
+    [`data/app/trends/${file}`]: { generatedAt: '2026-10-10T13:50:00Z',
+      contexts: { ...context('9', 'NFL-1', 'AWY at HOM', '2026-12-10T20:00:00Z', 'Fixture Quarterback'),
+        ...context('10', 'NFL-3', 'NE at DET', '2026-12-10T15:30:00Z', 'New England Quarterback') },
+      histories: { 9: history, 10: history }, rows: [
+        { contextKey: '9', kind: 'milestone', direction: 'at-least', line: 5 },
+        { contextKey: '10', kind: 'milestone', direction: 'at-least', line: 5 },
+      ] },
+  };
+  const app = loadApp('#research/trends?period=1Q&sport=NFL&game=NFL-3', {}, { extra });
+  const page = await app.api.views.research(M.resolve(app.sandbox.location.hash));
+  assert.match(page, /id="tgame" class="select trend-game-select"[^>]*data-select="trendGame"/);
+  assert.match(page, /<option value="">All upcoming · 2 games<\/option>/);
+  assert.match(page, /<option value="NFL-3" selected>NE at DET ·/);
+  assert.match(page, /Filters<span>1Q · NE at DET · Season · Milestones · All stats/);
+  assert.match(page, /New England Quarterback/);
+  assert.doesNotMatch(page, /Fixture Quarterback/);
+  assert.match(page, /1 of 1 trend/);
+});
+
 test('an empty official rail names a real price-clearing research lean and never promotes a pass', async () => {
   const closest = lineRow('Closest Look', { athleteId: '88', player: 'Closest Look', stat: 'recYds', marketType: null,
     title: 'Closest Look over 42.5 receiving yards', line: 42.5 }, { view: 'lean', tier: 'lean', chance: 0.56, needs: 0.524, edge: 3.6 });
