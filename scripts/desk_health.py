@@ -760,12 +760,13 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
         buffer_rows=[json.loads(line) for line in journal.read_text().splitlines() if line.strip()] if journal.exists() else []
         observed=quota.observed_buffer_usage(root/'work/quota',buffer_rows,now)
         if observed is not None:
-            buffer_used, buffer_limit = observed, 1000
+            buffer_used = observed
+            buffer_limit = quota.observed_buffer_limit(root / 'work/quota')
             request_counts['bufferProviderConservative'] = observed
     except (OSError,ValueError,TypeError,quota.QuotaBlocked):
         issue('buffer-usage-review','Buffer usage observation needs review; publication stays fail-closed.')
     if buffer_used >= .8*buffer_limit:
-        issue('buffer-api-pace', f'Counted Buffer requests reached 80% of the free {buffer_limit:,}-request allowance.')
+        issue('buffer-api-pace', f'Counted Buffer requests reached 80% of the {buffer_limit:,}-request allowance.')
     try:
         sharp_rows = [json.loads(line) for line in (root / 'work/quota/sharp.jsonl').read_text().splitlines() if line.strip()]
         recent = sum(1 for row in sharp_rows if moment(row.get('at')) and
@@ -832,6 +833,23 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     if model_failures:
         issue('local-model-failed', f'{int(model_failures)} local-model calls failed in the latest run.')
     published = number(state.get('published')) if state.get('outcome') == 'ok' else None
+    if published:
+        selection = 'published'
+    elif waiting:
+        selection = 'awaiting-delivery'
+    elif safety_held:
+        selection = 'held-for-review'
+    elif published is None:
+        selection = 'unknown'
+    else:
+        selection = 'no-new-play'
+    prior_day = (local.date() - timedelta(days=1)).isoformat()
+    recap = next((post for post in reversed(posts) if post.get('id') == f'receipt:day:{prior_day}'), {})
+    prior_recap = {
+        'date': prior_day,
+        'xUrl': recap.get('link') if moment(recap.get('sentAt')) else None,
+        'discordSentAt': stamp((recap.get('discord') or {}).get('sentAt')),
+    }
     try:
         reliability = reliability_view(reliability_history(conf / 'desk-health-reliability.json'), now)
     except (OSError, ValueError, TypeError, KeyError):
@@ -849,7 +867,9 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     return {'checkedAt': gates.stamp(now), 'mode': 'private-cached-only', 'issues': issues,
             'desk': {'outcome': 'ok' if state.get('outcome') == 'ok' else 'not-ok-or-unknown',
                      'finishedAt': stamp(state.get('finishedAt')), 'expectedSlot': gates.stamp(expected),
-                     'selection': 'unknown' if published is None else 'published' if published else 'no-new-play'},
+                     'selection': selection},
+            'priorRecap': prior_recap,
+            'bufferUsage': {'used': buffer_used, 'limit': buffer_limit},
             'reliability': reliability,
             'sources': checks, 'nbaSources': nba_checks, 'nbaMorning': nba_morning, 'deliveriesLast48h': counts,
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
@@ -884,6 +904,10 @@ def markdown(data):
     if not data['issues']:
         lines.append('No actionable issue found in the available cached checks; this is not a live service guarantee.')
     lines.append(f"Last completed desk run: {data['desk']['finishedAt'] or 'unknown'}.")
+    recap = data.get('priorRecap') or {}
+    if recap:
+        lines.append(f"Prior recap ({recap['date']}): X {recap['xUrl'] or 'unconfirmed'} | "
+                     f"Discord {recap['discordSentAt'] or 'unconfirmed'}.")
     pending = data.get('privateReleases') or {}
     lines.append(f"Private admissions awaiting delivery: {pending.get('waiting', 0)}; delayed {pending.get('delayed', 0)}; "
                  f"safety-held {pending.get('safetyHeld', 0)}; provider retry time "
