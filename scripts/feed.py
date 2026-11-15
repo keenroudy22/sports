@@ -273,6 +273,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                  render_time=None):
     """A PNG per pick item, when a browser is on the machine. Returns {guid: path}."""
     import pick_card
+    import receipts
     import ticket_card
     items = list(items)
     posted_keys = set(posted_keys)
@@ -306,11 +307,14 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                 if 'resultPick' in item:
                     pick = item['resultPick']
                     game = item['game']
-                    side = player_side(pick, game, player_team or {})
-                    art = pick_card.artwork(pick, game, player_side=side)
-                    svg = (ticket_card.cooked_svg(pick, game, player_side=side, art=art)
-                           if pick.get('result') == 'win' else
-                           ticket_card.burnt_svg(pick, game, player_side=side, art=art))
+                    if receipts.has_fun_final(pick):
+                        svg = pick_card.receipt_svg(receipts.fun_final_card(pick))
+                    else:
+                        side = player_side(pick, game, player_team or {})
+                        art = pick_card.artwork(pick, game, player_side=side)
+                        svg = (ticket_card.cooked_svg(pick, game, player_side=side, art=art)
+                               if pick.get('result') == 'win' else
+                               ticket_card.burnt_svg(pick, game, player_side=side, art=art))
                     pick_card.render(svg, path)
                 elif 'ladderResult' in item:
                     pick = item['ladderResult']

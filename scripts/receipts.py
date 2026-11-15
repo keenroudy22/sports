@@ -567,6 +567,28 @@ def result_card_key(pick):
     return f"{'cooked' if pick.get('result') == 'win' else 'burnt'}-{pick['id']}"
 
 
+def has_fun_final(pick):
+    """A fun ticket needs a stored grade for every original leg."""
+    legs = pick.get('legs') or []
+    actual = str(pick.get('actual') or '')
+    parts = [part.strip().lower() for part in actual.partition(':')[2].split(',')]
+    return (pick_card.play_kind(pick) == 'parlay' and bool(legs)
+            and actual.lower().startswith('legs:') and len(parts) == len(legs)
+            and all(part in MARKS for part in parts))
+
+
+def fun_final_card(pick):
+    """Use the existing Final Report graphic for one graded fun ticket."""
+    if not has_fun_final(pick) or pick.get('result') not in ('win', 'loss'):
+        raise ValueError('Individual fun Final needs a settled ticket and every original leg grade')
+    result = pick['result']
+    return {'title': 'TICKET WON' if result == 'win' else 'TICKET LOST',
+            'label': 'FUN TICKET FINAL',
+            'when': eastern_date(gates.when(pick['settledAt'])).isoformat(),
+            'rows': [(result, f"{label(pick)} {int(pick['odds']):+d} {x_post.public_book(pick['book'])}",
+                      result_detail(pick))]}
+
+
 def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAYS):
     """Cooked/Burnt cards still needed by a fresh or already-recorded result post.
 
@@ -575,12 +597,15 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
     merely because the site was rebuilt.
     """
     cutoff = now - timedelta(days=days)
-    posted, originals = set(), set()
+    posted, originals, text_only = set(), set(), set()
     for entry in (log_book or {}).get('posts', []):
         key = str(entry.get('id') or '')
         if (entry.get('kind') == 'buffer:play' and entry.get('tweetId') and entry.get('sentAt')
                 and not entry.get('cancelledAt') and not entry.get('deletedAt')):
             originals.add(key)
+        if (key.startswith(('cashed:', 'burnt:')) and entry.get('sentAt')
+                and not (entry.get('card') or entry.get('cardKey'))):
+            text_only.add(key.split(':', 1)[1])
         if key.startswith(('cashed:', 'burnt:')) and (entry.get('card') or entry.get('cardKey')) \
                 and not entry.get('cancelledAt') and not entry.get('deletedAt'):
             source_id = key.split(':', 1)[1]
@@ -589,7 +614,9 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
     out = []
     for key, original in first.items():
         pick = dict(original, **latest.get(key, {}))
-        if key not in originals or pick_card.play_kind(pick) not in ('player', 'team') or not pick.get('settledAt'):
+        fun_final = has_fun_final(pick) and key not in text_only
+        has_straight_art = pick_card.play_kind(pick) in ('player', 'team')
+        if key not in originals or not pick.get('settledAt') or not (fun_final or has_straight_art):
             continue
         if pick.get('result') not in ('win', 'loss'):
             continue
@@ -600,7 +627,7 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         except (TypeError, ValueError):
             continue
         game = games.get((pick.get('gameIds') or [None])[0])
-        if game and isinstance(pick.get('actualValue'), (int, float)):
+        if fun_final or (game and isinstance(pick.get('actualValue'), (int, float))):
             out.append({'card': result_card_key(pick), 'pick': pick, 'game': game})
     return out
 
@@ -692,8 +719,9 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
         what = ''
         if parlay:
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
-        card = (result_card_key(pick) if not ladder and isinstance(pick.get('actualValue'), (int, float))
-                and pick_card.play_kind(pick) in ('player', 'team') else None)
+        fun_final = has_fun_final(pick)
+        card = (result_card_key(pick) if fun_final or (not ladder and isinstance(pick.get('actualValue'), (int, float))
+                and pick_card.play_kind(pick) in ('player', 'team')) else None)
         post_key = f'cashed:{key}'
         due = now
         if ladder:
@@ -708,7 +736,8 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
                 due = at(eastern_date(now), LADDER_MORNING)
         elif result == 'loss':
             post_key = f'burnt:{key}'
-            head = burnt_reaction(pick, games)
+            head = (f'❌ {price} {label(pick, games)}. {result_detail(pick)}.'
+                    if fun_final else burnt_reaction(pick, games))
         if quiet and not ladder:
             # Quiet hours hold delivery, not admission. Queue a fresh morning
             # result before the play batch takes every slot until it expires.

@@ -311,6 +311,28 @@ class CashedTests(unittest.TestCase):
         log['posts'][0]['featured'] = True
         self.assertTrue(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)[0]['text'].startswith('✅ Player Seven'))
 
+    def test_graded_fun_loss_uses_the_same_final_key_for_art_and_native_quote(self):
+        import pick_card
+        first, latest, log = self.world()
+        key = 'NFL-2026-W4-c'
+        latest[key].update(result='loss', actual='legs: win, loss, win')
+        original = next(entry for entry in log['posts'] if entry['id'] == key)
+        original['sentAt'] = '2026-09-27T17:00:00Z'
+        original['tweetId'] = '1234567890123456789'
+        [card] = [r for r in receipts.result_cards(first, latest, GAMES, self.SUNDAY_EVENING, log)
+                  if r['pick']['id'] == key]
+        [plan] = [p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)
+                  if p['key'] == f'burnt:{key}']
+        self.assertEqual(plan['card'], card['card'])
+        self.assertEqual(buffer_post.quote_tweet_id(log, plan['key']), original['tweetId'])
+        self.assertIn('2/3 legs hit', plan['text'])
+        self.assertEqual(receipts.guard(plan), [])
+        svg = pick_card.receipt_svg(receipts.fun_final_card(card['pick']), avatar='')
+        self.assertIn('TICKET LOST', svg)
+        self.assertIn('2/3 legs hit', svg)
+        latest[key]['actual'] = 'legs: win, loss, unknown'
+        self.assertFalse(receipts.has_fun_final(dict(first[key], **latest[key])))
+
     def test_total_final_preserves_a_double_digit_half_point_margin(self):
         first, latest, log = self.world()
         key = 'NFL-2026-W4-b'
