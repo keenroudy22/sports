@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 import deployment_lock
 
 ROOT = Path(__file__).resolve().parents[1]
+RUN_LOCK_WAIT_SECONDS = 35 * 60
 ENV = {**os.environ, 'GH_CONFIG_DIR': '/Users/keen/.config/keenroudy/gh',
        'GIT_CONFIG_NOSYSTEM': '1'}
 
@@ -88,7 +89,8 @@ def release(production, candidate, locks, *, attempts=3, synchronize=synchronize
         raise ValueError('Release requires one to three bounded attempts')
     with deployment_lock.bounded_lock(locks/'release.lock'):
         for attempt in range(attempts):
-            with deployment_lock.bounded_lock(locks/'run.lock'):
+            # A full game-day run has held this lock for over 25 minutes.
+            with deployment_lock.bounded_lock(locks/'run.lock', timeout=RUN_LOCK_WAIT_SECONDS):
                 clean(production)
                 clean(candidate)
                 synchronize(production, candidate)
@@ -97,7 +99,7 @@ def release(production, candidate, locks, *, attempts=3, synchronize=synchronize
                 tested_base = deployment_lock.head(production)
                 tested_candidate = deployment_lock.head(candidate)
             verify(candidate)
-            with deployment_lock.bounded_lock(locks/'run.lock'):
+            with deployment_lock.bounded_lock(locks/'run.lock', timeout=RUN_LOCK_WAIT_SECONDS):
                 clean(production)
                 clean(candidate)
                 if (deployment_lock.head(production) != tested_base or
