@@ -308,7 +308,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                     pick = item['resultPick']
                     game = item['game']
                     if receipts.has_fun_final(pick):
-                        svg = pick_card.receipt_svg(receipts.fun_final_card(pick))
+                        svg = ticket_card.fun_final_svg(pick)
                     else:
                         side = player_side(pick, game, player_team or {})
                         art = pick_card.artwork(pick, game, player_side=side)

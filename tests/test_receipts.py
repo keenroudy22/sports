@@ -1,5 +1,6 @@
 import sys
 import unittest
+from xml.etree import ElementTree
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
@@ -9,6 +10,7 @@ import buffer_post
 import gates
 import pick_card
 import receipts
+import ticket_card
 
 GAMES = {'sun': {'id': 'sun', 'league': 'NFL', 'kickoff': '2026-09-27T17:00Z', 'home': {'short': 'Lions'}, 'away': {'short': 'Bills'}},     # Sun 1:00 PM ET
          'sun2': {'id': 'sun2', 'league': 'NFL', 'kickoff': '2026-09-27T20:25Z', 'home': {'short': 'Rams'}, 'away': {'short': 'Jets'}},
@@ -324,12 +326,22 @@ class CashedTests(unittest.TestCase):
         [plan] = [p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)
                   if p['key'] == f'burnt:{key}']
         self.assertEqual(plan['card'], card['card'])
+        self.assertTrue(card['card'].endswith('-ticket'))
         self.assertEqual(buffer_post.quote_tweet_id(log, plan['key']), original['tweetId'])
         self.assertIn('2/3 legs hit', plan['text'])
         self.assertEqual(receipts.guard(plan), [])
-        svg = pick_card.receipt_svg(receipts.fun_final_card(card['pick']), avatar='')
+        svg = ticket_card.fun_final_svg(card['pick'])
+        self.assertIn('data-kookn-theme="ticket"', svg)
         self.assertIn('TICKET LOST', svg)
-        self.assertIn('2/3 legs hit', svg)
+        visible_text = ' '.join(node.text or '' for node in ElementTree.fromstring(svg).iter()
+                                if node.tag.endswith('}text'))
+        self.assertIn('2/3 legs hit', visible_text)
+        self.assertIn('-0.25u', svg)
+        log['posts'].append({'id': plan['key'], 'cardKey': f'burnt-{key}',
+                             'sentAt': '2026-09-27T21:00:00Z'})
+        [preserved] = [r for r in receipts.result_cards(first, latest, GAMES, self.SUNDAY_EVENING, log)
+                       if r['pick']['id'] == key]
+        self.assertEqual(preserved['card'], f'burnt-{key}')
         latest[key]['actual'] = 'legs: win, loss, unknown'
         self.assertFalse(receipts.has_fun_final(dict(first[key], **latest[key])))
 

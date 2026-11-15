@@ -524,7 +524,9 @@ def final_card(p):
         inner += card.text(unit_x, y + 99, unit_text, 40, INK if unit_text.startswith('+') else RED if unit_text.startswith('-') else INK_SOFT, anchor='end')
         inner += kit.result_stamp(card, X2, y + row_height / 2, r['result'])
         y += row_height
-    inner += card.text(X1, perf + 64, f"NET {float(p.get('net_units', 0)):+.2f}u", 62, INK)
+    net_units = p.get('net_units', 0)
+    if net_units is not None:
+        inner += card.text(X1, perf + 64, f"NET {float(net_units):+.2f}u", 62, INK)
     frame(card, HOUSE, CHALK, perf, perf + 96, inner)
     return card
 

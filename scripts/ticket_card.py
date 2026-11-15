@@ -381,6 +381,29 @@ def final_svg(rows, day):
     return card.svg()
 
 
+def fun_final_svg(pick):
+    """Render the settled fun ticket through the same art guard as other Finals."""
+    import receipts
+    result = pick.get('result')
+    if not receipts.has_fun_final(pick) or result not in ('win', 'loss'):
+        raise ValueError('Individual fun Final needs a settled ticket and every original leg grade')
+    units = x_post.units_for(pick) if any(isinstance(pick.get(key), (int, float))
+                                        for key in ('units', 'riskUnits')) else None
+    detail = f"{int(pick['odds']):+d} {x_post.public_book(pick['book'])} · {receipts.result_detail(pick)}"
+    card = ticket_cards.final_card({
+        'headline': 'TICKET WON' if result == 'win' else 'TICKET LOST',
+        'row_label': 'FUN TICKET',
+        'net_units': units,
+        'rows': [{'result': 'hit' if result == 'win' else 'miss',
+                  'title': receipts.label(pick), 'detail': detail,
+                  'unit_text': f'{units:+.2f}u' if units is not None else None}],
+    })
+    problems = ticket_kit.qa(card, str(pick['id']))
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
+
+
 def prep_svg(prep, *, fetch=None):
     """Render a research-only Prep List from the site's already checked rows."""
     from datetime import date

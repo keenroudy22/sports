@@ -564,7 +564,8 @@ def near_miss(pick):
 
 
 def result_card_key(pick):
-    return f"{'cooked' if pick.get('result') == 'win' else 'burnt'}-{pick['id']}"
+    base = f"{'cooked' if pick.get('result') == 'win' else 'burnt'}-{pick['id']}"
+    return f'{base}-ticket' if has_fun_final(pick) else base
 
 
 def has_fun_final(pick):
@@ -577,18 +578,6 @@ def has_fun_final(pick):
             and all(part in MARKS for part in parts))
 
 
-def fun_final_card(pick):
-    """Use the existing Final Report graphic for one graded fun ticket."""
-    if not has_fun_final(pick) or pick.get('result') not in ('win', 'loss'):
-        raise ValueError('Individual fun Final needs a settled ticket and every original leg grade')
-    result = pick['result']
-    return {'title': 'TICKET WON' if result == 'win' else 'TICKET LOST',
-            'label': 'FUN TICKET FINAL',
-            'when': eastern_date(gates.when(pick['settledAt'])).isoformat(),
-            'rows': [(result, f"{label(pick)} {int(pick['odds']):+d} {x_post.public_book(pick['book'])}",
-                      result_detail(pick))]}
-
-
 def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAYS):
     """Cooked/Burnt cards still needed by a fresh or already-recorded result post.
 
@@ -597,7 +586,7 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
     merely because the site was rebuilt.
     """
     cutoff = now - timedelta(days=days)
-    posted, originals, text_only = set(), set(), set()
+    posted, originals, text_only = {}, set(), set()
     for entry in (log_book or {}).get('posts', []):
         key = str(entry.get('id') or '')
         if (entry.get('kind') == 'buffer:play' and entry.get('tweetId') and entry.get('sentAt')
@@ -609,7 +598,7 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         if key.startswith(('cashed:', 'burnt:')) and (entry.get('card') or entry.get('cardKey')) \
                 and not entry.get('cancelledAt') and not entry.get('deletedAt'):
             source_id = key.split(':', 1)[1]
-            posted.add(source_id)
+            posted[source_id] = entry.get('cardKey')
             originals.add(source_id)  # an already-recorded card is durable proof of the historical route
     out = []
     for key, original in first.items():
@@ -628,7 +617,7 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
             continue
         game = games.get((pick.get('gameIds') or [None])[0])
         if fun_final or (game and isinstance(pick.get('actualValue'), (int, float))):
-            out.append({'card': result_card_key(pick), 'pick': pick, 'game': game})
+            out.append({'card': posted.get(key) or result_card_key(pick), 'pick': pick, 'game': game})
     return out
 
 
