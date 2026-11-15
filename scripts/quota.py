@@ -28,6 +28,7 @@ BUFFER_TEMP_END = datetime(2026, 11, 6, 13, 5, tzinfo=timezone.utc)
 BUFFER_DELIVERY_RESERVE = 300
 BUFFER_ANALYTICS_PER_DAY = 3  # Sample engagement without crowding out actual publication.
 SHARP_PER_MINUTE = 12
+BUFFER_PLAN_LIMITS = (1000, 3000)
 
 
 def observe_buffer_usage(used, limit, *, root=STATE, now=None):
@@ -37,8 +38,9 @@ def observe_buffer_usage(used, limit, *, root=STATE, now=None):
     reservation adds to this conservative baseline, even after calendar rollover.
     """
     now = now or datetime.now(timezone.utc)
-    if type(used) is not int or type(limit) is not int or limit != 1000 or not 0 <= used <= limit:
-        raise ValueError('Expected the observed single-channel Free allowance')
+    if (type(used) is not int or type(limit) is not int or limit not in BUFFER_PLAN_LIMITS
+            or not 0 <= used <= limit):
+        raise ValueError('Expected an observed single-channel Buffer allowance')
     root = Path(root); root.mkdir(parents=True, exist_ok=True)
     with (root/'buffer.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
@@ -65,8 +67,8 @@ def observed_buffer_usage(root, rows, now):
         if (value['version'] != 1 or value['method'] != 'attended-official-usage'
                 or value.get('accountIdentity') != hashlib.sha256((os.environ.get('BUFFER_CHANNEL','')+'|'+os.environ.get('BUFFER_TOKEN','')).encode()).hexdigest()
                 or value['source'] != 'https://publish.buffer.com/settings/api'
-                or type(value['used']) is not int or value['limit'] != 1000
-                or not 0 <= value['used'] <= 1000
+                or type(value['used']) is not int or value['limit'] not in BUFFER_PLAN_LIMITS
+                or not 0 <= value['used'] <= value['limit']
                 or type(size) is not int or not 0 <= size <= len(raw)
                 or type(count) is not int or not 0 <= count <= len(rows)
                 or len([line for line in raw[:size].splitlines() if line.strip()]) != count
@@ -75,6 +77,18 @@ def observed_buffer_usage(root, rows, now):
             raise ValueError('Invalid observation anchor')
         return value['used'] + sum(r['count'] for r in rows[count:])
     except (OSError, ValueError, KeyError, TypeError):
+        raise QuotaBlocked('Buffer usage observation needs review') from None
+
+
+def observed_buffer_limit(root):
+    """Return the provider limit paired with an already validated observation."""
+    try:
+        value = json.loads((Path(root) / 'buffer-observation.json').read_text())
+        limit = value.get('limit')
+        if limit not in BUFFER_PLAN_LIMITS:
+            raise ValueError
+        return limit
+    except (OSError, ValueError, TypeError, AttributeError):
         raise QuotaBlocked('Buffer usage observation needs review') from None
 
 
@@ -146,7 +160,11 @@ def count_request(provider, root=STATE, now=None, optional=False, reserve=True, 
                 observed = observed_buffer_usage(root, rows, now)
                 if observed is not None:
                     rolling = monthly = observed
-                    stop = 950 if essential or operation in ('status','channels','limits','cancel') else 900
+                    plan_limit = observed_buffer_limit(root)
+                    # Preserve a control-plane reserve on either plan. Essentials
+                    # expands delivery room; it does not authorize optional polling.
+                    stop = (plan_limit - 50 if essential or operation in ('status','channels','limits','cancel')
+                            else plan_limit - (300 if plan_limit >= 3000 else 100))
                 if monthly >= stop:
                     raise QuotaBlocked('Buffer local free-plan request cap reached')
                 if rolling >= stop:

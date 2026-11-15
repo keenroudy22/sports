@@ -37,6 +37,19 @@ class QuotaTests(unittest.TestCase):
             with self.assertRaisesRegex(quota.QuotaBlocked,'observation needs review'):
                 quota.count_request('buffer',root,now)
 
+    def test_essentials_observation_reanchors_usage_without_erasing_journal(self):
+        now=datetime(2026,11,15,13,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            old=''.join(json.dumps(dict(provider='buffer',count=1,month='2026-11',at=now.isoformat()))+'\n' for _ in range(2900))
+            (root/'buffer.jsonl').write_text(old)
+            quota.observe_buffer_usage(953,3000,root=root,now=now)
+            quota.count_request('buffer',root=root,now=now,operation='publish',essential=True)
+            rows=[json.loads(line) for line in (root/'buffer.jsonl').read_text().splitlines()]
+            self.assertEqual(quota.observed_buffer_usage(root,rows,now),954)
+            self.assertEqual(quota.observed_buffer_limit(root),3000)
+            self.assertEqual(len(rows),2901)
+
     def test_observed_buffer_reserve_survives_month_rollover_and_expiry_holds(self):
         now=datetime(2026,11,30,15,tzinfo=timezone.utc)
         with tempfile.TemporaryDirectory() as root:

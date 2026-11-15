@@ -1,3 +1,7 @@
+# November 15 Kook’n operating rules
+
+Owner operating rules (Nov 15): apply these prospectively over conflicting older directions. Target five qualifying straights daily, prioritizing NBA and NFL props, weekend CFB and supported CBB. Verify exact current lines and prices, injuries, roles, matchup, movement and weather before release. Keep unresolved plays on the watchlist and say what changed when they clear. Keep straights, Chef’s Picks, fun tickets and Climbs separate, preserve current approved stakes and caps, and apply one-open-step and verified combined price rules. Prioritize prior slate grading and full recap before new picks. Require actual X URL, Discord receipt and hosted site verification. Use Buffer Essentials only within verified account limits with duplicate-safe recovery. Track engagement and frozen forecast performance. Keep core research free. During existing odds captures, prioritize checking DraftKings and FanDuel across all covered markets for arbs. Recheck both exact offers and settlement rules immediately, distinguish guaranteed coverage from middles, and send a private iMessage only through a verified owner destination. Never place wagers. Treat unsupported markets and stale quotes as unavailable. Report only material blockers and verified outcomes.
+
 # November 12 Today scan, mobile prop cards and exact book links — verified live
 
 The old Gambly copy-and-paste fallback is retired. Never show or restore a
