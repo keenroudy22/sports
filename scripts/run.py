@@ -1325,6 +1325,10 @@ AVAILABILITY_UPGRADE = re.compile(
     r"\bupgraded from\s+(?:out|doubtful|questionable|probable)\s+to\s+(?:questionable|probable|available|active)\b",
     re.IGNORECASE,
 )
+NOT_ON_INACTIVE_LIST = re.compile(
+    r"\b(?:not (?:listed |named )?on|left off|absent from) (?:the )?(?:\w+['’]s? )?inactives?(?: list)?\b",
+    re.IGNORECASE,
+)
 
 
 def hard(fact):
@@ -1341,7 +1345,7 @@ def hard(fact):
     improved = cleaned != claim
     if not improved and str(fact.get('status') or '').lower() in gates.QB_OUT | {'inactive'}:
         return True
-    return bool(HARD_NEWS.search(cleaned))
+    return bool(HARD_NEWS.search(NOT_ON_INACTIVE_LIST.sub('', cleaned)))
 
 
 def hold_reason(candidate, facts):

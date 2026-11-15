@@ -1413,6 +1413,10 @@ class ParlayGuardTests(unittest.TestCase):
         player = {'id': 'injury-10-77', 'kind': 'injury', 'direction': 'against', 'position': 'WR',
                   'status': 'Inactive', 'claim': 'Player 77 is listed Inactive.'}
         self.assertEqual(run.release_pull_reason(pick, [player]), 'typed injury report: Player 77 is listed Inactive.')
+        active = dict(web, status='', claim="Player 77 was not on the Patriots' inactive list.")
+        self.assertIsNone(run.release_pull_reason(pick, [active]))
+        mixed = dict(active, claim=active['claim'] + ' His quarterback was ruled out.')
+        self.assertIsNotNone(run.release_pull_reason(pick, [mixed]))
 
     def test_the_price_check_takes_a_ticket_off_when_its_leg_was_pulled(self):
         from unittest import mock
