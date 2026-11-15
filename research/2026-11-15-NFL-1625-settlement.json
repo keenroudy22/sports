@@ -1,0 +1,316 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-15T21:25:13Z",
+  "targetWeek": 10,
+  "summary": "Research update for Nov 15: Settled 1: Drake London UNDER 5.5 receptions loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4426502",
+      "market": "rec",
+      "line": 5.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401873058"
+      ],
+      "book": "DraftKings",
+      "odds": 104,
+      "projection": 5.2,
+      "edge": "Price-checked chance 50.4% against the exact two-sided price; 49.0% needed at +104: +1.4 percentage points.",
+      "cutoff": "UNDER 5.5 at +104 or better; off the card at 5 or lower, or at -111 or worse at 5.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-14T16:46:27Z",
+      "quotedAt": "2026-11-15T12:36:32Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 7:36 AM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-15T16:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.545,
+        "chance": 0.504,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.49,
+        "edgePoints": 1.4,
+        "evPerUnit": 0.028,
+        "snapshotAt": "2026-11-14T16:46:27Z",
+        "probabilitySpec": "862585d6737ed8ac9ac3dd34c7b61df3ee0fef76845db91c7efd2d8d104a36b6",
+        "evaluatedAt": "2026-11-15T13:34:58Z",
+        "fairChance": 0.462,
+        "anchoredChance": 0.504,
+        "gap": 4.2,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Kansas City Chiefs at Atlanta Falcons",
+      "title": "Drake London UNDER 5.5 receptions",
+      "id": "NFL-2026-W10-london-under-5-5-rec-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873058",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 7 of 10 under 5.5.",
+        "context": [
+          "Role: 1st of 4 ATL WRs by projected targets, 8.5 a game.",
+          "Defense: KC allows 9.88 receptions a game to WRs, 6th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 5.2 against 5.5. The under reads 50.4% after adjustment from the raw 54.5%; 49.0% is needed at +104. Last 10 games: 7 of 10 under 5.5. Role: 1st of 4 ATL WRs by projected targets, 8.5 a game. Defense: KC allows 9.88 receptions a game to WRs, 6th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Under 5.5 in 7 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-15T13:34:58Z"
+          },
+          {
+            "text": "Book says 5.5. I say 5.2.",
+            "numbers": {
+              "projection": 5.2,
+              "line": 5.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-14T16:46:27Z"
+          },
+          {
+            "text": "3 of his last 5 games finished under 5.5 receptions.",
+            "numbers": {
+              "values": [
+                7,
+                4,
+                7,
+                1,
+                5
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 5.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-08T14:30Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-15T13:34:58Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Divine Deablo (ATL) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4037626/divine-deablo",
+            "time": "2026-11-14T22:57Z"
+          },
+          {
+            "text": "Zachariah Branch (ATL) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4870612/zachariah-branch",
+            "time": "2026-11-13T19:42Z"
+          },
+          {
+            "text": "Josh Woods (ATL) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3128303/josh-woods",
+            "time": "2026-11-11T23:19Z"
+          },
+          {
+            "text": "James Pearce Jr. (ATL) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/5081394/james-pearce-jr",
+            "time": "2026-11-11T23:19Z"
+          },
+          {
+            "text": "Gervon Dexter Sr. (ATL) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4429014/gervon-dexter-sr",
+            "time": "2026-11-11T23:18Z"
+          },
+          {
+            "text": "Kenneth Walker III (KC) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4567048/kenneth-walker-iii",
+            "time": "2026-11-14T16:33Z"
+          },
+          {
+            "text": "Jaylon Moore (KC) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore",
+            "time": "2026-11-14T02:02Z"
+          },
+          {
+            "text": "Peter Woods (KC) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4871063/peter-woods",
+            "time": "2026-11-14T02:00Z"
+          },
+          {
+            "text": "Jaydn Ott (KC) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685489/jaydn-ott",
+            "time": "2026-11-13T23:28Z"
+          },
+          {
+            "text": "Mansoor Delane (KC) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4880124/mansoor-delane",
+            "time": "2026-11-13T23:25Z"
+          }
+        ],
+        "weather": null,
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 5.5,
+                "price": 109,
+                "time": "2026-11-15T02:14:40Z"
+              },
+              "now": {
+                "line": 5.5,
+                "price": 104,
+                "time": "2026-11-15T12:36:32Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 5.5,
+                "price": -112,
+                "time": "2026-11-15T02:14:40Z"
+              },
+              "now": {
+                "line": 5.5,
+                "price": -112,
+                "time": "2026-11-15T12:36:32Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 5.5,
+            "price": 104,
+            "time": "2026-11-15T12:36:32Z"
+          }
+        },
+        "ours": {
+          "projection": 5.2,
+          "line": 5.5,
+          "market": "rec",
+          "text": "Under 5.5 in 7 of his last 10 games.",
+          "snapshotAt": "2026-11-14T16:46:27Z"
+        },
+        "history": "Last 10 games: 7 of 10 under 5.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4037626/divine-deablo",
+            "time": "2026-11-14T22:57Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4870612/zachariah-branch",
+            "time": "2026-11-13T19:42Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3128303/josh-woods",
+            "time": "2026-11-11T23:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/5081394/james-pearce-jr",
+            "time": "2026-11-11T23:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4429014/gervon-dexter-sr",
+            "time": "2026-11-11T23:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4567048/kenneth-walker-iii",
+            "time": "2026-11-14T16:33Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore",
+            "time": "2026-11-14T02:02Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4871063/peter-woods",
+            "time": "2026-11-14T02:00Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685489/jaydn-ott",
+            "time": "2026-11-13T23:28Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4880124/mansoor-delane",
+            "time": "2026-11-13T23:25Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873058",
+            "time": "2026-11-15T13:34:58Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-15T13:34:58Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-15T13:49:15Z",
+      "result": "loss",
+      "actual": "Drake London: 6 receptions",
+      "settledAt": "2026-11-15T21:25:13Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873058",
+      "actualValue": 6,
+      "units": -1
+    }
+  ]
+}
