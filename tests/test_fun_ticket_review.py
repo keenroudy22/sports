@@ -73,6 +73,15 @@ class FunTicketReviewTests(unittest.TestCase):
         self.assertEqual((len(pick['legs']), pick['parlayStyle']), (6, 'lotto'))
         self.assertTrue(gates.longshot_shape(pick, ctx).ok)
 
+    def test_reviewed_ticket_expiry_respects_the_next_desk_run(self):
+        spec, ctx = fixture()
+        boundary = datetime(2026, 11, 13, 16, 45, tzinfo=timezone.utc)
+        with patch.object(gates, 'next_slot', return_value=boundary):
+            pick, held = review.candidate(ctx, NOW, spec)
+            self.assertIsNone(held)
+            self.assertEqual(gates.when(pick['expiresAt']), boundary)
+            self.assertTrue(gates.expiry_ok(pick, ctx).ok)
+
     def test_short_and_lotto_tickets_settle_from_official_game_finals(self):
         for count, style in ((3, 'short'), (6, 'lotto')):
             spec, ctx = fixture(count, style)

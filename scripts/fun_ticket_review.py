@@ -140,7 +140,7 @@ def candidate(ctx, now, spec):
                   firstKickoff=gates.stamp(first), ticketReceipt=ticket['researchReview']['receipt'],
                   confidence=1,
                   cutoff='A fun ticket is not re-entered. It stands or falls as posted.',
-                  expiresAt=gates.stamp(min(first - timedelta(minutes=30),
+                  expiresAt=gates.stamp(min(gates.next_slot(now), first - timedelta(minutes=30),
                                             gates.when(ticket['quotedAt']) + timedelta(hours=1))),
                   sources=sorted({ticket['researchReview']['ticketSource']} |
                       {fact['url'] for leg in ticket['legs'] for fact in leg['researchCase']['sources']}),
