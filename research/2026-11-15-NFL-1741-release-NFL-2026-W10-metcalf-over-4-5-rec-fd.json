@@ -1,0 +1,284 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-15T22:41:58Z",
+  "summary": "Released 1: DK Metcalf OVER 4.5 receptions +110 at FanDuel.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4047650",
+      "market": "rec",
+      "line": 4.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873064"
+      ],
+      "book": "FanDuel",
+      "odds": 110,
+      "projection": 4.9,
+      "edge": "Price-checked chance 50.6% against the exact two-sided price; 47.6% needed at +110: +2.9 percentage points.",
+      "cutoff": "OVER 4.5 at +110 or better; off the card at 5+, or at -105 or worse at 4.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-15T17:19:52Z",
+      "quotedAt": "2026-11-15T22:31:09Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 5:31 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-15T23:50:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.562,
+        "chance": 0.506,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.476,
+        "edgePoints": 2.9,
+        "evPerUnit": 0.062,
+        "snapshotAt": "2026-11-15T17:19:52Z",
+        "probabilitySpec": "862585d6737ed8ac9ac3dd34c7b61df3ee0fef76845db91c7efd2d8d104a36b6",
+        "evaluatedAt": "2026-11-15T22:34:08Z",
+        "fairChance": 0.444,
+        "anchoredChance": 0.506,
+        "gap": 6.2,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Pittsburgh Steelers at Cincinnati Bengals",
+      "title": "DK Metcalf OVER 4.5 receptions",
+      "id": "NFL-2026-W10-metcalf-over-4-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873064",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://www.steelers.com/news/matt-s-stats-week-10-at-bengals",
+        "https://www.steelers.com/news/week-10-injury-report-bengals-x6285",
+        "https://www.bengals.com/news/bengals-steelers-week-10-2026-injury-report"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 2 of 10 over 4.5.",
+        "context": [
+          "Role: 1st of 4 PIT WRs by projected targets, 8.6 a game.",
+          "Defense: CIN allows 10.75 receptions a game to WRs, 14th-stingiest of 32 this season."
+        ],
+        "cautions": [
+          "Only 2 of the last 10 games cleared this side of the line; recent results oppose it.",
+          "The Bengals allow a league-low 6.5 yards per target to receivers aligned outside the numbers."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 4.9 against 4.5. The over reads 50.6% after adjustment from the raw 56.2%; 47.6% is needed at +110. Last 10 games: 2 of 10 over 4.5. Role: 1st of 4 PIT WRs by projected targets, 8.6 a game. Defense: CIN allows 10.75 receptions a game to WRs, 14th-stingiest of 32 this season.",
+      "risk": "Only 2 of the last 10 games cleared this side of the line; recent results oppose it. The Bengals allow a league-low 6.5 yards per target to receivers aligned outside the numbers. An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 4.5. I say 4.9.",
+            "numbers": {
+              "projection": 4.9,
+              "line": 4.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-15T17:19:52Z"
+          },
+          {
+            "text": "DK Metcalf has 30 more targets than the Steelers' second leading target-getter, Jaylen Warren, and has run a route on 99.4% of dropbacks.",
+            "numbers": {},
+            "source": "https://www.steelers.com/news/matt-s-stats-week-10-at-bengals",
+            "time": "2026-11-15T22:34:08Z"
+          },
+          {
+            "text": "DK Metcalf has 30 more targets than the Steelers' second leading target-getter, Jaylen Warren, and has run a route on 99.4% of dropbacks.",
+            "numbers": {},
+            "source": "https://www.steelers.com/news/matt-s-stats-week-10-at-bengals",
+            "time": "2026-11-15T22:34:08Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "2 of his last 5 games finished over 4.5 receptions.",
+            "numbers": {
+              "values": [
+                5,
+                3,
+                11,
+                2,
+                1
+              ],
+              "hits": 2,
+              "games": 5,
+              "line": 4.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-01T18:00Z"
+          },
+          {
+            "text": "The Bengals allow a league-low 6.5 yards per target to receivers aligned outside the numbers.",
+            "numbers": {},
+            "source": "https://www.steelers.com/news/matt-s-stats-week-10-at-bengals",
+            "time": "2026-11-15T22:34:08Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Dalton Risner (CIN) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3125082/dalton-risner",
+            "time": "2026-11-15T16:29Z"
+          },
+          {
+            "text": "Myles Hinton (CIN) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4429000/myles-hinton",
+            "time": "2026-11-15T16:28Z"
+          },
+          {
+            "text": "Kyle Dugger (CIN) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger",
+            "time": "2026-11-14T01:56Z"
+          },
+          {
+            "text": "Derrick Harmon (PIT) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon",
+            "time": "2026-11-14T20:05Z"
+          },
+          {
+            "text": "Pat Freiermuth (PIT) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth",
+            "time": "2026-11-14T17:39Z"
+          }
+        ],
+        "weather": {
+          "tempF": 43,
+          "windMph": 0,
+          "windDirection": "",
+          "precipProb": 0,
+          "periodStart": "2026-11-15T20:00:00-05:00",
+          "issuedAt": "2026-11-15T17:08:04+00:00",
+          "source": "https://api.weather.gov/gridpoints/ILN/35,39/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 4.5,
+                "price": 109,
+                "time": "2026-11-15T19:56:55Z"
+              },
+              "now": {
+                "line": 4.5,
+                "price": 109,
+                "time": "2026-11-15T22:31:09Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 4.5,
+                "price": 110,
+                "time": "2026-11-15T19:56:55Z"
+              },
+              "now": {
+                "line": 4.5,
+                "price": 110,
+                "time": "2026-11-15T22:31:09Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 4.5,
+            "price": 110,
+            "time": "2026-11-15T22:31:09Z"
+          }
+        },
+        "ours": {
+          "projection": 4.9,
+          "line": 4.5,
+          "market": "rec",
+          "text": "Book says 4.5. I say 4.9.",
+          "snapshotAt": "2026-11-15T17:19:52Z"
+        },
+        "history": "Last 10 games: 2 of 10 over 4.5.",
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://www.steelers.com/news/matt-s-stats-week-10-at-bengals",
+            "time": "2026-11-15T22:34:08Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3125082/dalton-risner",
+            "time": "2026-11-15T16:29Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4429000/myles-hinton",
+            "time": "2026-11-15T16:28Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger",
+            "time": "2026-11-14T01:56Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon",
+            "time": "2026-11-14T20:05Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth",
+            "time": "2026-11-14T17:39Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/ILN/35,39/forecast/hourly",
+            "time": "2026-11-15T17:08:04+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873064",
+            "time": "2026-11-15T22:34:08Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-15T22:34:08Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.steelers.com/news/week-10-injury-report-bengals-x6285",
+            "time": "2026-11-15T22:34:08Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.bengals.com/news/bengals-steelers-week-10-2026-injury-report",
+            "time": "2026-11-15T22:34:08Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-15T22:41:58Z"
+    }
+  ]
+}
