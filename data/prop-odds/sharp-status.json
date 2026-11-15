@@ -1,57 +1,51 @@
 {
- "at": "2026-11-15T02:09:15Z",
+ "at": "2026-11-15T03:00:00Z",
  "confirmed": {
-  "CFB-401856863": "2026-11-15T02:10:18Z",
-  "CFB-401856864": "2026-11-15T02:10:18Z",
-  "CFB-401856887": "2026-11-15T02:10:18Z",
-  "CFB-401860915": "2026-11-15T02:10:18Z",
-  "CFB-401860917": "2026-11-15T02:10:18Z",
-  "CFB-401864537": "2026-11-15T02:10:18Z",
-  "CFB-401864540": "2026-11-15T02:10:18Z",
-  "NFL-401873053": "2026-11-15T02:14:40Z",
-  "NFL-401873054": "2026-11-15T02:14:40Z",
-  "NFL-401873055": "2026-11-15T02:14:40Z",
-  "NFL-401873056": "2026-11-15T02:14:40Z",
-  "NFL-401873057": "2026-11-15T02:14:40Z",
-  "NFL-401873058": "2026-11-15T02:14:40Z",
-  "NFL-401873059": "2026-11-15T02:14:40Z"
+  "CFB-401856864": "2026-11-15T03:00:57Z",
+  "CFB-401856887": "2026-11-15T03:00:57Z",
+  "CFB-401860917": "2026-11-15T03:00:57Z",
+  "CFB-401864537": "2026-11-15T03:00:57Z",
+  "NFL-401873053": "2026-11-15T03:05:29Z",
+  "NFL-401873054": "2026-11-15T03:05:29Z",
+  "NFL-401873055": "2026-11-15T03:05:29Z",
+  "NFL-401873056": "2026-11-15T03:05:29Z",
+  "NFL-401873057": "2026-11-15T03:05:29Z",
+  "NFL-401873058": "2026-11-15T03:05:29Z",
+  "NFL-401873059": "2026-11-15T03:05:29Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1288,
-    "fanduel": 273
+    "draftkings": 729,
+    "fanduel": 1142
    },
-   "eventsListed": 23,
-   "eventsMatched": 7,
-   "games": 7,
+   "eventsListed": 22,
+   "eventsMatched": 4,
+   "games": 4,
    "marketTypes": {
     "player_field_goals_made": 2,
     "player_kicking_points": 2,
-    "player_longest_passing_completion": 6,
-    "player_longest_reception": 16,
-    "player_longest_rush": 7,
-    "player_passing_+_rushing_yards": 75,
-    "player_passing_attempts": 18,
-    "player_passing_completions": 16,
-    "player_passing_touchdowns": 23,
-    "player_passing_yards": 119,
-    "player_passing_yards_combo_": 20,
-    "player_receiving_yards": 266,
-    "player_receiving_yards_combo_": 40,
-    "player_receptions": 34,
-    "player_rushing_attempts": 13,
-    "player_rushing_yards": 111,
-    "player_rushing_yards_combo_": 10,
-    "player_touchdowns": 144,
-    "point_spread": 639
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 8,
+    "player_longest_rush": 3,
+    "player_passing_+_rushing_yards": 43,
+    "player_passing_attempts": 8,
+    "player_passing_completions": 11,
+    "player_passing_touchdowns": 38,
+    "player_passing_yards": 135,
+    "player_passing_yards_combo_": 9,
+    "player_receiving_yards": 410,
+    "player_receiving_yards_combo_": 24,
+    "player_receptions": 127,
+    "player_rushing_attempts": 5,
+    "player_rushing_yards": 216,
+    "player_rushing_yards_combo_": 3,
+    "player_touchdowns": 88,
+    "point_spread": 735
    },
-   "requestsLeft": 48,
-   "rows": 1561,
+   "requestsLeft": 49,
+   "rows": 1871,
    "slateGames": [
-    "Texas Tech Red Raiders at Oklahoma State Cowboys 2026-11-15T02:30Z",
-    "Utah State Aggies at San Diego State Aztecs 2026-11-15T02:30Z",
-    "Wyoming Cowboys at UTEP Miners 2026-11-15T03:00Z",
     "Utah Utes at Arizona Wildcats 2026-11-15T03:30Z",
     "Colorado State Rams at Washington State Cougars 2026-11-15T03:45Z",
     "North Dakota State Bison at Hawai'i Rainbow Warriors 2026-11-15T04:00Z",
@@ -59,7 +53,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "Idaho State Bengals",
+     "away": "Idaho State",
      "external": {
       "ballybet": "1029186349",
       "bet365": "204312464",
@@ -75,7 +69,7 @@
       "fliff": "426379_c_p_209_prematch",
       "gemini": "NCAAF-2611150330-IDST-MONT-M",
       "hardrock": "1149091110369493412",
-      "kalshi": "KXNCAAF1H-26NOV14IDSTMONT",
+      "kalshi": "KXNCAAFSPREAD-26NOV14IDSTMONT",
       "novig": "01a1b424-6fc5-7843-8606-8d40f0fb8f0a",
       "onexbet": "770357622",
       "paddypower": "36306899",
@@ -90,10 +84,10 @@
       "stake": "e738516b-76d2-4a84-85ed-0a3213101ced",
       "thescorebet": "StandardEvent:8333ac91-73ba-4725-ae3e-0792d33eccf6"
      },
-     "home": "Montana Grizzlies",
+     "home": "Montana",
      "sample": {
-      "away_team": "Idaho State Bengals",
-      "home_team": "Montana Grizzlies",
+      "away_team": "Idaho State",
+      "home_team": "Montana",
       "markets": [
        "1st_half_moneyline_3-way",
        "draw_no_bet",
@@ -119,6 +113,7 @@
       "fanduel": "36305462",
       "fliff": "426862_c_p_209_prematch",
       "gemini": "NCAAF-2611180000-EMN-WMI-M",
+      "hardrock": "5115264741576671647",
       "kalshi": "KXNCAAFSPREAD-26NOV17EMUWMU",
       "novig": "01a1c2d7-5a89-7d80-b3bb-6ac768aa520d",
       "onexbet": "771018960",
@@ -145,7 +140,7 @@
      "type": "fixture"
     },
     {
-     "away": "Ball State Cardinals",
+     "away": "Ball State",
      "external": {
       "ballybet": "1027507804",
       "bet365": "204594109",
@@ -155,7 +150,8 @@
       "fanduel": "36305455",
       "fliff": "426860_c_p_209_prematch",
       "gemini": "NCAAF-2611180000-BALL-OHI-M",
-      "kalshi": "KXNCAAFSPREAD-26NOV17BALLOHIO",
+      "hardrock": "6304083101807149467",
+      "kalshi": "KXNCAAFTOTAL-26NOV17BALLOHIO",
       "novig": "01a1c2d7-5cab-7973-a1ac-996fb5cba1dc",
       "onexbet": "771018961",
       "paddypower": "36305455",
@@ -165,10 +161,10 @@
       "smarkets": "45438719",
       "thescorebet": "StandardEvent:554a3fe6-07aa-4d1b-859e-fbc94e33d00d"
      },
-     "home": "Ohio Bobcats",
+     "home": "Ohio",
      "sample": {
-      "away_team": "Ball State Cardinals",
-      "home_team": "Ohio Bobcats",
+      "away_team": "Ball State",
+      "home_team": "Ohio",
       "markets": [
        "draw_no_bet",
        "moneyline",
@@ -191,6 +187,7 @@
       "fanduel": "36305468",
       "fliff": "426864_c_p_209_prematch",
       "gemini": "NCAAF-2611180000-MOH-KENT-M",
+      "hardrock": "1439764495688925595",
       "kalshi": "KXNCAAFSPREAD-26NOV17MOHKENT",
       "novig": "01a1c2d7-5e63-7ab1-919a-fb65dfb9e64e",
       "onexbet": "771018962",
@@ -217,7 +214,7 @@
      "type": "fixture"
     },
     {
-     "away": "Akron Zips",
+     "away": "Akron",
      "external": {
       "ballybet": "1027507805",
       "bet365": "204594123",
@@ -227,9 +224,10 @@
       "fanduel": "36305469",
       "fliff": "426863_c_p_209_prematch",
       "gemini": "NCAAF-2611190000-AKR-MAS-M",
+      "hardrock": "4143631748170908053",
       "kalshi": "KXNCAAFSPREAD-26NOV18AKRMASS",
       "novig": "01a1c7fd-6794-7140-8371-2cfe48e79407",
-      "onexbet": "770349743",
+      "onexbet": "771038501",
       "paddypower": "36305469",
       "polymarket": "nfl_akron_massachusettsminutemen_2026-11-18_b3",
       "polymarket_us": "cfb-akron-umass-2026-11-18",
@@ -237,10 +235,10 @@
       "smarkets": "45438722",
       "thescorebet": "StandardEvent:22f79bb8-c301-433c-9a43-1a6d3e26ae51"
      },
-     "home": "UMass Minutemen",
+     "home": "UMass",
      "sample": {
-      "away_team": "Akron Zips",
-      "home_team": "UMass Minutemen",
+      "away_team": "Akron",
+      "home_team": "UMass",
       "markets": [
        "1st_half_moneyline_3-way",
        "draw_no_bet",
@@ -264,6 +262,7 @@
       "fanduel": "36305471",
       "fliff": "426861_c_p_209_prematch",
       "gemini": "NCAAF-2611190030-CMN-BUF-M",
+      "hardrock": "2458792906325098913",
       "kalshi": "KXNCAAFSPREAD-26NOV18CMUBUFF",
       "novig": "01a1c818-d8dd-7e90-9df9-1c081c56176b",
       "onexbet": "771018963",
@@ -291,15 +290,17 @@
      "type": "fixture"
     },
     {
-     "away": "Clemson Tigers",
+     "away": "Clemson",
      "external": {
       "ballybet": "1027397918",
       "betrivers": "1027397918",
       "fanatics": "5625032",
+      "fanatics_markets": "8539883",
       "fanduel": "36305486",
       "fliff": "427628_c_p_209_prematch",
       "gemini": "NCAAF-2611210030-CLE-DUK-M",
-      "kalshi": "KXNCAAF1H-26NOV20CLEMDUKE",
+      "hardrock": "5527563912733655438",
+      "kalshi": "KXNCAAFSPREAD-26NOV20CLEMDUKE",
       "novig": "01a1d25e-60d4-7b32-9185-96acadedf34f",
       "onexbet": "771011869",
       "polymarket": "nfl_clemsontigers_dukebluedevils_2026-11-20_b3",
@@ -307,10 +308,10 @@
       "prophetx": "1704741973",
       "smarkets": "45432076"
      },
-     "home": "Duke Blue Devils",
+     "home": "Duke",
      "sample": {
-      "away_team": "Clemson Tigers",
-      "home_team": "Duke Blue Devils",
+      "away_team": "Clemson",
+      "home_team": "Duke",
       "markets": [
        "1st_half_moneyline_3-way",
        "draw_no_bet",
@@ -364,6 +365,28 @@
      "type": "fixture"
     },
     {
+     "away": "Utah",
+     "external": {
+      "draftkings": "34999702",
+      "kalshi": "KXNCAAF1H-26NOV21UTAHTCU",
+      "novig": "01a1d355-3c7c-7272-a57d-839fce88ead3",
+      "polymarket": "nfl_tcuhornedfrogs_utahutes_2026-11-21_b2",
+      "prophetx": "1704739298"
+     },
+     "home": "TCU",
+     "sample": {
+      "away_team": "Utah",
+      "home_team": "TCU",
+      "markets": [
+       "1st_half_moneyline_3-way",
+       "moneyline",
+       "point_spread"
+      ]
+     },
+     "start": "2026-11-21T05:00:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "Ohio State",
      "external": {
       "draftkings": "34999640",
@@ -386,29 +409,7 @@
        "total_points"
       ]
      },
-     "start": "2026-11-21T05:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Utah",
-     "external": {
-      "draftkings": "34999702",
-      "kalshi": "KXNCAAF1H-26NOV21UTAHTCU",
-      "novig": "01a1d355-3c7c-7272-a57d-839fce88ead3",
-      "polymarket": "nfl_tcuhornedfrogs_utahutes_2026-11-21_b2",
-      "prophetx": "1704739298"
-     },
-     "home": "TCU",
-     "sample": {
-      "away_team": "Utah",
-      "home_team": "TCU",
-      "markets": [
-       "1st_half_moneyline_3-way",
-       "moneyline",
-       "point_spread"
-      ]
-     },
-     "start": "2026-11-21T05:00:00Z",
+     "start": "2026-11-21T17:00:00Z",
      "type": "fixture"
     },
     {
@@ -439,8 +440,8 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 5975,
-    "fanduel": 2763
+    "draftkings": 5981,
+    "fanduel": 2977
    },
    "eventsListed": 32,
    "eventsMatched": 13,
@@ -462,22 +463,22 @@
     "player_passing_touchdowns": 93,
     "player_passing_yards": 530,
     "player_passing_yards_combo_": 95,
-    "player_receiving_yards": 2272,
-    "player_receiving_yards_combo_": 208,
-    "player_receptions": 1265,
-    "player_rushing_+_receiving_yards": 68,
+    "player_receiving_yards": 2394,
+    "player_receiving_yards_combo_": 209,
+    "player_receptions": 1340,
+    "player_rushing_+_receiving_yards": 72,
     "player_rushing_attempts": 42,
-    "player_rushing_yards": 834,
+    "player_rushing_yards": 845,
     "player_rushing_yards_combo_": 71,
-    "player_sacks": 102,
+    "player_sacks": 103,
     "player_tackles": 150,
     "player_tackles_+_assists": 150,
-    "player_touchdowns": 304,
-    "player_touchdowns_combo_": 564,
+    "player_touchdowns": 301,
+    "player_touchdowns_combo_": 573,
     "point_spread": 1130
    },
    "requestsLeft": 0,
-   "rows": 8738,
+   "rows": 8958,
    "slateGames": [
     "New England Patriots at Detroit Lions 2026-11-15T14:30Z",
     "Buffalo Bills at New York Jets 2026-11-15T18:00Z",
@@ -587,7 +588,7 @@
       "fanatics_markets": "8470694",
       "fanduel": "36305232",
       "gemini": "NFL-2611200115-IND-HOU-S",
-      "kalshi": "KXNFL1HTEAMTOTAL-26NOV19INDHOU",
+      "kalshi": "KXNFLTOTAL-26NOV19INDHOU",
       "novig": "01a1c9ea-d600-7e01-8c79-b7a721168527",
       "onexbet": "769835083",
       "paddypower": "36305232",
