@@ -12055,6 +12055,70 @@
     "checkedAt": "2026-11-15T17:13:47Z",
     "state": "already-public"
    }
+  },
+  {
+   "id": "receipt:card:2026-11-15",
+   "postedAt": "2026-11-15T17:30:31Z",
+   "dueAt": "2026-11-15T17:32:31Z",
+   "bufferPostId": "6af9ec4ec5b364e0626f4b24",
+   "textHash": "fc85d504cadbe2a3",
+   "kind": "buffer:receipt",
+   "card": true,
+   "cardTheme": "ticket",
+   "straightCard": {
+    "version": 1,
+    "day": "2026-11-15",
+    "rows": [
+     {
+      "id": "NFL-2026-W10-coleman-over-2-5-rec-dk",
+      "title": "Keon Coleman OVER 2.5 receptions",
+      "league": "NFL",
+      "gameIds": [
+       "NFL-401873054"
+      ],
+      "publishedAt": "2026-11-15T17:01:56Z",
+      "market": "rec",
+      "direction": "over",
+      "line": 2.5,
+      "athleteId": "4635008",
+      "book": "DraftKings",
+      "odds": 119,
+      "riskUnits": 1,
+      "lane": "best_bet",
+      "kickoff": "2026-11-15T18:00:00Z"
+     },
+     {
+      "id": "NFL-2026-W10-london-under-5-5-rec-dk",
+      "title": "Drake London UNDER 5.5 receptions",
+      "league": "NFL",
+      "gameIds": [
+       "NFL-401873058"
+      ],
+      "publishedAt": "2026-11-15T13:49:15Z",
+      "market": "rec",
+      "direction": "under",
+      "line": 5.5,
+      "athleteId": "4426502",
+      "book": "DraftKings",
+      "odds": 104,
+      "riskUnits": 1,
+      "lane": "best_bet",
+      "kickoff": "2026-11-15T18:00:00Z"
+     }
+    ],
+    "fingerprint": "259914a5ef02cef4"
+   },
+   "queuedText": "Sunday's Best Bets: 2 straights.\n\nKeon Coleman over 2.5 catches (+119 DraftKings · 1u)\nDrake London under 5.5 catches (+104 DraftKings · 1u)\n\nCopy the bet 👇 @Playbook\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "Sunday's Best Bets: 2 straights.\n\nKeon Coleman over 2.5 catches (+119 DraftKings · 1u)\nDrake London under 5.5 catches (+104 DraftKings · 1u)\n\n21+ only",
+    "destination": "plays",
+    "image": "https://keenroudy.com/sports/data/cards/straight-card-2026-11-15-259914a5ef02cef4.png"
+   },
+   "cardKey": "straight-card-2026-11-15-259914a5ef02cef4"
   }
  ]
 }
