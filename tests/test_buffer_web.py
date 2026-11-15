@@ -37,7 +37,8 @@ class WebReceiptTests(unittest.TestCase):
                       reviewedAt=bp.stamp(self.now), dueAt=bp.stamp(self.now+timedelta(minutes=15)))
         with patch.object(bp, 'rate_backoff', return_value=None), patch.object(bp, 'graphql') as api:
             book = {'posts': [entry]}
-            result = web.reserve_public_play(entry['id'], book, self.now, reviewer=lambda: [review])
+            result = web.reserve_public_play(entry['id'], book, self.now + timedelta(microseconds=123456),
+                                             reviewer=lambda: [review])
             self.assertIs(result, entry)
             self.assertEqual(len(book['posts']), 1)
             self.assertNotIn('bufferPostId', entry)

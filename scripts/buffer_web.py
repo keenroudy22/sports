@@ -102,7 +102,7 @@ def reserve_public_play(guid, log_book, now, *, reviewer=None):
     if len(checked) != 1 or checked[0].get('id') != guid:
         raise WebHold('Current public-play release checks did not clear')
     row = checked[0]
-    if gates.when(row['reviewedAt']) != now or gates.when(row['dueAt']) <= now:
+    if gates.when(row['reviewedAt']) != gates.when(gates.stamp(now)) or gates.when(row['dueAt']) <= now:
         raise WebHold('Current reviewed release window unavailable')
     if x_post.text_hash(row['text']) != entry.get('textHash'):
         raise WebHold('Reviewed caption differs from the original public release')
