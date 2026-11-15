@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-15T02:57:37Z",
+  "updatedAt": "2026-11-15T03:16:28Z",
   "sources": [
     {
       "league": "NFL",
@@ -12,7 +12,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=14&limit=1000",
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=15&limit=1000"
       ],
-      "retrievedAt": "2026-11-15T02:57:37Z",
+      "retrievedAt": "2026-11-15T03:16:28Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -94,7 +94,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=16&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=16&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-11-15T02:57:37Z",
+      "retrievedAt": "2026-11-15T03:16:28Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -369882,7 +369882,7 @@
         "short": "BYU",
         "abbreviation": "BYU",
         "school": "BYU",
-        "score": 21,
+        "score": 28,
         "color": "#0047ba",
         "alternateColor": "#002e5d"
       },
@@ -370415,7 +370415,7 @@
         "short": "North Carolina",
         "abbreviation": "UNC",
         "school": "North Carolina",
-        "score": 7,
+        "score": 14,
         "color": "#7bafd4",
         "alternateColor": "#13294b"
       },
@@ -371750,7 +371750,7 @@
         "short": "Air Force",
         "abbreviation": "AFA",
         "school": "Air Force",
-        "score": 17,
+        "score": 24,
         "color": "#003594",
         "alternateColor": "#ffffff"
       },
@@ -372199,7 +372199,7 @@
         "short": "Tulsa",
         "abbreviation": "TLSA",
         "school": "Tulsa",
-        "score": 28,
+        "score": 31,
         "color": "#003595",
         "alternateColor": "#d0b787"
       },
@@ -372624,7 +372624,7 @@
         "short": "LSU",
         "abbreviation": "LSU",
         "school": "LSU",
-        "score": 14,
+        "score": 21,
         "color": "#461d76",
         "alternateColor": "#fdd023"
       },
@@ -373191,7 +373191,7 @@
         "short": "Stanford",
         "abbreviation": "STAN",
         "school": "Stanford",
-        "score": 24,
+        "score": 27,
         "color": "#8c1515",
         "alternateColor": "#ffffff"
       },
@@ -374017,7 +374017,7 @@
         "short": "UNLV",
         "abbreviation": "UNLV",
         "school": "UNLV",
-        "score": 7,
+        "score": 14,
         "color": "#cf0a2c",
         "alternateColor": "#cac8c8"
       },
@@ -374394,7 +374394,7 @@
         "short": "South Carolina",
         "abbreviation": "SC",
         "school": "South Carolina",
-        "score": 0,
+        "score": 6,
         "color": "#73000a",
         "alternateColor": "#000000"
       },
@@ -374809,7 +374809,7 @@
         "short": "UTSA",
         "abbreviation": "UTSA",
         "school": "UTSA",
-        "score": 7,
+        "score": 14,
         "color": "#0c2340",
         "alternateColor": "#f15a22"
       },
@@ -374819,7 +374819,7 @@
         "short": "North Texas",
         "abbreviation": "UNT",
         "school": "North Texas",
-        "score": 0,
+        "score": 3,
         "color": "#068f33",
         "alternateColor": "#ffffff"
       },
@@ -375803,7 +375803,7 @@
         "short": "San Diego St",
         "abbreviation": "SDSU",
         "school": "San Diego State",
-        "score": 0,
+        "score": 3,
         "color": "#a6192e",
         "alternateColor": "#000000"
       },
@@ -375813,7 +375813,7 @@
         "short": "Utah State",
         "abbreviation": "USU",
         "school": "Utah State",
-        "score": 0,
+        "score": 7,
         "color": "#0f2439",
         "alternateColor": "#ffffff"
       },
@@ -376228,9 +376228,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 11,
-      "state": "pre",
+      "state": "in",
       "completed": false,
-      "status": "Scheduled",
+      "status": "In Progress",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401864540",
@@ -376240,7 +376240,7 @@
         "short": "UTEP",
         "abbreviation": "UTEP",
         "school": "UTEP",
-        "score": null,
+        "score": 0,
         "color": "#ff8200",
         "alternateColor": "#041e42"
       },
@@ -376250,7 +376250,7 @@
         "short": "Wyoming",
         "abbreviation": "WYO",
         "school": "Wyoming",
-        "score": null,
+        "score": 0,
         "color": "#492f24",
         "alternateColor": "#ffc425"
       },
@@ -376258,19 +376258,6 @@
         "id": "3946",
         "name": "Sun Bowl",
         "indoor": false
-      },
-      "market": {
-        "provider": "DraftKings",
-        "spread": "+7",
-        "spreadOdds": "-112",
-        "spreadOpen": "+10",
-        "total": 40.5,
-        "totalOpen": "o43.5",
-        "overOdds": "-118",
-        "underOdds": "-102",
-        "homeML": "+230",
-        "awayML": "-285",
-        "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34964233"
       },
       "marketHistory": [
         {
@@ -376669,8 +376656,7 @@
           "retrievedAt": "2026-11-15T02:57:37Z",
           "phase": "pregame"
         }
-      ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      ]
     },
     {
       "id": "CFB-401856864",
@@ -377229,7 +377215,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "CFB-401860917",
@@ -377272,14 +377258,14 @@
       "market": {
         "provider": "DraftKings",
         "spread": "-7.5",
-        "spreadOdds": "-115",
+        "spreadOdds": "-112",
         "spreadOpen": "-6.5",
         "total": 64.5,
         "totalOpen": "o62.5",
-        "overOdds": "-118",
-        "underOdds": "-102",
-        "homeML": "-310",
-        "awayML": "+250",
+        "overOdds": "-110",
+        "underOdds": "-110",
+        "homeML": "-298",
+        "awayML": "+240",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34964197"
       },
       "marketHistory": [
@@ -377678,9 +377664,21 @@
           "awayML": "+250",
           "retrievedAt": "2026-11-15T02:57:37Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-7.5",
+          "spreadOdds": "-112",
+          "total": 64.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "homeML": "-298",
+          "awayML": "+240",
+          "retrievedAt": "2026-11-15T03:16:28Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "CFB-401864537",
@@ -378119,7 +378117,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873053",
@@ -378714,7 +378712,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "CFB-401856887",
@@ -379225,7 +379223,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873058",
@@ -379796,7 +379794,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873056",
@@ -380451,7 +380449,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873060",
@@ -381106,7 +381104,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873057",
@@ -381155,23 +381153,11 @@
         "totalOpen": "o45.5",
         "overOdds": "-110",
         "underOdds": "-110",
-        "homeML": "+470",
-        "awayML": "-650",
+        "homeML": "+500",
+        "awayML": "-700",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118232"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+8.5",
-          "spreadOdds": "-110",
-          "total": 44.5,
-          "overOdds": "-115",
-          "underOdds": "-105",
-          "homeML": "+340",
-          "awayML": "-440",
-          "retrievedAt": "2026-11-03T21:51:19Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+9.5",
@@ -381759,9 +381745,21 @@
           "awayML": "-650",
           "retrievedAt": "2026-11-15T02:06:48Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+10.5",
+          "spreadOdds": "-105",
+          "total": 46.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "homeML": "+500",
+          "awayML": "-700",
+          "retrievedAt": "2026-11-15T03:16:28Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873059",
@@ -382332,7 +382330,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873055",
@@ -382915,7 +382913,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873054",
@@ -383570,7 +383568,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873062",
@@ -384045,7 +384043,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873061",
@@ -384700,7 +384698,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873063",
@@ -385295,7 +385293,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873064",
@@ -385854,7 +385852,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873065",
@@ -386509,7 +386507,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "CFB-401866465",
@@ -387014,7 +387012,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "CFB-401856869",
@@ -390893,7 +390891,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873071",
@@ -391176,7 +391174,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873073",
@@ -391435,7 +391433,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873072",
@@ -391718,7 +391716,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873067",
@@ -392001,7 +391999,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873068",
@@ -392272,7 +392270,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873076",
@@ -392531,7 +392529,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873074",
@@ -392802,7 +392800,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873069",
@@ -393061,7 +393059,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873075",
@@ -393320,7 +393318,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873077",
@@ -393615,7 +393613,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873078",
@@ -393850,7 +393848,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "CFB-401866471",
@@ -394700,7 +394698,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "NFL-401873082",
@@ -396486,7 +396484,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-11-15T02:57:37Z"
+      "marketRetrievedAt": "2026-11-15T03:16:28Z"
     },
     {
       "id": "CFB-401858315",
@@ -398539,12 +398537,14 @@
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401869542",
       "home": {
-        "id": "-1",
-        "name": "TBD",
-        "short": "TBD",
-        "abbreviation": "TBD",
-        "school": "TBD",
-        "score": null
+        "id": "68",
+        "name": "Boise State Broncos",
+        "short": "Boise St",
+        "abbreviation": "BOIS",
+        "school": "Boise State",
+        "score": null,
+        "color": "#0033a0",
+        "alternateColor": "#d64309"
       },
       "away": {
         "id": "-2",
@@ -398553,6 +398553,11 @@
         "abbreviation": "TBD",
         "school": "TBD",
         "score": null
+      },
+      "venue": {
+        "id": "3653",
+        "name": "Albertsons Stadium",
+        "indoor": false
       }
     },
     {
