@@ -66022,5 +66022,375 @@
         "publishedAt": "2026-11-15T13:49:15Z"
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-11-15T17:01:56Z",
+    "summary": "Released 1: Keon Coleman OVER 2.5 receptions +119 at DraftKings.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "4635008",
+        "market": "rec",
+        "line": 2.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401873054"
+        ],
+        "book": "DraftKings",
+        "odds": 119,
+        "projection": 2.6,
+        "edge": "Price-checked chance 50.2% against the exact two-sided price; 45.7% needed at +119: +4.5 percentage points.",
+        "cutoff": "OVER 2.5 at +119 or better; off the card at 3+, or at +104 or worse at 2.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-15T11:25:59Z",
+        "quotedAt": "2026-11-15T15:07:22Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 10:07 AM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-15T18:00:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.522,
+          "chance": 0.502,
+          "calibrated": true,
+          "calibration": 0.09,
+          "calibrationN": 3361,
+          "push": 0.0,
+          "breakEven": 0.457,
+          "edgePoints": 4.5,
+          "evPerUnit": 0.099,
+          "snapshotAt": "2026-11-15T11:25:59Z",
+          "probabilitySpec": "862585d6737ed8ac9ac3dd34c7b61df3ee0fef76845db91c7efd2d8d104a36b6",
+          "evaluatedAt": "2026-11-15T16:48:10Z",
+          "fairChance": 0.431,
+          "anchoredChance": 0.502,
+          "gap": 7.1,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Buffalo Bills at New York Jets",
+        "title": "Keon Coleman OVER 2.5 receptions",
+        "id": "NFL-2026-W10-coleman-over-2-5-rec-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873054",
+          "https://api.sharpapi.io/api/v1/odds"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 4 of 10 over 2.5.",
+          "context": [
+            "Role: 3rd of 4 BUF WRs by projected targets, 4.0 a game.",
+            "Defense: NYJ allows 10.33 receptions a game to WRs, 11th-stingiest of 32 this season."
+          ],
+          "cautions": [
+            "Only 4 of the last 10 games cleared this side of the line; recent results oppose it."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 2.6 against 2.5. The over reads 50.2% after adjustment from the raw 52.2%; 45.7% is needed at +119. Last 10 games: 4 of 10 over 2.5. Role: 3rd of 4 BUF WRs by projected targets, 4.0 a game. Defense: NYJ allows 10.33 receptions a game to WRs, 11th-stingiest of 32 this season.",
+        "risk": "Only 4 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says 2.5. I say 2.6.",
+              "numbers": {
+                "projection": 2.6,
+                "line": 2.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-15T11:25:59Z"
+            },
+            {
+              "text": "3 of his last 5 games finished over 2.5 receptions.",
+              "numbers": {
+                "values": [
+                  6,
+                  1,
+                  4,
+                  1,
+                  3
+                ],
+                "hits": 3,
+                "games": 5,
+                "line": 2.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-11-10T01:15Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Only 4 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-15T16:48:10Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Garrett Wilson (NYJ) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4569618/garrett-wilson",
+              "time": "2026-11-15T12:14Z"
+            },
+            {
+              "text": "VJ Payne (NYJ) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4837388/vj-payne",
+              "time": "2026-11-15T01:01Z"
+            },
+            {
+              "text": "Adonai Mitchell (NYJ) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell",
+              "time": "2026-11-14T17:20Z"
+            },
+            {
+              "text": "Omar Cooper Jr. (NYJ) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr",
+              "time": "2026-11-14T17:15Z"
+            },
+            {
+              "text": "Nahshon Wright (NYJ) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4570470/nahshon-wright",
+              "time": "2026-11-14T02:10Z"
+            },
+            {
+              "text": "Harrison Phillips (NYJ) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3117255/harrison-phillips",
+              "time": "2026-11-14T02:08Z"
+            },
+            {
+              "text": "Joseph Ossai (NYJ) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai",
+              "time": "2026-11-14T02:04Z"
+            },
+            {
+              "text": "Jarvis Brownlee Jr. (NYJ) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4426817/jarvis-brownlee-jr",
+              "time": "2026-11-13T23:54Z"
+            },
+            {
+              "text": "Trevin Wallace (NYJ) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4683815/trevin-wallace",
+              "time": "2026-11-13T23:52Z"
+            },
+            {
+              "text": "Jordan Hancock (BUF) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4596480/jordan-hancock",
+              "time": "2026-11-15T00:29Z"
+            },
+            {
+              "text": "Tyrell Shavers (BUF) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241476/tyrell-shavers",
+              "time": "2026-11-14T21:49Z"
+            },
+            {
+              "text": "Spencer Brown (BUF) is listed Doubtful.",
+              "numbers": {
+                "status": "Doubtful"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4030899/spencer-brown",
+              "time": "2026-11-14T02:29Z"
+            },
+            {
+              "text": "Christian Benford (BUF) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4379778/christian-benford",
+              "time": "2026-11-14T01:04Z"
+            },
+            {
+              "text": "Sam Franklin Jr. (BUF) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4044133/sam-franklin-jr",
+              "time": "2026-11-12T21:30Z"
+            }
+          ],
+          "weather": {
+            "tempF": 51,
+            "windMph": 12,
+            "windDirection": "NW",
+            "precipProb": 1,
+            "periodStart": "2026-11-15T13:00:00-05:00",
+            "issuedAt": "2026-11-15T06:55:12+00:00",
+            "source": "https://api.weather.gov/gridpoints/OKX/29,47/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": 123,
+                  "time": "2026-11-15T02:14:40Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": 119,
+                  "time": "2026-11-15T15:07:22Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 2.5,
+                  "price": 112,
+                  "time": "2026-11-15T02:14:40Z"
+                },
+                "now": {
+                  "line": 2.5,
+                  "price": 112,
+                  "time": "2026-11-15T15:07:22Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 2.5,
+              "price": 119,
+              "time": "2026-11-15T15:07:22Z"
+            }
+          },
+          "ours": {
+            "projection": 2.6,
+            "line": 2.5,
+            "market": "rec",
+            "text": "Book says 2.5. I say 2.6.",
+            "snapshotAt": "2026-11-15T11:25:59Z"
+          },
+          "history": "Last 10 games: 4 of 10 over 2.5.",
+          "sources": [
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4569618/garrett-wilson",
+              "time": "2026-11-15T12:14Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4837388/vj-payne",
+              "time": "2026-11-15T01:01Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell",
+              "time": "2026-11-14T17:20Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr",
+              "time": "2026-11-14T17:15Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4570470/nahshon-wright",
+              "time": "2026-11-14T02:10Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3117255/harrison-phillips",
+              "time": "2026-11-14T02:08Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai",
+              "time": "2026-11-14T02:04Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4426817/jarvis-brownlee-jr",
+              "time": "2026-11-13T23:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4683815/trevin-wallace",
+              "time": "2026-11-13T23:52Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4596480/jordan-hancock",
+              "time": "2026-11-15T00:29Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241476/tyrell-shavers",
+              "time": "2026-11-14T21:49Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4030899/spencer-brown",
+              "time": "2026-11-14T02:29Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4379778/christian-benford",
+              "time": "2026-11-14T01:04Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4044133/sam-franklin-jr",
+              "time": "2026-11-12T21:30Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/OKX/29,47/forecast/hourly",
+              "time": "2026-11-15T06:55:12+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873054",
+              "time": "2026-11-15T16:48:10Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-11-15T16:48:10Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-15T17:01:56Z"
+      }
+    ]
   }
 ]
