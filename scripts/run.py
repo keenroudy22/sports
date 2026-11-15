@@ -3592,7 +3592,7 @@ def typefully_private_fallback_eligible(pick, log_book, now):
     return used < 4
 
 
-def release_private(now, log=log, only=None, review_only=False):
+def release_private(now, log=log, only=None, review_only=False, clock=time.monotonic):
     """Release due admissions Discord → public record → Buffer/X.
 
     Each state transition is persisted outside Git first.  A retry therefore
@@ -3606,6 +3606,7 @@ def release_private(now, log=log, only=None, review_only=False):
     import x_post
     import typefully_backup
 
+    started = clock()
     release_queue.retry_caption_guards(CONF, CAPTION_GUARD_VERSION, log=log)
     book = release_queue.load(CONF)
     if not book.get('plays'):
@@ -3782,7 +3783,8 @@ def release_private(now, log=log, only=None, review_only=False):
             receipt = discord_post.send_message(
                 discord_post.webhook(), text, f'private:{key}',
                 fetch=lambda _url, p=row['card']: _private_card(p), return_receipt=True)
-            row = release_queue.update(CONF, key, discordSentAt=published_at, discordReceipt=receipt or {})
+            discord_at = now + timedelta(seconds=clock() - started)
+            row = release_queue.update(CONF, key, discordSentAt=stamp(discord_at), discordReceipt=receipt or {})
             log(f'discord: {key} released before X')
 
         # Public delivery is real even when Buffer cannot accept a post. Save
@@ -3877,8 +3879,17 @@ def release_private(now, log=log, only=None, review_only=False):
                 if not buffer_post.reachable(image):
                     log(f'buffer: {key} waits for its released site card')
                     continue
+            submit_at = now + timedelta(seconds=clock() - started)
+            due = buffer_post.free_slot(
+                post_windows.play_due(submit_at, target, row['discordSentAt']), busy)
+            deadline = post_windows.deadline(row.get('league'), kickoff, submit_at, bool(pick.get('replacementOf')))
+            if due > deadline or due >= gates.when(pick['expiresAt']):
+                release_queue.update(CONF, key, held=True, heldAt=stamp(submit_at),
+                                     holdReason='no verified X window after Discord and site release')
+                log(f'buffer: {key} has no verified X window after Discord and site release')
+                continue
             if settings:
-                entry['bufferAttemptAt'] = stamp(now)
+                entry['bufferAttemptAt'] = stamp(submit_at)
                 x_post.save_log(log_book)
             post_id = buffer_post.create_post(text, channel['id'], due, image, essential=True)
             row = release_queue.update(CONF, key, bufferPostId=post_id, dueAt=stamp(due), bufferImage=image)
@@ -3893,17 +3904,19 @@ def release_private(now, log=log, only=None, review_only=False):
     return released
 
 
-def release_private_isolated(now, log=log, runner=None):
+def release_private_isolated(now, log=log, runner=None, clock=time.monotonic):
     """Release each queued play independently so one malformed row cannot stop Discord."""
     import release_queue
     import buffer_post
     runner = runner or release_private
+    started = clock()
     released = []
     keys = [row.get('id') for row in release_queue.load(CONF).get('plays', [])
             if row.get('id') and not row.get('held')]
     for key in keys:
         try:
-            released.extend(runner(now, log=log, only={key}))
+            checked_at = now + timedelta(seconds=int(clock() - started))
+            released.extend(runner(checked_at, log=log, only={key}))
         except buffer_post.BufferRateLimited as error:
             release_queue.update(CONF, key, bufferRetryAt=stamp(error.retry_at),
                                  deliveryDelay=str(error))

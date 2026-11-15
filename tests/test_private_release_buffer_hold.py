@@ -3,7 +3,7 @@ import sys
 import tempfile
 import unittest
 from contextlib import ExitStack
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -91,9 +91,12 @@ class PrivateReleaseBufferHoldTests(unittest.TestCase):
             channel.side_effect = None
             channel.return_value = {'id': 'channel'}
             blocked.return_value = None
-            self.assertEqual(run.release_private(now, log=lambda *_: None), [key])
+            elapsed = iter((0, 180))
+            self.assertEqual(run.release_private(now, log=lambda *_: None, clock=lambda: next(elapsed)), [key])
             send.assert_called_once()
             create.assert_called_once()
+            due = create.call_args.args[2]
+            self.assertGreaterEqual(due, now + timedelta(minutes=3) + run.post_windows.SOON)
             self.assertEqual(release_queue.load(root)['plays'], [])
             self.assertEqual(len(delivery_book['posts']), 1)
             self.assertEqual(entry['bufferPostId'], 'buffer-id')
