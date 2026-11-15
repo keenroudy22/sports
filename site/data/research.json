@@ -65118,5 +65118,600 @@
         "publishedAt": "2026-11-14T22:51:27Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-15T04:03:04Z",
+    "targetWeek": 11,
+    "summary": "Research update for Nov 14: Settled 1: 7-leg lotto at DraftKings loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "parlays": [
+      {
+        "book": "DraftKings",
+        "odds": 1674,
+        "parlayStyle": "lotto",
+        "quotedAt": "2026-11-14T17:35:52Z",
+        "researchReview": {
+          "method": "sourced-fun-ticket-review-v1",
+          "reviewer": "kookn-desk",
+          "reviewedAt": "2026-11-14T17:36:30Z",
+          "ticketVerified": true,
+          "ticketSource": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+          "receipt": "DraftKings public betslip visibly verified Nov. 14 at 12:35 PM ET: seven exact alternate spreads, combined +1674; no wager placed."
+        },
+        "legs": [
+          {
+            "id": "uga-alt-11-5",
+            "title": "Georgia -11.5",
+            "gameId": "CFB-401856883",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -11.5,
+            "mainLine": -16.5,
+            "marketWindow": "Full game",
+            "alternate": true,
+            "odds": -180,
+            "book": "DraftKings",
+            "observedAt": "2026-11-14T17:35:52Z",
+            "kickoff": "2026-11-14T20:30Z",
+            "source": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+            "researchCase": {
+              "why": "Georgia owns the stronger current two-way profile, and the alternate trims five points off the main spread.",
+              "risk": "Missouri has a positive turnover margin and can keep this inside two scores if Georgia gives away possessions.",
+              "availability": "Georgia's current official matchup notes and listed personnel context were reviewed before the quote.",
+              "sources": [
+                {
+                  "url": "https://georgiadogs.com/news/2026/11/9/football-returns-home-to-host-missouri-on-saturday",
+                  "fact": "Georgia's official preview lists a 41.1 scoring average, 14.0 points allowed per game and a 12-1 series lead.",
+                  "checkedAt": "2026-11-14T17:33:00Z"
+                }
+              ]
+            }
+          },
+          {
+            "id": "oregon-alt-9-5",
+            "title": "Oregon -9.5",
+            "gameId": "CFB-401858523",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -9.5,
+            "mainLine": -10.5,
+            "marketWindow": "Full game",
+            "alternate": true,
+            "odds": -122,
+            "book": "DraftKings",
+            "observedAt": "2026-11-14T17:35:52Z",
+            "kickoff": "2026-11-14T20:30Z",
+            "source": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+            "researchCase": {
+              "why": "Oregon is rolling at home after consecutive ranked wins, and the alternate gets the Ducks under ten.",
+              "risk": "Michigan has not allowed more than 21 points this season, so its defense can turn this into a tight game.",
+              "availability": "Oregon's official game-day update was checked; Teitum Tuioti is out and that defensive loss is included in the risk.",
+              "sources": [
+                {
+                  "url": "https://goducks.com/news/2026/11/14/football-5-things-to-watch-michigan",
+                  "fact": "Oregon's official game-day preview says the Ducks have won two straight, Michigan ranks fourth nationally in total defense and Tuioti is out for the season.",
+                  "checkedAt": "2026-11-14T17:33:00Z"
+                }
+              ]
+            }
+          },
+          {
+            "id": "nd-alt-20-5",
+            "title": "Notre Dame -20.5",
+            "gameId": "CFB-401858294",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -20.5,
+            "mainLine": -29.5,
+            "marketWindow": "Full game",
+            "alternate": true,
+            "odds": -295,
+            "book": "DraftKings",
+            "observedAt": "2026-11-14T17:35:52Z",
+            "kickoff": "2026-11-14T20:30Z",
+            "source": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+            "researchCase": {
+              "why": "Notre Dame has controlled this rivalry for a decade, and the alternate buys nine points off the main number.",
+              "risk": "A rivalry game plus a large favorite creates late backdoor-cover risk.",
+              "availability": "Notre Dame's current official game-day preview was checked before the ticket was finalized.",
+              "sources": [
+                {
+                  "url": "https://fightingirish.com/news/2026/11/13/irish-homestand-continues-with-rivalry-contest-against-eagles",
+                  "fact": "Notre Dame's official preview says the Irish have won ten consecutive games against Boston College.",
+                  "checkedAt": "2026-11-14T17:33:00Z"
+                }
+              ]
+            }
+          },
+          {
+            "id": "latech-alt-11-5",
+            "title": "Louisiana Tech -11.5",
+            "gameId": "CFB-401871099",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -11.5,
+            "mainLine": -17.5,
+            "marketWindow": "Full game",
+            "alternate": true,
+            "odds": -198,
+            "book": "DraftKings",
+            "observedAt": "2026-11-14T17:35:52Z",
+            "kickoff": "2026-11-14T22:00Z",
+            "source": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+            "researchCase": {
+              "why": "Louisiana Tech brings a six-game win streak home, and the alternate cuts the main spread by six points.",
+              "risk": "Southern Miss is a familiar rival, which raises the chance of a closer game than the form gap suggests.",
+              "availability": "Louisiana Tech's current official preview and matchup personnel context were checked before release.",
+              "sources": [
+                {
+                  "url": "https://latechsports.com/news/2026/11/12/football-preview-la-tech-vs-southern-miss",
+                  "fact": "Louisiana Tech's official preview reports a six-game winning streak, a 5-0 conference start and a 41-17 road win last week.",
+                  "checkedAt": "2026-11-14T17:33:00Z"
+                }
+              ]
+            }
+          },
+          {
+            "id": "uva-alt-6-5",
+            "title": "Virginia -6.5",
+            "gameId": "CFB-401858295",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -6.5,
+            "mainLine": -11.5,
+            "marketWindow": "Full game",
+            "alternate": true,
+            "odds": -214,
+            "book": "DraftKings",
+            "observedAt": "2026-11-14T17:35:52Z",
+            "kickoff": "2026-11-14T20:30Z",
+            "source": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+            "researchCase": {
+              "why": "Virginia's home split is the clearest edge here, and the alternate moves the ask below a touchdown.",
+              "risk": "Both teams enter on three-game skids, so Virginia's current form is not clean.",
+              "availability": "Virginia's current official matchup preview was checked before the quote and the leg stays at the cushioned number.",
+              "sources": [
+                {
+                  "url": "https://virginiasports.com/news/2026/11/11/virginia-welcomes-cal-for-heroes-appreciation-game",
+                  "fact": "Virginia's official preview says the Cavaliers are 4-1 at home this season while Cal has one road win.",
+                  "checkedAt": "2026-11-14T17:33:00Z"
+                }
+              ]
+            }
+          },
+          {
+            "id": "unm-alt-10-5",
+            "title": "New Mexico -10.5",
+            "gameId": "CFB-401864539",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -10.5,
+            "mainLine": -16.5,
+            "marketWindow": "Full game",
+            "alternate": true,
+            "odds": -233,
+            "book": "DraftKings",
+            "observedAt": "2026-11-14T17:35:52Z",
+            "kickoff": "2026-11-15T00:30Z",
+            "source": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+            "researchCase": {
+              "why": "New Mexico is 8-1 and has won eleven straight at home, while the alternate removes six points from the main spread.",
+              "risk": "UNLV is still playing for bowl eligibility and won last year's meeting by only five points going the other way.",
+              "availability": "New Mexico's current official game-day preview was checked before the quote.",
+              "sources": [
+                {
+                  "url": "https://golobos.com/news/2026/11/13/game-day-info-game-10-lobos-hosting-unlv",
+                  "fact": "New Mexico's official preview says the Lobos are seeking a 12th straight home win and UNLV enters 5-4.",
+                  "checkedAt": "2026-11-14T17:33:00Z"
+                }
+              ]
+            }
+          },
+          {
+            "id": "iowa-alt-11-5",
+            "title": "Iowa -11.5",
+            "gameId": "CFB-401858519",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -11.5,
+            "mainLine": -17.5,
+            "marketWindow": "Full game",
+            "alternate": true,
+            "odds": -207,
+            "book": "DraftKings",
+            "observedAt": "2026-11-14T17:35:52Z",
+            "kickoff": "2026-11-15T00:30Z",
+            "source": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+            "researchCase": {
+              "why": "Iowa's defense and Kinnick night-game form support the favorite, and the alternate buys six points.",
+              "risk": "Iowa can play low-possession games that leave less margin for a multi-score cover.",
+              "availability": "Iowa's current official game notes and role context were checked before the ticket was finalized.",
+              "sources": [
+                {
+                  "url": "https://hawkeyesports.com/news/2026/11/09/notes-military-appreciation-vs-purdue",
+                  "fact": "Iowa's official notes say the Hawkeyes have won eight straight Kinnick night games and held five opponents under 100 rushing yards.",
+                  "checkedAt": "2026-11-14T17:33:00Z"
+                }
+              ]
+            }
+          }
+        ],
+        "selectionMethod": "sourced-fun-ticket-review-v1",
+        "favorite": false,
+        "status": "settled",
+        "parlayType": "longshot",
+        "riskUnits": 0.25,
+        "quoteType": "sportsbook",
+        "priceEstimated": false,
+        "gameIds": [
+          "CFB-401856883",
+          "CFB-401858523",
+          "CFB-401858294",
+          "CFB-401871099",
+          "CFB-401858295",
+          "CFB-401864539",
+          "CFB-401858519"
+        ],
+        "id": "CFB-2026-11-14-lotto-draftkings",
+        "title": "7-leg lotto at DraftKings",
+        "firstKickoff": "2026-11-14T20:30:00Z",
+        "ticketReceipt": "DraftKings public betslip visibly verified Nov. 14 at 12:35 PM ET: seven exact alternate spreads, combined +1674; no wager placed.",
+        "expiresAt": "2026-11-14T18:35:52Z",
+        "sources": [
+          "https://fightingirish.com/news/2026/11/13/irish-homestand-continues-with-rivalry-contest-against-eagles",
+          "https://georgiadogs.com/news/2026/11/9/football-returns-home-to-host-missouri-on-saturday",
+          "https://goducks.com/news/2026/11/14/football-5-things-to-watch-michigan",
+          "https://golobos.com/news/2026/11/13/game-day-info-game-10-lobos-hosting-unlv",
+          "https://hawkeyesports.com/news/2026/11/09/notes-military-appreciation-vs-purdue",
+          "https://latechsports.com/news/2026/11/12/football-preview-la-tech-vs-southern-miss",
+          "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+          "https://virginiasports.com/news/2026/11/11/virginia-welcomes-cal-for-heroes-appreciation-game"
+        ],
+        "edge": "Desk-researched fun ticket. No validated win probability or positive-EV claim.",
+        "why": "Georgia owns the stronger current two-way profile, and the alternate trims five points off the main spread. Oregon is rolling at home after consecutive ranked wins, and the alternate gets the Ducks under ten. Notre Dame has controlled this rivalry for a decade, and the alternate buys nine points off the main number. Louisiana Tech brings a six-game win streak home, and the alternate cuts the main spread by six points. Virginia's home split is the clearest edge here, and the alternate moves the ask below a touchdown. New Mexico is 8-1 and has won eleven straight at home, while the alternate removes six points from the main spread. Iowa's defense and Kinnick night-game form support the favorite, and the alternate buys six points.",
+        "risks": [
+          "Missouri has a positive turnover margin and can keep this inside two scores if Georgia gives away possessions.",
+          "Michigan has not allowed more than 21 points this season, so its defense can turn this into a tight game.",
+          "A rivalry game plus a large favorite creates late backdoor-cover risk.",
+          "Southern Miss is a familiar rival, which raises the chance of a closer game than the form gap suggests.",
+          "Both teams enter on three-game skids, so Virginia's current form is not clean.",
+          "UNLV is still playing for bowl eligibility and won last year's meeting by only five points going the other way.",
+          "Iowa can play low-possession games that leave less margin for a multi-score cover."
+        ],
+        "correlation": "One leg per game; the sportsbook combined price is preserved exactly.",
+        "risk": "Missouri has a positive turnover margin and can keep this inside two scores if Georgia gives away possessions. Michigan has not allowed more than 21 points this season, so its defense can turn this into a tight game. A rivalry game plus a large favorite creates late backdoor-cover risk. Southern Miss is a familiar rival, which raises the chance of a closer game than the form gap suggests. Both teams enter on three-game skids, so Virginia's current form is not clean. UNLV is still playing for bowl eligibility and won last year's meeting by only five points going the other way. Iowa can play low-possession games that leave less margin for a multi-score cover. Every leg must hit. This is a fun ticket, not a validated probability or positive-EV claim.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Georgia owns the stronger current two-way profile, and the alternate trims five points off the main spread. Oregon is rolling at home after consecutive ranked wins, and the alternate gets the Ducks under ten. Notre Dame has controlled this rivalry for a decade, and the alternate buys nine points off the main number. Louisiana Tech brings a six-game win streak home, and the alternate cuts the main spread by six points. Virginia's home split is the clearest edge here, and the alternate moves the ask below a touchdown. New Mexico is 8-1 and has won eleven straight at home, while the alternate removes six points from the main spread. Iowa's defense and Kinnick night-game form support the favorite, and the alternate buys six points.",
+              "numbers": {},
+              "source": "Published ticket detail",
+              "time": "2026-11-14T17:38:20Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Missouri has a positive turnover margin and can keep this inside two scores if Georgia gives away possessions. Michigan has not allowed more than 21 points this season, so its defense can turn this into a tight game. A rivalry game plus a large favorite creates late backdoor-cover risk. Southern Miss is a familiar rival, which raises the chance of a closer game than the form gap suggests. Both teams enter on three-game skids, so Virginia's current form is not clean. UNLV is still playing for bowl eligibility and won last year's meeting by only five points going the other way. Iowa can play low-possession games that leave less margin for a multi-score cover. Every leg must hit. This is a fun ticket, not a validated probability or positive-EV claim.",
+              "numbers": {},
+              "source": "Published ticket risk",
+              "time": "2026-11-14T17:38:20Z"
+            }
+          ],
+          "reports": [],
+          "weather": null,
+          "line": {
+            "legs": [
+              {
+                "gameId": "CFB-401856883",
+                "title": "Georgia -11.5",
+                "line": -11.5,
+                "price": -180,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "CFB-401858523",
+                "title": "Oregon -9.5",
+                "line": -9.5,
+                "price": -122,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "CFB-401858294",
+                "title": "Notre Dame -20.5",
+                "line": -20.5,
+                "price": -295,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "CFB-401871099",
+                "title": "Louisiana Tech -11.5",
+                "line": -11.5,
+                "price": -198,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "CFB-401858295",
+                "title": "Virginia -6.5",
+                "line": -6.5,
+                "price": -214,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "CFB-401864539",
+                "title": "New Mexico -10.5",
+                "line": -10.5,
+                "price": -233,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "CFB-401858519",
+                "title": "Iowa -11.5",
+                "line": -11.5,
+                "price": -207,
+                "book": "DraftKings"
+              }
+            ],
+            "best": {
+              "book": "DraftKings",
+              "price": 1674,
+              "time": "2026-11-14T17:35:52Z"
+            }
+          },
+          "ours": null,
+          "history": null,
+          "sources": [
+            {
+              "label": "Published source",
+              "url": "https://fightingirish.com/news/2026/11/13/irish-homestand-continues-with-rivalry-contest-against-eagles",
+              "time": "2026-11-14T17:38:20Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://georgiadogs.com/news/2026/11/9/football-returns-home-to-host-missouri-on-saturday",
+              "time": "2026-11-14T17:38:20Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://goducks.com/news/2026/11/14/football-5-things-to-watch-michigan",
+              "time": "2026-11-14T17:38:20Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://golobos.com/news/2026/11/13/game-day-info-game-10-lobos-hosting-unlv",
+              "time": "2026-11-14T17:38:20Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://hawkeyesports.com/news/2026/11/09/notes-military-appreciation-vs-purdue",
+              "time": "2026-11-14T17:38:20Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://latechsports.com/news/2026/11/12/football-preview-la-tech-vs-southern-miss",
+              "time": "2026-11-14T17:38:20Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://sportsbook.draftkings.com/leagues/football/ncaaf?category=games&subcategory=alt-lines&nav_1=alternate-spread",
+              "time": "2026-11-14T17:38:20Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://virginiasports.com/news/2026/11/11/virginia-welcomes-cal-for-heroes-appreciation-game",
+              "time": "2026-11-14T17:38:20Z"
+            }
+          ],
+          "partial": true
+        },
+        "confidence": 1,
+        "cutoff": "A fun ticket is not re-entered. It stands or falls as posted.",
+        "publishedAt": "2026-11-14T17:41:14Z",
+        "result": "loss",
+        "actual": "legs: win, win, win, win, win, loss, win",
+        "settledAt": "2026-11-15T04:03:04Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856883",
+        "settlementReason": "One leg lost; the ticket loses.",
+        "units": -0.25
+      }
+    ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-15T05:36:54Z",
+    "targetWeek": 11,
+    "summary": "Research update for Nov 15: Settled 1: North Texas MONEYLINE loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "moneyline",
+        "line": 0.0,
+        "direction": "away",
+        "gameIds": [
+          "CFB-401862827"
+        ],
+        "book": "DraftKings",
+        "odds": -130,
+        "projection": 0.6,
+        "edge": "Price-checked chance 57.1% against the exact two-sided price; 56.5% needed at -130: +0.6 percentage points.",
+        "cutoff": "AWAY 0 at -130 or better; off the card at -0.5 or lower, or at -145 or worse at 0.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-13T12:48:54Z",
+        "quotedAt": "2026-11-14T21:48:26Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 4:48 PM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-15T02:00:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.623,
+          "chance": 0.571,
+          "calibrated": true,
+          "calibration": 0.35,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.565,
+          "edgePoints": 0.6,
+          "evPerUnit": 0.01,
+          "snapshotAt": "2026-11-13T12:48:54Z",
+          "probabilitySpec": "86501e656367347803fb02a3ccc597a2b371a110db94f9c60ed9af388cc9e5de",
+          "evaluatedAt": "2026-11-14T22:35:24Z",
+          "fairChance": 0.543,
+          "anchoredChance": 0.571,
+          "gap": 2.8,
+          "calibrationFamily": "CFB/moneyline"
+        },
+        "matchup": "North Texas Mean Green at UTSA Roadrunners",
+        "title": "North Texas MONEYLINE",
+        "id": "CFB-2026-W11-unt-utsa-ml-away-0-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862827",
+          "https://www.expressnews.com/sports/colleges/utsa/article/football-players-to-watch-roadrunners-north-texas-22523926.php",
+          "https://goutsa.com/news/2026/11/12/utsa-to-host-north-texas-in-key-american-conference-matchup"
+        ],
+        "why": "Price-checked win chance 57.1%; -130 needs 56.5%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: UTSA starting right guard Darrell Jones and rotational receiver DJ Allen exited the Florida Atlantic game and did not return; coach Jeff Traylor did not project their availability for North Texas. Checked before publishing: UTSA leading tackler Brandon Tucker missed the Florida Atlantic game, and his availability for North Texas was not established. The market: The spread opened +1.5 and is +2.5 at DraftKings, a move of 1 toward the away. 6 books span 75.5 to 76.5 on the total; the middle is 76.5. Our spread is 2.6 points off, bigger than 43% of our past gaps. Gaps this size went 1030-1023 against the close in 3584 games. Our total is 8.3 points off, bigger than 96% of our past gaps. Gaps this size went 103-50 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: UTSA is 37-5 at the Alamodome and 27-1 at home against league opponents under coach Jeff Traylor. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "North Texas entered the UTSA game at 7-2 overall and 5-0 in American Conference play.",
+            "North Texas ranked second nationally in passing at 343.8 yards per game and first in total offense at 534.7 yards per game."
+          ],
+          "cautions": [
+            "UTSA is 37-5 at the Alamodome and 27-1 at home against league opponents under coach Jeff Traylor."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Price-checked win chance 57.1%; this price needs 56.5%.",
+              "numbers": {
+                "chance": 0.571,
+                "breakEven": 0.565
+              },
+              "source": "Kook'n exact-price check",
+              "time": "2026-11-14T21:48:26Z"
+            },
+            {
+              "text": "North Texas entered the UTSA game at 7-2 overall and 5-0 in American Conference play.",
+              "numbers": {},
+              "source": "https://meangreensports.com/news/2026/11/10/football-mean-green-ready-for-pivotal-road-game-at-utsa",
+              "time": "2026-11-14T22:35:24Z"
+            },
+            {
+              "text": "North Texas ranked second nationally in passing at 343.8 yards per game and first in total offense at 534.7 yards per game.",
+              "numbers": {},
+              "source": "https://www.expressnews.com/sports/colleges/utsa/article/football-players-to-watch-roadrunners-north-texas-22523926.php",
+              "time": "2026-11-14T22:35:24Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "UTSA is 37-5 at the Alamodome and 27-1 at home against league opponents under coach Jeff Traylor.",
+              "numbers": {},
+              "source": "https://goutsa.com/news/2026/11/12/utsa-to-host-north-texas-in-key-american-conference-matchup",
+              "time": "2026-11-14T22:35:24Z"
+            },
+            {
+              "text": "UTSA is 37-5 at the Alamodome and 27-1 at home against league opponents under coach Jeff Traylor.",
+              "numbers": {},
+              "source": "https://goutsa.com/news/2026/11/12/utsa-to-host-north-texas-in-key-american-conference-matchup",
+              "time": "2026-11-14T22:35:24Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": null,
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -1.5,
+                  "price": -108,
+                  "time": "2026-11-09T11:45:06Z"
+                },
+                "now": {
+                  "line": -2.5,
+                  "price": -112,
+                  "time": "2026-11-14T16:47:24Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": -115,
+                  "time": "2026-11-09T11:45:06Z"
+                },
+                "now": {
+                  "line": -2.5,
+                  "price": -110,
+                  "time": "2026-11-14T16:47:24Z"
+                }
+              }
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 0.0,
+              "price": -130,
+              "time": "2026-11-14T21:48:26Z"
+            }
+          },
+          "ours": {
+            "projection": 0.6,
+            "line": 0.0,
+            "market": "moneyline",
+            "text": "Price-checked win chance 57.1%; this price needs 56.5%.",
+            "snapshotAt": "2026-11-13T12:48:54Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://goutsa.com/news/2026/11/12/utsa-to-host-north-texas-in-key-american-conference-matchup",
+              "time": "2026-11-14T22:35:24Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://meangreensports.com/news/2026/11/10/football-mean-green-ready-for-pivotal-road-game-at-utsa",
+              "time": "2026-11-14T22:35:24Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://www.expressnews.com/sports/colleges/utsa/article/football-players-to-watch-roadrunners-north-texas-22523926.php",
+              "time": "2026-11-14T22:35:24Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401862827",
+              "time": "2026-11-14T22:35:24Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-14T22:51:27Z",
+        "result": "loss",
+        "actual": "North Texas 16, UTSA 35",
+        "settledAt": "2026-11-15T05:36:54Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401862827",
+        "actualValue": -19,
+        "units": -1
+      }
+    ]
   }
 ]

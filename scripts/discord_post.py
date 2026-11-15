@@ -243,7 +243,8 @@ def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
 
 
 def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
-                send=http_send, fetch=download_image, log=print):
+                send=http_send, fetch=download_image, log=print,
+                hold_new_plays=None):
     """Deliver each Discord payload once.
 
     Confirmed plays carry ``readyAt`` and go to Discord before X. House, news and engagement posts keep the old
@@ -289,6 +290,13 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 mirror['state'] = 'skipped'
                 mirror['reason'] = 'not an approved Discord category'
                 entry['discord'] = mirror
+            continue
+        pregame = (kind in ('buffer:play', 'buffer:nba-trial', 'buffer:cbb-pick')
+                   or (kind == 'buffer:community'
+                       and mirror.get('communityType') == 'ticket'))
+        if hold_new_plays and pregame:
+            mirror['lastHold'] = str(hold_new_plays)
+            entry['discord'] = mirror
             continue
         ready = mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now
         if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \

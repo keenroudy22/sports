@@ -44,6 +44,49 @@ MONDAY_MORNING = datetime(2026, 9, 28, 12, 30, tzinfo=timezone.utc)       # Mon 
 
 
 class ReceiptTests(unittest.TestCase):
+    def test_results_first_gate_requires_complete_x_and_discord_recap(self):
+        games = {'g': {'id': 'g', 'league': 'CFB', 'kickoff': '2026-11-14T18:00:00Z',
+                       'home': {'short': 'Home'}, 'away': {'short': 'Away'}}}
+        play = pick('results-first', 'g', publishedAt='2026-11-14T12:00:00Z')
+        first = {play['id']: play}
+        latest = {play['id']: {'result': 'win'}}
+        now = datetime(2026, 11, 15, 14, 0, tzinfo=timezone.utc)
+        original = {'id': play['id'], 'kind': 'buffer:play',
+                    'sentAt': '2026-11-14T13:00:00Z'}
+        with patch.object(receipts, 'nba_daily_rows', return_value=[]):
+            hold = receipts.prior_day_results_hold(
+                first, latest, games, {'posts': [original]}, now)
+            self.assertIn('ready but not delivered', hold)
+            recap = {'id': 'receipt:day:2026-11-14', 'kind': 'buffer:receipt',
+                     'resultPickIds': [play['id']], 'sentAt': '2026-11-15T13:00:00Z',
+                     'tweetId': '2123456789012345678',
+                     'discord': {'state': 'pending'}}
+            book = {'posts': [original, recap]}
+            self.assertIsNone(receipts.prior_day_results_hold(
+                first, latest, games, book, now, channel='x'))
+            self.assertIn('on all', receipts.prior_day_results_hold(
+                first, latest, games, book, now, channel='all'))
+            recap['discord'] = {'state': 'sent', 'sentAt': '2026-11-15T13:01:00Z'}
+            self.assertIsNone(receipts.prior_day_results_hold(
+                first, latest, games, book, now, channel='all'))
+
+    def test_results_first_gate_rejects_partial_recap_and_unsettled_card(self):
+        games = {'g': {'id': 'g', 'league': 'CFB', 'kickoff': '2026-11-14T18:00:00Z',
+                       'home': {'short': 'Home'}, 'away': {'short': 'Away'}}}
+        play = pick('results-first-open', 'g', publishedAt='2026-11-14T12:00:00Z')
+        first = {play['id']: play}
+        now = datetime(2026, 11, 15, 14, 0, tzinfo=timezone.utc)
+        original = {'id': play['id'], 'kind': 'buffer:play',
+                    'sentAt': '2026-11-14T13:00:00Z'}
+        recap = {'id': 'receipt:day:2026-11-14', 'kind': 'buffer:receipt',
+                 'resultPickIds': ['some-other-play'], 'sentAt': '2026-11-15T13:00:00Z',
+                 'tweetId': '2123456789012345678',
+                 'discord': {'state': 'sent', 'sentAt': '2026-11-15T13:01:00Z'}}
+        with patch.object(receipts, 'nba_daily_rows', return_value=[]):
+            hold = receipts.prior_day_results_hold(
+                first, {}, games, {'posts': [original, recap]}, now)
+        self.assertIn('waiting for the complete graded card', hold)
+
     def test_long_leftovers_keep_losses_before_wins(self):
         rows = [pick(f'w{i}', 'sun', title=f'Long School Name Number {i} over 149.5 passing yards',
                      athleteId=str(i), market='pass_yds', result='win')

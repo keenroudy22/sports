@@ -14,6 +14,24 @@ NOW = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
 
 
 class DiscordPostTests(unittest.TestCase):
+    def test_results_first_gate_holds_new_play_but_not_the_recap(self):
+        play = {'id': 'new-play', 'kind': 'buffer:play',
+                'discord': {'state': 'pending', 'readyAt': '2026-09-28T15:00:00Z',
+                            'text': 'New play'}}
+        recap = {'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt',
+                 'fullDailyRecap': True, 'cardKey': 'receipt-day-2026-09-27',
+                 'discord': {'state': 'pending', 'destination': 'plays',
+                             'readyAt': '2026-09-28T15:00:00Z', 'text': 'Sunday results'}}
+        sent = []
+        discord_post.mirror_sent(
+            {'posts': [play, recap]}, NOW, url='plays',
+            send=lambda *args: (sent.append(args) or (204, b'')),
+            log=lambda *_: None, hold_new_plays='prior results missing')
+        self.assertEqual(len(sent), 1)
+        self.assertEqual(play['discord']['state'], 'pending')
+        self.assertEqual(play['discord']['lastHold'], 'prior results missing')
+        self.assertEqual(recap['discord']['state'], 'sent')
+
     def test_regular_nba_checks_original_then_sends_play_and_real_result_once(self):
         import nba_trial_runtime as nba
         now=datetime(2026,10,28,19,tzinfo=timezone.utc)

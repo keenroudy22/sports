@@ -3194,15 +3194,21 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         return
     log_book = x_post.load_log()
     try:
+        import receipts
+        results_first_hold = receipts.prior_day_results_hold(
+            ctx.first, ctx.latest, games, log_book, now, channel='all')
         import nba_trial_runtime
         nba_discord_plans = nba_trial_runtime.social_plans(now, log_book, refresh=False)
-        nba_trial_runtime.queue_discord_first(now, log_book, nba_discord_plans)
+        if not results_first_hold:
+            nba_trial_runtime.queue_discord_first(now, log_book, nba_discord_plans)
         import cbb_picks
-        cbb_picks.queue_discord(now, log_book)
+        if not results_first_hold:
+            cbb_picks.queue_discord(now, log_book)
         queued_results = discord_post.queue_results(log_book, ctx.first, ctx.latest, games, now)
         if queued_results:
             log(f'discord: queued {queued_results} official result update(s)')
-        for entry in discord_post.mirror_sent(log_book, now, log=log):
+        for entry in discord_post.mirror_sent(
+                log_book, now, log=log, hold_new_plays=results_first_hold):
             status['errors'].append(f"discord: {entry['id']} failed to mirror: {entry['error']}")
             alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
         for entry in buffer_post.reconcile(log_book, now, log=log):
@@ -3230,6 +3236,14 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         import nba_trial_runtime
         plans += nba_trial_runtime.social_plans(now, log_book, reserved=plans)
         plans += cbb_picks.plans(now, log_book, reserved=plans)
+        if results_first_hold:
+            held = [plan[0] for plan in plans
+                    if plan[1] in ('play', 'nba-trial', 'cbb-pick', 'community')]
+            plans = [plan for plan in plans
+                     if plan[1] not in ('play', 'nba-trial', 'cbb-pick', 'community')]
+            if held:
+                log('results-first: held new plays until the prior card recap reaches X and Discord: '
+                    + ', '.join(held))
         upgrades = pending_ladder_result_cards(log_book, ctx, now)
         if deploying and (plans or upgrades):
             cards = [card for *_, card in plans if card] + list(upgrades.values())
@@ -3241,6 +3255,9 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team,
                                      quotes=quotes, news=news, log=log)
             plans += nba_trial_runtime.social_plans(max(now, later), log_book, reserved=plans)
+            if results_first_hold:
+                plans = [plan for plan in plans
+                         if plan[1] not in ('play', 'nba-trial', 'cbb-pick', 'community')]
         # A Buffer discovery/limit outage must not prevent already-authorized
         # Discord delivery above. Empty plans need neither metered lookup.
         # An optional post blocked by the local journal cannot use the protected
@@ -3591,10 +3608,17 @@ def release_private(now, log=log, only=None, review_only=False):
         return []
     stores = gates.Stores(records=features.load())
     ctx = stores.as_of(now)
+    results_games = dict(ctx.games)
     slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
     release_queue.merge_context(ctx, CONF)
     ctx.games = live_games(now, {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')})
     log_book = x_post.load_log()
+    import receipts
+    results_first_hold = receipts.prior_day_results_hold(
+        ctx.first, ctx.latest, results_games, log_book, now, channel='all')
+    if results_first_hold and not review_only:
+        log(f'results-first: private releases remain queued: {results_first_hold}')
+        return []
     # X discovery is transport work, never a prerequisite for Discord/site.
     channel = None
     channel_error = None
@@ -4362,6 +4386,11 @@ def mirror(args):
             if not args.now:
                 now = datetime.now(timezone.utc)
             log_book = x_post.load_log()
+            results_ctx = gates.Stores().as_of(now)
+            import receipts
+            results_first_hold = receipts.prior_day_results_hold(
+                results_ctx.first, results_ctx.latest, getattr(results_ctx, 'games', {}),
+                log_book, now, channel='all')
             if result_transport_hold:
                 # These grades are already public. Read stored evidence only;
                 # do not re-capture, re-grade, rebuild or call Buffer to deliver
@@ -4381,14 +4410,15 @@ def mirror(args):
                     retry_stored_results(now, log_book)
                 x_post.save_log(log_book)
                 commit_log(now, push=not args.no_push)
-            if private_release_ready(now):
+            if private_release_ready(now) and not results_first_hold:
                 release_private_isolated(now)
                 log_book = x_post.load_log()
-            if nba_trial_runtime.discord_delivery_due(now, log_book):
+            if nba_trial_runtime.discord_delivery_due(now, log_book) and not results_first_hold:
                 plans = nba_trial_runtime.social_plans(now, log_book, refresh=False)
                 nba_trial_runtime.queue_discord_first(now, log_book, plans)
-            cbb_picks.queue_discord(now, log_book)
-            if basketball_due:
+            if not results_first_hold:
+                cbb_picks.queue_discord(now, log_book)
+            if basketball_due and not results_first_hold:
                 try:
                     retry_typefully_basketball(now, log_book, backup)
                 except (OSError, ValueError) as error:
@@ -4405,7 +4435,9 @@ def mirror(args):
             if not mirror_due(log_book, now):
                 x_post.save_log(log_book)
                 return 0
-            for entry in discord_post.mirror_sent(log_book, now, log=log):
+            for entry in discord_post.mirror_sent(
+                    log_book, now, log=log,
+                    hold_new_plays=results_first_hold):
                 failed.append(f"Discord: {entry['id']}: {entry['error']}")
                 alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
             # Preserve independent Discord receipts before fallible X work.

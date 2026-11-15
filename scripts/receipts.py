@@ -31,6 +31,7 @@ MORNING = (9, 0)                  # Eastern: when a receipt posts
 LATEST = (20, 0)                  # Eastern, the day after: a receipt not scheduled by then is stale and skipped
 WEEKDAY = 2                       # Wednesday: the week's receipt
 CARD_HISTORY_DAYS = 8             # Discord embeds and retrying publishers need recent generated URLs to survive
+RESULTS_FIRST_EFFECTIVE = date(2026, 11, 15)
 MARKS = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}
 KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun parlays', 'ladder': '80/20 Climb'}
 
@@ -405,6 +406,46 @@ def ready(first, latest, games, log_book, now):
             out.append(receipt)
     import daily_straight_card
     return [daily_straight_card.link_final(r, log_book, latest, games) for r in out if r['stale'] > now]
+
+
+def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
+    """Explain why today's plays must wait for yesterday's complete recap.
+
+    The owner requires the public story to stay chronological: the prior card's
+    results reach both X and Discord before a new day's plays. Research,
+    watchlists and grading continue while this gate is closed. A partial or
+    stale receipt cannot clear it; the receipt must name every released play
+    from that game day and carry a confirmed channel receipt.
+    """
+    today = eastern_date(now)
+    if today < RESULTS_FIRST_EFFECTIVE:
+        return None
+    day = today - timedelta(days=1)
+    public_first = released_first(first, log_book, games)
+    ids = counted(public_first, latest)
+    rows = plays_between(public_first, latest, games, ids, day, day)
+    rows += nba_daily_rows(day, now, log_book)
+    expected = {row['id'] for row in rows}
+    if not expected:
+        return None
+    key = f'receipt:day:{day.isoformat()}'
+    for entry in reversed(log_book.get('posts', [])):
+        if entry.get('id') != key or entry.get('cancelledAt') or entry.get('deletedAt'):
+            continue
+        if set(entry.get('resultPickIds') or []) != expected:
+            continue
+        x_sent = bool(entry.get('sentAt') and (entry.get('tweetId') or entry.get('link') or entry.get('sentUrl')))
+        discord = entry.get('discord') or {}
+        discord_sent = bool(discord.get('state') == 'sent' and discord.get('sentAt'))
+        if channel == 'x' and x_sent:
+            return None
+        if channel == 'discord' and discord_sent:
+            return None
+        if channel == 'all' and x_sent and discord_sent:
+            return None
+    receipt = day_receipt(day, public_first, latest, games, ids, now, log_book)
+    state = 'ready but not delivered' if receipt else 'waiting for the complete graded card'
+    return f"yesterday's {key} is {state} on {channel}"
 
 
 def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS, log_book=None):
