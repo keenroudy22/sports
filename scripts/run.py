@@ -3806,7 +3806,9 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                      'discord': {'state': 'sent', 'sentAt': sent_at, 'beforeX': True, 'text': text,
                                  'image': buffer_post.card_url(key),
                                  'messageId': (row.get('discordReceipt') or {}).get('id'),
-                                 'attachmentReceipt': (row.get('discordReceipt') or {}).get('image')}}
+                                 'attachmentReceipt': (row.get('discordReceipt') or {}).get('image'),
+                                 'attachmentState': ('attached' if (row.get('discordReceipt') or {}).get('image') else
+                                     'missing' if (row.get('discordReceipt') or {}).get('id') else 'unverified')}}
             entry.update(cardKey=key)
             if social_style.active(now):
                 entry.update(queuedText=text, socialStyleVersion=social_style.VERSION, socialAgeVersion=AGE_VERSION)

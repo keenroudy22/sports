@@ -361,6 +361,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         mirror['sentAt'] = gates.stamp(now)
         mirror['messageId'] = (receipt or {}).get('id')
         mirror['attachmentReceipt'] = (receipt or {}).get('image')
+        mirror['attachmentState'] = ('attached' if mirror['attachmentReceipt'] else
+                                     'missing' if mirror['messageId'] else 'unverified')
         mirror['beforeX'] = not bool(entry.get('sentAt'))
         mirror.pop('error', None)
         mirror.pop('lastAttemptAt', None)
@@ -398,6 +400,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         followup['sentAt'] = gates.stamp(now)
         followup['messageId'] = (receipt or {}).get('id')
         followup['attachmentReceipt'] = (receipt or {}).get('image')
+        followup['attachmentState'] = ('attached' if followup['attachmentReceipt'] else
+                                       'missing' if followup['messageId'] else 'unverified')
         followup.pop('error', None)
         followup.pop('lastAttemptAt', None)
         mirror['followup'] = followup

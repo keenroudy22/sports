@@ -29,10 +29,11 @@ def box_player(pick, game=None):
         return None
     snapshot = pick.get('settlementStats')
     if isinstance(snapshot, dict):
-        return dict(snapshot, id=athlete)
-    if game is None:
-        game = stored_games().get(pick.get('gameId') or (pick.get('gameIds') or [None])[0])
-    row = next((row for row in (game or {}).get('players', []) if str(row.get('id')) == athlete), None)
+        row = dict(snapshot, id=athlete)
+    else:
+        if game is None:
+            game = stored_games().get(pick.get('gameId') or (pick.get('gameIds') or [None])[0])
+        row = next((row for row in (game or {}).get('players', []) if str(row.get('id')) == athlete), None)
     market, value = str(pick.get('market') or ''), _number(pick.get('actualValue'))
     # A later box revision cannot silently replace the settled stat. Until a
     # dated correction exists, omit newer contextual stats if the versions differ.

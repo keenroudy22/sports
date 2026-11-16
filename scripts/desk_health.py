@@ -321,7 +321,8 @@ def held_captions(logs, day, posts):
 def delivery(posts, now):
     counts = {'queued': 0, 'xOverdue': 0, 'xFailed': 0, 'discordOverdue': 0,
               'discordFailed': 0, 'withheld': 0, 'xConfirmed': 0, 'discordConfirmed': 0,
-              'xMediaMissing': 0, 'xMediaUnverified': 0, 'xReceiptUnverified': 0, 'discordReceiptUnverified': 0}
+              'xMediaMissing': 0, 'xMediaUnverified': 0, 'xReceiptUnverified': 0, 'discordReceiptUnverified': 0,
+              'discordMediaMissing': 0, 'discordMediaUnverified': 0}
     for p in posts:
         if not isinstance(p, dict):
             continue
@@ -361,6 +362,9 @@ def delivery(posts, now):
                 counts['discordConfirmed'] += 1
             else:
                 counts['discordReceiptUnverified'] += 1
+            if mirror.get('image') and not mirror.get('attachmentReceipt'):
+                counts['discordMediaMissing' if mirror.get('attachmentState') == 'missing'
+                       else 'discordMediaUnverified'] += 1
         elif mirror.get('state') in ('failed', 'error') or mirror.get('error'):
             counts['discordFailed'] += 1
         elif mirror.get('state') == 'pending':
@@ -743,7 +747,9 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
               'xMediaMissing': 'A Sent X post is missing its required image; inspect it without duplicating the post.',
               'xMediaUnverified': 'A Sent X post has no actual attachment receipt; card intent is not media proof.',
               'xReceiptUnverified': 'An X sent timestamp lacks its actual post URL or ID.',
-              'discordReceiptUnverified': 'A Discord sent flag lacks its actual message ID.'}
+              'discordReceiptUnverified': 'A Discord sent flag lacks its actual message ID.',
+              'discordMediaMissing': 'Discord returned no durable card attachment; an external embed is not an uploaded attachment.',
+              'discordMediaUnverified': 'A Discord card lacks an actual attachment receipt; inspect without resending.'}
     for field, label in labels.items():
         if counts[field]:
             issue('delivery-' + field, label)
@@ -1052,7 +1058,8 @@ def html_report(data):
                        'withheld': 'Withheld', 'xConfirmed': 'X confirmed',
                        'discordConfirmed': 'Discord confirmed', 'heldCaptions': 'Caption length holds',
                        'xMediaMissing': 'X image missing', 'xMediaUnverified': 'X image unverified',
-                       'xReceiptUnverified': 'X receipt unverified', 'discordReceiptUnverified': 'Discord receipt unverified'}
+                       'xReceiptUnverified': 'X receipt unverified', 'discordReceiptUnverified': 'Discord receipt unverified',
+                       'discordMediaMissing': 'Discord attachment missing', 'discordMediaUnverified': 'Discord attachment unverified'}
     deliveries = data.get('deliveriesLast48h') or {}
     cohorts = data.get('deliveryCohorts') or {}
     cohort_rows = ''

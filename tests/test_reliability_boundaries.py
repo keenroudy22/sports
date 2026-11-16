@@ -72,6 +72,9 @@ class ReliabilityBoundaries(unittest.TestCase):
         self.assertEqual(result_display.detail(pick,game),'10 carries · missed by 4.5')
         corrected=dict(pick,actualValue=11,settlementStats={'car':11,'rushYds':50})
         self.assertEqual(result_display.detail(corrected,game),'11 carries · missed by 5.5')
+        # A later dated correction can inherit older context through the record merge.
+        stale_snapshot=dict(corrected,settlementStats={'car':10,'rushYds':50})
+        self.assertEqual(result_display.detail(stale_snapshot,game),'11 carries · missed by 5.5')
         dorwart=dict(pick,market='recYds',actualValue=21,line=49.5,result='win',settlementStats={'recYds':21,'rec':2,'tgt':3})
         self.assertEqual(result_display.detail(dorwart,game),'2 catches on 3 targets, 21 yards · cleared by 28.5')
         game.update(league='NFL',eventId='2')
@@ -119,6 +122,18 @@ class ReliabilityBoundaries(unittest.TestCase):
             self.assertTrue(send.call_args.kwargs['return_receipt'])
         self.assertEqual(row['discord']['messageId'],'message1')
         self.assertEqual(row['discord']['attachmentReceipt'],'https://cdn.discordapp.com/card.png')
+
+    def test_discord_embed_fallback_is_not_a_verified_durable_attachment(self):
+        row=dict(id='pick',kind='buffer:play',discord=dict(state='pending',readyAt='2026-11-16T17:00Z',
+                 text='Pick',image='https://keenroudy.com/card.png'))
+        with patch.object(discord_post,'send_message',return_value={'id':'message1','image':None}) as send:
+            discord_post.mirror_sent({'posts':[row]},NOW,url='plays',log=lambda *_:None)
+            discord_post.mirror_sent({'posts':[row]},NOW,url='plays',log=lambda *_:None)
+            self.assertEqual(send.call_count,1)
+        self.assertEqual(row['discord']['attachmentState'],'missing')
+        self.assertEqual(desk_health.delivery([row],NOW)['discordMediaMissing'],1)
+        row['discord'].pop('attachmentState')
+        self.assertEqual(desk_health.delivery([row],NOW)['discordMediaUnverified'],1)
 
     def test_one_minute_quote_window_alerts_before_thirty_minute_delay(self):
         import nba_trial_runtime, cbb_picks
