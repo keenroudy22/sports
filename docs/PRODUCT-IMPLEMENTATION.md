@@ -7866,3 +7866,5 @@ card/known risk on new structured tickets without restoring old screenshots. Ful
 site/X/Discord Sent receipts remain pending. Private evidence and a manual
 quarter-result/participation review are tracked in work/nov16-delivery-parlays.
 No 6–8-leg full-game ticket is approved or claimed by this entry.
+
+Pre-publication refresh: the exact same Q1 pair moved to +168 at DraftKings. No X or Discord post had been sent. Updated the unpublished source, caption and a new native card filename; retained the original +170 private quote evidence. Current release still requires hosted and actual delivery proof.
