@@ -48,6 +48,24 @@ alternate frequency and per-style daily checks remain. The full daily unit cap
 and all final admission checks belong to the subsequent production adapter.
 Health counts describe packet review, not a capacity or publication promise.
 
+## Private settlement review
+
+`scripts/prop_ticket_settlement.py` adds a pure offline `review(spec, evidence,
+now)` function. It binds a frozen reviewed packet and original combined quote
+to exact per-leg identities, terminal official actuals, participation, injury
+review and an observed book settlement with its jurisdiction and rule version.
+A loss returns the original 0.25u loss; all void/push returns zero; all wins use
+the original combined price. A reduced winning ticket requires the book's actual
+revised joint price matching every remaining leg. No division or multiplication
+of individual prices is allowed. Unknown injury protection, DNP decisions,
+changed terms, missing actuals and contradictory book outcomes stay held.
+
+The result is `settled-private`, never a public ledger write or publication.
+Receipt authenticity still requires attended verification; this function does
+not fetch a sportsbook or establish a new automatic settlement route. Its tests
+use synthetic fixtures, not evidence that a real ticket was published or graded.
+The actual production adapter and real-ticket proof below remain outstanding.
+
 ## Tracked next implementation
 
 Continue O-20261019-ALTFUN. First capture a real current combined book quote and

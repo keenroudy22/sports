@@ -7812,3 +7812,25 @@ Odds API249used/251remaining; existing reserve and Sharp12/min unchanged.
 No plans, paid credits, capture windows or routine Codex chats were added.
 The owner report is Documents/ChatGPT/Kook'n/delivery-parlays-2026-11-16/report.html.
 Goal remains active through17:30 proof and the explicit remaining ticket work.
+
+
+## November 16 — private SGP settlement review candidate
+
+The private settlement review now binds exact original ticket terms and frozen
+review to each terminal official actual, participation and injury check, plus
+an attended sportsbook settlement with jurisdiction/rule version. All wins use
+the original joint price; losses retain0.25u; all void/push returns0u. A reduced
+winning SGP stays held until the book supplies a matching revised joint price.
+Changed terms, unknown injury protection, missing DNP decisions and contradictory
+results cannot yield units. The function makes no request, writes no ledger and
+never authorizes publication. Eight synthetic scenario tests plus eight original
+review tests pass. Canonical and hosted proof remains pending for this addition;
+no real prop ticket has been released or graded through it. Production admission,
+send-time recheck and settlement integration remain tracked under ALTFUN.
+
+The newest observed17:00ET NBA report was downloaded through the ordinary browser
+and all6pages reviewed from those identical bytes in Chrome. Guarded intake at
+22:13Z ingested25team rows/17submitted, preserving the independent18:30:09Z ESPN
+snapshot and holding selection. No additional feed calls; normal17:30 capture
+still must refresh the independent provider clock. Browser evidence and intake
+receipt are in work/nov16-delivery-parlays/nba-evening-*.
