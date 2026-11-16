@@ -110,7 +110,9 @@ def review(spec, evidence, now):
         if result == 'void':
             if not row.get('bookDecisionReceipt') or not str(row.get('voidReason') or '').strip():
                 holds.append(f'Leg {index + 1}: book-confirmed void reason required')
-        elif participation != 'played' or not tickets.numeric(row.get('actual')):
+        elif (participation != 'played' or not tickets.numeric(row.get('actual'))
+              or not float(row['actual']).is_integer()
+              or leg['market'] not in ('rushYds', 'recYds', 'passYds') and row['actual'] < 0):
             holds.append(f'Leg {index + 1}: played status and official actual required')
         else:
             actual, line = row['actual'], leg['line']

@@ -62,7 +62,12 @@ class PropTicketSettlementTests(unittest.TestCase):
         for removal in ('void', 'push'):
             spec, evidence, now = case()
             if removal == 'void':void(evidence['legs'][0])
-            else:evidence['legs'][0].update(result='push', actual=2.5)
+            else:
+                spec['legs'][0]['line'] = 2
+                spec['ticketQuote']['terms'] = R.terms(spec)
+                evidence['originalReview']['termsFingerprint'] = R.fingerprint(spec)
+                evidence['bookSettlement']['termsFingerprint'] = R.fingerprint(spec)
+                evidence['legs'][0].update(terms=S.identity(spec['legs'][0]), result='push', actual=2)
             held = S.review(spec, evidence, now)
             self.assertEqual(held['state'], 'held')
             self.assertNotIn('units', held)
@@ -95,7 +100,7 @@ class PropTicketSettlementTests(unittest.TestCase):
 
     def test_unresolved_injury_participation_or_wrong_stat_never_grades(self):
         for changes in ({'injuryReview':'unknown'}, {'participation':'unknown'},
-                        {'actual':False}, {'actual':1}, {'final':False},
+                        {'actual':False}, {'actual':1}, {'actual':3.5}, {'actual':-1}, {'final':False},
                         {'injuryReview':'book-resolved'}, {'checkedAt':'2099-01-01T00:00:00Z'}):
             spec,evidence,now=case(); evidence['legs'][0].update(changes)
             result=S.review(spec,evidence,now)
