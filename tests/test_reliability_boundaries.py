@@ -46,6 +46,26 @@ class ReliabilityBoundaries(unittest.TestCase):
                 self.assertEqual(publication_guard.audit(root)['issues'],
                     [{'file':'img/tickets/renamed.png','reason':'personal-money-image'}])
 
+    def test_current_repository_contains_only_public_community_sources(self):
+        self.assertEqual(community_record.source_privacy_issues(), [])
+        self.assertTrue((community_record.ROOT/'data/community-settlements.jsonl').is_file())
+
+    def test_default_accounting_append_is_private_and_public_projection_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)/'public'; private=Path(folder)/'private'
+            row=dict(id='ticket',result='win',settledAt='2026-11-16T18:00Z',source='private receipt',
+                     stakeDollars=10,returnDollars=100,unitDollars=50,note='$10 wager; bet ID private')
+            with patch.object(community_record,'ROOT',root),patch.object(community_record,'private_root',return_value=private):
+                self.assertTrue(community_record.append(row))
+                self.assertFalse(community_record.append(row))
+            original=private/'community-results.jsonl'
+            self.assertEqual(json.loads(original.read_text()),row)
+            public=(root/'data/community-settlements.jsonl').read_text()
+            self.assertEqual(len(public.splitlines()),1)
+            self.assertNotIn('Dollars',public);self.assertNotIn('$',public);self.assertNotIn('private receipt',public)
+            self.assertEqual(json.loads(public)['units'],1.8)
+            self.assertFalse((root/'data/community-results.jsonl').exists())
+
     def test_stat_revision_cannot_mix_caption_and_margin_versions(self):
         pick=dict(id='daniels',athleteId='1',market='car',actualValue=10,line=5.5,direction='under',result='loss')
         game={'players':[{'id':'1','car':11,'rushYds':50}]}

@@ -1,3 +1,22 @@
+# November 16 community accounting privacy
+
+The GitHub repository is public. Personal dollar accounting and source receipts
+belong in `~/.config/keenroudy/community-private/`, never in tracked files.
+The original `community.json` and `community-results.jsonl` were preserved there
+byte-for-byte before migrating current public inputs. Keep those private sources
+append-only. `community_record.append(row)` now appends privately and publishes
+only the derived unit settlement to `data/community-settlements.jsonl`.
+The public `data/community.json` contains exact ticket terms and public units only.
+Do not add personal dollar fields, bet IDs or private source notes to it.
+Historical public Git commits and sent social attachments are not erased by this
+migration; do not claim that they were or rewrite that history automatically.
+
+For future attended Buffer confirmations, record actual observed image URLs via
+`buffer_web.confirm_sent(..., observed_images=[...])`; use an empty list when the
+Sent post has no image, and leave it unverified when it was not inspected. Never
+copy the intended card URL into this evidence without observing the attachment.
+Missing media is a delivery gap, not authorization to duplicate a Sent post.
+
 # November 15 Kook’n operating rules
 
 Owner operating rules (Nov 15): apply these prospectively over conflicting older directions. Target five qualifying straights daily, prioritizing NBA and NFL props, weekend CFB and supported CBB. Verify exact current lines and prices, injuries, roles, matchup, movement and weather before release. Keep unresolved plays on the watchlist and say what changed when they clear. Keep straights, Chef’s Picks, fun tickets and Climbs separate, preserve current approved stakes and caps, and apply one-open-step and verified combined price rules. Prioritize prior slate grading and full recap before new picks. Require actual X URL, Discord receipt and hosted site verification. Use Buffer Essentials only within verified account limits with duplicate-safe recovery. Track engagement and frozen forecast performance. Keep core research free. During existing odds captures, prioritize checking DraftKings and FanDuel across all covered markets for arbs. Recheck both exact offers and settlement rules immediately, distinguish guaranteed coverage from middles, and send a private iMessage only through a verified owner destination. Never place wagers. Treat unsupported markets and stale quotes as unavailable. Report only material blockers and verified outcomes.

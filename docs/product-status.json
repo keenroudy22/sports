@@ -9,7 +9,7 @@
       "owner": "agent",
       "next": "Finish canonical release, hosted phone/desktop and privacy checks; observe an ordinary production worker and record actual media receipts without forcing a post.",
       "doneWhen": "Both suites and clean export pass; canonical deploy and hosted workflow succeed; phone/desktop checks pass; a real scheduled worker uses the release and its holds/delivery receipts are documented.",
-      "evidence": "Nov16: normal and clean-export suites pass (2343 Python, 2 skipped; 372 Node), plus 24 privacy/boundary checks. Stored rehearsal exit0/ok, no outside writes/private reads. Two real Buffer Sent API responses each returned one image. Deployment unverified."
+      "evidence": "Nov16: 2346 Python (2 skipped) and 372 Node tests pass normally and in clean export. Public record matches 186 official plays; 14 community rows unchanged by private-source migration. Rehearsal exit0/ok, no private reads/outside writes. Two real Buffer Sent media checks passed. Hosted release pending."
     },
     {
       "id": "O-20261113-EDGES-SEARCH",

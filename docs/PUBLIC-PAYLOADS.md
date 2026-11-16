@@ -123,3 +123,12 @@ publish folder after exact private copies were verified. Their SHA-256 hashes
 are denied by the upload guard even if renamed. Sent social attachments and Git
 history are not erased by this website change. The private archive manifest is
 in the November 16 operator evidence, outside the public upload.
+
+The source repository is also public. Original personal accounting inputs were
+preserved byte-for-byte under the owner's private configuration before removing
+the raw accounting ledger and private ticket fields from the current checkout.
+The hosted build now uses `data/community-settlements.jsonl`, an append-only unit
+projection with the same settled outcomes and units. Default accounting appends
+write privately and then append the safe projection idempotently. Repository
+regressions reject reintroduced raw accounting inputs or unreviewed ticket fields.
+Existing public Git history remains a documented limitation.
