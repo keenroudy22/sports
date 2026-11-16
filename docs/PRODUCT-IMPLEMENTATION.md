@@ -7860,8 +7860,9 @@ card follows the approved dark stadium direction with the actual K/check logo,
 exact periods, team logos and no personal accounting. Structured public leg IDs
 now protect owner-ticket players from later same-game exposure; the weekly
 alternate check also reads these external reservations. Legacy string legs and
-all original records remain intact. Three regressions cover cross-market/book
-overlap, league/week boundaries and safe exact leg display. Full deployment and
+all original records remain intact. Four regressions cover cross-market/book
+overlap, league/week boundaries, safe exact leg display, and the reviewed native
+card/known risk on new structured tickets without restoring old screenshots. Full deployment and
 site/X/Discord Sent receipts remain pending. Private evidence and a manual
 quarter-result/participation review are tracked in work/nov16-delivery-parlays.
 No 6–8-leg full-game ticket is approved or claimed by this entry.
