@@ -26,6 +26,16 @@ def fixture():
 
 
 class NBAEditorialTests(unittest.TestCase):
+    def test_projection_reserves_the_eight_am_daily_recap_interval(self):
+        data, history = fixture()
+        now = datetime(2026, 11, 15, 21, tzinfo=timezone.utc)
+        data['sourceAt'] = boxscores.stamp(now)
+        for game in data['games']:
+            game['kickoff'] = '2026-11-17T00:00:00Z'
+        row = next(r for r in n.choices(data, now, history) if r['family'] == 'projections')
+        self.assertEqual(row['due'], '2026-11-16T13:20:00Z')
+        self.assertEqual(row['stale'], '2026-11-16T15:00:00Z')
+
     def test_next_day_projection_does_not_carry_overnight_book_prices(self):
         now,data,h=self.relevant_fixture()
         for g in data['games']:

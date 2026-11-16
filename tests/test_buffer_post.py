@@ -504,6 +504,22 @@ class ScheduleTests(unittest.TestCase):
         created = next(call for call in fake.calls if 'createPost' in call['query'])
         self.assertEqual(created['variables']['input']['assets'][0]['image']['url'], live)
 
+    def test_current_football_daily_receipt_mirrors_to_plays(self):
+        now = datetime(2026, 11, 16, 12, 0, tzinfo=timezone.utc)
+        key = 'receipt:day:2026-11-15'
+        card = 'receipt-day-2026-11-15'
+        text = 'Sunday: 0-3.\n\n21+ only'
+        verified = {'key': key, 'text': text, 'card': card, 'pickIds': ['football']}
+        with mock.patch.object(bp.receipts, 'ready', return_value=[verified]), \
+                mock.patch.object(bp, 'ticket_art_live', return_value=True), \
+                mock.patch.object(bp, 'plain_art_live', return_value=True):
+            rows = bp.schedule([(key, 'receipt', text, now + bp.SOON, card)], 'ch-x',
+                               {'posts': []}, now, key='t', send=FakeBuffer(),
+                               opener=lambda _: True)['posts']
+        self.assertTrue(rows[0]['fullDailyRecap'])
+        self.assertEqual(rows[0]['discord']['destination'], 'plays')
+        self.assertEqual(rows[0]['resultPickIds'], ['football'])
+
     def test_schedule_routes_pregame_tickets_to_plays_without_changing_their_record_kind(self):
         due = NOW + timedelta(hours=1)
         plans = [('p', 'play', 'Play', due, None), ('cashed:p', 'cashed', 'Win', due + bp.SPACING, None),

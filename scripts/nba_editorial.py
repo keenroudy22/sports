@@ -7,7 +7,7 @@ import json
 import math
 import os
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import boxscores
@@ -281,6 +281,11 @@ def choices(data, now, history=None):
             continue
         due=datetime(target.year,target.month,target.day,hour,tzinfo=gates.EASTERN).astimezone(timezone.utc)
         cutoff=min(due+timedelta(hours=2),boxscores.instant(games[0]['kickoff'])-timedelta(hours=2))
+        if family == 'projections' and target >= date(2026, 11, 16):
+            # Leave the 8 AM daily recap its full publishing interval.
+            due += timedelta(minutes=20)
+            if cutoff <= due:
+                continue
         if relevant and family == 'trends':
             cutoff=min(cutoff,*(boxscores.instant(r['quote']['retrievedAt'])+timedelta(hours=4) for r in rows))
             if cutoff<=due:continue  # overnight prices cannot become tomorrow's morning post
