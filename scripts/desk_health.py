@@ -10,6 +10,7 @@ import json
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import gates
 import odds_api
@@ -318,6 +319,25 @@ def held_captions(logs, day, posts):
     return len(set(ids) - resolved)
 
 
+def same_x_post(left, right, tweet_id):
+    """Buffer may canonicalize twitter.com/handle to x.com/numeric-account.
+
+    Keep both observed URLs intact; only a valid identical status ID can bridge
+    aliases. A different post, host or missing ID remains unverified.
+    """
+    def identity(url):
+        try:
+            parsed = urlsplit(url)
+            match = re.fullmatch(r'/(?:[^/]+|i/web)/status/(\d{8,30})/?', parsed.path)
+            if (parsed.scheme == 'https' and parsed.hostname in ('x.com', 'twitter.com', 'www.x.com', 'www.twitter.com')
+                    and not parsed.username and not parsed.password and match):
+                return match[1]
+        except (TypeError, ValueError):
+            pass
+        return None
+    return bool(tweet_id and identity(left) == identity(right) == str(tweet_id))
+
+
 def delivery(posts, now):
     counts = {'queued': 0, 'xOverdue': 0, 'xFailed': 0, 'discordOverdue': 0,
               'discordFailed': 0, 'withheld': 0, 'xConfirmed': 0, 'discordConfirmed': 0,
@@ -346,7 +366,8 @@ def delivery(posts, now):
                 media = p.get('mediaReceipt') or {}
                 if media.get('state') == 'missing':
                     counts['xMediaMissing'] += 1
-                elif media.get('state') != 'attached' or media.get('postUrl') != p.get('link'):
+                elif media.get('state') != 'attached' or (media.get('postUrl') != p.get('link')
+                        and not same_x_post(media.get('postUrl'), p.get('link'), p.get('tweetId'))):
                     counts['xMediaUnverified'] += 1
         elif p.get('error'):
             counts['xFailed'] += 1
@@ -496,10 +517,19 @@ def basketball_missing_originals(root, posts, now):
                 attempts = [p for p in posts if p.get('id') == pick_id]
                 held = next((p.get('cancelReason') or p.get('error') for p in reversed(attempts)
                              if p.get('cancelReason') or p.get('error')), None)
+                public_discord = any((p.get('discord') or {}).get('state') == 'sent'
+                                     and moment((p.get('discord') or {}).get('sentAt')) for p in attempts)
+                expired = bool(deadline and deadline <= now)
+                reason = held or 'Original X receipt missing; revalidate exact quote before recovery.'
+                if expired:
+                    reason = (held or 'Original X receipt missing; historical quote follow-up is blocked.') if public_discord else (
+                        'Expired admission without confirmed X or Discord release; keep outside the public record and never publish retrospectively.')
                 missing[pick_id] = {'league': league, 'kickoff': stamp(play['kickoff']),
                     'deadline': gates.stamp(deadline) if deadline else None,
-                    'state': 'expired' if deadline and deadline <= now else 'held' if held else 'awaiting',
-                    'reason': held or 'Original X receipt missing; revalidate exact quote before recovery.'}
+                    'state': 'expired' if expired else 'held' if held else 'awaiting',
+                    'publicDiscordConfirmed': bool(public_discord),
+                    'recoveryAllowed': not expired,
+                    'reason': reason}
     return missing
 
 
@@ -911,7 +941,14 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
         projection_shadow = projection_shadows.report(conf / 'projection-shadows' / 'observations.jsonl')
     except (OSError, ValueError, TypeError, KeyError):
         projection_shadow = {'rows': 0, 'graded': 0, 'status': 'unavailable'}
+    import prop_ticket_review
+    ticket_games = {g['id']: g for g in slate.get('games', []) if g.get('id')}
+    ticket_games.update({f"NBA-{g['providerId']}": dict(g, league='NBA',
+        state='pre' if g.get('status') == 'scheduled' else g.get('status'))
+        for g in nba_slate.get('games', []) if g.get('providerId')})
+    prop_tickets = prop_ticket_review.summary(conf, ticket_games, now)
     return {'checkedAt': gates.stamp(now), 'mode': 'private-cached-only', 'issues': issues,
+            'propTicketWorkbench': prop_tickets,
             'desk': {'outcome': 'ok' if state.get('outcome') == 'ok' else 'not-ok-or-unknown',
                      'finishedAt': stamp(state.get('finishedAt')), 'expectedSlot': gates.stamp(expected),
                      'selection': selection},
@@ -955,6 +992,9 @@ def markdown(data):
     if recap:
         lines.append(f"Prior recap ({recap['date']}): X {recap['xUrl'] or 'unconfirmed'} | "
                      f"Discord {recap['discordSentAt'] or 'unconfirmed'}.")
+    tickets = data.get('propTicketWorkbench') or {}
+    if tickets:
+        lines.append(f"Prop parlay workbench: {tickets['counts']}; private planning only. {tickets['nextAction']}. No provider calls or automatic release.")
     pending = data.get('privateReleases') or {}
     lines.append(f"Private admissions awaiting delivery: {pending.get('waiting', 0)}; delayed {pending.get('delayed', 0)}; "
                  f"safety-held {pending.get('safetyHeld', 0)}; provider retry time "

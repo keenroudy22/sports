@@ -13,6 +13,18 @@ NOW = datetime(2026, 10, 5, 14, 0, tzinfo=timezone.utc)
 
 
 class DeskHealthTests(unittest.TestCase):
+    def test_actual_x_image_receipt_accepts_status_id_aliases_only(self):
+        tweet = '2121967747827482974'
+        post = {'sentAt': NOW.isoformat(), 'card': True, 'tweetId': tweet,
+                'link': f'https://twitter.com/keenkooks/status/{tweet}',
+                'mediaReceipt': {'state': 'attached',
+                    'postUrl': f'https://x.com/1753110091912413184/status/{tweet}'}}
+        self.assertEqual(H.delivery([post], NOW)['xMediaUnverified'], 0)
+        for bad in ('https://x.com/keenkooks/status/2121967747827482975',
+                    f'https://x.com.evil.invalid/keenkooks/status/{tweet}', None):
+            post['mediaReceipt']['postUrl'] = bad
+            self.assertEqual(H.delivery([post], NOW)['xMediaUnverified'], 1)
+
     def test_seven_day_plan_is_eastern_deduplicated_and_not_a_pick(self):
         game={'id':'a','league':'CFB','kickoff':'2026-10-06T01:00:00Z'}
         plan=H.opportunity_plan({'games':[game,game,dict(game,id='b')]},
@@ -44,6 +56,9 @@ class DeskHealthTests(unittest.TestCase):
                 result = H.summary(root, root/'private', root, NOW, {'posts': posts})
             self.assertEqual(set(result['basketballMissingOriginals']), {'missing', 'confirmed', 'wrong-kind', 'new', 'college', 'college-unmarked'})
             self.assertEqual(result['basketballMissingOriginals']['missing']['state'], 'expired')
+            self.assertFalse(result['basketballMissingOriginals']['missing']['recoveryAllowed'])
+            self.assertIn('never publish retrospectively', result['basketballMissingOriginals']['missing']['reason'])
+            self.assertTrue(result['basketballMissingOriginals']['confirmed']['publicDiscordConfirmed'])
             self.assertIn('basketball-originals-unconfirmed', {i['code'] for i in result['issues']})
 
     def test_private_delayed_admission_is_not_reported_as_zero_delivery_work(self):

@@ -1,0 +1,150 @@
+import copy
+import json
+import sys
+import tempfile
+import unittest
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+import prop_ticket_review as R
+
+NOW = datetime(2026, 11, 16, 20, 0, tzinfo=timezone.utc)
+AT = NOW.isoformat()
+SOURCE = 'https://sportsbook.draftkings.com/event/test-fixture'
+
+
+def fixture(family='MNF'):
+    league = 'NBA' if family == 'NBA-alts' else 'NFL'
+    now = NOW + (timedelta(days=3) if family == 'TNF' else timedelta())
+    at = now.isoformat()
+    kick = (now + timedelta(hours=4)).isoformat()
+    games = {f'{league}-1': {'id': f'{league}-1', 'league': league, 'state': 'pre', 'kickoff': kick}}
+    legs = []
+    for i in range(3):
+        game = f'{league}-1'
+        evidence = {'reviewer': 'kookn-desk', 'approved': True, 'checkedAt': at,
+                    'role': 'Fixture: current starter with stable opportunity.',
+                    'matchup': 'Fixture: relevant opponent opportunity evidence.',
+                    'why': 'Fixture: workload supports the exact cushioned line.',
+                    'countercase': 'Fixture: a low-volume game can sink all three legs.',
+                    'availability': {'status': 'active', 'athleteId': str(i), 'gameId': game,
+                                     'checkedAt': at, 'source': 'https://www.espn.com/test'},
+                    'sources': [{'kind': kind, 'fact': 'Synthetic fixture evidence, never a real pick.',
+                                 'url': 'https://www.espn.com/test', 'checkedAt': at}
+                                for kind in ('role', 'matchup', 'availability')]}
+        legs.append({'gameId': game, 'athleteId': str(i), 'player': f'Fixture Player {i}',
+                     'kickoff': kick, 'market': 'pts' if league == 'NBA' else 'rec',
+                     'direction': 'over', 'line': 2.5, 'mainLine': 4.5,
+                     'period': 'full_game', 'alternate': True, 'odds': -200,
+                     'book': 'DraftKings', 'observedAt': at, 'source': SOURCE, 'review': evidence})
+    spec = {'family': family, 'parlayStyle': 'short', 'book': 'DraftKings', 'odds': 425,
+            'priceEstimated': False, 'legs': legs,
+            'correlationReview': {'checkedAt': at, 'sharedScript': 'Fixture: pace creates shared opportunity.',
+                                  'failureCase': 'Fixture: slow pace suppresses every player.'}}
+    spec['ticketQuote'] = {'verified': True, 'receipt': 'Private synthetic test receipt',
+                           'source': SOURCE, 'checkedAt': at, 'terms': R.terms(spec)}
+    return spec, games, now
+
+
+class PropTicketWorkbenchTests(unittest.TestCase):
+    def test_reviewed_families_are_private_and_keep_book_joint_price(self):
+        for family in R.FAMILIES:
+            spec, games, now = fixture(family)
+            result = R.review(spec, games, now)
+            with self.subTest(family=family):
+                self.assertEqual(result['state'], 'reviewed-private', result)
+                self.assertFalse(result['releaseReady'])
+                self.assertEqual(len(result['releaseHolds']), 2)
+                self.assertIn('+425 DraftKings', result['caption'])
+                self.assertNotIn('chance', result)
+                self.assertEqual(len(result['caption'].split('\n\n')[1].splitlines()), 3)
+                # Independent leg multiplication yields +237.5, deliberately
+                # unlike the observed joint price. The workbench must retain +425.
+                self.assertIn('no multiplication', result['jointPriceBasis'])
+
+    def test_exact_receipt_rejects_changed_terms_or_stale_price(self):
+        mutations = [lambda s: s.update(odds=500),
+                     lambda s: s['legs'][0].update(line=3.5),
+                     lambda s: s['legs'][0].update(athleteId='different'),
+                     lambda s: s['ticketQuote'].update(checkedAt='2026-11-15T20:00:00Z'),
+                     lambda s: s['ticketQuote'].update(source='https://draftkings.com.evil.invalid/'),
+                     lambda s: s['ticketQuote'].update(receipt=''),
+                     lambda s: s.update(priceEstimated=True)]
+        for mutate in mutations:
+            spec, games, now = fixture()
+            mutate(spec)
+            with self.subTest(spec=spec):
+                self.assertEqual(R.review(spec, games, now)['state'], 'held')
+
+    def test_unresolved_roles_periods_sources_and_probabilities_hold(self):
+        mutations = [lambda s: s['legs'][0]['review']['availability'].update(status='questionable'),
+                     lambda s: s['legs'][0]['review'].update(countercase=''),
+                     lambda s: s['legs'][0]['review'].update(sources=[]),
+                     lambda s: s['legs'][0].update(period='first_quarter'),
+                     lambda s: s['legs'][0].update(market='touchdowns'),
+                     lambda s: s.update(chance=.75),
+                     lambda s: s['legs'][0].update(rawChance=.9),
+                     lambda s: s.update(correlationReview={}),
+                     lambda s: s['legs'][0].update(mainLine=1.5),
+                     lambda s: s.update(riskUnits=1),
+                     lambda s: s.update(priceBoosted=True)]
+        for mutate in mutations:
+            spec, games, now = fixture()
+            mutate(spec)
+            spec['ticketQuote']['terms'] = R.terms(spec)
+            with self.subTest(spec=spec):
+                self.assertEqual(R.review(spec, games, now)['state'], 'held')
+
+    def test_game_day_deadline_and_nba_actual_alternate_required(self):
+        spec, games, now = fixture('NBA-alts')
+        spec['legs'][0]['alternate'] = False
+        spec['ticketQuote']['terms'] = R.terms(spec)
+        self.assertTrue(any('observed priced alternate' in h for h in R.review(spec, games, now)['holds']))
+        spec, games, now = fixture()
+        for when in (now + timedelta(hours=4), now + timedelta(days=1)):
+            self.assertEqual(R.review(spec, games, when)['state'], 'held')
+        spec['family'] = 'TNF'
+        self.assertEqual(R.review(spec, games, now)['state'], 'held')
+
+    def test_duplicate_player_and_existing_exposure_are_held(self):
+        spec, games, now = fixture()
+        first = {'original': {'id': 'original', 'league': 'NFL', 'publishedAt': AT, 'lane': 'best_bet',
+                             'gameIds': ['NFL-1'], 'athleteId': '0', 'status': 'active',
+                             'expiresAt': (now + timedelta(hours=3)).isoformat()}}
+        result = R.review(spec, games, now, first=first)
+        self.assertTrue(any('repeated exposure' in h for h in result['holds']), result)
+        spec['legs'][1]['athleteId'] = '0'
+        self.assertTrue(any('unique named player' in h for h in R.review(spec, games, now)['holds']))
+
+    def test_open_ticket_and_private_reservation_also_hold_repeated_players(self):
+        spec, games, now = fixture()
+        for existing in ({'legs': [spec['legs'][0]], 'parlayType': 'ladder'},
+                         {'legs': [spec['legs'][0]], '_pendingRelease': True}):
+            result = R.review(spec, games, now, first={'reserved': existing})
+            self.assertTrue(any('already reserves' in h for h in result['holds']), result)
+
+    def test_existing_alternate_frequency_is_not_widened(self):
+        spec, games, now = fixture()
+        first = {'old': {'league': 'NFL', 'publishedAt': (now-timedelta(days=2)).isoformat(),
+                         'legs': [{'alternate': True}], 'parlayType': 'longshot'}}
+        result = R.review(spec, games, now, first=first)
+        self.assertTrue(any('within seven days' in h for h in result['holds']), result)
+
+    def test_health_summary_is_bounded_private_and_contains_no_ticket_secrets(self):
+        spec, games, now = fixture()
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder)/'prop-ticket-reviews'
+            path.mkdir()
+            (path/'valid.json').write_text(json.dumps(spec))
+            (path/'invalid.json').write_text('broken')
+            result = R.summary(folder, games, now)
+            self.assertEqual(result['counts'], {'reviewed-private': 1, 'held': 0, 'invalid': 1})
+            self.assertEqual(result['providerRequests'], 0)
+            self.assertFalse(result['releaseReady'])
+            self.assertNotIn('synthetic test receipt', json.dumps(result))
+            self.assertNotIn('Fixture Player', json.dumps(result))
+
+
+if __name__ == '__main__':
+    unittest.main()

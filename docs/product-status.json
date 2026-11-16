@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T18:18:31Z",
+  "updatedAt": "2026-11-16T20:56:55.172776+00:00",
   "items": [
     {
       "id": "O-20261116-RELIABILITY",
       "title": "Privacy, consistent settled stats and actual delivery evidence",
-      "status": "observing",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Finish canonical release, hosted phone/desktop and privacy checks; observe an ordinary production worker and record actual media receipts without forcing a post.",
+      "next": "Verify both authorized correction posts: native X quotes/images and durable Discord receipts. Legacy proof reconciled (23 X images, 22 Discord IDs, 10 attachments). Historical-copy cleanup remains separate.",
       "doneWhen": "Both suites and clean export pass; canonical deploy and hosted workflow succeed; phone/desktop checks pass; a real scheduled worker uses the release and its holds/delivery receipts are documented.",
-      "evidence": "Nov16: 2347 Python (2 skipped) and 372 Node tests pass normally and in clean export. Public record matches 186 official plays; 14 community rows unchanged by private-source migration. Rehearsal exit0/ok, no private reads/outside writes. Two real Buffer Sent media checks passed. Hosted release pending."
+      "evidence": "Nov16 f1fe397fe; hosted run 43939913074 success. 2348 Python (2 skipped), 372 Node, clean export and offline rehearsal passed. Hosted 375/1440: 8 checks, no errors; 5 private URLs 404; Finals 11/21 visually verified. Natural 14:25 results and 14:35 precheck exit0; no new sends/stat drift; historical proof gaps surfaced. work/nov16-reliability/final-verification.json. No budget changes."
     },
     {
       "id": "O-20261113-EDGES-SEARCH",
@@ -466,9 +466,9 @@
       "title": "Early primetime alternate fun tickets and occasional CFB tickets",
       "status": "gated",
       "owner": "agent",
-      "next": "Finish sourced primetime admission/grading/category isolation: current roles, exact periods, verified joint same-book receipt; canonical release and actual delivery/grading. Nov3 CBB result is separate; recurring path unshipped.",
+      "next": "Deploy private MNF/TNF/NBA-alt reviews and verify the existing health worker. Next: joint-quote release and book-specific SGP void/reprice settlement, then a real sourced ticket with delivery/grading proof.",
       "doneWhen": "A real five-to-eight-leg ticket has supported unheld legs, current exact prices, a book-verified combined quote, reasons, separate fun grading and all release/send checks; early delivery and result receipts are verified.",
-      "evidence": "Owner Oct19 approved recurring MNF/TNF/SNF and occasional CFB alternate fun tickets. Feed has individual alternates, not a verified combined SGP quote; model holds remain. User later supplied an eight-leg personal ticket at+654, not the model shortlist. No automated series shipped. Dan screenshot tweet2112175517625409958 decodes09:34ET; exact competitor timing study remains unverified."
+      "evidence": "Nov16 owner requested delivery cleanup, two corrections and start of prop-parlay work. Private workbench checks exact ticket identity, fresh roles/availability, correlation, original stake/shape/frequency and exposure; no publishing or probability claim. Focused tests pass. Production integration and real ticket proof remain held; docs/PROP-TICKET-WORKBENCH.md."
     },
     {
       "id": "O-20261019-RESEARCHCARD",
@@ -1519,9 +1519,9 @@
       "title": "Kook'n Autopilot R1 delivery, research, results and daily operator",
       "status": "observing",
       "owner": "agent",
-      "next": "Verify individual native X Finals at 1:35 and 5:35 ET; verify lotto Final art and X Sent by Nov17 23:03 ET. Recheck late-slate quotes after the 13:30 capture and confirm hosted 375/1440.",
-      "doneWhen": "Each required individual Final has its own native X Sent URL, Discord receipt and hosted graphic. Timing fixes pass canonical deploy; natural release proves all three channels.",
-      "evidence": "Nov15: London/Coleman 2/5 with all receipts; four uncleared rows withdrawn. Nov14 recap Sent 08:12:57 ET. Five native Finals scheduled 13:02–13:52 ET. Recovery/clock fixes pushed; lotto Final preview verified, hosted art and X Sent pending. Evidence work/daily-1235-20261115."
+      "next": "Nov15 recap X and Discord are verified. Finish football-only recap routing and research-slot conflict regressions, canonical deploy and a natural receipt. Full prior handoff: PRODUCT-IMPLEMENTATION.md.",
+      "doneWhen": "The complete Nov15 recap has independent hosted art, Discord and X Sent receipts. Every new play clears channel and caption checks.",
+      "evidence": "Nov16 reconciliation verified the complete Nov15 0-3 recap: X Sent12:32:38Z, image attached; Discord actual05:47:10Z, message1571763542208675944 and durable attachment. Earlier pending schedule remains history. work/nov16-delivery-parlays contains observed provider evidence. Broader R1 work remains open."
     },
     {
       "id": "KA-R2",

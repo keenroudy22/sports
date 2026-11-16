@@ -948,7 +948,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 result_receipt = prior_discord_result(log_book, guid)
                 if result_receipt:
                     entry['discord'] = result_receipt
-                    entry['discord']['destination'] = 'wins'
+                    # This is the original official result in Plays & Results,
+                    # not a new community-win delivery.
+                    entry['discord']['destination'] = 'plays'
                     entry['discord']['reusedResultReceipt'] = True
                     entry['discordResultSourceId'] = quote_source_id(guid)
         if kind == 'community':

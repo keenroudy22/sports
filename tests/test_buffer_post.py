@@ -559,7 +559,7 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(result['discordResultSourceId'], 'p')
         self.assertEqual(result['discord']['state'], 'sent')
         self.assertEqual(result['discord']['messageId'], 'discord-result-1')
-        self.assertEqual(result['discord']['destination'], 'wins')
+        self.assertEqual(result['discord']['destination'], 'plays')
         self.assertTrue(result['discord']['reusedResultReceipt'])
 
     def test_official_schedule_uses_protected_delivery_lane_after_trial_end(self):

@@ -7653,3 +7653,78 @@ that correctly remains outside official ledgers. Football, CBB and NBA audits
 are clean. Updated full-suite and clean-export evidence, canonical promotion,
 hosted success and live375/1440 Results verification remain required before
 this section is called shipped.
+
+
+## November 16 — reliability first batch verified live
+
+Release `f1fe397fe0ec6efabb54f992efb4a3a788df7aba` passed canonical deployment and
+hosted workflow [43939913074](https://github.com/keenroudy22/sports/actions/runs/43939913074).
+All 2,348 Python tests (2 skipped), 372 Node tests and clean-export suites passed.
+The stored-input rehearsal exited 0/ok with no private reads or outside writes.
+The initial hosted attempt correctly rejected the accounting-ledger deletion;
+the follow-up checks the exact archived source hash and every replacement unit
+revision, including duplicates, without permitting other ledger deletions.
+
+Current public sources use only unit accounting; original private files remain
+byte-identical in the protected local archive. All five removed ticket URLs
+returned 404. Hosted record and both corrected Final cards show Daniels 11
+carries/missed by 5.5/-1u and Dorwart 21 yards/cleared by 28.5/+0.877u. Original
+wager terms, historical reports and outcomes remain intact. Eight hosted route
+checks at actual 375/1440 widths passed without overflow or browser/load error.
+
+The natural 14:25 ET results worker used the reliability changes and completed
+14:29:42 with 0 settled/closed/published/screened, no odds/prop requests and no
+new or lost delivery receipts. Climb had no qualified legs; optional research
+was unavailable or outside its window. The natural 14:35 precheck on the final
+commit exited 0 and found no stat drift. It surfaced 23 unverified historical
+X image receipts, 22 missing Discord message IDs and 10 Discord attachment
+receipts; missing proof is not a demonstrated failed send. No duplicates were sent.
+
+Older public Git history/social attachments remain outside this removal. Two
+correction captions/cards and original quote targets are prepared, not sent.
+Existing provider plans, capture cadence and risk caps are unchanged. Keep the
+site free. Full receipts and specific remaining actions are in the owner folder
+`reliability-release-2026-11-16/` and `work/nov16-reliability/`.
+This continuity update is local after verification; no extra code deployment is
+claimed for this documentation.
+
+### Preserved November 16 overnight handoff (pre-existing owner queue edit)
+
+The original KA-R1 note exceeded the queue's existing text limits. Its complete
+text is preserved here; the bounded queue entry points to this handoff. This is
+a prior recorded state, not a new assertion that its pending delivery shipped.
+
+next: Nov 16 07:35 ET desk and attended Buffer operator: move the existing full recap to a verified eligible slot by 08:00 if safely possible. Otherwise preserve the 08:21 queue and confirm actual Sent after due time. Reuse the 00:47:06 Discord receipt. Fix football-only daily Discord routing and the 08:01 optional research conflict through regression, canonical deploy and a natural hosted receipt.
+
+doneWhen: The complete Nov15 recap has independent hosted art, Discord and X Sent receipts. Every new play clears channel and caption checks.
+
+evidence: Nov 15 official straights 0–3/-3.00u. Hosted record and individual Discord/native X Final receipts verified. Hosted recap shows all three. Discord recap sent Nov 16 00:47:06 ET under receipt:day:2026-11-15 through the normal mirror after validating all three IDs. Buffer 6afa94dfa869c35e5bbd513e scheduled 08:21 ET; 08:01 NBA projection occupies the prior spacing slot. Provider confirms pending with exact caption and queue unpaused. No supported Climb legs or fresh NBA pairs. Next source checkpoint Nov 16 09:00 ET. See work/overnight-20261116.
+
+## November 16 — delivery reconciliation and prop-ticket foundation candidate
+
+The owner explicitly authorized the two prepared stat corrections and asked to
+start MNF/TNF player props and NBA alternates under current plans. Recovered
+23 actual X image receipts (21 Buffer API, two attended Sent observations),
+22 Discord message IDs and 10 durable attachments. Discord evidence was obtained
+from observed message identities and matching authenticated webhook GET content;
+no old pick was reposted. Several reused official results had incorrect `wins`
+metadata despite delivery in Plays & Results. Historical metadata corrections
+preserve the previous value, and the new scheduler fix uses `plays` prospectively.
+
+Stable, reserved correction IDs were scheduled once via the approved Buffer API,
+with original quote targets, privacy-attested corrected art and ten-minute spacing.
+Daniels Buffer `6afb6c073509d4c5b882a76f`, Dorwart `6afb6c083e6202be8789dada`.
+Daniels actual X `2122432090855673968` at20:50:18Z and attached image confirmed;
+attended Buffer Sent also shows its native original quote. Dorwart and both
+Discord confirmations remain to be verified before this batch closes.
+
+The private prop-ticket workbench supports explicit MNF/TNF and NBA-alt review
+packets, exact joint-ticket identity, fresh availability and sources, correlation
+countercases, original stakes/shapes/frequency and repeated-player holds.
+It never multiplies SGP probabilities/prices, queues a post or changes a record.
+The existing desk-health clock reads bounded private packets without requests.
+Public admission and book-specific SGP void/repricing/early-exit settlement are
+still unimplemented and explicitly held under O-20261019-ALTFUN. See
+`docs/PROP-TICKET-WORKBENCH.md`; no automatic public prop-parlay series is claimed.
+No services, provider limits, subscriptions, capture cadence or jobs changed.
+Canonical release, hosted and scheduled-worker receipts follow after validation.
