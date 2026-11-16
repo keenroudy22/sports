@@ -61,9 +61,8 @@ recurring public tickets. No automatic series is claimed by this workbench.
 
 ## Daily operating plan
 
-- Morning: finish the prior slate and delivery checks, then research five or more
-  potential qualifying straights across supported sports. Five is the coverage
-  target; an unsupported quote or weak case does not become a pick to fill it.
+- Morning: finish the prior slate and delivery checks, then screen the whole supported
+  slate and target five qualifying straights daily. Five is the release target; an unsupported quote or weak case does not become a pick to fill it.
 - MNF/TNF: prepare player roles and matchup cases early, then verify the actual
   same-book ticket after current availability. Prefer a readable 3–4-leg short
   ticket when it clears the current +200 to +1500 shape; larger lottos remain a

@@ -7762,3 +7762,53 @@ old.0new feed requests in intake/selection; the one diagnostic listing read was
 unmetered. Next existing17:30ET capture must refresh ESPN/prices, followed by
 fresh official-report recovery if direct transport still lags. Do not claim
 the16:00report is sufficient indefinitely or force a pick from stale prices.
+
+
+## November 16 — verified releases and expanded audit checkpoint
+
+The previous pending release statements are resolved: aea2154303 was included
+in 5d9b84656 with successful hosted run43958645769. Natural results16:25
+finished21:29:56Z OK; natural16:35 health reported prop-ticket-workbench-v1,
+zero requests and clean48h delivery. Results-order fd293c880 passed2363 Python
+(2skip),372 Node, clean export, build, record/publication/asset audits and stored
+rehearsal. Hosted43962188588 succeeded; live375px Today had no overflow, load
+failure or console error. Natural16:55 results finished22:00:13Z OK, errors0,
+published0. The replay proves November15 new plays could precede individual
+Finals under the old guard and are held by the new one. This is prospective;
+late historical deliveries are not relabeled on-time.
+
+Both corrections are confirmed with native X quotes, actual images and Discord
+attachments (IDs above). The expanded historical audit recovered23 additional
+Discord receipts via observed message identities and matching webhook content.
+All24 audited original captions, IDs and send clocks are preserved. One Wake
+Forest November14 original has no recovered Discord ID; its separately observed
+correction1571203435678933175 and Final1571262795327082587 do not prove the
+original. No historical play was duplicated. Current48h delivery has26X/24Discord
+confirmations and zero queued/overdue/failed/missing-media or receipt counts.
+Coward remains private/expired/excluded; Sengun has original and Final receipts.
+
+The owner requested full operational audit by November17 and MNF first-quarter
+and full-game player tickets tonight. MNF NFL-401873065 kicks at01:15Z. Manual
+FanDuel 1Q prices at21:44–21:47Z and stored quarter histories are retained in
+work/nov16-delivery-parlays/mnf-review.json. No actual joint quote was obtained
+before sign-in; no credentials/wager entered. Quarter history is descriptive,
+not a probability. Full-game screen:53 priced rows,9 graded,0positive adjusted
+edges at20:40Z. McConkey out and Brissett's first Baltimore start require current
+role/inactive review. Quarter publisher and SGP quote/settlement adapters remain
+gated; no ticket is claimed ready or posted. The normal17:30ET capture is the
+next source/price checkpoint, with attended official NBA report intake if needed.
+
+Paid readiness remains unproven: only1/7 completed days met the existing
+operational standard, and only60/208 confirmed posts in the last30days have
+metrics. Ticket-pick versus research/recap reach is observational, not a creative
+experiment. Keep the site free, preserve transparent results and readable art,
+and use existing analytics calls. Today/NBA-prop phone payload warnings remain
+tracked performance work, not publication failures. The 185-item queue remains
+finite; broader product choices are separate from this operational audit.
+
+Current verified Buffer allowance is3000 (1087used), normal stop2700 and
+essential stop2900; this supersedes the old anchored1000 allowance in the queue.
+Odds API249used/251remaining; existing reserve and Sharp12/min unchanged.
+No plans, paid credits, capture windows or routine Codex chats were added.
+The owner report is Documents/ChatGPT/Kook'n/delivery-parlays-2026-11-16/report.html.
+Goal remains active through17:30 proof and the explicit remaining ticket work.
