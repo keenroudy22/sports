@@ -11514,7 +11514,14 @@
      "state": "sent",
      "text": "✅ FINAL · HIT: Memphis/South Florida over 50.5\nMemphis 52, South Florida 41",
      "settledAt": "2026-11-13T04:54:20Z",
-     "sentAt": "2026-11-13T04:58:54Z"
+     "sentAt": "2026-11-13T04:58:54Z",
+     "messageId": "1570664233908174959",
+     "channelId": "1554299657432211558",
+     "attachmentReceipt": null,
+     "attachmentState": "missing",
+     "receiptVerifiedAt": "2026-11-16T20:48:21Z",
+     "receiptSource": "Discord webhook GET after attended message observation",
+     "providerSentAt": "2026-11-13T04:58:54.894000+00:00"
     },
     "lastHold": "yesterday's receipt:day:2026-11-15 is ready but not delivered on all"
    },
@@ -11888,7 +11895,14 @@
      "state": "sent",
      "text": "❌ FINAL · MISS: 7-leg lotto\nlegs: win, win, win, win, win, loss, win",
      "settledAt": "2026-11-15T04:03:04Z",
-     "sentAt": "2026-11-15T04:08:24Z"
+     "sentAt": "2026-11-15T04:08:24Z",
+     "messageId": "1571376312499703929",
+     "channelId": "1554299657432211558",
+     "attachmentReceipt": null,
+     "attachmentState": "missing",
+     "receiptVerifiedAt": "2026-11-16T20:48:23Z",
+     "receiptSource": "Discord webhook GET after attended message observation",
+     "providerSentAt": "2026-11-15T04:08:27.660000+00:00"
     },
     "lastHold": "yesterday's receipt:day:2026-11-15 is ready but not delivered on all"
    },
@@ -12263,7 +12277,14 @@
      "state": "sent",
      "text": "❌ FINAL · MISS: Keon Coleman over 2.5 catches\n1 catch on 3 targets · missed by 1.5",
      "settledAt": "2026-11-15T21:11:28Z",
-     "sentAt": "2026-11-15T21:16:33Z"
+     "sentAt": "2026-11-15T21:16:33Z",
+     "messageId": "1571635050355888261",
+     "channelId": "1554299657432211558",
+     "attachmentReceipt": null,
+     "attachmentState": "missing",
+     "receiptVerifiedAt": "2026-11-16T20:48:22Z",
+     "receiptSource": "Discord webhook GET after attended message observation",
+     "providerSentAt": "2026-11-15T21:16:35.572000+00:00"
     },
     "lastHold": "yesterday's receipt:day:2026-11-15 is ready but not delivered on all",
     "messageId": "1571571719288791110",
@@ -12785,8 +12806,20 @@
     "text": "✅ FINAL · HIT: Memphis/South Florida over 50.5\nMemphis 52, South Florida 41",
     "settledAt": "2026-11-13T04:54:20Z",
     "sentAt": "2026-11-13T04:58:54Z",
-    "destination": "wins",
-    "reusedResultReceipt": true
+    "destination": "plays",
+    "reusedResultReceipt": true,
+    "messageId": "1570664233908174959",
+    "channelId": "1554299657432211558",
+    "attachmentReceipt": null,
+    "attachmentState": "missing",
+    "receiptVerifiedAt": "2026-11-16T20:48:21Z",
+    "receiptSource": "Discord webhook GET after attended message observation",
+    "providerSentAt": "2026-11-13T04:58:54.894000+00:00",
+    "destinationCorrection": {
+     "previous": "wins",
+     "verified": "plays",
+     "at": "2026-11-16T20:48:21Z"
+    }
    },
    "discordResultSourceId": "CFB-2026-W11-mem-usf-over-50-5-espnbet",
    "cardKey": "cooked-CFB-2026-W11-mem-usf-over-50-5-espnbet",
@@ -12832,8 +12865,20 @@
     "text": "❌ FINAL · MISS: Keon Coleman over 2.5 catches\n1 catch on 3 targets · missed by 1.5",
     "settledAt": "2026-11-15T21:11:28Z",
     "sentAt": "2026-11-15T21:16:33Z",
-    "destination": "wins",
-    "reusedResultReceipt": true
+    "destination": "plays",
+    "reusedResultReceipt": true,
+    "messageId": "1571635050355888261",
+    "channelId": "1554299657432211558",
+    "attachmentReceipt": null,
+    "attachmentState": "missing",
+    "receiptVerifiedAt": "2026-11-16T20:48:22Z",
+    "receiptSource": "Discord webhook GET after attended message observation",
+    "providerSentAt": "2026-11-15T21:16:35.572000+00:00",
+    "destinationCorrection": {
+     "previous": "wins",
+     "verified": "plays",
+     "at": "2026-11-16T20:48:22Z"
+    }
    },
    "discordResultSourceId": "NFL-2026-W10-coleman-over-2-5-rec-dk",
    "cardKey": "burnt-NFL-2026-W10-coleman-over-2-5-rec-dk",
@@ -13011,8 +13056,20 @@
     "text": "❌ FINAL · MISS: 7-leg lotto\nlegs: win, win, win, win, win, loss, win",
     "settledAt": "2026-11-15T04:03:04Z",
     "sentAt": "2026-11-15T04:08:24Z",
-    "destination": "wins",
-    "reusedResultReceipt": true
+    "destination": "plays",
+    "reusedResultReceipt": true,
+    "messageId": "1571376312499703929",
+    "channelId": "1554299657432211558",
+    "attachmentReceipt": null,
+    "attachmentState": "missing",
+    "receiptVerifiedAt": "2026-11-16T20:48:23Z",
+    "receiptSource": "Discord webhook GET after attended message observation",
+    "providerSentAt": "2026-11-15T04:08:27.660000+00:00",
+    "destinationCorrection": {
+     "previous": "wins",
+     "verified": "plays",
+     "at": "2026-11-16T20:48:23Z"
+    }
    },
    "discordResultSourceId": "CFB-2026-11-14-lotto-draftkings",
    "cardKey": "burnt-CFB-2026-11-14-lotto-draftkings-ticket",
