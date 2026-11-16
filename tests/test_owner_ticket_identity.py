@@ -35,6 +35,9 @@ class OwnerTicketIdentityTests(unittest.TestCase):
         self.assertFalse(gates.alternate_parlay_frequency(c,self.ctx).ok)
         self.assertTrue(gates.alternate_parlay_frequency(dict(c,league='CFB'),self.ctx).ok)
         self.assertTrue(gates.alternate_parlay_frequency(dict(c,parlayType='ladder'),self.ctx).ok)
+        self.ticket['status']='withdrawn'
+        self.assertFalse(gates.alternate_parlay_frequency(c,self.ctx).ok,
+                         'Withdrawal cannot replenish a used weekly allowance')
         self.ticket['quotedAt']=gates.stamp(self.now-timedelta(days=7))
         self.assertTrue(gates.alternate_parlay_frequency(c,self.ctx).ok)
 

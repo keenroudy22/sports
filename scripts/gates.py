@@ -1361,8 +1361,6 @@ def alternate_parlay_frequency(candidate, ctx):
     league = candidate.get('league') or candidate.get('_league') or str(candidate.get('id') or '').split('-')[0]
     external = getattr(ctx, 'risk_external', {})
     for key, pick in {**external, **getattr(ctx, 'first', {})}.items():
-        if key in external and pick.get('personalTicket') and pick.get('status', 'active') == 'withdrawn':
-            continue
         if key == candidate.get('id') or pick.get('historicalImport') or pick.get('parlayType') == 'ladder':
             continue
         if (pick.get('league') or key.split('-')[0]) != league:
