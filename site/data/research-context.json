@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-16T11:54:28Z",
+  "updatedAt": "2026-11-16T13:21:31Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -4840,9 +4840,9 @@
               "id": "4431452",
               "name": "Drake Maye",
               "position": "QB",
-              "status": "Questionable",
+              "status": "Doubtful",
               "injury": "Ankle",
-              "reportedAt": "2026-11-16T01:28Z",
+              "reportedAt": "2026-11-16T12:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431452/drake-maye"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "14",
-          "name": "Davis Allen",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-11-15T19:52:06Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426553/davis-allen"
-        },
-        {
-          "teamId": "14",
           "name": "Myles Garrett",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-11-16T03:03:39Z",
           "source": "https://www.espn.com/nfl/player/_/id/3125082/dalton-risner"
+        },
+        {
+          "teamId": "17",
+          "name": "Drake Maye",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-11-16T13:21:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431452/drake-maye"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-16T11:54:28Z",
-      "lastAttemptAt": "2026-11-16T11:54:28Z",
+      "checkedAt": "2026-11-16T13:21:31Z",
+      "lastAttemptAt": "2026-11-16T13:21:31Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-16T11:54:28Z",
-      "lastAttemptAt": "2026-11-16T11:54:28Z",
+      "checkedAt": "2026-11-16T13:21:31Z",
+      "lastAttemptAt": "2026-11-16T13:21:31Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
