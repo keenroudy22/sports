@@ -23,6 +23,12 @@ class _Staged(Exception):
         self.value = value
 
 
+def require_prior_results(log_book, now):
+    hold = bp.receipts.current_results_hold(log_book, now)
+    if hold:
+        raise WebHold('Results first: ' + hold)
+
+
 def reserve_receipt(guid, first, latest, games, log_book, now, *, opener=None):
     """Recompute the normal plan and its caption/art gates, then reserve once.
 
@@ -87,6 +93,7 @@ def reserve_public_play(guid, log_book, now, *, reviewer=None):
     price/news/exposure/art/caption/tests before this reservation; no live gate
     or request cap is bypassed. Never supplies a fabricated Buffer post ID.
     """
+    require_prior_results(log_book, now)
     if bp.rate_backoff(now):
         raise WebHold('Provider backoff active; do not route around it')
     entry = next((p for p in log_book.get('posts', []) if p.get('id') == guid), None)
@@ -140,6 +147,7 @@ def confirm_sent(entry, *, observed_text, link, sent_at, now, observed_images=No
 def reserve_cbb_pick(guid, log_book, now, *, opener=None, validate_only=False):
     """Attended recovery for an admitted, delivered CBB pick; no API call."""
     import cbb_picks, social_style
+    require_prior_results(log_book, now)
     if bp.rate_backoff(now):
         raise WebHold('Provider backoff active; do not route around it')
     entry=next((e for e in log_book.get('posts',[]) if e.get('id')==guid),None)
@@ -179,6 +187,7 @@ def reserve_nba_pick(guid, log_book, now, *, opener=None, validate_only=False):
     marks a reservation as sent. Caller holds the ordinary desk writer lock.
     """
     import nba_trial_runtime as nba, social_style, social_voice
+    require_prior_results(log_book, now)
     if bp.rate_backoff(now):
         raise WebHold('Provider backoff active; do not route around it')
     entry=next((e for e in log_book.get('posts',[]) if e.get('id')==guid),None)

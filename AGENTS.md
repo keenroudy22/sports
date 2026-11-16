@@ -1,3 +1,12 @@
+# November 16 results-before-next-day-plays
+
+The owner reiterated that prior results must precede the next day's plays.
+Require confirmed individual Final receipts as well as the complete prior-day
+recap before releasing new picks or their combined pregame card. Apply the same
+barrier to API scheduling, Discord mirroring and attended Buffer recovery.
+A queued post is not sent. Preserve original posts; surface a concrete result
+or selection hold rather than describing the platform rework as the cause.
+
 # November 16 community accounting privacy
 
 The GitHub repository is public. Personal dollar accounting and source receipts

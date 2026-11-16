@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T20:56:55.172776+00:00",
+  "updatedAt": "2026-11-16",
   "items": [
     {
       "id": "O-20261116-RELIABILITY",
       "title": "Privacy, consistent settled stats and actual delivery evidence",
       "status": "shipped",
       "owner": "agent",
-      "next": "Verify both authorized correction posts: native X quotes/images and durable Discord receipts. Legacy proof reconciled (23 X images, 22 Discord IDs, 10 attachments). Historical-copy cleanup remains separate.",
+      "next": "Both authorized corrections are sent with native X quotes/images and durable Discord receipts. Verify the delivery follow-through hosted release and normal health run; historical-copy cleanup stays separate.",
       "doneWhen": "Both suites and clean export pass; canonical deploy and hosted workflow succeed; phone/desktop checks pass; a real scheduled worker uses the release and its holds/delivery receipts are documented.",
       "evidence": "Nov16 f1fe397fe; hosted run 43939913074 success. 2348 Python (2 skipped), 372 Node, clean export and offline rehearsal passed. Hosted 375/1440: 8 checks, no errors; 5 private URLs 404; Finals 11/21 visually verified. Natural 14:25 results and 14:35 precheck exit0; no new sends/stat drift; historical proof gaps surfaced. work/nov16-reliability/final-verification.json. No budget changes."
     },
@@ -1519,9 +1519,9 @@
       "title": "Kook'n Autopilot R1 delivery, research, results and daily operator",
       "status": "observing",
       "owner": "agent",
-      "next": "Nov15 recap X and Discord are verified. Finish football-only recap routing and research-slot conflict regressions, canonical deploy and a natural receipt. Full prior handoff: PRODUCT-IMPLEMENTATION.md.",
+      "next": "Deploy individual-Final and combined-card ordering guards; prove the next natural worker. At17:30ET verify fresh NBA availability/prices and any admitted play receipts. Prior handoff remains in PRODUCT-IMPLEMENTATION.md.",
       "doneWhen": "The complete Nov15 recap has independent hosted art, Discord and X Sent receipts. Every new play clears channel and caption checks.",
-      "evidence": "Nov16 reconciliation verified the complete Nov15 0-3 recap: X Sent12:32:38Z, image attached; Discord actual05:47:10Z, message1571763542208675944 and durable attachment. Earlier pending schedule remains history. work/nov16-delivery-parlays contains observed provider evidence. Broader R1 work remains open."
+      "evidence": "Nov16: prior recap verified on X/Discord; both corrections Sent with images/native quotes and Discord attachments. Recap-only ordering gap reproduced;83 focused tests pass for Finals, CBB, daily cards and attended routes.16:00ET NBA PDF reviewed/ingested; ESPN snapshot remains stale. Full release and natural proof pending."
     },
     {
       "id": "KA-R2",

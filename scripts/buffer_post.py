@@ -719,6 +719,13 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     # its Buffer tuple "play". The id namespace is authoritative for routing.
     plans = [(guid, 'community' if guid.startswith('community:') else kind, text, due, card_key)
              for guid, kind, text, due, card_key in plans]
+    if any(receipts.is_new_play(p[0], p[1]) for p in plans):
+        hold = receipts.current_results_hold(log_book, now)
+        if hold:
+            for p in plans:
+                if receipts.is_new_play(p[0], p[1]):
+                    log(f'results-first: {p[0]} held: {hold}')
+            plans = [p for p in plans if not receipts.is_new_play(p[0], p[1])]
     pending = pending_scheduled(log_book, now)
     # Tickets and result follow-ups get queue capacity before optional updates,
     # even before pressure reaches the reserve threshold. Due times stay intact.

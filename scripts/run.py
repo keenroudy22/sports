@@ -3249,9 +3249,9 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         plans += cbb_picks.plans(now, log_book, reserved=plans)
         if results_first_hold:
             held = [plan[0] for plan in plans
-                    if plan[1] in ('play', 'nba-trial', 'cbb-pick', 'community')]
+                    if receipts.is_new_play(plan[0], plan[1])]
             plans = [plan for plan in plans
-                     if plan[1] not in ('play', 'nba-trial', 'cbb-pick', 'community')]
+                     if not receipts.is_new_play(plan[0], plan[1])]
             if held:
                 log('results-first: held new plays until the prior card recap reaches X and Discord: '
                     + ', '.join(held))
@@ -3268,7 +3268,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             plans += nba_trial_runtime.social_plans(max(now, later), log_book, reserved=plans)
             if results_first_hold:
                 plans = [plan for plan in plans
-                         if plan[1] not in ('play', 'nba-trial', 'cbb-pick', 'community')]
+                         if not receipts.is_new_play(plan[0], plan[1])]
         # A Buffer discovery/limit outage must not prevent already-authorized
         # Discord delivery above. Empty plans need neither metered lookup.
         # An optional post blocked by the local journal cannot use the protected

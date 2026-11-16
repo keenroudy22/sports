@@ -292,6 +292,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 entry['discord'] = mirror
             continue
         pregame = (kind in ('buffer:play', 'buffer:nba-trial', 'buffer:cbb-pick')
+                   or (combined and str(entry.get('id', '')).startswith('receipt:card:'))
                    or (kind == 'buffer:community'
                        and mirror.get('communityType') == 'ticket'))
         if hold_new_plays and pregame:

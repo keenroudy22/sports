@@ -7728,3 +7728,37 @@ still unimplemented and explicitly held under O-20261019-ALTFUN. See
 `docs/PROP-TICKET-WORKBENCH.md`; no automatic public prop-parlay series is claimed.
 No services, provider limits, subscriptions, capture cadence or jobs changed.
 Canonical release, hosted and scheduled-worker receipts follow after validation.
+
+## November 16 — corrections sent and results-order follow-through
+
+Both correction posts are now observed in Buffer Sent with the original native
+quote and corrected graphic. Daniels: X2122432090855673968 at20:50:18.525Z;
+Dorwart: X2122435275972358612 at21:02:57.779Z. Discord independently delivered
+both with durable attachments: messages1571993146819215444 and1571995108096745533.
+The original loss -1.00u and win +0.88u remain unchanged. Evidence is retained in
+work/nov16-delivery-parlays/corrections-final-receipts.json and the attended DOM
+and screenshots. The earlier paragraph's pending statements are now resolved.
+
+Canonical source aea2154303d614268a760e15217396f3b23deeb1 passed2357 Python
+tests(2skip),372 Node tests, clean export, publication/record/asset audits and
+offline rehearsal; promoted with the run lock and pushed. Hosted verification
+is still pending; the subsequent NBA source-ingest commit superseded its queued
+workflow and includes this source.
+
+The owner explicitly repeated results-before-next-day-plays. Audit found the
+existing barrier checked only the full recap, permitting individual Finals to
+trail new plays(Saturday Finals did follow Sunday picks). The follow-through
+requires individual X Sent and Discord message receipts, includes CBB-only
+slates and the combined pregame card, and covers direct scheduling and attended
+recovery.83 focused tests pass; canonical/full and natural-run proof remain due.
+Prior November15 Finals and recap are already delivered; this is prospective.
+
+Today's source audit found the direct NBA listing lagging the browser listing.
+The actual newest16:00ET official PDF was downloaded from its visible canonical
+link and all6pages reviewed. Existing nba_report_intake.py --select ingested
+26teams(16submitted) under the normal lock. It preserved ESPN's18:30:09Z clock;
+selection correctly remains held because that independent snapshot is over60min
+old.0new feed requests in intake/selection; the one diagnostic listing read was
+unmetered. Next existing17:30ET capture must refresh ESPN/prices, followed by
+fresh official-report recovery if direct transport still lags. Do not claim
+the16:00report is sufficient indefinitely or force a pick from stale prices.

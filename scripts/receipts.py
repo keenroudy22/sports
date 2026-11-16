@@ -408,6 +408,49 @@ def ready(first, latest, games, log_book, now):
     return [daily_straight_card.link_final(r, log_book, latest, games) for r in out if r['stale'] > now]
 
 
+def is_new_play(guid, kind):
+    """Individual picks and the combined pregame card share the result barrier."""
+    return (str(kind).removeprefix('buffer:') in ('play', 'nba-trial', 'cbb-pick', 'community')
+            or str(guid).startswith('receipt:card:'))
+
+
+def prior_individual_results_hold(rows, log_book, channel):
+    """A recap or a queued Final is not evidence of individual result delivery."""
+    import buffer_post
+    posts = [p for p in log_book.get('posts', [])
+             if not p.get('cancelledAt') and not p.get('deletedAt')]
+    def sent_x(p):
+        return bool(p.get('sentAt') and re.fullmatch(r'\d{8,30}', str(p.get('tweetId') or '')))
+    def sent_discord(p):
+        return p.get('state') == 'sent' and bool(p.get('sentAt') and p.get('messageId'))
+    for row in rows:
+        key = row['id']
+        originals = [p for p in posts if p.get('id') == key]
+        x_required = channel in ('all', 'x') and any(sent_x(p) for p in originals)
+        discord_required = channel in ('all', 'discord') and any(
+            (p.get('discord') or {}).get('state') == 'sent' for p in originals)
+        if not x_required and not discord_required:
+            continue
+        if row.get('result') not in MARKS:
+            return f"prior slate's {key} is waiting for its final grade"
+        finals = [p for p in posts if buffer_post.quote_source_id(p.get('id')) == key]
+        if x_required and not any(sent_x(p) for p in finals):
+            return f"prior slate's individual Final for {key} has no confirmed X Sent receipt"
+        mirrors = [(p.get('discord') or {}) for p in finals]
+        mirrors += [(p.get('discord') or {}).get('result') or {} for p in originals]
+        if discord_required and not any(sent_discord(p) for p in mirrors):
+            return f"prior slate's individual Final for {key} has no confirmed Discord message receipt"
+    return None
+
+
+def current_results_hold(log_book, now):
+    """Shared final check for direct scheduling and attended recovery; no feeds."""
+    if eastern_date(now) < date(2026, 11, 16):
+        return None
+    ctx = gates.Stores().as_of(now)
+    return prior_day_results_hold(ctx.first, ctx.latest, ctx.games, log_book, now)
+
+
 def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
     """Explain why today's plays must wait for yesterday's complete recap.
 
@@ -425,6 +468,13 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
     ids = counted(public_first, latest)
     rows = plays_between(public_first, latest, games, ids, day, day)
     rows += nba_daily_rows(day, now, log_book)
+    if today >= date(2026, 11, 16):
+        import cbb_picks
+        cbb = [p for p in cbb_picks.public_rows()
+               if p.get('kickoff') and eastern_date(gates.when(p['kickoff'])) == day]
+        hold = prior_individual_results_hold(rows + cbb, log_book, channel)
+        if hold:
+            return hold
     expected = {row['id'] for row in rows}
     if not expected:
         return None
