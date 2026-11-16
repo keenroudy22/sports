@@ -9917,7 +9917,36 @@
    },
    "sentAt": "2026-11-08T00:07:04.156Z",
    "link": "https://x.com/1753110091912413184/status/2119220117468840416",
-   "tweetId": "2119220117468840416"
+   "tweetId": "2119220117468840416",
+   "metricsAttemptAt": "2026-11-16T00:02:12Z",
+   "metricsAttempts": [
+    "2026-11-16T00:02:12Z"
+   ],
+   "metricsHistory": [
+    {
+     "at": "2026-11-16T00:02:12Z",
+     "checkpointHours": 168,
+     "metrics": {
+      "reactions": 0,
+      "comments": 1,
+      "engagementRate": 3.25,
+      "reposts": 0,
+      "impressions": 123,
+      "clicks": 0
+     },
+     "providerUpdatedAt": "2026-11-15T11:33:11.192Z",
+     "followup": false
+    }
+   ],
+   "metrics": {
+    "reactions": 0,
+    "comments": 1,
+    "engagementRate": 3.25,
+    "reposts": 0,
+    "impressions": 123,
+    "clicks": 0
+   },
+   "metricsAt": "2026-11-16T00:02:12Z"
   },
   {
    "id": "cashed:CFB-2026-W10-afa-army-over-43-5-br",
@@ -9950,7 +9979,36 @@
    },
    "sentAt": "2026-11-08T04:04:46.204Z",
    "link": "https://x.com/1753110091912413184/status/2119279936770806057",
-   "tweetId": "2119279936770806057"
+   "tweetId": "2119279936770806057",
+   "metricsAttemptAt": "2026-11-16T00:02:12Z",
+   "metricsAttempts": [
+    "2026-11-16T00:02:12Z"
+   ],
+   "metricsHistory": [
+    {
+     "at": "2026-11-16T00:02:12Z",
+     "checkpointHours": 168,
+     "metrics": {
+      "reactions": 0,
+      "comments": 0,
+      "engagementRate": 0,
+      "reposts": 0,
+      "impressions": 45,
+      "clicks": 0
+     },
+     "providerUpdatedAt": "2026-11-15T11:33:11.192Z",
+     "followup": false
+    }
+   ],
+   "metrics": {
+    "reactions": 0,
+    "comments": 0,
+    "engagementRate": 0,
+    "reposts": 0,
+    "impressions": 45,
+    "clicks": 0
+   },
+   "metricsAt": "2026-11-16T00:02:12Z"
   },
   {
    "id": "cashed:CFB-2026-W10-colo-asu-ml-home-0-dk",
@@ -10101,7 +10159,36 @@
     "observedAt": "2026-11-08T14:47:40.663040+00:00",
     "timePrecision": "minute",
     "captionVerified": true
-   }
+   },
+   "metricsAttemptAt": "2026-11-16T00:02:12Z",
+   "metricsAttempts": [
+    "2026-11-16T00:02:12Z"
+   ],
+   "metricsHistory": [
+    {
+     "at": "2026-11-16T00:02:12Z",
+     "checkpointHours": 168,
+     "metrics": {
+      "reactions": 1,
+      "comments": 0,
+      "engagementRate": 7.69,
+      "reposts": 0,
+      "impressions": 65,
+      "clicks": 0
+     },
+     "providerUpdatedAt": "2026-11-15T11:33:11.192Z",
+     "followup": false
+    }
+   ],
+   "metrics": {
+    "reactions": 1,
+    "comments": 0,
+    "engagementRate": 7.69,
+    "reposts": 0,
+    "impressions": 65,
+    "clicks": 0
+   },
+   "metricsAt": "2026-11-16T00:02:12Z"
   },
   {
    "id": "NFL-2026-W9-allen-over-7-5-recyds-dk",
@@ -12512,6 +12599,21 @@
     "checkedAt": "2026-11-15T23:57:48Z",
     "state": "already-public"
    }
+  },
+  {
+   "id": "sheet:NFL:2026-11-16",
+   "postedAt": "2026-11-16T00:02:12Z",
+   "dueAt": "2026-11-16T00:14:03Z",
+   "bufferPostId": "6afa4811d7e5fee6388bb265",
+   "textHash": "d83e75b2aa95bf8f",
+   "kind": "buffer:sheet",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "📌 Tomorrow night's MNF projection.\nMy number next to Vegas. No current priced line cleared the watch check.\n📌 Save this one\n#NFL\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "cardKey": "sheet-nfl-2026-11-16"
   }
  ]
 }
