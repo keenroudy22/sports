@@ -1,4 +1,5 @@
 import json
+import hashlib
 import os
 import sys
 import tempfile
@@ -8,9 +9,32 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
 
 import integrity
+import community_record
 
 
 class LedgerTests(unittest.TestCase):
+    def test_private_accounting_migration_preserves_every_unit_revision(self):
+        row = {'id': 'ticket', 'result': 'win', 'settledAt': '2026-11-15T01:00:00Z',
+               'stakeDollars': 10, 'returnDollars': 20, 'unitDollars': 10}
+        before = (json.dumps(row) + '\n') * 2
+        projection = json.dumps(community_record.public_settlement(row)) + '\n'
+        with tempfile.TemporaryDirectory() as root:
+            os.makedirs(os.path.join(root, 'data'))
+            target = os.path.join(root, 'data/community-settlements.jsonl')
+            def check(after, source=before, path='data/community-results.jsonl'):
+                with open(target, 'w') as stream:
+                    stream.write(after)
+                with patch('integrity.subprocess.check_output', side_effect=[f'D\t{path}\n', source]):
+                    return integrity.verify_store_history('base', root)
+            # The production hash is fixed; this isolated fixture stands in for
+            # that exact reviewed source, never for arbitrary later ledgers.
+            with patch.object(integrity, 'PRIVATE_COMMUNITY_SHA256', hashlib.sha256(before.encode()).hexdigest()):
+                self.assertEqual(check(projection * 2), [])
+                self.assertTrue(check(projection))  # dropping a duplicate fails
+                self.assertTrue(check(projection.replace('1.0', '2.0') * 2))
+                self.assertTrue(check(projection * 2, source=before + '\n'))
+                self.assertTrue(check(projection * 2, path='data/other-results.jsonl'))
+
     def test_full_store_rows_preserve_nested_inputs_and_duplicates(self):
         before = '{"id":1,"inputs":{"role":2}}\n' * 2
         self.assertTrue(integrity.complete_rows(before) - integrity.complete_rows(before.splitlines()[0]))

@@ -20,6 +20,10 @@ from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEDGER = os.path.join(ROOT, 'tests', 'integrity-ledger.json')
+# One reviewed privacy migration, not a general exemption for deleted ledgers.
+# The exact original is retained privately; hosted verification uses its Git blob
+# and requires every derived unit revision, including duplicates, to survive.
+PRIVATE_COMMUNITY_SHA256 = '1574cf3e27e979699977f8047c877d985356853b232e86832ec7341d0d8c5903'
 
 # Frozen at first publication. A later report may add fields, never rewrite these.
 PICK_FIELDS = ('league', 'kind', 'title', 'gameId', 'gameIds', 'player', 'athleteId',
@@ -104,7 +108,7 @@ def main():
         problems = verify_report_history(sys.argv[2]) + verify_store_history(sys.argv[2])
         if problems:
             raise SystemExit('\n'.join(problems))
-        print('Prior reports and complete stored revisions are unchanged; only additions allowed.')
+        print('Prior reports and stored revisions verified, including the exact approved private-accounting migration.')
         return
     ledger = build()
     with open(LEDGER, 'w', encoding='utf-8') as handle:
@@ -134,6 +138,19 @@ def complete_rows(text, array=False):
     return Counter(json.dumps(row, sort_keys=True, separators=(',', ':')) for row in rows)
 
 
+def verified_private_community_migration(before, root):
+    """Accept only the archived Nov 16 source with all public unit rows intact."""
+    from community_record import public_settlement, source_privacy_issues
+    if hashlib.sha256(before.encode('utf-8')).hexdigest() != PRIVATE_COMMUNITY_SHA256:
+        return False
+    if source_privacy_issues(root):
+        return False
+    projected = '\n'.join(json.dumps(public_settlement(json.loads(line)))
+                          for line in before.splitlines() if line.strip())
+    after = (Path(root) / 'data/community-settlements.jsonl').read_text()
+    return not (complete_rows(projected) - complete_rows(after))
+
+
 def verify_store_history(base, root=ROOT):
     """Preserve every complete old JSONL revision, including duplicates; merges may reorder.
 
@@ -151,6 +168,10 @@ def verify_store_history(base, root=ROOT):
             continue
         try:
             before = subprocess.check_output(['git', 'show', f'{base}:{path}'], cwd=root, text=True)
+            if mode == 'D' and path == 'data/community-results.jsonl':
+                if not verified_private_community_migration(before, root):
+                    problems.append(f'Private accounting migration failed verification: {path}')
+                continue
             after = (Path(root) / path).read_text()
             if path.startswith('market-observations/'):
                 if before != after:
