@@ -7,6 +7,7 @@ from pathlib import Path
 from types import SimpleNamespace
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import gates, community_record
+import social_style
 
 class OwnerTicketIdentityTests(unittest.TestCase):
     def setUp(self):
@@ -52,3 +53,21 @@ class OwnerTicketIdentityTests(unittest.TestCase):
             self.assertEqual(row['legs'],[{'title':t['legs'][0]['title']},{'title':'Legacy exact leg'}])
             self.assertNotIn('privateSource',json.dumps(row))
             self.assertEqual(json.loads((root/'data/community.json').read_text())['tickets'][0],t)
+
+    def test_new_native_owner_card_and_known_open_risk_without_reviving_screenshots(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);(root/'data').mkdir();(root/'site/img/tickets').mkdir(parents=True)
+            t=dict(self.ticket,card='img/tickets/owner-q1.png')
+            path=root/'site'/t['card']
+            path.write_bytes(b'\x89PNG\r\n\x1a\n'+social_style.MARKER+b'KooknTheme\x00ticket')
+            def build():
+                (root/'data/community.json').write_text(json.dumps({'tickets':[t]}))
+                return community_record.build(root)[0]
+            (root/'data/x-posted.json').write_text(json.dumps({'posts':[{'id':t['id'],
+                'sentAt':'2026-11-16T23:01Z','link':'https://x.com/test/status/123456789'}]}))
+            row=build();self.assertEqual(row['card'],t['card']);self.assertEqual(row['riskUnits'],.25)
+            self.assertIsNone(row['units']);self.assertTrue(row['accountingUnknown'])
+            t['card']='../owner-q1.png';self.assertNotIn('card',build())
+            t['card']='img/tickets/owner-q1.png';path.write_bytes(b'old unreviewed screenshot')
+            self.assertNotIn('card',build())
+            t['legs']=['Legacy A','Legacy B'];self.assertNotIn('card',build())

@@ -187,4 +187,17 @@ def build(root=ROOT):
                     **{k: v for k, v in (public_accounting(result) if public_source else accounting(result)).items()
                        if k in ('accountingUnknown', 'units', 'riskUnits')},
                     'delivery': {'xAt': post['sentAt'], 'link': post['link']}})
+        # New structured owner tickets retain their reviewed native card. Do not
+        # restore old screenshot paths removed by the accounting privacy audit.
+        structured = ticket.get('legs') and all(isinstance(leg, dict) for leg in ticket['legs'])
+        card = str(ticket.get('card') or '')
+        if structured and re.fullmatch(r'img/tickets/[A-Za-z0-9_-]+\.png', card):
+            import social_style
+            source = root / 'site' / card
+            if social_style.current_png(source) and b'KooknTheme\x00ticket' in source.read_bytes()[:256]:
+                out[-1]['card'] = card
+        risk = ticket.get('riskUnits')
+        if (structured and not result and type(risk) in (int, float)
+                and Decimal(str(risk)).is_finite() and risk > 0):
+            out[-1]['riskUnits'] = risk  # Known posted risk; no assumed cash return.
     return out
