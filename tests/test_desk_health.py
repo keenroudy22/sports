@@ -42,7 +42,7 @@ class DeskHealthTests(unittest.TestCase):
                     play('missing'), play('confirmed'), play('wrong-kind'), play('new', 10)]), \
                  mock.patch('cbb_picks.public_rows', return_value=[play('college'), play('college-unmarked')]):
                 result = H.summary(root, root/'private', root, NOW, {'posts': posts})
-            self.assertEqual(set(result['basketballMissingOriginals']), {'missing', 'wrong-kind', 'college-unmarked'})
+            self.assertEqual(set(result['basketballMissingOriginals']), {'missing', 'confirmed', 'wrong-kind', 'new', 'college', 'college-unmarked'})
             self.assertEqual(result['basketballMissingOriginals']['missing']['state'], 'expired')
             self.assertIn('basketball-originals-unconfirmed', {i['code'] for i in result['issues']})
 
@@ -321,7 +321,8 @@ class DeskHealthTests(unittest.TestCase):
         self.assertEqual(result['discordOverdue'], 1)
 
     def test_discord_released_play_without_buffer_due_time_is_not_invisible(self):
-        post={'kind':'buffer:play','discord':{'state':'sent','sentAt':'2026-10-05T13:00Z'}}
+        post={'kind':'buffer:play','link':'https://x.com/keenkooks/status/123','tweetId':'123',
+              'discord':{'state':'sent','sentAt':'2026-10-05T13:00Z','messageId':'456'}}
         result=H.delivery([post],NOW)
         self.assertEqual(result['xOverdue'],1)
         self.assertEqual(result['discordConfirmed'],1)
@@ -623,6 +624,11 @@ class DeskHealthTests(unittest.TestCase):
             self.assertFalse(list(root.rglob('*.tmp')))
 
     def post(self, identity, **values):
+        if values.get('sentAt'):
+            values.setdefault('link', 'https://x.com/keenkooks/status/123')
+            values.setdefault('tweetId', '123')
+        if (values.get('discord') or {}).get('state') == 'sent':
+            values['discord'].setdefault('messageId', '456')
         return {'id': identity, 'dueAt': H.gates.stamp(NOW - timedelta(hours=1)),
                 'bufferPostId': 'stored-provider-id', **values}
 

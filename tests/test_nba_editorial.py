@@ -133,7 +133,9 @@ class NBAEditorialTests(unittest.TestCase):
                 buffer_post.audit_pending_style({'posts':[entry]},now,log=lambda *_:None,items={})
                 self.assertEqual(delete.called,deleted)
             if deleted:self.assertTrue(entry['socialStyleAudit']['needsRevision'])
-            if status=='sent':self.assertIn('sentAt',entry)
+            if status=='sent':
+                self.assertNotIn('sentAt',entry)  # provider omitted its actual timestamp
+                self.assertEqual(entry['deliveryReceipt']['state'],'unverified')
 
     def test_new_prop_caption_leads_with_line_number_and_current_role(self):
         now,_,_=self.relevant_fixture()

@@ -4,6 +4,7 @@ Settlements are append-only corrections. A screenshot first shown after a win
 cannot create a pregame publication. Injured legs do not rewrite ticket odds.
 """
 import json
+import re
 from pathlib import Path
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
@@ -59,6 +60,19 @@ def append(row, path=None):
     return True
 
 
+# Public projection: new private ticket fields must never become public by default.
+PUBLIC_TICKET_FIELDS = frozenset(('id', 'title', 'displayTitle', 'league', 'kind',
+    'odds', 'baseOdds', 'priceBoosted', 'book', 'kickoff', 'status', 'quotedAt',
+    'personalTicket'))
+
+
+def public_note(result):
+    note = str(result.get('publicNote') or result.get('note') or '')
+    if re.search(r'[$£€]|\b(?:dollars?|usd|stake|payout|bet[ -]?id|wager[ -]?id)\b', note, re.I):
+        return 'Confirmed settlement; accounting shown in units.'
+    return note or 'Personal ticket; separate from Best Bets.'
+
+
 def build(root=ROOT):
     root = Path(root)
     posts = read(root / 'data/x-posted.json', {'posts': []})['posts']
@@ -78,7 +92,7 @@ def build(root=ROOT):
             continue
         post = min(releases, key=lambda p: p['sentAt'])
         result = results.get(key, {})
-        out.append({**ticket, 'community': True, 'publishedAt': post['sentAt'], 'posted': True,
+        out.append({**{k: v for k, v in ticket.items() if k in PUBLIC_TICKET_FIELDS}, 'community': True, 'publishedAt': post['sentAt'], 'posted': True,
                     'season': kickoff.year, 'seasonType': 2, 'lane': 'personal',
                     'kind': ('parlays' if len(ticket.get('legs', [])) > 1 else
                              ticket['kind'] if ticket.get('kind') in ('spreads', 'totals', 'moneyline') else 'props'),
@@ -87,7 +101,7 @@ def build(root=ROOT):
                     'legs': [{'title': leg} for leg in ticket.get('legs', [])] if len(ticket.get('legs', [])) > 1 else [],
                     'result': result.get('result'), 'settledAt': result.get('settledAt'),
                     'cashout': result.get('cashout') is True,
-                    'entryNote': result.get('note') or 'Personal ticket; separate from Best Bets.',
-                    'resultSource': result.get('source'), **accounting(result),
+                    'entryNote': public_note(result),
+                    **{k: v for k, v in accounting(result).items() if k in ('accountingUnknown', 'units', 'riskUnits')},
                     'delivery': {'xAt': post['sentAt'], 'link': post['link']}})
     return out

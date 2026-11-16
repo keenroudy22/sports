@@ -1,7 +1,16 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-15T17:54:27Z",
+  "updatedAt": "2026-11-16T18:18:31Z",
   "items": [
+    {
+      "id": "O-20261116-RELIABILITY",
+      "title": "Privacy, consistent settled stats and actual delivery evidence",
+      "status": "observing",
+      "owner": "agent",
+      "next": "Finish canonical release, hosted phone/desktop and privacy checks; observe an ordinary production worker and record actual media receipts without forcing a post.",
+      "doneWhen": "Both suites and clean export pass; canonical deploy and hosted workflow succeed; phone/desktop checks pass; a real scheduled worker uses the release and its holds/delivery receipts are documented.",
+      "evidence": "Nov16: normal and clean-export suites pass (2343 Python, 2 skipped; 372 Node), plus 24 privacy/boundary checks. Stored rehearsal exit0/ok, no outside writes/private reads. Two real Buffer Sent API responses each returned one image. Deployment unverified."
+    },
     {
       "id": "O-20261113-EDGES-SEARCH",
       "title": "Find all eligible NBA quotes from Edges",

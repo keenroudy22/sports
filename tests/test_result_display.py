@@ -40,7 +40,7 @@ class ResultDisplayTests(unittest.TestCase):
                  ('rushYds', {'car': 15, 'rushYds': 89}, '89 yards on 15 carries'),
                  ('passYds', {'cmp': 9, 'att': 22, 'passYds': 104}, '9 of 22, 104 yards')]
         for market, player, expected in cases:
-            pick = dict(self.pick, market=market)
+            pick = dict(self.pick, market=market, actualValue=player.get(market))
             with self.subTest(market=market):
                 self.assertEqual(result_display.stat_line(pick, {'players': [dict(player, id='4869443')]}), expected)
 

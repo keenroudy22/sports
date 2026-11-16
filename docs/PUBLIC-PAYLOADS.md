@@ -110,3 +110,16 @@ verified `att`, `cmp` and `passYds` for official passers. Separate full-game pas
 reconciliation excludes sacks/conversions. The existing player tabs/chart read
 these through explicit `q1_` display keys; those keys do not authorize quarter
 markets, full-game quotes, probabilities or projection grades.
+
+### November 16 privacy boundary
+
+Community results use an explicit public projection. Private ticket accounting,
+source paths, arbitrary new fields and money-bearing settlement notes stay out
+of the website. Public units still derive from the untouched accounting ledger.
+The upload guard also rejects personal-money field names recursively.
+
+Five pre-policy ticket images containing personal amounts were removed from the
+publish folder after exact private copies were verified. Their SHA-256 hashes
+are denied by the upload guard even if renamed. Sent social attachments and Git
+history are not erased by this website change. The private archive manifest is
+in the November 16 operator evidence, outside the public upload.

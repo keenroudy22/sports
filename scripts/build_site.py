@@ -2792,6 +2792,8 @@ def board_picks(first, latest, by_id, identities, now=None):
                      'status': status,
                      'result': recent.get('result'), 'actual': recent.get('actual'),
                      'actualValue': recent.get('actualValue'), 'settledAt': recent.get('settledAt'),
+                     'settlementStats': recent.get('settlementStats'),
+                     'correctionOf': recent.get('correctionOf'), 'correctedAt': recent.get('correctedAt'),
                      'units': recent.get('units'),                         # saved when the play was graded
                      'settlementReason': recent.get('settlementReason'),
                      'settlementReviewSources': recent.get('settlementReviewSources'),

@@ -565,6 +565,9 @@ def near_miss(pick):
 
 def result_card_key(pick):
     base = f"{'cooked' if pick.get('result') == 'win' else 'burnt'}-{pick['id']}"
+    if pick.get('correctedAt'):
+        import hashlib
+        base += '-correction-' + hashlib.sha256(str(pick['correctedAt']).encode()).hexdigest()[:10]
     return f'{base}-ticket' if has_fun_final(pick) else base
 
 
@@ -618,6 +621,8 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         game = games.get((pick.get('gameIds') or [None])[0])
         if fun_final or (game and isinstance(pick.get('actualValue'), (int, float))):
             out.append({'card': posted.get(key) or result_card_key(pick), 'pick': pick, 'game': game})
+            if pick.get('correctedAt') and posted.get(key):
+                out.append({'card': result_card_key(pick), 'pick': pick, 'game': game})
     return out
 
 

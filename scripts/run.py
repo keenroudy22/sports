@@ -52,6 +52,7 @@ import projection_shadows
 import role_sanity
 import refresh
 import researcher
+import result_display
 import reasoned_edges
 import scoreboard
 import season_trends
@@ -489,6 +490,12 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
                         resultSource=box_url(league, ids[0].split('-', 1)[1]))
         if value is not None:
             revision['actualValue'] = value
+            if kind in ('props', 'riskyProps'):
+                snapshot = result_display.box_player(original, record_for(played[0]))
+                if snapshot:
+                    revision['settlementStats'] = {k: snapshot[k] for k in
+                        ('car', 'rushYds', 'rec', 'recYds', 'tgt', 'pbpTgt', 'cmp', 'att', 'passYds',
+                         'otCar', 'otRushYds', 'otRec', 'otRecYds', 'otPassYds', 'otAtt') if k in snapshot}
         if reason:
             revision['settlementReason'] = reason
         if review_sources:
@@ -3797,7 +3804,9 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                      'cardTheme': 'ticket', 'reasonKind': x_post.reason_kind(x_post.reason_in(text)),
                      'copyVariant': x_post.copy_variant(text),
                      'discord': {'state': 'sent', 'sentAt': sent_at, 'beforeX': True, 'text': text,
-                                 'image': buffer_post.card_url(key)}}
+                                 'image': buffer_post.card_url(key),
+                                 'messageId': (row.get('discordReceipt') or {}).get('id'),
+                                 'attachmentReceipt': (row.get('discordReceipt') or {}).get('image')}}
             entry.update(cardKey=key)
             if social_style.active(now):
                 entry.update(queuedText=text, socialStyleVersion=social_style.VERSION, socialAgeVersion=AGE_VERSION)

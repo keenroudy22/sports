@@ -345,7 +345,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 link = str(entry.get('link') or '').strip()
                 suffix = 'RESEARCH · NOT A BEST BET'
                 text = f'{text.rstrip()}\n\n{suffix}' + (f'\n{link}' if link else '')
-            send_message(target, text, mirror.get('image'), send=send, fetch=fetch)
+            receipt = send_message(target, text, mirror.get('image'), send=send, fetch=fetch, return_receipt=True)
         except DiscordError as error:
             message = str(error)
             changed = mirror.get('error') != message
@@ -359,6 +359,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
             continue
         mirror['state'] = 'sent'
         mirror['sentAt'] = gates.stamp(now)
+        mirror['messageId'] = (receipt or {}).get('id')
+        mirror['attachmentReceipt'] = (receipt or {}).get('image')
         mirror['beforeX'] = not bool(entry.get('sentAt'))
         mirror.pop('error', None)
         mirror.pop('lastAttemptAt', None)
@@ -379,7 +381,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         if not target:
             continue
         try:
-            send_message(target, followup.get('text') or '', followup.get('image'), send=send)
+            receipt = send_message(target, followup.get('text') or '', followup.get('image'), send=send, return_receipt=True)
         except DiscordError as error:
             message = str(error)
             changed = followup.get('error') != message
@@ -394,6 +396,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
             continue
         followup['state'] = 'sent'
         followup['sentAt'] = gates.stamp(now)
+        followup['messageId'] = (receipt or {}).get('id')
+        followup['attachmentReceipt'] = (receipt or {}).get('image')
         followup.pop('error', None)
         followup.pop('lastAttemptAt', None)
         mirror['followup'] = followup
@@ -415,7 +419,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
             if safe != text:
                 result.setdefault('legacyText', text)
                 result['text'] = safe
-            send_message(url, safe, send=send)
+            receipt = send_message(url, safe, send=send, return_receipt=True)
         except DiscordError as error:
             message = str(error)
             changed = result.get('error') != message
@@ -430,6 +434,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
             continue
         result['state'] = 'sent'
         result['sentAt'] = gates.stamp(now)
+        result['messageId'] = (receipt or {}).get('id')
         result.pop('error', None)
         result.pop('lastAttemptAt', None)
         mirror['result'] = result

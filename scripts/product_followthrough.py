@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATES = ('shipped', 'ready', 'owner-needed', 'observing', 'gated')
 OWNERS = ('agent', 'owner', 'desk', 'provider')
 MAX_BYTES = 256 * 1024
-MAX_ITEMS = 184                       # retain the prior queue and two matchup and Edges follow-ups
+MAX_ITEMS = 185                       # retain prior queue plus approved Nov16 reliability batch
 BRIEF_LIMIT = 1200
 ITEM_FIELDS = {'id', 'title', 'status', 'owner', 'next', 'doneWhen', 'evidence'}
 

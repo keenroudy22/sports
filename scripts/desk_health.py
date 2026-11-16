@@ -320,7 +320,8 @@ def held_captions(logs, day, posts):
 
 def delivery(posts, now):
     counts = {'queued': 0, 'xOverdue': 0, 'xFailed': 0, 'discordOverdue': 0,
-              'discordFailed': 0, 'withheld': 0, 'xConfirmed': 0, 'discordConfirmed': 0}
+              'discordFailed': 0, 'withheld': 0, 'xConfirmed': 0, 'discordConfirmed': 0,
+              'xMediaMissing': 0, 'xMediaUnverified': 0, 'xReceiptUnverified': 0, 'discordReceiptUnverified': 0}
     for p in posts:
         if not isinstance(p, dict):
             continue
@@ -336,7 +337,16 @@ def delivery(posts, now):
         if p.get('cancelledAt') or p.get('deletedAt'):
             continue
         if sent:
-            counts['xConfirmed'] += 1
+            if p.get('link') and p.get('tweetId'):
+                counts['xConfirmed'] += 1
+            else:
+                counts['xReceiptUnverified'] += 1
+            if p.get('card'):
+                media = p.get('mediaReceipt') or {}
+                if media.get('state') == 'missing':
+                    counts['xMediaMissing'] += 1
+                elif media.get('state') != 'attached' or media.get('postUrl') != p.get('link'):
+                    counts['xMediaUnverified'] += 1
         elif p.get('error'):
             counts['xFailed'] += 1
         elif (due or released) and (due or released) < now - timedelta(minutes=15):
@@ -347,7 +357,10 @@ def delivery(posts, now):
         if not isinstance(mirror, dict):
             continue
         if mirror.get('state') == 'sent':
-            counts['discordConfirmed'] += 1
+            if mirror.get('messageId') or mirror.get('id'):
+                counts['discordConfirmed'] += 1
+            else:
+                counts['discordReceiptUnverified'] += 1
         elif mirror.get('state') in ('failed', 'error') or mirror.get('error'):
             counts['discordFailed'] += 1
         elif mirror.get('state') == 'pending':
@@ -461,20 +474,28 @@ def basketball_missing_originals(root, posts, now):
                 continue
             if entry.get(pick_flag) is not True:
                 continue
-            mirror = entry.get('discord') or {}
-            times = [moment(entry.get('sentAt')),
-                     moment(mirror.get('sentAt')) if mirror.get('state') == 'sent' else None]
-            if any(at is not None and at <= now for at in times):
+            at = moment(entry.get('sentAt'))
+            if (at is not None and at <= now and entry.get('link') and entry.get('tweetId')
+                    and not entry.get('deletedAt')):
                 confirmed.add(entry.get('id'))
         for play in read_plays(root / 'data' / directory):
             admitted = moment(play.get('publishedAt'))
             kickoff = moment(play.get('kickoff'))
             pick_id = play.get('id')
+            quote = (play.get('sourceReview') or {}).get('quote') or {}
+            checked = moment(quote.get('checkedAt'))
+            deadline = min(kickoff, checked + timedelta(hours=1)) if kickoff and checked else kickoff
+            urgent = deadline and deadline <= now + timedelta(minutes=15)
             if (pick_id and kickoff and now - timedelta(hours=72) <= kickoff
-                    and admitted and admitted + timedelta(minutes=30) <= now
+                    and admitted and (admitted + timedelta(minutes=30) <= now or urgent)
                     and pick_id not in confirmed):
+                attempts = [p for p in posts if p.get('id') == pick_id]
+                held = next((p.get('cancelReason') or p.get('error') for p in reversed(attempts)
+                             if p.get('cancelReason') or p.get('error')), None)
                 missing[pick_id] = {'league': league, 'kickoff': stamp(play['kickoff']),
-                                    'state': 'expired' if kickoff <= now else 'awaiting'}
+                    'deadline': gates.stamp(deadline) if deadline else None,
+                    'state': 'expired' if deadline and deadline <= now else 'held' if held else 'awaiting',
+                    'reason': held or 'Original X receipt missing; revalidate exact quote before recovery.'}
     return missing
 
 
@@ -533,7 +554,8 @@ def delivery_outcome(post, channel, now):
         return 'unknown'
     # A later pull cannot erase a delivery that was already confirmed on this channel.
     if sent or (channel == 'discord' and evidence.get('state') == 'sent'):
-        return 'confirmed'
+        verified = (post.get('link') and post.get('tweetId')) if channel == 'x' else (evidence.get('messageId') or evidence.get('id'))
+        return 'confirmed' if verified else 'unknown'
     precheck = post.get('precheck')
     if isinstance(precheck, dict) and precheck.get('result') == 'withheld':
         return 'withheld'
@@ -717,7 +739,11 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     counts['heldCaptions'] = held_captions(logs, local.date().isoformat(), posts)
     labels = {'xOverdue': 'X delivery is overdue and unconfirmed.', 'xFailed': 'An X delivery has a recorded failure.',
               'discordOverdue': 'Discord delivery is overdue and unconfirmed.', 'discordFailed': 'A Discord delivery has a recorded failure.',
-              'heldCaptions': 'Research copy was held for length and has not been queued.'}
+              'heldCaptions': 'Research copy was held for length and has not been queued.',
+              'xMediaMissing': 'A Sent X post is missing its required image; inspect it without duplicating the post.',
+              'xMediaUnverified': 'A Sent X post has no actual attachment receipt; card intent is not media proof.',
+              'xReceiptUnverified': 'An X sent timestamp lacks its actual post URL or ID.',
+              'discordReceiptUnverified': 'A Discord sent flag lacks its actual message ID.'}
     for field, label in labels.items():
         if counts[field]:
             issue('delivery-' + field, label)
@@ -728,8 +754,14 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
         issue('basketball-originals-unavailable', 'Basketball original delivery could not be checked.')
     if basketball_missing:
         ids = ', '.join(sorted(basketball_missing))
-        issue('basketball-originals-unconfirmed', f'Basketball picks without an original Discord or X receipt: {ids}.')
+        issue('basketball-originals-unconfirmed', f'Basketball picks without an original X receipt: {ids}.')
     record = read(root / 'site/data/app/record.json')
+    import features, settlement_audit
+    stat_drift = settlement_audit.drift(record.get('picks') or [],
+                                       features.load(root=root / 'data/boxscores'))
+    for mismatch in stat_drift:
+        issue('settlement-stat-drift', f"{mismatch['id']}: settled {mismatch['settledValue']}, "
+              f"current official box {mismatch['currentBoxValue']}; dated correction required.")
     result_speed = result_timeliness(record, posts, now)
     basketball_finals = basketball_final_timeliness(record, posts, now)
     if result_speed['state'] == 'available' and result_speed['missing']:
@@ -883,7 +915,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'sources': checks, 'nbaSources': nba_checks, 'nbaMorning': nba_morning, 'deliveriesLast48h': counts,
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
             'deliveryCohorts': delivery_cohorts(post_book, now),
-            'resultTimeliness': result_speed,
+            'resultTimeliness': result_speed, 'settlementStatDrift': stat_drift,
             'basketballFinalTimeliness': basketball_finals,
             'basketballMissingOriginals': basketball_missing,
             'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
@@ -948,6 +980,8 @@ def markdown(data):
                      f"{finals['over30Minutes']} late, {finals['pendingScheduled']} queued, "
                      f"{finals['missing']} missing, {finals['quoteBlocked']} missing an original X post.")
     cohorts = data.get('deliveryCohorts') or {}
+    for pick_id, gap in (data.get('basketballMissingOriginals') or {}).items():
+        lines.append(f"X delivery {pick_id}: {gap['state']}; deadline {gap.get('deadline') or gap['kickoff']}; {gap.get('reason', 'receipt missing')}")
     lines.append('Distinct delivery cohorts: ' + str(cohorts.get('state', 'unknown')) + '.')
     for cohort in cohorts.get('cohorts') or []:
         lines.append(f"Scheduled {cohort['fromAt']} through {cohort['throughAt']} (inclusive).")
@@ -1016,7 +1050,9 @@ def html_report(data):
     delivery_labels = {'queued': 'X queued', 'xOverdue': 'X overdue', 'xFailed': 'X failed',
                        'discordOverdue': 'Discord overdue', 'discordFailed': 'Discord failed',
                        'withheld': 'Withheld', 'xConfirmed': 'X confirmed',
-                       'discordConfirmed': 'Discord confirmed', 'heldCaptions': 'Caption length holds'}
+                       'discordConfirmed': 'Discord confirmed', 'heldCaptions': 'Caption length holds',
+                       'xMediaMissing': 'X image missing', 'xMediaUnverified': 'X image unverified',
+                       'xReceiptUnverified': 'X receipt unverified', 'discordReceiptUnverified': 'Discord receipt unverified'}
     deliveries = data.get('deliveriesLast48h') or {}
     cohorts = data.get('deliveryCohorts') or {}
     cohort_rows = ''

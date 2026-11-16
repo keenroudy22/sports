@@ -1048,8 +1048,8 @@ def cancel_closed(closed_ids, log_book, now, key=None, send=http_send, log=print
     return log_book
 
 
-STATUS = 'query($id: PostId!) { post(input: {id: $id}) { id status text sentAt externalLink error { message } } }'
-METRICS = 'query($id: PostId!) { post(input: {id: $id}) { id metricsUpdatedAt metrics { type value } } }'
+STATUS = 'query($id: PostId!) { post(input: {id: $id}) { id status text sentAt externalLink assets { source mimeType thumbnail } error { message } } }'
+METRICS = 'query($id: PostId!) { post(input: {id: $id}) { id status sentAt externalLink assets { source mimeType thumbnail } metricsUpdatedAt metrics { type value } } }'
 SETTLE_METRICS = timedelta(hours=24)     # owner Autopilot: first read at 24h, within 30h
 
 
@@ -1098,6 +1098,8 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
             if isinstance(error, BufferRateLimited) or 'reserve' in str(error).lower() or 'cap reached' in str(error).lower():
                 break
             continue
+        if post.get('status') == 'sent' and isinstance(post.get('assets'), list):
+            record_sent_evidence(entry, post, now)
         metrics = {m['type']: m['value'] for m in post.get('metrics') or [] if isinstance(m.get('value'), (int, float))}
         if not metrics or not any(k in metrics for k in ('impressions','views')):
             log(f"buffer: {entry['id']} metrics unavailable; prior observation retained")
@@ -1166,9 +1168,15 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
         try:
             post = graphql(STATUS, {'id': entry['bufferPostId']}, key=key, send=send).get('post') or {}
             if post.get('status') == 'sent' or post.get('sentAt'):
-                entry['sentAt'] = post.get('sentAt') or gates.stamp(now)
+                if not post.get('sentAt'):
+                    entry['deliveryReceipt'] = {'state': 'unverified', 'reason': 'Sent timestamp missing'}
+                    continue
+                entry['sentAt'] = post['sentAt']
                 entry['link'] = post.get('externalLink') or None
                 entry['tweetId'] = (entry['link'] or '').rstrip('/').rsplit('/', 1)[-1] if '/status/' in (entry['link'] or '') else None
+                media = record_sent_evidence(entry, post, now)
+                if entry.get('card') and media['state'] != 'attached':
+                    failed.append({**entry, 'error': f"Sent post image {media['state']}; inspect without resending"})
                 entry['socialStyleAudit'] = {'checkedAt': gates.stamp(now), 'state': 'already-public'}
                 continue
             if post.get('status') != 'scheduled':
@@ -1223,6 +1231,23 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
     return failed
 
 
+def record_sent_evidence(entry, post, now, source='Buffer Sent API'):
+    """Keep actual media observations separate from requested-card intent.
+
+    A missing image is a delivery gap, never permission to resend a public post.
+    """
+    assets = post.get('assets')
+    images = [a for a in assets if isinstance(a, dict)
+              and str(a.get('mimeType') or '').startswith('image/')
+              and a.get('source')] if isinstance(assets, list) else []
+    entry['mediaReceipt'] = {'state': ('attached' if images else 'missing')
+                             if isinstance(assets, list) else 'unverified',
+        'checkedAt': gates.stamp(now), 'source': source,
+        'bufferPostId': entry.get('bufferPostId'), 'postUrl': post.get('externalLink'),
+        'images': [{'url': a['source'], 'mimeType': a['mimeType']} for a in images]}
+    return entry['mediaReceipt']
+
+
 def reconcile(log_book, now, key=None, send=http_send, log=print):
     """Ask Buffer what became of each post whose time has passed, once: the X link when it went out, the
     message when it failed. Returns the entries that failed, for the run to raise."""
@@ -1257,9 +1282,18 @@ def reconcile(log_book, now, key=None, send=http_send, log=print):
         status = post.get('status')
         if status == 'sent':
             link = post.get('externalLink') or ''
-            entry['sentAt'] = post.get('sentAt') or gates.stamp(now)
+            if not post.get('sentAt'):
+                entry['deliveryReceipt'] = {'state': 'unverified', 'reason': 'Sent timestamp missing'}
+                failed.append({**entry, 'error': 'Buffer reports sent without actual publication time; reconcile, do not resend'})
+                continue
+            entry['sentAt'] = post['sentAt']
             entry['link'] = link or None
             entry['tweetId'] = link.rstrip('/').rsplit('/', 1)[-1] if '/status/' in link else None
+            media = record_sent_evidence(entry, post, now)
+            if entry.get('card') and media['state'] != 'attached':
+                problem = f"Sent post image {media['state']}; inspect actual post, do not resend"
+                failed.append({**entry, 'error': problem})
+                log(f"buffer: {entry['id']} {problem}")
             log(f"buffer: {entry['id']} went out: {link or 'no link returned'}")
         elif status == 'error':
             entry['error'] = ((post.get('error') or {}).get('message')) or 'Buffer reports an error without a message'

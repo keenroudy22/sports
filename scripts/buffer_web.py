@@ -114,7 +114,7 @@ def reserve_public_play(guid, log_book, now, *, reviewer=None):
     return entry
 
 
-def confirm_sent(entry, *, observed_text, link, sent_at, now):
+def confirm_sent(entry, *, observed_text, link, sent_at, now, observed_images=None):
     """Record a matching Buffer Sent observation; never infer success from a click.
 
     An unknown/failed click leaves the reservation intact and blocks a duplicate.
@@ -131,6 +131,9 @@ def confirm_sent(entry, *, observed_text, link, sent_at, now):
     if not gates.when(web['reservedAt']) <= at <= now or now-at > timedelta(days=1):
         raise WebHold('Invalid actual publication time')
     entry.update(sentAt=gates.stamp(at), link=link, tweetId=link.rsplit('/', 1)[-1])
+    assets = ([{'source': url, 'mimeType': 'image/observed'} for url in observed_images]
+              if isinstance(observed_images, list) else None)
+    bp.record_sent_evidence(entry, {'assets': assets, 'externalLink': link}, now, 'Buffer Sent UI')
     web.update(state='sent', verifiedAt=gates.stamp(now), evidence='Buffer Sent UI')
 
 

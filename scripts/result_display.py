@@ -27,9 +27,19 @@ def box_player(pick, game=None):
     athlete = str(pick.get('athleteId') or '')
     if not athlete:
         return None
+    snapshot = pick.get('settlementStats')
+    if isinstance(snapshot, dict):
+        return dict(snapshot, id=athlete)
     if game is None:
         game = stored_games().get(pick.get('gameId') or (pick.get('gameIds') or [None])[0])
-    return next((row for row in (game or {}).get('players', []) if str(row.get('id')) == athlete), None)
+    row = next((row for row in (game or {}).get('players', []) if str(row.get('id')) == athlete), None)
+    market, value = str(pick.get('market') or ''), _number(pick.get('actualValue'))
+    # A later box revision cannot silently replace the settled stat. Until a
+    # dated correction exists, omit newer contextual stats if the versions differ.
+    if pick.get('result') and value is not None and row is not None and (row.get(market) != value and not
+            (market in ('rec', 'recYds') and value == 0 and row.get(market) is None and row.get('pbpTgt') is not None)):
+        return {'id': athlete, market: value}
+    return row
 
 
 def _number(value):

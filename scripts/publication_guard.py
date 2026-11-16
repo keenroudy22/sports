@@ -5,6 +5,7 @@ prevents unreviewed file families, known private desk artifacts and recognizable
 credentials from silently becoming public. Never echo a matched value.
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -28,7 +29,12 @@ PRIVATE_NAMES = {'env', '.env', 'desk-health.html', 'desk-health.json', 'desk-he
 PRIVATE_DIRS = {'.git', '.config', 'pending', 'failed', 'x-drafts', 'learning', 'private'}
 PRIVATE_KEYS = {'apikey', 'accesstoken', 'refreshtoken', 'clientsecret', 'password',
                 'webhookurl', 'discordwebhookurl', 'discordreviewwebhookurl',
-                'authorization', 'privatekey', 'bufferaccesstoken'}
+                'authorization', 'privatekey', 'bufferaccesstoken',
+                'stakedollars', 'returndollars', 'unitdollars', 'potentialreturndollars',
+                'protectionfeedollars', 'totalchargeddollars', 'betid', 'wagerid'}
+# Previously published ticket art containing personal money; retained in private archive.
+PRIVATE_IMAGE_HASHES = frozenset(('d163fe8cb4a7f9821573c187276f8a7643560786e79d7671948345ee12563173', '6ff9dca6aaf35550882bfdad275eea6bde1f37f71a2c2d24a401329930529c23', 'b0e82ddae98e9639929e04497061f406cacb70c816258b8a8e2bf3fff3725344', '5b16c1eb6b461ec1e0fbb1a565f87b1c089676c6acf7b4bfaf3147e69c640c67', 'e02d4260c5e22d9b3e366d638012681565d862b64856b377e858dd3f3b856eee'))
+
 TEXT_SUFFIXES = {'.html', '.css', '.js', '.json', '.xml', '.svg'}
 MAX_TEXT_BYTES = 64 * 1024 * 1024
 PATTERNS = (
@@ -112,6 +118,8 @@ def audit(folder):
                 length = path.stat().st_size
                 size += length
                 if path.suffix.lower() not in TEXT_SUFFIXES:
+                    if hashlib.sha256(path.read_bytes()).hexdigest() in PRIVATE_IMAGE_HASHES:
+                        issue(relative, 'personal-money-image')
                     continue
                 if length > MAX_TEXT_BYTES:
                     issue(relative, 'text-too-large-to-check')

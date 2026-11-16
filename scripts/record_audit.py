@@ -36,7 +36,7 @@ def audit(reports, public):
         initial, recent, row = first[pick_id], latest.get(pick_id, {}), indexed[pick_id]
         for field, value in (('league', initial.get('league')), ('publishedAt', initial.get('publishedAt')),
                              ('result', recent.get('result')), ('settledAt', recent.get('settledAt')),
-                             ('units', recent.get('units'))):
+                             ('units', recent.get('units')), ('actualValue', recent.get('actualValue'))):
             if row.get(field) != value:
                 issues.append(f'{pick_id}: {field} does not match the append-only record')
         season = row.get('season')
