@@ -12685,6 +12685,61 @@
    "sentAt": "2026-11-16T05:03:01.874Z",
    "link": "https://x.com/1753110091912413184/status/2122193701531209822",
    "tweetId": "2122193701531209822"
+  },
+  {
+   "id": "receipt:day:2026-11-15",
+   "postedAt": "2026-11-16T05:29:19Z",
+   "dueAt": "2026-11-16T13:21:00Z",
+   "bufferPostId": "6afa94dfa869c35e5bbd513e",
+   "textHash": "19bc6a5459adabd4",
+   "kind": "buffer:receipt",
+   "card": true,
+   "cardTheme": "ticket",
+   "resultPickIds": [
+    "NFL-2026-W10-metcalf-over-4-5-rec-fd",
+    "NFL-2026-W10-london-under-5-5-rec-dk",
+    "NFL-2026-W10-coleman-over-2-5-rec-dk"
+   ],
+   "queuedText": "Sunday: 0-3.\n❌ DK Metcalf over 4.5 catches · had 2\n❌ Drake London under 5.5 catches · 6 catches on 12 targets · missed by 0.5\n❌ Keon Coleman over 2.5 catches · 1 catch on 3 targets · missed by 1.5\n\n#NFL\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "cardKey": "receipt-day-2026-11-15"
+  },
+  {
+   "id": "research:end-zone:2026-11-16",
+   "postedAt": "2026-11-16T05:29:19Z",
+   "dueAt": "2026-11-16T15:31:00Z",
+   "bufferPostId": "6afa94e060a910801c6ebf93",
+   "textHash": "2f97a02dfc784793",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "🎯 END-ZONE WORK\nDerrick Henry (anytime TD lean + first TD dart): 40 red-zone · 25 inside 10\nOmarion Hampton: 18 red-zone · 10 inside 10\nJustin Herbert: 6 red-zone · 5 inside 10\nOronde Gadsden: 6 red-zone · 3 inside 10\n#NFL\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nDerrick Henry (anytime TD lean + first TD dart): 40 red-zone · 25 inside 10\nOmarion Hampton: 18 red-zone · 10 inside 10\nJustin Herbert: 6 red-zone · 5 inside 10\nOronde Gadsden: 6 red-zone · 3 inside 10\n#NFL\n\n21+ only",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-11-16.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "Derrick Henry",
+      "athleteId": "3043078",
+      "gameId": "NFL-401873065",
+      "league": "NFL",
+      "kickoff": "2026-11-17T01:15Z",
+      "anytime": true,
+      "firstTd": true
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-11-16"
   }
  ]
 }
