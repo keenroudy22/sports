@@ -1070,7 +1070,7 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
     candidates = [(entry, social_learning.checkpoint(entry, now)) for entry in log_book.get('posts', [])
                   if entry.get('bufferPostId')]
     candidates = [(entry, point) for entry, point in candidates if point is not None]
-    candidates.sort(key=lambda pair:(bool(pair[0].get('metricsAt')),pair[0]['sentAt']))
+    candidates.sort(key=lambda pair: social_learning.metrics_priority(pair[0], now))
     # Extra refreshes have their own small ceiling; never expand the provider budget.
     followups = sum(1 for entry in log_book.get('posts', []) for at in entry.get('metricsRefreshAttempts', [])
                     if str(at)[:10] == gates.stamp(now)[:10])

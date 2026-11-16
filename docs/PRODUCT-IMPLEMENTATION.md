@@ -7834,3 +7834,17 @@ and all6pages reviewed from those identical bytes in Chrome. Guarded intake at
 snapshot and holding selection. No additional feed calls; normal17:30 capture
 still must refresh the independent provider clock. Browser evidence and intake
 receipt are in work/nov16-delivery-parlays/nba-evening-*.
+
+
+## November 16 — comparable-age analytics priority candidate
+
+Stored replay found the three daily analytics calls prioritize the oldest
+unmeasured post, allowing recent posts to miss24–48h comparative observation.
+First reads now prioritize24–30h, then30–48h, then older first reads and
+followups. Ties remain oldest-first within each window; neither outcome nor
+engagement selects the sample. The unchanged three-call daily cap, cooldown,
+provider reserve and actual observation clocks remain. A regression proves a
+seven-day backlog cannot consume the three requests ahead of timely reads.
+No extra call was made today; actual scheduled collection proof remains due
+when the existing daily allowance resets. This cannot retroactively repair
+missed observation windows or establish a causal creative winner.

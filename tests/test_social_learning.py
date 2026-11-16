@@ -25,6 +25,21 @@ class SocialLearningTests(unittest.TestCase):
         self.assertFalse(any(e.get('metricsAt') for e in entries))
         self.assertEqual(sum(len(e.get('metricsAttempts', [])) for e in entries), len(calls))
 
+    def test_old_unmeasured_backlog_cannot_consume_timely_first_reads(self):
+        entries = [dict(id=name, bufferPostId=name, sentAt=gates.stamp(NOW-timedelta(hours=hours)))
+                   for name,hours in [('backlog',180),('late',40),('fresh',25),('deadline',29)]]
+        calls=[]
+        def send(url,body,headers):
+            calls.append(body['variables']['id'])
+            return 200,b'{"data":{"post":{"metrics":[{"type":"impressions","value":100}]}}}'
+        book={'posts':entries}
+        self.assertEqual(b.collect_metrics(book,NOW,key='t',send=send),3)
+        self.assertEqual(calls,['deadline','fresh','late'])
+        self.assertEqual(b.collect_metrics(book,NOW+timedelta(minutes=10),key='t',send=send),0)
+        self.assertEqual(len(calls),3)
+        self.assertNotIn('metricsAt',entries[0])
+        self.assertTrue(all(e['metricsHistory'][0]['at']==gates.stamp(NOW) for e in entries[1:]))
+
     def test_checkpoints_and_no_old_fake_backfill(self):
         e=dict(bufferPostId='p',sentAt=gates.stamp(NOW-timedelta(hours=73)),metricsAt=gates.stamp(NOW-timedelta(hours=49)))
         self.assertEqual(s.checkpoint(e,NOW),72)

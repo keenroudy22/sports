@@ -21,6 +21,18 @@ def checkpoint(entry, now):
     return max(eligible) if eligible and age <= 192 else None
 
 
+def metrics_priority(entry, now):
+    """Spend the existing cap on timely first reads before the older backlog.
+
+    Prefer the owner's 24–30h target, then salvage comparable 30–48h reads.
+    Never rank by wager outcome or observed engagement. Old reads keep their
+    actual clocks; this only orders requests and cannot increase their budget.
+    """
+    age = (now - gates.when(entry['sentAt'])).total_seconds() / 3600
+    tier = 3 if entry.get('metricsAt') else 0 if age <= 30 else 1 if age <= 48 else 2
+    return tier, gates.when(entry['sentAt'])
+
+
 def research_order(default, log_book, now):
     """Prefer mature, stronger research families; never replace a qualified ticket."""
     groups = {name: [] for name in default}
