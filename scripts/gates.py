@@ -1334,9 +1334,13 @@ def player_exposure(row):
 
 def player_overlap(candidate, ctx):
     exposures = {player_exposure(r) for r in candidate.get('legs') or [candidate]} - {None}
-    for key, pick in getattr(ctx, 'first', {}).items():
+    external = getattr(ctx, 'risk_external', {})
+    for key, pick in {**external, **getattr(ctx, 'first', {})}.items():
         latest = getattr(ctx, 'latest', {}).get(key, {})
-        if key == candidate.get('id') or not occupies_game(pick, latest, ctx.now):
+        owner_ticket = (key in external and pick.get('personalTicket') is True
+                        and pick.get('status', 'active') == 'active'
+                        and not pick.get('result'))
+        if key == candidate.get('id') or not (owner_ticket or occupies_game(pick, latest, ctx.now)):
             continue
         pick = dict(pick, **latest)
         existing = {player_exposure(r) for r in pick.get('legs') or [pick]} - {None}
@@ -1355,14 +1359,17 @@ def alternate_parlay_frequency(candidate, ctx):
             any(isinstance(l, dict) and l.get('alternate') for l in candidate.get('legs') or [])):
         return Decision(True, 'alternate_parlay_frequency', 'main-line ticket or separate ladder')
     league = candidate.get('league') or candidate.get('_league') or str(candidate.get('id') or '').split('-')[0]
-    for key, pick in getattr(ctx, 'first', {}).items():
+    external = getattr(ctx, 'risk_external', {})
+    for key, pick in {**external, **getattr(ctx, 'first', {})}.items():
+        if key in external and pick.get('personalTicket') and pick.get('status', 'active') == 'withdrawn':
+            continue
         if key == candidate.get('id') or pick.get('historicalImport') or pick.get('parlayType') == 'ladder':
             continue
         if (pick.get('league') or key.split('-')[0]) != league:
             continue
         if not (pick.get('parlayType') == 'easyProps' or any(isinstance(l, dict) and l.get('alternate') for l in pick.get('legs') or [])):
             continue
-        published = when(pick.get('publishedAt') or '1970-01-01T00:00Z')
+        published = when(pick.get('publishedAt') or (pick.get('quotedAt') if pick.get('personalTicket') else None) or '1970-01-01T00:00Z')
         if ctx.now - timedelta(days=7) < published <= ctx.now and not pulled_before_post(key, ctx):
             return Decision(False, 'alternate_parlay_frequency', f'{key} used the alternate-ticket exception within seven days; main lines only')
     return Decision(True, 'alternate_parlay_frequency', 'occasional alternate-ticket exception available')

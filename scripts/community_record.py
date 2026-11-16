@@ -179,7 +179,8 @@ def build(root=ROOT):
                              ticket['kind'] if ticket.get('kind') in ('spreads', 'totals', 'moneyline') else 'props'),
                     'parlayType': 'community' if len(ticket.get('legs', [])) > 1 else None,
                     'title': ticket.get('displayTitle') or ticket['title'],
-                    'legs': [{'title': leg} for leg in ticket.get('legs', [])] if len(ticket.get('legs', [])) > 1 else [],
+                    'legs': [{'title': leg.get('title', '') if isinstance(leg, dict) else leg}
+                             for leg in ticket.get('legs', [])] if len(ticket.get('legs', [])) > 1 else [],
                     'result': result.get('result'), 'settledAt': result.get('settledAt'),
                     'cashout': result.get('cashout') is True,
                     'entryNote': public_note(result),

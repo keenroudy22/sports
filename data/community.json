@@ -317,6 +317,54 @@
         "T.J. Hockenson 25+ receiving yards"
       ],
       "quotedAt": "2026-11-09T17:54:07.975330+00:00"
+    },
+    {
+      "id": "community:personal-ticket:2026-11-16-mnf-q1",
+      "league": "NFL",
+      "kind": "parlays",
+      "parlayType": "community",
+      "personalTicket": true,
+      "displayTitle": "MNF 1Q · Hampton 5+ / Henry 20+ rushing yards",
+      "title": "MNF 1Q two-leg parlay at DraftKings",
+      "odds": 170,
+      "book": "DraftKings",
+      "kickoff": "2026-11-17T01:15Z",
+      "status": "active",
+      "riskUnits": 0.25,
+      "card": "img/tickets/mnf-q1-2026-11-16.png",
+      "legs": [
+        {
+          "gameId": "NFL-401873065",
+          "athleteId": "4685382",
+          "player": "Omarion Hampton",
+          "market": "rushYds",
+          "period": "1Q",
+          "direction": "over",
+          "line": 4.5,
+          "milestone": 5.0,
+          "alternate": true,
+          "book": "DraftKings",
+          "odds": -203,
+          "kickoff": "2026-11-17T01:15Z",
+          "title": "Omarion Hampton 5+ rushing yards (1Q)"
+        },
+        {
+          "gameId": "NFL-401873065",
+          "athleteId": "3043078",
+          "player": "Derrick Henry",
+          "market": "rushYds",
+          "period": "1Q",
+          "direction": "over",
+          "line": 19.5,
+          "milestone": 20.0,
+          "alternate": true,
+          "book": "DraftKings",
+          "odds": -133,
+          "kickoff": "2026-11-17T01:15Z",
+          "title": "Derrick Henry 20+ rushing yards (1Q)"
+        }
+      ],
+      "quotedAt": "2026-11-16T22:43:04Z"
     }
   ]
 }

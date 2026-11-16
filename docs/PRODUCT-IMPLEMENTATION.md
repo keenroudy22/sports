@@ -7848,3 +7848,20 @@ seven-day backlog cannot consume the three requests ahead of timely reads.
 No extra call was made today; actual scheduled collection proof remains due
 when the existing daily allowance resets. This cannot retroactively repair
 missed observation windows or establish a causal creative winner.
+
+
+## November 16 attended MNF Q1 owner ticket — candidate
+
+The owner explicitly requested X, site and Discord publication of Hampton 5+
+Q1 rushing yards and Henry 20+ Q1 rushing yards. DraftKings visibly quoted the
+exact pair at +170 (no boost), 22:43:04Z. This uses the existing attended owner
+fun-ticket category, 0.25u, not an automatic quarter-model admission. A native
+card follows the approved dark stadium direction with the actual K/check logo,
+exact periods, team logos and no personal accounting. Structured public leg IDs
+now protect owner-ticket players from later same-game exposure; the weekly
+alternate check also reads these external reservations. Legacy string legs and
+all original records remain intact. Three regressions cover cross-market/book
+overlap, league/week boundaries and safe exact leg display. Full deployment and
+site/X/Discord Sent receipts remain pending. Private evidence and a manual
+quarter-result/participation review are tracked in work/nov16-delivery-parlays.
+No 6–8-leg full-game ticket is approved or claimed by this entry.
