@@ -1,3 +1,14 @@
+# November 17 full-slate parlay selection
+
+The owner clarified that ordinary parlays should be researched across all
+available supported games. Do not present a single-game draft as the strongest
+legs from the full slate. MNF and TNF are the requested same-game parlay slots.
+Compare roles, availability, opponent and exact prices across the slate before
+choosing the ticket; retain current exposure, price and delivery checks.
+The owner dislikes demanding 35 points for a modest parlay return. Prefer
+lower supported alternate thresholds across the slate; compare the actual
+combined price and do not raise a scoring threshold just to reach an odds band.
+
 # November 17 projection graphic completeness
 
 The owner rejected NBA projection cards showing N/A book totals. When current

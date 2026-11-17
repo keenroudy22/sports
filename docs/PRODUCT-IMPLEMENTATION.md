@@ -8340,3 +8340,78 @@ release-bar language. Inspect the receipt-backed official-status adapter,
 correct that inconsistent copy, and verify the same public pick is identified
 consistently in both sections without changing its original terms or record.
 This observation is not fixed by the projection-card release.
+
+## November17 — current operating agreement and cross-game ticket
+
+The owner wants ordinary parlays researched across the full supported slate;
+MNF/TNF remain the same-game specials. Prefer lower supported alternate
+thresholds over demanding35points merely to improve a modest ticket price.
+The rejected35-point draft was never published. All published terms remain
+immutable. No new service, allowance or wager is authorized.
+
+The revised six-leg NBA ticket is Naz Reid6+rebounds, Luka Doncic30+points,
+Keldon Johnson4+rebounds, Cade Cunningham6+assists, Darius Garland6+assists and
+Keyonte George6+assists across CHA-LAL, DET-SAS and UTA-LAC. FanDuel showed
++445 unboosted, no paid protection; allocation0.25u. Both admission and an
+independent later exact-price check passed through prop_ticket_release.py.
+All four pages of the actual10:30AM official injury report were reviewed and
+ingested through the canonical intake. Historical hit counts informed judgment,
+not a probability/EV claim. Knicks participation and POR/MIN submissions stayed
+held. No extra metered capture was requested.
+
+TicketNBA-2026-11-17-prop-ticket-30105dea6ec3e393 reached Discord15:54:21Z,
+message1572278742221463622, and the append-only NBA fun ledger via76f9836d8.
+Hosted44119673985 succeeded15:58:50Z. Live exact pick route at375x812 showed
+all six unchanged terms and+445, scrollWidth375, no missing images or console
+warnings/errors; viewport reset. Buffer accepted6afc79ff5bbbda0a891aba4a for
+16:01:58Z. This paragraph records scheduling, not an X Sent receipt.
+Private evidence: work/nov16-delivery-parlays/nov17-six-lower-release.json.
+
+Operating cadence verified from installed jobs and production code:
+- Full desk captures:06:45,08:30,11:45,17:30,21:00,23:30Eastern, with existing
+  football-day extras including18:50 on Monday/Thursday/Sunday. Daily app
+  research reviews:07:35,08:35,09:35,10:35,11:35,12:35,13:35,17:35.
+- Results checks at:25/:55 each hour; prechecks at:05/:35; delivery every5min.
+  These are evaluation windows, not promises of new public posts at each time.
+- Prior individual Finals and full-slate recap precede next-day plays. Aim for
+  the complete recap that night, otherwise08:00Eastern; never invent a pending
+  result. Overnight app review00:45; morning07:35 owns unresolved follow-up.
+- Target five qualifying straight Best Bets across sports, with supported NBA/
+  NFL props, CBB and weekend CFB. Best Bets1u, Chef's Picks2u, fun0.25u, shared
+  regular/big-slate ceilings5u/8u; all lanes consume capacity. A daily target is
+  not permission to exceed capacity or force an unsupported fifth play.
+- Regular fun tickets compare the full slate. Monday/Thursday research includes
+  full-game props and supported first-quarter specials. One explicit fun style
+  per day and current exposure/overlap checks remain. Exact combined quote,
+  availability, role, opponent and correlated failure review are required.
+- Climb review windows10:00,13:30,16:00,20:00. One open rung; prefer two supported
+  alternatives across games, actual combined-200to-150, bank20%of return and ride
+ 80%only after confirmed settlement. Existing maximum3steps/week still applies.
+  The current alternate validation has zero open segments: daily Climb delivery
+  is not enabled or promised. Preparing a conditional next step is not admission.
+- X uses Buffer,20minute ordinary spacing and current20post/day ceiling. Optional
+  research yields to picks/results. Production now permits Discord/X in the same
+  eligible cycle: no guaranteed10–15minute exclusive Discord lead. Actual delivery
+  clocks can differ while hosted artwork or channel processing completes.
+- Four app automations exist: daily, overnight, Tuesday11:00weekly, and the
+  Saturday10:00weekly slate-longshot heartbeat. No new automation was created.
+  Daily/overnight already archive routine standalone runs; weekly now has the
+  same rule. The weekly lotto heartbeat stays in its existing owner chat.
+
+Two constraints still need explicit follow-through. O-20261019-ALTFUN owns the
+obsolete seven-day alternate-ticket throttle: it conflicts with the owner's
+regular-parlay direction. Implement a bounded prospective rule for the reviewed
+prop-ticket path, retaining current per-style daily/exposure/source checks,
+then full canonical release before claiming daily alts are enabled. Climb
+frequency cannot be promised while its separate evidence qualification is closed.
+Neither constraint is permission to manufacture validation or price evidence.
+
+Learning and growth remain separate. The realNov17 learning report applied
+bounded trust changes using graded evidence; several NFL prop weights decreased.
+The local27B weekly narrative timed out after180.17seconds, so the deterministic
+packet exists but a successful model summary is not claimed. Latest audited
+social coverage has60of208recent posts measured, with missing conversions
+unknown. Compare like-aged formats with at least8comparable measured posts;
+retain losses and measure closing price/forecast error separately from reach.
+The reliability window remains1of7completed days passing all requirements.
+Paid-platform readiness is not established by these delivery repairs.
