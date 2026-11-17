@@ -33,6 +33,26 @@ class MatchupMarketPlayerTests(unittest.TestCase):
         self.assertEqual(build_site.matchup_market_players({athlete}, index, fixture,
                                                           {'33': chart, '22': chart}, now), [])
 
+    def test_final_box_retains_matchup_team_after_the_depth_chart_refreshes(self):
+        now = datetime(2026, 11, 17, 5, tzinfo=timezone.utc)
+        fixture = {'id': 'NFL-401873065', 'league': 'NFL', 'state': 'post',
+                   'kickoff': '2026-11-17T01:15Z',
+                   'home': {'id': '33', 'abbreviation': 'BAL'},
+                   'away': {'id': '24', 'abbreviation': 'LAC'}}
+        athlete = '2578570'
+        index = {athlete: [athlete, 'Jacoby Brissett', 'QB', '22', 'ARI']}
+        chart = {'status': 'ok', 'checkedAt': '2026-11-17T04:46:13Z'}
+        box = {'eventId': '401873065', 'league': 'NFL', 'retrievedAt': '2026-11-17T04:46:12Z',
+               'players': [{'id': athlete, 'team': '33', 'name': 'Jacoby Brissett', 'pos': 'QB'}]}
+        self.assertEqual(build_site.matchup_market_players({athlete}, index, fixture, {'33': chart}, now,
+                                                          final_box=box),
+                         [[athlete, 'Jacoby Brissett', 'QB', '33', 'BAL']])
+        for rejected in (dict(box, eventId='401873066'), dict(box, retrievedAt='2026-11-17T05:01Z')):
+            self.assertEqual(build_site.matchup_market_players({athlete}, index, fixture, {'33': chart}, now,
+                                                              final_box=rejected), [index[athlete]])
+        self.assertEqual(build_site.matchup_market_players(
+            {athlete}, index, dict(fixture, state='in'), {'33': chart}, now, final_box=box), [index[athlete]])
+
 
 class InjuryRoleTests(unittest.TestCase):
     def test_exact_ids_and_listed_order_never_guess_absent_players(self):

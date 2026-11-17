@@ -619,12 +619,22 @@ def injury_roles(players, chart, now):
              'roleSource': chart.get('source') if fresh else None} for p in players]
 
 
-def matchup_market_players(player_ids, player_index, game, depth_charts, now):
-    """Assign quoted players to the matchup using verified pregame depth evidence."""
+def matchup_market_players(player_ids, player_index, game, depth_charts, now, *, final_box=None):
+    """Assign quoted players using the game's final box or verified pregame depth."""
     teams = {str(game[side]['id']): game[side] for side in ('home', 'away')}
     through = min(now, features.when(game['kickoff']))
     observed = defaultdict(list)
     if game['league'] == 'NFL':
+        final_box = final_box or {}
+        captured = instant(final_box.get('retrievedAt'))
+        if (game.get('state') == 'post'
+                and f"{final_box.get('league')}-{final_box.get('eventId')}" == game.get('id')
+                and captured and features.when(game['kickoff']) <= captured <= now):
+            for player in final_box.get('players', []):
+                athlete = str(player.get('id') or '')
+                if athlete in player_ids:
+                    observed[athlete].append((str(player.get('team')), player.get('name'), player.get('pos')))
+        final_players = set(observed)
         for team_id, chart in depth_charts.items():
             if chart.get('status') != 'ok' or not chart.get('checkedAt'):
                 continue
@@ -637,7 +647,7 @@ def matchup_market_players(player_ids, player_index, game, depth_charts, now):
             for slot in chart.get('positions') or []:
                 for player in slot.get('players') or []:
                     athlete = str(player.get('id') or '')
-                    if athlete in player_ids:
+                    if athlete in player_ids and athlete not in final_players:
                         observed[athlete].append((str(team_id), player.get('name'), slot.get('group')))
 
     entries = []
@@ -2357,7 +2367,8 @@ def build(now=None):
         market_players.update(str(row['athleteId']) for row in detail['lines'] + detail['modelReads']
                               if row.get('athleteId'))
         detail['marketPlayers'] = matchup_market_players(
-            market_players, football_indexes[game['league']], game, depth_charts, now)
+            market_players, football_indexes[game['league']], game, depth_charts, now,
+            final_box=stored.get(game['id']))
         write(OUT / 'games' / f"{game['id']}.json", detail)
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],

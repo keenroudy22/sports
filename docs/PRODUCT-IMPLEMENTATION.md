@@ -8179,8 +8179,21 @@ passing, Flowers 74 receiving, Harris 86 receiving, Johnston 6 receiving and
 Andrews 82 receiving. Both losing legs participated in the second half.
 The ticket finished 4/6 and -0.25u under the posted unit allocation.
 
-The Nov16 recap plan resolves exactly the two delivered MNF tickets, both
-losses, with -0.50u total. It is due Nov17 at 08:00 ET. The production gate
-reports the missing lotto Final X receipt before it will evaluate the daily
-recap receipt. The append and plan prove grading and release ordering.
-The separate hosted card, Buffer Sent and Discord receipts remain pending.
+The full-game Final card and matching public row became live after hosted
+run 44017540533 checked out b653ec2fa and deployed artifact 14299623611
+at 04:38:20Z. The first X attempt correctly held for the missing image.
+An attended start of the existing mirror scheduled the result without
+changing its cadence. Buffer Sent confirmed X2122552627451842587 at
+04:49:16.506Z with native quote 2122496448834969748 and the exact hosted
+PNG. The existing mirror confirmed attached Discord1572113895206817882
+at 04:59:16Z. The Q1 and full-game Finals have independent receipts.
+
+The Nov16 recap includes exactly the two delivered MNF tickets, both losses,
+with -0.50u total. It is due Nov17 at 08:00 ET. Its confirmed channel
+receipts are still required before Tuesday plays.
+
+The scheduled source refresh replaced Brissett's pregame depth chart with
+a post-kickoff snapshot at 04:46:13Z. The refreshed source also supplied the
+official final box for the same event at 04:46:12Z, listing Brissett under
+Baltimore. The build now prefers the matching, as-of final box for completed
+matchup identity. Upcoming matchups still require pregame roster evidence.
