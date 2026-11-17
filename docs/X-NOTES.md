@@ -392,3 +392,18 @@ observations by format and outcome. Keep unknown metrics unknown and require at
 least eight comparable measured posts before reallocating an existing slot.
 This research is complete; growth effectiveness, P12 and future ticket settlement
 remain separate outstanding evidence. No new schedule, provider or bill.
+
+### November 17 passing-yard caption review
+
+For a player-prop hit count, check which appearances supplied the denominator and
+how much the player actually played. Give the season and stat in the caption when
+older appearances would change how a reader interprets the sample. If current
+workload is the reason for a pick, use attempts, carries, targets or minutes from
+the comparable games.
+
+Nick Poulos illustrates the difference. He went under 215.5 passing yards in
+six of seven recorded passing appearances this season through November 11.
+His ten-appearance sample reached back to 2024 and included three older games
+with eight, four and one pass attempt. The current-season count gives readers
+more context for the posted line. The archived Nov 17 pick retains its original
+terms and artwork.
