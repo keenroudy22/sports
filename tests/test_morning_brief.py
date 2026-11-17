@@ -61,3 +61,23 @@ class MorningBriefTests(unittest.TestCase):
               dict(id='r',kind='buffer:research',sentAt='2026-10-22T11:00:00Z',dueAt='2026-10-22T11:15:00Z',bufferPostId='2')]
         with patch.object(b,'graphql',side_effect=AssertionError('must not request')):
             self.assertEqual(b.yield_optional({'posts':rows},self.now.replace(minute=15),self.now,'c'),[])
+
+    def test_valid_nba_research_can_yield_to_a_fresh_straight_after_the_recap(self):
+        import x_post
+        now = datetime(2026, 11, 17, 13, 7, tzinfo=timezone.utc)
+        recap = dict(id='receipt:day:2026-11-16', kind='buffer:receipt', bufferPostId='recap',
+                     dueAt='2026-11-17T13:00:00Z', sentAt='2026-11-17T13:01:40Z')
+        research = dict(id='nba-projections-2026-11-17', kind='buffer:research', bufferPostId='research',
+                        dueAt='2026-11-17T13:24:00Z', textHash=x_post.text_hash('Research'))
+        ledger = {'posts': [recap, research]}
+        desired = now.replace(minute=10)
+        with patch('nba_editorial.stored', return_value=[dict(key=research['id'], stale='2026-11-17T15:00:00Z')]), \
+                patch.object(b, 'graphql', return_value={'post': {'status': 'scheduled', 'text': 'Research'}}) as check, \
+                patch.object(b, 'delete_post') as delete, patch.object(b, 'create_post', return_value='moved'):
+            self.assertEqual(b.yield_optional(ledger, desired, now, 'c', expires=now.replace(minute=19)), [])
+            check.assert_not_called()
+            self.assertEqual(b.yield_optional(ledger, desired, now, 'c', expires=now.replace(minute=30)), [research['id']])
+            delete.assert_called_once()
+        self.assertEqual(research['dueAt'], '2026-11-17T13:40:00Z')
+        self.assertEqual(research['deliveryHistory'][0]['bufferPostId'], 'research')
+        self.assertEqual(recap['bufferPostId'], 'recap')

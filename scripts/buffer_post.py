@@ -398,29 +398,32 @@ def discord_first_due(now):
     return post_windows.delivery_ready(now)
 
 
-def yield_optional(log_book, desired, now, channel_id, key=None, send=http_send):
+def yield_optional(log_book, desired, now, channel_id, key=None, send=http_send, *, expires=None):
     """Move at most two unsent routine posts, never a public play or sent post.
 
     Keep copy/art intact and preserve every prior Buffer identity as a receipt.
     Restore the original schedule if its replacement is refused.
     """
+    import nba_editorial
     moved=[]
     for entry in sorted(log_book.get('posts',[]),key=lambda r:r.get('dueAt') or ''):
         if len(moved)>=2:break
-        if entry.get('kind') not in ('buffer:receipt','buffer:book'):continue
+        kind = entry.get('kind')
+        if kind not in ('buffer:receipt','buffer:book','buffer:research') or early_daily_receipt(entry.get('id')):
+            continue
         if any(entry.get(k) for k in ('sentAt','cancelledAt','deletedAt','error')) or not entry.get('bufferPostId'):continue
         old_due=gates.when(entry['dueAt'])
-        if old_due<=now+SOON or abs((old_due-desired).total_seconds())>=SPACING.total_seconds():continue
+        if old_due<=now+SOON:continue
+        busy=taken({'posts':[r for r in log_book['posts'] if r is not entry]},now)
+        official_due=free_slot(desired,busy)
+        if free_slot(desired,busy+[old_due])<=official_due or (expires and official_due>=expires):continue
+        snapshot=next((r for r in nba_editorial.stored() if r['key']==entry['id']),None) if kind=='buffer:research' else None
+        if kind=='buffer:research' and not snapshot:continue
+        due=free_slot(max(old_due,official_due+SPACING),busy+[official_due])
+        if eastern_date(due)!=eastern_date(old_due) or (snapshot and due>=gates.when(snapshot['stale'])):continue
         query='query($id: PostId!) { post(input: {id: $id}) { id status text } }'
         post=graphql(query,{'id':entry['bufferPostId']},key=key,send=send).get('post') or {}
         if post.get('status')!='scheduled' or x_post.text_hash(post.get('text',''))!=entry.get('textHash'):continue
-        busy=taken({'posts':[r for r in log_book['posts'] if r is not entry]},now)+[desired]
-        due=free_slot(max(old_due,desired+SPACING),busy)
-        if eastern_date(due)!=eastern_date(old_due):continue
-        # Do not carry a time-sensitive research quote past its existing cutoff.
-        import nba_editorial
-        snapshot=next((r for r in nba_editorial.stored() if r['key']==entry['id']),None)
-        if snapshot and due>=gates.when(snapshot['stale']):continue
         mirror=entry.get('discord') or {}
         image=(mirror.get('image') or card_url(entry.get('cardKey') or entry['id'])) if entry.get('card') else None
         old_id=entry['bufferPostId']

@@ -3803,7 +3803,8 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                 if channel_error:
                     raise buffer_post.BufferError(channel_error)
                 channel = channel or buffer_post.x_channel(wanted='keenkooks')
-                moved=buffer_post.yield_optional(log_book,due,now,channel['id'])
+                moved=buffer_post.yield_optional(log_book,due,now,channel['id'],
+                                                 expires=gates.when(pick['expiresAt']))
                 if moved:log(f'release: routine posts moved behind fresh play: {moved}')
             except (buffer_post.BufferError, buffer_post.MissingToken) as error:
                 channel_error = str(error)
