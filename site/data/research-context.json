@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-17T17:06:15Z",
+  "updatedAt": "2026-11-17T19:21:17Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1157,6 +1157,24 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4685278",
+              "name": "Luther Burden III",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-17T18:22Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685278/luther-burden-iii"
+            },
+            {
+              "id": "4361093",
+              "name": "Kyler Gordon",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-11-17T18:14Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361093/kyler-gordon"
+            },
+            {
               "id": "4870953",
               "name": "Malik Muhammad II",
               "position": "CB",
@@ -1173,15 +1191,6 @@
               "injury": "Toe",
               "reportedAt": "2026-11-16T23:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
-            },
-            {
-              "id": "4685278",
-              "name": "Luther Burden III",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-11-16T20:25Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685278/luther-burden-iii"
             },
             {
               "id": "4243253",
@@ -1371,15 +1380,6 @@
               "injury": "Knee",
               "reportedAt": "2026-11-05T04:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116726/kentavius-street"
-            },
-            {
-              "id": "4251007",
-              "name": "Braxton Jones",
-              "position": "OT",
-              "status": "Injured Reserve",
-              "injury": "Knee",
-              "reportedAt": "2026-11-05T03:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4251007/braxton-jones"
             }
           ]
         },
@@ -2767,6 +2767,15 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4035538",
+              "name": "David Montgomery",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-17T17:39Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery"
+            },
+            {
               "id": "3919117",
               "name": "Azeez Al-Shaair",
               "position": "LB",
@@ -2864,15 +2873,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-11-17T00:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4432708/marvin-harrison-jr"
-            },
-            {
-              "id": "4035538",
-              "name": "David Montgomery",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-17T00:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery"
             },
             {
               "id": "3117256",
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4575131",
+              "name": "Jacory Croskey-Merritt",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Groin",
+              "reportedAt": "2026-11-17T19:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt"
+            },
+            {
               "id": "4361088",
               "name": "Colson Yankoff",
               "position": "TE",
@@ -7162,15 +7171,6 @@
               "injury": "Triceps",
               "reportedAt": "2026-11-17T00:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/3051890/laremy-tunsil"
-            },
-            {
-              "id": "4575131",
-              "name": "Jacory Croskey-Merritt",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Groin",
-              "reportedAt": "2026-11-16T20:18Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt"
             },
             {
               "id": "3122797",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "34",
-          "name": "Danielle Hunter",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-11-17T14:05:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2976560/danielle-hunter"
-        },
         {
           "teamId": "34",
           "name": "Brevin Jordan",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-11-17T17:06:15Z",
           "source": "https://www.espn.com/nfl/player/_/id/3919117/azeez-al-shaair"
+        },
+        {
+          "teamId": "3",
+          "name": "Luther Burden III",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-11-17T19:21:17Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4685278/luther-burden-iii"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-17T17:06:15Z",
-      "lastAttemptAt": "2026-11-17T17:06:15Z",
+      "checkedAt": "2026-11-17T19:21:17Z",
+      "lastAttemptAt": "2026-11-17T19:21:17Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-17T17:06:15Z",
-      "lastAttemptAt": "2026-11-17T17:06:15Z",
+      "checkedAt": "2026-11-17T19:21:17Z",
+      "lastAttemptAt": "2026-11-17T19:21:17Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
