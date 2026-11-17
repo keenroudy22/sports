@@ -68,33 +68,47 @@ def rows(root, now):
 
 
 def public_rows(root, posts, now):
+    import receipts
     result = []
     for ticket in rows(root, now).values():
         sent = delivery(ticket, posts, now)
         if not sent:
             continue
         kickoff = gates.when(ticket['kickoff']).astimezone(gates.EASTERN)
+        card_key = receipts.result_card_key(ticket) if ticket.get('result') else ticket['id']
         result.append(dict(ticket, delivery=sent, posted=True,
                            gameId=ticket['gameIds'][0],
                            season=kickoff.year + (kickoff.month >= 10), seasonType=2,
-                           card='data/cards/' + ticket['id'] + '.png'))
+                           card='data/cards/' + card_key + '.png'))
     return result
 
 
-def publish(root, pick, posts, now):
-    """Save the exact original after the release worker records confirmation."""
+def original_row(pick):
+    """Validate and project the exact public fields before an external send."""
     if (pick.get('league') != 'NBA' or pick.get('family') != 'NBA-alts'
             or pick.get('selectionMethod') != release.METHOD or pick.get('riskUnits') != .25
             or pick.get('kind') != 'parlays' or pick.get('parlayType') != 'longshot'
             or not review.price(pick.get('odds')) or pick.get('book') not in ('DraftKings', 'FanDuel')
             or review.fingerprint(pick) != pick.get('propTicketFingerprint')):
         raise ValueError('Reviewed NBA alternate ticket with exact original terms required')
+    legs = pick['legs']
+    if (not legs or pick['gameIds'] != list(dict.fromkeys(leg['gameId'] for leg in legs))
+            or gates.when(pick['firstKickoff']) != min(gates.when(leg['kickoff']) for leg in legs)
+            or any(leg.get('alternate') is not True or leg.get('period') != 'full_game'
+                   or leg.get('market') not in review.STATS['NBA'] for leg in legs)):
+        raise ValueError('NBA alternate ticket requires its original full-game fixtures and markets')
+    row = {k: pick[k] for k in ORIGINAL_FIELDS}
+    row.update(type='publish', legs=[{k: leg[k] for k in (*release.PUBLIC_LEG_FIELDS, 'id', 'title')}
+                                    for leg in legs])
+    return row
+
+
+def publish(root, pick, posts, now):
+    """Save the exact original after the release worker records confirmation."""
+    row = original_row(pick)
     sent = delivery(pick, posts, now)
     if not sent or pick.get('publishedAt') != min(at for at in (sent['discordAt'], sent['xAt']) if at):
         raise ValueError('Actual pregame NBA ticket delivery receipt required')
-    row = {k: pick[k] for k in ORIGINAL_FIELDS}
-    row.update(type='publish', legs=[{k: leg[k] for k in (*release.PUBLIC_LEG_FIELDS, 'id', 'title')}
-                                    for leg in pick['legs']])
     target = Path(root) / PATH
     earlier = next((r for r in boxscores.read_store(target) if r['id'] == row['id'] and r['type'] == 'publish'), None)
     if earlier == row:

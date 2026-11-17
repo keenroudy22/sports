@@ -3396,9 +3396,11 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
     # Read newly appended unit results directly; the local site export may
     # still predate the grade while Pages builds its required Final artwork.
     unit_rows = receipts.unit_fun_rows(now, log_book=log_book, root=Path(root))
-    if unit_rows:
+    nba_fun_rows = [row for row in unit_rows if row.get('family') == 'NBA-alts']
+    owner_rows = [row for row in unit_rows if row.get('family') != 'NBA-alts']
+    if owner_rows:
         record = dict(record or {}, picks=list({p['id']: p for p in
-            [*(record or {}).get('picks', []), *unit_rows]}.values()))
+            [*(record or {}).get('picks', []), *owner_rows]}.values()))
     if isinstance(record, dict) and isinstance(record.get('picks'), list):
         record = dict(record, picks=[p for p in record['picks']
             if isinstance(p, dict) and desk_health.moment(p.get('settledAt')) and
@@ -3418,7 +3420,19 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
         nba_missing = len(nba_results.plans(now, log_book, Path(root) / 'data/nba-trial'))
     except (OSError, ValueError, KeyError, TypeError):
         nba_missing = 0
-    missing = int(result.get('missing') or 0) + cbb_missing + nba_missing
+    import buffer_post
+    missing_nba_fun = 0
+    for row in nba_fun_rows:
+        if not row.get('settledAt') or not now - receipts.RESULT_RECOVERY_FRESH < gates.when(row['settledAt']) <= now:
+            continue
+        final_id = receipts.nba_fun_final_id(row)
+        if not buffer_post.quote_tweet_id(log_book, final_id):
+            continue
+        covered = any(p.get('id') == final_id and not any(p.get(k) for k in ('cancelledAt', 'deletedAt', 'error'))
+                      and (p.get('sentAt') or (p.get('bufferPostId') and p.get('dueAt')
+                           and gates.when(p['dueAt']) >= now - RESULT_RECOVERY_GAP)) for p in log_book['posts'])
+        missing_nba_fun += not covered
+    missing = int(result.get('missing') or 0) + cbb_missing + nba_missing + missing_nba_fun
     if not missing:
         return 0
     state = load_json(Path(conf) / 'result-recovery.json', {})
@@ -3620,6 +3634,54 @@ def typefully_private_fallback_eligible(pick, log_book, now):
     return used < 4
 
 
+def remember_private_discord(row, text, log_book, now):
+    """Restore the local post entry from its persisted Discord send receipt."""
+    import buffer_post
+    import social_style
+    import x_post
+    from social_copy import AGE_VERSION
+
+    key = row['id']
+    entry = next((e for e in log_book.get('posts', []) if e.get('id') == key), None)
+    if entry is not None:
+        return entry
+    sent_at = row['discordSentAt']
+    sent = row.get('discordReceipt') or {}
+    entry = {'id': key, 'postedAt': sent_at,
+             'textHash': x_post.text_hash(text), 'kind': 'buffer:play', 'card': True,
+             'cardKey': key, 'cardTheme': 'ticket', 'reasonKind': x_post.reason_kind(x_post.reason_in(text)),
+             'copyVariant': x_post.copy_variant(text),
+             'discord': {'state': 'sent', 'sentAt': sent_at, 'beforeX': True, 'text': text,
+                         'image': buffer_post.card_url(key), 'messageId': sent.get('id'),
+                         'attachmentReceipt': sent.get('image'),
+                         'attachmentState': ('attached' if sent.get('image') else
+                                             'missing' if sent.get('id') else 'unverified')}}
+    if social_style.active(now):
+        entry.update(queuedText=text, socialStyleVersion=social_style.VERSION, socialAgeVersion=AGE_VERSION)
+    log_book.setdefault('posts', []).append(entry)
+    x_post.save_log(log_book)
+    return entry
+
+
+def persist_nba_fun_release(row, log_book, now, log):
+    """Finish a delivered NBA ticket even if its pregame quote has now expired."""
+    import nba_fun_record
+    import release_queue
+
+    key = row['id']
+    try:
+        remember_private_discord(row, row['discordText'], log_book, now)
+        pick = dict(row['pick'], publishedAt=row['discordSentAt'])
+        release_queue.archive_card(row['card'], ROOT, key)
+        nba_fun_record.publish(ROOT, pick, log_book['posts'], now)
+        result = commit_log(now, push=True)
+    except (OSError, KeyError, ValueError, RunError) as error:
+        raise ReleaseArtifactError(f'NBA ticket already delivered to Discord. Public record recovery: {error}') from error
+    log('NBA fun release record:', result)
+    return release_queue.update(CONF, key, publicPath=str(nba_fun_record.PATH),
+                                publicPushedAt=stamp(datetime.now(timezone.utc)))
+
+
 def release_private(now, log=log, only=None, review_only=False, clock=time.monotonic):
     """Release due admissions Discord → public record → Buffer/X.
 
@@ -3645,7 +3707,16 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
     slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
     release_queue.merge_context(ctx, CONF)
     ctx.games = live_games(now, {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')})
+    if any(row.get('league') == 'NBA' for row in book['plays']):
+        import prop_ticket_review
+        ctx.games.update(prop_ticket_review.nba_fixtures(ROOT))
     log_book = x_post.load_log()
+    if not review_only:
+        for index, row in enumerate(book['plays']):
+            if (row.get('league') == 'NBA' and row.get('discordSentAt') and not row.get('publicPath')
+                    and (row.get('pick') or {}).get('family') == 'NBA-alts'
+                    and (only is None or row.get('id') in only)):
+                book['plays'][index] = persist_nba_fun_release(row, log_book, now, log)
     import receipts
     results_first_hold = receipts.prior_day_results_hold(
         ctx.first, ctx.latest, results_games, log_book, now, channel='all')
@@ -3661,6 +3732,7 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
         key = row.get('id')
         if only is not None and key not in only:
             continue
+        nba_fun = (row.get('league') == 'NBA' and (row.get('pick') or {}).get('family') == 'NBA-alts')
         existing = next((e for e in log_book['posts'] if e.get('id') == key), {})
         settings = typefully_backup.config(CONF)
         if existing.get('typefullyDelivery') and not review_only:
@@ -3675,7 +3747,7 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
         if existing.get('bufferAttemptAt') and not row.get('bufferPostId'):
             continue
         local_cap = buffer_post.quota.buffer_block_reason(now=now, essential=True) if settings else None
-        fallback = bool(settings and local_cap and 'cap reached' in local_cap
+        fallback = bool(not nba_fun and settings and local_cap and 'cap reached' in local_cap
                         and not buffer_post.rate_backoff(now)
                         and typefully_private_fallback_eligible(
                             row.get('pick') or {}, log_book, now))
@@ -3759,7 +3831,7 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
 
         # Deterministic hard-news precheck.  A model concern never withdraws
         # an admitted play, but typed out/doubtful/inactive news still does.
-        if not row.get('precheckedAt') or now - gates.when(row['precheckedAt']) > timedelta(minutes=15):
+        if not nba_fun and (not row.get('precheckedAt') or now - gates.when(row['precheckedAt']) > timedelta(minutes=15)):
             context_file = live_context(stores.context_file, now)
             check_status = {'llm': {'judged': 0},
                             'research': {'asked': 0, 'verified': 0, 'dropped': 0}}
@@ -3783,7 +3855,7 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                 continue
             release_queue.update(CONF, key, precheckedAt=stamp(now))
 
-        from social_copy import x_ticket_copy, AGE_VERSION
+        from social_copy import x_ticket_copy
         text = x_ticket_copy(str(row.get('caption') or '').strip(), 'play', key, pick)
         if x_post.guard(text, pick, x_post.reason_in(text), now=now):
             release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason='caption guard',
@@ -3798,7 +3870,11 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                   'takeaways': [], row['kind']: [public_pick]}
         # Prove the exact public row before the first external send.  A bad row
         # stays private and the isolated wrapper moves on to every other row.
-        validate({'private-release.json': report}, stores.reports, ctx.games)
+        if nba_fun:
+            import nba_fun_record
+            nba_fun_record.original_row(public_pick)
+        else:
+            validate({'private-release.json': report}, stores.reports, ctx.games)
         import social_style
         if social_style.active(now):
             style_problems = social_style.release_issues(text, Path(row['card']))
@@ -3814,33 +3890,25 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
             continue
 
         if not row.get('discordSentAt'):
+            if nba_fun:
+                send_at = now + timedelta(seconds=clock() - started)
+                refusal = private_release_refusal(row, ctx, send_at)
+                if refusal:
+                    log(f'discord: {key} held at send: {refusal}')
+                    continue
             receipt = discord_post.send_message(
                 discord_post.webhook(), text, f'private:{key}',
                 fetch=lambda _url, p=row['card']: _private_card(p), return_receipt=True)
             discord_at = now + timedelta(seconds=clock() - started)
-            row = release_queue.update(CONF, key, discordSentAt=stamp(discord_at), discordReceipt=receipt or {})
+            row = release_queue.update(CONF, key, discordSentAt=stamp(discord_at), discordReceipt=receipt or {},
+                                       **({'discordText': text} if nba_fun else {}))
             log(f'discord: {key} released before X')
 
         # Public delivery is real even when Buffer cannot accept a post. Save
         # that receipt before the public report, without inventing an X schedule.
-        entry = next((e for e in log_book.get('posts', []) if e.get('id') == key), None)
-        if entry is None:
-            sent_at = row['discordSentAt']
-            entry = {'id': key, 'postedAt': sent_at,
-                     'textHash': x_post.text_hash(text), 'kind': 'buffer:play', 'card': True,
-                     'cardTheme': 'ticket', 'reasonKind': x_post.reason_kind(x_post.reason_in(text)),
-                     'copyVariant': x_post.copy_variant(text),
-                     'discord': {'state': 'sent', 'sentAt': sent_at, 'beforeX': True, 'text': text,
-                                 'image': buffer_post.card_url(key),
-                                 'messageId': (row.get('discordReceipt') or {}).get('id'),
-                                 'attachmentReceipt': (row.get('discordReceipt') or {}).get('image'),
-                                 'attachmentState': ('attached' if (row.get('discordReceipt') or {}).get('image') else
-                                     'missing' if (row.get('discordReceipt') or {}).get('id') else 'unverified')}}
-            entry.update(cardKey=key)
-            if social_style.active(now):
-                entry.update(queuedText=text, socialStyleVersion=social_style.VERSION, socialAgeVersion=AGE_VERSION)
-            log_book.setdefault('posts', []).append(entry)
-            x_post.save_log(log_book)
+        entry = remember_private_discord(row, text, log_book, now)
+        if nba_fun and not row.get('publicPath'):
+            row = persist_nba_fun_release(row, log_book, now + timedelta(seconds=clock() - started), log)
 
         if not row.get('publicPath'):
             safe = re.sub(r'[^A-Za-z0-9-]+', '-', key).strip('-')[:72]
@@ -3901,6 +3969,10 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
             continue
 
         if not row.get('bufferPostId'):
+            if nba_fun and (buffer_post.pending_scheduled(log_book, now) >= buffer_post.BUFFER_NORMAL_LIMIT
+                            or buffer_post.day_count(log_book, eastern_date(now)) >= buffer_post.MAX_PER_DAY):
+                log(f'buffer: {key} held by the existing queue or daily post cap')
+                continue
             if channel_error:
                 log(f'buffer: {key} released on Discord/site; X waits: {channel_error}')
                 continue
@@ -3912,12 +3984,22 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                     log(f'buffer: {key} released on Discord/site; X waits: {error}')
                     continue
             image = (row.get('discordReceipt') or {}).get('image')
+            if nba_fun:
+                image = buffer_post.live_card_url(key)
+                if not image:
+                    log(f'buffer: {key} waits for its hosted NBA ticket card')
+                    continue
             if not image:
                 image = buffer_post.card_url(key)
                 if not buffer_post.reachable(image):
                     log(f'buffer: {key} waits for its released site card')
                     continue
             submit_at = now + timedelta(seconds=clock() - started)
+            if nba_fun:
+                refusal = private_release_refusal(row, ctx, submit_at)
+                if refusal:
+                    log(f'buffer: {key} held at send: {refusal}')
+                    continue
             due = buffer_post.free_slot(
                 post_windows.play_due(submit_at, target, row['discordSentAt']), busy)
             deadline = post_windows.deadline(row.get('league'), kickoff, submit_at, bool(pick.get('replacementOf')))
@@ -4416,8 +4498,11 @@ def mirror(args):
         return 0
     import nba_trial_runtime
     import cbb_picks
-    nba_discord_waiting = (nba_trial_runtime.discord_delivery_due(now, x_post.load_log())
-                           or cbb_picks.discord_delivery_due(now, x_post.load_log()))
+    import copy
+    observed_posts = x_post.load_log()
+    nba_discord_waiting = (nba_trial_runtime.discord_delivery_due(now, observed_posts)
+                           or cbb_picks.discord_delivery_due(now, observed_posts)
+                           or discord_post.queue_nba_fun_results(copy.deepcopy(observed_posts), now))
     private_waiting = private_release_ready(now)
     if not chef_waiting and not nba_discord_waiting and not private_waiting and not retry_results and not basketball_due and not nba_result_due:
         if result_transport_hold:
@@ -4749,7 +4834,7 @@ def homepage_editor(now, status, enabled=True):
 def commit_log(now, push=True, runner=git, cwd=ROOT):
     """Commit delivery evidence and the optional local homepage notes after scheduling."""
     paths = ('data/x-posted.json', 'site/data/desk-notes.json', 'data/nba-capture/', 'data/sport-box/',
-             'data/nba-trial/', 'data/cbb-picks/', 'data/community-settlements.jsonl', 'data/nba-fun/')
+             'data/nba-trial/', 'data/cbb-picks/', 'data/community-settlements.jsonl', 'data/nba-fun/', 'data/release-cards/')
     changed = [p for p in paths if runner('status', '--porcelain', '--', p, cwd=cwd).stdout.strip()]
     if not changed:
         return {'committed': False, 'pushed': False}
@@ -5058,6 +5143,34 @@ def precheck(args):
             stores = gates.Stores(records=records)
             ctx = stores.as_of(now)
             ctx.games = games
+            nba_fun_entries = [entry for entry in due if entry['id'].startswith('NBA-')
+                               and '-prop-ticket-' in entry['id']]
+            if nba_fun_entries:
+                import prop_ticket_review
+                ctx.games.update(prop_ticket_review.nba_fixtures(ROOT))
+                for entry in nba_fun_entries:
+                    key = entry['id']
+                    ticket = ctx.risk_external.get(key)
+                    reason = (private_release_refusal({'pick': ticket, 'league': 'NBA', 'publicPath': True}, ctx, now)
+                              if ticket else 'delivered NBA ticket is missing from the ledger')
+                    if reason and not args.dry_run:
+                        buffer_post.cancel_closed({key}, log_book, now, log=log)
+                        if not entry.get('cancelledAt'):
+                            continue
+                        followup = (entry.get('discord') or {}).get('followup')
+                        if followup:
+                            followup['text'] = (f'⚠️ UPDATE: {ticket["title"] if ticket else "NBA ticket"}\n\n'
+                                                f'X release held: {reason}. The published ticket will still be graded.')
+                    entry['precheck'] = {'at': stamp(now), 'result': 'closed' if reason else 'clear',
+                                         **({'reason': reason} if reason else {})}
+                    log(f'precheck: {key}: {reason or "current NBA evidence clear"}')
+                nba_ids = {entry['id'] for entry in nba_fun_entries}
+                due = [entry for entry in due if entry['id'] not in nba_ids]
+                if not due:
+                    if not args.dry_run:
+                        x_post.save_log(log_book)
+                        commit_log(now, push=not args.no_push)
+                    return 0
             raw_first = raw_first_publications(stores.reports)
             context_file = live_context(stores.context_file, now)
             use_llm = not args.no_llm and llm.available()

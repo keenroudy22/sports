@@ -102,7 +102,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: site/data/cards
-          key: kookn-cards-${{ runner.os }}-${{ hashFiles('research/*.json', 'data/nba-trial/*.jsonl') }}
+          key: kookn-cards-${{ runner.os }}-${{ hashFiles('research/*.json', 'data/nba-trial/*.jsonl', 'data/nba-fun/*.jsonl') }}
           restore-keys: |
             kookn-cards-${{ runner.os }}-
       - name: Build the plays feed and its cards

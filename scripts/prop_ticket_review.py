@@ -62,9 +62,52 @@ def nba_fixtures(root):
     if not path.is_file():
         return {}
     games = json.loads(path.read_text())['games']
-    return {game['id']: dict(game, league='NBA', state='pre' if game.get('status') == 'scheduled'
+    return {game['id']: dict(game, **{side: game['teams'][side] for side in ('home', 'away')},
+                            league='NBA', state='pre' if game.get('status') == 'scheduled'
                             else game.get('status')) for game in games
             if game.get('id') == f"NBA-{game.get('providerId')}" and game.get('providerId')}
+
+
+def nba_participation(spec, games, root, now):
+    """Cross-check attended evidence with the ordinary stored NBA intake."""
+    import nba_capture
+    import nba_player_props
+    folder = Path(root) / 'data/nba-capture'
+    try:
+        snapshot = json.loads((folder / 'injuries-current.json').read_text())
+        report_time = gates.when(snapshot['official']['reportedAt'])
+        reports, rosters = {}, {}
+        for leg in spec['legs']:
+            game = games[leg['gameId']]
+            if game.get('seasonType') != 'regular-season' or game.get('state') != 'pre':
+                return 'Stored NBA fixture is outside the supported pregame regular-season scope'
+            if game['id'] not in reports:
+                reports[game['id']] = nba_capture.availability_for_game(snapshot, game, now, max_hours=1)
+            rows, holds = reports[game['id']]
+            name = leg['player']
+            athlete = str(leg['athleteId'])
+            if holds or any(str(row.get('athleteId') or row.get('id')) == athlete
+                            and nba_capture.blocks_availability(row.get('status')) for row in rows):
+                return f'{name}: current official NBA participation is unresolved'
+            if gates.when(leg['review']['availability']['checkedAt']) < report_time:
+                return f'{name}: attended participation review predates the latest official report'
+            players = []
+            for team in game['teams'].values():
+                team_id = str(team['id'])
+                if team_id not in rosters:
+                    rosters[team_id] = json.loads((folder / 'rosters' / f'{team_id}.json').read_text())
+                roster = rosters[team_id]
+                if (str(roster.get('team')) != team_id or roster.get('season') != game['season']
+                        or not nba_player_props.fresh(roster.get('retrievedAt'), now, 24)):
+                    return f'{name}: current NBA roster evidence for both teams is required'
+                players.extend(p for p in roster['players'] if str(p['id']) == athlete)
+            if (len(players) != 1 or players[0].get('active') is not True
+                    or nba_capture.blocks_availability(players[0].get('status'))
+                    or nba_player_props.normal(players[0]['name']) != nba_player_props.normal(name)):
+                return f'{name}: active player identity could not be confirmed on the current NBA roster'
+    except (OSError, KeyError, ValueError, TypeError, AttributeError):
+        return 'Current NBA roster or official participation snapshot unavailable'
+    return None
 
 
 def review(spec, games, now, *, first=None, latest=None, risk_external=None):

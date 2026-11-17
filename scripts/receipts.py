@@ -463,18 +463,26 @@ def prior_individual_results_hold(rows, log_book, channel):
     for row in rows:
         key = row['id']
         originals = [p for p in posts if p.get('id') == key]
+        nba_fun = row.get('family') == 'NBA-alts'
+        discord_originals = ([p for p in log_book.get('posts', []) if p.get('id') == key]
+                             if nba_fun else originals)
         x_required = channel in ('all', 'x') and any(sent_x(p) for p in originals)
         discord_required = channel in ('all', 'discord') and any(
-            (p.get('discord') or {}).get('state') == 'sent' for p in originals)
+            (p.get('discord') or {}).get('state') == 'sent' for p in discord_originals)
         if not x_required and not discord_required:
             continue
         if row.get('result') not in MARKS:
             return f"prior slate's {key} is waiting for its final grade"
         finals = [p for p in posts if buffer_post.quote_source_id(p.get('id')) == key]
+        if nba_fun:
+            final_id = nba_fun_final_id(row)
+            finals = [p for p in finals if p.get('id') == final_id]
         if x_required and not any(sent_x(p) for p in finals):
             return f"prior slate's individual Final for {key} has no confirmed X Sent receipt"
         mirrors = [(p.get('discord') or {}) for p in finals]
-        mirrors += [(p.get('discord') or {}).get('result') or {} for p in originals]
+        mirrors += [(p.get('discord') or {}).get('result') or {} for p in discord_originals]
+        if nba_fun:
+            mirrors = [m for m in mirrors if not m.get('finalId') or m['finalId'] == final_id]
         if discord_required and not any(sent_discord(p) for p in mirrors):
             return f"prior slate's individual Final for {key} has no confirmed Discord message receipt"
     return None
@@ -661,6 +669,15 @@ def result_card_key(pick):
     return f'{base}-ticket' if has_fun_final(pick) else base
 
 
+def nba_fun_final_id(pick):
+    prefix = 'cashed' if pick.get('result') == 'win' else 'burnt'
+    key = f'{prefix}:{pick["id"]}'
+    if pick.get('correctedAt'):
+        import hashlib
+        key += ':' + hashlib.sha256(pick['correctedAt'].encode()).hexdigest()[:10]
+    return key
+
+
 def has_fun_final(pick):
     """A fun ticket needs a stored grade for every original leg."""
     legs = pick.get('legs') or []
@@ -687,6 +704,9 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
     posted, originals, text_only = {}, set(), set()
     for entry in (log_book or {}).get('posts', []):
         key = str(entry.get('id') or '')
+        if (unit_rows.get(key, {}).get('family') == 'NBA-alts'
+                and (entry.get('discord') or {}).get('state') == 'sent'):
+            originals.add(key)
         if ((entry.get('kind') == 'buffer:play' or entry.get('id') in unit_rows)
                 and entry.get('tweetId') and entry.get('sentAt')
                 and not entry.get('cancelledAt') and not entry.get('deletedAt')):
@@ -696,7 +716,8 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
             text_only.add(key.split(':', 1)[1])
         if key.startswith(('cashed:', 'burnt:')) and (entry.get('card') or entry.get('cardKey')) \
                 and not entry.get('cancelledAt') and not entry.get('deletedAt'):
-            source_id = key.split(':', 1)[1]
+            from buffer_post import quote_source_id
+            source_id = quote_source_id(key)
             posted[source_id] = entry.get('cardKey')
             originals.add(source_id)  # an already-recorded card is durable proof of the historical route
     out = []
@@ -706,7 +727,8 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         has_straight_art = pick_card.play_kind(pick) in ('player', 'team')
         if key not in originals or not pick.get('settledAt') or not (fun_final or has_straight_art):
             continue
-        if pick.get('result') not in ('win', 'loss'):
+        if pick.get('result') not in ('win', 'loss') and not (fun_final and pick.get('family') == 'NBA-alts'
+                                                              and pick.get('result') in MARKS):
             continue
         try:
             settled = gates.when(pick['settledAt'])
@@ -716,8 +738,11 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
             continue
         game = games.get((pick.get('gameIds') or [None])[0])
         if fun_final or (game and isinstance(pick.get('actualValue'), (int, float))):
-            out.append({'card': posted.get(key) or result_card_key(pick), 'pick': pick, 'game': game})
-            if pick.get('correctedAt') and posted.get(key):
+            if pick.get('family') == 'NBA-alts':
+                out.append({'card': result_card_key(pick), 'pick': pick, 'game': game})
+            else:
+                out.append({'card': posted.get(key) or result_card_key(pick), 'pick': pick, 'game': game})
+            if pick.get('family') != 'NBA-alts' and pick.get('correctedAt') and posted.get(key):
                 out.append({'card': result_card_key(pick), 'pick': pick, 'game': game})
     return out
 
@@ -799,7 +824,8 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
         ladder = pick_card.play_kind(pick) == 'ladder'
-        if not pick.get('settledAt') or (result not in ('win', 'loss') and not ladder):
+        nba_fun = pick.get('family') == 'NBA-alts' and has_fun_final(pick)
+        if not pick.get('settledAt') or (result not in ('win', 'loss') and not ladder and not nba_fun):
             continue
         settled_at = gates.when(pick['settledAt'])
         fresh = LADDER_CASHED_FRESH if ladder else (fresh_window or CASHED_FRESH)
@@ -831,6 +857,12 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
             post_key = f'burnt:{key}'
             head = (f'❌ {price} {label(pick, games)}. {result_detail(pick)}.'
                     if fun_final else burnt_reaction(pick, games))
+        if nba_fun:
+            post_key = nba_fun_final_id(pick)
+            if result in ('push', 'void'):
+                head = f'➖ {price} {label(pick, games)} {result}. {result_detail(pick)}.'
+            if pick.get('correctedAt'):
+                head = 'Correction\n' + head
         if quiet and not ladder:
             # Quiet hours hold delivery, not admission. Queue a fresh morning
             # result before the play batch takes every slot until it expires.

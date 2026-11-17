@@ -673,7 +673,8 @@ def quote_source_id(guid):
     """Return the immutable original-play id for an individual Final."""
     for prefix in ('cashed:', 'burnt:', 'ladder-loss:', 'ladder-push:', 'ladder-void:'):
         if str(guid).startswith(prefix):
-            return str(guid)[len(prefix):]
+            source = str(guid)[len(prefix):]
+            return re.sub(r':\b[0-9a-f]{10}$', '', source) if source.startswith('NBA-') else source
     match = re.fullmatch(r'receipt:(?:cbb|nba):((?:CBB|NBA)-[A-Za-z0-9-]+):[0-9a-f]{10}', str(guid))
     return match.group(1) if match else None
 
@@ -705,6 +706,8 @@ def prior_discord_result(log_book, guid):
         if original.get('id') != source_id:
             continue
         result = (original.get('discord') or {}).get('result') or {}
+        if result.get('finalId') and result['finalId'] != guid:
+            continue
         if result.get('state') == 'sent' and result.get('sentAt'):
             return dict(result)
     return None
@@ -773,6 +776,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if (kind == 'cashed' or guid.startswith(('receipt:cbb:', 'receipt:nba:'))) and not native_quote_id:
             log(f'buffer: {guid} held: confirmed original X post is required for the native quote')
             continue
+        if kind == 'cashed' and (quote_source_id(guid) or '').startswith('NBA-') and '-prop-ticket-' in guid:
+            allowed = receipts.cashed({}, {}, {}, log_book, now, fresh_window=receipts.RESULT_RECOVERY_FRESH)
+            if not any(p['key'] == guid and p['text'] == text and p['card'] == card_key for p in allowed):
+                log(f'buffer: {guid} held: NBA fun Final differs from the latest verified grade')
+                continue
         if guid.startswith('receipt:cbb:'):
             import cbb_picks
             original = next((p for p in cbb_picks.public_rows() if p.get('result') and cbb_picks.result_key(p) == guid), None)
@@ -826,7 +834,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                                or '-prop-ticket-' in guid):
             import prop_ticket_release
             context = gates.Stores().as_of(now)
-            original = context.first.get(guid) or item
+            original = context.first.get(guid) or context.risk_external.get(guid) or item
+            if original.get('family') == 'NBA-alts':
+                import prop_ticket_review
+                context.games.update(prop_ticket_review.nba_fixtures(context.root))
             held = ('Original reviewed prop-ticket identity required'
                     if original.get('selectionMethod') != prop_ticket_release.METHOD else
                     prop_ticket_release.refusal(original, context, now))

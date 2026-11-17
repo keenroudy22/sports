@@ -52,6 +52,14 @@ def route_snapshot_time(now, record_path=ROOT / 'site' / 'data' / 'app' / 'recor
 def posted_card_keys(log_book, since=None):
     """Card filenames already attached to confirmed X or Discord posts."""
     keys = set()
+    def retain(key, sent):
+        if not sent or not isinstance(key, str) or not re.fullmatch(r'[A-Za-z0-9_.:-]+', key):
+            return
+        try:
+            if since is None or gates.when(sent) >= since:
+                keys.add(key)
+        except (TypeError, ValueError):
+            return
     for entry in log_book.get('posts') or []:
         if not isinstance(entry, dict) or not entry.get('card'):
             continue
@@ -59,18 +67,10 @@ def posted_card_keys(log_book, since=None):
         # A reused text-only settlement receipt proves the message, not that
         # this later Final graphic was ever attached. Preserve actual images.
         discord_art_sent = mirror.get('sentAt') if (not mirror.get('reusedResultReceipt') or mirror.get('image')) else None
-        sent = entry.get('sentAt') or discord_art_sent
-        if not sent:
-            continue
-        if since is not None:
-            try:
-                if gates.when(sent) < since:
-                    continue
-            except (TypeError, ValueError):
-                continue
-        key = entry.get('cardKey') or entry.get('id')
-        if isinstance(key, str) and re.fullmatch(r'[A-Za-z0-9_.:-]+', key):
-            keys.add(key)
+        retain(entry.get('cardKey') or entry.get('id'), entry.get('sentAt') or discord_art_sent)
+        result = mirror.get('result') or {}
+        if result.get('state') == 'sent' and result.get('attachmentState') == 'attached':
+            retain(result.get('cardKey'), result.get('sentAt'))
     return keys
 
 
@@ -421,6 +421,9 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
               for r in receipts.ladder_result_cards(ctx.first, ctx.latest, now)]
     ready += [{'guid': r['card'], 'resultPick': r['pick'], 'game': r['game']}
               for r in receipts.result_cards(public_first, ctx.latest, ctx.games, now, post_log)]
+    # These originals are already published. Restore their exact archived bytes.
+    ready += [{'guid': row['id']} for row in receipts.unit_fun_rows(now, log_book=post_log)
+              if row.get('family') == 'NBA-alts' and now - timedelta(days=8) <= gates.when(row['publishedAt'])]
     try:
         restored = {entry.get('id') for entry in post_log.get('posts', [])
                     if entry.get('restoredAt') and not entry.get('cancelledAt') and not entry.get('deletedAt')}

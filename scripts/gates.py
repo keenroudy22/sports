@@ -599,6 +599,9 @@ def expiry_ok(candidate, ctx):
         return Decision(False, 'expiry_ok', f"expiresAt {candidate['expiresAt']} is not after now")
     starts = kickoffs(candidate, ctx)
     limit = min([next_slot(ctx.now)] + starts)
+    if candidate.get('selectionMethod') == 'sourced-prop-ticket-v1':
+        # Attended ticket evidence has its own stricter age and kickoff limit.
+        limit = min([quoted + timedelta(hours=1)] + [start - timedelta(minutes=30) for start in starts])
     if candidate.get('selectionMethod') == 'sourced-climb-review-v1':
         import climb_review
         refusal = climb_review.refusal(candidate, ctx)

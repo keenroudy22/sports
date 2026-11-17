@@ -31,7 +31,7 @@ def prepared(family='MNF'):
         'receipt':'Private rule evidence','checkedAt':now.isoformat(),
         **{k:'Synthetic reviewed rule, never a factual sportsbook policy.'
            for k in ('participation','pushVoid','earlyExit','reprice')}}
-    ctx=SimpleNamespace(now=now,games=games,first={},latest={},risk_external={},risk_games={})
+    ctx=SimpleNamespace(now=now,games=games,first={},latest={},risk_external={},risk_games={},root=ROOT)
     pick,held=P.candidate(spec,ctx,now)
     assert not held,held
     packet={'originalSpec':copy.deepcopy(spec),'originalReview':R.review(spec,games,now),
@@ -49,7 +49,8 @@ class PropTicketReleaseTests(unittest.TestCase):
             self.assertNotIn('Synthetic private',json.dumps(pick))
             self.assertNotIn('Private synthetic',json.dumps(pick))
             self.assertNotIn('ticketQuote',pick)
-            self.assertIsNone(P.refusal(pick,ctx,packet=packet))
+            with patch.object(R, 'nba_participation', return_value=None):
+                self.assertIsNone(P.refusal(pick,ctx,packet=packet))
             original=copy.deepcopy(pick)
             run.write_prose(pick,ctx,[])
             self.assertEqual(pick,original)
@@ -129,12 +130,13 @@ class PropTicketReleaseTests(unittest.TestCase):
                     packet['checks']=[];P.save(pick['id'],packet,conf)
                     self.assertIn('send check',run.private_release_refusal({'league':'NFL','pick':pick},ctx,ctx.now))
 
-    def test_nba_queue_remains_explicitly_held_until_its_public_adapter_exists(self):
+    def test_nba_queue_holds_when_current_participation_is_unavailable(self):
         spec,ctx,pick,packet=prepared('NBA-alts')
         with tempfile.TemporaryDirectory() as conf:
+            ctx.root = Path(conf)
             actual,held=P.enqueue(spec,ctx,ctx.now,conf)
             self.assertIsNone(actual)
-            self.assertIn('NBA public',held)
+            self.assertIn('participation snapshot unavailable',held)
             self.assertFalse(list(Path(conf).iterdir()))
 
     def test_actual_queue_and_draft_remain_private_until_rechecked(self):

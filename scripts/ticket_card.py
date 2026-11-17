@@ -383,12 +383,12 @@ def final_svg(rows, day):
 
 def daily_result_svg(rows, day):
     """Keep every new unit-backed fun result on mixed and fun-only daily cards."""
-    if not any(row.get('settlementBasis') == 'published-unit-stake-v1' for row in rows):
+    if not any(row.get('settlementBasis') == 'published-unit-stake-v1' or row.get('family') == 'NBA-alts' for row in rows):
         return final_svg(rows, day)
     import receipts
     if not rows or any(row.get('result') not in receipts.MARKS for row in rows):
         raise ValueError('Complete graded daily card required')
-    values = [x_post.units_for(row) for row in rows]
+    values = [0 if row['result'] == 'void' else x_post.units_for(row) for row in rows]
     card = ticket_cards.final_card({
         'headline': 'DAILY FINAL', 'row_label': 'PLAYS',
         'net_units': sum(values) if all(value is not None for value in values) else None,
@@ -409,12 +409,13 @@ def fun_final_svg(pick):
     """Render the settled fun ticket through the same art guard as other Finals."""
     import receipts
     result = pick.get('result')
-    if not receipts.has_fun_final(pick) or result not in ('win', 'loss'):
+    allowed = ('win', 'loss', 'push', 'void') if pick.get('family') == 'NBA-alts' else ('win', 'loss')
+    if not receipts.has_fun_final(pick) or result not in allowed:
         raise ValueError('Individual fun Final needs a settled ticket and every original leg grade')
-    units = x_post.units_for(pick) if any(isinstance(pick.get(key), (int, float))
-                                        for key in ('units', 'riskUnits')) else None
+    units = 0 if result == 'void' else x_post.units_for(pick)
+    headline = {'win': 'TICKET WON', 'loss': 'TICKET LOST', 'push': 'TICKET PUSH', 'void': 'TICKET VOID'}[result]
     detail = f"{int(pick['odds']):+d} {x_post.public_book(pick['book'])} · {receipts.result_detail(pick)}"
-    rows = [{'result': 'hit' if result == 'win' else 'miss',
+    rows = [{'result': {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}[result],
              'title': receipts.label(pick), 'detail': detail,
              'unit_text': f'{units:+.2f}u' if units is not None else None}]
     actuals = pick.get('settlementLegActuals')
@@ -439,7 +440,7 @@ def fun_final_svg(pick):
                          'title': f"{leg['player']} {selection}",
                          'detail': shown, 'hide_units': True})
     card = ticket_cards.final_card({
-        'headline': 'TICKET WON' if result == 'win' else 'TICKET LOST',
+        'headline': headline,
         'row_label': 'LEGS' if detailed else 'FUN TICKET',
         **({'subheading': f"{int(pick['odds']):+d} {x_post.public_book(pick['book'])} · {len(rows)} LEGS"} if detailed else {}),
         'net_units': units,

@@ -211,7 +211,43 @@ def queue_results(log_book, first, latest, games, now):
         queued += 1
     import nba_trial_runtime
     import cbb_picks
-    return queued + nba_trial_runtime.queue_discord_results(log_book, now) + cbb_picks.queue_results(log_book, now)
+    return (queued + queue_nba_fun_results(log_book, now) + nba_trial_runtime.queue_discord_results(log_book, now)
+            + cbb_picks.queue_results(log_book, now))
+
+
+def queue_nba_fun_results(log_book, now, root=None):
+    """Prepare a Final for tickets whose Discord original has no confirmed X quote."""
+    import buffer_post
+    import receipts
+    graded = {pick['id']: pick for pick in receipts.unit_fun_rows(now, log_book=log_book, root=root)
+              if pick.get('family') == 'NBA-alts' and pick.get('result') in receipts.MARKS}
+    queued = 0
+    for entry in log_book.get('posts', []):
+        pick = graded.get(entry.get('id'))
+        mirror = entry.get('discord') or {}
+        if not pick or mirror.get('state') != 'sent' or not mirror.get('messageId'):
+            continue
+        if not now - RESULT_UPDATE_FRESH < gates.when(pick['settledAt']) <= now:
+            continue
+        final_id = receipts.nba_fun_final_id(pick)
+        if buffer_post.quote_tweet_id(log_book, final_id):
+            continue
+        if entry.get('bufferPostId') and not any(entry.get(k) for k in ('cancelledAt', 'deletedAt', 'error')):
+            if entry.get('dueAt') and gates.when(entry['dueAt']) + timedelta(minutes=15) > now:
+                continue  # Give the scheduled original time to reach Sent.
+        prior = mirror.get('result') or {}
+        if prior.get('finalId') == final_id:
+            continue
+        if prior:
+            mirror.setdefault('previousResults', []).append(prior)
+        heading = 'CORRECTION' if pick.get('correctedAt') else 'FINAL'
+        text = (f"{heading} · {receipts.MARKS[pick['result']]} {receipts.label(pick)} "
+                f"({pick['odds']:+d} {pick['book']})\n{receipts.result_detail(pick)}\n\n21+ only")
+        mirror['result'] = {'state': 'pending', 'text': text, 'settledAt': pick['settledAt'],
+                            'finalId': final_id, 'cardKey': receipts.result_card_key(pick)}
+        entry['discord'] = mirror
+        queued += 1
+    return queued
 
 
 def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
@@ -424,7 +460,15 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
             if safe != text:
                 result.setdefault('legacyText', text)
                 result['text'] = safe
-            receipt = send_message(url, safe, send=send, return_receipt=True)
+            image = None
+            if result.get('cardKey'):
+                import buffer_post
+                image = buffer_post.card_url(result['cardKey'])
+                # An unavailable hosted image must hold this Final for retry.
+                data = fetch(image)
+                receipt = send_message(url, safe, image, send=send, fetch=lambda _: data, return_receipt=True)
+            else:
+                receipt = send_message(url, safe, send=send, return_receipt=True)
         except DiscordError as error:
             message = str(error)
             changed = result.get('error') != message
@@ -440,6 +484,9 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         result['state'] = 'sent'
         result['sentAt'] = gates.stamp(now)
         result['messageId'] = (receipt or {}).get('id')
+        if result.get('cardKey'):
+            result['attachmentReceipt'] = (receipt or {}).get('image')
+            result['attachmentState'] = 'attached' if result['attachmentReceipt'] else 'missing'
         result.pop('error', None)
         result.pop('lastAttemptAt', None)
         mirror['result'] = result

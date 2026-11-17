@@ -132,6 +132,10 @@ def _refusal(pick, ctx, now=None, *, packet=None, conf=None, phase='send'):
         return '; '.join(result['holds'])
     if pick.get('family') != original.get('family') or pick.get('riskUnits') != .25:
         return 'Original prop-ticket family and 0.25u allocation must remain unchanged'
+    if pick.get('family') == 'NBA-alts':
+        held = review.nba_participation(latest, ctx.games, ctx.root, now)
+        if held:
+            return held
     _, held = candidate(dict(latest, id=pick['id']), ctx, now)
     if held:
         return held
@@ -145,6 +149,10 @@ def recheck(key, spec, ctx, now, conf=None):
     result = evaluate(dict(spec, id=key), ctx, now)
     if result['state'] != 'reviewed-private':
         raise ValueError('; '.join(result['holds']))
+    if spec.get('family') == 'NBA-alts':
+        held = review.nba_participation(spec, ctx.games, ctx.root, now)
+        if held:
+            raise ValueError(held)
     admitted = gates.when(packet['admittedAt'])
     if gates.when(spec['ticketQuote']['checkedAt']) < admitted:
         raise ValueError('Recheck cannot predate admission')
@@ -161,11 +169,14 @@ def enqueue(spec, ctx, now, conf=None):
     pick, held = candidate(spec, ctx, now)
     if held:
         return None, held
-    if pick['league'] != 'NFL':
-        return None, 'NBA public prop-ticket ledger/delivery adapter remains unfinished; candidate stays private'
     key = pick['id']
-    if key in ctx.first or any(row.get('id') == key for row in release_queue.load(conf)['plays']):
+    if (key in ctx.first or key in getattr(ctx, 'risk_external', {})
+            or any(row.get('id') == key for row in release_queue.load(conf)['plays'])):
         return None, 'This exact prop ticket is already reserved or published'
+    if pick['league'] == 'NBA':
+        held = review.nba_participation(spec, ctx.games, ctx.root, now)
+        if held:
+            return None, held
     packet = {'originalSpec': copy.deepcopy(spec), 'originalReview': evaluate(spec, ctx, now),
               'admittedAt': gates.stamp(now), 'checks': [], 'settlementEvidence': None}
     # Initial admission uses the reviewed quote; public release requires an
@@ -184,7 +195,7 @@ def enqueue(spec, ctx, now, conf=None):
                                     ctx.games[pick['gameIds'][0]], ctx.games, ctx, now, target)
     except (OSError, RuntimeError, run.ReleaseArtifactError):
         pass  # Existing artifact recovery owns this reserved row.
-    added = release_queue.enqueue(conf, [('NFL', 'parlays', pick)], {}, [], folder, now, games=ctx.games)
+    added = release_queue.enqueue(conf, [(pick['league'], 'parlays', pick)], {}, [], folder, now, games=ctx.games)
     return (pick, None) if added else (None, 'No duplicate admission')
 
 

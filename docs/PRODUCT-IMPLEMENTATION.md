@@ -8121,3 +8121,23 @@ can recheck current NBA participation, release its original art and save the
 delivery and ledger under the same recovery path. Final delivery for voids
 and dated corrections still needs coverage. The +1000 Monday ticket was in
 the fourth quarter when checked and remains open pending final evidence.
+
+## November16 — NBA alternate-ticket worker candidate
+
+The existing private release worker now admits reviewed NBA alternate tickets
+using the ordinary NBA slate, roster and official participation snapshots.
+A separate attended combined-price recheck is required before release.
+It saves the exact original art, the confirmed Discord attachment and the
+append-only NBA fun original before scheduling X with the hosted card.
+A recovered Discord receipt can complete its missing public record after the
+quote expires. The existing precheck cancels an unsent X attempt with unresolved
+current evidence while keeping the delivered original available for grading.
+
+Fun Finals use the original X post as a native quote when one was confirmed.
+Discord-only originals receive their Final through the existing result mirror.
+Void Finals and dated corrections have separate result keys. The prior-day
+barrier checks delivery of the current result, and daily cards include these
+tickets. The temporary-store integration ran admission, exact recheck, an Out
+hold, Discord delivery, a missing hosted card, and a single X schedule after
+art became available. Focused receipt and worker checks passed. No provider
+requests or schedules were added. Canonical and hosted verification are pending.
