@@ -18,6 +18,9 @@ import prop_ticket_settlement as S
 import run
 import release_queue
 import x_post
+import ticket_card
+import discord_post
+import desk_health
 import buffer_post
 import receipts
 from test_prop_ticket_review import fixture
@@ -281,6 +284,48 @@ class PropTicketReleaseTests(unittest.TestCase):
         self.assertIn('leg voided',receipts.result_detail(rows[0][2]))
         self.assertNotIn('Private reduced quote',json.dumps(rows))
         self.assertEqual(pick,before)
+
+        row = rows[0][2]
+        post = dict(id=pick['id'], kind='buffer:play', tweetId='123456789012',
+                    sentAt=packet['admittedAt'], discord={'state':'sent', 'messageId':'123456789012'})
+        log = {'posts':[post]}
+        with patch.object(receipts, 'unit_fun_rows', return_value=[]):
+            [final] = receipts.cashed(ctx.first, {pick['id']:row}, games, log, now)
+            self.assertEqual(discord_post.queue_results(log, ctx.first, {pick['id']:row}, games, now), 1)
+        self.assertIn('original +425 · settled +180', final['text'])
+        self.assertEqual(receipts.guard(final), [])
+        self.assertIn('settled at +180', post['discord']['result']['text'])
+        self.assertEqual(post['discord']['result']['cardKey'], final['card'])
+        self.assertNotIn('None', row['actual'])
+        art = ticket_card.fun_final_svg(row)
+        self.assertIn('original +425 · settled +180', art)
+        self.assertIn('NET +0.45u', art)
+
+    def test_all_void_football_tickets_reach_individual_final_and_recovery(self):
+        for family in ('MNF', 'TNF'):
+            with self.subTest(family=family):
+                _,ctx,pick,packet = prepared(family)
+                _,evidence,now = case(family)
+                for leg in evidence['legs']:
+                    void(leg)
+                evidence['bookSettlement']['result'] = 'void'
+                packet['settlementEvidence'] = evidence
+                row,hold = P.settlement_revision(pick,now,packet=packet)
+                self.assertIsNone(hold)
+                first,latest = {pick['id']:pick},{pick['id']:row}
+                post = dict(id=pick['id'],kind='buffer:play',tweetId='123456789012',sentAt=packet['admittedAt'])
+                log = {'posts':[post]}
+                with patch.object(receipts,'unit_fun_rows',return_value=[]):
+                    [plan] = receipts.cashed(first,latest,ctx.games,log,now)
+                    [card] = receipts.result_cards(first,latest,ctx.games,now,log)
+                self.assertEqual(card['card'],plan['card'])
+                self.assertEqual(buffer_post.quote_tweet_id(log,plan['key']),post['tweetId'])
+                self.assertIn('legs voided',plan['text'])
+                self.assertNotIn('0/0',plan['text'])
+                self.assertNotIn('cashed',plan['text'])
+                self.assertIn('TICKET VOID',ticket_card.fun_final_svg(row))
+                health=desk_health.result_timeliness({'picks':[dict(row,posted=True)]},[post],now,individual_only=True)
+                self.assertEqual(health['missing'],1)
 
     def test_injury_deadline_needs_fresh_review_and_preserves_result_disclosure(self):
         spec,ctx,pick,packet=prepared()

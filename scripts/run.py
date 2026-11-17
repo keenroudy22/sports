@@ -4682,8 +4682,8 @@ def lotto_pings(plans, ctx):
             continue
         pick_id = key.split(':', 1)[1]
         pick = dict(ctx.first.get(pick_id) or {}, **ctx.latest.get(pick_id, {}))
-        if pick and pick_card.play_kind(pick) == 'parlay' and isinstance(pick.get('odds'), (int, float)):
-            out.append(('Longshot hit: pin it', f"{pick.get('title') or 'The fun parlay'} cashed at {int(pick['odds']):+d}. "
+        if key.startswith('cashed:') and pick_card.play_kind(pick) == 'parlay' and isinstance(pick.get('odds'), (int, float)):
+            out.append(('Longshot hit: pin it', f"{pick.get('title') or 'The fun parlay'} cashed at {int(pick.get('settledOdds') or pick['odds']):+d}. "
                         "The CASHED post is at the top of the profile: tap to open it, then ... and Pin to your profile."))
         info = pick.get('ladder') or {}
         if pick and pick_card.play_kind(pick) == 'ladder' and (info.get('totalAfter') or info.get('payout') or 0) >= (info.get('goal') or 1000):

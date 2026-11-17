@@ -136,6 +136,24 @@ def injury_detail(pick):
     return f'{who} left hurt'
 
 
+def repriced_odds(pick):
+    """Return the recorded winning settlement price only when the book changed it."""
+    settled = pick.get('settledOdds')
+    if (pick.get('result') == 'win' and type(settled) in (int, float)
+            and abs(settled) >= 100 and settled != pick.get('odds')):
+        return int(settled)
+    return None
+
+
+def fun_final_price(pick):
+    book = x_post.public_book(pick['book'])
+    original = int(pick['odds'])
+    settled = repriced_odds(pick)
+    if settled is not None:
+        return f'{book} · original {original:+d} · settled {settled:+d}'
+    return f'{original:+d} {book}'
+
+
 def result_detail(pick):
     """One factual line that makes a receipt worth reading without manufacturing a stat.
 
@@ -155,9 +173,15 @@ def result_detail(pick):
             won = results.count('win')
             voided = results.count('void') + results.count('push')
             live = len(results) - voided
-            pieces.append(f'{won}/{live} live legs hit' if voided else f'{won}/{len(results)} legs hit')
-            if voided:
-                pieces.append(f"{voided} leg{'s' if voided != 1 else ''} voided")
+            if live:
+                pieces.append(f'{won}/{live} live legs hit' if voided else f'{won}/{len(results)} legs hit')
+            for mark, word in (('void', 'voided'), ('push', 'pushed')):
+                count = results.count(mark)
+                if count:
+                    pieces.append(f"{count} leg{'s' if count != 1 else ''} {word}")
+            settled_price = repriced_odds(pick)
+            if settled_price is not None:
+                pieces.append(f'settled at {settled_price:+d}')
             if pick.get('result') == 'loss' and results.count('loss') == 1:
                 pieces.append('missed by one leg')
             elif pick.get('result') == 'win' and not voided:
@@ -723,6 +747,10 @@ def nba_fun_final_id(pick):
     return key
 
 
+def supports_neutral_fun_final(pick):
+    return pick.get('family') == 'NBA-alts' or pick.get('selectionMethod') == 'sourced-prop-ticket-v1'
+
+
 def has_fun_final(pick):
     """A fun ticket needs a stored grade for every original leg."""
     legs = pick.get('legs') or []
@@ -772,7 +800,7 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         has_straight_art = pick_card.play_kind(pick) in ('player', 'team')
         if key not in originals or not pick.get('settledAt') or not (fun_final or has_straight_art):
             continue
-        if pick.get('result') not in ('win', 'loss') and not (fun_final and pick.get('family') == 'NBA-alts'
+        if pick.get('result') not in ('win', 'loss') and not (fun_final and supports_neutral_fun_final(pick)
                                                               and pick.get('result') in MARKS):
             continue
         try:
@@ -869,8 +897,10 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
         ladder = pick_card.play_kind(pick) == 'ladder'
-        nba_fun = pick.get('family') == 'NBA-alts' and has_fun_final(pick)
-        if not pick.get('settledAt') or (result not in ('win', 'loss') and not ladder and not nba_fun):
+        fun_final = has_fun_final(pick)
+        nba_fun = pick.get('family') == 'NBA-alts' and fun_final
+        if not pick.get('settledAt') or (result not in ('win', 'loss') and not ladder
+                and not (result in ('push', 'void') and supports_neutral_fun_final(pick) and fun_final)):
             continue
         settled_at = gates.when(pick['settledAt'])
         fresh = LADDER_CASHED_FRESH if ladder else (fresh_window or CASHED_FRESH)
@@ -883,7 +913,8 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
         what = ''
         if parlay:
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
-        fun_final = has_fun_final(pick)
+            if repriced_odds(pick) is not None:
+                head = f"✅ My {label(pick, games)} cashed. {fun_final_price(pick)}."
         card = (result_card_key(pick) if fun_final or (not ladder and isinstance(pick.get('actualValue'), (int, float))
                 and pick_card.play_kind(pick) in ('player', 'team')) else None)
         post_key = f'cashed:{key}'
@@ -902,10 +933,11 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
             post_key = f'burnt:{key}'
             head = (f'❌ {price} {label(pick, games)}. {result_detail(pick)}.'
                     if fun_final else burnt_reaction(pick, games))
+        if fun_final and result in ('push', 'void'):
+            head = f'➖ {price} {label(pick, games)} {result}. {result_detail(pick)}.'
+            post_key = f'burnt:{key}'
         if nba_fun:
             post_key = nba_fun_final_id(pick)
-            if result in ('push', 'void'):
-                head = f'➖ {price} {label(pick, games)} {result}. {result_detail(pick)}.'
             if pick.get('correctedAt'):
                 head = 'Correction\n' + head
         if quiet and not ladder:

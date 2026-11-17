@@ -207,6 +207,9 @@ def queue_results(log_book, first, latest, games, now):
                  if pick.get('ladder') else receipts.label(pick, games))
         text = f'{mark} FINAL · {word}: {title}' + (f'\n{detail}' if detail else '')
         mirror['result'] = {'state': 'pending', 'text': text, 'settledAt': pick['settledAt']}
+        if pick.get('selectionMethod') == 'sourced-prop-ticket-v1' and receipts.has_fun_final(pick):
+            mirror['result'].update(cardKey=receipts.result_card_key(pick),
+                                    text=f"{mark} FINAL · {word}: {title} ({pick['odds']:+d} {pick['book']})\n{receipts.result_detail(pick)}")
         entry['discord'] = mirror
         queued += 1
     import nba_trial_runtime

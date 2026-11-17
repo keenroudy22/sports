@@ -224,8 +224,14 @@ def _settlement_revision(original, now, *, packet=None, conf=None):
     if result['state'] != 'settled-private':
         return None, '; '.join(result['holds'])
     rows = evidence['legs']
-    actual = '; '.join(f"{leg['player']}: {row.get('actual', row['result'])} {review.STATS[league][leg['market']]} ({row['result']})"
-                       for leg, row in zip(spec['legs'], rows))
+    details = []
+    for leg, row in zip(spec['legs'], rows):
+        stat = review.STATS[league][leg['market']]
+        if row['result'] == 'void':
+            details.append(f"{leg['player']}: {stat} void")
+        else:
+            details.append(f"{leg['player']}: {row['actual']} {stat} ({row['result']})")
+    actual = '; '.join(details)
     rules_based = result['settlementBasis'] == 'official-stats-and-rules'
     receipt = evidence['statSettlement' if rules_based else 'bookSettlement']
     revision = dict(original, status='settled', result=result['result'], actual=actual,

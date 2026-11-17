@@ -411,12 +411,12 @@ def fun_final_svg(pick):
     """Render the settled fun ticket through the same art guard as other Finals."""
     import receipts
     result = pick.get('result')
-    allowed = ('win', 'loss', 'push', 'void') if pick.get('family') == 'NBA-alts' else ('win', 'loss')
+    allowed = ('win', 'loss', 'push', 'void') if receipts.supports_neutral_fun_final(pick) else ('win', 'loss')
     if not receipts.has_fun_final(pick) or result not in allowed:
         raise ValueError('Individual fun Final needs a settled ticket and every original leg grade')
     units = 0 if result == 'void' else x_post.units_for(pick)
     headline = {'win': 'TICKET WON', 'loss': 'TICKET LOST', 'push': 'TICKET PUSH', 'void': 'TICKET VOID'}[result]
-    detail = f"{int(pick['odds']):+d} {x_post.public_book(pick['book'])} · {receipts.result_detail(pick)}"
+    detail = f"{receipts.fun_final_price(pick)} · {receipts.result_detail(pick)}"
     rows = [{'result': {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}[result],
              'title': receipts.label(pick), 'detail': detail,
              'unit_text': f'{units:+.2f}u' if units is not None else None}]
@@ -437,14 +437,14 @@ def fun_final_svg(pick):
             threshold = milestone if type(milestone) in (int, float) else leg['line']
             selection = f'{milestone:g}+' if type(milestone) in (int, float) else f"{leg['direction'].upper()} {leg['line']:g}"
             shown = (f"Final: {actual:g} {stat}{period} · {'cleared' if mark == 'win' else 'missed'} by {abs(actual-threshold):g}"
-                     if type(actual) in (int, float) and mark in ('win', 'loss') else mark.upper())
+                     if type(actual) in (int, float) and mark in ('win', 'loss') else f'{stat}{period} · {mark.upper()}')
             rows.append({'result': {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}[mark],
                          'title': f"{leg['player']} {selection}",
                          'detail': shown, 'hide_units': True})
     card = ticket_cards.final_card({
         'headline': headline,
         'row_label': 'LEGS' if detailed else 'FUN TICKET',
-        **({'subheading': f"{int(pick['odds']):+d} {x_post.public_book(pick['book'])} · {len(rows)} LEGS"} if detailed else {}),
+        **({'subheading': f"{receipts.fun_final_price(pick)} · {len(rows)} LEGS"} if detailed else {}),
         'net_units': units,
         'rows': rows,
     })

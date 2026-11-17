@@ -445,7 +445,8 @@ def result_timeliness(record, posts, now, *, individual_only=False):
         if not settled or not cutoff <= settled <= now:
             continue
         result = str(pick.get('result') or '').lower()
-        eligible = result == 'win'
+        eligible = result == 'win' or (individual_only and result in ('push', 'void')
+                                       and pick.get('selectionMethod') == 'sourced-prop-ticket-v1')
         if result == 'loss' and individual_only:
             eligible = True
         elif result == 'loss':
