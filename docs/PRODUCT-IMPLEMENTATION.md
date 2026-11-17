@@ -8592,21 +8592,34 @@ before repeating every gate. Proof:work/nov16-delivery-parlays/price-link-final-
 phone image:nov17-ohio-fixed-phone.jpg. Natural1255 worker also completed
 at18:01:05Z without errors and persisted the real X/media receipt.
 
-### November17 cross-channel favorite consistency — candidate
+### November17 cross-channel favorite consistency — verified release
 
 The old featured selector could replace a named pick after Discord had already
 sent it but before X Sent, or attach a new featured label to a plain Discord
 pick. It also matched fresh comparisons without the original line/book. The
-candidate recognizes an actual Discord message receipt as public delivery and
+release recognizes an actual Discord message receipt as public delivery and
 requires the same line and book for the comparison. Queued/unverified Discord
 entries do not count. Original stakes, reports and sent cards are unchanged.
-Thirty focused feature/official-availability tests pass. Full release and real
-worker observation remain pending.
+Thirty focused feature/official-availability tests pass. Canonical release
+`a2936806dbc12ce8a67ba96e2e64b759b2275e0c` passed 2,431 Python tests (two skipped)
+and 373 interface tests in normal and clean exports, build/feed, record/NBA,
+public-boundary, asset/SVG checks and the stored-input rehearsal. The rehearsal
+had zero outside writes/private reads. Hosted run `44153763801` succeeded at
+19:03:50Z. Live Ohio checks at375/1440 retained Best Bet1u, -10/-108BetMGM,
+the -108 price ceiling and original X2122750303346790801, with no overflow,
+broken images, rendered load failure or console warning/error. The placeholder
+book link remains absent. Existing payload-size warnings remain; these checks
+do not establish page-speed improvements.
+
+The natural1355 settlement/research worker finished18:59:34Z without errors,
+new admissions, publications or settlements. It started before this release;
+it is not proof of a new featured designation. A real post-release designation
+remains part of P12. Evidence:work/nov16-delivery-parlays/featured-consistency-final-verification.json.
 
 The natural1330 check ran18:30:05–18:37:38Z, outcome ok, no errors or admissions.
 The five upcoming NBA games were held by availability; inspection shows the
 official capture succeeded but the12:30ET report was already more than60minutes
-old by selection. The candidate reports this age hold explicitly instead of the
+old by selection. The release reports this age hold explicitly instead of the
 generic unavailable message; it does not extend freshness or refresh timestamps.
 The player-prop probability review separately remains unproven. Evidence:
 work/nov16-delivery-parlays/nov17-1330-scheduled-status.json.
