@@ -2,6 +2,7 @@ import copy
 import json
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from contextlib import ExitStack
 from datetime import timedelta
 from pathlib import Path
@@ -25,6 +26,26 @@ import x_post
 
 
 class NbaFunRecordTests(unittest.TestCase):
+    def test_recovered_native_ticket_renders_units_and_exact_terms(self):
+        spec, ctx, pick, _ = prepared('NBA-alts')
+        game = dict(ctx.games['NBA-1'], home={'id': '10'}, away={'id': '11'})
+        ctx.player_team = {}
+        with patch.object(run.pick_card, 'chrome_path', return_value='/Chrome'), \
+                patch.object(run.pick_card, 'fetch_data_uri', return_value=None) as images, \
+                patch.object(run.pick_card, 'render') as render, patch('featured.of_day', return_value=None):
+            run.render_private_play_card(pick['id'], pick, game, {'NBA-1': game}, ctx, ctx.now, Path('fixture.png'))
+        svg = render.call_args.args[0]
+        text = ' '.join(''.join(node.itertext()) for node in
+                        ET.fromstring(svg).iter('{http://www.w3.org/2000/svg}text'))
+        self.assertIn('+425', text)
+        self.assertIn('DRAFTKINGS', text)
+        self.assertIn('0.25u', text)
+        self.assertFalse(social_style.privacy_issues(text))
+        for leg in spec['legs']:
+            self.assertIn(leg['player'], text)
+            self.assertIn(run.pick_card.HEADSHOT.format(sport='nba', athlete=leg['athleteId']),
+                          [call.args[0] for call in images.call_args_list])
+
     def test_worker_checks_official_roster_and_promotes_one_delivered_original(self):
         spec, ctx, pick, packet = prepared('NBA-alts')
         at = ctx.now

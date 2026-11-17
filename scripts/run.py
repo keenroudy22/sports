@@ -3477,7 +3477,8 @@ def render_private_play_card(key, pick, game, games, ctx, now, target):
         if kind == 'ladder':
             svg = ticket_card.climb_svg(pick, games, ctx.player_team)
         elif kind == 'parlay':
-            svg = ticket_card.fun_svg(pick, games, ctx.player_team)
+            dated = dict(pick, publishedAt=pick.get('publishedAt') or stamp(now))
+            svg = ticket_card.fun_svg(dated, games, ctx.player_team)
         else:
             svg = ticket_card.straight_svg(pick, game, player_side=side,
                                            featured=is_featured, art=art)

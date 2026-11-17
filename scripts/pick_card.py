@@ -262,6 +262,10 @@ def logo_url(team, league):
         return LOGO['NFL'].format(abbr=str(team['abbreviation']).lower())
     if league == 'CFB' and team.get('id'):
         return LOGO['CFB'].format(id=team['id'])
+    if league == 'NBA':
+        logo = str(team.get('logo') or '')
+        if re.fullmatch(r'https://a\.espncdn\.com/i/teamlogos/nba/(?:500|500-dark)/[a-z0-9-]+\.png', logo):
+            return logo
     return None
 
 
@@ -516,9 +520,10 @@ def ticket_art(pick, games=None, player_team=None, fetch=None):
     games, player_team = games or {}, player_team or {}
     league = str(pick.get('league') or pick.get('id') or '').split('-')[0]
     result = []
+    sport = {'NFL': 'nfl', 'CFB': 'college-football', 'NBA': 'nba'}.get(league)
     for leg in pick.get('legs') or []:
         athlete = leg_athlete_id(leg)
-        uri = fetch(HEADSHOT.format(sport='nfl' if league == 'NFL' else 'college-football', athlete=athlete)) if athlete and league in ('NFL', 'CFB') else None
+        uri = fetch(HEADSHOT.format(sport=sport, athlete=athlete)) if athlete and sport else None
         if uri:
             result.append({'kind': 'photo', 'uri': uri})
             continue
