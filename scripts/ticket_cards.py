@@ -441,7 +441,7 @@ def result_card(p, won):
     else:
         inner += kit.pill(card, X2, fb - 62, f"MISSED BY {p['margin']}", RED, '#2A0306', 52, CROSS)
     if p.get('score_detail') or p.get('close_line'):
-        inner += card.text(X1, fb + 60, p.get('score_detail') or p['close_line'], 40, INK_SOFT, 'd', 600)
+        inner += card.text(X1, fb + 40, p.get('score_detail') or p['close_line'], 40, INK_SOFT, 'd', 600)
     perf = 1100
     if neutral:
         label, accent, ink, mark = p['result'].upper(), RULE, INK, 'M5 25 H45'
