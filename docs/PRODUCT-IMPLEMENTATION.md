@@ -8283,3 +8283,19 @@ record lacks its permalink. The regression covers a missing or mismatched X
 link and a Discord non-message identifier. Monday Nov16's two actual Final
 receipts already satisfy these checks. The complete 08:00 ET recap still
 requires confirmation on both channels before Tuesday plays can go out.
+
+The Nov17 scheduled capture held Tuesday's private play while the previous
+recap was pending. The two-ticket recap reached Discord at 08:00:53 and X at
+08:01:40 ET. Nick Poulos under 215.5 passing yards at −114 FanDuel, 1u, then
+reached Discord at 08:13, X at 08:20 and the hosted site at 08:21 ET.
+[Recap on X](https://x.com/1753110091912413184/status/2122676544644522048)
+[Pick on X](https://x.com/1753110091912413184/status/2122681166939517083)
+
+An optional NBA research post initially pushed the official X slot beyond
+the verified price window. The desk moved that unsent research through the
+existing Buffer route and verified its separate 08:41 ET receipt. The
+subsequent release allows eligible research to yield when an official play
+can use the earlier slot before its price expires. The release also removed
+routine touchdown-lean follow-ups. It passed the full local and clean-export
+test suites, stored-input rehearsal, hosted publishing and live 375 px checks.
+[Release run](https://github.com/keenroudy22/sports/actions/runs/44101997699)
