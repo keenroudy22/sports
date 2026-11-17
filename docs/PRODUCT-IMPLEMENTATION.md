@@ -8697,5 +8697,16 @@ handicap and classifies opposing comparisons as risks. Original records and
 stakes stay unchanged. Kook vs Book keeps the verified line, projection and
 history but omits probability comparisons/clear claims when a public chance,
 break-even probability or gap is unavailable. Official labels remain original.
-This follow-up is under test; its release/live proof is still pending.
-Evidence:work/nov16-delivery-parlays/spread-first-live-checks.json.
+Follow-up0f30cf88b passed2450Python(2skipped)/377Node normal+clean,
+all canonical gates and the1525 stored-input rehearsal(stvimwom), with
+zero outside writes/private reads. Pages44175116188 succeeded21:04:53Z.
+Live Today/full Ohio at375/1440 verified the correct numbers, absent stale
+WHY and two-column research comparisons with no unsupported chance-gap or
+clear claims. Original-10/-108/1u and X receipt were retained. No overflow,
+broken images or console errors. P61 is shipped; P12 remains unfinished.
+The natural1555 run also completed20:55:05-20:59:43Z outcomeok/errors0,
+0admissions/publications, shared review present; it preceded this follow-up
+promotion and is not a positive prospective dossier/public Chef proof.
+Evidence:work/nov16-delivery-parlays/comparison-followup-final-verification.json
+and comparison-followup-live-checks.json. NBA props retains a soft payload
+warning; hard budgets pass. Plans, budgets, schedules and stakes are unchanged.
