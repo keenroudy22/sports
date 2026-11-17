@@ -22,15 +22,22 @@ class DiscordPostTests(unittest.TestCase):
                  'fullDailyRecap': True, 'cardKey': 'receipt-day-2026-09-27',
                  'discord': {'state': 'pending', 'destination': 'plays',
                              'readyAt': '2026-09-28T15:00:00Z', 'text': 'Sunday results'}}
+        prior = {'id': 'old-play', 'kind': 'buffer:play',
+                 'discord': {'state': 'sent', 'messageId': 'test-receipt', 'lastHold': 'historical hold'}}
+        cancelled = {'id': 'old-cancelled', 'kind': 'buffer:play', 'cancelledAt': '2026-09-28T15:00:00Z',
+                     'discord': {'state': 'pending', 'readyAt': '2026-09-28T15:00:00Z'}}
         sent = []
         discord_post.mirror_sent(
-            {'posts': [play, recap]}, NOW, url='plays',
+            {'posts': [play, recap, prior, cancelled]}, NOW, url='plays',
             send=lambda *args: (sent.append(args) or (204, b'')),
             log=lambda *_: None, hold_new_plays='prior results missing')
         self.assertEqual(len(sent), 1)
         self.assertEqual(play['discord']['state'], 'pending')
         self.assertEqual(play['discord']['lastHold'], 'prior results missing')
         self.assertEqual(recap['discord']['state'], 'sent')
+        self.assertEqual(prior['discord'], {'state': 'sent', 'messageId': 'test-receipt',
+                                            'lastHold': 'historical hold'})
+        self.assertNotIn('lastHold', cancelled['discord'])
 
     def test_regular_nba_checks_original_then_sends_play_and_real_result_once(self):
         import nba_trial_runtime as nba

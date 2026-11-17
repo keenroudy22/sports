@@ -327,6 +327,10 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 mirror['reason'] = 'not an approved Discord category'
                 entry['discord'] = mirror
             continue
+        ready = mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now
+        if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \
+                or entry.get('cancelledAt') or entry.get('deletedAt'):
+            continue
         pregame = (kind in ('buffer:play', 'buffer:nba-trial', 'buffer:cbb-pick')
                    or (combined and str(entry.get('id', '')).startswith('receipt:card:'))
                    or (kind == 'buffer:community'
@@ -334,10 +338,6 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         if hold_new_plays and pregame:
             mirror['lastHold'] = str(hold_new_plays)
             entry['discord'] = mirror
-            continue
-        ready = mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now
-        if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \
-                or entry.get('cancelledAt') or entry.get('deletedAt'):
             continue
         if kind == 'buffer:research' and destination == 'research':
             # A sent X post is history, but its delayed Discord copy is still a
