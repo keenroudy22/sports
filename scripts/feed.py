@@ -137,7 +137,9 @@ def play_title(pick):
 
 def postable(pick):
     """Player props, game lines and the day's fun parlay: favorites, model leans, prop leans and the longshot."""
-    return pick.get('favorite') is True or bool(pick.get('modelLean')) or bool(pick.get('legs')) or pick.get('parlayType') == 'longshot'
+    return (pick.get('favorite') is True or bool(pick.get('modelLean'))
+            or bool(pick.get('legs')) or pick.get('parlayType') == 'longshot'
+            or x_post.tiered_straight(pick))
 
 
 def in_window(kickoff, now, league=None):

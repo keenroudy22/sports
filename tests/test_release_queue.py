@@ -17,6 +17,46 @@ NOW = datetime(2026, 10, 11, 12, 0, tzinfo=timezone.utc)
 
 
 class ReleaseQueueTests(unittest.TestCase):
+    def test_tiered_best_bet_recovers_real_caption_without_legacy_flags(self):
+        now = datetime(2026, 11, 17, 18, 0, tzinfo=timezone.utc)
+        pick = {'id': 'CFB-tiered-spread', 'title': 'Ohio -10',
+                'status': 'active', 'favorite': False, 'modelLean': False,
+                'marketType': 'spread', 'line': -10, 'direction': 'home',
+                'gameIds': ['CFB-game'], 'book': 'BetMGM', 'odds': -108,
+                'lane': 'best_bet', 'selectionPolicy': run.gates.TIER_POLICY,
+                'stakingPolicy': run.gates.staking.CURRENT_VERSION, 'riskUnits': 1,
+                'expiresAt': '2026-11-17T22:30:00Z',
+                'probabilityAtPublication': {'chance': .523, 'breakEven': .519}}
+        game = {'id': 'CFB-game', 'league': 'CFB', 'kickoff': '2026-11-18T00:00:00Z',
+                'away': {'id': '1', 'name': 'Ball State'}, 'home': {'id': '2', 'name': 'Ohio'}}
+        reason = 'Ohio has won its last 17 home games.'
+        with tempfile.TemporaryDirectory() as folder:
+            conf = Path(folder)
+            row = {'id': pick['id'], 'pick': pick, 'reason': reason,
+                   'artifactState': 'recovery-needed', 'caption': None,
+                   'card': str(conf / 'card.png')}
+            release_queue.save(conf, {'plays': [row]})
+            def render(*args):
+                Path(args[-1]).write_bytes(b'\x89PNG\r\n\x1a\nrecovered')
+            with mock.patch.object(run, 'CONF', conf), \
+                    mock.patch.object(x_post, 'load_log', return_value={'posts': []}), \
+                    mock.patch.object(run, 'render_private_play_card', side_effect=render):
+                result = run.recover_private_release_artifacts(
+                    row, SimpleNamespace(first={}, latest={}), {game['id']: game}, now)
+            self.assertEqual(result['artifactState'], 'ready')
+            self.assertIn('Ohio -10', result['caption'])
+            self.assertIn(reason, result['caption'])
+            self.assertEqual(result['pick'], pick)
+            import feed
+            self.assertTrue(feed.postable(pick))
+            for changes in ({'lane': 'research'}, {'selectionPolicy': None}, {'riskUnits': 2}):
+                self.assertFalse(feed.postable(dict(pick, **changes)))
+            for changes in ({'expiresAt': '2026-11-17T17:00:00Z'}, {'status': 'settled'}):
+                with self.assertRaises(x_post.Refused):
+                    x_post.refuse(dict(pick, **changes), game, {'posts': []}, now)
+            with self.assertRaises(x_post.Refused):
+                x_post.refuse(pick, game, {'posts': [{'id': pick['id']}]}, now)
+
     def test_withdrawal_retains_original_admission_and_reason_privately(self):
         with tempfile.TemporaryDirectory() as folder:
             conf = Path(folder)

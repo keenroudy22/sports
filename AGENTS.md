@@ -1,3 +1,17 @@
+# November 17 owner — daily Chef's Pick
+
+The owner wants the old-school Chef's Pick to be the daily centerpiece: one
+favorite straight chosen across all supported sports and markets. Prefer a
+playable price around -110; compare the full supported slate, save the exact
+quote, supporting matchup evidence and strongest countercase, and review every
+day. Say clearly when a favorite is still held. This direction is prospective;
+preserve original published terms, historical labels, stakes and exposure caps.
+The existing rare chef_pick tier and POTD presentation need a coordinated
+migration tracked in product-status P12. Until that implementation is verified,
+the existing daily review must identify its favorite in the operator report and
+use only tested admission paths. Do not call a research lean published, invent
+market coverage, or manufacture a play to fill the daily slot.
+
 # November 17 full-slate parlay selection
 
 From November17 Eastern, the sourced-prop-ticket-v1 reviewed MNF/TNF and

@@ -8496,3 +8496,55 @@ found current stored model margin16.97 and the16:45:06Z BetMGM quoteOhio-10
 at-108/opposite-110. Thus the cache-missing refusal was not evidence of a
 sub-six-point current margin. This stored observation is not a new admission
 or a current sportsbook-page confirmation. Re-evaluate normally before release.
+
+
+### November 17 combined reliability and reviewed-ticket frequency release
+
+Canonical candidate `f7e468d3030d562d84b13c3490e1ee6c91a29da4` promoted
+from tested base `d7a69b85bd325b759c31111eda736dd757353e06`. Both normal
+and clean-export suites passed 2,425 Python tests (two skips) and 373 Node
+tests. The isolated 11:55 rehearsal returned exit 0/outcome ok, with no
+outside writes or private reads. Hosted run `44135616134` succeeded.
+Today and the full Poulos breakdown passed actual 375 and 1440 CSS-pixel
+checks: no horizontal overflow, missing images, rendered load failure or
+console warnings/errors; full probability, hit-history and original-note
+sections remained available. Evidence is in
+`work/nov16-delivery-parlays/combined-live-layouts.json`; phone capture is
+`combined-live-today-phone.jpg`. A first attempt measured only1178 pixels
+and was not counted as a phone check. The cold-phone10-second performance
+target remains separate and unverified.
+
+The real12:25 results worker ran asPID77106 on production f7e468d303 and
+completed at17:29:40Z with outcome ok, zero errors, zero admissions, zero
+new publications and zero settlements. Its status is preserved in
+`scheduled-status-1225-combined-release.json`. This proves scheduled operation;
+it does not prove a new positive CFB release or a subsequent reviewed parlay.
+No Ohio play was restored or published by the repair. The owner-facing Ohio
+-10.5/-111 FanDuel and Davidson-3.5/-120 FanDuel discussion is research only.
+DraftKings showed Davidson-3.5/-115 on its board but its event page returned
+no available bets, so that quote was not approved for release.
+
+The owner also requested a daily all-sports Chef's Pick. Existing daily
+automation now requires the comparison and favorite/hold in its operator
+report, without more runs or provider capacity. P12 tracks the coordinated
+prospective public-label/tier migration; it is not implemented or deployed.
+
+### November 17 Best Bet release routing follow-up — candidate
+
+The owner-requested12:33 selection run completed17:35:12Z, with31screened
+candidates and no public release. Ohio-10/-108BetMGM passed selection and
+remains privately admitted. Its card/caption recovery failed because both old
+favorite/modelLean flags were false, while the approved tier was best_bet1u.
+The real x_post.do_draft path reproduced this failure in a regression test.
+The candidate recognizes the exact existing tier policy, official straight
+lane and matching stake in caption/feed category routing. It does not change
+selection, prices, probability, freshness, exposure or duplicate guards, and
+does not relabel Ohio as Chef's Pick. Eighty-two targeted tests pass, including
+actual caption recovery and held research/wrong-stake/expired/settled/duplicate
+checks. Canonical deployment and actual delivery remain pending.
+
+The server-wide Discord SMU search for November13–15 found only the already
+verified Wake Forest Final, no original pick. The archived original caption
+already said Wake Forest despite its incorrect original artwork, so searching
+the former card label did not recover a receipt. Keep this historical original
+delivery unverified; do not republish a historical pick to manufacture evidence.

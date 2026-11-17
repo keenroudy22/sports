@@ -774,9 +774,23 @@ def cancelled_private_draft(entry):
                 and not any(entry.get(k) for k in ('sentAt', 'tweetId', 'link')))
 
 
+def tiered_straight(pick):
+    """Recognize admitted tiers independently of legacy discovery flags.
+
+    This is category routing only. Caption, probability, current-price,
+    availability and delivery guards still run before a public release.
+    """
+    return (pick.get('selectionPolicy') == gates.TIER_POLICY
+            and pick.get('lane') in ('best_bet', 'chef_pick')
+            and not (pick.get('legs') or pick.get('parlayType'))
+            and type(pick.get('riskUnits')) in (int, float)
+            and pick['riskUnits'] == gates.staking.expected(pick))
+
+
 def refuse(pick, game, log, now, text=None):
     """The reason this pick must not be posted now, or None."""
-    if pick.get('favorite') is not True and not pick.get('modelLean') and not (pick.get('legs') or pick.get('parlayType')):
+    if (pick.get('favorite') is not True and not pick.get('modelLean')
+            and not (pick.get('legs') or pick.get('parlayType')) and not tiered_straight(pick)):
         raise Refused('only favorites, model leans, prop leans and the longshot go to X')
     if pick.get('result') or pick.get('status') not in (None, 'active'):
         raise Refused(f"the pick is {pick.get('status') or 'settled'}, not open")
