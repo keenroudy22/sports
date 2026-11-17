@@ -8164,3 +8164,23 @@ Verify the next normal worker on this release. Real prop-ticket receipts
 require an eligible future NBA or primetime window. MNF+1000 remained open
 at the fourth-quarter check and must be settled before the prior-day recap
 can clear new plays. Existing provider plans, budgets and jobs were retained.
+
+## November16 — Scheduled NBA worker and MNF grading
+
+The ordinary 23:25 ET worker ran on the hosted NBA release from 04:25:05Z to
+04:29:24Z. It finished OK with zero errors, publishes, grades, odds or prop
+requests. Real NBA and primetime alternate-ticket admission still requires
+an eligible event, current source evidence and an attended joint book quote.
+
+After the worker released its write lock, the reviewed MNF +1000 grade
+appended and pushed as b653ec2fa. The final game score was LAC 23–20.
+In ticket order the sourced stats were Herbert 129 passing, Brissett 340
+passing, Flowers 74 receiving, Harris 86 receiving, Johnston 6 receiving and
+Andrews 82 receiving. Both losing legs participated in the second half.
+The ticket finished 4/6 and -0.25u under the posted unit allocation.
+
+The Nov16 recap plan resolves exactly the two delivered MNF tickets, both
+losses, with -0.50u total. It is due Nov17 at 08:00 ET. The production gate
+reports the missing lotto Final X receipt before it will evaluate the daily
+recap receipt. The append and plan prove grading and release ordering.
+The separate hosted card, Buffer Sent and Discord receipts remain pending.
