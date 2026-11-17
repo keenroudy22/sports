@@ -7924,3 +7924,40 @@ result receipts. It never infers a void or reduced SGP price. A regression
 covers the deadline boundary, stale checks, missing evidence, known different
 book decisions and the public injury disclosure. This remains a candidate
 until its canonical/hosted/live receipt is recorded.
+
+## November 16 — NFL adapter verified and owner-requested MNF lotto sent
+
+The NFL adapter is deployed at557027ca965c702e2f71ecdc101f0ebbd6b0dcbb,
+hosted43989366505 successful. Canonical and clean-export checks passed2392
+Python tests (2 skipped),372 Node tests and the normal build, record, public
+boundary, budget and rehearsal gates. Live375px Today had no overflow, load
+failure or console error. The natural1955 worker ran00:55:06–00:59:10Z on
+descendant1cc7783, completed OK with no errors, zero settlements and zero
+publications. This verifies the worker, not a real ticket settlement through
+the new adapter. Evidence: work/nov16-delivery-parlays/prop-release-receipt.json
+and scheduled-status-1955-final.json. NBA public integration remains gated.
+
+The owner clarified that the requested full-game parlay is a speculative fun
+lotto. The attended second ticket uses the existing community route,0.25u,
+with no change to automatic weekly caps or claims of positive expected value.
+The six exact full-game legs are Herbert200+pass yards, Brissett200+pass yards,
+Flowers70+receiving yards, Tre Harris40+receiving yards, Johnston30+receiving
+yards and Andrews20+receiving yards. DraftKings displayed the actual joint
++1000 base price, no boost, including a final01:00:06Z attended recheck.
+All six were checked against current depth charts and final inactive lists.
+Brissett's first Baltimore start, Herbert's recent rotation and Njoku's return
+remain countercases; no stable-role model or win probability is asserted.
+
+Source/card1cc7783 shipped through successful hosted43991375282. The normal
+writer waited for the2000 worker, then Buffer accepted6afba83b4b26315855b08efa
+at01:04:47Z. X actually sent01:06:02Z:
+https://x.com/1753110091912413184/status/2122496448834969748
+The Sent caption and actual image were inspected in Buffer. Discord sent
+01:06:07Z, message1572055215665062029 with attachment1572055215446827038.
+Hosted Today receipt update43992945549 succeeded at82d9707b on01:17:46Z.
+Live375x812 verified01:18:34Z: exactly one Q1+168 and one lotto+1000, correct
+card links, zero overflow/load/console errors. This site update was late
+against the listed01:15Z kickoff; serial build latency remains an open delivery
+fix. Both owner tickets' results remain pending. Preserve original prices and never invent personal
+cash, protection decisions or realized units to fill the community ledger.
+No new plans, provider quotas or scheduled jobs were added.
