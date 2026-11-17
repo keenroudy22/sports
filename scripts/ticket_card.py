@@ -323,6 +323,8 @@ def final_detail(pick):
     """A final stat and exact-line margin, only when the stored result supports the arithmetic."""
     import receipts
     import result_display
+    if pick.get('league') == 'CBB' and pick.get('dailyActual'):
+        return pick['dailyActual']
     is_prop = pick.get('marketType') == 'prop' or bool(pick.get('athleteId')) or pick.get('kind') == 'props'
     if is_prop:
         rich = result_display.detail(pick)

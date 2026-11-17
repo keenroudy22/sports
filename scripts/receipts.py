@@ -97,8 +97,8 @@ def label(pick, games=None):
     if pick_card.play_kind(pick) == 'parlay':
         odds = pick.get('odds')
         return f"{len(pick.get('legs') or [])}-leg {'lotto' if isinstance(odds, (int, float)) and odds >= x_post.LOTTO else 'parlay'}"
-    if pick.get("nbaDailySelection"):
-        return pick["nbaDailySelection"]
+    if pick.get('dailySelection'):
+        return pick['dailySelection']
     return pick_card.short_title(pick, (games or {}).get((pick.get('gameIds') or [None])[0]))
 
 
@@ -142,8 +142,8 @@ def result_detail(pick):
     Parlays say how many live legs hit, identify protected voids, and call out a one-leg miss. Straight plays use
     the preserved final result.
     """
-    if pick.get("nbaDailySelection"):
-        return pick.get("nbaDailyActual", "")
+    if pick.get('dailySelection'):
+        return pick.get('dailyActual', '')
     injury = injury_detail(pick)
     if pick_card.play_kind(pick) == 'parlay':
         results = leg_results(pick)
@@ -265,7 +265,7 @@ def settled(rows):
 
 def leagues(rows):
     found = {str(r.get('id', '')).split('-')[0] for r in rows}
-    return ' '.join(x_post.TAGS.get(l, '#' + l) for l in ('NFL', 'CFB', 'NBA') if l in found)
+    return ' '.join(x_post.TAGS.get(l, '#' + l) for l in ('NFL', 'CFB', 'NBA', 'CBB') if l in found)
 
 
 def fit(lines, head, tail, head_sep='\n\n'):
@@ -355,19 +355,52 @@ def nba_daily_rows(day, as_of, log_book):
                 or gates.when(play['publishedAt']) > as_of):
             continue
         # Keep the actual grade separate from the immutable offered terms.
-        row = dict(play, posted=True, nbaDailySelection=nba_prop_release.selection(play))
+        row = dict(play, posted=True, dailySelection=nba_prop_release.selection(play))
         if not row.get('settledAt') or gates.when(row['settledAt']) > as_of:
             row.pop('result', None)
         if row.get('result') and row.get('actual') is not None:
-            row['nbaDailyActual'] = f"Final: {row['actual']:g} {nba_prop_release.STATS[row['stat']]}"
+            row['dailyActual'] = f"Final: {row['actual']:g} {nba_prop_release.STATS[row['stat']]}"
+        published.append(row)
+    return published
+
+
+def cbb_daily_rows(day, as_of, log_book):
+    """Carry released CBB originals and their grades into the full daily card."""
+    if day < date(2026, 11, 17) or as_of is None:
+        return []
+    import cbb_picks
+    delivered = set()
+    for entry in log_book.get('posts', []):
+        if entry.get('kind') != 'buffer:cbb-pick' or entry.get('cbbPick') is not True:
+            continue
+        discord = entry.get('discord') or {}
+        x_time = (entry.get('sentAt') if entry.get('tweetId') and entry.get('link')
+                  and not entry.get('cancelledAt') and not entry.get('deletedAt') else None)
+        discord_time = discord.get('sentAt') if discord.get('state') == 'sent' and discord.get('messageId') else None
+        if any(clock and gates.when(clock) <= as_of for clock in (x_time, discord_time)):
+            delivered.add(entry['id'])
+    published = []
+    for play in cbb_picks.public_rows():
+        if (play['id'] not in delivered or eastern_date(gates.when(play['kickoff'])) != day
+                or gates.when(play['publishedAt']) > as_of):
+            continue
+        teams = play['game']['teams']
+        selection = cbb_picks.selection(play)
+        if play['marketType'] == 'total':
+            selection = f"{teams['away']['abbreviation']}/{teams['home']['abbreviation']} {selection}"
+        row = dict(play, posted=True, dailySelection=selection)
+        if not row.get('settledAt') or gates.when(row['settledAt']) > as_of:
+            row.pop('result', None)
+        if row.get('result') and row.get('actual') is not None:
+            row['dailyActual'] = cbb_picks.result_detail(row)
         published.append(row)
     return published
 
 
 def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
-    nba_rows = nba_daily_rows(day, as_of, log_book or {})
+    basketball = nba_daily_rows(day, as_of, log_book or {}) + cbb_daily_rows(day, as_of, log_book or {})
     fun_rows = unit_fun_rows(as_of, day=day, log_book=log_book or {}) if as_of else []
-    rows = plays_between(first, latest, games, ids, day, day) + nba_rows + fun_rows
+    rows = plays_between(first, latest, games, ids, day, day) + basketball + fun_rows
     if not settled(rows):
         return None
     if not rows:
@@ -381,7 +414,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     text = fit_result_rows(rows, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
-    return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}' + ('-all-sports' if nba_rows or fun_rows else ''), 'kind': 'receipt',
+    return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}' + ('-all-sports' if basketball or fun_rows else ''), 'kind': 'receipt',
             'title': headline(rows), 'label': 'FINAL',
             'when': f'{day:%A, %b %-d}',
             # Retained art keeps the record followers saw when the receipt became
@@ -393,8 +426,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
             # Stable identities let health recognize a complete daily recap as
             # result delivery without parsing prose or demanding duplicate Finals.
             'pickIds': [r['id'] for r in rows],
-            **({'nbaDailyRows': rows} if nba_rows else {}),
-            **({'dailyRows': rows} if nba_rows or fun_rows else {}),
+            **({'dailyRows': rows} if basketball or fun_rows else {}),
             'rows': [(r['result'], label(r, games), result_detail(r), pick_card.play_kind(r)) for r in rows], 'text': text,
             'due': due,
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
@@ -513,12 +545,14 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
     ids = counted(public_first, latest)
     rows = plays_between(public_first, latest, games, ids, day, day)
     rows += nba_daily_rows(day, now, log_book)
+    rows += cbb_daily_rows(day, now, log_book)
     rows += unit_fun_rows(now, day=day, log_book=log_book)
     if today >= date(2026, 11, 16):
         import cbb_picks
         cbb = [p for p in cbb_picks.public_rows()
                if p.get('kickoff') and eastern_date(gates.when(p['kickoff'])) == day]
-        hold = prior_individual_results_hold(rows + cbb, log_book, channel)
+        row_ids = {row['id'] for row in rows}
+        hold = prior_individual_results_hold(rows + [row for row in cbb if row['id'] not in row_ids], log_book, channel)
         if hold:
             return hold
     expected = {row['id'] for row in rows}

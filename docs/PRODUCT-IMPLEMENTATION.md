@@ -8240,3 +8240,19 @@ The new recap gate requires the stored X status ID to match its permalink
 and the Discord send to carry a provider message ID. The full result ID
 set is still required. Provider acknowledgments with no receipt remain
 held for reconciliation, with no change to the duplicate-safe send path.
+
+### Daily recap coverage from the Nov17 slate
+
+Delivered CBB straights now enter the same daily recap and results-first
+ID check as released football and NBA plays and the separate fun tickets.
+A CBB-only day has a complete recap. An unsettled delivered CBB play
+holds the card and a private or queued admission stays outside it.
+Totals name both teams and retain the actual game total. This starts
+with the Nov17 game day and retains the existing Nov16 recap.
+
+The overnight candidate inventory checked five NBA fixtures and both
+rosters per game. Its six stored points, rebounds and assists comparisons
+are older FanDuel main lines for Knicks–Raptors. The ordinary feed has
+no fresh exact alternate legs or combined ticket at this clock. Use
+work/nov16-delivery-parlays/nov17-nba-alt-pregame-watch.json to target
+current availability, role and price checks in the existing windows.

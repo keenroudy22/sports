@@ -574,9 +574,52 @@ class CrossSportDailyTest(unittest.TestCase):
         self.assertIn('Example Player', recap['text'])
         self.assertNotIn('Private NBA admission', recap['text'])
         self.assertEqual(recap['pickIds'], [football['id'], basketball['id']])
-        data = ticket_card.final_data(recap['nbaDailyRows'], str(day))
+        data = ticket_card.final_data(recap['dailyRows'], str(day))
         self.assertEqual(data['net_units'], 0)
         self.assertEqual([r['result'] for r in data['rows']], ['hit', 'miss'])
+
+    def test_cbb_only_day_requires_a_complete_graded_daily_recap(self):
+        import cbb_picks
+        import ticket_card
+        day = datetime(2026, 11, 17, tzinfo=timezone.utc).date()
+        now = datetime(2026, 11, 18, 13, 20, tzinfo=timezone.utc)
+        kickoff = '2026-11-18T01:00Z'
+        play = dict(id='CBB-total', league='CBB', marketType='total', direction='under',
+                    line=150.5, book='DraftKings', odds=-110, riskUnits=1,
+                    kickoff=kickoff, publishedAt='2026-11-17T22:00Z',
+                    game={'teams': {'away': {'abbreviation': 'AWAY'}, 'home': {'abbreviation': 'HOME'}}})
+        private = dict(play, id='CBB-private')
+        posts = [
+            {'id': play['id'], 'kind': 'buffer:cbb-pick', 'cbbPick': True,
+             'discord': {'state': 'sent', 'sentAt': '2026-11-17T22:01Z',
+                         'messageId': '1571763542208675944'}},
+            {'id': private['id'], 'kind': 'buffer:cbb-pick', 'cbbPick': True,
+             'bufferPostId': 'queued-but-not-sent', 'dueAt': '2026-11-17T22:30Z'},
+        ]
+        log = {'posts': posts}
+        with patch.object(cbb_picks, 'public_rows', return_value=[play, private]):
+            self.assertIsNone(receipts.day_receipt(day, {}, {}, {}, set(), now, log))
+            play.update(result='loss', actual=153, settledAt='2026-11-18T03:05Z')
+            before_final = datetime(2026, 11, 18, 3, tzinfo=timezone.utc)
+            self.assertIsNone(receipts.day_receipt(day, {}, {}, {}, set(), before_final, log))
+            recap = receipts.day_receipt(day, {}, {}, {}, set(), now, log)
+            self.assertEqual(recap['pickIds'], [play['id']])
+            self.assertEqual(recap['card'], 'receipt-day-2026-11-17-all-sports')
+            self.assertEqual(recap['due'].hour, 13)
+            self.assertIn('AWAY/HOME UNDER 150.5', recap['text'])
+            self.assertIn('Game total: 153', ticket_card.daily_result_svg(recap['dailyRows'], str(day)))
+            self.assertIn('individual Final', receipts.prior_day_results_hold({}, {}, {}, log, now))
+            posts[0]['discord']['result'] = {
+                'state': 'sent', 'sentAt': '2026-11-18T03:07Z', 'messageId': '1571763542208675945'}
+            self.assertIn('ready but not delivered', receipts.prior_day_results_hold({}, {}, {}, log, now))
+            posts.append({'id': recap['key'], 'resultPickIds': [private['id']],
+                          'sentAt': '2026-11-18T13:00Z', 'tweetId': '2123456789012345678',
+                          'link': 'https://x.com/keenkooks/status/2123456789012345678',
+                          'discord': {'state': 'sent', 'sentAt': '2026-11-18T13:01Z',
+                                      'messageId': '1571763542208675946'}})
+            self.assertIn('ready but not delivered', receipts.prior_day_results_hold({}, {}, {}, log, now))
+            posts[-1]['resultPickIds'] = recap['pickIds']
+            self.assertIsNone(receipts.prior_day_results_hold({}, {}, {}, log, now))
 
 
     def test_early_daily_receipt_reserves_eight_before_late_individual_or_research(self):
