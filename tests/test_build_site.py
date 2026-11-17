@@ -253,6 +253,20 @@ class ModelReadTests(unittest.TestCase):
 
 
 class PickTests(unittest.TestCase):
+    def test_fitted_game_never_advertises_the_legacy_unchecked_worse_price(self):
+        import pricing
+        pick = {'marketType': 'spread', 'odds': -108,
+                'cutoff': pricing.cutoff('spread', 'home', -10, -108),
+                'probabilityAtPublication': {'chance': .523, 'calibrationMethod': 'neutral-centered-fitted'}}
+        original = pick['cutoff']
+        fields = build_site.cutoff_fields(pick)
+        self.assertEqual(fields['cutoffOdds'], -108)
+        self.assertIn('Price check applies at -108 or better at -10', fields['cutoff'])
+        self.assertNotIn('-122', fields['cutoff'])
+        self.assertEqual(pick['cutoff'], original)
+        self.assertGreater(.523, pricing.break_even(-108))
+        self.assertLess(.523, pricing.break_even(-122))
+
     def test_repaired_learned_prop_does_not_advertise_chasing_a_generic_price_tolerance(self):
         import pricing
         pick = {'odds': 102, 'cutoff': pricing.cutoff('rec', 'over', 5.5, 102),

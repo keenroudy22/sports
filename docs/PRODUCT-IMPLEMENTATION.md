@@ -8548,3 +8548,31 @@ verified Wake Forest Final, no original pick. The archived original caption
 already said Wake Forest despite its incorrect original artwork, so searching
 the former card label did not recover a receipt. Keep this historical original
 delivery unverified; do not republish a historical pick to manufacture evidence.
+
+### November 17 actual Best Bet delivery proof and page follow-up
+
+Routing repair81b34f82ac231b13801e90d037c355a1a144b580 passed2426Python
+(two skips)/373Node in normal and clean exports, all canonical release gates,
+and1225offline rehearsal iqjmpfsb (ok,0outside writes/0private reads).
+Hosted44141131968 succeeded. The natural12:50mirror PID93088 recovered
+Ohio's caption/card at17:51:26Z and released it through normal checks:
+Ohio-10/-108BetMGM1u, Discord1572308502645309502 provider17:52:39.110Z;
+exact caption and attachment bytes verified by GET. Buffer6afc946ed4c8ef4106f1fe49
+actually Sent17:54:46.036Z, X2122750303346790801, exact caption and image
+confirmed via the budgeted provider API. Publication descendant7c8a6ae2e
+passed hosted44141805919. The actual Ohio page loaded at375/1440 with no
+overflow, broken images, rendered error or console warning/error. Evidence:
+work/nov16-delivery-parlays/nov17-ohio-{discord-verified,x-provider,live-layouts}.json.
+
+That live check found two separate content defects: the generic original
+cutoff advertised -122 despite the current price gate, and BetMGM's captured
+link contained an unresolved {state} hostname. The follow-up candidate extends
+the existing verified-quote-only display rule to fitted game probabilities and
+rejects unresolved link hostnames. It preserves original reports and posted
+terms;22targeted tests pass. Full deployment/live verification remain pending.
+
+The earlier owner-facing FanDuel Ohio-10.5/-111 recommendation was corrected:
+read-only current-model evaluation gives52.3% against52.6% required, so it
+does not qualify. Captured BetMGM-10/-108 qualifies at52.3% versus51.9%.
+This comparison is stored in nov17-ohio-price-comparison.json. Davidson-3.5
+/-120FanDuel remains sourced research, not an official admission or publication.

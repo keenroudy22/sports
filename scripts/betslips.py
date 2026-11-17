@@ -133,6 +133,10 @@ def safe_url(value):
         return None
     if parsed.hostname in {'localhost', '127.0.0.1', '::1'}:
         return None
+    # Feed templates such as sports.{state}.betmgm.com are not usable links.
+    # Do not guess a jurisdiction or advertise an unresolved placeholder.
+    if any(char in parsed.hostname for char in '{}<>%') or any(char.isspace() for char in parsed.hostname):
+        return None
     return parsed.geturl()
 
 

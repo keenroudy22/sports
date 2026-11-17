@@ -97,6 +97,9 @@ class BetslipTests(unittest.TestCase):
         self.assertIsNone(betslips.safe_url('http://gambly.com/a'))
         self.assertIsNone(betslips.safe_url('https://user:secret@gambly.com/a'))
         self.assertIsNone(betslips.safe_url('https://localhost/a'))
+        self.assertIsNone(betslips.safe_url('https://sports.{state}.betmgm.com/en/sports?options=6:123&type=Single'))
+        self.assertIsNone(betslips.safe_url('https://sports.%7Bstate%7D.betmgm.com/en/sports'))
+        self.assertEqual(betslips.safe_url('https://sports.in.betmgm.com/en/sports'), 'https://sports.in.betmgm.com/en/sports')
         self.assertEqual(betslips.safe_url('https://gambly.com/a'), 'https://gambly.com/a')
 
     def test_exact_captured_prop_link_becomes_the_only_public_action(self):
