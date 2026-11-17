@@ -1392,7 +1392,10 @@ def write_trends(rows, now):
 
 def recent_picks(picks, now):
     cutoff = now - timedelta(hours=72)
-    return [pick for pick in picks if not pick.get('result') or
+    # The detailed play payload owns the dossier; Today never renders it.
+    # Keep the original row intact for the full record and the play page.
+    return [{key: value for key, value in pick.items() if key != 'dossier'}
+            for pick in picks if not pick.get('result') or
             (instant(pick.get('settledAt') or pick.get('publishedAt')) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff]
 
 

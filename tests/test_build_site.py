@@ -1156,6 +1156,17 @@ class PayloadSplitTests(unittest.TestCase):
         self.assertEqual([row['id'] for row in build_site.recent_picks(rows, now)], ['open', 'recent'])
 
 
+    def test_today_leaves_dossier_on_source_row_without_changing_visible_terms(self):
+        now = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+        visible = {'id': 'recent', 'result': 'loss', 'settledAt': '2026-10-06T10:00:00Z',
+                   'odds': -115, 'line': 4.5, 'book': 'DraftKings', 'units': -1,
+                   'delivery': {'x': 'https://x.com/example/status/123'}}
+        dossier = {'reasons': [{'text': 'Original evidence'}]}
+        source = dict(visible, dossier=dossier)
+        self.assertEqual(build_site.recent_picks([source], now), [visible])
+        self.assertEqual(source, dict(visible, dossier=dossier))
+
+
 class MoneylineCutoffDisplayTests(unittest.TestCase):
     def test_zero_moneyline_placeholder_is_not_a_point_spread_cutoff(self):
         fields=build_site.cutoff_fields({'marketType':'moneyline','odds':130,
