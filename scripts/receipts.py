@@ -982,7 +982,6 @@ def house_posts(first, latest, games, log_book, now, log=print):
         out.append(extra)
     out += cashed(first, latest, games, log_book, now)
     import research_posts
-    out += research_posts.touchdown_followups(log_book, now)
     import morning_brief
     morning=morning_brief.post(now)
     import sheet

@@ -1,3 +1,17 @@
+# November 17 standout model calls
+
+Stop automatic touchdown follow-ups for research leans. A standout model call
+may get an individually reviewed post when the exact pregame call and final
+outcome are verifiable and the result is genuinely unusual. Use scoring order
+to verify first touchdown. Preserve the distinction between research and
+official plays, and continue the normal official Finals and daily recap.
+
+For Nov 17, review toward five NBA and three CBB straights and cover the CFB
+slate. Keep holds visible and apply existing release checks. On big slates,
+highlight the strongest qualifying favorites using the current presentation.
+Write public X copy as Kook’n in first person, with the exact play and the
+verified fact that supports it.
+
 # November 16 results-before-next-day-plays
 
 The owner reiterated that prior results must precede the next day's plays.

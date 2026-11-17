@@ -777,55 +777,6 @@ def planned_metadata(key):
     return dict(_PLANNED_METADATA.get(key) or {}) or None
 
 
-def touchdown_followups(log_book, now, box_root=None):
-    """One verified follow-up when a named End-Zone Work lean scores.
-
-    The final box-score store is the authority. A research lean never enters
-    the betting record, and a miss produces no victory-lap post.
-    """
-    import boxscores
-    records = boxscores.stored(box_root or boxscores.STORE)
-    posted = {str(entry.get('id') or '') for entry in log_book.get('posts') or []}
-    out = []
-    for entry in log_book.get('posts') or []:
-        meta = entry.get('research') or {}
-        if entry.get('kind') != 'buffer:research' or meta.get('type') != 'td-lean' or not entry.get('sentAt'):
-            continue
-        key = f"research:td-hit:{entry.get('id')}"
-        if key in posted:
-            continue
-        leans = list(meta.get('leans') or [])
-        if not leans and meta.get('player'):
-            leans = [{'player': meta.get('player'), 'athleteId': meta.get('athleteId'),
-                      'gameId': meta.get('gameId'), 'league': meta.get('league'),
-                      'kickoff': meta.get('kickoff'), 'anytime': True, 'firstTd': False}]
-        kickoff = when((leans[0] if leans else {}).get('kickoff'))
-        if not kickoff or not timedelta(0) <= now - kickoff <= timedelta(days=2):
-            continue
-        hits = []
-        for lean in leans:
-            event = str(lean.get('gameId') or '').split('-', 1)[-1]
-            game = records.get(event)
-            player = next((row for row in (game or {}).get('players') or []
-                           if str(row.get('id') or '') == str(lean.get('athleteId') or '')), None)
-            if (player or {}).get('rushTD', 0) + (player or {}).get('recTD', 0) >= 1:
-                hits.append(lean)
-        if not hits:
-            continue
-        league = str(hits[0].get('league') or '').upper()
-        names = ' and '.join(row['player'] for row in hits)
-        # The box score proves that a player scored, but not that the score was
-        # the game's first. Never turn a scorer hit into a false first-TD receipt.
-        call = ('anytime TD lean' if all(row.get('anytime') for row in hits)
-                else 'End-Zone Work call')
-        text = (f"🎯 {names} found the end zone.\n"
-                f"That was my {call} this morning."
-                + (f"\n#{league}" if league else ''))
-        out.append({'key': key, 'kind': 'research', 'card': None, 'text': text,
-                    'due': now + timedelta(minutes=2), 'stale': now + timedelta(hours=6)})
-    return out
-
-
 def art_for(row, game, fetch):
     if row.get('athleteId'):
         league = row.get('league')

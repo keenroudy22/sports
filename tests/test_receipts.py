@@ -505,13 +505,25 @@ class LadderReceiptTests(unittest.TestCase):
 
 
 class DailyTests(unittest.TestCase):
+    def test_house_posts_omit_automatic_touchdown_lean_followups(self):
+        now = datetime(2026, 11, 17, 5, 0, tzinfo=timezone.utc)
+        history = {'posts': [{'id': 'research:end-zone:2026-11-16', 'kind': 'buffer:research',
+                             'sentAt': '2026-11-16T15:30:00Z',
+                             'research': {'type': 'td-lean', 'player': 'Runner', 'athleteId': '12',
+                                          'gameId': 'NFL-456', 'league': 'NFL',
+                                          'kickoff': '2026-11-17T01:15:00Z'}}]}
+        final = {'456': {'players': [{'id': '12', 'rushTD': 1}]}}
+        with patch('boxscores.stored', return_value=final), \
+                patch('research_posts.post', return_value=None):
+            queued = receipts.house_posts({}, {}, {}, history, now, log=lambda *_: None)
+        self.assertFalse(any(row['key'].startswith('research:td-hit:') for row in queued))
+
     def test_weekly_projection_sheet_returns_to_the_house_queue_once(self):
         now = datetime(2026, 10, 17, 14, 30, tzinfo=timezone.utc)
         projection = {'key': 'sheet:CFB:2026-10-17', 'kind': 'sheet', 'card': 'sheet-cfb-2026-10-17',
                       'text': 'Full college projections', 'due': now, 'stale': now + timedelta(hours=1)}
         with patch('sheet.post', return_value=projection), \
                 patch('research_posts.post', return_value=None), \
-                patch('research_posts.touchdown_followups', return_value=[]), \
                 patch('sports_posts.post', return_value=None), \
                 patch.object(receipts, 'ready', return_value=[]), \
                 patch.object(receipts, 'book', return_value=None), \
