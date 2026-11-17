@@ -909,7 +909,7 @@
       "owner": "agent",
       "next": "When the shared checkout is clean, rerun deploy.py; wait for hosted success, verify Today and the detailed pick at 375/1440, then measure the cold-phone 10s target.",
       "doneWhen": "Trigger and undo fixtures pass, no gate loosens below the October 7 baseline, every move logs evidence, the Monday packet explains changes and reversals, and a cold phone visit meets the documented 10-second budget.",
-      "evidence": "Prior split live: d1811645/40045096781. Nov17 9cb869bd6: Today removes unused dossiers only; saved payload 342764→305624B with source rows intact. 84 focused/373 Node passed. Canonical clean gate stopped on concurrent edits; no hosted revision or live viewport receipt. Full run logs in work/weekly-20261117."
+      "evidence": "Prior split live: d1811645/40045096781. Nov17 9cb869bd6: Today removes unused dossiers only; saved payload 342764→305624B with source rows intact. 84 focused/373 Node passed; each 2418-test Python suite hit only the concurrent ALTFUN field limit (2 skips). Canonical clean gate stopped; no hosted/live receipt. Logs in work/weekly-20261117."
     },
     {
       "id": "P47",
