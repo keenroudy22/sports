@@ -8415,3 +8415,13 @@ unknown. Compare like-aged formats with at least8comparable measured posts;
 retain losses and measure closing price/forecast error separately from reach.
 The reliability window remains1of7completed days passing all requirements.
 Paid-platform readiness is not established by these delivery repairs.
+
+Actual X follow-through: Buffer Sent UI and API both confirmed ticket
+NBA-2026-11-17-prop-ticket-30105dea6ec3e393 at2026-11-17T16:08:02.307Z,
+https://x.com/1753110091912413184/status/2122723443372081371, with the exact
+PNG attachment and all six caption terms. Queue0/Sent361 observed. The
+initial16:01:58Z schedule was not the actual send time. Current-plan API usage
+remains below the verified3000allowance; no upgrade or metered feed expansion.
+Private final receipt:work/nov16-delivery-parlays/nov17-six-lower-sent-receipt.json.
+The user resumed this goal; get_goal confirmed active. Real NBA settlement and
+first typed TNF publication/result remain unobserved, not complete.
