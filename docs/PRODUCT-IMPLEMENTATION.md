@@ -8679,3 +8679,23 @@ for Today, the full ticket and its explanation. Unknown sides show no
 comparison; props, totals and moneylines retain their own conventions.
 Regression tests cover both sides and favorites/underdogs. Release/live
 verification of this correction is pending underP61.
+
+### November17 comparison display follow-up — live findings
+
+The numeric spread correction2efa6c617 passed2449Python(2skipped)/375Node,
+normal and clean exports, all canonical gates and Pages44169809300SUCCESS
+at20:34:44Z. Live Today and full Ohio pages at375/1440 showed the original
+-10/-108/1u, selected-team spread-17 and+7 gap, with no overflow, broken
+images or console errors. Natural1525 also finished20:25:05-20:29:15Z
+outcomeok/errors0,0admissions/publications, shared review present.
+
+Semantic QA still found the old generated ticketWhy sentence on the full
+pick and chance-gap claims beside intentionally withheld public chances in
+Kook vs Book. Follow-up code omits number-only ticket WHY fallback (as Today
+already does), writes future spread dossier reasons using the selected-team
+handicap and classifies opposing comparisons as risks. Original records and
+stakes stay unchanged. Kook vs Book keeps the verified line, projection and
+history but omits probability comparisons/clear claims when a public chance,
+break-even probability or gap is unavailable. Official labels remain original.
+This follow-up is under test; its release/live proof is still pending.
+Evidence:work/nov16-delivery-parlays/spread-first-live-checks.json.

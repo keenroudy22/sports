@@ -47,7 +47,8 @@ test('the ticket shows book versus model number while private chance, fair price
 });
 
 test('WHY and BUT are the build\'s saved strings, printed as they are', () => {
-  assert.match(ticketBody, /say\('WHY', heldSafe\(pick\.ticketWhy, hold\)\) \+ say\('BUT', heldSafe\(pick\.ticketBut, hold\), ' kt-but'\)/);
+  assert.match(ticketBody, /say\('WHY',[^\n]+heldSafe\(pick\.ticketWhy, hold\)\)/);
+  assert.match(ticketBody, /say\('BUT', heldSafe\(pick\.ticketBut, hold\), ' kt-but'\)/);
   assert.match(ticketBody, /const heldSafe = \(text, held\) => held && !held\.afterPosting && HELD_WORDS\.test\(text \|\| ''\) \? null : text;/,
     'a new hold drops suspect words before posting; a delivered play retains its posted WHY');
   assert.doesNotMatch(ticketBody, /whyLines|watchLine|reasoning\.|cautions/);

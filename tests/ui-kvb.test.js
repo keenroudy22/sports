@@ -78,3 +78,29 @@ test('Today omits the Kook vs. Book panel when no prop qualifies', () => {
   assert.equal(api.home(), '');
   assert.equal(api.home({ rows: [row('thin', { thin: true }), row('fringe', { line: .5 })] }), '');
 });
+
+test('a withheld or incomplete probability keeps the projection but has no chance-gap claim', () => {
+  const api = setup();
+  for (const missing of [{chance:null}, {chance:undefined}, {chance:NaN}, {chance:1.1},
+    {needs:null}, {edge:null}, {edge:NaN}]) {
+    const play = row('held-chance', {...missing,value:true});
+    const original = structuredClone(play);
+    const html = api.home({rows:[play],charts:{players:[chartPlayer('held-chance')]}});
+    assert.match(html,/Research only/);
+    assert.match(html,/style="--kvb-cols:2"/);
+    assert.match(html,/Book line[\s\S]*49\.5[\s\S]*Kook’n[\s\S]*61\.2/);
+    assert.match(html,/no verified probability comparison/);
+    assert.match(html,/shortlisted · 0 clear/);
+    assert.match(html,/chart-stub/);
+    assert.doesNotMatch(html,/Chance gap|Price clears|Price is close|math is positive|– vs|Kook’n –/);
+    assert.deepEqual(play,original);
+  }
+});
+
+test('an official label survives a withheld current chance without inventing a comparison', () => {
+  const html=setup().home({rows:[row('official',{official:true,chance:null})]});
+  assert.match(html,/Official play/);
+  assert.match(html,/shortlisted · 0 clear/);
+  assert.match(html,/no verified probability comparison/);
+  assert.doesNotMatch(html,/Chance gap|– vs/);
+});

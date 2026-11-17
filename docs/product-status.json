@@ -1042,9 +1042,9 @@
       "title": "Kitchen Ticket website for Today, plays and players",
       "status": "ready",
       "owner": "agent",
-      "next": "Fix confirmed Nov17 spread display sign: home margin+17 and Ohio-10 must show selected-team spread-17, gap+7. Verify Today and full pick at375/1440 after canonical release; preserve original terms and all player-page contracts.",
+      "next": "Deploy and verify the stale number-only WHY and withheld chance-gap follow-up at375/1440. Numeric spread correction is live; preserve originals, stakes, saved meaningful reasons and player-page contracts.",
       "doneWhen": "Every supported player prop links to its stored game log, projections stay paired with the posted or current line, Line Ladder rows never imply offered odds or probabilities, and hosted/live checks stay clean.",
-      "evidence": "Prior player-page release4ec35ded2/Pages42932611698 verified375/1440 with2223Python(2skip)/324Node normal+clean and all gates. Nov17 shared-review live QA found Ohio-10/+17 home-margin comparison incorrectly showing+27. Frontend correction to selected-team spread-17/gap+7 passes focused tests; canonical release and live verification pending."
+      "evidence": "2efa6c617/Pages44169809300SUCCESS;2449Python(2skip)/375Node and all gates. Live375/1440:Ohio-10/-108/1u, model-17/gap+7;no overflow/broken images/console errors. QA found stale generated WHY and missing-chance comparisons. Follow-up in progress; P61 remains open."
     },
     {
       "id": "P62",

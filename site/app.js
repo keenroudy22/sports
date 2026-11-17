@@ -317,8 +317,7 @@
     return hit ? hit.replace(/^Statistical counterpoint:\s*/i, '') : null;
   };
 
-  /* Stored spread projections are home winning margins, not selected-team
-     handicap lines. Convert only for display; original terms stay immutable. */
+  /* Spread projections store home margins; display selected-team handicaps. */
   const pickProjection = pick => {
     if (!isNum(pick?.projection) || pick?.marketType === 'moneyline' || pick?.market === 'moneyline') return null;
     if (pick.marketType !== 'spread' && pick.market !== 'spread') return Number(pick.projection);
@@ -946,7 +945,7 @@
     return `<article class="kt-order${opts.compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}${hold ? ' is-held' : ''}" style="${style}" aria-label="${esc(label)}">
       <div class="kt-shade"><div class="kt-paper">${panel}${bet}<div class="kt-cut"></div>
         <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
-        <p class="kt-now">${esc(nowLine)}</p>${number}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
+        <p class="kt-now">${esc(nowLine)}</p>${number}${best ? say('WHY', /^Book says .+ I say /i.test(pick.ticketWhy || '') ? null : heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
         ${opts.strip && best ? strip(pick.hitStrip, pick.line, String(pick.direction || '').toLowerCase()) : ''}
         ${best && opponentTrendText(pick) ? `<p class="kt-note">${esc(opponentTrendText(pick))}</p>` : ''}
         ${stub || extra || orderUp || breakdown ? `<div class="kt-perf"></div><div class="kt-stubrow"><div class="kt-stubl">${stub}${extra}</div>${breakdown}${orderUp}</div>` : ''}</div></div>
@@ -2142,7 +2141,7 @@
   const PLAYER_ASSET = 'app-player.js?v=sha256-a3d5787e6fed';
   const GAMES_ASSET = 'app-games.js?v=sha256-7a753f8ade5f';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-d0c8ba8cf2a2';
-  const KVB_ASSET = 'app-kvb.js?v=sha256-0467472b071d';
+  const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
   let researchCssLoading = null;
   const ensureResearchCss = () => researchCssLoading || (researchCssLoading = new Promise((ok, fail) => {

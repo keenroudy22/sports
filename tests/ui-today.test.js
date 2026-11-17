@@ -118,7 +118,8 @@ test('spread displays compare the selected-team handicap on Today and the full p
   ]) {
     const pick = { ...total, id: `spread-${league}-${direction}-${line}-${projection}`, league,
       marketType: 'spread', direction, side: direction, line, projection, odds: -108, riskUnits: 1,
-      posted: true, displayTitle: `Fixture ${direction} ${line}`, probabilityAtPublication: {} };
+      posted: true, displayTitle: `Fixture ${direction} ${line}`, probabilityAtPublication: {},
+      ticketWhy: `Book says ${line}. I say ${projection}.` };
     const original = JSON.stringify(pick);
     const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [pick] }, hero: { ...HERO, bets: [pick] } });
     const page = await api.views.today({ view: 'today' });
@@ -127,6 +128,7 @@ test('spread displays compare the selected-team handicap on Today and the full p
     assert.ok(detail.includes(`it at<b class="num">${C.fixed(expected)}</b>`), pick.id);
     assert.ok(detail.includes(`Our model projects ${expected} against the ${line} line.`), pick.id);
     assert.ok(M.howWeGotIt(pick).includes(`Our model projects ${expected} against the ${line} line.`));
+    assert.doesNotMatch(detail, /Book says [-\d.]+\. I say/);
     assert.match(detail, /Graded at the posted 1u stake/);
     assert.equal(JSON.stringify(pick), original);
   }

@@ -126,15 +126,21 @@ def build(candidate, game, ctx, records, now, *, captures=(), weather_row=None, 
             reasons.append(_item(f"Price-checked win chance {chance:.1%}; this price needs {needed:.1%}.",
                                  {'chance': chance, 'breakEven': needed}, "Kook'n exact-price check",
                                  candidate.get('quotedAt')))
-    elif projection is not None and line is not None:
+    elif projection is not None and line is not None and (market != 'spread' or side in ('home', 'away')):
         units = pricing.WORDS.get(market, 'points')
         # This dossier line can feed a public caption. Keep the plain owner-approved
         # shape and never expose the retired "My <stat> is ...; the book's line is ..."
         # sentence.
-        text = f"Book says {float(line):g}. I say {projection:g}."
-        item = _item(text, {'projection': projection, 'line': line},
+        compared = (-projection if side == 'home' else projection) if market == 'spread' else projection
+        text = f"Book says {float(line):g}. I say {compared:g}."
+        numbers = {'projection': projection, 'line': line}
+        if market == 'spread':
+            numbers['selectedTeamSpread'] = compared
+        item = _item(text, numbers,
                      "Kook'n projection", candidate.get('snapshotAt') or (snap or {}).get('retrievedAt'))
-        if market != 'spread' and side in ('over', 'under'):
+        if market == 'spread':
+            (reasons if line > compared else risks).append(item)
+        elif side in ('over', 'under'):
             (reasons if (projection - line) * (1 if side == 'over' else -1) > 0 else risks).append(item)
         else:
             reasons.append(item)

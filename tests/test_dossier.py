@@ -15,6 +15,24 @@ GAME = {'id': 'NFL-1', 'league': 'NFL', 'season': 2026, 'kickoff': '2026-10-08T0
 
 
 class DossierTests(unittest.TestCase):
+    def test_spread_reason_uses_selected_handicap_and_preserves_home_margin(self):
+        import copy
+        for side,line,margin,expected,supports in [
+            ('home',-10,17,-17,True),('away',10,17,17,False),
+            ('home',10,-17,17,False),('away',-10,-17,-17,True),
+            ('home',10,-3,3,True),('away',10,3,3,True),
+            ('home',-10,3,-3,False),('away',-10,-3,-3,False),
+        ]:
+            with self.subTest(side=side,line=line,margin=margin):
+                pick={'id':'spread','gameIds':[GAME['id']],'marketType':'spread',
+                      'direction':side,'line':line,'projection':margin,'odds':-108,'book':'BetMGM'}
+                original=copy.deepcopy(pick)
+                case=dossier.build(pick,GAME,self.context(),[],NOW)
+                text=f'Book says {line:g}. I say {expected:g}.'
+                self.assertTrue(any(r['text']==text for r in case['reasons' if supports else 'risks']))
+                self.assertEqual(case['ours']['projection'],margin)
+                self.assertEqual(pick,original)
+
     def test_moneyline_case_describes_win_chance_not_zero_point_line(self):
         import run
         c={'id':'ml','title':'Away moneyline','gameIds':[GAME['id']], 'marketType':'moneyline',
