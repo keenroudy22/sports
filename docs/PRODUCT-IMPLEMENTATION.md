@@ -8632,7 +8632,7 @@ review/designation before claiming a daily all-sports Chef is live. Keep origina
 public labels and stakes fixed, and verify one natural designation across all
 three delivery surfaces. These consistency repairs do not close P12.
 
-### November17 shared daily Chef review — implementation in progress
+### November17 shared daily Chef review — private stage deployed
 
 The new private daily_chef_review bridge sees current-day football admissions,
 including the private release queue, and the separate NBA/CBB original stores.
@@ -8658,4 +8658,24 @@ Remaining work: bind the reviewed favorite to its first publication atomically,
 carry the frozen designation through all three sport caption/card/site adapters,
 preserve historical labels and stakes, and verify a natural designation. The
 legacy public selector remains unchanged while that integration is unfinished.
-Targeted review/featured/run tests:167passed. Full release is pending.
+Targeted review/featured/run tests:167passed. Release17565cd28 passed2449Python
+(2skipped)/373Node in normal/clean exports and all canonical gates. Hosted
+44161224692 succeeded at19:45:27Z. The installed private command completed at
+19:41:29Z with the same two public references and no reviewable admissions;
+its report is0600. This was a manual stored-input check. The natural1455 run
+then completed19:55:03-19:59:13Z, outcomeok/errors0, with the shared review
+present:2public CFB references,0reviewable admissions,0new publications. It
+correctly held the explicit comparison/designation. Evidence:
+work/nov16-delivery-parlays/nov17-1455-scheduled-status.json. The isolated
+dry-run does not exercise this hook.
+Evidence:work/nov16-delivery-parlays/daily-chef-hosted-receipt.json and
+nov17-daily-chef-installed-review.json.
+
+Live Today QA found a separate display error: the Ohio-10 pick
+compared its stored+17 home winning margin as though it were a handicap,
+showing+27 rather than+7. The original bet, price and stake are unchanged.
+The frontend correction converts home margins to selected-team spreads
+for Today, the full ticket and its explanation. Unknown sides show no
+comparison; props, totals and moneylines retain their own conventions.
+Regression tests cover both sides and favorites/underdogs. Release/live
+verification of this correction is pending underP61.

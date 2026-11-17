@@ -36,11 +36,11 @@ test('closed, pulled and withdrawn states get their state words, never "Still go
 });
 
 test('the ticket shows book versus model number while private chance, fair price and edge stay off it', () => {
-  assert.match(ticketBody, /isNum\(pick\.projection\).*isNum\(pick\.line\)/);
+  assert.match(ticketBody, /isNum\(projection\).*isNum\(pick\.line\)/);
   assert.match(ticketBody, /Book \$\{tense \? 'says' : 'said'\}/);
   assert.doesNotMatch(ticketBody, /vm\.fair|vm\.edge|fairOdds|pctOne\(vm\.chance\)|pctOne\(vm\.needs\)/);
   const explanation = source.slice(source.indexOf('const howWeGotIt ='), source.indexOf('/* A best bet', source.indexOf('const howWeGotIt =')));
-  assert.match(explanation, /pick && pick\.projection/);
+  assert.match(explanation, /pickProjection\(pick\)/);
   const pickPage = source.slice(source.indexOf('VIEWS.pick = async'), source.indexOf('/* ---------- Research'));
   assert.match(pickPage, /tape\('My price'/, 'fair price and edge live on the play page');
   assert.match(pickPage, /Price matching our chance/);

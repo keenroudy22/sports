@@ -109,6 +109,46 @@ test('a moneyline ticket shows the real price without treating win probability a
   assert.doesNotMatch(page,/Book (?:says|said)<b class="num">0(?:\.0)?<\/b>/);
   assert.doesNotMatch(page,/I (?:have|had) it at<b class="num">0\.5<\/b>/);
 });
+test('spread displays compare the selected-team handicap on Today and the full pick without changing the original', async () => {
+  for (const [league, direction, line, projection, expected, gap] of [
+    ['CFB', 'home', -10, 17, -17, 7], ['NFL', 'away', 10, 17, 17, -7],
+    ['NBA', 'home', 10, -17, 17, -7], ['NBA', 'away', -10, -17, -17, 7],
+    ['CFB', 'home', 10, -3, 3, 7], ['NFL', 'away', 10, 3, 3, 7],
+    ['CFB', 'home', -10, 3, -3, -7], ['NBA', 'away', -10, -3, -3, -7],
+  ]) {
+    const pick = { ...total, id: `spread-${league}-${direction}-${line}-${projection}`, league,
+      marketType: 'spread', direction, side: direction, line, projection, odds: -108, riskUnits: 1,
+      posted: true, displayTitle: `Fixture ${direction} ${line}`, probabilityAtPublication: {} };
+    const original = JSON.stringify(pick);
+    const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [pick] }, hero: { ...HERO, bets: [pick] } });
+    const page = await api.views.today({ view: 'today' });
+    if (league !== 'NBA') assert.ok(page.includes(`Book line ${C.fixed(line)}, Kook’n projection ${C.fixed(expected)}, projected gap ${gap} toward the pick`), pick.id);
+    const detail = await api.views.pick({ id: pick.id });
+    assert.ok(detail.includes(`it at<b class="num">${C.fixed(expected)}</b>`), pick.id);
+    assert.ok(detail.includes(`Our model projects ${expected} against the ${line} line.`), pick.id);
+    assert.ok(M.howWeGotIt(pick).includes(`Our model projects ${expected} against the ${line} line.`));
+    assert.match(detail, /Graded at the posted 1u stake/);
+    assert.equal(JSON.stringify(pick), original);
+  }
+});
+
+test('unidentified spread sides have no comparison; totals and props keep their directional gaps', async () => {
+  for (const pick of [
+    { ...total, marketType: 'spread', direction: null, side: null, projection: 17, line: -10 },
+    { ...total, marketType: 'spread', direction: 'over', side: null, projection: 17, line: -10 },
+  ]) {
+    const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [pick] }, hero: { ...HERO, bets: [pick] } });
+    assert.doesNotMatch(await api.views.today({ view: 'today' }), /class="decision-numbers"/);
+    assert.doesNotMatch(await api.views.pick({ id: pick.id }), /I (?:have|had) it at|We project 17 against/);
+    assert.equal(M.pickProjection(pick), null);
+  }
+  for (const [pick, gap] of [[{ ...total, projection: 60, line: 51.5 }, 8.5],
+    [{ ...prop, projection: 40, direction: 'under' }, 9.5], [prop, 11.7]]) {
+    const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [pick] }, hero: { ...HERO, bets: [pick] } });
+    assert.ok((await api.views.today({ view: 'today' })).includes(`Kook’n projection ${C.fixed(pick.projection)}, projected gap ${gap} toward the pick`));
+  }
+});
+
 /* The top of Today: the chef's line, the first ticket and the Climb stub, up to the stub's aside. */
 const top = page => page.slice(page.indexOf('<section class="kt-lede'), page.indexOf('<p class="kt-aside">'));
 const mondayNfl = { ...prop, id: 'NFL-2026-W6-monday-total-dk', kind: 'gamePicks', athleteId: null, market: null, marketType: 'total',

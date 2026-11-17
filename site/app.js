@@ -317,12 +317,21 @@
     return hit ? hit.replace(/^Statistical counterpoint:\s*/i, '') : null;
   };
 
-  /* The chain from our raw number to the chance we show, in words (the card face never shows the raw projection). */
+  /* Stored spread projections are home winning margins, not selected-team
+     handicap lines. Convert only for display; original terms stay immutable. */
+  const pickProjection = pick => {
+    if (!isNum(pick?.projection) || pick?.marketType === 'moneyline' || pick?.market === 'moneyline') return null;
+    if (pick.marketType !== 'spread' && pick.market !== 'spread') return Number(pick.projection);
+    const side = String(pick.direction || pick.side || '').toLowerCase();
+    return side === 'home' ? -Number(pick.projection) : side === 'away' ? Number(pick.projection) : null;
+  };
+
+  /* The chain from our comparable number to the chance we show, in words. */
   const howWeGotIt = pick => {
     const pap = (pick && pick.probabilityAtPublication) || {};
     const parts = [];
-    const moneyline = pick?.marketType === 'moneyline' || pick?.market === 'moneyline';
-    if (!moneyline && isNum(pick && pick.projection) && isNum(pick && pick.line)) parts.push(`Our model projects ${round1(pick.projection)} against the ${pick.line} line.`);
+    const projection = pickProjection(pick);
+    if (isNum(projection) && isNum(pick && pick.line)) parts.push(`Our model projects ${round1(projection)} against the ${pick.line} line.`);
     if (isNum(pap.rawChance) && isNum(pap.chance)) {
       parts.push(`On its own the model says ${pctOne(pap.rawChance)}. We trust only part of that${isNum(pap.calibration) ? ` (${Math.round(100 * pap.calibration)}% of its lean)` : ''}${isNum(pap.calibrationN) ? `, based on ${pap.calibrationN} graded lines like it` : ''}, so we show ${pctOne(pap.chance)}.`);
       if (isNum(pap.calibration) && pap.calibration < 0.5) parts.push('Our model runs hot in this market, so we cut it down hard.');
@@ -612,7 +621,7 @@
   const propsHref = league => `#research/players?sport=${propSport(league)}`;
 
   const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
-    whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, favoriteHold, favoriteLook, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, opponentTrendText, gapScore,
+    whyLines, watchLine, historyLine, pickProjection, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, favoriteHold, favoriteLook, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, opponentTrendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, propSport, propsHref, isParlayLike, climbWords, heroBets,
     teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, todayMarketRank, todayResearchOrder };
 
@@ -911,9 +920,9 @@
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${isNum(latest.current.line) && pick.marketType !== 'moneyline' && pick.market !== 'moneyline' ? `${latest.current.line} at ` : ''}${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.pastLine ? `Line moved from ${pick.line}; outside my posted range.` : latest.pastPrice ? `Past my ${odd(pick.cutoffOdds)} limit.` : latest.inside ? good : 'Check the current line and price.'}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
     const tense = !afterHold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
-    const number = best && pick.marketType !== 'moneyline' && pick.market !== 'moneyline'
-      && (!hold || afterHold) && isNum(pick.projection) && isNum(pick.line)
-      ? `<p class="kt-lead kt-chance"><span>Book ${tense ? 'says' : 'said'}<b class="num">${esc(C.fixed(pick.line))}</b></span><i></i><span>I ${tense ? 'have' : 'had'} it at<b class="num">${esc(C.fixed(pick.projection))}</b></span></p>` : '';
+    const projection = pickProjection(pick);
+    const number = best && (!hold || afterHold) && isNum(projection) && isNum(pick.line)
+      ? `<p class="kt-lead kt-chance"><span>Book ${tense ? 'says' : 'said'}<b class="num">${esc(C.fixed(pick.line))}</b></span><i></i><span>I ${tense ? 'have' : 'had'} it at<b class="num">${esc(C.fixed(projection))}</b></span></p>` : '';
     /* The build already chose held-safe words (build_site.held_words); when the hold comes only from the board rows,
        a saved line that quotes a projection, chance or edge is left off, never reworded. */
     const heldSafe = (text, held) => held && !held.afterPosting && HELD_WORDS.test(text || '') ? null : text;
@@ -964,11 +973,12 @@
       : hold ? heldShort(hold)
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${isNum(latest.current.line) && pick.marketType !== 'moneyline' && pick.market !== 'moneyline' ? `${latest.current.line} at ` : ''}${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.pastLine ? `Line moved from ${pick.line}; outside my posted range.` : latest.pastPrice ? `Past my ${odd(pick.cutoffOdds)} limit.` : latest.inside ? good : 'Check the current line and price.'}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
-    const showModel = best && pick.marketType !== 'moneyline' && pick.market !== 'moneyline' && (!hold || afterHold)
-      && isNum(pick.projection) && isNum(pick.line);
-    const toward = showModel ? round1(String(pick.direction || '').toLowerCase() === 'under' ? Number(pick.line) - Number(pick.projection) : Number(pick.projection) - Number(pick.line)) : null;
-    const comparison = showModel ? `<div class="decision-numbers" aria-label="Book line ${esc(C.fixed(pick.line))}, Kook’n projection ${esc(C.fixed(pick.projection))}, projected gap ${esc(toward)} toward the pick">
-      <span><small>Book line</small><b class="num">${esc(C.fixed(pick.line))}</b></span><span class="ours"><small>Kook’n projection</small><b class="num">${esc(C.fixed(pick.projection))}</b></span><span class="gap${toward > 0 ? ' good' : ''}"><small>Gap to pick</small><b class="num">${toward > 0 ? '+' : ''}${esc(C.fixed(toward))}</b></span></div>` : '';
+    const projection = pickProjection(pick);
+    const showModel = best && (!hold || afterHold) && isNum(projection) && isNum(pick.line);
+    const lowerWins = pick.marketType === 'spread' || pick.market === 'spread' || String(pick.direction || '').toLowerCase() === 'under';
+    const toward = showModel ? round1(lowerWins ? Number(pick.line) - projection : projection - Number(pick.line)) : null;
+    const comparison = showModel ? `<div class="decision-numbers" aria-label="Book line ${esc(C.fixed(pick.line))}, Kook’n projection ${esc(C.fixed(projection))}, projected gap ${esc(toward)} toward the pick">
+      <span><small>Book line</small><b class="num">${esc(C.fixed(pick.line))}</b></span><span class="ours"><small>Kook’n projection</small><b class="num">${esc(C.fixed(projection))}</b></span><span class="gap${toward > 0 ? ' good' : ''}"><small>Gap to pick</small><b class="num">${toward > 0 ? '+' : ''}${esc(C.fixed(toward))}</b></span></div>` : '';
     const heldSafe = text => hold && !hold.afterPosting && HELD_WORDS.test(text || '') ? null : text;
     const savedWhy = heldSafe(pick.ticketWhy);
     const summaryWhy = savedWhy && !/^Book says .+ I say /i.test(savedWhy) ? savedWhy : null;
@@ -1404,7 +1414,6 @@
     const back = '<a class="kt-back" href="#today">‹ Today</a>';
     if (!pick) return head('', 'Play not found', 'This play is not in the current window. Every published play stays on the <a href="#record">record</a>.', back);
     const vm = pickVM(pick);
-    const moneyline = pick.marketType === 'moneyline' || pick.market === 'moneyline';
     /* Unavailable (decision 9): no fair price, edge, chance or projection while the play's market is held. The posted
        price, the grading words and the delivery history stay. */
     const hold = vm.kind === 'best' ? pickHold(pick, catalog?.lines) : null;
@@ -1449,7 +1458,7 @@
       ${pick.whatChanged ? tape('What changed', `<p>${esc(pick.whatChanged)}</p>`) : ''}
       ${notices.length ? `<div class="card on-felt" style="margin-top:14px;display:grid;gap:8px">${notices.map(n => `<p class="small">${n}</p>`).join('')}</div>` : ''}
       ${how.length ? tape(chanceTitle, `<div class="card"><ol class="steps">${how.map(x => `<li>${esc(x)}</li>`).join('')}</ol>${vm.chance != null ? `<p class="small muted" style="margin-top:6px">At posting: ${pctOne(vm.chance)} estimated chance · ${esc(oddsText(vm.odds))} needed ${pctOne(vm.needs)} to break even.</p>` : ''}</div>`)
-        : vm.kind === 'best' && !hold && !moneyline && isNum(pick.projection) ? tape('Our number', `<div class="card"><p>We project ${esc(C.fixed(pick.projection))} against the ${esc(pick.line)} line. No chance estimate checked against results was saved for this play.</p></div>`) : ''}
+        : ''}
       ${chart}${projected}
       ${vm.legs.length ? tape('Legs', `<div class="card"><ul class="fa">${vm.legs.map(l => `<li>${esc(l)}</li>`).join('')}</ul>${pick.correlation ? `<p class="small muted" style="margin-top:8px"><b>How the legs relate:</b> ${esc(prose(pick.correlation))}</p>` : ''}</div>`) : ''}
       ${(pick.why || pick.risk) && !hold ? `<details class="more-box" data-box="fullread" style="margin-top:20px"><summary>Our notes when we posted it</summary><div class="grid two"><div class="card"><p class="eyebrow green">Why</p><p style="margin-top:6px">${esc(prose(pick.why))}</p>${(pick.reasoning || {}).historyNote ? `<p class="small muted" style="margin-top:6px">${esc(pick.reasoning.historyNote)}</p>` : ''}</div><div class="card"><p class="eyebrow">What could go wrong</p><p style="margin-top:6px">${esc(prose(pick.risk))}</p></div></div></details>` : ''}
