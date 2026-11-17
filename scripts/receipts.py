@@ -483,22 +483,34 @@ def is_new_play(guid, kind):
             or str(guid).startswith('receipt:card:'))
 
 
+def confirmed_x(entry):
+    link = str(entry.get('link') or entry.get('sentUrl') or '')
+    permalink = re.fullmatch(
+        r'https://(?:www\.)?(?:x|twitter)\.com/(?:[A-Za-z0-9_]+|i/web)/status/(\d{8,30})/?(?:[?#].*)?',
+        link)
+    return bool(entry.get('sentAt') and permalink and permalink[1] == str(entry.get('tweetId') or ''))
+
+
+def confirmed_discord(entry):
+    return bool(entry.get('state') == 'sent' and entry.get('sentAt')
+                and re.fullmatch(r'\d{8,30}', str(entry.get('messageId') or '')))
+
+
 def prior_individual_results_hold(rows, log_book, channel):
     """A recap or a queued Final is not evidence of individual result delivery."""
     import buffer_post
     posts = [p for p in log_book.get('posts', [])
              if not p.get('cancelledAt') and not p.get('deletedAt')]
-    def sent_x(p):
-        return bool(p.get('sentAt') and re.fullmatch(r'\d{8,30}', str(p.get('tweetId') or '')))
-    def sent_discord(p):
-        return p.get('state') == 'sent' and bool(p.get('sentAt') and p.get('messageId'))
     for row in rows:
         key = row['id']
         originals = [p for p in posts if p.get('id') == key]
         nba_fun = row.get('family') == 'NBA-alts'
         discord_originals = ([p for p in log_book.get('posts', []) if p.get('id') == key]
                              if nba_fun else originals)
-        x_required = channel in ('all', 'x') and any(sent_x(p) for p in originals)
+        # A historical original with a recorded tweet ID still needs its Final,
+        # even when its old receipt omitted the permalink.
+        x_required = channel in ('all', 'x') and any(
+            p.get('sentAt') and re.fullmatch(r'\d{8,30}', str(p.get('tweetId') or '')) for p in originals)
         discord_required = channel in ('all', 'discord') and any(
             (p.get('discord') or {}).get('state') == 'sent' for p in discord_originals)
         if not x_required and not discord_required:
@@ -509,13 +521,13 @@ def prior_individual_results_hold(rows, log_book, channel):
         if nba_fun:
             final_id = nba_fun_final_id(row)
             finals = [p for p in finals if p.get('id') == final_id]
-        if x_required and not any(sent_x(p) for p in finals):
+        if x_required and not any(confirmed_x(p) for p in finals):
             return f"prior slate's individual Final for {key} has no confirmed X Sent receipt"
         mirrors = [(p.get('discord') or {}) for p in finals]
         mirrors += [(p.get('discord') or {}).get('result') or {} for p in discord_originals]
         if nba_fun:
             mirrors = [m for m in mirrors if not m.get('finalId') or m['finalId'] == final_id]
-        if discord_required and not any(sent_discord(p) for p in mirrors):
+        if discord_required and not any(confirmed_discord(p) for p in mirrors):
             return f"prior slate's individual Final for {key} has no confirmed Discord message receipt"
     return None
 
@@ -564,14 +576,8 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
             continue
         if set(entry.get('resultPickIds') or []) != expected:
             continue
-        x_link = str(entry.get('link') or entry.get('sentUrl') or '')
-        permalink = re.fullmatch(
-            r'https://(?:www\.)?(?:x|twitter)\.com/(?:[A-Za-z0-9_]+|i/web)/status/(\d{8,30})/?(?:[?#].*)?',
-            x_link)
-        x_sent = bool(entry.get('sentAt') and permalink and permalink[1] == str(entry.get('tweetId') or ''))
-        discord = entry.get('discord') or {}
-        discord_sent = bool(discord.get('state') == 'sent' and discord.get('sentAt')
-                            and re.fullmatch(r'\d{8,30}', str(discord.get('messageId') or '')))
+        x_sent = confirmed_x(entry)
+        discord_sent = confirmed_discord(entry.get('discord') or {})
         if channel == 'x' and x_sent:
             return None
         if channel == 'discord' and discord_sent:

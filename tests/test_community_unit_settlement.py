@@ -203,7 +203,9 @@ class CommunityUnitSettlementTests(unittest.TestCase):
             self.assertIn('NET +0.42u', ticket_card.daily_result_svg(recap['dailyRows'], '2026-11-16'))
             self.assertIn('individual Final', receipts.prior_day_results_hold({}, {}, {}, book, tomorrow))
             book['posts'].append({'id': plans[0]['key'], 'sentAt': now.isoformat(), 'tweetId': '987654321',
-                                 'discord': {'state': 'sent', 'sentAt': now.isoformat(), 'messageId': '5678'}})
+                                 'link': 'https://x.com/keenkooks/status/987654321',
+                                 'discord': {'state': 'sent', 'sentAt': now.isoformat(),
+                                             'messageId': '1571763542208675943'}})
             self.assertIn('ready but not delivered', receipts.prior_day_results_hold({}, {}, {}, book, tomorrow))
             book['posts'].append({'id': recap['key'], 'resultPickIds': recap['pickIds'],
                                  'sentAt': tomorrow.isoformat(), 'tweetId': '987654322',

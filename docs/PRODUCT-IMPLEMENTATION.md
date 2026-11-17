@@ -8273,3 +8273,13 @@ observed book decision and rejects a reduced quote timestamp earlier than
 the kickoff of any removed leg. The original combined quote, actual book
 decision, leg identity, remaining exact terms and reduction price still
 have to agree. The change leaves the original tickets and stakes intact.
+
+### Individual Final delivery receipts
+
+The results-first gate uses the same published X permalink and numeric
+Discord message ID checks for individual Finals and the full daily recap.
+An original X post recorded by ID still requires a Final when the old
+record lacks its permalink. The regression covers a missing or mismatched X
+link and a Discord non-message identifier. Monday Nov16's two actual Final
+receipts already satisfy these checks. The complete 08:00 ET recap still
+requires confirmation on both channels before Tuesday plays can go out.

@@ -31,8 +31,14 @@ class ResultsOrderTests(unittest.TestCase):
                               'sentAt': '2026-11-16T13:00:00Z', 'tweetId': '2123456789012345679'})
         self.assertIn('X Sent', receipts.prior_individual_results_hold([row], book, 'all'))
         final.update(sentAt='2026-11-16T13:05:00Z', tweetId='2123456789012345680')
+        self.assertIn('X Sent', receipts.prior_individual_results_hold([row], book, 'all'))
+        final['link'] = 'https://x.com/keenkooks/status/2123456789012345679'
+        self.assertIn('X Sent', receipts.prior_individual_results_hold([row], book, 'all'))
+        final['link'] = 'https://x.com/keenkooks/status/2123456789012345680'
         self.assertIn('Discord', receipts.prior_individual_results_hold([row], book, 'all'))
         original['discord']['result'] = {'state': 'sent', 'sentAt': '2026-11-16T13:06:00Z'}
+        self.assertIn('Discord', receipts.prior_individual_results_hold([row], book, 'all'))
+        original['discord']['result']['messageId'] = 'pending-provider-id'
         self.assertIn('Discord', receipts.prior_individual_results_hold([row], book, 'all'))
         original['discord']['result']['messageId'] = '1571995108096745533'
         self.assertIsNone(receipts.prior_individual_results_hold([row], book, 'all'))
@@ -56,7 +62,8 @@ class ResultsOrderTests(unittest.TestCase):
                 patch.object(receipts, 'nba_daily_rows', return_value=[]):
             self.assertIn('CBB-prior', receipts.prior_day_results_hold({}, {}, {}, book, NOW))
             book['posts'].append({'id': 'receipt:cbb:CBB-prior:0123456789',
-                                  'sentAt': '2026-11-16T12:00:00Z', 'tweetId': '2123456789012345679'})
+                                  'sentAt': '2026-11-16T12:00:00Z', 'tweetId': '2123456789012345679',
+                                  'link': 'https://x.com/keenkooks/status/2123456789012345679'})
             self.assertIsNone(receipts.prior_day_results_hold({}, {}, {}, book, NOW))
 
     def test_combined_pregame_card_is_held_but_result_card_is_not(self):
