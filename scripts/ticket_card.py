@@ -243,80 +243,74 @@ def climb_result_svg(pick, games, player_team=None, **kwargs):
     return card.svg()
 
 
-def cooked_data(pick, game, *, art=None, fetch=None, player_side=None):
-    """A won straight play, using the immutable grading value and site's unit rule."""
-    if pick_card.play_kind(pick) not in ('player', 'team') or pick.get('result') != 'win':
-        raise ValueError('Cooked preview needs a won straight play')
-    if not isinstance(pick.get('actualValue'), (int, float)):
-        raise ValueError('Cooked preview needs a recorded numeric final')
+def straight_result_data(pick, game, *, art=None, fetch=None, player_side=None):
+    """Use the recorded stat or selected-team margin, score and original price."""
+    import result_display
+    kind = pick_card.play_kind(pick)
+    result = pick.get('result')
+    if kind not in ('player', 'team') or result not in ('win', 'loss', 'push', 'void'):
+        raise ValueError('An individual Final needs a settled straight play')
+    value = pick.get('actualValue')
+    if result != 'void' and not isinstance(value, (int, float)):
+        raise ValueError('An individual Final needs the recorded numeric result')
     fetch = fetch or pick_card.fetch_data_uri
-    prop = pick_card.play_kind(pick) == 'player'
-    player_side = _player_side(pick, game, player_side) if prop else pick_card.side_for(pick, game, player_side)
-    art = art if art is not None else pick_card.artwork(pick, game, player_side=player_side)
-    side = player_side
-    team = game.get(side) or {}
-    won = x_post.units_for(pick)
-    if won is None or won <= 0:
-        raise ValueError('Cooked preview needs priced won units')
+    prop = kind == 'player'
+    side = _player_side(pick, game, player_side) if prop else pick_card.side_for(pick, game, player_side)
+    art = art if art is not None else pick_card.artwork(pick, game, player_side=side)
     subject, selection = ticket_kit.leg_parts(str(pick.get('title') or ''))
-    spread = not prop and str(pick.get('marketType') or '').lower() in ('spread', 'moneyline')
-    return {'player': subject if spread else _name(pick),
-            'side': selection if spread else str(pick['direction']).upper(),
-            'line': '' if spread else f"{float(pick['line']):g}",
+    team_side = not prop and pick.get('marketType') in ('spread', 'moneyline')
+    data = {'player': subject if team_side else _name(pick),
+            'side': selection if team_side else str(pick['direction']).upper(),
+            'line': '' if team_side else f"{float(pick['line']):g}",
             'market': pick.get('market') or pick.get('marketType'),
-            'odds': pick['odds'], 'book': pick['book'],
-            'final_label': 'FINAL · SCORING MARGIN' if pick.get('marketType') == 'moneyline' else 'FINAL',
-            'score_detail': str(pick.get('actual') or '') if pick.get('marketType') == 'moneyline' else '',
-            'final': pick['actualValue'], 'margin': f"{abs(pick['actualValue'] - pick['line']):g}",
+            'odds': pick['odds'], 'book': pick['book'], 'result': result,
+            'final_label': 'FINAL · SCORING MARGIN' if team_side else 'FINAL',
+            'score_detail': str(pick.get('actual') or '') if team_side else '',
+            'final': value if result != 'void' else 'VOID',
+            'margin': f"{result_display.line_distance(pick, value):g}" if result != 'void' else '',
             'photo': (art or {}).get('uri') if (art or {}).get('kind') == 'photo' else None,
-            'team_logo': _logo(team, game.get('league'), fetch), 'units_won': won,
-            'close_line': None}
+            'team_logo': _logo(game.get(side) or {}, game.get('league'), fetch), 'close_line': None}
+    units = x_post.units_for(pick)
+    if result == 'win':
+        if units is None or units <= 0:
+            raise ValueError('Cooked preview needs priced won units')
+        data['units_won'] = units
+    elif result == 'loss':
+        data['units_lost'] = units if units is not None and units < 0 else -float(pick.get('riskUnits') or 1)
+    return data
+
+
+def cooked_data(pick, game, **kwargs):
+    if pick.get('result') != 'win':
+        raise ValueError('Cooked preview needs a won straight play')
+    return straight_result_data(pick, game, **kwargs)
+
+
+def burnt_data(pick, game, **kwargs):
+    if pick.get('result') != 'loss':
+        raise ValueError('Burnt preview needs a lost straight play')
+    return straight_result_data(pick, game, **kwargs)
+
+
+def straight_final_svg(pick, game, **kwargs):
+    data = straight_result_data(pick, game, **kwargs)
+    card = ticket_cards.result_card(data, pick['result'] == 'win')
+    problems = ticket_kit.qa(card, str(pick.get('id') or 'final'))
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
 
 
 def cooked_svg(pick, game, **kwargs):
-    card = ticket_cards.cooked_card(cooked_data(pick, game, **kwargs))
-    problems = ticket_kit.qa(card, str(pick.get('id') or 'cooked'))
-    if problems:
-        raise ValueError('; '.join(problems))
-    return card.svg()
-
-
-def burnt_data(pick, game, *, art=None, fetch=None, player_side=None):
-    """A lost straight play, using only the immutable stored grade."""
-    import receipts
-    if pick_card.play_kind(pick) not in ('player', 'team') or pick.get('result') != 'loss':
-        raise ValueError('Burnt preview needs a settled lost straight play')
-    if not isinstance(pick.get('actualValue'), (int, float)):
-        raise ValueError('Burnt preview needs a recorded numeric final')
-    fetch = fetch or pick_card.fetch_data_uri
-    prop = pick_card.play_kind(pick) == 'player'
-    player_side = _player_side(pick, game, player_side) if prop else pick_card.side_for(pick, game, player_side)
-    art = art if art is not None else pick_card.artwork(pick, game, player_side=player_side)
-    team = game.get(player_side) or {}
-    units = x_post.units_for(pick)
-    if units is None or units >= 0:
-        units = -float(pick.get('riskUnits') or 1)
-    subject, selection = ticket_kit.leg_parts(str(pick.get('title') or ''))
-    spread = not prop and str(pick.get('marketType') or '').lower() in ('spread', 'moneyline')
-    return {'player': subject if spread else _name(pick),
-            'side': selection if spread else str(pick['direction']).upper(),
-            'line': '' if spread else f"{float(pick['line']):g}",
-            'market': pick.get('market') or pick.get('marketType'),
-            'odds': pick['odds'], 'book': pick['book'],
-            'final_label': 'FINAL · SCORING MARGIN' if pick.get('marketType') == 'moneyline' else 'FINAL',
-            'score_detail': str(pick.get('actual') or '') if pick.get('marketType') == 'moneyline' else '',
-            'final': pick['actualValue'], 'margin': f"{abs(pick['actualValue'] - pick['line']):g}",
-            'photo': (art or {}).get('uri') if (art or {}).get('kind') == 'photo' else None,
-            'team_logo': _logo(team, game.get('league'), fetch), 'units_lost': units,
-            'close_line': None}
+    if pick.get('result') != 'win':
+        raise ValueError('Cooked preview needs a won straight play')
+    return straight_final_svg(pick, game, **kwargs)
 
 
 def burnt_svg(pick, game, **kwargs):
-    card = ticket_cards.burnt_card(burnt_data(pick, game, **kwargs))
-    problems = ticket_kit.qa(card, str(pick.get('id') or 'burnt'))
-    if problems:
-        raise ValueError('; '.join(problems))
-    return card.svg()
+    if pick.get('result') != 'loss':
+        raise ValueError('Burnt preview needs a lost straight play')
+    return straight_final_svg(pick, game, **kwargs)
 
 
 def final_detail(pick):
@@ -325,6 +319,8 @@ def final_detail(pick):
     import result_display
     if pick.get('league') == 'CBB' and pick.get('dailyActual'):
         return pick['dailyActual']
+    if spread := result_display.spread_detail(pick):
+        return spread
     is_prop = pick.get('marketType') == 'prop' or bool(pick.get('athleteId')) or pick.get('kind') == 'props'
     if is_prop:
         rich = result_display.detail(pick)
@@ -350,7 +346,7 @@ def final_detail(pick):
         base = re.sub(r'^Final: [^:]+: ', 'Final: ', receipts.result_detail(pick))
     line = pick.get('line')
     if pick.get('result') in ('win', 'loss') and isinstance(value, (int, float)) and isinstance(line, (int, float)):
-        return f"{base} · {'cleared' if pick['result'] == 'win' else 'missed'} by {abs(float(value) - float(line)):g}"
+        return f"{base} · {'cleared' if pick['result'] == 'win' else 'missed'} by {result_display.line_distance(pick, value):g}"
     return base
 
 

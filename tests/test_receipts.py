@@ -308,6 +308,68 @@ class CashedTests(unittest.TestCase):
             entry['tweetId'] = f"20{entry['id'][-1]}"
         return first, latest, log
 
+    def test_football_straight_finals_use_selected_side_spread_and_quote_neutral_outcomes(self):
+        import discord_post
+        import desk_health
+        import run
+        now = self.SUNDAY_EVENING
+        for direction, line, home, away, expected, distance in (
+            ('home', -10, 34, 20, 'win', 4), ('home', -10, 26, 20, 'loss', 4),
+            ('home', -10, 30, 20, 'push', 0), ('away', 7, 21, 17, 'win', 3),
+            ('away', 7, 30, 20, 'loss', 3)):
+            with self.subTest(direction=direction, line=line, home=home, away=away):
+                game = dict(GAMES['sun'], home={'short':'Lions','abbreviation':'DET','score':home},
+                            away={'short':'Bills','abbreviation':'BUF','score':away})
+                team = game[direction]['short']
+                original = pick('spread','sun',league='NFL',title=f'{team} {line:+d}',line=line,
+                                marketType='spread',direction=direction)
+                key = original['id']
+                result, actual, value = run.grade_game_pick(original, game)
+                self.assertEqual(result, expected)
+                row = dict(original,result=result,actual=actual,actualValue=value,settledAt=gates.stamp(now))
+                post = dict(id=key,kind='buffer:play',sentAt='2026-09-27T12:00:00Z',
+                            tweetId='123456789012',discord={'state':'sent','sentAt':'2026-09-27T12:00:00Z',
+                                                           'messageId':'123456789012'})
+                log = {'posts':[post]}
+                [plan] = receipts.cashed({key:original},{key:row},{'sun':game},log,now)
+                [card] = receipts.result_cards({key:original},{key:row},{'sun':game},now,log)
+                self.assertEqual(plan['card'],card['card'])
+                self.assertEqual(buffer_post.quote_tweet_id(log,plan['key']),post['tweetId'])
+                self.assertIn(actual,plan['text'])
+                art = ticket_card.straight_final_svg(row,game,art={},fetch=lambda _: str(Path(__file__).resolve().parents[1]/'site/kookn-mark.png'))
+                if result == 'push':
+                    self.assertIn('PUSH',plan['text'])
+                    self.assertIn('PUSH',art)
+                    self.assertIn('+0.00u',art)
+                    self.assertNotIn('BURNT',art)
+                    self.assertEqual(discord_post.queue_results(log,{key:original},{key:row},{'sun':game},now),1)
+                    self.assertEqual(post['discord']['result']['cardKey'],plan['card'])
+                    self.assertEqual(desk_health.result_timeliness({'picks':[dict(row,posted=True)]},
+                                     log['posts'],now,individual_only=True)['missing'],1)
+                else:
+                    expected_detail = f"{'cleared' if result=='win' else 'missed'} by {distance}"
+                    self.assertIn(expected_detail,plan['text'])
+                    self.assertIn(expected_detail,ticket_card.final_detail(row))
+                    self.assertIn(expected_detail.upper(),art)
+
+    def test_explicit_football_void_can_quote_a_result_without_inventing_a_stat(self):
+        now = self.SUNDAY_EVENING
+        row = pick('void','sun',league='CFB',title='Player Over 44.5',athleteId='333',market='rushYds',
+                   result='void',actual='Did not play',settledAt=gates.stamp(now))
+        key = row['id']
+        post = dict(id=key,kind='buffer:play',sentAt='2026-09-27T12:00:00Z',tweetId='123456789012')
+        log = {'posts':[post]}
+        [plan] = receipts.cashed({key:row},{},GAMES,log,now)
+        [card] = receipts.result_cards({key:row},{},GAMES,now,log)
+        self.assertIn('Did not play',plan['text'])
+        self.assertEqual(plan['card'],card['card'])
+        game = dict(GAMES['sun'], home={'short':'Lions','abbreviation':'DET'})
+        art = ticket_card.straight_final_svg(row,game,art={},player_side='home',
+                    fetch=lambda _: str(Path(__file__).resolve().parents[1]/'site/kookn-mark.png'))
+        self.assertIn('VOID',art)
+        self.assertIn('STAKE RETURNED',art)
+        self.assertNotIn('MISSED BY',art)
+
     def test_a_win_that_went_out_is_cashed_with_its_post_quoted(self):
         first, latest, log = self.world()
         posts = {p['key']: p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)}

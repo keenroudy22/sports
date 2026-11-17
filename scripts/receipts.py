@@ -23,6 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gates
 import pick_card
 import record_scope
+import result_display
 import re
 import x_post
 from sports_refresh import eastern_date
@@ -716,7 +717,7 @@ def near_miss(pick):
     value, line = pick.get('actualValue'), pick.get('line')
     if not isinstance(value, (int, float)) or not isinstance(line, (int, float)):
         return False
-    miss = abs(float(value) - float(line))
+    miss = result_display.line_distance(pick, value)
     market = str(pick.get('market') or '')
     if market in ('recYds', 'rushYds', 'passYds'):
         return miss <= 3
@@ -747,6 +748,13 @@ def nba_fun_final_id(pick):
         import hashlib
         key += ':' + hashlib.sha256(pick['correctedAt'].encode()).hexdigest()[:10]
     return key
+
+
+def neutral_straight(pick):
+    """Football pushes have a recorded final value; an explicit void may lack a stat."""
+    return (pick.get('league') in ('NFL', 'CFB') and pick_card.play_kind(pick) in ('player', 'team')
+            and (pick.get('result') == 'void' or
+                 pick.get('result') == 'push' and isinstance(pick.get('actualValue'), (int, float))))
 
 
 def supports_neutral_fun_final(pick):
@@ -782,6 +790,9 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         if (unit_rows.get(key, {}).get('family') == 'NBA-alts'
                 and (entry.get('discord') or {}).get('state') == 'sent'):
             originals.add(key)
+        if (entry.get('kind') == 'buffer:play' and confirmed_discord(entry.get('discord') or {})
+                and key in first and neutral_straight(dict(first[key], **latest.get(key, {})))):
+            originals.add(key)
         if ((entry.get('kind') == 'buffer:play' or entry.get('id') in unit_rows)
                 and entry.get('tweetId') and entry.get('sentAt')
                 and not entry.get('cancelledAt') and not entry.get('deletedAt')):
@@ -802,7 +813,7 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         has_straight_art = pick_card.play_kind(pick) in ('player', 'team')
         if key not in originals or not pick.get('settledAt') or not (fun_final or has_straight_art):
             continue
-        if pick.get('result') not in ('win', 'loss') and not (fun_final and supports_neutral_fun_final(pick)
+        if pick.get('result') not in ('win', 'loss') and not neutral_straight(pick) and not (fun_final and supports_neutral_fun_final(pick)
                                                               and pick.get('result') in MARKS):
             continue
         try:
@@ -812,7 +823,7 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
         except (TypeError, ValueError):
             continue
         game = games.get((pick.get('gameIds') or [None])[0])
-        if fun_final or (game and isinstance(pick.get('actualValue'), (int, float))):
+        if fun_final or (game and (neutral_straight(pick) or isinstance(pick.get('actualValue'), (int, float)))):
             if pick.get('family') == 'NBA-alts':
                 out.append({'card': result_card_key(pick), 'pick': pick, 'game': game})
             else:
@@ -848,6 +859,8 @@ def win_reaction(pick, games=None):
     direction = str(pick.get('direction') or '').lower()
     value, line = pick.get('actualValue'), pick.get('line')
     market_type = pick.get('marketType')
+    if market_type == 'spread' and (detail := result_display.spread_detail(pick)):
+        return f'✅ {play}. {detail}.'
     if market_type == 'total' and not stat:
         scores = re.findall(r'\b(\d{1,3})\b', result_display.clean_actual(pick))
         return f"✅ {play}. Went {scores[-2]}-{scores[-1]}." if len(scores) >= 2 else f'✅ {play}.'
@@ -875,7 +888,7 @@ def burnt_reaction(pick, games=None):
         return f'{play}. {overtime}. Pain.'
     detail = result_display.detail(pick)
     if not detail and isinstance(pick.get('actualValue'), (int, float)) and isinstance(pick.get('line'), (int, float)):
-        detail = f"missed by {abs(float(pick['actualValue']) - float(pick['line'])):g}"
+        detail = f"missed by {result_display.line_distance(pick, pick['actualValue']):g}"
     return f'{play}. {detail}. Pain.' if detail else f'{play}. One short. Pain.'
 
 
@@ -901,7 +914,8 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
         ladder = pick_card.play_kind(pick) == 'ladder'
         fun_final = has_fun_final(pick)
         nba_fun = pick.get('family') == 'NBA-alts' and fun_final
-        if not pick.get('settledAt') or (result not in ('win', 'loss') and not ladder
+        neutral = neutral_straight(pick)
+        if not pick.get('settledAt') or (result not in ('win', 'loss') and not ladder and not neutral
                 and not (result in ('push', 'void') and supports_neutral_fun_final(pick) and fun_final)):
             continue
         settled_at = gates.when(pick['settledAt'])
@@ -917,7 +931,7 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
             if repriced_odds(pick) is not None:
                 head = f"✅ My {label(pick, games)} cashed. {fun_final_price(pick)}."
-        card = (result_card_key(pick) if fun_final or (not ladder and isinstance(pick.get('actualValue'), (int, float))
+        card = (result_card_key(pick) if neutral or fun_final or (not ladder and isinstance(pick.get('actualValue'), (int, float))
                 and pick_card.play_kind(pick) in ('player', 'team')) else None)
         post_key = f'cashed:{key}'
         due = now
@@ -935,6 +949,12 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
             post_key = f'burnt:{key}'
             head = (f'❌ {price} {label(pick, games)}. {result_detail(pick)}.'
                     if fun_final else burnt_reaction(pick, games))
+        if neutral:
+            post_key = f'burnt:{key}'
+            outcome = 'PUSH' if result == 'push' else 'VOID'
+            actual = result_display.clean_actual(pick)
+            head = f"➖ {outcome} · {label(pick, games)} {price}. Net 0.00u."
+            what = actual
         if fun_final and result in ('push', 'void'):
             head = f'➖ {price} {label(pick, games)} {result}. {result_detail(pick)}.'
             post_key = f'burnt:{key}'

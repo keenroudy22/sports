@@ -403,6 +403,8 @@ def result_timeliness(record, posts, now, *, individual_only=False):
     report names that limitation instead of inventing an exact stadium clock.
     Wins and honest near misses are expected to get an individual result post.
     """
+    import receipts
+    import result_display
     rows = record.get('picks') if isinstance(record, dict) else None
     if not isinstance(rows, list):
         return {'state': 'unknown', 'source': 'settledAt', 'eligible': 0, 'posted': 0,
@@ -446,7 +448,7 @@ def result_timeliness(record, posts, now, *, individual_only=False):
             continue
         result = str(pick.get('result') or '').lower()
         eligible = result == 'win' or (individual_only and result in ('push', 'void')
-                                       and pick.get('selectionMethod') == 'sourced-prop-ticket-v1')
+                                       and (pick.get('selectionMethod') == 'sourced-prop-ticket-v1' or receipts.neutral_straight(pick)))
         if result == 'loss' and individual_only:
             eligible = True
         elif result == 'loss':
@@ -454,7 +456,7 @@ def result_timeliness(record, posts, now, *, individual_only=False):
             if isinstance(actual, (int, float)) and isinstance(line, (int, float)):
                 market = str(pick.get('market') or pick.get('marketType') or '').lower()
                 threshold = 1 if market in ('rec', 'receptions') else 2 if market in ('spread', 'total') else 3
-                eligible = abs(float(actual) - float(line)) <= threshold
+                eligible = result_display.line_distance(pick, actual) <= threshold
         if not eligible:
             continue
         pick_id = str(pick.get('id') or '')

@@ -12,6 +12,27 @@ def player_name(pick, box_player=None):
     return match.group(1).strip() if match else 'Player'
 
 
+def line_distance(pick, actual):
+    """Distance from the settlement boundary using the selected side's scoring margin."""
+    line = pick['line']
+    return abs(actual + line) if pick.get('marketType') == 'spread' else abs(actual - line)
+
+
+def spread_detail(pick):
+    if pick.get('marketType') != 'spread':
+        return None
+    value, line = _number(pick.get('actualValue')), _number(pick.get('line'))
+    if value is None or line is None:
+        return None
+    cover = value + line
+    result = 'win' if cover > 0 else 'loss' if cover < 0 else 'push'
+    if pick.get('result') != result:
+        return None
+    margin = 'landed on the line' if result == 'push' else f"{'cleared' if cover > 0 else 'missed'} by {abs(cover):g}"
+    score = clean_actual(pick)
+    return f"Final: {score} · {margin}" if score else margin
+
+
 def clean_actual(pick):
     actual = str(pick.get('actual') or '').strip()
     return re.sub(r'^\d{5,}:\s*', player_name(pick) + ': ', actual)
@@ -133,6 +154,8 @@ def overtime_detail(pick, game=None):
 
 def detail(pick, game=None):
     """Stat line plus an exact-line margin when the saved grade agrees with it."""
+    if spread := spread_detail(pick):
+        return spread
     overtime = overtime_detail(pick, game)
     if overtime:
         return overtime

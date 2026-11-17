@@ -314,9 +314,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                     else:
                         side = player_side(pick, game, player_team or {})
                         art = pick_card.artwork(pick, game, player_side=side)
-                        svg = (ticket_card.cooked_svg(pick, game, player_side=side, art=art)
-                               if pick.get('result') == 'win' else
-                               ticket_card.burnt_svg(pick, game, player_side=side, art=art))
+                        svg = ticket_card.straight_final_svg(pick, game, player_side=side, art=art)
                     pick_card.render(svg, path)
                 elif 'ladderResult' in item:
                     pick = item['ladderResult']

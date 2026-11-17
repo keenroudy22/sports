@@ -427,25 +427,35 @@ def result_card(p, won):
     fb = base + 266
     inner += card.text(X1 - 4, fb, str(p['final']), 176, INK)
     fx = X1 - 4 + width(str(p['final']), 176) + 22
-    u = kit.STAT_UNITS.get(p.get('market'), ())
+    neutral = p.get('result') in ('push', 'void')
+    u = () if p.get('result') == 'void' else kit.STAT_UNITS.get(p.get('market'), ())
     if len(u) == 2:
         inner += card.text(fx, fb - 68, u[0], 70, INK) + card.text(fx, fb, u[1], 70, INK)
     elif u:
         inner += card.text(fx, fb, u[0], 70, INK)
-    if won:
+    if neutral:
+        wording = 'ON THE LINE' if p['result'] == 'push' else 'STAKE RETURNED'
+        inner += kit.pill(card, X2, fb - 62, wording, RULE, INK, 44)
+    elif won:
         inner += kit.pill(card, X2, fb - 62, f"CLEARED BY {p['margin']}", GREEN, GREEN_INK, 52, CHECK)
     else:
         inner += kit.pill(card, X2, fb - 62, f"MISSED BY {p['margin']}", RED, '#2A0306', 52, CROSS)
     if p.get('score_detail') or p.get('close_line'):
         inner += card.text(X1, fb + 60, p.get('score_detail') or p['close_line'], 40, INK_SOFT, 'd', 600)
     perf = 1100
-    result_units = (f"+{float(p.get('units_won', 0)):.2f}u WON" if won
-                    else f"{float(p.get('units_lost', -1)):.2f}u")
+    if neutral:
+        label, accent, ink, mark = p['result'].upper(), RULE, INK, 'M5 25 H45'
+        result_units = '+0.00u'
+    elif won:
+        label, accent, ink, mark = 'COOKED', GREEN, GREEN_INK, CHECK
+        result_units = f"+{float(p.get('units_won', 0)):.2f}u WON"
+    else:
+        label, accent, ink, mark = 'BURNT', RED, '#2A0306', CROSS
+        result_units = f"{float(p.get('units_lost', -1)):.2f}u"
     inner += card.text(X1, perf + 64, result_units.replace('-', MINUS), 62, INK)
     inner += kit.logo_disc(card, p['team_logo'], X2 - 40, perf + 46, 36, ring=kit.LINE)
-    stamp = (kit.big_stamp(card, 742, panel_bottom - 16, 'COOKED', GREEN, GREEN_INK, CHECK, angle=-6)
-             if won else kit.big_stamp(card, 742, panel_bottom - 16, 'BURNT', RED, '#2A0306', CROSS, angle=-6))
-    frame(card, CHARCOAL, GREEN if won else RED, perf, 1196, inner, breakout + stamp)
+    stamp = kit.big_stamp(card, 742, panel_bottom - 16, label, accent, ink, mark, angle=-6)
+    frame(card, CHARCOAL, accent, perf, 1196, inner, breakout + stamp)
     return card
 
 
