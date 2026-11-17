@@ -344,14 +344,26 @@ def grade(now,root=nba_trial.STORE,boxroot=None):
  return added
 
 
+def pending_final_games(now, root=nba_trial.STORE):
+ """Unsettled published straights and ticket fixtures, with their own tip times."""
+ import nba_fun_record
+ root=Path(root)
+ games={str(play['eventId']):play['kickoff'] for play in public_rows(root) if not play.get('result')}
+ for ticket in nba_fun_record.rows(root.parent.parent,now).values():
+  if not ticket.get('result'):
+   for leg in ticket['legs']:
+    games.setdefault(leg['gameId'],leg['kickoff'])
+ return [{'eventId':event,'kickoff':kickoff} for event,kickoff in games.items()]
+
+
 def refresh_published_finals(now, root=nba_trial.STORE, boxroot=None, fetch=None):
  """Fetch only ended, still-unboxed games containing a published NBA play."""
  boxroot=Path(boxroot or ROOT/'data'/'sport-box')
  known={str(r['eventId']) for p in boxroot.glob('*.jsonl') for r in boxscores.read_store(p)}
  due=[]
- for play in public_rows(Path(root)):
-  event=str(play['eventId']);kickoff=boxscores.instant(play['kickoff'])
-  if not play.get('result') and event not in known and kickoff+timedelta(hours=3)<=now:due.append(event)
+ for play in pending_final_games(now,root):
+  event=play['eventId'];kickoff=boxscores.instant(play['kickoff'])
+  if event not in known and kickoff+timedelta(hours=3)<=now:due.append(event)
  if not due:return {'captured':0,'errors':0,'requests':0,'events':[]}
  import sport_box
  return sport_box.refresh_events(due,root=boxroot,fetch=fetch,now=now,league='NBA',limit=5)

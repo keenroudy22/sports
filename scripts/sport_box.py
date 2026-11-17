@@ -228,7 +228,7 @@ def refresh(root=None, fetch=None, now=None, limit=20, league='NBA'):
         slate = nba_capture.STORE/'slate.json'
         games = json.loads(slate.read_text()).get('games',[]) if slate.exists() else []
         final_ids.extend(str(g['providerId']) for g in games if g['status'] == 'final')
-        final_ids = nba_capture_order(final_ids, history, old, nba_trial_runtime.public_rows())
+        final_ids = nba_capture_order(final_ids, history, old, nba_trial_runtime.pending_final_games(now))
     else:
         final_ids = cbb_capture_order(score_games, history, old, now) + final_ids + [r['eventId'] for r in history]
     result={'captured':0,'errors':0,'requests':0}

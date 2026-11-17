@@ -62,6 +62,33 @@ class TrialRuntimeTests(unittest.TestCase):
   with patch('sport_box.refresh_events') as refresh:
    rt.refresh_published_finals(kickoff+timedelta(hours=5),self.root,boxes)
    refresh.assert_not_called()
+ def test_multigame_ticket_finals_use_each_tip_and_share_the_straight_budget(self):
+  import nba_fun_record
+  trial=self.root/'data/nba-trial';trial.mkdir(parents=True)
+  boxes=self.root/'data/sport-box';boxes.mkdir()
+  first=NOW+timedelta(hours=1);late=first+timedelta(hours=3)
+  path=self.root/nba_fun_record.PATH
+  legs=[{'gameId':'NBA-1','kickoff':first.isoformat()},
+        {'gameId':'NBA-1','kickoff':first.isoformat()},
+        {'gameId':'NBA-2','kickoff':late.isoformat()}]
+  ticket={'type':'publish','id':'ticket','publishedAt':NOW.isoformat(),
+          'firstKickoff':first.isoformat(),'legs':legs}
+  boxscores.append(path,[ticket])
+  self.assertEqual(rt.pending_final_games(NOW-timedelta(seconds=1),trial),[])
+  with patch('sport_box.refresh_events') as refresh:
+   rt.refresh_published_finals(first+timedelta(hours=2),trial,boxes)
+   refresh.assert_not_called()
+   rt.refresh_published_finals(first+timedelta(hours=3),trial,boxes)
+   self.assertEqual(refresh.call_args.args[0],['NBA-1'])
+   self.assertEqual(refresh.call_args.kwargs['limit'],5)
+   boxscores.append(boxes/'nba-2027.jsonl',[{'eventId':'NBA-1'}])
+   rt.refresh_published_finals(late+timedelta(hours=3),trial,boxes)
+   self.assertEqual(refresh.call_args.args[0],['NBA-2'])
+   settled=late+timedelta(hours=4)
+   boxscores.append(path,[{'type':'settle','id':'ticket','settledAt':settled.isoformat(),'result':'win'}])
+   refresh.reset_mock()
+   rt.refresh_published_finals(settled,trial,boxes)
+   refresh.assert_not_called()
  def test_candidates_require_known_variance_support_and_clear_current_injuries(self):
   root=self.root/'capture';root.mkdir()
   game={'id':'NBA-1','providerId':'1','league':'NBA','season':2027,'seasonType':'regular-season','kickoff':'2026-10-20T23:00:00Z','status':'scheduled','timeConfirmed':True,'teams':{'home':{'id':'1','abbreviation':'A'},'away':{'id':'2','abbreviation':'B'}}}
