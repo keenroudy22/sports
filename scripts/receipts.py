@@ -112,7 +112,8 @@ def stake_text(pick):
 
 def leg_results(pick):
     """The settled result of each parlay leg from the immutable settlement text, when it was recorded."""
-    if pick.get('selectionMethod') == 'sourced-prop-ticket-v1':
+    if (pick.get('selectionMethod') == 'sourced-prop-ticket-v1'
+            or pick.get('settlementBasis') == 'published-unit-stake-v1'):
         results = pick.get('settlementLegResults')
         if (isinstance(results, list) and len(results) == len(pick.get('legs') or [])
                 and all(isinstance(result, str) and result in MARKS for result in results)):
@@ -302,6 +303,31 @@ def fit_result_rows(rows, head, tail, games=None):
         kept.remove(wins[-1] if wins else kept[-1])
 
 
+def unit_fun_rows(as_of, day=None, log_book=None):
+    """Prospective unit-backed owner tickets, apart from historical cash slips."""
+    import community_record
+    effective = datetime(2026, 11, 16, tzinfo=timezone.utc)
+    if as_of < effective:
+        return []
+    originals = community_record.read(community_record.ROOT/'data/community.json', {'tickets': []})['tickets']
+    supported = {row['id'] for row in originals if row.get('riskUnits') == .25
+                 and row.get('legs') and all(isinstance(leg, dict) for leg in row['legs'])}
+    delivered = {p.get('id') for p in (log_book or {}).get('posts', [])
+                 if p.get('sentAt') and p.get('tweetId') and p.get('link')
+                 and not p.get('cancelledAt') and not p.get('deletedAt')
+                 and gates.when(p['sentAt']) <= as_of}
+    out = []
+    for row in community_record.build(community_record.ROOT):
+        if (row['id'] not in supported or row['id'] not in delivered
+                or not effective <= gates.when(row['publishedAt']) <= as_of
+                or day is not None and eastern_date(gates.when(row['kickoff'])) != day):
+            continue
+        if row.get('settledAt') and gates.when(row['settledAt']) > as_of:
+            row = dict(row, result=None, units=None)
+        out.append(row)
+    return out
+
+
 def nba_daily_rows(day, as_of, log_book):
     if day < date(2026, 11, 10) or as_of is None:
         return []
@@ -336,7 +362,8 @@ def nba_daily_rows(day, as_of, log_book):
 
 def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     nba_rows = nba_daily_rows(day, as_of, log_book or {})
-    rows = plays_between(first, latest, games, ids, day, day) + nba_rows
+    fun_rows = unit_fun_rows(as_of, day=day, log_book=log_book or {}) if as_of else []
+    rows = plays_between(first, latest, games, ids, day, day) + nba_rows + fun_rows
     if not settled(rows):
         return None
     if not rows:
@@ -350,7 +377,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     text = fit_result_rows(rows, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
-    return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}' + ('-all-sports' if nba_rows else ''), 'kind': 'receipt',
+    return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}' + ('-all-sports' if nba_rows or fun_rows else ''), 'kind': 'receipt',
             'title': headline(rows), 'label': 'FINAL',
             'when': f'{day:%A, %b %-d}',
             # Retained art keeps the record followers saw when the receipt became
@@ -363,6 +390,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
             # result delivery without parsing prose or demanding duplicate Finals.
             'pickIds': [r['id'] for r in rows],
             **({'nbaDailyRows': rows} if nba_rows else {}),
+            **({'dailyRows': rows} if nba_rows or fun_rows else {}),
             'rows': [(r['result'], label(r, games), result_detail(r), pick_card.play_kind(r)) for r in rows], 'text': text,
             'due': due,
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
@@ -473,6 +501,7 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
     ids = counted(public_first, latest)
     rows = plays_between(public_first, latest, games, ids, day, day)
     rows += nba_daily_rows(day, now, log_book)
+    rows += unit_fun_rows(now, day=day, log_book=log_book)
     if today >= date(2026, 11, 16):
         import cbb_picks
         cbb = [p for p in cbb_picks.public_rows()
@@ -620,6 +649,8 @@ def near_miss(pick):
 
 def result_card_key(pick):
     base = f"{'cooked' if pick.get('result') == 'win' else 'burnt'}-{pick['id']}"
+    if pick.get('settlementBasis') == 'published-unit-stake-v1':
+        base = base.replace(':', '-')
     if pick.get('correctedAt'):
         import hashlib
         base += '-correction-' + hashlib.sha256(str(pick['correctedAt']).encode()).hexdigest()[:10]
@@ -629,6 +660,9 @@ def result_card_key(pick):
 def has_fun_final(pick):
     """A fun ticket needs a stored grade for every original leg."""
     legs = pick.get('legs') or []
+    if (pick.get('selectionMethod') == 'sourced-prop-ticket-v1'
+            or pick.get('settlementBasis') == 'published-unit-stake-v1'):
+        return pick_card.play_kind(pick) == 'parlay' and bool(legs) and len(leg_results(pick)) == len(legs)
     actual = str(pick.get('actual') or '')
     parts = [part.strip().lower() for part in actual.partition(':')[2].split(',')]
     return (pick_card.play_kind(pick) == 'parlay' and bool(legs)
@@ -644,10 +678,13 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
     merely because the site was rebuilt.
     """
     cutoff = now - timedelta(days=days)
+    unit_rows = {row['id']: row for row in unit_fun_rows(now, log_book=log_book or {})}
+    first = dict(first, **unit_rows)
     posted, originals, text_only = {}, set(), set()
     for entry in (log_book or {}).get('posts', []):
         key = str(entry.get('id') or '')
-        if (entry.get('kind') == 'buffer:play' and entry.get('tweetId') and entry.get('sentAt')
+        if ((entry.get('kind') == 'buffer:play' or entry.get('id') in unit_rows)
+                and entry.get('tweetId') and entry.get('sentAt')
                 and not entry.get('cancelledAt') and not entry.get('deletedAt')):
             originals.add(key)
         if (key.startswith(('cashed:', 'burnt:')) and entry.get('sentAt')
@@ -747,10 +784,13 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
     local = now.astimezone(gates.EASTERN)
     minute = local.hour * 60 + local.minute
     quiet = QUIET[0][0] * 60 + QUIET[0][1] <= minute < QUIET[1][0] * 60 + QUIET[1][1]
+    unit_rows = {row['id']: row for row in unit_fun_rows(now, log_book=log_book)}
+    first = dict(first, **unit_rows)
     out = []
     for entry in log_book.get('posts', []):
         key = entry.get('id')
-        if entry.get('kind') != 'buffer:play' or not entry.get('tweetId') or entry.get('cancelledAt') or entry.get('deletedAt') or key not in first:
+        if ((entry.get('kind') != 'buffer:play' and key not in unit_rows) or not entry.get('tweetId')
+                or entry.get('cancelledAt') or entry.get('deletedAt') or key not in first):
             continue
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()

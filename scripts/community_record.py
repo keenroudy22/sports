@@ -81,8 +81,11 @@ def public_note(result):
 
 
 PUBLIC_SOURCE_FIELDS = PUBLIC_TICKET_FIELDS | frozenset(('legs', 'card', 'riskUnits', 'parlayType'))
+PUBLIC_LEG_FIELDS = frozenset(('gameId', 'athleteId', 'player', 'market', 'direction',
+    'line', 'period', 'book', 'odds', 'kickoff', 'title', 'milestone', 'alternate'))
 PUBLIC_SETTLEMENT_FIELDS = frozenset(('id', 'result', 'settledAt', 'cashout', 'publicNote',
-                                     'accountingUnknown', 'units', 'riskUnits'))
+                                     'accountingUnknown', 'units', 'riskUnits',
+                                     'settlementBasis', 'actual', 'settlementLegResults', 'settlementLegActuals'))
 
 
 def private_root():
@@ -115,6 +118,21 @@ def public_accounting(row):
         raise ValueError('Invalid public settlement identity, time or result')
     if set(row) - PUBLIC_SETTLEMENT_FIELDS:
         raise ValueError('Unreviewed field in public community settlement')
+    extended = {'settlementBasis', 'actual', 'settlementLegResults', 'settlementLegActuals'} & set(row)
+    if extended:
+        marks = row.get('settlementLegResults')
+        actuals = row.get('settlementLegActuals')
+        if (row.get('settlementBasis') != 'published-unit-stake-v1'
+                or not isinstance(marks, list) or not 1 <= len(marks) <= 8
+                or any(mark not in ('win', 'loss') for mark in marks)
+                or not isinstance(actuals, list) or len(actuals) != len(marks)
+                or any(type(value) not in (int, float) or not Decimal(str(value)).is_finite()
+                       or not float(value).is_integer() for value in actuals)
+                or row.get('result') != ('loss' if 'loss' in marks else 'win')
+                or row.get('riskUnits') != .25 or row.get('cashout') is not False
+                or not isinstance(row.get('actual'), str) or not 1 <= len(row['actual']) <= 2000
+                or public_note({'note': row['actual']}) != row['actual']):
+            raise ValueError('Invalid published-unit result evidence')
     if row.get('accountingUnknown') is True and row.get('units') is None and row.get('riskUnits') is None:
         return {'accountingUnknown': True, 'units': None, 'riskUnits': None}
     risk, units = row.get('riskUnits'), row.get('units')
@@ -134,14 +152,31 @@ def source_privacy_issues(root=ROOT):
     issues = []
     if (root / 'data/community-results.jsonl').exists():
         issues.append('Private accounting ledger must live outside the public checkout')
-    for ticket in read(root / 'data/community.json', {'tickets': []})['tickets']:
+    tickets = read(root / 'data/community.json', {'tickets': []})['tickets']
+    for ticket in tickets:
         if set(ticket) - PUBLIC_SOURCE_FIELDS:
             issues.append('Unreviewed field in public community ticket')
+        if any(isinstance(leg, dict) and set(leg)-PUBLIC_LEG_FIELDS for leg in ticket.get('legs') or []):
+            issues.append('Unreviewed field in public community leg')
     path = root / 'data/community-settlements.jsonl'
     if path.exists():
         for line in path.read_text().splitlines():
             row = json.loads(line)
             public_accounting(row)
+            if row.get('settlementBasis') == 'published-unit-stake-v1':
+                ticket = next((t for t in tickets if t['id'] == row['id']), {})
+                odds = ticket.get('odds')
+                if (ticket.get('riskUnits') != .25 or type(odds) not in (int, float)
+                        or abs(odds) < 100 or len(ticket.get('legs') or []) != len(row['settlementLegResults'])):
+                    raise ValueError('Unit settlement must retain the original posted allocation and legs')
+                units = -.25 if row['result'] == 'loss' else round(.25*(odds/100 if odds > 0 else 100/-odds), 6)
+                if row['units'] != units:
+                    raise ValueError('Unit settlement contradicts the original posted price')
+                for leg, actual, mark in zip(ticket['legs'], row['settlementLegActuals'], row['settlementLegResults']):
+                    if (not isinstance(leg, dict) or type(leg.get('line')) not in (int, float)
+                            or leg.get('direction') not in ('over', 'under') or actual == leg['line']
+                            or mark != ('win' if (actual > leg['line']) == (leg['direction'] == 'over') else 'loss')):
+                        raise ValueError('Public leg actual contradicts its original line or result')
             if public_note(row) != row.get('publicNote'):
                 issues.append('Private text in public community settlement')
     return issues
@@ -179,11 +214,14 @@ def build(root=ROOT):
                              ticket['kind'] if ticket.get('kind') in ('spreads', 'totals', 'moneyline') else 'props'),
                     'parlayType': 'community' if len(ticket.get('legs', [])) > 1 else None,
                     'title': ticket.get('displayTitle') or ticket['title'],
-                    'legs': [{'title': leg.get('title', '') if isinstance(leg, dict) else leg}
+                    'legs': [{k: v for k, v in leg.items() if k in PUBLIC_LEG_FIELDS}
+                             if isinstance(leg, dict) and result.get('settlementBasis') == 'published-unit-stake-v1'
+                             else {'title': leg.get('title', '') if isinstance(leg, dict) else leg}
                              for leg in ticket.get('legs', [])] if len(ticket.get('legs', [])) > 1 else [],
                     'result': result.get('result'), 'settledAt': result.get('settledAt'),
                     'cashout': result.get('cashout') is True,
                     'entryNote': public_note(result),
+                    **{k: result[k] for k in ('settlementBasis', 'actual', 'settlementLegResults', 'settlementLegActuals') if k in result},
                     **{k: v for k, v in (public_accounting(result) if public_source else accounting(result)).items()
                        if k in ('accountingUnknown', 'units', 'riskUnits')},
                     'delivery': {'xAt': post['sentAt'], 'link': post['link']}})

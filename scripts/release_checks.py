@@ -15,7 +15,7 @@ MODULES = (
     'test_nba_moneyline_agreement', 'test_post_windows', 'test_parlay_caption',
     'test_social_age_notice', 'test_discord_post', 'test_record_audit',
     'test_publication_guard', 'test_chef_picks', 'test_daily_straight_card',
-    'test_prop_ticket_release',
+    'test_prop_ticket_release', 'test_community_unit_settlement',
 )
 
 

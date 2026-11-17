@@ -218,6 +218,7 @@ def _settlement_revision(original, now, *, packet=None, conf=None):
                     settledAt=gates.stamp(now), resultSource=rows[0]['source'],
                     units=round(result['units'], 3), settledOdds=result.get('settledOdds'),
                     settlementLegResults=[row['result'] for row in rows],
+                    settlementLegActuals=[row.get('actual') for row in rows],
                     settlementBasis=result['settlementBasis'],
                     settlementReason=('Official final stats, clear participation/injury checks and original reviewed book rules.'
                                       if rules_based else 'Exact original ticket and official leg actuals reconciled with the listed book.'),

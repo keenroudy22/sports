@@ -327,7 +327,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                     receipt = item['receipt']
                     # Weekly category summaries are not individual settled plays; retain their existing
                     # reviewed renderer until a category-specific Kitchen receipt has been reviewed.
-                    svg = (ticket_card.final_svg(item['receiptPicks'], item['receiptDay'])
+                    svg = (ticket_card.daily_result_svg(item['receiptPicks'], item['receiptDay'])
                            if ticket and item.get('receiptPicks') else
                            pick_card.receipt_svg(receipt))
                     pick_card.render(svg, path)
@@ -406,7 +406,7 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
             from datetime import date
             day = date.fromisoformat(r['key'].removeprefix('receipt:day:'))
             item['receiptDay'] = day.isoformat()
-            item['receiptPicks'] = r.get('nbaDailyRows') or receipts.plays_between(public_first, ctx.latest, ctx.games,
+            item['receiptPicks'] = r.get('dailyRows') or r.get('nbaDailyRows') or receipts.plays_between(public_first, ctx.latest, ctx.games,
                                                            receipts.counted(public_first, ctx.latest), day, day)
             frozen = {row['id']: row for row in r.get('linkedStraightRows') or []}
             item['receiptPicks'] = [frozen.get(p['id'], p) for p in item['receiptPicks']]

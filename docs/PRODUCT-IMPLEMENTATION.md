@@ -7961,3 +7961,36 @@ against the listed01:15Z kickoff; serial build latency remains an open delivery
 fix. Both owner tickets' results remain pending. Preserve original prices and never invent personal
 cash, protection decisions or realized units to fill the community ledger.
 No new plans, provider quotas or scheduled jobs were added.
+
+
+## November 16 — published-unit fun settlement and Final delivery candidate
+
+The new attended community_unit_settlement path validates the frozen pregame
+ticket, explicit0.25u allocation, original X Sent receipt, exact completed-period
+actuals and current Indiana book rules. It records performance at the published
+unit allocation, not an owner cash payout. Unknown stats, removed/protected legs,
+changed terms, postgame additions and backdated corrections hold. Private
+evidence has its own0600 append-only journal; public rows contain only derived
+units and reviewed actuals. Legacy cash settlements remain unchanged.
+
+The candidate connects these prospective tickets to individual Final graphics,
+native-quote result planning, daily recaps and results-before-next-day-plays.
+Detailed Finals retain original milestones, period, price/book, each actual and
+margin, plus ticket-level units. It also fixes structured NFL adapter results
+being omitted by the older text-only leg-marker graphic check. New public leg
+fields use an explicit allowlist. No new feeds, paid plans or jobs are added.
+
+The supported-Python full suite passed2401 tests (2 skipped) before the final
+card/allowlist refinements; focused tests passed afterward. Canonical clean
+release, hosted/live checks and a real Final receipt are still required. The
+first all-suite attempt used the Mac's older Python3.9 and failed unsupported
+imports/syntax; it is not the passing release result.
+
+Actual Q1 evidence is ready, not yet appended/published: ESPN's full44-play
+feed reconciles with its box and team counts at period2/15:00. Hampton4carries
+for26yards cleared5+; Henry2carries for0yards missed20+. Original+168DK means
+loss at the published0.25u allocation. Current Indiana football/market rules
+confirm game participation for period props and that full-time injury early-exit
+rules do not apply to this quarter market. Private evidence is under the
+community-private/reviews directory; work/nov16-delivery-parlays retains the
+source snapshots and candidate art. No actual result publication is claimed.

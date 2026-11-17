@@ -154,7 +154,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/sport-box/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/',
+LEFTOVER = ('data/community-settlements.jsonl', 'data/morning-brief/', 'data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/sport-box/', 'data/nba-capture/', 'data/nba-roster-research/', 'data/nba-roster-exposure-v2/', 'data/nba-roster-exposure-v2-study/', 'data/nba-roster-confirmation-v2/', 'data/nba-roster-confirmation-v3/', 'data/nba-trial/', 'data/cbb-picks/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
@@ -4743,7 +4743,7 @@ def homepage_editor(now, status, enabled=True):
 def commit_log(now, push=True, runner=git, cwd=ROOT):
     """Commit delivery evidence and the optional local homepage notes after scheduling."""
     paths = ('data/x-posted.json', 'site/data/desk-notes.json', 'data/nba-capture/', 'data/sport-box/',
-             'data/nba-trial/', 'data/cbb-picks/')
+             'data/nba-trial/', 'data/cbb-picks/', 'data/community-settlements.jsonl')
     changed = [p for p in paths if runner('status', '--porcelain', '--', p, cwd=cwd).stdout.strip()]
     if not changed:
         return {'committed': False, 'pushed': False}

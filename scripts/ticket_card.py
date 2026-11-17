@@ -381,6 +381,30 @@ def final_svg(rows, day):
     return card.svg()
 
 
+def daily_result_svg(rows, day):
+    """Keep every new unit-backed fun result on mixed and fun-only daily cards."""
+    if not any(row.get('settlementBasis') == 'published-unit-stake-v1' for row in rows):
+        return final_svg(rows, day)
+    import receipts
+    if not rows or any(row.get('result') not in receipts.MARKS for row in rows):
+        raise ValueError('Complete graded daily card required')
+    values = [x_post.units_for(row) for row in rows]
+    card = ticket_cards.final_card({
+        'headline': 'DAILY FINAL', 'row_label': 'PLAYS',
+        'net_units': sum(values) if all(value is not None for value in values) else None,
+        'rows': [{'result': {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}[row['result']],
+                  'title': receipts.label(row),
+                  'detail': (f"{int(row['odds']):+d} {x_post.public_book(row['book'])} · {receipts.result_detail(row)}"
+                             if pick_card.play_kind(row) == 'parlay' else final_detail(row)),
+                  'unit_text': f'{value:+.2f}u' if value is not None else None}
+                 for row, value in zip(rows, values)],
+    })
+    problems = ticket_kit.qa(card, 'daily-final-'+day)
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
+
+
 def fun_final_svg(pick):
     """Render the settled fun ticket through the same art guard as other Finals."""
     import receipts
@@ -390,13 +414,36 @@ def fun_final_svg(pick):
     units = x_post.units_for(pick) if any(isinstance(pick.get(key), (int, float))
                                         for key in ('units', 'riskUnits')) else None
     detail = f"{int(pick['odds']):+d} {x_post.public_book(pick['book'])} · {receipts.result_detail(pick)}"
+    rows = [{'result': 'hit' if result == 'win' else 'miss',
+             'title': receipts.label(pick), 'detail': detail,
+             'unit_text': f'{units:+.2f}u' if units is not None else None}]
+    actuals = pick.get('settlementLegActuals')
+    marks = receipts.leg_results(pick)
+    detailed = (isinstance(actuals, list) and len(actuals) == len(pick.get('legs') or [])
+                and len(marks) == len(actuals)
+                and all(isinstance(leg, dict) and isinstance(leg.get('line'), (int, float))
+                        and leg.get('player') and leg.get('market') for leg in pick['legs']))
+    if detailed:
+        import prop_ticket_review
+        stats = prop_ticket_review.STATS.get(pick.get('league'), {})
+        rows = []
+        for leg, actual, mark in zip(pick['legs'], actuals, marks):
+            period = ' · 1Q' if leg.get('period') == '1Q' else ''
+            stat = stats.get(leg['market'], leg['market'])
+            milestone = leg.get('milestone')
+            threshold = milestone if type(milestone) in (int, float) else leg['line']
+            selection = f'{milestone:g}+' if type(milestone) in (int, float) else f"{leg['direction'].upper()} {leg['line']:g}"
+            shown = (f"Final: {actual:g} {stat}{period} · {'cleared' if mark == 'win' else 'missed'} by {abs(actual-threshold):g}"
+                     if type(actual) in (int, float) and mark in ('win', 'loss') else mark.upper())
+            rows.append({'result': {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}[mark],
+                         'title': f"{leg['player']} {selection}",
+                         'detail': shown, 'hide_units': True})
     card = ticket_cards.final_card({
         'headline': 'TICKET WON' if result == 'win' else 'TICKET LOST',
-        'row_label': 'FUN TICKET',
+        'row_label': 'LEGS' if detailed else 'FUN TICKET',
+        **({'subheading': f"{int(pick['odds']):+d} {x_post.public_book(pick['book'])} · {len(rows)} LEGS"} if detailed else {}),
         'net_units': units,
-        'rows': [{'result': 'hit' if result == 'win' else 'miss',
-                  'title': receipts.label(pick), 'detail': detail,
-                  'unit_text': f'{units:+.2f}u' if units is not None else None}],
+        'rows': rows,
     })
     problems = ticket_kit.qa(card, str(pick['id']))
     if problems:

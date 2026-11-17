@@ -505,7 +505,9 @@ def final_card(p):
         push_count = sum(r['result'] == 'push' for r in p['rows'])
         void_count = sum(r['result'] == 'void' for r in p['rows'])
         sub = f"{len(p['rows'])} BEST BETS · {wins}W/{misses}L/{push_count}P/{void_count}V"
-    inner += card.text(COL_X, panel_bottom - 30, sub, 46, CHALK, tracking=1)
+    sub = p.get('subheading') or sub
+    sub_size = fit(sub, 46, PANEL_X2 - 24 - COL_X, floor=30)
+    inner += card.text(COL_X, panel_bottom - 30, sub, sub_size, CHALK, tracking=1)
     top = panel_bottom + 20
     y = top
     for i, (r, detail_lines, detail_size, row_height) in enumerate(layouts):
@@ -521,7 +523,8 @@ def final_card(p):
         unit_x = X2 - 194
         for line_index, detail in enumerate(detail_lines):
             inner += card.text(X1, y + 96 + line_index * 38, detail, detail_size, INK_SOFT, 'd', 500)
-        inner += card.text(unit_x, y + 99, unit_text, 40, INK if unit_text.startswith('+') else RED if unit_text.startswith('-') else INK_SOFT, anchor='end')
+        if not r.get('hide_units'):
+            inner += card.text(unit_x, y + 99, unit_text, 40, INK if unit_text.startswith('+') else RED if unit_text.startswith('-') else INK_SOFT, anchor='end')
         inner += kit.result_stamp(card, X2, y + row_height / 2, r['result'])
         y += row_height
     net_units = p.get('net_units', 0)

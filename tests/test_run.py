@@ -881,6 +881,13 @@ class GitTests(unittest.TestCase):
         self.assertEqual(self.sh('show','--name-only','--format=','HEAD').stdout.split(),
                          ['data/sport-box/nba-2027.jsonl'])
 
+    def test_commit_log_commits_public_unit_results_without_private_evidence(self):
+        (self.repo/'data/community-settlements.jsonl').write_text('{"id":"synthetic","units":0.42}\n')
+        now=datetime(2026,11,17,4,tzinfo=timezone.utc)
+        self.assertEqual(run.commit_log(now,push=False,runner=self.runner,cwd=self.repo),{'committed':True,'pushed':False})
+        self.assertEqual(self.sh('show','--name-only','--format=','HEAD').stdout.split(),
+                         ['data/community-settlements.jsonl'])
+
     def test_sync_commits_captures_a_stopped_run_left_behind(self):
         (self.repo / 'data' / 'odds' / 'nfl.jsonl').write_text('{}\n{"x": 1}\n')
         with self.assertRaises(run.RunError) as caught:        # no remote here, so the rebase step fails after the commit
