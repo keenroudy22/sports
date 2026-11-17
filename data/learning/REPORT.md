@@ -5,7 +5,7 @@
 ## Changes this week
 
 - **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
-- **researcher** domains: {'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'on3.com', 'philadelphiaeagles.com', 'chicagobears.com', 'seahawks.com', 'buffalobills.com'], 'avoidDomains': ['startribune.com']} to {'preferDomains': ['si.com', 'on3.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'fausports.com', 'seahawks.com'], 'avoidDomains': ['startribune.com', 'storage.googleapis.com']}. Which sites the researcher cites keep checking out.
+- **researcher** domains: {'avoidDomains': ['startribune.com'], 'preferDomains': ['si.com', 'abqjournal.com', 'sports.yahoo.com', 'on3.com', 'philadelphiaeagles.com', 'chicagobears.com', 'seahawks.com', 'buffalobills.com']} to {'avoidDomains': ['startribune.com', 'storage.googleapis.com'], 'preferDomains': ['si.com', 'on3.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'fausports.com', 'seahawks.com']}. Which sites the researcher cites keep checking out.
 - **CFB/moneyline** twoWay.trust: 0.971 to 0.954. CFB/moneyline trust 0.97 to 0.95.
 - **CFB/moneyline/plus_money** twoWay.trust: 0.95 to 0.937. CFB/moneyline/plus_money trust 0.95 to 0.94.
 - **CFB/prop:rec** twoWay.trust: 0.9 to 0.931. CFB/prop:rec trust 0.90 to 0.93.
@@ -21,6 +21,7 @@
 - **NFL/prop:rushYds** twoWay.trust: 0.8 to 0.75. NFL/prop:rushYds trust 0.80 to 0.75.
 - **NFL/total** twoWay.gap: 4.0 to 6.0. NFL/total gap floor +2 points.
 - **NFL/total/plus_money** twoWay.trust: 1.0 to 0.965. NFL/total/plus_money trust 1.00 to 0.96.
+- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
 
 ## Direction changes
 
@@ -30,9 +31,11 @@ Applied:
 - none
 
 In force now:
-- NFL totals: paused as a best bet since 2026-10-08 (research and shadow only); edge bar +4 since None
+- NFL totals: paused as a best bet since 2026-10-08 (research and shadow only); edge bar +6 since None
 
 Report only (nothing loosens):
+- Diagnostic only after October31 owner reset: Weekend card back to 5 best bets: the two weeks are up.
+- Diagnostic only after October31 owner reset: Fun tickets back to their usual shape: the two weeks are up.
 - No Climb rung for 6 straight days with 2+ games. Nothing was loosened.
 
 ## Segments (published since their last change)
@@ -74,24 +77,15 @@ Report only (nothing loosens):
 
 ## Two-way Autopilot learning
 
-- Applied trust:CFB/moneyline: CFB/moneyline trust 0.97 to 0.95.
-- Applied trust:CFB/moneyline/plus_money: CFB/moneyline/plus_money trust 0.95 to 0.94.
-- Applied trust:CFB/prop:rec: CFB/prop:rec trust 0.90 to 0.93.
-- Applied trust:CFB/total: CFB/total trust 0.88 to 0.91.
-- Applied trust:CFB/total/plus_money: CFB/total/plus_money trust 0.95 to 1.00.
-- Applied trust:NFL/moneyline: NFL/moneyline trust 1.04 to 1.06.
-- Applied trust:NFL/moneyline/plus_money: NFL/moneyline/plus_money trust 0.90 to 0.85.
-- Applied trust:NFL/prop:att: NFL/prop:att trust 1.00 to 0.96.
-- Applied trust:NFL/prop:car: NFL/prop:car trust 0.95 to 0.90.
-- Applied trust:NFL/prop:car/plus_money: NFL/prop:car/plus_money trust 0.95 to 0.93.
-- Applied trust:NFL/prop:cmp: NFL/prop:cmp trust 1.15 to 1.09.
-- Applied trust:NFL/prop:cmp/plus_money: NFL/prop:cmp/plus_money trust 1.00 to 0.95.
-- Applied trust:NFL/prop:rushYds: NFL/prop:rushYds trust 0.80 to 0.75.
-- Applied gap:NFL/total: NFL/total gap floor +2 points.
-- Applied trust:NFL/total/plus_money: NFL/total/plus_money trust 1.00 to 0.96.
+- Waiting for a second Tuesday: gap:NFL/total (NFL/total gap floor +2 points).
 - Waiting for a second Tuesday: trust:CFB/prop:passYds (CFB/prop:passYds trust 0.84 to 0.86).
 - Waiting for a second Tuesday: trust:CFB/prop:recYds (CFB/prop:recYds trust 0.98 to 1.02).
 - Waiting for a second Tuesday: trust:CFB/spread (CFB/spread trust 0.91 to 0.92).
+- Waiting for a second Tuesday: trust:CFB/total/plus_money (CFB/total/plus_money trust 1.00 to 1.01).
+- Waiting for a second Tuesday: trust:NFL/moneyline/plus_money (NFL/moneyline/plus_money trust 0.85 to 0.80).
+- Waiting for a second Tuesday: trust:NFL/prop:car (NFL/prop:car trust 0.90 to 0.87).
+- Waiting for a second Tuesday: trust:NFL/prop:cmp (NFL/prop:cmp trust 1.09 to 1.04).
+- Waiting for a second Tuesday: trust:NFL/prop:cmp/plus_money (NFL/prop:cmp/plus_money trust 0.95 to 0.94).
 - Waiting for a second Tuesday: trust:NFL/prop:rec (NFL/prop:rec trust 1.00 to 0.99).
 - Waiting for a second Tuesday: trust:NFL/prop:rec/plus_money (NFL/prop:rec/plus_money trust 1.05 to 1.01).
 - Waiting for a second Tuesday: trust:NFL/prop:recYds (NFL/prop:recYds trust 1.02 to 1.00).
@@ -265,7 +259,7 @@ Report only (nothing loosens):
 - meangreensports.com: 3 of 5 checked out
 - mgoblue.com: 7 of 7 checked out
 - miamihurricanes.com: 3 of 3 checked out
-- miamiredhawks.com: 14 of 14 checked out
+- miamiredhawks.com: 11 of 11 checked out
 - miamistudent.net: 4 of 4 checked out
 - minutemancommand.com: 0 of 3 checked out
 - missouristatebears.com: 4 of 5 checked out
