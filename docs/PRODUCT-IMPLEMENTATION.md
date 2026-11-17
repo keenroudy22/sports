@@ -8728,3 +8728,24 @@ errors. All three ticket games were still pregame and it made zero box
 requests. Offline replay matched all six athletes to completed historical
 box scores. Tonight’s real box capture, grading and result receipts remain
 open. Private evidence is in work/nov16-delivery-parlays/ticket-box-targets-release.json.
+
+### November 17 — repriced parlay Finals and fully void football tickets
+
+A winning reviewed ticket now shows the original and verified reduced price on
+the individual Final and X caption. Discord and the daily result detail identify
+the settlement price. Reduced-price wording requires the reviewed book
+settlement. The historical September 27 calculated price is outside that path.
+Fully void reviewed MNF/TNF tickets now reach the neutral Final card, native
+quote planner, Discord card queue and missing-result check. The weekly and
+historical records keep the original terms.
+
+Release 37d55652e passed 2,452 Python tests (two skipped) and 377 Node tests
+in both the normal and clean-export suites, plus the offline rehearsal.
+[Hosted production run 44189364229](https://github.com/keenroudy22/sports/actions/runs/44189364229)
+succeeded at 22:25:49Z. The live NBA pick page showed all six players and +445
+FanDuel at 375 and 1440 px with no overflow, broken images or browser errors.
+The actual 17:25 ET results worker finished at 22:30:08Z with zero errors,
+grades or publications before the games. Only isolated fixtures exercised a
+void and a reduced-price win. The live ticket still needs its own settlement
+and delivery receipts. Private proof is in
+work/nov16-delivery-parlays/repriced-final-release.json.
