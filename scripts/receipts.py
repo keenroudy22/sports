@@ -303,13 +303,14 @@ def fit_result_rows(rows, head, tail, games=None):
         kept.remove(wins[-1] if wins else kept[-1])
 
 
-def unit_fun_rows(as_of, day=None, log_book=None):
+def unit_fun_rows(as_of, day=None, log_book=None, root=None):
     """Prospective unit-backed owner tickets, apart from historical cash slips."""
     import community_record
+    root = community_record.ROOT if root is None else root
     effective = datetime(2026, 11, 16, tzinfo=timezone.utc)
     if as_of < effective:
         return []
-    originals = community_record.read(community_record.ROOT/'data/community.json', {'tickets': []})['tickets']
+    originals = community_record.read(root/'data/community.json', {'tickets': []})['tickets']
     supported = {row['id'] for row in originals if row.get('riskUnits') == .25
                  and row.get('legs') and all(isinstance(leg, dict) for leg in row['legs'])}
     delivered = {p.get('id') for p in (log_book or {}).get('posts', [])
@@ -317,7 +318,7 @@ def unit_fun_rows(as_of, day=None, log_book=None):
                  and not p.get('cancelledAt') and not p.get('deletedAt')
                  and gates.when(p['sentAt']) <= as_of}
     out = []
-    for row in community_record.build(community_record.ROOT):
+    for row in community_record.build(root):
         if (row['id'] not in supported or row['id'] not in delivered
                 or not effective <= gates.when(row['publishedAt']) <= as_of
                 or day is not None and eastern_date(gates.when(row['kickoff'])) != day):

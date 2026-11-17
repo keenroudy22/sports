@@ -3393,6 +3393,12 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
     # wake for results that receipts.cashed can still publish, otherwise one
     # expired result rebuilds the whole desk every fifteen minutes forever.
     import receipts
+    # Read newly appended unit results directly; the local site export may
+    # still predate the grade while Pages builds its required Final artwork.
+    unit_rows = receipts.unit_fun_rows(now, log_book=log_book, root=Path(root))
+    if unit_rows:
+        record = dict(record or {}, picks=list({p['id']: p for p in
+            [*(record or {}).get('picks', []), *unit_rows]}.values()))
     if isinstance(record, dict) and isinstance(record.get('picks'), list):
         record = dict(record, picks=[p for p in record['picks']
             if isinstance(p, dict) and desk_health.moment(p.get('settledAt')) and

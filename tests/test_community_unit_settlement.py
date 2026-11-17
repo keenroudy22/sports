@@ -153,6 +153,26 @@ class CommunityUnitSettlementTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 record.public_accounting(dict(result, **change))
 
+    def test_five_minute_recovery_reads_new_unit_grade_before_site_rebuild(self):
+        import run
+        import x_post
+        ticket, evidence, posts, now = fixture()
+        posts[0].update(kind='buffer:community', tweetId='123456789')
+        evidence['legs'][1].update(actual=0, result='loss')
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); private = root/'private'
+            (root/'data').mkdir()
+            (root/'data/community.json').write_text(json.dumps({'tickets': [ticket]}))
+            (root/'data/x-posted.json').write_text(json.dumps({'posts': posts}))
+            unit.append(ticket['id'], evidence, now, root=root, private=private)
+            with patch.object(x_post, 'load_log', return_value={'posts': posts}):
+                self.assertEqual(run.result_recovery_needed(now, root, private), 1)
+                posts.append({'id': 'burnt:'+ticket['id'], 'bufferPostId': 'scheduled',
+                              'dueAt': (now+timedelta(minutes=2)).isoformat()})
+                self.assertEqual(run.result_recovery_needed(now, root, private), 0)
+                posts[-1].update(sentAt=(now+timedelta(minutes=2)).isoformat(), tweetId='987654321')
+                self.assertEqual(run.result_recovery_needed(now+timedelta(minutes=3), root, private), 0)
+
     def test_actual_result_planner_card_and_results_first_barrier_include_ticket(self):
         ticket, evidence, posts, now = fixture()
         posts[0].update(kind='buffer:community', tweetId='123456789',

@@ -7994,3 +7994,12 @@ confirm game participation for period props and that full-time injury early-exit
 rules do not apply to this quarter market. Private evidence is under the
 community-private/reviews directory; work/nov16-delivery-parlays retains the
 source snapshots and candidate art. No actual result publication is claimed.
+
+The first canonical attempt passed2401Python/372Node tests but was deliberately
+stopped during clean-export verification before promotion: inspection found the
+five-minute recovery wakeup omitted these community Finals. The candidate now
+reads the new unit-grade ledger before the local site rebuild, respects existing
+pending/Sent receipts and retains the bounded retry clock. A real-writer regression
+covers missing, queued and sent outcomes. No failed or interrupted gate counts
+as a deployed release. Natural2100 on the prior release completed02:08:04Z,
+errors[],published0,settled0; it is not proof of this new result path.
