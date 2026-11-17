@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-17T19:21:17Z",
+  "updatedAt": "2026-11-17T20:11:51Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -2772,7 +2772,7 @@
               "position": "RB",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-11-17T17:39Z",
+              "reportedAt": "2026-11-17T19:47Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery"
             },
             {
@@ -2997,6 +2997,15 @@
           "name": "Indianapolis Colts",
           "players": [
             {
+              "id": "4601021",
+              "name": "Jaylon Carlies",
+              "position": "LB",
+              "status": "Injured Reserve",
+              "injury": "Neck",
+              "reportedAt": "2026-11-17T19:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4601021/jaylon-carlies"
+            },
+            {
               "id": "2566045",
               "name": "Luke Rhodes",
               "position": "LS",
@@ -3022,15 +3031,6 @@
               "injury": "Knee",
               "reportedAt": "2026-11-17T12:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4892240/jalen-travis"
-            },
-            {
-              "id": "4601021",
-              "name": "Jaylon Carlies",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Neck",
-              "reportedAt": "2026-11-17T12:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4601021/jaylon-carlies"
             },
             {
               "id": "4571557",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "34",
-          "name": "Brevin Jordan",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-11-17T14:05:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362504/brevin-jordan"
-        },
-        {
-          "teamId": "34",
           "name": "Azeez Al-Shaair",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-11-17T19:21:17Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685278/luther-burden-iii"
+        },
+        {
+          "teamId": "11",
+          "name": "Jaylon Carlies",
+          "from": "Questionable",
+          "to": "Injured Reserve",
+          "observedAt": "2026-11-17T20:11:51Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4601021/jaylon-carlies"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-17T19:21:17Z",
-      "lastAttemptAt": "2026-11-17T19:21:17Z",
+      "checkedAt": "2026-11-17T20:11:51Z",
+      "lastAttemptAt": "2026-11-17T20:11:51Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-17T19:21:17Z",
-      "lastAttemptAt": "2026-11-17T19:21:17Z",
+      "checkedAt": "2026-11-17T20:11:51Z",
+      "lastAttemptAt": "2026-11-17T20:11:51Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
