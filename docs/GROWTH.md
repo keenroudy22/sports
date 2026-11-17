@@ -1,5 +1,28 @@
 # Kook'n growth plan
 
+## November 17 current direction
+
+The owner-requested historical review of Wavey and Alex Caruso is recorded in
+`docs/X-NOTES.md`, with dated original posts and a bounded sample. Apply Alex's
+consistent daily-card structure and Wavey's recognizable long-shot presentation
+within existing categories. Target five qualifying straights across the currently
+supported sports; the daily favorite is one of them. P12 owns the still-pending
+daily Chef label migration. Preserve the current supported NBA prop/ticket paths;
+older paper-trial descriptions below are historical, not a rollback instruction.
+
+Keep exact book/line/price and verified matchup reasoning on individual plays,
+one readable slate card, a distinct fun ticket when supported, and complete
+results before the following day's picks. Ordinary NBA alternates may span games;
+MNF/TNF are the requested same-game slots. Existing exposure, one-open-step
+Climb, price, participation, category and delivery gates continue to control.
+
+Use the existing morning, afternoon and pregame reviews and existing delivery
+windows; this does not create jobs or promise a fixed number of admissible bets.
+The next weekly review compares actual Kook'n observations at24h/72h/7d by format
+and outcome, with eight comparable posts before a format decision. Creator
+milestones support a historical account, not a causal growth or profit promise.
+No like-gated picks, new giveaways, paid tools or automatic social engagement.
+
 October 5 product implementation keeps the public schedule/caps and evidence gates. Tested creative/copy variants
 inside approved categories can rotate; new social categories, alternate/milestone sheets, X live progress and creator
 outreach still need their separate decisions. Current trend research is fresh main-line-only. `PRODUCT-IMPLEMENTATION.md`

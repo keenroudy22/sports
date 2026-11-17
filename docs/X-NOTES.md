@@ -298,3 +298,97 @@ These observations support presentation choices, not a verified profitability
 claim or copying their bets. No automated reactions or new giveaway/affiliate
 launch. The owner ends NBA Trial framing prospectively; see AGENTS.md for the
 regular0.5u game-pick policy and the still-unfinished prop admission path.
+
+## November 17 owner-requested historical review: Wavey and Alex Caruso
+
+Read the public profiles and dated searches directly in the owner's attended X
+session. The saved sample contains 29 distinct Wavey and 45 distinct Alex post
+URLs, including replies and promotions; it is not a complete posting or betting
+history. Search ranking, deletions, reposts, age and pinned distribution prevent
+fair format rankings. Initial public mirrors were discovery leads; the findings
+below use the original posts. No engagement, message, subscription or paid API
+request was made. Raw observations are private working evidence at
+`work/nov16-delivery-parlays/nov17-creator-review-evidence.json`.
+
+### Wavey: a visible breakout, with important context
+
+- [May 31, 2025](https://x.com/winwithwavey/status/1929006266908869023):
+  he described losing access to an older account, @WaveyWins. The May 2025 join
+  date therefore does not establish that he started with no audience or experience.
+- [August 5, 2025](https://x.com/winwithwavey/status/1952920226343125456):
+  he credited Parlay Party for an opportunity in its channel. Earlier posts mix
+  MLB conversation, memes, tickets and ordinary low-engagement updates.
+- [October 1, 2025](https://x.com/winwithwavey/status/1973585829726658681):
+  approaching 10K followers. [October 3](https://x.com/winwithwavey/status/1974228790755930428):
+  he reported reaching 10K the previous night and then 24K. These are dated
+  creator-reported milestones, not independent account analytics.
+- His [October 2 ticket](https://x.com/winwithwavey/status/1973623652013977672)
+  remains pinned. At this review it showed approximately 4.37M cumulative views,
+  4,705 likes and 1,846 bookmarks. The inspected image makes the legs and team
+  colors central; +18453 includes a displayed 30% boost, with +14190 base odds.
+  A short caption accompanies the slip. These are present-day cumulative metrics,
+  not its first-day reach or proof of audited long-term profit.
+- [September 2, 2026](https://x.com/winwithwavey/status/2095024300059426824):
+  a 50K milestone post. The profile displayed 57K on November 17. This is a
+  sparse timeline, not a continuous growth curve or attribution model.
+- The [November 15 ticket](https://x.com/winwithwavey/status/2122044038761374091)
+  had 196,082 views and 502 bookmarks at observation. Its
+  [disappointed follow-up](https://x.com/winwithwavey/status/2122130493965750312)
+  had 206,349 views and 85 bookmarks; subsequent posts acknowledged the miss.
+  This is useful evidence that his ongoing conversation includes losses. It does
+  not establish that near-misses predict the next ticket or improve its value.
+
+The timing supports a breakout around the October 2025 ticket, but cannot isolate
+the ticket from creator connections, community sharing, promotions or other posts.
+Borrow an identifiable ticket series, legible exact terms and honest follow-up.
+Do not borrow money promises, cash-out requests or a stream of live filler.
+
+### Alex: a repeatable daily product over several years
+
+- Creator-reported milestones include
+  [2K in September 2021](https://x.com/AlexCaruso/status/1435423803782451204),
+  [7K in June 2022](https://x.com/AlexCaruso/status/1532109849676349442), and
+  [10K in July 2022](https://x.com/AlexCaruso/status/1545430224153755649).
+  His profile displayed 376.1K at this review. Do not fill the intervening dates
+  with invented follower counts.
+- [September 2022](https://x.com/AlexCaruso/status/1566434667372371968)
+  described daily fantasy-football research threads. Audience development preceded
+  the five-pick examples; straight-bet volume alone cannot explain his growth.
+- The same five-line NBA card appears on
+  [November 17, 2023](https://x.com/AlexCaruso/status/1725572756614300135),
+  [November 1, 2024](https://x.com/AlexCaruso/status/1852402269511143856),
+  [December 9, 2024](https://x.com/AlexCaruso/status/1866175663075410155), and
+  [November 17, 2026](https://x.com/AlexCaruso/status/2122755446306218279).
+  That verifies a longstanding format, not five eligible bets on every calendar day.
+- Individual posts name the player, threshold, book and a role/matchup case; the
+  daily list lets readers recover the whole card. His
+  [November 16 slate recap](https://x.com/AlexCaruso/status/2122552754056929469)
+  includes all seven listed NBA/NFL decisions, including three losses. Other
+  sampled recaps include two- and four-play NBA days and losing NFL slates.
+- Like targets, conditional giveaways and affiliate posts accompany the picks.
+  They confound engagement comparisons and are not part of Kook'n's adaptation.
+  Narrow historical splits and asserted records were not independently validated.
+  A win percentage without the actual prices and complete denominator is not ROI.
+
+### Kook'n application and next observation
+
+Use five qualifying straights as the daily coverage target across supported
+sports, with one clearly identified all-sports favorite included in that total.
+P12 still owns the prospective daily Chef label migration; the name does not
+increase the stake. Give each official play exact terms and one or two verified
+matchup facts, then collect the released plays into one saveable daily card when
+the current release rules permit. An incomplete slate stays incomplete.
+
+Keep a recognizable fun-ticket series in the existing ticket slots: ordinary
+NBA alternates may span games; MNF/TNF use the requested same-game format.
+Inspect actual combined prices, base/boost terms and every leg. Do not increase
+thresholds, stakes, ticket count or exposure to manufacture spectacular odds.
+Ladders retain one open step and the prior result. Results precede the following
+day's plays; wins and losses receive the existing verified delivery treatment.
+
+Next action: the existing daily review uses the current verified slate and these
+presentation notes; the existing weekly review compares Kook'n's actual 24h/72h/7d
+observations by format and outcome. Keep unknown metrics unknown and require at
+least eight comparable measured posts before reallocating an existing slot.
+This research is complete; growth effectiveness, P12 and future ticket settlement
+remain separate outstanding evidence. No new schedule, provider or bill.

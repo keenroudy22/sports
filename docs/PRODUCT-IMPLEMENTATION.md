@@ -8576,3 +8576,18 @@ read-only current-model evaluation gives52.3% against52.6% required, so it
 does not qualify. Captured BetMGM-10/-108 qualifies at52.3% versus51.9%.
 This comparison is stored in nov17-ohio-price-comparison.json. Davidson-3.5
 /-120FanDuel remains sourced research, not an official admission or publication.
+
+### November17 price/link cleanup — verified live
+
+Final6a20fc8754e67bc3ecb6a3662ac2237585c9c7f6 passed2427Python(two skips)
+and373Node tests in normal and clean exports, all canonical gates and1255
+offline rehearsal3s643tr8 (ok,0outside writes/0private reads). Hosted
+44146732565 succeeded. Actual375/1440 Ohio page shows only -108 as the
+price limit, no unresolved BetMGM action, and the actual12:54PM X Sent link.
+No horizontal overflow, broken image, rendered error or console warning/error.
+Original -10/-1081u terms and all309earlier reports remain unchanged.
+The initial attempt stopped after its generator added the exact unchanged Ohio
+report to the public index; that generated addition was verified and committed
+before repeating every gate. Proof:work/nov16-delivery-parlays/price-link-final-verification.json;
+phone image:nov17-ohio-fixed-phone.jpg. Natural1255 worker also completed
+at18:01:05Z without errors and persisted the real X/media receipt.
