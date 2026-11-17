@@ -68383,5 +68383,189 @@
         "publishedAt": "2026-11-17T13:12:26Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-17T17:50:55Z",
+    "summary": "Released 1: Ohio -10 -108 at BetMGM.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": false,
+        "marketType": "spread",
+        "line": -10.0,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401866464"
+        ],
+        "book": "BetMGM",
+        "odds": -108,
+        "projection": 17.0,
+        "edge": "Price-checked chance 52.3% against the exact two-sided price; 51.9% needed at -108: +0.4 percentage points.",
+        "cutoff": "HOME -10 at -108 or better; off the card on no key number, or at -123 or worse at -10.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-12T04:18:58Z",
+        "quotedAt": "2026-11-17T17:07:30Z",
+        "quoteType": "capture",
+        "quoteNote": "BetMGM's number and price from the 12:07 PM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-17T22:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.654,
+          "chance": 0.523,
+          "calibrated": true,
+          "calibration": 0.15,
+          "calibrationN": null,
+          "push": 0.022,
+          "breakEven": 0.519,
+          "edgePoints": 0.4,
+          "evPerUnit": 0.029,
+          "snapshotAt": "2026-11-12T04:18:58Z",
+          "probabilitySpec": "605b2b2303ef7bae02b8c79323e640846bce52448896892ecd8bd13fafe367b1",
+          "evaluatedAt": "2026-11-17T17:33:03Z",
+          "fairChance": 0.498,
+          "anchoredChance": 0.523,
+          "gap": 2.5,
+          "calibrationFamily": "CFB/spread",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Ball State Cardinals at Ohio Bobcats",
+        "title": "Ohio -10",
+        "id": "CFB-2026-W12-ball-ohio-spread-home-minus-10-mgm",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401866464",
+          "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac"
+        ],
+        "why": "Model lean, our number only. We have the home margin at 17; the book is at -10. That makes the home 52.3%, and -108 needs 51.9%. Checked before publishing: Ball State is led by senior quarterback Keldric Luster, while Ohio coach John Hauser and his staff remain confident in quarterback Nick Poulos for the Ball State matchup. The market: The spread opened -9.5 and is -10 at DraftKings, a move of 0.5 toward the home. The total opened 50.5 and is 49.5 at DraftKings, 1 toward the under. 6 books span -10.5 to -9.5 on the spread; the middle is -10. Our spread is 7 points off, bigger than 76% of our past gaps. Gaps this size went 426-419 against the close in 3584 games. Our total is 2.8 points off, bigger than 51% of our past gaps. Gaps this size went 944-831 against the close in 3602 games.",
+        "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Ohio has a 17-game home win streak entering the Ball State game."
+          ],
+          "cautions": [],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Book says -10. I say 17.",
+              "numbers": {
+                "projection": 17.0,
+                "line": -10.0
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-12T04:18:58Z"
+            },
+            {
+              "text": "Ohio has a 17-game home win streak entering the Ball State game.",
+              "numbers": {},
+              "source": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+              "time": "2026-11-17T17:33:03Z"
+            },
+            {
+              "text": "Ohio has a 17-game home win streak entering the Ball State game.",
+              "numbers": {},
+              "source": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+              "time": "2026-11-17T17:33:03Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-17T17:33:03Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 42,
+            "windMph": 0,
+            "windDirection": "",
+            "precipProb": 0,
+            "periodStart": "2026-11-17T19:00:00-05:00",
+            "issuedAt": "2026-11-17T11:48:23+00:00",
+            "source": "https://api.weather.gov/gridpoints/RLX/42,110/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -9.5,
+                  "price": -110,
+                  "time": "2026-11-15T11:45:07Z"
+                },
+                "now": {
+                  "line": -10.0,
+                  "price": -110,
+                  "time": "2026-11-17T17:07:30Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": -8.5,
+                  "price": -110,
+                  "time": "2026-11-13T11:45:06Z"
+                },
+                "now": {
+                  "line": -9.5,
+                  "price": -125,
+                  "time": "2026-11-17T17:07:30Z"
+                }
+              }
+            },
+            "best": {
+              "book": "BetMGM",
+              "line": -10.0,
+              "price": -108,
+              "time": "2026-11-17T17:07:30Z"
+            }
+          },
+          "ours": {
+            "projection": 17.0,
+            "line": -10.0,
+            "market": "spread",
+            "text": "Book says -10. I say 17.",
+            "snapshotAt": "2026-11-12T04:18:58Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "stats",
+              "url": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+              "time": "2026-11-17T17:33:03Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/RLX/42,110/forecast/hourly",
+              "time": "2026-11-17T11:48:23+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401866464",
+              "time": "2026-11-17T17:33:03Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-17T17:50:55Z"
+      }
+    ]
   }
 ]
