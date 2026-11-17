@@ -8256,3 +8256,20 @@ are older FanDuel main lines for Knicks–Raptors. The ordinary feed has
 no fresh exact alternate legs or combined ticket at this clock. Use
 work/nov16-delivery-parlays/nov17-nba-alt-pregame-watch.json to target
 current availability, role and price checks in the existing windows.
+
+### Indiana NBA parlay grading evidence
+
+The Nov17 browser review checked the Indiana DraftKings basketball, general
+and market rules and FanDuel's canonical Indiana house rules. DraftKings'
+ordinary single-game NBA over provision checks second-half participation
+and a timely team or league announcement. FanDuel's ordinary NBA performance
+market checks whether the player took the court. Paid protection stays
+outside the normal unit record. Preserve the listed book's terms and any
+confirmed repriced quote as evidence. See the private working evidence
+`work/nov16-delivery-parlays/indiana-nba-sgp-rules-2026-11-17.json`.
+
+Settlement review now requires the supported Indiana jurisdiction for an
+observed book decision and rejects a reduced quote timestamp earlier than
+the kickoff of any removed leg. The original combined quote, actual book
+decision, leg identity, remaining exact terms and reduction price still
+have to agree. The change leaves the original tickets and stakes intact.

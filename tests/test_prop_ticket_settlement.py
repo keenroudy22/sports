@@ -78,6 +78,11 @@ class PropTicketSettlementTests(unittest.TestCase):
                 'source': 'https://sportsbook.draftkings.com/fixture-reprice',
                 'checkedAt': now.isoformat(), 'odds': 180, 'priceEstimated': False}
             evidence['bookSettlement']['settledOdds'] = 180
+            evidence['reducedQuote']['checkedAt'] = spec['ticketQuote']['checkedAt']
+            held = S.review(spec, evidence, now)
+            self.assertEqual(held['state'], 'held')
+            self.assertTrue(any('book-repriced' in reason for reason in held['holds']))
+            evidence['reducedQuote']['checkedAt'] = now.isoformat()
             result = S.review(spec, evidence, now)
             self.assertEqual(result['state'], 'settled-private', result)
             self.assertEqual(result['units'], .45)
@@ -90,6 +95,7 @@ class PropTicketSettlementTests(unittest.TestCase):
                      lambda s,e: e['bookSettlement'].update(termsFingerprint='different'),
                      lambda s,e: e['bookSettlement'].update(source='https://draftkings.com.evil.invalid/'),
                      lambda s,e: e['bookSettlement'].update(jurisdiction=''),
+                     lambda s,e: e['bookSettlement'].update(jurisdiction='OH'),
                      lambda s,e: e['bookSettlement'].update(ruleVersion=''),
                      lambda s,e: e['bookSettlement'].update(result='loss'),
                      lambda s,e: e['bookSettlement'].update(settledOdds=600),

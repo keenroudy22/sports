@@ -25,6 +25,14 @@ def clock(value, now):
         return False
 
 
+def reduced_quote_clock(value, legs, removed, now):
+    try:
+        checked = gates.when(value)
+        return max(gates.when(legs[index]['kickoff']) for index in removed) <= checked <= now
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
 def review(spec, evidence, now):
     """Return a private settlement proposal, or explicit holds, without side effects."""
     invalid = {'version': VERSION, 'state': 'held', 'releaseReady': False,
@@ -61,7 +69,7 @@ def review(spec, evidence, now):
             or receipt.get('termsFingerprint') != fingerprint
             or receipt.get('book') != spec['book'] or not https(receipt.get('source'), spec['book'])
             or not clock(receipt.get('checkedAt'), now)
-            or not str(receipt.get('jurisdiction') or '').strip()
+            or receipt.get('jurisdiction') != 'IN'
             or not str(receipt.get('ruleVersion') or '').strip()
             or not https(receipt.get('rulesSource'), spec['book'])):
         holds.append('Verified exact-ticket book settlement, jurisdiction and rules required')
@@ -180,7 +188,8 @@ def review(spec, evidence, now):
                     or reduced.get('originalTermsFingerprint') != fingerprint
                     or reduced.get('book') != spec['book'] or reduced.get('remainingLegs') != remaining
                     or not https(reduced.get('source'), spec['book'])
-                    or not clock(reduced.get('checkedAt'), now) or not tickets.price(reduced.get('odds'))
+                    or not reduced_quote_clock(reduced.get('checkedAt'), legs, removed, now)
+                    or not tickets.price(reduced.get('odds'))
                     or reduced.get('priceEstimated') is not False):
                 holds.append('Reduced SGP requires the actual book-repriced remaining ticket')
             else:
