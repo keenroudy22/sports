@@ -8425,3 +8425,31 @@ remains below the verified3000allowance; no upgrade or metered feed expansion.
 Private final receipt:work/nov16-delivery-parlays/nov17-six-lower-sent-receipt.json.
 The user resumed this goal; get_goal confirmed active. Real NBA settlement and
 first typed TNF publication/result remain unobserved, not complete.
+
+## November 17 reviewed-ticket frequency — release candidate
+
+The owner wants regular lower-threshold NBA alternates and both Monday/Thursday
+football specials. For new reviewed MNF/TNF and NBA-alts tickets from November17
+Eastern, the sourced-prop-ticket-v1 path uses the existing daily limit per
+explicit style instead of the legacy seven-day alternate exception. Historical
+replay, unreviewed automatic/easyProps tickets and Climb policy are unchanged.
+This frequency permission does not admit a play: exact observed combined price,
+fresh sourced role/opponent/availability review, private admission and recheck,
+book settlement rules, 0.25u, shared exposure and no repeated player/game remain.
+A fully reviewed ticket can still be held by any of those checks.
+
+Tests cover consecutive NBA dates, Thursday after Monday, same-day duplication,
+legacy and historical behavior, missing private admission, source/quote/player
+failures and shared/open-ticket exposure. The first full run exposed an eager
+clock access in legacy test contexts; the exception now checks its typed method
+before reading that clock. The oversized ALTFUN queue entry was shortened to
+its existing bounds, with full evidence retained above. No validation limits
+were raised. Full suites, clean export, canonical deployment and live evidence
+must pass before this candidate is called shipped.
+
+Candidate verification: normal and clean-export suites each passed2422Python
+(2existing skips) and373Node tests. Real stored-input1055rehearsal ns80yan6
+finished exit0/outcomeok,0outside writes/0private reads;2network attempts were
+blocked as designed. Source/price freshness is not proven by that rehearsal.
+Canonical deployment and hosted/live checks follow; these test results alone
+are not a release receipt.

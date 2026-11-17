@@ -1357,10 +1357,25 @@ def without_straight_players(rows, ctx):
 
 
 def alternate_parlay_frequency(candidate, ctx):
-    """Regular tickets get at most one alternate-based exception per league in seven days. Ladders stay separate."""
+    """Legacy alternates remain weekly; sourced prop tickets use existing daily limits."""
     if candidate.get('parlayType') == 'ladder' or not (candidate.get('parlayType') == 'easyProps' or
             any(isinstance(l, dict) and l.get('alternate') for l in candidate.get('legs') or [])):
         return Decision(True, 'alternate_parlay_frequency', 'main-line ticket or separate ladder')
+    # Owner's Nov17 regular-parlay direction applies only to the typed review
+    # path. This is a frequency decision, not evidence of admission: the separate
+    # reviewed_prop_ticket gate still requires the private packet, exact quote,
+    # participation, settlement rules and staking checks. Never widen legacy
+    # easyProps/automatic tickets or historical replay with this exception.
+    import prop_ticket_review
+    family = candidate.get('family')
+    expected_league = prop_ticket_review.FAMILIES.get(family, (None, None))[0]
+    if (candidate.get('selectionMethod') == prop_ticket_review.METHOD
+            and expected_league is not None and candidate.get('league') == expected_league
+            and candidate.get('parlayType') == 'longshot' and candidate.get('riskUnits') == .25
+            and eastern_date(when(candidate['publishedAt']) if candidate.get('publishedAt')
+                             else ctx.now).isoformat() >= '2026-11-17'):
+        return Decision(True, 'alternate_parlay_frequency',
+                        'reviewed prop ticket uses per-style daily limits; evidence and exposure checks still required')
     league = candidate.get('league') or candidate.get('_league') or str(candidate.get('id') or '').split('-')[0]
     external = getattr(ctx, 'risk_external', {})
     for key, pick in {**external, **getattr(ctx, 'first', {})}.items():

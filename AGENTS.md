@@ -1,5 +1,15 @@
 # November 17 full-slate parlay selection
 
+From November17 Eastern, the sourced-prop-ticket-v1 reviewed MNF/TNF and
+NBA-alts paths may prepare tickets on successive eligible days. They use the
+existing one-per-explicit-style daily limit instead of the legacy rolling
+seven-day alternate exception. This implements the owner's regular-parlay
+direction; it is not a daily publication quota. Keep exact joint book prices,
+private sourced reviews, current participation, 0.25u, shared exposure, no
+repeated player/game, settlement evidence and all delivery checks. Legacy
+automatic/easyProps tickets and historical replay retain their existing rule.
+This instruction is policy; deployment evidence belongs in PRODUCT-IMPLEMENTATION.
+
 The owner clarified that ordinary parlays should be researched across all
 available supported games. Do not present a single-game draft as the strongest
 legs from the full slate. MNF and TNF are the requested same-game parlay slots.

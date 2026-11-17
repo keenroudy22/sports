@@ -14,9 +14,9 @@ AT = NOW.isoformat()
 SOURCE = 'https://sportsbook.draftkings.com/event/test-fixture'
 
 
-def fixture(family='MNF'):
+def fixture(family='MNF', *, days=0):
     league = 'NBA' if family == 'NBA-alts' else 'NFL'
-    now = NOW + (timedelta(days=3) if family == 'TNF' else timedelta())
+    now = NOW + timedelta(days=days) + (timedelta(days=3) if family == 'TNF' else timedelta())
     at = now.isoformat()
     kick = (now + timedelta(hours=4)).isoformat()
     games = {f'{league}-1': {'id': f'{league}-1', 'league': league, 'state': 'pre', 'kickoff': kick}}
@@ -130,6 +130,28 @@ class PropTicketWorkbenchTests(unittest.TestCase):
                          'legs': [{'alternate': True}], 'parlayType': 'longshot'}}
         result = R.review(spec, games, now, first=first)
         self.assertTrue(any('within seven days' in h for h in result['holds']), result)
+
+    def test_reviewed_nba_next_day_and_tnf_after_mnf_use_daily_limits(self):
+        for family, days in (('NBA-alts', 1), ('NBA-alts', 2), ('TNF', 0), ('MNF', 7)):
+            spec, games, now = fixture(family, days=days)
+            league = R.FAMILIES[family][0]
+            first = {'prior': {'league': league, 'publishedAt': (now-timedelta(days=1)).isoformat(),
+                              'legs': [{'alternate': True}], 'parlayType': 'longshot',
+                              'parlayStyle': 'short', 'result': 'loss'}}
+            with self.subTest(family=family, days=days):
+                result = R.review(spec, games, now, first=first)
+                self.assertEqual(result['state'], 'reviewed-private', result)
+                first['prior']['publishedAt'] = (now-timedelta(minutes=20)).isoformat()
+                result = R.review(spec, games, now, first=first)
+                self.assertTrue(any("already today's short parlay" in h for h in result['holds']), result)
+
+    def test_regular_alts_still_require_current_price_and_available_players(self):
+        for mutate in (lambda s: s['ticketQuote'].update(checkedAt=AT),
+                       lambda s: s['legs'][0]['review']['availability'].update(status='out'),
+                       lambda s: s.update(odds=600)):
+            spec, games, now = fixture('NBA-alts', days=1)
+            mutate(spec)
+            self.assertEqual(R.review(spec, games, now)['state'], 'held')
 
     def test_health_summary_is_bounded_private_and_contains_no_ticket_secrets(self):
         spec, games, now = fixture()

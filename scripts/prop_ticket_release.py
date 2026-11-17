@@ -16,7 +16,7 @@ import prop_ticket_review as review
 import prop_ticket_settlement as settlement
 from fun_ticket_review import https
 
-METHOD = 'sourced-prop-ticket-v1'
+METHOD = review.METHOD
 CONF = Path(os.environ.get('KEENROUDY_CONF', str(Path.home() / '.config/keenroudy')))
 PUBLIC_LEG_FIELDS = ('gameId', 'athleteId', 'player', 'market', 'direction', 'line',
                      'period', 'book', 'odds', 'alternate', 'kickoff')

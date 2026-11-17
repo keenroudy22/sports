@@ -18,6 +18,7 @@ import x_post
 from fun_ticket_review import https
 
 VERSION = 'prop-ticket-workbench-v1'
+METHOD = 'sourced-prop-ticket-v1'
 STATS = {'NFL': {'car': 'carries', 'rec': 'receptions', 'rushYds': 'rushing yards',
                  'recYds': 'receiving yards', 'passYds': 'passing yards',
                  'att': 'passing attempts', 'cmp': 'completions'},
@@ -121,7 +122,8 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
                 'holds': ['Supported family and structured player legs required']}
     ctx = SimpleNamespace(now=now, games=games, first=first or {}, latest=latest or {},
                           risk_external=risk_external or {})
-    candidate = dict(spec, league=league, parlayType='longshot', riskUnits=.25)
+    candidate = dict(spec, league=league, parlayType='longshot', riskUnits=.25,
+                     selectionMethod=METHOD)
     shape = gates.longshot_shape(candidate, ctx)
     if not shape.ok:
         holds.append(shape.reason)

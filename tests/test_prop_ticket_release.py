@@ -40,6 +40,30 @@ def prepared(family='MNF'):
 
 
 class PropTicketReleaseTests(unittest.TestCase):
+    def test_prospective_frequency_exception_keeps_admission_and_exposure_guards(self):
+        spec,ctx,pick,packet=prepared('TNF')
+        ctx.first={'monday':{'league':'NFL','publishedAt':(ctx.now-timedelta(days=3)).isoformat(),
+                            'legs':[{'alternate':True}],'parlayType':'longshot','result':'loss'}}
+        self.assertTrue(gates.alternate_parlay_frequency(pick,ctx).ok)
+        with tempfile.TemporaryDirectory() as conf, patch.object(P,'CONF',Path(conf)):
+            self.assertFalse(gates.reviewed_prop_ticket(pick,ctx).ok, 'a method label is not admission')
+            P.save(pick['id'],packet,conf)
+            self.assertTrue(gates.reviewed_prop_ticket(pick,ctx).ok)
+            ctx.risk_external={'other':{'id':'other','riskUnits':5,'gameIds':['NFL-1']}}
+            self.assertIn('exposure',P.refusal(pick,ctx,packet=packet))
+            ctx.risk_external={'reserved':{'legs':[spec['legs'][0]],'_pendingRelease':True}}
+            self.assertIn('already reserves',P.refusal(pick,ctx,packet=packet))
+
+    def test_frequency_exception_does_not_widen_legacy_or_historical_tickets(self):
+        spec,ctx,pick,packet=prepared('TNF')
+        ctx.first={'prior':{'league':'NFL','publishedAt':(ctx.now-timedelta(days=4)).isoformat(),
+                           'legs':[{'alternate':True}],'parlayType':'longshot'}}
+        for change in ({'selectionMethod':None}, {'family':'unsupported'}, {'riskUnits':1},
+                       {'parlayType':'easyProps'}, {'family':'NBA-alts'},
+                       {'publishedAt':'2026-11-16T20:00:00Z'}):
+            with self.subTest(change=change):
+                self.assertFalse(gates.alternate_parlay_frequency(dict(pick,**change),ctx).ok)
+
     def test_shared_candidates_keep_exact_joint_terms_and_private_evidence_out(self):
         for family in R.FAMILIES:
             spec,ctx,pick,packet=prepared(family)
