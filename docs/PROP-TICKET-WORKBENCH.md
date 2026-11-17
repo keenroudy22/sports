@@ -3,7 +3,8 @@
 The November 16 owner request starts MNF/TNF player-prop and NBA alternate-ticket
 work without new subscriptions, requests, stakes or exposure allowances.
 `scripts/prop_ticket_review.py` is private review tooling, not an automatic
-selector, admission route or proof that a ticket was posted.
+selector or proof that a ticket was posted. The separate NFL release adapter
+below is a new candidate requiring canonical deployment and live proof.
 
 ## Current implementation
 
@@ -64,18 +65,42 @@ The result is `settled-private`, never a public ledger write or publication.
 Receipt authenticity still requires attended verification; this function does
 not fetch a sportsbook or establish a new automatic settlement route. Its tests
 use synthetic fixtures, not evidence that a real ticket was published or graded.
-The actual production adapter and real-ticket proof below remain outstanding.
+The new NFL adapter below integrates this review with the ordinary result worker;
+its deployment and real full-game ticket proof remain outstanding.
 
-## Tracked next implementation
+## NFL admission and release adapter — candidate
 
-Continue O-20261019-ALTFUN. First capture a real current combined book quote and
-complete sourced player review. Then implement and test the same-game quote
-adapter, release-time identity/price/availability and all exposure checks, plus
-book-specific nonparticipant, push, void/reprice and early-exit settlement.
-Missing participation or changed combined terms must hold. NBA primary straight
-protection rules cannot be assumed to apply to SGPs. Require normal canonical
-release and real hosted/site/X/Discord and grading receipts before enabling
-recurring public tickets. No automatic series is claimed by this workbench.
+`scripts/prop_ticket_release.py` validates a public-safe full-game NFL candidate,
+then `--queue --spec /private/path.json` reserves it in the existing private
+release queue. The packet must additionally provide `settlementPolicy`: verified
+book and Indiana jurisdiction, official book rules URL, rule version, private
+receipt, fresh check clock, and reviewed participation, push/void, early-exit and
+SGP repricing terms. No hidden sportsbook collection or new request is made.
+
+Private proof lives in `~/.config/keenroudy/prop-ticket-releases/`, mode0600.
+`--recheck ID --spec /private/fresh.json` appends a fresh attended check retaining
+all original identities, thresholds, periods, book and actual combined price.
+Until that post-admission check exists, the normal worker retains the private
+reservation without sending. Ordinary expiry, exposure, result-first, caption,
+card, Discord lead and Buffer checks still apply. Neither a private queue row
+nor passing tests establishes publication.
+
+`--settlement /private/evidence.json --id ID` validates and stores evidence for
+a published original; the ordinary results worker owns the append-only revision.
+A `basis: official-stats-and-rules` packet uses `statSettlement` instead of
+`bookSettlement` and must match the original reviewed book rules. Every leg must
+be a clear played/final win or loss. This grades the published0.25u allocation
+without requesting a personal wager screenshot, and records that distinct basis.
+Nonparticipation, push/void, unresolved injury or protection stays held; actual
+book decisions and any reduced joint price use the observed-book pathway.
+No cash fields, private receipts or source filenames enter the public revision.
+
+Continue O-20261019-ALTFUN: release this NFL candidate canonically, verify hosted
+and natural worker behavior, complete the separate NBA ledger/delivery adapter,
+and obtain real full-game ticket/publication/grading proof. NBA-alts can be
+reviewed privately but `--queue` explicitly refuses them. The separately published
+Nov16 owner Q1 ticket is not a full-game adapter test. No recurring automatic
+series is claimed and the existing calls, stakes and caps remain unchanged.
 
 ## Daily operating plan
 
@@ -93,3 +118,12 @@ recurring public tickets. No automatic series is claimed by this workbench.
 - Publish only useful new information: qualifying picks/tickets, material
   changes and complete results. Every actual public release needs site proof,
   X Sent/native quote where required, and Discord message/attachment receipts.
+
+
+For an injury-related raw loss, the NFL release adapter preserves the existing
+12-hour deadline. After kickoff+12h, an attended `deadline-stats` injury review
+must be fresh, include sources and a public-safe note, and explicitly establish
+that no different official book decision is known. It can then grade the loss
+from official final stats, preserving the injury note and verified injured
+player names for receipts. It cannot infer protection, a void or SGP repricing.
+Before that deadline, or with missing checks, the result remains held.

@@ -1,9 +1,10 @@
 """Private SGP settlement review. No network, publication or ledger writes.
 
-Require exact original terms and a sportsbook settlement receipt. Reduced-leg
+Require exact original terms and reviewed official stats/rules or a sportsbook receipt. Reduced-leg
 SGP prices come from the book, never independent-odds arithmetic. This module
 cannot establish receipt authenticity or replace the future admission adapter.
 """
+from datetime import timedelta
 import gates
 import prop_ticket_review as tickets
 from fun_ticket_review import https
@@ -32,7 +33,8 @@ def review(spec, evidence, now):
         return invalid
     holds = []
     legs = spec.get('legs') or []
-    receipt = evidence.get('bookSettlement') or {}
+    rules_based = evidence.get('basis') == 'official-stats-and-rules'
+    receipt = evidence.get('statSettlement' if rules_based else 'bookSettlement') or {}
     frozen = evidence.get('originalReview') or {}
     if (not isinstance(legs, list) or not 1 <= len(legs) <= 8
             or any(not isinstance(leg, dict) for leg in legs)
@@ -61,13 +63,25 @@ def review(spec, evidence, now):
             or not clock(receipt.get('checkedAt'), now)
             or not str(receipt.get('jurisdiction') or '').strip()
             or not str(receipt.get('ruleVersion') or '').strip()
-            or not https(receipt.get('rulesSource'))):
+            or not https(receipt.get('rulesSource'), spec['book'])):
         holds.append('Verified exact-ticket book settlement, jurisdiction and rules required')
+    if rules_based:
+        policy = spec.get('settlementPolicy') or {}
+        if (not isinstance(policy, dict) or policy.get('verified') is not True
+                or policy.get('jurisdiction') != 'IN' or policy.get('book') != spec['book']
+                or receipt.get('rulesSource') != policy.get('source')
+                or receipt.get('source') != policy.get('source')
+                or receipt.get('ruleVersion') != policy.get('ruleVersion')
+                or receipt.get('jurisdiction') != policy.get('jurisdiction')
+                or not policy.get('receipt')
+                or not tickets.fresh(policy.get('checkedAt'), gates.when(frozen.get('checkedAt')), 1440)):
+            holds.append('Stat-based grading requires the original reviewed book rules and jurisdiction')
     rows = evidence.get('legs') or []
     if not isinstance(rows, list) or len(rows) != len(legs) or any(not isinstance(r, dict) for r in rows):
         rows = []
         holds.append('One terminal evidence row per original leg required')
     results, removed, seen = [], [], set()
+    injury_notes, injury_sources, injury_players = [], [], []
     for index, leg in enumerate(legs):
         key = str(identity(leg))
         if key in seen:
@@ -105,7 +119,30 @@ def review(spec, evidence, now):
         participation = row.get('participation')
         if participation not in ('played', 'did-not-play'):
             holds.append(f'Leg {index + 1}: participation unresolved')
-        if row.get('injuryReview') not in ('clear', 'book-resolved'):
+        deadline_stats = row.get('injuryReview') == 'deadline-stats'
+        if deadline_stats:
+            injury = row.get('injuryEvidence') or {}
+            try:
+                deadline = gates.when(leg.get('kickoff')) + timedelta(hours=12)
+                valid_deadline = (isinstance(injury, dict) and rules_based and result == 'loss'
+                    and participation == 'played' and now >= deadline
+                    and deadline <= gates.when(injury.get('checkedAt')) <= now
+                    and receipt.get('checkedAt') and gates.when(receipt['checkedAt']) >= deadline
+                    and injury.get('differentBookDecisionKnown') is False
+                    and injury.get('status') in ('verified-injury', 'unresolved')
+                    and isinstance(injury.get('note'), str) and len(injury['note'].strip()) >= 20
+                    and isinstance(injury.get('sources'), list) and bool(injury['sources'])
+                    and all(https(url) for url in injury['sources']))
+            except (TypeError, ValueError):
+                valid_deadline = False
+            if not valid_deadline:
+                holds.append(f'Leg {index + 1}: 12-hour injury deadline and fresh review without a known different book decision required')
+            else:
+                injury_notes.append(injury['note'])
+                injury_sources.extend(injury['sources'])
+                if injury['status'] == 'verified-injury':
+                    injury_players.append(leg['player'])
+        if row.get('injuryReview') not in ('clear', 'book-resolved', 'deadline-stats'):
             holds.append(f'Leg {index + 1}: injury/early-exit review unresolved')
         if result == 'void':
             if not row.get('bookDecisionReceipt') or not str(row.get('voidReason') or '').strip():
@@ -122,6 +159,9 @@ def review(spec, evidence, now):
                 holds.append(f'Leg {index + 1}: result contradicts exact original threshold')
         if row.get('injuryReview') == 'book-resolved' and not row.get('bookDecisionReceipt'):
             holds.append(f'Leg {index + 1}: injury protection needs its actual book decision')
+        if rules_based and (result not in ('win', 'loss') or participation != 'played'
+                            or row.get('injuryReview') not in ('clear', 'deadline-stats')):
+            holds.append(f'Leg {index + 1}: stat-based grading cannot resolve removal, protection or early exit')
     result, odds = None, None
     if len(results) == len(legs):
         if 'loss' in results:
@@ -145,16 +185,19 @@ def review(spec, evidence, now):
                 holds.append('Reduced SGP requires the actual book-repriced remaining ticket')
             else:
                 odds = reduced['odds']
-        if receipt.get('result') != result:
+        if not rules_based and receipt.get('result') != result:
             holds.append('Book result does not match the sourced leg outcomes')
-        if result == 'win' and receipt.get('settledOdds') != odds:
+        if not rules_based and result == 'win' and receipt.get('settledOdds') != odds:
             holds.append('Book settled price must match the original or verified reduced combined quote')
     answer = {'version': VERSION, 'state': 'held' if holds else 'settled-private',
               'releaseReady': False, 'holds': list(dict.fromkeys(holds)),
               'termsFingerprint': fingerprint, 'riskUnits': .25,
-              'recordWriteAllowed': False, 'providerRequests': 0}
+              'recordWriteAllowed': False, 'providerRequests': 0,
+              'settlementBasis': 'official-stats-and-rules' if rules_based else 'observed-book-settlement'}
     if not holds:
         answer.update(result=result, settledOdds=odds,
+                      injuryNotes=injury_notes, injurySources=list(dict.fromkeys(injury_sources)),
+                      injuryPlayers=list(dict.fromkeys(injury_players)),
                       units=round(-.25 if result == 'loss' else 0 if result == 'void'
                                   else .25 * (odds / 100 if odds > 0 else 100 / -odds), 6))
     return answer

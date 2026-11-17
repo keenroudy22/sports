@@ -822,6 +822,17 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if kind != 'play' and not combined:
             text = without_playbook(text)
         item = (items or {}).get(guid, {})
+        if kind == 'play' and (item.get('selectionMethod') == 'sourced-prop-ticket-v1'
+                               or '-prop-ticket-' in guid):
+            import prop_ticket_release
+            context = gates.Stores().as_of(now)
+            original = context.first.get(guid) or item
+            held = ('Original reviewed prop-ticket identity required'
+                    if original.get('selectionMethod') != prop_ticket_release.METHOD else
+                    prop_ticket_release.refusal(original, context, now))
+            if held:
+                log(f'buffer: {guid} held: {held}')
+                continue
         if kind == 'community' and guid.startswith('community:personal-ticket:') and len(item.get('legs') or []) > 1:
             try:
                 text = parlay_caption.owner_ticket(item)

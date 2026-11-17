@@ -439,6 +439,14 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
             continue
         kind, original = raw_first[key]
         league, reason, review_notes, review_sources, injury_players = pick.get('league'), None, [], [], []
+        if original.get('selectionMethod') == 'sourced-prop-ticket-v1':
+            import prop_ticket_release
+            revision, held = prop_ticket_release.settlement_revision(original, now, conf=CONF)
+            if held:
+                unclear.append({'id': key, 'why': held, 'settlementReview': True})
+            else:
+                revisions.append((league, kind, revision))
+            continue
         if kind == 'parlays':
             results, pending = [], []
             for leg in original.get('legs') or []:
@@ -1969,6 +1977,8 @@ def verified_opposition(candidate, facts=()):
 def write_prose(candidate, ctx, records):
     """Template why and risk from the pick's own numbers. A model may polish these later; it never adds a number."""
     if candidate.get('legs'):       # a parlay has no single line or side: its words come first, before any are read
+        if candidate.get('selectionMethod') == 'sourced-prop-ticket-v1':
+            return candidate  # Exact sourced role/countercase copy; no independent-leg claims.
         if candidate.get('selectionMethod') == 'sourced-fun-ticket-review-v1':
             candidate['why'] = ' '.join(leg['researchCase']['why'] for leg in candidate['legs'])
             candidate['risk'] = (' '.join(leg['researchCase']['risk'] for leg in candidate['legs']) +
@@ -3526,6 +3536,11 @@ def private_release_refusal(row, ctx, now):
     effective market rule.
     """
     pick = dict(row.get('pick') or {}, league=row.get('league'))
+    if pick.get('selectionMethod') == 'sourced-prop-ticket-v1':
+        import prop_ticket_release
+        held = prop_ticket_release.refusal(pick, ctx, now, conf=CONF)
+        if held:
+            return held
     try:
         quoted = gates.when(pick.get('quotedAt'))
         expires = gates.when(pick.get('expiresAt'))
@@ -3674,6 +3689,12 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
             continue
         row = normalize_private_stake(row, ctx, now)
         pick = dict(row.get('pick') or {})
+        if pick.get('selectionMethod') == 'sourced-prop-ticket-v1':
+            import prop_ticket_release
+            packet = prop_ticket_release.load(key, CONF)
+            if not packet.get('checks') and gates.when(pick['expiresAt']) > now:
+                log(f'release: {key} awaits its attended exact-ticket recheck; reservation retained')
+                continue
         refusal = private_release_refusal(row, ctx, now)
         if refusal:
             release_queue.remove(CONF, key)
@@ -4956,6 +4977,11 @@ def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), 
     A previously closed leg or deterministic typed injury news on a leg may stop
     it. Research/model concerns are logged but cannot pull an admitted ticket.
     """
+    if pick.get('selectionMethod') == 'sourced-prop-ticket-v1':
+        import prop_ticket_release
+        held = prop_ticket_release.refusal(pick, ctx, now, conf=CONF)
+        if held:
+            return held
     hit = pulled_leg(pick, ctx, closing)
     if hit:
         return f"its {hit[0].get('title')} leg was pulled: {hit[1]}"

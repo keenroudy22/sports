@@ -7868,3 +7868,59 @@ quarter-result/participation review are tracked in work/nov16-delivery-parlays.
 No 6–8-leg full-game ticket is approved or claimed by this entry.
 
 Pre-publication refresh: the exact same Q1 pair moved to +168 at DraftKings. No X or Discord post had been sent. Updated the unpublished source, caption and a new native card filename; retained the original +170 private quote evidence. Current release still requires hosted and actual delivery proof.
+
+
+## November 16 — actual MNF Q1 publication and next NFL adapter candidate
+
+The attended Q1 +168 DraftKings ticket is live, exactly once: Hampton5+Q1
+rushing yards and Henry20+Q1 rushing yards, no boost,0.25u fun allocation.
+X Sent23:32:02Z: https://x.com/1753110091912413184/status/2122472794273321114
+Buffer6afb91fa85dca6b14a0820a9 has an observed image receipt.
+Discord1572031762236969052 sent23:32:55Z with durable attachment1572031762266333324.
+Hosted43980238895 succeeded atdc444b590; live Today and375px checks matched both
+legs, exact price/card and actual X link, with no overflow/load/console error.
+The card hash starts8c99581a5fc62d8e31e36ecc5507bb2743ad0311e10ca411aa1fbcbd2702f5f1.
+Canonical03c346 passed2376Python(2skip)/372Node and all normal/clean gates.
+Natural1825 and1850 workers completed OK with no errors or additional plays.
+Final inactives were not yet available on the reviewed team pages by00:03Z;
+actual Q1 settlement remains pending. No personal money or bet identifier was
+published. The six-player full-game screen stayed held and was not posted.
+
+The next NFL MNF/TNF full-game adapter candidate connects private reviewed
+packets to the existing private queue, ordinary exposure/admission gates,
+Discord-first release, Buffer and append-only result worker. Every send needs
+an attended exact-original combined-price recheck after admission. Missing,
+malformed, stale or changed evidence holds; initial review requires saved Indiana
+book-specific participation/push/void/early-exit/reprice rules. A normal completed
+ticket with clear participation/injury evidence can grade from official final
+stats and those original rules, explicitly labeled as stat/rules-based rather
+than an observed wager settlement. Removed/protected legs require actual book
+resolution, and reduced wins require a verified revised joint price. Original
+terms never change. This candidate has32 focused tests; canonical release,
+hosted proof and a real full-game ticket remain outstanding. NBA public tickets
+remain explicitly held until their separate ledger/delivery integration exists.
+No new provider calls, jobs, account plans or quotas are introduced.
+
+
+Final inactives follow-up: the Chargers' published November16 final list at
+https://www.chargers.com/news/ravens-inactives-week-10-2026 clears Hampton and
+Henry; neither is inactive. Q1 results remain unobserved before kickoff.
+The +1000–+2000 full-game request remains held: Brissett's first Baltimore start
+and Njoku's return leave the researched receiving allocation uncertain. No
+extra legs, fabricated combined price or unsupported touchdown prop was posted.
+
+The existing natural results worker completed00:03:01Z with zero published or
+settled plays. Its00:02:46Z analytics read used exactly the existing three daily
+calls on three24–30h-old result posts (19,18,15 impressions; zero interactions).
+This observes the comparable-age priority in production; it does not establish
+which creative improves engagement. Receipt: work/nov16-delivery-parlays/
+analytics-natural-reset.json; normal run-2026-11-16.log preserves the worker.
+
+The new NFL adapter also preserves the existing12-hour injury-review rule:
+a raw loss can grade from official stats after kickoff+12h only with a fresh
+attended injury review and explicit absence of a known different book decision.
+It preserves the review sources/note and names verified injured players on
+result receipts. It never infers a void or reduced SGP price. A regression
+covers the deadline boundary, stale checks, missing evidence, known different
+book decisions and the public injury disclosure. This remains a candidate
+until its canonical/hosted/live receipt is recorded.

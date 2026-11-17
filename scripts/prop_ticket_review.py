@@ -56,7 +56,7 @@ def fingerprint(spec):
                                     separators=(',', ':')).encode()).hexdigest()
 
 
-def review(spec, games, now, *, first=None, latest=None):
+def review(spec, games, now, *, first=None, latest=None, risk_external=None):
     """Validate a private proposal without turning a review into a public pick."""
     holds = []
     family = spec.get('family')
@@ -65,7 +65,8 @@ def review(spec, games, now, *, first=None, latest=None):
     if not league or not isinstance(legs, list) or not legs or any(not isinstance(l, dict) for l in legs):
         return {'version': VERSION, 'state': 'held', 'releaseReady': False,
                 'holds': ['Supported family and structured player legs required']}
-    ctx = SimpleNamespace(now=now, games=games, first=first or {}, latest=latest or {})
+    ctx = SimpleNamespace(now=now, games=games, first=first or {}, latest=latest or {},
+                          risk_external=risk_external or {})
     candidate = dict(spec, league=league, parlayType='longshot', riskUnits=.25)
     shape = gates.longshot_shape(candidate, ctx)
     if not shape.ok:
@@ -157,6 +158,8 @@ def review(spec, games, now, *, first=None, latest=None):
     # The shared straight occupancy helper deliberately excludes tickets.
     # This workbench also checks open tickets and private reservations.
     for key, existing in (first or {}).items():
+        if key == spec.get('id'):
+            continue
         existing = dict(existing, **(latest or {}).get(key, {}))
         if existing.get('result') or existing.get('status') in ('settled', 'withdrawn', 'historical'):
             continue

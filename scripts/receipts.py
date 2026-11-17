@@ -112,6 +112,11 @@ def stake_text(pick):
 
 def leg_results(pick):
     """The settled result of each parlay leg from the immutable settlement text, when it was recorded."""
+    if pick.get('selectionMethod') == 'sourced-prop-ticket-v1':
+        results = pick.get('settlementLegResults')
+        if (isinstance(results, list) and len(results) == len(pick.get('legs') or [])
+                and all(isinstance(result, str) and result in MARKS for result in results)):
+            return results
     actual = str(pick.get('actual') or '')
     if not actual.lower().startswith('legs:'):
         return []

@@ -1461,6 +1461,12 @@ def longshot_exact_ticket(candidate, ctx):
                     'exact sportsbook combined price and private ticket receipt required before release')
 
 
+def reviewed_prop_ticket(candidate, ctx):
+    import prop_ticket_release
+    reason = prop_ticket_release.refusal(candidate, ctx, phase='admit')
+    return Decision(not reason, 'reviewed_prop_ticket', reason or 'reviewed ticket identity retained')
+
+
 def ladder_one_rung(candidate, ctx):
     """The ladder climbs one rung at a time: no new rung while one is ungraded, including a rung pulled before its
     post. Once a rung settles, the next scheduled scan may advance or restart it the same day. A pulled rung counts
@@ -1514,7 +1520,7 @@ def ladder_supported(candidate, ctx):
     return Decision(not reason, 'ladder_supported', reason or success)
 
 
-FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy', 'stakingPolicy', 'selectionMethod', 'researchReview')))
+FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy', 'stakingPolicy', 'selectionMethod', 'researchReview', 'family', 'propTicketFingerprint')))
 
 
 def revision_frozen(candidate, ctx):
@@ -1545,7 +1551,7 @@ RULES = {
                                  prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),
     'favorite': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'longshot': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_shape, longshot_exact_ticket, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
+    'longshot': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_shape, longshot_exact_ticket, reviewed_prop_ticket, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
     'ladder': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, ladder_selective, ladder_supported, player_overlap),
     'revision': (revision_frozen,),
 }
