@@ -46,6 +46,14 @@ class WorkflowTests(unittest.TestCase):
         self.assertNotIn('continue-on-error:', fast)
         self.assertIn('fetch-depth: 0', refresh)
 
+    def test_pages_deploys_the_exact_visible_artifact_from_this_attempt(self):
+        fast = WORKFLOW.split('  publish:',1)[0]
+        name = 'github-pages-${{ github.run_id }}-${{ github.run_attempt }}'
+        self.assertIn('name: '+name, fast)
+        self.assertIn('artifact_name: '+name, fast)
+        self.assertIn('PAGES_ARTIFACT_ID: ${{ steps.pages-artifact.outputs.artifact_id }}', fast)
+        self.assertLess(fast.index('python scripts/pages_artifact_ready.py'),fast.index('uses: actions/deploy-pages@'))
+
     def test_only_the_serialized_current_main_lane_can_publish_pages(self):
         fast, refresh = WORKFLOW.split('  publish:', 1)
         self.assertEqual(WORKFLOW.count('uses: actions/deploy-pages@'), 1)

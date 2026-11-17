@@ -130,6 +130,7 @@ class CommunityUnitSettlementTests(unittest.TestCase):
             row = record.build(root)[0]
             self.assertEqual(row['units'], .42)
             self.assertTrue(receipts.has_fun_final(row))
+            self.assertEqual(row['card'], 'data/cards/'+receipts.result_card_key(row)+'.png')
             self.assertNotIn('Private synthetic', (root/'data/community-settlements.jsonl').read_text())
             correction = copy.deepcopy(evidence)
             correction['checkedAt'] = (now+timedelta(minutes=1)).isoformat()

@@ -4,6 +4,13 @@ const assert=require('node:assert/strict');
 const C=require('../site/core.js');
 globalThis.KRCore=C;
 const {model:M}=require('../site/app.js');
+test('a two-leg result never borrows the first player stat as the whole ticket outcome',()=>{
+ const p={kind:'parlays',legs:[{},{}],result:'loss',settlementLegResults:['win','loss'],
+  actual:'Omarion Hampton: 26 rushing yards (1Q; win); Derrick Henry: 0 rushing yards (1Q; loss)'};
+ assert.equal(M.resultLine(p),'1/2 legs hit.');
+ assert.equal(M.resultLine({...p,settlementLegResults:undefined}),'');
+ assert.equal(M.resultLine({...p,settlementLegResults:['win']}),'');
+});
 test('personal category notes cannot close an unsettled posted ticket',()=>{
  const now=Date.parse('2026-10-21T17:00:00Z');
  const p={id:'community:personal-ticket:fixture',community:true,posted:true,kind:'parlays',

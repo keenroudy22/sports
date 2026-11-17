@@ -195,6 +195,12 @@
      with the graded result (a book settlement can differ from the box score). */
   const resultLine = pick => {
     if (pick.resultDetail) return `${pick.resultDetail}.`;
+    if (C.isParlay(pick)) {
+      const marks = pick.settlementLegResults;
+      return Array.isArray(marks) && marks.length === (pick.legs || []).length && marks.length &&
+        marks.every(mark => ['win', 'loss', 'push', 'void'].includes(mark))
+        ? `${marks.filter(mark => mark === 'win').length}/${marks.length} legs hit.` : '';
+    }
     const a = String(pick.actual || ''), line = Number(pick.line), dir = String(pick.direction || '').toLowerCase();
     const score = a.match(/^(.+?) (\d+), (.+?) (\d+)$/), stat = a.match(/:\s*([\d.]+)\s/);
     const lead = score ? `Final ${score[2]}-${score[4]}` : stat ? `Had ${stat[1]}` : '';

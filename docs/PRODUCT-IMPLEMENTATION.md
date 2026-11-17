@@ -8025,3 +8025,31 @@ all release gates remain. A real shallow-clone fixture proves append acceptance
 and rejection of rewritten reports/results, including a newer queued head.
 21focused integrity/workflow tests passed. This latency change is not deployed
 and no measured speedup is claimed.
+
+## November16 — actual Q1 loss Final; checkout improvement hosted
+
+The first result build44003343522 passed all checks but deploy-pages initially
+saw zero uploaded artifacts. Its retry saw two same-name artifacts and failed.
+Fresh stored-only44005069111 succeeded02:49:34Z at7762fe5f; no odds/model calls.
+Hosted record verified Q1loss,-0.25u,+168DK,actuals26/0; full-game+1000 remains
+open. The actual Final PNG hash is f0c03dbc14245d81bc2e5cba935832675fc9d3d10790ecca83ff1240f82300f6.
+The ordinary worker scheduled Buffer6afbc190797935b975d899e6 and X actually
+sent02:57:46.405Z, https://x.com/1753110091912413184/status/2122524567352528921 .
+Buffer Sent UI verified exact graphic and native quote of2122472794273321114.
+Discord was still pending at the initial check. This first Final was delayed
+by implementation and hosting failures; do not claim a timely result SLA.
+
+Checkoutd8fcf9286 passed2404Python(2skip)/372Node,clean exports/all gates and
+current-slot rehearsal. Hosted44005980878 succeeded02:55:14Z. Checkout measured
+26seconds versus128seconds in the preceding successful full-history run; the
+exact pre-push record comparison passed. This is one measured pair, not a
+guarantee of all future build durations.
+
+Live375Results verified Nov16 0-1/-0.25u and one open ticket, but exposed the
+legacy summary parsing the first leg as Had26. The follow-up candidate shows
+1/2legs hit and links the settled community ticket to its detailed Final card,
+while preserving original posted art.373Node tests and37focusedPython passed.
+The same candidate gives each hosted attempt a unique artifact name and requires
+the exact upload ID to become visible before deploying, with bounded read-only
+GitHub checks; provider errors fail closed. It adds no sport feed/model requests,
+plans or jobs. Canonical/hosted/live verification of these follow-ups is pending.

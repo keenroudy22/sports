@@ -234,6 +234,9 @@ def build(root=ROOT):
             source = root / 'site' / card
             if social_style.current_png(source) and b'KooknTheme\x00ticket' in source.read_bytes()[:256]:
                 out[-1]['card'] = card
+        if result.get('settlementBasis') == 'published-unit-stake-v1':
+            import receipts
+            out[-1]['card'] = 'data/cards/' + receipts.result_card_key(out[-1]) + '.png'
         risk = ticket.get('riskUnits')
         if (structured and not result and type(risk) in (int, float)
                 and Decimal(str(risk)).is_finite() and risk > 0):
