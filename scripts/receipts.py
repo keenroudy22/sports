@@ -139,7 +139,9 @@ def injury_detail(pick):
 def repriced_odds(pick):
     """Return the recorded winning settlement price only when the book changed it."""
     settled = pick.get('settledOdds')
-    if (pick.get('result') == 'win' and type(settled) in (int, float)
+    if (pick.get('settlementBasis') == 'observed-book-settlement'
+            and pick.get('selectionMethod') == 'sourced-prop-ticket-v1'
+            and pick.get('result') == 'win' and type(settled) in (int, float)
             and abs(settled) >= 100 and settled != pick.get('odds')):
         return int(settled)
     return None

@@ -4676,6 +4676,7 @@ def lotto_pings(plans, ctx):
     """A fun parlay that hit is the post worth pinning (the owner pins the big ones by hand): (title, message) for each
     cashed parlay just scheduled. The ping lands five minutes later, when the cashed post is at the top of the profile."""
     import pick_card
+    import receipts
     out = []
     for key, kind, *_ in plans:
         if kind != 'cashed':
@@ -4683,7 +4684,8 @@ def lotto_pings(plans, ctx):
         pick_id = key.split(':', 1)[1]
         pick = dict(ctx.first.get(pick_id) or {}, **ctx.latest.get(pick_id, {}))
         if key.startswith('cashed:') and pick_card.play_kind(pick) == 'parlay' and isinstance(pick.get('odds'), (int, float)):
-            out.append(('Longshot hit: pin it', f"{pick.get('title') or 'The fun parlay'} cashed at {int(pick.get('settledOdds') or pick['odds']):+d}. "
+            price = receipts.repriced_odds(pick) or int(pick['odds'])
+            out.append(('Longshot hit: pin it', f"{pick.get('title') or 'The fun parlay'} cashed at {price:+d}. "
                         "The CASHED post is at the top of the profile: tap to open it, then ... and Pin to your profile."))
         info = pick.get('ladder') or {}
         if pick and pick_card.play_kind(pick) == 'ladder' and (info.get('totalAfter') or info.get('payout') or 0) >= (info.get('goal') or 1000):

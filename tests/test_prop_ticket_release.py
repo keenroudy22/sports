@@ -300,6 +300,9 @@ class PropTicketReleaseTests(unittest.TestCase):
         art = ticket_card.fun_final_svg(row)
         self.assertIn('original +425 · settled +180', art)
         self.assertIn('NET +0.45u', art)
+        for legacy in (dict(row, settlementBasis=None), dict(row, selectionMethod=None)):
+            self.assertIsNone(receipts.repriced_odds(legacy))
+            self.assertNotIn('settled', receipts.fun_final_price(legacy))
 
     def test_all_void_football_tickets_reach_individual_final_and_recovery(self):
         for family in ('MNF', 'TNF'):
