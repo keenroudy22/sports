@@ -8053,3 +8053,15 @@ The same candidate gives each hosted attempt a unique artifact name and requires
 the exact upload ID to become visible before deploying, with bounded read-only
 GitHub checks; provider errors fail closed. It adds no sport feed/model requests,
 plans or jobs. Canonical/hosted/live verification of these follow-ups is pending.
+
+The ordinary mirror confirmed the Q1 Final on Discord at03:03:40Z, message
+1572084847156138076, with attachment1572084846925320202. The normal worker log
+records the hosted-art hold, X schedule, actual Sent and Discord mirror; no
+manual duplicate was posted. CDN byte comparison returned403, so only the
+actual message/attachment receipt, not byte equality, is claimed for Discord.
+
+The summary/artifact candidate first passed2408Python(2skip)/373Node in normal
+and clean exports, then correctly stopped at the92KiB shell limit:94270bytes,
+62over. No promotion occurred. Shortening two implementation comments brings
+the unchanged functional bundle to94132bytes; the92KiB limit is preserved.
+Canonical/hosted/mobile verification must pass before this follow-up is shipped.

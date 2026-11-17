@@ -182,8 +182,7 @@
   const tonight = iso => etHour(iso) >= TONIGHT;
   const ledeTitle = (rows, today) => !rows.length ? 'Nothing on the rail yet.'
     : `${COUNT[rows.length] || rows.length} for ${!today ? weekday(rows[0].kickoff) : rows.every(r => tonight(r.kickoff)) ? 'tonight' : 'today'}.`;
-  /* With a player photo hanging from the rail the breakout head sits beside the chef's line (NOTES 4.3: under about
-     200 px at 32 px). Longer lines step the size down from a conservative width estimate; CSS caps the width too. */
+  /* Shrink longer rail headings; CSS also caps their width. */
   const ledeSize = title => title.length <= 16 ? null : Math.max(24, Math.floor(196 / (title.length * 0.4)));
   /* Counts belong to the category recap, not a mixed-ticket date-line record. */
   const dateLine = (nowIso, last) => {
@@ -191,8 +190,7 @@
     const gap = lastDay ? (Date.parse(C.dayOf(nowIso) + 'T16:00:00Z') - Date.parse(lastDay)) / 86400000 : 99;
     return `${C.dayLabel(nowIso)}.${gap === 1 ? ` ${weekday(lastDay)} results below.` : ''}`;
   };
-  /* A settled slip's detail: "Final 45-24, missed by 21." from the saved actual. The margin prints only when it agrees
-     with the graded result (a book settlement can differ from the box score). */
+  /* Saved ticket results; single-leg margins must agree with the book grade. */
   const resultLine = pick => {
     if (pick.resultDetail) return `${pick.resultDetail}.`;
     if (C.isParlay(pick)) {
