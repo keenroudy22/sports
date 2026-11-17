@@ -715,7 +715,7 @@
       (today.picks || []).forEach(p => byId.set(p.id, p));
       return [...byId.values()];
     }
-    const byId = new Map([...record.picks, ...(record.cbbPicks || []), ...(record.nbaPicks || []), ...(record.communityPicks || [])].map(p => [p.id, p]));
+    const byId = new Map([...record.picks, ...(record.cbbPicks || []), ...(record.nbaPicks || []), ...(record.communityPicks || []), ...(record.funPicks || [])].map(p => [p.id, p]));
     (today.picks || []).forEach(p => byId.set(p.id, p));
     previousEvery = [...byId.values()];
     return previousEvery;

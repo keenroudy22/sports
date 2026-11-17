@@ -199,8 +199,11 @@ def settlement_revision(original, now, *, packet=None, conf=None):
 def _settlement_revision(original, now, *, packet=None, conf=None):
     packet = packet if packet is not None else load(original.get('id'), conf)
     spec = packet.get('originalSpec') or {}
-    if not isinstance(spec, dict) or spec.get('family') not in ('MNF', 'TNF'):
-        return None, 'Supported original NFL prop-ticket packet required'
+    if not isinstance(spec, dict) or spec.get('family') not in review.FAMILIES:
+        return None, 'Supported original prop-ticket packet required'
+    league = review.FAMILIES[spec['family']][0]
+    if original.get('league') != league or original.get('family') != spec['family']:
+        return None, 'Original prop-ticket league and family must match the reviewed packet'
     if review.terms(original) != review.terms(spec):
         return None, 'Original prop-ticket terms do not match private settlement evidence'
     evidence = packet.get('settlementEvidence')
@@ -210,7 +213,7 @@ def _settlement_revision(original, now, *, packet=None, conf=None):
     if result['state'] != 'settled-private':
         return None, '; '.join(result['holds'])
     rows = evidence['legs']
-    actual = '; '.join(f"{leg['player']}: {row.get('actual', row['result'])} {review.STATS['NFL'][leg['market']]} ({row['result']})"
+    actual = '; '.join(f"{leg['player']}: {row.get('actual', row['result'])} {review.STATS[league][leg['market']]} ({row['result']})"
                        for leg, row in zip(spec['legs'], rows))
     rules_based = result['settlementBasis'] == 'official-stats-and-rules'
     receipt = evidence['statSettlement' if rules_based else 'bookSettlement']
@@ -235,6 +238,7 @@ def _settlement_revision(original, now, *, packet=None, conf=None):
 
 def main():
     import argparse
+    import release_queue
     import run
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--spec')
@@ -243,28 +247,47 @@ def main():
     parser.add_argument('--settlement', help='Private settlement evidence JSON; requires --id')
     parser.add_argument('--id')
     args = parser.parse_args()
+    if args.settlement and not args.id:
+        parser.error('--settlement requires --id')
+    if not args.settlement and not args.spec:
+        parser.error('--spec is required for a preview, admission or recheck')
     with run.Lock(run.CONF/'run.lock', wait=run.RUN_LOCK_WAIT):
         now = datetime.now(timezone.utc)
         ctx = gates.Stores().as_of(now)
+        release_queue.merge_context(ctx, run.CONF)
+        if args.spec:
+            spec = json.loads(Path(args.spec).read_text())
+            if spec.get('family') == 'NBA-alts':
+                ctx.games.update(review.nba_fixtures(ctx.root))
         if args.settlement:
             packet = load(args.id, run.CONF)
             if not packet:
                 raise ValueError('Original private packet missing')
             packet['settlementEvidence'] = json.loads(Path(args.settlement).read_text())
-            original = ctx.first.get(args.id)
-            if not original:
+            original = ctx.first.get(args.id) or ctx.risk_external.get(args.id)
+            if not original or original.get('_pendingRelease'):
                 raise ValueError('Only a published original may receive settlement evidence')
             revised, held = settlement_revision(original, now, packet=packet)
             if held:
                 raise ValueError(held)
             packet.setdefault('settlementHistory', []).append(copy.deepcopy(packet['settlementEvidence']))
+            if original.get('family') == 'NBA-alts':
+                import nba_fun_record
+                import x_post
+                posts = x_post.load_log()['posts']
+                if not nba_fun_record.delivery(original, posts, now):
+                    raise ValueError('NBA ticket settlement requires a delivered original')
+                save(args.id, packet, run.CONF)
+                added = nba_fun_record.settle(run.ROOT, args.id, posts, packet, now)
+                run.commit_log(now)
+                print(json.dumps({'state':'settlement-appended' if added else 'already-settled','id':args.id}))
+                return
             save(args.id, packet, run.CONF)
             print(json.dumps({'state':'reviewed-settlement-awaiting-normal-worker','id':args.id}))
         elif args.recheck:
-            recheck(args.recheck, json.loads(Path(args.spec).read_text()), ctx, now, run.CONF)
+            recheck(args.recheck, spec, ctx, now, run.CONF)
             print(json.dumps({'state':'rechecked-private','id':args.recheck}))
         else:
-            spec = json.loads(Path(args.spec).read_text())
             pick, held = enqueue(spec,ctx,now,run.CONF) if args.queue else candidate(spec,ctx,now)
             print(json.dumps({'state':'held' if held else 'admitted-private' if args.queue else 'reviewed-preview',
                               'id':pick.get('id') if pick else None,'reason':held}))

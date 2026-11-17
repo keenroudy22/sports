@@ -304,8 +304,9 @@ def fit_result_rows(rows, head, tail, games=None):
 
 
 def unit_fun_rows(as_of, day=None, log_book=None, root=None):
-    """Prospective unit-backed owner tickets, apart from historical cash slips."""
+    """Receipt-backed fun tickets with public unit stakes."""
     import community_record
+    import nba_fun_record
     root = community_record.ROOT if root is None else root
     effective = datetime(2026, 11, 16, tzinfo=timezone.utc)
     if as_of < effective:
@@ -326,6 +327,8 @@ def unit_fun_rows(as_of, day=None, log_book=None, root=None):
         if row.get('settledAt') and gates.when(row['settledAt']) > as_of:
             row = dict(row, result=None, units=None)
         out.append(row)
+    out.extend(row for row in nba_fun_record.public_rows(root, (log_book or {}).get('posts', []), as_of)
+               if day is None or eastern_date(gates.when(row['kickoff'])) == day)
     return out
 
 

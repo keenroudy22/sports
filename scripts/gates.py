@@ -1424,7 +1424,14 @@ def longshot_one_per_day(candidate, ctx):
     """One fun parlay of each explicit style a day; a short card and lotto may coexist."""
     kind = candidate.get('parlayType') or 'longshot'
     style = candidate.get('parlayStyle') or kind
-    today = [k for k, p in published_today(ctx, candidate.get('id'))
+    publications = dict(published_today(ctx, candidate.get('id')))
+    for key, row in getattr(ctx, 'risk_external', {}).items():
+        if key == candidate.get('id') or row.get('family') != 'NBA-alts' or not row.get('publishedAt'):
+            continue
+        published = when(row['publishedAt'])
+        if published <= ctx.now and same_day(published, ctx.now):
+            publications[key] = row
+    today = [k for k, p in publications.items()
              if (p.get('parlayStyle') or p.get('parlayType') or ('longshot' if p.get('legs') else None)) == style
              and not pulled_before_post(k, ctx)]
     word = {'easyProps': 'easy parlay', 'short': 'short parlay', 'lotto': 'lotto'}.get(style, 'longshot')

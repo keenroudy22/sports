@@ -63,7 +63,7 @@ def audit_cbb_public(public, expected):
 
 def audit_all_sports(public):
     """A play may appear in one sport ledger only; duplicates corrupt day and month totals."""
-    rows = [row for key in ('picks', 'cbbPicks', 'nbaPicks') for row in (public.get(key) or [])]
+    rows = [row for key in ('picks', 'cbbPicks', 'nbaPicks', 'funPicks', 'communityPicks') for row in (public.get(key) or [])]
     ids = [row.get('id') for row in rows]
     return ['duplicate play id across all-sports Results ledgers'] if len(ids) != len(set(ids)) else []
 
@@ -92,6 +92,8 @@ def main(argv=None):
     import community_record
     if public.get('communityPicks', []) != community_record.build(ROOT):
         issues.append('personal-ticket record differs from pregame receipts and append-only settlements')
+    if public.get('funPicks', []) != build_site.nba_fun_picks():
+        issues.append('NBA fun record differs from delivered tickets and append-only settlements')
     counts = {key: len(public.get(key) or []) for key in ('picks', 'cbbPicks', 'nbaPicks')}
     print(json.dumps({'picksChecked': sum(counts.values()), 'byLedger': counts, 'issues': issues}, sort_keys=True))
     return 1 if issues else 0

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T03:31:23.846609+00:00",
+  "updatedAt": "2026-11-17T03:38:31.928555+00:00",
   "items": [
     {
       "id": "O-20261116-RELIABILITY",
@@ -466,9 +466,9 @@
       "title": "Early primetime alternate fun tickets and occasional CFB tickets",
       "status": "gated",
       "owner": "agent",
-      "next": "Settle full-game lotto after final/injury/book checks; confirm individual Final and complete recap before Nov17 plays. Implement separate NBA fun ledger and delivery/settlement adapters using existing workers, reviews and limits.",
+      "next": "Grade the lotto after the final and verify Final/recap receipts. Connect the NBA fun ledger candidate to private admission, participation rechecks, worker delivery and Final recovery. Keep publication held through integration tests.",
       "doneWhen": "A real five-to-eight-leg ticket has supported unheld legs, current exact prices, a book-verified combined quote, reasons, separate fun grading and all release/send checks; early delivery and result receipts are verified.",
-      "evidence": "Q1+168 FinalX2122524567352528921 native quote/card and Discord1572084847156138076 attached; -0.25u(26/0). Summary/artifact8c0c4f591/44009783533 verified;2408Python(2skip)/373Node normal+clean;375/1440 clean. Natural2225 OK/errors0,published0,settled0; no LLM/odds/prop requests. Lotto+1000 X2122496448834969748 remains open. NBA public routing gated. Full receipts in PRODUCT-IMPLEMENTATION.md."
+      "evidence": "Q1 FinalX2122524567352528921/Discord1572084847156138076, -0.25u(26/0). Site8c0c4f591/44009783533 verified375/1440; scheduled2225 OK. +1000 lotto open in fourth quarter. Local NBA fun ledger, site projection, result review and shared caps passed111 focused Python/373 browser tests. NBA admission/final routing still held. See PRODUCT-IMPLEMENTATION.md."
     },
     {
       "id": "O-20261019-RESEARCHCARD",

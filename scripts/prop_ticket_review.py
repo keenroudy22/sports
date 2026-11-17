@@ -56,6 +56,17 @@ def fingerprint(spec):
                                     separators=(',', ':')).encode()).hexdigest()
 
 
+def nba_fixtures(root):
+    """Use the ordinary NBA capture's event IDs and original kickoff clocks."""
+    path = Path(root) / 'data/nba-capture/slate.json'
+    if not path.is_file():
+        return {}
+    games = json.loads(path.read_text())['games']
+    return {game['id']: dict(game, league='NBA', state='pre' if game.get('status') == 'scheduled'
+                            else game.get('status')) for game in games
+            if game.get('id') == f"NBA-{game.get('providerId')}" and game.get('providerId')}
+
+
 def review(spec, games, now, *, first=None, latest=None, risk_external=None):
     """Validate a private proposal without turning a review into a public pick."""
     holds = []
@@ -157,7 +168,8 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
             holds.append(decision.reason)
     # The shared straight occupancy helper deliberately excludes tickets.
     # This workbench also checks open tickets and private reservations.
-    for key, existing in (first or {}).items():
+    external_tickets = {key: row for key, row in (risk_external or {}).items() if row.get('legs')}
+    for key, existing in {**external_tickets, **(first or {})}.items():
         if key == spec.get('id'):
             continue
         existing = dict(existing, **(latest or {}).get(key, {}))
@@ -218,11 +230,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     now = datetime.now(timezone.utc)
     ctx = gates.Stores().as_of(now)
-    nba_path = Path(__file__).resolve().parents[1] / 'data/nba-capture/slate.json'
-    if nba_path.exists():
-        nba_slate = json.loads(nba_path.read_text())
-        ctx.games.update({f"NBA-{g['providerId']}": dict(g, league='NBA',
-            state='pre' if g.get('status') == 'scheduled' else g.get('status'))
-            for g in nba_slate.get('games', []) if g.get('providerId')})
+    ctx.games.update(nba_fixtures(ctx.root))
     print(json.dumps(review(json.loads(Path(args.spec).read_text()), ctx.games, now,
-                            first=ctx.first, latest=ctx.latest), indent=2))
+                            first=ctx.first, latest=ctx.latest, risk_external=ctx.risk_external), indent=2))

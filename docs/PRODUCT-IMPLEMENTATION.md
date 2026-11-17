@@ -8099,3 +8099,25 @@ and Final/recap adapters are implemented and tested. Do not use the NBA straight
 ledger or football report history for that shortcut. Local implementation map:
 work/nov16-delivery-parlays/nba-public-routing-next.txt. Release and UI/run
 receipts are in unit-summary-artifact-release.json in the same evidence folder.
+
+## November16 — NBA fun record candidate
+
+The development candidate adds an append-only NBA fun ledger for reviewed
+points, rebounds and assists alternate tickets. A real pregame delivery receipt
+is required for a public row. The ticket keeps its joint book price and 0.25u
+stake. The shared settlement reviewer now accepts the NBA family and appends
+corrections while preserving the original. Today, Results, the shared exposure
+checks and prior-day result planning read the separate ledger. NBA straight
+records remain under their existing adapter.
+
+A temporary-store regression verified that a queued post cannot enter the
+public record, a confirmed attachment can, unresolved injury evidence holds
+the grade, and a later correction preserves the original bytes. The focused
+111 Python tests and 373 browser tests passed. The ordinary NBA slate parser
+recognized 13 stored events, six scheduled at inspection.
+
+The candidate is local. NBA admission remains held until the normal worker
+can recheck current NBA participation, release its original art and save the
+delivery and ledger under the same recovery path. Final delivery for voids
+and dated corrections still needs coverage. The +1000 Monday ticket was in
+the fourth quarter when checked and remains open pending final evidence.

@@ -2339,7 +2339,8 @@ def build(now=None):
     import hoops_store
     nba_finals = hoops_store.load('NBA')
     nba_public = nba_record_picks(now, team_finals=nba_finals)
-    posted_records = list({p['id']: p for p in picks + cbb_public + nba_public + community_records}.values())
+    nba_fun = nba_fun_picks(now)
+    posted_records = list({p['id']: p for p in picks + cbb_public + nba_public + community_records + nba_fun}.values())
     import morning_brief
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'morningBrief': morning_brief.current(now),
@@ -2362,6 +2363,7 @@ def build(now=None):
                                 # rows with an observed Discord or X receipt in separately audited adapters.
                                 'cbbPicks': cbb_public,
                                 'nbaPicks': nba_public,
+                                'funPicks': nba_fun,
                                 'communityPicks': community_records,
                                 'climbRoute': ticket_climb_route.public_route(route_state, now, route_games)})
     generated = stamp(now)
@@ -2551,6 +2553,12 @@ def cbb_record_picks(now=None, root=ROOT):
             'card': None,
         }, now=now))
     return sorted(rows, key=lambda row: (str(row.get('kickoff') or ''), row['id']))
+
+
+def nba_fun_picks(now=None, root=ROOT):
+    import nba_fun_record
+    posts = read(root / 'data/x-posted.json', {'posts': []})['posts']
+    return nba_fun_record.public_rows(root, posts, now or datetime.now(timezone.utc))
 
 
 def nba_record_picks(now=None, root=ROOT, *, team_finals=()):

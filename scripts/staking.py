@@ -178,6 +178,8 @@ def external(root, now):
     for row in read(root / 'data/community.json', {'tickets': []}).get('tickets', []):
         # Owner-supplied already-placed tickets consume exposure, even before social delivery.
         rows[row['id']] = dict(row, riskUnits=row.get('riskUnits'))
+    import nba_fun_record
+    rows.update(nba_fun_record.rows(root, now))
     sports = read(root / 'site/data/sports.json', {})
     for league, block in sports.get('leagues', {}).items():
         if league in ('NBA','CBB'):
