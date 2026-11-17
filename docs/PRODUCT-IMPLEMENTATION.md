@@ -8003,3 +8003,25 @@ pending/Sent receipts and retains the bounded retry clock. A real-writer regress
 covers missing, queued and sent outcomes. No failed or interrupted gate counts
 as a deployed release. Natural2100 on the prior release completed02:08:04Z,
 errors[],published0,settled0; it is not proof of this new result path.
+
+## November16 — unit result path promoted; Q1 publication still awaiting art
+
+Canonicalb5d63f2 passed2402Python tests(2skipped),372Node tests, both clean-export
+suites, build/feed, record/NBA/privacy/assets/SVG gates and2055offline rehearsal.
+Hosted44002733062 succeeded. Actual375CSS-pixel Today had zero overflow,
+console errors/warnings or rendered load errors. The production writer appended
+the verified Q1loss as ea2306f8, keeping+168DK/0.25u and original5+/20+ thresholds.
+Hampton26/Henry0 produce-0.25u. No personal cash accounting was supplied.
+The2125natural settlement-only run completed02:29:32Z,errors[],published0,
+settled0; it found the new Final and correctly held it because its card was not
+live. Hosted44003343522 at descendant7762fe5f now owns that result-data update;
+queued44002821994 was superseded, not a shipped receipt. X/Discord Final and
+actual hosted loss verification remain pending.
+
+A separate latency candidate changes only the push-publish checkout to depth1
+and explicitly fetches the exact trusted pre-push commit before the existing
+whole-report/complete-store comparison. Capture jobs retain full history and
+all release gates remain. A real shallow-clone fixture proves append acceptance
+and rejection of rewritten reports/results, including a newer queued head.
+21focused integrity/workflow tests passed. This latency change is not deployed
+and no measured speedup is claimed.

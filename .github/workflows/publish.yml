@@ -52,7 +52,7 @@ jobs:
           # Always publish current main so a queued fast-lane run includes every
           # record commit that landed while the previous deployment finished.
           ref: main
-          fetch-depth: 0
+          fetch-depth: 1
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
@@ -71,7 +71,11 @@ jobs:
         if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
         env:
           RECORD_BASE: ${{ github.event.before }}
-        run: python scripts/integrity.py --verify-base "$RECORD_BASE"
+        run: |
+          # Compare the complete trusted pre-push tree without downloading every
+          # historical capture blob. Failure to fetch/verify still stops Pages.
+          git fetch --no-tags --depth=1 origin "$RECORD_BASE"
+          python scripts/integrity.py --verify-base "$RECORD_BASE"
       - name: Check browser scripts
         run: |
           node --check site/core.js

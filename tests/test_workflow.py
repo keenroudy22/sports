@@ -37,6 +37,15 @@ class WorkflowTests(unittest.TestCase):
         self.assertIn("if: github.event_name == 'push' && github.event.before !=", fast)
         self.assertIn('tests.test_publication_supervisor', fast)
 
+    def test_fast_checkout_keeps_the_exact_pre_push_integrity_base(self):
+        fast, refresh = WORKFLOW.split('  publish:', 1)
+        self.assertIn('fetch-depth: 1', fast)
+        self.assertIn('git fetch --no-tags --depth=1 origin "$RECORD_BASE"', fast)
+        self.assertLess(fast.index('git fetch --no-tags --depth=1'),
+                        fast.index('python scripts/integrity.py --verify-base "$RECORD_BASE"'))
+        self.assertNotIn('continue-on-error:', fast)
+        self.assertIn('fetch-depth: 0', refresh)
+
     def test_only_the_serialized_current_main_lane_can_publish_pages(self):
         fast, refresh = WORKFLOW.split('  publish:', 1)
         self.assertEqual(WORKFLOW.count('uses: actions/deploy-pages@'), 1)

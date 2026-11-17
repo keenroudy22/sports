@@ -4,6 +4,8 @@ import os
 import sys
 import tempfile
 import unittest
+import subprocess
+from pathlib import Path
 from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
@@ -13,6 +15,38 @@ import community_record
 
 
 class LedgerTests(unittest.TestCase):
+    def test_shallow_checkout_and_exact_base_still_detect_record_rewrites(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source = Path(folder)/'source'; source.mkdir()
+            clone = Path(folder)/'clone'
+            def git(*args, cwd=source):
+                return subprocess.check_output(['git', *args], cwd=cwd, text=True,
+                                               stderr=subprocess.DEVNULL).strip()
+            git('init', '-b', 'main')
+            git('config', 'user.name', 'Synthetic integrity test')
+            git('config', 'user.email', 'test@example.invalid')
+            (source/'research').mkdir(); (source/'data').mkdir()
+            (source/'research/original.json').write_text('{"original":true}\n')
+            (source/'data/results.jsonl').write_text('{"id":"original","units":1}\n')
+            git('add', '.'); git('commit', '-m', 'Synthetic base')
+            base = git('rev-parse', 'HEAD')
+            with (source/'data/results.jsonl').open('a') as stream:
+                stream.write('{"id":"second","units":-1}\n')
+            git('add', '.'); git('commit', '-m', 'Synthetic append')
+            (source/'research/new.json').write_text('{"new":true}\n')
+            git('add', '.'); git('commit', '-m', 'Synthetic newer queued head')
+            git('clone', '--depth=1', source.as_uri(), str(clone))
+            self.assertEqual(git('rev-list', '--count', 'HEAD', cwd=clone), '1')
+            with self.assertRaises(subprocess.CalledProcessError):
+                git('cat-file', '-e', base, cwd=clone)
+            git('fetch', '--no-tags', '--depth=1', 'origin', base, cwd=clone)
+            self.assertEqual(integrity.verify_report_history(base, clone), [])
+            self.assertEqual(integrity.verify_store_history(base, clone), [])
+            (clone/'research/original.json').write_text('{"rewritten":true}\n')
+            (clone/'data/results.jsonl').write_text('{"id":"original","units":99}\n')
+            self.assertTrue(integrity.verify_report_history(base, clone))
+            self.assertTrue(integrity.verify_store_history(base, clone))
+
     def test_private_accounting_migration_preserves_every_unit_revision(self):
         row = {'id': 'ticket', 'result': 'win', 'settledAt': '2026-11-15T01:00:00Z',
                'stakeDollars': 10, 'returnDollars': 20, 'unitDollars': 10}
