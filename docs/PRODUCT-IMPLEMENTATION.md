@@ -8710,3 +8710,21 @@ promotion and is not a positive prospective dossier/public Chef proof.
 Evidence:work/nov16-delivery-parlays/comparison-followup-final-verification.json
 and comparison-followup-live-checks.json. NBA props retains a soft payload
 warning; hard budgets pass. Plans, budgets, schedules and stakes are unchanged.
+
+### November 17 NBA parlay final boxes
+
+Release `55bf1e57390458cd4b5525a813825f4c375102ef` added each unsettled
+published NBA ticket fixture to the local results worker and the hosted
+final-box priority list. Each leg uses its own tip time. Shared fixtures
+consume one slot. The local worker retains its five-request ceiling,
+three-hour wait, stored-box check and final-status validation.
+
+Both test environments passed 2,451 Python tests (two skipped) and 377 Node
+tests. The normal release gates and offline rehearsal passed. Pages run
+44184750234 succeeded. The live +445 ticket showed all six terms at 375 and
+1440 CSS pixels with no overflow, missing images or console errors. The
+4:55 p.m. Eastern results worker started after promotion and finished without
+errors. All three ticket games were still pregame and it made zero box
+requests. Offline replay matched all six athletes to completed historical
+box scores. Tonight’s real box capture, grading and result receipts remain
+open. Private evidence is in work/nov16-delivery-parlays/ticket-box-targets-release.json.
