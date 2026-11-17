@@ -8141,3 +8141,26 @@ tickets. The temporary-store integration ran admission, exact recheck, an Out
 hold, Discord delivery, a missing hosted card, and a single X schedule after
 art became available. Focused receipt and worker checks passed. No provider
 requests or schedules were added. Canonical and hosted verification are pending.
+
+## November16 — NBA alternate-ticket worker hosted
+
+The first canonical attempt was stopped before promotion after a native SVG
+preview exposed dollar text on a regenerated draft with no publication time.
+The corrected renderer stamps the draft for the units-only policy and uses
+the existing ESPN art sources for NBA legs. The regression checks the rendered
+book, odds, player rows and units as well as absence of dollar fields.
+
+Canonical4849de7bd949e0467e45d8abb9b7f5ce1fd3e17d passed2411Python(2skip) and
+373Node in normal and clean exports. Site, feed, privacy, record, NBA, assets,
+SVG and2225stored-input rehearsal passed. Rehearsal exit0 with no outside
+writes or private reads. Hosted44014357090 succeeded04:07:03Z after exact
+artifact14297294191 was confirmed on the first check. The actual 375px/1440px
+Fun record used app fingerprint3d0c531b1c00 with no sideways scroll, console
+error or rendered load failure. No synthetic NBA ticket reached production.
+
+The actual2255results worker finished03:58:23Z on the earlier release without
+errors, odds/prop calls, grades or publishes while the game was still live.
+Verify the next normal worker on this release. Real prop-ticket receipts
+require an eligible future NBA or primetime window. MNF+1000 remained open
+at the fourth-quarter check and must be settled before the prior-day recap
+can clear new plays. Existing provider plans, budgets and jobs were retained.
