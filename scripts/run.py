@@ -3776,7 +3776,7 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                 continue
         refusal = private_release_refusal(row, ctx, now)
         if refusal:
-            release_queue.remove(CONF, key)
+            release_queue.withdraw(CONF, key, refusal, now)
             if not row.get('discordSentAt') and not row.get('publicPath'):
                 ctx.first.pop(key, None)
                 ctx.latest.pop(key, None)

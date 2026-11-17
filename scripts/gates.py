@@ -1070,7 +1070,10 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
             and not any(row.get('class') == 'A' or row.get('type') in STRONG_SIDE_REASONS for row in reasons):
         return Decision(False, 'plan_selection', 'an NFL side needs a strong current reason before it can be a Full Send', numbers)
     if league == 'CFB' and market in ('spread', 'moneyline'):
-        desk = candidate.get('_desk') or {}
+        # Private queue/public rows intentionally omit the selection cache.
+        # Rebuild from the current snapshot at release instead of treating
+        # an absent cache as an absent model projection.
+        desk = desk_for(candidate, ctx) or {}
         margin = desk.get('projection')
         line = candidate.get('line')
         side = side_of(candidate)

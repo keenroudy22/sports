@@ -17,6 +17,33 @@ NOW = datetime(2026, 10, 11, 12, 0, tzinfo=timezone.utc)
 
 
 class ReleaseQueueTests(unittest.TestCase):
+    def test_withdrawal_retains_original_admission_and_reason_privately(self):
+        with tempfile.TemporaryDirectory() as folder:
+            conf = Path(folder)
+            original = {'id':'held','pick':{'line':-10,'odds':-110},'caption':None}
+            release_queue.save(conf,{'plays':[original,{'id':'other'}]})
+            release_queue.withdraw(conf,'held','Current projection fails the spread margin.',NOW)
+            journal = conf/'pending/release-withdrawals.jsonl'
+            event = json.loads(journal.read_text())
+            self.assertEqual(event['admission'],original)
+            self.assertEqual(event['reason'],'Current projection fails the spread margin.')
+            self.assertEqual(event['checkedAt'],'2026-10-11T12:00:00Z')
+            self.assertEqual(journal.stat().st_mode & 0o777,0o600)
+            self.assertEqual(release_queue.load(conf),{'plays':[{'id':'other'}]})
+            before = journal.read_bytes()
+            release_queue.withdraw(conf,'other','New exact offer no longer matches.',NOW)
+            self.assertTrue(journal.read_bytes().startswith(before))
+            self.assertEqual(len(journal.read_text().splitlines()),2)
+
+    def test_failed_withdrawal_receipt_cannot_erase_the_private_admission(self):
+        with tempfile.TemporaryDirectory() as folder:
+            original = {'plays':[{'id':'held','pick':{'line':-10}}]}
+            release_queue.save(folder,original)
+            with mock.patch.object(release_queue.os,'open',side_effect=OSError('disk full')):
+                with self.assertRaises(OSError):
+                    release_queue.withdraw(folder,'held','Exact quote expired.',NOW)
+            self.assertEqual(release_queue.load(folder),original)
+
     def test_new_climb_rung_without_latest_row_is_marked_pending(self):
         rung = {'id': 'CFB-2026-W7-ladder-1017-c3s2-dk', 'title': '80/20 Climb #3 · Step 2'}
         ctx = SimpleNamespace(first={rung['id']: dict(rung, league='CFB', kind='parlays')}, latest={})

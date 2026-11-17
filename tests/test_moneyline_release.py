@@ -12,6 +12,36 @@ import gates,run,release_queue
 NOW=datetime(2026,10,22,15,30,tzinfo=timezone.utc)
 
 class MoneylineReleaseTests(unittest.TestCase):
+    def test_persisted_college_spread_rechecks_current_projection_without_private_cache(self):
+        for side, margin, home_line in (('home', 17, -10), ('away', -17, 10)):
+            now = datetime(2026,11,17,17,tzinfo=timezone.utc)
+            game = {'id':'CFB-g','league':'CFB','state':'pre','kickoff':'2026-11-18T00:00:00Z',
+                    'home':{'id':'h'},'away':{'id':'a'}}
+            ctx = gates.Context(now=now,games={'CFB-g':game},odds={'CFB-g':{
+                'gameId':'CFB-g','retrievedAt':gates.stamp(now),'books':{'draftkings':{
+                    'spread':{'home':home_line,'homePrice':-110,'awayPrice':-110}}}}})
+            pick = {'id':'spread','gameIds':['CFB-g'],'league':'CFB','marketType':'spread',
+                    'direction':side,'line':-10,'book':'DraftKings','odds':-110,
+                    'selectionPolicy':gates.TIER_POLICY,'lane':'best_bet','riskUnits':1,
+                    'quotedAt':gates.stamp(now),'expiresAt':gates.stamp(now+timedelta(hours=1)),
+                    '_desk':{'rawChance':.75,'projection':margin,'push':0}}
+            decision = {'id':'spread','decision':'published','planReasons':[
+                {'type':'news','class':'A','direction':'for','text':'Synthetic verified opponent role change.'}]}
+            with tempfile.TemporaryDirectory() as folder:
+                release_queue.enqueue(Path(folder),[('CFB','gamePicks',pick)],{},[decision],
+                                      Path(folder),now,games=ctx.games,log=lambda *_:None)
+                row = release_queue.load(Path(folder))['plays'][0]
+            self.assertNotIn('_desk',row['pick'])
+            with self.subTest(side=side), patch.object(gates,'desk_for',return_value=pick['_desk']):
+                self.assertIsNone(run.private_release_refusal(row,ctx,now))
+            for current in (None, margin/abs(margin)*15.9):
+                with self.subTest(side=side,current=current), patch.object(gates,'desk_for',
+                        return_value={'rawChance':.75,'projection':current,'push':0}):
+                    self.assertIn('6 points',run.private_release_refusal(row,ctx,now))
+            ctx.odds['CFB-g']['books']['draftkings']['spread'][side+'Price'] = -120
+            with patch.object(gates,'desk_for',return_value=pick['_desk']):
+                self.assertIn('exact book/line/price',run.private_release_refusal(row,ctx,now))
+
     def data(self):
         game={'id':'NFL-g','league':'NFL','state':'pre','kickoff':'2026-10-23T00:15:00Z',
               'marketRetrievedAt':gates.stamp(NOW-timedelta(minutes=5)),

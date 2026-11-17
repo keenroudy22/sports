@@ -4,6 +4,7 @@ The queue lives outside the repository.  Selection can reserve a future play,
 but neither ``research/`` nor the public post log sees it until delivery.
 """
 import json
+import os
 import shutil
 from pathlib import Path
 
@@ -153,6 +154,29 @@ def remove(conf, key):
     book = load(conf)
     book['plays'] = [row for row in book['plays'] if row.get('id') != key]
     save(conf, book)
+
+
+def withdraw(conf, key, reason, now):
+    """Retain an exact private refusal receipt before removing an admission."""
+    row = next((row for row in load(conf)['plays'] if row.get('id') == key), None)
+    if row is None or not isinstance(reason, str) or not reason.strip():
+        raise ValueError('An existing private admission and withdrawal reason are required')
+    state = ('x-recovery-closed' if row.get('discordSentAt') or row.get('publicPath')
+             else 'withdrawn-before-release')
+    receipt = {'id': key, 'checkedAt': gates.stamp(now), 'state': state,
+               'reason': reason, 'admission': row}
+    target = Path(conf) / 'pending' / 'release-withdrawals.jsonl'
+    target.parent.mkdir(parents=True, exist_ok=True)
+    # Caller holds the ordinary run lock. A failed journal write leaves the
+    # queue intact; this private evidence never enters the public pick record.
+    fd = os.open(target, os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o600)
+    with os.fdopen(fd, 'a', encoding='utf-8') as out:
+        os.fchmod(out.fileno(), 0o600)
+        out.write(json.dumps(receipt, ensure_ascii=False) + '\n')
+        out.flush()
+        os.fsync(out.fileno())
+    remove(conf, key)
+    return receipt
 
 
 def update(conf, key, **changes):

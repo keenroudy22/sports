@@ -8453,3 +8453,46 @@ finished exit0/outcomeok,0outside writes/0private reads;2network attempts were
 blocked as designed. Source/price freshness is not proven by that rehearsal.
 Canonical deployment and hosted/live checks follow; these test results alone
 are not a release receipt.
+
+## November 17 observed CFB admission withdrawal — release candidate
+
+The real11:45worker admitted Ohio-10 at BetMGM privately at16:54:16Z, then
+withdrew it before any public release. Its queue was empty and no public pick
+or delivery receipt existed. The16:54:28Z private alert hash313c1f0149030849
+matches exactly the title “Kook'n play withdrawn before release” and message
+“CFB-2026-W12-ball-ohio-spread-home-minus-10-mgm: its current tier price check
+failed: a college side needs the model margin at least 6 points past the spread”.
+The ordinary run log lacked that withdrawal reason. This is not a Sent play.
+Private observed status:work/nov16-delivery-parlays/nov17-1145-observed-status.json.
+
+Root cause reproduced for home and away CFB spreads: the private queue strips
+underscore-prefixed selection caches, and release validation explicitly removes
+_desk before recomputing the tier. The CFB margin check nevertheless read only
+_desk, so a valid current projection became an apparent missing projection.
+The candidate now calls the existing desk_for pricing path, retaining the exact
+six-point margin requirement, current paired quote and every other release gate.
+Tests still hold a truly insufficient/missing margin and a changed book price.
+Release withdrawals now append an exact private receipt before queue removal;
+a failed journal write retains the admission. Already-public plays are labeled
+X-recovery-closed and their public originals remain unchanged. No forced Ohio
+publication or historical record change follows from this diagnosis.
+
+The earlier release candidate passed its suites/build/audits/rehearsal, then
+production advanced. Its repeat clean export stopped on disk exhaustion before
+promotion. Completed isolated rehearsal snapshots were compressed with every
+file SHA256 verified before duplicate source folders were removed:23snapshots,
+31921files,about10GiBfree restored. Logs, reports, results and complete archived
+inputs remain. Receipt:work/nov16-delivery-parlays/rehearsal-archive-receipts.json.
+A subsequent release again passed all gates, then waited for the11:45/11:55
+workers. It was deliberately stopped during resynchronization tests to include
+this newly observed CFB repair. Nothing from this combined candidate is claimed
+shipped until the next canonical deployment and hosted/live verification pass.
+
+Combined candidate verification:2425Python tests(2skips) and373Node tests
+passed in normal and clean-export environments. Stored-input1155rehearsal
+5sjlzns7 completed exit0/outcomeok with0outside writes/0private reads.
+Read-only17:09:01Z check of the correct BallState–Ohio fixtureCFB-401866464
+found current stored model margin16.97 and the16:45:06Z BetMGM quoteOhio-10
+at-108/opposite-110. Thus the cache-missing refusal was not evidence of a
+sub-six-point current margin. This stored observation is not a new admission
+or a current sportsbook-page confirmation. Re-evaluate normally before release.

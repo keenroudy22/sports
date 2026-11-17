@@ -10,6 +10,13 @@ repeated player/game, settlement evidence and all delivery checks. Legacy
 automatic/easyProps tickets and historical replay retain their existing rule.
 This instruction is policy; deployment evidence belongs in PRODUCT-IMPLEMENTATION.
 
+Release-time withdrawals retain their original private admission and exact reason
+in `~/.config/keenroudy/pending/release-withdrawals.jsonl` before leaving the queue.
+Morning/pregame reviews should consult this journal when a selected play has no
+public receipt. A withdrawal is not a posted play or permission to restore stale
+terms. Keep the journal private. Recompute CFB spread projections from the current
+snapshot after queue serialization; the six-point margin requirement is unchanged.
+
 The owner clarified that ordinary parlays should be researched across all
 available supported games. Do not present a single-game draft as the strongest
 legs from the full slate. MNF and TNF are the requested same-game parlay slots.
