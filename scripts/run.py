@@ -2403,6 +2403,28 @@ def pick_of_the_day(now, ctx, status, current=None, write=True):
         status['pickOfTheDay'] = featured.choose(ctx, now, write=write, log=log, current=current)
     except Exception as error:
         log(f'pick of the day not chosen ({type(error).__name__}: {error})')
+    # Give the operator one current cross-sport comparison instead of hiding
+    # NBA/CBB behind the legacy football-only designation. This read-only stage
+    # never admits a play, changes a public label, calls a feed or raises stakes.
+    try:
+        import daily_chef_review
+        import release_queue
+        import x_post
+        report = daily_chef_review.snapshot(ctx, now, posts=x_post.load_log()['posts'],
+                                           pending=release_queue.load(CONF)['plays'])
+        comparison = daily_chef_review.comparison(report, now, CONF)
+        report['comparison'] = comparison
+        if write:
+            daily_chef_review.save_snapshot(report, CONF)
+        status['dailyChefReview'] = {
+            **comparison, 'coverage': report['coverage'],
+            'reviewableIds': [r['terms']['id'] for r in report['rows'] if r['state'] == 'reviewable'],
+            'publicationAuthority': False,
+        }
+    except Exception as error:
+        status['dailyChefReview'] = {'state': 'unavailable',
+                                    'reason': f'{type(error).__name__}: {error}'}
+        log(f'daily Chef review unavailable ({type(error).__name__}: {error})')
 
 
 def commit_push(now, slot, counts, push=True, runner=git, cwd=ROOT):

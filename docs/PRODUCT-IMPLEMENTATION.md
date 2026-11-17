@@ -8631,3 +8631,31 @@ probability that can be ranked as model edge. Implement the common all-sports
 review/designation before claiming a daily all-sports Chef is live. Keep original
 public labels and stakes fixed, and verify one natural designation across all
 three delivery surfaces. These consistency repairs do not close P12.
+
+### November17 shared daily Chef review — implementation in progress
+
+The new private daily_chef_review bridge sees current-day football admissions,
+including the private release queue, and the separate NBA/CBB original stores.
+It retains exact terms, stakes, source facts, countercases, per-sport coverage
+and current adapter holds. Existing public or attempted deliveries cannot be
+relabel candidates. Model and sourced evidence stay distinct; no common
+probability score is invented. A comparative packet must rank every reviewable
+admission, account for all four sports, match the current evidence fingerprint
+and remain within30minutes. A stale/changed comparison is held. The private
+comparison survives snapshot refreshes. No odds capture, subscription or
+automation is added. The ordinary scheduled favorite review now reports this
+coverage privately and exposes failures instead of calling them an empty slate.
+
+The actual19:12:18Z stored-input check found three CFB games and two already
+public CFB straights, five NBA games and68CBB games with no current-day straight
+admissions. These are coverage facts, not an exhaustive market scan or proof
+that no additional bets qualify. Neither public CFB pick may be relabeled.
+The current NBA parlay is intentionally excluded from a straight favorite.
+Evidence:work/nov16-delivery-parlays/nov17-daily-chef-cross-sport-review.json.
+
+This is the common review stage of P12, not the completed public Chef migration.
+Remaining work: bind the reviewed favorite to its first publication atomically,
+carry the frozen designation through all three sport caption/card/site adapters,
+preserve historical labels and stakes, and verify a natural designation. The
+legacy public selector remains unchanged while that integration is unfinished.
+Targeted review/featured/run tests:167passed. Full release is pending.
