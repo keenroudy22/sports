@@ -1,27 +1,8 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-11-17T11:49:38Z",
+  "selectedAt": "2026-11-17T16:48:14Z",
   "mode": "local",
   "rows": [
-    {
-      "gameId": "CFB-401866465",
-      "league": "CFB",
-      "kickoff": "2026-11-17T23:00:00Z",
-      "matchup": "EMU at WMU",
-      "href": "#game/CFB-401866465",
-      "kind": "trend",
-      "label": "Season trend",
-      "player": "Harold Mack",
-      "stat": "rec",
-      "title": "Harold Mack \u00b7 Over 2.5 receptions",
-      "text": "7/8 recorded games this season. DraftKings -182 captured; history, not a prediction.",
-      "observedAt": "2026-11-17T13:31:52Z",
-      "expiresAt": "2026-11-17T17:31:52Z",
-      "rate": 0.875,
-      "sample": 8,
-      "price": -182,
-      "id": "E0"
-    },
     {
       "gameId": "CFB-401866466",
       "league": "CFB",
@@ -34,12 +15,40 @@
       "stat": "rushYds",
       "title": "D'Shawntae Jones \u00b7 Under 64.5 rushing yards",
       "text": "7/9 recorded games this season. FanDuel -114 captured; history, not a prediction.",
-      "observedAt": "2026-11-17T13:31:52Z",
-      "expiresAt": "2026-11-17T17:31:52Z",
+      "observedAt": "2026-11-17T14:08:14Z",
+      "expiresAt": "2026-11-17T18:08:14Z",
       "rate": 0.7777777777777778,
       "sample": 9,
       "price": -114,
       "id": "E2"
+    },
+    {
+      "gameId": "NBA-401910002",
+      "league": "NBA",
+      "kind": "schedule",
+      "label": "Next up",
+      "kickoff": "2026-11-18T00:30:00Z",
+      "matchup": "NY at TOR",
+      "title": "NY at TOR",
+      "text": "Tue 7:30 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-11-17T14:04:37Z",
+      "expiresAt": "2026-11-17T18:04:37Z",
+      "href": "#scores/NBA",
+      "id": "E7"
+    },
+    {
+      "gameId": "CBB-401927381",
+      "league": "CBB",
+      "kind": "schedule",
+      "label": "Next up",
+      "kickoff": "2026-11-17T17:00:00Z",
+      "matchup": "HOF at MUR",
+      "title": "HOF at MUR",
+      "text": "Tue 12:00 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-11-17T14:04:37Z",
+      "expiresAt": "2026-11-17T17:00:00Z",
+      "href": "#scores/CBB",
+      "id": "E8"
     }
   ]
 }
