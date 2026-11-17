@@ -207,7 +207,9 @@ class CommunityUnitSettlementTests(unittest.TestCase):
             self.assertIn('ready but not delivered', receipts.prior_day_results_hold({}, {}, {}, book, tomorrow))
             book['posts'].append({'id': recap['key'], 'resultPickIds': recap['pickIds'],
                                  'sentAt': tomorrow.isoformat(), 'tweetId': '987654322',
-                                 'discord': {'state': 'sent', 'sentAt': tomorrow.isoformat()}})
+                                 'link': 'https://x.com/keenkooks/status/987654322',
+                                 'discord': {'state': 'sent', 'sentAt': tomorrow.isoformat(),
+                                             'messageId': '1571763542208675944'}})
             self.assertIsNone(receipts.prior_day_results_hold({}, {}, {}, book, tomorrow))
 
 

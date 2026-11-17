@@ -8225,3 +8225,18 @@ and running times from 209 to 341 seconds. The Nov16 full-game original
 waited 350 seconds in queue and took 341 seconds to build and deploy. Its
 site appearance missed kickoff. Retain that miss and measure all three
 delivery surfaces on the next real pregame ticket.
+
+## November17 — Historical Discord Finals and recap confirmation
+
+Discord's provider responses confirmed six previously unlinked Finals from
+Nov11–14. The exact channel, message, caption and provider clocks matched
+the saved outcomes. Production receipt commit e7d0ec441 adds metadata only
+and keeps all six historical text-only results as delivered. No posts were
+resent. Wake Forest's original Nov14 Discord delivery has a local success
+acknowledgment at 14:46:53Z, but its original message ID remains unverified.
+The later correction and Final each have their own observed receipts.
+
+The new recap gate requires the stored X status ID to match its permalink
+and the Discord send to carry a provider message ID. The full result ID
+set is still required. Provider acknowledgments with no receipt remain
+held for reconciliation, with no change to the duplicate-safe send path.

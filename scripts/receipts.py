@@ -530,9 +530,14 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
             continue
         if set(entry.get('resultPickIds') or []) != expected:
             continue
-        x_sent = bool(entry.get('sentAt') and (entry.get('tweetId') or entry.get('link') or entry.get('sentUrl')))
+        x_link = str(entry.get('link') or entry.get('sentUrl') or '')
+        permalink = re.fullmatch(
+            r'https://(?:www\.)?(?:x|twitter)\.com/(?:[A-Za-z0-9_]+|i/web)/status/(\d{8,30})/?(?:[?#].*)?',
+            x_link)
+        x_sent = bool(entry.get('sentAt') and permalink and permalink[1] == str(entry.get('tweetId') or ''))
         discord = entry.get('discord') or {}
-        discord_sent = bool(discord.get('state') == 'sent' and discord.get('sentAt'))
+        discord_sent = bool(discord.get('state') == 'sent' and discord.get('sentAt')
+                            and re.fullmatch(r'\d{8,30}', str(discord.get('messageId') or '')))
         if channel == 'x' and x_sent:
             return None
         if channel == 'discord' and discord_sent:

@@ -64,11 +64,20 @@ class ReceiptTests(unittest.TestCase):
                      'tweetId': '2123456789012345678',
                      'discord': {'state': 'pending'}}
             book = {'posts': [original, recap]}
+            self.assertIn('on x', receipts.prior_day_results_hold(
+                first, latest, games, book, now, channel='x'))
+            recap['link'] = 'https://x.com/keenkooks/status/2123456789012345679'
+            self.assertIn('on x', receipts.prior_day_results_hold(
+                first, latest, games, book, now, channel='x'))
+            recap['link'] = 'https://x.com/keenkooks/status/2123456789012345678'
             self.assertIsNone(receipts.prior_day_results_hold(
                 first, latest, games, book, now, channel='x'))
             self.assertIn('on all', receipts.prior_day_results_hold(
                 first, latest, games, book, now, channel='all'))
             recap['discord'] = {'state': 'sent', 'sentAt': '2026-11-15T13:01:00Z'}
+            self.assertIn('on all', receipts.prior_day_results_hold(
+                first, latest, games, book, now, channel='all'))
+            recap['discord']['messageId'] = '1571763542208675944'
             self.assertIsNone(receipts.prior_day_results_hold(
                 first, latest, games, book, now, channel='all'))
 
