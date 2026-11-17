@@ -8299,3 +8299,44 @@ can use the earlier slot before its price expires. The release also removed
 routine touchdown-lean follow-ups. It passed the full local and clean-export
 test suites, stored-input rehearsal, hosted publishing and live 375 px checks.
 [Release run](https://github.com/keenroudy22/sports/actions/runs/44101997699)
+
+
+## November17 — projection completeness fix verified
+
+The owner rejected N/A book comparisons and requested model totals alone when
+book totals are unavailable. Release6794c8b755774fd7f97c478c6881934d949313ae
+uses MY TOTAL with model-only rows when any displayed book comparison is
+missing. Unsent legacy placeholders are blocked by rendering and queued
+relevance checks. The already-Sent original and its immutable attachment remain
+unchanged; no correction post or duplicate research post was sent.
+
+Canonical release passed2417Python tests(2skipped),373Node tests, clean export,
+all build/feed/budget/record187/NBA5/public-boundary/assets/SVG checks and the
+0955 stored-input rehearsal(exit0,outcomeok,0outside writes/private reads).
+Hosted44112035271/job134139937246 succeeded2026-11-17T15:19:34Z with exact
+artifact14341162787 and Pages build6794c8b755774fd7f97c478c6881934d949313ae.
+Live Today at actual375x812 had scrollWidth375, no rendered load failure and
+no console warnings/errors. The viewport was reset. The unchanged app
+fingerprint is3d0c531b1c00; this release changes the editorial generator.
+
+Production checks reject the actual bad Nov17 snapshot before sending. The
+local delivery log has no unsent NBA entries. The corrected private preview
+shows MY TOTAL and214/224/223/230 without placeholders. This is visual proof
+of the fallback, not a newly published post. Evidence and screenshots are in
+work/nov16-delivery-parlays/nov17-projection-completeness-release.json.
+
+O-20261019-ALTFUN: FanDuel login is resolved and an actual six-leg unboosted
+quote was observed with every exact leg in the visible slip. No stake or paid
+protection was entered and no wager was placed. The private draft remains
+unapproved: Reed has a priced milestone but no observed main line in the
+expanded market; current official availability and matchup review remain.
+Next action is the existing Nov17 11:45 ET capture and pregame review, followed
+by exact repricing, ordinary admission and actual site/Discord/X receipts only
+if qualified. First typed NBA/NFL publication and settlement remain open.
+
+Follow-up N17-KVB-STATUS(owner agent): live Today presents Poulos as an official
+Best Bet while its separate Kook vs Book row still uses generic research and
+release-bar language. Inspect the receipt-backed official-status adapter,
+correct that inconsistent copy, and verify the same public pick is identified
+consistently in both sections without changing its original terms or record.
+This observation is not fixed by the projection-card release.
