@@ -8197,3 +8197,31 @@ a post-kickoff snapshot at 04:46:13Z. The refreshed source also supplied the
 official final box for the same event at 04:46:12Z, listing Brissett under
 Baltimore. The build now prefers the matching, as-of final box for completed
 matchup identity. Upcoming matchups still require pregame roster evidence.
+
+## November17 — Matchup identity and Discord hold release
+
+The ordinary 00:25 ET results run finished at 05:29:13Z with zero errors
+and queued the complete Nov16 recap for 08:00 ET. Its site card shows the
++168 and +1000 DraftKings tickets and -0.50u net. The two original ticket
+IDs are included in the queue record. X Sent and the Discord attachment
+still need confirmation before new plays can release.
+
+The overnight hold had updated 149 historical Discord rows, including
+124 already-sent entries. The mirror now applies the hold only to due,
+pending pregame deliveries. The regression verifies the prior-day recap
+can deliver while due plays are held and historical receipts stay intact.
+
+Release b41e2362a ran 2,413 Python tests with two skips and 373 Node tests
+with zero failures in normal and clean exports. Site, feed, phone payload, record, NBA,
+privacy, asset, SVG and 00:25 stored-input rehearsal checks passed.
+Hosted run 44025586873 checked out that commit and deployed exact artifact
+14302753468 at 05:43:49Z. The live matchup shows Brissett under Baltimore
+with the captured line and a held projection. The public payload keeps
+210.5 and 213.5 passing yards as archived lines. Both the 375px and 1370px
+page widths fit without page-level horizontal overflow.
+
+Across five actual Pages runs, queue times ranged from 6 to 350 seconds
+and running times from 209 to 341 seconds. The Nov16 full-game original
+waited 350 seconds in queue and took 341 seconds to build and deploy. Its
+site appearance missed kickoff. Retain that miss and measure all three
+delivery surfaces on the next real pregame ticket.
