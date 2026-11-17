@@ -96,6 +96,46 @@ class ChooseTests(unittest.TestCase):
             self.assertIsNone(featured.choose(ctx, NOW, Path(folder) / 'featured.json',
                                               log=lambda *_: None, current=current))
 
+    def test_fresh_comparison_cannot_borrow_another_line_or_book(self):
+        ctx = self.world()
+        for changed in ({'line': 40.5}, {'book': 'FanDuel'}, {'direction': 'under'}):
+            with self.subTest(changed=changed), tempfile.TemporaryDirectory() as folder, \
+                    mock.patch.object(featured, 'strength', return_value=12):
+                path = Path(folder) / 'featured.json'
+                self.assertIsNone(featured.choose(ctx, NOW, path, log=lambda *_: None,
+                    log_book={'posts': []}, current=[play('fresh', 'g1', **changed)]))
+                self.assertFalse(path.exists())
+
+    def test_discord_first_publication_freezes_feature_and_plain_labels(self):
+        ctx = self.world()
+        receipt = {'state': 'sent', 'sentAt': '2026-09-26T10:40:00Z',
+                   'messageId': '1572308502645309502'}
+        sent = {'posts': [{'id': 'b', 'kind': 'buffer:play', 'discord': receipt}]}
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(featured.gates, 'desk_for', side_effect=fake_desk):
+            path = Path(folder) / 'featured.json'
+            featured.save({'2026-09-26': {'id': 'b'}}, path)
+            ctx.latest['b'] = {'entryNote': 'Closed after verified news'}
+            self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None,
+                log_book=sent), 'b', 'A public Discord feature cannot be replaced before X catches up')
+            path.unlink()
+            ctx.latest.pop('b')
+            self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None,
+                log_book=sent), 'a', 'A plain Discord pick cannot acquire a different label on X')
+
+    def test_queued_or_unverified_discord_does_not_freeze_a_private_pick(self):
+        ctx = self.world()
+        ctx.latest['b'] = {'entryNote': 'Withdrawn before delivery'}
+        for receipt in ({'state': 'queued', 'sentAt': '2026-09-26T10:40:00Z',
+                         'messageId': '1572308502645309502'},
+                        {'state': 'sent', 'sentAt': '2026-09-26T10:40:00Z'}):
+            with self.subTest(receipt=receipt), tempfile.TemporaryDirectory() as folder, \
+                    mock.patch.object(featured.gates, 'desk_for', side_effect=fake_desk):
+                path = Path(folder) / 'featured.json'
+                featured.save({'2026-09-26': {'id': 'b'}}, path)
+                self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None,
+                    log_book={'posts': [{'id': 'b', 'discord': receipt}]}), 'a')
+
     def test_a_pick_pulled_before_it_posts_is_replaced_once_it_has_posted_never(self):
         """Sep 25: the Pick of the Day (Navy at UAB over) closed at 11:03 AM over the quarterback's ankle, before its
         noon post. The best play left that has not posted takes its place; one that went out keeps the day."""

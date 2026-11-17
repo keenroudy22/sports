@@ -81,9 +81,20 @@ def strength(pick, ctx, policy=None):
     return round(100 * (chance - desk['breakEven']), 2)
 
 
+def delivered_ids(log_book):
+    """A Discord-first play is already public, even while its X send is pending.
+
+    Retain the historical X sent marker; Discord requires its actual message
+    receipt, not a queued state or an intended delivery time.
+    """
+    import receipts
+    return {p.get('id') for p in (log_book or {}).get('posts', [])
+            if p.get('sentAt') or receipts.confirmed_discord(p.get('discord') or {})}
+
+
 def pulled(key, ctx, log_book):
     """Did the named play close before its post went out? Once it has posted it is the day's pick, win or lose."""
-    if any(p.get('id') == key and p.get('sentAt') for p in (log_book or {}).get('posts', [])):
+    if key in delivered_ids(log_book):
         return False
     merged = dict(ctx.first.get(key) or {}, **(ctx.latest.get(key) or {}))
     return bool(merged) and not merged.get('result') and bool(merged.get('entryNote') or (merged.get('status') or 'active') != 'active')
@@ -92,7 +103,7 @@ def pulled(key, ctx, log_book):
 def signature(pick):
     """The market identity used to pair an official play with today's fresh board quote."""
     return ((pick.get('gameIds') or [None])[0], str(pick.get('athleteId') or ''),
-            gates.market_key(pick), gates.side_of(pick))
+            gates.market_key(pick), gates.side_of(pick), pick.get('line'), pick.get('book'))
 
 
 def choose(ctx, now, path=None, policy=None, write=True, log=print, log_book=None, current=None):
@@ -113,7 +124,7 @@ def choose(ctx, now, path=None, policy=None, write=True, log=print, log_book=Non
         log_book = x_post.load_log()
     if named and not pulled(named, ctx, log_book):
         return named
-    sent = {p.get('id') for p in log_book.get('posts', []) if p.get('sentAt')}
+    sent = delivered_ids(log_book)
     passed = set(entry.get('replaced') or []) | ({named} if named else set())
     planned = [(key, pick, kickoff) for key, pick, kickoff in
                todays_plays(ctx.first, ctx.latest, ctx.games, day, now)

@@ -173,8 +173,13 @@ def availability_for_game(snapshot, game, now, max_hours=4):
         report=snapshot['official']
         if report.get('archive') or report.get('analysisOnly'):
             return snapshot.get('rows',[]),unknown
-        if report.get('state')=='unavailable' or not timedelta(0)<=now-boxscores.instant(report['reportedAt'])<=timedelta(hours=max_hours):
+        if report.get('state')=='unavailable':
             return snapshot.get('rows',[]),unknown
+        age=now-boxscores.instant(report['reportedAt'])
+        if not timedelta(0)<=age<=timedelta(hours=max_hours):
+            reason=('Official NBA report time is in the future' if age<timedelta(0)
+                    else f'Official NBA report is older than {max_hours*60:g} minutes')
+            return snapshot.get('rows',[]),dict.fromkeys(unknown,reason)
         expected_source='https://ak-static.cms.nba.com/referee/injury/Injury-Report_'+boxscores.instant(report['reportedAt']).astimezone(official.EASTERN).strftime('%Y-%m-%d_%I_%M%p')+'.pdf'
         if report.get('source')!=expected_source or report.get('season')!=game.get('season'):
             return snapshot.get('rows',[]),unknown

@@ -8591,3 +8591,30 @@ report to the public index; that generated addition was verified and committed
 before repeating every gate. Proof:work/nov16-delivery-parlays/price-link-final-verification.json;
 phone image:nov17-ohio-fixed-phone.jpg. Natural1255 worker also completed
 at18:01:05Z without errors and persisted the real X/media receipt.
+
+### November17 cross-channel favorite consistency — candidate
+
+The old featured selector could replace a named pick after Discord had already
+sent it but before X Sent, or attach a new featured label to a plain Discord
+pick. It also matched fresh comparisons without the original line/book. The
+candidate recognizes an actual Discord message receipt as public delivery and
+requires the same line and book for the comparison. Queued/unverified Discord
+entries do not count. Original stakes, reports and sent cards are unchanged.
+Thirty focused feature/official-availability tests pass. Full release and real
+worker observation remain pending.
+
+The natural1330 check ran18:30:05–18:37:38Z, outcome ok, no errors or admissions.
+The five upcoming NBA games were held by availability; inspection shows the
+official capture succeeded but the12:30ET report was already more than60minutes
+old by selection. The candidate reports this age hold explicitly instead of the
+generic unavailable message; it does not extend freshness or refresh timestamps.
+The player-prop probability review separately remains unproven. Evidence:
+work/nov16-delivery-parlays/nov17-1330-scheduled-status.json.
+
+P12 is still a wider migration: gates.context currently contains only NFL/CFB;
+featured.todays_plays excludes ordinary tier-policy1u Best Bets; NBA and sourced
+CBB have separate admission/records. CBB source approval is not a calibrated
+probability that can be ranked as model edge. Implement the common all-sports
+review/designation before claiming a daily all-sports Chef is live. Keep original
+public labels and stakes fixed, and verify one natural designation across all
+three delivery surfaces. These consistency repairs do not close P12.

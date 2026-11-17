@@ -158,6 +158,19 @@ class OfficialAvailabilityTests(unittest.TestCase):
             self.assertTrue(nba_capture.availability_for_game(bad,games[0],NOW)[1])
         self.assertTrue(nba_capture.availability_for_game({'rows':[]},games[0],NOW)[1])
 
+    def test_official_report_age_hold_explains_the_existing_exact_boundary(self):
+        games,_=fixtures();report=self.report()
+        snapshot=dict(rows=[],official=report,gameAvailability=official.merge([],report,games))
+        boundary=REPORTED+timedelta(hours=1)
+        self.assertFalse(nba_capture.availability_for_game(snapshot,games[0],boundary,max_hours=1)[1])
+        rows,holds=nba_capture.availability_for_game(snapshot,games[0],boundary+timedelta(seconds=13),max_hours=1)
+        self.assertEqual(set(holds.values()),{'Official NBA report is older than 60 minutes'})
+        self.assertEqual(rows,[])
+        future=copy.deepcopy(snapshot)
+        future['official']['reportedAt']=(NOW+timedelta(seconds=1)).isoformat()
+        _,holds=nba_capture.availability_for_game(future,games[0],NOW,max_hours=1)
+        self.assertEqual(set(holds.values()),{'Official NBA report time is in the future'})
+
     def test_capture_to_trial_keeps_official_report_and_fails_closed_on_reader_error(self):
         import nba_trial_runtime
         games,rosters=fixtures()
