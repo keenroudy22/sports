@@ -2,5 +2,5 @@
 
 Recorded before each game, graded after; nothing here is published. A -110 price needs 52.4%.
 
-- **NBA totals**: 209 games recorded, 128 paper plays graded. At the number recorded 67-61 (52.3%, -0.08u); at the opener 65-63; closing line value +0.92 points (90% +0.58 to +1.30).
-- **CBB totals**: 703 games recorded, 289 paper plays graded. At the number recorded 146-143 (50.5%, -10.82u); at the opener 142-147; closing line value +0.04 points (90% -0.26 to +0.32).
+- **NBA totals**: 210 games recorded, 131 paper plays graded. At the number recorded 68-63 (51.9%, -1.17u); at the opener 66-65; closing line value +0.90 points (90% +0.54 to +1.25).
+- **CBB totals**: 715 games recorded, 290 paper plays graded. At the number recorded 146-144 (50.3%, -11.82u); at the opener 142-148; closing line value +0.02 points (90% -0.26 to +0.33).
