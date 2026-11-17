@@ -1152,7 +1152,7 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
 
 def queued_relevance_issues(entry, now):
     import nba_editorial
-    if now < nba_editorial.RELEVANCE_START or not re.fullmatch(r'nba-(?:trends|props)-\d{4}-\d{2}-\d{2}',str(entry.get('id') or '')):
+    if now < nba_editorial.RELEVANCE_START or not re.fullmatch(r'nba-(?:projections|trends|props)-\d{4}-\d{2}-\d{2}',str(entry.get('id') or '')):
         return []
     snapshot=next((r for r in nba_editorial.stored() if r['key']==entry['id']),None)
     if not snapshot:return ['current NBA research evidence unavailable']

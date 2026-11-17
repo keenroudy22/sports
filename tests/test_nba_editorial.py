@@ -41,7 +41,32 @@ class NBAEditorialTests(unittest.TestCase):
         for g in data['games']:
             g['kickoff']=g['kickoff'].replace('2026-10-24','2026-10-25')
         row=next(r for r in n.choices(data,now,h) if r['family']=='projections')
-        self.assertTrue(all(r['right'].endswith('/ N/A') for r in row['rows']))
+        self.assertEqual(row['right_label'], 'MY TOTAL')
+        self.assertTrue(all(r['right'] == '≈225' for r in row['rows']))
+        self.assertNotIn('N/A', json.dumps(row))
+
+    def test_partial_book_coverage_uses_a_consistent_model_total_column(self):
+        now,data,h=self.relevant_fixture()
+        data['games'][1].pop('totalQuote')
+        row=next(r for r in n.choices(data,now,h) if r['family']=='projections')
+        self.assertEqual(row['right_label'], 'MY TOTAL')
+        self.assertTrue(all(r['right']=='≈225' and r['quote'] is None for r in row['rows']))
+        self.assertEqual(n.relevance_issues(row,now), [])
+
+    def test_old_missing_book_graphic_is_blocked_before_delivery(self):
+        now,data,h=self.relevant_fixture()
+        row=next(r for r in n.choices(data,now,h) if r['family']=='projections')
+        self.assertEqual(row['right_label'], 'MY / BOOK')
+        row['rows'][0]['right']='≈225 / N/A'
+        self.assertIn('projection graphic contains a missing-value placeholder', n.relevance_issues(row,now))
+        import buffer_post
+        with patch.object(n,'stored',return_value=[row]):
+            self.assertIn('projection graphic contains a missing-value placeholder',
+                          buffer_post.queued_relevance_issues({'id':row['key']},now))
+        with tempfile.TemporaryDirectory() as folder, patch.object(n,'stored',return_value=[row]), \
+                patch.object(n.pick_card,'render') as render:
+            self.assertEqual(n.render_due(now,Path(folder),log=lambda *_:None),{})
+            render.assert_not_called()
 
     def test_projection_deadline_does_not_extend_source_freshness(self):
         now,data,h=self.relevant_fixture()

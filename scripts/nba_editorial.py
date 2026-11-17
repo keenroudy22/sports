@@ -96,6 +96,9 @@ def relevance_issues(snapshot, now):
     if now < RELEVANCE_START:
         return []
     if snapshot.get('family') == 'projections':
+        if any(re.search(r'\bN/A\b', str(row.get(field, '')), re.I)
+               for row in snapshot.get('rows', []) for field in ('subject', 'line', 'right', 'detail')):
+            return ['projection graphic contains a missing-value placeholder']
         # A next-day draft's editorial deadline does not refresh its source.
         # Book comparisons have the same four-hour lifetime as the site.
         priced = any(' / N/A' not in str(r.get('right', '')) and ' / ' in str(r.get('right', ''))
@@ -254,10 +257,16 @@ def choices(data, now, history=None):
             pass
         projected.append({'subject':f"{a['abbreviation']} at {h['abbreviation']}",
                           'line':f"My rounded score {round(p['away'])} - {round(p['home'])}" + (f" | {quote['book']}" if book_total is not None else ''),
-                          'right':f"≈{round(p['total'])} / {book_total:g}" if book_total is not None else f"≈{round(p['total'])} / N/A",
+                          'right':f"≈{round(p['total'])} / {book_total:g}" if book_total is not None else f"≈{round(p['total'])}",
                           'quote':dict(quote) if book_total is not None else None,
                           'detail':'', 'logo':a.get('logo'),
                           'caption':f"{names(g)}: about {round(p['away'])}-{round(p['home'])}"})
+    if any(not row.get('quote') for row in projected):
+        # Use one consistent column when some sportsbook comparisons are missing.
+        for row in projected:
+            row['right'] = row['right'].split(' / ', 1)[0]
+            row['line'] = row['line'].split(' | ', 1)[0]
+            row['quote'] = None
     if len(games)==1:
         g=games[0]
         projected=[{'subject':g['teams'][s]['abbreviation'],'line':'My projected points',
@@ -321,7 +330,7 @@ def choices(data, now, history=None):
                         (f"{target:%b %-d} · MATCHUP RESEARCH" if relevant else 'LAST SEASON · REGULAR SEASON' if chosen[0]['window']=='LAST SEASON' else
                          'THIS SEASON · SCORING CONTEXT')),
                     'editorialPolicy':EDITORIAL_POLICY if relevant else None,
-                    'right_label':('MY / BOOK' if len(games)>1 else 'MY TOTAL') if family=='projections' else 'MY TOTAL' if relevant else 'AVG POINTS'})
+                    'right_label':('MY / BOOK' if all(r.get('quote') for r in rows) else 'MY TOTAL') if family=='projections' else 'MY TOTAL' if relevant else 'AVG POINTS'})
     return out
 
 
@@ -421,6 +430,10 @@ def render_due(now, folder, root=STORE, fetch=None, log=print, posted_keys=(), r
             if not path.is_file():
                 raise ValueError(f"Original posted NBA art missing: {row['key']}")
             out[row['key']]=path
+            continue
+        if any('N/A' in str(item.get(field, '')).upper()
+               for item in row['rows'] for field in ('subject', 'line', 'right', 'detail')):
+            log(f"{row['key']}: missing-value placeholder; graphic held for revision")
             continue
         rows=[]
         for item in row['rows']:

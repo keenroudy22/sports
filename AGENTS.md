@@ -1,3 +1,10 @@
+# November 17 projection graphic completeness
+
+The owner rejected NBA projection cards showing N/A book totals. When current
+book lines are unavailable, show the model totals alone with the MY TOTAL
+heading. Check the rendered graphic before publication. Queued legacy cards
+with missing-value placeholders require revision before sending.
+
 # November 17 standout model calls
 
 Stop automatic touchdown follow-ups for research leans. A standout model call
