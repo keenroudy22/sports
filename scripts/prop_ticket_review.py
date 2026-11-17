@@ -1,8 +1,8 @@
 """Private MNF/TNF and NBA-alt ticket workbench. No network, admission or posting.
 
-Stage exact, sourced ticket reviews on the existing desk-health clock. Passing
-this review is not release authority: joint-price rechecks and sportsbook SGP
-void/reprice settlement still need their own production integration and proof.
+Stage exact, sourced ticket reviews on the existing desk-health clock. The
+release worker separately verifies admission, the latest exact combined quote,
+and current participation. Settlement requires its own evidence.
 """
 import argparse
 import hashlib
@@ -23,7 +23,7 @@ STATS = {'NFL': {'car': 'carries', 'rec': 'receptions', 'rushYds': 'rushing yard
                  'att': 'passing attempts', 'cmp': 'completions'},
          'NBA': {'pts': 'points', 'reb': 'rebounds', 'ast': 'assists'}}
 FAMILIES = {'MNF': ('NFL', 0), 'TNF': ('NFL', 3), 'NBA-alts': ('NBA', None)}
-RELEASE_HOLDS = ['Production admission and send-time joint-quote recheck not enabled',
+RELEASE_HOLDS = ['Private admission and attended exact combined-price recheck required before release',
                  'Book-specific parlay void/reprice and injury settlement proof required']
 
 
@@ -262,7 +262,7 @@ def summary(conf, games, now):
     return {'version': VERSION, 'checkedAt': gates.stamp(now), 'planningOnly': True,
             'releaseReady': False, 'counts': counts, 'providerRequests': 0,
             'storedUpcomingGames7d': fixtures,
-            'nextAction': ('Review held private packets and complete production release/settlement adapters'
+            'nextAction': ('Resolve the recorded holds, then use the reviewed-ticket admission and recheck'
                            if paths else 'Capture a fresh exact combined sportsbook ticket and sourced player review'),
             'releaseHolds': RELEASE_HOLDS}
 
