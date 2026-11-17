@@ -8065,3 +8065,37 @@ and clean exports, then correctly stopped at the92KiB shell limit:94270bytes,
 62over. No promotion occurred. Shortening two implementation comments brings
 the unchanged functional bundle to94132bytes; the92KiB limit is preserved.
 Canonical/hosted/mobile verification must pass before this follow-up is shipped.
+
+## November16 — whole-ticket result display and artifact guard verified
+
+Canonical8c0c4f591f8b42e3bf566276fbfe10588b7526a2 passed2408Python(2skip) and
+373Node in normal/clean exports, all build/privacy/record/NBA/assets/SVG gates
+and2155offline rehearsal (outcomeok, outside writes0/private reads0). The first
+attempt's shell-size failure remains recorded above; a second attempt was
+stopped after a queue next-action exceeded its240-character limit by4characters.
+The corrected, validated queue and94132-byte shell passed the complete retry.
+
+Hosted44009783533 succeeded. Its unique github-pages-44009783533-1 upload
+was artifact14295359271; the new exact-ID visibility check passed on attempt1
+at03:26:31Z before deploy. Live Chrome verified app fingerprint473a9a4ca8e9,
+375/1440widths without overflow, console errors or rendered load failures.
+Nov16 remains0-1/-0.25u with the+1000lotto open. The Q1 row now says1/2legs hit
+and clicking See the card opens the1080x1350Final with Hampton26,Henry0 and
+net-0.25u. Public HTTP probes returned403, so browser DOM/link/image evidence
+is the live proof; no successful direct-HTTP claim is made for this check.
+
+The real2225scheduled worker ran03:25:06–03:29:01Z on this release: outcomeok,
+errors[],published0,settled0,closed0,LLMunused; its log says no odds/prop requests.
+It left the ongoing game ungraded and had no unscheduled official picks.
+Q1 Final X2122524567352528921 and Discord1572084847156138076 are confirmed,
+with graphic/native quote on X and an actual Discord attachment receipt.
+No subscription, source allowance, daily exposure cap or job was added.
+
+Remaining next action: after the full-game final, verify all six actuals and
+participation/injury/book rules, append the result and confirm individual Final
+and complete daily recap before Nov17plays. NBA alternate publication remains
+held until a separate fun ledger, receipt-backed site/delivery, shared exposure
+and Final/recap adapters are implemented and tested. Do not use the NBA straight
+ledger or football report history for that shortcut. Local implementation map:
+work/nov16-delivery-parlays/nba-public-routing-next.txt. Release and UI/run
+receipts are in unit-summary-artifact-release.json in the same evidence folder.
