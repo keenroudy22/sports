@@ -619,6 +619,48 @@ def injury_roles(players, chart, now):
              'roleSource': chart.get('source') if fresh else None} for p in players]
 
 
+def matchup_market_players(player_ids, player_index, game, depth_charts, now):
+    """Assign quoted players to the matchup using verified pregame depth evidence."""
+    teams = {str(game[side]['id']): game[side] for side in ('home', 'away')}
+    through = min(now, features.when(game['kickoff']))
+    observed = defaultdict(list)
+    if game['league'] == 'NFL':
+        for team_id, chart in depth_charts.items():
+            if chart.get('status') != 'ok' or not chart.get('checkedAt'):
+                continue
+            try:
+                age = through - features.when(chart['checkedAt'])
+            except (TypeError, ValueError):
+                continue
+            if not timedelta(0) <= age <= timedelta(hours=48):
+                continue
+            for slot in chart.get('positions') or []:
+                for player in slot.get('players') or []:
+                    athlete = str(player.get('id') or '')
+                    if athlete in player_ids:
+                        observed[athlete].append((str(team_id), player.get('name'), slot.get('group')))
+
+    entries = []
+    for athlete in player_ids:
+        matches = observed.get(athlete, [])
+        team_ids = {match[0] for match in matches}
+        if len(team_ids) > 1:
+            continue  # A conflicting source cannot assign a current team.
+        if team_ids:
+            team_id = next(iter(team_ids))
+            team = teams.get(team_id)
+            if not team:
+                continue
+            prior = player_index.get(athlete)
+            name = (prior[1] if prior else None) or next((m[1] for m in matches if m[1]), None)
+            position = next((m[2] for m in matches if m[2] in ('QB', 'RB', 'FB', 'WR', 'TE')), None)
+            if name and position:
+                entries.append([athlete, name, position, team_id, team.get('abbreviation') or team.get('abbr')])
+        elif athlete in player_index:
+            entries.append(player_index[athlete][:5])
+    return sorted(entries, key=lambda entry: (entry[1] or '', entry[0]))
+
+
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
                 records, snap_players, now, grading, favorites=None, trends=None, reads=None, alternates=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
@@ -2314,9 +2356,8 @@ def build(now=None):
         market_players = {str(pid) for pid in (detail.get('props') or {}).get('lines', {})}
         market_players.update(str(row['athleteId']) for row in detail['lines'] + detail['modelReads']
                               if row.get('athleteId'))
-        player_index = football_indexes[game['league']]
-        market_entries = [player_index[pid][:5] for pid in market_players if pid in player_index]
-        detail['marketPlayers'] = sorted(market_entries, key=lambda entry: (entry[1] or '', entry[0]))
+        detail['marketPlayers'] = matchup_market_players(
+            market_players, football_indexes[game['league']], game, depth_charts, now)
         write(OUT / 'games' / f"{game['id']}.json", detail)
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],

@@ -13,6 +13,27 @@ from fakegames import game
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class MatchupMarketPlayerTests(unittest.TestCase):
+    def test_traded_player_uses_unique_pregame_depth_assignment(self):
+        now = datetime(2026, 11, 17, 3, tzinfo=timezone.utc)
+        fixture = {'league': 'NFL', 'kickoff': '2026-11-17T01:15Z',
+                   'home': {'id': '33', 'abbreviation': 'BAL'},
+                   'away': {'id': '24', 'abbreviation': 'LAC'}}
+        athlete = '2578570'
+        index = {athlete: [athlete, 'Jacoby Brissett', 'QB', '22', 'ARI', 'season history']}
+        chart = {'status': 'ok', 'checkedAt': '2026-11-17T00:21:19Z',
+                 'positions': [{'group': 'QB', 'players': [{'id': athlete, 'name': 'Jacoby Brissett'}]}]}
+        entries = build_site.matchup_market_players({athlete}, index, fixture, {'33': chart}, now)
+        self.assertEqual(entries, [[athlete, 'Jacoby Brissett', 'QB', '33', 'BAL']])
+        self.assertEqual(index[athlete][3:], ['22', 'ARI', 'season history'])
+        for unsafe in (dict(chart, checkedAt='2026-11-17T02:00Z'),
+                       dict(chart, checkedAt='2026-11-14T23:00Z'), dict(chart, status='failed')):
+            self.assertEqual(build_site.matchup_market_players({athlete}, index, fixture, {'33': unsafe}, now),
+                             [index[athlete][:5]])
+        self.assertEqual(build_site.matchup_market_players({athlete}, index, fixture,
+                                                          {'33': chart, '22': chart}, now), [])
+
+
 class InjuryRoleTests(unittest.TestCase):
     def test_exact_ids_and_listed_order_never_guess_absent_players(self):
         now = datetime(2026, 10, 22, 12, tzinfo=timezone.utc)
