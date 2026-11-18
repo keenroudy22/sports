@@ -883,10 +883,7 @@
       <div class="line" style="bottom:${px(Number(line)).toFixed(1)}px"><span>${esc(line)}</span></div></div>
       <figcaption><b>${esc(cap)}</b>${h.last10 && h.last10[1] >= 6 ? `${esc(h.last10[0])} of his last ${esc(h.last10[1])}` : ''}</figcaption></figure>`;
   };
-  /* The order ticket: chip, name and photo on the team panel, the bet, price and book, my chance against what the
-     price needs, WHY and BUT (saved strings chosen at build time), the hit strip and the season record on the stub.
-     opts: strip (show the hit strip), compact (smaller bet), season ({wins, losses, pushes}), lines (current quotes),
-     onPage (the play page: h1 name, no link). */
+  // Render the published ticket on Today or its individual play page.
   const ticket = (pick, opts = {}) => {
     const vm = pickVM(pick), g = gameOf(pick), parts = betParts(pick, g), league = pick.league || String(pick.gameId || '').split('-')[0];
     const climb = vm.kind === 'climb', fun = vm.kind === 'fun', best = vm.kind === 'best', info = pick.ladder || {};
@@ -913,9 +910,7 @@
         ${chipHtml}${nameHtml}<p class="kt-meta">${g && g.away ? `<span class="kt-discs">${disc(g.away, league)}${disc(g.home, league)}</span>` : ''}<span><b>${esc(matchup || (climb || fun ? vm.book || '' : ''))}</b>${esc(when)}</span></p></div>`;
       if (photo) after = `<div class="kt-ph kt-photo" aria-hidden="true">${img}</div>`;
     }
-    /* The now line: the latest same-book quote and how far the posted price may go. An expired or moved quote never
-       reads as open: closed plays show their state words instead. */
-    /* Unavailable (decision 9; the A-22/A-23 hold): no now line, no chance and no ORDER UP, only the plain words. */
+    // Use the latest same-book quote and preserve any post-publication hold.
     const rows = opts.lines || todayExtras?.lines?.lines;
     const hold = best && !pick.result ? pickHold(pick, rows) : null;
     const latest = !pick.result && !climb && !fun && !hold ? latestPickQuote(pick, rows) : null;
