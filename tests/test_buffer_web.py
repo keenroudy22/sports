@@ -13,6 +13,25 @@ import buffer_post as bp
 class WebReceiptTests(unittest.TestCase):
     now = datetime(2026, 10, 26, 13, tzinfo=timezone.utc)
 
+    def test_attended_cbb_price_renewal_keeps_original_and_requires_both_prices(self):
+        from tests.test_cbb_picks import fixture, NOW
+        original = fixture()
+        before = copy.deepcopy(original)
+        now = NOW + timedelta(hours=2)
+        renewal = copy.deepcopy(original)
+        renewal['quote'].update(checkedAt=bp.stamp(now), receipt='second-visible-book-observation')
+        renewal['review']['checkedAt'] = bp.stamp(now)
+        renewed = web.reviewed_cbb_delivery(original, renewal, now)
+        self.assertEqual(original, before)
+        self.assertEqual(renewed['quote']['checkedAt'], bp.stamp(now))
+        for field in ('line', 'odds', 'oppositeOdds'):
+            wrong = copy.deepcopy(renewal)
+            wrong['quote'][field] += 1
+            with self.assertRaises(web.WebHold):
+                web.reviewed_cbb_delivery(original, wrong, now)
+        with self.assertRaises(web.WebHold):
+            web.reviewed_cbb_delivery(dict(original, result='loss'), renewal, now)
+
     def test_cbb_recovery_reuses_own_intent_but_respects_other_slots(self):
         import cbb_picks
         now=datetime(2026,11,3,15,tzinfo=timezone.utc)

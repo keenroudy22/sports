@@ -144,7 +144,28 @@ def confirm_sent(entry, *, observed_text, link, sent_at, now, observed_images=No
     web.update(state='sent', verifiedAt=gates.stamp(now), evidence='Buffer Sent UI')
 
 
-def reserve_cbb_pick(guid, log_book, now, *, opener=None, validate_only=False):
+def reviewed_cbb_delivery(original, renewal, now):
+    """Revalidate identical unsent terms for an attended X delivery, without re-admission."""
+    import cbb_picks
+    if (not original or original.get('result') or not isinstance(renewal, dict)
+            or renewal.get('id') != original['id'] or renewal.get('eventId') != original['eventId']
+            or renewal.get('game') != original['game']):
+        raise WebHold('Renewal must identify the same unsettled CBB fixture')
+    quote = renewal.get('quote') or {}
+    review = renewal.get('review') or {}
+    if (quote.get('source') != original['quote']['source']
+            or quote.get('receipt') == original['quote']['receipt']
+            or review.get('why') != original['review']['why']):
+        raise WebHold('New same-event sportsbook evidence and the original selection rationale are required')
+    play = dict(original, quote=quote, review=review)
+    if not cbb_picks.current_match(play, now):
+        raise WebHold('Renewed quote must match both original prices and pass the current source review')
+    if gates.when(quote['checkedAt']) <= gates.when(original['quote']['checkedAt']):
+        raise WebHold('A newer observed sportsbook price is required')
+    return play
+
+
+def reserve_cbb_pick(guid, log_book, now, *, opener=None, validate_only=False, renewal=None):
     """Attended recovery for an admitted, delivered CBB pick; no API call."""
     import cbb_picks, social_style
     require_prior_results(log_book, now)
@@ -156,6 +177,8 @@ def reserve_cbb_pick(guid, log_book, now, *, opener=None, validate_only=False):
             or any(entry.get(k) for k in ('bufferPostId','sentAt','webDelivery','typefullyDelivery','bufferAttemptAt','error','cancelledAt','deletedAt'))):
         raise WebHold('Requires one public CBB play with no prior or ambiguous X attempt')
     play=next((p for p in cbb_picks.public_rows() if p['id']==guid),None)
+    if renewal is not None:
+        play=reviewed_cbb_delivery(play,renewal,now)
     if not play or not cbb_picks.current_match(play,now):
         raise WebHold('Current CBB quote/review did not clear')
     text=cbb_picks.caption(play)
@@ -176,6 +199,8 @@ def reserve_cbb_pick(guid, log_book, now, *, opener=None, validate_only=False):
     entry.update(dueAt=gates.stamp(due),queuedText=text)
     entry['webDelivery']=dict(state='reserved',reservedAt=gates.stamp(now),reviewedAt=gates.stamp(now),image=image,
                                evidence='CBB original ledger, current source/quote, caption and hosted-card checks')
+    if renewal is not None:
+        entry['webDelivery']['quoteRecheckedAt']=play['quote']['checkedAt']
     return entry
 
 
