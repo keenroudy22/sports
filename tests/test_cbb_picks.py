@@ -171,6 +171,21 @@ class CBBPicksTests(unittest.TestCase):
             self.assertEqual(log['posts'][0]['discord']['destination'],'plays')
             self.assertNotIn('sentAt',log['posts'][0])
 
+    def test_current_discord_pick_can_arrive_when_x_slots_outlast_the_quote(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            cbb.admit(fixture(),context(),NOW,root)
+            log={'posts':[]}
+            with patch('buffer_post.free_slot',return_value=NOW+timedelta(hours=2)), \
+                 patch('buffer_post.live_card_url',return_value='https://keenroudy.com/card.png'), \
+                 patch('buffer_post.ticket_art_live',return_value=True), \
+                 patch('buffer_post.plain_art_live',return_value=True):
+                self.assertFalse(cbb.plans(NOW,log,root))
+                self.assertEqual(cbb.queue_discord(NOW,log,root),1)
+                self.assertIsNone(log['posts'][0]['dueAt'])
+                self.assertEqual(cbb.queue_discord(NOW,log,root),0)
+                self.assertFalse(cbb.queue_discord(NOW+timedelta(hours=1),{'posts':[]},root))
+
     def test_canonical_fixture_prevents_wrong_matchup(self):
         with tempfile.TemporaryDirectory() as d:
             p=fixture();p['game']['teams']['home']['id']='other';p['review']['sources'][0]['teamId']='other'

@@ -144,7 +144,7 @@ def current_match(play,now,root=STORE):
     return not play.get('result') and refusal(play,now) is None
 
 
-def plans(now,log_book,root=STORE,reserved=()):
+def plans(now,log_book,root=STORE,reserved=(), *, for_discord=False):
     import buffer_post,x_post
     busy=buffer_post.taken(log_book,now)+[p[3] for p in reserved]
     result=[]
@@ -155,8 +155,17 @@ def plans(now,log_book,root=STORE,reserved=()):
         text=caption(p)
         if x_post.x_style(text) or x_post.tweet_length(text)>x_post.LIMIT:continue
         due=buffer_post.free_slot(post_windows.play_due(now,now),busy)
-        if due>=min(boxscores.instant(p['game']['kickoff'])-timedelta(minutes=15),boxscores.instant(p['quote']['checkedAt'])+timedelta(hours=1)):continue
-        result.append((p['id'],'cbb-pick',text,due,p['id'].lower()));busy.append(due)
+        expires=min(boxscores.instant(p['game']['kickoff'])-timedelta(minutes=15),boxscores.instant(p['quote']['checkedAt'])+timedelta(hours=1))
+        if due >= expires:
+            if not for_discord or now >= expires:
+                continue
+            # The current quote can still go to Discord. Leave X unscheduled.
+            due=None
+        else:
+            busy.append(due)
+        result.append((p['id'],'cbb-pick',text,due,p['id'].lower()))
+    if for_discord:
+        return result
     for p in public_rows(root):
         if not p.get('result') or not now-timedelta(days=3)<=boxscores.instant(p['settledAt'])<=now:continue
         original=next((e for e in reversed(log_book.get('posts',[])) if e.get('id')==p['id']
@@ -193,13 +202,13 @@ def result_text(p):
 def queue_discord(now,log_book,root=STORE,opener=None):
     import buffer_post,x_post
     count=0
-    for guid,kind,text,due,key in plans(now,log_book,root):
+    for guid,kind,text,due,key in plans(now,log_book,root,for_discord=True):
         if kind!='cbb-pick':continue
         if any(e['id']==guid for e in log_book.get('posts',[])):continue
         image=buffer_post.live_card_url(key,opener)
         if not image or not buffer_post.ticket_art_live(image) or not buffer_post.plain_art_live(image):continue
         log_book.setdefault('posts',[]).append(dict(id=guid,kind='buffer:cbb-pick',cbbPick=True,cbbDiscordOnly=True,
-            postedAt=boxscores.stamp(now),dueAt=boxscores.stamp(due),queuedText=text,textHash=x_post.text_hash(text),
+            postedAt=boxscores.stamp(now),dueAt=boxscores.stamp(due) if due else None,queuedText=text,textHash=x_post.text_hash(text),
             card=True,cardKey=key,discord=dict(state='pending',destination='plays',text=buffer_post.without_playbook(text),
             image=image,readyAt=boxscores.stamp(now))))
         count+=1
