@@ -1,0 +1,620 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-18T03:30:06Z",
+  "targetWeek": 12,
+  "summary": "Research update for Nov 17: Settled 3: Nick Poulos UNDER 215.5 passing yards win; Ohio -10 loss; Victor Rosa OVER 25.5 rushing yards win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "QB",
+      "athleteId": "5228762",
+      "market": "passYds",
+      "line": 215.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401866464"
+      ],
+      "book": "FanDuel",
+      "odds": -114,
+      "projection": 156.4,
+      "edge": "Price-checked chance 53.8% against the exact two-sided price; 53.3% needed at -114: +0.5 percentage points.",
+      "cutoff": "UNDER 215.5 at -114 or better; off the card at 215 or lower, or at -129 or worse at 215.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-12T04:18:58Z",
+      "quotedAt": "2026-11-17T11:46:09Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 6:46 AM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-17T13:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.737,
+        "chance": 0.538,
+        "calibrated": true,
+        "calibration": 0.16,
+        "calibrationN": 2871,
+        "push": 0.0,
+        "breakEven": 0.533,
+        "edgePoints": 0.5,
+        "evPerUnit": 0.01,
+        "snapshotAt": "2026-11-12T04:18:58Z",
+        "probabilitySpec": "9406c3b11d1635d3218e37fc13631906a61c19b05621ada0693d0411a26dacb1",
+        "evaluatedAt": "2026-11-17T11:49:38Z",
+        "fairChance": 0.5,
+        "anchoredChance": 0.538,
+        "gap": 3.8,
+        "calibrationFamily": "CFB/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Ball State Cardinals at Ohio Bobcats",
+      "title": "Nick Poulos UNDER 215.5 passing yards",
+      "id": "CFB-2026-W12-poulos-under-215-5-passyds-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401866464",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://woub.org/2026/11/11/ohio-football-falls-in-the-battle-of-the-bricks-to-miami-allowing-34-unanswered-points/",
+        "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+        "https://ohiobobcats.com/news/2026/11/14/ohio-football-returns-home-to-host-ball-state"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 9 of 10 under 215.5.",
+        "context": [
+          "Role: projected for 22.3 att a game.",
+          "Defense: BALL allows 226.8 passing yards a game to QBs, 99th-stingiest of 138 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 156.4 against 215.5. The under reads 53.8% after adjustment from the raw 73.7%; 53.3% is needed at -114. Last 10 games: 9 of 10 under 215.5. Role: projected for 22.3 att a game. Defense: BALL allows 226.8 passing yards a game to QBs, 99th-stingiest of 138 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Under 215.5 in 9 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-17T11:49:38Z"
+          },
+          {
+            "text": "Book says 215.5. I say 156.4.",
+            "numbers": {
+              "projection": 156.4,
+              "line": 215.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-12T04:18:58Z"
+          },
+          {
+            "text": "4 of his last 5 games finished under 215.5 passing yards.",
+            "numbers": {
+              "values": [
+                158,
+                165,
+                266,
+                197,
+                193
+              ],
+              "hits": 4,
+              "games": 5,
+              "line": 215.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-11T01:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 7 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-17T11:49:38Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "The November 17 preview says Ohio will look to Duncan Brune and Nick Poulos on the ground to reduce the number of dropbacks needed against Ball State.",
+            "numbers": {},
+            "source": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+            "time": "2026-11-17T11:49:38Z"
+          },
+          {
+            "text": "The November 17 preview says Ohio will look to Duncan Brune and Nick Poulos on the ground to reduce the number of dropbacks needed against Ball State.",
+            "numbers": {},
+            "source": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+            "time": "2026-11-17T11:49:38Z"
+          }
+        ],
+        "weather": {
+          "tempF": 43,
+          "windMph": 0,
+          "windDirection": "",
+          "precipProb": 0,
+          "periodStart": "2026-11-17T19:00:00-05:00",
+          "issuedAt": "2026-11-16T20:19:20+00:00",
+          "source": "https://api.weather.gov/gridpoints/RLX/42,110/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": null,
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 228.5,
+                "price": -114,
+                "time": "2026-11-16T02:27:25Z"
+              },
+              "now": {
+                "line": 215.5,
+                "price": -114,
+                "time": "2026-11-17T11:46:09Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 215.5,
+            "price": -114,
+            "time": "2026-11-17T11:46:09Z"
+          }
+        },
+        "ours": {
+          "projection": 156.4,
+          "line": 215.5,
+          "market": "passYds",
+          "text": "Under 215.5 in 9 of his last 10 games.",
+          "snapshotAt": "2026-11-12T04:18:58Z"
+        },
+        "history": "Last 10 games: 9 of 10 under 215.5.",
+        "sources": [
+          {
+            "label": "role",
+            "url": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+            "time": "2026-11-17T11:49:38Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/RLX/42,110/forecast/hourly",
+            "time": "2026-11-16T20:19:20+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866464",
+            "time": "2026-11-17T11:49:38Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-17T11:49:38Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://woub.org/2026/11/11/ohio-football-falls-in-the-battle-of-the-bricks-to-miami-allowing-34-unanswered-points/",
+            "time": "2026-11-17T11:49:38Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://ohiobobcats.com/news/2026/11/14/ohio-football-returns-home-to-host-ball-state",
+            "time": "2026-11-17T11:49:38Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-17T13:12:26Z",
+      "result": "win",
+      "actual": "Nick Poulos: 155 passing yards",
+      "settledAt": "2026-11-18T03:30:06Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401866464",
+      "actualValue": 155,
+      "settlementStats": {
+        "car": 8,
+        "rushYds": 58,
+        "cmp": 9,
+        "att": 13,
+        "passYds": 155
+      },
+      "units": 0.877
+    },
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "4873234",
+      "market": "rushYds",
+      "line": 25.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401866464"
+      ],
+      "book": "FanDuel",
+      "odds": 108,
+      "projection": 31.3,
+      "edge": "Price-checked chance 51.4% against the exact two-sided price; 48.1% needed at +108: +3.3 percentage points.",
+      "cutoff": "OVER 25.5 at +108 or better; off the card at 26+, or at -107 or worse at 25.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-12T04:18:58Z",
+      "quotedAt": "2026-11-17T22:31:15Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 5:31 PM ET capture across 1 book; FanDuel is the only book with this market so far. FanDuel is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-18T00:00:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.587,
+        "chance": 0.514,
+        "calibrated": true,
+        "calibration": 0.16,
+        "calibrationN": 2871,
+        "push": 0.0,
+        "breakEven": 0.481,
+        "edgePoints": 3.3,
+        "evPerUnit": 0.069,
+        "snapshotAt": "2026-11-12T04:18:58Z",
+        "probabilitySpec": "6e1ddd354a78240111a4eac00516a7ce3ea81f99fbf48203c58f9d65a6285eb7",
+        "evaluatedAt": "2026-11-17T22:34:33Z",
+        "fairChance": 0.455,
+        "anchoredChance": 0.514,
+        "gap": 5.9,
+        "calibrationFamily": "CFB/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Ball State Cardinals at Ohio Bobcats",
+      "title": "Victor Rosa OVER 25.5 rushing yards",
+      "id": "CFB-2026-W12-rosa-over-25-5-rushyds-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401866464",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://ohiobobcats.com/news/2026/11/14/ohio-football-returns-home-to-host-ball-state",
+        "https://ballstatesports.com/news/2026/11/15/football-football-gameday-maction-slate-continues-cardinals-and-bobcats-take-tuesday-stage-in-athens"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 6 of 10 over 25.5.",
+        "context": [
+          "Role: 2nd of 3 OHIO RBs by projected carries, 6.7 a game.",
+          "Defense: BALL allows 169.8 rushing yards a game to RBs, 136th-stingiest of 138 this season."
+        ],
+        "cautions": [
+          "Ball State allowed Buffalo 302 rushing yards in its November 11 game, with 130 coming in the fourth quarter."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 31.3 against 25.5. The over reads 51.4% after adjustment from the raw 58.7%; 48.1% is needed at +108. Last 10 games: 6 of 10 over 25.5. Role: 2nd of 3 OHIO RBs by projected carries, 6.7 a game. Defense: BALL allows 169.8 rushing yards a game to RBs, 136th-stingiest of 138 this season.",
+      "risk": "Ball State allowed Buffalo 302 rushing yards in its November 11 game, with 130 coming in the fourth quarter. An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Over 25.5 in 6 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-17T22:34:33Z"
+          },
+          {
+            "text": "Book says 25.5. I say 31.3.",
+            "numbers": {
+              "projection": 31.3,
+              "line": 25.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-12T04:18:58Z"
+          },
+          {
+            "text": "4 of his last 5 games finished over 25.5 rushing yards.",
+            "numbers": {
+              "values": [
+                30,
+                70,
+                35,
+                40,
+                5
+              ],
+              "hits": 4,
+              "games": 5,
+              "line": 25.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-04T00:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Ball State allowed Buffalo 302 rushing yards in its November 11 game, with 130 coming in the fourth quarter.",
+            "numbers": {},
+            "source": "https://ballstatesports.com/news/2026/11/15/football-football-gameday-maction-slate-continues-cardinals-and-bobcats-take-tuesday-stage-in-athens",
+            "time": "2026-11-17T22:34:33Z"
+          },
+          {
+            "text": "Ball State allowed Buffalo 302 rushing yards in its November 11 game, with 130 coming in the fourth quarter.",
+            "numbers": {},
+            "source": "https://ballstatesports.com/news/2026/11/15/football-football-gameday-maction-slate-continues-cardinals-and-bobcats-take-tuesday-stage-in-athens",
+            "time": "2026-11-17T22:34:33Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 42,
+          "windMph": 0,
+          "windDirection": "",
+          "precipProb": 0,
+          "periodStart": "2026-11-17T19:00:00-05:00",
+          "issuedAt": "2026-11-17T11:48:23+00:00",
+          "source": "https://api.weather.gov/gridpoints/RLX/42,110/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": null,
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 25.5,
+                "price": 108,
+                "time": "2026-11-17T22:31:15Z"
+              },
+              "now": {
+                "line": 25.5,
+                "price": 108,
+                "time": "2026-11-17T22:31:15Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 25.5,
+            "price": 108,
+            "time": "2026-11-17T22:31:15Z"
+          }
+        },
+        "ours": {
+          "projection": 31.3,
+          "line": 25.5,
+          "market": "rushYds",
+          "text": "Over 25.5 in 6 of his last 10 games.",
+          "snapshotAt": "2026-11-12T04:18:58Z"
+        },
+        "history": "Last 10 games: 6 of 10 over 25.5.",
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://ballstatesports.com/news/2026/11/15/football-football-gameday-maction-slate-continues-cardinals-and-bobcats-take-tuesday-stage-in-athens",
+            "time": "2026-11-17T22:34:33Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/RLX/42,110/forecast/hourly",
+            "time": "2026-11-17T11:48:23+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866464",
+            "time": "2026-11-17T22:34:33Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-17T22:34:33Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://ohiobobcats.com/news/2026/11/14/ohio-football-returns-home-to-host-ball-state",
+            "time": "2026-11-17T22:34:33Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-17T22:41:10Z",
+      "result": "win",
+      "actual": "Victor Rosa: 65 rushing yards",
+      "settledAt": "2026-11-18T03:30:06Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401866464",
+      "actualValue": 65,
+      "settlementStats": {
+        "car": 12,
+        "rushYds": 65,
+        "rec": 1,
+        "recYds": 2
+      },
+      "units": 1.08
+    }
+  ],
+  "gamePicks": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": false,
+      "marketType": "spread",
+      "line": -10.0,
+      "direction": "home",
+      "gameIds": [
+        "CFB-401866464"
+      ],
+      "book": "BetMGM",
+      "odds": -108,
+      "projection": 17.0,
+      "edge": "Price-checked chance 52.3% against the exact two-sided price; 51.9% needed at -108: +0.4 percentage points.",
+      "cutoff": "HOME -10 at -108 or better; off the card on no key number, or at -123 or worse at -10.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-12T04:18:58Z",
+      "quotedAt": "2026-11-17T17:07:30Z",
+      "quoteType": "capture",
+      "quoteNote": "BetMGM's number and price from the 12:07 PM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-17T22:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.654,
+        "chance": 0.523,
+        "calibrated": true,
+        "calibration": 0.15,
+        "calibrationN": null,
+        "push": 0.022,
+        "breakEven": 0.519,
+        "edgePoints": 0.4,
+        "evPerUnit": 0.029,
+        "snapshotAt": "2026-11-12T04:18:58Z",
+        "probabilitySpec": "605b2b2303ef7bae02b8c79323e640846bce52448896892ecd8bd13fafe367b1",
+        "evaluatedAt": "2026-11-17T17:33:03Z",
+        "fairChance": 0.498,
+        "anchoredChance": 0.523,
+        "gap": 2.5,
+        "calibrationFamily": "CFB/spread",
+        "calibrationMethod": "neutral-centered-fitted"
+      },
+      "matchup": "Ball State Cardinals at Ohio Bobcats",
+      "title": "Ohio -10",
+      "id": "CFB-2026-W12-ball-ohio-spread-home-minus-10-mgm",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401866464",
+        "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac"
+      ],
+      "why": "Model lean, our number only. We have the home margin at 17; the book is at -10. That makes the home 52.3%, and -108 needs 51.9%. Checked before publishing: Ball State is led by senior quarterback Keldric Luster, while Ohio coach John Hauser and his staff remain confident in quarterback Nick Poulos for the Ball State matchup. The market: The spread opened -9.5 and is -10 at DraftKings, a move of 0.5 toward the home. The total opened 50.5 and is 49.5 at DraftKings, 1 toward the under. 6 books span -10.5 to -9.5 on the spread; the middle is -10. Our spread is 7 points off, bigger than 76% of our past gaps. Gaps this size went 426-419 against the close in 3584 games. Our total is 2.8 points off, bigger than 51% of our past gaps. Gaps this size went 944-831 against the close in 3602 games.",
+      "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Ohio has a 17-game home win streak entering the Ball State game."
+        ],
+        "cautions": [],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says -10. I say 17.",
+            "numbers": {
+              "projection": 17.0,
+              "line": -10.0
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-12T04:18:58Z"
+          },
+          {
+            "text": "Ohio has a 17-game home win streak entering the Ball State game.",
+            "numbers": {},
+            "source": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+            "time": "2026-11-17T17:33:03Z"
+          },
+          {
+            "text": "Ohio has a 17-game home win streak entering the Ball State game.",
+            "numbers": {},
+            "source": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+            "time": "2026-11-17T17:33:03Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-17T17:33:03Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 42,
+          "windMph": 0,
+          "windDirection": "",
+          "precipProb": 0,
+          "periodStart": "2026-11-17T19:00:00-05:00",
+          "issuedAt": "2026-11-17T11:48:23+00:00",
+          "source": "https://api.weather.gov/gridpoints/RLX/42,110/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": -9.5,
+                "price": -110,
+                "time": "2026-11-15T11:45:07Z"
+              },
+              "now": {
+                "line": -10.0,
+                "price": -110,
+                "time": "2026-11-17T17:07:30Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": -8.5,
+                "price": -110,
+                "time": "2026-11-13T11:45:06Z"
+              },
+              "now": {
+                "line": -9.5,
+                "price": -125,
+                "time": "2026-11-17T17:07:30Z"
+              }
+            }
+          },
+          "best": {
+            "book": "BetMGM",
+            "line": -10.0,
+            "price": -108,
+            "time": "2026-11-17T17:07:30Z"
+          }
+        },
+        "ours": {
+          "projection": 17.0,
+          "line": -10.0,
+          "market": "spread",
+          "text": "Book says -10. I say 17.",
+          "snapshotAt": "2026-11-12T04:18:58Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://www.thepostathens.com/article/2026/11/ohio-football-preview-ball-state-night-game-must-win-2026-mac",
+            "time": "2026-11-17T17:33:03Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/RLX/42,110/forecast/hourly",
+            "time": "2026-11-17T11:48:23+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866464",
+            "time": "2026-11-17T17:33:03Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-17T17:50:55Z",
+      "result": "loss",
+      "actual": "Ball State 28, Ohio 35",
+      "settledAt": "2026-11-18T03:30:06Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401866464",
+      "actualValue": 7,
+      "units": -1
+    }
+  ]
+}
