@@ -8749,3 +8749,37 @@ grades or publications before the games. Only isolated fixtures exercised a
 void and a reduced-price win. The live ticket still needs its own settlement
 and delivery receipts. Private proof is in
 work/nov16-delivery-parlays/repriced-final-release.json.
+
+### November 17 football spread margins and push Finals
+
+Release `2a702839f` corrected the cover margin on football spread result
+cards and captions. A team laying ten and winning by fourteen clears by
+four. A ten-point win produces a push Final showing the score and zero
+units. An explicitly voided football straight also has a neutral Final.
+The changes cover the X original-quote planner, Discord result card and
+missing-result recovery. The original wager and grading ledger are preserved.
+
+The normal and clean exports each ran 2,454 Python tests with two skips and
+377 passing Node tests. The publication guard, record audits and offline
+results rehearsal passed. The hosted Ohio and NBA pick pages displayed the
+original terms at 375 and 1440 pixels with zero page overflow, missing
+images or browser errors. [Hosted release](https://github.com/keenroudy22/sports/actions/runs/44200168736)
+
+Before kickoff all four original PNGs matched the live site, the attachments
+observed in Buffer Sent for X and the Discord attachments byte for byte.
+The graphic text matched each straight and every NBA alternate threshold,
+book and ticket price. The installed code also passed a private four-play
+replay. A partial recap or a missing individual receipt held the next
+day's plays. The three football straights carry 3u in Ball State–Ohio and
+the six-player NBA ticket carries 0.25u across three games, within the
+8u slate ceiling. Tonight’s actual settlement and result receipts remain
+open. Verification files are in `work/nov16-delivery-parlays/` under
+`nov17-football-final-hosted-release.json`, `nov17-all-four-pregame-assets.json`,
+`nov17-all-four-card-terms-check.json` and `nov17-installed-four-play-replay.json`.
+
+The natural 18:55 Eastern results worker started at 23:55:05Z on the tested
+revision and finished at 00:00:13Z with zero errors, grades or publications.
+The worker logged zero odds or prop requests. NBA final-box requests were
+also zero ahead of the first tip. Its observed launchd PID and terminal
+receipt are in `work/nov16-delivery-parlays/nov17-1855-results-observed.json`.
+The 18:25 worker had run on the previous revision.
