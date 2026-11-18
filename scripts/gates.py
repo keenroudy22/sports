@@ -1008,6 +1008,7 @@ def plan_reasons(candidate):
     return [row for row in rows if row.get('direction') == 'for' and row.get('text')]
 
 
+STRAIGHT_PRICE_MARGIN_FROM = datetime(2026, 11, 18, 19, 8, tzinfo=timezone.utc)
 MONEYLINE_ALIGNMENT_FROM = datetime(2026,10,27,17,tzinfo=timezone.utc)
 
 
@@ -1086,10 +1087,17 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     if chance <= numbers['breakEven']:
         return Decision(False, 'plan_selection',
                         f"anchored chance {chance:.1%} does not beat the {numbers['breakEven']:.1%} this price needs", numbers)
-    # A Gut call is the game-day fallback: positive expected value is enough.
-    # The strict chance > break-even check above still refuses a losing price,
-    # while every price, role, injury and supporting-reason rule remains in
-    # force. Best bets keep their four-point floor.
+    if ctx.now >= STRAIGHT_PRICE_MARGIN_FROM and lane in ('best_bet', 'chef_pick'):
+        # Use the exact offered odds. The stored break-even and market gap
+        # are rounded reporting values, and the latter removes the vig.
+        required_points = 3 if odds < -150 else 2
+        offered_break_even = pricing.break_even(odds)
+        edge_points = 100 * (chance - offered_break_even)
+        if not math.isfinite(edge_points) or edge_points + 1e-10 < required_points:
+            return Decision(False, 'straight_price_margin',
+                            f'{odds:+g} needs {offered_break_even:.2%} to break even; '
+                            f'model {chance:.2%} clears it by {edge_points:.2f} points, '
+                            f'{lane} requires {required_points}', numbers)
     lane_floor = 0 if lane == 'gut_call' or regular else 4
     if gap < lane_floor:
         return Decision(False, 'plan_selection',

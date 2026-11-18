@@ -1164,6 +1164,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **November 18 straight prices:** For a new modeled Best Bet or Chef’s Pick, require the
+  adjusted win chance to exceed break-even at the exact book price by at least two
+  percentage points, or three for favorites more expensive than −150. Apply at selection
+  and again before first delivery. These are editorial minimums. Pass if the matchup and
+  price would not earn the actual stake, even above the minimum. For sourced basketball
+  straights, approve the exact price explicitly in the existing review and explain why the
+  matchup warrants it. Never infer an edge from a team’s record alone.
+
+
 - **October23 full-process audit:** target3–5 independently qualifying daily straights
   as a coverage/delivery objective, not a forced bet quota. Public stakes remain in
   units; personal dollar equivalents differ and never rescale historical records.
