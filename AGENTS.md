@@ -1,3 +1,11 @@
+# November 18 morning recap order
+
+Target 6:45 a.m. Eastern for the previous slate’s complete graded recap starting November 19.
+Hold new X and Discord content, including projections, research and weekly summaries,
+until the prior results have confirmed delivery. Prepare research privately overnight and
+check the gate on the intended Eastern publication day before giving new content to Buffer.
+Individual Finals may still go out as games settle. A delayed grade holds new posts.
+
 # November 17 evening — complete daily cards only
 
 Publish individual plays as they qualify. Omit the combined pregame Best Bets

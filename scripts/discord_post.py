@@ -340,7 +340,10 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                    or (combined and str(entry.get('id', '')).startswith('receipt:card:'))
                    or (kind == 'buffer:community'
                        and mirror.get('communityType') == 'ticket'))
-        if hold_new_plays and pregame:
+        import receipts
+        waits = (receipts.waits_for_morning_results(entry.get('id'), kind, receipts.eastern_date(now))
+                 if kind != 'buffer:community' else pregame)
+        if hold_new_plays and waits:
             mirror['lastHold'] = str(hold_new_plays)
             entry['discord'] = mirror
             continue

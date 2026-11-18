@@ -91,6 +91,38 @@ class ResultsOrderTests(unittest.TestCase):
                 send.assert_not_called()
                 self.assertEqual(book['posts'], [])
 
+    def test_overnight_projection_cannot_reserve_next_mornings_provider_slot(self):
+        now = datetime(2026, 11, 18, 3, 1, tzinfo=timezone.utc)
+        due = datetime(2026, 11, 18, 13, 20, tzinfo=timezone.utc)
+        plan = ('nba-projections-2026-11-18', 'research', 'My numbers', due, 'card')
+        with patch.object(receipts, 'current_results_hold') as check, patch.object(buffer_post, 'create_post') as create:
+            buffer_post.schedule([plan], 'x', {'posts': []}, now, log=lambda *_: None)
+            check.assert_not_called()
+            create.assert_not_called()
+            check.return_value = 'recap missing on Discord'
+            buffer_post.schedule([plan], 'x', {'posts': []}, due, log=lambda *_: None)
+            check.assert_called_once()
+            create.assert_not_called()
+
+    def test_new_content_waits_while_prior_result_routes_remain_open(self):
+        now = datetime(2026, 11, 19, 12, tzinfo=timezone.utc)
+        day = receipts.eastern_date(now)
+        self.assertEqual(receipts.daily_morning(day).strftime('%H:%M'), '11:45')
+        for kind in ('research', 'book', 'sheet', 'sports', 'conversation', 'news', 'play'):
+            self.assertTrue(receipts.waits_for_morning_results('new', kind, day))
+        self.assertTrue(receipts.waits_for_morning_results('receipt:week:2026-11-17', 'receipt', day))
+        for guid in ('receipt:day:2026-11-18', 'receipt:nba:prior', 'receipt:cbb:prior'):
+            self.assertFalse(receipts.waits_for_morning_results(guid, 'receipt', day))
+        research = {'id': 'nba-projections-2026-11-19', 'kind': 'buffer:research',
+                    'sentAt': '2026-11-19T11:50:00Z',
+                    'discord': {'state': 'pending', 'destination': 'research', 'text': 'My numbers'}}
+        with patch.object(discord_post, 'send_message') as send:
+            discord_post.mirror_sent({'posts': [research]}, now, research_url='research',
+                                     hold_new_plays='recap missing', log=lambda *_: None)
+            send.assert_not_called()
+        self.assertEqual(research['discord']['state'], 'pending')
+        self.assertEqual(research['discord']['lastHold'], 'recap missing')
+
     def test_attended_recovery_cannot_jump_results(self):
         for reserve in (buffer_web.reserve_public_play, buffer_web.reserve_nba_pick,
                         buffer_web.reserve_cbb_pick):

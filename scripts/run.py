@@ -3281,11 +3281,11 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         plans += cbb_picks.plans(now, log_book, reserved=plans)
         if results_first_hold:
             held = [plan[0] for plan in plans
-                    if receipts.is_new_play(plan[0], plan[1])]
+                    if receipts.waits_for_morning_results(plan[0], plan[1], eastern_date(plan[3]))]
             plans = [plan for plan in plans
-                     if not receipts.is_new_play(plan[0], plan[1])]
+                     if not receipts.waits_for_morning_results(plan[0], plan[1], eastern_date(plan[3]))]
             if held:
-                log('results-first: held new plays until the prior card recap reaches X and Discord: '
+                log('results-first: held new posts until prior results reach X and Discord: '
                     + ', '.join(held))
         upgrades = pending_ladder_result_cards(log_book, ctx, now)
         if deploying and (plans or upgrades):
@@ -3300,7 +3300,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             plans += nba_trial_runtime.social_plans(max(now, later), log_book, reserved=plans)
             if results_first_hold:
                 plans = [plan for plan in plans
-                         if not receipts.is_new_play(plan[0], plan[1])]
+                         if not receipts.waits_for_morning_results(plan[0], plan[1], eastern_date(plan[3]))]
         # A Buffer discovery/limit outage must not prevent already-authorized
         # Discord delivery above. Empty plans need neither metered lookup.
         # An optional post blocked by the local journal cannot use the protected
@@ -4441,7 +4441,8 @@ def retry_stored_results(now, log_book):
         return
     games = {g['id']: g for g in slate['games']}
     plans = [p for p in buffer_post.plan(ctx.first, ctx.latest, games, now, log_book,
-                                      ctx.player_team, log=log, results_only=True) if p[1] == 'cashed']
+                                      ctx.player_team, log=log, results_only=True)
+             if p[1] == 'cashed' or buffer_post.early_daily_receipt(p[0])]
     import cbb_picks
     plans += [p for p in cbb_picks.plans(now, log_book, reserved=plans) if p[1] == 'receipt']
     import nba_results

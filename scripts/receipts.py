@@ -33,6 +33,7 @@ LATEST = (20, 0)                  # Eastern, the day after: a receipt not schedu
 WEEKDAY = 2                       # Wednesday: the week's receipt
 CARD_HISTORY_DAYS = 8             # Discord embeds and retrying publishers need recent generated URLs to survive
 RESULTS_FIRST_EFFECTIVE = date(2026, 11, 15)
+MORNING_RECAP_FIRST = date(2026, 11, 18)
 MARKS = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}
 KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun parlays', 'ladder': '80/20 Climb'}
 
@@ -267,6 +268,8 @@ def morning(day):
 
 def daily_morning(day):
     """Owner's earlier full-slate recap; historical/weekly clocks stay intact."""
+    if day > MORNING_RECAP_FIRST:
+        return datetime(day.year, day.month, day.day, 6, 45, tzinfo=gates.EASTERN).astimezone(timezone.utc)
     if day >= date(2026, 11, 9):
         return datetime(day.year, day.month, day.day, 8, 0, tzinfo=gates.EASTERN).astimezone(timezone.utc)
     return morning(day)
@@ -508,6 +511,18 @@ def is_new_play(guid, kind):
     """Individual picks and the combined pregame card share the result barrier."""
     return (str(kind).removeprefix('buffer:') in ('play', 'nba-trial', 'cbb-pick', 'community')
             or str(guid).startswith('receipt:card:'))
+
+
+def waits_for_morning_results(guid, kind, delivery_day):
+    """Individual Finals and the daily recap can clear the morning release gate."""
+    if delivery_day < MORNING_RECAP_FIRST:
+        return is_new_play(guid, kind)
+    kind = str(kind).removeprefix('buffer:')
+    if kind == 'cashed':
+        return False
+    if kind == 'receipt' and str(guid).startswith(('receipt:day:', 'receipt:nba:', 'receipt:cbb:')):
+        return False
+    return True
 
 
 def confirmed_x(entry):

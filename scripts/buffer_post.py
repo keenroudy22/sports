@@ -539,6 +539,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     house = (receipts.cashed(first, latest, games, log_book, now,
                               fresh_window=receipts.RESULT_RECOVERY_FRESH) if results_only else
              receipts.house_posts(first, latest, games, log_book, now, log=log))
+    if results_only and today >= receipts.MORNING_RECAP_FIRST:
+        house += [p for p in receipts.ready(first, latest, games, log_book, now)
+                  if early_daily_receipt(p['key'])]
     for post in house:
         if set(post['key'].split('+')) & posted:
             continue
@@ -725,13 +728,25 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     # its Buffer tuple "play". The id namespace is authoritative for routing.
     plans = [(guid, 'community' if guid.startswith('community:') else kind, text, due, card_key)
              for guid, kind, text, due, card_key in plans]
-    if any(receipts.is_new_play(p[0], p[1]) for p in plans):
-        hold = receipts.current_results_hold(log_book, now)
-        if hold:
-            for p in plans:
-                if receipts.is_new_play(p[0], p[1]):
-                    log(f'results-first: {p[0]} held: {hold}')
-            plans = [p for p in plans if not receipts.is_new_play(p[0], p[1])]
+    today = eastern_date(now)
+    checked = []
+    hold = None
+    results_checked = False
+    for plan_row in plans:
+        guid, kind, _, due, _ = plan_row
+        delivery_day = eastern_date(due)
+        if receipts.waits_for_morning_results(guid, kind, delivery_day):
+            if delivery_day > today and delivery_day >= receipts.MORNING_RECAP_FIRST:
+                log(f'results-first: {guid} deferred to its Eastern publication day')
+                continue
+            if not results_checked:
+                hold = receipts.current_results_hold(log_book, now)
+                results_checked = True
+            if hold:
+                log(f'results-first: {guid} held: {hold}')
+                continue
+        checked.append(plan_row)
+    plans = checked
     pending = pending_scheduled(log_book, now)
     # Tickets and result follow-ups get queue capacity before optional updates,
     # even before pressure reaches the reserve threshold. Due times stay intact.
