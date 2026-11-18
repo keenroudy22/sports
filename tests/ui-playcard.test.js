@@ -20,8 +20,12 @@ test('expired prices are standing plays but never look open', () => {
   assert.equal(vm.mode, 'expired');
   assert.doesNotMatch([vm.status, vm.statusNote].join(' '), /\bopen\b|price expired/i);
   assert.match(ticketBody, /vm\.mode === 'expired' \? 'Posted price may be gone\. Check your book\.'/);
-  assert.match(ticketBody, /const tense = !afterHold && \(vm\.mode === 'open' \|\| \(vm\.mode === 'expired' && latest && latest\.inside\)\)/,
-    'an aged quote only reads "I have it" while a fresh quote is still inside the posted limit; a later hold is historical');
+  assert.match(ticketBody, /const tense = !afterHold && entryOpen\(vm.mode, latest\)/);
+  assert.equal(M.entryOpen('open', null), true);
+  assert.equal(M.entryOpen('open', {inside:false}), false);
+  assert.equal(M.entryOpen('expired', null), false);
+  assert.equal(M.entryOpen('expired', {inside:true}), true);
+  assert.equal(M.entryOpen('closed', {inside:true}), false);
 });
 
 test('closed, pulled and withdrawn states get their state words, never "Still good to"', () => {

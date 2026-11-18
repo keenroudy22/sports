@@ -92,6 +92,9 @@
     const pastLine = !moneyline && isNum(pick.cutoffBoundary) && (pick.direction === 'under' ? current.line <= pick.cutoffBoundary : current.line >= pick.cutoffBoundary);
     return { current, pastPrice, pastLine, inside: (moneyline || current.line === pick.line) && isNum(pick.cutoffOdds) && !pastPrice && !pastLine };
   };
+  const entryOpen = (mode, latest) => latest
+    ? ['open', 'expired'].includes(mode) && latest.inside
+    : mode === 'open';
   const climbWords = s => s.open ? `Step ${s.open.step || s.step} is live`
     : s.last && s.last.result === 'win' ? `Step ${s.last.step || s.step - 1} cashed · Step ${s.step} not posted yet`
       : s.last && s.last.result === 'loss' ? 'New $50 climb · Step 1 not posted yet'
@@ -626,7 +629,7 @@
   const propSport = league => PROP_SPORTS.has(String(league || '').toUpperCase()) ? String(league).toUpperCase() : 'NFL';
   const propsHref = league => `#research/players?sport=${propSport(league)}`;
 
-  const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
+  const model = { splitColours, ledeSize, goodTo, latestPickQuote, entryOpen, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, pickProjection, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, favoriteHold, favoriteLook, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, opponentTrendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, propSport, propsHref, isParlayLike, climbWords, heroBets,
     teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, todayMarketRank, todayResearchOrder };
@@ -925,7 +928,7 @@
       : climb ? (isNum(Number(info.stake)) && isNum(Number(info.payout)) && info.payout ? `${money(info.stake)} → ${money(info.payout)} if it cashes.` : '')
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${isNum(latest.current.line) && pick.marketType !== 'moneyline' && pick.market !== 'moneyline' ? `${latest.current.line} at ` : ''}${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.pastLine ? `Line moved from ${pick.line}; outside my posted range.` : latest.pastPrice ? `Past my ${odd(pick.cutoffOdds)} limit.` : latest.inside ? good : 'Check the current line and price.'}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
-    const tense = !afterHold && ((vm.mode === 'open' && (!latest || latest.inside)) || (vm.mode === 'expired' && latest && latest.inside));
+    const tense = !afterHold && entryOpen(vm.mode, latest);
     const projection = pickProjection(pick);
     const number = best && (!hold || afterHold) && isNum(projection) && isNum(pick.line)
       ? `<p class="kt-lead kt-chance"><span>Book ${tense ? 'says' : 'said'}<b class="num">${esc(C.fixed(pick.line))}</b></span><i></i><span>I ${tense ? 'have' : 'had'} it at<b class="num">${esc(C.fixed(projection))}</b></span></p>` : '';
@@ -991,7 +994,7 @@
     const matchup = g && g.away && g.home ? `${g.away.abbr} at ${g.home.abbr}` : vm.league === 'CFB' ? 'College football' : vm.league;
     const history = best && pick.hitStrip && Array.isArray(pick.hitStrip.season) && pick.hitStrip.season[1]
       ? `${pick.hitStrip.season[0]} of ${pick.hitStrip.season[1]} at this line this season` : '';
-    const actionable = !pick.result && !hold && ((vm.mode === 'open' && (!latest || latest.inside)) || (vm.mode === 'expired' && latest && latest.inside));
+    const actionable = !pick.result && !hold && entryOpen(vm.mode, latest);
     const status = pick.result ? RESULT_WORD[pick.result] || 'Final' : pick.priceMarginHold ? 'Pass at this price' : hold && !afterHold ? 'Unavailable' : actionable ? 'Open' : ['open', 'expired'].includes(vm.mode) ? 'Check price' : vm.status || 'Closed';
     const title = vm.kind === 'climb' ? `${vm.title} · Step ${(pick.ladder || {}).step || ''}` : vm.title;
     const art = pick.athleteId ? artFor(pick, 'sm') : g && g.away && g.home
