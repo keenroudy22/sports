@@ -1022,6 +1022,8 @@ def price(candidate, ctx, now):
     # original lane and stake; the policy is never retrofitted onto the record.
     if not candidate.get('publishedAt') and game.get('league') in ('NFL', 'CFB'):
         candidate.update(selectionPolicy=gates.TIER_POLICY, lane='best_bet', riskUnits=1)
+        if now >= pricing.STRAIGHT_PRICE_MARGIN_FROM:
+            candidate['cutoff'] = pricing.cutoff(market, side, line, odds, price_tolerance=1)
         gates.staking.apply(candidate, now)
     p = dict(p, **{key: selection[key] for key in
                    ('chance', 'breakEven', 'edgePoints', 'evPerUnit', 'calibration', 'calibrated')})

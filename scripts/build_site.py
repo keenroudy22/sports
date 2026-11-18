@@ -1411,10 +1411,15 @@ def active_community_tickets(payload, now):
             and instant(row['kickoff']) > now]
 
 
-def cutoff_fields(pick):
+def cutoff_fields(pick, *, current_straight=False):
     """Display limits parsed from the original pricing cutoff, never a new entry rule."""
+    if current_straight:
+        probability = pick.get('probabilityAtPublication') or {}
+        chance = probability.get('anchoredChance', probability.get('chance'))
+        if not pricing.clears_straight_price(chance, pick.get('odds')):
+            return dict(priceMarginHold=True, cutoff=None, cutoffOdds=None, cutoffLine=None, cutoffBoundary=None)
     text = str(pick.get('cutoff') or '')
-    price = re.search(r'or at ([+-]\d+) or worse at ([+-]?\d+(?:\.\d+)?)', text)
+    price = re.search(r'(?:or|off the card) at ([+-]\d+) or worse at ([+-]?\d+(?:\.\d+)?)', text)
     boundary = re.search(r'(?:Closed to new entries|off the card) at ([+-]?\d+(?:\.\d+)?)', text, re.I)
     if not price:
         return {'cutoffOdds': None, 'cutoffLine': None, 'cutoffBoundary': None}
@@ -1424,7 +1429,7 @@ def cutoff_fields(pick):
     # the actual publication quote. Preserve the original append-only rule.
     probability = pick.get('probabilityAtPublication') or {}
     checked_quote_only = probability.get('calibrationMethod') in ('neutral-centered-held-out', 'neutral-centered-fitted') and isinstance(pick.get('odds'), (int, float))
-    if checked_quote_only:
+    if current_straight or checked_quote_only:
         cents = max(cents, pricing.cents(pick['odds']))
     fields = {'cutoffOdds': cents - 100 if cents < 0 else cents + 100,
             'cutoffLine': float(price[2]), 'cutoffBoundary': float(boundary[1]) if boundary else None}
@@ -1432,7 +1437,10 @@ def cutoff_fields(pick):
         # Zero is the internal moneyline placeholder, not a point spread.
         # Keep the published price limit but never close it on a +/-0.5 line.
         fields['cutoffBoundary'] = None
-    if checked_quote_only:
+    if current_straight:
+        line_note = '' if (pick.get('marketType') or pick.get('market')) == 'moneyline' else f" at the same line ({float(price[2]):g})"
+        fields['cutoff'] = f"At {pick['odds']:+g} or better{line_note}. A worse price needs a fresh review."
+    elif checked_quote_only:
         fields['cutoff'] = (f"Price check applies at {pick['odds']:+g} or better at {float(price[2]):g}. "
                             "A worse price or a different line needs a new check; the original generic tolerance "
                             "is not a current value recommendation.")
@@ -1452,7 +1460,7 @@ HERO_ROWS = 6              # the weekend card cap is five straight plays; one sp
 HERO_FIELDS = ('id', 'league', 'kind', 'displayTitle', 'market', 'marketType', 'athleteId', 'position', 'line',
                'direction', 'odds', 'book', 'kickoff', 'featured', 'status', 'entryNote', 'expiresAt',
                'cutoffOdds', 'cutoffLine', 'gameId', 'side', 'ticketWhy', 'ticketBut', 'hitStrip', 'held',
-               'quote', 'lane', 'riskUnits', 'selectionPolicy')
+               'quote', 'lane', 'riskUnits', 'selectionPolicy', 'priceMarginHold')
 
 
 def hero_parlay(pick):
@@ -2844,7 +2852,10 @@ def board_picks(first, latest, by_id, identities, now=None):
                      'favorite': pick.get('favorite') is True or key in FAVORITES_BEFORE_FLAG,
                      'marketType': pick_market_type(pick, recent), 'parlayType': pick.get('parlayType'),
                      'ladder': pick.get('ladder'),                         # a ladder rung's run, step and dollars (scripts/ladder.py)
-                     'cutoff': pick.get('cutoff'), **cutoff_fields(pick), 'why': pick.get('why'),
+                     'cutoff': pick.get('cutoff'), **cutoff_fields(pick, current_straight=bool(
+                         now >= pricing.STRAIGHT_PRICE_MARGIN_FROM and pick.get('lane') in ('best_bet', 'chef_pick')
+                         and pick.get('selectionPolicy') and not recent.get('result') and instant(game.get('kickoff'))
+                         and now < instant(game['kickoff']))), 'why': pick.get('why'),
                      'risk': pick.get('risk'), 'edge': pick.get('edge'), 'quotedAt': pick.get('quotedAt'),
                      'whatChanged': pick.get('whatChanged'),
                      'dossier': pick.get('dossier') if isinstance(pick.get('dossier'), dict) else None,

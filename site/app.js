@@ -30,7 +30,11 @@
     const average = values.reduce((a, b) => a + b, 0) / values.length;
     return average > 0 && Math.abs(projection - average) / average > .3 ? `Our average is ${round1(projection)}; his last ${values.length} games averaged ${round1(average)}. Wide range, low certainty.` : '';
   };
-  const goodTo = pick => isNum(pick.cutoffOdds) && isNum(pick.cutoffLine) ? `Still a bet down to ${oddsText(pick.cutoffOdds)} at ${pick.cutoffLine}` : '';
+  const goodTo = pick => {
+    if (!isNum(pick.cutoffOdds) || !isNum(pick.cutoffLine)) return '';
+    const line = (pick.marketType || pick.market) === 'moneyline' ? '' : ` at ${pick.cutoffLine}`;
+    return `Still a bet down to ${oddsText(pick.cutoffOdds)}${line}`;
+  };
   const heldRow = r => Boolean(r && (r.roleSuspect || r.priceSuspect || r.roleHold));
   const holdOf = rows => {
     const held = (rows || []).filter(heldRow);
@@ -42,7 +46,9 @@
   };
   const SAME_VOLUME = { recYds: 'targets', rec: 'targets', rushYds: 'carries', car: 'carries', passYds: 'att', att: 'att', cmp: 'att' };
   const pickHold = (pick, rows) => {
-    if (!pick || pick.result || !pick.athleteId) return null;
+    if (!pick || pick.result) return null;
+    if (pick.priceMarginHold) return { kind: 'entryPrice', afterPosting: true };
+    if (!pick.athleteId) return null;
     if (pick.held) return pick.held;
     const key = C ? C.marketKey(pick) : pick.market;
     const hold = holdOf((rows || []).filter(r => r.gameId === pick.gameId && String(r.athleteId) === String(pick.athleteId)
@@ -58,7 +64,8 @@
           : "No usable projection: the workload estimate doesn't match his recent full games.";
   const HELD_WORDS = /\bproject|\bchance\b|\bedge\b|\bmodel\b|\bfair\b|\d%|^Role: /i;
   const heldShort = hold => hold.kind === 'price' ? 'Price unavailable.' : 'Projection unavailable.';
-  const afterPostingWords = hold => hold.kind === 'qb' ? "His team's quarterback picture changed since I posted; no current projection is shown."
+  const afterPostingWords = hold => hold.kind === 'entryPrice' ? 'Pass at the posted price under my current price rule.'
+    : hold.kind === 'qb' ? "His team's quarterback picture changed since I posted; no current projection is shown."
     : hold.kind === 'price' ? 'That price moved further than I like since I posted.'
       : 'His recent workload looks lighter than my number assumed since I posted.';
   const heldQuote = (pick, rows, now = Date.now()) => {
@@ -918,7 +925,7 @@
       : climb ? (isNum(Number(info.stake)) && isNum(Number(info.payout)) && info.payout ? `${money(info.stake)} → ${money(info.payout)} if it cashes.` : '')
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${isNum(latest.current.line) && pick.marketType !== 'moneyline' && pick.market !== 'moneyline' ? `${latest.current.line} at ` : ''}${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.pastLine ? `Line moved from ${pick.line}; outside my posted range.` : latest.pastPrice ? `Past my ${odd(pick.cutoffOdds)} limit.` : latest.inside ? good : 'Check the current line and price.'}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
-    const tense = !afterHold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
+    const tense = !afterHold && ((vm.mode === 'open' && (!latest || latest.inside)) || (vm.mode === 'expired' && latest && latest.inside));
     const projection = pickProjection(pick);
     const number = best && (!hold || afterHold) && isNum(projection) && isNum(pick.line)
       ? `<p class="kt-lead kt-chance"><span>Book ${tense ? 'says' : 'said'}<b class="num">${esc(C.fixed(pick.line))}</b></span><i></i><span>I ${tense ? 'have' : 'had'} it at<b class="num">${esc(C.fixed(projection))}</b></span></p>` : '';
@@ -984,8 +991,8 @@
     const matchup = g && g.away && g.home ? `${g.away.abbr} at ${g.home.abbr}` : vm.league === 'CFB' ? 'College football' : vm.league;
     const history = best && pick.hitStrip && Array.isArray(pick.hitStrip.season) && pick.hitStrip.season[1]
       ? `${pick.hitStrip.season[0]} of ${pick.hitStrip.season[1]} at this line this season` : '';
-    const actionable = !pick.result && !hold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
-    const status = pick.result ? RESULT_WORD[pick.result] || 'Final' : hold && !afterHold ? 'Unavailable' : actionable ? 'Open' : vm.mode === 'expired' ? 'Check price' : vm.status || 'Closed';
+    const actionable = !pick.result && !hold && ((vm.mode === 'open' && (!latest || latest.inside)) || (vm.mode === 'expired' && latest && latest.inside));
+    const status = pick.result ? RESULT_WORD[pick.result] || 'Final' : pick.priceMarginHold ? 'Pass at this price' : hold && !afterHold ? 'Unavailable' : actionable ? 'Open' : ['open', 'expired'].includes(vm.mode) ? 'Check price' : vm.status || 'Closed';
     const title = vm.kind === 'climb' ? `${vm.title} · Step ${(pick.ladder || {}).step || ''}` : vm.title;
     const art = pick.athleteId ? artFor(pick, 'sm') : g && g.away && g.home
       ? `<span class="ava-pair sm">${teamMark(g.away, 'sm', g.league || pick.league)}${teamMark(g.home, 'sm', g.league || pick.league)}</span>` : '';

@@ -6,6 +6,7 @@ the stored v2 mean, with the spread its 80% range implies; results are whole num
 whole-number line can push. Stdlib only.
 """
 import math
+from datetime import datetime, timezone
 
 import model_v2
 
@@ -54,6 +55,19 @@ def payout(odds):
 
 def break_even(odds):
     return 1 / (1 + payout(odds))
+
+
+STRAIGHT_PRICE_MARGIN_FROM = datetime(2026, 11, 18, 19, 8, tzinfo=timezone.utc)
+
+
+def straight_margin_points(odds):
+    return 3 if odds < -150 else 2
+
+
+def clears_straight_price(chance, odds):
+    return (type(chance) in (int, float) and 0 <= chance <= 1
+            and type(odds) in (int, float) and math.isfinite(odds) and abs(odds) >= 100
+            and 100 * (chance - break_even(odds)) + 1e-10 >= straight_margin_points(odds))
 
 
 def fair_chance(price_side, price_other):
@@ -209,9 +223,11 @@ def price(snapshot, market, side, line, odds, athlete=None):
             'cutoff': cutoff(market, side, line, odds)}
 
 
-def cutoff(market, side, line, odds):
+def cutoff(market, side, line, odds, *, price_tolerance=RULES['cents']):
     """The worst number and price, written from the entry rules."""
-    worst = worse_price(odds)
+    worst = worse_price(odds, price_tolerance)
+    if market == 'moneyline' and price_tolerance == 1:
+        return f"{side.upper()} moneyline at {odds:+d} or better; off the card at {worst:+d} or worse at 0."
     if market == 'spread':
         # Our number only gets worse downward: -2.5 to -3, or +3.5 to +3.
         below = max((k for k in KEYS if k < line), default=None)

@@ -1008,7 +1008,7 @@ def plan_reasons(candidate):
     return [row for row in rows if row.get('direction') == 'for' and row.get('text')]
 
 
-STRAIGHT_PRICE_MARGIN_FROM = datetime(2026, 11, 18, 19, 8, tzinfo=timezone.utc)
+STRAIGHT_PRICE_MARGIN_FROM = pricing.STRAIGHT_PRICE_MARGIN_FROM
 MONEYLINE_ALIGNMENT_FROM = datetime(2026,10,27,17,tzinfo=timezone.utc)
 
 
@@ -1090,10 +1090,10 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     if ctx.now >= STRAIGHT_PRICE_MARGIN_FROM and lane in ('best_bet', 'chef_pick'):
         # Use the exact offered odds. The stored break-even and market gap
         # are rounded reporting values, and the latter removes the vig.
-        required_points = 3 if odds < -150 else 2
+        required_points = pricing.straight_margin_points(odds)
         offered_break_even = pricing.break_even(odds)
         edge_points = 100 * (chance - offered_break_even)
-        if not math.isfinite(edge_points) or edge_points + 1e-10 < required_points:
+        if not pricing.clears_straight_price(chance, odds):
             return Decision(False, 'straight_price_margin',
                             f'{odds:+g} needs {offered_break_even:.2%} to break even; '
                             f'model {chance:.2%} clears it by {edge_points:.2f} points, '

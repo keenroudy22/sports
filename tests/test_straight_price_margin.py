@@ -34,6 +34,20 @@ class StraightPriceMarginTests(unittest.TestCase):
             self.numbers['anchoredChance'] = minimum
             self.assertTrue(gates.selection_verdict(self.pick, self.ctx).ok)
 
+    def test_site_keeps_original_odds_and_withholds_unearned_live_price_guidance(self):
+        import build_site
+        pick = dict(marketType='moneyline', odds=-170, probabilityAtPublication=self.numbers,
+                    cutoff=gates.pricing.cutoff('moneyline', 'home', 0, -170))
+        self.assertEqual(build_site.cutoff_fields(pick)['cutoffOdds'], -184)
+        held = build_site.cutoff_fields(pick, current_straight=True)
+        self.assertTrue(held['priceMarginHold'])
+        self.assertIsNone(held['cutoff'])
+        self.assertIsNone(held['cutoffOdds'])
+        self.numbers['anchoredChance'] = .68
+        self.assertEqual(build_site.cutoff_fields(pick, current_straight=True)['cutoffOdds'], -170)
+        pick['cutoff'] = gates.pricing.cutoff('moneyline', 'home', 0, -170, price_tolerance=1)
+        self.assertEqual(build_site.cutoff_fields(pick)['cutoffOdds'], -170)
+
     def test_private_release_discards_old_approval_and_checks_actual_price(self):
         self.pick.update(quotedAt='2026-11-18T19:00:00Z', expiresAt='2026-11-18T19:30:00Z')
         self.pick['_selection'] = {**self.numbers, 'anchoredChance': .70}

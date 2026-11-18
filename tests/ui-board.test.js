@@ -140,3 +140,10 @@ test('the college defense file name keeps its .json extension and cannot climb d
   assert.equal('teams/CFB-defense.json'.replace(re, ''), 'teams/CFB-defense.json');
   assert.ok(!'../../x.json'.replace(re, '').includes('..'));
 });
+
+test('a published team moneyline below the current price margin has no live endorsement', () => {
+  const pick = {marketType:'moneyline', priceMarginHold:true};
+  const hold = M.pickHold(pick, []);
+  assert.equal(M.afterPostingWords(hold), 'Pass at the posted price under my current price rule.');
+  assert.equal(M.pickHold({...pick, result:'loss'}, []), null);
+});
