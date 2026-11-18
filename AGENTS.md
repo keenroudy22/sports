@@ -1,3 +1,10 @@
+# November 17 evening — complete daily cards only
+
+Publish individual plays as they qualify. Omit the combined pregame Best Bets
+post on X and Discord while further plays can qualify. The desk has no final
+slate lock. A clear queue or the last scheduled review does not close the day.
+Use the complete postgame recap across sports for the day's finished card.
+
 # November 17 owner — daily Chef's Pick
 
 The owner wants the old-school Chef's Pick to be the daily centerpiece: one

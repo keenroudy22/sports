@@ -17,6 +17,8 @@ import record_scope
 import x_post
 
 EFFECTIVE = datetime(2026, 10, 28, 11, 45, tzinfo=timezone.utc)
+# Later reviews can still add plays. Without a final slate, skip the pregame summary.
+OPEN_SLATE_CARDS_ENDED = datetime(2026, 11, 18, 1, 42, tzinfo=timezone.utc)
 PREFIX = 'receipt:card:'
 TERMS = ('id', 'title', 'league', 'season', 'seasonType', 'gameIds', 'kickoff',
          'publishedAt', 'marketType', 'market', 'direction', 'line', 'athleteId',
@@ -63,7 +65,7 @@ def proposal(first, latest, games, log_book, now):
     """Wait for each active official straight's actual X receipt, before first kickoff."""
     import receipts
     day = gates.eastern_date(now)
-    if now < EFFECTIVE or accepted(log_book, day):
+    if not EFFECTIVE <= now < OPEN_SLATE_CARDS_ENDED or accepted(log_book, day):
         return None
     rows, starts = [], []
     for ident, original in sorted(first.items()):
@@ -131,6 +133,9 @@ def history(first, latest, games, log_book, now):
 
 def linked(log_book, day, latest):
     """Only actual X proof links a settled Final to frozen original terms."""
+    # On Nov 17 another straight followed the card. Use the complete daily recap.
+    if str(day) >= gates.eastern_date(OPEN_SLATE_CARDS_ENDED).isoformat():
+        return None
     entry = accepted(log_book, day) or {}
     data = entry.get('straightCard') or {}
     link = str(entry.get('link') or '')
@@ -173,13 +178,14 @@ def link_final(receipt, log_book, latest, games):
     return result
 
 
-def discord_eligible(entry):
+def discord_eligible(entry, now):
     """Narrowly authorize combined official cards and their linked daily Finals."""
     if entry.get('kind') != 'buffer:receipt':
         return False
     data = entry.get('straightCard') or {}
     if str(entry.get('id') or '') == key(data.get('day')) and data.get('version') == 1:
-        return bool(data.get('rows')) and signature(data['rows']) == data.get('fingerprint')
+        return (now < OPEN_SLATE_CARDS_ENDED and bool(data.get('rows'))
+                and signature(data['rows']) == data.get('fingerprint'))
     result = entry.get('straightCardResult') or {}
     return (entry.get('id') == 'receipt:day:' + str(result.get('day'))
             and result.get('version') == 1 and bool(result.get('pickIds'))

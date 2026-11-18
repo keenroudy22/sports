@@ -310,7 +310,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 mirror['destination'] = destination
                 mirror['communityType'] = phase
         import daily_straight_card
-        combined = daily_straight_card.discord_eligible(entry) and destination == 'plays'
+        combined = daily_straight_card.discord_eligible(entry, now) and destination == 'plays'
         nba_pick = kind == 'buffer:nba-trial' and entry.get('nbaPick') is True and destination == 'plays'
         cbb_pick = kind == 'buffer:cbb-pick' and entry.get('cbbPick') is True and destination == 'plays'
         full_daily = (entry.get('fullDailyRecap') is True and kind == 'buffer:receipt'

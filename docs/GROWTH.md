@@ -11,7 +11,7 @@ daily Chef label migration. Preserve the current supported NBA prop/ticket paths
 older paper-trial descriptions below are historical, not a rollback instruction.
 
 Keep exact book/line/price and verified matchup reasoning on individual plays,
-one readable slate card, a distinct fun ticket when supported, and complete
+a combined pregame card only after every play is final (skip it under the current rolling reviews), a distinct fun ticket when supported, and complete
 results before the following day's picks. Ordinary NBA alternates may span games;
 MNF/TNF are the requested same-game slots. Existing exposure, one-open-step
 Climb, price, participation, category and delivery gates continue to control.

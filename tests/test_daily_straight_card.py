@@ -65,6 +65,25 @@ class DailyStraightCardTests(unittest.TestCase):
         self.assertIsNone(daily.proposal(first, latest, games, log, NOW))
         self.assertEqual(len(daily.history(first, latest, games, log, NOW)), 1)
 
+    def test_open_day_suppresses_summary_even_after_all_known_straights_sent(self):
+        first, latest, games, log = world()
+        snapshot = daily.proposal(first, latest, games, log, NOW)['straightCard']
+        now = gates.when('2026-11-18T18:00:00Z')
+        games['g']['kickoff'] = '2026-11-18T23:00:00Z'
+        for r in first.values():
+            r.update(kickoff=games['g']['kickoff'], publishedAt='2026-11-18T11:00:00Z')
+        for entry in log['posts']:
+            entry['sentAt'] = '2026-11-18T12:00:00Z'
+        self.assertIsNone(daily.proposal(first, latest, games, log, now))
+        prepared = dict(id=daily.key(DAY), kind='buffer:receipt', straightCard=snapshot)
+        self.assertFalse(daily.discord_eligible(prepared, now))
+        # A confirmed but partial Nov 17 card cannot replace the full recap art.
+        snapshot.update(day='2026-11-17')
+        prepared.update(id=daily.key(snapshot['day']), sentAt=gates.stamp(now),
+                        link='https://x.com/keenkooks/status/12345')
+        grades = {k: dict(result='win') for k in first}
+        self.assertIsNone(daily.linked({'posts': [prepared]}, snapshot['day'], grades))
+
     def test_missing_or_invalid_stake_price_holds_instead_of_guessing(self):
         for field, value in [('riskUnits', None), ('riskUnits', float('nan')), ('odds', None), ('odds', True)]:
             first, latest, games, log = world()
