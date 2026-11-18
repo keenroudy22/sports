@@ -14942,6 +14942,50 @@
    "socialStyleVersion": "units-only-no-decimal-20261027",
    "socialVoiceVersion": "casual-20261022",
    "socialAgeVersion": "age-20261023"
+  },
+  {
+   "id": "research:end-zone:2026-11-18",
+   "postedAt": "2026-11-18T05:29:31Z",
+   "dueAt": "2026-11-18T15:32:00Z",
+   "bufferPostId": "6afd37c0aa3b065dd9762e8c",
+   "textHash": "cf226be5f71f6c0b",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "queuedText": "🎯 END-ZONE WORK\nJames McNeil Jr. (first TD dart): 8 red-zone · 7 inside 10\nJordan Gant (anytime TD lean): 21 red-zone · 15 inside 10\nNino Hill: 12 red-zone · 8 inside 10\nMessiah Burch: 31 red-zone · 13 inside 10\n#CFB\n\n21+ only",
+   "socialStyleVersion": "units-only-no-decimal-20261027",
+   "socialVoiceVersion": "casual-20261022",
+   "socialAgeVersion": "age-20261023",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nJames McNeil Jr. (first TD dart): 8 red-zone · 7 inside 10\nJordan Gant (anytime TD lean): 21 red-zone · 15 inside 10\nNino Hill: 12 red-zone · 8 inside 10\nMessiah Burch: 31 red-zone · 13 inside 10\n#CFB\n\n21+ only",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-11-18.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "James McNeil Jr.",
+      "athleteId": "5194659",
+      "gameId": "CFB-401866469",
+      "league": "CFB",
+      "kickoff": "2026-11-19T00:30Z",
+      "anytime": false,
+      "firstTd": true
+     },
+     {
+      "player": "Jordan Gant",
+      "athleteId": "5084582",
+      "gameId": "CFB-401866467",
+      "league": "CFB",
+      "kickoff": "2026-11-19T00:00Z",
+      "anytime": true,
+      "firstTd": false
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-11-18"
   }
  ]
 }
