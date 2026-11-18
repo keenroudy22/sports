@@ -8783,3 +8783,24 @@ The worker logged zero odds or prop requests. NBA final-box requests were
 also zero ahead of the first tip. Its observed launchd PID and terminal
 receipt are in `work/nov16-delivery-parlays/nov17-1855-results-observed.json`.
 The 18:25 worker had run on the previous revision.
+
+## November 17 evening — skip incomplete Best Bets cards
+
+Tuesday’s two-straight card reached X at 1:32 p.m. Eastern. Victor Rosa followed
+at 5:44 p.m. The desk could compare the individual receipts already present,
+but its rolling reviews can add another play. On the owner’s instruction the
+desk now omits the combined pregame post. The X planner, Buffer acceptance
+and Discord mirror enforce the change. November 17’s complete recap uses all
+eligible results without linking back to the two-straight summary.
+
+Release e7b4c7f553b84c31e6983cf85361e85113c54435 passed 2,455 Python tests
+(two skipped) and 377 Node tests in the working tree and clean export, the
+publication checks and the stored-input rehearsal. Pages run 44219243757
+succeeded. The installed replay used the two actual original receipts, shifted
+the pregame timeline one day and confirmed the combined post was withheld.
+The real 8:55 p.m. results run finished at 8:59 p.m. Eastern with zero errors
+and zero publications. The hosted original passed 375px and 1440px checks.
+The existing daily review prompt now follows the same rule. Its schedule,
+model and archive settings were verified. Evidence is in
+work/nov16-delivery-parlays/nov17-complete-cards-installed-replay.json,
+nov17-2055-results-observed.json and nov17-complete-cards-live-layout.json.
