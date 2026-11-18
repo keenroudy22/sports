@@ -2671,6 +2671,12 @@ def _run(args, now, slot, kinds, status):
     # The web researcher reads the news for every play that passes the rules, on the runs that publish.
     research_on = researcher.enabled() and selection_run
     status['research'] = {'on': research_on, 'asked': 0, 'verified': 0, 'dropped': 0, 'families': {}}
+    # A qualifying rollover takes its share of the day's units before straight admission.
+    if 'ladder' in kinds:
+        manual_ladder = load_json(Path(args.ladder_spec), None) if args.ladder_spec else None
+        ladder_step(ctx, games, now, records, published, decided, screened, manual=manual_ladder,
+                    status=status)
+
     potd_market = []      # fresh priced board markets; only matching official singles can receive the POTD label
     best_pool = []        # fully checked rows; ranked by the logged Kitchen score before publication
     gut_pool = []         # fully checked fallbacks; chosen only after every Best bet has been considered
@@ -2969,12 +2975,6 @@ def _run(args, now, slot, kinds, status):
         easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=not args.dry_run, exclude=exclude)
         if eastern_date(now).weekday() == 5:          # a college Saturday gets its alternate-line parlay too
             easy_parlay_step(ctx, games, now, records, published, decided, screened, exclude=exclude, league='CFB')
-    if 'ladder' in kinds:
-        exclude = longshot_exclusions(ctx, screened, [revision for _, _, revision in closed])
-        manual_ladder = load_json(Path(args.ladder_spec), None) if args.ladder_spec else None
-        ladder_step(ctx, games, now, records, published, decided, screened, manual=manual_ladder,
-                    status=status)
-
     # A selection is only an admission here.  It becomes a public report when
     # the Discord-first delivery job releases it; until then it lives solely
     # under ~/.config/keenroudy/pending/.
