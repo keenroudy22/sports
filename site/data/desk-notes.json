@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-11-18T13:35:58Z",
+  "selectedAt": "2026-11-18T16:48:48Z",
   "mode": "local",
   "rows": [
     {
@@ -11,35 +11,30 @@
       "href": "#game/NFL-401873066",
       "kind": "trend",
       "label": "Season trend",
-      "player": "Jonathan Taylor",
-      "stat": "car",
-      "title": "Jonathan Taylor \u00b7 Over 12.5 carries",
-      "text": "9/10 recorded games this season. DraftKings -123 captured; history, not a prediction.",
-      "observedAt": "2026-11-18T13:31:53Z",
-      "expiresAt": "2026-11-18T17:31:53Z",
-      "rate": 0.9,
+      "player": "Daniel Jones",
+      "stat": "cmp",
+      "title": "Daniel Jones \u00b7 Over 18.5 completions",
+      "text": "8/10 recorded games this season. DraftKings -132 captured; history, not a prediction.",
+      "observedAt": "2026-11-18T16:42:41Z",
+      "expiresAt": "2026-11-18T20:42:41Z",
+      "rate": 0.8,
       "sample": 10,
-      "price": -123,
-      "id": "E1"
+      "price": -132,
+      "id": "E3"
     },
     {
-      "gameId": "CFB-401866467",
-      "league": "CFB",
-      "kickoff": "2026-11-19T00:00:00Z",
-      "matchup": "AKR at MASS",
-      "href": "#game/CFB-401866467",
-      "kind": "trend",
-      "label": "Season trend",
-      "player": "Elijah Faulkner",
-      "stat": "rushYds",
-      "title": "Elijah Faulkner \u00b7 Under 33.5 rushing yards",
-      "text": "6/8 recorded games this season. FanDuel -114 captured; history, not a prediction.",
-      "observedAt": "2026-11-18T13:32:09Z",
-      "expiresAt": "2026-11-18T17:32:09Z",
-      "rate": 0.75,
-      "sample": 8,
-      "price": -114,
-      "id": "E0"
+      "gameId": "NHL-401892739",
+      "league": "NHL",
+      "kind": "schedule",
+      "label": "Next up",
+      "kickoff": "2026-11-19T00:30:00Z",
+      "matchup": "BOS at DET",
+      "title": "BOS at DET",
+      "text": "Wed 7:30 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-11-18T16:40:05Z",
+      "expiresAt": "2026-11-18T20:40:05Z",
+      "href": "#scores/NHL",
+      "id": "E7"
     }
   ]
 }
