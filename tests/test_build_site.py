@@ -107,6 +107,31 @@ class MatchupPayloadTests(unittest.TestCase):
         self.assertIn('range', card['v2'])
         self.assertIn('chance', card['value']['spread'])
 
+    def test_football_position_games_pair_workload_with_the_opposing_player_and_period(self):
+        game = {'league': 'NFL', 'season': 2026, 'kickoff': '2026-11-20T01:15Z',
+                'home': {'id': '1'}, 'away': {'id': '2'}}
+        box = dict(game, eventId='9', seasonType=2, kickoff='2026-11-15T18:00Z',
+                   away={'id': '3', 'abbreviation': 'VIS'}, quality={'plays': 'ok'},
+                   players=[{'id': 'p', 'name': 'Receiver', 'pos': 'WR', 'team': '3',
+                             'rec': 0, 'tgt': 2, 'pbpTgt': 3}])
+        snaps = {'9': {'p': {'team': '3', 'snaps': 18, 'pct': .3},
+                       'q': {'team': '3', 'pos': 'WR', 'name': 'Backup', 'snaps': 1, 'pct': .02}}}
+        now = datetime(2026, 11, 19, tzinfo=timezone.utc)
+        result = build_site.football_position_games(game, [box, dict(box, season=2025),
+            dict(box, kickoff=game['kickoff']), dict(box, seasonType=1)], snaps, now)
+        self.assertEqual(len(result['1']), 1)
+        self.assertEqual(result['2'], [])
+        players = result['1'][0]['players']
+        self.assertEqual(players[0]['stats'], {'rec': 0, 'targets': 2, 'snaps': 18, 'snapPct': .3})
+        self.assertEqual(players[1]['stats'], {'snaps': 1, 'snapPct': .02})
+        box['players'][0].pop('tgt')
+        for quality, targets in [('ok', 3), ('partial', None)]:
+            box['quality']['plays'] = quality
+            cfb = build_site.football_position_games(dict(game, league='CFB'), [box], snaps, now)
+            stats = cfb['1'][0]['players'][0]['stats']
+            self.assertNotIn('snaps', stats)
+            self.assertEqual(stats.get('targets'), targets)
+
     def test_basketball_payload_keeps_only_the_two_teams_and_receipt_backed_market_terms(self):
         game = {'id': 'NBA-1', 'teams': {'home': {'id': '1'}, 'away': {'id': '2'}}}
         index = [['11', 'Home Player', 'G', '1'], ['22', 'Away Player', 'F', '2'],

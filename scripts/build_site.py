@@ -994,6 +994,48 @@ def matchup_player_rows(index):
     return by_team
 
 
+def football_position_games(game, records, snap_players, now):
+    """Last five stored regular-season games for each defense, before this matchup."""
+    cutoff = min(now, features.when(game['kickoff']))
+    result = {}
+    for side in ('away', 'home'):
+        defense = game[side]['id']
+        history = [box for box in records if box['season'] == game['season'] and box['seasonType'] == 2
+                   and defense in (box['home']['id'], box['away']['id']) and features.when(box['kickoff']) < cutoff]
+        games = []
+        for box in sorted(history, key=lambda b: features.when(b['kickoff']), reverse=True)[:5]:
+            offense = box['away'] if box['home']['id'] == defense else box['home']
+            nfl = game['league'] == 'NFL'
+            snaps = snap_players.get(box['eventId'], {}) if nfl else {}
+            players = []
+            # Include an NFL skill player with recorded offensive snaps even if he had no box-score line.
+            lines = {p['id']: p for p in box['players'] if p.get('team') == offense['id']}
+            participants = dict(lines)
+            for pid, snap in snaps.items():
+                if snap.get('team') == offense['id'] and snap.get('snaps', 0) > 0:
+                    participants.setdefault(pid, snap)
+            for pid, player in participants.items():
+                snap = snaps.get(pid, {})
+                if snap.get('team') != offense['id']:
+                    snap = {}
+                pos = player.get('pos') or snap.get('pos')
+                if pos not in ('QB', 'RB', 'FB', 'WR', 'TE', 'K', 'PK') or not player.get('name'):
+                    continue
+                stats = {}
+                if pid in lines:
+                    stats.update({k: player[k] for k in LOG_KEYS if isinstance(player.get(k), (int, float))})
+                    stats.update(features.unified(player, game['league'], box.get('quality', {}).get('plays') == 'ok'))
+                    if 'rushTD' in stats or 'recTD' in stats:
+                        stats['anyTD'] = stats.get('rushTD', 0) + stats.get('recTD', 0)
+                if snap:
+                    stats.update(snaps=snap['snaps'], snapPct=snap['pct'])
+                players.append({'name': player['name'], 'position': pos, 'stats': stats})
+            games.append({'event': box['eventId'], 'date': day(box['kickoff']),
+                          'team': offense.get('abbreviation') or offense['id'], 'players': players})
+        result[defense] = games
+    return result
+
+
 def opponent_position_games(records, season):
     """Index regular-season box scores by the team that faced the listed players."""
     history = defaultdict(list)
@@ -2416,6 +2458,8 @@ def build(now=None):
         detail['marketPlayers'] = matchup_market_players(
             market_players, football_indexes[game['league']], game, depth_charts, now,
             final_box=stored.get(game['id']))
+        if game.get('state') == 'pre' and features.when(game['kickoff']) > now:
+            detail['positionGames'] = football_position_games(game, info['records'], snap_players, now)
         write(OUT / 'games' / f"{game['id']}.json", detail)
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],

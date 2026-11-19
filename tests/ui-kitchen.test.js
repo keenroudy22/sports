@@ -165,6 +165,23 @@ test('an unavailable player keeps the reference line and history without present
   assert.doesNotMatch(page, /<p class="eyebrow">Current line<\/p>|clears my price|Kook’n projection<\/small><b class="num">167\.1/);
 });
 
+test('football opponent comparisons show the selected stat and observed workload', async () => {
+  const fill = files => {
+    files['data/app/games/CFB-1.json'].positionGames = {166: [{
+      event: '987', date: '2026-10-01', team: 'VIS', players: [
+        {name:'Visiting QB',position:'QB',stats:{rushYds:21,car:3,targets:0}},
+        {name:'Visiting WR',position:'WR',stats:{rec:5,targets:7}}
+      ]
+    }]};
+  };
+  const html = await playerPage(false, fill, 'CFB', 'rushYds');
+  assert.match(html, /Quarterbacks against New Mexico St/);
+  assert.match(html, /Visiting QB<span>— snaps · 3 carries · 0 targets/);
+  assert.match(html, /class="y">21<\/td>/);
+  assert.doesNotMatch(html, /Visiting WR/);
+  assert.match(html, /college-football\/boxscore\/_\/gameId\/987/);
+});
+
 test('NBA player page ties a posted prop to last 5, last 10, minutes and the full game log', async () => {
   const nbaKeys = ['pts','reb','ast','fg3m','pra','pa','pr','ra','min','fgm','fga','ftm','fta','stl','blk','tov','plusMinus'];
   const points = [0,0,2,7,8,11,9,16,12,11], minutes = [1,2,11,25,28,26,12,22,24,29];

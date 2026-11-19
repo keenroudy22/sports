@@ -254,8 +254,9 @@
   const chartWindowLabel = (start, count, total) =>
     `Games ${start + 1}–${start + count} of ${total}`;
   const opponentPositionPanel = ({ games, opponent, position, stat, metric, league }) => {
-    const groups = { PG: 'G', SG: 'G', G: 'G', SF: 'F', PF: 'F', F: 'F', C: 'C' };
-    const labels = { G: 'Guards', F: 'Forwards', C: 'Centers' };
+    const football = league === 'NFL' || league === 'CFB';
+    const groups = football ? { ...C.POS_GROUP, PK: 'PK', K: 'PK' } : { PG: 'G', SG: 'G', G: 'G', SF: 'F', PF: 'F', F: 'F', C: 'C' };
+    const labels = { G: 'Guards', F: 'Forwards', C: 'Centers', QB: 'Quarterbacks', RB: 'Running backs', WR: 'Wide receivers', TE: 'Tight ends', PK: 'Kickers' };
     const group = groups[position];
     const title = group ? `${labels[group]} against ${opponent}` : `Position matchup against ${opponent}`;
     const header = `<section class="kt-page-sec" aria-labelledby="position-matchup"><div class="kt-sec-head"><h2 class="kt-tape" id="position-matchup">${esc(title)}</h2></div>`;
@@ -263,17 +264,23 @@
       const reason = group ? 'No recent regular-season box scores are available for this matchup.' : 'The box score does not list a position for this player.';
       return `${header}<p class="small muted">${reason}</p></section>`;
     }
-    const boxPath = league === 'NBA' ? 'nba' : 'mens-college-basketball';
+    const boxPath = { NBA: 'nba', CBB: 'mens-college-basketball', NFL: 'nfl', CFB: 'college-football' }[league];
+    const minutesColumn = !football && stat !== 'min';
     const sections = games.map(game => {
       const peers = game.players.filter(p => groups[p.position] === group);
       const date = new Date(`${game.date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
       const boxLink = `https://www.espn.com/${boxPath}/boxscore/_/gameId/${encodeURIComponent(game.event)}`;
-      const rows = peers.map(player => `<tr><th scope="row">${esc(player.name)}</th><td class="y">${esc(player.stats[stat] ?? '—')}</td>${stat === 'min' ? '' : `<td>${esc(player.stats.min ?? '—')}</td>`}</tr>`).join('');
-      const table = rows ? `<table class="kt-log basketball-log" aria-label="${esc(game.team)} · ${esc(date)}"><thead><tr><th scope="col">Player</th><th scope="col">${esc(metric)}</th>${stat === 'min' ? '' : '<th scope="col">Min</th>'}</tr></thead><tbody>${rows}</tbody></table>` : `<p class="small muted">No players listed at this position.</p>`;
+      const rows = peers.map(player => {
+        const stats = player.stats;
+        const workload = football ? `<span>${esc(stats.snaps ?? '—')} snaps · ${esc(stats.car ?? '—')} carries · ${esc(stats.targets ?? '—')} targets</span>` : '';
+        const value = stat === 'snapPct' && isNum(stats[stat]) ? Math.round(stats[stat] * 100) + '%' : stats[stat] ?? '—';
+        return `<tr><th scope="row">${esc(player.name)}${workload}</th><td class="y">${esc(value)}</td>${minutesColumn ? `<td>${esc(stats.min ?? '—')}</td>` : ''}</tr>`;
+      }).join('');
+      const table = rows ? `<table class="kt-log basketball-log" aria-label="${esc(game.team)} · ${esc(date)}"><thead><tr><th scope="col">Player</th><th scope="col">${esc(metric)}</th>${minutesColumn ? '<th scope="col">Min</th>' : ''}</tr></thead><tbody>${rows}</tbody></table>` : '<p class="small muted">No players listed at this position.</p>';
       const lineup = game.defenders?.length ? `<details><summary>${esc(opponent)} players who played</summary><p class="small">${game.defenders.map(esc).join(' · ')}</p></details>` : '';
       return `<div class="position-box"><h3><a class="plain-link" href="${boxLink}" target="_blank" rel="noopener">${esc(game.team)} · ${esc(date)} ↗</a></h3>${table}${lineup}</div>`;
     }).join('');
-    return `${header}<p class="small muted">Last ${games.length} recorded regular-season ${games.length === 1 ? 'game' : 'games'} · players grouped by listed position.</p>${sections}</section>`;
+    return `${header}<p class="small muted">Last ${games.length} recorded regular-season ${games.length === 1 ? 'game' : 'games'} · players grouped by listed position.${league === 'CFB' ? ' College snap counts are unavailable in this feed.' : ''}${football ? ' A dash means the stat was unavailable.' : ''}</p>${sections}</section>`;
   };
   const basketballPlayer = async route => {
     const league = route.league === 'CBB' ? 'CBB' : 'NBA';
@@ -478,6 +485,10 @@
     const h = line != null ? C.hits(values, line) : null;
 
     const opp = next ? (side === 'home' ? next.away : next.home) : null;
+    const positionPanel = opp && !isQuarter ? opponentPositionPanel({
+      games: nextDetail?.positionGames?.[opp.id], opponent: opp.name || abbr(opp.id),
+      position: pos, metric: PLAYER_LABEL[stat] || stat, stat, league
+    }) : '';
     const group = C.POS_GROUP[pos];
     const dRows = teams ? defenseRows(teams, league) : {};
     const allow = !isQuarter && opp && group && teams ? C.rankOf(dRows, opp.id, group, stat) : null;
@@ -658,7 +669,7 @@
       <section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">${esc(scope === 'current' ? 'Regular season' : scopeLabel)}</span></div>${chalkLog}
       <details class="plain-fold" data-box="player-every"><summary>${isQuarter ? 'Every full-game stat' : 'Every stat'}</summary>${log.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${cols.map(k => `<th class="n">${esc(PLAYER_LABEL[k] || k)}</th>`).join('')}</tr></thead><tbody>${log.map(r =>
         `<tr><td><a href="#game/${esc(league)}-${esc(r[0])}">${esc(r[1])}</a><br><span class="tiny muted">${esc(where(r))} ${esc(abbr(r[6]))}${r[4] === 3 ? ' · postseason' : ''}</span></td>${cols.map(k => { const v = C.observedStat(r, keys, k); return `<td class="n">${v == null ? '<span class="muted">–</span>' : k === 'snapPct' ? Math.round(100 * v) + '%' : esc(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div><p class="small muted" style="margin-top:6px">A dash means not recorded, never zero.</p>` : ''}</details>
-      <details class="plain-fold" data-box="player-splits"><summary>Splits</summary><div class="kpis"><div class="kpi"><small>Home</small><b class="num">${esc(split.home ? valueText(split.home.avg) : '–')}</b><span>${split.home ? split.home.n : 0} game${split.home && split.home.n === 1 ? '' : 's'}</span></div><div class="kpi"><small>Away</small><b class="num">${esc(split.away ? valueText(split.away.avg) : '–')}</b><span>${split.away ? split.away.n : 0} game${split.away && split.away.n === 1 ? '' : 's'}</span></div>${split.neutral ? `<div class="kpi"><small>Neutral site</small><b class="num">${esc(valueText(split.neutral.avg))}</b><span>${split.neutral.n} game${split.neutral.n === 1 ? '' : 's'}</span></div>` : ''}</div></details></section>${q1}`;
+      <details class="plain-fold" data-box="player-splits"><summary>Splits</summary><div class="kpis"><div class="kpi"><small>Home</small><b class="num">${esc(split.home ? valueText(split.home.avg) : '–')}</b><span>${split.home ? split.home.n : 0} game${split.home && split.home.n === 1 ? '' : 's'}</span></div><div class="kpi"><small>Away</small><b class="num">${esc(split.away ? valueText(split.away.avg) : '–')}</b><span>${split.away ? split.away.n : 0} game${split.away && split.away.n === 1 ? '' : 's'}</span></div>${split.neutral ? `<div class="kpi"><small>Neutral site</small><b class="num">${esc(valueText(split.neutral.avg))}</b><span>${split.neutral.n} game${split.neutral.n === 1 ? '' : 's'}</span></div>` : ''}</div></details></section>${positionPanel}${q1}`;
   };
 
   views.basketballMilestones = async route => {
