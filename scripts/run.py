@@ -1454,8 +1454,17 @@ def opponent_injury_summary(candidate, fact, ctx):
         return {str(row['name']).casefold() for row in injuries.get(gates.team_key(game.get('league'), team), {}).values()
                 if row.get('name')}
     names = {n.strip().casefold() for n in entities}
-    if not names <= listed(opponent) or names & listed(own):
-        return False
+    home_names, other_names = listed(own), listed(opponent)
+    for name in names:
+        if name in other_names and name not in home_names:
+            continue
+        # The Colts' official report uses "Charvarius Ward Sr." while the
+        # roster lists "Charvarius Ward". Only resolve an omitted suffix
+        # when there is a single matching unsuffixed name across both teams.
+        base = re.sub(r'\s+(?:sr|jr|ii|iii|iv)\.?$', '', name)
+        related = {n for n in home_names | other_names if n == base or n.startswith(base + ' ')}
+        if base == name or related != {base} or base not in other_names or base in home_names:
+            return False
     # Preserve a mixed sentence even if the extraction omitted the player or
     # his starting quarterback from its entity list.
     claim = str(fact.get('claim') or '').casefold()

@@ -1420,6 +1420,11 @@ class ParlayGuardTests(unittest.TestCase):
             entities=['Danielle Hunter','Woody Marks','Jake Hummel'],
             claim='Houston ruled out Danielle Hunter and Woody Marks. Jake Hummel is questionable.')
         self.assertEqual(run.relevant_facts(pick,[fact],ctx),[])
+        ctx.injuries['NFL-34']['ward'] = {'name':'Charvarius Ward'}
+        official = dict(fact, entities=['Charvarius Ward Sr.'], claim='Charvarius Ward Sr. is out.')
+        self.assertEqual(run.relevant_facts(pick,[official],ctx),[])
+        ctx.injuries['NFL-11'] = {'another':{'name':'Charvarius Ward Jr.'}}
+        self.assertEqual(run.relevant_facts(pick,[official],ctx),[official])
         for changed in [dict(fact,entities=[]), dict(fact,entities=['Unknown player']),
                         dict(fact,direction='against'),dict(fact,claim=fact['claim']+' Daniel Jones is out.')]:
             self.assertEqual(run.relevant_facts(pick,[changed],ctx),[changed])
