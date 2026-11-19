@@ -3447,6 +3447,8 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
     import buffer_post
     missing_nba_fun = 0
     for row in nba_fun_rows:
+        if receipts.quiet_parlay_result(row):
+            continue
         if not row.get('settledAt') or not now - receipts.RESULT_RECOVERY_FRESH < gates.when(row['settledAt']) <= now:
             continue
         final_id = receipts.nba_fun_final_id(row)

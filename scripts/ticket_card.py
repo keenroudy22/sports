@@ -381,21 +381,24 @@ def final_svg(rows, day):
 
 def daily_result_svg(rows, day):
     """Keep every new unit-backed fun result on mixed and fun-only daily cards."""
-    if not any(row.get('settlementBasis') == 'published-unit-stake-v1' or row.get('family') == 'NBA-alts' for row in rows):
-        return final_svg(rows, day)
     import receipts
+    shown = [row for row in rows if not receipts.quiet_parlay_result(row)]
+    if len(shown) == len(rows) and not any(row.get('settlementBasis') == 'published-unit-stake-v1' or row.get('family') == 'NBA-alts' for row in rows):
+        return final_svg(rows, day)
     if not rows or any(row.get('result') not in receipts.MARKS for row in rows):
         raise ValueError('Complete graded daily card required')
     values = [0 if row['result'] == 'void' else x_post.units_for(row) for row in rows]
     card = ticket_cards.final_card({
         'headline': 'DAILY FINAL', 'row_label': 'PLAYS',
+        'subheading': (f'{len(rows)} PLAYS TOTAL · {receipts.record_text(x_post.summarize(rows))}'
+                       if len(shown) < len(rows) else None),
         'net_units': sum(values) if all(value is not None for value in values) else None,
         'rows': [{'result': {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}[row['result']],
                   'title': receipts.label(row),
                   'detail': (f"{int(row['odds']):+d} {x_post.public_book(row['book'])} · {receipts.result_detail(row)}"
                              if pick_card.play_kind(row) == 'parlay' else final_detail(row)),
                   'unit_text': f'{value:+.2f}u' if value is not None else None}
-                 for row, value in zip(rows, values)],
+                 for row, value in zip(rows, values) if not receipts.quiet_parlay_result(row)],
     })
     problems = ticket_kit.qa(card, 'daily-final-'+day)
     if problems:

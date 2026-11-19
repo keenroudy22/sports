@@ -427,13 +427,24 @@ def cbb_daily_rows(day, as_of, log_book):
     return published
 
 
+PARLAY_WIN_POSTS_FROM = datetime(2026, 11, 19, 7, 29, tzinfo=gates.EASTERN)
+
+
+def quiet_parlay_result(pick):
+    """Non-winning new parlays stay in the ledger and unit totals. Corrections remain deliverable."""
+    return (pick_card.play_kind(pick) == 'parlay' and pick.get('result') in ('loss', 'push', 'void')
+            and not pick.get('correctedAt') and bool(pick.get('settledAt'))
+            and gates.when(pick['settledAt']) >= PARLAY_WIN_POSTS_FROM)
+
+
 def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     basketball = nba_daily_rows(day, as_of, log_book or {}) + cbb_daily_rows(day, as_of, log_book or {})
     fun_rows = unit_fun_rows(as_of, day=day, log_book=log_book or {}) if as_of else []
     rows = plays_between(first, latest, games, ids, day, day) + basketball + fun_rows
     if not settled(rows):
         return None
-    if not rows:
+    shown = [row for row in rows if not quiet_parlay_result(row)]
+    if not shown:
         return None
     name = f'{day:%A}'
     due = daily_morning(day + timedelta(days=1))
@@ -441,7 +452,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     opener = f"Late, but here's {name}.\n\n" if late else ''
     head = f"{opener}{name}: {headline(rows)}."
     tail = leagues(rows)
-    text = fit_result_rows(rows, head, tail.strip(), games)
+    text = fit_result_rows(shown, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}' + ('-all-sports' if basketball or fun_rows else ''), 'kind': 'receipt',
@@ -456,8 +467,8 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
             # Stable identities let health recognize a complete daily recap as
             # result delivery without parsing prose or demanding duplicate Finals.
             'pickIds': [r['id'] for r in rows],
-            **({'dailyRows': rows} if basketball or fun_rows else {}),
-            'rows': [(r['result'], label(r, games), result_detail(r), pick_card.play_kind(r)) for r in rows], 'text': text,
+            **({'dailyRows': rows} if basketball or fun_rows or len(shown) < len(rows) else {}),
+            'rows': [(r['result'], label(r, games), result_detail(r), pick_card.play_kind(r)) for r in shown], 'text': text,
             'due': due,
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
 
@@ -559,6 +570,8 @@ def prior_individual_results_hold(rows, log_book, channel):
             continue
         if row.get('result') not in MARKS:
             return f"prior slate's {key} is waiting for its final grade"
+        if quiet_parlay_result(row):
+            continue
         finals = [p for p in posts if buffer_post.quote_source_id(p.get('id')) == key]
         if nba_fun:
             final_id = nba_fun_final_id(row)
@@ -610,7 +623,7 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
         if hold:
             return hold
     expected = {row['id'] for row in rows}
-    if not expected:
+    if not expected or all(quiet_parlay_result(row) for row in rows):
         return None
     key = f'receipt:day:{day.isoformat()}'
     for entry in reversed(log_book.get('posts', [])):
@@ -926,6 +939,8 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
             continue
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
+        if quiet_parlay_result(pick):
+            continue
         ladder = pick_card.play_kind(pick) == 'ladder'
         fun_final = has_fun_final(pick)
         nba_fun = pick.get('family') == 'NBA-alts' and fun_final

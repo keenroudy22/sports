@@ -102,8 +102,15 @@ def current(now,root=STORE):
         except (OSError,ValueError,TypeError,KeyError):continue
     return None
 
+def public_brief(now,root=STORE):
+    # Frozen screening notes still support internal research and verified promotions.
+    if eastern_date(now).isoformat() >= '2026-11-19':
+        return None
+    return current(now,root)
+
+
 def post(now,root=STORE):
-    row=current(now,root)
+    row=public_brief(now,root)
     if not row:return None
     return dict(key=f"research:morning:{row['day']}",kind='research',text=row['text'],due=boxscores.instant(row['capturedAt']),
         stale=min(boxscores.instant(row['observedAt'])+timedelta(hours=4),boxscores.instant(row['kickoff'])-timedelta(minutes=45)),card=None)

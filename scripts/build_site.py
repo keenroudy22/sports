@@ -2406,7 +2406,7 @@ def build(now=None):
     posted_records = list({p['id']: p for p in picks + cbb_public + nba_public + community_records + nba_fun}.values())
     import morning_brief
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
-                               'morningBrief': morning_brief.current(now),
+                               'morningBrief': morning_brief.public_brief(now),
                                'health': research_views.health(freshness, now), 'games': cards,
                                'picks': recent_picks(posted_records, now),
                                'historyFile': 'record.json', 'model': summary,
@@ -2473,7 +2473,7 @@ def build(now=None):
     nba_scoreboard = sports_scoreboard.get('NBA')
     nba = nba_today.build(now, boxes=nba_boxes, delivered=nba_public, scoreboard=nba_scoreboard,
                           team_finals=nba_finals, prop_limit=None)
-    nba['morningBrief'] = morning_brief.current(now)
+    nba['morningBrief'] = morning_brief.public_brief(now)
     nba_overview, nba_props = nba_today.public_payloads(nba)
     nba_matchup_props = nba_today.matchup_prop_payloads({
         'generatedAt': nba['generatedAt'], 'rows': nba['playerProps']['rows'],

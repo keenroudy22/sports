@@ -197,7 +197,7 @@ def queue_results(log_book, first, latest, games, now):
             settled_at = gates.when(pick['settledAt'])
         except (TypeError, ValueError):
             continue
-        if not now - RESULT_UPDATE_FRESH < settled_at <= now:
+        if receipts.quiet_parlay_result(pick) or not now - RESULT_UPDATE_FRESH < settled_at <= now:
             continue
         overtime = result_display.overtime_detail(pick)
         mark = '😩' if overtime else {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}[result]
@@ -225,7 +225,8 @@ def queue_nba_fun_results(log_book, now, root=None):
     import buffer_post
     import receipts
     graded = {pick['id']: pick for pick in receipts.unit_fun_rows(now, log_book=log_book, root=root)
-              if pick.get('family') == 'NBA-alts' and pick.get('result') in receipts.MARKS}
+              if pick.get('family') == 'NBA-alts' and pick.get('result') in receipts.MARKS
+              and not receipts.quiet_parlay_result(pick)}
     queued = 0
     for entry in log_book.get('posts', []):
         pick = graded.get(entry.get('id'))
