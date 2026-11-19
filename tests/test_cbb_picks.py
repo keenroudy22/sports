@@ -50,6 +50,21 @@ class CBBPicksTests(unittest.TestCase):
         with patch.object(cbb,'public_rows',return_value=[p]),patch.object(cbb,'current_match',return_value=False):
             self.assertEqual(cbb.plans(NOW,{'posts':[entry]}),[])
 
+    def test_discord_plans_do_not_book_their_own_x_slots(self):
+        a, b = fixture(), fixture()
+        b['id'] += '-second'
+        entries = [dict(id=p['id'], cbbDiscordOnly=True,
+                        dueAt=boxscores.stamp(NOW+timedelta(minutes=m)))
+                   for p, m in ((a, 10), (b, 30))]
+        with patch.object(cbb,'public_rows',return_value=[a,b]):
+            plans = cbb.plans(NOW, {'posts':entries})
+            self.assertEqual([p[0] for p in plans],[a['id'],b['id']])
+            self.assertGreaterEqual(plans[1][3]-plans[0][3],timedelta(minutes=20))
+            entries[0]['bufferAttemptAt'] = boxscores.stamp(NOW)
+            plans = cbb.plans(NOW, {'posts':entries})
+            self.assertEqual([p[0] for p in plans],[b['id']])
+            self.assertGreaterEqual(plans[0][3],NOW+timedelta(minutes=30))
+
     def test_individual_final_fits_between_reserved_posts_at_result_spacing(self):
         pick=fixture()
         pick.update(result='win',actual=144,book='DraftKings',settledAt=boxscores.stamp(NOW))

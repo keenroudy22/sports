@@ -148,11 +148,18 @@ def current_match(play,now,root=STORE):
 
 def plans(now,log_book,root=STORE,reserved=(), *, for_discord=False):
     import buffer_post,x_post
-    busy=buffer_post.taken(log_book,now)+[p[3] for p in reserved]
+    # Re-plan Discord-only placeholders as one batch. A proposed X time has
+    # no provider reservation. Keep every actual or ambiguous send attempt.
+    attempts = ('bufferPostId', 'bufferAttemptAt', 'webDelivery', 'typefullyDelivery',
+                'sentAt', 'link', 'error', 'cancelledAt', 'deletedAt')
+    posts = log_book.get('posts', [])
+    occupied = [entry for entry in posts if not entry.get('cbbDiscordOnly')
+                or any(entry.get(field) for field in attempts)]
+    occupied_ids = {entry.get('id') for entry in occupied}
+    busy=buffer_post.taken(dict(posts=occupied),now)+[p[3] for p in reserved if p[3]]
     result=[]
     for p in public_rows(root):
-        entry=next((e for e in log_book.get('posts',[]) if e['id']==p['id']),None)
-        if entry and (not entry.get('cbbDiscordOnly') or entry.get('bufferPostId') or entry.get('sentAt') or entry.get('webDelivery')):continue
+        if p['id'] in occupied_ids:continue
         if not current_match(p,now) or delivery_pending(p['id'],root):continue
         text=caption(p)
         if x_post.x_style(text) or x_post.tweet_length(text)>x_post.LIMIT:continue
