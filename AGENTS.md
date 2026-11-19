@@ -1,3 +1,13 @@
+# November 19 Daily Double
+
+Review the two favorite supported alternate lines early every day as a Daily
+Double. Aim near even money on the whole ticket. The working range is −110 to
++110 on a visible, unboosted, exact same-book quote. Compare available games,
+check each leg's role and matchup, and carry known injuries through every leg
+before the first public send. Use the ordinary 0.25u fun-ticket stake, one Daily
+Double per Eastern day, with its own prospective results. The Climb keeps its
+rollover. Only release after the morning results and normal delivery checks.
+
 # November 19 daily card and independently funded Climb
 
 Target five qualifying straights across the supported slate. The daily Chef’s Pick

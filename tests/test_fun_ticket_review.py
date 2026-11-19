@@ -18,7 +18,7 @@ NOW = datetime(2026, 11, 13, 16, 10, tzinfo=timezone.utc)
 def fixture(count=3, style='short'):
     games = {}
     legs = []
-    price = -200 if style == 'short' else -150
+    price = {'short': -200, 'lotto': -150, 'daily-double': -240}[style]
     for index in range(count):
         game_id = f'CFB-{index}'
         kickoff = f'2026-11-13T2{index}:00:00Z' if index < 4 else '2026-11-13T23:30:00Z'
@@ -66,6 +66,19 @@ class FunTicketReviewTests(unittest.TestCase):
         self.assertIn('Every leg must hit', pick['risk'])
         self.assertTrue(gates.longshot_exact_ticket(pick, ctx).ok)
 
+    def test_daily_double_accepts_only_two_verified_alternates_near_even(self):
+        spec, ctx = fixture(2, 'daily-double')
+        pick, held = review.candidate(ctx, NOW, spec)
+        self.assertIsNone(held)
+        self.assertEqual((pick['title'], pick['riskUnits']), ('Daily Double', .25))
+        for quote in (-111, -110, -100, -1, 0, 99, 100, 110, 111):
+            with self.subTest(quote=quote):
+                self.assertEqual(gates.longshot_shape(dict(pick, odds=quote), ctx).ok,
+                                 quote in (-110, -100, 100, 110))
+        self.assertFalse(gates.longshot_shape(dict(pick, legs=pick['legs'][:1]), ctx).ok)
+        spec['legs'][0]['alternate'] = False
+        self.assertIsNone(review.candidate(ctx, NOW, spec)[0])
+
     def test_exact_six_leg_lotto_has_its_own_shape(self):
         spec, ctx = fixture(6, 'lotto')
         pick, held = review.candidate(ctx, NOW, spec)
@@ -82,8 +95,8 @@ class FunTicketReviewTests(unittest.TestCase):
             self.assertEqual(gates.when(pick['expiresAt']), boundary)
             self.assertTrue(gates.expiry_ok(pick, ctx).ok)
 
-    def test_short_and_lotto_tickets_settle_from_official_game_finals(self):
-        for count, style in ((3, 'short'), (6, 'lotto')):
+    def test_reviewed_ticket_styles_settle_from_official_game_finals(self):
+        for count, style in ((2, 'daily-double'), (3, 'short'), (6, 'lotto')):
             spec, ctx = fixture(count, style)
             pick, held = review.candidate(ctx, NOW, spec)
             self.assertIsNone(held)

@@ -397,6 +397,8 @@ def save_reasons(reasons, path=None):
 def parlay_head(pick, league):
     """A fun ticket leads with its exact posted price, leg count and public book."""
     odds = int(pick['odds'])
+    if pick.get('parlayStyle') == 'daily-double':
+        return f"Daily Double {odds:+d} ({public_book(pick.get('book'))})"
     return f"🎰 {odds:+d} Chef's Special ({public_book(pick.get('book'))})"
 
 

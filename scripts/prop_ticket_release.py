@@ -80,7 +80,8 @@ def candidate(spec, ctx, now):
             'status': 'active', 'favorite': False, 'riskUnits': .25,
             'book': spec['book'], 'odds': spec['odds'], 'legs': legs,
             'gameIds': list(dict.fromkeys(leg['gameId'] for leg in legs)),
-            'title': f"{len(legs)}-leg {spec['family']} parlay at {spec['book']}",
+            'title': ('Daily Double' if spec['parlayStyle'] == 'daily-double'
+                      else f"{len(legs)}-leg {spec['family']} parlay at {spec['book']}"),
             'quotedAt': gates.stamp(quoted), 'firstKickoff': gates.stamp(first),
             'expiresAt': gates.stamp(min(quoted + timedelta(hours=1), first-timedelta(minutes=30))),
             'quoteType': 'sportsbook', 'priceEstimated': False,
@@ -130,6 +131,8 @@ def _refusal(pick, ctx, now=None, *, packet=None, conf=None, phase='send'):
     result = evaluate(dict(latest, id=pick['id']), ctx, now)
     if result['state'] != 'reviewed-private':
         return '; '.join(result['holds'])
+    if len({row.get('parlayStyle') for row in (original, latest, pick)}) != 1:
+        return 'Original reviewed ticket style must remain unchanged'
     if pick.get('family') != original.get('family') or pick.get('riskUnits') != .25:
         return 'Original prop-ticket family and 0.25u allocation must remain unchanged'
     if pick.get('family') == 'NBA-alts':

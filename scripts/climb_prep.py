@@ -80,7 +80,8 @@ def multi_leg_drafts(legs, counts, target, *, style, ideal_leg=-225, limit=4):
         if (leg.get('alternate') is not True or leg.get('book') not in ladder.SLUGS
                 or not ladder.LEG_PRICES[0] <= leg.get('odds',0) <= ladder.LEG_PRICES[1]):
             continue
-        grouped.setdefault((leg['league'],leg['book']),{}).setdefault(leg['gameId'],[]).append(leg)
+        league = 'football' if style == 'daily-double' else leg['league']
+        grouped.setdefault((league,leg['book']),{}).setdefault(leg['gameId'],[]).append(leg)
     options=[]
     for (league,book),games in grouped.items():
         # One leg per game keeps the derived cross-game price meaningful. Keep
@@ -99,7 +100,9 @@ def multi_leg_drafts(legs, counts, target, *, style, ideal_leg=-225, limit=4):
                 price=parlay.american(dec)
                 if not target[0] <= price <= target[1]:continue
                 holds=sorted(set(sum((leg.get('holds',[]) for leg in chosen),[])))
-                options.append(dict(book=book,league=league,legs=list(chosen),derivedOdds=price,
+                leagues={leg['league'] for leg in chosen}
+                options.append(dict(book=book,league=chosen[0]['league'] if len(leagues)==1 else 'NFL/CFB',
+                    legs=list(chosen),derivedOdds=price,
                     legCount=count,planningOnly=True,status='source-review-needed',
                     parlayType='longshot',parlayStyle=style,reviewRoute='sourced-fun-ticket-review-v1',
                     priceBasis='Product of separate cross-game prices; exact sportsbook ticket price required',
@@ -181,6 +184,7 @@ def prepare(ctx, now, day=None):
                 twoLegOptions=supported_options,
                 evidenceHeldOptions=two_leg_options(watch_legs,now) if not supported_options else [],
                 sourceReviewOptions=source_review_options(review_legs,now),
+                dailyDoubleDrafts=multi_leg_drafts(review_legs,(2,),(-110,110),style='daily-double',ideal_leg=-240),
                 shortParlayDrafts=multi_leg_drafts(review_legs,(3,4),(200,1500),style='short',ideal_leg=-250) if big_slate else [],
                 lottoDrafts=multi_leg_drafts(review_legs,(6,7,8),(1500,20000),style='lotto',ideal_leg=-190) if big_slate else [],
                 releaseReady=False,

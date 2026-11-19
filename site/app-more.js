@@ -303,10 +303,12 @@ button.cal-day { cursor: pointer; }
     }
     if (tab === 'fun') {
       const fun = rows.filter(p => C.isParlay(p) && !C.isLadder(p) && !C.isUnpricedImport(p) && C.countsPublic(p));
+      const doubleRows = rows.filter(p => p.parlayStyle === 'daily-double' && (p.delivery?.xAt || p.delivery?.discordAt));
+      const doubleRecord = C.summaryOf(doubleRows, 10);
       const s = C.summaryOf(fun, 10);
       const settled = fun.filter(p => p.result && matches(p)).sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)));
       const open = fun.filter(p => !p.result);
-      return `${top}${tabs}${pickers}<div class="kpis"><div class="kpi"><small>Fun tickets</small><b class="num">${esc(wl(s))}</b><span>longshots at a smaller stake</span></div><div class="kpi"><small>Units</small><b class="num ${s.units < 0 ? 'red' : 'green'}">${esc(units(s.units))}</b><span>recorded ticket stakes · never in the best-bet record</span></div><div class="kpi"><small>Pending</small><b class="num">${s.pending}</b><span>not settled</span></div></div>
+      return `${top}${tabs}${pickers}<div class="kpis"><div class="kpi"><small>Fun tickets</small><b class="num">${esc(wl(s))}</b><span>longshots at a smaller stake</span></div><div class="kpi"><small>Units</small><b class="num ${s.units < 0 ? 'red' : 'green'}">${esc(units(s.units))}</b><span>recorded ticket stakes · never in the best-bet record</span></div><div class="kpi"><small>Pending</small><b class="num">${s.pending}</b><span>not settled</span></div><div class="kpi"><small>Daily Double</small><b class="num">${esc(wl(doubleRecord))}</b><span>${doubleRows.length ? esc(units(doubleRecord.units)) + ' · ' + doubleRecord.pending + ' pending' : 'No tickets posted yet'}</span></div></div>
         ${open.length ? section('Not graded yet', `<div class="receipts">${open.map(p => receipt(p, clvById)).join('')}</div>`) : ''}
         ${section('Every fun ticket', `${search}${settled.length ? weeksOf(settled, p => receipt(p, clvById), 'fun') : '<p class="muted">No fun tickets match.</p>'}`)}`;
     }

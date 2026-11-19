@@ -136,7 +136,8 @@ def candidate(ctx, now, spec):
     style = ticket['parlayStyle']
     first = min(gates.when(ctx.games[gid]['kickoff']) for gid in ticket['gameIds'])
     ticket.update(id=f"{ctx.games[ticket['gameIds'][0]]['league']}-{gates.eastern_date(now)}-{style}-{ticket['book'].lower().replace(' ', '-')}",
-                  title=f"{len(ticket['legs'])}-leg {'parlay' if style == 'short' else 'lotto'} at {ticket['book']}",
+                  title=('Daily Double' if style == 'daily-double'
+                         else f"{len(ticket['legs'])}-leg {'parlay' if style == 'short' else 'lotto'} at {ticket['book']}"),
                   firstKickoff=gates.stamp(first), ticketReceipt=ticket['researchReview']['receipt'],
                   confidence=1,
                   cutoff='A fun ticket is not re-entered. It stands or falls as posted.',

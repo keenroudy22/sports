@@ -183,7 +183,7 @@ def fun_data(pick, games, player_team=None, *, fetch=None, art=None):
     if len(legs) > 1:
         hero_photo, hero_logo, hero_team = _chef_profile(), None, None
     return {'odds': int(pick['odds']), 'book': pick['book'], 'date': date, 'stake': 10,
-            'social_units': social_units.active(pick),
+            'social_units': social_units.active(pick), 'parlayStyle': pick.get('parlayStyle'),
             'units': (None if pick.get('personalTicket') and pick.get('riskUnits') is None else float(pick.get('riskUnits', .25))), 'price_estimated': bool(pick.get('priceEstimated')),
             'photo': hero_photo, 'hero_logo': hero_logo, 'hero_team': _colors(hero_team or {}),
             'hero_team_name': (hero_team or {}).get('abbreviation') or 'K', 'legs': legs}

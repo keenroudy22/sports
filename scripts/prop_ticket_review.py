@@ -230,8 +230,9 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
     if not holds:
         if len(legs) >= 6:
             captions = [parlay_caption.compact_prop(leg) for leg in legs]
+        title = 'Daily Double' if spec.get('parlayStyle') == 'daily-double' else f'My {family} parlay'
         result['caption'] = parlay_caption.layout(
-            f"My {family} parlay · {int(spec['odds']):+d} {spec['book']}", captions, '21+ only')
+            f"{title} · {int(spec['odds']):+d} {spec['book']}", captions, '21+ only')
         if x_post.tweet_length(result['caption']) > x_post.LIMIT or x_post.x_style(result['caption']):
             result['state'] = 'held'
             result['holds'].append('Complete one-leg-per-line caption needs voice or length review')

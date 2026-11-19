@@ -1382,6 +1382,13 @@ def alternate_parlay_frequency(candidate, ctx):
     import prop_ticket_review
     family = candidate.get('family')
     expected_league = prop_ticket_review.FAMILIES.get(family, (None, None))[0]
+    if (candidate.get('selectionMethod') == 'sourced-fun-ticket-review-v1'
+            and candidate.get('parlayStyle') == 'daily-double'
+            and candidate.get('parlayType') == 'longshot' and candidate.get('riskUnits') == .25
+            and longshot_shape(candidate, ctx).ok
+            and eastern_date(when(candidate['publishedAt']) if candidate.get('publishedAt')
+                             else ctx.now).isoformat() >= '2026-11-19'):
+        return Decision(True, 'alternate_parlay_frequency', 'reviewed Daily Double uses its own daily limit')
     if (candidate.get('selectionMethod') == prop_ticket_review.METHOD
             and expected_league is not None and candidate.get('league') == expected_league
             and candidate.get('parlayType') == 'longshot' and candidate.get('riskUnits') == .25
@@ -1464,8 +1471,8 @@ def longshot_one_per_day(candidate, ctx):
             publications[key] = row
     today = [k for k, p in publications.items()
              if (p.get('parlayStyle') or p.get('parlayType') or ('longshot' if p.get('legs') else None)) == style
-             and not pulled_before_post(k, ctx)]
-    word = {'easyProps': 'easy parlay', 'short': 'short parlay', 'lotto': 'lotto'}.get(style, 'longshot')
+             and (style == 'daily-double' or not pulled_before_post(k, ctx))]
+    word = {'easyProps': 'easy parlay', 'short': 'short parlay', 'lotto': 'lotto', 'daily-double': 'Daily Double'}.get(style, 'longshot')
     if len(today) >= LONGSHOTS_PER_DAY:
         return Decision(False, 'longshot_one_per_day', f"{today[0]} is already today's {word}")
     return Decision(True, 'longshot_one_per_day', f'first {word} today')
@@ -1477,7 +1484,12 @@ def longshot_shape(candidate, ctx):
         return Decision(True, 'longshot_shape', 'historical or separate ticket category')
     legs, odds = candidate.get('legs') or [], candidate.get('odds')
     style = candidate.get('parlayStyle')
-    if style == 'short':
+    if style == 'daily-double':
+        reviewed = candidate.get('selectionMethod') in ('sourced-prop-ticket-v1', 'sourced-fun-ticket-review-v1')
+        ok = (reviewed and len(legs) == 2 and all(isinstance(leg, dict) and leg.get('alternate') is True for leg in legs)
+              and type(odds) in (float, int) and (-110 <= odds <= -100 or 100 <= odds <= 110) and int(odds) == odds)
+        reason = 'Daily Double needs two reviewed alternates and an exact combined price from -110 to +110'
+    elif style == 'short':
         ok = 3 <= len(legs) <= 4 and isinstance(odds, (int, float)) and 200 <= odds <= 1500
         reason = 'short parlay needs 3–4 legs and +200 to +1500; no forced ticket'
     elif style == 'lotto':

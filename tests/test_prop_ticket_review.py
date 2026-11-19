@@ -48,6 +48,15 @@ def fixture(family='MNF', *, days=0):
 
 
 class PropTicketWorkbenchTests(unittest.TestCase):
+    def test_daily_double_uses_verified_two_leg_joint_quote(self):
+        spec, games, now = fixture('NBA-alts')
+        spec.update(parlayStyle='daily-double', odds=-105, legs=spec['legs'][:2])
+        self.assertEqual(R.review(spec, games, now)['state'], 'held')
+        spec['ticketQuote']['terms'] = R.terms(spec)
+        reviewed = R.review(spec, games, now)
+        self.assertEqual(reviewed['state'], 'reviewed-private', reviewed['holds'])
+        self.assertIn('Daily Double · -105', reviewed['caption'])
+
     def test_long_ticket_keeps_full_name_direction_threshold_and_market(self):
         import parlay_caption
         cases = [('over', 7.5, 'rushYds', 'Daniel Jones O7.5 rush yds'),

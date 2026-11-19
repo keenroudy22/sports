@@ -97,6 +97,8 @@ def label(pick, games=None):
             return name
         return f"{name} ({pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))})"
     if pick_card.play_kind(pick) == 'parlay':
+        if pick.get('parlayStyle') == 'daily-double':
+            return 'Daily Double'
         odds = pick.get('odds')
         return f"{len(pick.get('legs') or [])}-leg {'lotto' if isinstance(odds, (int, float)) and odds >= x_post.LOTTO else 'parlay'}"
     if pick.get('dailySelection'):

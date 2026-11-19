@@ -289,7 +289,8 @@ def ticket_card(p):
     else:
         inner += kit.initials_badge(card, 790, (PANEL_TOP + panel_bottom) / 2 + 8, 130,
                                     p.get('hero_team_name', 'K'), top)
-    chip, _ = kit.series_chip(card, COL_X, 204, 'CHEF’S SPECIAL')
+    series = 'DAILY DOUBLE' if p.get('parlayStyle') == 'daily-double' else 'CHEF’S SPECIAL'
+    chip, _ = kit.series_chip(card, COL_X, 204, series)
     inner += chip
     inner += card.text(COL_X - 6, hero_base, kit.price(p['odds']), hero_size, CHALK)
     sub = f"{p['book'].upper()} · {n} LEGS · {p['date']}"
