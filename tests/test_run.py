@@ -1409,6 +1409,22 @@ class ParlayGuardTests(unittest.TestCase):
         pulled = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, closing=closing, look=lambda *a: self.fail('pulled first'))
         self.assertTrue(pulled.startswith('its Navy at UAB over 51.5 leg was pulled'))
 
+    def test_neutral_opponent_injuries_cannot_withdraw_a_healthy_colts_prop(self):
+        from types import SimpleNamespace
+        game = dict(league='NFL', home={'id':'34'}, away={'id':'11'})
+        ctx = SimpleNamespace(games={'NFL-game':game}, player_team={'mc':'11'}, names={'mc':'Seth McGowan','qb':'Daniel Jones'},
+            starters={'NFL-11':'qb'}, injuries={'NFL-34':{str(i):{'name':n} for i,n in enumerate(
+                ('Danielle Hunter','Woody Marks','Jake Hummel'))}})
+        pick = dict(athleteId='mc', gameIds=['NFL-game'], league='NFL')
+        fact = dict(id='web-1',origin='codex researcher',verified=True,kind='injury',direction='neutral',
+            entities=['Danielle Hunter','Woody Marks','Jake Hummel'],
+            claim='Houston ruled out Danielle Hunter and Woody Marks. Jake Hummel is questionable.')
+        self.assertEqual(run.relevant_facts(pick,[fact],ctx),[])
+        for changed in [dict(fact,entities=[]), dict(fact,entities=['Unknown player']),
+                        dict(fact,direction='against'),dict(fact,claim=fact['claim']+' Daniel Jones is out.')]:
+            self.assertEqual(run.relevant_facts(pick,[changed],ctx),[changed])
+        self.assertFalse(run.opponent_injury_summary(dict(pick,athleteId=None),fact,ctx))
+
     def test_release_pull_reason_blocks_verified_web_hard_news_and_weather(self):
         pick = {'athleteId': '77'}
         web = {'id': 'web-1', 'origin': 'claude researcher', 'kind': 'injury', 'direction': 'against',

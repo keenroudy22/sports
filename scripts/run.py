@@ -1432,6 +1432,38 @@ def pre_research_refusal(candidate, ctx):
     return None
 
 
+def opponent_injury_summary(candidate, fact, ctx):
+    """A neutral list of identified opponent injuries is matchup context for a player prop."""
+    if (not candidate.get('athleteId') or fact.get('kind') != 'injury'
+            or fact.get('direction') != 'neutral' or fact.get('verified') is not True):
+        return False
+    entities = fact.get('entities')
+    if not entities or not isinstance(entities, list) or not all(isinstance(n, str) and n.strip() for n in entities):
+        return False
+    game_ids = candidate.get('gameIds') or []
+    if len(game_ids) != 1:
+        return False
+    game = ctx.games.get(game_ids[0], {})
+    teams = {str(game[side]['id']) for side in ('home', 'away') if (game.get(side) or {}).get('id')}
+    own = str(candidate.get('_team') or ctx.player_team.get(str(candidate['athleteId'])) or '')
+    if len(teams) != 2 or own not in teams:
+        return False
+    opponent = (teams - {own}).pop()
+    injuries = getattr(ctx, 'injuries', {})
+    def listed(team):
+        return {str(row['name']).casefold() for row in injuries.get(gates.team_key(game.get('league'), team), {}).values()
+                if row.get('name')}
+    names = {n.strip().casefold() for n in entities}
+    if not names <= listed(opponent) or names & listed(own):
+        return False
+    # Preserve a mixed sentence even if the extraction omitted the player or
+    # his starting quarterback from its entity list.
+    claim = str(fact.get('claim') or '').casefold()
+    own_qb = getattr(ctx, 'starters', {}).get(gates.team_key(game.get('league'), own))
+    protected = [candidate.get('player'), ctx.names.get(str(candidate['athleteId'])), ctx.names.get(str(own_qb))]
+    return not any(name and str(name).casefold() in claim for name in protected)
+
+
 def relevant_facts(candidate, facts, ctx):
     """The facts that can change what this pick depends on. The line's move is not one: the price is already
     taken at the current number, and backtests show a move away from our number does not hurt our side. Long
@@ -1447,6 +1479,8 @@ def relevant_facts(candidate, facts, ctx):
     for fact in facts:
         kind = fact.get('kind')
         if researcher.from_web(fact):
+            if opponent_injury_summary(candidate, fact, ctx):
+                continue
             if kind in ('injury', 'role', 'weather'):   # statistical reporting is context, not a separate news hold
                 out.append(fact)
             continue
