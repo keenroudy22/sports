@@ -1,0 +1,404 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-19T03:17:34Z",
+  "targetWeek": 12,
+  "summary": "Research update for Nov 18: Settled 2: Akron at Massachusetts over 46.5 win; Massachusetts MONEYLINE loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 46.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401866467"
+      ],
+      "book": "BetMGM",
+      "odds": -108,
+      "projection": 49.7,
+      "edge": "Price-checked chance 52.8% against the exact two-sided price; 51.9% needed at -108: +0.9 percentage points.",
+      "cutoff": "OVER 46.5 at -108 or better; off the card at 48+, or at -123 or worse at 46.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-12T04:18:58Z",
+      "quotedAt": "2026-11-18T11:45:05Z",
+      "quoteType": "capture",
+      "quoteNote": "BetMGM's number and price from the 6:45 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-18T16:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.579,
+        "chance": 0.528,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.519,
+        "edgePoints": 0.9,
+        "evPerUnit": 0.018,
+        "snapshotAt": "2026-11-12T04:18:58Z",
+        "probabilitySpec": "5ece987206f6c9cef0374425520e4f236719bc410feede25c6e6325ec009ec94",
+        "evaluatedAt": "2026-11-18T13:35:58Z",
+        "fairChance": 0.498,
+        "anchoredChance": 0.528,
+        "gap": 3.1,
+        "calibrationFamily": "CFB/total",
+        "calibrationMethod": "neutral-centered-fitted"
+      },
+      "matchup": "Akron Zips at Massachusetts Minutemen",
+      "title": "Akron at Massachusetts over 46.5",
+      "id": "CFB-2026-W12-akr-mass-over-46-5-mgm",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401866467",
+        "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+        "https://umassathletics.com/news/2026/11/15/massachusetts-football-hosts-akron-on-wednesday-for-senior-night"
+      ],
+      "why": "Model lean, our number only. We have the total at 49.7; the book is at 46.5. That makes the over 52.8%, and -108 needs 51.9%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Akron says Cibastian Broughton returned to the starting lineup against Ohio and completed 34 of 52 passes for 405 yards and two touchdowns in his two games since returning. Checked before publishing: UMass says William Watson III missed the Miami (OH) and Buffalo games and most of the Toledo game with lower body injuries; its Akron preview does not state whether he will start against Akron. The market: The total opened 47.5 and is 46.5 at DraftKings, 1 toward the under. 6 books span -3.5 to -3 on the spread; the middle is -3.5. Our spread is 4.3 points off, bigger than 57% of our past gaps. Gaps this size went 771-765 against the close in 3584 games. Our total is 3.2 points off, bigger than 54% of our past gaps. Gaps this size went 888-767 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: Akron lists its scoring offense at 18.6 points per game and UMass's scoring defense at 22.3 points allowed per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Akron lists UMass's scoring offense at 24.3 points per game and its own scoring defense at 33.2 points allowed per game."
+        ],
+        "cautions": [
+          "Akron lists its scoring offense at 18.6 points per game and UMass's scoring defense at 22.3 points allowed per game."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 46.5. I say 49.7.",
+            "numbers": {
+              "projection": 49.7,
+              "line": 46.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-12T04:18:58Z"
+          },
+          {
+            "text": "Akron lists UMass's scoring offense at 24.3 points per game and its own scoring defense at 33.2 points allowed per game.",
+            "numbers": {},
+            "source": "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+            "time": "2026-11-18T13:35:58Z"
+          },
+          {
+            "text": "Akron lists UMass's scoring offense at 24.3 points per game and its own scoring defense at 33.2 points allowed per game.",
+            "numbers": {},
+            "source": "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+            "time": "2026-11-18T13:35:58Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Akron lists its scoring offense at 18.6 points per game and UMass's scoring defense at 22.3 points allowed per game.",
+            "numbers": {},
+            "source": "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+            "time": "2026-11-18T13:35:58Z"
+          },
+          {
+            "text": "Akron lists its scoring offense at 18.6 points per game and UMass's scoring defense at 22.3 points allowed per game.",
+            "numbers": {},
+            "source": "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+            "time": "2026-11-18T13:35:58Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "College injury news is thin; no verified status report is stored.",
+            "numbers": {},
+            "source": null,
+            "time": null
+          }
+        ],
+        "weather": {
+          "tempF": 41,
+          "windMph": 1,
+          "windDirection": "SW",
+          "precipProb": 0,
+          "periodStart": "2026-11-18T19:00:00-05:00",
+          "issuedAt": "2026-11-17T18:35:54+00:00",
+          "source": "https://api.weather.gov/gridpoints/BOX/22,93/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 45.5,
+                "price": -110,
+                "time": "2026-11-15T11:45:07Z"
+              },
+              "now": {
+                "line": 46.5,
+                "price": -110,
+                "time": "2026-11-18T11:45:05Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 45.5,
+                "price": -105,
+                "time": "2026-11-13T11:45:06Z"
+              },
+              "now": {
+                "line": 46.5,
+                "price": -110,
+                "time": "2026-11-18T11:45:05Z"
+              }
+            }
+          },
+          "best": {
+            "book": "BetMGM",
+            "line": 46.5,
+            "price": -108,
+            "time": "2026-11-18T11:45:05Z"
+          }
+        },
+        "ours": {
+          "projection": 49.7,
+          "line": 46.5,
+          "market": "total",
+          "text": "Book says 46.5. I say 49.7.",
+          "snapshotAt": "2026-11-12T04:18:58Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "stats",
+            "url": "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+            "time": "2026-11-18T13:35:58Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/BOX/22,93/forecast/hourly",
+            "time": "2026-11-17T18:35:54+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866467",
+            "time": "2026-11-18T13:35:58Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://umassathletics.com/news/2026/11/15/massachusetts-football-hosts-akron-on-wednesday-for-senior-night",
+            "time": "2026-11-18T13:35:58Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-18T14:28:52Z",
+      "result": "win",
+      "actual": "Akron 34, UMass 33",
+      "settledAt": "2026-11-19T03:17:34Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401866467",
+      "actualValue": 67,
+      "units": 0.926
+    },
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "moneyline",
+      "line": 0.0,
+      "direction": "home",
+      "gameIds": [
+        "CFB-401866467"
+      ],
+      "book": "DraftKings",
+      "odds": -170,
+      "projection": 0.7,
+      "edge": "Price-checked chance 63.2% against the exact two-sided price; 63.0% needed at -170: +0.2 percentage points.",
+      "cutoff": "HOME 0 at -170 or better; off the card at -0.5 or lower, or at -185 or worse at 0.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-12T04:18:58Z",
+      "quotedAt": "2026-11-18T16:39:57Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 11:39 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-18T22:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.684,
+        "chance": 0.632,
+        "calibrated": true,
+        "calibration": 0.35,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.63,
+        "edgePoints": 0.2,
+        "evPerUnit": 0.004,
+        "snapshotAt": "2026-11-12T04:18:58Z",
+        "probabilitySpec": "86501e656367347803fb02a3ccc597a2b371a110db94f9c60ed9af388cc9e5de",
+        "evaluatedAt": "2026-11-18T16:48:48Z",
+        "fairChance": 0.604,
+        "anchoredChance": 0.632,
+        "gap": 2.8,
+        "calibrationFamily": "CFB/moneyline"
+      },
+      "matchup": "Akron Zips at Massachusetts Minutemen",
+      "title": "Massachusetts MONEYLINE",
+      "id": "CFB-2026-W12-akr-mass-ml-home-0-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401866467"
+      ],
+      "why": "Price-checked win chance 63.2%; -170 needs 63.0%. The market: The total opened 47.5 and is 48.5 at DraftKings, 1 toward the over. 6 books span -3.5 to -3 on the spread; the middle is -3.5. Our spread is 4.3 points off, bigger than 57% of our past gaps. Gaps this size went 771-765 against the close in 3584 games. Our total is 1.2 points off, bigger than 20% of our past gaps. Gaps this size went 1522-1342 against the close in 3602 games.",
+      "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Massachusetts enters the Akron game at 5-5 overall and 2-4 in the MAC, while Akron enters at 1-9 overall and 0-6 in the MAC."
+        ],
+        "cautions": [
+          "William Watson III missed the Miami (OH) and Buffalo games and most of the Toledo game with lower body injuries."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Price-checked win chance 63.2%; this price needs 63.0%.",
+            "numbers": {
+              "chance": 0.632,
+              "breakEven": 0.63
+            },
+            "source": "Kook'n exact-price check",
+            "time": "2026-11-18T16:39:57Z"
+          },
+          {
+            "text": "Massachusetts enters the Akron game at 5-5 overall and 2-4 in the MAC, while Akron enters at 1-9 overall and 0-6 in the MAC.",
+            "numbers": {},
+            "source": "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+            "time": "2026-11-18T16:48:48Z"
+          },
+          {
+            "text": "Massachusetts enters the Akron game at 5-5 overall and 2-4 in the MAC, while Akron enters at 1-9 overall and 0-6 in the MAC.",
+            "numbers": {},
+            "source": "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+            "time": "2026-11-18T16:48:48Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "William Watson III missed the Miami (OH) and Buffalo games and most of the Toledo game with lower body injuries.",
+            "numbers": {},
+            "source": "https://umassathletics.com/news/2026/11/15/massachusetts-football-hosts-akron-on-wednesday-for-senior-night",
+            "time": "2026-11-18T16:48:48Z"
+          },
+          {
+            "text": "William Watson III missed the Miami (OH) and Buffalo games and most of the Toledo game with lower body injuries.",
+            "numbers": {},
+            "source": "https://umassathletics.com/news/2026/11/15/massachusetts-football-hosts-akron-on-wednesday-for-senior-night",
+            "time": "2026-11-18T16:48:48Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "William Watson III missed the Miami (OH) and Buffalo games and most of the Toledo game with lower body injuries.",
+            "numbers": {},
+            "source": "https://umassathletics.com/news/2026/11/15/massachusetts-football-hosts-akron-on-wednesday-for-senior-night",
+            "time": "2026-11-18T16:48:48Z"
+          },
+          {
+            "text": "William Watson III missed the Miami (OH) and Buffalo games and most of the Toledo game with lower body injuries.",
+            "numbers": {},
+            "source": "https://umassathletics.com/news/2026/11/15/massachusetts-football-hosts-akron-on-wednesday-for-senior-night",
+            "time": "2026-11-18T16:48:48Z"
+          }
+        ],
+        "weather": {
+          "tempF": 41,
+          "windMph": 5,
+          "windDirection": "W",
+          "precipProb": 0,
+          "periodStart": "2026-11-18T19:00:00-05:00",
+          "issuedAt": "2026-11-18T12:51:59+00:00",
+          "source": "https://api.weather.gov/gridpoints/BOX/22,93/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": -2.5,
+                "price": -110,
+                "time": "2026-11-15T11:45:07Z"
+              },
+              "now": {
+                "line": -3.5,
+                "price": -102,
+                "time": "2026-11-18T11:45:05Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": -2.5,
+                "price": -110,
+                "time": "2026-11-13T11:45:06Z"
+              },
+              "now": {
+                "line": -3.5,
+                "price": -108,
+                "time": "2026-11-18T11:45:05Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 0.0,
+            "price": -170,
+            "time": "2026-11-18T16:39:57Z"
+          }
+        },
+        "ours": {
+          "projection": 0.7,
+          "line": 0.0,
+          "market": "moneyline",
+          "text": "Price-checked win chance 63.2%; this price needs 63.0%.",
+          "snapshotAt": "2026-11-12T04:18:58Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://umassathletics.com/news/2026/11/15/massachusetts-football-hosts-akron-on-wednesday-for-senior-night",
+            "time": "2026-11-18T16:48:48Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://gozips.com/news/2026/11/18/football-at-umass-for-wednesday-maction",
+            "time": "2026-11-18T16:48:48Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/BOX/22,93/forecast/hourly",
+            "time": "2026-11-18T12:51:59+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866467",
+            "time": "2026-11-18T16:48:48Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-18T16:55:54Z",
+      "result": "loss",
+      "actual": "Akron 34, UMass 33",
+      "settledAt": "2026-11-19T03:17:34Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401866467",
+      "actualValue": -1,
+      "units": -1
+    }
+  ]
+}
