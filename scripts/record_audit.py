@@ -5,6 +5,7 @@ official record accidentally, while settlement comparisons catch stale or omitte
 """
 import argparse
 import json
+from datetime import datetime
 from pathlib import Path
 
 import build_site
@@ -84,8 +85,13 @@ def main(argv=None):
     public = load(args.today)
     issues = audit(load(args.research), public)
     issues.extend(audit_all_sports(public))
-    issues.extend(audit_cbb_public(public, build_site.cbb_record_picks()))
-    issues.extend(audit_nba_public(public, build_site.nba_record_picks(team_finals=hoops_store.load('NBA'))))
+    import daily_potd
+    at = datetime.fromisoformat(public['generatedAt'].replace('Z', '+00:00'))
+    college = build_site.cbb_record_picks(at)
+    nba = build_site.nba_record_picks(at, team_finals=hoops_store.load('NBA'))
+    daily_potd.mark_delivered(college + nba, load(ROOT / 'data/x-posted.json')['posts'], ROOT, at)
+    issues.extend(audit_cbb_public(public, college))
+    issues.extend(audit_nba_public(public, nba))
     cbb_today = args.today.with_name('cbb.json')
     if cbb_today.is_file():
         issues.extend(audit_cbb_today(public, load(cbb_today)))
