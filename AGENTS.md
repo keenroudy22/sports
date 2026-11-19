@@ -1,3 +1,15 @@
+# November 19 daily card and independently funded Climb
+
+Target five qualifying straights across the supported slate. The daily Chef’s Pick
+is the favorite among the straights and needs its own prospective record at its
+first published terms. Review the ladder early and use its own rollover bank.
+Research alternate lines across sports, including mixed NFL/CFB rungs. Check
+market support and settlement before publishing a new sport or market.
+Prioritize MNF and TNF same-game player parlays, Saturday CFB and Sunday NFL
+parlays, and full-slate NBA parlays on other days. Look for additional tickets
+when the exact joint price and supporting facts qualify. Publish early once the
+morning recap is delivered. Keep ordinary stakes, ticket limits and actual receipts.
+
 # November 18 morning recap order
 
 Target 6:45 a.m. Eastern for the previous slate’s complete graded recap starting November 19.

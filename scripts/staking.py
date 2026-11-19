@@ -11,6 +11,7 @@ CURRENT_VERSION = '2026-10-29-one-two-unit-shared-cap'
 CURRENT_EFFECTIVE = datetime.fromisoformat('2026-10-29T13:28:41+00:00')
 EASTERN = ZoneInfo('America/New_York')
 OWNER_UNIT = 25  # Private Climb dollar-to-exposure conversion; never rescale old results.
+SEPARATE_CLIMB = datetime.fromisoformat('2026-11-19T16:11:00+00:00')
 CAP_EFFECTIVE = datetime.fromisoformat('2026-11-08T15:30:00+00:00')
 
 
@@ -77,15 +78,18 @@ def units(pick):
     return float(value) / OWNER_UNIT if climb else float(value)
 
 
-def large_slate(on, games):
+def large_slate(on, games, now=None):
     # Eight eligible-sport games is the existing definition of a large slate.
-    count = sum(g.get('league') in ('NFL', 'CFB', 'NBA') and day(g, {}) == on for g in games.values())
+    leagues = {'NFL', 'CFB', 'NBA'}
+    if on >= SEPARATE_CLIMB.astimezone(EASTERN).date() and (now is None or now >= SEPARATE_CLIMB):
+        leagues.add('CBB')
+    count = sum(g.get('league') in leagues and day(g, {}) == on for g in games.values())
     return on.weekday() in (5, 6) or count >= 8
 
 
 def limit(on, games, now=None):
-    large = large_slate(on, games)
     now = now or datetime.now(CAP_EFFECTIVE.tzinfo)
+    large = large_slate(on, games, now)
     if now >= CAP_EFFECTIVE and on >= CAP_EFFECTIVE.astimezone(EASTERN).date():
         return 8 if large else 5
     return 5 if large else 3
@@ -98,6 +102,10 @@ def check(candidate, ctx):
     on = day(candidate, games)
     if on is None:
         return 'shared exposure: missing game day'
+    separate_climb = ctx.now >= SEPARATE_CLIMB and on >= SEPARATE_CLIMB.astimezone(EASTERN).date()
+    if separate_climb and candidate.get('parlayType') == 'ladder':
+        # The Climb admission checks its own earned rollover and one open rung.
+        return None if units(candidate) is not None else 'Climb exposure: candidate stake unknown'
     rows = {**getattr(ctx, 'risk_external', {}), **ctx.first}
     used = 0
     day_rows=[]
@@ -106,6 +114,8 @@ def check(candidate, ctx):
             continue
         # Settlements/expired quotes NEVER replenish the day's budget.
         if row.get('_pendingRelease') and (row.get('held') or row.get('withdrawn')):
+            continue
+        if separate_climb and row.get('parlayType') == 'ladder':
             continue
         value = units(row)
         if value is None:
@@ -157,7 +167,7 @@ def check(candidate, ctx):
                 and not row.get('historicalImport'))
     if (nba_pick_policy.active(ctx.now) and straight(candidate)
             and (league(candidate) in ('NBA','CBB') or any(league(r) in ('NBA','CBB') for r in day_rows))):
-        maximum=8 if large_slate(on, games) else 5
+        maximum=8 if large_slate(on, games, ctx.now) else 5
         count=sum(straight(r) for r in day_rows)
         if count>=maximum:
             return f'shared exposure: {count} straights already reserved; daily straight-count cap is {maximum}'

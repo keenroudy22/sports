@@ -25,6 +25,25 @@ def context(**extra):
 
 
 class StakingTests(unittest.TestCase):
+    def test_climb_is_separately_funded_from_owner_cutover(self):
+        ctx = context()
+        ctx.now = staking.SEPARATE_CLIMB
+        kickoff = '2026-11-20T01:15:00Z'
+        rung = dict(id='rung', kickoff=kickoff, parlayType='ladder', ladder={'stake': 95})
+        straight = dict(id='fifth', kickoff=kickoff, riskUnits=1)
+        ctx.first = {str(i): dict(straight, id=str(i)) for i in range(4)}
+        ctx.first['rung'] = rung
+        self.assertEqual(staking.units(rung), 3.8)
+        self.assertIsNone(staking.check(straight, ctx))
+        self.assertIsNone(staking.check(rung, ctx))
+        self.assertIsNotNone(staking.check(dict(rung, ladder={}), ctx))
+        ctx.now -= timedelta(seconds=1)
+        self.assertIn('exceeds', staking.check(straight, ctx))
+        self.assertIn('exceeds', staking.check(rung, ctx))
+        ctx.games = {str(i): dict(league='CBB', kickoff=kickoff) for i in range(8)}
+        self.assertEqual(staking.limit(ctx.now.date(), ctx.games, ctx.now), 5)
+        self.assertEqual(staking.limit(ctx.now.date(), ctx.games, staking.SEPARATE_CLIMB), 8)
+
     def test_owner_daily_five_target_and_big_slate_capacity_are_prospective(self):
         now=datetime(2026,11,9,15,tzinfo=timezone.utc)
         self.assertEqual(staking.limit(now.date(),{},now),5)
