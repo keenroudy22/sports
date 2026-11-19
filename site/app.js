@@ -758,7 +758,7 @@
     const wanted = FOOTBALL.includes(league) ? [league] : FOOTBALL;
     const shards = await Promise.all(wanted.map(l => files[l] === `lines-${l}.json` ? maybe(`app/${files[l]}`) : Promise.resolve(null)));
     if (shards.some((payload, i) => !payload || payload.league !== wanted[i] || !Array.isArray(payload.lines))) return null;
-    return { generatedAt: index.generatedAt, lines: shards.flatMap(payload => payload.lines) };
+    return { generatedAt: index.generatedAt, matchups: index.matchups || {}, lines: shards.flatMap(payload => payload.lines) };
   };
   const LEAGUE_NAME = { ALL: 'All sports', NFL: 'NFL', CFB: 'College football', NBA: 'NBA', WNBA: 'WNBA', CBB: 'College hoops', MLB: 'MLB', NHL: 'NHL', EPL: 'Premier League', MLS: 'MLS' };
   const todayISO = () => new Date().toISOString();
@@ -2099,7 +2099,9 @@
   const ticketCatalog = async () => {
     const [football, nba] = await Promise.all([lineData('ALL'), maybe('app/nba-props.json')]);
     if (!football || (state.ticket.some(r => String(r.id).startsWith('nba-draft:')) && !Array.isArray(nba?.rows))) return null;
-    return { lines: [...football.lines, ...(C.nbaTicketLines && Array.isArray(nba?.rows) ? C.nbaTicketLines(nba.rows) : [])] };
+    const lines = [...football.lines, ...(C.nbaTicketLines && Array.isArray(nba?.rows) ? C.nbaTicketLines(nba.rows) : [])];
+    const matchups = football.matchups || {};
+    return { matchups, lines: lines.map(row => ({ ...row, matchup: matchups[row.gameId] || row.matchup })) };
   };
   const ticketRows = async () => {
     const data = await ticketCatalog();
@@ -2108,7 +2110,7 @@
     const now = Date.now();
     return state.ticket.map(item => {
       const row = current.get(item.id);
-      if (!row) return { ...item, state: 'closed', missing: true };
+      if (!row) return { ...item, matchup: item.matchup || data.matchups?.[item.gameId], state: 'closed', missing: true };
       const changed = Number(row.odds) !== Number(item.odds) || Number(row.line) !== Number(item.line) || bookLabel(row.book) !== bookLabel(item.book);
       const closed = !C.eligible(row, now);
       return { ...row, changed: changed && !closed, closed, started: Date.parse(row.kickoff) <= now, previous: item };
@@ -2355,7 +2357,7 @@
     saved.set('watchlist', state.watchlist.slice(0, 100));
     render(true);
   };
-  const ticketLeg = row => ({ id: row.id, title: row.title, player: row.player || null, market: row.market || null, direction: row.direction || null, line: row.line,
+  const ticketLeg = row => ({ id: row.id, title: row.title, matchup: row.matchup, player: row.player || null, market: row.market || null, direction: row.direction || null, line: row.line,
     odds: row.odds, book: row.book, gameId: row.gameId, kickoff: row.kickoff, state: row.state, expiresAt: row.expiresAt, observedAt: row.observedAt });
   function boot() {
     document.addEventListener('error', event => {

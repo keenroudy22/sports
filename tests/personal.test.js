@@ -30,6 +30,9 @@ test('sport changes preserve the selected section, with detail pages returning t
 test('an active posted straight has an exact-link action or copies the original sportsbook terms',()=>{
  const pick={...row,posted:true,title:'Receiver UNDER 4.5 receptions',direction:'under',odds:106};
  assert.match(P.betslipAction(pick,now,true),/data-copy-bet="Receiver UNDER 4\.5 receptions · \+106 at FanDuel"/);
+ const total={...pick,matchup:'Little Rock at Jacksonville',marketType:'total',title:'OVER 143.5',odds:-115,book:'DraftKings'};
+ assert.match(P.betslipAction(total,now,true),/data-copy-bet="Little Rock at Jacksonville · Game total OVER 143\.5 · -115 at DraftKings"/);
+ assert.equal(P.betslipAction({...total,matchup:null},now,true),'');
  const linked={...pick,betslip:{status:'ready',book:'FanDuel',url:'https://sportsbook.fanduel.com/exact',legsMatched:1,legsRequested:1}};
  assert.match(P.betslipAction(linked,now,true),/Open exact line in FanDuel/);
  assert.doesNotMatch(P.betslipAction(linked,now,true),/data-copy-bet/);

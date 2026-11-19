@@ -2513,7 +2513,6 @@ def build(now=None):
                                 'climbRoute': ticket_climb_route.public_route(route_state, now, route_games)})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)
-    write(OUT / 'lines.json', line_index)
     for league, name in line_index['files'].items():
         write(OUT / name, {'generatedAt': generated, 'league': league,
                            'lines': [row for row in lines if row.get('league') == league]})
@@ -2561,6 +2560,11 @@ def build(now=None):
         'generatedAt': nba['generatedAt'], 'rows': nba['playerProps']['rows'],
     })
     nba_overview['matchupPropEvents'] = list(nba_matchup_props)
+    draft_games = {row.get('gameId') for row in lines}
+    draft_games.update(f"NBA-{row['eventId']}" for row in nba_props.get('rows', []) if row.get('eventId'))
+    line_index['matchups'] = {g['id']: label for g in (*cards, *nba_overview['games'])
+                              if g.get('id') in draft_games and (label := matchup_label(g))}
+    write(OUT / 'lines.json', line_index)
     write(OUT / 'nba.json', nba_overview)
     write(OUT / 'nba-props.json', nba_props)
     for event, payload in nba_matchup_props.items():
@@ -2641,6 +2645,18 @@ def public_delivery(entry):
             'restoredAt': entry.get('restoredAt'), 'cancelled': cancelled, 'failed': bool(entry.get('error'))}
 
 
+def matchup_label(game):
+    teams = game.get('teams') or game
+    names = []
+    for side in ('away', 'home'):
+        team = teams.get(side) or {}
+        name = team.get('shortName') or team.get('short') or team.get('name') or team.get('abbreviation')
+        if not name:
+            return None
+        names.append(name)
+    return (' vs ' if game.get('neutral') else ' at ').join(names)
+
+
 def cbb_record_picks(now=None, root=ROOT):
     """Normalize delivered college-basketball picks for the shared Results surface."""
     import cbb_picks
@@ -2681,7 +2697,7 @@ def cbb_record_picks(now=None, root=ROOT):
             result_detail = f"{cbb_picks.result_detail(row)} · {verb} by {margin:g}"
         rows.append(betslips.decorate({
             'id': row['id'], 'league': 'CBB', 'kind': 'gamePicks', 'lane': 'best_bet',
-            'title': title, 'displayTitle': title, 'marketType': row.get('marketType'),
+            'title': title, 'displayTitle': title, 'matchup': matchup_label(game), 'marketType': row.get('marketType'),
             'direction': row.get('direction'), 'line': row.get('line'), 'odds': row.get('odds'),
             'book': row.get('book'), 'displayBook': row.get('book'), 'riskUnits': row.get('riskUnits'),
             'kickoff': row.get('kickoff') or game.get('kickoff'), 'publishedAt': row.get('publishedAt'),
@@ -2765,7 +2781,7 @@ def nba_record_picks(now=None, root=ROOT, *, team_finals=()):
             sources.insert(0, row['source'])
         rows.append(betslips.decorate({
             'id': row['id'], 'league': 'NBA', 'kind': 'props', 'lane': 'best_bet',
-            'title': title, 'displayTitle': title, 'player': row.get('player'),
+            'title': title, 'displayTitle': title, 'matchup': matchup_label(game), 'player': row.get('player'),
             'athleteId': row.get('athleteId'), 'market': row.get('stat'), 'marketType': 'prop',
             'direction': row.get('direction'), 'line': row.get('line'), 'odds': row.get('odds'),
             'book': row.get('book'), 'displayBook': row.get('book'), 'riskUnits': row.get('riskUnits'),
@@ -2896,6 +2912,7 @@ def board_picks(first, latest, by_id, identities, now=None):
         rows.append({'id': key, 'league': pick.get('league'), 'kind': pick.get('kind'), 'title': pick.get('title'),
                      # The same title and one-line reason the play's X post carries, so the site reads like the post.
                      'displayTitle': pick_card.display_title(pick, game) if game else pick.get('title'),
+                     **({'matchup': matchup_label(game)} if game and len(game_ids) == 1 and not pick.get('legs') else {}),
                      'reason': reasons.get(key) if isinstance(reasons, dict) and isinstance(reasons.get(key), str) else None,
                      # A Pick of the Day pulled before its post went out never wears the star.
                      'featured': key in named and (key in went_out or not (recent.get('entryNote') or pick.get('entryNote'))),

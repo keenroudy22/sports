@@ -335,7 +335,7 @@
   };
 
   const ticketText = selected => ["Kook'n Sports: personal draft, not an official ticket",
-    ...selected.map((row, i) => `${i + 1}. ${row.title || row.player || 'Line'} | ${row.book || 'Book unavailable'} ${odds(row.odds)} | seen ${row.observedAt || 'time unavailable'}`),
+    ...selected.map((row, i) => `${i + 1}. ${row.matchup || row.gameId || 'Matchup unavailable'} · ${row.title || row.player || 'Line'} | ${row.book || 'Book unavailable'} ${odds(row.odds)} | seen ${row.observedAt || 'time unavailable'}`),
     'Check every market, price and the sportsbook’s ticket total yourself.'].join('\n');
 
   /* ---------- the record ---------- */

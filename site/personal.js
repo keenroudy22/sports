@@ -45,7 +45,11 @@
     if (pick.posted !== true || pick.community || pick.historicalImport || pick.parlayType || legs !== 1
         || pick.priceAssumed || !title || !pick.book || !Number.isFinite(pick.odds) || Math.abs(pick.odds) < 100) return '';
     const price = pick.odds > 0 ? '+' + pick.odds : String(pick.odds);
-    return `<button type="button" class="btn small" data-copy-bet="${html(`${title} · ${price} at ${pick.book}`)}" aria-label="Copy posted bet: ${html(title)}">Copy posted bet</button>`;
+    const matchup = String(pick.matchup || '').trim();
+    if (!matchup && (/^(over|under)\b/i.test(title) || pick.marketType === 'total')) return '';
+    const selection = pick.marketType === 'total' ? `Game total ${title}` : title;
+    const text = [matchup, selection, `${price} at ${pick.book}`].filter(Boolean).join(' · ');
+    return `<button type="button" class="btn small" data-copy-bet="${html(text)}" aria-label="Copy posted bet: ${html(text)}">Copy posted bet</button>`;
   }
   const api = {leagues,league,key,snapshot,changes,sportRoute,betslipAction};
   if(typeof module !== 'undefined') module.exports=api; else root.KRPersonal=api;
