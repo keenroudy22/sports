@@ -170,12 +170,23 @@ test('NBA player page ties a posted prop to last 5, last 10, minutes and the ful
   const points = [0,0,2,7,8,11,9,16,12,11], minutes = [1,2,11,25,28,26,12,22,24,29];
   const nbaRow = (i) => [`40190${900+i}`, `2026-${i < 6 ? '09' : '10'}-${String(10+i).padStart(2,'0')}`, 2027, 0, 2, '25', String(100+i), i%2, `OP${i}`,
     ...nbaKeys.map(k => k === 'pts' ? points[i] : k === 'reb' ? (i === 9 ? 5 : 1) : k === 'ast' ? (i > 6 ? 2 : 0) : k === 'fg3m' ? (i > 4 ? 2 : 0) : k === 'min' ? minutes[i] : 0)];
-  const page = await playerPage(false, files => Object.assign(files, {
+  const fill = files => Object.assign(files, {
     'data/app/players/NBA.json': { keys:nbaKeys, shards:32, season:2027, players:[['4870883','Bennett Stirtz','G','25','OKC','2026-10-19',10]] },
     [`data/app/players/NBA/${4870883 % 32}.json`]: { keys:nbaKeys, players:{'4870883':{name:'Bennett Stirtz',pos:'G',rows:points.map((_,i)=>nbaRow(i))}} },
-    'data/app/nba.json': { games:[{providerId:'401909965',kickoff:'2026-10-08T23:00:00Z',status:'scheduled',teams:{away:{id:'25',abbreviation:'OKC',name:'Oklahoma City Thunder'},home:{id:'22',abbreviation:'POR',name:'Portland Trail Blazers'}}}], trial:{plays:[{id:'p',athleteId:'4870883',stat:'pts',line:7.5,direction:'over',odds:101,book:'DraftKings',riskUnits:1,kickoff:'2026-10-08T23:00:00Z',publishedAt:'2026-10-07T17:00:00Z'}]} },
+    'data/app/nba.json': { games:[{id:'NBA-401909965',providerId:'401909965',kickoff:'2026-10-08T23:00:00Z',status:'scheduled',teams:{away:{id:'25',abbreviation:'OKC',name:'Oklahoma City Thunder'},home:{id:'22',abbreviation:'POR',name:'Portland Trail Blazers'}}}], trial:{plays:[{id:'p',athleteId:'4870883',stat:'pts',line:7.5,direction:'over',odds:101,book:'DraftKings',riskUnits:1,kickoff:'2026-10-08T23:00:00Z',publishedAt:'2026-10-07T17:00:00Z'}]} },
     'data/app/nba-props.json': { rows:[{athleteId:'4870883',eventId:'401909965',stat:'pts',line:7.5,side:'over',over:-102,under:-130,book:'FanDuel',kickoff:'2026-10-08T23:00:00Z',sourceAt:'2026-10-07T17:30:00Z',teamName:'Oklahoma City Thunder',projection:{value:11},currentRole:{games:3,minutes:[22,24,29]}}] },
-  }), 'NBA', 'pts');
+    'data/app/games/NBA-401909965.json': {positionGames:{22:[{date:'2026-10-06',event:'401900001',team:'DET',defenders:['Portland Center'],players:[
+      {name:'Detroit Guard',position:'G',stats:{pts:12,reb:0,min:24}},
+      {name:'Detroit Forward',position:'F',stats:{pts:22,reb:9,min:31}}
+    ]}]}},
+  });
+  const page = await playerPage(false, fill, 'NBA', 'pts');
+  assert.match(page, /Guards against Portland Trail Blazers/);
+  assert.match(page, /Detroit Guard<\/th><td class="y">12<\/td><td>24<\/td>/);
+  assert.doesNotMatch(page, /Detroit Forward/);
+  assert.match(page, /Portland Center/);
+  const boards = await playerPage(false, fill, 'NBA', 'reb');
+  assert.match(boards, /Detroit Guard<\/th><td class="y">0<\/td><td>24<\/td>/);
   assert.match(page, /Bennett Stirtz/);
   assert.match(page, /Kook’n play:<\/b> over 7\.5 at \+101 DraftKings · 1u/);
   assert.match(page, /Last 5 average<\/small><b class="num">11\.8/);

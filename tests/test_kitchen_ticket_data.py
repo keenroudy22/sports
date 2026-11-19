@@ -42,6 +42,11 @@ class TicketWordsTests(unittest.TestCase):
              'players': [{'id': '5241364', 'name': 'Bennett Stirtz', 'pos': 'G', 'team': '25', 'dnp': False,
                           'stats': {'pts': 16, 'reb': 1, 'ast': 1, 'fg3m': 4, 'min': 22}}]},
         ]
+        boxes[0]['players'].append(dict(boxes[0]['players'][0], name='Inactive guard', dnp=True))
+        matchups = build_site.opponent_position_games(boxes + [dict(boxes[0], seasonType=1)], 2027)
+        self.assertEqual(len(matchups['22']), 1)
+        self.assertEqual(matchups['22'][0]['players'], [
+            {'name': 'Bennett Stirtz', 'position': 'G', 'stats': boxes[0]['players'][0]['stats']}])
         index, shards, season = build_site.build_nba_players(boxes)
         self.assertEqual(season, 2027)
         self.assertEqual(index[0][:5], ['5241364', 'Bennett Stirtz', 'G', '25', 'OKC'])

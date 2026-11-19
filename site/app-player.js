@@ -56,6 +56,10 @@
 .kt-log tbody th span { display: block; font-size: 12px; }
 .kt-log td { width: 56px; font: 500 13px/1 var(--font-body); color: var(--dim); }
 .kt-log td.y { width: 52px; font: 700 22px/1 var(--font-display); color: var(--chalk); }
+.position-box { max-width: 720px; margin: 18px 0 24px; }
+.position-box h3 { margin: 0; }
+.position-box details { margin-top: 8px; font-size: 13px; color: var(--dim); }
+.position-box summary { cursor: pointer; padding: 5px 0; }
 .kt-log.basketball-log { max-width: 720px; }
 .basketball-log th, .basketball-log td { padding-inline: 0 8px; }
 .basketball-log th:last-child, .basketball-log td:last-child { padding-inline-end: 0; }
@@ -249,6 +253,28 @@
   };
   const chartWindowLabel = (start, count, total) =>
     `Games ${start + 1}–${start + count} of ${total}`;
+  const opponentPositionPanel = ({ games, opponent, position, stat, metric, league }) => {
+    const groups = { PG: 'G', SG: 'G', G: 'G', SF: 'F', PF: 'F', F: 'F', C: 'C' };
+    const labels = { G: 'Guards', F: 'Forwards', C: 'Centers' };
+    const group = groups[position];
+    const title = group ? `${labels[group]} against ${opponent}` : `Position matchup against ${opponent}`;
+    const header = `<section class="kt-page-sec" aria-labelledby="position-matchup"><div class="kt-sec-head"><h2 class="kt-tape" id="position-matchup">${esc(title)}</h2></div>`;
+    if (!group || !games?.length) {
+      const reason = group ? 'No recent regular-season box scores are available for this matchup.' : 'The box score does not list a position for this player.';
+      return `${header}<p class="small muted">${reason}</p></section>`;
+    }
+    const boxPath = league === 'NBA' ? 'nba' : 'mens-college-basketball';
+    const sections = games.map(game => {
+      const peers = game.players.filter(p => groups[p.position] === group);
+      const date = new Date(`${game.date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+      const boxLink = `https://www.espn.com/${boxPath}/boxscore/_/gameId/${encodeURIComponent(game.event)}`;
+      const rows = peers.map(player => `<tr><th scope="row">${esc(player.name)}</th><td class="y">${esc(player.stats[stat] ?? '—')}</td>${stat === 'min' ? '' : `<td>${esc(player.stats.min ?? '—')}</td>`}</tr>`).join('');
+      const table = rows ? `<table class="kt-log basketball-log" aria-label="${esc(game.team)} · ${esc(date)}"><thead><tr><th scope="col">Player</th><th scope="col">${esc(metric)}</th>${stat === 'min' ? '' : '<th scope="col">Min</th>'}</tr></thead><tbody>${rows}</tbody></table>` : `<p class="small muted">No players listed at this position.</p>`;
+      const lineup = game.defenders?.length ? `<details><summary>${esc(opponent)} players who played</summary><p class="small">${game.defenders.map(esc).join(' · ')}</p></details>` : '';
+      return `<div class="position-box"><h3><a class="plain-link" href="${boxLink}" target="_blank" rel="noopener">${esc(game.team)} · ${esc(date)} ↗</a></h3>${table}${lineup}</div>`;
+    }).join('');
+    return `${header}<p class="small muted">Last ${games.length} recorded regular-season ${games.length === 1 ? 'game' : 'games'} · players grouped by listed position.</p>${sections}</section>`;
+  };
   const basketballPlayer = async route => {
     const league = route.league === 'CBB' ? 'CBB' : 'NBA';
     const profile = await C.chartPlayer(get, league, route.id);
@@ -292,6 +318,8 @@
     const last10 = regular.slice(-10).map(row => value(row, stat)).filter(isNum);
     const side = matchup && Object.entries(matchup.teams).find(([, team]) => String(team.id) === String(teamId));
     const opponent = matchup && matchup.teams[side?.[0] === 'home' ? 'away' : 'home'];
+    const matchupFile = next && opponent && /^(NBA|CBB)-[0-9]+$/.test(next.id)
+      ? await maybe(`app/games/${next.id}.json`) : null;
     const typedLine = state.player.line !== '' && isNum(Number(state.player.line)) && Number(state.player.line) >= 0 ? Number(state.player.line) : null;
     const selectedSide = state.player.direction === 'under' ? 'under' : 'over';
     const linkedBook = typedLine != null && route.stat === stat && Number(route.line) === typedLine ? bookLabel(route.book) : null;
@@ -347,6 +375,10 @@
       { label: capturedLine != null ? 'Book' : 'Chart line', value: line, kind: 'book' }, { label: 'Kook’n', value: isNum(projection) ? Number(projection) : null, kind: 'kookn' },
       { label: 'L5 avg', value: average(last5) }, { label: 'L10 avg', value: average(last10) }, { label: scope === 'all' ? 'All avg' : 'Season', value: average(seasonStatValues) }
     ], format: fmt });
+    const positionPanel = next && opponent ? opponentPositionPanel({
+      games: matchupFile?.positionGames?.[opponent.id], opponent: opponent.name || opponent.abbreviation,
+      position: data.pos, metric, stat, league
+    }) : '';
     const nbaInsights = `<div class="player-insights">${nbaWindow}${minuteTrend}${nbaComparison}</div>`;
     const thresholds = line == null ? [] : [...new Set([-2, -1, 0, 1, 2].map(step => Math.max(0, line + step)))];
     const ladder = thresholds.length ? `<section class="line-lab" aria-labelledby="nba-ladder"><div class="line-lab-head"><div><p class="eyebrow">What-if research</p><h2 id="nba-ladder">Line ladder</h2><p>How often did ${esc(data.name)} ${dir === 'over' ? 'clear' : 'stay below'} nearby numbers?</p></div><span class="line-lab-direction">${esc(dir)}</span></div><table class="line-lab-table"><thead><tr><th>Line</th><th>L5</th><th>L10</th><th>Season</th></tr></thead><tbody>${thresholds.map(threshold => { const count = list => ({hits:list.filter(v => dir === 'over' ? v > threshold : v < threshold).length,games:list.length}); const a=count(last5),b=count(last10),c=count(regular.map(row => value(row,stat)).filter(isNum)); const cell=x=>`<td>${x.games ? Math.round(100*x.hits/x.games)+'%' : '–'}<span>${x.hits}/${x.games}</span></td>`; return `<tr${threshold===line?' class="book"':''}><th>${esc(threshold)}${threshold===line?`<span class="line-lab-tag">${capturedLine != null ? 'Book' : 'Chart'}</span>`:''}</th>${cell(a)}${cell(b)}${cell(c)}</tr>`; }).join('')}</tbody></table><p class="line-lab-note">${isNum(projection) ? `Kook’n projects ${esc(fmt(projection))}. ` : ''}Historical thresholds—not offered alternate prices or probabilities.</p></section>` : '';
@@ -372,7 +404,7 @@
     }).join('');
     const gameLog = logRows ? `<table class="kt-log basketball-log"><thead><tr><th scope="col">Game</th><th scope="col">${esc(metric)}</th>${stat === 'min' ? '' : '<th scope="col">Min</th>'}${line == null ? '' : `<th scope="col">${esc(dir === 'under' ? 'U' : 'O')} ${esc(line)}</th>`}</tr></thead><tbody>${logRows}</tbody></table>`
       : '<p class="small muted">No games in this window.</p>';
-    return `${back}${hero}${tabs}${filtersFold('player', `${scope === 'all' ? 'All seasons' : season + ' season'} · ${recent.length} games · ${esc(metric)}`, `${seasonSelect}${seg('pwin', [['last5','Last 5'],['last10','Last 10'],['last20','Last 20'],['all','All games']], state.player.window)}`)}<section class="player-board" aria-labelledby="nba-stat"><div class="player-board-head"><div><p class="eyebrow">${capturedLine != null ? posted ? 'Posted line' : quoteStatus?.current ? 'Current line' : 'Earlier line' : line != null ? 'Chart line' : 'Season snapshot'}</p><h2 id="nba-stat">${esc(metric)}</h2></div><span class="player-board-mode">${capturedLine != null ? 'Kook vs Book' : 'Player history'}</span></div>${lineEntry}<div class="kt-number-grid kt-player-numbers"><span><small>${lineLabel}</small><b class="num">${esc(line == null ? '–' : line)}</b></span><span><small>Kook’n projection</small><b class="num">${esc(isNum(projection) ? fmt(projection) : 'Held')}</b></span><span><small>Kook’n − line</small><b class="num">${projectionGap == null ? '–' : `${projectionGap > 0 ? '+' : ''}${esc(fmt(projectionGap))}`}</b></span><span><small>Last 5 average</small><b class="num">${esc(fmt(average(last5)))}</b></span><span><small>Last 5 hits</small><b class="num">${line == null ? '–' : `${h5.hits}/${h5.games}`}</b></span></div>${quote ? `<p class="kt-prices">${quote}</p>` : ''}${estimateNote}${range}${isNum(projectedMinutes) && comparison ? `<p class="kt-prices"><b>Kook’n minutes:</b> ${esc(C.fixed(projectedMinutes))}</p>` : ''}${roleMinutes?.length ? `<p class="kt-prices"><b>Recent workload:</b> ${roleMinutes.map(m => esc(m)).join(' / ')} minutes</p>` : ''}<div class="player-chart-legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>${chart}</section>${nbaInsights}${ladder}<section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">Official box scores</span></div>${gameLog}<p class="small muted" style="margin-top:8px">Last 5, Last 10 and the full season use recorded regular-season appearances. A one-minute appearance counts as an appearance; minutes are shown so role changes stay visible. Kook’n minus the book is not a probability or proof that a price is valuable.</p></section>`;
+    return `${back}${hero}${tabs}${filtersFold('player', `${scope === 'all' ? 'All seasons' : season + ' season'} · ${recent.length} games · ${esc(metric)}`, `${seasonSelect}${seg('pwin', [['last5','Last 5'],['last10','Last 10'],['last20','Last 20'],['all','All games']], state.player.window)}`)}<section class="player-board" aria-labelledby="nba-stat"><div class="player-board-head"><div><p class="eyebrow">${capturedLine != null ? posted ? 'Posted line' : quoteStatus?.current ? 'Current line' : 'Earlier line' : line != null ? 'Chart line' : 'Season snapshot'}</p><h2 id="nba-stat">${esc(metric)}</h2></div><span class="player-board-mode">${capturedLine != null ? 'Kook vs Book' : 'Player history'}</span></div>${lineEntry}<div class="kt-number-grid kt-player-numbers"><span><small>${lineLabel}</small><b class="num">${esc(line == null ? '–' : line)}</b></span><span><small>Kook’n projection</small><b class="num">${esc(isNum(projection) ? fmt(projection) : 'Held')}</b></span><span><small>Kook’n − line</small><b class="num">${projectionGap == null ? '–' : `${projectionGap > 0 ? '+' : ''}${esc(fmt(projectionGap))}`}</b></span><span><small>Last 5 average</small><b class="num">${esc(fmt(average(last5)))}</b></span><span><small>Last 5 hits</small><b class="num">${line == null ? '–' : `${h5.hits}/${h5.games}`}</b></span></div>${quote ? `<p class="kt-prices">${quote}</p>` : ''}${estimateNote}${range}${isNum(projectedMinutes) && comparison ? `<p class="kt-prices"><b>Kook’n minutes:</b> ${esc(C.fixed(projectedMinutes))}</p>` : ''}${roleMinutes?.length ? `<p class="kt-prices"><b>Recent workload:</b> ${roleMinutes.map(m => esc(m)).join(' / ')} minutes</p>` : ''}<div class="player-chart-legend"><span class="hit"><i></i>Cleared line</span><span class="miss"><i></i>Missed line</span><span><i></i>Push or unknown</span></div>${chart}</section>${nbaInsights}${ladder}<section class="kt-page-sec"><div class="kt-sec-head"><h2 class="kt-tape">Game log</h2><span class="kt-kind">Official box scores</span></div>${gameLog}<p class="small muted" style="margin-top:8px">Last 5, Last 10 and the full season use recorded regular-season appearances. A one-minute appearance counts as an appearance; minutes are shown so role changes stay visible. Kook’n minus the book is not a probability or proof that a price is valuable.</p></section>${positionPanel}`;
   };
   views.player = async route => {
     const league = route.league;

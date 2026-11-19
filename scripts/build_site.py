@@ -994,7 +994,35 @@ def matchup_player_rows(index):
     return by_team
 
 
-def write_basketball_matchups(league, overview, scoreboard, index, picks):
+def opponent_position_games(records, season):
+    """Index regular-season box scores by the team that faced the listed players."""
+    history = defaultdict(list)
+    for box in records:
+        if box.get('season') != season or box.get('seasonType') != 2:
+            continue
+        teams = box.get('teams') or {}
+        if len(teams) != 2 or not box.get('kickoff'):
+            continue
+        appearances = [p for p in box['players'] if not p.get('dnp')]
+        for defending, attacking in (tuple(teams), tuple(reversed(teams))):
+            opponents = [p for p in appearances if p.get('team') == attacking and p.get('name')]
+            if not opponents:
+                continue
+            history[defending].append({
+                'event': str(box['eventId']).split('-')[-1], 'kickoff': box['kickoff'], 'date': day(box['kickoff']),
+                'team': teams[attacking].get('abbr'),
+                'defenders': [p['name'] for p in appearances if p.get('team') == defending and p.get('name')],
+                'players': [{'name': p['name'], 'position': p.get('group') or p.get('pos'),
+                             'stats': {k: p['stats'][k] for k in ('pts', 'reb', 'ast', 'fg3m', 'pra', 'pa', 'pr', 'ra', 'min')
+                                       if isinstance((p.get('stats') or {}).get(k), (int, float))}}
+                            for p in opponents],
+            })
+    for games in history.values():
+        games.sort(key=lambda g: instant(g['kickoff']), reverse=True)
+    return history
+
+
+def write_basketball_matchups(league, overview, scoreboard, index, picks, position_games=None):
     by_team = matchup_player_rows(index)
     open_picks = defaultdict(list)
     for pick in picks:
@@ -1013,9 +1041,17 @@ def write_basketball_matchups(league, overview, scoreboard, index, picks):
         if not all(teams.get(side) for side in ('away', 'home')):
             continue
         team_ids = {str(teams[side].get('id')) for side in ('away', 'home')}
+        recent = {}
+        if position_games and game.get('kickoff') and (game.get('status') or 'scheduled') == 'scheduled':
+            cutoff = instant(game['kickoff'])
+            if cutoff:
+                for team in team_ids:
+                    recent[team] = [box for box in position_games.get(team, [])
+                                    if instant(box['kickoff']) < cutoff][:5]
         write(OUT / 'games' / f'{game_id}.json', {
             'game': game, 'research': research, 'generatedAt': overview['generatedAt'],
             'players': [entry for team in sorted(team_ids) for entry in by_team[team]],
+            **({'positionGames': recent} if recent else {}),
             'picks': open_picks[game_id],
             'matchupPropEvents': [game_id[4:]] if game_id[4:] in priced else [],
         })
@@ -2487,7 +2523,8 @@ def build(now=None):
     write(OUT / 'players' / 'NBA.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['NBA'],
                                          'players': nba_index, 'season': nba_season})
     write_player_shards('NBA', nba_index, nba_shards, nba_season, NBA_LOG_KEYS)
-    write_basketball_matchups('NBA', nba_overview, nba_scoreboard, nba_index, nba_public)
+    write_basketball_matchups('NBA', nba_overview, nba_scoreboard, nba_index, nba_public,
+                              opponent_position_games(nba_boxes, nba_season))
     cbb_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('cbb-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
     cbb_index, cbb_shards, cbb_season = build_basketball_players(cbb_boxes, 'CBB')
@@ -2495,7 +2532,8 @@ def build(now=None):
                                          'players': cbb_index, 'season': cbb_season,
                                          'projectionNote': 'Research baseline: 60% recent and 40% season per-minute production at recent median minutes. Not a probability or automatic pick.'})
     write_player_shards('CBB', cbb_index, cbb_shards, cbb_season, NBA_LOG_KEYS)
-    write_basketball_matchups('CBB', cbb, sports_scoreboard.get('CBB'), cbb_index, [])
+    write_basketball_matchups('CBB', cbb, sports_scoreboard.get('CBB'), cbb_index, [],
+                              opponent_position_games(cbb_boxes, cbb_season))
     import shutil as nba_copy
     nba_preview = ROOT / 'design/final/nba-trial-preview.png'
     if nba_preview.exists():
