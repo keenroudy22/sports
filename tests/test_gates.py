@@ -596,6 +596,16 @@ class FavoriteLongshotRevisionTests(unittest.TestCase):
         lotto = {'id': 'lotto', 'parlayType': 'longshot', 'parlayStyle': 'lotto', 'legs': [{}] * 6}
         self.assertTrue(gates.longshot_one_per_day(lotto, ctx).ok)
 
+    def test_november_19_tnf_lotto_accepts_verified_review_below_default_floor(self):
+        now = datetime(2026, 11, 19, 22, tzinfo=timezone.utc)
+        ticket = {'parlayType': 'longshot', 'parlayStyle': 'lotto', 'family': 'TNF',
+                  'selectionMethod': 'sourced-prop-ticket-v1',
+                  'legs': [{'gameId': 'NFL-401873066'}] * 6, 'odds': 696}
+        self.assertTrue(gates.longshot_shape(ticket, context(now=now)).ok)
+        self.assertFalse(gates.longshot_shape(ticket, context(now=now + timedelta(days=7))).ok)
+        self.assertFalse(gates.longshot_shape(dict(ticket, selectionMethod=None), context(now=now)).ok)
+        self.assertFalse(gates.longshot_shape(dict(ticket, legs=ticket['legs'][:5]), context(now=now)).ok)
+
     def test_new_short_and_lotto_shapes_are_explicit(self):
         ctx = context(now=datetime(2026, 11, 13, 15, 0, tzinfo=timezone.utc))
         self.assertTrue(gates.longshot_shape({'parlayType': 'longshot', 'parlayStyle': 'short',

@@ -1493,8 +1493,15 @@ def longshot_shape(candidate, ctx):
         ok = 3 <= len(legs) <= 4 and isinstance(odds, (int, float)) and 200 <= odds <= 1500
         reason = 'short parlay needs 3–4 legs and +200 to +1500; no forced ticket'
     elif style == 'lotto':
-        ok = 6 <= len(legs) <= 8 and isinstance(odds, (int, float)) and 1500 <= odds <= 20000
-        reason = 'lotto needs 6–8 legs and +1500 to +20000; no forced ticket'
+        # The owner waived the +1500 floor for the November 19 TNF ticket.
+        nov19_tnf = (candidate.get('family') == 'TNF'
+                     and candidate.get('selectionMethod') == 'sourced-prop-ticket-v1'
+                     and eastern_date(ctx.now).isoformat() == '2026-11-19'
+                     and all(isinstance(leg, dict) and leg.get('gameId') == 'NFL-401873066'
+                             for leg in legs))
+        minimum = 100 if nov19_tnf else 1500
+        ok = 6 <= len(legs) <= 8 and isinstance(odds, (int, float)) and minimum <= odds <= 20000
+        reason = f'lotto needs 6–8 legs and +{minimum} to +20000; no forced ticket'
     else:
         ok = 4 <= len(legs) <= 8 and isinstance(odds, (int, float)) and 400 <= odds <= 1000
         reason = 'legacy fun ticket needs 4–8 legs and +400 to +1000; no forced ticket'
