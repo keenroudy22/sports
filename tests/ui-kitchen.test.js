@@ -176,7 +176,7 @@ test('football opponent comparisons show the selected stat and observed workload
   };
   const html = await playerPage(false, fill, 'CFB', 'rushYds');
   assert.match(html, /Quarterbacks against New Mexico St/);
-  assert.match(html, /Visiting QB<span>— snaps · 3 carries · 0 targets/);
+  assert.match(html, /Visiting QB<span>Snaps — · Carries 3 · Targets 0/);
   assert.match(html, /class="y">21<\/td>/);
   assert.doesNotMatch(html, /Visiting WR/);
   assert.match(html, /college-football\/boxscore\/_\/gameId\/987/);

@@ -272,7 +272,7 @@
       const boxLink = `https://www.espn.com/${boxPath}/boxscore/_/gameId/${encodeURIComponent(game.event)}`;
       const rows = peers.map(player => {
         const stats = player.stats;
-        const workload = football ? `<span>${esc(stats.snaps ?? '—')} snaps · ${esc(stats.car ?? '—')} carries · ${esc(stats.targets ?? '—')} targets</span>` : '';
+        const workload = football ? `<span>Snaps ${esc(stats.snaps ?? '—')} · Carries ${esc(stats.car ?? '—')} · Targets ${esc(stats.targets ?? '—')}</span>` : '';
         const value = stat === 'snapPct' && isNum(stats[stat]) ? Math.round(stats[stat] * 100) + '%' : stats[stat] ?? '—';
         return `<tr><th scope="row">${esc(player.name)}${workload}</th><td class="y">${esc(value)}</td>${minutesColumn ? `<td>${esc(stats.min ?? '—')}</td>` : ''}</tr>`;
       }).join('');
