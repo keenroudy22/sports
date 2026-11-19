@@ -36,6 +36,27 @@ class NBAEditorialTests(unittest.TestCase):
         self.assertEqual(row['due'], '2026-11-16T13:20:00Z')
         self.assertEqual(row['stale'], '2026-11-16T15:00:00Z')
 
+    def test_final_length_counts_emoji_and_footer_and_retains_four_matchups(self):
+        self.assertTrue(n.caption_fits('a'*268 + '🍳'))
+        self.assertFalse(n.caption_fits('a'*269 + '🍳'))
+        now, data, history = self.relevant_fixture()
+        names = [('Golden State Warriors','Memphis Grizzlies'), ('Portland Trail Blazers','Milwaukee Bucks'),
+                 ('New York Knicks','Minnesota Timberwolves'), ('LA Clippers','San Antonio Spurs')]
+        import copy
+        games = []
+        for i, (away, home) in enumerate(names):
+            game = copy.deepcopy(data['games'][0])
+            game['id'] = str(i)
+            for side, name in [('home', home), ('away', away)]:
+                game['teams'][side].update(name=name, abbreviation=name[:3].upper())
+            games.append(game)
+        data['games'] = games
+        row = next(r for r in n.choices(data, now, history) if r['family']=='projections')
+        self.assertTrue(n.caption_fits(row['text']))
+        self.assertEqual(len(row['rows']), 4)
+        for r in row['rows']:
+            self.assertIn(r['subject'], row['text'])
+
     def test_next_day_projection_does_not_carry_overnight_book_prices(self):
         now,data,h=self.relevant_fixture()
         for g in data['games']:

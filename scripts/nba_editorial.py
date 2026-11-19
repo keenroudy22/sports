@@ -14,6 +14,7 @@ import boxscores
 import gates
 import hoops_store
 import pick_card
+from social_copy import with_age_notice
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,6 +24,16 @@ RELEVANCE_START = datetime(2026, 10, 23, 18, 21, tzinfo=timezone.utc)
 EDITORIAL_POLICY = 'current-matchup-20261023'
 REVIEW = Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')/'nba-editorial-review.json'
 PROP_REVIEW = REVIEW.with_name('nba-props-review.json')
+
+
+def caption_fits(text):
+    """NBA editorial captions have no URLs. Count the actual footer and X's double-weight characters."""
+    import x_post
+    caption = with_age_notice(text)
+    double_weight = sum(not (ord(ch) <= 0x10ff or 0x2000 <= ord(ch) <= 0x200d
+                             or 0x2010 <= ord(ch) <= 0x201f or 0x2032 <= ord(ch) <= 0x2037)
+                        for ch in caption)
+    return len(caption) + double_weight <= x_post.LIMIT
 
 
 def prop_text(rows, book, window):
@@ -63,7 +74,7 @@ def prop_choice(data,now,preview=False):
         if rows and (r['book']!=evidence[0]['book'] or p['window']!=evidence[0]['projection']['window']):continue
         proposed=rows+[item]
         proposed_text=prop_text(proposed,r['book'],p['window'])
-        if x_post.tweet_length(proposed_text)>x_post.LIMIT or x_post.x_style(proposed_text):continue
+        if not caption_fits(proposed_text) or x_post.x_style(proposed_text):continue
         text=proposed_text
         rows=proposed;evidence.append(r);seen.add(r['athleteId'])
         if len(rows)==3:break
@@ -304,7 +315,6 @@ def choices(data, now, history=None):
                     cutoff=min(cutoff,boxscores.instant(row['quote']['retrievedAt'])+timedelta(hours=4))
         if now>=cutoff:
             continue
-        import x_post
         prefix=(f"NBA {target:%b %-d} 🍳 My numbers:" if family=='projections' else
                 'NBA totals on my radar 👀' if relevant else
                 f"NBA on my radar 👀 Last {chosen[0]['games']} games, {chosen[0]['window'].lower()}")
@@ -318,8 +328,13 @@ def choices(data, now, history=None):
         # never use +N more or silently drop a displayed team from the words.
         while len(rows)>=2:
             text='\n'.join([prefix,*[r['caption'] for r in rows],note,'#NBA'])
-            if x_post.tweet_length(text)<=x_post.LIMIT:
+            if caption_fits(text):
                 break
+            if family == 'projections':
+                compact = [r['subject'] + ': ' + r['caption'].rpartition(': ')[2] for r in rows]
+                text = '\n'.join([prefix, *compact, note, '#NBA'])
+                if caption_fits(text):
+                    break
             rows=rows[:-1]
         else:
             continue
@@ -353,7 +368,7 @@ def prepare(now, root=STORE, data=None, history=None):
             # draft may get a new immutable revision under the same deduplicated post ID.
             if row['key'] in attempted or (current_draft and boxscores.instant(old['stale'])>now
                     and not x_post.x_style(old['text'])
-                    and x_post.tweet_length(old['text'])<=x_post.LIMIT):
+                    and caption_fits(old['text'])):
                 continue
         path=Path(root)/f"{row['key']}.json"
         if old:
@@ -393,7 +408,7 @@ def review_ready(due, review=None, path=None):
 def posts(now, root=STORE, review=None):
     return [dict(key=r['key'],kind='research',text=r['text'],due=boxscores.instant(r['due']),
                  stale=boxscores.instant(r['stale']),card=r['key']) for r in stored(root)
-            if not r.get('preview') and now<boxscores.instant(r['stale']) and boxscores.instant(r['due'])-now<=timedelta(days=1)
+            if not r.get('preview') and caption_fits(r['text']) and now<boxscores.instant(r['stale']) and boxscores.instant(r['due'])-now<=timedelta(days=1)
             and not relevance_issues(r,now)
             and watch_current(r,now)
             and review_ready(boxscores.instant(r['due']),review,PROP_REVIEW if r.get('family')=='props' else REVIEW)
