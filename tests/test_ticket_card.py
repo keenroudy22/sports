@@ -167,8 +167,13 @@ class TicketCardTests(unittest.TestCase):
             self.assertNotIn('HOT PLATE (POTD)', svg)
 
     def test_real_prop_shape_shows_exact_price_units_and_photo_without_season_or_helpline(self):
+        import daily_potd
+        import html
+        import ticket_cards
         data = ticket_card.straight_data(PROP, GAME, player_side='away',
                                          art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
+        daily = ticket_cards.play_card(dict(data, seriesLabel=daily_potd.LABEL.upper()))
+        self.assertIn(daily_potd.LABEL.upper(), html.unescape(daily.svg()))
         self.assertEqual(data['team'], 'NMSU')
         self.assertEqual(data['photo'], self.image)
         svg = ticket_card.straight_svg(PROP, GAME, player_side='away',
