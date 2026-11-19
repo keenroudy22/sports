@@ -48,6 +48,15 @@ def fixture(family='MNF', *, days=0):
 
 
 class PropTicketWorkbenchTests(unittest.TestCase):
+    def test_long_ticket_keeps_full_name_direction_threshold_and_market(self):
+        import parlay_caption
+        cases = [('over', 7.5, 'rushYds', 'Daniel Jones O7.5 rush yds'),
+                 ('under', 3.5, 'rec', 'Dalton Schultz U3.5 rec')]
+        for side, line, market, expected in cases:
+            player = expected.rsplit(' ' + side[0].upper(), 1)[0]
+            leg = dict(player=player, direction=side, market=market, line=line)
+            self.assertEqual(parlay_caption.compact_prop(leg), expected)
+
     def test_reviewed_families_are_private_and_keep_book_joint_price(self):
         for family in R.FAMILIES:
             spec, games, now = fixture(family)

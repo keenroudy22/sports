@@ -75,6 +75,7 @@ def supporting_reason(pick):
 
 def straight_data(pick, game, *, featured=False, player_side=None, art=None, fetch=None, reason=None):
     """Only source numbers from the posted pick; missing calibration stays absent."""
+    import daily_potd
     fetch = fetch or pick_card.fetch_data_uri
     league = game.get('league') or str(pick.get('id') or '').split('-')[0]
     away, home = game.get('away') or {}, game.get('home') or {}
@@ -99,7 +100,7 @@ def straight_data(pick, game, *, featured=False, player_side=None, art=None, fet
         units = 1
     output = {
         'kind': 'player' if prop else 'game', 'featured': bool(featured),
-        'seriesLabel': {'gut_call': 'FULL SEND', 'upset': 'UPSET PICK', 'chef_pick': "CHEF'S PICK"}.get(pick.get('lane'))
+        'seriesLabel': daily_potd.LABEL.upper() if daily_potd.designation(dict(pick, game=game)) else {'gut_call': 'FULL SEND', 'upset': 'UPSET PICK', 'chef_pick': "CHEF'S PICK"}.get(pick.get('lane'))
                        or ('BEST BET' if pick.get('selectionPolicy') == '2026-10-19-1u-2u' else None),
         'player': _name(pick) if prop else '', 'team': team_code,
         'away': away_code, 'home': home_code,

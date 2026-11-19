@@ -228,6 +228,8 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
               'termsFingerprint': fingerprint(spec), 'riskUnits': .25,
               'jointPriceBasis': 'Observed sportsbook ticket only; no multiplication'}
     if not holds:
+        if len(legs) >= 6:
+            captions = [parlay_caption.compact_prop(leg) for leg in legs]
         result['caption'] = parlay_caption.layout(
             f"My {family} parlay · {int(spec['odds']):+d} {spec['book']}", captions, '21+ only')
         if x_post.tweet_length(result['caption']) > x_post.LIMIT or x_post.x_style(result['caption']):

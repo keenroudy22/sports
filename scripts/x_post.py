@@ -518,6 +518,9 @@ def _number_line(pick, game, day, history, salt=0):
 
 
 def _play_prefix(pick, game, featured):
+    import daily_potd
+    if daily_potd.designation(dict(pick, game=game or {})):
+        return '🍳 ' + daily_potd.LABEL + '\n'
     if pick.get('lane') == 'chef_pick':
         return "🍳 Chef's Pick: "
     if pick.get('selectionPolicy') == gates.TIER_POLICY and pick.get('lane') == 'best_bet':
@@ -618,6 +621,9 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         payout = 10 * (1 + odds / 100) if odds > 0 else 10 * (1 + 100 / abs(odds))
         import parlay_caption
         stake = (social_units.label(pick['riskUnits']) if pick.get('riskUnits') is not None else '') if social_units.active(pick) else f"$10 → {pick_card.dollars(payout)}"
+        if len(legs) >= 6 and pick.get('selectionMethod') == 'sourced-prop-ticket-v1':
+            compact = [parlay_caption.compact_prop(leg) for leg in pick['legs']]
+            return parlay_caption.layout(f"{pick['family']} lotto {odds:+d} {public_book(pick['book'])}", compact, stake)
         top = parlay_caption.layout(parlay_head(pick, league), legs, stake)
         options = ([top, f'{ASK}\n{tail}'], [top, tail])
     else:

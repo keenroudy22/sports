@@ -24,3 +24,12 @@ def owner_ticket(item):
     if item.get('priceBoosted'):
         heading += f" boosted ({int(item['baseOdds']):+d} before boost)"
     return layout(heading, rows)
+
+
+def compact_prop(leg):
+    """Keep the full player name and the original half-line on longer tickets."""
+    markets = {'car': 'carries', 'rec': 'rec', 'rushYds': 'rush yds', 'recYds': 'rec yds',
+               'passYds': 'pass yds', 'att': 'pass att', 'cmp': 'comp',
+               'pts': 'pts', 'reb': 'reb', 'ast': 'ast'}
+    side = {'over': 'O', 'under': 'U'}[leg['direction']]
+    return f"{leg['player']} {side}{leg['line']:g} {markets[leg['market']]}"

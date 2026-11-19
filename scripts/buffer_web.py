@@ -184,7 +184,7 @@ def reserve_cbb_pick(guid, log_book, now, *, opener=None, validate_only=False, r
     text=cbb_picks.caption(play)
     if x_post.text_hash(text)!=entry.get('textHash') or x_post.x_style(text) or social_style.issues(text) or x_post.tweet_length(text)>x_post.LIMIT:
         raise WebHold('CBB caption differs from the original public release or fails style')
-    image=bp.live_card_url(guid.lower(),opener)
+    image=bp.live_card_url(entry.get('cardKey') or guid.lower(),opener)
     if not image or not bp.ticket_art_live(image) or not bp.plain_art_live(image):
         raise WebHold('CBB original branded card is not verified live')
     # Replacing this play's unsent intent consumes no second queue slot.

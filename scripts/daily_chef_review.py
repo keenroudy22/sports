@@ -226,20 +226,38 @@ def comparison(current, now, conf):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     parser.add_argument('--review', type=Path, help='Validate a private comparative review; never publishes')
+    parser.add_argument('--designate', action='store_true', help='Reserve the reviewed favorite before its first send')
     args = parser.parse_args()
+    if args.designate and not args.review:
+        parser.error('--designate requires the current --review packet')
     import run, release_queue, x_post
     with run.Lock(run.CONF/'run.lock', wait=run.RUN_LOCK_WAIT):
+        if args.designate:
+            run.sync()
         now = datetime.now(timezone.utc)
         ctx = gates.Stores().as_of(now)
         report = snapshot(ctx, now, posts=x_post.load_log()['posts'], pending=release_queue.load(run.CONF)['plays'])
         if args.review:
             packet = json.loads(args.review.read_text())
-            validate_review(packet, report, now)
+            decision = validate_review(packet, report, now)
+            if args.designate:
+                import daily_potd
+                daily_potd.reserve(report, decision, ctx.root, now)
+                key = decision['selectedId']
+                pending = next((p for p in release_queue.load(run.CONF)['plays'] if p['id'] == key), None)
+                if pending:
+                    release_queue.update(run.CONF, key, caption=None,
+                        card=str(release_queue.cards(run.CONF) / (key+'-potd.png')))
+                target = 'data/daily-chef-designations.json'
+                if run.git('status','--porcelain','--',target,cwd=ctx.root).stdout.strip():
+                    run.git('add','--',target,cwd=ctx.root)
+                    run.git('commit','--only','-m','Reserve daily Chef selection before original delivery','--',target,cwd=ctx.root)
+                run.push_with_retry(cwd=ctx.root)
             save_private(packet, run.CONF/'pending/daily-chef-comparison.json')
         report['comparison'] = comparison(report, now, run.CONF)
         path = save_snapshot(report, run.CONF)
         print(json.dumps({'path': str(path), 'coverage': report['coverage'],
-                          'comparison': report.get('comparison'), 'publicationAuthority': False}))
+                          'comparison': report.get('comparison'), 'reservedId': decision['selectedId'] if args.designate else None, 'publicationAuthority': False}))
 
 
 if __name__ == '__main__':

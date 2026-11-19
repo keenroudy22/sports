@@ -3,6 +3,7 @@
 No feed or social action before opening day or a delivered first-card preview.
 Unresolved team injuries hold totals; player props wait for a verified player model.
 """
+import daily_potd
 import json
 import math
 import os
@@ -418,7 +419,7 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
    from social_copy import projection_free_reason
    reason=projection_free_reason(reason)
    if not reason:continue
-   heading=play.get('series') or nba_pick_policy.label(boxscores.instant(play['publishedAt']))
+   heading=daily_potd.LABEL if daily_potd.designation(play) else (play.get('series') or nba_pick_policy.label(boxscores.instant(play['publishedAt'])))
    candidate=f"🏀 {heading}\n{title}\n{selection} ({play['odds']:+d}, {play['book']})\n{projection}\n{reason}\n#NBA"
    final_candidate=candidate
    if play.get('marketType')=='player':
@@ -427,7 +428,7 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
    if x_post.tweet_length(final_candidate)<=x_post.LIMIT and not x_post.x_style(final_candidate):
     text=candidate;break
   if not text:continue
-  plans.append((play['id'],'nba-trial',text,due,play['id'].lower()))
+  plans.append((play['id'],'nba-trial',text,due,daily_potd.card_key(play)))
  return plans+results
 
 
@@ -492,7 +493,7 @@ def render_due(now,folder,log=print,root=nba_trial.STORE,restore=None):
   if play.get('marketType')=='player' and play.get('result'):
    import nba_results
    nba_results.render(play,folder)
-  path=Path(folder)/(play['id'].lower()+'.png')
+  path=Path(folder)/(daily_potd.card_key(play)+'.png')
   if path.exists():continue
   if play['id'] in posted:
    if play['id'] in referenced or not play.get('result') or now-boxscores.instant(play['publishedAt'])<=timedelta(days=8):
@@ -513,7 +514,7 @@ def render_due(now,folder,log=print,root=nba_trial.STORE,restore=None):
   # Same reviewed layout; actual play label and real supporting reason replace preview wording.
   svg=nba_trial.preview_svg(play['game'],quote,preview=False,direction=play['direction'],reason=play['reasons'][0],
                             market=play.get('marketType','total'),line=play['line'],odds=play['odds'],units=play.get('riskUnits',1),
-                            series_label=play.get('series') or nba_pick_policy.label(boxscores.instant(play['publishedAt'])))
+                            series_label=daily_potd.LABEL if daily_potd.designation(play) else play.get('series') or nba_pick_policy.label(boxscores.instant(play['publishedAt'])))
   pick_card.render(svg,path)
 
 

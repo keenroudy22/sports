@@ -250,10 +250,10 @@ def player_headshot(play):
 
 
 def card(play):
-    import ticket_cards, ticket_kit
+    import ticket_cards, ticket_kit, daily_potd
     teams = play['game']['teams']; home = teams['home']['abbreviation']; away = teams['away']['abbreviation']
     own = next(t['abbreviation'] for t in teams.values() if str(t['id']) == str(play['team']))
-    data = dict(kind='player', player=play['player'], featured=False, seriesLabel='BEST BET',
+    data = dict(kind='player', player=play['player'], featured=False, seriesLabel=daily_potd.LABEL.upper() if daily_potd.designation(play) else 'BEST BET',
         away=away, home=home, team=own, team_colors={a:('#17241f','#eef4ec') for a in (home,away)},
         when=boxscores.instant(play['kickoff']).astimezone(EASTERN).strftime('%b %-d · %-I:%M %p'),
         side=play['direction'].upper(), line=f"{play['line']:g}", market=play['stat'],

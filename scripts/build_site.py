@@ -2484,6 +2484,8 @@ def build(now=None):
     nba_public = nba_record_picks(now, team_finals=nba_finals)
     nba_fun = nba_fun_picks(now)
     posted_records = list({p['id']: p for p in picks + cbb_public + nba_public + community_records + nba_fun}.values())
+    import daily_potd
+    daily_potd.mark_delivered(posted_records, read(ROOT / 'data/x-posted.json', {}).get('posts', []), ROOT, now)
     import morning_brief
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'morningBrief': morning_brief.public_brief(now),

@@ -12,6 +12,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import boxscores
+import daily_potd
 import gates
 import post_windows
 import nba_capture
@@ -132,9 +133,10 @@ def selection(p):
 
 def caption(p):
     import social_voice, buffer_post
+    heading = daily_potd.LABEL if daily_potd.designation(p) else 'CBB PICK'
     teams=p['game']['teams']
     return buffer_post.x_ticket_copy(social_voice.finish(
-        f"🏀 CBB PICK\n{teams['away']['abbreviation']} at {teams['home']['abbreviation']}\n"
+        f"🏀 {heading}\n{teams['away']['abbreviation']} at {teams['home']['abbreviation']}\n"
         f"{selection(p)} ({p['odds']:+d}, DraftKings) · 1u\n\n{p['review']['why']}\n#CBB"),'play',p['id'])
 
 
@@ -163,7 +165,7 @@ def plans(now,log_book,root=STORE,reserved=(), *, for_discord=False):
             due=None
         else:
             busy.append(due)
-        result.append((p['id'],'cbb-pick',text,due,p['id'].lower()))
+        result.append((p['id'],'cbb-pick',text,due,daily_potd.card_key(p)))
     if for_discord:
         return result
     for p in public_rows(root):
@@ -249,7 +251,7 @@ def payload(root=STORE, *, delivered):
 def render(folder,root=STORE):
     import nba_trial,pick_card
     for p in public_rows(root):
-        target=Path(folder)/(p['id'].lower()+'.png')
+        target=Path(folder)/(daily_potd.card_key(p)+'.png')
         if target.exists():
             if p.get('result'):render_result(p,folder)
             continue
@@ -262,7 +264,7 @@ def render(folder,root=STORE):
                                   for side,team in p['game']['teams'].items()})
         svg=nba_trial.preview_svg(game,dict(book='DraftKings',retrievedAt=q['checkedAt'],current=current),
             preview=False,direction=side,market=market,line=p['line'],odds=p['odds'],units=1,
-            reason=p['review']['why'],series_label='CBB PICK')
+            reason=p['review']['why'],series_label=daily_potd.LABEL if daily_potd.designation(p) else 'CBB PICK')
         pick_card.render(svg,target)
         if p.get('result'):render_result(p,folder)
 
