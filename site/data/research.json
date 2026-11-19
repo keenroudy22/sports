@@ -70505,5 +70505,114 @@
         "publishedAt": "2026-11-19T19:47:52Z"
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-11-19T20:05:05Z",
+    "summary": "Research update for Nov 19: Nothing to settle. Closed 1: 4-leg TNF parlay at FanDuel. Nothing published. precheck before posting",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4",
+        "league": "NFL",
+        "kind": "parlays",
+        "family": "TNF",
+        "selectionMethod": "sourced-prop-ticket-v1",
+        "parlayType": "longshot",
+        "parlayStyle": "short",
+        "status": "expired",
+        "favorite": false,
+        "riskUnits": 0.25,
+        "book": "FanDuel",
+        "odds": 540,
+        "legs": [
+          {
+            "gameId": "NFL-401873066",
+            "athleteId": "4686422",
+            "player": "Xavier Hutchinson",
+            "market": "rec",
+            "direction": "over",
+            "line": 2.5,
+            "period": "full_game",
+            "book": "FanDuel",
+            "odds": -200,
+            "alternate": true,
+            "kickoff": "2026-11-20T01:15Z",
+            "id": "NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4-leg-1",
+            "title": "Xavier Hutchinson over 2.5 receptions"
+          },
+          {
+            "gameId": "NFL-401873066",
+            "athleteId": "4258173",
+            "player": "Nico Collins",
+            "market": "rec",
+            "direction": "over",
+            "line": 4.5,
+            "period": "full_game",
+            "book": "FanDuel",
+            "odds": -154,
+            "alternate": false,
+            "kickoff": "2026-11-20T01:15Z",
+            "id": "NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4-leg-2",
+            "title": "Nico Collins over 4.5 receptions"
+          },
+          {
+            "gameId": "NFL-401873066",
+            "athleteId": "3917792",
+            "player": "Daniel Jones",
+            "market": "rushYds",
+            "direction": "over",
+            "line": 7.5,
+            "period": "full_game",
+            "book": "FanDuel",
+            "odds": -120,
+            "alternate": false,
+            "kickoff": "2026-11-20T01:15Z",
+            "id": "NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4-leg-3",
+            "title": "Daniel Jones over 7.5 rushing yards"
+          },
+          {
+            "gameId": "NFL-401873066",
+            "athleteId": "4686468",
+            "player": "Seth McGowan",
+            "market": "rushYds",
+            "direction": "over",
+            "line": 19.5,
+            "period": "full_game",
+            "book": "FanDuel",
+            "odds": -215,
+            "alternate": true,
+            "kickoff": "2026-11-20T01:15Z",
+            "id": "NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4-leg-4",
+            "title": "Seth McGowan over 19.5 rushing yards"
+          }
+        ],
+        "gameIds": [
+          "NFL-401873066"
+        ],
+        "title": "4-leg TNF parlay at FanDuel",
+        "quotedAt": "2026-11-19T19:27:54Z",
+        "firstKickoff": "2026-11-20T01:15:00Z",
+        "expiresAt": "2026-11-19T20:27:54Z",
+        "quoteType": "sportsbook",
+        "priceEstimated": false,
+        "ticketReceipt": "22d1525ad2ff09f4ad62939dfcd14696b9545b0f38d2b1eb56b06d041903dd02",
+        "propTicketFingerprint": "22d1525ad2ff09f4ad62939dfcd14696b9545b0f38d2b1eb56b06d041903dd02",
+        "confidence": 1,
+        "cutoff": "Exact posted ticket; no substitutions or re-entry.",
+        "edge": "Sourced fun ticket; no calibrated probability or positive-EV claim.",
+        "why": "Three catches in each of the last three clears the alternate. Five catches is reachable on his lead receiver workload. Jones ran for 9 and 11 in two of his last three. Eight yards can come on one scramble. The 20-yard alternate gives six and a half yards of room from the main line after five straight games of 27 or more.",
+        "risk": "Dell practiced fully and could draw routes and targets away. Houston leading early could cut attempts and he missed this twice before last game. Seven yards in the other game would lose; sacks rather than scramble yards are a real risk. Taylor starts. Both Colts tackles are ruled out. Fewer first downs or an early deficit could cut McGowan\u2019s carries.",
+        "sources": [
+          "https://in.sportsbook.fanduel.com/football/nfl/indianapolis-colts-@-houston-texans-36305232",
+          "https://www.espn.com/nfl/boxscore/_/gameId/401873056",
+          "https://www.espn.com/nfl/boxscore/_/gameId/401873059",
+          "https://www.houstontexans.com/news/week-11-injury-report-texans-vs-colts"
+        ],
+        "correlation": "Observed same-book combined price; never multiplied leg prices or probabilities.",
+        "publishedAt": "2026-11-19T19:47:52Z",
+        "entryNote": "Pulled before posting: its Daniel Jones over 7.5 rushing yards leg: verified availability report: The Colts ruled out starting tackles Bernhard Raimann with a concussion and Jalen Travis with a knee injury. Stays in the record at +540 and is graded as posted."
+      }
+    ]
   }
 ]
