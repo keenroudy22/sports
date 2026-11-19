@@ -12,10 +12,10 @@ import parlay
 from itertools import combinations
 
 
-def two_leg_options(legs, now, supported=False, limit=8):
+def two_leg_options(legs, now, supported=False, limit=8, mixed_review=False):
     """Bounded private shortlist. Derived cross-game odds are not a book receipt.
 
-    Never join same-game legs or mix books/leagues. Watch-list model support is
+    Mixed NFL/CFB pairs require the explicit sourced route. Watch-list model support is
     not established performance, admission or permission to publish.
     """
     grouped={}
@@ -30,13 +30,16 @@ def two_leg_options(legs, now, supported=False, limit=8):
         pool.extend(rows[:4])
     options=[]
     for a,b in combinations(pool,2):
-        if a['gameId']==b['gameId'] or a['book']!=b['book'] or a['league']!=b['league']:
+        mixed = a['league'] != b['league']
+        if mixed and not (mixed_review and now >= ladder.MIXED_REVIEW_FROM and {a['league'], b['league']} == {'NFL', 'CFB'}):
+            continue
+        if a['gameId']==b['gameId'] or a['book']!=b['book']:
             continue
         price=parlay.american(parlay.decimal(a['odds'])*parlay.decimal(b['odds']))
         if not ladder.TARGET[0] <= price <= ladder.TARGET[1]:continue
         if supported and a['chance']*b['chance'] <= pricing.break_even(price):continue
         holds=sorted(set(a.get('holds',[])+b.get('holds',[])))
-        options.append(dict(book=a['book'],league=a['league'],derivedOdds=price,
+        options.append(dict(book=a['book'],league='NFL/CFB' if mixed else a['league'],derivedOdds=price,
             priceBasis='Product of separate cross-game prices; final ticket price needs confirmation',
             status='supported-watch' if supported else 'evidence-held-watch',planningOnly=True,
             legs=[a,b],holds=holds,
@@ -58,7 +61,7 @@ def source_review_options(legs, now, limit=8):
         # Two quoted rungs per team near the preferred two-leg price shape.
         rows.sort(key=lambda r:(abs(r['odds']+400),r['line']))
         pool.extend(rows[:2])
-    result=two_leg_options(pool,now,limit=limit)
+    result=two_leg_options(pool,now,limit=limit,mixed_review=True)
     for option in result:
         option.update(status='source-review-needed',reviewRoute='sourced-climb-review-v1')
         option['releaseChecks']+=['Sourced matchup/availability reason and countercase for each leg','Existing reviewed-ticket admission; no probability/EV claim']

@@ -730,7 +730,9 @@ def cfb_jurisdiction(candidate, ctx):
     """A college pick quotes a book available in Indiana. Pregame college player props are legal there (see
     INDIANA_BOOKS); every pick the desk publishes is pregame."""
     league = candidate.get('league') or ((game_of(candidate, ctx) or {}).get('league'))
-    if league != 'CFB':
+    college_leg = any(((getattr(ctx, 'games', {}) or {}).get(leg.get('gameId')) or {}).get('league') == 'CFB'
+                      for leg in candidate.get('legs') or [] if isinstance(leg, dict))
+    if league != 'CFB' and not college_leg:
         return Decision(True, 'cfb_jurisdiction', 'not a college pick')
     book = candidate.get('book')
     if book not in INDIANA_BOOKS:
@@ -1537,7 +1539,9 @@ def ladder_selective(candidate, ctx):
     if candidate.get('book') not in ladder.SLUGS or any(leg.get('book') != candidate['book'] for leg in legs):
         return Decision(False, 'ladder_selective', 'all Climb legs need the same supported book')
     leagues = {((getattr(ctx, 'games', {}) or {}).get(gid) or {}).get('league') for gid in game_ids}
-    if len(leagues) != 1 or not leagues <= {'NFL', 'CFB'}:
+    reviewed_mix = (leagues == {'NFL', 'CFB'} and ctx.now >= ladder.MIXED_REVIEW_FROM
+                    and candidate.get('selectionMethod') == 'sourced-climb-review-v1')
+    if not leagues <= {'NFL', 'CFB'} or (len(leagues) != 1 and not reviewed_mix):
         return Decision(False, 'ladder_selective', 'Climb uses one eligible football league; NBA ticket readiness is not established')
     week = ladder.weekly_status(ctx.first, ctx.now, exclude=candidate.get('id'))
     if week['posted'] >= ladder.MAX_WEEKLY_STEPS:

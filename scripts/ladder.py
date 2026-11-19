@@ -77,6 +77,7 @@ STAKE = parlay.STAKE                # the ticket's size in the desk's own terms;
 SOURCE = 'https://sharpapi.io/'
 SHADOW_NAME = 'ladder-shadow-2026.jsonl'
 SELECTIVE_FROM = date(2026, 10, 21)
+MIXED_REVIEW_FROM = datetime(2026, 11, 19, 16, 6, tzinfo=timezone.utc)
 ALT_SHAPE_FROM = date(2026, 10, 21)
 MIN_LEGS = 2
 MAX_LEGS = 3

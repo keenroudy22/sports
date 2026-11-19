@@ -61,6 +61,18 @@ class ReviewedClimbTests(unittest.TestCase):
         self.assertIsNone(shadow['ticket']['chance'])
         self.assertIsNone(shadow['ticket']['edge'])
 
+    def test_mixed_league_rungs_require_the_prospective_sourced_review(self):
+        ticket, ctx = fixture()
+        pick, error = ladder.manual_candidate(ctx, ctx.games, NOW, ticket)
+        self.assertIsNone(error)
+        ctx.games[pick['gameIds'][0]]['league'] = 'NFL'
+        self.assertFalse(gates.ladder_selective(pick, ctx).ok)
+        ctx.now = ladder.MIXED_REVIEW_FROM
+        self.assertTrue(gates.ladder_selective(pick, ctx).ok)
+        self.assertFalse(gates.ladder_selective(dict(pick, selectionMethod='automatic'), ctx).ok)
+        ctx.games[pick['gameIds'][0]]['league'] = 'NBA'
+        self.assertFalse(gates.ladder_selective(pick, ctx).ok)
+
     def test_bad_price_receipt_and_probability_claims_are_refused(self):
         for mutate in (
             lambda t:t.update(odds=-175),
