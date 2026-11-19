@@ -24,10 +24,12 @@ class PrivateReleaseBufferHoldTests(unittest.TestCase):
                     expiresAt='2026-10-27T00:00:00Z')
         ctx = SimpleNamespace(games={'NFL-game': game}, first={}, latest={}, player_team={}, now=now)
         delivery_book = {'posts': []}
+        stored_caption = "Player over 2.5 receptions\n\n❤️ if you're tailing"
+        expected_caption = "Player over 2.5 receptions\n\nWho's on it with me? 🍳\n\nCopy the bet 👇 @Playbook\n\n21+ only"
         with tempfile.TemporaryDirectory() as folder, ExitStack() as stack:
             root = Path(folder)
             (root / 'research').mkdir()
-            row = dict(id=key, pick=pick, league='NFL', kind='props', caption='Exact caption',
+            row = dict(id=key, pick=pick, league='NFL', kind='props', caption=stored_caption,
                        card=str(root / 'card.png'), precheckedAt=run.stamp(now))
             release_queue.save(root, {'plays': [row]})
             patches = [
@@ -40,7 +42,7 @@ class PrivateReleaseBufferHoldTests(unittest.TestCase):
                 ('run.post_windows.public_release_open', True),
                 ('run.post_windows.target', now), ('run.post_windows.jitter', now-now),
                 ('x_post.load_log', delivery_book), ('x_post.save_log', None),
-                ('social_copy.x_ticket_copy', 'Exact caption'), ('x_post.guard', []),
+                ('x_post.guard', []),
                 ('run.validate', None), ('social_style.release_issues', []),
                 ('run.run_tests', None), ('run.commit_push', {'pushed': True}), ('run.commit_log', None),
                 ('buffer_post.yield_optional', 0),
@@ -79,7 +81,7 @@ class PrivateReleaseBufferHoldTests(unittest.TestCase):
             # another Discord send, or another public report.
             checked = run.release_private(now, log=lambda *_: None, review_only=True)
             self.assertEqual([r['id'] for r in checked], [key])
-            self.assertEqual(checked[0]['text'], 'Exact caption')
+            self.assertEqual(checked[0]['text'], expected_caption)
             self.assertEqual(channel.call_count, 1)
             send.assert_called_once()
             create.assert_not_called()
@@ -95,6 +97,7 @@ class PrivateReleaseBufferHoldTests(unittest.TestCase):
             self.assertEqual(run.release_private(now, log=lambda *_: None, clock=lambda: next(elapsed)), [key])
             send.assert_called_once()
             create.assert_called_once()
+            self.assertEqual(create.call_args.args[0], expected_caption)
             due = create.call_args.args[2]
             self.assertGreaterEqual(due, now + timedelta(minutes=3) + run.post_windows.SOON)
             self.assertEqual(release_queue.load(root)['plays'], [])

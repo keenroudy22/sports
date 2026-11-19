@@ -3926,8 +3926,10 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                 continue
             release_queue.update(CONF, key, precheckedAt=stamp(now))
 
+        import social_voice
         from social_copy import x_ticket_copy
-        text = x_ticket_copy(str(row.get('caption') or '').strip(), 'play', key, pick)
+        caption = social_voice.finish(str(row.get('caption') or '').strip())
+        text = x_ticket_copy(caption, 'play', key, pick)
         if x_post.guard(text, pick, x_post.reason_in(text), now=now):
             release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason='caption guard',
                                  captionGuardVersion=CAPTION_GUARD_VERSION)
