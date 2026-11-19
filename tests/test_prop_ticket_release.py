@@ -304,7 +304,7 @@ class PropTicketReleaseTests(unittest.TestCase):
             self.assertIsNone(receipts.repriced_odds(legacy))
             self.assertNotIn('settled', receipts.fun_final_price(legacy))
 
-    def test_all_void_football_tickets_reach_individual_final_and_recovery(self):
+    def test_all_void_football_tickets_keep_record_art_and_follow_current_social_policy(self):
         for family in ('MNF', 'TNF'):
             with self.subTest(family=family):
                 _,ctx,pick,packet = prepared(family)
@@ -319,14 +319,20 @@ class PropTicketReleaseTests(unittest.TestCase):
                 post = dict(id=pick['id'],kind='buffer:play',tweetId='123456789012',sentAt=packet['admittedAt'])
                 log = {'posts':[post]}
                 with patch.object(receipts,'unit_fun_rows',return_value=[]):
-                    [plan] = receipts.cashed(first,latest,ctx.games,log,now)
+                    plans = receipts.cashed(first,latest,ctx.games,log,now)
                     [card] = receipts.result_cards(first,latest,ctx.games,now,log)
+                self.assertIn('TICKET VOID',ticket_card.fun_final_svg(row))
+                if family == 'TNF':  # This fixture settles after the Nov 19 social policy change.
+                    self.assertEqual(plans, [])
+                    health=desk_health.result_timeliness({'picks':[dict(row,posted=True)]},[post],now,individual_only=True)
+                    self.assertEqual(health['missing'],0)
+                    continue
+                [plan] = plans
                 self.assertEqual(card['card'],plan['card'])
                 self.assertEqual(buffer_post.quote_tweet_id(log,plan['key']),post['tweetId'])
                 self.assertIn('legs voided',plan['text'])
                 self.assertNotIn('0/0',plan['text'])
                 self.assertNotIn('cashed',plan['text'])
-                self.assertIn('TICKET VOID',ticket_card.fun_final_svg(row))
                 health=desk_health.result_timeliness({'picks':[dict(row,posted=True)]},[post],now,individual_only=True)
                 self.assertEqual(health['missing'],1)
 
