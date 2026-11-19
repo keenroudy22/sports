@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 339,
+   "gamesGraded": 341,
    "gamesQuoted": 354,
-   "moneylineSnapshots": 1605,
+   "moneylineSnapshots": 1606,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,70 @@
      "season": 2027
     },
     {
-     "gamesGraded": 300,
+     "gamesGraded": 302,
      "gamesQuoted": 313,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1605,
+   "snapshots": 1606,
    "status": "capturing",
-   "totalSnapshots": 1605
+   "totalSnapshots": 1606
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "BOS",
+    "id": "1",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/bos.png",
+    "name": "Boston Bruins",
+    "shortName": "Bruins"
+   },
+   "awayScore": 4,
+   "gameId": "NHL-401892739",
+   "gradedAt": "2026-11-19T04:25:20Z",
+   "home": {
+    "abbreviation": "DET",
+    "id": "5",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png",
+    "name": "Detroit Red Wings",
+    "shortName": "Red Wings"
+   },
+   "homeScore": 1,
+   "kickoff": "2026-11-19T00:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "MTL",
+    "id": "10",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/mtl.png",
+    "name": "Montreal Canadiens",
+    "shortName": "Canadiens"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401892740",
+   "gradedAt": "2026-11-19T04:25:20Z",
+   "home": {
+    "abbreviation": "NJ",
+    "id": "11",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nj.png",
+    "name": "New Jersey Devils",
+    "shortName": "Devils"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-11-19T00:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "DAL",
@@ -2593,59 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "CAR",
-    "id": "7",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/car.png",
-    "name": "Carolina Hurricanes",
-    "shortName": "Hurricanes"
-   },
-   "awayScore": 1,
-   "gameId": "NHL-401892642",
-   "gradedAt": "2026-11-04T04:25:11Z",
-   "home": {
-    "abbreviation": "NSH",
-    "id": "27",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nsh.png",
-    "name": "Nashville Predators",
-    "shortName": "Predators"
-   },
-   "homeScore": 4,
-   "kickoff": "2026-11-04T01:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "EDM",
-    "id": "6",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/edm.png",
-    "name": "Edmonton Oilers",
-    "shortName": "Oilers"
-   },
-   "awayScore": 3,
-   "gameId": "NHL-401892636",
-   "gradedAt": "2026-11-04T04:25:11Z",
-   "home": {
-    "abbreviation": "NJ",
-    "id": "11",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nj.png",
-    "name": "New Jersey Devils",
-    "shortName": "Devils"
-   },
-   "homeScore": 4,
-   "kickoff": "2026-11-04T00:30:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final/SO",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-19T03:51:25Z"
+ "updatedAt": "2026-11-19T04:25:20Z"
 }
