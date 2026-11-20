@@ -15,7 +15,7 @@ class SocialLearningTests(unittest.TestCase):
         start = before + timedelta(minutes=1)
         end = start + timedelta(days=7)
         for key in ('research:morning:2026-11-20', 'research:numbers:2026-11-20',
-                    'nba-projections-2026-11-20', 'sheet:NFL:2026-11-22'):
+                    'nba-projections-2026-11-20', 'nba-trends-2026-11-20', 'sheet:NFL:2026-11-22'):
             self.assertIsNone(s.research_trial_hold(key, before))
             self.assertTrue(s.research_trial_hold(key, start))
             self.assertEqual(b.queued_relevance_issues({'id': key, 'dueAt': gates.stamp(start)}, before),
@@ -24,6 +24,16 @@ class SocialLearningTests(unittest.TestCase):
         for key in ('receipt:day:2026-11-19', 'research:matchup:2026-11-20',
                     'research:nfl-1q-ticket:2026-11-20', 'NBA-reviewed-123', 'NFL-prop-ticket'):
             self.assertIsNone(s.research_trial_hold(key, start))
+
+    def test_held_nba_roundup_cannot_be_rescheduled_to_make_room_for_a_play(self):
+        from unittest.mock import patch
+        now = datetime(2026, 11, 20, 15, tzinfo=timezone.utc)
+        entry = {'id': 'nba-trends-2026-11-20', 'kind': 'buffer:research',
+                 'dueAt': '2026-11-20T15:10:00Z', 'bufferPostId': 'queued'}
+        snapshot = {'key': entry['id'], 'stale': '2026-11-20T22:00:00Z'}
+        with patch('nba_editorial.stored', return_value=[snapshot]), patch.object(b, 'graphql') as provider:
+            self.assertEqual(b.yield_optional({'posts': [entry]}, gates.when(entry['dueAt']), now, 'channel'), [])
+            provider.assert_not_called()
 
     def test_missing_first_metrics_are_bounded_across_passes_and_failures(self):
         morning = NOW.replace(hour=8)

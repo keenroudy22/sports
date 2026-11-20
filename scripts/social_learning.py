@@ -9,7 +9,7 @@ CHECKPOINTS = (24, 72, 168)
 RESEARCH_TRIAL_START = date(2026, 11, 20)
 RESEARCH_TRIAL_END = date(2026, 11, 27)
 GENERIC_RESEARCH = re.compile(
-    r'(?:research:(?:morning|numbers):|nba-projections-|sheet:(?:NFL|CFB):)\d{4}-\d{2}-\d{2}'
+    r'(?:research:(?:morning|numbers):|nba-(?:projections|trends)-|sheet:(?:NFL|CFB):)\d{4}-\d{2}-\d{2}'
 )
 
 

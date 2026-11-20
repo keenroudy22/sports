@@ -413,7 +413,8 @@ def yield_optional(log_book, desired, now, channel_id, key=None, send=http_send,
             continue
         if any(entry.get(k) for k in ('sentAt','cancelledAt','deletedAt','error')) or not entry.get('bufferPostId'):continue
         old_due=gates.when(entry['dueAt'])
-        if old_due<=now+SOON:continue
+        if old_due <= now + SOON or social_learning.research_trial_hold(entry['id'], old_due):
+            continue
         busy=taken({'posts':[r for r in log_book['posts'] if r is not entry]},now)
         official_due=free_slot(desired,busy)
         if free_slot(desired,busy+[old_due])<=official_due or (expires and official_due>=expires):continue
