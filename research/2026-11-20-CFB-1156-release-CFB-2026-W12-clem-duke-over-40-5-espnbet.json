@@ -1,0 +1,266 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-20T16:56:48Z",
+  "summary": "Released 1: Clemson at Duke over 40.5 -105 at ESPN BET.",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 40.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401858303"
+      ],
+      "book": "ESPN BET",
+      "odds": -105,
+      "projection": 47.0,
+      "edge": "Price-checked chance 55.6% against the exact two-sided price; 51.2% needed at -105: +4.4 percentage points.",
+      "cutoff": "OVER 40.5 at -105 or better; off the card at 42+, or at -106 or worse at 40.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-15T11:25:59Z",
+      "quotedAt": "2026-11-20T16:24:53Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 11:24 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-20T22:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.656,
+        "chance": 0.556,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.512,
+        "edgePoints": 4.4,
+        "evPerUnit": 0.086,
+        "snapshotAt": "2026-11-15T11:25:59Z",
+        "probabilitySpec": "23115a89126d01346dd44969ea202ae3598f83a6722d087fc2bb035ef469bc01",
+        "evaluatedAt": "2026-11-20T16:48:32Z",
+        "fairChance": 0.489,
+        "anchoredChance": 0.556,
+        "gap": 6.7,
+        "calibrationFamily": "CFB/total",
+        "calibrationMethod": "neutral-centered-fitted"
+      },
+      "matchup": "Clemson Tigers at Duke Blue Devils",
+      "title": "Clemson at Duke over 40.5",
+      "id": "CFB-2026-W12-clem-duke-over-40-5-espnbet",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858303",
+        "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+        "https://www.theclemsoninsider.com/2026/11/19/swinney-asked-about-changes-needed-on-offense/"
+      ],
+      "why": "Model lean, our number only. We have the total at 47; the book is at 40.5. That makes the over 55.6%, and -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable. Checked before publishing: Clemson starting running back Gideon Davidson and starting center Harris Sewell are listed as probable against Duke. The market: The spread opened -8.5 and is -12.5 at DraftKings, a move of 4 toward the home. The total opened 44.5 and is 41.5 at DraftKings, 3 toward the under. 6 books span -13.5 to -12.5 on the spread; the middle is -13. Our spread is 2.8 points off, bigger than 43% of our past gaps. Gaps this size went 1021-1013 against the close in 3584 games. Our total is 5.5 points off, bigger than 80% of our past gaps. Gaps this size went 405-332 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: Clemson has not scored an offensive touchdown in its past two games and is averaging 21.0 points per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable."
+        ],
+        "cautions": [
+          "Clemson quarterback Tait Reynolds will miss the rest of the season with a knee injury.",
+          "Clemson quarterback Christopher Vizzina is out against Duke with a concussion.",
+          "Trent Pearman is set to make his first career start at quarterback for Clemson against Duke.",
+          "Clemson starting slot receiver Tyler Brown and starting right guard Easton Ware are out against Duke.",
+          "Clemson has not scored an offensive touchdown in its past two games and is averaging 21.0 points per game."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Book says 40.5. I say 47.",
+            "numbers": {
+              "projection": 47.0,
+              "line": 40.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-15T11:25:59Z"
+          },
+          {
+            "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Clemson quarterback Tait Reynolds will miss the rest of the season with a knee injury.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson quarterback Christopher Vizzina is out against Duke with a concussion.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Clemson quarterback Tait Reynolds will miss the rest of the season with a knee injury.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson quarterback Christopher Vizzina is out against Duke with a concussion.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Trent Pearman is set to make his first career start at quarterback for Clemson against Duke.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/20/jps-preview-and-prediction-clemson-at-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson starting slot receiver Tyler Brown and starting right guard Easton Ware are out against Duke.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson quarterback Tait Reynolds will miss the rest of the season with a knee injury.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson quarterback Christopher Vizzina is out against Duke with a concussion.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Trent Pearman is set to make his first career start at quarterback for Clemson against Duke.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/20/jps-preview-and-prediction-clemson-at-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson starting slot receiver Tyler Brown and starting right guard Easton Ware are out against Duke.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          }
+        ],
+        "weather": {
+          "tempF": 50,
+          "windMph": 3,
+          "windDirection": "NE",
+          "precipProb": 0,
+          "periodStart": "2026-11-20T19:00:00-05:00",
+          "issuedAt": "2026-11-19T18:22:37+00:00",
+          "source": "https://api.weather.gov/gridpoints/RAH/64,66/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 44.5,
+                "price": -110,
+                "time": "2026-11-15T11:45:07Z"
+              },
+              "now": {
+                "line": 40.5,
+                "price": -108,
+                "time": "2026-11-18T11:45:05Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 44.5,
+                "price": -110,
+                "time": "2026-11-15T11:45:07Z"
+              },
+              "now": {
+                "line": 40.5,
+                "price": -110,
+                "time": "2026-11-18T11:45:05Z"
+              }
+            }
+          },
+          "best": {
+            "book": "ESPN BET",
+            "line": 40.5,
+            "price": -105,
+            "time": "2026-11-20T16:24:53Z"
+          }
+        },
+        "ours": {
+          "projection": 47.0,
+          "line": 40.5,
+          "market": "total",
+          "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+          "snapshotAt": "2026-11-15T11:25:59Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "label": "role",
+            "url": "https://www.theclemsoninsider.com/2026/11/20/jps-preview-and-prediction-clemson-at-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "label": "injury",
+            "url": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://www.theclemsoninsider.com/2026/11/19/swinney-asked-about-changes-needed-on-offense/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/RAH/64,66/forecast/hourly",
+            "time": "2026-11-19T18:22:37+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858303",
+            "time": "2026-11-20T16:48:32Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-20T16:56:48Z"
+    }
+  ]
+}
