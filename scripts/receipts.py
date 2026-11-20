@@ -457,7 +457,12 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     text = fit_result_rows(shown, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
-    return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}' + ('-all-sports' if basketball or fun_rows else ''), 'kind': 'receipt',
+    card = f'receipt-day-{day.isoformat()}' + ('-all-sports' if basketball or fun_rows else '')
+    if day == date(2026, 11, 19) and any(r['id'] == 'NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4' for r in fun):
+        # The first image was published for the incomplete recap. Wait for the
+        # rebuilt card to be hosted under its own URL before sending recovery.
+        card += '-complete'
+    return {'key': f'receipt:day:{day.isoformat()}', 'card': card, 'kind': 'receipt',
             'title': headline(rows), 'label': 'FINAL',
             'when': f'{day:%A, %b %-d}',
             # Retained art keeps the record followers saw when the receipt became

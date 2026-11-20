@@ -46,6 +46,20 @@ MONDAY_MORNING = datetime(2026, 9, 28, 12, 30, tzinfo=timezone.utc)       # Mon 
 
 
 class ReceiptTests(unittest.TestCase):
+    def test_rebuilt_november_19_recap_uses_a_distinct_card_url(self):
+        key = 'NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4'
+        game = dict(GAMES['sun'], kickoff='2026-11-20T01:15:00Z')
+        day = gates.eastern_date(gates.when(game['kickoff']))
+        played = pick('original', 'sun', id=key, title='4-leg parlay', posted=True,
+                      legs=[{'title': 'X'}] * 4, parlayType='longshot', riskUnits=.25,
+                      odds=540, publishedAt='2026-11-19T19:48:00Z')
+        winner = pick('winner', 'sun', publishedAt='2026-11-19T19:00:00Z', posted=True, result='win')
+        first = {key: played, winner['id']: winner}
+        self.assertIsNone(receipts.day_receipt(day, first, {}, {'sun': game}, set(first)))
+        post = receipts.day_receipt(day, first, {key: {'result': 'loss'}}, {'sun': game}, set(first))
+        self.assertEqual(post['card'], 'receipt-day-2026-11-19-complete')
+        self.assertEqual(set(post['pickIds']), set(first))
+
     def test_results_first_gate_requires_complete_x_and_discord_recap(self):
         games = {'g': {'id': 'g', 'league': 'CFB', 'kickoff': '2026-11-14T18:00:00Z',
                        'home': {'short': 'Home'}, 'away': {'short': 'Away'}}}
