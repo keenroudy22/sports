@@ -39,6 +39,28 @@ class DiscordPostTests(unittest.TestCase):
                                             'lastHold': 'historical hold'})
         self.assertNotIn('lastHold', cancelled['discord'])
 
+    def test_corrected_november_recap_recovers_the_category_skip_once(self):
+        now = datetime(2026, 11, 20, 14, tzinfo=timezone.utc)
+        recap = {'id': 'receipt:day:2026-11-19', 'kind': 'buffer:receipt',
+                 'fullDailyRecap': True, 'cardKey': 'receipt-day-2026-11-19-all-sports-complete',
+                 'sentAt': '2026-11-20T13:34:03Z', 'tweetId': '2123771858931577292',
+                 'link': 'https://x.com/keenkooks/status/2123771858931577292'}
+        skipped = {'state': 'skipped', 'destination': 'plays', 'text': 'Thursday results',
+                   'reason': 'not an approved Discord category'}
+        recap['discord'] = dict(skipped)
+        attempted = dict(recap, discord=dict(skipped, attempts=1))
+        unconfirmed = dict(recap, tweetId=None, discord=dict(skipped))
+        log = {'posts': [recap, attempted, unconfirmed]}
+        with patch.object(discord_post, 'send_message', return_value={'id': '1573300000000000000'}) as send:
+            for _ in range(2):
+                discord_post.mirror_sent(log, now, url='plays', log=lambda *_: None,
+                                         hold_new_plays='recap still missing')
+            send.assert_called_once()
+        self.assertEqual(recap['discord']['messageId'], '1573300000000000000')
+        self.assertNotIn('reason', recap['discord'])
+        self.assertEqual(attempted['discord']['state'], 'skipped')
+        self.assertEqual(unconfirmed['discord']['state'], 'skipped')
+
     def test_regular_nba_checks_original_then_sends_play_and_real_result_once(self):
         import nba_trial_runtime as nba
         now=datetime(2026,10,28,19,tzinfo=timezone.utc)

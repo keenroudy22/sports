@@ -297,6 +297,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
     research_url = research_url if research_url is not None else research_webhook()
     if not url and not wins_url and not research_url:
         return []
+    import receipts
     failed = []
     for entry in log_book.get('posts', []):
         mirror = entry.get('discord') or {}
@@ -314,11 +315,13 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         combined = daily_straight_card.discord_eligible(entry, now) and destination == 'plays'
         nba_pick = kind == 'buffer:nba-trial' and entry.get('nbaPick') is True and destination == 'plays'
         cbb_pick = kind == 'buffer:cbb-pick' and entry.get('cbbPick') is True and destination == 'plays'
+        corrected_recap = (entry.get('id') == 'receipt:day:2026-11-19'
+                           and entry.get('cardKey') == 'receipt-day-2026-11-19-all-sports-complete')
         full_daily = (entry.get('fullDailyRecap') is True and kind == 'buffer:receipt'
                       and destination == 'plays' and str(entry.get('id', '')).startswith('receipt:day:')
-                      and entry.get('cardKey') in {
+                      and (corrected_recap or entry.get('cardKey') in {
                           'receipt-day-' + entry['id'].split(':')[-1] + suffix
-                          for suffix in ('', '-all-sports')})
+                          for suffix in ('', '-all-sports')}))
         allowed = (combined or full_daily or nba_pick or cbb_pick or (kind == 'buffer:play' and destination != 'wins')
                    or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith(('cashed:', 'burnt:'))
                        and destination != 'wins')
@@ -333,6 +336,14 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 mirror['reason'] = 'not an approved Discord category'
                 entry['discord'] = mirror
             continue
+        # The corrected Nov 19 card was previously skipped before any send.
+        # Recover only the actual X recap and let the ordinary mirror send it.
+        if (full_daily and corrected_recap and mirror.get('state') == 'skipped'
+                and mirror.get('reason') == 'not an approved Discord category'
+                and not any(mirror.get(k) for k in ('attempts', 'lastAttemptAt', 'messageId', 'sentAt'))
+                and receipts.confirmed_x(entry)):
+            mirror['state'] = 'pending'
+            mirror.pop('reason')
         ready = mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now
         if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \
                 or entry.get('cancelledAt') or entry.get('deletedAt'):
@@ -341,7 +352,6 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                    or (combined and str(entry.get('id', '')).startswith('receipt:card:'))
                    or (kind == 'buffer:community'
                        and mirror.get('communityType') == 'ticket'))
-        import receipts
         waits = (receipts.waits_for_morning_results(entry.get('id'), kind, receipts.eastern_date(now))
                  if kind != 'buffer:community' else pregame)
         if hold_new_plays and waits:
