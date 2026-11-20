@@ -1028,15 +1028,27 @@
   const withdrawalNotice = p => /withdr(?:ew|awn)|removed.*recommendation/i.test(p.entryNote || '')
     ? 'Recommendation withdrawn before kickoff. Original published result still counts.' : '';
   const slip = (p, opts = {}) => {
-    const vm = pickVM(p), g = gameOf(p), kicker = [opts.group ? p.league : p.community ? 'Personal fun ticket' : isChefPick(p) ? "Chef's Pick" : vm.featured ? 'Hot Plate (POTD)' : vm.kind === 'fun' ? funTicketLabel(p) : vm.kind === 'climb' ? '80/20 Climb' : 'Best bet', opts.when && ticketWhen(p.kickoff)].filter(Boolean).join(' · ');
-    const stake = opts.group ? (C.isLadder(p) ? (isNum(p.ladder?.stake) ? money(p.ladder.stake) : '') : `${C.stakeOf(p)}u`) : '';
-    const price = [`${odd(p.odds)} ${vm.book || ''}`.trim(), p.community ? 'original quote' : stake].filter(Boolean).join(' · ');
+    const vm = pickVM(p), g = gameOf(p), kicker = [p.community ? 'Personal fun ticket' : isChefPick(p) ? "Chef's Pick" : vm.featured ? 'Hot Plate (POTD)' : vm.kind === 'fun' ? funTicketLabel(p) : vm.kind === 'climb' ? '80/20 Climb' : 'Best bet', opts.when && ticketWhen(p.kickoff)].filter(Boolean).join(' · ');
+    const price = `${odd(p.odds)} ${vm.book || ''}${p.community ? ' · original quote' : ''}`.trim();
     const resultName = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ` : '';
     const detail = p.result ? `${resultName}${resultLine(p)} ${price}.` : opts.waiting ? `${price}.` : `${price}. ${vm.statusShort || (vm.mode === 'open' && vm.calibrated && vm.chance != null ? `I have it at ${pctOne(vm.chance)}.` : '')}`;
     const personal = p.community ? `<p class="kt-slip-personal">My card · tracked separately from Best Bets${p.result && p.entryNote ? `. ${esc(p.entryNote)}` : ''}</p>` : '';
-    const legs = opts.group && vm.legs.length ? `<ul class="kt-slip-legs">${vm.legs.map(leg => `<li>${esc(leg)}</li>`).join('')}</ul>` : '';
-    const body = `<a class="kt-slip${p.community ? ' is-community' : ''}" href="${esc(vm.href)}" aria-label="${esc(`${p.result ? `${RESULT_WORD[p.result]}: ` : ''}${vm.title}, ${oddsText(p.odds)}${vm.book ? ` at ${vm.book}` : ''}`)}"><p class="kt-slip-k">${esc(kicker)}</p><p class="kt-slip-t">${slipTitle(p, g)}</p><p class="kt-slip-d">${esc(detail.trim())}</p>${legs}${personal}${withdrawalNotice(p) ? `<p class="kt-slip-personal">${esc(withdrawalNotice(p))}</p>` : ''}${opts.waiting ? '<span class="kt-waiting">WAITING ON THE FINAL</span>' : ''}</a>`;
+    const body = `<a class="kt-slip${p.community ? ' is-community' : ''}" href="${esc(vm.href)}" aria-label="${esc(`${p.result ? `${RESULT_WORD[p.result]}: ` : ''}${vm.title}, ${oddsText(p.odds)}${vm.book ? ` at ${vm.book}` : ''}`)}"><p class="kt-slip-k">${esc(kicker)}</p><p class="kt-slip-t">${slipTitle(p, g)}</p><p class="kt-slip-d">${esc(detail.trim())}</p>${personal}${withdrawalNotice(p) ? `<p class="kt-slip-personal">${esc(withdrawalNotice(p))}</p>` : ''}${opts.waiting ? '<span class="kt-waiting">WAITING ON THE FINAL</span>' : ''}</a>`;
     return opts.spike ? `<div class="kt-spiked"><span class="kt-spike" aria-hidden="true"></span>${body}${stampFor(p.result)}</div>` : body;
+  };
+  const orderSlip = (pick, now = Date.now()) => {
+    const vm = pickVM(pick, now), info = pick.ladder || {};
+    const title = vm.kind === 'climb' ? `Step ${info.step}` : vm.kind === 'fun' ? `${vm.legs.length}-leg ${vm.lotto ? 'lotto' : 'parlay'}` : vm.title;
+    const stake = vm.kind === 'climb' ? (isNum(info.stake) ? money(info.stake) : '') : `${C.stakeOf(pick)}u`;
+    const status = pick.result ? RESULT_WORD[pick.result] || 'Final' : vm.mode === 'expired' ? 'Check price' : vm.state.word;
+    const meta = [pick.league, ticketWhen(pick.kickoff), status].filter(Boolean).join(' · ');
+    const book = postedBook(pick.betslip?.book || pick.book);
+    const action = vm.kind === 'best' ? P.betslipAction(pick.betslip && book ? { ...pick, betslip: { ...pick.betslip, book } } : pick, now, true) : '';
+    return `<article class="order-slip"><a class="order-slip-main" href="${esc(vm.href)}">
+      <span><strong>${esc(title)}</strong><small>${esc(meta)}</small></span>
+      <span class="order-slip-price"><b class="num">${esc(odd(pick.odds))}</b><small>${esc([vm.book, stake].filter(Boolean).join(' · '))}</small></span></a>
+      ${vm.legs.length ? `<ul class="order-slip-legs">${vm.legs.map(leg => `<li>${esc(leg)}</li>`).join('')}</ul>` : ''}
+      ${action ? `<div class="order-slip-action">${action}</div>` : ''}</article>`;
   };
   /* Full posted-day recap. Compact rows include every ticket, win or loss; Climb dollars stay separate. */
   const leftovers = (settled, waiting, last) => {
@@ -1237,12 +1249,12 @@
     const chefPicks = straights.filter(isChefPick);
     const currentBets = straights.filter(p => !isChefPick(p));
     const options = { season, lines, cards, quick: true, compact: true, group: true };
-    const kitchenGroup = (id, name, tickets) => tickets.length ? `<section class="kitchen-group" aria-labelledby="order-${id}"><div class="kt-focus-head"><h2 id="order-${id}">${name}</h2></div><div class="kt-slips">${tickets.map(p => slip(p, { when: true, group: true })).join('')}</div></section>` : '';
+    const kitchenGroup = (id, name, tickets) => tickets.length ? `<section class="kitchen-group" aria-labelledby="order-${id}"><h2 id="order-${id}">${name}</h2><div class="order-slips">${tickets.map(p => orderSlip(p)).join('')}</div></section>` : '';
     return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>Today’s board</h1>${postedSummary ? '' : `<p class="today-summary">${esc(title)}</p>`}${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      <div class="kitchen-orders"${!straights.length && !postedSummary && activeTickets.length ? ' id="today-card"' : ''}>
-      ${chefPicks.length ? `<section class="kitchen-group" aria-labelledby="order-chef"><div class="kt-focus-head"><h2 id="order-chef">Chef’s Pick</h2></div>${rail(chefPicks, { ...options, id: currentBets.length || postedSummary ? '' : 'today-card', label: 'Chef’s Pick' })}</section>` : ''}
+      <div class="kitchen-orders"${!currentBets.length && !postedSummary && (chefPicks.length || activeTickets.length) ? ' id="today-card"' : ''}>
+      ${kitchenGroup('chef', 'Chef’s Pick', chefPicks)}
       ${postedSummary || (currentBets.length ? `<div class="kt-focus-head"><h2>${currentBets.length > 1 ? `Today’s best bets · ${currentBets.length}` : 'Today’s best bet'}</h2><a href="#record">Track record ›</a></div>
-      ${rail(currentBets, { ...options, id: 'today-card', label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' })}` : chefPicks.length || activeTickets.length ? '' : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'My strongest current research look is below.' : "See today’s matchups and research below.") : 'The board updates as picks are posted.', 'today-card', true))}
+      ${activeTickets.length || chefPicks.length ? `<div class="order-slips" id="today-card">${currentBets.map(p => orderSlip(p)).join('')}</div>` : rail(currentBets, { ...options, id: 'today-card', label: currentBets.length > 1 ? 'Today’s best bets' : 'Today’s best bet' })}` : chefPicks.length || activeTickets.length ? '' : emptyRail(postedToday ? 'No open entry right now. Earlier posted plays and their original prices remain below and in the record.' : nothingCleared ? (favorite ? 'My strongest current research look is below.' : "See today’s matchups and research below.") : 'The board updates as picks are posted.', 'today-card', true))}
       ${kitchenGroup('double', 'Daily Double', activeTickets.filter(p => p.parlayStyle === 'daily-double'))}
       ${kitchenGroup('climb', 'Current Climb step', activeTickets.filter(C.isLadder))}
       ${kitchenGroup('parlays', 'Fun parlays', activeTickets.filter(p => !C.isLadder(p) && p.parlayStyle !== 'daily-double'))}
@@ -1388,18 +1400,13 @@
     const postedRows = state.league === 'ALL' ? picks.filter(p => !p.community && !C.isParlay(p) && C.countsPublic(p) && C.dayOf(p.kickoff) === etDay()) : [];
     const posted = postedRows.sort(order);
     const shownStraights = posted.filter(p => p.result || !isChefPick(p) || !rows.some(row => row.id === p.id));
-    const straightLine = p => {
-      const vm = pickVM(p, now);
-      const status = p.result ? RESULT_WORD[p.result] || 'Final' : vm.mode === 'expired' ? 'Check price' : vm.state.word;
-      return `<li><a class="today-straight" href="${esc(vm.href)}"><span><strong>${esc(vm.title)}</strong><small>${esc(p.league)} · ${esc(ticketWhen(p.kickoff))}${status ? ` · ${esc(status)}` : ''}</small>${p.why || p.reason ? '<small>Full breakdown</small>' : ''}</span><span class="today-straight-price"><b class="num">${esc(oddsText(p.odds))}</b><small>${esc(vm.book)} · ${esc(C.stakeOf(p))}u</small></span><span aria-hidden="true">›</span></a>${P.betslipAction(p, now, true)}</li>`;
-    };
     const activeStraights = shownStraights.filter(p => !p.result && !pulled(p) && !offCard(p));
     const earlierStraights = shownStraights.filter(p => p.result || pulled(p) || offCard(p));
-    const postedSummary = posted.some(p => ['NBA', 'CBB'].includes(p.league)) ? `<section id="today-posted-straights" aria-labelledby="posted-straights-heading">
+    const postedSummary = posted.some(p => ['NBA', 'CBB'].includes(p.league)) ? `<section class="kitchen-group" id="today-posted-straights" aria-labelledby="posted-straights-heading">
       <div class="kt-focus-head"><h2 id="posted-straights-heading">Best Bets</h2><a href="#record">Track record ›</a></div>
       <p class="small muted kitchen-straight-count">${posted.length} posted straight${posted.length === 1 ? '' : 's'} today</p>
-      <div id="today-card">${activeStraights.length ? `<ul class="today-straights">${activeStraights.map(straightLine).join('')}</ul>` : ''}</div>
-      ${earlierStraights.length ? `<details class="plain-fold"><summary>Earlier today · ${earlierStraights.length}</summary><ul class="today-straights">${earlierStraights.map(straightLine).join('')}</ul></details>` : ''}</section>` : '';
+      <div class="order-slips" id="today-card">${activeStraights.map(p => orderSlip(p, now)).join('')}</div>
+      ${earlierStraights.length ? `<details class="plain-fold"><summary>Earlier today · ${earlierStraights.length}</summary><div class="order-slips">${earlierStraights.map(p => orderSlip(p, now)).join('')}</div></details>` : ''}</section>` : '';
     const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba, { showPicks: !postedSummary }) : '';
     const extraToday = [
       prepList(today.prep, notesList, now),

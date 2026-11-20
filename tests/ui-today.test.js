@@ -103,7 +103,7 @@ test('the Today straight links to its visible matchup case, cited facts and risk
     sources: ['https://example.edu/box-score'] };
   const { api } = loadApp('#today', {}, { today: { ...TODAY, picks: [pick] } });
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /href="#pick\/CBB-sourced-1"[^>]*>[\s\S]*?Full breakdown/);
+  assert.match(page, /class="order-slip-main" href="#pick\/CBB-sourced-1"/);
   const detail = await api.views.pick({ view: 'pick', id: pick.id });
   assert.match(detail, /<h2[^>]*>Why I played it<\/h2>[\s\S]*Extra possessions are the angle\./);
   assert.match(detail, /What I checked<\/h3>[\s\S]*Twelve offensive boards\. <a href="https:\/\/example\.edu\/box-score"/);
@@ -1133,8 +1133,9 @@ test('the Today order groups posted tickets once before research', async () => {
   const page = await api.views.today({ view: 'today' });
   const order = page.slice(page.indexOf('class="kitchen-orders"'), page.indexOf('aria-label="Betting data and research"'));
   assert.match(order, /Chef’s Pick[\s\S]*Today’s best bet[\s\S]*Daily Double[\s\S]*Current Climb step[\s\S]*Fun parlays/);
-  assert.match(order, /Daily Double<\/span> \+106/);
-  assert.match(order, /Step 3<\/span> −150/);
+  assert.match(order, /Daily Double[\s\S]*2-leg parlay[\s\S]*>\+106</);
+  assert.match(order, /Step 3<\/strong>[\s\S]*>−150</);
+  assert.equal((order.match(/>\+106</g) || []).length, 1);
   assert.match(order, /Player A over 9\.5 points/);
   assert.equal((page.match(/href="#pick\/live-double"/g) || []).length, 1);
   assert.equal((page.match(/href="#pick\/live-lotto"/g) || []).length, 1);
@@ -1157,8 +1158,8 @@ test('All-sports Today puts every published straight before research', async () 
  assert.match(page,/3 posted straights today/);
  const summary=page.slice(page.indexOf('id="today-posted-straights"'),page.indexOf('aria-label="Betting data and research"'));
  assert.match(summary,/Fixture Receiver over 49\.5/);
- assert.match(summary,/#pick\/cbb-today[\s\S]*QUC \+8\.5[\s\S]*-112[\s\S]*DraftKings · 1u/);
- assert.match(summary,/#pick\/nba-today[\s\S]*Example Guard over 5\.5 assists[\s\S]*Hit[\s\S]*-120/);
+ assert.match(summary,/#pick\/cbb-today[\s\S]*QUC \+8\.5[\s\S]*−112[\s\S]*DraftKings · 1u/);
+ assert.match(summary,/#pick\/nba-today[\s\S]*Example Guard over 5\.5 assists[\s\S]*Hit[\s\S]*−120/);
  assert.match(summary,/Open exact line in FanDuel/);
  assert.equal((page.match(/Example Guard over 5\.5 assists/g)||[]).length,1);
  assert.doesNotMatch(summary,/cbb-tomorrow|Later Open/);
