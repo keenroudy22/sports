@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-19T23:09:54Z",
+  "updatedAt": "2026-11-20T03:37:57Z",
   "timeZone": "America/Indianapolis",
   "leagues": {
     "NBA": {
@@ -13,15 +13,15 @@
         "picks": false
       },
       "coverageNote": "NBA Today has team projections, player research and a separate record of posted NBA picks.",
-      "lastAttemptAt": "2026-11-19T23:09:54Z",
+      "lastAttemptAt": "2026-11-20T03:37:57Z",
       "requestedWindow": {
         "from": "2026-11-19",
         "through": "2026-11-21",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-11-19T23:09:54Z",
-      "lastSuccessfulAt": "2026-11-19T23:09:54Z",
+      "checkedAt": "2026-11-20T03:37:57Z",
+      "lastSuccessfulAt": "2026-11-20T03:37:57Z",
       "error": null,
       "window": {
         "from": "2026-11-19",
@@ -49,9 +49,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 4,
           "clock": "0.0",
           "teams": {
             "home": {
@@ -70,14 +70,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 126,
+            "away": 98
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910019/warriors-grizzlies"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910020",
@@ -90,9 +90,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 4,
           "clock": "0.0",
           "teams": {
             "home": {
@@ -111,14 +111,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 114,
+            "away": 124
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910020/trail-blazers-bucks"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910021",
@@ -131,9 +131,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 4,
           "clock": "0.0",
           "teams": {
             "home": {
@@ -152,14 +152,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 99,
+            "away": 102
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910021/knicks-timberwolves"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910022",
@@ -172,9 +172,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 4,
           "clock": "0.0",
           "teams": {
             "home": {
@@ -193,14 +193,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 124,
+            "away": 112
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910022/clippers-spurs"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909305",
@@ -241,7 +241,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909305/hornets-hawks"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909306",
@@ -282,7 +282,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909306/magic-nets"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909307",
@@ -323,7 +323,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909307/pacers-cavaliers"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909308",
@@ -364,7 +364,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909308/raptors-pistons"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909309",
@@ -405,7 +405,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909309/wizards-bulls"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909310",
@@ -446,7 +446,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909310/pelicans-thunder"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909311",
@@ -487,7 +487,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909311/suns-jazz"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909312",
@@ -528,7 +528,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909312/rockets-nuggets"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401909313",
@@ -569,7 +569,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401909313/kings-lakers"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910023",
@@ -610,7 +610,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910023/bucks-76ers"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910024",
@@ -651,7 +651,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910024/trail-blazers-knicks"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910025",
@@ -692,7 +692,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910025/clippers-mavericks"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910026",
@@ -733,7 +733,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910026/grizzlies-timberwolves"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910027",
@@ -774,7 +774,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910027/pelicans-spurs"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NBA-401910028",
@@ -815,7 +815,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nba/game/_/gameId/401910028/celtics-kings"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         }
       ]
     },
@@ -829,15 +829,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-11-19T23:09:54Z",
+      "lastAttemptAt": "2026-11-20T03:37:57Z",
       "requestedWindow": {
         "from": "2026-11-19",
         "through": "2026-11-21",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-11-19T23:09:54Z",
-      "lastSuccessfulAt": "2026-11-19T23:09:54Z",
+      "checkedAt": "2026-11-20T03:37:57Z",
+      "lastSuccessfulAt": "2026-11-20T03:37:57Z",
       "error": null,
       "window": {
         "from": "2026-11-19",
@@ -865,15 +865,15 @@
         "picks": true
       },
       "coverageNote": "CBB sourced desk picks have their own original-term record. Team score projections and sheets remain research.",
-      "lastAttemptAt": "2026-11-19T23:09:54Z",
+      "lastAttemptAt": "2026-11-20T03:37:57Z",
       "requestedWindow": {
         "from": "2026-11-19",
         "through": "2026-11-21",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-11-19T23:09:54Z",
-      "lastSuccessfulAt": "2026-11-19T23:09:54Z",
+      "checkedAt": "2026-11-20T03:37:57Z",
+      "lastSuccessfulAt": "2026-11-20T03:37:57Z",
       "error": null,
       "window": {
         "from": "2026-11-19",
@@ -929,7 +929,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920517/florida-west-virginia"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920519",
@@ -942,9 +942,9 @@
           "kickoff": "2026-11-19T22:00:00Z",
           "timeConfirmed": true,
           "neutral": true,
-          "status": "in_progress",
-          "statusDetail": "Halftime",
-          "period": 1,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -963,14 +963,14 @@
             }
           },
           "scores": {
-            "home": 36,
-            "away": 42
+            "home": 73,
+            "away": 78
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401920519"
+            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920519/notre-dame-auburn"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401918959",
@@ -983,10 +983,10 @@
           "kickoff": "2026-11-19T23:00:00Z",
           "timeConfirmed": true,
           "neutral": true,
-          "status": "in_progress",
-          "statusDetail": "17:30 - 1st",
-          "period": 1,
-          "clock": "17:30",
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
+          "clock": "0:00",
           "teams": {
             "home": {
               "id": "152",
@@ -1004,14 +1004,14 @@
             }
           },
           "scores": {
-            "home": 2,
-            "away": 2
+            "home": 93,
+            "away": 83
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401918959"
+            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401918959/murray-st-nc-state"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401902280",
@@ -1024,9 +1024,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1045,14 +1045,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 84,
+            "away": 77
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401902280/northeastern-butler"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911021",
@@ -1065,9 +1065,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1086,14 +1086,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 78,
+            "away": 69
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911021/buffalo-st-bonaventure"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401912211",
@@ -1106,9 +1106,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1127,14 +1127,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 82,
+            "away": 51
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401912211/mary-baldwin-american"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401916318",
@@ -1147,9 +1147,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1168,14 +1168,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 101,
+            "away": 62
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401916318/umbc-ohio-state"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920413",
@@ -1188,9 +1188,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1209,14 +1209,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 85,
+            "away": 74
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920413/montana-st-high-point"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920878",
@@ -1229,9 +1229,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1250,14 +1250,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 72,
+            "away": 78
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920878/little-rock-jacksonville"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401923304",
@@ -1270,9 +1270,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1291,14 +1291,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 67,
+            "away": 69
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401923304/maine-quinnipiac"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401926144",
@@ -1311,9 +1311,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1332,14 +1332,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 64,
+            "away": 45
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401926144/north-park-siue"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401928812",
@@ -1352,9 +1352,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1373,14 +1373,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 93,
+            "away": 41
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401928812/berea-n-kentucky"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401928826",
@@ -1393,9 +1393,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1414,14 +1414,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 83,
+            "away": 76
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401928826/robert-morris-toledo"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401919005",
@@ -1434,9 +1434,9 @@
           "kickoff": "2026-11-20T00:30:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:30 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1455,14 +1455,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 74,
+            "away": 67
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919005/tulane-louisiana-tech"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401926814",
@@ -1475,9 +1475,9 @@
           "kickoff": "2026-11-20T00:30:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:30 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1496,14 +1496,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 86,
+            "away": 70
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401926814/charleston-drake"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401929373",
@@ -1516,9 +1516,9 @@
           "kickoff": "2026-11-20T00:30:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:30 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1537,14 +1537,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 74,
+            "away": 67
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401929373/tusculum-north-alabama"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401906867",
@@ -1557,9 +1557,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1578,14 +1578,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 92,
+            "away": 68
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906867/southern-utah-texas"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401918950",
@@ -1598,9 +1598,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1619,14 +1619,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 83,
+            "away": 69
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401918950/stetson-louisville"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401919050",
@@ -1639,10 +1639,10 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "0:20 - OT",
+          "period": 3,
+          "clock": "0:20",
           "teams": {
             "home": {
               "id": "2628",
@@ -1660,14 +1660,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 92,
+            "away": 94
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919050/texas-am-tcu"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401919050"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920845",
@@ -1680,9 +1680,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1701,14 +1701,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 93,
+            "away": 61
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920845/se-missouri-st-thomas"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401921028",
@@ -1721,9 +1721,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1742,14 +1742,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 79,
+            "away": 86
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921028/ga-southern-hou-christian"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401927375",
@@ -1762,9 +1762,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1783,14 +1783,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 123,
+            "away": 48
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401927375/eureka-illinois-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401929409",
@@ -1803,9 +1803,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 2,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -1824,14 +1824,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 91,
+            "away": 66
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401929409/mayville-st-north-dakota"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920520",
@@ -1844,10 +1844,10 @@
           "kickoff": "2026-11-20T01:30:00Z",
           "timeConfirmed": true,
           "neutral": true,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:30 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "2:44 - 2nd",
+          "period": 2,
+          "clock": "2:44",
           "teams": {
             "home": {
               "id": "2439",
@@ -1865,14 +1865,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 66,
+            "away": 87
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920520/rutgers-unlv"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401920520"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920888",
@@ -1885,10 +1885,10 @@
           "kickoff": "2026-11-20T01:30:00Z",
           "timeConfirmed": true,
           "neutral": true,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:30 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "6:18 - 2nd",
+          "period": 2,
+          "clock": "6:18",
           "teams": {
             "home": {
               "id": "275",
@@ -1906,14 +1906,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 55,
+            "away": 55
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920888/seton-hall-wisconsin"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401920888"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911534",
@@ -1926,10 +1926,10 @@
           "kickoff": "2026-11-20T02:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 9:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "14:13 - 2nd",
+          "period": 2,
+          "clock": "14:13",
           "teams": {
             "home": {
               "id": "166",
@@ -1947,14 +1947,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 49,
+            "away": 57
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911534/utep-new-mexico-st"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401911534"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925941",
@@ -1967,10 +1967,10 @@
           "kickoff": "2026-11-20T02:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 9:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "5:26 - 2nd",
+          "period": 2,
+          "clock": "5:26",
           "teams": {
             "home": {
               "id": "264",
@@ -1988,14 +1988,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 67,
+            "away": 55
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925941/utah-tech-washington"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401925941"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401928354",
@@ -2008,10 +2008,10 @@
           "kickoff": "2026-11-20T02:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 9:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "9:49 - 2nd",
+          "period": 2,
+          "clock": "9:49",
           "teams": {
             "home": {
               "id": "2492",
@@ -2029,14 +2029,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 58,
+            "away": 64
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401928354/santa-barbara-pepperdine"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401928354"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401928388",
@@ -2049,9 +2049,9 @@
           "kickoff": "2026-11-20T02:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 9:00 PM EST",
-          "period": 0,
+          "status": "in_progress",
+          "statusDetail": "Halftime",
+          "period": 1,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -2070,14 +2070,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 44,
+            "away": 32
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401928388/southern-miss-grambling"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401928388"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401930884",
@@ -2090,10 +2090,10 @@
           "kickoff": "2026-11-20T02:00:00Z",
           "timeConfirmed": true,
           "neutral": true,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 9:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "11:14 - 2nd",
+          "period": 2,
+          "clock": "11:14",
           "teams": {
             "home": {
               "id": "2483",
@@ -2111,14 +2111,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 48,
+            "away": 51
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401930884/oregon-st-oregon"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401930884"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401918056",
@@ -2131,10 +2131,10 @@
           "kickoff": "2026-11-20T03:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 10:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "6:14 - 1st",
+          "period": 1,
+          "clock": "6:14",
           "teams": {
             "home": {
               "id": "25",
@@ -2152,14 +2152,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 30,
+            "away": 20
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401918056/east-texas-am-california"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401918056"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920349",
@@ -2172,10 +2172,10 @@
           "kickoff": "2026-11-20T03:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 10:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "4:31 - 1st",
+          "period": 1,
+          "clock": "4:31",
           "teams": {
             "home": {
               "id": "24",
@@ -2193,14 +2193,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 24,
+            "away": 30
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920349/sacramento-st-stanford"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401920349"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925916",
@@ -2213,10 +2213,10 @@
           "kickoff": "2026-11-20T03:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 10:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "3:20 - 1st",
+          "period": 1,
+          "clock": "3:20",
           "teams": {
             "home": {
               "id": "2502",
@@ -2234,14 +2234,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 55,
+            "away": 16
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925916/nw-indian-portland-st"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401925916"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401917536",
@@ -2254,10 +2254,10 @@
           "kickoff": "2026-11-20T03:30:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 10:30 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "18:23 - 1st",
+          "period": 1,
+          "clock": "18:23",
           "teams": {
             "home": {
               "id": "2541",
@@ -2275,14 +2275,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 4,
+            "away": 5
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401917536/vcu-santa-clara"
+            "url": "https://www.espn.com/mens-college-basketball/game?gameId=401917536"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920518",
@@ -2323,7 +2323,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920518/houston-kansas"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 3.5,
+            "awayLine": -3.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401926773",
@@ -2364,7 +2372,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401926773/tarleton-st-usc"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -28.5,
+            "awayLine": 28.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401918454",
@@ -2405,7 +2421,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401918454/averett-william-mary"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401909698",
@@ -2446,7 +2462,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909698/green-bay-florida-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -23.5,
+            "awayLine": 23.5,
+            "homeOdds": -105,
+            "awayOdds": -115
+          }
         },
         {
           "id": "CBB-401925841",
@@ -2487,7 +2511,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925841/bloomfield-md-eastern"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401916122",
@@ -2528,7 +2552,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401916122/temple-mtsu"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 3.5,
+            "awayLine": -3.5,
+            "homeOdds": -108,
+            "awayOdds": -112
+          }
         },
         {
           "id": "CBB-401921418",
@@ -2569,7 +2601,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921418/oklahoma-st-minnesota"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 1.5,
+            "awayLine": -1.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401919019",
@@ -2610,7 +2650,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919019/uab-g-washington"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -10.5,
+            "awayLine": 10.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401916123",
@@ -2651,7 +2699,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401916123/indiana-st-sf-austin"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -3.5,
+            "awayLine": 3.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401919826",
@@ -2692,7 +2748,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919826/w-illinois-ualbany"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -8.5,
+            "awayLine": 8.5,
+            "homeOdds": -115,
+            "awayOdds": -105
+          }
         },
         {
           "id": "CBB-401920380",
@@ -2733,7 +2797,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920380/northwestern-virginia-tech"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -10.5,
+            "awayLine": 10.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401922022",
@@ -2774,7 +2846,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401922022/s-dakota-st-idaho-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 5.5,
+            "awayLine": -5.5,
+            "homeOdds": -102,
+            "awayOdds": -118
+          }
         },
         {
           "id": "CBB-401920066",
@@ -2815,7 +2895,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920066/rhode-island-liberty"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 2.5,
+            "awayLine": -2.5,
+            "homeOdds": -122,
+            "awayOdds": 102
+          }
         },
         {
           "id": "CBB-401921723",
@@ -2856,7 +2944,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921723/manhattan-miami"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -39.5,
+            "awayLine": 39.5,
+            "homeOdds": -108,
+            "awayOdds": -112
+          }
         },
         {
           "id": "CBB-401916124",
@@ -2897,7 +2993,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401916124/ut-martin-s-illinois"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -1.5,
+            "awayLine": 1.5,
+            "homeOdds": -102,
+            "awayOdds": -118
+          }
         },
         {
           "id": "CBB-401919827",
@@ -2938,7 +3042,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919827/mercyhurst-canisius"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 3.5,
+            "awayLine": -3.5,
+            "homeOdds": -120,
+            "awayOdds": 100
+          }
         },
         {
           "id": "CBB-401921419",
@@ -2979,7 +3091,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921419/dayton-utah"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -1.5,
+            "awayLine": 1.5,
+            "homeOdds": -105,
+            "awayOdds": -115
+          }
         },
         {
           "id": "CBB-401920298",
@@ -3020,7 +3140,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920298/delaware-csu-northridge"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -6.5,
+            "awayLine": 6.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401928834",
@@ -3061,7 +3189,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401928834/wvu-tech-akron"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401929353",
@@ -3102,7 +3230,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401929353/cent-baptist-incarnate-word"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401929460",
@@ -3143,7 +3271,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401929460/worcester-st-bryant"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925828",
@@ -3184,7 +3312,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925828/north-texas-app-state"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 2.5,
+            "awayLine": -2.5,
+            "homeOdds": -120,
+            "awayOdds": 100
+          }
         },
         {
           "id": "CBB-401906852",
@@ -3225,7 +3361,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906852/coastal-tennessee"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -28.5,
+            "awayLine": 28.5,
+            "homeOdds": -118,
+            "awayOdds": -102
+          }
         },
         {
           "id": "CBB-401909709",
@@ -3266,7 +3410,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909709/c-michigan-pitt"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -23.5,
+            "awayLine": 23.5,
+            "homeOdds": -102,
+            "awayOdds": -118
+          }
         },
         {
           "id": "CBB-401916299",
@@ -3307,7 +3459,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401916299/wagner-maryland"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -33.5,
+            "awayLine": 33.5,
+            "homeOdds": -115,
+            "awayOdds": -105
+          }
         },
         {
           "id": "CBB-401917903",
@@ -3348,7 +3508,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401917903/paine-west-georgia"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920195",
@@ -3389,7 +3549,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920195/saint-josephs-drexel"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 3.5,
+            "awayLine": -3.5,
+            "homeOdds": 100,
+            "awayOdds": -120
+          }
         },
         {
           "id": "CBB-401920357",
@@ -3430,7 +3598,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920357/harvard-holy-cross"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 12.5,
+            "awayLine": -12.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401920427",
@@ -3471,7 +3647,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920427/loyola-md-virginia"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -43.5,
+            "awayLine": 43.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401920818",
@@ -3512,7 +3696,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920818/se-louisiana-kennesaw-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -12.5,
+            "awayLine": 12.5,
+            "homeOdds": -108,
+            "awayOdds": -112
+          }
         },
         {
           "id": "CBB-401920922",
@@ -3553,7 +3745,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920922/w-michigan-mount-st-marys"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 8.5,
+            "awayLine": -8.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401921007",
@@ -3594,7 +3794,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921007/kansas-city-iona"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -4.5,
+            "awayLine": 4.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401921107",
@@ -3635,7 +3843,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921107/bellarmine-e-kentucky"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -7.5,
+            "awayLine": 7.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401921692",
@@ -3654,11 +3870,11 @@
           "clock": "0:00",
           "teams": {
             "home": {
-              "id": "-1",
-              "name": "TBD",
-              "shortName": "TBD",
-              "abbreviation": "TBD",
-              "logo": null
+              "id": "93",
+              "name": "Murray State Racers",
+              "shortName": "Murray St",
+              "abbreviation": "MUR",
+              "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/93.png"
             },
             "away": {
               "id": "-2",
@@ -3674,9 +3890,9 @@
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921692/tbd-tbd"
+            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921692/tbd-murray-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401924736",
@@ -3717,7 +3933,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401924736/monmouth-princeton"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -3.5,
+            "awayLine": 3.5,
+            "homeOdds": -105,
+            "awayOdds": -115
+          }
         },
         {
           "id": "CBB-401924844",
@@ -3758,7 +3982,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401924844/niagara-delaware-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -2.5,
+            "awayLine": 2.5,
+            "homeOdds": 100,
+            "awayOdds": -120
+          }
         },
         {
           "id": "CBB-401925927",
@@ -3799,7 +4031,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925927/sc-state-the-citadel"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -2.5,
+            "awayLine": 2.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401926134",
@@ -3840,7 +4080,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401926134/oakland-purdue"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -24.5,
+            "awayLine": 24.5,
+            "homeOdds": -105,
+            "awayOdds": -115
+          }
         },
         {
           "id": "CBB-401926782",
@@ -3881,7 +4129,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401926782/georgia-st-jax-state"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -1.5,
+            "awayLine": 1.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401927396",
@@ -3922,7 +4178,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401927396/richmond-western-ky"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 1.5,
+            "awayLine": -1.5,
+            "homeOdds": -130,
+            "awayOdds": 110
+          }
         },
         {
           "id": "CBB-401909545",
@@ -3963,7 +4227,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909545/iowa-xavier"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -3.5,
+            "awayLine": 3.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401925080",
@@ -4004,7 +4276,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925080/ut-arlington-nwestern-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 4.5,
+            "awayLine": -4.5,
+            "homeOdds": -118,
+            "awayOdds": -102
+          }
         },
         {
           "id": "CBB-401925865",
@@ -4045,7 +4325,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925865/tulsa-mississippi-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -6.5,
+            "awayLine": 6.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401906784",
@@ -4086,7 +4374,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906784/georgia-georgia-tech"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 8.5,
+            "awayLine": -8.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401909799",
@@ -4127,7 +4423,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909799/campbell-kansas-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -15.5,
+            "awayLine": 15.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401916125",
@@ -4168,7 +4472,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401916125/utah-valley-east-carolina"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 4.5,
+            "awayLine": -4.5,
+            "homeOdds": -115,
+            "awayOdds": -105
+          }
         },
         {
           "id": "CBB-401916290",
@@ -4209,7 +4521,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401916290/kentucky-indiana"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -3.5,
+            "awayLine": 3.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401919784",
@@ -4250,7 +4570,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919784/le-moyne-missouri"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -36.5,
+            "awayLine": 36.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401920707",
@@ -4291,7 +4619,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920707/lipscomb-alabama-am"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": 5.5,
+            "awayLine": -5.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401921757",
@@ -4332,7 +4668,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921757/ucf-vanderbilt"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -18.5,
+            "awayLine": 18.5,
+            "homeOdds": -105,
+            "awayOdds": -115
+          }
         },
         {
           "id": "CBB-401925740",
@@ -4373,7 +4717,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925740/miss-valley-st-arkansas"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -43.5,
+            "awayLine": 43.5,
+            "homeOdds": -102,
+            "awayOdds": -118
+          }
         },
         {
           "id": "CBB-401926755",
@@ -4414,7 +4766,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401926755/neumann-lehigh"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401929459",
@@ -4455,7 +4807,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401929459/south-alabama-smu"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -16.5,
+            "awayLine": 16.5,
+            "homeOdds": -105,
+            "awayOdds": -115
+          }
         },
         {
           "id": "CBB-401935675",
@@ -4496,7 +4856,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401935675/west-coast-pepperdine"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401912710",
@@ -4537,7 +4897,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401912710/marshall-north-carolina"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -20.5,
+            "awayLine": 20.5,
+            "homeOdds": -115,
+            "awayOdds": -105
+          }
         },
         {
           "id": "CBB-401913529",
@@ -4578,7 +4946,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401913529/e-illinois-illinois"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -51.5,
+            "awayLine": 51.5,
+            "homeOdds": -108,
+            "awayOdds": -112
+          }
         },
         {
           "id": "CBB-401920137",
@@ -4619,7 +4995,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920137/bakersfield-idaho"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -1.5,
+            "awayLine": 1.5,
+            "homeOdds": -110,
+            "awayOdds": -110
+          }
         },
         {
           "id": "CBB-401928795",
@@ -4660,7 +5044,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401928795/sam-houston-boise-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -11.5,
+            "awayLine": 11.5,
+            "homeOdds": -112,
+            "awayOdds": -108
+          }
         },
         {
           "id": "CBB-401921691",
@@ -4679,11 +5071,11 @@
           "clock": "0:00",
           "teams": {
             "home": {
-              "id": "-1",
-              "name": "TBD",
-              "shortName": "TBD",
-              "abbreviation": "TBD",
-              "logo": null
+              "id": "152",
+              "name": "NC State Wolfpack",
+              "shortName": "NC State",
+              "abbreviation": "NCSU",
+              "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/152.png"
             },
             "away": {
               "id": "-2",
@@ -4699,9 +5091,9 @@
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921691/tbd-tbd"
+            "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921691/tbd-nc-state"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925664",
@@ -4742,7 +5134,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925664/alabama-st-fresno-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -10.5,
+            "awayLine": 10.5,
+            "homeOdds": -105,
+            "awayOdds": -115
+          }
         },
         {
           "id": "CBB-401911252",
@@ -4783,7 +5183,15 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911252/saint-louis-saint-marys"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z",
+          "spreadQuote": {
+            "book": "DraftKings",
+            "observedAt": "2026-11-20T03:37:57Z",
+            "homeLine": -1.5,
+            "awayLine": 1.5,
+            "homeOdds": -118,
+            "awayOdds": -102
+          }
         },
         {
           "id": "CBB-401922284",
@@ -4824,7 +5232,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401922284/sc-upstate-unc-greensboro"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401924884",
@@ -4865,7 +5273,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401924884/siena-bucknell"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401923402",
@@ -4906,7 +5314,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401923402/columbia-boston-u"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925756",
@@ -4947,7 +5355,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925756/detroit-mercy-michigan-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920948",
@@ -4988,7 +5396,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920948/denver-e-michigan"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401921169",
@@ -5029,7 +5437,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921169/kent-state-cleveland-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401921811",
@@ -5070,7 +5478,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921811/queens-lsu"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401923312",
@@ -5111,7 +5519,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401923312/new-hampshire-new-haven"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401919828",
@@ -5152,7 +5560,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919828/mercyhurst-w-illinois"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401909719",
@@ -5193,7 +5601,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909719/lafayette-syracuse"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401909730",
@@ -5234,7 +5642,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909730/w-carolina-wake-forest"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911022",
@@ -5275,7 +5683,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911022/n-illinois-bowling-green"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911199",
@@ -5316,7 +5724,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911199/fordham-portland"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401919031",
@@ -5357,7 +5765,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919031/new-mexico-wichita-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920773",
@@ -5398,7 +5806,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920773/psu-behrend-colgate"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401921222",
@@ -5439,7 +5847,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921222/navy-rider"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401922222",
@@ -5480,7 +5888,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401922222/little-rock-north-florida"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401924722",
@@ -5521,7 +5929,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401924722/cornell-morgan-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401924882",
@@ -5562,7 +5970,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401924882/stony-brook-saint-peters"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401928819",
@@ -5603,7 +6011,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401928819/calumet-purdue-fw"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401929452",
@@ -5644,7 +6052,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401929452/va-lynchburg-james-madison"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401917953",
@@ -5685,7 +6093,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401917953/ut-rio-grande-austin-peay"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920569",
@@ -5726,7 +6134,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920569/tbd-tbd"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920846",
@@ -5767,7 +6175,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920846/st-thomas-milwaukee"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401927365",
@@ -5808,7 +6216,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401927365/drake-missouri-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911278",
@@ -5849,7 +6257,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911278/army-binghamton"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401917918",
@@ -5890,7 +6298,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401917918/c-arkansas-jacksonville"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401918995",
@@ -5931,7 +6339,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401918995/south-florida-george-mason"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401921183",
@@ -5972,7 +6380,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921183/penn-la-salle"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401922048",
@@ -6013,7 +6421,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401922048/longwood-etsu"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401923322",
@@ -6054,7 +6462,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401923322/ualbany-canisius"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925890",
@@ -6095,7 +6503,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925890/justice-n-colorado"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401926113",
@@ -6136,7 +6544,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401926113/clinton-furman"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401917538",
@@ -6177,7 +6585,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401917538/uc-irvine-san-diego"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911337",
@@ -6218,7 +6626,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911337/air-force-utsa"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401919849",
@@ -6259,7 +6667,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401919849/northeastern-stonehill"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925065",
@@ -6300,7 +6708,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925065/southern-miss-nicholls"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925709",
@@ -6341,7 +6749,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925709/winthrop-wofford"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920570",
@@ -6382,7 +6790,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920570/tbd-tbd"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401909517",
@@ -6423,7 +6831,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909517/coppin-st-georgetown"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911023",
@@ -6464,7 +6872,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911023/maine-umass"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925897",
@@ -6505,7 +6913,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925897/unc-wilmington-norfolk-st"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911310",
@@ -6546,7 +6954,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911310/brown-vermont"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911378",
@@ -6587,7 +6995,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911378/charleston-so-mercer"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401911394",
@@ -6628,7 +7036,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401911394/gardner-webb-vmi"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401917539",
@@ -6669,7 +7077,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401917539/ca-baptist-lmu"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920125",
@@ -6710,7 +7118,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920125/n-arizona-cal-poly"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920964",
@@ -6751,7 +7159,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920964/morehead-st-elon"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401920975",
@@ -6792,7 +7200,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401920975/radford-chattanooga"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401921776",
@@ -6833,7 +7241,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401921776/michigan-villanova"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401926217",
@@ -6874,7 +7282,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401926217/presbyterian-tennessee-tech"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401917966",
@@ -6915,7 +7323,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401917966/sw-adventist-abilene-chrstn"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925099",
@@ -6956,7 +7364,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925099/texas-am-cc-oral-roberts"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401928998",
@@ -6997,7 +7405,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401928998/troy-valparaiso"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401925049",
@@ -7038,7 +7446,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401925049/lsu-n-orleans-texas-southern"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401917537",
@@ -7079,7 +7487,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401917537/bradley-pacific"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "CBB-401909567",
@@ -7120,7 +7528,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909567/washington-st-duke"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         }
       ]
     },
@@ -7134,15 +7542,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-11-19T23:09:54Z",
+      "lastAttemptAt": "2026-11-20T03:37:57Z",
       "requestedWindow": {
         "from": "2026-11-19",
         "through": "2026-11-21",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-11-19T23:09:54Z",
-      "lastSuccessfulAt": "2026-11-19T23:09:54Z",
+      "checkedAt": "2026-11-20T03:37:57Z",
+      "lastSuccessfulAt": "2026-11-20T03:37:57Z",
       "error": null,
       "window": {
         "from": "2026-11-19",
@@ -7170,15 +7578,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-11-19T23:09:54Z",
+      "lastAttemptAt": "2026-11-20T03:37:57Z",
       "requestedWindow": {
         "from": "2026-11-19",
         "through": "2026-11-21",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-11-19T23:09:54Z",
-      "lastSuccessfulAt": "2026-11-19T23:09:54Z",
+      "checkedAt": "2026-11-20T03:37:57Z",
+      "lastSuccessfulAt": "2026-11-20T03:37:57Z",
       "error": null,
       "window": {
         "from": "2026-11-19",
@@ -7206,9 +7614,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final/SO",
+          "period": 5,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7227,14 +7635,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 3,
+            "away": 4
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892742/kings-maple-leafs"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892743",
@@ -7247,9 +7655,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final/OT",
+          "period": 4,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7268,14 +7676,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 5,
+            "away": 6
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892743/flyers-senators"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892745",
@@ -7288,9 +7696,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 3,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7309,14 +7717,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 2,
+            "away": 5
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892745/blues-penguins"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892746",
@@ -7329,9 +7737,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 3,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7350,14 +7758,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 3,
+            "away": 6
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892746/sabres-capitals"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892747",
@@ -7370,9 +7778,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final/OT",
+          "period": 4,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7391,14 +7799,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 1,
+            "away": 2
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892747/canadiens-hurricanes"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892749",
@@ -7411,9 +7819,9 @@
           "kickoff": "2026-11-20T00:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final/OT",
+          "period": 4,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7432,14 +7840,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 4,
+            "away": 3
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892749/islanders-jets"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892744",
@@ -7452,9 +7860,9 @@
           "kickoff": "2026-11-20T00:30:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 7:30 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 3,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7473,14 +7881,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 3,
+            "away": 1
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892744/oilers-lightning"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892748",
@@ -7493,9 +7901,9 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
+          "status": "final",
+          "statusDetail": "Final",
+          "period": 3,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7514,14 +7922,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 2,
+            "away": 4
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892748/blue-jackets-blackhawks"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892750",
@@ -7534,10 +7942,10 @@
           "kickoff": "2026-11-20T01:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 8:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "2:10 - 3rd",
+          "period": 3,
+          "clock": "2:10",
           "teams": {
             "home": {
               "id": "3",
@@ -7555,14 +7963,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 1,
+            "away": 3
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/nhl/game/_/gameId/401892750/wild-flames"
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892750"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892751",
@@ -7575,10 +7983,10 @@
           "kickoff": "2026-11-20T02:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 9:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "2:29 - 2nd",
+          "period": 2,
+          "clock": "2:29",
           "teams": {
             "home": {
               "id": "17",
@@ -7596,14 +8004,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 3,
+            "away": 0
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/nhl/game/_/gameId/401892751/ducks-avalanche"
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892751"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892752",
@@ -7616,9 +8024,9 @@
           "kickoff": "2026-11-20T02:40:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 9:40 PM EST",
-          "period": 0,
+          "status": "in_progress",
+          "statusDetail": "End of 1st",
+          "period": 1,
           "clock": "0:00",
           "teams": {
             "home": {
@@ -7637,14 +8045,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 1,
+            "away": 1
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/nhl/game/_/gameId/401892752/canucks-kraken"
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892752"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892753",
@@ -7657,10 +8065,10 @@
           "kickoff": "2026-11-20T03:00:00Z",
           "timeConfirmed": true,
           "neutral": false,
-          "status": "scheduled",
-          "statusDetail": "11/19 - 10:00 PM EST",
-          "period": 0,
-          "clock": "0:00",
+          "status": "in_progress",
+          "statusDetail": "1:56 - 1st",
+          "period": 1,
+          "clock": "1:56",
           "teams": {
             "home": {
               "id": "37",
@@ -7678,14 +8086,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 0,
+            "away": 2
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/nhl/game/_/gameId/401892753/stars-golden-knights"
+            "url": "https://www.espn.com/nhl/game/_/gameId/401892753"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892754",
@@ -7726,7 +8134,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892754/oilers-hurricanes"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892755",
@@ -7767,7 +8175,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892755/blackhawks-flames"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892756",
@@ -7808,7 +8216,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892756/sabres-panthers"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892757",
@@ -7849,7 +8257,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892757/penguins-predators"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892758",
@@ -7890,7 +8298,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892758/capitals-bruins"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892759",
@@ -7931,7 +8339,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892759/blue-jackets-maple-leafs"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892760",
@@ -7972,7 +8380,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892760/flyers-canadiens"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892761",
@@ -8013,7 +8421,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892761/kings-senators"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892762",
@@ -8054,7 +8462,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892762/islanders-red-wings"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892763",
@@ -8095,7 +8503,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892763/devils-blues"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892764",
@@ -8136,7 +8544,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892764/golden-knights-jets"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892765",
@@ -8177,7 +8585,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892765/ducks-mammoth"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892766",
@@ -8218,7 +8626,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892766/wild-canucks"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "NHL-401892767",
@@ -8259,7 +8667,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/nhl/game/_/gameId/401892767/kraken-sharks"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         }
       ]
     },
@@ -8273,15 +8681,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-11-19T23:09:54Z",
+      "lastAttemptAt": "2026-11-20T03:37:57Z",
       "requestedWindow": {
         "from": "2026-11-19",
         "through": "2026-11-21",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-11-19T23:09:54Z",
-      "lastSuccessfulAt": "2026-11-19T23:09:54Z",
+      "checkedAt": "2026-11-20T03:37:57Z",
+      "lastSuccessfulAt": "2026-11-20T03:37:57Z",
       "error": null,
       "window": {
         "from": "2026-11-19",
@@ -8337,7 +8745,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401879233/fulham-manchester-city"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "EPL-401878754",
@@ -8378,7 +8786,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401878754/ipswich-town-tottenham-hotspur"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "EPL-401878756",
@@ -8419,7 +8827,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401878756/sunderland-aston-villa"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "EPL-401879235",
@@ -8460,7 +8868,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401879235/crystal-palace-coventry-city"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "EPL-401879236",
@@ -8501,7 +8909,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401879236/leeds-united-chelsea"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "EPL-401879238",
@@ -8542,7 +8950,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401879238/nottingham-forest-afc-bournemouth"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "EPL-401879232",
@@ -8583,7 +8991,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401879232/arsenal-newcastle-united"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         }
       ]
     },
@@ -8597,15 +9005,15 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-11-19T23:09:54Z",
+      "lastAttemptAt": "2026-11-20T03:37:57Z",
       "requestedWindow": {
         "from": "2026-11-19",
         "through": "2026-11-21",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-11-19T23:09:54Z",
-      "lastSuccessfulAt": "2026-11-19T23:09:54Z",
+      "checkedAt": "2026-11-20T03:37:57Z",
+      "lastSuccessfulAt": "2026-11-20T03:37:57Z",
       "error": null,
       "window": {
         "from": "2026-11-19",
@@ -8633,10 +9041,10 @@
           "kickoff": "2026-11-20T00:30:00Z",
           "timeConfirmed": true,
           "neutral": null,
-          "status": "scheduled",
-          "statusDetail": "Scheduled",
-          "period": null,
-          "clock": "0'",
+          "status": "final",
+          "statusDetail": "FT",
+          "period": 2,
+          "clock": "90'+8'",
           "teams": {
             "home": {
               "id": "12011",
@@ -8654,14 +9062,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 1,
+            "away": 3
           },
           "source": {
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401933535/fc-cincinnati-orlando-city-sc"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "MLS-401933555",
@@ -8674,10 +9082,10 @@
           "kickoff": "2026-11-20T03:00:00Z",
           "timeConfirmed": true,
           "neutral": null,
-          "status": "scheduled",
-          "statusDetail": "Scheduled",
-          "period": null,
-          "clock": "0'",
+          "status": "in_progress",
+          "statusDetail": "28'",
+          "period": 1,
+          "clock": "28'",
           "teams": {
             "home": {
               "id": "9726",
@@ -8695,14 +9103,14 @@
             }
           },
           "scores": {
-            "home": null,
-            "away": null
+            "home": 0,
+            "away": 0
           },
           "source": {
             "name": "ESPN",
-            "url": "https://www.espn.com/soccer/match/_/gameId/401933555/real-salt-lake-seattle-sounders-fc"
+            "url": "https://www.espn.com/soccer/match/_/gameId/401933555"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "MLS-401933733",
@@ -8743,7 +9151,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401933733/philadelphia-union-new-england-revolution"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "MLS-401933732",
@@ -8784,7 +9192,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401933732/portland-timbers-fc-dallas"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         },
         {
           "id": "MLS-401933739",
@@ -8825,7 +9233,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/soccer/match/_/gameId/401933739/columbus-crew-inter-miami-cf"
           },
-          "updatedAt": "2026-11-19T23:09:54Z"
+          "updatedAt": "2026-11-20T03:37:57Z"
         }
       ]
     }
