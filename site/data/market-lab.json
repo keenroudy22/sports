@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 352,
-   "gamesQuoted": 354,
-   "moneylineSnapshots": 1629,
+   "gamesGraded": 354,
+   "gamesQuoted": 368,
+   "moneylineSnapshots": 1643,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,70 @@
      "season": 2027
     },
     {
-     "gamesGraded": 313,
-     "gamesQuoted": 313,
+     "gamesGraded": 315,
+     "gamesQuoted": 327,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1629,
+   "snapshots": 1643,
    "status": "capturing",
-   "totalSnapshots": 1629
+   "totalSnapshots": 1643
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "DAL",
+    "id": "9",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/dal.png",
+    "name": "Dallas Stars",
+    "shortName": "Stars"
+   },
+   "awayScore": 4,
+   "gameId": "NHL-401892753",
+   "gradedAt": "2026-11-20T16:25:11Z",
+   "home": {
+    "abbreviation": "VGK",
+    "id": "37",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/vgk.png",
+    "name": "Vegas Golden Knights",
+    "shortName": "Golden Knights"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-11-20T03:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final/SO",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "VAN",
+    "id": "22",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
+    "name": "Vancouver Canucks",
+    "shortName": "Canucks"
+   },
+   "awayScore": 1,
+   "gameId": "NHL-401892752",
+   "gradedAt": "2026-11-20T16:25:11Z",
+   "home": {
+    "abbreviation": "SEA",
+    "id": "124292",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/sea.png",
+    "name": "Seattle Kraken",
+    "shortName": "Kraken"
+   },
+   "homeScore": 5,
+   "kickoff": "2026-11-20T02:40:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "ANA",
@@ -2593,59 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "UTA",
-    "id": "129764",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/uta.png",
-    "name": "Utah Mammoth",
-    "shortName": "Mammoth"
-   },
-   "awayScore": 4,
-   "gameId": "NHL-401892648",
-   "gradedAt": "2026-11-06T02:55:12Z",
-   "home": {
-    "abbreviation": "MTL",
-    "id": "10",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/mtl.png",
-    "name": "Montreal Canadiens",
-    "shortName": "Canadiens"
-   },
-   "homeScore": 5,
-   "kickoff": "2026-11-06T00:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final/OT",
-   "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "VGK",
-    "id": "37",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/vgk.png",
-    "name": "Vegas Golden Knights",
-    "shortName": "Golden Knights"
-   },
-   "awayScore": 2,
-   "gameId": "NHL-401892649",
-   "gradedAt": "2026-11-06T02:55:12Z",
-   "home": {
-    "abbreviation": "DET",
-    "id": "5",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png",
-    "name": "Detroit Red Wings",
-    "shortName": "Red Wings"
-   },
-   "homeScore": 1,
-   "kickoff": "2026-11-06T00:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-20T13:51:21Z"
+ "updatedAt": "2026-11-20T16:25:11Z"
 }
