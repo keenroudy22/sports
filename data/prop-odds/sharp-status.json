@@ -1,12 +1,12 @@
 {
- "at": "2026-11-20T11:45:08Z",
+ "at": "2026-11-20T13:32:26Z",
  "confirmed": {
   "CFB-401856746": "2026-11-20T04:33:37Z",
-  "CFB-401856748": "2026-11-20T11:46:09Z",
-  "CFB-401856749": "2026-11-20T11:46:09Z",
+  "CFB-401856748": "2026-11-20T13:33:21Z",
+  "CFB-401856749": "2026-11-20T13:33:21Z",
   "CFB-401856750": "2026-11-20T04:33:37Z",
   "CFB-401856754": "2026-11-20T04:33:37Z",
-  "CFB-401856866": "2026-11-20T11:46:09Z",
+  "CFB-401856866": "2026-11-20T13:33:21Z",
   "CFB-401856867": "2026-11-20T11:46:09Z",
   "CFB-401856868": "2026-11-20T04:33:37Z",
   "CFB-401856869": "2026-11-19T19:53:33Z",
@@ -37,33 +37,33 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 999,
-    "fanduel": 392
+    "draftkings": 801,
+    "fanduel": 741
    },
    "eventsListed": 138,
    "eventsMatched": 62,
    "games": 64,
    "marketTypes": {
-    "player_longest_passing_completion": 5,
-    "player_longest_reception": 20,
-    "player_longest_rush": 10,
-    "player_passing_+_rushing_yards": 116,
+    "player_longest_passing_completion": 3,
+    "player_longest_reception": 12,
+    "player_longest_rush": 6,
+    "player_passing_+_rushing_yards": 70,
     "player_passing_attempts": 23,
     "player_passing_completions": 20,
-    "player_passing_touchdowns": 33,
-    "player_passing_yards": 159,
-    "player_passing_yards_combo_": 27,
-    "player_receiving_yards": 303,
+    "player_passing_touchdowns": 35,
+    "player_passing_yards": 144,
+    "player_passing_yards_combo_": 18,
+    "player_receiving_yards": 322,
     "player_receiving_yards_combo_": 33,
-    "player_receptions": 33,
+    "player_receptions": 86,
     "player_rushing_attempts": 26,
-    "player_rushing_yards": 149,
+    "player_rushing_yards": 214,
     "player_rushing_yards_combo_": 29,
     "player_touchdowns": 41,
-    "point_spread": 364
+    "point_spread": 460
    },
    "requestsLeft": 0,
-   "rows": 1391,
+   "rows": 1542,
    "slateGames": [
     "Vanderbilt Commodores at Florida Gators 2026-11-21T17:00Z",
     "Wofford Terriers at Ole Miss Rebels 2026-11-21T17:00Z",
@@ -141,7 +141,7 @@
       "fanduel": "36323421",
       "fliff": "428199_c_p_209_prematch",
       "hardrock": "2251922835173933486",
-      "kalshi": "KXNCAAFGAME-26NOV21MONMCAMP",
+      "kalshi": "KXNCAAFSPREAD-26NOV21MONMCAMP",
       "novig": "01a1d61f-9fee-7621-b31a-9be67ff7465b",
       "onexbet": "772462978",
       "polymarket": "nfl_campbell_monmouth_2026-11-21_b2",
@@ -248,7 +248,7 @@
       "fanduel": "36323410",
       "fliff": "428195_c_p_209_prematch",
       "hardrock": "6492683366110986667",
-      "kalshi": "KXNCAAFTOTAL-26NOV21FORHC",
+      "kalshi": "KXNCAAFSPREAD-26NOV21FORHC",
       "novig": "01a1d5e8-bd78-7db0-a49d-805f63f4e3d5",
       "onexbet": "772462960",
       "polymarket": "nfl_fordham_holycross_2026-11-21_b2",
@@ -284,7 +284,7 @@
       "fanduel": "36323400",
       "fliff": "428192_c_p_209_prematch",
       "hardrock": "2980688298934141344",
-      "kalshi": "KXNCAAF1H-26NOV21FURVMI",
+      "kalshi": "KXNCAAFGAME-26NOV21FURVMI",
       "novig": "01a1d5e8-b71d-72a1-8c6b-cc84512bf649",
       "onexbet": "772462961",
       "polymarket": "nfl_furman_vmi_2026-11-21_b2",
@@ -356,7 +356,7 @@
       "fanduel": "36323423",
       "fliff": "428197_c_p_209_prematch",
       "hardrock": "5191211174802358687",
-      "kalshi": "KXNCAAF1H-26NOV21HOWNORF",
+      "kalshi": "KXNCAAFSPREAD-26NOV21HOWNORF",
       "novig": "01a1d5e8-b7bd-7831-821d-d97c4e58eda5",
       "onexbet": "772462963",
       "polymarket": "nfl_howard_norfolkstate_2026-11-21_b2",
@@ -383,7 +383,7 @@
      "type": "fixture"
     },
     {
-     "away": "Long Island University",
+     "away": "LIU",
      "external": {
       "bet365": "204594627",
       "fanatics_markets": "8607017",
@@ -402,7 +402,7 @@
      },
      "home": "Robert Morris",
      "sample": {
-      "away_team": "Long Island University",
+      "away_team": "LIU",
       "home_team": "Robert Morris",
       "markets": [
        "1st_half_moneyline_3-way",
