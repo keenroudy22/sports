@@ -164,8 +164,7 @@ def from_stores(stores, now):
                    and int(rung.get('run') or 0) == state['run'] - 1), None)
     return {'run': int(state['run']), 'step': int(state['step']), 'stake': int(state['stake']),
             'banked': int(state['banked']), 'saved': int(state['saved']), 'cashed': cashed,
-            'open': opened, 'missed': missed, 'weekly': ladder.weekly_status(ctx.first, now),
-            'reviewedDaily': now >= ladder.REVIEWED_DAILY_FROM}, load_games(stores.slate)
+            'open': opened, 'missed': missed, 'weekly': ladder.weekly_status(ctx.first, now)}, load_games(stores.slate)
 
 
 def plan_from(step, stake, banked):
@@ -217,6 +216,7 @@ def public_route(state, now, games):
     return {'run': state['run'], 'step': state['step'], 'saved': state['saved'],
             'banked': state['banked'], 'stake': state['stake'],
             'goal': GOAL, 'rows': rows, 'image': 'data/cards/climb-route.png',
+            'reviewedDaily': now >= ladder.REVIEWED_DAILY_FROM,
             'weekly': {k:v for k,v in (state.get('weekly') or {}).items() if k != 'ids'}}
 
 

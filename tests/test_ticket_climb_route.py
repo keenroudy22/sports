@@ -51,6 +51,15 @@ class RouteTests(unittest.TestCase):
         self.assertNotIn('>TUE ', card.svg())
         self.assertEqual(kit.qa(card, 'unselected-route'), [])
 
+    def test_public_route_exposes_the_reviewed_daily_rule_at_the_cutover(self):
+        state, _ = route.fixture_states(NOW, self.games)['open']
+        cutover = ladder.REVIEWED_DAILY_FROM
+        earlier = route.public_route(state, cutover - timedelta(seconds=1), self.games)
+        current = route.public_route(state, cutover, self.games)
+        self.assertFalse(earlier['reviewedDaily'])
+        self.assertTrue(current['reviewedDaily'])
+        self.assertEqual(earlier['rows'], current['rows'])
+
     def test_real_history_can_grow_without_squeezing_rows_or_clipping_footer(self):
         state, instant = route.fixture_states(NOW, self.games)['midclimb']
         state = dict(state, cashed=[dict(state['cashed'][0], step=i + 1) for i in range(15)], open=None)
