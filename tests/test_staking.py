@@ -25,6 +25,31 @@ def context(**extra):
 
 
 class StakingTests(unittest.TestCase):
+    def test_owner_cancellation_releases_nba_fun_slot_only_after_discord_deletion(self):
+        import json
+        import nba_fun_record
+        now = datetime(2026, 11, 20, 19, tzinfo=timezone.utc)
+        key = 'cancelled-nba-fun'
+        original = {'id': key, 'family': 'NBA-alts', 'parlayStyle': 'short',
+                    'publishedAt': '2026-11-20T18:55:00Z'}
+        post = {'id': key, 'kind': 'buffer:play', 'cancelledAt': '2026-11-20T18:56:00Z',
+                'doNotRepost': True, 'discord': {'state': 'sent'}}
+        candidate = {'id': 'replacement', 'parlayStyle': 'short'}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(nba_fun_record, 'rows', return_value={key: original}):
+            root = Path(tmp)
+            (root / 'data').mkdir()
+            log = root / 'data/x-posted.json'
+            ctx = context()
+            ctx.now, ctx.latest = now, {}
+            for state, x_sent, blocked in [('sent', False, True), ('deleted', False, False), ('deleted', True, True)]:
+                with self.subTest(state=state, x_sent=x_sent):
+                    post['discord'].update(state=state, deletedAt='2026-11-20T18:58:00Z')
+                    post['sentAt'] = '2026-11-20T18:57:00Z' if x_sent else None
+                    log.write_text(json.dumps({'posts': [post]}))
+                    ctx.risk_external, _ = staking.external(root, now)
+                    self.assertEqual(key in ctx.risk_external, blocked)
+                    self.assertEqual(gates.longshot_one_per_day(candidate, ctx).ok, not blocked)
+
     def test_climb_is_separately_funded_from_owner_cutover(self):
         ctx = context()
         ctx.now = staking.SEPARATE_CLIMB

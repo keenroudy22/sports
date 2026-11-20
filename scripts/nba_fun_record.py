@@ -83,6 +83,24 @@ def public_rows(root, posts, now):
     return result
 
 
+def risk_rows(root, posts, now):
+    """Keep original exposure until every delivered copy of an owner cancellation is gone."""
+    cancelled, sent = set(), set()
+    for post in posts:
+        if post.get('kind') != 'buffer:play':
+            continue
+        key = post.get('id')
+        mirror = post.get('discord') or {}
+        if post.get('sentAt') or mirror.get('state') == 'sent':
+            sent.add(key)
+        if (post.get('doNotRepost') is True and post.get('cancelledAt')
+                and mirror.get('state') == 'deleted' and mirror.get('deletedAt')
+                and max(gates.when(post['cancelledAt']), gates.when(mirror['deletedAt'])) <= now):
+            cancelled.add(key)
+    return {key: row for key, row in rows(root, now).items()
+            if row.get('result') or key not in cancelled or key in sent}
+
+
 def original_row(pick):
     """Validate and project the exact public fields before an external send."""
     if (pick.get('league') != 'NBA' or pick.get('family') != 'NBA-alts'
