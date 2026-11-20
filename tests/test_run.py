@@ -1748,28 +1748,36 @@ class BufferPostsTests(unittest.TestCase):
 
     def test_missing_deployed_card_does_not_hold_the_posting_lock(self):
         import buffer_post
+        import cbb_picks
         import x_post
         from unittest import mock
         now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
         ctx = type('Ctx', (), {'first': {}, 'latest': {}, 'player_team': {}})()
         plans = [('a', 'play', 'text', now, 'a')]
-        answers = iter([False])
+        answers = iter([False, True])
         slept, calls = [], []
         status = {'errors': [], 'x': {}}
+
+        def college_plan(at, *args, **kwargs):
+            return [('CBB-a', 'cbb-pick', 'college pick', at, 'cbb-a')]
+
         with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
                 mock.patch.object(x_post, 'load_log', return_value={'posts': []}), mock.patch.object(x_post, 'save_log'), \
                 mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
                 mock.patch.object(buffer_post, 'reconcile', return_value=[]), \
-                mock.patch.object(buffer_post, 'plan', side_effect=lambda *a, **k: calls.append(a[3]) or plans), \
+                mock.patch.object(buffer_post, 'plan', side_effect=lambda *a, **k: calls.append(a[3]) or list(plans)), \
                 mock.patch.object(buffer_post, 'daily_limit', return_value={'remaining': 50}), \
                 mock.patch.object(buffer_post, 'reachable', side_effect=lambda url: next(answers)), \
+                mock.patch.object(cbb_picks, 'queue_discord'), \
+                mock.patch.object(cbb_picks, 'plans', side_effect=college_plan) as college, \
                 mock.patch.object(buffer_post, 'schedule') as schedule:
             run.buffer_posts(now, ctx, {}, [], status, deploying=True, sleep=slept.append, clock=lambda: 0)
         self.assertEqual(slept, [], 'a hosted graphics wait must not block Discord/private releases')
         self.assertEqual(status['x']['cardsAwaitingDeploy'], 1)
         self.assertEqual(len(calls), 2, 'fresh due times still reach the guarded scheduler')
+        self.assertEqual([call.args[0] for call in college.call_args_list], calls)
         schedule.assert_called_once()
-        self.assertEqual(schedule.call_args[0][0], plans)
+        self.assertEqual(schedule.call_args[0][0], plans + college_plan(calls[1]))
         self.assertEqual(status['errors'], [])
 
     def test_a_house_card_is_checked_at_its_own_address_and_a_held_post_is_reported(self):

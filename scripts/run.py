@@ -3339,10 +3339,11 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             if waiting:
                 status['x']['cardsAwaitingDeploy'] = len(waiting)
                 log(f'buffer: {len(waiting)} card(s) await deployment; next existing pass retries without blocking delivery')
-            later = datetime.now(timezone.utc)
-            plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team,
+            replan_at = max(now, datetime.now(timezone.utc))
+            plans = buffer_post.plan(ctx.first, ctx.latest, games, replan_at, log_book, ctx.player_team,
                                      quotes=quotes, news=news, log=log)
-            plans += nba_trial_runtime.social_plans(max(now, later), log_book, reserved=plans)
+            plans += nba_trial_runtime.social_plans(replan_at, log_book, reserved=plans)
+            plans += cbb_picks.plans(replan_at, log_book, reserved=plans)
             if results_first_hold:
                 plans = [plan for plan in plans
                          if not receipts.waits_for_morning_results(plan[0], plan[1], eastern_date(plan[3]))]
