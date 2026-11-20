@@ -1,0 +1,231 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-20T14:02:16Z",
+  "summary": "Released 1: Ladder step 4: 2 legs at DraftKings -196 at DraftKings.",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "CFB-2026-W12-ladder-1120-c4s4-dk",
+      "title": "Ladder step 4: 2 legs at DraftKings",
+      "status": "active",
+      "favorite": false,
+      "parlayType": "ladder",
+      "riskUnits": 0.25,
+      "ladder": {
+        "run": 4,
+        "step": 4,
+        "stake": 95,
+        "payout": 143,
+        "banked": 58,
+        "bankThisWin": 29,
+        "bankedAfter": 87,
+        "nextStake": 114,
+        "totalAfter": 201,
+        "bankPercent": 20,
+        "ridePercent": 80,
+        "start": 50,
+        "goal": 1000
+      },
+      "legs": [
+        {
+          "gameId": "CFB-401858303",
+          "title": "Duke -2.5",
+          "kickoff": "2026-11-21T00:30Z",
+          "marketType": "spread",
+          "direction": "home",
+          "line": -2.5,
+          "mainLine": -13.5,
+          "odds": -504,
+          "book": "DraftKings",
+          "alternate": true,
+          "marketWindow": "Full game",
+          "source": "https://sportsbook.draftkings.com/event/clemson-%40-duke/34999618",
+          "observedAt": "2026-11-20T13:52:16.560Z",
+          "researchCase": {
+            "why": "Duke allows 3.2 yards a carry, and Clemson lost both experienced quarterbacks last week. I only need Duke by a field goal.",
+            "risk": "Clemson has won three straight road games and ranks fourth nationally in passes defended. A turnover or stalled Duke drive can keep this inside a field goal.",
+            "availability": "Dabo Swinney named Trent Pearman the starter and ruled out Christopher Vizzina, with Tait Reynolds out for the year. Duke game notes list Nate Sheppard as its leading runner; the final ACC game-day list is due two hours before kickoff.",
+            "sources": [
+              {
+                "url": "https://theacc.com/news/2026/11/19/week-12-friday-preview-acc-football-fridays-opens-pivotal-week-12-slate.aspx",
+                "fact": "Duke allows 3.2 yards per carry; Clemson has won three straight road games and ranks fourth in passes defended.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              },
+              {
+                "url": "https://www.tigernet.com/clemson-football/news/swinney-breaks-down-clemsons-updated-qb-depth-chart-provides-injury-updates-50119",
+                "fact": "Head coach names Pearman the starter and rules both Reynolds and Vizzina out.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              },
+              {
+                "url": "https://data.clemsontigers.com/pdf/football/2026-27/Notes/2026-11-Duke.pdf",
+                "fact": "Official notes list Pearman 10 for 19, 86 yards with two interceptions for the season.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              }
+            ]
+          }
+        },
+        {
+          "gameId": "CFB-401866468",
+          "title": "Toledo -5.5",
+          "kickoff": "2026-11-21T00:30Z",
+          "marketType": "spread",
+          "direction": "home",
+          "line": -5.5,
+          "mainLine": -16.5,
+          "odds": -380,
+          "book": "DraftKings",
+          "alternate": true,
+          "marketWindow": "Full game",
+          "source": "https://sportsbook.draftkings.com/event/bowling-green-%40-toledo/34999619",
+          "observedAt": "2026-11-20T13:52:16.560Z",
+          "researchCase": {
+            "why": "Toledo is 5–1 at home with a +95 scoring margin and leads the MAC allowing opponents to convert only 32.7% on third down. I like laying less than a touchdown.",
+            "risk": "This is a rivalry. Bowling Green won the last meeting and comes in off 33 points against Kent State. Toledo only beat Sacramento State by three in its recent road game.",
+            "availability": "Toledo reports Connor Walendzak back last week with 117 rushing yards and has CJ Miller in the rotation. Reviewed the Toledo team notes and morning matchup coverage. A separate final availability list was not verified.",
+            "sources": [
+              {
+                "url": "https://utrockets.com/news/2026/11/18/football-toledo-welcomes-bowling-green-to-the-glass-bowl-for-battle-of-i-75",
+                "fact": "Official preview confirms home point differential, third-down defense, Walendzak’s return and Bowling Green’s most recent result.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              },
+              {
+                "url": "https://utrockets.com/sports/football/schedule",
+                "fact": "Toledo official score shows 20–17 win at Sacramento State on November 4.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              }
+            ]
+          }
+        }
+      ],
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "CFB-401858303",
+        "CFB-401866468"
+      ],
+      "book": "DraftKings",
+      "odds": -196,
+      "quotedAt": "2026-11-20T13:52:16.560Z",
+      "priceEstimated": false,
+      "expiresAt": "2026-11-20T15:52:16Z",
+      "quoteType": "sportsbook",
+      "confidence": 1,
+      "edge": "Desk-researched alternate ticket. No validated win probability or positive-EV claim.",
+      "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://data.clemsontigers.com/pdf/football/2026-27/Notes/2026-11-Duke.pdf",
+        "https://sportsbook.draftkings.com/event/bowling-green-%40-toledo/34999619",
+        "https://theacc.com/news/2026/11/19/week-12-friday-preview-acc-football-fridays-opens-pivotal-week-12-slate.aspx",
+        "https://utrockets.com/news/2026/11/18/football-toledo-welcomes-bowling-green-to-the-glass-bowl-for-battle-of-i-75",
+        "https://utrockets.com/sports/football/schedule",
+        "https://www.espn.com/college-football/game/_/gameId/401858303",
+        "https://www.espn.com/college-football/game/_/gameId/401866468",
+        "https://www.tigernet.com/clemson-football/news/swinney-breaks-down-clemsons-updated-qb-depth-chart-provides-injury-updates-50119"
+      ],
+      "selectionMethod": "sourced-climb-review-v1",
+      "researchReview": {
+        "method": "sourced-climb-review-v1",
+        "reviewer": "kookn-desk",
+        "reviewedAt": "2026-11-20T13:53:51.435081+00:00",
+        "ticketVerified": true,
+        "ticketSource": "https://sportsbook.draftkings.com/event/bowling-green-%40-toledo/34999619",
+        "receipt": "Indiana DraftKings visible betslip checked at 13:52:16.560Z. Duke -2.5 at -504 vs Clemson and Toledo -5.5 at -380 vs Bowling Green. Two full-game alternate spreads, actual unboosted two-pick parlay -196. All wager fields blank."
+      },
+      "why": "Duke allows 3.2 yards a carry, and Clemson lost both experienced quarterbacks last week. I only need Duke by a field goal. Toledo is 5–1 at home with a +95 scoring margin and leads the MAC allowing opponents to convert only 32.7% on third down. I like laying less than a touchdown.",
+      "risks": [
+        "Clemson has won three straight road games and ranks fourth nationally in passes defended. A turnover or stalled Duke drive can keep this inside a field goal.",
+        "This is a rivalry. Bowling Green won the last meeting and comes in off 33 points against Kent State. Toledo only beat Sacramento State by three in its recent road game."
+      ],
+      "risk": "Clemson has won three straight road games and ranks fourth nationally in passes defended. A turnover or stalled Duke drive can keep this inside a field goal. This is a rivalry. Bowling Green won the last meeting and comes in off 33 points against Kent State. Toledo only beat Sacramento State by three in its recent road game. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Duke allows 3.2 yards a carry, and Clemson lost both experienced quarterbacks last week. I only need Duke by a field goal. Toledo is 5–1 at home with a +95 scoring margin and leads the MAC allowing opponents to convert only 32.7% on third down. I like laying less than a touchdown.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-11-20T13:54:15Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Clemson has won three straight road games and ranks fourth nationally in passes defended. A turnover or stalled Duke drive can keep this inside a field goal. This is a rivalry. Bowling Green won the last meeting and comes in off 33 points against Kent State. Toledo only beat Sacramento State by three in its recent road game. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-11-20T13:54:15Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "CFB-401858303",
+              "title": "Duke -2.5",
+              "line": -2.5,
+              "price": -504,
+              "book": "DraftKings"
+            },
+            {
+              "gameId": "CFB-401866468",
+              "title": "Toledo -5.5",
+              "line": -5.5,
+              "price": -380,
+              "book": "DraftKings"
+            }
+          ],
+          "best": {
+            "book": "DraftKings",
+            "price": -196,
+            "time": "2026-11-20T13:52:16.560Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://data.clemsontigers.com/pdf/football/2026-27/Notes/2026-11-Duke.pdf",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://sportsbook.draftkings.com/event/bowling-green-%40-toledo/34999619",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://theacc.com/news/2026/11/19/week-12-friday-preview-acc-football-fridays-opens-pivotal-week-12-slate.aspx",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://utrockets.com/news/2026/11/18/football-toledo-welcomes-bowling-green-to-the-glass-bowl-for-battle-of-i-75",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://utrockets.com/sports/football/schedule",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858303",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866468",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.tigernet.com/clemson-football/news/swinney-breaks-down-clemsons-updated-qb-depth-chart-provides-injury-updates-50119",
+            "time": "2026-11-20T13:54:15Z"
+          }
+        ],
+        "partial": true
+      },
+      "publishedAt": "2026-11-20T14:02:16Z"
+    }
+  ]
+}
