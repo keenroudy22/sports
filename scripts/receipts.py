@@ -205,7 +205,7 @@ def result_detail(pick):
 
 def result_line(pick, games=None):
     """The compact public receipt row, with the result first and a useful second line when one exists."""
-    main = f"{MARKS[pick['result']]} {label(pick, games)}"
+    main = f"{MARKS[pick['result']]} {pick.get('dailyCaptionSelection') or label(pick, games)}"
     detail = result_detail(pick)
     return f'{main} · {detail}' if detail else main
 
@@ -321,7 +321,7 @@ def fit_result_rows(rows, head, tail, games=None):
         return text
     # Margins and explanatory detail go first. The attached receipt still holds
     # every full row; X never shows a win while concealing a loss for length.
-    short = [f"{MARKS[row['result']]} {label(row, games)}" for row in rows]
+    short = [f"{MARKS[row['result']]} {row.get('dailyCaptionSelection') or label(row, games)}" for row in rows]
     kept = list(range(len(rows)))
     while True:
         omitted = [rows[index]['result'] for index in range(len(rows)) if index not in kept]
@@ -418,9 +418,19 @@ def cbb_daily_rows(day, as_of, log_book):
             continue
         teams = play['game']['teams']
         selection = cbb_picks.selection(play)
+        schools = {}
+        for side, team in teams.items():
+            short = team.get('shortName') or team.get('name') or team['abbreviation']
+            full = team.get('name') or ''
+            if short.endswith(' St') and full.startswith(short[:-2] + 'State'):
+                short = short[:-2] + 'State'
+            schools[side] = short
         if play['marketType'] == 'total':
+            public_selection = f"{schools['away']}/{schools['home']} {selection}"
             selection = f"{teams['away']['abbreviation']}/{teams['home']['abbreviation']} {selection}"
-        row = dict(play, posted=True, dailySelection=selection)
+        else:
+            public_selection = f"{schools[play['direction']]} {play['line']:+g}"
+        row = dict(play, posted=True, dailySelection=selection, dailyCaptionSelection=public_selection)
         if not row.get('settledAt') or gates.when(row['settledAt']) > as_of:
             row.pop('result', None)
         if row.get('result') and row.get('actual') is not None:
@@ -454,9 +464,16 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     opener = f"Late, but here's {name}.\n\n" if late else ''
     head = f"{opener}{name}: {headline(rows)}."
     tail = leagues(rows)
-    text = fit_result_rows(shown, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
+    if day == date(2026, 11, 19):
+        shown = [dict(r, dailyCaptionSelection='+696 Houston Texans parlay')
+                 if r['id'] == 'NFL-2026-11-19-prop-ticket-3ba30e34b6ea9820' else r for r in shown]
+        head = f"Thursday recap 🍳 {headline(rows)} on straights"
+        tail = (f"Straights {x_post.summarize(straight)['units']:+g}u · "
+                f"Parlays {record_text(x_post.summarize(fun))} · "
+                f"Full card {x_post.summarize(rows)['units']:+g}u")
+    text = fit_result_rows(shown, head, tail.strip(), games)
     card = f'receipt-day-{day.isoformat()}' + ('-all-sports' if basketball or fun_rows else '')
     if day == date(2026, 11, 19) and any(r['id'] == 'NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4' for r in fun):
         # The first image was published for the incomplete recap. Wait for the
