@@ -10,6 +10,21 @@ NOW=datetime(2026,10,22,20,tzinfo=timezone.utc)
 
 
 class SocialLearningTests(unittest.TestCase):
+    def test_seven_day_research_hold_uses_eastern_publication_day(self):
+        before = datetime(2026, 11, 20, 4, 59, tzinfo=timezone.utc)
+        start = before + timedelta(minutes=1)
+        end = start + timedelta(days=7)
+        for key in ('research:morning:2026-11-20', 'research:numbers:2026-11-20',
+                    'nba-projections-2026-11-20', 'sheet:NFL:2026-11-22'):
+            self.assertIsNone(s.research_trial_hold(key, before))
+            self.assertTrue(s.research_trial_hold(key, start))
+            self.assertEqual(b.queued_relevance_issues({'id': key, 'dueAt': gates.stamp(start)}, before),
+                             [s.research_trial_hold(key, start)])
+            self.assertIsNone(s.research_trial_hold(key, end))
+        for key in ('receipt:day:2026-11-19', 'research:matchup:2026-11-20',
+                    'research:nfl-1q-ticket:2026-11-20', 'NBA-reviewed-123', 'NFL-prop-ticket'):
+            self.assertIsNone(s.research_trial_hold(key, start))
+
     def test_missing_first_metrics_are_bounded_across_passes_and_failures(self):
         morning = NOW.replace(hour=8)
         entries = [dict(id=str(i), bufferPostId=str(i),

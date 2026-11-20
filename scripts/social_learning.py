@@ -1,10 +1,24 @@
 """Comparable-age editorial evidence. Never changes wagers, stakes or results."""
 from statistics import median
 import math
-from datetime import timedelta
+import re
+from datetime import date, timedelta
 import gates
 
 CHECKPOINTS = (24, 72, 168)
+RESEARCH_TRIAL_START = date(2026, 11, 20)
+RESEARCH_TRIAL_END = date(2026, 11, 27)
+GENERIC_RESEARCH = re.compile(
+    r'(?:research:(?:morning|numbers):|nba-projections-|sheet:(?:NFL|CFB):)\d{4}-\d{2}-\d{2}'
+)
+
+
+def research_trial_hold(post_id, publish_at):
+    """During the trial, leave routine leans and scoreboards off X."""
+    day = gates.eastern_date(publish_at)
+    if RESEARCH_TRIAL_START <= day < RESEARCH_TRIAL_END and GENERIC_RESEARCH.fullmatch(post_id or ''):
+        return 'Seven-day X trial holds routine leans and projection roundups'
+    return None
 
 
 def checkpoint(entry, now):

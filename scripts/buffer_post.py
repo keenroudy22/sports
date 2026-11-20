@@ -545,6 +545,10 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     for post in house:
         if set(post['key'].split('+')) & posted:
             continue
+        hold = social_learning.research_trial_hold(post['key'], max(now, post['due']))
+        if hold:
+            log(f"buffer: {post['key']} held: {hold}")
+            continue
         problems = receipts.guard(post)
         if problems:
             if refused is not None:
@@ -734,6 +738,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     results_checked = False
     for plan_row in plans:
         guid, kind, _, due, _ = plan_row
+        trial_hold = social_learning.research_trial_hold(guid, max(now, due))
+        if trial_hold:
+            log(f'buffer: {guid} held: {trial_hold}')
+            continue
         delivery_day = eastern_date(due)
         if receipts.waits_for_morning_results(guid, kind, delivery_day):
             if delivery_day > today and delivery_day >= receipts.MORNING_RECAP_FIRST:
@@ -1166,6 +1174,10 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
 
 
 def queued_relevance_issues(entry, now):
+    due = gates.when(entry['dueAt']) if entry.get('dueAt') else now
+    trial_hold = social_learning.research_trial_hold(entry.get('id'), max(now, due))
+    if trial_hold:
+        return [trial_hold]
     import nba_editorial
     if now < nba_editorial.RELEVANCE_START or not re.fullmatch(r'nba-(?:projections|trends|props)-\d{4}-\d{2}-\d{2}',str(entry.get('id') or '')):
         return []
