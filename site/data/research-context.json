@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-20T03:39:35Z",
+  "updatedAt": "2026-11-20T04:27:18Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -2767,6 +2767,24 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4839498",
+              "name": "Keylan Rutledge",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-11-20T04:16Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4839498/keylan-rutledge"
+            },
+            {
+              "id": "4429022",
+              "name": "Kayshon Boutte",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Hip",
+              "reportedAt": "2026-11-20T04:14Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429022/kayshon-boutte"
+            },
+            {
               "id": "3043109",
               "name": "Trent Brown",
               "position": "OT",
@@ -2788,7 +2806,7 @@
               "id": "4428989",
               "name": "Chris Braswell",
               "position": "DE",
-              "status": "Out",
+              "status": "Doubtful",
               "injury": "Knee",
               "reportedAt": "2026-11-20T01:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428989/chris-braswell"
@@ -2956,15 +2974,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4033812/jake-hansen"
             },
             {
-              "id": "4429022",
-              "name": "Kayshon Boutte",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-17T05:25Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4429022/kayshon-boutte"
-            },
-            {
               "id": "2971573",
               "name": "Ka'imi Fairbairn",
               "position": "PK",
@@ -2981,15 +2990,6 @@
               "injury": null,
               "reportedAt": "2026-11-17T01:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/2983509/dare-ogunbowale"
-            },
-            {
-              "id": "4839498",
-              "name": "Keylan Rutledge",
-              "position": "G",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-17T01:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4839498/keylan-rutledge"
             }
           ]
         },
@@ -3000,9 +3000,9 @@
               "id": "4686468",
               "name": "Seth McGowan",
               "position": "RB",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Hamstring",
-              "reportedAt": "2026-11-20T03:14Z",
+              "reportedAt": "2026-11-20T03:28Z",
               "source": "https://www.espn.com/nfl/player/_/id/4686468/seth-mcgowan"
             },
             {
@@ -6010,7 +6010,7 @@
               "position": "WR",
               "status": "Injured Reserve",
               "injury": "Foot",
-              "reportedAt": "2026-11-19T21:05Z",
+              "reportedAt": "2026-11-19T18:28Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035687/michael-pittman-jr"
             },
             {
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "20",
-          "name": "Harrison Phillips",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-11-18T23:06:54Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3117255/harrison-phillips"
-        },
-        {
-          "teamId": "23",
-          "name": "Mason McCormick",
-          "from": "Out",
-          "to": "Injured Reserve",
-          "observedAt": "2026-11-18T23:06:54Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4368304/mason-mccormick"
-        },
-        {
-          "teamId": "23",
-          "name": "Patrick Queen",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-11-18T23:06:54Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4242207/patrick-queen"
-        },
-        {
-          "teamId": "10",
-          "name": "Tyjae Spears",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-11-18T23:06:54Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
-        },
-        {
           "teamId": "22",
           "name": "Max Melton",
           "from": "Active",
@@ -7764,11 +7732,43 @@
           "to": "Questionable",
           "observedAt": "2026-11-20T03:39:35Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685397/jordan-james"
+        },
+        {
+          "teamId": "34",
+          "name": "Keylan Rutledge",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-11-20T04:27:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4839498/keylan-rutledge"
+        },
+        {
+          "teamId": "34",
+          "name": "Kayshon Boutte",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-11-20T04:27:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4429022/kayshon-boutte"
+        },
+        {
+          "teamId": "34",
+          "name": "Chris Braswell",
+          "from": "Out",
+          "to": "Doubtful",
+          "observedAt": "2026-11-20T04:27:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4428989/chris-braswell"
+        },
+        {
+          "teamId": "11",
+          "name": "Seth McGowan",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-11-20T04:27:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4686468/seth-mcgowan"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-20T03:39:35Z",
-      "lastAttemptAt": "2026-11-20T03:39:35Z",
+      "checkedAt": "2026-11-20T04:27:18Z",
+      "lastAttemptAt": "2026-11-20T04:27:18Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-20T03:39:35Z",
-      "lastAttemptAt": "2026-11-20T03:39:35Z",
+      "checkedAt": "2026-11-20T04:27:18Z",
+      "lastAttemptAt": "2026-11-20T04:27:18Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
