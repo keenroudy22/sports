@@ -78,6 +78,7 @@ SOURCE = 'https://sharpapi.io/'
 SHADOW_NAME = 'ladder-shadow-2026.jsonl'
 SELECTIVE_FROM = date(2026, 10, 21)
 MIXED_REVIEW_FROM = datetime(2026, 11, 19, 16, 6, tzinfo=timezone.utc)
+REVIEWED_DAILY_FROM = datetime(2026, 11, 20, 14, tzinfo=timezone.utc)
 ALT_SHAPE_FROM = date(2026, 10, 21)
 MIN_LEGS = 2
 MAX_LEGS = 3
@@ -134,6 +135,16 @@ def weekly_refusal(ctx, now):
     week = weekly_status(ctx.first, now)
     if week['posted'] >= MAX_WEEKLY_STEPS:
         return f"weekly Climb limit reached: {week['posted']}/{MAX_WEEKLY_STEPS} steps since {week['weekStart']}; restarts do not reset it"
+    return None
+
+
+def reviewed_daily(ticket, now):
+    return now >= REVIEWED_DAILY_FROM and ticket.get('selectionMethod') == 'sourced-climb-review-v1'
+
+
+def reviewed_day_refusal(ctx, exclude=None):
+    if any(pick.get('parlayType') == 'ladder' for _, pick in gates.published_today(ctx, exclude)):
+        return 'Today’s Eastern Climb slot already has a published or privately reserved rung'
     return None
 
 

@@ -133,7 +133,8 @@ def candidate(ctx, games, now, spec):
     where = ladder.state(ctx.first, ctx.latest)
     if where['open']:
         return None, 'An existing Climb is still open'
-    held = ladder.weekly_refusal(ctx, now)
+    held = (ladder.reviewed_day_refusal(ctx) if ladder.reviewed_daily(spec, now)
+            else ladder.weekly_refusal(ctx, now))
     if held:
         return None, held
     ticket = dict(spec, selectionMethod=METHOD)

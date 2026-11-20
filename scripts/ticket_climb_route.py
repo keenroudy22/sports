@@ -164,7 +164,8 @@ def from_stores(stores, now):
                    and int(rung.get('run') or 0) == state['run'] - 1), None)
     return {'run': int(state['run']), 'step': int(state['step']), 'stake': int(state['stake']),
             'banked': int(state['banked']), 'saved': int(state['saved']), 'cashed': cashed,
-            'open': opened, 'missed': missed, 'weekly': ladder.weekly_status(ctx.first, now)}, load_games(stores.slate)
+            'open': opened, 'missed': missed, 'weekly': ladder.weekly_status(ctx.first, now),
+            'reviewedDaily': now >= ladder.REVIEWED_DAILY_FROM}, load_games(stores.slate)
 
 
 def plan_from(step, stake, banked):

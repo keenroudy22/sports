@@ -1562,6 +1562,9 @@ def ladder_selective(candidate, ctx):
                     and candidate.get('selectionMethod') == 'sourced-climb-review-v1')
     if not leagues <= {'NFL', 'CFB'} or (len(leagues) != 1 and not reviewed_mix):
         return Decision(False, 'ladder_selective', 'Climb uses one eligible football league; NBA ticket readiness is not established')
+    if ladder.reviewed_daily(candidate, ctx.now):
+        held = ladder.reviewed_day_refusal(ctx, exclude=candidate.get('id'))
+        return Decision(not held, 'ladder_selective', held or f'{len(legs)} legs in today’s reviewed Climb slot')
     week = ladder.weekly_status(ctx.first, ctx.now, exclude=candidate.get('id'))
     if week['posted'] >= ladder.MAX_WEEKLY_STEPS:
         return Decision(False, 'ladder_selective', f"weekly Climb limit reached: {week['posted']}/{ladder.MAX_WEEKLY_STEPS}; restarts do not reset it", week)

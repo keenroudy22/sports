@@ -121,6 +121,26 @@ class ReviewedClimbTests(unittest.TestCase):
         with patch.object(ladder,'v3_enabled',return_value=False):
             self.assertIsNone(ladder.manual_candidate(ctx,ctx.games,NOW,ticket)[0])
 
+    def test_reviewed_slot_after_weekly_cap_and_same_day_reservation(self):
+        ticket, ctx = fixture()
+        history = {
+            f'rung-{day}': {'parlayType': 'ladder', 'publishedAt': f'2026-10-{day}T15:00Z'}
+            for day in (26, 27, 28)
+        }
+        empty_state = ladder.state({}, {})
+        ctx.first = history
+        with patch.object(ladder, 'state', return_value=empty_state):
+            self.assertIn('weekly Climb limit', review.candidate(ctx, ctx.games, NOW, ticket)[1])
+            with patch.object(ladder, 'REVIEWED_DAILY_FROM', NOW):
+                pick, held = review.candidate(ctx, ctx.games, NOW, ticket)
+                self.assertIsNone(held)
+                self.assertTrue(gates.ladder_selective(pick, ctx).ok)
+                self.assertFalse(gates.ladder_selective(dict(pick, selectionMethod=None), ctx).ok)
+                ctx.first[pick['id']] = dict(pick, publishedAt=NOW.isoformat(), _pendingRelease=True)
+                self.assertTrue(gates.ladder_selective(pick, ctx).ok)
+                self.assertFalse(gates.ladder_selective(dict(pick, id='second-book'), ctx).ok)
+                self.assertIn('privately reserved', review.candidate(ctx, ctx.games, NOW, ticket)[1])
+
     def test_release_rechecks_and_review_is_frozen(self):
         ticket,ctx=fixture();pick,_=ladder.manual_candidate(ctx,ctx.games,NOW,ticket)
         self.assertIsNone(run.private_release_refusal(dict(pick=pick,league='CFB',discordSentAt='already'),ctx,NOW))

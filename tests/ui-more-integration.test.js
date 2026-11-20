@@ -103,6 +103,11 @@ test('the real app shared interface renders every lazy view with fixture data', 
   assert.match(climbHtml, /Target combined odds: -200 to -150/);
   assert.match(climbHtml, /This week: 1 of 3 steps used across all restarts/);
   assert.match(climbHtml, /NBA is research-only for the Climb/);
+  routeFixture.climbRoute.reviewedDaily = true;
+  const dailyClimb = await views.record({tab:'climb'});
+  assert.match(dailyClimb, /one qualifying rung per Eastern day/);
+  assert.doesNotMatch(dailyClimb, /This week: 1 of 3/);
+  routeFixture.climbRoute.reviewedDaily = false;
   routeFixture.climbRoute.weekly.weekStart = '2026-10-12';
   assert.doesNotMatch(await views.record({tab:'climb'}), /This week: 1 of 3/);
 });
