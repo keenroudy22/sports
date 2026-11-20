@@ -23,7 +23,7 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 351,
+   "gamesGraded": 352,
    "gamesQuoted": 354,
    "moneylineSnapshots": 1629,
    "seasons": [
@@ -34,7 +34,7 @@
      "season": 2027
     },
     {
-     "gamesGraded": 312,
+     "gamesGraded": 313,
      "gamesQuoted": 313,
      "phase": "regular",
      "season": 2027
@@ -46,6 +46,32 @@
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "ANA",
+    "id": "25",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ana.png",
+    "name": "Anaheim Ducks",
+    "shortName": "Ducks"
+   },
+   "awayScore": 0,
+   "gameId": "NHL-401892751",
+   "gradedAt": "2026-11-20T04:34:40Z",
+   "home": {
+    "abbreviation": "COL",
+    "id": "17",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/col.png",
+    "name": "Colorado Avalanche",
+    "shortName": "Avalanche"
+   },
+   "homeScore": 4,
+   "kickoff": "2026-11-20T02:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "CBJ",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "CHI",
-    "id": "4",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/chi.png",
-    "name": "Chicago Blackhawks",
-    "shortName": "Blackhawks"
-   },
-   "awayScore": 1,
-   "gameId": "NHL-401892650",
-   "gradedAt": "2026-11-06T02:55:12Z",
-   "home": {
-    "abbreviation": "TB",
-    "id": "20",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tb.png",
-    "name": "Tampa Bay Lightning",
-    "shortName": "Lightning"
-   },
-   "homeScore": 4,
-   "kickoff": "2026-11-06T00:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-20T04:34:13Z"
+ "updatedAt": "2026-11-20T04:34:40Z"
 }
