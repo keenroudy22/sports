@@ -203,7 +203,7 @@ def posted_rows(state):
     return rows
 
 
-def public_route(state, now, games):
+def public_route(state):
     """Small companion to the PNG, containing only real posted ledger rows."""
     rows = []
     for kind, row, window in posted_rows(state):
@@ -211,13 +211,10 @@ def public_route(state, now, games):
         rows.append({'kind': kind, 'step': row['step'], 'league': (window or {}).get('league'),
                      'day': day, 'clock': clock, 'bet': row['bet'], 'cashes': row['cashes'],
                      'bank': row['bank'], 'banked': row['banked'], 'ride': row['ride'],
-                     'id': row.get('id'), 'legs': row.get('legs') or [],
-                     'plannedAt': 'typical -160' if kind in ('next', 'plan') else None})
+                     'id': row.get('id'), 'legs': row.get('legs') or []})
     return {'run': state['run'], 'step': state['step'], 'saved': state['saved'],
             'banked': state['banked'], 'stake': state['stake'],
-            'goal': GOAL, 'rows': rows, 'image': 'data/cards/climb-route.png',
-            'reviewedDaily': now >= ladder.REVIEWED_DAILY_FROM,
-            'weekly': {k:v for k,v in (state.get('weekly') or {}).items() if k != 'ids'}}
+            'goal': GOAL, 'rows': rows, 'image': 'data/cards/climb-route.png'}
 
 
 DISC_CX, DISC_R = X1 + 22, 22

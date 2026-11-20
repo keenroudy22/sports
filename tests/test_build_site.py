@@ -1210,6 +1210,19 @@ class PayloadSplitTests(unittest.TestCase):
         self.assertEqual(build_site.recent_picks([source], now), [visible])
         self.assertEqual(source, dict(visible, dossier=dossier))
 
+    def test_public_prices_keep_only_the_displayed_projection_fields(self):
+        pick = {'probabilityAtPublication': {
+            'chance': .56, 'breakEven': .524, 'calibrated': True, 'edgePoints': 3.6,
+            'rawChance': .71, 'calibrationMethod': 'internal', 'calibrationN': 100}}
+        self.assertEqual(build_site.public_probability(pick),
+                         {'chance': .56, 'breakEven': .524, 'calibrated': True, 'edgePoints': 3.6})
+        line = {'book': 'FanDuel', 'marketWindow': 'internal', 'roleHold': 'qb',
+                'grade': {'projection': 51.2, 'raw': .71, 'model': 'internal', 'performanceNeed': 5}}
+        self.assertEqual(build_site.reader_line(line),
+                         {'book': 'FanDuel', 'roleHold': 'qb', 'grade': {'projection': 51.2}})
+        self.assertEqual(pick['probabilityAtPublication']['rawChance'], .71)
+        self.assertEqual(line['grade']['raw'], .71)
+
 
 class MoneylineCutoffDisplayTests(unittest.TestCase):
     def test_zero_moneyline_placeholder_is_not_a_point_spread_cutoff(self):
@@ -1274,14 +1287,14 @@ class BasketballPlayerDirectoryTests(unittest.TestCase):
                     'stats':{'min':minute_values[i],'pts':10+i,'reb':4,'ast':3,'pra':17+i,'pa':13+i,'pr':14+i,'ra':7,'fg3m':2}}]})
         return rows
 
-    def test_cbb_directory_builds_a_transparent_role_aware_projection(self):
+    def test_cbb_directory_keeps_the_projection_and_minutes_without_model_weights(self):
         index, shards, season = build_site.build_basketball_players(self.games(), 'CBB')
         projection = shards[101 % build_site.SHARDS['CBB']]['101']['projection']
         self.assertEqual((season, index[0][1], projection['status'], projection['games']),
                          (2027, 'Test Guard', 'ready', 5))
         self.assertGreater(projection['values']['pts'], 10)
         self.assertAlmostEqual(projection['minutes'], 30.7)
-        self.assertIn('per-minute', projection['method'])
+        self.assertNotIn('method', projection)
         self.assertEqual(index[0][7]['values'], projection['values'])
 
     def test_chart_shards_include_the_same_team_and_season_as_the_directory(self):

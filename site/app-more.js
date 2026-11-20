@@ -5,7 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (ctx) {
   const { C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME, maybe, get,
     indexGames, when, whenShort, dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved,
-    oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS,
+    oddsText, units, wl, roiOf, rate, receipt, climbRow, cumulativeUnits, OWNER_FLAGS,
     kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague,
     pickVM } = ctx;
   const { rail, clock, minus, slip, etDay } = ctx;
@@ -193,7 +193,25 @@ button.cal-day { cursor: pointer; }
       <p class="cal-legend">Green with a plus is a winning day, red with a minus a losing day, gray is even. A ring marks a day still waiting on a result. ${ledger === 'all' ? 'Every released straight and fun ticket counts once; Best bets keep their own record. Personal tickets without verified unit stakes count in W–L, not net units.' : ledger === 'best' ? 'W–L counts every graded best bet; units use recorded prices only.' : ledger === 'fun' ? 'Each posted parlay counts as one ticket, never one win per leg. Personal stakes and injury-adjusted payouts are not assumed.' : 'The Climb is tracked in dollars from each step\'s ledger, apart from best bets.'}</p>${assumedNote}${voidNote}${slips}${line}</section>`;
   };
   const moreGroup = (title, links) => `<p class="eyebrow more-group">${title}</p><div class="list-links">${links}</div>`;
-  const views = {};
+  /* One sport's research status: a paper trial, data collection or scores only. Shared by Today and Record › Trials. */
+  const trialCard = (lg, lab, trials) => {
+    const market = ((lab || {}).leagues || {})[lg], trial = ((trials || {}).leagues || {})[lg];
+    if (!market && !trial && (!lab || !trials)) return `<div class="card"><p class="eyebrow">${esc(LEAGUE_NAME[lg] || lg)}</p><p class="small muted" style="margin-top:6px">Trial data is unavailable right now. <button type="button" class="btn small" data-retry>Try again</button></p></div>`;
+    if (!market && !trial) return `<div class="card"><p class="eyebrow">${esc(LEAGUE_NAME[lg] || lg)} <span class="badge research">Scores only</span></p><p class="small" style="margin-top:6px">Schedules and scores are live. No model record or projections yet.</p><p class="small" style="margin-top:8px"><a href="#games/live?sport=${esc(lg)}">Live scores →</a></p></div>`;
+    const count = (trial && trial.record) || {}, graded = (count.win || 0) + (count.loss || 0) + (count.push || 0);
+    const ready = trial && trial.readiness;
+    const status = ready ? `${ready.stage === 'live-picks' ? 'NBA picks active' : ready.stage === 'live-trial' ? 'Live trial' : ready.stage === 'paper' ? 'Paper stage' : 'Log stage'}` : trial ? 'Trial model' : 'Collecting data';
+    const body = trial ? `<p style="margin-top:6px"><b class="num">${graded ? `${count.win}–${count.loss}${count.push ? '–' + count.push : ''}` : 'Pending'}</b> <span class="small muted">trial totals record · ${esc(trial.recorded || 0)} projections saved</span></p><p class="small muted">${graded ? `${graded} trial leans graded at their saved lines. Not official plays.` : 'No graded trial leans yet. The record starts with saved pregame projections, never backfilled results.'}</p>`
+      : `<p style="margin-top:6px">${esc(market.gamesQuoted)} games with saved lines · ${esc(market.gamesGraded)} finals linked</p><p class="small muted">Collected games, not prediction wins. Building the history a model needs.</p>`;
+    const upcoming = ((trial || {}).upcoming || []).filter(r => Date.parse(r.kickoff) > Date.now());
+    const seasons = (trial || market || {}).seasons || [];
+    return `<div class="card"><p class="eyebrow">${esc(LEAGUE_NAME[lg] || lg)} <span class="badge ${trial ? 'trial' : 'research'}">${esc(status)}</span></p>${body}
+      ${upcoming.length ? `<div class="receipts" style="margin-top:8px">${upcoming.slice(0, 8).map(r => `<div class="receipt" style="grid-template-columns:minmax(0,1fr)"><div><b>${esc(r.away)} at ${esc(r.home)}</b><span>Projected total ${esc(r.projection)} · saved line ${esc(r.line)} · ${esc(whenShort(r.kickoff))} · price checked ${esc(whenShort(r.capturedAt))}${r.sparse ? ' · thin history' : ''}</span></div></div>`).join('')}</div>` : ''}
+      ${seasons.length ? `<details class="more-box" data-box="trial-history:${esc(lg)}" style="margin-top:8px"><summary>Season history</summary><div class="table-wrap"><table class="t"><tbody>${seasons.map(row => `<tr><td>${esc(row.season)} · ${row.phase === 'playoffs' ? 'Playoffs' : row.phase === 'regular' ? 'Regular season' : 'Stage not recorded'}</td><td class="n">${trial ? `${esc(row.recorded)} saved` : `${esc(row.gamesQuoted || 0)} quoted in this stage`}</td><td class="n">${trial ? (() => { const r = row.record || {}; const n = (r.win || 0) + (r.loss || 0) + (r.push || 0); return n ? `${r.win || 0}–${r.loss || 0}${r.push ? '–' + r.push : ''}` : 'Pending'; })() : `${esc(row.gamesGraded || 0)} finals`}</td></tr>`).join('')}</tbody></table></div>${trial ? '' : '<p class="small muted" style="margin-top:6px">A game recorded in more than one stage is counted in each.</p>'}</details>` : ''}
+      <p class="small" style="margin-top:8px"><a href="#games/live?sport=${esc(lg)}">Live scores →</a></p></div>`;
+  };
+
+  const views = { trialCard };
   /* ---------- player page (lazy since the Kitchen Ticket release, to keep the first-load shell in budget) ---------- */
   views.record = async route => {
     const tab = route.tab || 'official';
@@ -313,26 +331,23 @@ button.cal-day { cursor: pointer; }
         ${section('Every fun ticket', `${search}${settled.length ? weeksOf(settled, p => receipt(p, clvById), 'fun') : '<p class="muted">No fun tickets match.</p>'}`)}`;
     }
     if (tab === 'climb') {
-      if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${tabs}${empty(`No Climb for ${LEAGUE_NAME[state.league]}`, 'The 80/20 Climb uses NFL and college football legs. No football data is substituted here. Switch to All sports, NFL or College football to see it.', 'research')}`;
+      if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${tabs}${empty(`No Climb for ${LEAGUE_NAME[state.league]}`, 'Switch to All sports to see the current Climb.', 'research')}`;
       const lad = C.theLadder(every);
       const acc = lad.accounting;
       const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
       const routeHtml = climbRoute ? `<section id="route" class="climb-route" aria-label="Current 80/20 Climb route">
         <img class="climb-route-art" src="${esc(climbRoute.image)}?v=${esc(String((today || {}).generatedAt || '').replace(/\W/g, ''))}" alt="Current 80/20 Climb: posted steps and actual balances" loading="lazy">
         <h2>Climb #${esc(climbRoute.run)} · the route</h2>
-        <p class="small muted">Posted steps only. The next pick is not selected: NFL and college sides or player props are eligible, including standalone Thursday and Monday games. No future date, price or payout is promised.</p>
-        <p class="small">2-3 alternate-line legs at one book; two preferred. Target combined odds: -200 to -150. ${climbRoute.reviewedDaily ? 'Up to one qualifying rung per Eastern day. An open rung settles first.' : 'Target: 1-3 qualifying steps per week, never a quota.'} NBA is research-only for the Climb until its ticket checks are ready.</p>
-        ${!climbRoute.reviewedDaily && climbRoute.weekly && climbRoute.weekly.weekStart === (() => { const day = new Date(etDay() + 'T12:00:00Z'); day.setUTCDate(day.getUTCDate() - (day.getUTCDay() + 6) % 7); return day.toISOString().slice(0, 10); })() ? `<p class="small muted">This week: ${esc(climbRoute.weekly.posted)} of ${esc(climbRoute.weekly.maximum)} steps used across all restarts. Up to ${esc(climbRoute.weekly.remaining)} more, only if they qualify. Monday-Sunday, Eastern time.</p>` : ''}
+        <p class="small muted">Posted steps and actual returns.</p>
         <div class="climb-route-steps">${(climbRoute.rows || []).filter(row => row.kind === 'cashed' || row.kind === 'open').map(row => {
-          const real = row.kind === 'cashed' || row.kind === 'open';
-          const stateText = row.kind === 'cashed' ? '✓ Cashed' : row.kind === 'open' ? 'Open · not settled' : row.kind === 'next' ? 'Next step · not posted yet' : 'Plan · typical −160';
-          const legs = real ? `<div class="climb-route-legs">${(row.legs || []).map((leg, i) => `<a href="${esc(leg.href || '#record/climb')}">${esc(leg.title || `Leg ${i + 1}`)}${leg.odds != null ? ` · ${esc(oddsText(leg.odds))}` : ''}${leg.book ? ` · ${esc(bookLabel(leg.book))}` : ''} ›${leg.why ? `<small>Why: ${esc(leg.why)}</small>` : ''}</a>`).join('')}</div>` : '';
+          const stateText = row.kind === 'cashed' ? '✓ Cashed' : 'Open · not settled';
+          const legs = `<div class="climb-route-legs">${(row.legs || []).map((leg, i) => `<a href="${esc(leg.href || '#record/climb')}">${esc(leg.title || `Leg ${i + 1}`)}${leg.odds != null ? ` · ${esc(oddsText(leg.odds))}` : ''}${leg.book ? ` · ${esc(bookLabel(leg.book))}` : ''} ›${leg.why ? `<small>Why: ${esc(leg.why)}</small>` : ''}</a>`).join('')}</div>`;
           return `<div class="climb-route-step ${esc(row.kind)}"><div class="climb-route-head"><b>Step ${esc(row.step)} · ${esc(stateText)}</b><span>${esc(row.league || '')} ${esc(row.day || '')} ${esc(row.clock || '')}</span></div>
             <p>${esc(money(row.bet))} bet → ${esc(money(row.cashes))} ${row.kind === 'cashed' ? 'returned' : 'returns if it wins'} · ${esc(money(row.bank))} ${row.kind === 'cashed' ? 'banked' : 'to bank on a win'}</p>${legs}</div>`;
         }).join('')}</div><p class="climb-route-bank">Current climb · ${esc(money(climbRoute.banked))} banked · ${esc(money(climbRoute.stake))} ${lad.open ? 'riding' : 'available'}</p></section>` : '';
       return `${top}${tabs}${routeHtml}<div class="kpis"><div class="kpi"><small>Current climb</small><b class="num">#${esc(lad.run)} · step ${esc(lad.step)}</b><span>${money(lad.banked + lad.stake)} of $1,000</span></div><div class="kpi"><small>Steps</small><b class="num">${esc(acc.wins)}–${esc(acc.losses)}</b><span>won–lost</span></div><div class="kpi"><small>Banked so far</small><b class="num">${money(lad.saved)}</b><span>across every climb · stays banked after a miss</span></div><div class="kpi"><small>Best climb</small><b class="num">${money(lad.best)}</b><span>highest bank + ride</span></div>
         <div class="kpi"><small>Wagered</small><b class="num">${money(acc.wagered)}</b><span>returned ${money(acc.returned)}</span></div><div class="kpi"><small>Net</small><b class="num ${acc.net < 0 ? 'red' : 'green'}">${acc.net < 0 ? '−' : '+'}${money(Math.abs(acc.net))}</b><span>lifetime, in dollars</span></div></div>
-        <div class="card" style="margin-top:14px"><p>Bank 20% of every winning return and ride 80% on the next step. A miss ends the climb and starts a new $50 one; banked money stays banked. A new step is never guaranteed.</p>${lad.open ? `<p class="small" style="margin-top:6px">A step is open now. <a href="#today">See Today</a>.</p>` : '<p class="small muted" style="margin-top:6px">Next step: not selected. One to three eligible legs at one book must clear the checks; standalone NFL games are included.</p>'}</div>
+        <div class="card" style="margin-top:14px"><p>This Climb banks 20% of each winning return and rolls the remaining 80% into the next step.</p>${lad.open ? `<p class="small" style="margin-top:6px">A step is open now. <a href="#today">See Today</a>.</p>` : '<p class="small muted" style="margin-top:6px">The next step hasn’t been posted.</p>'}</div>
         ${section('Past steps', `<div class="receipts">${lad.history.slice().reverse().map(climbRow).join('') || '<p class="muted">No settled steps yet.</p>'}</div>`, '', `The Climb keeps its own run history and spans NFL and college legs, so it is shown whole; changing the season view does not change an active run.${lad.climbs.length ? ` Climbs finished: ${lad.climbs.length}.` : ''}`)}`;
     }
     if (tab === 'model') {
@@ -439,13 +454,13 @@ button.cal-day { cursor: pointer; }
       direction: 'over', odds: -110, book: 'DraftKings', kickoff: '2099-09-13T17:00:00Z', status: 'active', cutoffOdds: -124,
       probabilityAtPublication: { chance: 0.56, breakEven: 0.524, calibrated: true }, ticketWhy: 'One saved reason for the play.', ticketBut: 'The first saved reason against it.' }], { sample: true })}</div>
       <div class="card" style="margin-top:24px"><ol style="margin:0;padding-left:18px;display:grid;gap:8px"><li><b>The price and book.</b> −110 at DraftKings is what we saw when we posted. Check your own book; prices move. The small line under it shows the latest price we saw and how far the play still holds.</li><li><b>My chance vs what the price needs.</b> I have it at 56.0%; −110 must win 52.4% of the time to avoid losing money. A best bet clears that bar.</li><li><b>Why and but.</b> One saved reason for the play and the first saved reason against it, never written on the page.</li><li><b>The play page.</b> Tap a ticket for the fair price, the chance gap and how we got the number.</li><li><b>Graded in public.</b> Settled plays go on the spike with a HIT, MISS or PUSH stamp. Every result stays on the Record.</li></ol></div>
-    ${section('Two ways to use Kook\'n', `<div class="grid two"><div class="card"><p class="eyebrow green">The quick route</p><h3 style="margin-top:4px">Our best bets</h3><p class="small" style="margin-top:4px">Open Today for the posted best bets and the Climb. Tap a ticket for how we got the number.</p><p style="margin-top:8px"><a class="btn small" href="#today">See Today →</a></p></div>
+    ${section('Two ways to use Kook\'n', `<div class="grid two"><div class="card"><p class="eyebrow green">The quick route</p><h3 style="margin-top:4px">Today’s plays</h3><p class="small" style="margin-top:4px">Open Today for the posted plays. Tap any slip for the full terms.</p><p style="margin-top:8px"><a class="btn small" href="#today">See Today →</a></p></div>
       <div class="card"><p class="eyebrow green">Do your own research</p><h3 style="margin-top:4px">The research board</h3><p class="small" style="margin-top:4px">Sort lines by how far our chance is above what the price needs. Compare past results, matchups and defenses. Save players or lines for later.</p><p style="margin-top:8px"><a class="btn small" href="#research/lines">Open Research →</a></p></div></div>`)}
     ${section('Inside the free Discord', `<div class="card"><p><b>Plays & Results:</b> posted plays only. Best bets usually land here 10–15 minutes before X.</p><p style="margin-top:6px"><b>General chat:</b> games, questions and feedback. <b>Wins & Bad Beats:</b> wins and close misses.</p><p class="small muted" style="margin-top:6px">Research is not a best bet. A historical hit rate is not a promise. Check the exact line and price yourself.</p><p style="margin-top:10px"><a class="btn primary small" href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener">Join the Discord ↗</a></p></div>`)}
     ${section('Glossary', `<dl class="glossary card">
-      <dt>Best Bet · 1u</dt><dd>A price-checked play with positive estimated value and a supporting reason. Injury, role and current-price checks still apply.</dd>
-      <dt>Chef's Pick · 2u</dt><dd>The rarer, stronger tier. It must also clear the stricter value and observed-performance checks. Higher conviction is not a guarantee. New plays use the posted stake; earlier results stay unchanged.</dd>
-      <dt>Pick of the Day</dt><dd>The one best bet we feature each day. Its record is shown on the Record page.</dd>
+      <dt>Best Bet</dt><dd>An official straight on today’s card.</dd>
+      <dt>Chef's Pick</dt><dd>My favorite straight on the card. See its record on the Results page.</dd>
+      <dt>Daily Double</dt><dd>A two-leg ticket near even money.</dd>
       <dt>Research</dt><dd>Lines we track and grade but did not post. Useful context, not picks.</dd>
       <dt>Unit (u)</dt><dd>One standard stake. +1.00u means you won one stake; −1.00u means you lost one.</dd>
       <dt>What a price needs</dt><dd>How often a bet must win to avoid losing money at that price. At −110, that is 52.4%.</dd>
@@ -454,7 +469,7 @@ button.cal-day { cursor: pointer; }
       <dt>Closing line</dt><dd>The final number before kickoff. Beating it more often than not is the best early sign of real skill.</dd>
       <dt>Old price</dt><dd>The price we posted is older than our freshness limit. The play still counts at the posted price; check your book for today's.</dd>
       <dt>Fun ticket</dt><dd>A longshot parlay at a smaller stake, tracked separately from the record.</dd>
-      <dt>The 80/20 Climb</dt><dd>A $50 to $1,000 challenge using two to three qualifying alternate-line legs at one book, one leg per game. Two legs preferred, with combined odds around -200 to -150. Target one to three steps per Eastern Monday-Sunday week, with a maximum of three across restarts and only one step open. No step is forced or guaranteed safe. A winning return is split 20% banked and 80% carried to the next step. A losing step loses only its active stake; money already banked stays banked, and a new $50 climb starts. A new step is never guaranteed.</dd>
+      <dt>The 80/20 Climb</dt><dd>A $50 to $1,000 challenge. The current format banks 20% of a winning return and rolls the rest into the next step. The Climb page tracks the posted steps and returns.</dd>
       <dt>Trial</dt><dd>A new sport collecting evidence on paper. Not a best bet until the trial earns it.</dd></dl>`)}
     <p class="small">Times are Eastern.</p>
     <p class="small">Analytics: Cloudflare's cookie-free counter. Nothing personal is collected.</p>

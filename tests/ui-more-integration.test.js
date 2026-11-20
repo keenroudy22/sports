@@ -96,20 +96,8 @@ test('the real app shared interface renders every lazy view with fixture data', 
   assert.match(climbHtml, /climb-route\.png/);
   assert.match(climbHtml, /#pick\/real-rung/);
   assert.doesNotMatch(climbHtml, /Next step · not posted yet/);
-  assert.match(climbHtml, /next pick is not selected/);
-  assert.doesNotMatch(climbHtml, /Plan · typical −160/);
-  assert.match(climbHtml, /standalone Thursday and Monday/);
-  assert.match(climbHtml, /2-3 alternate-line legs at one book; two preferred/);
-  assert.match(climbHtml, /Target combined odds: -200 to -150/);
-  assert.match(climbHtml, /This week: 1 of 3 steps used across all restarts/);
-  assert.match(climbHtml, /NBA is research-only for the Climb/);
-  routeFixture.climbRoute.reviewedDaily = true;
-  const dailyClimb = await views.record({tab:'climb'});
-  assert.match(dailyClimb, /one qualifying rung per Eastern day/);
-  assert.doesNotMatch(dailyClimb, /This week: 1 of 3/);
-  routeFixture.climbRoute.reviewedDaily = false;
-  routeFixture.climbRoute.weekly.weekStart = '2026-10-12';
-  assert.doesNotMatch(await views.record({tab:'climb'}), /This week: 1 of 3/);
+  assert.match(climbHtml, /Posted steps and actual returns/);
+  assert.doesNotMatch(climbHtml, /typical −160|standalone Thursday and Monday|alternate-line legs|Target combined odds|steps used across|NBA is research-only/);
 });
 
 test('official record always renders the separate Chef record without changing overall results', async () => {

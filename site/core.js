@@ -398,7 +398,7 @@
     const parts = [`${pct(g.chance)} our chance${g.push >= 0.01 ? `, ${pct(g.push)} chance of a tie` : ''}`,
       g.needs == null ? 'no price yet' : `this price needs ${pct(g.needs)} to win often enough`];
     if (typeof g.edge === 'number') parts.push(`${Math.abs(Number(g.edge)).toFixed(1)} points ${g.edge >= 0 ? 'above' : 'below'} what this price needs`);
-    if (g.performanceCaution) parts.push(`recent results mean we need at least ${Number(g.performanceNeed || 5).toFixed(0)} points above what this price needs`);
+    if (g.performanceCaution) parts.push('recent results warrant caution');
     if (g.thin) parts.push('few games so far');
     if (g.limited) parts.push('questionable on the report');
     if (g.calibrated === false) parts.push('not yet checked against results');

@@ -572,11 +572,12 @@ test('a priced line on a thin sample says too early, not no value', () => {
   assert.equal(solid.word, 'Some value');
 });
 
-test('a performance caution explains the higher bar without erasing a qualifying line', () => {
+test('a qualifying line can carry a performance caution without publishing the threshold', () => {
   const cautious = C.gradeOf({ tier: 'strong', chance: 0.58, needs: 0.52, edge: 6,
     performanceCaution: true, performanceNeed: 5 });
   assert.deepEqual([cautious.tier, cautious.word], ['strong', 'Good value']);
-  assert.match(cautious.detail, /need at least 5 points above what this price needs/);
+  assert.match(cautious.detail, /recent results warrant caution/);
+  assert.doesNotMatch(cautious.detail, /need at least 5 points/);
   const shrunk = C.gradeOf({ tier: 'lean', view: 'pass', chance: 0.52, needs: 0.53, edge: -1 });
   assert.deepEqual([shrunk.tier, shrunk.word], ['pass', 'No value']);
   assert.equal(C.tierOf({ tier: 'lean' }), 'lean');

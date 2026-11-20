@@ -729,7 +729,8 @@ test('the play page under review shows no fair price, edge, chance or projection
     assert.ok(!page.includes(banned), banned);
   assert.match(page, /data-held="1"/, 'the history box drops its defense verdict too');
   const clean = await loadApp('#record', {}, { today: { ...TODAY, picks: [{ ...king, held: undefined }, ...rungs] } }).api.views.pick({ id: king.id });
-  assert.match(clean, /How we got 53\.7%/, 'one decimal, matching the ticket');
+  assert.match(clean, /Projection at posting[\s\S]*53\.7%/, 'the published chance stays visible');
+  assert.doesNotMatch(clean, /65\.9%|398 graded lines/);
   assert.match(clean, /My price/);
 });
 
@@ -1037,18 +1038,18 @@ test('Today\'s games show live scores and our projected score, with the free sco
   assert.doesNotMatch(nflOnly, /kt-games"/, 'an NFL-only day has no duplicate games section');
 });
 
-test('Fun tickets and Pulled before kickoff are visible sections when they have plays, and absent when empty', async () => {
-  const fun = { ...total, id: 'CFB-2026-W6-fun-longshot', kind: 'parlays', parlayType: 'longshot', legs: ['Leg A over 40.5', 'Leg B over 3.5'], odds: 450, displayTitle: 'Longshot' };
+test('posted fun parlays lead with the active card and withdrawals stay in their own section', async () => {
+  const fun = { ...total, id: 'CFB-2026-W6-fun-longshot', posted: true, kind: 'parlays', parlayType: 'longshot', legs: ['Leg A over 40.5', 'Leg B over 3.5'], odds: 450, displayTitle: 'Longshot' };
   const gone = { ...total, id: 'CFB-2026-W6-pulled', posted: true, displayTitle: 'Pulled Team at Other under 50.5', status: 'withdrawn', entryNote: 'Pulled over news before its post went out.' };
   const todayOff = { ...total, id: 'CFB-today-off-fd', displayTitle: 'Moved Line Today under 56.5', status: 'expired',
     entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, fun, gone, todayOff] } }).api.views.today({ view: 'today' });
-  assert.match(page, /<h2 class="kt-head" id="fun-h">Fun tickets<\/h2><span class="kt-kind">Smaller stake, apart from best bets<\/span>/);
+  assert.match(page, /<h2 id="order-parlays">Fun parlays<\/h2>/);
   assert.match(page, /<h2 class="kt-head" id="pulled-h">Pulled before kickoff · 1<\/h2>[\s\S]*Pulled Team at Other/);
   const at = s => page.indexOf(s);
-  assert.ok(at('kt-games"') < at('kt-fun"') && at('kt-fun"') < at('kt-pulled"') && at('kt-pulled"') < at('kt-off-card"'));
+  assert.ok(at('id="order-parlays"') < at('kt-games"') && at('kt-games"') < at('kt-pulled"') && at('kt-pulled"') < at('kt-off-card"'));
   const plain = await loadApp('#record').api.views.today({ view: 'today' });
-  assert.ok(!plain.includes('kt-fun"') && !plain.includes('kt-pulled"'));
+  assert.ok(!plain.includes('id="order-parlays"') && !plain.includes('kt-pulled"'));
 });
 
 test('an owner community ticket is unmistakably personal and separate from best bets', async () => {
@@ -1119,6 +1120,26 @@ test('withdrawn settled play shows its withdrawal on receipt, slip and detail wi
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [prop, old], lastSlate: { ALL: { day: '2026-10-07' } } } }).api.views.today({ view: 'today' });
   assert.doesNotMatch(page, /Sam Houston|Wednesday results|results below|id="left-h"/);
  });
+
+test('the Today order groups posted tickets once before research', async () => {
+  const chef = { ...prop, dailyChefDay: '2026-10-10' };
+  const openClimb = { ...rung('open-climb', 3, 2, null, { stake: 94 }, prop.kickoff), posted: true };
+  const double = { id: 'live-double', title: 'Daily Double', league: 'NBA', kind: 'parlays', parlayType: 'longshot',
+    parlayStyle: 'daily-double', kickoff: prop.kickoff, book: 'DraftKings', odds: 106, riskUnits: 0.25,
+    legs: ['Player A over 9.5 points', 'Player B over 11.5 points'], posted: true };
+  const lotto = { ...double, id: 'live-lotto', parlayStyle: 'lotto', odds: 1140, title: 'Tonight’s lotto' };
+  const unposted = { ...lotto, id: 'unposted-lotto', posted: false };
+  const { api } = loadApp('#today', {}, { today: { ...TODAY, picks: [chef, { ...total, posted: true }, ...rungs, openClimb, double, lotto, unposted] } });
+  const page = await api.views.today({ view: 'today' });
+  const order = page.slice(page.indexOf('class="kitchen-orders"'), page.indexOf('aria-label="Betting data and research"'));
+  assert.match(order, /Chef’s Pick[\s\S]*Today’s best bet[\s\S]*Daily Double[\s\S]*Current Climb step[\s\S]*Fun parlays/);
+  assert.match(order, /Daily Double<\/span> \+106/);
+  assert.match(order, /Step 3<\/span> −150/);
+  assert.match(order, /Player A over 9\.5 points/);
+  assert.equal((page.match(/href="#pick\/live-double"/g) || []).length, 1);
+  assert.equal((page.match(/href="#pick\/live-lotto"/g) || []).length, 1);
+  assert.doesNotMatch(page, /unposted-lotto/);
+});
 
 test('All-sports Today puts every published straight before research', async () => {
  const college={id:'cbb-today',league:'CBB',posted:true,displayTitle:'QUC +8.5',kickoff:prop.kickoff,marketType:'spread',direction:'away',line:8.5,odds:-112,book:'DraftKings',riskUnits:1};

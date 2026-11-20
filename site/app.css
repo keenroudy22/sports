@@ -647,6 +647,30 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-slips { display: grid; gap: 18px; padding: 8px 0 14px 6px; }
 .kt-slips .kt-slip { transform: none; -webkit-mask: none; mask: none; }
 .kt-slips .kt-slip-k { padding-left: 0; }
+.kitchen-group { margin: 18px 0 0; }
+.kitchen-orders > .kitchen-group:first-child { margin-top: 0; margin-bottom: 18px; }
+.kitchen-orders .kt-slips { gap: 8px; padding: 0; }
+.kitchen-orders .kt-slip { padding: 12px 14px; }
+.kt-slip-legs { margin: 8px 0 0; padding-left: 1.15em; color: var(--ink-soft); font-size: 14px; line-height: 1.4; }
+.kitchen-orders .decision-list.is-compact, .kitchen-orders .today-straights { border: 0; border-radius: 0; overflow: visible; background: none; box-shadow: none; }
+.kitchen-orders .decision-list.is-compact { gap: 8px; }
+.kitchen-orders .decision-card, .kitchen-orders .today-straights li { color: var(--ticket-ink); }
+.kitchen-orders .decision-list.is-compact .decision-card, .kitchen-orders .today-straights li {
+  background: linear-gradient(var(--paper-top), var(--paper-bot)); border: 0; border-radius: 0;
+}
+.kitchen-orders .today-straights { display: grid; gap: 8px; }
+.kitchen-straight-count { margin: -4px 0 8px; }
+.kitchen-orders .decision-title h3 a, .kitchen-orders .decision-price strong,
+.kitchen-orders .decision-current, .kitchen-orders .decision-more, .kitchen-orders .today-straight { color: var(--ticket-ink); }
+.kitchen-orders .decision-title p, .kitchen-orders .decision-price small, .kitchen-orders .decision-numbers small,
+.kitchen-orders .today-straight small { color: var(--ink-soft); }
+.kitchen-orders .decision-tier, .kitchen-orders .decision-numbers .gap.good b,
+.kitchen-orders .decision-more span, .kitchen-orders .today-straight > span:last-child { color: var(--ticket-green); }
+.kitchen-orders .decision-state, .kitchen-orders .decision-card.is-open .decision-state,
+.kitchen-orders .decision-numbers > span, .kitchen-orders .today-straight:hover { background: rgba(33, 72, 51, .09); color: var(--ticket-ink); }
+.kitchen-orders .decision-title h3 a:hover, .kitchen-orders .decision-more:hover, .kitchen-orders .kt-slip:hover .kt-slip-t,
+.kitchen-orders .today-straight:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+.kitchen-orders a:focus-visible { outline-offset: -4px; }
 /* Prep List, chalked on the felt. */
 .kt-prep { margin-top: 38px; }
 .kt-rows { margin: 12px 0 0; padding: 0; list-style: none; }

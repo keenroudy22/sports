@@ -108,12 +108,15 @@ jobs:
       - name: Build the plays feed and its cards
         run: python scripts/feed.py
       - name: Verify the public artifact boundary
-        run: python scripts/publication_guard.py
+        run: |
+          mkdir -p "$RUNNER_TEMP/kookn-public"
+          rsync -a --exclude='/data/research.json' --exclude='/data/market-lines.json' site/ "$RUNNER_TEMP/kookn-public/"
+          python scripts/publication_guard.py --site "$RUNNER_TEMP/kookn-public"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         id: pages-artifact
         with:
-          path: site
+          path: ${{ runner.temp }}/kookn-public
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Verify exact uploaded Pages artifact is visible
         env:

@@ -87,7 +87,7 @@ test('moneyline chances are never formatted as points against a zero line',()=>{
  const original=JSON.stringify(pick);
  const explanation=M.howWeGotIt(pick).join(' ');
  assert.doesNotMatch(explanation,/projects 0\.4|against the 0 line/);
- assert.match(explanation,/40\.1%/);assert.match(explanation,/36\.3%/);
+ assert.doesNotMatch(explanation,/40\.1%/);assert.match(explanation,/the price needs 35\.7%/);
  const vm=M.pickVM(pick,Date.parse('2026-10-27T18:00:00Z'));
  assert.doesNotMatch(vm.statusShort,/graded at 0 /);
  assert.match(vm.statusShort,/graded at \+180/);

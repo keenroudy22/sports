@@ -239,7 +239,7 @@ test('CBB player page shows an honest Kookn baseline and lets the reader check a
   assert.match(page, /data-input="playerLine"/);
   assert.match(page, /Kook’n projection<\/small><b class="num">15\.1/);
   assert.match(page, /Kook’n baseline:<\/b> 5 current-season games · 30\.2 projected minutes/);
-  assert.match(page, /60% recent and 40% season per-minute rate/);
+  assert.doesNotMatch(page, /60% recent and 40% season per-minute rate/);
   assert.match(page, /Kook’n − line<\/small><b class="num">–/);
   assert.match(page, /mens-college-basketball\/boxscore/);
   assert.match(page, /Kook’n minus the book is not a probability/);

@@ -516,7 +516,7 @@ def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None
             'v2': v2, 'lean': lean(v2, mkt, league, snapshot.get('sd') if snapshot else None, paused),
             # Best captured, price-aware spread and total reads for the weekly projection sheet. These are built
             # from the same multi-book rows as the Board; no price means no highlighted value.
-            'value': values or None,
+            'value': {kind: reader_grade(row) for kind, row in values.items()} if values else None,
             # The market as evidence beside our number, never inside it (scripts/market_read.py).
             'marketRead': market_block}
 
@@ -684,9 +684,7 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
             block = final['players'].get(side) or {}
             people[side] = {'volume': block.get('volume'), 'players': [
                 {**p, 'name': names.get(p['id'], p['id'])} for p in block.get('players', [])]}
-        detail['forecast'] = {'publishedAt': final['publishedAt'], 'why': final['why'], 'range': final['range80'],
-                              'sd': final['sd'], 'inputs': {k: final['inputs'][k] for k in
-                                                            ('games', 'through', 'ratings', 'ruledOut', 'injuryCoverage')},
+        detail['forecast'] = {'publishedAt': final['publishedAt'], 'range': final['range80'],
                               'players': people,
                               'history': [{'at': s['publishedAt'], 'margin': rnd(s['margin']), 'total': rnd(s['total']),
                                            **({'late': True} if s.get('late') else {})}
@@ -906,8 +904,7 @@ def basketball_projection(rows, season=None):
                      if any(isinstance(row.get('stats', {}).get(key), (int, float)) for row in recent)}
     return {'status': status, 'reason': reason, 'games': len(games),
             'minutes': round(projected_minutes, 1), 'values': estimates,
-            'recent': recent_values, 'recentMinutes': [row['stats']['min'] for row in recent],
-            'method': '60% recent and 40% season per-minute rate at recent median minutes'}
+            'recent': recent_values, 'recentMinutes': [row['stats']['min'] for row in recent]}
 
 
 def build_basketball_players(records, league='NBA'):
@@ -1470,8 +1467,6 @@ def write_trends(rows, now):
 
 def recent_picks(picks, now):
     cutoff = now - timedelta(hours=72)
-    # The detailed play payload owns the dossier; Today never renders it.
-    # Keep the original row intact for the full record and the play page.
     return [{key: value for key, value in pick.items() if key != 'dossier'}
             for pick in picks if not pick.get('result') or
             (instant(pick.get('settledAt') or pick.get('publishedAt')) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff]
@@ -1538,7 +1533,7 @@ HERO_ROWS = 6              # the weekend card cap is five straight plays; one sp
 HERO_FIELDS = ('id', 'league', 'kind', 'displayTitle', 'market', 'marketType', 'athleteId', 'position', 'line',
                'direction', 'odds', 'book', 'kickoff', 'featured', 'status', 'entryNote', 'expiresAt',
                'cutoffOdds', 'cutoffLine', 'gameId', 'side', 'ticketWhy', 'ticketBut', 'hitStrip', 'held',
-               'quote', 'lane', 'riskUnits', 'selectionPolicy', 'priceMarginHold')
+               'quote', 'lane', 'riskUnits', 'selectionPolicy', 'priceMarginHold', 'dailyChefDay')
 
 
 def hero_parlay(pick):
@@ -1596,7 +1591,7 @@ def public_probability(pick):
     chance, needed = value.get('chance'), value.get('breakEven')
     if not all(isinstance(number, (int, float)) for number in (chance, needed)) or chance <= needed:
         return None
-    return value
+    return {key: value[key] for key in ('chance', 'breakEven', 'calibrated', 'edgePoints') if key in value}
 
 
 def hero_bet(pick, now, potd=None, teams=None):
@@ -2348,9 +2343,9 @@ def build(now=None):
         _, player = pricing.player_line(snapshots[-1], row.get('athleteId')) if snapshots else (None, None)
         role = role_sanity.VOLUME.get(row.get('stat'))
         if player and role:
-            explanation = ('The projected starting quarterback has changed or split recent work; fewer than three full games establish this passing role.'
+            explanation = ('The starting quarterback or passing role is uncertain.'
                            if row.get('roleHold') == 'qb' else
-                           f"Projected workload is below 70% of the last three full games ({', '.join(str(v) for v in row.get('recentFull', []))} {row.get('recentVolume', 'opportunities')}).")
+                           'Projected workload is below the player’s recent role.')
             for stat, volume in role_sanity.VOLUME.items():
                 field = pricing.PROJECTED.get(stat)
                 if volume == role and field and field not in player.setdefault('underReview', []):
@@ -2460,6 +2455,7 @@ def build(now=None):
             final_box=stored.get(game['id']))
         if game.get('state') == 'pre' and features.when(game['kickoff']) > now:
             detail['positionGames'] = football_position_games(game, info['records'], snap_players, now)
+        detail['lines'] = [reader_line(row) for row in detail['lines']]
         write(OUT / 'games' / f"{game['id']}.json", detail)
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],
@@ -2500,7 +2496,7 @@ def build(now=None):
     write(OUT / 'today-hero.json', today_hero(posted_records, now, featured_store.of_day(eastern_date(now).isoformat()),
                                               ticket_teams))
     import ticket_climb_route  # ladder/gates use build_site constants; import after this module is initialized
-    route_state, route_games = ticket_climb_route.from_stores(ticket_climb_route.gates.Stores(), now)
+    route_state, _ = ticket_climb_route.from_stores(ticket_climb_route.gates.Stores(), now)
     write(OUT / 'record.json', {'generatedAt': stamp(now),
                                 'picks': [{**pick, 'card': record_card(pick)} for pick in picks],
                                 # Basketball has immutable sport ledgers, but Results is the all-sports public
@@ -2510,12 +2506,12 @@ def build(now=None):
                                 'nbaPicks': nba_public,
                                 'funPicks': nba_fun,
                                 'communityPicks': community_records,
-                                'climbRoute': ticket_climb_route.public_route(route_state, now, route_games)})
+                                'climbRoute': ticket_climb_route.public_route(route_state)})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)
     for league, name in line_index['files'].items():
         write(OUT / name, {'generatedAt': generated, 'league': league,
-                           'lines': [row for row in lines if row.get('league') == league]})
+                           'lines': [reader_line(row) for row in lines if row.get('league') == league]})
     for league in ('NFL', 'CFB'):
         info = league_data[league]
         charts = build_player_charts(league, window, forecasts, info['player_logs'], info['current'], lines, now)
@@ -2580,7 +2576,7 @@ def build(now=None):
     cbb_index, cbb_shards, cbb_season = build_basketball_players(cbb_boxes, 'CBB')
     write(OUT / 'players' / 'CBB.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['CBB'],
                                          'players': cbb_index, 'season': cbb_season,
-                                         'projectionNote': 'Research baseline: 60% recent and 40% season per-minute production at recent median minutes. Not a probability or automatic pick.'})
+                                         'projectionNote': 'Kook’n research projections use recorded player performance and minutes.'})
     write_player_shards('CBB', cbb_index, cbb_shards, cbb_season, NBA_LOG_KEYS)
     write_basketball_matchups('CBB', cbb, sports_scoreboard.get('CBB'), cbb_index, [],
                               opponent_position_games(cbb_boxes, cbb_season))
@@ -2850,6 +2846,21 @@ def reader_words(value):
     return value
 
 
+def reader_grade(grade):
+    if not isinstance(grade, dict):
+        return grade
+    return {key: value for key, value in grade.items()
+            if key not in ('raw', 'rawTier', 'model', 'performanceNeed', 'snapshotAt')}
+
+
+def reader_line(row):
+    """Keep the public comparison and availability, without raw model inputs."""
+    line = {key: value for key, value in row.items() if key != 'marketWindow'}
+    if isinstance(line.get('grade'), dict):
+        line['grade'] = reader_grade(line['grade'])
+    return line
+
+
 def pick_market_type(pick, recent):
     current = pick.get('marketType') or recent.get('marketType')
     if current:
@@ -2955,9 +2966,10 @@ def board_picks(first, latest, by_id, identities, now=None):
                               kickoff=(game or {}).get('kickoff') or pick.get('kickoff')),now)
                          if pick.get('lane')=='chef_pick' else None),
                      'chefEvidence': ({key: pick['chefEvidence'].get(key) for key in
-                                      ('policy','n','evaluatedAt','errorAllowance','conservativeChance')}
+                                      ('policy',)}
                                       if isinstance(pick.get('chefEvidence'),dict) else None),
-                     'reasoning': pick.get('reasoning'),
+                     'reasoning': {key: reasoning[key] for key in ('context', 'cautions', 'history', 'historyNote')
+                                   if key in reasoning} or None,
                      'reasons': public_sentences(reasons.get(key) if isinstance(reasons, dict) else None,
                                                  reasoning.get('context'), pick.get('why'), limit=4),
                      'cautions': public_sentences(reasoning.get('cautions'), pick.get('risk'), limit=4),
@@ -2975,11 +2987,12 @@ def board_picks(first, latest, by_id, identities, now=None):
                          and now < instant(game['kickoff']))), 'why': pick.get('why'),
                      'risk': pick.get('risk'), 'edge': pick.get('edge'), 'quotedAt': pick.get('quotedAt'),
                      'whatChanged': pick.get('whatChanged'),
-                     'dossier': pick.get('dossier') if isinstance(pick.get('dossier'), dict) else None,
                      'expiresAt': pick.get('expiresAt'), 'publishedAt': pick.get('publishedAt'),
                      'historicalImport': pick.get('historicalImport'), 'sources': pick.get('sources') or [],
-                     'legs': pick.get('legs'), 'correlation': pick.get('correlation'), 'riskTier': pick.get('riskTier'),
-                     'marketWindow': pick.get('marketWindow'), 'entryNote': entry_note,
+                     'legs': [leg if not isinstance(leg, dict) else
+                              {k: v for k, v in leg.items() if k not in ('rawChance', 'calibration', 'calibrationN')}
+                              for leg in pick.get('legs') or []] or None,
+                     'correlation': pick.get('correlation'), 'entryNote': entry_note,
                      'status': status,
                      'result': recent.get('result'), 'actual': recent.get('actual'),
                      'actualValue': recent.get('actualValue'), 'settledAt': recent.get('settledAt'),

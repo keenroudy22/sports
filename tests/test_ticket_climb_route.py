@@ -44,21 +44,20 @@ class RouteTests(unittest.TestCase):
     def test_unselected_future_is_absent_even_with_no_posted_steps(self):
         state = {'run': 1, 'step': 1, 'stake': 50, 'banked': 0, 'saved': 0,
                  'cashed': [], 'open': None, 'missed': None}
-        self.assertEqual(route.public_route(state, NOW, self.games)['rows'], [])
+        self.assertEqual(route.public_route(state)['rows'], [])
         card = route.climb_route(state, NOW, self.games)
         self.assertIn('NEXT STEP: NOT SELECTED', card.svg())
         self.assertNotIn('typical', card.svg())
         self.assertNotIn('>TUE ', card.svg())
         self.assertEqual(kit.qa(card, 'unselected-route'), [])
 
-    def test_public_route_exposes_the_reviewed_daily_rule_at_the_cutover(self):
+    def test_public_route_excludes_desk_rules(self):
         state, _ = route.fixture_states(NOW, self.games)['open']
-        cutover = ladder.REVIEWED_DAILY_FROM
-        earlier = route.public_route(state, cutover - timedelta(seconds=1), self.games)
-        current = route.public_route(state, cutover, self.games)
-        self.assertFalse(earlier['reviewedDaily'])
-        self.assertTrue(current['reviewedDaily'])
-        self.assertEqual(earlier['rows'], current['rows'])
+        state['weekly'] = {'posted': 1, 'maximum': 3}
+        public = route.public_route(state)
+        self.assertNotIn('reviewedDaily', public)
+        self.assertNotIn('weekly', public)
+        self.assertTrue(public['rows'])
 
     def test_real_history_can_grow_without_squeezing_rows_or_clipping_footer(self):
         state, instant = route.fixture_states(NOW, self.games)['midclimb']
@@ -151,7 +150,7 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(state['open']['cashes'], 104)
         self.assertEqual(state['open']['first'], route.when('2026-10-09T23:00Z'))
         self.assertEqual(route.route_rows(state, NOW, games)[-1][1]['planned'], True)
-        public = route.public_route(state, NOW, games)
+        public = route.public_route(state)
         self.assertEqual(public['image'], 'data/cards/climb-route.png')
         self.assertEqual(public['rows'][0]['kind'], 'cashed')
         self.assertEqual(public['rows'][0]['bet'], 50)
@@ -159,7 +158,7 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(public['rows'][0]['legs'][0]['href'], '#pick/win')
         self.assertEqual(public['rows'][1]['kind'], 'open')
         self.assertEqual(len(public['rows']), 2)
-        self.assertTrue(all(row['plannedAt'] is None for row in public['rows']))
+        self.assertTrue(all('plannedAt' not in row for row in public['rows']))
         with TemporaryDirectory() as folder:
             path, rendered_state, rendered_rows = route.render(Path(folder) / 'climb-route.png', NOW, stores)
             self.assertTrue(path.is_file())

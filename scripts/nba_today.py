@@ -26,6 +26,8 @@ def public_payloads(data):
 
     props = data.get('playerProps', {})
     overview = {k: v for k, v in data.items() if k != 'playerProps'}
+    if isinstance(overview.get('readiness'), dict):
+        overview['readiness'] = {'stage': overview['readiness'].get('stage')}
     overview['playerPropsFile'] = 'nba-props.json'
     overview['playerProps'] = {k: props[k] for k in ('availabilityAt', 'availableRows', 'note') if k in props}
     overview['teamTrends'] = list({json.dumps(r, sort_keys=True): r for r in data.get('teamTrends', [])}.values())
@@ -288,7 +290,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, d
         r.pop('why',None);r.pop('caution',None)
         for key in ('last5','seasonHistory'):
             if key in r:r[key].pop('values',None)
-    player_props['note']+=' Minutes × own per-minute rate, not opponent-adjusted. Teammate absences are not redistributed.'
+    player_props['note']+=' Recheck player availability and roles before using these estimates.'
     return {'league':'NBA','generatedAt':boxscores.stamp(now),'season':season,'playerProps':player_props,
             'heading':'Opening night · October 20' if nba_capture.sports_refresh.eastern_date(now).isoformat() < '2026-10-20' else 'NBA Today',
             'sourceAt':slate.get('retrievedAt'),'scheduleFresh':fresh(slate.get('retrievedAt'),now,24) or scoreboard_fresh,
@@ -296,7 +298,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None, *, d
             'prepNote':'Current-season games, fresh prices and player availability must clear before a row appears.',
             'readiness':readiness,
             'trial':{'label':nba_trial.nba_pick_policy.label(now),'state':'ready' if started else readiness['stage'],'record':trial_record,'plays':public_plays,'seasons':trial_seasons,
-                     'note':(('NBA picks use 1u and the shared daily exposure limit. No qualifying play has been released yet.' if not public_plays else 'NBA results are shown separately by sport at their original posted terms.') if readiness.get('readyForPicks') else
-                             'NBA Trial record is separate from football. Only a fully checked side or total can appear.' if public_plays else
+                     'note':(('No NBA play has been released yet.' if not public_plays else 'NBA results are shown separately by sport at their original posted terms.') if readiness.get('readyForPicks') else
+                             'The NBA Trial has its own record.' if public_plays else
                              ("NBA Trial is open. No play has been released yet." if readiness['readyForLiveTrial'] else
-                              f"NBA Trial starts October 20. Preseason logging is {readiness['cleanCaptureDays']}/{readiness['cleanCaptureDaysRequired']} clean days and {readiness['paperGraded']}/{readiness['paperGradesRequired']} paper grades toward eventual Best bets promotion."))}}
+                              'NBA research is available. No NBA play has been released yet.'))}}

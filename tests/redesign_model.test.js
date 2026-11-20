@@ -69,13 +69,11 @@ test('why lines never use counterpoints or raw-model sentences', () => {
   assert.equal(M.watchLine(pick), "The opponent's positional allowance points against this side.");
 });
 
-test('how-we-got-it explains the shrink without hiding it', () => {
+test('the posted projection omits private calibration inputs', () => {
   const lines = M.howWeGotIt({ projection: 68.2, line: 49.5, odds: -102, probabilityAtPublication: { rawChance: 0.659, chance: 0.537, calibration: 0.23, calibrationN: 398, breakEven: 0.505 } });
-  assert.match(lines.join(' '), /65.9%|66%/);
-  assert.match(lines.join(' '), /so we show 53\.7%/, 'one decimal, as the ticket prints it');
+  assert.match(lines.join(' '), /projects 68\.2 against the 49\.5 line/);
   assert.match(lines.join(' '), /the price needs 50\.5%/);
-  assert.match(lines.join(' '), /398 graded lines/);
-  assert.match(lines.join(' '), /cut it down hard/);
+  assert.doesNotMatch(lines.join(' '), /65\.9%|398 graded lines|cut it down hard/);
 });
 
 test('pick view model: open best bet shows our chance on the stub, results show tickets', () => {
