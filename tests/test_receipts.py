@@ -126,6 +126,14 @@ class ReceiptTests(unittest.TestCase):
         hand = {'posts': [{'id': 'CFB-2026-W3-hand', 'kind': 'pick', 'postedAt': '2026-09-19T12:30:00Z', 'tweetId': None}]}
         self.assertEqual(receipts.served(hand), {'CFB-2026-W3-hand'}, 'a play posted by hand went out')
 
+    def test_cancelled_x_draft_still_counts_after_confirmed_discord_delivery(self):
+        sent = {'id': 'NFL-delivered', 'kind': 'buffer:play', 'cancelledAt': '2026-11-19T20:05:05Z',
+                'discord': {'state': 'sent', 'sentAt': '2026-11-19T19:49:58Z',
+                            'messageId': '1573062814388723806'}}
+        missing_receipt = dict(sent, id='NFL-unverified', discord={'state': 'sent', 'sentAt': '2026-11-19T19:49:58Z'})
+        deleted = dict(sent, id='NFL-deleted', deletedAt='2026-11-19T20:06:00Z')
+        self.assertEqual(receipts.served({'posts': [sent, missing_receipt, deleted]}), {'NFL-delivered'})
+
     def test_post_boundary_receipt_reconciles_to_only_released_plays(self):
         games = {
             'sat': {'id': 'sat', 'league': 'CFB', 'kickoff': '2026-10-10T23:30:00Z',

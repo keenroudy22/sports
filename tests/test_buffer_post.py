@@ -238,6 +238,16 @@ TICKET = dict(legs=[{'title': 'Iowa at Michigan over 38.5'}, {'title': 'Oklahoma
 
 
 class PlanTests(unittest.TestCase):
+    def test_november_19_incomplete_recap_can_retry_after_private_removal(self):
+        entry = {'id': 'receipt:day:2026-11-19', 'kind': 'buffer:receipt',
+                 'bufferPostId': '6affe431ca85ebefb0febfbf',
+                 'cancelledAt': '2026-11-20T11:33:11Z', 'dueAt': '2026-11-20T11:45:00Z',
+                 'fullDailyRecap': True, 'discord': {'state': 'held'}}
+        self.assertTrue(bp.replaced_partial_daily(entry))
+        self.assertFalse(bp.replaced_partial_daily(dict(entry, bufferPostId='unknown')))
+        self.assertFalse(bp.replaced_partial_daily(dict(entry, discord={'state': 'sent', 'messageId': '1573062814388723806'})))
+        self.assertFalse(bp.replaced_partial_daily(dict(entry, link='https://x.com/keenkooks/status/12345678')))
+
     def test_weekly_summary_is_text_only_but_daily_receipt_keeps_card(self):
         now = datetime(2026, 10, 21, 12, 0, tzinfo=timezone.utc)
         house = [{'key': f'receipt:{kind}:2026-10-20', 'kind': 'receipt',

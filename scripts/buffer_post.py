@@ -447,12 +447,19 @@ PARTIAL_DAILY_CANCEL = ('Unsent partial football-only daily recap; three publish
 
 def replaced_partial_daily(entry):
     """Only the acknowledged, pre-due removal of the incomplete recap can retry."""
-    return (entry.get('id') == 'receipt:day:2026-11-10'
-            and entry.get('kind') == 'buffer:receipt'
-            and entry.get('cancelReason') == PARTIAL_DAILY_CANCEL
-            and entry.get('bufferPostId') and entry.get('cancelledAt') and entry.get('dueAt')
-            and gates.when(entry['cancelledAt']) < gates.when(entry['dueAt'])
-            and not any(entry.get(k) for k in ('sentAt', 'sentUrl', 'deletedAt', 'discord')))
+    if (entry.get('kind') != 'buffer:receipt'
+            or not all(entry.get(k) for k in ('bufferPostId', 'cancelledAt', 'dueAt'))
+            or any(entry.get(k) for k in ('sentAt', 'sentUrl', 'tweetId', 'link', 'deletedAt'))
+            or gates.when(entry['cancelledAt']) >= gates.when(entry['dueAt'])):
+        return False
+    if entry['id'] == 'receipt:day:2026-11-10':
+        return entry.get('cancelReason') == PARTIAL_DAILY_CANCEL and not entry.get('discord')
+    discord = entry.get('discord') or {}
+    return (entry['id'] == 'receipt:day:2026-11-19'
+            and entry['bufferPostId'] == '6affe431ca85ebefb0febfbf'
+            and entry.get('fullDailyRecap') is True
+            and discord.get('state') == 'held'
+            and not any(discord.get(k) for k in ('sentAt', 'messageId')))
 
 
 def early_daily_receipt(key):

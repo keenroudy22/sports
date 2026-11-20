@@ -39,12 +39,12 @@ KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun par
 
 
 def served(log_book):
-    """Ids of plays released to X or Discord. Cancelled/deleted posts were never served."""
+    """Ids of plays that reached X or Discord."""
     out = set()
     for p in log_book.get('posts', []):
-        if p.get('cancelledAt') or p.get('deletedAt'):
-            continue
         discord = p.get('discord') or {}
+        if p.get('deletedAt') or (p.get('cancelledAt') and not confirmed_discord(discord)):
+            continue
         if (p.get('kind') == 'buffer:play' and (p.get('sentAt') or (discord.get('state') == 'sent' and discord.get('sentAt')))) \
                 or (p.get('kind') == 'pick' and p.get('postedAt')):
             out.add(p['id'])
