@@ -2657,6 +2657,18 @@ def matchup_label(game):
     return (' vs ' if game.get('neutral') else ' at ').join(names)
 
 
+def pick_source_facts(review, valid_url):
+    """Publish the cited fact and its public page, without the rest of the review packet."""
+    facts = []
+    for source in review.get('sources') or []:
+        if not isinstance(source, dict):
+            continue
+        url, fact = source.get('url'), source.get('fact')
+        if isinstance(fact, str) and fact.strip() and valid_url(url):
+            facts.append({'url': url, 'fact': fact.strip()})
+    return facts
+
+
 def cbb_record_picks(now=None, root=ROOT):
     """Normalize delivered college-basketball picks for the shared Results surface."""
     import cbb_picks
@@ -2709,6 +2721,7 @@ def cbb_record_picks(now=None, root=ROOT):
             'status': 'settled' if row.get('result') else 'active', 'modelLean': False,
             'selectionPolicy': row.get('selectionMethod'), 'reason': review.get('why'), 'why': review.get('why'),
             'risk': review.get('countercase'), 'sources': list(dict.fromkeys(sources)),
+            'sourceFacts': pick_source_facts(review, cbb_picks.web),
             'delivery': {'discordAt': stamp(discord_at) if discord_at else None,
                          'xAt': stamp(x_at) if x_at else None,
                          'originalX': original_x_post(attempts, now),
@@ -2732,6 +2745,7 @@ def nba_record_picks(now=None, root=ROOT, *, team_finals=()):
     is required, and a settlement is exposed only after its recorded settlement time.
     """
     import nba_prop_release
+    import nba_reviewed_props
     from nba_today import matched_final_scores
     import nba_trial_runtime
 
@@ -2795,6 +2809,7 @@ def nba_record_picks(now=None, root=ROOT, *, team_finals=()):
             'status': 'settled' if row.get('result') else 'active', 'modelLean': False,
             'selectionPolicy': row.get('selectionMethod'), 'reason': review.get('why') or (row.get('reasons') or [None])[0],
             'why': review.get('why'), 'risk': review.get('countercase'), 'sources': list(dict.fromkeys(sources)),
+            'sourceFacts': pick_source_facts(review, nba_reviewed_props.source),
             'delivery': {'discordAt': stamp(discord_at) if discord_at else None,
                          'xAt': stamp(x_at) if x_at else None,
                          'originalX': original_x_post(attempts, now),

@@ -349,7 +349,8 @@ class PickTests(unittest.TestCase):
                 'settledAt': '2026-11-11T12:00:00Z', 'result': 'win', 'actual': 13,
                 'season': 2027, 'seasonType': 2, 'selectionMethod': 'sourced-nba-primary-prop-v1',
                 'retrievedAt': '2026-11-10T16:45:00Z',
-                'sourceReview': {'why': 'Verified role.', 'countercase': 'Minutes can fall.', 'sources': []}}
+                'sourceReview': {'why': 'Verified role.', 'countercase': 'Minutes can fall.', 'sources': [
+                    {'url': 'https://www.nba.com/stats', 'fact': 'Played 30 minutes.', 'checkedAt': 'private clock'}]}}
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             (root / 'data').mkdir()
@@ -361,6 +362,7 @@ class PickTests(unittest.TestCase):
                 [row] = build_site.nba_record_picks(now, root)
             self.assertEqual(row['displayTitle'], 'Example Player OVER 7.5 points')
             self.assertEqual(row['resultDetail'], '13 points · cleared by 5.5')
+            self.assertEqual(row['sourceFacts'], [{'url': 'https://www.nba.com/stats', 'fact': 'Played 30 minutes.'}])
             self.assertEqual(row['delivery']['discordAt'], '2026-11-10T17:20:00Z')
             self.assertEqual(row['delivery']['xAt'], '2026-11-10T17:35:00Z')
             self.assertTrue(row['posted'])
@@ -394,7 +396,9 @@ class PickTests(unittest.TestCase):
                 'selectionMethod': 'sourced-cbb-straight-v1', 'quote': {'checkedAt': '2026-11-10T16:45:00Z'},
                 'game': {'id': 'CBB-1', 'season': 2027, 'seasonType': 'regular-season',
                          'teams': {'away': {'abbreviation': 'QUC'}, 'home': {'abbreviation': 'LMU'}}},
-                'review': {'why': 'Verified continuity.', 'countercase': 'Road game.', 'sources': []}}
+                'review': {'why': 'Verified continuity.', 'countercase': 'Road game.', 'sources': [
+                    {'url': 'https://example.edu/stats', 'fact': 'Twelve offensive boards.'},
+                    {'url': 'file:///private/notes', 'fact': 'Private evidence.'}]}}
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             (root / 'data').mkdir()
@@ -406,6 +410,7 @@ class PickTests(unittest.TestCase):
                 [row] = build_site.cbb_record_picks(now, root)
             self.assertEqual(row['displayTitle'], 'QUC +8.5')
             self.assertEqual(row['resultDetail'], 'QUC scoring margin: +1 · cleared by 9.5')
+            self.assertEqual(row['sourceFacts'], [{'url': 'https://example.edu/stats', 'fact': 'Twelve offensive boards.'}])
             self.assertEqual(row['delivery']['discordAt'], '2026-11-10T17:20:00Z')
             self.assertEqual(row['delivery']['xAt'], '2026-11-10T17:35:00Z')
             self.assertTrue(row['posted'])

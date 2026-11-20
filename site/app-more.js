@@ -522,6 +522,21 @@ button.cal-day { cursor: pointer; }
   };
   views.lab = async () => views.record({ tab: 'trials' });
   /* Keep old bookmarks working without publishing private timing and health pages. */
+  views.pickNotes = (pick, showNotes, why, tape, prose) => {
+    const host = (url, i) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (_) { return `Source ${i + 1}`; } };
+    const sourceLink = (url, i) => `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(host(url, i))} ↗</a>`;
+    const sources = (pick.sources || []).filter(url => /^https:\/\//.test(url));
+    const facts = showNotes ? (pick.sourceFacts || []).filter(({ url }) => sources.includes(url)) : [];
+    const remaining = sources.filter(url => !facts.some(fact => fact.url === url));
+    const notes = showNotes && (why || pick.risk || facts.length) ? tape('Why I played it', `<div class="card">
+      ${why ? `<p>${esc(prose(why))}</p>` : ''}
+      ${facts.length ? `<h3 class="small" style="margin-top:14px">What I checked</h3><ul class="steps">${facts.map(({ fact, url }, i) => `<li>${esc(fact)} ${sourceLink(url, i)}</li>`).join('')}</ul>` : ''}
+      ${pick.risk ? `<h3 class="small" style="margin-top:14px">What could beat it</h3><p>${esc(prose(pick.risk))}</p>` : ''}
+      ${pick.reasoning?.historyNote ? `<p class="small muted" style="margin-top:6px">${esc(pick.reasoning.historyNote)}</p>` : ''}
+    </div>`) : '';
+    return { notes, sourceLinks: remaining.length ? `<p class="small muted" style="margin-top:14px">Sources: ${remaining.map(sourceLink).join(' · ')}</p>` : '' };
+  };
+
   views.schedule = async () => views.more();
   views.status = async () => views.more();
   views.feedback = async () => `<a class="back" href="#more">← More</a>${head('Feedback', 'What helped, what got in the way', 'Your note stays here until you copy and send it privately on Discord.')}

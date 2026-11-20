@@ -1374,7 +1374,7 @@
     const postedSummary = posted.some(p => ['NBA', 'CBB'].includes(p.league)) ? `<section id="today-posted-straights" aria-labelledby="posted-straights-heading"><div class="kt-focus-head"><h2 id="posted-straights-heading">${posted.length} posted straight${posted.length === 1 ? '' : 's'} today</h2><a href="#record">Track record ›</a></div><ul class="today-straights" id="today-card">${posted.map(p => {
       const vm = pickVM(p, now);
       const status = p.result ? RESULT_WORD[p.result] || 'Final' : vm.mode === 'expired' ? 'Check price' : vm.state.word;
-      return `<li><a class="today-straight" href="${esc(vm.href)}"><span><strong>${esc(vm.title)}</strong><small>${esc(p.league)} · ${esc(ticketWhen(p.kickoff))}${status ? ` · ${esc(status)}` : ''}</small></span><span class="today-straight-price"><b class="num">${esc(oddsText(p.odds))}</b><small>${esc(vm.book)} · ${esc(C.stakeOf(p))}u</small></span><span aria-hidden="true">›</span></a>${P.betslipAction(p, now, true)}</li>`;
+      return `<li><a class="today-straight" href="${esc(vm.href)}"><span><strong>${esc(vm.title)}</strong><small>${esc(p.league)} · ${esc(ticketWhen(p.kickoff))}${status ? ` · ${esc(status)}` : ''}</small>${p.why || p.reason ? '<small>Full breakdown</small>' : ''}</span><span class="today-straight-price"><b class="num">${esc(oddsText(p.odds))}</b><small>${esc(vm.book)} · ${esc(C.stakeOf(p))}u</small></span><span aria-hidden="true">›</span></a>${P.betslipAction(p, now, true)}</li>`;
     }).join('')}</ul></section>` : '';
     const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba, { showPicks: !postedSummary }) : '';
     const extraToday = [
@@ -1423,8 +1423,6 @@
     const hold = vm.kind === 'best' ? pickHold(pick, catalog?.lines) : null;
     const how = hold ? [] : howWeGotIt(pick);
     const prose = v => v == null ? '' : typeof v === 'string' ? v : Array.isArray(v) ? v.map(prose).join(' · ') : typeof v === 'object' ? Object.entries(v).map(([k, x]) => `${k}: ${prose(x)}`).join(' · ') : String(v);
-    const host = (u, i) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (_) { return `Source ${i + 1}`; } };
-    const sources = (pick.sources || []).filter(x => /^https:\/\//.test(x));
     const originalX = pick.delivery?.originalX;
     const clv = (((board || {}).picks || {}).rows || []).find(r => r.id === pick.id);
     const research = C.pickResearchRoute ? C.pickResearchRoute(pick) : null;
@@ -1443,6 +1441,12 @@
     const sameGame = research === `#game/${pick.gameId}`;
     const isSaved = state.watchlist.some(r => r.key === 'pick:' + pick.id);
     const tape = (title, body) => `<section class="kt-page-sec"><h2 class="kt-tape">${esc(title)}</h2>${body}</section>`;
+    const why = pick.why || (vm.kind === 'best' ? pick.reason : null);
+    const showNotes = !hold || hold.afterPosting;
+    const { notes = '', sourceLinks = '' } = why || pick.risk || pick.sources?.length
+      ? await ensureMore().then(views => views.pickNotes(pick, showNotes, why, tape, prose))
+        .catch(() => ({ notes: showNotes && why ? tape('Why I played it', `<p>${esc(prose(why))}</p>`) : '' }))
+      : {};
     const price = vm.kind === 'best' && !hold && vm.fair != null && vm.calibrated && vm.mode !== 'closed'
       ? tape('My price', `<div class="kt-figs"><p><b class="num">${esc(minus(oddsText(vm.fair)))}</b>Price matching our chance</p><p><b class="num">${vm.edge > 0 ? '+' : ''}${esc(vm.edge)} pts</b>Chance vs price's need</p></div>`) : '';
     const started = Date.parse(pick.kickoff) <= Date.now();
@@ -1458,19 +1462,18 @@
     return `${back}<p class="small muted">${esc(when(vm.kickoff))}${pick.quotedAt && vm.mode === 'open' ? ` · price quoted ${esc(ago(pick.quotedAt))}` : ''}</p>
       ${withdrawalNotice(pick) ? `<div class="card on-felt" style="margin-top:14px"><p><b>Recommendation withdrawn.</b> Original published result still counts.</p></div>` : ''}
       <div class="kt-page"><div style="margin-top:14px">${rail([pick], { onPage: true, lines: catalog?.lines, season: (today.season || {})[state.league] })}</div>
-      ${result ? tape('Result', result) : ''}${price}${held}${stake}
+      ${result ? tape('Result', result) : ''}${price}${held}${notes}${stake}
       ${pick.whatChanged ? tape('What changed', `<p>${esc(pick.whatChanged)}</p>`) : ''}
       ${notices.length ? `<div class="card on-felt" style="margin-top:14px;display:grid;gap:8px">${notices.map(n => `<p class="small">${n}</p>`).join('')}</div>` : ''}
       ${how.length ? tape(chanceTitle, `<div class="card"><ol class="steps">${how.map(x => `<li>${esc(x)}</li>`).join('')}</ol>${vm.chance != null ? `<p class="small muted" style="margin-top:6px">At posting: ${pctOne(vm.chance)} estimated chance · ${esc(oddsText(vm.odds))} needed ${pctOne(vm.needs)} to break even.</p>` : ''}</div>`)
         : ''}
       ${chart}${projected}
       ${vm.legs.length ? tape('Legs', `<div class="card"><ul class="fa">${vm.legs.map(l => `<li>${esc(l)}</li>`).join('')}</ul>${pick.correlation ? `<p class="small muted" style="margin-top:8px"><b>How the legs relate:</b> ${esc(prose(pick.correlation))}</p>` : ''}</div>`) : ''}
-      ${(pick.why || pick.risk) && !hold ? `<details class="more-box" data-box="fullread" style="margin-top:20px"><summary>Our notes when we posted it</summary><div class="grid two"><div class="card"><p class="eyebrow green">Why</p><p style="margin-top:6px">${esc(prose(pick.why))}</p>${(pick.reasoning || {}).historyNote ? `<p class="small muted" style="margin-top:6px">${esc(pick.reasoning.historyNote)}</p>` : ''}</div><div class="card"><p class="eyebrow">What could go wrong</p><p style="margin-top:6px">${esc(prose(pick.risk))}</p></div></div></details>` : ''}
       ${pick.cutoff ? tape(vm.mode === 'open' && !hold ? 'Good to' : vm.kind === 'best' ? 'Was good to' : 'Entry rule', `<p>${esc(prose(pick.cutoff))}</p>${vm.mode === 'open' && !hold && goodTo(pick) ? `<p class="small muted" style="margin-top:4px">${esc(goodTo(pick))}</p>` : ''}`) : ''}
       ${tape('Where it stands', `${vm.statusNote && !hold ? `<p class="small">${esc(vm.statusNote)}</p>` : ''}<p class="small muted" style="margin-top:4px">${esc(C.deliveryText(pick) || 'No delivery evidence recorded.')}</p>${/^https:\/\/x\.com\/keenkooks\/status\/[0-9]{15,22}$/.test(originalX) ? `<p class="small"><a href="${esc(originalX)}" target="_blank" rel="noopener noreferrer">Original pick on X ↗</a></p>` : ''}`)}
       ${hold ? '' : P.betslipAction(pick,Date.now())}
       <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><a class="btn" href="${pick.posted === true && !pick.historicalImport && /^(NFL|CFB|NBA|CBB)-[A-Za-z0-9_-]{1,140}$/.test(pick.id) ? `p/${esc(pick.id)}.html` : esc(vm.href)}" data-copy-link>Share pick</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
-      ${sources.length ? `<p class="small muted" style="margin-top:14px">Sources: ${sources.map((x, i) => `<a href="${esc(x)}" target="_blank" rel="noopener noreferrer">${esc(host(x, i))} ↗</a>`).join(' · ')}</p>` : ''}
+      ${sourceLinks}
       <p class="kt-social small"><a href="https://discord.gg/ZnjubjsBPM">Discord</a> · <a href="https://x.com/keenkooks">Kook’n on X</a></p>
       <p class="small muted" style="margin-top:10px">${pick.accountingUnknown || (pick.historicalImport && !pick.priceAssumed && !(isNum(pick.riskUnits) && pick.riskUnits > 0)) ? 'The original stake is unknown; historical unit assumptions are labeled separately.' : C.isParlay(pick) ? (C.isLadder(pick) ? 'Climb · tracked in dollars.' : 'Fun ticket · separate record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : `Graded at the posted ${C.stakeOf(pick)}u stake, at the line and price we posted.`} The posted price is kept for grading even after the line moves.</p></div>`;
   };
@@ -2144,7 +2147,7 @@
   const MORE_VIEW_NAMES = ['record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-c9b88aa3038b';
+  const MORE_ASSET = 'app-more.js?v=sha256-95e52b5f221f';
   const PLAYER_ASSET = 'app-player.js?v=sha256-b7fa3de4d7af';
   const GAMES_ASSET = 'app-games.js?v=sha256-7a753f8ade5f';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-d0c8ba8cf2a2';

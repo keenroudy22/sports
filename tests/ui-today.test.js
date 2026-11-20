@@ -13,6 +13,7 @@ const P = require('../site/personal.js');
 globalThis.KRCore = C;
 const { model: M } = require('../site/app.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
+const moreSource = fs.readFileSync('site/app-more.js', 'utf8');
 const css = fs.readFileSync('site/app.css', 'utf8');
 const html = fs.readFileSync('site/index.html', 'utf8');
 
@@ -88,11 +89,27 @@ const loadApp = (hash, held = {}, { hero = HERO, today = TODAY, stored = {}, ext
     AbortController, TextEncoder, TextDecoder, setTimeout, clearTimeout, setInterval, clearInterval,
   };
   sandbox.globalThis = sandbox; sandbox.self = sandbox; sandbox.window = sandbox;
+  vm.runInNewContext(moreSource, sandbox, { filename: 'site/app-more.js' });
   vm.runInNewContext(source, sandbox, { filename: 'site/app.js' });
   return { api: sandbox.module.exports, view, sandbox };
 };
 const settle = async () => { for (let i = 0; i < 20; i++) await new Promise(r => setTimeout(r, 0)); };
 const wait = ms => new Promise(r => setTimeout(r, ms));
+
+test('the Today straight links to its visible matchup case, cited facts and risk', async () => {
+  const pick = { ...total, id: 'CBB-sourced-1', league: 'CBB', posted: true, lane: 'best_bet',
+    why: 'Extra possessions are the angle.', risk: 'Their guards can keep it close.',
+    sourceFacts: [{ url: 'https://example.edu/box-score', fact: 'Twelve offensive boards.' }],
+    sources: ['https://example.edu/box-score'] };
+  const { api } = loadApp('#today', {}, { today: { ...TODAY, picks: [pick] } });
+  const page = await api.views.today({ view: 'today' });
+  assert.match(page, /href="#pick\/CBB-sourced-1"[^>]*>[\s\S]*?Full breakdown/);
+  const detail = await api.views.pick({ view: 'pick', id: pick.id });
+  assert.match(detail, /<h2[^>]*>Why I played it<\/h2>[\s\S]*Extra possessions are the angle\./);
+  assert.match(detail, /What I checked<\/h3>[\s\S]*Twelve offensive boards\. <a href="https:\/\/example\.edu\/box-score"/);
+  assert.match(detail, /What could beat it<\/h3><p>Their guards can keep it close\.<\/p>/);
+  assert.doesNotMatch(detail, /<details[^>]*>\s*<summary>Why I played it/);
+});
 
 test('a moneyline ticket shows the real price without treating win probability as a points projection', async () => {
   const ml={...prop,id:'NFL-ml',kind:'gamePicks',athleteId:null,position:null,market:null,
@@ -378,7 +395,7 @@ test('the shell requests the hero before render-blocking CSS and keeps the foote
 test('tapping another tab before today.json lands replaces the hero with the loading line', async () => {
   let release;
   const gate = new Promise(r => { release = r; });
-  const { api, view, sandbox } = loadApp('#today', { 'data/app/today.json': gate });
+  const { api, view, sandbox } = loadApp('#today', { 'data/app/today.json': gate, 'data/app/record.json': gate });
   api.render();
   await settle();
   assert.match(view.innerHTML, /hero-first/);
