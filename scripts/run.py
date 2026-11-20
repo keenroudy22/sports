@@ -3398,7 +3398,10 @@ def mirror_due(log_book, now):
     """Is there an X result or Discord-first delivery the lightweight job should handle?"""
     import nba_editorial
     import buffer_post
+    import discord_post
     for entry in log_book.get('posts', []):
+        if discord_post.recoverable_complete_recap(entry):
+            return True
         if buffer_post.style_audit_due(entry, now):
             return True
         if nba_editorial.veto_pending(entry,now):
@@ -4156,6 +4159,8 @@ def stored_discord_work_due(now, log_book):
     """
     import copy
     import discord_post
+    if any(discord_post.recoverable_complete_recap(entry) for entry in log_book.get('posts', [])):
+        return True
     book = copy.deepcopy(log_book)
     try:
         ctx = gates.Stores().as_of(now)

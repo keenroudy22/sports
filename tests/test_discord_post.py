@@ -8,6 +8,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import discord_post
 import result_display
+import run
 
 
 NOW = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
@@ -51,6 +52,8 @@ class DiscordPostTests(unittest.TestCase):
         attempted = dict(recap, discord=dict(skipped, attempts=1))
         unconfirmed = dict(recap, tweetId=None, discord=dict(skipped))
         log = {'posts': [recap, attempted, unconfirmed]}
+        self.assertTrue(run.mirror_due(log, now))
+        self.assertTrue(run.stored_discord_work_due(now, log))
         with patch.object(discord_post, 'send_message', return_value={'id': '1573300000000000000'}) as send:
             for _ in range(2):
                 discord_post.mirror_sent(log, now, url='plays', log=lambda *_: None,
@@ -60,6 +63,7 @@ class DiscordPostTests(unittest.TestCase):
         self.assertNotIn('reason', recap['discord'])
         self.assertEqual(attempted['discord']['state'], 'skipped')
         self.assertEqual(unconfirmed['discord']['state'], 'skipped')
+        self.assertFalse(run.mirror_due(log, now))
 
     def test_regular_nba_checks_original_then_sends_play_and_real_result_once(self):
         import nba_trial_runtime as nba
