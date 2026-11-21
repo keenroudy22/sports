@@ -100,20 +100,24 @@ test('the real app shared interface renders every lazy view with fixture data', 
   assert.doesNotMatch(climbHtml, /typical −160|standalone Thursday and Monday|alternate-line legs|Target combined odds|steps used across|NBA is research-only/);
 });
 
-test('official record always renders the separate Chef record without changing overall results', async () => {
-  const {api,factory}=loadBrowserApi();
-  const picks=[{id:'chef',league:'CFB',season:2026,kind:'props',lane:'chef_pick',posted:true,
-    riskUnits:1,odds:100,result:'loss',kickoff:'2026-10-28T00:00Z',settledAt:'2026-10-28T04:00Z',
-    title:'Player over 2.5 catches',chefEvidence:{policy:'chef-forward-ev-v1'}}];
-  const ctx=api.moreContext({allPicks:async()=>picks, get:async()=>({}),
-    maybe:async path=>path==='scoreboard.json'?{picks:{rows:[{id:'chef',clv:1}]}}:null});
-  Object.assign(ctx.state,{league:'CFB',record:{season:'current',phase:'current',q:''}});
-  const html=await factory(ctx).record({tab:'official'});
-  assert.match(html,/id="chef-record"/);
-  assert.match(html,/Forward EV policy/);
-  assert.match(html,/Included in the overall best-bet record/);
-  assert.match(html,/beat the closing line on 1 of 1/);
-  assert.equal(C.recordBreakdown(picks).all.losses,1);
+test('Results tracks daily Chef designations and keeps legacy picks in Every result', async () => {
+  const { api, factory } = loadBrowserApi();
+  const legacy = { id: 'legacy-chef', league: 'CFB', season: 2026, kind: 'props', lane: 'chef_pick', posted: true, featured: true,
+    riskUnits: 2, odds: -110, result: 'loss', kickoff: '2026-10-28T00:00Z', title: 'Legacy player over 2.5 catches' };
+  const daily = { ...legacy, id: 'daily-chef', lane: 'best_bet', dailyChefDay: '2026-10-28', featured: false, riskUnits: 1,
+    odds: 120, result: 'win', kickoff: '2026-10-28T23:00Z', title: 'Daily player over 20.5 yards' };
+  const ctx = api.moreContext({ allPicks: async () => [legacy, daily], get: async () => ({}), maybe: async () => null });
+  Object.assign(ctx.state, { league: 'CFB', record: { season: 'current', phase: 'current', q: '' } });
+  const html = await factory(ctx).record({ tab: 'official' });
+  const tracker = html.split('id="daily-chef-record"')[1].split('</section>')[0];
+  assert.match(tracker, /1–0<\/b> · \+1\.20u · 0 open/);
+  assert.match(tracker, /#pick\/daily-chef/);
+  assert.doesNotMatch(tracker, /#pick\/legacy-chef/);
+  assert.doesNotMatch(html, /id="chef-record"|<small>Pick of the Day<\/small>|Forward EV policy/);
+  const history = html.split('Every result')[1].split('</section>')[0];
+  assert.match(history, /#pick\/daily-chef/);
+  assert.match(history, /#pick\/legacy-chef/);
+  assert.match(html, /1–1 at posted prices · −0\.80u/);
 });
 
 
@@ -137,14 +141,14 @@ test('Results splits moneylines from spreads and uses saved graded estimates', a
   assert.doesNotMatch(calibration, /60–&lt;70%/);
 });
 
-test('the Chef record survives a rolling release with an older cached core', async () => {
-  const {api,factory}=loadBrowserApi();
-  const ctx=api.moreContext({allPicks:async()=>[],get:async()=>({}),maybe:async()=>null});
-  ctx.C={...C,chefRecord:undefined};
-  Object.assign(ctx.state,{league:'CFB',record:{season:'current',phase:'current',q:''}});
-  const html=await factory(ctx).record({tab:'official'});
-  assert.match(html,/id="chef-record"/);
-  assert.match(html,/No Chef/);
+test('the daily Chef tracker explains its empty state', async () => {
+  const { api, factory } = loadBrowserApi();
+  const ctx = api.moreContext({ allPicks: async () => [], get: async () => ({}), maybe: async () => null });
+  Object.assign(ctx.state, { league: 'CFB', record: { season: 'current', phase: 'current', q: '' } });
+  const html = await factory(ctx).record({ tab: 'official' });
+  assert.match(html, /id="daily-chef-record"/);
+  assert.match(html, /first daily favorite posted at its original price/);
+  assert.doesNotMatch(html, /id="chef-record"/);
 });
 
 test('NBA record keeps posted player terms and voids separate from team margins', async()=>{

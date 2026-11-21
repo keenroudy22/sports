@@ -232,7 +232,8 @@ button.cal-day { cursor: pointer; }
     const kLabel = `Record · ${archive.selectedSeason === 'all' ? 'all seasons' : seasonLabel} · ${phaseLabel}`;
     const showSeason = archive.seasons.length > 1, hasPlayoffs = all.some(p => C.recordPhaseOf(p) === 'playoffs');
     const nonDefault = state.record.season !== 'current' || state.record.phase !== 'current';
-    const k = kpiStrip(all, board, rows, nonDefault ? kLabel : curPhases.length === 1 && curPhases[0] === 'playoffs' ? 'Playoff record' : 'Season record');
+    const recordLabel = nonDefault ? kLabel : curPhases.length === 1 && curPhases[0] === 'playoffs' ? 'Playoff record' : 'Season record';
+    const k = kpiStrip(all, board, rows, recordLabel, { showFeatured: false });
     const recordHref = path => `${path}${state.league === 'ALL' ? '' : `?sport=${encodeURIComponent(state.league)}`}`;
     const tabs = `<div class="toolbar"><div class="chip-scroll">${segLinks([[recordHref('#record'), 'Best bets', 'official'], [recordHref('#record/fun'), 'Fun', 'fun'], [recordHref('#record/climb'), 'Climb', 'climb'], [recordHref('#record/model'), 'Model', 'model'], [recordHref('#record/trials'), 'Trials', 'trials']], tab)}</div></div>`;
     const top = head('The record', 'Every play, graded in public', `Win or lose, at the price and book we posted.${state.league !== 'ALL' ? ` Showing ${esc(LEAGUE_NAME[state.league])}.` : ' All posted sports are counted together; use the sport chips for the breakdown.'}`);
@@ -267,24 +268,10 @@ button.cal-day { cursor: pointer; }
         const ordered = [...items].sort((a, b) => String(b.kickoff || b.settledAt).localeCompare(String(a.kickoff || a.settledAt)));
         return section(`${name} · ${wl(stats)} · ${units(stats.units)}`, `<div class="receipts">${ordered.map(p => receipt(p, clvById)).join('')}</div>`);
       }).join('');
-      // Rolling releases can briefly pair the new view with a cached older core.
-      const chefRows = rows.filter(p => p.lane === 'chef_pick' && !C.isParlay(p) && C.countsPublic(p) && !C.isUnpricedImport(p));
-      const chef = typeof C.chefRecord === 'function' ? C.chefRecord(rows) : {
-        rows: chefRows, ...{ all: C.recordBreakdown(chefRows).all, captured: C.recordBreakdown(chefRows).captured },
-        forward: C.recordBreakdown(chefRows.filter(p => p.chefEvidence?.policy === 'chef-forward-ev-v1')).captured,
-      };
-      const chefClose = clvSummary(chef.rows.map(p => ({ clv: clvById.get(p.id) })));
-      const chefPrices = chef.rows.map(p => p.chefPriceComparison).filter(p => isNum(p?.edgePoints));
-      const daily = straight.filter(p => p.dailyChefDay);
-      const potd = C.summaryOf(daily, 1);
-      const dailyPanel = section("Daily Chef’s Pick", `<div class="card" id="daily-chef-record"><p><b>${esc(wl(potd))}</b> · ${esc(units(potd.units))} · ${esc(potd.pending)} open</p>
-        ${daily.length ? [...daily].sort((a,b) => b.dailyChefDay.localeCompare(a.dailyChefDay)).map(p => receipt(p, clvById)).join('') : '<p class="small muted">The record starts with the first daily favorite posted at its original price.</p>'}</div>`);
-      const chefPanel = section("Chef's Picks", `<div class="card" id="chef-record"><p><b>${esc(wl(chef.all))}</b> · ${esc(units(chef.captured.units))} at recorded prices · ${esc(chef.all.pending)} open</p>
-        <p class="small muted">Included in the overall best-bet record. New picks use 2u; earlier stakes stay as posted. Promo credits are excluded from these units.</p>
-        <p class="small">Forward EV policy: ${esc(wl(chef.forward))} · ${esc(units(chef.forward.units))} · ${esc(chef.forward.pending)} open.</p>
-        <p class="small muted">${chefClose.measured ? `Posted line beat the closing line on ${chefClose.beat} of ${chefClose.measured} measured plays; ${chefClose.tied} tied.` : 'Closing-line comparison: no measured plays yet.'} Passing on a day is allowed.</p>
-        <p class="small muted">Exact-line price check: ${chefPrices.length ? `${chefPrices.filter(p => p.edgePoints > 0).length} of ${chefPrices.length} posted prices better than the latest stored same-book quote within an hour of kickoff. Captured comparison, not a verified closing price.` : 'no comparable near-kickoff prices recorded yet.'}</p>
-        ${chef.rows.length ? `<div class="receipts">${[...chef.rows].sort((a,b) => String(b.kickoff).localeCompare(String(a.kickoff))).map(p => receipt(p, clvById)).join('')}</div>` : '<p class="small muted">No Chef’s Picks in this view yet.</p>'}</div>`);
+      const daily = straight.filter(p => p.dailyChefDay).sort((a, b) => b.dailyChefDay.localeCompare(a.dailyChefDay));
+      const dailyRecord = C.summaryOf(daily, 1);
+      const dailyPanel = section("Daily Chef’s Pick", `<div class="card" id="daily-chef-record"><p><b>${esc(wl(dailyRecord))}</b> · ${esc(units(dailyRecord.units))} · ${esc(dailyRecord.pending)} open</p>
+        ${daily.length ? `<div class="receipts">${daily.map(p => receipt(p, clvById)).join('')}</div>` : '<p class="small muted">The record starts with the first daily favorite posted at its original price.</p>'}</div>`);
       const rec = C.recordBreakdown(straight);
       rec.captured.roi = OWNER_FLAGS.roi ? roiOf(rec.captured) : null;
       const points = cumulativeUnits(straight, cal.headlineUnits);
@@ -303,7 +290,7 @@ button.cal-day { cursor: pointer; }
       const compact = items => { const t = C.summaryOf(items); return items.length ? `${wl(t)}${t.pending ? ` · ${t.pending} pending` : ''}` : '—'; };
       const archiveRows = [...archiveGroups].sort((a, b) => b[0].localeCompare(a[0])).map(([key, items]) => { const [lg, season, phase] = key.split('|');
         return [`${lg} ${season} · ${phase === 'playoffs' ? 'Playoffs' : 'Regular season'}`, compact(items.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p) && C.isHeadline(p))), compact(items.filter(p => C.isParlay(p) && !C.isLadder(p) && !C.isUnpricedImport(p) && C.countsPublic(p))), compact(items.filter(p => C.isLadder(p) && C.countsPublic(p)))]; });
-      return `${top}${tabs}${pickers}${calendar(every, clvById)}${k.html}${dailyPanel}${chefPanel}
+      return `${top}${tabs}${pickers}${calendar(every, clvById)}${k.html}${dailyPanel}
         ${section('Units over the season', `<div class="card">${unitsChart(points) || '<p class="muted small">Not enough graded plays yet.</p>'}<p class="chart-cap">${esc(wl(rec.captured))} at posted prices · ${esc(units(rec.captured.units))}${rec.captured.roi != null ? ` · ROI ${rec.captured.roi > 0 ? '+' : ''}${rec.captured.roi.toFixed(1)}%` : ''}. ${rec.assumed.wins + rec.assumed.losses ? `${esc(wl(rec.assumed))} more from before prices were recorded, counted at an assumed −115 and kept out of the units line.` : ''}${rec.credits ? ` Promo credits of ${rec.credits}u are not counted as winnings.` : ''}</p></div>`)}
         ${open.length ? section('Not graded yet', `<div class="receipts">${open.map(p => receipt(p, clvById)).join('')}</div>`, '', 'Graded at the price we posted, even if the price has moved since.') : ''}
         ${notPosted.length ? section('Not posted', `<div class="receipts">${notPosted.map(p => `<p><a href="#pick/${esc(p.id)}">${esc(niceTitle(p.displayTitle || p.title))}</a> · Not posted; excluded from the record.</p>`).join('')}</div>`) : ''}

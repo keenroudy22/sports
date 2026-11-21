@@ -1122,7 +1122,7 @@
   /* Owner decisions still open (HANDOFF §7 R7 and §13): closing-line value as a headline number and a public ROI.
      Until that is approved, CLV stays on Model vs market and the receipts, and ROI is not shown. */
   const OWNER_FLAGS = { clvHeadline: false, roi: false };
-  const kpiStrip = (picks, board, rows = null, label = null) => {
+  const kpiStrip = (picks, board, rows = null, label = null, { showFeatured = true } = {}) => {
     const archive = rows ? null : C.recordArchive(picks);
     const scoped = rows || archive.rows;
     const straight = scoped.filter(p => !C.isParlay(p));
@@ -1139,7 +1139,7 @@
       <div class="kpi"><small>${esc(head)}</small><b class="num">${esc(wl(rec.all))}</b><span>every best bet, win or lose</span></div>
       <div class="kpi"><small>Units</small><b class="num ${rec.captured.units < 0 ? 'red' : rec.captured.units > 0 ? 'green' : ''}">${esc(units(rec.captured.units))}</b><span>at posted prices · ${esc(wl(rec.captured))} with a recorded price${rec.captured.roi != null ? ` · ROI ${rec.captured.roi > 0 ? '+' : ''}${rec.captured.roi.toFixed(1)}%` : ''}</span></div>
       ${OWNER_FLAGS.clvHeadline ? `<div class="kpi"><small>Beat the closing line</small><b class="num">${clv.measured ? `${clv.beat} of ${clv.measured}` : '–'}</b><span>${clv.measured ? `${clv.tied} tied · ${clv.lost} lost` : 'not measured yet'}</span></div>`
-        : `<div class="kpi"><small>Pick of the Day</small><b class="num">${esc(wl(potd))}</b><span>one featured play a day</span></div>`}
+        : showFeatured ? `<div class="kpi"><small>Pick of the Day</small><b class="num">${esc(wl(potd))}</b><span>one featured play a day</span></div>` : ''}
       <div class="kpi"><small>Last game day</small><b class="num">${recNow.lastDay ? esc(wl(recNow.lastDay)) : '–'}</b><span>this week ${esc(wl(recNow.week))}</span></div></div>` };
   };
 
@@ -2183,7 +2183,7 @@
   const MORE_VIEW_NAMES = ['record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-fcdd0d6e38cc';
+  const MORE_ASSET = 'app-more.js?v=sha256-2519713f622d';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
   const GAMES_ASSET = 'app-games.js?v=sha256-66215733a50f';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-d0c8ba8cf2a2';
