@@ -84,6 +84,26 @@ class ReleaseQueueTests(unittest.TestCase):
                     release_queue.withdraw(folder,'held','Exact quote expired.',NOW)
             self.assertEqual(release_queue.load(folder),original)
 
+    def test_private_straight_withdrawal_rejects_the_same_old_capture(self):
+        with tempfile.TemporaryDirectory() as folder:
+            houston = {'id': 'houston-under', 'line': 70.5, 'odds': -110,
+                       'quotedAt': '2026-10-11T11:18:00Z'}
+            ticket = {'id': 'double', 'legs': [{'id': 'a'}, {'id': 'b'}]}
+            release_queue.save(folder, {'plays': [
+                {'id': houston['id'], 'pick': houston},
+                {'id': ticket['id'], 'pick': ticket},
+                {'id': 'public-straight', 'pick': {'id': 'public-straight'}, 'discordSentAt': 'earlier'},
+            ]})
+            release_queue.withdraw(folder, houston['id'], 'The sportsbook moved to 71.5.', NOW)
+            release_queue.withdraw(folder, ticket['id'], 'Ticket window expired.', NOW)
+            release_queue.withdraw(folder, 'public-straight', 'X recovery closed.', NOW)
+            withdrawals = release_queue.withdrawn_straights(folder, NOW)
+            self.assertEqual(withdrawals, {houston['id']: NOW})
+            self.assertIn('captured again', release_queue.withdrawn_quote_refusal(houston, withdrawals))
+            self.assertIsNone(release_queue.withdrawn_quote_refusal(
+                dict(houston, quotedAt='2026-10-11T12:01:00Z'), withdrawals))
+            self.assertIsNone(release_queue.withdrawn_quote_refusal(ticket, withdrawals))
+
     def test_new_climb_rung_without_latest_row_is_marked_pending(self):
         rung = {'id': 'CFB-2026-W7-ladder-1017-c3s2-dk', 'title': '80/20 Climb #3 · Step 2'}
         ctx = SimpleNamespace(first={rung['id']: dict(rung, league='CFB', kind='parlays')}, latest={})

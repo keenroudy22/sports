@@ -156,6 +156,44 @@ def remove(conf, key):
     save(conf, book)
 
 
+def withdrawal_path(conf):
+    return Path(conf) / 'pending' / 'release-withdrawals.jsonl'
+
+
+def withdrawn_straights(conf, now):
+    """Latest private withdrawal for each straight, as of this run's clock."""
+    withdrawals = {}
+    try:
+        journal = withdrawal_path(conf).open(encoding='utf-8')
+    except FileNotFoundError:
+        return withdrawals
+    with journal:
+        for line in journal:
+            receipt = json.loads(line)
+            if receipt.get('state') != 'withdrawn-before-release':
+                continue
+            pick = (receipt.get('admission') or {}).get('pick') or {}
+            if pick.get('legs') or pick.get('parlayType'):
+                continue
+            key = receipt['id']
+            checked = gates.when(receipt['checkedAt'])
+            if checked <= now and (key not in withdrawals or checked > withdrawals[key]):
+                withdrawals[key] = checked
+    return withdrawals
+
+
+def withdrawn_quote_refusal(pick, withdrawals):
+    checked = withdrawals.get(pick.get('id'))
+    if checked is None or pick.get('legs') or pick.get('parlayType'):
+        return None
+    try:
+        if gates.when(pick.get('quotedAt')) > checked:
+            return None
+    except (TypeError, ValueError):
+        pass
+    return 'the previous release was withdrawn and the exact quote has not been captured again'
+
+
 def withdraw(conf, key, reason, now):
     """Retain an exact private refusal receipt before removing an admission."""
     row = next((row for row in load(conf)['plays'] if row.get('id') == key), None)
@@ -165,7 +203,7 @@ def withdraw(conf, key, reason, now):
              else 'withdrawn-before-release')
     receipt = {'id': key, 'checkedAt': gates.stamp(now), 'state': state,
                'reason': reason, 'admission': row}
-    target = Path(conf) / 'pending' / 'release-withdrawals.jsonl'
+    target = withdrawal_path(conf)
     target.parent.mkdir(parents=True, exist_ok=True)
     # Caller holds the ordinary run lock. A failed journal write leaves the
     # queue intact; this private evidence never enters the public pick record.

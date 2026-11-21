@@ -2725,13 +2725,18 @@ def _run(args, now, slot, kinds, status):
     gut_pool = []         # fully checked fallbacks; chosen only after every Best bet has been considered
     safer_pool = []       # fully honest moneyline legs; combined only when a day has no Best bet
     deferred_research = []
+    withdrawals = release_queue.withdrawn_straights(CONF, now) if wanted else {}
     for candidate_rank, candidate, reclaim_research in research_passes(wanted, deferred_research):
         want = 'prop' if candidate.get('athleteId') else 'lean'
         if want not in kinds:
             continue
         if price(candidate, ctx, now) is None:
             continue
-        early_hold = pre_research_refusal(candidate, ctx)
+        withdrawn_quote = release_queue.withdrawn_quote_refusal(candidate, withdrawals)
+        if withdrawn_quote:
+            early_hold = gates.Decision(False, 'withdrawn_quote', withdrawn_quote)
+        else:
+            early_hold = pre_research_refusal(candidate, ctx)
         if early_hold:
             league = candidate['_league']
             screened.append({'league':league,'gameId':candidate['gameIds'][0],'title':candidate['title'],
@@ -3805,6 +3810,7 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
     channel_error = None
     released = []
     busy = buffer_post.taken(log_book, now)
+    withdrawals = release_queue.withdrawn_straights(CONF, now)
     for row in list(book['plays']):
         key = row.get('id')
         if only is not None and key not in only:
@@ -3850,7 +3856,10 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
             if not packet.get('checks') and gates.when(pick['expiresAt']) > now:
                 log(f'release: {key} awaits its attended exact-ticket recheck; reservation retained')
                 continue
-        refusal = private_release_refusal(row, ctx, now)
+        refusal = None
+        if not row.get('discordSentAt') and not row.get('publicPath'):
+            refusal = release_queue.withdrawn_quote_refusal(pick, withdrawals)
+        refusal = refusal or private_release_refusal(row, ctx, now)
         if refusal:
             release_queue.withdraw(CONF, key, refusal, now)
             if not row.get('discordSentAt') and not row.get('publicPath'):
