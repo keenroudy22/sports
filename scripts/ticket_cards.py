@@ -513,7 +513,8 @@ def final_card(p):
         lines, detail_size = final_detail_lines(result['detail'], detail_room)
         layouts.append((result, lines, detail_size, 112 + max(0, len(lines) - 1) * 38))
     perf = max(1100, panel_bottom + 20 + sum(layout[3] for layout in layouts) + 34)
-    card = kit.Card(perf + 96 + 154)          # 1350 up to five rows, then +112 per row
+    footer = 146 if p.get('category_units') else 96
+    card = kit.Card(perf + footer + 154)
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(760, 300))
     chip, _ = kit.series_chip(card, COL_X, 204, 'FINAL')
     inner += chip
@@ -553,7 +554,9 @@ def final_card(p):
     net_units = p.get('net_units', 0)
     if net_units is not None:
         inner += card.text(X1, perf + 64, f"NET {float(net_units):+.2f}u", 62, INK)
-    frame(card, HOUSE, CHALK, perf, perf + 96, inner)
+    if category_units := p.get('category_units'):
+        inner += card.text(X1, perf + 115, category_units, fit(category_units, 42, X2 - X1), INK_SOFT)
+    frame(card, HOUSE, CHALK, perf, perf + footer, inner)
     return card
 
 

@@ -456,8 +456,10 @@ def replaced_partial_daily(entry):
     if entry['id'] == 'receipt:day:2026-11-10':
         return entry.get('cancelReason') == PARTIAL_DAILY_CANCEL and not entry.get('discord')
     discord = entry.get('discord') or {}
-    return (entry['id'] == 'receipt:day:2026-11-19'
-            and entry['bufferPostId'] == '6affe431ca85ebefb0febfbf'
+    replace = ((entry['id'], entry['bufferPostId']) == ('receipt:day:2026-11-19', '6affe431ca85ebefb0febfbf')
+               or ((entry['id'], entry['bufferPostId']) == ('receipt:day:2026-11-20', '6b01336620a2d09a0ad88861')
+                   and str(entry.get('cancelReason', '')).startswith('Incomplete full daily recap: Climb4Step4')))
+    return (replace
             and entry.get('fullDailyRecap') is True
             and discord.get('state') == 'held'
             and not any(discord.get(k) for k in ('sentAt', 'messageId')))

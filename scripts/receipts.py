@@ -425,6 +425,8 @@ def cbb_daily_rows(day, as_of, log_book):
             full = team.get('name') or ''
             if short.endswith(' St') and full.startswith(short[:-2] + 'State'):
                 short = short[:-2] + 'State'
+            if short == 'Jax State' and full.startswith('Jacksonville State'):
+                short = 'Jacksonville State'
             schools[side] = short
         if play['marketType'] == 'total':
             public_selection = f"{schools['away']}/{schools['home']} {selection}"
@@ -441,6 +443,7 @@ def cbb_daily_rows(day, as_of, log_book):
 
 
 PARLAY_WIN_POSTS_FROM = datetime(2026, 11, 19, 7, 29, tzinfo=gates.EASTERN)
+COMPLETE_CARD_FROM = date(2026, 11, 20)
 
 
 def quiet_parlay_result(pick):
@@ -450,13 +453,34 @@ def quiet_parlay_result(pick):
             and gates.when(pick['settledAt']) >= PARLAY_WIN_POSTS_FROM)
 
 
+def daily_climb_units(row):
+    """Use the posted Climb stake for the recap without changing the ledger."""
+    if pick_card.play_kind(row) != 'ladder':
+        return row
+    info = row.get('ladder') or {}
+    stake, returned = info.get('stake'), info.get('payout')
+    result = row.get('result')
+    if not isinstance(stake, (int, float)) or (result == 'win' and not isinstance(returned, (int, float))):
+        return row
+    from staking import OWNER_UNIT
+    net = returned - stake if result == 'win' else -stake if result == 'loss' else 0
+    results = leg_results(row)
+    detail = (f"{results.count('win')}/{len(results)} legs hit" if results
+              else f"{len(row['legs'])}/{len(row['legs'])} legs hit" if result == 'win' and row.get('legs') else '')
+    return dict(row, units=net / OWNER_UNIT, dailyActual=detail)
+
+
 def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     basketball = nba_daily_rows(day, as_of, log_book or {}) + cbb_daily_rows(day, as_of, log_book or {})
     fun_rows = unit_fun_rows(as_of, day=day, log_book=log_book or {}) if as_of else []
     rows = plays_between(first, latest, games, ids, day, day) + basketball + fun_rows
     if not settled(rows):
         return None
-    shown = [row for row in rows if not quiet_parlay_result(row)]
+    complete = day >= COMPLETE_CARD_FROM
+    if complete:
+        rows = [daily_climb_units(row) for row in rows]
+        rows.sort(key=lambda row: {'team': 0, 'player': 0, 'parlay': 1, 'ladder': 2}[pick_card.play_kind(row)])
+    shown = rows if complete else [row for row in rows if not quiet_parlay_result(row)]
     if not shown:
         return None
     name = f'{day:%A}'
@@ -467,6 +491,15 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     tail = leagues(rows)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
+    climb = [r for r in rows if pick_card.play_kind(r) == 'ladder']
+    if complete:
+        head = f"{name} recap 🍳 {record_text(x_post.summarize(rows))} overall"
+        parts = []
+        for category, plays in (('Straights', straight), ('Parlays', fun), ('Climb', climb)):
+            if plays:
+                summary = x_post.summarize(plays)
+                parts.append(f"{category} {record_text(summary)} ({summary['units']:+.2f}u)")
+        tail = ' · '.join(parts + [f"Net {x_post.summarize(rows)['units']:+.2f}u"])
     if day == date(2026, 11, 19):
         shown = [dict(r, dailyCaptionSelection='+696 Houston Texans parlay')
                  if r['id'] == 'NFL-2026-11-19-prop-ticket-3ba30e34b6ea9820' else r for r in shown]
@@ -476,6 +509,8 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
                 f"Full card {x_post.summarize(rows)['units']:+g}u")
     text = fit_result_rows(shown, head, tail.strip(), games)
     card = f'receipt-day-{day.isoformat()}' + ('-all-sports' if basketball or fun_rows else '')
+    if complete and (climb or fun):
+        card += '-complete'
     if day == date(2026, 11, 19) and any(r['id'] == 'NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4' for r in fun):
         # The first image was published for the incomplete recap. Wait for the
         # rebuilt card to be hosted under its own URL before sending recovery.
@@ -492,7 +527,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
             # Stable identities let health recognize a complete daily recap as
             # result delivery without parsing prose or demanding duplicate Finals.
             'pickIds': [r['id'] for r in rows],
-            **({'dailyRows': rows} if basketball or fun_rows or len(shown) < len(rows) else {}),
+            **({'dailyRows': rows} if basketball or fun_rows or (complete and (climb or fun)) or len(shown) < len(rows) else {}),
             'rows': [(r['result'], label(r, games), result_detail(r), pick_card.play_kind(r)) for r in shown], 'text': text,
             'due': due,
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
