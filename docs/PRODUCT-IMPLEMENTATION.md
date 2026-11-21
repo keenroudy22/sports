@@ -8826,3 +8826,17 @@ Source `dda1a42add3af3d96c7b099219ceee5d0131e06b` passed the canonical release o
 The review covered 63 page/layout checks and 143 generated HTML files with no missing local references, plus save/reload/remove, search, filters, copy-link, exact-chart and calculator interactions. The final hosted sweep checked 21 phone routes at 375px and nine desktop routes at 1440px with no overflow, load-error states or console errors. The visible asset fingerprint was `app.js?v=sha256-25a91216b9c0`. Legacy and copied Gibbs links reopened NFL/TB–DET/rushing yards/RB/Last5; the full chart kept 85.5 over, DraftKings and the exact game, with unverified pricing still labeled as reference. CFB Defense stayed in CFB. NFL/NBA game and CFB team detail navigation selected the correct sport. P02 is now shipped.
 
 Evidence: `work/nov21-site-review-report.json`, `work/nov21-site-review-browser-audit.json`, `work/nov21-site-review-live-audit.json`, `work/nov21-site-review-static-links.json`, `work/nov21-site-review-live-phone.jpg`, and the matching Python, Node, clean, preflight, release and hosted logs. The full-page screenshot mechanism produced a distorted capture; the retained evidence uses the verified normal viewport screenshot. No social delivery or betting-record changes were part of this repair. The preserved KA-R1 handoff above remains separate unfinished operational work.
+
+### November 21 single Daily Chef’s Pick tracker
+
+Results displays one standalone Daily Chef’s Pick tracker. The retired Chef’s
+Picks panel and Pick of the Day tile were removed from Results. Historical picks
+retain their original terms, stakes, grades and place in Every result and the
+overall record. The daily tracker uses the existing receipt-backed designation.
+
+Release `998aaf0f0` passed 2,496 Python tests (two skipped), 387 frontend tests,
+the clean export, and the full release gates. The audit reconciled 210 official
+plays. Pages run [44960660607](https://github.com/keenroudy22/sports/actions/runs/44960660607)
+succeeded. At 375px, live Results showed one daily tracker at 1–0 and +0.87u,
+retained the historical Flournoy result link, and had no console error or overflow.
+Evidence: `work/nov21-daily-chef-results/live-check.json` and `live-phone.jpg`.
