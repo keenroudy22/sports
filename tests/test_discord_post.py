@@ -65,6 +65,19 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(unconfirmed['discord']['state'], 'skipped')
         self.assertFalse(run.mirror_due(log, now))
 
+    def test_complete_recap_with_climb_uses_the_normal_results_destination(self):
+        now = datetime(2026, 11, 21, 14, tzinfo=timezone.utc)
+        recap = {'id': 'receipt:day:2026-11-20', 'kind': 'buffer:receipt',
+                 'fullDailyRecap': True, 'cardKey': 'receipt-day-2026-11-20-all-sports-complete',
+                 'discord': {'state': 'pending', 'destination': 'plays', 'readyAt': now.isoformat(),
+                             'text': 'Friday results'}}
+        with patch.object(discord_post, 'send_message', return_value={'id': '1573300000000000001'}) as send:
+            for _ in range(2):
+                discord_post.mirror_sent({'posts': [recap]}, now, url='plays',
+                                         log=lambda *_: None, hold_new_plays='recap still missing')
+            send.assert_called_once()
+        self.assertEqual(recap['discord']['messageId'], '1573300000000000001')
+
     def test_regular_nba_checks_original_then_sends_play_and_real_result_once(self):
         import nba_trial_runtime as nba
         now=datetime(2026,10,28,19,tzinfo=timezone.utc)

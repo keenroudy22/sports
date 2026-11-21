@@ -846,7 +846,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 if p['key'] == guid and p.get('text') == text and p.get('card') == card_key), None)
         if early_daily_receipt(guid):
             full_daily = daily_receipt
-        if guid.startswith('receipt:day:') and (str(card_key).endswith('-all-sports') or
+        if guid.startswith('receipt:day:') and (str(card_key).endswith(('-all-sports', '-complete')) or
                 any(p.get('id') == guid and replaced_partial_daily(p) for p in log_book.get('posts', []))):
             full_daily = daily_receipt if daily_receipt and daily_receipt.get('dailyRows') else None
             if (not full_daily or full_daily['text'] != text or full_daily['card'] != card_key
