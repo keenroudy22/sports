@@ -23,9 +23,9 @@
    "totalSnapshots": 173
   },
   "NHL": {
-   "gamesGraded": 354,
+   "gamesGraded": 355,
    "gamesQuoted": 373,
-   "moneylineSnapshots": 1698,
+   "moneylineSnapshots": 1711,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 315,
+     "gamesGraded": 316,
      "gamesQuoted": 332,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 1698,
+   "snapshots": 1711,
    "status": "capturing",
-   "totalSnapshots": 1698
+   "totalSnapshots": 1711
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "EDM",
+    "id": "6",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/edm.png",
+    "name": "Edmonton Oilers",
+    "shortName": "Oilers"
+   },
+   "awayScore": 4,
+   "gameId": "NHL-401892754",
+   "gradedAt": "2026-11-21T22:25:12Z",
+   "home": {
+    "abbreviation": "CAR",
+    "id": "7",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/car.png",
+    "name": "Carolina Hurricanes",
+    "shortName": "Hurricanes"
+   },
+   "homeScore": 7,
+   "kickoff": "2026-11-21T18:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "DAL",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "BOS",
-    "id": "1",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/bos.png",
-    "name": "Boston Bruins",
-    "shortName": "Bruins"
-   },
-   "awayScore": 6,
-   "gameId": "NHL-401892654",
-   "gradedAt": "2026-11-06T02:27:14Z",
-   "home": {
-    "abbreviation": "PIT",
-    "id": "16",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/pit.png",
-    "name": "Pittsburgh Penguins",
-    "shortName": "Penguins"
-   },
-   "homeScore": 2,
-   "kickoff": "2026-11-06T00:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-11-21T21:46:27Z"
+ "updatedAt": "2026-11-21T22:25:12Z"
 }
