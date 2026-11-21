@@ -544,12 +544,13 @@
     const day = new Date(`${value}T12:00:00Z`);
     return Number.isFinite(day.getTime()) && day.toISOString().slice(0, 10) === value ? value : null;
   };
-  const favoritePath = (league, day) => {
+  const gamesPath = (tab, league, day) => {
     const params = new URLSearchParams();
     if (league && league !== 'ALL') params.set('sport', league);
     if (day) params.set('date', day);
-    return `#games/favorites${params.size ? `?${params}` : ''}`;
+    return `#games${tab && tab !== 'upcoming' ? `/${tab}` : ''}${params.size ? `?${params}` : ''}`;
   };
+  const favoritePath = (league, day) => gamesPath('favorites', league, day);
   const parseHash = hash => {
     const raw = String(hash || '').replace(/^#\/?/, '');
     const cut = raw.indexOf('?');
@@ -2358,10 +2359,7 @@
   let inputTimer = null;
   /* What the sport picker should open: the same tab in the new sport, or the list a sport-specific page belongs to. */
   const sportDestination = route => {
-    if (route.view === 'games' && route.tab === 'favorites') return favoritePath(state.league, route.day);
-    if (route.view === 'games' && route.tab === 'live' && route.day)
-      return `#games/live?${new URLSearchParams({ sport: state.league, date: route.day })}`;
-    if (route.view === 'games') return `#games${route.tab && route.tab !== 'upcoming' ? '/' + route.tab : ''}${state.league !== 'ALL' ? '?sport=' + state.league : ''}`;
+    if (route.view === 'games') return gamesPath(route.tab, state.league, route.day);
     if (route.view === 'game' || route.view === 'team') return '#games';
     if (route.view === 'player') return '#research/players';
     if (route.view === 'today') return state.league === 'ALL' ? '#today' : `#today?sport=${state.league}`;
