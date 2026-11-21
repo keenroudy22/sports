@@ -473,6 +473,61 @@
         }
       ],
       "quotedAt": "2026-11-17T00:41:44.287276+00:00"
+    },
+    {
+      "id": "community:personal-ticket:2026-11-21-cfb-noon",
+      "league": "CFB",
+      "kind": "parlays",
+      "parlayType": "community",
+      "personalTicket": true,
+      "displayTitle": "Noon CFB parlay",
+      "title": "Noon CFB parlay at FanDuel",
+      "odds": 316,
+      "book": "FanDuel",
+      "kickoff": "2026-11-21T17:00Z",
+      "status": "active",
+      "card": "img/tickets/cfb-noon-2026-11-21-316.png",
+      "quotedAt": "2026-11-21T16:08:33.064623+00:00",
+      "legs": [
+        {
+          "gameId": "CFB-401858531",
+          "athleteId": "5127885",
+          "player": "Kwazi Gilmer",
+          "market": "rec",
+          "direction": "over",
+          "line": 2.5,
+          "milestone": 3,
+          "alternate": true,
+          "odds": -215,
+          "title": "Kwazi Gilmer 3+ receptions",
+          "book": "FanDuel",
+          "kickoff": "2026-11-21T17:00Z",
+          "period": "full_game"
+        },
+        {
+          "gameId": "CFB-401858533",
+          "market": "moneyline",
+          "direction": "away",
+          "alternate": false,
+          "odds": -194,
+          "title": "Wisconsin moneyline",
+          "book": "FanDuel",
+          "kickoff": "2026-11-21T17:00Z",
+          "period": "full_game"
+        },
+        {
+          "gameId": "CFB-401862834",
+          "market": "total",
+          "direction": "under",
+          "line": 68.5,
+          "alternate": false,
+          "odds": -114,
+          "title": "Memphis at Navy under 68.5 points",
+          "book": "FanDuel",
+          "kickoff": "2026-11-21T17:00Z",
+          "period": "full_game"
+        }
+      ]
     }
   ]
 }
