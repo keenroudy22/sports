@@ -2861,6 +2861,7 @@ def board_picks(first, latest, by_id, identities, now=None):
     A pick is a favorite if it was one when first published; a later report cannot promote or demote it.
     """
     import featured as featured_store
+    import fun_ticket_review
     import pick_card
     now=now or datetime.now(timezone.utc)
     try:
@@ -2964,9 +2965,11 @@ def board_picks(first, latest, by_id, identities, now=None):
                      'whatChanged': pick.get('whatChanged'),
                      'expiresAt': pick.get('expiresAt'), 'publishedAt': pick.get('publishedAt'),
                      'historicalImport': pick.get('historicalImport'), 'sources': pick.get('sources') or [],
-                     'legs': [leg if not isinstance(leg, dict) else
-                              {k: v for k, v in leg.items() if k not in ('rawChance', 'calibration', 'calibrationN')}
-                              for leg in pick.get('legs') or []] or None,
+                     'legs': (fun_ticket_review.public_legs(pick)
+                              if pick.get('selectionMethod') == fun_ticket_review.METHOD and pick.get('legs')
+                              else [leg if not isinstance(leg, dict) else
+                                    {k: v for k, v in leg.items() if k not in ('rawChance', 'calibration', 'calibrationN')}
+                                    for leg in pick.get('legs') or []]) or None,
                      'correlation': pick.get('correlation'), 'entryNote': entry_note,
                      'status': status,
                      'result': recent.get('result'), 'actual': recent.get('actual'),

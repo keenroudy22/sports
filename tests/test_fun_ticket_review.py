@@ -1,4 +1,5 @@
 import copy
+import json
 import sys
 import tempfile
 import unittest
@@ -8,6 +9,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+import build_site
 import fun_ticket_review as review
 import gates
 import run
@@ -50,6 +52,30 @@ def fixture(count=3, style='short'):
 
 
 class FunTicketReviewTests(unittest.TestCase):
+    def test_public_release_archives_private_review_and_preserves_terms(self):
+        spec, ctx = fixture()
+        pick, held = review.candidate(ctx, NOW, spec)
+        self.assertIsNone(held)
+        pick['dossier'] = {'note': 'Private review'}
+        with tempfile.TemporaryDirectory() as folder:
+            public = review.public_pick(pick, folder)
+            self.assertEqual(review.public_pick(pick, folder), public)
+            archive = Path(folder) / 'fun-ticket-reviews' / f"{pick['id']}.json"
+            for key in ('researchReview', 'ticketReceipt', 'dossier'):
+                self.assertNotIn(key, public)
+                self.assertEqual(json.loads(archive.read_text())[key], pick[key])
+            self.assertEqual(archive.stat().st_mode & 0o777, 0o600)
+            self.assertEqual(public['odds'], pick['odds'])
+            self.assertEqual(public['riskUnits'], pick['riskUnits'])
+            for original, exported in zip(pick['legs'], public['legs']):
+                self.assertNotIn('researchCase', exported)
+                for term in ('gameId', 'title', 'line', 'odds', 'book', 'kickoff'):
+                    self.assertEqual(exported[term], original[term])
+            historical = dict(pick, league='CFB', publishedAt=gates.stamp(NOW))
+            row, = build_site.board_picks({pick['id']: historical}, {}, {}, {}, now=NOW)
+            self.assertNotIn('ticketReceipt', row)
+            self.assertEqual(row['legs'], public['legs'])
+
     def test_exact_short_ticket_becomes_reviewed_candidate_without_ev_claim(self):
         spec, ctx = fixture()
         pick, held = review.candidate(ctx, NOW, spec)

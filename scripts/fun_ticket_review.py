@@ -6,6 +6,7 @@ alternate, then hands the ticket to the ordinary private release queue.
 """
 import json
 import math
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlparse
@@ -17,6 +18,33 @@ import pricing
 
 METHOD = 'sourced-fun-ticket-review-v1'
 EFFECTIVE = datetime(2026, 11, 13, 16, 0, tzinfo=timezone.utc)
+PUBLIC_LEG_TERMS = frozenset(('id', 'title', 'gameId', 'kickoff', 'marketType',
+                              'marketWindow', 'direction', 'line', 'odds', 'book',
+                              'alternate', 'reason'))
+
+
+def public_legs(pick):
+    return [{key: value for key, value in leg.items() if key in PUBLIC_LEG_TERMS}
+            for leg in pick['legs']]
+
+
+def public_pick(pick, conf):
+    """Archive the verified packet before exporting only the posted terms and copy."""
+    private = {key: pick[key] for key in ('researchReview', 'ticketReceipt', 'dossier', 'legs') if key in pick}
+    folder = Path(conf) / 'fun-ticket-reviews'
+    folder.mkdir(mode=0o700, parents=True, exist_ok=True)
+    target = folder / f"{pick['id']}.json"
+    if target.is_file():
+        if json.loads(target.read_text(encoding='utf-8')) != private:
+            raise ValueError('Saved fun-ticket review differs from the release candidate')
+    else:
+        temporary = target.with_suffix('.tmp')
+        fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, 'w', encoding='utf-8') as out:
+            json.dump(private, out, ensure_ascii=False)
+        temporary.replace(target)
+    return dict({key: value for key, value in pick.items() if key not in private},
+                legs=public_legs(pick))
 
 
 def number(value):

@@ -3957,6 +3957,9 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
         if (pick.get('ladder') or {}).get('fullRollover'):
             import climb_review
             public_pick = climb_review.public_pick(public_pick, CONF)
+        elif pick.get('selectionMethod') == 'sourced-fun-ticket-review-v1':
+            import fun_ticket_review
+            public_pick = fun_ticket_review.public_pick(public_pick, CONF)
         report = {'league': row['league'], 'publishedAt': published_at, 'summary':
                   f"Released 1: {public_pick.get('title')} {int(public_pick.get('odds')):+d} at {public_pick.get('book')}.",
                   'takeaways': [], row['kind']: [public_pick]}
