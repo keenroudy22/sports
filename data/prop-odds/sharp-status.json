@@ -1,14 +1,14 @@
 {
- "at": "2026-11-21T04:26:58Z",
+ "at": "2026-11-21T11:45:05Z",
  "confirmed": {
   "CFB-401856746": "2026-11-21T04:32:33Z",
   "CFB-401856747": "2026-11-20T22:58:14Z",
-  "CFB-401856748": "2026-11-21T04:32:33Z",
-  "CFB-401856749": "2026-11-21T04:32:33Z",
+  "CFB-401856748": "2026-11-21T11:46:06Z",
+  "CFB-401856749": "2026-11-21T11:46:06Z",
   "CFB-401856750": "2026-11-21T04:32:33Z",
   "CFB-401856754": "2026-11-20T22:58:14Z",
   "CFB-401856755": "2026-11-20T22:58:14Z",
-  "CFB-401856866": "2026-11-21T04:32:33Z",
+  "CFB-401856866": "2026-11-21T11:46:06Z",
   "CFB-401856867": "2026-11-21T04:32:33Z",
   "CFB-401856868": "2026-11-21T04:32:33Z",
   "CFB-401858305": "2026-11-21T04:32:33Z",
@@ -33,35 +33,35 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 5190,
-    "fanduel": 4270
+    "draftkings": 892,
+    "fanduel": 583
    },
-   "eventsListed": 133,
+   "eventsListed": 131,
    "eventsMatched": 56,
    "games": 58,
    "marketTypes": {
-    "player_field_goals_made": 9,
-    "player_kicking_points": 9,
-    "player_longest_passing_completion": 16,
-    "player_longest_reception": 69,
-    "player_longest_rush": 33,
-    "player_passing_+_rushing_yards": 272,
-    "player_passing_attempts": 96,
-    "player_passing_completions": 83,
-    "player_passing_touchdowns": 158,
-    "player_passing_yards": 647,
-    "player_passing_yards_combo_": 73,
-    "player_receiving_yards": 1835,
-    "player_receiving_yards_combo_": 176,
-    "player_receptions": 401,
-    "player_rushing_attempts": 108,
-    "player_rushing_yards": 1197,
-    "player_rushing_yards_combo_": 166,
-    "player_touchdowns": 378,
-    "point_spread": 3734
+    "player_field_goals_made": 2,
+    "player_kicking_points": 2,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 14,
+    "player_longest_rush": 6,
+    "player_passing_+_rushing_yards": 68,
+    "player_passing_attempts": 27,
+    "player_passing_completions": 24,
+    "player_passing_touchdowns": 35,
+    "player_passing_yards": 141,
+    "player_passing_yards_combo_": 18,
+    "player_receiving_yards": 316,
+    "player_receiving_yards_combo_": 31,
+    "player_receptions": 75,
+    "player_rushing_attempts": 29,
+    "player_rushing_yards": 160,
+    "player_rushing_yards_combo_": 36,
+    "player_touchdowns": 42,
+    "point_spread": 445
    },
    "requestsLeft": 0,
-   "rows": 9460,
+   "rows": 1475,
    "slateGames": [
     "Vanderbilt Commodores at Florida Gators 2026-11-21T17:00Z",
     "Wofford Terriers at Ole Miss Rebels 2026-11-21T17:00Z",
@@ -135,7 +135,7 @@
       "fanduel": "36323421",
       "fliff": "428199_c_p_209_prematch",
       "hardrock": "2251922835173933486",
-      "kalshi": "KXNCAAFSPREAD-26NOV21MONMCAMP",
+      "kalshi": "KXNCAAFTOTAL-26NOV21MONMCAMP",
       "novig": "01a1d61f-9fee-7621-b31a-9be67ff7465b",
       "onexbet": "772462978",
       "paddypower": "36323421",
@@ -146,7 +146,8 @@
       "sbobet": "10931809",
       "smarkets": "45452765",
       "smarkets_lay": "45452765",
-      "stake": "6f34bebb-728e-4463-aa4c-1d2b84fa7f09"
+      "stake": "6f34bebb-728e-4463-aa4c-1d2b84fa7f09",
+      "thescorebet": "StandardEvent:c5cda27f-713a-4784-923c-39a439d57a0c"
      },
      "home": "Campbell",
      "sample": {
@@ -154,6 +155,7 @@
       "home_team": "Campbell",
       "markets": [
        "1st_half_moneyline_3-way",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -174,7 +176,7 @@
       "fanduel": "36323430",
       "fliff": "428208_c_p_209_prematch",
       "hardrock": "182623414620651940",
-      "kalshi": "KXNCAAF1H-26NOV21DUQCCSU",
+      "kalshi": "KXNCAAFTOTAL-26NOV21DUQCCSU",
       "novig": "01a1d5e8-b276-71b3-a888-ce6c52cdf54d",
       "onexbet": "772462959",
       "paddypower": "36323430",
@@ -183,9 +185,11 @@
       "prophetx": "1704744084",
       "robinhood": "fc0ec132-30ed-4710-908f-982e29bb8466",
       "saba": "138141656",
+      "sbobet": "10925002",
       "smarkets": "45450652",
       "smarkets_lay": "45450652",
-      "stake": "de2b0098-d54d-4d6a-9e2a-16c6597a65e7"
+      "stake": "de2b0098-d54d-4d6a-9e2a-16c6597a65e7",
+      "thescorebet": "StandardEvent:7cc3fee8-18bb-452f-b12b-b88d4a3237b9"
      },
      "home": "Central Connecticut",
      "sample": {
@@ -203,7 +207,7 @@
      "type": "fixture"
     },
     {
-     "away": "Cornell",
+     "away": "Cornell Big Red",
      "external": {
       "ballybet": "1029186198",
       "bet365": "204594618",
@@ -214,7 +218,7 @@
       "fanduel": "36323411",
       "fliff": "428196_c_p_209_prematch",
       "hardrock": "1548848044712264088",
-      "kalshi": "KXNCAAF1H-26NOV21CORCLMB",
+      "kalshi": "KXNCAAFSPREAD-26NOV21CORCLMB",
       "novig": "01a1d5e8-b476-70a2-bd30-d494aa5bbddd",
       "onexbet": "772462958",
       "paddypower": "36323411",
@@ -223,14 +227,16 @@
       "prophetx": "1704744085",
       "robinhood": "5c70769d-5072-4830-b370-045d118bbdef",
       "saba": "138140705",
+      "sbobet": "10924999",
       "smarkets": "45446909",
       "smarkets_lay": "45446909",
-      "stake": "95ade938-2b6c-4088-9c99-de646489b303"
+      "stake": "95ade938-2b6c-4088-9c99-de646489b303",
+      "thescorebet": "StandardEvent:04a151b3-6210-42ac-b853-faaeb5f0fc7c"
      },
-     "home": "Columbia",
+     "home": "Columbia Lions",
      "sample": {
-      "away_team": "Cornell",
-      "home_team": "Columbia",
+      "away_team": "Cornell Big Red",
+      "home_team": "Columbia Lions",
       "markets": [
        "1st_half_moneyline_3-way",
        "draw_no_bet",
@@ -243,7 +249,7 @@
      "type": "fixture"
     },
     {
-     "away": "Fordham",
+     "away": "Fordham Rams",
      "external": {
       "ballybet": "1029186332",
       "bet365": "204594636",
@@ -254,7 +260,7 @@
       "fanduel": "36323410",
       "fliff": "428195_c_p_209_prematch",
       "hardrock": "6492683366110986667",
-      "kalshi": "KXNCAAFTOTAL-26NOV21FORHC",
+      "kalshi": "KXNCAAFSPREAD-26NOV21FORHC",
       "novig": "01a1d5e8-bd78-7db0-a49d-805f63f4e3d5",
       "onexbet": "772462960",
       "paddypower": "36323410",
@@ -266,12 +272,13 @@
       "sbobet": "10925001",
       "smarkets": "45450898",
       "smarkets_lay": "45450898",
-      "stake": "d91ec771-88e1-4a0b-8dac-770c81290411"
+      "stake": "d91ec771-88e1-4a0b-8dac-770c81290411",
+      "thescorebet": "StandardEvent:a2a0f6ee-ded7-44c0-a4f2-80e6ba9f7b8f"
      },
-     "home": "Holy Cross",
+     "home": "Holy Cross Crusaders",
      "sample": {
-      "away_team": "Fordham",
-      "home_team": "Holy Cross",
+      "away_team": "Fordham Rams",
+      "home_team": "Holy Cross Crusaders",
       "markets": [
        "1st_half_moneyline_3-way",
        "draw_no_bet",
@@ -295,7 +302,7 @@
       "fanduel": "36323400",
       "fliff": "428192_c_p_209_prematch",
       "hardrock": "2980688298934141344",
-      "kalshi": "KXNCAAFSPREAD-26NOV21FURVMI",
+      "kalshi": "KXNCAAFTOTAL-26NOV21FURVMI",
       "novig": "01a1d5e8-b71d-72a1-8c6b-cc84512bf649",
       "onexbet": "772462961",
       "paddypower": "36323400",
@@ -306,7 +313,8 @@
       "saba": "138140673",
       "smarkets": "45450260",
       "smarkets_lay": "45450260",
-      "stake": "300a0345-bdc0-4cd8-857e-6d7102e1e5e5"
+      "stake": "300a0345-bdc0-4cd8-857e-6d7102e1e5e5",
+      "thescorebet": "StandardEvent:3bb25478-146e-4130-b4f9-857cf5c82a54"
      },
      "home": "VMI",
      "sample": {
@@ -335,7 +343,7 @@
       "fanduel": "36323427",
       "fliff": "428204_c_p_209_prematch",
       "hardrock": "6853574590227153309",
-      "kalshi": "KXNCAAF1H-26NOV21HAMPSTON",
+      "kalshi": "KXNCAAFTOTAL-26NOV21HAMPSTON",
       "novig": "01a1d5e8-b317-7972-a48b-8ff054649ca5",
       "onexbet": "772462962",
       "paddypower": "36323427",
@@ -346,7 +354,8 @@
       "saba": "138141649",
       "smarkets": "45450888",
       "smarkets_lay": "45450888",
-      "stake": "1d5621da-7564-4355-a2c9-ff646004b5db"
+      "stake": "1d5621da-7564-4355-a2c9-ff646004b5db",
+      "thescorebet": "StandardEvent:0c9ac802-b0fe-469b-8011-859507b1a09a"
      },
      "home": "Stony Brook",
      "sample": {
@@ -364,7 +373,7 @@
      "type": "fixture"
     },
     {
-     "away": "Howard",
+     "away": "Howard Bison",
      "external": {
       "ballybet": "1029186166",
       "bet365": "204594633",
@@ -375,7 +384,7 @@
       "fanduel": "36323423",
       "fliff": "428197_c_p_209_prematch",
       "hardrock": "5191211174802358687",
-      "kalshi": "KXNCAAF1H-26NOV21HOWNORF",
+      "kalshi": "KXNCAAFSPREAD-26NOV21HOWNORF",
       "novig": "01a1d5e8-b7bd-7831-821d-d97c4e58eda5",
       "onexbet": "772462963",
       "paddypower": "36323423",
@@ -387,12 +396,13 @@
       "sbobet": "10931794",
       "smarkets": "45452766",
       "smarkets_lay": "45452766",
-      "stake": "3f0c4137-5812-406b-aa6e-2e9922270b8c"
+      "stake": "3f0c4137-5812-406b-aa6e-2e9922270b8c",
+      "thescorebet": "StandardEvent:7a21a496-e657-4684-871f-8e7b0bd6db92"
      },
-     "home": "Norfolk State",
+     "home": "Norfolk State Spartans",
      "sample": {
-      "away_team": "Howard",
-      "home_team": "Norfolk State",
+      "away_team": "Howard Bison",
+      "home_team": "Norfolk State Spartans",
       "markets": [
        "1st_half_moneyline_3-way",
        "draw_no_bet",
@@ -407,12 +417,15 @@
     {
      "away": "Long Island",
      "external": {
+      "ballybet": "1029186179",
       "bet365": "204594627",
+      "betrivers": "1029186179",
       "draftkings": "35047831",
       "fanatics": "5632797",
       "fanatics_markets": "8607017",
       "fanduel": "36323425",
       "fliff": "428205_c_p_209_prematch",
+      "hardrock": "9139481426404704670",
       "kalshi": "KXNCAAFSPREAD-26NOV21LIURMU",
       "novig": "01a1d5e8-ba2c-7342-b37d-adb0c88c6146",
       "onexbet": "772462964",
@@ -422,9 +435,11 @@
       "prophetx": "1704744090",
       "robinhood": "fdeef982-3f7a-45f2-87d4-5220754f6db0",
       "saba": "138141664",
+      "sbobet": "10931792",
       "smarkets": "45450273",
       "smarkets_lay": "45450273",
-      "stake": "5a9d06f1-823d-4fee-9b64-dd40159d42cd"
+      "stake": "5a9d06f1-823d-4fee-9b64-dd40159d42cd",
+      "thescorebet": "StandardEvent:01a99ab7-873c-4b35-bd26-c080638dd7e2"
      },
      "home": "Robert Morris",
      "sample": {
@@ -452,19 +467,20 @@
       "fanduel": "36323408",
       "fliff": "428193_c_p_209_prematch",
       "hardrock": "931495905216037263",
-      "kalshi": "KXNCAAFSPREAD-26NOV21NHCMHU",
+      "kalshi": "KXNCAAFTOTAL-26NOV21NHCMHU",
       "novig": "01a1d5e8-b66f-7213-b1c6-d815e59ad400",
       "onexbet": "772462965",
       "paddypower": "36323408",
       "polymarket": "nfl_mercyhurst_newhavencollege_2026-11-21_b2",
       "polymarket_us": "cfb-nhc-mrcy-2026-11-21",
       "prophetx": "1704744069",
-      "robinhood": "34ae59d5-2092-4a16-9599-c1c16a0b399a",
+      "robinhood": "faf311be-91c6-40ae-b925-337c07298c81",
       "saba": "138140685",
       "sbobet": "10931791",
       "smarkets": "45449195",
       "smarkets_lay": "45449195",
-      "stake": "31535da9-bfd7-4771-9479-7fa6829afca3"
+      "stake": "31535da9-bfd7-4771-9479-7fa6829afca3",
+      "thescorebet": "StandardEvent:428cb2da-5c2a-4d1a-8a6d-dc6bdde6b8bf"
      },
      "home": "Mercyhurst",
      "sample": {
@@ -493,7 +509,7 @@
       "fanduel": "36323440",
       "fliff": "428206_c_p_209_prematch",
       "hardrock": "3442183411062669740",
-      "kalshi": "KXNCAAF1H-26NOV21SHUMRMK",
+      "kalshi": "KXNCAAFTOTAL-26NOV21SHUMRMK",
       "novig": "01a1d5e8-b0e1-7660-9f8d-d379130f2395",
       "onexbet": "772462967",
       "paddypower": "36323440",
@@ -505,7 +521,8 @@
       "sbobet": "10931798",
       "smarkets": "45449270",
       "smarkets_lay": "45449270",
-      "stake": "e932df06-950d-4e07-8e94-44dbbf27adb9"
+      "stake": "e932df06-950d-4e07-8e94-44dbbf27adb9",
+      "thescorebet": "StandardEvent:a83f1066-1900-4470-a33d-d33aa6cf5a13"
      },
      "home": "Merrimack",
      "sample": {
@@ -525,25 +542,29 @@
     {
      "away": "Albany Great Danes",
      "external": {
+      "ballybet": "1029186191",
       "bet365": "204594609",
+      "betrivers": "1029186191",
       "draftkings": "35047815",
       "fanatics": "5632791",
       "fanatics_markets": "8607027",
       "fanduel": "36323402",
       "fliff": "428194_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26NOV21ALBYNCAT",
+      "hardrock": "4472336728667062674",
+      "kalshi": "KXNCAAFTOTAL-26NOV21ALBYNCAT",
       "novig": "01a1d5e8-bcdf-7b71-b2a9-52a63dcc628d",
       "onexbet": "772462957",
       "paddypower": "36323402",
       "polymarket": "nfl_northcarolinaat_universityatalbany_2026-11-21_b2",
       "polymarket_us": "cfb-albny-ncat-2026-11-21",
       "prophetx": "1704744070",
-      "robinhood": "52f339a2-c260-4526-a423-53fb44d3af14",
+      "robinhood": "d4ace73c-f864-4435-a025-7638bcde2cca",
       "saba": "138140696",
       "sbobet": "10925000",
       "smarkets": "45448552",
       "smarkets_lay": "45448552",
-      "stake": "47fad32e-6ed7-4ba8-b8c3-540244abb42f"
+      "stake": "47fad32e-6ed7-4ba8-b8c3-540244abb42f",
+      "thescorebet": "StandardEvent:fb99aab2-1655-4c13-bbbf-37a02333378d"
      },
      "home": "North Carolina A&T Aggies",
      "sample": {
@@ -580,9 +601,11 @@
       "polymarket_us": "cfb-penn-prnce-2026-11-21",
       "prophetx": "1704744095",
       "robinhood": "d9caeec8-242a-48d5-9ef4-4dc6a2a4b650",
+      "sbobet": "10931797",
       "smarkets": "45449268",
       "smarkets_lay": "45449268",
-      "stake": "108afa63-fd7c-4297-a583-6abeb1b22ca3"
+      "stake": "108afa63-fd7c-4297-a583-6abeb1b22ca3",
+      "thescorebet": "StandardEvent:851d6639-b0f9-4571-9c6b-359e900bd34c"
      },
      "home": "Princeton",
      "sample": {
