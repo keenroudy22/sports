@@ -13,6 +13,21 @@ from fakegames import game
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class ContractBonusTests(unittest.TestCase):
+    def test_only_sourced_bonus_fields_reach_the_matching_nfl_game(self):
+        reports = json.loads((ROOT / 'data/nfl-contract-bonuses.json').read_text())
+        game_id, (row,) = next(iter(reports.items()))
+        card = {'id': game_id, 'league': 'NFL', 'kickoff': '2026-11-22T21:25Z',
+                'home': {'id': '19'}, 'away': {'id': '30'}}
+        self.assertEqual(build_site.contract_bonus_rows(card, {
+            game_id: [dict(row, privateNote='omit', bonuses=[*row['bonuses'],
+                      dict(row['bonuses'][0], amount=-1)]), dict(row, teamId='999'),
+                      dict(row, termsSource='http://example.com'), dict(row, reportedOn='2026-11-23')]
+        }), [row])
+        self.assertEqual(build_site.contract_bonus_rows(dict(card, id='NFL-other'), reports), [])
+        self.assertEqual(build_site.contract_bonus_rows(dict(card, league='CFB'), reports), [])
+
+
 class MatchupMarketPlayerTests(unittest.TestCase):
     def test_traded_player_uses_unique_pregame_depth_assignment(self):
         now = datetime(2026, 11, 17, 3, tzinfo=timezone.utc)

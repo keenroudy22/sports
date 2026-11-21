@@ -21,6 +21,14 @@
 .kt-why, .section[id] { scroll-margin-top: 64px; }
 .kt-why-note { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--burnt); background: var(--burnt-soft); font: 500 14px/1.4 var(--font-body); }
 .kt-why-foot { margin-top: 12px; font: 500 14px/1.45 var(--font-body); color: var(--dim); }
+.bonus-card { background: linear-gradient(145deg, var(--kookd-soft), transparent 55%), var(--felt); }
+.bonus-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; }
+.bonus-player { display: flex; align-items: center; gap: 10px; }
+.bonus-total { font: 700 30px/1 var(--font-display); color: var(--kookd); }
+.bonus-targets { padding: 0; margin: 12px 0 10px; list-style: none; }
+.bonus-targets li { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 10px 12px; background: var(--felt-night); }
+.bonus-metric { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; }
+.bonus-sources a { display: inline-block; padding: 6px 0; }
 `;
   if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-football-game-css'))) {
     const style = document.createElement('style'); style.id = 'kr-football-game-css'; style.textContent = FOOTBALL_GAME_CSS; document.head.appendChild(style);
@@ -90,6 +98,24 @@
 
   const GARBAGE = 'Garbage-time risk: spread 21+.';
   const anchored = (id, html) => html.replace('<section class="section">', `<section class="section" id="${id}">`);
+  const dollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  const bonusDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  const contractBonuses = (game, rows) => {
+    if (game.league !== 'NFL' || !rows?.length) return '';
+    const cards = rows.map(row => {
+      const team = String(game.home.id) === row.teamId ? game.home : game.away;
+      const total = row.bonuses.reduce((sum, item) => sum + item.amount, 0);
+      return `<article class="card bonus-card"><div class="bonus-head">
+        <div class="bonus-player">${headshot('NFL', row.athleteId, '', team, team.abbr)}
+          <div><h3><a href="#player/NFL/${esc(row.athleteId)}">${esc(row.player)}</a></h3><p class="small muted">${esc(team.abbr)} · Pregame snapshot · ${esc(bonusDate.format(new Date(row.reportedOn)))}</p></div>
+        </div><div><span class="small muted">Up to </span><b class="bonus-total num">${dollars.format(total)}</b></div></div>
+        <ul class="grid three bonus-targets" role="list">${row.bonuses.map(item => `<li><div class="bonus-metric"><b>${esc(item.label)}</b><b class="num green">${dollars.format(item.amount)}</b></div>
+          <div class="small muted">${item.before} of ${item.target} this season · <b>${item.target - item.before} more needed</b></div></li>`).join('')}</ul>
+        <p class="small muted bonus-sources"><a href="${esc(row.termsSource)}" target="_blank" rel="noopener">Reported terms ↗</a> · <a href="${esc(row.statsSource)}" target="_blank" rel="noopener">Season totals ↗</a></p></article>`;
+    }).join('');
+    return anchored('contract-bonuses', section('Contract bonuses', `<div class="grid">${cards}</div>`, '',
+      'Reported season incentives within reach going into this matchup.'));
+  };
   /* "Why my number differs" (owner, Oct 7, item 28): my number, the book, the gap and every stored-data driver, by weight.
      The numbers each driver used stay in the JSON for tests; the sentence already carries them.
      A note appears only when a concrete flag fired. A stale line prints only the staleness line. Research, never a play. */
@@ -527,7 +553,7 @@
       `<a class="more" href="#game/${esc(g.id)}#model-vs" data-copy-link>Copy matchup link</a>`,
       'Projected score, spread and total compared with the captured market.')) : '';
 
-    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${header}${postedHtml}${linePreview}${quickNumber}${sheet}${tdHtml}${actions}${liveStamp(liveNow.refreshed)}
+    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${header}${postedHtml}${linePreview}${contractBonuses(g, detail.contractBonuses)}${quickNumber}${sheet}${tdHtml}${actions}${liveStamp(liveNow.refreshed)}
       ${finalHtml}
       ${whySection(g, why, final)}
       ${pregame ? anchored('lines-we-like', section('Lines we like', favHtml, why && !final ? `<a class="more" href="#game/${esc(g.id)}#why">Why my number differs →</a>` : '', fav.length ? 'Current prices where my estimated chance is above what the price needs. Research, not extra best bets.' : 'Research held until the stated check clears. Not an official play.')) : ''}

@@ -36,9 +36,10 @@ import shutil
 import statistics
 import sys
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
@@ -78,6 +79,36 @@ ALLOWED_KEYS = {'QB': ('att', 'cmp', 'passYds', 'passTD', 'int', 'sacks', 'car',
 
 def read(path, fallback):
     return json.loads(path.read_text(encoding='utf-8')) if path.exists() else fallback
+
+
+def contract_bonus_rows(card, reports):
+    """Only dated, sourced NFL season incentives for the teams in this matchup."""
+    if card['league'] != 'NFL':
+        return []
+    teams = {str(card[side]['id']) for side in ('home', 'away')}
+    kickoff = eastern_date(features.when(card['kickoff']))
+    rows = []
+    for row in reports.get(card['id'], []):
+        source_keys = ('termsSource', 'statsSource')
+        if row['teamId'] not in teams or not row['athleteId'].isdigit():
+            continue
+        try:
+            reported = date.fromisoformat(row['reportedOn'])
+        except ValueError:
+            continue
+        if reported > kickoff or reported.isoformat() != row['reportedOn']:
+            continue
+        if any(link.scheme != 'https' or not link.hostname or link.username or link.password
+               for link in (urlsplit(row[key]) for key in source_keys)):
+            continue
+        bonuses = [{key: bonus[key] for key in ('label', 'before', 'target', 'amount')}
+                   for bonus in row['bonuses'] if bonus['label'] and
+                   all(type(bonus[key]) is int for key in ('before', 'target', 'amount')) and
+                   0 <= bonus['before'] < bonus['target'] and bonus['amount'] > 0]
+        if bonuses:
+            rows.append({**{key: row[key] for key in ('athleteId', 'teamId', 'player', 'reportedOn', *source_keys)},
+                         'bonuses': bonuses})
+    return rows
 
 
 def write(path, payload):
@@ -2191,6 +2222,7 @@ def build(now=None):
     slate = read(DATA / 'slate.json', {'games': []})
     reports = read(DATA / 'research.json', [])
     community = read(ROOT / 'data' / 'community.json', {'tickets': []})
+    contract_bonus_reports = read(ROOT / 'data' / 'nfl-contract-bonuses.json', {})
     catalog = read(DATA / 'market-lines.json', {})
     identities = identity_colors(read(DATA / 'player-identity.json', {}))
     context = read(DATA / 'research-context.json', {})
@@ -2431,6 +2463,9 @@ def build(now=None):
         if game.get('state') == 'pre' and features.when(game['kickoff']) > now:
             detail['positionGames'] = football_position_games(game, info['records'], snap_players, now)
         detail['lines'] = [reader_line(row) for row in detail['lines']]
+        bonuses = contract_bonus_rows(card, contract_bonus_reports)
+        if bonuses:
+            detail['contractBonuses'] = bonuses
         write(OUT / 'games' / f"{game['id']}.json", detail)
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],

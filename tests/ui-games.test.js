@@ -302,6 +302,26 @@ test('the game page prints every driver under #why, a note only when a flag fire
   for (const html of [blowout, total, stale]) for (const word of ['desk', 'scan', 'automated', 'pipeline', 'calibration']) assert.ok(!new RegExp(`\\b${word}\\b`, 'i').test(html), word);
 });
 
+test('contract bonuses show sourced season thresholds as a dated matchup snapshot', async () => {
+  const { api, factory } = loadBrowserApi();
+  const [id, bonuses] = Object.entries(require('../data/nfl-contract-bonuses.json'))[0];
+  const g = { ...slate().at(-1), id, home: team('19', 'NYG', 'Giants', 5, 6),
+    away: team('30', 'JAX', 'Jaguars', 2, 3), completed: true, state: 'post' };
+  const detail = { ...g, contractBonuses: bonuses, marketPlayers: [] };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
+  const views = factory(ctx);
+  const html = await views.game({ id });
+  const panel = html.split('id="contract-bonuses"')[1].split('</section>')[0];
+  assert.match(panel, /Isaiah Likely[\s\S]+Pregame snapshot · Nov 20[\s\S]+\$750,000/);
+  for (const [before, target, needed] of [[55, 60, 5], [575, 650, 75], [7, 8, 1]]) {
+    assert.ok(panel.includes(`${before} of ${target} this season · <b>${needed} more needed</b>`));
+  }
+  assert.equal((panel.match(/\$250,000/g) || []).length, 3);
+  assert.ok(panel.includes(bonuses[0].termsSource) && panel.includes(bonuses[0].statsSource));
+  delete detail.contractBonuses;
+  assert.doesNotMatch(await views.game({ id }), /Contract bonuses/);
+});
+
 test('game alternates keep real prices while unusable projections are absent', async () => {
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];
