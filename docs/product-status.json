@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T18:40:50.470808Z",
+  "updatedAt": "2026-11-21T19:14:33.867350Z",
   "items": [
     {
       "id": "O-20261116-RELIABILITY",
@@ -509,11 +509,11 @@
     {
       "id": "P02",
       "title": "Shareable research context and consistent search",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Nov21 regression fixes ready: complete canonical release and verify copied football filters, exact chart quote, CFB Defense and cross-sport navigation live at 375/1440px.",
+      "next": "Preserve copied football filters, exact chart market context, CFB Defense and sport-aware detail navigation. Keep the new regressions and existing shared-search controls.",
       "doneWhen": "Shared links preserve allowed filters and selected stat/sample; main research searches match player/team/market; no private ticket state is shared.",
-      "evidence": "4660ba1387a78b0686c2e74670388f26a983656c; publish 37333009159 succeeded 2026-10-05T15:30:45Z. Live phone Carries/Last 5 drill-down verified; app109/core66/CSS73. 867 Python tests (2 skipped), 123 frontend tests passed. Nov2 shared sport controls f3322c69d/hosted41514093051SUCCESS;2079Python(2skip)/305Node normal+clean/all gates; live375/1440 CBB/NBA/NHL and one-card NBA search verified. Nov21 local regressions reproduced and fixed; hosted verification pending."
+      "evidence": "Nov21 dda1a42ad; Pages44939034590 SUCCESS. 2492Python(2skip)/387Node normal, clean and canonical gates passed. 63 review checks plus30live375/1440 checks: no overflow/load/console errors. Gibbs85.5overDK/game and RB/Last5 survived sharing; CFB Defense and cross-sport nav verified. Prior releases4660ba13/37333009159 and f3322c69d/41514093051 retained. Full receipt in PRODUCT-IMPLEMENTATION.md."
     },
     {
       "id": "P03",
