@@ -1,0 +1,504 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-21T04:07:20Z",
+  "targetWeek": 12,
+  "summary": "Research update for Nov 20: Settled 2: Ladder step 4: 2 legs at DraftKings loss; Clemson at Duke over 40.5 loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 40.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401858303"
+      ],
+      "book": "ESPN BET",
+      "odds": -105,
+      "projection": 47.0,
+      "edge": "Price-checked chance 55.6% against the exact two-sided price; 51.2% needed at -105: +4.4 percentage points.",
+      "cutoff": "OVER 40.5 at -105 or better; off the card at 42+, or at -106 or worse at 40.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-15T11:25:59Z",
+      "quotedAt": "2026-11-20T16:24:53Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 11:24 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-20T22:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.656,
+        "chance": 0.556,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.512,
+        "edgePoints": 4.4,
+        "evPerUnit": 0.086,
+        "snapshotAt": "2026-11-15T11:25:59Z",
+        "probabilitySpec": "23115a89126d01346dd44969ea202ae3598f83a6722d087fc2bb035ef469bc01",
+        "evaluatedAt": "2026-11-20T16:48:32Z",
+        "fairChance": 0.489,
+        "anchoredChance": 0.556,
+        "gap": 6.7,
+        "calibrationFamily": "CFB/total",
+        "calibrationMethod": "neutral-centered-fitted"
+      },
+      "matchup": "Clemson Tigers at Duke Blue Devils",
+      "title": "Clemson at Duke over 40.5",
+      "id": "CFB-2026-W12-clem-duke-over-40-5-espnbet",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858303",
+        "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+        "https://www.theclemsoninsider.com/2026/11/19/swinney-asked-about-changes-needed-on-offense/"
+      ],
+      "why": "Model lean, our number only. We have the total at 47; the book is at 40.5. That makes the over 55.6%, and -105 needs 51.2%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable. Checked before publishing: Clemson starting running back Gideon Davidson and starting center Harris Sewell are listed as probable against Duke. The market: The spread opened -8.5 and is -12.5 at DraftKings, a move of 4 toward the home. The total opened 44.5 and is 41.5 at DraftKings, 3 toward the under. 6 books span -13.5 to -12.5 on the spread; the middle is -13. Our spread is 2.8 points off, bigger than 43% of our past gaps. Gaps this size went 1021-1013 against the close in 3584 games. Our total is 5.5 points off, bigger than 80% of our past gaps. Gaps this size went 405-332 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: Clemson has not scored an offensive touchdown in its past two games and is averaging 21.0 points per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable."
+        ],
+        "cautions": [
+          "Clemson quarterback Tait Reynolds will miss the rest of the season with a knee injury.",
+          "Clemson quarterback Christopher Vizzina is out against Duke with a concussion.",
+          "Trent Pearman is set to make his first career start at quarterback for Clemson against Duke.",
+          "Clemson starting slot receiver Tyler Brown and starting right guard Easton Ware are out against Duke.",
+          "Clemson has not scored an offensive touchdown in its past two games and is averaging 21.0 points per game."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Book says 40.5. I say 47.",
+            "numbers": {
+              "projection": 47.0,
+              "line": 40.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-15T11:25:59Z"
+          },
+          {
+            "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Clemson quarterback Tait Reynolds will miss the rest of the season with a knee injury.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson quarterback Christopher Vizzina is out against Duke with a concussion.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Clemson quarterback Tait Reynolds will miss the rest of the season with a knee injury.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson quarterback Christopher Vizzina is out against Duke with a concussion.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Trent Pearman is set to make his first career start at quarterback for Clemson against Duke.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/20/jps-preview-and-prediction-clemson-at-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson starting slot receiver Tyler Brown and starting right guard Easton Ware are out against Duke.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson quarterback Tait Reynolds will miss the rest of the season with a knee injury.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson quarterback Christopher Vizzina is out against Duke with a concussion.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Trent Pearman is set to make his first career start at quarterback for Clemson against Duke.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/20/jps-preview-and-prediction-clemson-at-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson starting slot receiver Tyler Brown and starting right guard Easton Ware are out against Duke.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+            "numbers": {},
+            "source": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          }
+        ],
+        "weather": {
+          "tempF": 50,
+          "windMph": 3,
+          "windDirection": "NE",
+          "precipProb": 0,
+          "periodStart": "2026-11-20T19:00:00-05:00",
+          "issuedAt": "2026-11-19T18:22:37+00:00",
+          "source": "https://api.weather.gov/gridpoints/RAH/64,66/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 44.5,
+                "price": -110,
+                "time": "2026-11-15T11:45:07Z"
+              },
+              "now": {
+                "line": 40.5,
+                "price": -108,
+                "time": "2026-11-18T11:45:05Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 44.5,
+                "price": -110,
+                "time": "2026-11-15T11:45:07Z"
+              },
+              "now": {
+                "line": 40.5,
+                "price": -110,
+                "time": "2026-11-18T11:45:05Z"
+              }
+            }
+          },
+          "best": {
+            "book": "ESPN BET",
+            "line": 40.5,
+            "price": -105,
+            "time": "2026-11-20T16:24:53Z"
+          }
+        },
+        "ours": {
+          "projection": 47.0,
+          "line": 40.5,
+          "market": "total",
+          "text": "Clemson starting linebacker Jeremiah Alexander is out against Duke, while starting cornerback Elliot Washington III remains questionable.",
+          "snapshotAt": "2026-11-15T11:25:59Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://www.theclemsoninsider.com/2026/11/18/new-starter-listed-on-clemson-injury-report/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "label": "role",
+            "url": "https://www.theclemsoninsider.com/2026/11/20/jps-preview-and-prediction-clemson-at-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "label": "injury",
+            "url": "https://www.theclemsoninsider.com/2026/11/19/multiple-clemson-starters-ruled-out-for-duke/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://www.theclemsoninsider.com/2026/11/19/swinney-asked-about-changes-needed-on-offense/",
+            "time": "2026-11-20T16:48:32Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/RAH/64,66/forecast/hourly",
+            "time": "2026-11-19T18:22:37+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858303",
+            "time": "2026-11-20T16:48:32Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-20T16:56:48Z",
+      "result": "loss",
+      "actual": "Clemson 20, Duke 10",
+      "settledAt": "2026-11-21T04:07:20Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401858303",
+      "actualValue": 30,
+      "units": -1
+    }
+  ],
+  "parlays": [
+    {
+      "id": "CFB-2026-W12-ladder-1120-c4s4-dk",
+      "title": "Ladder step 4: 2 legs at DraftKings",
+      "status": "settled",
+      "favorite": false,
+      "parlayType": "ladder",
+      "riskUnits": 0.25,
+      "ladder": {
+        "run": 4,
+        "step": 4,
+        "stake": 95,
+        "payout": 143,
+        "banked": 58,
+        "bankThisWin": 29,
+        "bankedAfter": 87,
+        "nextStake": 114,
+        "totalAfter": 201,
+        "bankPercent": 20,
+        "ridePercent": 80,
+        "start": 50,
+        "goal": 1000
+      },
+      "legs": [
+        {
+          "gameId": "CFB-401858303",
+          "title": "Duke -2.5",
+          "kickoff": "2026-11-21T00:30Z",
+          "marketType": "spread",
+          "direction": "home",
+          "line": -2.5,
+          "mainLine": -13.5,
+          "odds": -504,
+          "book": "DraftKings",
+          "alternate": true,
+          "marketWindow": "Full game",
+          "source": "https://sportsbook.draftkings.com/event/clemson-%40-duke/34999618",
+          "observedAt": "2026-11-20T13:52:16.560Z",
+          "researchCase": {
+            "why": "Duke allows 3.2 yards a carry, and Clemson lost both experienced quarterbacks last week. I only need Duke by a field goal.",
+            "risk": "Clemson has won three straight road games and ranks fourth nationally in passes defended. A turnover or stalled Duke drive can keep this inside a field goal.",
+            "availability": "Dabo Swinney named Trent Pearman the starter and ruled out Christopher Vizzina, with Tait Reynolds out for the year. Duke game notes list Nate Sheppard as its leading runner; the final ACC game-day list is due two hours before kickoff.",
+            "sources": [
+              {
+                "url": "https://theacc.com/news/2026/11/19/week-12-friday-preview-acc-football-fridays-opens-pivotal-week-12-slate.aspx",
+                "fact": "Duke allows 3.2 yards per carry; Clemson has won three straight road games and ranks fourth in passes defended.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              },
+              {
+                "url": "https://www.tigernet.com/clemson-football/news/swinney-breaks-down-clemsons-updated-qb-depth-chart-provides-injury-updates-50119",
+                "fact": "Head coach names Pearman the starter and rules both Reynolds and Vizzina out.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              },
+              {
+                "url": "https://data.clemsontigers.com/pdf/football/2026-27/Notes/2026-11-Duke.pdf",
+                "fact": "Official notes list Pearman 10 for 19, 86 yards with two interceptions for the season.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              }
+            ]
+          }
+        },
+        {
+          "gameId": "CFB-401866468",
+          "title": "Toledo -5.5",
+          "kickoff": "2026-11-21T00:30Z",
+          "marketType": "spread",
+          "direction": "home",
+          "line": -5.5,
+          "mainLine": -16.5,
+          "odds": -380,
+          "book": "DraftKings",
+          "alternate": true,
+          "marketWindow": "Full game",
+          "source": "https://sportsbook.draftkings.com/event/bowling-green-%40-toledo/34999619",
+          "observedAt": "2026-11-20T13:52:16.560Z",
+          "researchCase": {
+            "why": "Toledo is 5–1 at home with a +95 scoring margin and leads the MAC allowing opponents to convert only 32.7% on third down. I like laying less than a touchdown.",
+            "risk": "This is a rivalry. Bowling Green won the last meeting and comes in off 33 points against Kent State. Toledo only beat Sacramento State by three in its recent road game.",
+            "availability": "Toledo reports Connor Walendzak back last week with 117 rushing yards and has CJ Miller in the rotation. Reviewed the Toledo team notes and morning matchup coverage. A separate final availability list was not verified.",
+            "sources": [
+              {
+                "url": "https://utrockets.com/news/2026/11/18/football-toledo-welcomes-bowling-green-to-the-glass-bowl-for-battle-of-i-75",
+                "fact": "Official preview confirms home point differential, third-down defense, Walendzak’s return and Bowling Green’s most recent result.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              },
+              {
+                "url": "https://utrockets.com/sports/football/schedule",
+                "fact": "Toledo official score shows 20–17 win at Sacramento State on November 4.",
+                "checkedAt": "2026-11-20T13:53:51.435081+00:00"
+              }
+            ]
+          }
+        }
+      ],
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "CFB-401858303",
+        "CFB-401866468"
+      ],
+      "book": "DraftKings",
+      "odds": -196,
+      "quotedAt": "2026-11-20T13:52:16.560Z",
+      "priceEstimated": false,
+      "expiresAt": "2026-11-20T15:52:16Z",
+      "quoteType": "sportsbook",
+      "confidence": 1,
+      "edge": "Desk-researched alternate ticket. No validated win probability or positive-EV claim.",
+      "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://data.clemsontigers.com/pdf/football/2026-27/Notes/2026-11-Duke.pdf",
+        "https://sportsbook.draftkings.com/event/bowling-green-%40-toledo/34999619",
+        "https://theacc.com/news/2026/11/19/week-12-friday-preview-acc-football-fridays-opens-pivotal-week-12-slate.aspx",
+        "https://utrockets.com/news/2026/11/18/football-toledo-welcomes-bowling-green-to-the-glass-bowl-for-battle-of-i-75",
+        "https://utrockets.com/sports/football/schedule",
+        "https://www.espn.com/college-football/game/_/gameId/401858303",
+        "https://www.espn.com/college-football/game/_/gameId/401866468",
+        "https://www.tigernet.com/clemson-football/news/swinney-breaks-down-clemsons-updated-qb-depth-chart-provides-injury-updates-50119"
+      ],
+      "selectionMethod": "sourced-climb-review-v1",
+      "researchReview": {
+        "method": "sourced-climb-review-v1",
+        "reviewer": "kookn-desk",
+        "reviewedAt": "2026-11-20T13:53:51.435081+00:00",
+        "ticketVerified": true,
+        "ticketSource": "https://sportsbook.draftkings.com/event/bowling-green-%40-toledo/34999619",
+        "receipt": "Indiana DraftKings visible betslip checked at 13:52:16.560Z. Duke -2.5 at -504 vs Clemson and Toledo -5.5 at -380 vs Bowling Green. Two full-game alternate spreads, actual unboosted two-pick parlay -196. All wager fields blank."
+      },
+      "why": "Duke allows 3.2 yards a carry, and Clemson lost both experienced quarterbacks last week. I only need Duke by a field goal. Toledo is 5–1 at home with a +95 scoring margin and leads the MAC allowing opponents to convert only 32.7% on third down. I like laying less than a touchdown.",
+      "risks": [
+        "Clemson has won three straight road games and ranks fourth nationally in passes defended. A turnover or stalled Duke drive can keep this inside a field goal.",
+        "This is a rivalry. Bowling Green won the last meeting and comes in off 33 points against Kent State. Toledo only beat Sacramento State by three in its recent road game."
+      ],
+      "risk": "Clemson has won three straight road games and ranks fourth nationally in passes defended. A turnover or stalled Duke drive can keep this inside a field goal. This is a rivalry. Bowling Green won the last meeting and comes in off 33 points against Kent State. Toledo only beat Sacramento State by three in its recent road game. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Duke allows 3.2 yards a carry, and Clemson lost both experienced quarterbacks last week. I only need Duke by a field goal. Toledo is 5–1 at home with a +95 scoring margin and leads the MAC allowing opponents to convert only 32.7% on third down. I like laying less than a touchdown.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-11-20T13:54:15Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Clemson has won three straight road games and ranks fourth nationally in passes defended. A turnover or stalled Duke drive can keep this inside a field goal. This is a rivalry. Bowling Green won the last meeting and comes in off 33 points against Kent State. Toledo only beat Sacramento State by three in its recent road game. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-11-20T13:54:15Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "CFB-401858303",
+              "title": "Duke -2.5",
+              "line": -2.5,
+              "price": -504,
+              "book": "DraftKings"
+            },
+            {
+              "gameId": "CFB-401866468",
+              "title": "Toledo -5.5",
+              "line": -5.5,
+              "price": -380,
+              "book": "DraftKings"
+            }
+          ],
+          "best": {
+            "book": "DraftKings",
+            "price": -196,
+            "time": "2026-11-20T13:52:16.560Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://data.clemsontigers.com/pdf/football/2026-27/Notes/2026-11-Duke.pdf",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://sportsbook.draftkings.com/event/bowling-green-%40-toledo/34999619",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://theacc.com/news/2026/11/19/week-12-friday-preview-acc-football-fridays-opens-pivotal-week-12-slate.aspx",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://utrockets.com/news/2026/11/18/football-toledo-welcomes-bowling-green-to-the-glass-bowl-for-battle-of-i-75",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://utrockets.com/sports/football/schedule",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858303",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401866468",
+            "time": "2026-11-20T13:54:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.tigernet.com/clemson-football/news/swinney-breaks-down-clemsons-updated-qb-depth-chart-provides-injury-updates-50119",
+            "time": "2026-11-20T13:54:15Z"
+          }
+        ],
+        "partial": true
+      },
+      "publishedAt": "2026-11-20T14:02:16Z",
+      "result": "loss",
+      "actual": "legs: loss, win",
+      "settledAt": "2026-11-21T04:07:20Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401858303",
+      "settlementReason": "One leg lost; the ticket loses.",
+      "units": -0.25
+    }
+  ]
+}
