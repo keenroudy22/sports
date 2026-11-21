@@ -539,6 +539,17 @@
 
   /* Routes. New grammar first; every old link (core.js routePath/LEGACY) lands on its new screen. */
   const MORE_PAGES = ['start', 'saved', 'arbs', 'lab', 'schedule', 'feedback', 'status', 'glossary'];
+  const gameDate = value => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return null;
+    const day = new Date(`${value}T12:00:00Z`);
+    return Number.isFinite(day.getTime()) && day.toISOString().slice(0, 10) === value ? value : null;
+  };
+  const favoritePath = (league, day) => {
+    const params = new URLSearchParams();
+    if (league && league !== 'ALL') params.set('sport', league);
+    if (day) params.set('date', day);
+    return `#games/favorites${params.size ? `?${params}` : ''}`;
+  };
   const parseHash = hash => {
     const raw = String(hash || '').replace(/^#\/?/, '');
     const cut = raw.indexOf('?');
@@ -577,7 +588,11 @@
       case 'stats': case 'charts': case 'players': return { view: 'research', mode: 'players', sub: a === 'defense' ? 'defense' : a === 'teams' ? 'teams' : ['search', 'players'].includes(a) || (q && !['stat', 'sample', 'date', 'position'].some(key => params.has(key))) ? 'search' : null, q,
         league: params.get('sport') ? params.get('sport').toUpperCase() : null, legacy: true, ctx: [...params.keys()].length && C && C.researchContext ? C.researchContext(`#stats?${params}`) : null };
       case 'defense': return { view: 'research', mode: 'players', sub: 'defense', legacy: true };
-      case 'games': return { view: 'games', tab: ['favorites', 'live', 'final'].includes(a) ? a : 'upcoming', league: params.get('sport') ? params.get('sport').toUpperCase() : null };
+      case 'games': {
+        const day = ['favorites', 'live'].includes(a) && gameDate(params.get('date'));
+        return { view: 'games', tab: ['favorites', 'live', 'final'].includes(a) ? a : 'upcoming',
+          league: params.get('sport') ? params.get('sport').toUpperCase() : null, ...(day ? { day } : {}) };
+      }
       case 'scores': return { view: 'games', tab: 'live', league: a ? a.toUpperCase() : 'ALL', legacy: true };
       case 'sport': return { view: 'games', tab: 'live', league: (a || 'NBA').toUpperCase(), legacy: true };
       case 'game': return rest ? { view: 'game', id: rest.split('#')[0], anchor: rest.split('#')[1] || null } : { view: 'games', tab: 'upcoming' };
@@ -2161,7 +2176,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-fcdd0d6e38cc';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
-  const GAMES_ASSET = 'app-games.js?v=sha256-999d8899a1c5';
+  const GAMES_ASSET = 'app-games.js?v=sha256-66215733a50f';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-d0c8ba8cf2a2';
   const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
@@ -2174,7 +2189,7 @@
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
     GAMES, HEADSHOT, MARK, STAT_UNITS, clock, defGames, defenseVerdict, disc, favoriteHold, favoriteLook, filtersFold, hasValue, lineVM, logoImg, minus, nameSize, odd, onBoard, panelVars, pctOne, teamPanel, ticketWhen, toneFor, watchButton, HOUSE, rail, holdOf, heldWords, slip, etDay, opponentTrendText, ...overrides });
-  const gamesContext = (overrides = {}) => moreContext({ setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican,
+  const gamesContext = (overrides = {}) => moreContext({ setLeague, favoritePath, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican,
     boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, ticketButton, resultLine, luminance, ...overrides });
   const BUNDLES = { more: { asset: MORE_ASSET, global: 'KRMore', context: moreContext, word: 'More pages' },
     player: { asset: PLAYER_ASSET, global: 'KRPlayer', context: moreContext, word: 'Player research' },
@@ -2343,6 +2358,9 @@
   let inputTimer = null;
   /* What the sport picker should open: the same tab in the new sport, or the list a sport-specific page belongs to. */
   const sportDestination = route => {
+    if (route.view === 'games' && route.tab === 'favorites') return favoritePath(state.league, route.day);
+    if (route.view === 'games' && route.tab === 'live' && route.day)
+      return `#games/live?${new URLSearchParams({ sport: state.league, date: route.day })}`;
     if (route.view === 'games') return `#games${route.tab && route.tab !== 'upcoming' ? '/' + route.tab : ''}${state.league !== 'ALL' ? '?sport=' + state.league : ''}`;
     if (route.view === 'game' || route.view === 'team') return '#games';
     if (route.view === 'player') return '#research/players';
@@ -2501,6 +2519,11 @@
     });
     document.addEventListener('change', event => {
       const el = event.target;
+      if (el.hasAttribute('data-favorite-date')) {
+        const day = gameDate(el.value);
+        if (day) location.hash = favoritePath(resolve(location.hash).league || 'ALL', day);
+        return;
+      }
       if (el.id === 'league') {
         setLeague(el.value);
         const dest = sportDestination(resolve(location.hash));

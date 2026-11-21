@@ -7,7 +7,7 @@
   const { C, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME, teamDirectory,
     maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, whenShort, dayLabel,
     bookLabel, ago, oddsText, isNum, inLeague, setLeague, liveStamp, liveFor, LIVE, favSpread, quoteAge,
-    ticket, ticketButton, etDay, lineData, niceTitle } = ctx;
+    ticket, ticketButton, etDay, lineData, niceTitle, favoritePath } = ctx;
   const views = {};
   /* Navigator, "why" and badge styles arrive with this bundle, so the first-load shell stays inside its budget. */
   const GAMES_CSS = ".kt-worth-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(196px, 1fr); gap: 10px; margin: 10px 0 6px; padding-bottom: 6px; }\n.kt-worth-card { display: grid; gap: 4px; align-content: start; padding: 10px 12px; background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); color: var(--chalk); min-width: 0; }\n.kt-worth-card:hover { text-decoration: none; border-color: var(--line-strong); }\n.kt-worth-card .wc-t { font: 700 15px/1.1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.kt-worth-card b { font: 500 14px/1.3 var(--font-body); color: var(--kookd); }\n.kt-worth-card small { font-size: 13px; color: var(--dim); }\n"
@@ -33,6 +33,8 @@
       .slate-favorite-row > span:not(.slate-rank) { display:grid; gap:3px; min-width:0; overflow-wrap:anywhere; }
       .slate-favorite-row small, .slate-rank { font-size:12px; color:var(--dim); }
       .slate-favorite-row .slate-posted { color:var(--kookd); }
+      .slate-day { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:12px 0; }
+      .slate-day input { max-width:100%; }
       @media (max-width:600px) {
         .slate-favorite-row { grid-template-columns:3ch minmax(0,1fr) minmax(0,.85fr); gap:6px 8px; }
         .slate-rank { grid-row:1/3; }
@@ -248,7 +250,8 @@
         <p><a href="#games/live?sport=CBB">Live scores & finals ›</a> · <a href="#record?sport=CBB">CBB Results ›</a></p>`;
   };
 
-  const FAVORITE_LEAGUES = ['NFL', 'NBA', 'CFB', 'CBB'];
+  const RANKED_LEAGUES = ['NFL', 'NBA', 'CFB', 'CBB'];
+  const FAVORITE_LEAGUES = [...new Set([...RANKED_LEAGUES, ...Object.keys(LIVE)])];
   const boardPrice = (quote, kickoff, now) => Boolean(bookLabel(quote.book) && isNum(quote.odds) && Math.abs(quote.odds) >= 100
     && Date.parse(quote.observedAt) <= now
     && ['fresh', 'aging'].includes(quoteAge(quote.observedAt, kickoff, now, quote).kind));
@@ -286,76 +289,128 @@
 
   const favoriteLine = (game, league, prices, picks, now) => {
     const football = FOOTBALL.includes(league);
-    if (game.completed || game.status === 'final' || game.state === 'post') return { status: 'Final' };
-    if (game.state === 'in' || Date.parse(game.kickoff) <= now) return { status: 'Game started' };
-    if (!football && game.status && game.status !== 'scheduled') return { status: 'Game unavailable' };
+    const unavailable = /postpon|cancel/i.test(game.status || '');
+    const final = !unavailable && (game.completed || game.status === 'final' || game.state === 'post');
+    const started = !unavailable && (game.state === 'in' || Date.parse(game.kickoff) <= now);
     const posted = picks.filter(pick => pick.posted === true && !pick.community && !pick.historicalImport && !C.isParlay(pick));
     const chef = pick => Boolean(pick.dailyChefDay || pick.lane === 'chef_pick');
-    const official = posted.filter(pick => C.isOpen(pick, now) && boardPrice({ ...pick, observedAt: pick.quotedAt }, game.kickoff, now))
+    const official = posted.filter(pick => !pick.entryNote && pick.status !== 'withdrawn'
+      && isNum(pick.odds) && Math.abs(pick.odds) >= 100 && bookLabel(pick.book))
       .sort((a, b) => Number(chef(b)) - Number(chef(a)) || String(b.publishedAt).localeCompare(String(a.publishedAt)))[0];
-    if (official) return { ...official, title: niceTitle(official.displayTitle || official.title), observedAt: official.quotedAt,
-      status: chef(official) ? 'Chef’s Pick' : 'Best Bet', rankGroup: chef(official) ? 0 : 1 };
+    if (official) {
+      const current = !started && !final && !unavailable && C.isOpen(official, now)
+        && boardPrice({ ...official, observedAt: official.quotedAt }, game.kickoff, now);
+      const result = official.result ? C.pickState(official, now).word : unavailable ? 'Game unavailable'
+        : final ? 'Final · grade pending' : started ? 'In play' : '';
+      const label = chef(official) ? 'Chef’s Pick' : 'Best Bet';
+      return { ...official, title: niceTitle(official.displayTitle || official.title), observedAt: official.quotedAt,
+        status: result ? `${label} · ${result}` : label, originalPrice: !current, rankGroup: chef(official) ? 0 : 1 };
+    }
     if (posted.some(pick => pick.entryNote || pick.status === 'withdrawn')) return { status: 'Previous line closed' };
+    if (unavailable) return { status: /cancel/i.test(game.status) ? 'Cancelled' : 'Postponed' };
+    if (final) return { status: 'Final' };
+    if (started) return { status: 'Game started' };
+    if (!RANKED_LEAGUES.includes(league)) return { status: 'No ranked line' };
+    if (!football && game.status && game.status !== 'scheduled') return { status: 'Game unavailable' };
     if (!football && !game.projection) return { status: 'Projection unavailable' };
     if (league === 'NBA' && nbaLineupsPending(game)) return { status: 'Lineup check pending' };
     const current = prices.filter(row => !row.athleteId && ['point spread', 'total points'].includes(row.market)
       && row.state === 'open' && row.freshness !== 'stale' && Date.parse(row.kickoff) === Date.parse(game.kickoff)
       && boardPrice(row, game.kickoff, now));
-    if ((football && !current.length) || (league === 'CBB' && !freshCbbSpread(game, now))) return { status: 'No fresh line' };
+    const projection = football ? game.v2 : game.projection;
+    const noPrice = () => ({ status: 'No fresh line', modelTotal: !projection?.sparse && !game.hold && isNum(projection?.total) ? projection.total : null });
+    if ((football && !current.length) || (league === 'CBB' && !freshCbbSpread(game, now))) return noPrice();
     const options = football ? footballFavorites(current) : basketballFavorites(game, league, now);
     const best = options.sort((a, b) => b.score - a.score || b.odds - a.odds || a.title.localeCompare(b.title))[0];
-    return best ? { ...best, rankGroup: 2 } : { status: 'Pass' };
+    if (best) return { ...best, rankGroup: 2 };
+    if (league === 'NBA' && ![game.spreadQuote, game.totalQuote].some(row => row && boardPrice({
+      book: row.book, odds: row.homeOdds ?? row.home ?? row.over, observedAt: row.observedAt || row.retrievedAt,
+    }, game.kickoff, now))) return noPrice();
+    return { status: 'Pass' };
   };
 
-  views.favoriteLines = async () => {
-    const selected = FAVORITE_LEAGUES.includes(state.league) ? state.league : 'ALL';
+  views.favoriteLines = async (route = {}) => {
+    const selected = FAVORITE_LEAGUES.includes(route.league) ? route.league : 'ALL';
     const leagues = selected === 'ALL' ? FAVORITE_LEAGUES : [selected];
-    const [today, prices, nba, cbb] = await Promise.all([
-      get('app/today.json'), leagues.some(league => FOOTBALL.includes(league)) ? lineData(selected) : null,
+    const now = Date.now(), todayDay = etDay(), day = route.day || todayDay;
+    const past = day < todayDay;
+    const [today, nflPrices, cfbPrices, nba, cbb, sports, record] = await Promise.all([
+      get('app/today.json').catch(() => null), !past && leagues.includes('NFL') ? lineData('NFL') : null, !past && leagues.includes('CFB') ? lineData('CFB') : null,
       leagues.includes('NBA') ? maybe('app/nba.json') : null, leagues.includes('CBB') ? maybe('app/cbb.json') : null,
+      leagues.some(league => !FOOTBALL.includes(league)) ? maybe('sports.json') : null,
+      past ? maybe('app/record.json') : null,
     ]);
     const groupByGame = rows => rows.reduce((groups, row) => {
-      if (!row.gameId) return groups;
-      if (!groups.has(row.gameId)) groups.set(row.gameId, []);
-      groups.get(row.gameId).push(row);
+      const key = row.gameId || row.gameIds?.[0];
+      if (!key) return groups;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(row);
       return groups;
     }, new Map());
-    const byPrice = groupByGame(prices?.lines || []), byPick = groupByGame(today.picks || []);
-    const now = Date.now(), day = etDay();
-    const sportNav = [['ALL', 'All four'], ...FAVORITE_LEAGUES.map(league => [league, league])]
-      .map(([key, label]) => [`#games/favorites?sport=${key}`, label, key]);
-    const teamName = team => team.name || team.shortName || team.abbr || team.abbreviation;
+    const byPrice = groupByGame([...(nflPrices?.lines || []), ...(cfbPrices?.lines || [])]);
+    const archivedPicks = [...(record?.picks || []), ...(record?.nbaPicks || []), ...(record?.cbbPicks || [])];
+    const byPick = groupByGame([...new Map([...archivedPicks, ...(today?.picks || [])].map(pick => [pick.id, pick])).values()]);
+    const dayOffset = delta => new Date(Date.parse(`${day}T12:00:00Z`) + delta * 86400000).toISOString().slice(0, 10);
+    const sportNav = [['ALL', 'All sports'], ...FAVORITE_LEAGUES.map(league => [league, league])]
+      .map(([key, label]) => [favoritePath(key, route.day), label, key]);
+    const teamName = team => team?.shortName || team?.name || team?.abbr || team?.abbreviation || 'TBD';
     const sections = leagues.map(league => {
-      const source = league === 'NBA' ? nba : league === 'CBB' ? cbb : today;
-      const games = (source?.games || []).filter(game => (game.league || league) === league && C.dayOf(game.kickoff) === day);
+      const source = league === 'NBA' ? nba : league === 'CBB' ? cbb : FOOTBALL.includes(league) ? today : null;
+      const schedule = sports?.leagues?.[league];
+      const onDay = game => (game.league || league) === league && C.dayOf(game.kickoff) === day;
+      const fixtures = (source?.games || []).filter(onDay);
+      const stored = new Map((schedule?.games || []).filter(onDay).map(game => [game.id, game]));
+      fixtures.forEach(game => stored.set(game.id, { ...stored.get(game.id), ...game, favoriteDetail: true }));
+      const live = liveFor(league, day);
+      for (const game of live?.games || []) {
+        if (!onDay(game)) continue;
+        const prior = stored.get(game.id);
+        if (!prior) stored.set(game.id, game);
+        else if (Date.parse(prior.kickoff) === Date.parse(game.kickoff))
+          stored.set(game.id, { ...prior, status: game.status, state: game.state, completed: game.completed });
+        else stored.set(game.id, game);
+      }
+      const games = [...stored.values()];
       const ranked = games.map(game => ({ game, line: favoriteLine(game, league, byPrice.get(game.id) || [], byPick.get(game.id) || [], now) }))
         .sort((a, b) => (a.line.rankGroup ?? 3) - (b.line.rankGroup ?? 3) || (b.line.score ?? 0) - (a.line.score ?? 0)
           || Date.parse(a.game.kickoff) - Date.parse(b.game.kickoff) || a.game.id.localeCompare(b.game.id));
       const rows = ranked.map(({ game, line }, index) => {
         const teams = game.teams || game;
-        const link = line.rankGroup < 2 ? `#pick/${encodeURIComponent(line.id)}` : `#game/${encodeURIComponent(game.id)}`;
+        const gameLink = game.favoriteDetail ? `#game/${encodeURIComponent(game.id)}`
+          : `#games/live?${new URLSearchParams({ sport: league, date: day })}`;
+        const link = line.rankGroup < 2 ? `#pick/${encodeURIComponent(line.id)}` : gameLink;
+        const priceLabel = line.originalPrice ? 'Original posted price' : line.observedAt ? `Checked ${ago(line.observedAt)}` : '';
         return `<li class="slate-favorite-row"><span class="slate-rank">${line.rankGroup != null ? index + 1 : ''}</span>
-          <span class="slate-matchup"><a href="#game/${esc(encodeURIComponent(game.id))}">${esc(teamName(teams.away))} at ${esc(teamName(teams.home))}</a><small>${esc(whenShort(game.kickoff))}</small></span>
-          <span>${line.title ? `<a href="${esc(link)}"><b>${esc(line.title)}</b></a>` : ''}<small class="${line.rankGroup < 2 ? 'slate-posted' : ''}">${esc(line.status)}</small></span>
-          ${line.title ? `<span class="slate-price"><b>${esc(oddsText(line.odds))} · ${esc(bookLabel(line.book))}</b><small>Checked ${esc(ago(line.observedAt))}</small></span>` : ''}</li>`;
+          <span class="slate-matchup"><a href="${esc(gameLink)}">${esc(teamName(teams.away))} at ${esc(teamName(teams.home))}</a><small>${esc(whenShort(game.kickoff))}</small></span>
+          <span>${line.title ? `<a href="${esc(link)}"><b>${esc(line.title)}</b></a>` : isNum(line.modelTotal) ? `<b>Kook’n total ${esc(C.fixed(line.modelTotal, 1))}</b>` : ''}<small class="${line.rankGroup < 2 ? 'slate-posted' : ''}">${esc(line.status)}</small></span>
+          ${line.title ? `<span class="slate-price"><b>${esc(oddsText(line.odds))} · ${esc(bookLabel(line.book))}</b><small>${esc(priceLabel)}</small></span>` : ''}</li>`;
       }).join('');
+      const emptySlate = live?.failed ? 'Schedule unavailable for this date.'
+        : live?.at || source || schedule ? 'No games listed for this date.' : 'Checking the schedule…';
       return `<section class="kt-page-sec" aria-labelledby="favorite-${league}"><h2 id="favorite-${league}">${esc(LEAGUE_NAME[league])}</h2>
-        ${rows ? `<ol class="slate-favorites">${rows}</ol>` : `<p class="small muted">${source ? 'No games today.' : 'The schedule could not be loaded.'}</p>`}</section>`;
+        ${rows ? `<ol class="slate-favorites">${rows}</ol>` : `<p class="small muted">${esc(emptySlate)}</p>`}</section>`;
     });
-    return `${head('Games', 'Favorite lines', 'One line per game, ranked within each sport. Posted Best Bets come first, followed by research leans.')}${gameTabs('favorites')}
+    const dates = `<nav class="slate-day" aria-label="Slate date"><a class="btn small" href="${esc(favoritePath(selected, dayOffset(-1)))}">Previous day</a>
+      <label for="favorite-date" class="sr">Slate date in Eastern time</label><input class="select" type="date" id="favorite-date" data-favorite-date value="${esc(day)}">
+      <a class="btn small" href="${esc(favoritePath(selected, dayOffset(1)))}">Next day</a>
+      <a class="btn small" href="${esc(favoritePath(selected))}">Today</a></nav>`;
+    return `${head('Games', 'Favorite lines', 'One ranked line per game when available. Posted Best Bets come first, followed by research leans.')}${gameTabs('favorites')}${dates}
       <div class="chip-scroll">${segLinks(sportNav, selected)}</div>${sections.join('')}`;
   };
 
   views.games = async route => {
     const tab = route.tab || 'upcoming';
+    if (tab === 'favorites') {
+      setLeague(FAVORITE_LEAGUES.includes(route.league) ? route.league : 'ALL');
+      return views.favoriteLines(route);
+    }
     if (route.league) setLeague(route.league);
-    if (tab === 'favorites') return views.favoriteLines();
     if (state.league === 'CBB' && tab === 'upcoming') return views.cbbToday({gamesPage:true});
     const tabs = gameTabs(tab);
     const football = FOOTBALL.includes(state.league) || state.league === 'ALL';
     const intro = tab === 'live' ? 'Scores refresh about once a minute.' : tab === 'final' ? 'Final scores vs. our projections.' : football || state.league === 'NBA' ? 'Projected scores and the latest lines we captured.' : 'Scores and schedules.';
     const top = `${head('Games', tab === 'live' ? 'Live and scores' : tab === 'final' ? 'Recent finals' : 'Upcoming games', intro)}${tabs}`;
-    if (tab === 'live') return top + await gamesLive();
+    if (tab === 'live') return top + await gamesLive(route.day ? { day: route.day } : {});
     if (state.league === 'NBA') {
       let data;
       try { data=await get('app/nba.json'); }

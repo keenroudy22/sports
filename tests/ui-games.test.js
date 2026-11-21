@@ -106,6 +106,7 @@ test('Favorite Lines ranks a posted Chef’s Pick and one current priced lean pe
   assert.match(html, /Best Bets come first/);
   assert.match(html, /Previous line closed/);
   assert.match(html, /No fresh line/);
+  assert.match(html, /Kook’n total 56\.0/);
   assert.doesNotMatch(html, /Second market|Stale quote|Closed reentry/);
 });
 
@@ -129,6 +130,54 @@ test('Favorite Lines uses the priced side in basketball and respects roster hold
   assert.match(html, /Team-rating lean/);
   assert.match(html, /No fresh line/);
   assert.doesNotMatch(html, /Over 145|Over 150|-102 · DraftKings/);
+});
+
+test('Favorite Lines opens every sport by default and preserves the selected Eastern date in navigation', async () => {
+  const { api, factory } = loadBrowserApi();
+  const day = C.dayOf(kickoff(19));
+  const tip = `${day}T22:00:00Z`;
+  const teams = { home: { name: 'Hurricanes' }, away: { name: 'Rangers' } };
+  const hockey = { id: 'NHL-1', league: 'NHL', kickoff: tip, status: 'scheduled', teams };
+  const asked = [];
+  const ctx = contextFor(api, [], { get: async () => { throw Error('Today temporarily unavailable'); },
+    etDay: () => day, liveFor: (sport, date) => { asked.push([sport, date]); return null; },
+    maybe: async path => path === 'sports.json' ? { leagues: { NHL: { games: [hockey] }, WNBA: { games: [] } } } : null });
+  const views = factory(ctx);
+  const html = unesc(await views.games(api.model.resolve('#games/favorites')));
+  assert.equal(ctx.state.league, 'ALL');
+  assert.match(html, new RegExp(`id="favorite-date" data-favorite-date value="${day}"`));
+  assert.equal(asked.length, 9);
+  assert.ok(asked.every(([, date]) => date === day));
+  assert.match(html, /favorite-WNBA/);
+  assert.match(html, /Rangers at Hurricanes/);
+  assert.match(html, /No ranked line/);
+
+  const route = api.model.resolve(`#games/favorites?sport=NHL&date=${day}`);
+  assert.equal(route.day, day);
+  assert.equal(api.model.resolve('#games/favorites?date=2026-02-31').day, undefined);
+  const hockeyOnly = unesc(await views.games(route));
+  assert.match(hockeyOnly, new RegExp(`#games/favorites\\?sport=NBA&amp;date=${day}`));
+  assert.match(hockeyOnly, new RegExp(`#games/live\\?sport=NHL&amp;date=${day}`));
+  assert.doesNotMatch(hockeyOnly, /aria-labelledby="favorite-NFL"/);
+});
+
+test('Favorite Lines keeps actual posted prices on earlier dates without recreating old leans', async () => {
+  const { api, factory } = loadBrowserApi();
+  const day = C.dayOf(new Date(Date.now() - 2 * 86400000).toISOString());
+  const tip = `${day}T22:00:00Z`;
+  const teams = { home: { shortName: 'Home' }, away: { shortName: 'Away' } };
+  const games = ['CBB-70', 'CBB-71'].map(id => ({ id, kickoff: tip, status: 'final', completed: true, teams }));
+  const record = { cbbPicks: [{ id: 'CBB-win', gameIds: ['CBB-70'], kickoff: tip, posted: true,
+    title: 'Away +5', status: 'settled', result: 'win', odds: -108, book: 'DraftKings' }] };
+  const ctx = contextFor(api, [], { maybe: async path => path === 'app/record.json' ? record : null,
+    liveFor: (league, date) => league === 'CBB' && date === day ? { at: Date.now(), games } : null });
+  const html = unesc(await factory(ctx).games(api.model.resolve(`#games/favorites?sport=CBB&date=${day}`)));
+  assert.match(html, /href="#pick\/CBB-win"><b>Away \+5/);
+  assert.match(html, /Best Bet · Won/);
+  assert.match(html, /-108 · DraftKings/);
+  assert.match(html, /Original posted price/);
+  assert.match(html, /<small class="">Final<\/small>/);
+  assert.doesNotMatch(html, /Research lean|No fresh line/);
 });
 
 test('the college slate sorts by bettability, shows tiers and keeps NFL in kickoff order with badges only', async () => {
