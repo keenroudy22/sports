@@ -167,7 +167,7 @@ def candidate(ctx, games, now, spec):
         ladder.prospective_stake(where, ticket)
     except ValueError as error:
         return None, str(error)
-    ticket.update(firstKickoff=min(games[g]['kickoff'] for g in ticket['gameIds']),
+    ticket.update(odds=int(ticket['odds']), firstKickoff=min(games[g]['kickoff'] for g in ticket['gameIds']),
                   decimal=parlay.decimal(ticket['odds']), quoteType='sportsbook', priceEstimated=False,
                   sources=sorted({ticket['researchReview']['ticketSource']} |
                       {fact['url'] for leg in ticket['legs'] for fact in leg['researchCase']['sources']}))

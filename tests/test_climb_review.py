@@ -45,7 +45,7 @@ def fixture():
 
 class ReviewedClimbTests(unittest.TestCase):
     def test_full_rollover_one_and_two_leg_public_path_excludes_private_review(self):
-        now = ladder.FULL_ROLLOVER_FROM + timedelta(hours=4)
+        now = ladder.FULL_ROLLOVER_FROM + timedelta(hours=9)
         for single in (True, False):
             ticket, ctx = fixture()
             ctx.now = now
@@ -53,9 +53,9 @@ class ReviewedClimbTests(unittest.TestCase):
                 gid = f'old-{i}'
                 ctx.first[gid] = dict(id=gid, parlayType='ladder', result='loss',
                                       publishedAt=f'2026-11-{10+i:02}T14:00Z')
-            ticket['quotedAt'] = '2026-11-21T08:55Z'
-            ticket['odds'] = -220 if single else -210
-            ticket['researchReview'].update(reviewedAt='2026-11-21T08:58Z', unboosted=True)
+            ticket['quotedAt'] = '2026-11-21T13:55Z'
+            ticket['odds'] = -220.0 if single else -210
+            ticket['researchReview'].update(reviewedAt='2026-11-21T13:58Z', unboosted=True)
             if single:
                 ticket['legs'] = ticket['legs'][:1]
             else:
@@ -64,10 +64,11 @@ class ReviewedClimbTests(unittest.TestCase):
                 ctx.games[leg['gameId']]['kickoff'] = '2026-11-21T17:00Z'
                 leg.update(odds=-220 if single else -465, observedAt=ticket['quotedAt'],
                            kickoff='2026-11-21T17:00Z', receipt='private leg receipt')
-                leg['researchCase']['sources'][0]['checkedAt'] = '2026-11-21T08:54Z'
+                leg['researchCase']['sources'][0]['checkedAt'] = '2026-11-21T13:54Z'
             pick, held = ladder.manual_candidate(ctx, ctx.games, now, ticket)
             self.assertIsNone(held)
-            self.assertTrue(gates.ladder_selective(pick, ctx).ok)
+            admitted, decisions = gates.admit(dict(pick, league='CFB'), ctx)
+            self.assertTrue(admitted, [decision.reason for decision in gates.refusals(decisions)])
             self.assertIsNone(run.private_release_refusal({'pick': pick, 'league': 'CFB'}, ctx, now))
             self.assertIn('expired', run.private_release_refusal({'pick': pick}, ctx, now + timedelta(hours=2)))
             edited = dict(pick, ladder=dict(pick['ladder'], nextStake=50))
