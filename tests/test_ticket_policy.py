@@ -70,6 +70,25 @@ class TicketPolicyTests(unittest.TestCase):
         self.assertIn('seven days', reason)
         fetch.assert_not_called()
 
+    def test_reviewed_football_alternates_use_daily_limits_prospectively(self):
+        for league in ('NFL', 'CFB'):
+            for style, count, odds in (('short', 4, 554), ('lotto', 6, 1510)):
+                with self.subTest(league=league, style=style):
+                    prior = dict(ticket(), id=f'{league}-prior', league=league,
+                                 publishedAt='2026-11-20T17:35Z')
+                    ctx = context([prior])
+                    ctx.now = gates.when('2026-11-21T15:35Z')
+                    reviewed = dict(id=f'{league}-reviewed', league=league, legs=[{'alternate': True}] * count,
+                                    odds=odds, parlayStyle=style, parlayType='longshot', riskUnits=.25,
+                                    selectionMethod='sourced-fun-ticket-review-v1')
+                    self.assertTrue(gates.alternate_parlay_frequency(reviewed, ctx).ok)
+                    self.assertFalse(gates.alternate_parlay_frequency(dict(reviewed, selectionMethod=None), ctx).ok)
+                    self.assertFalse(gates.alternate_parlay_frequency(dict(reviewed, odds=110), ctx).ok)
+                    historical = dict(reviewed, publishedAt='2026-11-20T20:00Z')
+                    self.assertFalse(gates.alternate_parlay_frequency(historical, ctx).ok)
+                    ctx.first[f'{league}-today'] = dict(reviewed, publishedAt='2026-11-21T14:00Z')
+                    self.assertFalse(gates.longshot_one_per_day(reviewed, ctx).ok)
+
     def test_longshot_tries_main_lines_without_shared_player_first(self):
         ctx = context([straight()])
         rows = [{'gameId': 'NFL-1', 'athleteId': '77'}, {'gameId': 'NFL-2', 'athleteId': '88'}]

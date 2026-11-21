@@ -1370,33 +1370,30 @@ def without_straight_players(rows, ctx):
 
 
 def alternate_parlay_frequency(candidate, ctx):
-    """Legacy alternates remain weekly; sourced prop tickets use existing daily limits."""
+    """Keep legacy alternates weekly and apply daily limits to reviewed tickets."""
     if candidate.get('parlayType') == 'ladder' or not (candidate.get('parlayType') == 'easyProps' or
             any(isinstance(l, dict) and l.get('alternate') for l in candidate.get('legs') or [])):
         return Decision(True, 'alternate_parlay_frequency', 'main-line ticket or separate ladder')
-    # Owner's Nov17 regular-parlay direction applies only to the typed review
-    # path. This is a frequency decision, not evidence of admission: the separate
-    # reviewed_prop_ticket gate still requires the private packet, exact quote,
-    # participation, settlement rules and staking checks. Never widen legacy
-    # easyProps/automatic tickets or historical replay with this exception.
     import prop_ticket_review
     family = candidate.get('family')
     expected_league = prop_ticket_review.FAMILIES.get(family, (None, None))[0]
+    policy_time = when(candidate['publishedAt']) if candidate.get('publishedAt') else ctx.now
+    policy_day = eastern_date(policy_time).isoformat()
+    style = candidate.get('parlayStyle')
+    league = candidate.get('league') or candidate.get('_league') or str(candidate.get('id') or '').split('-')[0]
     if (candidate.get('selectionMethod') == 'sourced-fun-ticket-review-v1'
-            and candidate.get('parlayStyle') == 'daily-double'
             and candidate.get('parlayType') == 'longshot' and candidate.get('riskUnits') == .25
-            and longshot_shape(candidate, ctx).ok
-            and eastern_date(when(candidate['publishedAt']) if candidate.get('publishedAt')
-                             else ctx.now).isoformat() >= '2026-11-19'):
-        return Decision(True, 'alternate_parlay_frequency', 'reviewed Daily Double uses its own daily limit')
+            and longshot_shape(candidate, ctx).ok):
+        if style == 'daily-double' and policy_day >= '2026-11-19':
+            return Decision(True, 'alternate_parlay_frequency', 'reviewed Daily Double uses its own daily limit')
+        if style in ('short', 'lotto') and league in ('NFL', 'CFB') and policy_day >= '2026-11-21':
+            return Decision(True, 'alternate_parlay_frequency', 'reviewed football parlay uses its per-style daily limit')
     if (candidate.get('selectionMethod') == prop_ticket_review.METHOD
             and expected_league is not None and candidate.get('league') == expected_league
             and candidate.get('parlayType') == 'longshot' and candidate.get('riskUnits') == .25
-            and eastern_date(when(candidate['publishedAt']) if candidate.get('publishedAt')
-                             else ctx.now).isoformat() >= '2026-11-17'):
+            and policy_day >= '2026-11-17'):
         return Decision(True, 'alternate_parlay_frequency',
                         'reviewed prop ticket uses per-style daily limits; evidence and exposure checks still required')
-    league = candidate.get('league') or candidate.get('_league') or str(candidate.get('id') or '').split('-')[0]
     external = getattr(ctx, 'risk_external', {})
     for key, pick in {**external, **getattr(ctx, 'first', {})}.items():
         if key == candidate.get('id') or pick.get('historicalImport') or pick.get('parlayType') == 'ladder':
