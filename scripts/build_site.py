@@ -1644,49 +1644,24 @@ def hero_last_slate(picks, today):
             'units': round(sum(priced), 4) if priced else None}
 
 
-def hero_climb(picks):
-    """Where the 80/20 Climb stands, walked from the rungs exactly as ladder.state and core.js theLadder walk them."""
-    def counts(rung):
-        if rung.get('result') or hero_pulled(rung):
-            return True
-        return not rung.get('entryNote') and (rung.get('status') or 'active') == 'active'
-    rungs = sorted((p for p in picks if p.get('parlayType') == 'ladder' and counts(p)),
-                   key=lambda p: (str(p.get('publishedAt') or ''), str(p.get('id'))))
-    start, goal = 50, 1000
-    run, step, stake, banked, open_rung, last, settled = 1, 1, start, 0, None, None, 0
-    wagered = paid = saved = 0       # lifetime dollars, as core.js theLadder's accounting counts them
-    for rung in rungs:
-        info = rung.get('ladder') or {}
-        if not rung.get('result'):
-            open_rung = rung
-            continue
-        settled += 1
-        last = {'result': rung['result'], 'step': info.get('step') or step}
-        wagered += number(info.get('stake')) or stake
-        if rung['result'] == 'win':
-            returned = int(info.get('payout') or stake)
-            paid += number(info.get('payout')) or stake
-            cut = int(round(returned * .2))
-            before = int(info['banked']) if info.get('banked') is not None else banked
-            banked = int(info['bankedAfter']) if info.get('bankedAfter') is not None else before + cut
-            saved += max(0, banked - before)
-            stake = int(info['nextStake']) if info.get('nextStake') is not None else returned - cut
-            step += 1
-            if banked + stake >= goal:
-                run, step, stake, banked = run + 1, 1, start, 0
-        elif rung['result'] == 'loss':
-            run, step, stake, banked = run + 1, 1, start, 0
-        elif rung['result'] in ('push', 'void'):
-            paid += number(info.get('stake')) or stake
-    info = (open_rung or {}).get('ladder') or {}
-    out = {'run': run, 'step': step, 'riding': stake, 'banked': banked, 'settled': settled, 'last': last,
-           'saved': round(saved), 'net': round(paid - wagered)}
-    if open_rung:
-        out['open'] = {'step': info.get('step') or step, 'league': open_rung.get('league')}
-        out['riding'] = int(info.get('stake') or stake)
-        out['banked'] = int(info['banked']) if info.get('banked') is not None else banked
-    return {key: value for key, value in out.items() if value is not None}
-
+def hero_climb(picks, now=None):
+    """Compact first-paint status derived from the same ledger as the Climb route."""
+    import ladder
+    rungs = {pick['id']: pick for pick in picks if pick.get('parlayType') == 'ladder'}
+    state = ladder.state(rungs, {}, now)
+    history = state['history']
+    out = {'run': state['run'], 'step': state['step'], 'riding': state['stake'], 'banked': state['banked'],
+           'settled': len(history), 'saved': state['saved'], 'net': state['accounting']['net']}
+    if state['fullRollover']:
+        out['fullRollover'] = True
+    if history:
+        out['last'] = {key: history[-1][key] for key in ('result', 'step')}
+    if pick := state['open']:
+        info = pick.get('ladder') or {}
+        out['open'] = {'step': info.get('step') or state['step'], 'league': pick.get('league')}
+        out['riding'] = info.get('stake') or state['stake']
+        out['banked'] = info.get('banked') if info.get('banked') is not None else state['banked']
+    return out
 
 def hero_next_day(rows):
     """The earliest later game day's plays still on the card (a play closed after its line moved is off it)."""
@@ -1709,7 +1684,7 @@ def today_hero(picks, now, potd=None, teams=None):
     chosen = bets[:HERO_ROWS]
     rows = [hero_bet(p, now, potd, teams) for p in chosen]
     payload = {'generatedAt': stamp(now), 'day': today, 'bets': rows, 'more': len(bets) - len(rows),
-               'climb': hero_climb(picks), 'last': last_slates(picks, today), 'season': season_records(picks, now)}
+               'climb': hero_climb(picks, now), 'last': last_slates(picks, today), 'season': season_records(picks, now)}
     # Never let a crowded slate grow the first paint: the full card still lists every play.
     while payload['bets'] and len(json.dumps(payload, separators=(',', ':'), sort_keys=True,
                                              ensure_ascii=False).encode('utf-8')) > HERO_BYTES:

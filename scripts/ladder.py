@@ -37,6 +37,7 @@ import math
 import os
 import sys
 from datetime import date, datetime, timedelta, timezone
+from decimal import Decimal, ROUND_HALF_UP
 from itertools import combinations
 from pathlib import Path
 
@@ -79,6 +80,9 @@ SHADOW_NAME = 'ladder-shadow-2026.jsonl'
 SELECTIVE_FROM = date(2026, 10, 21)
 MIXED_REVIEW_FROM = datetime(2026, 11, 19, 16, 6, tzinfo=timezone.utc)
 REVIEWED_DAILY_FROM = datetime(2026, 11, 20, 14, tzinfo=timezone.utc)
+FULL_ROLLOVER_FROM = datetime(2026, 11, 21, 5, tzinfo=timezone.utc)
+FULL_ROLLOVER_RUN = 5
+FULL_ROLLOVER_TARGET = (-220, -200)
 ALT_SHAPE_FROM = date(2026, 10, 21)
 MIN_LEGS = 2
 MAX_LEGS = 3
@@ -93,9 +97,13 @@ def shape_policy(now=None):
 
 def shape_refusal(ticket, now=None):
     minimum, target, alternates = shape_policy(now)
+    full = full_rollover(ticket)
+    maximum = MAX_LEGS
+    if full:
+        minimum, maximum, target, alternates = 1, 2, FULL_ROLLOVER_TARGET, True
     legs = ticket.get('legs')
-    words = 'two to three alternate' if alternates else 'one to three'
-    if not isinstance(legs, list) or not minimum <= len(legs) <= MAX_LEGS or any(not isinstance(l, dict) for l in legs):
+    words = 'one or two alternate' if full else 'two to three alternate' if alternates else 'one to three'
+    if not isinstance(legs, list) or not minimum <= len(legs) <= maximum or any(not isinstance(l, dict) for l in legs):
         return f'Climb ticket needs {words} valid legs'
     if alternates and any(l.get('alternate') is not True for l in legs):
         return 'Climb needs actual alternate lines, not a main line relabeled as an alternate'
@@ -103,6 +111,10 @@ def shape_refusal(ticket, now=None):
     if not isinstance(price, (int, float)) or isinstance(price, bool) or not math.isfinite(price) or not target[0] <= price <= target[1]:
         return f'Climb combined ticket must be priced {target[0]:+d} to {target[1]:+d}'
     return None
+
+
+def full_rollover(ticket):
+    return (ticket.get('ladder') or ticket).get('fullRollover') is True
 
 
 def weekly_status(first, now, exclude=None):
@@ -307,13 +319,12 @@ def played(rung):
     return not rung.get('entryNote') and (rung.get('status') or 'active') == 'active'
 
 
-def state(first, latest):
+def state(first, latest, now=None):
     """Where the ladder stands, from the rungs themselves:
     {'run', 'step', 'stake', 'banked', 'saved', 'open', 'history', 'climbs', 'start', 'goal'}.
 
-    A win banks 20% of its return and rides 80%; reaching the goal with the bank plus the next stake finishes the
-    climb. A loss starts a new climb at START while the already saved money stays saved; a push or void keeps the
-    stake, bank and step."""
+    Earlier wins banked 20%. Climb #5 and later roll the full return.
+    A loss resets the climb; a push or void leaves the step unchanged."""
     run, step, stake, banked, saved, open_rung = 1, 1, START, 0, 0, None
     history, climbs = [], []
     wagered = returned_total = wins = losses = pushes = voids = 0
@@ -325,19 +336,20 @@ def state(first, latest):
         if not result:
             open_rung = rung
             continue
-        rung_stake = int(info.get('stake') or stake)
+        money = cents if full_rollover(rung) else int
+        rung_stake = money(info.get('stake') or stake)
         wagered += rung_stake
-        item = {'id': rung['id'], 'run': info.get('run'), 'step': info.get('step'), 'stake': info.get('stake'),
+        item = {'id': rung['id'], 'run': info.get('run'), 'step': info.get('step') or step, 'stake': info.get('stake'),
                 'payout': info.get('payout'), 'odds': rung.get('odds'), 'result': result,
                 'settledAt': rung.get('settledAt')}
         if result == 'win':
-            returned = int(info.get('payout') or stake)
+            returned = money(info.get('payout') or stake)
             returned_total += returned
             wins += 1
             before = int(info.get('banked') if info.get('banked') is not None else banked)
-            cut, next_stake = split_return(returned)
+            cut, next_stake = split_return(returned, full_rollover(rung))
             after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else before + cut)
-            next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else next_stake)
+            next_stake = money(info.get('nextStake') if info.get('nextStake') is not None else next_stake)
             saved += max(0, after - before)
             banked, stake, step = after, next_stake, step + 1
             item.update({'banked': before, 'bankedAfter': after, 'nextStake': next_stake})
@@ -354,15 +366,17 @@ def state(first, latest):
         elif result == 'void':
             returned_total += rung_stake
             voids += 1
-        item['ladderTotal'] = {'wagered': wagered, 'returned': returned_total,
-                               'net': returned_total - wagered}
+        item['ladderTotal'] = {'wagered': cents(wagered), 'returned': cents(returned_total),
+                               'net': cents(returned_total - wagered)}
         history.append(item)
-    accounting = {'wagered': wagered, 'returned': returned_total, 'net': returned_total - wagered,
-                  'atRisk': int((open_rung.get('ladder') or {}).get('stake') or stake) if open_rung else 0,
+    accounting = {'wagered': cents(wagered), 'returned': cents(returned_total), 'net': cents(returned_total - wagered),
+                  'atRisk': cents((open_rung.get('ladder') or {}).get('stake') or stake) if open_rung else 0,
                   'wins': wins, 'losses': losses, 'pushes': pushes, 'voids': voids}
+    full = run >= FULL_ROLLOVER_RUN and (now or datetime.now(timezone.utc)) >= FULL_ROLLOVER_FROM
+    bank_percent = 0 if full else int(BANK_RATE * 100)
     return {'run': run, 'step': step, 'stake': stake, 'open': open_rung, 'history': history, 'climbs': climbs,
-            'banked': banked, 'saved': saved, 'bankPercent': int(BANK_RATE * 100),
-            'ridePercent': 100 - int(BANK_RATE * 100), 'start': START, 'goal': GOAL,
+            'banked': banked, 'saved': saved, 'bankPercent': bank_percent, 'fullRollover': full,
+            'ridePercent': 100 - bank_percent, 'start': START, 'goal': GOAL,
             'accounting': accounting}
 
 
@@ -389,12 +403,22 @@ def saved_through(first, latest, target):
     return saved
 
 
-def payout(stake, odds):
+def cents(amount):
+    rounded = Decimal(str(amount)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    return int(rounded) if rounded == int(rounded) else float(rounded)
+
+
+def payout(stake, odds, full=False):
+    if full:
+        price = Decimal(str(odds))
+        profit = price / 100 if price > 0 else 100 / -price
+        return cents(Decimal(str(stake)) * (1 + profit))
     return int(round(stake * parlay.decimal(odds)))
 
 
-def split_return(returned):
-    """Whole-dollar 80/20 split: bank 20% of the return and ride the remainder."""
+def split_return(returned, full=False):
+    if full:
+        return 0, cents(returned)
     returned = int(returned)
     bank = int(round(returned * BANK_RATE))
     return bank, returned - bank
@@ -739,6 +763,10 @@ def prospective_stake(where, ticket):
     accounting agrees with the actual append-only ladder state.
     """
     adjustment = ticket.get('stakeAdjustment')
+    if where.get('fullRollover'):
+        if adjustment is not None:
+            raise ValueError('The full-rollover Climb uses the complete balance')
+        return cents(where['stake']), 0, None
     if adjustment is None:
         return int(where['stake']), int(where['banked']), None
     if not isinstance(adjustment, dict) or adjustment.get('method') != OWNER_ROLL_SPLIT:
@@ -761,13 +789,17 @@ def ticket_pick(ticket, league, where, now, games):
     first = games.get(ticket['gameIds'][0]) or {}
     day = eastern_date(now)
     stake, banked, adjustment = prospective_stake(where, ticket)
-    returned = payout(stake, ticket['odds'])
-    bank_cut, next_stake = split_return(returned)
+    full = where.get('fullRollover') is True
+    returned = payout(stake, ticket['odds'], full)
+    bank_cut, next_stake = split_return(returned, full)
+    bank_percent = 0 if full else int(BANK_RATE * 100)
     info = {'run': where['run'], 'step': where['step'], 'stake': stake, 'payout': returned,
             'banked': banked, 'bankThisWin': bank_cut, 'bankedAfter': banked + bank_cut,
             'nextStake': next_stake, 'totalAfter': banked + returned,
-            'bankPercent': int(BANK_RATE * 100), 'ridePercent': 100 - int(BANK_RATE * 100),
+            'bankPercent': bank_percent, 'ridePercent': 100 - bank_percent,
             'start': START, 'goal': GOAL}
+    if full:
+        info['fullRollover'] = True
     if adjustment:
         info['stakeAdjustment'] = adjustment
     base = (f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-"
@@ -777,7 +809,8 @@ def ticket_pick(ticket, league, where, now, games):
         sources.add(SOURCE)
     sources.update(games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source'))
     return {'id': base,
-            'title': f"Ladder step {info['step']}: {len(ticket['legs'])} legs at {ticket['book']}",
+            'title': (f"Climb step {info['step']} at {ticket['book']}" if full else
+                      f"Ladder step {info['step']}: {len(ticket['legs'])} legs at {ticket['book']}"),
             'status': 'active', 'favorite': False, 'parlayType': 'ladder', 'riskUnits': STAKE,
             'ladder': info, 'legs': ticket['legs'], '_league': league,
             'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',
@@ -809,9 +842,11 @@ def manual_candidate(ctx, games, now, spec):
     if isinstance(spec, dict) and spec.get('selectionMethod') == 'sourced-climb-review-v1':
         import climb_review
         return climb_review.candidate(ctx, games, now, spec)
-    where = state(ctx.first, ctx.latest)
+    where = state(ctx.first, ctx.latest, now)
     if where['open']:
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"
+    if where['fullRollover']:
+        return None, 'The full-rollover Climb needs a sourced review and exact sportsbook ticket'
     blocked = weekly_refusal(ctx, now)
     if blocked:
         return None, blocked
@@ -907,9 +942,11 @@ def candidate(ctx, games, now, exclude=()):
     Compare eligible NFL and college tickets; a rung stays inside one league, as a report does."""
     if not v3_enabled():
         return None, 'Climb v3 is switched off'
-    where = state(ctx.first, ctx.latest)
+    where = state(ctx.first, ctx.latest, now)
     if where['open']:
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"
+    if where['fullRollover']:
+        return None, 'The full-rollover Climb needs a sourced review and exact sportsbook ticket'
     blocked = weekly_refusal(ctx, now)
     if blocked:
         return None, blocked

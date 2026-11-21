@@ -93,6 +93,26 @@ def book_of(*rungs):
 
 
 class StateTests(unittest.TestCase):
+    def test_full_rollover_cent_accounting_and_neutral_grades(self):
+        first, latest = book_of(
+            rung('a', '2026-11-17T12:30:00Z', 1, 50, 75, 'loss'),
+            rung('b', '2026-11-18T12:30:00Z', 1, 50, 75, 'loss', run=2),
+            rung('c', '2026-11-19T12:30:00Z', 1, 50, 75, 'loss', run=3),
+            rung('d', '2026-11-20T12:30:00Z', 1, 50, 75, 'loss', run=4),
+            rung('e', '2026-11-21T12:30:00Z', 1, 50, 72.73, 'win', run=5,
+                 ladder_info={'fullRollover': True}),
+            rung('f', '2026-11-22T12:30:00Z', 2, 72.73, 105.79, 'push', run=5,
+                 ladder_info={'fullRollover': True}),
+            rung('g', '2026-11-23T12:30:00Z', 2, 72.73, 105.79, 'void', run=5,
+                 ladder_info={'fullRollover': True}))
+        where = ladder.state(first, latest, ladder.FULL_ROLLOVER_FROM)
+        self.assertEqual((where['run'], where['step'], where['stake'], where['banked']), (5, 2, 72.73, 0))
+        self.assertEqual((where['accounting']['returned'], where['accounting']['net']), (218.19, -177.27))
+        amount = 50
+        for _ in range(8):
+            amount = ladder.payout(amount, -220, full=True)
+        self.assertEqual(amount, 1001.91)
+
     def test_a_win_banks_twenty_rides_eighty_and_a_loss_cannot_take_the_bank(self):
         first, latest = book_of(rung('r1', '2026-09-27T12:30:00Z', 1, 50, 96, 'win'),
                                 rung('r2', '2026-09-28T12:30:00Z', 2, 77, 150, 'loss'),

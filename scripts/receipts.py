@@ -85,7 +85,8 @@ def label(pick, games=None):
     """A play as its post named it: "Iowa/Michigan over 38.5", "5-leg lotto", "80/20 Climb step 2"."""
     if pick_card.play_kind(pick) == 'ladder':
         info = pick.get('ladder') or {}
-        name = f"80/20 Climb step {info.get('step', 1)}"
+        title = 'Climb' if info.get('fullRollover') else '80/20 Climb'
+        name = f"{title} step {info.get('step', 1)}"
         # Modern public results omit private dollars. Keep historical receipts
         # stable; the separate Climb advancement card carries its approved units.
         import social_style
@@ -1035,21 +1036,25 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
 def ladder_result(pick):
     """(head, body) for one settled rung: advance, restart with the bank protected, or keep riding."""
     import social_units
-    money = social_units.climb if social_units.active(pick) else pick_card.dollars
     info = pick.get('ladder') or {}
+    full = info.get('fullRollover')
+    money = social_units.climb if full or social_units.active(pick) else pick_card.dollars
+    cast = float if full else int
+    name = 'Climb' if full else '80/20 Climb'
     result = str(pick.get('result') or 'win').lower()
-    returned = int(info.get('payout') or 0)
+    returned = cast(info.get('payout') or 0)
     bank_this = int(info.get('bankThisWin') if info.get('bankThisWin') is not None else round(returned * 0.20))
     banked_after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else (info.get('banked') or 0) + bank_this)
-    next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else returned - bank_this)
-    total = int(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
+    next_stake = cast(info.get('nextStake') if info.get('nextStake') is not None else returned - bank_this)
+    total = cast(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
     stake, won = money(info.get('stake')), money(returned)
     if result == 'win' and total >= (info.get('goal') or 1000):
-        return (f"🪜 80/20 Climb complete: {money(info.get('start', 50))} → {money(total)} in {info.get('step', 1)} steps",
-                f"{money(banked_after)} banked along the way.")
+        return (f"🪜 {name} complete: {money(info.get('start', 50))} → {money(total)} in {info.get('step', 1)} steps",
+                '' if full else f"{money(banked_after)} banked along the way.")
     if result == 'win':
         return (f"Step {info.get('step', 1)} cashed ✅ {won} back.",
-                f"{money(bank_this)} to the bank, {money(next_stake)} rides on step {info.get('step', 1) + 1}.")
+                (f"Full return rides on step {info.get('step', 1) + 1}." if full else
+                 f"{money(bank_this)} to the bank, {money(next_stake)} rides on step {info.get('step', 1) + 1}."))
     if result == 'loss':
         marks = leg_results(pick)
         legs = pick.get('legs') or []
@@ -1069,7 +1074,7 @@ def ladder_result(pick):
         body = f"{money(info['banked'])} stays in the bank." if info.get('banked', 0) else ''
         return head, body
     bank = f" {money(info.get('banked'))} stays in the bank." if info.get('banked', 0) else ''
-    return (f"➖ 80/20 Climb step {info.get('step', 1)} {result}", f"{stake} rides the same step.{bank}")
+    return (f"➖ {name} step {info.get('step', 1)} {result}", f"{stake} rides the same step.{bank}")
 
 
 def ladder_cashed(pick):

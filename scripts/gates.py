@@ -1544,6 +1544,26 @@ def ladder_selective(candidate, ctx):
     import ladder
     if eastern_date(ctx.now) < ladder.SELECTIVE_FROM:
         return Decision(True, 'ladder_selective', 'before selective-policy cutover')
+    info = candidate.get('ladder') or {}
+    full = ladder.full_rollover(candidate)
+    if full or ctx.now >= ladder.FULL_ROLLOVER_FROM:
+        if not candidate.get('publishedAt') or full:
+            before = {key: pick for key, pick in ctx.first.items() if key != candidate.get('id')}
+            where = ladder.state(before, ctx.latest, ctx.now)
+            if full != where['fullRollover']:
+                return Decision(False, 'ladder_selective', 'Climb format must match the settled run')
+            if full:
+                odds = candidate.get('odds')
+                if (candidate.get('selectionMethod') != 'sourced-climb-review-v1'
+                        or not isinstance(odds, (int, float))
+                        or not ladder.FULL_ROLLOVER_TARGET[0] <= odds <= ladder.FULL_ROLLOVER_TARGET[1]):
+                    return Decision(False, 'ladder_selective', 'Full-rollover Climb needs its sourced sportsbook price')
+                payout = ladder.payout(where['stake'], odds, True)
+                expected = {'run': where['run'], 'step': where['step'], 'stake': where['stake'],
+                            'payout': payout, 'nextStake': payout, 'totalAfter': payout, 'banked': 0,
+                            'bankThisWin': 0, 'bankedAfter': 0, 'bankPercent': 0, 'ridePercent': 100}
+                if any(info.get(key) != value for key, value in expected.items()) or info.get('stakeAdjustment') is not None:
+                    return Decision(False, 'ladder_selective', 'Full-rollover Climb dollars must match the settled balance')
     legs = candidate.get('legs') or []
     refusal = ladder.shape_refusal(candidate, ctx.now)
     if refusal:

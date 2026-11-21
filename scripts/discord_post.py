@@ -203,8 +203,9 @@ def queue_results(log_book, first, latest, games, now):
         mark = '😩' if overtime else {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}[result]
         word = 'OT BAD BEAT' if overtime else {'win': 'HIT', 'loss': 'MISS', 'push': 'PUSH', 'void': 'VOID'}[result]
         detail = overtime or result_display.detail(pick) or result_display.clean_actual(pick)
-        title = (f"80/20 Climb step {(pick.get('ladder') or {}).get('step', 1)}"
-                 if pick.get('ladder') else receipts.label(pick, games))
+        info = pick.get('ladder')
+        title = (f"80/20 Climb step {info.get('step', 1)}" if info and not info.get('fullRollover')
+                 else receipts.label(pick, games))
         text = f'{mark} FINAL · {word}: {title}' + (f'\n{detail}' if detail else '')
         mirror['result'] = {'state': 'pending', 'text': text, 'settledAt': pick['settledAt']}
         if receipts.neutral_straight(pick):

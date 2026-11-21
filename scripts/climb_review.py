@@ -5,7 +5,10 @@ route accepts exact, visibly verified cross-game sportsbook tickets and keeps
 the ordinary one-open-step, exposure, jurisdiction and delivery checks.
 """
 import math
+import json
+import os
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from urllib.parse import urlparse
 
 import gates
@@ -34,6 +37,7 @@ def https(value, book=None):
 
 def refusal(ticket, ctx):
     """Recheck the immutable review at admission and every private release."""
+    import ladder
     now = ctx.now
     if now < EFFECTIVE:
         return 'Sourced Climb review is not effective at this historical clock'
@@ -51,10 +55,17 @@ def refusal(ticket, ctx):
         return 'Climb needs a visibly verified combined sportsbook ticket'
     if not isinstance(review.get('receipt'), str) or not review['receipt'].strip():
         return 'Climb needs its saved ticket verification receipt'
+    full = ladder.full_rollover(ticket)
+    if full:
+        if review.get('unboosted') is not True:
+            return 'The full-rollover Climb needs an unboosted sportsbook price'
+        shape = ladder.shape_refusal(ticket, now)
+        if shape:
+            return shape
     if any(ticket.get(key) is not None for key in ('chance', 'rawChance', 'fairOdds', 'expectedValue')):
         return 'Discretionary Climb cannot claim a validated probability or EV'
     legs = ticket.get('legs') or []
-    if len(legs) not in (2, 3):
+    if not full and len(legs) not in (2, 3):
         return 'Reviewed Climb needs two or three legs'
     product = 1.0
     ids = set()
@@ -123,22 +134,29 @@ def refusal(ticket, ctx):
     odds = ticket.get('odds')
     # The visibly quoted ticket is authoritative. Books may round/reprice a
     # cross-game combo slightly; reject material mismatches, not that rounding.
-    if not number(odds) or not -200 <= odds <= -150 or abs(parlay.decimal(odds)-product) > .03:
+    low, high = ladder.FULL_ROLLOVER_TARGET if full else ladder.TARGET
+    if (not number(odds) or not low <= odds <= high or int(odds) != odds
+            or (full and len(legs) == 1 and odds != legs[0]['odds'])
+            or abs(parlay.decimal(odds)-product) > .03):
         return 'Exact combined Climb price must match its same-book legs and target band'
     return None
 
 
 def candidate(ctx, games, now, spec):
     import ladder
-    where = ladder.state(ctx.first, ctx.latest)
+    where = ladder.state(ctx.first, ctx.latest, now)
     if where['open']:
         return None, 'An existing Climb is still open'
     held = (ladder.reviewed_day_refusal(ctx) if ladder.reviewed_daily(spec, now)
             else ladder.weekly_refusal(ctx, now))
     if held:
         return None, held
-    ticket = dict(spec, selectionMethod=METHOD)
-    ticket['gameIds'] = [leg.get('gameId') for leg in ticket.get('legs', [])]
+    ticket = dict(spec, selectionMethod=METHOD, fullRollover=where['fullRollover'])
+    ticket.pop('ladder', None)
+    legs = ticket.get('legs')
+    if not isinstance(legs, list) or any(not isinstance(leg, dict) for leg in legs):
+        return None, 'Reviewed Climb needs valid leg rows'
+    ticket['gameIds'] = [leg.get('gameId') for leg in legs]
     held = refusal(ticket, ctx)
     if held:
         return None, held
@@ -161,6 +179,33 @@ def candidate(ctx, games, now, spec):
                 why=[leg['researchCase']['why'] for leg in ticket['legs']],
                 risks=[leg['researchCase']['risk'] for leg in ticket['legs']])
     return pick, None
+
+
+def public_pick(pick, conf):
+    """Retain the reviewed proof privately and export only the posted ticket."""
+    review = pick['researchReview']
+    private = {'researchReview': review, 'legs': pick['legs']}
+    folder = Path(conf) / 'climb-reviews'
+    folder.mkdir(parents=True, exist_ok=True)
+    target = folder / f"{pick['id']}.json"
+    if target.is_file():
+        if json.loads(target.read_text(encoding='utf-8')) != private:
+            raise ValueError('Saved Climb review differs from the release candidate')
+    else:
+        # The release worker holds the desk lock. Replace only after a complete write.
+        temp = target.with_suffix('.tmp')
+        fd = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, 'w', encoding='utf-8') as out:
+            json.dump(private, out, ensure_ascii=False)
+        temp.replace(target)
+    cleaned = {key: value for key, value in pick.items()
+               if key not in ('researchReview', 'dossier')}
+    cleaned['sources'] = sorted({fact['url'] for leg in pick['legs'] for fact in leg['researchCase']['sources']})
+    terms = {'id', 'title', 'gameId', 'kickoff', 'marketType', 'marketWindow', 'direction',
+             'line', 'odds', 'book', 'alternate', 'reason'}
+    cleaned['legs'] = [{key: value for key, value in leg.items() if key in terms}
+                       for leg in pick['legs']]
+    return cleaned
 
 
 def enqueue(spec, ctx, now, conf):

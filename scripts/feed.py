@@ -124,8 +124,10 @@ def play_title(pick):
     """Public RSS title from the priced, published item, not old internal category names."""
     kind = pick_card.play_kind(pick)
     if kind == 'ladder':
-        step = (pick.get('ladder') or {}).get('step') or 1
-        title = f"80/20 Climb · step {step} · {len(pick.get('legs') or [])} legs at {pick.get('book') or 'the posted book'}"
+        info = pick.get('ladder') or {}
+        name = 'Climb' if info.get('fullRollover') else '80/20 Climb'
+        count = len(pick.get('legs') or [])
+        title = f"{name} · step {info.get('step') or 1} · {count} {'leg' if count == 1 else 'legs'} at {pick.get('book') or 'the posted book'}"
     elif kind == 'parlay':
         odds = pick.get('odds')
         price = f'{int(odds):+d}' if isinstance(odds, (int, float)) else 'posted price'

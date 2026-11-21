@@ -272,7 +272,7 @@
   /* One honest label per market. Game totals are game totals, never "team props". */
   const marketLabel = row => {
     if (!row) return '';
-    if (row.parlayType === 'ladder') return '80/20 Climb';
+    if (row.parlayType === 'ladder') return row.ladder?.fullRollover ? 'Climb' : '80/20 Climb';
     if (isParlayLike(row)) return funTicketLabel(row);
     const market = String(row.market || row.marketType || '').toLowerCase();
     if (row.athleteId || row.player || STAT_WORD[row.market] || /yards|receptions|carries|attempts|completions|touchdown/.test(market)) {
@@ -888,7 +888,7 @@
     const climb = vm.kind === 'climb', fun = vm.kind === 'fun', best = vm.kind === 'best', info = pick.ladder || {};
     const laneChip = { gut_call: 'Full Send', upset: 'Upset pick', safer_combo: 'Safer combo',
       special: "Chef's Special", nba: 'NBA picks', soccer: 'Soccer Trial', cbb: 'College hoops Trial' };
-    const chip = isChefPick(pick) ? `Chef's Pick · ${C.stakeOf(pick)}u` : pick.selectionPolicy === '2026-10-19-1u-2u' && pick.lane === 'best_bet' ? `Best Bet · ${C.stakeOf(pick)}u` : vm.featured ? 'Hot Plate (POTD)' : climb ? `80/20 Climb${info.run ? ` #${info.run}` : ''}` : fun ? funTicketLabel(pick) : laneChip[pick.lane] || 'Best bet';
+    const chip = isChefPick(pick) ? `Chef's Pick · ${C.stakeOf(pick)}u` : pick.selectionPolicy === '2026-10-19-1u-2u' && pick.lane === 'best_bet' ? `Best Bet · ${C.stakeOf(pick)}u` : vm.featured ? 'Hot Plate (POTD)' : climb ? `${info.fullRollover ? 'Climb' : '80/20 Climb'}${info.run ? ` #${info.run}` : ''}` : fun ? funTicketLabel(pick) : laneChip[pick.lane] || 'Best bet';
     const chipHtml = `<p class="kt-chip">${vm.featured ? FLAME : ''}${esc(chip)}</p>`;
     const when = ticketWhen(pick.kickoff), matchup = g && g.away && g.home ? `${g.away.abbr} at ${g.home.abbr}` : '';
     const nameText = climb ? `Step ${info.step || ''}`.trim() : pick.parlayStyle === 'daily-double' ? 'Daily Double' : fun ? `${vm.legs.length} legs` : parts.name;
@@ -965,7 +965,7 @@
       nba: 'NBA picks', soccer: 'Soccer Trial', cbb: 'College hoops Trial' };
     const tier = isChefPick(pick) ? `Chef's Pick · ${C.stakeOf(pick)}u`
       : pick.selectionPolicy === '2026-10-19-1u-2u' && pick.lane === 'best_bet' ? `Best Bet · ${C.stakeOf(pick)}u`
-        : vm.featured ? 'Pick of the day' : vm.kind === 'climb' ? '80/20 Climb' : vm.kind === 'fun' ? funTicketLabel(pick) : laneChip[pick.lane] || 'Best bet';
+        : vm.featured ? 'Pick of the day' : vm.kind === 'climb' ? 'Climb' : vm.kind === 'fun' ? funTicketLabel(pick) : laneChip[pick.lane] || 'Best bet';
     const rows = opts.lines || todayExtras?.lines?.lines;
     const hold = best && !pick.result ? pickHold(pick, rows) : null;
     const latest = !pick.result && best && !hold ? latestPickQuote(pick, rows) : null;
@@ -1014,8 +1014,8 @@
     const n = c.settled || 0;
     const aside = `${c.last && c.last.result === 'win' && !c.open ? `Step ${c.last.step || c.step - 1} cashed. ` : ''}${c.saved ? `<strong>${money(c.saved)} banked.</strong> ` : ''}${n ? `Net ${signedMoney(c.net)} over ${WORDS[n] || n} step${n === 1 ? '' : 's'}. ` : ''}<a href="#record/climb">See the route ›</a>`;
     return `<section id="today-climb" class="kt-sec kt-climb" aria-labelledby="climb-h"><div class="kt-focus-head"><h2 id="climb-h">Today’s Climb</h2><a href="#record/climb">Full route ›</a></div>
-      <a class="kt-stub" href="#record/climb" aria-label="80/20 Climb number ${esc(c.run)}, step ${esc(c.step)}, ${esc(money(c.riding))}. ${esc(state)}.">
-      <span class="kt-stub-chip"><span class="kt-pchip"><b>${money(c.riding)}</b></span></span><span class="kt-stub-main"><span class="kt-stub-e">80/20 Climb #${esc(c.run)}</span>
+      <a class="kt-stub" href="#record/climb" aria-label="Climb number ${esc(c.run)}, step ${esc(c.step)}, ${esc(money(c.riding))}. ${esc(state)}.">
+      <span class="kt-stub-chip"><span class="kt-pchip"><b>${money(c.riding)}</b></span></span><span class="kt-stub-main"><span class="kt-stub-e">${c.fullRollover ? '$50 to $1K Climb' : '80/20 Climb'} #${esc(c.run)}</span>
       <span class="kt-stub-k">Step ${esc(c.open ? c.open.step || c.step : c.step)}</span><span class="kt-stub-s">${esc(state)}</span>
       <span class="kt-route" aria-hidden="true">${'<span class="kt-node done">✓</span>'.repeat(done)}<span class="kt-node">${esc(c.step)}</span><span class="kt-trail"></span><span class="kt-flag"><svg viewBox="0 0 16 18"><path d="M2 1v16" stroke="#07120D" stroke-width="2.4" stroke-linecap="round"/><path d="M3 2h11l-3 3.5 3 3.5H3z" fill="#07120D"/></svg>$1,000</span></span></span></a>
       <p class="kt-aside">${aside}</p>${past.length ? `<details class="plain-fold" data-box="climb-past"><summary>Past steps · ${past.length}</summary><div class="receipts">${past.slice().reverse().map(climbRow).join('')}</div></details>` : ''}</section>`;
@@ -1028,7 +1028,7 @@
   const withdrawalNotice = p => /withdr(?:ew|awn)|removed.*recommendation/i.test(p.entryNote || '')
     ? 'Recommendation withdrawn before kickoff. Original published result still counts.' : '';
   const slip = (p, opts = {}) => {
-    const vm = pickVM(p), g = gameOf(p), kicker = [p.community ? 'Personal fun ticket' : isChefPick(p) ? "Chef's Pick" : vm.featured ? 'Hot Plate (POTD)' : vm.kind === 'fun' ? funTicketLabel(p) : vm.kind === 'climb' ? '80/20 Climb' : 'Best bet', opts.when && ticketWhen(p.kickoff)].filter(Boolean).join(' · ');
+    const vm = pickVM(p), g = gameOf(p), kicker = [p.community ? 'Personal fun ticket' : isChefPick(p) ? "Chef's Pick" : vm.featured ? 'Hot Plate (POTD)' : vm.kind === 'fun' ? funTicketLabel(p) : vm.kind === 'climb' ? 'Climb' : 'Best bet', opts.when && ticketWhen(p.kickoff)].filter(Boolean).join(' · ');
     const price = `${odd(p.odds)} ${vm.book || ''}${p.community ? ' · original quote' : ''}`.trim();
     const resultName = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ` : '';
     const detail = p.result ? `${resultName}${resultLine(p)} ${price}.` : opts.waiting ? `${price}.` : `${price}. ${vm.statusShort || (vm.mode === 'open' && vm.calibrated && vm.chance != null ? `I have it at ${pctOne(vm.chance)}.` : '')}`;
@@ -1197,8 +1197,8 @@
   const VIEWS = {};
 
   /* ---------- Today: the Kitchen Ticket (OWNER-DECISIONS 2026-10-07 item 22) ---------- */
-  const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
-  const signedMoney = n => { const v = Math.round(Number(n) || 0); return `${v > 0 ? '+' : v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString('en-US')}`; };
+  const money = n => `$${(Number(n) || 0).toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+  const signedMoney = n => { const v = Number(n) || 0; return `${v > 0 ? '+' : v < 0 ? '−' : ''}${money(Math.abs(v))}`; };
   const currentUpset = (g, now) => g.upsetWatch && g.state === 'pre' && !g.completed && Date.parse(g.kickoff) > now
     && now >= Date.parse(g.upsetWatch.observedAt) && now - Date.parse(g.upsetWatch.observedAt) <= 4 * 3600000;
   const upsetRow = (g, rank) => {
@@ -1327,7 +1327,7 @@
     /* A future bet must not become today's best bet just because today's bar cleared nothing. */
     const rows = todays;
     const ladder = C.theLadder(all);
-    const climb = !Array.isArray(todayExtras && todayExtras.every) && heroLoaded && heroLoaded.climb ? heroLoaded.climb : { run: ladder.run, step: ladder.step, riding: ladder.open ? Number((ladder.open.ladder || {}).stake) || ladder.stake : ladder.stake,
+    const climb = !Array.isArray(todayExtras && todayExtras.every) && heroLoaded && heroLoaded.climb ? heroLoaded.climb : { run: ladder.run, step: ladder.step, fullRollover: ladder.fullRollover, riding: ladder.open ? Number((ladder.open.ladder || {}).stake) || ladder.stake : ladder.stake,
       open: ladder.open && { step: (ladder.open.ladder || {}).step }, settled: ladder.history.length, saved: ladder.saved, net: ladder.accounting.net,
       last: ladder.history.length ? { result: ladder.history[ladder.history.length - 1].result, step: (ladder.history[ladder.history.length - 1].ladder || {}).step } : null };
     const games = (today.games || []).filter(inLeague);
@@ -2101,11 +2101,10 @@
   const climbRow = p => {
     const info = p.ladder || {};
     const mark = p.result === 'win' ? ['hit', '✓', 'Hit'] : p.result === 'loss' ? ['miss', '✗', 'Miss'] : p.result ? ['push', '–', 'Push'] : ['open', '•', 'Open'];
-    const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
     const net = (p.ladderTotal || {}).net;
     const paid = p.result === 'win' ? money(info.payout) : p.result === 'loss' ? '$0' : money(info.stake);
     const bankWin = p.result === 'win' ? (isNum(Number(info.bankedAfter)) && isNum(Number(info.banked)) && info.bankedAfter != null ? Number(info.bankedAfter) - Number(info.banked) : Number(info.bankThisWin) || C.ladderSplit(info.payout).bank) : null;
-    const bank = bankWin != null ? ` · bank +${money(bankWin)}` : '';
+    const bank = bankWin != null && !info.fullRollover ? ` · bank +${money(bankWin)}` : '';
     return `<div class="receipt"><span class="r-mark ${mark[0]}" aria-hidden="true">${mark[1]}</span><div><b><span class="sr">${esc(mark[2])}: </span><a class="plain-link" href="#pick/${esc(encodeURIComponent(p.id))}">Step ${esc(info.step || '?')}${info.run ? ` · climb #${esc(info.run)}` : ''}</a></b><span>${esc((p.legs || []).map(l => typeof l === 'string' ? l : l.title).filter(Boolean).map(niceTitle).join(' · ') || niceTitle(p.displayTitle || p.title || ''))}</span><span>${esc(oddsText(p.odds))} ${esc(bookLabel(p.book) || '')} · ${esc(whenShort(p.kickoff || p.publishedAt))}</span></div>
       <span class="u ${p.result === 'win' ? 'green' : p.result === 'loss' ? 'red' : 'muted'}">${esc(money(info.stake))} → ${esc(paid)}<br><span class="tiny muted">${esc(bank.replace(' · ', ''))}${isNum(net) ? `${bank ? ' · ' : ''}running ${net < 0 ? '−' : '+'}${money(Math.abs(net))}` : ''}</span></span></div>`;
   };
@@ -2160,7 +2159,7 @@
   const MORE_VIEW_NAMES = ['record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-f852db28c7d9';
+  const MORE_ASSET = 'app-more.js?v=sha256-fcdd0d6e38cc';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
   const GAMES_ASSET = 'app-games.js?v=sha256-e607c1f43965';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-d0c8ba8cf2a2';

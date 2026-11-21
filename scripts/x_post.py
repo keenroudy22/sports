@@ -416,6 +416,10 @@ def public_book(value):
 def ladder_text(pick):
     """The three money lines for the Kook'n 80/20 Climb: stake, return, bank and next ride."""
     info = pick.get('ladder') or {}
+    if info.get('fullRollover'):
+        return (f"THE CLIMB · STEP {info['step']}\n"
+                f"{social_units.climb(info['stake'])} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})",
+                '', 'Full return rides.')
     if social_units.active(pick):
         head = (f"80/20 CLIMB · STEP {info.get('step', 1)}\n"
                 f"{social_units.climb(info.get('stake'))} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})")
@@ -870,7 +874,9 @@ def recap(day, first, latest, games, now):
     head = f"{datetime.fromisoformat(day):%A} went {everything['win']}-{everything['loss']}" + (f"-{everything['push']}" if everything['push'] else '')
     def public_title(row):
         if pick_card.play_kind(row) == 'ladder':
-            return f"80/20 Climb step {(row.get('ladder') or {}).get('step', 1)}"
+            info = row.get('ladder') or {}
+            name = 'Climb' if info.get('fullRollover') else '80/20 Climb'
+            return f"{name} step {info.get('step', 1)}"
         import result_display
         detail = result_display.detail(row)
         return f"{row['title']} · {detail}" if detail else str(row['title'])

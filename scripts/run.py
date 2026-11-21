@@ -3667,7 +3667,10 @@ def private_release_refusal(row, ctx, now):
             if held:
                 return held
     if pick.get('parlayType') == 'ladder':
-        for rule in (gates.ladder_selective, gates.ladder_supported):
+        rules = (gates.ladder_selective, gates.ladder_supported)
+        if (pick.get('ladder') or {}).get('fullRollover'):
+            rules = (gates.ladder_one_rung, *rules)
+        for rule in rules:
             policy = rule(pick, ctx)
             if not policy.ok:
                 return policy.reason
@@ -3942,6 +3945,9 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
 
         published_at = row.get('discordSentAt') or stamp(now)
         public_pick = dict(pick, publishedAt=published_at)
+        if (pick.get('ladder') or {}).get('fullRollover'):
+            import climb_review
+            public_pick = climb_review.public_pick(public_pick, CONF)
         report = {'league': row['league'], 'publishedAt': published_at, 'summary':
                   f"Released 1: {public_pick.get('title')} {int(public_pick.get('odds')):+d} at {public_pick.get('book')}.",
                   'takeaways': [], row['kind']: [public_pick]}
@@ -4712,7 +4718,7 @@ def owner_agenda(now, ctx, games):
     if not slate:
         return False
     import ladder
-    where = ladder.state(ctx.first, ctx.latest)
+    where = ladder.state(ctx.first, ctx.latest, now)
     if where['open']:
         info = where['open'].get('ladder') or {}
         climb = f"Climb {info.get('run', where['run'])} Step {info.get('step', where['step'])} is open; the next waits for its result."
@@ -4746,7 +4752,8 @@ def lotto_pings(plans, ctx):
         info = pick.get('ladder') or {}
         if pick and pick_card.play_kind(pick) == 'ladder' and (info.get('totalAfter') or info.get('payout') or 0) >= (info.get('goal') or 1000):
             final = info.get('totalAfter') or info.get('payout')
-            out.append(('80/20 Climb complete: pin it', f"The Kook'n 80/20 Climb reached ${final:,} from ${info.get('start', 50)} in "
+            name = 'Climb' if info.get('fullRollover') else '80/20 Climb'
+            out.append((f'{name} complete: pin it', f"The Kook'n {name} reached ${final:,} from ${info.get('start', 50)} in "
                         f"{info.get('step', 1)} steps. The LADDER COMPLETE post is at the top of the profile: tap to open it, then ... "
                         "and Pin to your profile."))
     return out

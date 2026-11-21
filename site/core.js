@@ -561,25 +561,27 @@
      It stays outside the straight record, and a rung pulled before its post still counts and waits for its result. */
   const isLadder = p => p.parlayType === 'ladder';
   const LADDER = { start: 50, goal: 1000, bankPercent: 20, ridePercent: 80 };
-  const ladderSplit = returned => {
+  const ladderSplit = (returned, full) => {
+    if (full) return { bank: 0, ride: Number(returned) || 0 };
     const gross = Math.round(Number(returned) || 0), bank = Math.round(gross * LADDER.bankPercent / 100);
     return { bank, ride: gross - bank };
   };
-  const theLadder = picks => {
+  const theLadder = (picks, now = Date.now()) => {
     const pulled = p => /before its post went out|^Pulled before posting:/.test(p.entryNote || '');
     const rungs = picks.filter(isLadder).filter(p => p.result || pulled(p) || (!p.entryNote && (p.status || 'active') === 'active'))
       .sort((a, b) => String(a.publishedAt || '').localeCompare(String(b.publishedAt || '')) || String(a.id).localeCompare(String(b.id)));
     let run = 1, step = 1, stake = LADDER.start, banked = 0, saved = 0, open = null, best = LADDER.start;
     let wagered = 0, returned = 0, wins = 0, losses = 0, pushes = 0, voids = 0;
     const history = [], climbs = [];
+    const cents = n => Math.round(n * 100) / 100;
     for (const r of rungs) {
       const info = r.ladder || {};
       if (!r.result) { open = r; continue; }
       const rungStake = Number(info.stake) || stake;
-      wagered += rungStake;
+      wagered = cents(wagered + rungStake);
       if (r.result === 'win') {
-        const gross = Number(info.payout) || stake, split = ladderSplit(gross);
-        returned += gross; wins += 1;
+        const gross = Number(info.payout) || stake, split = ladderSplit(gross, info.fullRollover);
+        returned = cents(returned + gross); wins += 1;
         const before = Number.isFinite(Number(info.banked)) ? Number(info.banked) : banked;
         const after = Number.isFinite(Number(info.bankedAfter)) ? Number(info.bankedAfter) : before + split.bank;
         const nextStake = Number.isFinite(Number(info.nextStake)) ? Number(info.nextStake) : split.ride;
@@ -590,13 +592,15 @@
           run += 1; step = 1; stake = LADDER.start; banked = 0;
         }
       } else if (r.result === 'loss') { losses += 1; run += 1; step = 1; stake = LADDER.start; banked = 0; }
-      else if (r.result === 'push') { returned += rungStake; pushes += 1; }
-      else if (r.result === 'void') { returned += rungStake; voids += 1; }
-      history.push({ ...r, ladderTotal: { wagered, returned, net: returned - wagered } });
+      else if (r.result === 'push') { returned = cents(returned + rungStake); pushes += 1; }
+      else if (r.result === 'void') { returned = cents(returned + rungStake); voids += 1; }
+      history.push({ ...r, ladderTotal: { wagered, returned, net: cents(returned - wagered) } });
     }
-    const accounting = { wagered, returned, net: returned - wagered,
+    const accounting = { wagered, returned, net: cents(returned - wagered),
       atRisk: open ? Number((open.ladder || {}).stake) || stake : 0, wins, losses, pushes, voids };
-    return { run, step, stake, banked, saved, open, history, climbs, best, accounting, ...LADDER };
+    const fullRollover = run >= 5 && now >= Date.UTC(2026, 10, 21, 5);
+    return { run, step, stake, banked, saved, open, history, climbs, best, accounting, ...LADDER,
+      fullRollover, ...(fullRollover ? { bankPercent: 0, ridePercent: 100 } : {}) };
   };
   const dayOf = iso => {
     const d = new Date(iso);

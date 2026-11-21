@@ -11,7 +11,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import climb_review as review
 import gates
 import ladder
+import refresh
 import run
+import social_style
+import ticket_card
+import x_post
 
 NOW = datetime(2026, 10, 31, 13, tzinfo=timezone.utc)
 
@@ -40,6 +44,69 @@ def fixture():
 
 
 class ReviewedClimbTests(unittest.TestCase):
+    def test_full_rollover_one_and_two_leg_public_path_excludes_private_review(self):
+        now = ladder.FULL_ROLLOVER_FROM + timedelta(hours=4)
+        for single in (True, False):
+            ticket, ctx = fixture()
+            ctx.now = now
+            for i in range(4):
+                gid = f'old-{i}'
+                ctx.first[gid] = dict(id=gid, parlayType='ladder', result='loss',
+                                      publishedAt=f'2026-11-{10+i:02}T14:00Z')
+            ticket['quotedAt'] = '2026-11-21T08:55Z'
+            ticket['odds'] = -220 if single else -210
+            ticket['researchReview'].update(reviewedAt='2026-11-21T08:58Z', unboosted=True)
+            if single:
+                ticket['legs'] = ticket['legs'][:1]
+            else:
+                ctx.games['g1']['league'] = 'NFL'
+            for leg in ticket['legs']:
+                ctx.games[leg['gameId']]['kickoff'] = '2026-11-21T17:00Z'
+                leg.update(odds=-220 if single else -465, observedAt=ticket['quotedAt'],
+                           kickoff='2026-11-21T17:00Z', receipt='private leg receipt')
+                leg['researchCase']['sources'][0]['checkedAt'] = '2026-11-21T08:54Z'
+            pick, held = ladder.manual_candidate(ctx, ctx.games, now, ticket)
+            self.assertIsNone(held)
+            self.assertTrue(gates.ladder_selective(pick, ctx).ok)
+            self.assertIsNone(run.private_release_refusal({'pick': pick, 'league': 'CFB'}, ctx, now))
+            self.assertIn('expired', run.private_release_refusal({'pick': pick}, ctx, now + timedelta(hours=2)))
+            edited = dict(pick, ladder=dict(pick['ladder'], nextStake=50))
+            self.assertFalse(gates.ladder_selective(edited, ctx).ok)
+            self.assertEqual((pick['ladder']['stake'], pick['ladder']['nextStake']),
+                             (50, 72.73 if single else 73.81))
+            run.write_prose(pick, ctx, [])
+            pick.update(publishedAt=gates.stamp(now), jurisdictionVerified=True)
+            caption = x_post.draft(pick, ctx.games['g0'], history=[])
+            self.assertFalse(x_post.guard(caption, pick, now=now))
+            self.assertIn('Full return rides.', caption)
+            svg = ticket_card.climb_svg(pick, ctx.games, art=[None] * len(ticket['legs']))
+            self.assertFalse(social_style.issues(svg, graphic=True))
+            svg = ticket_card.climb_result_svg(dict(pick, result='win'), ctx.games,
+                                               art=[None] * len(ticket['legs']))
+            self.assertIn('ROLLS TO STEP 2', svg)
+            with tempfile.TemporaryDirectory() as conf:
+                public = review.public_pick(pick, conf)
+                self.assertEqual(public, review.public_pick(pick, conf))
+                self.assertTrue((Path(conf) / 'climb-reviews' / f"{pick['id']}.json").is_file())
+            self.assertNotIn('researchReview', public)
+            self.assertTrue(all('receipt' not in leg and 'researchCase' not in leg for leg in public['legs']))
+            with patch.object(refresh, 'datetime', wraps=datetime) as clock:
+                clock.now.return_value = now
+                refresh.validate_report({'league': 'CFB', 'publishedAt': pick['publishedAt'],
+                                         'parlays': [public]}, ctx.games)
+            games = {f"{game['league']}-{i}": dict(game, completed=True,
+                     away=dict(game['away'], score=20), home=dict(game['home'], score=17))
+                     for i, game in enumerate(ctx.games.values())}
+            legs = [dict(leg, gameId=gid) for leg, gid in zip(public['legs'], games)]
+            final = dict(public, league='CFB', legs=legs, gameIds=[leg['gameId'] for leg in legs])
+            graded, unclear = run.settle(SimpleNamespace(first={final['id']: final}, latest={}),
+                                         {final['id']: ('parlays', final)}, games, [], now + timedelta(hours=12))
+            self.assertFalse(unclear)
+            self.assertEqual(graded[0][2]['result'], 'win')
+            self.assertEqual(graded[0][2]['ladder'], public['ladder'])
+            ticket['researchReview']['unboosted'] = False
+            self.assertIn('unboosted', ladder.manual_candidate(ctx, ctx.games, now, ticket)[1])
+
     def test_separate_route_needs_no_manufactured_probability_and_retains_case(self):
         ticket, ctx = fixture()
         pick, error = ladder.manual_candidate(ctx,ctx.games,NOW,ticket)

@@ -201,12 +201,15 @@ def climb_data(pick, games, player_team=None, **kwargs):
     if pick.get('parlayType') != 'ladder':
         raise ValueError('80/20 Climb card needs a published rung')
     info = pick.get('ladder') or {}
+    full = info.get('fullRollover') is True
     legs = fun_data(pick, games, player_team, **kwargs)['legs']
-    stake, payout = int(info['stake']), int(info['payout'])
+    money = float if full else int
+    stake, payout = money(info['stake']), money(info['payout'])
     bank_this = int(info.get('bankThisWin', round(payout * .2)))
-    return {'social_units': social_units.active(pick), 'run': int(info['run']), 'step': int(info['step']), 'stake': stake, 'payout': payout,
+    return {'social_units': social_units.active(pick), 'full_rollover': full,
+            'run': int(info['run']), 'step': int(info['step']), 'stake': stake, 'payout': payout,
             'banked': int(info.get('banked') or 0), 'bank_this': bank_this,
-            'next_stake': int(info.get('nextStake', payout - bank_this)),
+            'next_stake': money(info.get('nextStake', payout - bank_this)),
             'goal': int(info.get('goal') or 1000), 'odds': int(pick['odds']), 'book': pick['book'], 'legs': legs}
 
 
@@ -236,7 +239,8 @@ def climb_result_svg(pick, games, player_team=None, **kwargs):
     data['start'] = int(info.get('start') or 50)
     if result == 'win':
         data['banked'] = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else data['banked'] + data['bank_this'])
-        data['complete'] = int(info.get('totalAfter') if info.get('totalAfter') is not None else data['banked'] + data['next_stake']) >= data['goal']
+        data['complete'] = (info.get('totalAfter') if info.get('totalAfter') is not None
+                            else data['banked'] + data['next_stake']) >= data['goal']
     card = ticket_cards.climb_card(data)
     problems = ticket_kit.qa(card, str(pick.get('id') or 'climb-result'))
     if problems:

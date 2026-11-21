@@ -331,15 +331,20 @@ def ticket_card(p):
 def climb_card(p):
     import social_units
     money = social_units.climb if p.get('social_units') else kit.money
+    full = p.get('full_rollover')
+    result = p.get('result')
     card = kit.Card()
     panel_bottom = 568
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(540, 380))
-    chip, _ = kit.series_chip(card, COL_X, 204, '80/20 CLIMB')
+    chip, _ = kit.series_chip(card, COL_X, 204, 'THE CLIMB' if full else '80/20 CLIMB')
     inner += chip
     cy, r = 396, 104
     a, b = 316, 764
     inner += kit.poker_chip(card, a, cy, r, money(p['stake']))
-    inner += kit.poker_chip(card, b, cy, r, money(p['payout']))
+    payout = p['payout']
+    if full and result in ('loss', 'push', 'void'):
+        payout = 0 if result == 'loss' else p['stake']
+    inner += kit.poker_chip(card, b, cy, r, money(payout))
     inner += (f'<path d="M{a + r + 34} {cy} H{b - r - 46}" stroke="{CHALK}" stroke-width="12" stroke-linecap="round"/>'
               f'<path d="M{b - r - 70} {cy - 30} L{b - r - 34} {cy} L{b - r - 70} {cy + 30}" fill="none" stroke="{CHALK}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>')
     sub = f"CLIMB #{p['run']} · STEP {p['step']} · {kit.price(p['odds'])} {p['book'].upper()}"
@@ -356,8 +361,10 @@ def climb_card(p):
     y = top + pitch * len(p['legs']) + 20
     inner += kit.dashed(X1, X2, y)
     y += 70
-    result = p.get('result')
-    inner += kit.leader(card, y, 'Banked so far' if not result else 'All climbs banked', money(p['banked']))
+    if full:
+        inner += kit.leader(card, y, 'The goal', money(p['goal']))
+    else:
+        inner += kit.leader(card, y, 'Banked so far' if not result else 'All climbs banked', money(p['banked']))
     y += 70
     if result == 'win':
         next_line = (f"CLIMB COMPLETE · NEXT {money(p['start'])}" if p.get('complete') else
@@ -368,6 +375,8 @@ def climb_card(p):
         next_line = f"{result.upper()} · STEP {p['step']} AGAIN · {money(p['stake'])} RIDES"
     else:
         next_line = f"{money(p['bank_this'])} BANKED · {money(p['next_stake'])} RIDES"
+    if full and (not result or result == 'win' and not p.get('complete')):
+        next_line = f"{money(p['next_stake'])} ROLLS TO STEP {p['step'] + 1}"
     inner += kit.leader(card, y, 'If it cashes' if not result else 'Result', next_line)
     perf = y + 44
     inner += climb_route(card, p, perf)
@@ -381,11 +390,13 @@ def climb_route(card, p, perf):
     import social_units
     money = social_units.climb if p.get('social_units') else kit.money
     cy = perf + 92
-    xs = [X1 + 38 + i * 132 for i in range(p['step'])]
     flag_x = X2 - 70
+    # Show the latest five steps on long climbs so the milestone stays clear.
+    steps = range(max(1, p['step'] - 4), p['step'] + 1)
+    xs = [X1 + 38 + i * 132 for i in range(len(steps))]
     s = f'<line x1="{xs[0]}" y1="{cy}" x2="{xs[-1]}" y2="{cy}" stroke="{INK}" stroke-width="8"/>'
     s += f'<line x1="{xs[-1] + 40}" y1="{cy}" x2="{flag_x - 20}" y2="{cy}" stroke="{kit.MUTED}" stroke-width="6" stroke-dasharray="4 14" stroke-linecap="round"/>'
-    for i, x in enumerate(xs, 1):
+    for i, x in zip(steps, xs):
         if i < p['step']:
             s += (f'<circle cx="{x}" cy="{cy}" r="32" fill="{GREEN}"/>'
                   f'<path transform="translate({x - 17} {cy - 15}) scale(0.66)" d="{CHECK}" fill="none" stroke="{GREEN_INK}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>')

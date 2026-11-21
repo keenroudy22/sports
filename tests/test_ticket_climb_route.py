@@ -215,8 +215,8 @@ class RouteTests(unittest.TestCase):
         card = route.climb_route(state, NOW, self.games)
         self.assertEqual(kit.qa(card, 'ten-row-route'), [])
         self.assertIn('OPEN · POSTED AT −218 · NOT SETTLED YET', card.svg())
-        self.assertIn('2−3 ALT LEGS · ONE BOOK · −200 TO −150 TOTAL', card.svg())
-        self.assertIn('TWO LEGS PREFERRED. NO STEP IS FORCED.', card.svg())
+        self.assertNotIn('ALT LEGS · ONE BOOK', card.svg())
+        self.assertNotIn('TWO LEGS PREFERRED', card.svg())
         self.assertNotIn('1−3 LEGS', card.svg())
 
     def test_png_and_all_three_explicit_fixture_cards(self):

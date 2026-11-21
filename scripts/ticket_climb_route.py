@@ -128,7 +128,7 @@ def public_legs(pick):
 def from_stores(stores, now):
     """Read ladder.state over gates.Stores().as_of(now), never today.json."""
     ctx = stores.as_of(now)
-    state = ladder.state(ctx.first, ctx.latest)
+    state = ladder.state(ctx.first, ctx.latest, now)
     by_id = {key: dict(pick, **ctx.latest.get(key, {})) for key, pick in ctx.first.items()}
     cashed = []
     for rung in state['history']:
@@ -137,12 +137,11 @@ def from_stores(stores, now):
         pick = by_id[rung['id']]
         first, last = leg_times(pick)
         before = int(rung.get('banked') or 0)
-        banked = int(rung.get('bankedAfter') if rung.get('bankedAfter') is not None
-                     else before + ladder.split_return(rung['payout'])[0])
-        cashes = int(rung['payout'])
-        cashed.append({'step': int(rung['step']), 'bet': int(rung['stake']),
+        banked = rung['bankedAfter']
+        cashes = ladder.cents(rung['payout'])
+        cashed.append({'step': int(rung['step']), 'bet': ladder.cents(rung['stake']),
                        'cashes': cashes, 'bank': banked - before, 'banked': banked,
-                       'ride': int(rung.get('nextStake') or ladder.split_return(cashes)[1]),
+                       'ride': rung.get('nextStake') or ladder.split_return(cashes, ladder.full_rollover(pick))[1],
                        'league': pick['league'], 'first': first, 'last': last, 'id': rung['id'],
                        'legs': public_legs(pick)})
     cashed.sort(key=lambda row: row['step'])
@@ -151,18 +150,20 @@ def from_stores(stores, now):
         pick = state['open']
         info = pick.get('ladder') or {}
         first, last = leg_times(pick)
-        stake = int(info.get('stake') or state['stake'])
-        cashes = int(info.get('payout') or ladder.payout(stake, pick['odds']))
-        bank, ride = ladder.split_return(cashes)
+        full = ladder.full_rollover(pick)
+        stake = info.get('stake') or state['stake']
+        cashes = info.get('payout') or ladder.payout(stake, pick['odds'], full)
+        bank, ride = ladder.split_return(cashes, full)
         opened = {'id': pick['id'], 'step': state['step'], 'league': pick['league'],
                   'first': first, 'last': last, 'odds': pick['odds'], 'bet': stake,
                   'cashes': cashes, 'bank': int(info.get('bankThisWin') if info.get('bankThisWin') is not None else bank),
                   'banked': int(info.get('bankedAfter') if info.get('bankedAfter') is not None else state['banked'] + bank),
-                  'ride': int(info.get('nextStake') if info.get('nextStake') is not None else ride),
+                  'ride': info.get('nextStake') if info.get('nextStake') is not None else ride,
                   'legs': public_legs(pick)}
     missed = next((rung for rung in reversed(state['history']) if rung.get('result') == 'loss'
                    and int(rung.get('run') or 0) == state['run'] - 1), None)
-    return {'run': int(state['run']), 'step': int(state['step']), 'stake': int(state['stake']),
+    return {'run': int(state['run']), 'step': int(state['step']), 'stake': state['stake'],
+            'fullRollover': state['fullRollover'],
             'banked': int(state['banked']), 'saved': int(state['saved']), 'cashed': cashed,
             'open': opened, 'missed': missed, 'weekly': ladder.weekly_status(ctx.first, now)}, load_games(stores.slate)
 
@@ -213,7 +214,7 @@ def public_route(state):
                      'bank': row['bank'], 'banked': row['banked'], 'ride': row['ride'],
                      'id': row.get('id'), 'legs': row.get('legs') or []})
     return {'run': state['run'], 'step': state['step'], 'saved': state['saved'],
-            'banked': state['banked'], 'stake': state['stake'],
+            'banked': state['banked'], 'stake': state['stake'], 'fullRollover': bool(state.get('fullRollover')),
             'goal': GOAL, 'rows': rows, 'image': 'data/cards/climb-route.png'}
 
 
@@ -236,7 +237,7 @@ def _disc(card, cy, kind, step, ink, soft):
             + card.text(DISC_CX, cy + 40 * CAP / 2, str(step), 40, color, anchor='middle'))
 
 
-def _row(card, cy, kind, row, window, ink, soft):
+def _row(card, cy, kind, row, window, ink, soft, columns=COLS):
     svg = _disc(card, cy, kind, row['step'], ink, soft)
     if window:
         league = window['league']
@@ -252,7 +253,7 @@ def _row(card, cy, kind, row, window, ink, soft):
         svg += card.text(TAG_X, cy + 40 * CAP / 2, 'NO SLATE YET', 40, soft, tracking=1)
     real = {'cashed': ('bet', 'cashes', 'bank'), 'open': ('bet', 'cashes', 'bank'),
             'next': ('bet',)}.get(kind, ())
-    for _, right, size, key in COLS:
+    for _, right, size, key in columns:
         svg += card.text(right, cy + size * CAP / 2, kit.money(row[key]), size,
                          ink if key in real else soft, anchor='end')
     return svg
@@ -277,12 +278,15 @@ def climb_route(state, now, games, fixture=False):
     card = kit.Card(height=max(1350, 1100 + len(rows) * 70))
     panel_bottom = 400
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(780, 290))
+    full = state.get('fullRollover')
     label = (f'FIXTURE · CLIMB #{state["run"]} ROUTE MAP' if fixture
+             else f'CLIMB #{state["run"]} · THE ROUTE' if full
              else f'80/20 CLIMB #{state["run"]} · ROUTE MAP')
     chip, _ = kit.series_chip(card, COL_X, 172, label)
     inner += chip
     inner += card.text(COL_X, 340, '$50 → $1,000', 136, CHALK)
-    inner += card.text(COL_X, 384, 'Bank 20% of every win. Ride 80%.', 40, CHALK, 'd', 600)
+    rule = 'The full return rolls to the next step.' if full else 'Bank 20% of every win. Ride 80%.'
+    inner += card.text(COL_X, 384, rule, 40, CHALK, 'd', 600)
 
     hy = panel_bottom + 52
     posted_label = 'POSTED STEPS ONLY'
@@ -290,7 +294,8 @@ def climb_route(state, now, games, fixture=False):
     inner += (f'<rect x="{X1}" y="{hy - 38}" width="{stamp_w:.0f}" height="50" rx="8" fill="none" '
               f'stroke="{INK}" stroke-width="3"/>'
               + card.text(X1 + 14, hy, posted_label, 40, INK, tracking=1))
-    for name, right, _, _ in COLS:
+    columns = tuple(col for col in COLS if not full or col[3] != 'bank')
+    for name, right, _, _ in columns:
         inner += card.text(right, hy, name, 40, INK_SOFT, anchor='end', tracking=1)
     inner += f'<line x1="{X1}" y1="{hy + 18}" x2="{X2}" y2="{hy + 18}" stroke="{INK}" stroke-width="3"/>'
     top = hy + 22
@@ -311,33 +316,29 @@ def climb_route(state, now, games, fixture=False):
             words = ('NEXT · NOT POSTED YET' if kind == 'next'
                      else f'OPEN · POSTED AT {kit.price(row["odds"])} · NOT SETTLED YET')
             inner += card.text(X1 + 2, y + 50, words, 40, CHALK, tracking=1)
-            inner += _row(card, y + BAR_HEAD + pitch / 2 + 4, kind, row, window, CHALK, DIM)
+            inner += _row(card, y + BAR_HEAD + pitch / 2 + 4, kind, row, window, CHALK, DIM, columns)
             y += height
         else:
-            inner += _row(card, y + pitch / 2, kind, row, window, INK, INK_SOFT)
+            inner += _row(card, y + pitch / 2, kind, row, window, INK, INK_SOFT, columns)
             y += pitch
             nxt = rows[i + 1] if i + 1 < len(rows) else None
             if nxt and nxt[0] not in ('next', 'open'):
                 inner += f'<line x1="{X1}" y1="{y}" x2="{X2}" y2="{y}" stroke="{RULE}" stroke-width="2"/>'
 
     flag_x, fy = X1 + 14, max(y + 170, 900)
-    inner += card.text(X1, fy - 124, 'NEXT STEP: NOT SELECTED', 44, INK, tracking=1)
-    inner += card.text(X1, fy - 68, 'NFL / CFB · SIDES OR PLAYER PROPS', 40, INK_SOFT, tracking=1)
+    if not state.get('open'):
+        inner += card.text(X1, fy - 124, 'NEXT STEP: NOT SELECTED', 44, INK, tracking=1)
     inner += (f'<path d="M{flag_x} {fy + 6} V{fy - 50}" stroke="{INK}" stroke-width="6" stroke-linecap="round"/>'
               f'<path d="M{flag_x + 3} {fy - 50} h44 l-12 15 l12 15 h-44 z" fill="{INK}"/>')
     inner += card.text(flag_x + 66, fy, 'GOAL $1,000', 48, INK)
     stake_label = 'RIDING' if state.get('open') else 'AVAILABLE'
-    summary = f'{kit.money(state["banked"])} BANKED · {kit.money(state["stake"])} {stake_label}'
+    summary = f'{kit.money(state["stake"])} {stake_label}'
+    if not full:
+        summary = f'{kit.money(state["banked"])} BANKED · {summary}'
     room = X2 - (flag_x + 66 + width('GOAL $1,000', 48) + 20)
     inner += card.text(X2, fy, summary, fit(summary, 40, room, 'd', 600),
                        INK_SOFT, 'd', 600, anchor='end')
     perf = fy + 30
-    rule = f'2{MINUS}3 ALT LEGS · ONE BOOK · {MINUS}200 TO {MINUS}150 TOTAL'
-    inner += card.text(X1, perf + 58, rule, fit(rule, 38, X2 - X1, tracking=1),
-                       INK_SOFT, tracking=1)
-    preference = 'TWO LEGS PREFERRED. NO STEP IS FORCED.'
-    inner += card.text(X1, perf + 108, preference, fit(preference, 38, X2 - X1, tracking=1),
-                       INK_SOFT, tracking=1)
     ticket_cards.frame(card, HOUSE, CHALK, perf, perf + 124, inner)
     if fixture:
         badge = card.text(540, 820, 'FIXTURE', 220, INK, anchor='middle', tracking=8, role='badge')

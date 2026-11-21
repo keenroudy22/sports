@@ -12,7 +12,7 @@ import parlay
 from itertools import combinations
 
 
-def two_leg_options(legs, now, supported=False, limit=8, mixed_review=False):
+def two_leg_options(legs, now, supported=False, limit=8, mixed_review=False, target=ladder.TARGET):
     """Bounded private shortlist. Derived cross-game odds are not a book receipt.
 
     Mixed NFL/CFB pairs require the explicit sourced route. Watch-list model support is
@@ -36,7 +36,7 @@ def two_leg_options(legs, now, supported=False, limit=8, mixed_review=False):
         if a['gameId']==b['gameId'] or a['book']!=b['book']:
             continue
         price=parlay.american(parlay.decimal(a['odds'])*parlay.decimal(b['odds']))
-        if not ladder.TARGET[0] <= price <= ladder.TARGET[1]:continue
+        if not target[0] <= price <= target[1]:continue
         if supported and a['chance']*b['chance'] <= pricing.break_even(price):continue
         holds=sorted(set(a.get('holds',[])+b.get('holds',[])))
         options.append(dict(book=a['book'],league='NFL/CFB' if mixed else a['league'],derivedOdds=price,
@@ -45,27 +45,40 @@ def two_leg_options(legs, now, supported=False, limit=8, mixed_review=False):
             legs=[a,b],holds=holds,
             releaseChecks=['Fresh game-day prices and news','Exact ticket price',
                            'Normal admission, exposure and one-open-step checks']))
-    options.sort(key=lambda r:(len(r['holds']),abs(r['derivedOdds']+175),
+    midpoint = sum(target) / 2
+    options.sort(key=lambda r:(len(r['holds']),abs(r['derivedOdds']-midpoint),
                                r['book'],tuple(l['title'] for l in r['legs'])))
     return options[:limit]
 
 
-def source_review_options(legs, now, limit=8):
+def source_review_options(legs, now, limit=8, full=False):
     """Price-only drafts for the approved sourced review; never model approval."""
     grouped={}
     for leg in legs:
         if leg.get('book') not in ladder.SLUGS or not ladder.LEG_PRICES[0]<=leg['odds']<=ladder.LEG_PRICES[1]:continue
         grouped.setdefault((leg['league'],leg['book'],leg['gameId'],leg['team']),[]).append(leg)
     pool=[]
+    target = ladder.FULL_ROLLOVER_TARGET if full else ladder.TARGET
+    preferred_leg = parlay.american(parlay.decimal(sum(target) / 2) ** .5) if full else -400
     for rows in grouped.values():
         # Two quoted rungs per team near the preferred two-leg price shape.
-        rows.sort(key=lambda r:(abs(r['odds']+400),r['line']))
+        rows.sort(key=lambda r:(abs(r['odds']-preferred_leg),r['line']))
         pool.extend(rows[:2])
-    result=two_leg_options(pool,now,limit=limit,mixed_review=True)
+    result=two_leg_options(pool,now,limit=limit,mixed_review=True,target=target)
+    if full:
+        singles = [dict(book=leg['book'], league=leg['league'], derivedOdds=leg['odds'],
+                        priceBasis='Captured alternate price; exact sportsbook offer needs confirmation',
+                        legCount=1, planningOnly=True, legs=[leg], holds=leg.get('holds', []),
+                        releaseChecks=['Fresh game-day price and news', 'Exact unboosted sportsbook offer'])
+                   for leg in legs if leg.get('alternate') is True and leg.get('book') in ladder.SLUGS
+                   and target[0] <= leg['odds'] <= target[1]]
+        singles.sort(key=lambda row: (len(row['holds']), abs(row['derivedOdds'] - sum(target) / 2),
+                                      row['book'], row['legs'][0]['title']))
+        result = singles[:limit // 2] + result
     for option in result:
         option.update(status='source-review-needed',reviewRoute='sourced-climb-review-v1')
         option['releaseChecks']+=['Sourced matchup/availability reason and countercase for each leg','Existing reviewed-ticket admission; no probability/EV claim']
-    return result
+    return result[:limit]
 
 
 def multi_leg_drafts(legs, counts, target, *, style, ideal_leg=-225, limit=4):
@@ -178,12 +191,14 @@ def prepare(ctx, now, day=None):
             kickoff=game['kickoff'],alternateSpreads=quotes,supportedSpreadLegs=len(supported),
             supportedPropLegs=len(props),roleEligiblePropWatch=len(raw_props),
             coverageHold=None if quotes else 'No complete current two-sided alternate spread ladder captured'))
-    supported_options=two_leg_options(supported_legs,now,supported=True)
+    full = now >= ladder.FULL_ROLLOVER_FROM and ladder.state(
+        getattr(ctx, 'first', {}), getattr(ctx, 'latest', {}), now)['fullRollover']
+    supported_options=two_leg_options(supported_legs,now,supported=True) if not full else []
     big_slate=len(out)>=8
     return dict(asOf=gates.stamp(now),targetDate=day.isoformat(),planningOnly=True,games=out,
                 twoLegOptions=supported_options,
-                evidenceHeldOptions=two_leg_options(watch_legs,now) if not supported_options else [],
-                sourceReviewOptions=source_review_options(review_legs,now),
+                evidenceHeldOptions=two_leg_options(watch_legs,now) if not full and not supported_options else [],
+                sourceReviewOptions=source_review_options(review_legs,now,full=full),
                 dailyDoubleDrafts=multi_leg_drafts(review_legs,(2,),(-110,110),style='daily-double',ideal_leg=-240),
                 shortParlayDrafts=multi_leg_drafts(review_legs,(3,4),(200,1500),style='short',ideal_leg=-250) if big_slate else [],
                 lottoDrafts=multi_leg_drafts(review_legs,(6,7,8),(1500,20000),style='lotto',ideal_leg=-190) if big_slate else [],

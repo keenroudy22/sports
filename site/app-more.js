@@ -334,20 +334,20 @@ button.cal-day { cursor: pointer; }
       if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${tabs}${empty(`No Climb for ${LEAGUE_NAME[state.league]}`, 'Switch to All sports to see the current Climb.', 'research')}`;
       const lad = C.theLadder(every);
       const acc = lad.accounting;
-      const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
-      const routeHtml = climbRoute ? `<section id="route" class="climb-route" aria-label="Current 80/20 Climb route">
-        <img class="climb-route-art" src="${esc(climbRoute.image)}?v=${esc(String((today || {}).generatedAt || '').replace(/\W/g, ''))}" alt="Current 80/20 Climb: posted steps and actual balances" loading="lazy">
-        <h2>Climb #${esc(climbRoute.run)} · the route</h2>
+      const money = n => `$${(Number(n) || 0).toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+      const routeHtml = climbRoute ? `<section id="route" class="climb-route" aria-label="Current Climb route">
+        <img class="climb-route-art" src="${esc(climbRoute.image)}?v=${esc(String((today || {}).generatedAt || '').replace(/\W/g, ''))}" alt="Current Climb: posted steps and actual balances" loading="lazy">
+        <h2>${climbRoute.fullRollover ? '$50 to $1K Climb' : 'Climb'} #${esc(climbRoute.run)}</h2>
         <p class="small muted">Posted steps and actual returns.</p>
         <div class="climb-route-steps">${(climbRoute.rows || []).filter(row => row.kind === 'cashed' || row.kind === 'open').map(row => {
           const stateText = row.kind === 'cashed' ? '✓ Cashed' : 'Open · not settled';
           const legs = `<div class="climb-route-legs">${(row.legs || []).map((leg, i) => `<a href="${esc(leg.href || '#record/climb')}">${esc(leg.title || `Leg ${i + 1}`)}${leg.odds != null ? ` · ${esc(oddsText(leg.odds))}` : ''}${leg.book ? ` · ${esc(bookLabel(leg.book))}` : ''} ›${leg.why ? `<small>Why: ${esc(leg.why)}</small>` : ''}</a>`).join('')}</div>`;
           return `<div class="climb-route-step ${esc(row.kind)}"><div class="climb-route-head"><b>Step ${esc(row.step)} · ${esc(stateText)}</b><span>${esc(row.league || '')} ${esc(row.day || '')} ${esc(row.clock || '')}</span></div>
-            <p>${esc(money(row.bet))} bet → ${esc(money(row.cashes))} ${row.kind === 'cashed' ? 'returned' : 'returns if it wins'} · ${esc(money(row.bank))} ${row.kind === 'cashed' ? 'banked' : 'to bank on a win'}</p>${legs}</div>`;
-        }).join('')}</div><p class="climb-route-bank">Current climb · ${esc(money(climbRoute.banked))} banked · ${esc(money(climbRoute.stake))} ${lad.open ? 'riding' : 'available'}</p></section>` : '';
+            <p>${esc(money(row.bet))} bet → ${esc(money(row.cashes))} ${row.kind === 'cashed' ? 'returned' : 'returns if it wins'}${climbRoute.fullRollover ? '' : ` · ${esc(money(row.bank))} ${row.kind === 'cashed' ? 'banked' : 'to bank on a win'}`}</p>${legs}</div>`;
+        }).join('')}</div><p class="climb-route-bank">Current climb · ${climbRoute.fullRollover ? '' : `${esc(money(climbRoute.banked))} banked · `} ${esc(money(climbRoute.stake))} ${lad.open ? 'riding' : 'available'}</p></section>` : '';
       return `${top}${tabs}${routeHtml}<div class="kpis"><div class="kpi"><small>Current climb</small><b class="num">#${esc(lad.run)} · step ${esc(lad.step)}</b><span>${money(lad.banked + lad.stake)} of $1,000</span></div><div class="kpi"><small>Steps</small><b class="num">${esc(acc.wins)}–${esc(acc.losses)}</b><span>won–lost</span></div><div class="kpi"><small>Banked so far</small><b class="num">${money(lad.saved)}</b><span>across every climb · stays banked after a miss</span></div><div class="kpi"><small>Best climb</small><b class="num">${money(lad.best)}</b><span>highest bank + ride</span></div>
         <div class="kpi"><small>Wagered</small><b class="num">${money(acc.wagered)}</b><span>returned ${money(acc.returned)}</span></div><div class="kpi"><small>Net</small><b class="num ${acc.net < 0 ? 'red' : 'green'}">${acc.net < 0 ? '−' : '+'}${money(Math.abs(acc.net))}</b><span>lifetime, in dollars</span></div></div>
-        <div class="card" style="margin-top:14px"><p>This Climb banks 20% of each winning return and rolls the remaining 80% into the next step.</p>${lad.open ? `<p class="small" style="margin-top:6px">A step is open now. <a href="#today">See Today</a>.</p>` : '<p class="small muted" style="margin-top:6px">The next step hasn’t been posted.</p>'}</div>
+        <div class="card" style="margin-top:14px"><p>${lad.fullRollover ? 'The full winning return rolls into the next step.' : 'This Climb banks 20% of each winning return and rolls the remaining 80% into the next step.'}</p>${lad.open ? `<p class="small" style="margin-top:6px">A step is open now. <a href="#today">See Today</a>.</p>` : '<p class="small muted" style="margin-top:6px">The next step hasn’t been posted.</p>'}</div>
         ${section('Past steps', `<div class="receipts">${lad.history.slice().reverse().map(climbRow).join('') || '<p class="muted">No settled steps yet.</p>'}</div>`, '', `The Climb keeps its own run history and spans NFL and college legs, so it is shown whole; changing the season view does not change an active run.${lad.climbs.length ? ` Climbs finished: ${lad.climbs.length}.` : ''}`)}`;
     }
     if (tab === 'model') {
@@ -469,7 +469,7 @@ button.cal-day { cursor: pointer; }
       <dt>Closing line</dt><dd>The final number before kickoff. Beating it more often than not is the best early sign of real skill.</dd>
       <dt>Old price</dt><dd>The price we posted is older than our freshness limit. The play still counts at the posted price; check your book for today's.</dd>
       <dt>Fun ticket</dt><dd>A longshot parlay at a smaller stake, tracked separately from the record.</dd>
-      <dt>The 80/20 Climb</dt><dd>A $50 to $1,000 challenge. The current format banks 20% of a winning return and rolls the rest into the next step. The Climb page tracks the posted steps and returns.</dd>
+      <dt>The Climb</dt><dd>A $50 to $1,000 challenge. The Climb page tracks each step and its return.</dd>
       <dt>Trial</dt><dd>A new sport collecting evidence on paper. Not a best bet until the trial earns it.</dd></dl>`)}
     <p class="small">Times are Eastern.</p>
     <p class="small">Analytics: Cloudflare's cookie-free counter. Nothing personal is collected.</p>
@@ -500,7 +500,7 @@ button.cal-day { cursor: pointer; }
         const c = !lines && !(pick && pick.result) ? { state: 'unchecked', text: "Couldn't re-check prices right now" } : pick && pick.result ? { state: 'settled', text: `${pvm.status}${pick.resultDetail ? ` · ${pick.player || String(pick.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${pick.resultDetail}` : pick.actual ? ` · ${typeof pick.actual === 'string' ? pick.actual : ''}` : ''}` }
           : pick && (C.isParlay(pick) || Date.parse(pick.kickoff) <= Date.now()) ? { state: 'reference', text: Date.parse(pick.kickoff) <= Date.now() ? 'Waiting on result' : 'Tracked as posted' }
             : isPick ? (() => { const pc = pickChange(s, rows); return pvm && pvm.mode !== 'open' ? { ...pc, text: `${pvm.status} · ${pc.text.replace('since you saved it', 'since posted')}` } : { ...pc, text: pc.text.replace('since you saved it', 'since posted') }; })() : P.changes(s, sidedRows);
-        const kind = isPick ? (pvm ? { best: 'Best bet', fun: 'Fun ticket', climb: '80/20 Climb' }[pvm.kind] : 'Best bet') : s.type === 'line' ? 'Line' : s.type === 'player' ? 'Player' : s.type === 'game' ? 'Game' : 'Saved';
+        const kind = isPick ? (pvm ? { best: 'Best bet', fun: 'Fun ticket', climb: 'Climb' }[pvm.kind] : 'Best bet') : s.type === 'line' ? 'Line' : s.type === 'player' ? 'Player' : s.type === 'game' ? 'Game' : 'Saved';
         const href = isPick && s.pickId ? `#pick/${encodeURIComponent(s.pickId)}` : /^#(player|game)\//.test(s.href) ? s.href : '#today';
         return `<div class="receipt" style="grid-template-columns:40px minmax(0,1fr) auto"><span class="r-mark open">★</span><div><b><a href="${esc(href)}" class="plain-link">${esc(niceTitle(s.title))}</a></b><span>${esc(kind)}${s.league ? ` · ${esc(s.league)}` : ''} · ${esc(c.text)}</span>
           ${s.type === 'line' || (isPick && !['settled', 'reference'].includes(c.state)) ? `<span>${isPick ? 'Posted' : 'When saved'}: ${esc(priceText(s))}${s.observedAt ? ` · ${esc(ago(s.observedAt))}` : ''}</span><span>Latest: ${c.state === 'unchecked' ? 'not re-checked · <button type="button" class="linkish" data-retry>Try again</button>' : c.current ? esc(priceText(c.current)) : 'no fresh quote · check your book'}</span>` : ''}</div>

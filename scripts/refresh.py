@@ -322,9 +322,15 @@ def validate_report(report, games):
                 assert pick.get('position'), 'Active prop missing position'
             if report['league'] == 'CFB':
                 assert pick.get('jurisdictionVerified') is True
+            reviewed_climb = (pick.get('parlayType') == 'ladder'
+                              and pick.get('selectionMethod') == 'sourced-climb-review-v1'
+                              and pick.get('jurisdictionVerified') is True
+                              and published >= datetime(2026, 11, 19, 16, 6, tzinfo=timezone.utc)
+                              and (games.get(pick['gameIds'][0]) or {}).get('league') == report['league'])
             for gid in pick['gameIds']:
                 assert gid in games, f'Unknown game {gid}'
-                assert games[gid]['league'] == report['league']
+                assert (games[gid]['league'] == report['league']
+                        or reviewed_climb and games[gid]['league'] in ('NFL', 'CFB'))
                 assert historical or published < datetime.fromisoformat(games[gid]['kickoff'].replace('Z', '+00:00')), 'Late recommendation'
     return report
 
