@@ -7,7 +7,7 @@
   const { C, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME, teamDirectory,
     maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, whenShort, dayLabel,
     bookLabel, ago, oddsText, isNum, inLeague, setLeague, liveStamp, liveFor, LIVE, favSpread, quoteAge,
-    ticket, ticketButton, etDay } = ctx;
+    ticket, ticketButton, etDay, lineData, niceTitle } = ctx;
   const views = {};
   /* Navigator, "why" and badge styles arrive with this bundle, so the first-load shell stays inside its budget. */
   const GAMES_CSS = ".kt-worth-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(196px, 1fr); gap: 10px; margin: 10px 0 6px; padding-bottom: 6px; }\n.kt-worth-card { display: grid; gap: 4px; align-content: start; padding: 10px 12px; background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); color: var(--chalk); min-width: 0; }\n.kt-worth-card:hover { text-decoration: none; border-color: var(--line-strong); }\n.kt-worth-card .wc-t { font: 700 15px/1.1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.kt-worth-card b { font: 500 14px/1.3 var(--font-body); color: var(--kookd); }\n.kt-worth-card small { font-size: 13px; color: var(--dim); }\n"
@@ -26,6 +26,18 @@
       @media (max-width:600px) {
         .cbb-slate-row { grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,.8fr); gap:8px; padding:11px; }
         .cbb-slate-matchup { grid-column:1/-1; }
+      }
+      .slate-favorites { list-style:none; padding:0; margin:10px 0 0; border:1px solid var(--line); border-radius:var(--radius); background:var(--felt); }
+      .slate-favorites li + li { border-top:1px solid var(--line); }
+      .slate-favorite-row { display:grid; grid-template-columns:3ch minmax(0,1.45fr) minmax(0,1.1fr) minmax(0,.8fr); gap:10px; padding:12px; align-items:start; }
+      .slate-favorite-row > span:not(.slate-rank) { display:grid; gap:3px; min-width:0; overflow-wrap:anywhere; }
+      .slate-favorite-row small, .slate-rank { font-size:12px; color:var(--dim); }
+      .slate-favorite-row .slate-posted { color:var(--kookd); }
+      @media (max-width:600px) {
+        .slate-favorite-row { grid-template-columns:3ch minmax(0,1fr) minmax(0,.85fr); gap:6px 8px; }
+        .slate-rank { grid-row:1/3; }
+        .slate-matchup { grid-column:2/-1; }
+        .slate-price { text-align:right; }
       }
     `;
   if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-games-css'))) {
@@ -57,7 +69,7 @@
     return `<section class="section" style="margin:8px 0 18px" aria-labelledby="worth-h"><div class="section-head"><h2 id="worth-h" style="white-space:nowrap">Worth your time</h2><span class="kt-kind">Research · the one thing to check</span></div>
       <div class="chip-scroll"><div class="kt-worth-strip">${top.map(g => `<a class="kt-worth-card" href="#game/${esc(g.id)}"><span class="wc-t">${esc(g.away.abbr)} at ${esc(g.home.abbr)}</span><b>${esc(g.look || g.plainGap || 'Take a look')}</b><small>${esc([C.TIER_WORD[g.tier], whenShort(g.kickoff).split(', ').pop(), !(g.bettableParts || {}).official ? 'Research lean · not a bet' : ''].filter(Boolean).join(' · '))}</small></a>`).join('')}</div></div></section>`;
   };
-  const gameTabs = tab => `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
+  const gameTabs = tab => `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/favorites', 'Favorite lines', 'favorites'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
   const teamSearch = () => `<div class="grow"><label class="sr" for="gq">Find a team</label><input id="gq" class="search" type="search" placeholder="Find a team" value="${esc(state.games.q || '')}" data-input="gq" autocomplete="off" maxlength="80"></div>`;
   const projectionWindow = (rows, newest = false) => {
     const q=String(state.games.q || '').trim().toLowerCase();
@@ -235,9 +247,109 @@
         ${data.note ? `<details class="more-box"><summary>About these projections</summary><p class="small muted">${esc(data.note)}</p></details>` : ''}
         <p><a href="#games/live?sport=CBB">Live scores & finals ›</a> · <a href="#record?sport=CBB">CBB Results ›</a></p>`;
   };
+
+  const FAVORITE_LEAGUES = ['NFL', 'NBA', 'CFB', 'CBB'];
+  const boardPrice = (quote, kickoff, now) => Boolean(bookLabel(quote.book) && isNum(quote.odds) && Math.abs(quote.odds) >= 100
+    && Date.parse(quote.observedAt) <= now
+    && ['fresh', 'aging'].includes(quoteAge(quote.observedAt, kickoff, now, quote).kind));
+  const nbaLineupsPending = game => !game.rosterContext?.reportedAt || Boolean(game.rosterContext.holds?.length);
+  const footballFavorites = rows => rows.filter(row => {
+    const grade = row.grade || {};
+    return grade.calibrated && grade.pricePaired && !grade.thin && !grade.limited && !grade.unproven
+      && !row.roleHold && !row.priceHold && !row.injuryHold
+      && ['lean', 'strong'].includes(grade.tier) && isNum(grade.edge) && grade.edge > 0;
+  }).map(row => ({ ...row, score: row.grade.edge, status: 'Research lean' }));
+
+  const basketballFavorites = (game, league, now) => {
+    const projection = game.projection;
+    if (!projection || projection.sparse || game.hold) return [];
+    const status = league === 'CBB' ? 'Team-rating lean' : 'Research lean';
+    const candidates = [];
+    const spread = game.spreadQuote;
+    if (isNum(projection.margin) && isNum(spread?.homeLine) && spread.awayLine === -spread.homeLine
+        && [spread.homeOdds ?? spread.home, spread.awayOdds ?? spread.away].every(odds => isNum(odds) && Math.abs(odds) >= 100)) {
+      const gap = projection.margin + spread.homeLine;
+      const side = gap > 0 ? 'home' : 'away';
+      const team = game.teams[side];
+      candidates.push({ title: C.spreadText(team.shortName || team.name || team.abbreviation, spread[side + 'Line']),
+        odds: spread[side + 'Odds'] ?? spread[side], book: spread.book, observedAt: spread.observedAt || spread.retrievedAt, score: Math.abs(gap), status });
+    }
+    const total = league === 'NBA' && game.totalQuote;
+    if (isNum(projection.total) && isNum(total?.line)
+        && [total.over, total.under].every(odds => isNum(odds) && Math.abs(odds) >= 100)) {
+      const gap = projection.total - total.line;
+      candidates.push({ title: `${gap > 0 ? 'Over' : 'Under'} ${total.line}`, odds: gap > 0 ? total.over : total.under,
+        book: total.book, observedAt: total.retrievedAt, score: Math.abs(gap), status });
+    }
+    return candidates.filter(row => row.score >= .05 && boardPrice(row, game.kickoff, now));
+  };
+
+  const favoriteLine = (game, league, prices, picks, now) => {
+    const football = FOOTBALL.includes(league);
+    if (game.completed || game.status === 'final' || game.state === 'post') return { status: 'Final' };
+    if (game.state === 'in' || Date.parse(game.kickoff) <= now) return { status: 'Game started' };
+    if (!football && game.status && game.status !== 'scheduled') return { status: 'Game unavailable' };
+    const posted = picks.filter(pick => pick.posted === true && !pick.community && !pick.historicalImport && !C.isParlay(pick));
+    const chef = pick => Boolean(pick.dailyChefDay || pick.lane === 'chef_pick');
+    const official = posted.filter(pick => C.isOpen(pick, now) && boardPrice({ ...pick, observedAt: pick.quotedAt }, game.kickoff, now))
+      .sort((a, b) => Number(chef(b)) - Number(chef(a)) || String(b.publishedAt).localeCompare(String(a.publishedAt)))[0];
+    if (official) return { ...official, title: niceTitle(official.displayTitle || official.title), observedAt: official.quotedAt,
+      status: chef(official) ? 'Chef’s Pick' : 'Best Bet', rankGroup: chef(official) ? 0 : 1 };
+    if (posted.some(pick => pick.entryNote || pick.status === 'withdrawn')) return { status: 'Previous line closed' };
+    if (!football && !game.projection) return { status: 'Projection unavailable' };
+    if (league === 'NBA' && nbaLineupsPending(game)) return { status: 'Lineup check pending' };
+    const current = prices.filter(row => !row.athleteId && ['point spread', 'total points'].includes(row.market)
+      && row.state === 'open' && row.freshness !== 'stale' && Date.parse(row.kickoff) === Date.parse(game.kickoff)
+      && boardPrice(row, game.kickoff, now));
+    if ((football && !current.length) || (league === 'CBB' && !freshCbbSpread(game, now))) return { status: 'No fresh line' };
+    const options = football ? footballFavorites(current) : basketballFavorites(game, league, now);
+    const best = options.sort((a, b) => b.score - a.score || b.odds - a.odds || a.title.localeCompare(b.title))[0];
+    return best ? { ...best, rankGroup: 2 } : { status: 'Pass' };
+  };
+
+  views.favoriteLines = async () => {
+    const selected = FAVORITE_LEAGUES.includes(state.league) ? state.league : 'ALL';
+    const leagues = selected === 'ALL' ? FAVORITE_LEAGUES : [selected];
+    const [today, prices, nba, cbb] = await Promise.all([
+      get('app/today.json'), leagues.some(league => FOOTBALL.includes(league)) ? lineData(selected) : null,
+      leagues.includes('NBA') ? maybe('app/nba.json') : null, leagues.includes('CBB') ? maybe('app/cbb.json') : null,
+    ]);
+    const groupByGame = rows => rows.reduce((groups, row) => {
+      if (!row.gameId) return groups;
+      if (!groups.has(row.gameId)) groups.set(row.gameId, []);
+      groups.get(row.gameId).push(row);
+      return groups;
+    }, new Map());
+    const byPrice = groupByGame(prices?.lines || []), byPick = groupByGame(today.picks || []);
+    const now = Date.now(), day = etDay();
+    const sportNav = [['ALL', 'All four'], ...FAVORITE_LEAGUES.map(league => [league, league])]
+      .map(([key, label]) => [`#games/favorites?sport=${key}`, label, key]);
+    const teamName = team => team.name || team.shortName || team.abbr || team.abbreviation;
+    const sections = leagues.map(league => {
+      const source = league === 'NBA' ? nba : league === 'CBB' ? cbb : today;
+      const games = (source?.games || []).filter(game => (game.league || league) === league && C.dayOf(game.kickoff) === day);
+      const ranked = games.map(game => ({ game, line: favoriteLine(game, league, byPrice.get(game.id) || [], byPick.get(game.id) || [], now) }))
+        .sort((a, b) => (a.line.rankGroup ?? 3) - (b.line.rankGroup ?? 3) || (b.line.score ?? 0) - (a.line.score ?? 0)
+          || Date.parse(a.game.kickoff) - Date.parse(b.game.kickoff) || a.game.id.localeCompare(b.game.id));
+      const rows = ranked.map(({ game, line }, index) => {
+        const teams = game.teams || game;
+        const link = line.rankGroup < 2 ? `#pick/${encodeURIComponent(line.id)}` : `#game/${encodeURIComponent(game.id)}`;
+        return `<li class="slate-favorite-row"><span class="slate-rank">${line.rankGroup != null ? index + 1 : ''}</span>
+          <span class="slate-matchup"><a href="#game/${esc(encodeURIComponent(game.id))}">${esc(teamName(teams.away))} at ${esc(teamName(teams.home))}</a><small>${esc(whenShort(game.kickoff))}</small></span>
+          <span>${line.title ? `<a href="${esc(link)}"><b>${esc(line.title)}</b></a>` : ''}<small class="${line.rankGroup < 2 ? 'slate-posted' : ''}">${esc(line.status)}</small></span>
+          ${line.title ? `<span class="slate-price"><b>${esc(oddsText(line.odds))} · ${esc(bookLabel(line.book))}</b><small>Checked ${esc(ago(line.observedAt))}</small></span>` : ''}</li>`;
+      }).join('');
+      return `<section class="kt-page-sec" aria-labelledby="favorite-${league}"><h2 id="favorite-${league}">${esc(LEAGUE_NAME[league])}</h2>
+        ${rows ? `<ol class="slate-favorites">${rows}</ol>` : `<p class="small muted">${source ? 'No games today.' : 'The schedule could not be loaded.'}</p>`}</section>`;
+    });
+    return `${head('Games', 'Favorite lines', 'One line per game, ranked within each sport. Posted Best Bets come first, followed by research leans.')}${gameTabs('favorites')}
+      <div class="chip-scroll">${segLinks(sportNav, selected)}</div>${sections.join('')}`;
+  };
+
   views.games = async route => {
     const tab = route.tab || 'upcoming';
     if (route.league) setLeague(route.league);
+    if (tab === 'favorites') return views.favoriteLines();
     if (state.league === 'CBB' && tab === 'upcoming') return views.cbbToday({gamesPage:true});
     const tabs = gameTabs(tab);
     const football = FOOTBALL.includes(state.league) || state.league === 'ALL';

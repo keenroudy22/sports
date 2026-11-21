@@ -577,7 +577,7 @@
       case 'stats': case 'charts': case 'players': return { view: 'research', mode: 'players', sub: a === 'defense' ? 'defense' : a === 'teams' ? 'teams' : ['search', 'players'].includes(a) || (q && !['stat', 'sample', 'date', 'position'].some(key => params.has(key))) ? 'search' : null, q,
         league: params.get('sport') ? params.get('sport').toUpperCase() : null, legacy: true, ctx: [...params.keys()].length && C && C.researchContext ? C.researchContext(`#stats?${params}`) : null };
       case 'defense': return { view: 'research', mode: 'players', sub: 'defense', legacy: true };
-      case 'games': return { view: 'games', tab: ['live', 'final'].includes(a) ? a : 'upcoming', league: params.get('sport') ? params.get('sport').toUpperCase() : null };
+      case 'games': return { view: 'games', tab: ['favorites', 'live', 'final'].includes(a) ? a : 'upcoming', league: params.get('sport') ? params.get('sport').toUpperCase() : null };
       case 'scores': return { view: 'games', tab: 'live', league: a ? a.toUpperCase() : 'ALL', legacy: true };
       case 'sport': return { view: 'games', tab: 'live', league: (a || 'NBA').toUpperCase(), legacy: true };
       case 'game': return rest ? { view: 'game', id: rest.split('#')[0], anchor: rest.split('#')[1] || null } : { view: 'games', tab: 'upcoming' };
@@ -1419,7 +1419,7 @@
     ].filter(Boolean).join('');
     const rest2 = [
       leftovers(recent, awaiting.filter(p => C.dayOf(p.kickoff) === lastDay), (today.lastSlate || {})[state.league]),
-      shown.length ? ktSec('games', nflNow.length ? 'Other games today' : "Today's games", `${liveStamp(liveToday.refreshed)}<div class="today-game-list">${shown.map(todayGameRow).join('')}</div>`,
+      shown.length ? ktSec('games', nflNow.length ? 'Other games today' : "Today's games", `${liveStamp(liveToday.refreshed)}<p class="small"><a href="#games/favorites?sport=ALL">Favorite lines for today ›</a></p><div class="today-game-list">${shown.map(todayGameRow).join('')}</div>`,
         { kind: `${todayGames.length} game${todayGames.length === 1 ? '' : 's'} on today’s slate`, link: ktLink(otherGames.length > shown.length ? '#games' : '#games/live', otherGames.length > shown.length ? `See all ${todayGames.length} games` : 'Live scores') }) : '',
       nbaSummary,
       fun.length ? ktSec('fun', 'Fun tickets', slips(fun), { kind: 'Smaller stake, apart from best bets' }) : '',
@@ -2161,7 +2161,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-fcdd0d6e38cc';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
-  const GAMES_ASSET = 'app-games.js?v=sha256-e607c1f43965';
+  const GAMES_ASSET = 'app-games.js?v=sha256-999d8899a1c5';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-d0c8ba8cf2a2';
   const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';

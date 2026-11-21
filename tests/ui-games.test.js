@@ -83,6 +83,54 @@ const contextFor = (api, games, overrides = {}) => {
     withLive: list => ({ games: list, refreshed: null }), liveStamp: () => '', liveFor: () => null, ...overrides });
 };
 
+test('Favorite Lines ranks a posted Chef’s Pick and one current priced lean per football game', async () => {
+  const { api, factory } = loadBrowserApi();
+  const makeGame = id => game(id, team('1', 'HOME', 'Home Team', 2, 3), team('2', 'AWAY', 'Away Team', 4, 5), -6, 50, 9, 56,
+    { status: '12:00 PM' });
+  const games = ['CFB-60', 'CFB-61', 'CFB-62', 'CFB-63', 'CFB-64'].map(makeGame);
+  const observedAt = new Date(Date.now() - 120000).toISOString();
+  const quote = (i, title, edge, extra = {}) => ({ gameId: games[i].id, kickoff: games[i].kickoff, market: 'point spread',
+    state: 'open', book: 'DraftKings', odds: -110, observedAt, title, grade: { calibrated: true, pricePaired: true, edge, tier: 'lean' }, ...extra });
+  const picks = [{ id: 'CFB-chef', gameId: games[3].id, league: 'CFB', kickoff: games[3].kickoff, posted: true,
+    status: 'active', lane: 'chef_pick', displayTitle: 'Chef game -3', odds: -102, book: 'FanDuel', quotedAt: observedAt },
+  { id: 'CFB-closed', gameId: games[4].id, league: 'CFB', posted: true, status: 'expired', entryNote: 'Off the card.' }];
+  const ctx = contextFor(api, games, { etDay: () => C.dayOf(games[0].kickoff), get: async () => ({ games, picks }),
+    lineData: async () => ({ lines: [quote(0, 'Smaller lean', 3), quote(1, 'Strongest research', 7), quote(1, 'Second market', 5),
+      quote(2, 'Stale quote', 15, { observedAt: new Date(Date.now() - 5 * 3600000).toISOString() }), quote(4, 'Closed reentry', 10)] }) });
+  const route = api.model.resolve('#games/favorites?sport=CFB');
+  assert.equal(route.tab, 'favorites');
+  const html = unesc(await factory(ctx).games(route));
+  assert.deepEqual([...html.matchAll(/href="#game\/(CFB-\d+)"/g)].map(match => match[1]).filter((id, i, ids) => ids.indexOf(id) === i),
+    ['CFB-63', 'CFB-61', 'CFB-60', 'CFB-62', 'CFB-64']);
+  assert.match(html, /href="#pick\/CFB-chef"><b>Chef game -3/);
+  assert.match(html, /Best Bets come first/);
+  assert.match(html, /Previous line closed/);
+  assert.match(html, /No fresh line/);
+  assert.doesNotMatch(html, /Second market|Stale quote|Closed reentry/);
+});
+
+test('Favorite Lines uses the priced side in basketball and respects roster holds and historical totals', async () => {
+  const { api, factory } = loadBrowserApi();
+  const tip = kickoff(12);
+  const observedAt = new Date(Date.now() - 120000).toISOString();
+  const basketball = (id, extra = {}) => ({ id, kickoff: tip,
+    teams: { home: { name: 'Home', shortName: 'Home' }, away: { name: 'Away', shortName: 'Away' } },
+    projection: { margin: 1, total: 220 }, rosterContext: { holds: [], reportedAt: observedAt }, ...extra });
+  const spread = { book: 'DraftKings', observedAt, homeLine: -5, awayLine: 5, homeOdds: -102, awayOdds: -118 };
+  const nba = { games: [basketball('NBA-60', { spreadQuote: spread, status: 'scheduled' }),
+    basketball('NBA-61', { spreadQuote: spread, rosterContext: { reportedAt: observedAt, holds: ['Availability pending'] } })] };
+  const cbb = { games: [basketball('CBB-62', { spreadQuote: spread, firstTotal: { book: 'DraftKings', line: 145 } }),
+    basketball('CBB-63', { firstTotal: { book: 'DraftKings', line: 150 } })] };
+  const ctx = contextFor(api, [], { etDay: () => C.dayOf(tip), maybe: async path => ({ 'app/nba.json': nba, 'app/cbb.json': cbb }[path] || null) });
+  const html = unesc(await factory(ctx).games({ tab: 'favorites', league: 'ALL' }));
+  assert.equal((html.match(/<b>Away \+5<\/b>/g) || []).length, 2);
+  assert.equal((html.match(/-118 · DraftKings/g) || []).length, 2);
+  assert.match(html, /Lineup check pending/);
+  assert.match(html, /Team-rating lean/);
+  assert.match(html, /No fresh line/);
+  assert.doesNotMatch(html, /Over 145|Over 150|-102 · DraftKings/);
+});
+
 test('the college slate sorts by bettability, shows tiers and keeps NFL in kickoff order with badges only', async () => {
   const { api, factory } = loadBrowserApi();
   const games = slate();
