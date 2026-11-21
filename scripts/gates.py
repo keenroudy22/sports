@@ -1377,13 +1377,13 @@ def alternate_parlay_frequency(candidate, ctx):
     import prop_ticket_review
     family = candidate.get('family')
     expected_league = prop_ticket_review.FAMILIES.get(family, (None, None))[0]
-    policy_time = when(candidate['publishedAt']) if candidate.get('publishedAt') else ctx.now
-    policy_day = eastern_date(policy_time).isoformat()
     style = candidate.get('parlayStyle')
     league = candidate.get('league') or candidate.get('_league') or str(candidate.get('id') or '').split('-')[0]
     if (candidate.get('selectionMethod') == 'sourced-fun-ticket-review-v1'
             and candidate.get('parlayType') == 'longshot' and candidate.get('riskUnits') == .25
             and longshot_shape(candidate, ctx).ok):
+        policy_day = eastern_date(when(candidate['publishedAt']) if candidate.get('publishedAt')
+                                 else ctx.now).isoformat()
         if style == 'daily-double' and policy_day >= '2026-11-19':
             return Decision(True, 'alternate_parlay_frequency', 'reviewed Daily Double uses its own daily limit')
         if style in ('short', 'lotto') and league in ('NFL', 'CFB') and policy_day >= '2026-11-21':
@@ -1391,7 +1391,8 @@ def alternate_parlay_frequency(candidate, ctx):
     if (candidate.get('selectionMethod') == prop_ticket_review.METHOD
             and expected_league is not None and candidate.get('league') == expected_league
             and candidate.get('parlayType') == 'longshot' and candidate.get('riskUnits') == .25
-            and policy_day >= '2026-11-17'):
+            and eastern_date(when(candidate['publishedAt']) if candidate.get('publishedAt')
+                             else ctx.now).isoformat() >= '2026-11-17'):
         return Decision(True, 'alternate_parlay_frequency',
                         'reviewed prop ticket uses per-style daily limits; evidence and exposure checks still required')
     external = getattr(ctx, 'risk_external', {})

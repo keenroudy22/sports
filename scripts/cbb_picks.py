@@ -126,9 +126,16 @@ def admit(play, ctx, now, root=STORE):
     return nba_capture.append_changed([row],Path(root),lambda r:(r['type'],r['id']))
 
 
+def team_label(team):
+    # San Diego's ESPN abbreviation is also a private-currency marker.
+    if team['abbreviation'] == 'USD':
+        return team.get('shortName') or team['name']
+    return team['abbreviation']
+
+
 def selection(p):
     return (f"{p['direction'].upper()} {p['line']:g}" if p['marketType']=='total' else
-            f"{p['game']['teams'][p['direction']]['abbreviation']} {p['line']:+g}")
+            f"{team_label(p['game']['teams'][p['direction']])} {p['line']:+g}")
 
 
 def caption(p):
@@ -136,7 +143,7 @@ def caption(p):
     heading = daily_potd.LABEL if daily_potd.designation(p) else 'CBB PICK'
     teams=p['game']['teams']
     return buffer_post.x_ticket_copy(social_voice.finish(
-        f"🏀 {heading}\n{teams['away']['abbreviation']} at {teams['home']['abbreviation']}\n"
+        f"🏀 {heading}\n{team_label(teams['away'])} at {team_label(teams['home'])}\n"
         f"{selection(p)} ({p['odds']:+d}, DraftKings) · 1u\n\n{p['review']['why']}\n#CBB"),'play',p['id'])
 
 
@@ -196,15 +203,16 @@ def result_key(p):
 
 def result_detail(p):
     if p['marketType']=='total':return f"Game total: {p['actual']:g}"
-    team=p['game']['teams'][p['direction']]['abbreviation']
+    team=team_label(p['game']['teams'][p['direction']])
     return f"{team} scoring margin: {p['actual']:+g}"
 
 
 def result_text(p):
     net=(100/-p['odds'] if p['odds']<0 else p['odds']/100) if p['result']=='win' else -1 if p['result']=='loss' else 0
     day=boxscores.instant(p.get('kickoff') or p['game']['kickoff']).astimezone(gates.EASTERN).strftime('%b %d')
+    teams = p['game']['teams']
     return (f"{'✅' if p['result']=='win' else '❌' if p['result']=='loss' else '➖'} CBB FINAL · {day}\n"
-            f"{p['game']['teams']['away']['abbreviation']} at {p['game']['teams']['home']['abbreviation']}\n"
+            f"{team_label(teams['away'])} at {team_label(teams['home'])}\n"
             f"{selection(p)} ({p['odds']:+d}, DraftKings)\n{result_detail(p)} · {net:+.2f}u")
 
 

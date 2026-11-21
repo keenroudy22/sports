@@ -176,6 +176,20 @@ class CBBPicksTests(unittest.TestCase):
         self.assertIn('UNDER 150.5',text);self.assertIn('@Playbook',text)
         self.assertIn('21+ only',text);self.assertNotIn('/private/',text)
 
+    def test_san_diego_caption_and_result_use_the_school_name(self):
+        import social_style
+
+        play = dict(fixture(), book='DraftKings')
+        play['game']['teams']['home'].update(abbreviation='USD', name='San Diego Toreros', shortName='San Diego')
+        text = cbb.caption(play)
+        self.assertIn('AWAY at San Diego', text)
+        self.assertFalse(social_style.privacy_issues(text))
+
+        final = dict(play, marketType='spread', direction='home', line=-4.5, result='win', actual=8)
+        text = cbb.result_text(final)
+        self.assertIn('San Diego -4.5', text)
+        self.assertFalse(social_style.privacy_issues(text))
+
     def test_discord_queue_requires_live_art_and_preserves_receipt(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);p=fixture();cbb.admit(p,context(),NOW,root);log={'posts':[]}
