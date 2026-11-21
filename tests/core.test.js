@@ -491,6 +491,9 @@ test('a pick says where it stands in words, and red is only for a loss', () => {
   assert.equal(word({ ...pick, entryNote: 'Closed to new entries at 11:03 AM ET, before its post went out: the quarterback is out.' }), 'Pulled',
     'a play pulled over news before its post says so, not that the line moved');
   assert.equal(word({ ...pick, kickoff: '2026-09-20T11:00:00Z', entryNote: 'before its post went out: news' }), 'Pulled', 'even once its game is on');
+  const corrected = { ...pick, kickoff: '2026-09-20T11:00:00Z', entryNote: 'Off the card: the line moved before the alert.' };
+  assert.deepEqual(C.pickState(corrected, now), { word: 'Line moved', tone: 'closed' });
+  assert.equal(word({ ...corrected, gameFinal: true, result: 'win' }), 'Won');
   assert.equal(word({ ...pick, expiresAt: '2026-09-20T11:00:00Z' }), 'Price expired');
   assert.equal(word({ ...pick, kickoff: '2026-09-20T11:00:00Z' }), 'In play');
   assert.deepEqual(C.pickState({ ...pick, result: 'win' }, now), { word: 'Won', tone: 'win' });
