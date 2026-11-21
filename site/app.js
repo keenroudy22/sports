@@ -537,7 +537,7 @@
       lost: measured.filter(r => r.clv < 0).length, avg: measured.length ? round1(measured.reduce((s, r) => s + r.clv, 0) / measured.length * 10) / 10 : null };
   };
 
-  /* Routes. New grammar first; every old link (core.js routePath/LEGACY) lands on its new screen. */
+  /* Canonical routes and legacy redirects. */
   const MORE_PAGES = ['start', 'saved', 'arbs', 'lab', 'schedule', 'feedback', 'status', 'glossary'];
   const gameDate = value => {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return null;
@@ -572,22 +572,22 @@
       case 'research': {
         const lineParams = ['type', 'sort', 'show', 'q'].some(key => params.has(key));
         const mode = a === '' ? (lineParams ? 'lines' : 'news') : ['lines', 'trends', 'milestones', 'players', 'news'].includes(a) ? a : 'lines';
-        return { view: 'research', mode, ctx: mode === 'trends' && C.researchContext ? C.researchContext(`#trends?${params}`) : null, type: params.get('type') || null, sort: params.get('sort') || null, q, game: params.get('game') || null, sub: params.get('view') || null, rate: params.get('rate') || null, show: params.get('show') || null, pl: (params.get('pl') || '').toUpperCase() || null,
+        const ctx = C.researchContext && (mode === 'trends' ? C.researchContext(`#trends?${params}`)
+          : mode === 'players' && ['stat', 'sample', 'date', 'position'].some(key => params.has(key)) ? C.researchContext(`#stats?${params}`) : null);
+        return { view: 'research', mode, ctx, type: params.get('type') || null, sort: params.get('sort') || null, q, game: params.get('game') || null, sub: params.get('view') || null, rate: params.get('rate') || null, show: params.get('show') || null, pl: (params.get('pl') || '').toUpperCase() || null,
           league: params.get('sport') ? params.get('sport').toUpperCase() : null };
       }
       case 'edges': return { view: 'research', mode: 'lines', type: params.get('type') || 'all', sort: params.get('sort') || 'edge',
         show: params.get('show') || 'value', q, league: params.get('sport') ? params.get('sport').toUpperCase() : 'ALL', edges: true };
-      /* Old board links carried their own filters (best, market, sport, sort); keep what still means something. */
       case 'board': return { view: 'research', mode: 'lines', type: a === 'props' ? 'props' : a === 'favorites' ? 'all' : 'games',
         sort: a === 'favorites' || params.get('best') ? 'edge' : (params.get('sort') === 'time' ? 'kickoff' : params.get('sort') === 'confidence' ? 'chance' : null),
         q: q || (params.get('market') && params.get('market') !== 'all' ? params.get('market') : ''), league: params.get('sport') ? params.get('sport').toUpperCase() : null, legacy: true };
       case 'lines': return { view: 'research', mode: 'lines', type: 'all', legacy: true };
       case 'props': return { view: 'research', mode: 'lines', type: 'props', legacy: true };
-      /* Old shared research links keep their controls (C.researchContext validates every value). */
       case 'trends': return { view: 'research', mode: 'trends', game: rest || null, q, league: params.get('sport') ? params.get('sport').toUpperCase() : null, legacy: true,
         ctx: [...params.keys()].length && C && C.researchContext ? C.researchContext(`#trends?${params}`) : null };
       case 'stats': case 'charts': case 'players': return { view: 'research', mode: 'players', sub: a === 'defense' ? 'defense' : a === 'teams' ? 'teams' : ['search', 'players'].includes(a) || (q && !['stat', 'sample', 'date', 'position'].some(key => params.has(key))) ? 'search' : null, q,
-        league: params.get('sport') ? params.get('sport').toUpperCase() : null, legacy: true, ctx: [...params.keys()].length && C && C.researchContext ? C.researchContext(`#stats?${params}`) : null };
+        game: params.get('game') || null, league: params.get('sport') ? params.get('sport').toUpperCase() : null, legacy: true, ctx: [...params.keys()].length && C && C.researchContext ? C.researchContext(`#stats?${params}`) : null };
       case 'defense': return { view: 'research', mode: 'players', sub: 'defense', legacy: true };
       case 'games': {
         const day = ['favorites', 'live'].includes(a) && gameDate(params.get('date'));
@@ -612,7 +612,7 @@
       default: return MORE_PAGES.includes(v) ? { view: v } : { view: 'today' };
     }
   };
-  /* The new address for a legacy link. Shareable deep links (#pick, #game, #player, #team) never change. */
+  /* Preserve shared controls when redirecting legacy links. */
   const canonical = route => {
     if (!route.legacy) return null;
     if (route.view === 'research') {
@@ -626,6 +626,11 @@
       if (route.mode === 'trends' && route.ctx) {
         for (const [key, field] of Object.entries({period:'trendPeriod', stat:'trendStat', sample:'trendWindow', date:'trendDay', rate:'trendRate', kind:'trendKind'}))
           if (route.ctx[field]) params.set(key, route.ctx[field]);
+      }
+      if (route.mode === 'players' && route.ctx) {
+        for (const [key, field] of Object.entries({stat:'chartStat', sample:'chartWindow', date:'chartDay', position:'chartPos'}))
+          if (route.ctx[field]) params.set(key, route.ctx[field]);
+        if (!route.sub) params.set('view', 'matchup');
       }
       const tail = params.toString();
       return `#research/${route.mode}${tail ? '?' + tail : ''}`;
@@ -1564,14 +1569,15 @@
           <div class="btn-row" style="margin-top:10px">${vm.athleteId ? `<a class="btn small" href="${esc(playerChart)}">Player chart</a>` : ''}${vm.gameId ? `<a class="btn small" href="#game/${esc(vm.gameId)}">Game page</a>` : ''}${vm.src ? ticketButton(vm.id, vm.title) : ''}${vm.src ? watchButton(P.snapshot({ ...vm.src, direction: vm.src.direction || vm.src.side || null })) : ''}</div></div></div>
     </details>`;
   };
-  /* A link that reopens this exact view, in the old site's shareable format (the resolver maps it back). */
+  /* Share the selected view and filters. */
   const researchShare = (mode, route = {}) => {
     const base = { league: state.league, researchQuery: state.q };
     if (mode === 'trends' && C.researchHash) return C.researchHash(route.game ? `#trends/${encodeURIComponent(route.game)}` : '#trends', { ...base, trendPeriod: state.trends.period, trendStat: state.trends.stat, trendWindow: state.trends.window, trendDay: state.trends.day, trendRate: state.trends.rate, trendKind: state.trends.kind });
     if (mode === 'players' && C.researchHash) {
       const pg = state.players.game || 'next';
-      return C.researchHash(state.players.sub === 'defense' ? '#stats/defense' : state.players.sub === 'teams' ? '#stats/teams' : '#stats', { ...base, researchQuery: state.players.q, chartStat: state.players.chartStat, chartPos: state.players.chartPos, chartWindow: state.players.chartWindow,
+      const shared = C.researchHash(state.players.sub === 'defense' ? '#stats/defense' : state.players.sub === 'teams' ? '#stats/teams' : '#stats', { ...base, researchQuery: state.players.q, chartStat: state.players.chartStat, chartPos: state.players.chartPos, chartWindow: state.players.chartWindow,
         chartDay: pg.startsWith('day:') ? pg.slice(4) : pg === 'all' ? 'all' : 'next' });
+      return canonical({ ...resolve(shared), sub: state.players.sub, game: /^(NFL|CFB)-[A-Za-z0-9_-]+$/.test(pg) ? pg : null });
     }
     const path = route.edges ? '#edges' : `#research/${mode === 'news' ? 'news' : 'lines'}`;
     return path + lineQuery(state.league);
@@ -1601,7 +1607,7 @@
     const edgeTab = (league, label) => `<a href="#edges${esc(lineQuery(league))}"${state.league === league ? ' aria-current="page"' : ''}>${label}</a>`;
     const sportLanes = edges ? `<nav class="edge-sports" aria-label="Kook’n Edges sports">${edgeTab('ALL', 'All sports')}${['NFL','CFB','NBA','CBB'].map(l => edgeTab(l,l)).join('')}</nav>` : '';
     return `${head('Research', title, sub)}${sportLanes}
-      ${edges ? '' : `<nav class="research-quick" aria-label="Research tools">${tool('#edges', 'Edges', 'edges')}${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? tool(`#research/milestones?sport=${researchSport}`, 'Milestones', 'milestones') : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool('#research/players?view=defense&amp;sport=NFL', 'Defenses', 'defense')}</nav>`}
+      ${edges ? '' : `<nav class="research-quick" aria-label="Research tools">${tool('#edges', 'Edges', 'edges')}${tool(`#research/players?sport=${researchSport}`, basketball ? 'Prop research' : 'Props', 'props')}${basketball ? tool(`#research/milestones?sport=${researchSport}`, 'Milestones', 'milestones') : tool('#research/trends?period=1Q&amp;sport=NFL', '1Q', 'first')}${tool(`#research/players?view=search&amp;sport=${researchSport}`, 'Players', 'players')}${basketball ? tool(`#today?sport=${researchSport}`, 'Games', 'defense') : tool(`#research/players?view=defense&amp;sport=${researchSport}`, 'Defenses', 'defense')}</nav>`}
       <details class="plain-fold research-more"><summary>More research</summary><div class="btn-row"><a class="btn small" href="#edges">Kook’n Edges</a><a class="btn small" href="#research/trends?period=full">Full-game hit rates</a><a class="btn small" href="#research/news">Injuries & news</a><a class="btn small" href="#trends?period=full&amp;kind=alternate&amp;sport=ALL">Alternate lines</a></div></details>`;
   };
   let appliedHash = null;
@@ -1616,7 +1622,10 @@
       if (route.sort && SORTS[route.sort]) state.board.sort = route.sort;
       if (route.edges) state.q = route.q || '';
       if (route.q) { if (route.mode === 'players') { state.players.q = route.q; state.players.sub = 'search'; } else state.q = route.q; }
-      if (route.mode === 'players') state.players.sub = ['defense', 'teams', 'search', 'matchup'].includes(route.sub) ? route.sub : route.q ? 'search' : 'matchup';
+      if (route.mode === 'players') {
+        state.players.sub = ['defense', 'teams', 'search', 'matchup'].includes(route.sub) ? route.sub : route.q && !route.ctx ? 'search' : 'matchup';
+        if (/^(NFL|CFB)-[A-Za-z0-9_-]+$/.test(route.game || '')) state.players.game = route.game;
+      }
       if (route.pl === 'NFL' || route.pl === 'CFB') state.players.league = route.pl;
       if (route.rate && ['70', '80', '90', '100'].includes(route.rate)) state.trends.rate = route.rate;
       if (route.show === 'all' || route.show === 'value') state.board.show = route.show;
@@ -1862,8 +1871,7 @@
       <details class="plain-fold trend-method"><summary>How this is ranked</summary><p class="small muted">${esc(method)} Green cleared the line, red missed, gray tied or not recorded.</p></details>${list}`;
   };
 
-  /* Research · Players: the props.cash-style matchup charts (every player in a game, bars vs the line), search and
-     defense-vs-position. Same data as the old Charts page (player-charts/<L>.json). */
+  /* Player matchup charts, search and defense by position. */
   const CHART_STATS = [['recYds', 'Rec yds'], ['rec', 'Receptions'], ['targets', 'Targets'], ['rushYds', 'Rush yds'], ['car', 'Carries'],
     ['passYds', 'Pass yds'], ['cmp', 'Completions'], ['att', 'Pass att'], ['passTD', 'Pass TD'], ['rushTD', 'Rush TD'], ['recTD', 'Rec TD'], ['recLong', 'Long rec'], ['rushLong', 'Long rush'], ['kPts', 'Kick pts']];
   const chartHas = (pl, key) => Object.prototype.hasOwnProperty.call(pl.projection || {}, key) || Object.prototype.hasOwnProperty.call(pl.lines || {}, key) || (pl.underReview || []).includes(key)
@@ -1946,7 +1954,7 @@
           ${dvp ? `<p class="small ${esc(dvp.cls)}" style="margin-top:6px">${esc(dvp.text)}</p>` : ''}
           <p class="small" style="margin-top:6px">${esc(researchPrice(matched || {}))}</p>
           ${matched?.qbNews ? `<p class="caution">QB news: ${esc(matched.qbNews)}</p>` : ''}
-          <p style="margin-top:10px"><a class="btn small" href="#player/${esc(league)}/${esc(pl.id)}?stat=${esc(key)}">Full player chart →</a></p>
+          <p style="margin-top:10px"><a class="btn small" href="${esc(C.playerLineHref({ league, athleteId: pl.id, stat: key, line, direction: dir, book: cur?.book, gameId: g.id }))}">Full player chart →</a></p>
         </div></div></details>`;
       };
       if (!list.length) return '';
@@ -2282,7 +2290,7 @@
       if (c.chartPos) state.players.chartPos = c.chartPos;
       if (c.chartWindow) state.players.chartWindow = c.chartWindow;
       if (c.chartDay) state.players.game = c.chartDay === 'all' || c.chartDay === 'next' ? c.chartDay : `day:${c.chartDay}`;
-      if (c.researchQuery) { state.players.q = c.researchQuery; state.players.sub = 'search'; }
+      state.players.q = c.researchQuery || '';
     } else if (route.mode === 'trends') {
       if (c.trendPeriod) state.trends.period = c.trendPeriod; if (c.trendStat) state.trends.stat = c.trendStat; if (c.trendWindow) state.trends.window = c.trendWindow;
       if (c.trendRate) state.trends.rate = c.trendRate; if (c.trendKind) state.trends.kind = c.trendKind; if (c.trendDay) state.trends.day = c.trendDay;
@@ -2306,6 +2314,8 @@
     const savedY = (history.state || {}).scroll;
     rendering = true;
     let route = resolve(location.hash);
+    if (['player', 'team'].includes(route.view)) setLeague(route.league);
+    if (route.view === 'game' && /^(NFL|CFB|NBA|CBB)-/.test(route.id)) setLeague(route.id.split('-')[0]);
     if (route.legacy && route.league) setLeague(route.league);
     if (route.legacy && route.ctx) applyContext(route);
     const next = canonical(route);

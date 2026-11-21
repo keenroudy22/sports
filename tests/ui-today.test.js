@@ -96,6 +96,53 @@ const loadApp = (hash, held = {}, { hero = HERO, today = TODAY, stored = {}, ext
 const settle = async () => { for (let i = 0; i < 20; i++) await new Promise(r => setTimeout(r, 0)); };
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
+test('detail navigation updates the sport before drawing the shared navigation', async () => {
+  for (const [hash, league, view] of [['#game/NFL-1', 'NFL', 'game'], ['#game/NBA-1', 'NBA', 'game'],
+    ['#player/CBB/77', 'CBB', 'player'], ['#team/CFB/58', 'CFB', 'team']]) {
+    const app = loadApp(hash);
+    app.api.moreContext().state.league = league === 'NFL' ? 'CFB' : 'NFL';
+    app.sandbox.document.head.appendChild = link => link.onload();
+    const nav = element(), query = app.sandbox.document.querySelector;
+    app.sandbox.document.querySelector = selector => selector === '#top-tabs' ? nav : query(selector);
+    app.api.views[view] = async () => '<h1>Detail</h1>';
+    await app.api.render();
+    assert.equal(app.api.moreContext().state.league, league);
+    assert.ok(nav.innerHTML.includes(`href="#research/players?sport=${league}"`));
+  }
+});
+
+test('copied football prop filters survive canonicalization, reload and exact chart handoff', async () => {
+  const game = { id: 'CFB-1', day: '2026-10-10', kickoff: '2026-10-10T20:00:00Z',
+    away: { id: '1', abbreviation: 'AWY' }, home: { id: '2', abbreviation: 'HOM' } };
+  const player = { id: '77', gameId: game.id, side: 'away', name: 'Test Runner', pos: 'RB',
+    projection: { rushYds: 55 }, lines: { rushYds: { line: 62.5, direction: 'under', book: 'FanDuel', odds: -115, observedAt: '2026-10-10T13:00:00Z' } },
+    rows: Array.from({ length: 8 }, (_, i) => ({ date: `2026-09-${10+i}`, season: 2026, stats: { rushYds: 40+i } })) };
+  const extra = { 'data/app/player-charts/CFB.json': { games: [game, { ...game, id: 'CFB-2' }], players: [player, { ...player, id: '88', gameId: 'CFB-2', name: 'Other Runner' }] },
+    'data/app/teams/CFB.json': { teams: {} }, ...linesFor([]) };
+  const legacy = '#stats?stat=rushYds&sample=last5&date=next&position=RB&q=Test&sport=CFB&game=CFB-1';
+  const canonical = M.canonical(M.resolve(legacy));
+  assert.match(canonical, /view=matchup/);
+  for (const hash of [legacy, canonical]) {
+    const app = loadApp(hash, {}, { extra });
+    const page = await app.api.views.research(M.resolve(hash));
+    assert.match(page, /<h1>Player prop board<\/h1>/);
+    assert.match(page, /value="rushYds" selected/);
+    assert.match(page, /value="CFB-1" selected/);
+    assert.match(page, /data-set="cwin:last5"[^>]*aria-pressed="true"/);
+    assert.match(page, /Test Runner/);
+    assert.doesNotMatch(page, /Other Runner/);
+    assert.match(page, /href="#research\/players\?view=defense&amp;sport=CFB"/);
+    assert.match(page, /href="#player\/CFB\/77\?stat=rushYds&amp;line=62.5&amp;direction=under&amp;book=FanDuel&amp;game=CFB-1"/);
+    const copied = page.match(/href="([^"]+)" data-copy-link>Copy link/)[1].replaceAll('&amp;', '&');
+    const fresh = loadApp(copied, {}, { extra });
+    const reopened = await fresh.api.views.research(M.resolve(copied));
+    assert.match(reopened, /value="CFB-1" selected/);
+    assert.match(reopened, /value="rushYds" selected/);
+    assert.match(reopened, /Test Runner/);
+    assert.doesNotMatch(reopened, /Other Runner/);
+  }
+});
+
 test('the Today straight links to its visible matchup case, cited facts and risk', async () => {
   const pick = { ...total, id: 'CBB-sourced-1', league: 'CBB', posted: true, lane: 'best_bet',
     why: 'Extra possessions are the angle.', risk: 'Their guards can keep it close.',
