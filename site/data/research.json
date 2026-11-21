@@ -73034,5 +73034,78 @@
         "units": 0.909
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-21T22:02:24Z",
+    "summary": "Released 1: Climb step 1 at DraftKings -206 at DraftKings.",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "CFB-2026-W12-ladder-1121-c5s1-dk",
+        "title": "Climb step 1 at DraftKings",
+        "status": "active",
+        "favorite": false,
+        "parlayType": "ladder",
+        "riskUnits": 0.25,
+        "ladder": {
+          "run": 5,
+          "step": 1,
+          "stake": 50,
+          "payout": 74.27,
+          "banked": 0,
+          "bankThisWin": 0,
+          "bankedAfter": 0,
+          "nextStake": 74.27,
+          "totalAfter": 74.27,
+          "bankPercent": 0,
+          "ridePercent": 100,
+          "start": 50,
+          "goal": 1000,
+          "fullRollover": true
+        },
+        "legs": [
+          {
+            "id": "CFB-401858302-home-alt",
+            "gameId": "CFB-401858302",
+            "title": "Miami -14.5",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -14.5,
+            "odds": -206,
+            "book": "DraftKings",
+            "alternate": true,
+            "kickoff": "2026-11-22T00:00Z",
+            "marketWindow": "Full game"
+          }
+        ],
+        "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+        "gameIds": [
+          "CFB-401858302"
+        ],
+        "book": "DraftKings",
+        "odds": -206,
+        "quotedAt": "2026-11-21T22:01:25.906Z",
+        "priceEstimated": false,
+        "expiresAt": "2026-11-21T23:45:00Z",
+        "quoteType": "sportsbook",
+        "confidence": 1,
+        "edge": "Desk-researched alternate ticket. No validated win probability or positive-EV claim.",
+        "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://app.hdintelligence.com/?conf=ACC&source=ACC&sport=Football&type=report",
+          "https://forecast.weather.gov/MapClick.php?FcstType=text&TextType=1&lat=25.98&lg=english&lon=-80.2&unit=0",
+          "https://miamihurricanes.com/news/2026/11/14/no-7-miami-notches-crucial-acc-win-with-36-25-victory-over-duke"
+        ],
+        "selectionMethod": "sourced-climb-review-v1",
+        "why": "Miami put up 532 yards against Duke. Virginia Tech lists four offensive linemen out.",
+        "risks": [
+          "Duke stayed within 11. Miami is still without Malachi Toney, and Zechariah Poyser is a game-time decision."
+        ],
+        "risk": "Duke stayed within 11. Miami is still without Malachi Toney, and Zechariah Poyser is a game-time decision. Every leg must hit. This is a researched Climb, without a validated probability or positive-EV claim.",
+        "jurisdictionVerified": true,
+        "publishedAt": "2026-11-21T22:02:24Z"
+      }
+    ]
   }
 ]
