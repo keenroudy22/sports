@@ -3562,7 +3562,9 @@ def render_private_play_card(key, pick, game, games, ctx, now, target):
                                            featured=is_featured, art=art)
     else:
         svg = pick_card.modern_svg(pick, game, player_side=side, featured=is_featured, art=art)
-    pick_card.render(svg, target)
+    import social_style
+    challenge = social_style.challenge_amounts(pick)
+    pick_card.render(svg, target, **({'challenge': challenge} if challenge else {}))
 
 
 def recover_private_release_artifacts(row, ctx, games, now):
@@ -3573,6 +3575,7 @@ def recover_private_release_artifacts(row, ctx, games, now):
 
     key = row.get('id')
     pick = dict(row.get('pick') or {})
+    challenge = social_style.challenge_amounts(pick)
     game = games.get((pick.get('gameIds') or [None])[0])
     if not key or not game:
         raise ReleaseArtifactError('the selected game is unavailable for artifact recovery')
@@ -3580,7 +3583,7 @@ def recover_private_release_artifacts(row, ctx, games, now):
     try:
         caption = str(row.get('caption') or '').strip()
         unpublished = not row.get('discordSentAt') and not row.get('publicPath')
-        if not caption or (unpublished and social_style.active(now) and social_style.issues(caption)):
+        if not caption or (unpublished and social_style.active(now) and social_style.issues(caption, challenge=challenge)):
             first = dict(ctx.first)
             latest = dict(ctx.latest)
             first[key] = dict(pick)
@@ -3593,7 +3596,7 @@ def recover_private_release_artifacts(row, ctx, games, now):
         card = Path(row.get('card') or (release_queue.cards(CONF) / f'{key}.png'))
         valid_card = card.is_file() and card.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n'
         if unpublished and social_style.active(now):
-            valid_card = valid_card and social_style.current_png(card)
+            valid_card = valid_card and social_style.current_png(card, challenge=challenge)
         if not valid_card:
             card.parent.mkdir(parents=True, exist_ok=True)
             render_private_play_card(key, pick, game, games, ctx, now, card)
@@ -3740,6 +3743,8 @@ def remember_private_discord(row, text, log_book, now):
                                              'missing' if sent.get('id') else 'unverified')}}
     if social_style.active(now):
         entry.update(queuedText=text, socialStyleVersion=social_style.VERSION, socialAgeVersion=AGE_VERSION)
+    if challenge := social_style.challenge_amounts(row.get('pick') or {}):
+        entry['climbAmounts'] = list(challenge)
     log_book.setdefault('posts', []).append(entry)
     x_post.save_log(log_book)
     return entry
@@ -3972,7 +3977,8 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
             validate({'private-release.json': report}, stores.reports, ctx.games)
         import social_style
         if social_style.active(now):
-            style_problems = social_style.release_issues(text, Path(row['card']))
+            style_problems = social_style.release_issues(text, Path(row['card']),
+                                                        challenge=social_style.challenge_amounts(pick))
             if style_problems:
                 raise ReleaseArtifactError('; '.join(style_problems))
         run_tests()
@@ -3993,7 +3999,8 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                     continue
             receipt = discord_post.send_message(
                 discord_post.webhook(), text, f'private:{key}',
-                fetch=lambda _url, p=row['card']: _private_card(p), return_receipt=True)
+                fetch=lambda _url, p=row['card']: _private_card(p), return_receipt=True,
+                **({'challenge': challenge} if (challenge := social_style.challenge_amounts(pick)) else {}))
             discord_at = now + timedelta(seconds=clock() - started)
             row = release_queue.update(CONF, key, discordSentAt=stamp(discord_at), discordReceipt=receipt or {},
                                        **({'discordText': text} if nba_fun else {}))

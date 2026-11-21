@@ -1073,7 +1073,8 @@ def ladder_result(pick):
     import social_units
     info = pick.get('ladder') or {}
     full = info.get('fullRollover')
-    money = social_units.climb if full or social_units.active(pick) else pick_card.dollars
+    from ticket_kit import money as dollar_amount
+    money = dollar_amount if full else social_units.climb if social_units.active(pick) else pick_card.dollars
     cast = float if full else int
     name = 'Climb' if full else '80/20 Climb'
     result = str(pick.get('result') or 'win').lower()
@@ -1083,11 +1084,12 @@ def ladder_result(pick):
     next_stake = cast(info.get('nextStake') if info.get('nextStake') is not None else returned - bank_this)
     total = cast(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
     stake, won = money(info.get('stake')), money(returned)
+    heading = f"{money(info['start'])} to {money(info['goal'])} Climb\n" if full else ''
     if result == 'win' and total >= (info.get('goal') or 1000):
-        return (f"🪜 {name} complete: {money(info.get('start', 50))} → {money(total)} in {info.get('step', 1)} steps",
+        return (f"{heading}🪜 {name} complete: {money(info.get('start', 50))} → {money(total)} in {info.get('step', 1)} steps",
                 '' if full else f"{money(banked_after)} banked along the way.")
     if result == 'win':
-        return (f"Step {info.get('step', 1)} cashed ✅ {won} back.",
+        return (f"{heading}Step {info.get('step', 1)} cashed ✅ {won} back.",
                 (f"Full return rides on step {info.get('step', 1) + 1}." if full else
                  f"{money(bank_this)} to the bank, {money(next_stake)} rides on step {info.get('step', 1) + 1}."))
     if result == 'loss':
@@ -1105,11 +1107,11 @@ def ladder_result(pick):
             miss_line += '.'
         else:
             miss_line = 'One leg missed.'
-        head = f"The climb stopped at step {info.get('step', 1)}. {miss_line} Back to {money(info.get('start', 50))}."
+        head = f"{heading}The climb stopped at step {info.get('step', 1)}. {miss_line} Back to {money(info.get('start', 50))}."
         body = f"{money(info['banked'])} stays in the bank." if info.get('banked', 0) else ''
         return head, body
     bank = f" {money(info.get('banked'))} stays in the bank." if info.get('banked', 0) else ''
-    return (f"➖ {name} step {info.get('step', 1)} {result}", f"{stake} rides the same step.{bank}")
+    return (f"{heading}➖ {name} step {info.get('step', 1)} {result}", f"{stake} rides the same step.{bank}")
 
 
 def ladder_cashed(pick):

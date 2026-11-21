@@ -414,12 +414,13 @@ def public_book(value):
 
 
 def ladder_text(pick):
-    """The three money lines for the Kook'n 80/20 Climb: stake, return, bank and next ride."""
+    """Format each Climb using its original tracking rules."""
     info = pick.get('ladder') or {}
     if info.get('fullRollover'):
-        return (f"THE CLIMB · STEP {info['step']}\n"
-                f"{social_units.climb(info['stake'])} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})",
-                '', 'Full return rides.')
+        from ticket_kit import money
+        return (f"{money(info['start'])} to {money(info['goal'])} Climb · Step {info['step']}",
+                f"{money(info['stake'])} → {money(info['payout'])} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})",
+                'Full return rides.')
     if social_units.active(pick):
         head = (f"80/20 CLIMB · STEP {info.get('step', 1)}\n"
                 f"{social_units.climb(info.get('stake'))} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})")
@@ -717,6 +718,8 @@ def now_line(pick, quote):
 
 def guard(text, pick, reason=None, now_quote=None, *, now=None):
     # Prospective release clock is validation context, never a public timestamp.
+    import social_style
+    challenge = social_style.challenge_amounts(pick)
     units_active = social_units.active(pick) or (now is not None and now >= social_units.EFFECTIVE)
     problems = x_style(text.replace(SITE, ''))
     # A formatter may omit an unsafe suffix from the final shape.  Refuse the
@@ -730,7 +733,9 @@ def guard(text, pick, reason=None, now_quote=None, *, now=None):
     if now_quote:
         extra.append({'now': list(now_quote)})  # the number available now comes from the latest capture
     extra.append({'stake': pick_card.stake(pick)})
-    if units_active and pick.get('ladder'):
+    if challenge:
+        extra.append({'challenge': challenge})
+    elif units_active and pick.get('ladder'):
         extra.append({'climbUnits': [social_units.climb(v) for k, v in pick['ladder'].items() if k in ('stake', 'payout', 'banked', 'bankThisWin', 'nextStake', 'start', 'goal') and isinstance(v, (int, float))]})
     if pick.get('ladder'):          # "$1,062" reads as 1 and 62: the rung's dollars as the post writes them
         extra.append({k: pick_card.dollars(v) for k, v in pick['ladder'].items() if isinstance(v, int)})
@@ -750,9 +755,8 @@ def guard(text, pick, reason=None, now_quote=None, *, now=None):
     final_length = tweet_length(x_ticket_copy(text, 'play', pick.get('id', ''), pick))
     if final_length > LIMIT:
         problems.append(f'{final_length} characters including ticket tag and age notice')
-    if units_active:
-        import social_style
-        problems += social_style.privacy_issues(text)
+    if units_active or challenge:
+        problems += social_style.privacy_issues(text, challenge=challenge)
     lane = pick.get('lane')
     if lane in ('best_bet', 'chef_pick', 'hot_plate', 'gut_call', 'upset') and not reason:
         problems.append('play has no supporting reason')

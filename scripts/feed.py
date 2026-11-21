@@ -299,6 +299,8 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
             continue
         try:
             source = item.get('ladderResult') or item.get('resultPick') or item.get('receipt') or item.get('pick') or {}
+            import social_style
+            challenge = social_style.challenge_amounts(source)
             # A card cached before the cutover is not proof that an unposted play has new art.
             # Rebuild eligible cards; confirmed attachments above are immutable.
             # An unpublished card takes the theme at this build, not at the play's older
@@ -322,7 +324,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                     pick = item['ladderResult']
                     svg = (ticket_card.climb_result_svg(pick, games or {}, player_team)
                            if ticket else pick_card.ladder_result_svg(pick))
-                    pick_card.render(svg, path)
+                    pick_card.render(svg, path, **({'challenge': challenge} if challenge else {}))
                 elif 'straightCard' in item:
                     pick_card.render(ticket_card.daily_straight_svg(item['straightCard'], games or {}), path)
                 elif 'receipt' in item:
@@ -353,7 +355,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                     else:
                         svg = pick_card.modern_svg(pick, item['game'], record=item.get('record'),
                                                    player_side=item.get('side'), featured=item.get('featured', False), art=art)
-                    pick_card.render(svg, path)
+                    pick_card.render(svg, path, **({'challenge': challenge} if challenge else {}))
             out[item['guid']] = path
         except Exception as error:
             log(f"card for {item['guid']} not rendered: {error}")

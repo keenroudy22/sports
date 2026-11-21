@@ -1120,7 +1120,7 @@ def ladder_body(info, legs, price, book, ink, soft, accent, title_size):
     return rows
 
 
-def render(svg_text, out, chrome=None, timeout=45, size=None):
+def render(svg_text, out, chrome=None, timeout=45, size=None, *, challenge=()):
     """Rasterize the SVG to a PNG with the machine's headless browser. Raises when there is none.
 
     Chrome writes the screenshot and then, on this machine, does not exit on its own, so the file is
@@ -1170,7 +1170,7 @@ def render(svg_text, out, chrome=None, timeout=45, size=None):
     if 'data-kookn-theme="ticket"' in svg_text:
         mark_png_theme(out)
     import social_style
-    social_style.mark(out, svg_text)
+    social_style.mark(out, svg_text, challenge=challenge)
     return out
 
 

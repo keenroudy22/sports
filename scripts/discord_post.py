@@ -115,7 +115,7 @@ def multipart(payload, image):
 
 
 def send_message(url, text, image_url=None, send=http_send, username="Kook'n Sports", fetch=download_image,
-                 return_receipt=False):
+                 return_receipt=False, *, challenge=()):
     """Send one webhook message without ever putting the secret URL in an error or log.
 
     Cards are uploaded to Discord so an old post cannot break when the generated site card rolls out of the
@@ -125,8 +125,8 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
     # The owner-approved live pilot has one exact cheering exception.
     final_text = with_age_notice(without_playbook(text))
     import social_style
-    if social_style.privacy_issues(final_text):
-        raise DiscordError('Private dollar amount or bet identifier in social caption')
+    if privacy := social_style.privacy_issues(final_text, challenge=challenge):
+        raise DiscordError('; '.join(privacy))
     if decimal_projection(final_text):
         raise DiscordError('Decimal forecast in social caption; revise without changing the wager')
     if len(final_text) > 2000:
@@ -183,6 +183,7 @@ def queue_results(log_book, first, latest, games, now):
     """
     import receipts
     import result_display
+    import social_style
     queued = 0
     for entry in log_book.get('posts', []):
         key = entry.get('id')
@@ -208,6 +209,9 @@ def queue_results(log_book, first, latest, games, now):
                  else receipts.label(pick, games))
         text = f'{mark} FINAL · {word}: {title}' + (f'\n{detail}' if detail else '')
         mirror['result'] = {'state': 'pending', 'text': text, 'settledAt': pick['settledAt']}
+        if challenge := social_style.challenge_amounts(pick):
+            mirror['result'].update(text='\n'.join(part for part in receipts.ladder_result(pick) if part),
+                                    climbAmounts=list(challenge))
         if receipts.neutral_straight(pick):
             mirror['result'].update(cardKey=receipts.result_card_key(pick), text=text + '\nNet 0.00u')
         if pick.get('selectionMethod') == 'sourced-prop-ticket-v1' and receipts.has_fun_final(pick):
@@ -415,7 +419,9 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 link = str(entry.get('link') or '').strip()
                 suffix = 'RESEARCH · NOT A BEST BET'
                 text = f'{text.rstrip()}\n\n{suffix}' + (f'\n{link}' if link else '')
-            receipt = send_message(target, text, mirror.get('image'), send=send, fetch=fetch, return_receipt=True)
+            challenge = entry.get('climbAmounts') or ()
+            receipt = send_message(target, text, mirror.get('image'), send=send, fetch=fetch, return_receipt=True,
+                                   **({'challenge': challenge} if challenge else {}))
         except DiscordError as error:
             message = str(error)
             changed = mirror.get('error') != message
@@ -501,7 +507,9 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
                 data = fetch(image)
                 receipt = send_message(url, safe, image, send=send, fetch=lambda _: data, return_receipt=True)
             else:
-                receipt = send_message(url, safe, send=send, return_receipt=True)
+                challenge = result.get('climbAmounts') or ()
+                receipt = send_message(url, safe, send=send, return_receipt=True,
+                                       **({'challenge': challenge} if challenge else {}))
         except DiscordError as error:
             message = str(error)
             changed = result.get('error') != message

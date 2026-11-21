@@ -332,13 +332,13 @@ def ticket_art_live(url, timeout=15):
         return False
 
 
-def plain_art_live(url, timeout=15):
+def plain_art_live(url, timeout=15, *, challenge=()):
     """Read the native renderer's policy attestation, never guess from file date."""
     try:
         request = urllib.request.Request(url, headers={'User-Agent': 'KeenRoudySports/1.0', 'Range': 'bytes=0-255'})
         with urllib.request.urlopen(request, timeout=timeout) as response:
             prefix = response.read(256)
-        return prefix.startswith(b'\x89PNG\r\n\x1a\n') and social_style.MARKER in prefix
+        return social_style.marked_png(prefix, challenge=challenge)
     except (urllib.error.URLError, OSError, ValueError):
         return False
 
@@ -866,6 +866,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if kind != 'play' and not combined:
             text = without_playbook(text)
         item = (items or {}).get(guid, {})
+        challenge = social_style.challenge_amounts(item if kind == 'play' else (items or {}).get(quote_source_id(guid), {}))
         if kind == 'play' and (item.get('selectionMethod') == 'sourced-prop-ticket-v1'
                                or '-prop-ticket-' in guid):
             import prop_ticket_release
@@ -899,7 +900,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         problems = x_post.x_style(text)
         if social_style.active(now):
-            problems += social_style.issues(text)
+            problems += social_style.issues(text, challenge=challenge)
         if problems:
             if kind == 'play' and missed_target(guid, due, now, items):
                 stats['officialNotScheduled'] += 1
@@ -925,7 +926,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # Resolve every fallible field before Buffer accepts the post. Otherwise a
         # local labeling error after createPost could leave an unlogged post that a
         # later run schedules again. Text-only posts do not enter card comparisons.
-        if image and social_style.active(now) and not owner_slip_image(guid, kind, card_key, items, now=now) and not plain_art_live(image):
+        if image and social_style.active(now) and not owner_slip_image(guid, kind, card_key, items, now=now) \
+                and not plain_art_live(image, **({'challenge': challenge} if challenge else {})):
             log(f'buffer: {guid} waits: image has no verified current social-style marker')
             if kind == 'play':
                 stats['officialNotScheduled'] += 1
@@ -988,6 +990,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if social_style.active(now):
             entry.update(queuedText=text, socialStyleVersion=social_style.VERSION,
                          socialVoiceVersion=social_voice.VERSION, socialAgeVersion=AGE_VERSION)
+        if challenge:
+            entry['climbAmounts'] = list(challenge)
         if corrections and text == prior.get('queuedText'):
             entry['captionCorrections'] = list(corrections)
         # Official plays and their settled win updates stay together in Plays
@@ -1253,7 +1257,8 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
             if post.get('status') != 'scheduled':
                 raise BufferError('queued style check cannot confirm a private scheduled provider state')
             text = canonical_caption(post.get('text') or entry.get('queuedText') or (entry.get('discord') or {}).get('text'))
-            problems = social_style.issues(text) if text else ['caption unavailable for verification']
+            challenge = entry.get('climbAmounts') or ()
+            problems = social_style.issues(text, challenge=challenge) if text else ['caption unavailable for verification']
             if now >= AGE_EFFECTIVE and not age_notice_current(text):
                 problems.append('caption needs the owner-approved 21+ only line')
             problems += queued_relevance_issues(entry, now)
@@ -1271,8 +1276,8 @@ def audit_pending_style(log_book, now, key=None, send=http_send, log=print, art_
                     and (entry.get('discord') or {}).get('beforeX')
                     and (entry.get('discord') or {}).get('state') == 'sent'
                     and re.fullmatch(r'[A-Za-z0-9-]{1,150}', archive_id)
-                    and social_style.current_png(ROOT / 'data' / 'release-cards' / f'{archive_id}.png'))
-                if not released_archive and (not image or not art_check(image)):
+                    and social_style.current_png(ROOT / 'data' / 'release-cards' / f'{archive_id}.png', challenge=challenge))
+                if not released_archive and (not image or not art_check(image, **({'challenge': challenge} if challenge else {}))):
                     problems.append('house graphic lacks verified current social-style marker')
             if problems:
                 delete_post(entry['bufferPostId'], key=key, send=send)

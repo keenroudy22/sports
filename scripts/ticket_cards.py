@@ -330,8 +330,8 @@ def ticket_card(p):
 # ---------------------------------------------------------------------------- 80/20 Climb
 def climb_card(p):
     import social_units
-    money = social_units.climb if p.get('social_units') else kit.money
     full = p.get('full_rollover')
+    money = social_units.climb if p.get('social_units') and not full else kit.money
     result = p.get('result')
     card = kit.Card()
     panel_bottom = 568
@@ -388,7 +388,7 @@ def climb_route(card, p, perf):
     """Printed route: cashed steps get green checks, the current step is outlined, the future is a muted line
     to the $1,000 flag. No future step count and no guessed amounts."""
     import social_units
-    money = social_units.climb if p.get('social_units') else kit.money
+    money = social_units.climb if p.get('social_units') and not p.get('full_rollover') else kit.money
     cy = perf + 92
     flag_x = X2 - 70
     # Show the latest five steps on long climbs so the milestone stays clear.
