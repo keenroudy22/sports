@@ -148,6 +148,32 @@ class BudgetTests(unittest.TestCase):
         games = [dict(SLATE[1], kickoff='2026-11-01T22:00:00Z')]
         status = {'leagues': {'NFL': {'month': '2026-11', 'monthCredits': 70}}}
         self.assertIn('monthly', odds_api.due('NFL', games, status, november))
+
+    def test_monthly_game_line_budget_leaves_two_reads_for_each_later_featured_day(self):
+        games = [game('cfb', 'CFB', '2026-12-05T20:30:00Z', 'Home', 'Away'),
+                 game('nfl', 'NFL', '2026-12-06T18:00:00Z', 'Home', 'Away')]
+        friday = datetime(2026, 12, 4, 19, tzinfo=timezone.utc)
+        with self.subTest('Friday can use the unreserved credits'):
+            status = {'leagues': {'CFB': {'month': '2026-12', 'monthCredits': 52}}}
+            self.assertIsNone(odds_api.due('CFB', games, status, friday))
+        for league, day in [('CFB', 5), ('NFL', 6)]:
+            with self.subTest(league=league):
+                month = {'month': '2026-12', 'monthCredits': 54}
+                status = {'leagues': {league: month}}
+                self.assertIn('keeping 16', odds_api.due(league, games, status, friday))
+                featured = friday.replace(day=day, hour=15)
+                self.assertIsNone(odds_api.due(league, games, status, featured))
+                month['monthCredits'] = 58
+                self.assertIn('keeping 12', odds_api.due(league, games, status, featured))
+
+    def test_unused_featured_reserve_does_not_cross_the_provider_month(self):
+        now = datetime(2026, 12, 31, 20, tzinfo=timezone.utc)
+        games = [game('cfb', 'CFB', '2027-01-02T17:00:00Z', 'Home', 'Away')]
+        status = {'leagues': {'CFB': {'month': '2026-12', 'monthCredits': 68}}}
+        self.assertIsNone(odds_api.due('CFB', games, status, now))
+        status['leagues']['CFB']['monthCredits'] = 70
+        self.assertIn('monthly', odds_api.due('CFB', games, status, now))
+
     def test_last_daily_capture_waits_for_evening_without_raising_budget(self):
         games=[game('CFB-late','CFB','2026-09-20T02:00:00Z','Home','Away')]
         status={'leagues':{'CFB':{'day':'2026-09-19','count':2}}}

@@ -53,6 +53,9 @@ RESERVE = 24                              # credits kept back for the month's la
 DAILY_CREDITS = 8                         # weekday ceiling across football
 WEEKEND_CREDITS = 6                       # SharpAPI supplies broad weekend prop coverage
 NEXT_DAY_COLLEGE_MIN_GAMES = 8            # protect Friday's last call for a real Saturday board
+MONTHLY_LEAGUE_CREDITS = 70
+FEATURED_DAY_CREDITS = 2 * COST          # one morning capture and one later capture
+FEATURED_WEEKDAY = {'CFB': 5, 'NFL': 6}
 
 
 def capped_month_projection(status, now):
@@ -220,12 +223,24 @@ def due(league, games, status, now):
     if usage.get('remaining') is not None and usage['remaining'] - COST < RESERVE:
         return f"only {usage['remaining']} credits left; keeping the reserve"
     mine = status.get('leagues', {}).get(league, {})
-    if now.strftime('%Y-%m') >= '2026-11' and mine.get('month') == now.strftime('%Y-%m') \
-            and int(mine.get('monthCredits') or 0) + COST > 70:
-        return '70 monthly game-line credits already used for this league'
+    month = now.astimezone(timezone.utc).strftime('%Y-%m')
+    today = local.date()
+    monthly_used = int(mine.get('monthCredits') or 0) if mine.get('month') == month else 0
+    monthly_left = MONTHLY_LEAGUE_CREDITS - monthly_used - COST
+    if month >= '2026-11' and monthly_left < 0:
+        return f'{MONTHLY_LEAGUE_CREDITS} monthly game-line credits already used for this league'
+    if today.isoformat() >= '2026-11-21':
+        # Weekday and early-market pulls may spend only the unreserved part of
+        # the same monthly allowance. Earlier weekends also protect later ones.
+        featured = today + timedelta(days=(FEATURED_WEEKDAY[league] - today.weekday()) % 7 or 7)
+        reserved = 0
+        while featured.strftime('%Y-%m') == month:
+            reserved += FEATURED_DAY_CREDITS
+            featured += timedelta(days=7)
+        if monthly_left < reserved:
+            return f'keeping {reserved} monthly game-line credits for later {league} weekend slates'
     if mine.get('lastAt') and now - features.when(mine['lastAt']) < MIN_GAP:
         return f"captured {mine['lastAt']}, inside the gap"
-    today = eastern_date(now)
     spent_today = sum(int(row.get('count') or 0) * COST for row in (status.get('leagues') or {}).values()
                       if row.get('day') == today.isoformat())
     credit_cap = WEEKEND_CREDITS if today.weekday() in (5, 6) else DAILY_CREDITS
