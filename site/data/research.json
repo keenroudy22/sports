@@ -72778,5 +72778,261 @@
         "publishedAt": "2026-11-21T19:35:57Z"
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-21T21:25:13Z",
+    "targetWeek": 12,
+    "summary": "Research update for Nov 21: Settled 1: Houston at West Virginia under 70.5 win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 70.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401856868"
+        ],
+        "book": "FanDuel",
+        "odds": -110,
+        "projection": 60.2,
+        "edge": "Price-checked chance 58.6% against the exact two-sided price; 52.4% needed at -110: +6.2 percentage points.",
+        "cutoff": "UNDER 70.5 at -110 or better; off the card at 69 or lower, or at -111 or worse at 70.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-15T17:19:52Z",
+        "quotedAt": "2026-11-21T04:24:07Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 11:24 PM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-21T16:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.739,
+          "chance": 0.586,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.524,
+          "edgePoints": 6.2,
+          "evPerUnit": 0.119,
+          "snapshotAt": "2026-11-15T17:19:52Z",
+          "probabilitySpec": "23115a89126d01346dd44969ea202ae3598f83a6722d087fc2bb035ef469bc01",
+          "evaluatedAt": "2026-11-21T13:36:10Z",
+          "fairChance": 0.5,
+          "anchoredChance": 0.586,
+          "gap": 8.6,
+          "calibrationFamily": "CFB/total",
+          "calibrationMethod": "neutral-centered-fitted"
+        },
+        "matchup": "Houston Cougars at West Virginia Mountaineers",
+        "title": "Houston at West Virginia under 70.5",
+        "id": "CFB-2026-W12-hou-wvu-under-70-5-fd",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856868",
+          "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+          "https://www.on3.com/sites/wv-sports/news/west-virginia-houston-how-to-watch-2026/",
+          "https://wvusports.com/news/2026/11/18/football-wvu-concludes-home-slate-with-meeting-against-21st-ranked-houston-on-saturday"
+        ],
+        "why": "Model lean, our number only. We have the total at 60.2; the book is at 70.5. That makes the under 58.6%, and -110 needs 52.4%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Houston starting quarterback Conner Weigman was listed as questionable on Friday's availability report. Checked before publishing: Keisean Henderson would be in line to play quarterback for Houston if Conner Weigman cannot play or is limited. The market: The total opened 71.5 and is 70.5 at DraftKings, 1 toward the under. 6 books span 7.5 to 9.5 on the spread; the middle is 8.5. 6 books span 69.5 to 70.5 on the total; the middle is 70. Our spread is 1.1 points off, bigger than 18% of our past gaps. Gaps this size went 1478-1473 against the close in 3584 games. Our total is 10.3 points off, bigger than 99% of our past gaps. Gaps this size went 29-21 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: West Virginia's preview listed Houston at 35.1 points per game and West Virginia at 34.9 points per game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Houston starting quarterback Conner Weigman was listed as questionable on Friday's availability report.",
+            "West Virginia listed wide receiver Jaden Bray and tight end Cam Ball as out for the Houston game.",
+            "West Virginia was playing without senior right guard Bubba Grayson, who was injured in the Texas Tech loss."
+          ],
+          "cautions": [
+            "West Virginia starting quarterback Michael Hawkins Jr. was removed from Friday's availability report after being listed as probable Thursday.",
+            "West Virginia's preview listed Houston at 35.1 points per game and West Virginia at 34.9 points per game."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "West Virginia listed wide receiver Jaden Bray and tight end Cam Ball as out for the Houston game.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "Book says 70.5. I say 60.2.",
+              "numbers": {
+                "projection": 60.2,
+                "line": 70.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-15T17:19:52Z"
+            },
+            {
+              "text": "Houston starting quarterback Conner Weigman was listed as questionable on Friday's availability report.",
+              "numbers": {},
+              "source": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "West Virginia starting quarterback Michael Hawkins Jr. was removed from Friday's availability report after being listed as probable Thursday.",
+              "numbers": {},
+              "source": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "West Virginia's preview listed Houston at 35.1 points per game and West Virginia at 34.9 points per game.",
+              "numbers": {},
+              "source": "https://wvusports.com/news/2026/11/18/football-wvu-concludes-home-slate-with-meeting-against-21st-ranked-houston-on-saturday",
+              "time": "2026-11-21T13:36:10Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Houston starting quarterback Conner Weigman was listed as questionable on Friday's availability report.",
+              "numbers": {},
+              "source": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "West Virginia starting quarterback Michael Hawkins Jr. was removed from Friday's availability report after being listed as probable Thursday.",
+              "numbers": {},
+              "source": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "West Virginia listed wide receiver Jaden Bray and tight end Cam Ball as out for the Houston game.",
+              "numbers": {},
+              "source": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "West Virginia was playing without senior right guard Bubba Grayson, who was injured in the Texas Tech loss.",
+              "numbers": {},
+              "source": "https://wvusports.com/news/2026/11/18/football-wvu-concludes-home-slate-with-meeting-against-21st-ranked-houston-on-saturday",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "Houston starting quarterback Conner Weigman was listed as questionable on Friday's availability report.",
+              "numbers": {},
+              "source": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "West Virginia starting quarterback Michael Hawkins Jr. was removed from Friday's availability report after being listed as probable Thursday.",
+              "numbers": {},
+              "source": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "West Virginia listed wide receiver Jaden Bray and tight end Cam Ball as out for the Houston game.",
+              "numbers": {},
+              "source": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "text": "West Virginia was playing without senior right guard Bubba Grayson, who was injured in the Texas Tech loss.",
+              "numbers": {},
+              "source": "https://wvusports.com/news/2026/11/18/football-wvu-concludes-home-slate-with-meeting-against-21st-ranked-houston-on-saturday",
+              "time": "2026-11-21T13:36:10Z"
+            }
+          ],
+          "weather": {
+            "tempF": 66,
+            "windMph": 3,
+            "windDirection": "SE",
+            "precipProb": 0,
+            "periodStart": "2026-11-21T13:00:00-05:00",
+            "issuedAt": "2026-11-21T04:01:19+00:00",
+            "source": "https://api.weather.gov/gridpoints/PBZ/83,30/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 70.5,
+                  "price": -115,
+                  "time": "2026-11-16T11:45:06Z"
+                },
+                "now": {
+                  "line": 70.5,
+                  "price": -112,
+                  "time": "2026-11-18T11:45:05Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 70.5,
+                  "price": -110,
+                  "time": "2026-11-16T11:45:06Z"
+                },
+                "now": {
+                  "line": 70.5,
+                  "price": -110,
+                  "time": "2026-11-18T11:45:05Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 70.5,
+              "price": -110,
+              "time": "2026-11-21T04:24:07Z"
+            }
+          },
+          "ours": {
+            "projection": 60.2,
+            "line": 70.5,
+            "market": "total",
+            "text": "West Virginia listed wide receiver Jaden Bray and tight end Cam Ball as out for the Houston game.",
+            "snapshotAt": "2026-11-15T17:19:52Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.on3.com/sites/wv-sports/news/west-virginia-vs-houston-football-availability-report-11-20/",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "label": "injury",
+              "url": "https://wvusports.com/news/2026/11/18/football-wvu-concludes-home-slate-with-meeting-against-21st-ranked-houston-on-saturday",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/PBZ/83,30/forecast/hourly",
+              "time": "2026-11-21T04:01:19+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856868",
+              "time": "2026-11-21T13:36:10Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.on3.com/sites/wv-sports/news/west-virginia-houston-how-to-watch-2026/",
+              "time": "2026-11-21T13:36:10Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-21T13:50:55Z",
+        "result": "win",
+        "actual": "Houston 34, West Virginia 31",
+        "settledAt": "2026-11-21T21:25:13Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856868",
+        "actualValue": 65,
+        "units": 0.909
+      }
+    ]
   }
 ]
