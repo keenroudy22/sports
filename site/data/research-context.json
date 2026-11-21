@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-21T17:42:28Z",
+  "updatedAt": "2026-11-21T18:24:17Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1387,6 +1387,24 @@
           "name": "Cincinnati Bengals",
           "players": [
             {
+              "id": "3051746",
+              "name": "Oren Burks",
+              "position": "LB",
+              "status": "Injured Reserve",
+              "injury": "Groin",
+              "reportedAt": "2026-11-21T18:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3051746/oren-burks"
+            },
+            {
+              "id": "3125082",
+              "name": "Dalton Risner",
+              "position": "G",
+              "status": "Out",
+              "injury": "Knee",
+              "reportedAt": "2026-11-21T17:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3125082/dalton-risner"
+            },
+            {
               "id": "4401811",
               "name": "Kyle Dugger",
               "position": "S",
@@ -1414,15 +1432,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4429000/myles-hinton"
             },
             {
-              "id": "3125082",
-              "name": "Dalton Risner",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-11-20T02:16Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3125082/dalton-risner"
-            },
-            {
               "id": "4570546",
               "name": "Swayze Bozeman",
               "position": "LB",
@@ -1430,15 +1439,6 @@
               "injury": "Forearm",
               "reportedAt": "2026-11-20T01:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4570546/swayze-bozeman"
-            },
-            {
-              "id": "3051746",
-              "name": "Oren Burks",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Groin",
-              "reportedAt": "2026-11-20T01:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3051746/oren-burks"
             },
             {
               "id": "4426422",
@@ -7142,8 +7142,17 @@
               "position": "RB",
               "status": "Questionable",
               "injury": "Heel",
-              "reportedAt": "2026-11-21T16:32Z",
+              "reportedAt": "2026-11-21T17:53Z",
               "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
+            },
+            {
+              "id": "4575131",
+              "name": "Jacory Croskey-Merritt",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Groin",
+              "reportedAt": "2026-11-21T17:50Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt"
             },
             {
               "id": "3051890",
@@ -7162,15 +7171,6 @@
               "injury": "Foot",
               "reportedAt": "2026-11-20T21:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4567156/treylon-burks"
-            },
-            {
-              "id": "4575131",
-              "name": "Jacory Croskey-Merritt",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Groin",
-              "reportedAt": "2026-11-20T19:55Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt"
             },
             {
               "id": "2576736",
@@ -7365,22 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "12",
-          "name": "Trey Smith",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-11-20T22:51:28Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4242459/trey-smith"
-        },
-        {
-          "teamId": "12",
-          "name": "Jaylon Moore",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-11-20T22:51:28Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore"
-        },
         {
           "teamId": "12",
           "name": "Kenneth Walker III",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-11-21T17:42:28Z",
           "source": "https://www.espn.com/nfl/player/_/id/4429164/nick-herbig"
+        },
+        {
+          "teamId": "4",
+          "name": "Oren Burks",
+          "from": "Questionable",
+          "to": "Injured Reserve",
+          "observedAt": "2026-11-21T18:24:17Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3051746/oren-burks"
+        },
+        {
+          "teamId": "4",
+          "name": "Dalton Risner",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-11-21T18:24:17Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3125082/dalton-risner"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-21T17:42:28Z",
-      "lastAttemptAt": "2026-11-21T17:42:28Z",
+      "checkedAt": "2026-11-21T18:24:17Z",
+      "lastAttemptAt": "2026-11-21T18:24:17Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-21T17:42:28Z",
-      "lastAttemptAt": "2026-11-21T17:42:28Z",
+      "checkedAt": "2026-11-21T18:24:17Z",
+      "lastAttemptAt": "2026-11-21T18:24:17Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
