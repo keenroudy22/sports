@@ -8840,3 +8840,21 @@ plays. Pages run [44960660607](https://github.com/keenroudy22/sports/actions/run
 succeeded. At 375px, live Results showed one daily tracker at 1–0 and +0.87u,
 retained the historical Flournoy result link, and had no console error or overflow.
 Evidence: `work/nov21-daily-chef-results/live-check.json` and `live-phone.jpg`.
+
+### November 21 NFL contract bonuses on matchup pages
+
+The Jaguars–Giants matchup shows Isaiah Likely’s three reported incremental
+$250,000 incentives, with totals and thresholds from his Week 11 pregame snapshot.
+The player profile, Spotrac report and NFL Week 11 stats are linked. Curated
+snapshots in `data/nfl-contract-bonuses.json` travel only with their corresponding
+NFL game payload and retain the pregame label after kickoff. Future reports can
+be added through the same file after checking the original terms and season totals.
+
+Source `955e497b9` shipped in release `10040fead` and [Pages run
+44962876785](https://github.com/keenroudy22/sports/actions/runs/44962876785).
+The working and clean suites ran 2,497 Python tests (two skipped) and 388 Node
+tests. Release checks and the 18:25 offline rehearsal passed, and the record
+reconciled 211 plays. Browser preview at 375px and 1440px showed the correct
+thresholds and opened Likely’s profile. Live 375px verified all three bonuses,
+$750,000 combined, the original two sources, and zero overflow or console errors.
+Evidence: `work/nov21-contract-bonuses/live-check.json` and `live-phone.jpg`.
