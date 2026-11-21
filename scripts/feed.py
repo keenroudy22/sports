@@ -463,7 +463,7 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
         import nba_trial_runtime
         nba_trial_runtime.render_due(now, cards_folder, log=log, restore=restore_posted_cards)
         import cbb_picks
-        cbb_picks.render(cards_folder)
+        cbb_picks.render(cards_folder, posted_keys=posted_card_keys(post_log))
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(rss(items, cards, now), encoding='utf-8')
     log(f'{len(items)} items in the feed ({sum(1 for i in items if "pick" in i)} plays, {len(cards)} cards) -> {out}')

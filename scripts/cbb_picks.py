@@ -263,20 +263,22 @@ def payload(root=STORE, *, delivered):
                 note='Sourced desk picks; separate from baseline model accuracy, fun tickets and Climbs.')
 
 
-def render(folder,root=STORE):
-    import nba_trial,pick_card
+def render(folder,root=STORE, *, posted_keys=()):
+    import nba_trial,pick_card,social_style
     for p in public_rows(root):
-        target=Path(folder)/(daily_potd.card_key(p)+'.png')
-        if target.exists():
+        key = daily_potd.card_key(p)
+        target = Path(folder)/(key+'.png')
+        teams = p['game']['teams']
+        ambiguous_team = any(team['abbreviation'] == 'USD' for team in teams.values())
+        if target.exists() and (key in posted_keys or not ambiguous_team or social_style.current_png(target)):
             if p.get('result'):render_result(p,folder)
             continue
         q=p['quote'];market=p['marketType'];side=p['direction']
         current=({'total':dict(line=p['line'],**{side:p['odds'],('under' if side=='over' else 'over'):p['oppositeOdds']})}
                  if market=='total' else {side:dict(spreadPrice=p['odds'],spreadLine=p['line']),
                     ('away' if side=='home' else 'home'):dict(spreadPrice=p['oppositeOdds'],spreadLine=-p['line'])})
-        # Keep immutable fixture names; use the provider's compact names on art.
-        game=dict(p['game'],teams={side:dict(team,name=team.get('shortName') or team['abbreviation'])
-                                  for side,team in p['game']['teams'].items()})
+        game=dict(p['game'],teams={side:dict(team,name=team.get('shortName') or team_label(team),
+                                            abbreviation=team_label(team)) for side,team in teams.items()})
         svg=nba_trial.preview_svg(game,dict(book='DraftKings',retrievedAt=q['checkedAt'],current=current),
             preview=False,direction=side,market=market,line=p['line'],odds=p['odds'],units=1,
             reason=p['review']['why'],series_label=daily_potd.LABEL if daily_potd.designation(p) else 'CBB PICK')

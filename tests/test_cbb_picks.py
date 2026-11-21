@@ -190,6 +190,25 @@ class CBBPicksTests(unittest.TestCase):
         self.assertIn('San Diego -4.5', text)
         self.assertFalse(social_style.privacy_issues(text))
 
+    def test_san_diego_card_recovers_before_send_without_replacing_posted_art(self):
+        import daily_potd
+        import social_style
+
+        play = dict(fixture(), book='DraftKings')
+        play['game']['teams']['home'].update(abbreviation='USD', name='San Diego Toreros', shortName='San Diego')
+        key = daily_potd.card_key(play)
+        with tempfile.TemporaryDirectory() as folder, patch.object(cbb, 'public_rows', return_value=[play]), \
+                patch('pick_card.render') as render:
+            target = Path(folder)/(key+'.png')
+            target.write_bytes(b'old render without the current social marker')
+            cbb.render(folder, posted_keys={key})
+            render.assert_not_called()
+            cbb.render(folder)
+            svg, output = render.call_args.args
+            self.assertEqual(output, target)
+            self.assertTrue('SAN DIEGO' in svg.upper(), 'The native card should spell out San Diego')
+            self.assertFalse(social_style.issues(svg, graphic=True))
+
     def test_discord_queue_requires_live_art_and_preserves_receipt(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);p=fixture();cbb.admit(p,context(),NOW,root);log={'posts':[]}
