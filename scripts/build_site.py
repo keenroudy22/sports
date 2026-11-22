@@ -7,6 +7,7 @@ Each page loads only what it shows:
   app/today-hero.json         Today's first paint (under 4 KB): today's best bets with
                               price, book, kickoff and card, the Climb status, last W-L
   app/record.json             the complete public pick history
+  app/contract-bonuses.json   sourced NFL season incentive snapshots
   app/lines.json              small line-catalog manifest
   app/lines-NFL.json          NFL line catalog and current game markets
   app/lines-CFB.json          CFB line catalog and current game markets
@@ -108,6 +109,22 @@ def contract_bonus_rows(card, reports):
         if bonuses:
             rows.append({**{key: row[key] for key in ('athleteId', 'teamId', 'player', 'reportedOn', *source_keys)},
                          'bonuses': bonuses})
+    return rows
+
+
+def contract_bonus_index(games, reports, game_pages):
+    """Keep sourced snapshots available after their matchup pages age out."""
+    rows = []
+    for game_id in sorted(reports):
+        game = games.get(game_id)
+        if not game:
+            continue
+        for report in contract_bonus_rows(game, reports):
+            away, home = (game[side].get('abbreviation') or game[side].get('abbr') or game[side].get('name')
+                          for side in ('away', 'home'))
+            team = home if str(game['home']['id']) == report['teamId'] else away
+            rows.append({**report, 'team': team, 'matchup': f'{away} at {home}', 'kickoff': game['kickoff'],
+                         'gameId': game_id, 'gamePage': game_id in game_pages})
     return rows
 
 
@@ -2266,6 +2283,8 @@ def build(now=None):
         shutil.rmtree(OUT)
     window = [g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')
               and now - WINDOW_BACK <= features.when(g['kickoff']) <= now + WINDOW_AHEAD]
+    write(OUT / 'contract-bonuses.json', {'reports': contract_bonus_index(
+        by_id, contract_bonus_reports, {g['id'] for g in window})})
     grading = defaultdict(list)
     for row in (read(DATA / 'scoreboard-games.json', {}) or {}).values():
         for r in row:

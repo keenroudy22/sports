@@ -55,6 +55,7 @@ network calls and changes nothing. New file families require a reviewed allowlis
 | `data/app/games/NBA-<id>.json`, `data/app/games/CBB-<id>.json` | Single-matchup copies of the reviewed schedule or saved score data, the two teams’ public player directory rows, and exact terms for open receipt-backed NBA props. Book quotes use the existing NBA matchup prop files. |
 | `marketPlayers` on NFL and CFB game files | Public athlete ID, name, position, team ID and abbreviation for players with a captured matchup market. The chart and matchup continue to use the original odds and projection sources. |
 | `contractBonuses` on selected NFL game files | Curated public reports in `data/nfl-contract-bonuses.json`. Each dated pregame snapshot contains the player's public identity, incremental bonuses, season totals and thresholds, plus HTTPS sources for the terms and stats. No new file family or feed. |
+| `data/app/contract-bonuses.json` | The same approved incentive snapshots in one index, with matchup, kickoff and availability of the internal game link. Built offline from the curated file and existing schedule and final stores. |
 
 The check rejects unknown paths, symlinks, known owner-only files, credential-bearing JSON fields and selected
 recognizable token/webhook patterns. It reports only file paths and reason codes, never matched values. Private

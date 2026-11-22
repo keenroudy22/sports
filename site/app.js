@@ -606,6 +606,7 @@
       case 'results': return { view: 'record', tab: 'official', league: params.get('sport') ? params.get('sport').toUpperCase() : null, legacy: true };
       case 'model': return { view: 'record', tab: 'model', legacy: true };
       case 'vegas': return { view: 'vegas', league: a ? a.toUpperCase() : null };
+      case 'bonuses': return { view: v, stat: a };
       case 'more': case 'tools': return { view: 'more' };
       case 'responsible': return { view: 'more', legacy: true };
       case 'ticket': case 'parlays': return { view: 'ticket' };
@@ -641,7 +642,7 @@
     return null;
   };
   const TAB_OF = { today: 'today', pick: 'today', research: 'research', games: 'games', game: 'games', team: 'games', player: 'research',
-    record: 'record', vegas: 'record', more: 'more', ticket: 'more' };
+    record: 'record', vegas: 'record', more: 'more', ticket: 'more', bonuses: 'more' };
   MORE_PAGES.forEach(p => { TAB_OF[p] = 'more'; });
   TAB_OF.lab = 'record';
 
@@ -2181,12 +2182,12 @@
   /* ---------- Lazy bundles ---------- */
   /* Record, More, player and Games pages are not part of the first paint. Each bundle is one fingerprinted file. */
   const MORE_VIEW_NAMES = ['record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
-    'schedule', 'status', 'feedback'];
+    'schedule', 'status', 'feedback', 'bonuses'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-2519713f622d';
+  const MORE_ASSET = 'app-more.js?v=sha256-02520cbcfb5c';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
   const GAMES_ASSET = 'app-games.js?v=sha256-66215733a50f';
-  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-1b8ce89ba693';
+  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-a96b78d67a1f';
   const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
   let researchCssLoading = null;

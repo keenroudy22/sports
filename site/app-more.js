@@ -427,13 +427,41 @@ button.cal-day { cursor: pointer; }
       <p class="small muted" style="margin-top:14px">Entertainment only, 21+. This describes past games. It is not betting advice, and no pick is ever certain.</p>`;
   };
 
+  views.bonuses = async ({ stat } = {}) => {
+    const { reports } = await get('app/contract-bonuses.json');
+    const top = head('NFL', 'Contract Bonuses', 'Closest first, based on the percentage of each season target reached in the pregame snapshot.',
+      '<a class="back" href="#more">← More</a>');
+    const rows = reports.flatMap(report => report.bonuses.map(bonus => ({ ...bonus, report, progress: bonus.before / bonus.target })));
+    if (!rows.length) return top + empty('No bonuses listed yet', 'Sourced NFL bonus snapshots will appear here.');
+    const labels = [...new Set(rows.map(row => row.label))].sort();
+    const selected = labels.includes(stat) ? stat : '';
+    const filters = segLinks([['#bonuses', 'All stats', ''], ...labels.map(label => [`#bonuses/${encodeURIComponent(label)}`, label, label])], selected);
+    const dollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    const pct = new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 1 });
+    const showDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+    const cards = rows.filter(row => !selected || row.label === selected).sort((a, b) => b.progress - a.progress ||
+      b.report.reportedOn.localeCompare(a.report.reportedOn) || a.report.player.localeCompare(b.report.player));
+    return `${top}<div class="toolbar">${filters}</div>
+      <div class="section grid two" aria-label="Bonuses, closest first">${cards.map(({ report, label, amount, before, target, progress }) => {
+        const matchup = report.gamePage ? `<a href="#game/${esc(report.gameId)}#contract-bonuses">${esc(report.matchup)} ›</a>` : esc(report.matchup);
+        return `<article class="card"><div class="section-head"><h2>${esc(label)}</h2><b class="green num">${dollars.format(amount)}</b></div>
+          <p><a href="#player/NFL/${esc(report.athleteId)}"><b>${esc(report.player)}</b></a> <span class="small muted">${esc(report.team)}</span></p>
+          <p class="small muted">${matchup} · ${esc(whenShort(report.kickoff))}</p>
+          <p style="margin-top:10px"><b>${target - before} more needed</b> · ${before} of ${target}</p>
+          <progress aria-label="${esc(label)} toward season target" value="${before}" max="${target}" style="width:100%;accent-color:var(--kookd)">${pct.format(progress)}</progress>
+          <p class="small muted">${pct.format(progress)} of target · Pregame snapshot ${esc(showDate.format(new Date(report.reportedOn)))}</p>
+          <p class="small" style="margin-top:8px"><a href="${esc(report.termsSource)}" target="_blank" rel="noopener">Reported terms ↗</a> · <a href="${esc(report.statsSource)}" target="_blank" rel="noopener">Season totals ↗</a></p></article>`;
+      }).join('')}</div>`;
+  };
+
   views.more = async () => `${head('More', 'Tools and help', '')}
     ${moreGroup('New here', `<a href="#start"><span><b>Start here</b><br><span class="small muted">How to read a best bet in 30 seconds, plus the glossary</span></span><small>→</small></a>
       <a href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener"><span><b>Free Kook'n Discord</b><br><span class="small muted">Picks, results, and slate discussion</span></span><small>↗</small></a>
       <a href="https://x.com/keenkooks" target="_blank" rel="noopener"><span><b>Follow on X</b></span><small>@keenkooks ↗</small></a>`)}
     ${moreGroup('Yours', `<a href="#saved"><span><b>Saved</b></span><small>${state.watchlist.length} saved →</small></a>
       <a href="#ticket"><span><b>My ticket</b><br><span class="small muted">Save and compare legs</span></span><small>${state.ticket.length} legs →</small></a>`)}
-    ${moreGroup('Tools', `<a href="#arbs"><span><b>Arb calculator</b><br><span class="small muted">Exact two-book stake math</span></span><small>→</small></a>`)}
+    ${moreGroup('Tools', `<a href="#bonuses"><span><b>Contract Bonuses</b><br><span class="small muted">Reported NFL incentives ranked by progress</span></span><small>→</small></a>
+      <a href="#arbs"><span><b>Arb calculator</b><br><span class="small muted">Exact two-book stake math</span></span><small>→</small></a>`)}
     ${moreGroup('Help', `<a href="#feedback"><span><b>Feedback</b></span><small>→</small></a>`)}`;
   views.glossary = async () => views.start();
   views.start = async () => `<a class="back" href="#more">← More</a>${head('Start here', 'How to read a best bet', 'Thirty seconds, then you know everything on the page.')}

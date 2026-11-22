@@ -312,6 +312,7 @@ test('contract bonuses show sourced season thresholds as a dated matchup snapsho
   const views = factory(ctx);
   const html = await views.game({ id });
   const panel = html.split('id="contract-bonuses"')[1].split('</section>')[0];
+  assert.match(panel, /href="#bonuses"/);
   assert.match(panel, /Isaiah Likely[\s\S]+Pregame snapshot · Nov 20[\s\S]+\$750,000/);
   for (const [before, target, needed] of [[55, 60, 5], [575, 650, 75], [7, 8, 1]]) {
     assert.ok(panel.includes(`${before} of ${target} this season · <b>${needed} more needed</b>`));

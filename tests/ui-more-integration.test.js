@@ -100,6 +100,26 @@ test('the real app shared interface renders every lazy view with fixture data', 
   assert.doesNotMatch(climbHtml, /typical −160|standalone Thursday and Monday|alternate-line legs|Target combined odds|steps used across|NBA is research-only/);
 });
 
+test('NFL bonus index ranks progress across stats and filters via a shareable route', async () => {
+  const { api, factory } = loadBrowserApi();
+  const [gameId, [report]] = Object.entries(require('../data/nfl-contract-bonuses.json'))[0];
+  const reports = [{ ...report, gameId, gamePage: true, team: 'NYG', matchup: 'JAX at NYG', kickoff: '2026-11-22T21:25Z' }];
+  const views = factory(api.moreContext({ get: async path => {
+    assert.equal(path, 'app/contract-bonuses.json');
+    return { reports };
+  } }));
+  assert.match(await views.more(), /href="#bonuses"/);
+  const all = await views.bonuses(api.model.resolve('#bonuses'));
+  assert.deepEqual([...all.matchAll(/<h2>([^<]+)<\/h2>/g)].map(match => match[1]),
+    ['Receptions', 'Receiving yards', 'Receiving TDs']);
+  assert.match(all, /5 more needed[\s\S]*91\.7% of target/);
+  assert.ok(all.includes(`#game/${gameId}#contract-bonuses`));
+  const filtered = await views.bonuses(api.model.resolve('#bonuses/Receiving%20yards'));
+  assert.match(filtered, /<h2>Receiving yards<\/h2>[\s\S]*75 more needed/);
+  assert.doesNotMatch(filtered, /<h2>(Receptions|Receiving TDs)<\/h2>/);
+  assert.match(filtered, /href="#bonuses\/Receiving%20yards" aria-current="page"/);
+});
+
 test('Results tracks daily Chef designations and keeps legacy picks in Every result', async () => {
   const { api, factory } = loadBrowserApi();
   const legacy = { id: 'legacy-chef', league: 'CFB', season: 2026, kind: 'props', lane: 'chef_pick', posted: true, featured: true,

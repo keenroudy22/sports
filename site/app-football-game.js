@@ -113,7 +113,7 @@
           <div class="small muted">${item.before} of ${item.target} this season · <b>${item.target - item.before} more needed</b></div></li>`).join('')}</ul>
         <p class="small muted bonus-sources"><a href="${esc(row.termsSource)}" target="_blank" rel="noopener">Reported terms ↗</a> · <a href="${esc(row.statsSource)}" target="_blank" rel="noopener">Season totals ↗</a></p></article>`;
     }).join('');
-    return anchored('contract-bonuses', section('Contract bonuses', `<div class="grid">${cards}</div>`, '',
+    return anchored('contract-bonuses', section('Contract bonuses', `<div class="grid">${cards}</div>`, '<a class="more" href="#bonuses">All NFL bonuses →</a>',
       'Reported season incentives within reach going into this matchup.'));
   };
   /* "Why my number differs" (owner, Oct 7, item 28): my number, the book, the gap and every stored-data driver, by weight.

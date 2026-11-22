@@ -27,6 +27,16 @@ class ContractBonusTests(unittest.TestCase):
         self.assertEqual(build_site.contract_bonus_rows(dict(card, id='NFL-other'), reports), [])
         self.assertEqual(build_site.contract_bonus_rows(dict(card, league='CFB'), reports), [])
 
+    def test_bonus_index_lists_snapshots_even_when_game_pages_age_out(self):
+        reports = json.loads((ROOT / 'data/nfl-contract-bonuses.json').read_text())
+        game_id, (report,) = next(iter(reports.items()))
+        card = {'id': game_id, 'league': 'NFL', 'kickoff': '2026-11-22T21:25Z',
+                'home': {'id': '19', 'abbreviation': 'NYG'}, 'away': {'id': '30', 'abbreviation': 'JAX'}}
+        for pages in (set(), {game_id}):
+            self.assertEqual(build_site.contract_bonus_index({game_id: card}, reports, pages),
+                             [dict(report, matchup='JAX at NYG', team='NYG', kickoff=card['kickoff'],
+                                   gameId=game_id, gamePage=bool(pages))])
+
 
 class MatchupMarketPlayerTests(unittest.TestCase):
     def test_traded_player_uses_unique_pregame_depth_assignment(self):
