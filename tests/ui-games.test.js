@@ -453,6 +453,22 @@ test('football stat cells keep the displayed threshold, odds and chart side toge
   assert.match(await cell(), /Earlier quote · checked/);
 });
 
+test('a current RB receptions lean is highlighted in the featured player table', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = { ...slate()[1], league: 'NFL', kickoff: new Date(Date.now() + 3600000).toISOString() };
+  const quote = { athleteId: '4241416', player: 'Chuba Hubbard', kind: 'player', stat: 'rec',
+    title: 'Chuba Hubbard over 3.5 receptions', line: 3.5, direction: 'over', odds: 113,
+    book: 'DraftKings', observedAt: new Date().toISOString(), chance: .50, needs: .47, belowBar: true };
+  const detail = { ...g, teams: {}, picks: [], lines: [{ ...quote, book: 'FanDuel', odds: -105 }],
+    favoriteLines: [quote], forecast: { players: { home: { players: [{ id: '4241416', name: 'Chuba Hubbard',
+      pos: 'RB', rushYds: [68.8, 20, 118], carries: [16.5, 8, 25], receptions: [3.6, .8, 6.3] }] } } } };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
+  const featured = async () => (await factory(ctx).game({ id: g.id })).split('RB · featured')[1].split('</table>')[0];
+  assert.match(await featured(), /Chuba Hubbard[\s\S]*data-stat="Rec"><a class="prop-cell liked"[^>]*stat=rec&amp;line=3\.5&amp;direction=over&amp;book=DraftKings[\s\S]*O \+113 · DraftKings[\s\S]*Research lean/);
+  quote.observedAt = new Date(Date.now() - 5 * 3600000).toISOString();
+  assert.doesNotMatch(await featured(), /data-stat="Rec"|Research lean/);
+});
+
 test('a football pricing-only player stays visible and opens the captured market', async () => {
   const { api, factory } = loadBrowserApi();
   const g = { ...slate()[1], kickoff: new Date(Date.now() + 3600000).toISOString() };

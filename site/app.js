@@ -2186,7 +2186,7 @@
   const MORE_ASSET = 'app-more.js?v=sha256-2519713f622d';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
   const GAMES_ASSET = 'app-games.js?v=sha256-66215733a50f';
-  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-80aad80f997b';
+  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-1b8ce89ba693';
   const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
   let researchCssLoading = null;

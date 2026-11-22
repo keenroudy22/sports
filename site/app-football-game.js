@@ -405,7 +405,7 @@
     const displayedPlayers = side => [...unavailablePlayers(side), ...projectionPlayers(side)];
     const POSITION_PROJ = {
       QB: [['att','Att'],['cmp','Cmp'],['passYds','Pass yds']],
-      RB: [['carries','Car'],['rushYds','Rush yds'],['targets','Tgt'],['recYds','Rec yds']],
+      RB: [['carries','Car'],['rushYds','Rush yds'],['targets','Tgt'],['receptions','Rec'],['recYds','Rec yds']],
       WR: [['targets','Tgt'],['receptions','Rec'],['recYds','Rec yds']],
       TE: [['targets','Tgt'],['receptions','Rec'],['recYds','Rec yds']]
     };
@@ -426,6 +426,9 @@
           : usableProjection(player,'targets') || usableProjection(player,'receptions') || usableProjection(player,'recYds') ? 'WR' : null);
       const group = pos => list.filter(player => (inferredPos(player) === 'FB' ? 'RB' : inferredPos(player)) === pos);
       const projectionMarket = key => key === 'targets' ? 'tgt' : C.PROJECTION_MARKET[key];
+      const likedPropQuote = (player, key) => !player.unavailable && usableProjection(player, key)
+        && fav.find(row => String(row.athleteId) === String(player.id)
+          && C.marketKey(row) === projectionMarket(key) && hasCurrentPrice(row));
       const statCell = (player, key) => {
         const stat = projectionMarket(key);
         const v = player.unavailable || !usableProjection(player,key) ? null : player[key];
@@ -437,7 +440,7 @@
         const rows = propRows(player.id, stat);
         const current = rows.filter(hasCurrentPrice).sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt)
           || Number(b.line === reference) - Number(a.line === reference));
-        const likedQuote = v && fav.find(row => exactMarket(row) && hasCurrentPrice(row));
+        const likedQuote = likedPropQuote(player, key);
         const read = (!player.unavailable || player.lineOnly ? current.find(exactPick) || likedQuote || current[0] : null)
           || (v && rows.find(row => row.line === reference && isNum(row.odds)));
         const line = read ? read.line : isNum(reference) ? reference : null;
@@ -467,9 +470,12 @@
         const primaryKeys = PRIMARY_POSITION_PROJ[pos] || [];
         const shownCols = primaryKeys.map(key => cols.find(([candidate]) => candidate === key)).filter(Boolean);
         if (!shownCols.length) shownCols.push(...cols.slice(0,2));
-        const secondaryCols = cols.filter(([key]) => !shownCols.some(([shown]) => shown === key));
+        const secondaryCols = cols.filter(column => !shownCols.includes(column));
+        const highlightedCols = secondaryCols.filter(([key]) => active.some(player => likedPropQuote(player, key)));
+        shownCols.push(...highlightedCols);
+        const extraCols = secondaryCols.filter(column => !highlightedCols.includes(column));
         const playerPriority = player => cols.reduce((score,[key]) => score + (hasLine(player,key) ? 20 : 0)
-          + (fav.some(row => String(row.athleteId) === String(player.id) && C.marketKey(row) === projectionMarket(key)) ? 50 : 0)
+          + (likedPropQuote(player, key) ? 50 : 0)
           + (picks.some(row => String(row.athleteId) === String(player.id) && C.marketKey(row) === projectionMarket(key)) ? 100 : 0), 0);
         const ordered = active.slice().sort((a,b) => playerPriority(b)-playerPriority(a) || opportunity(b)-opportunity(a));
         const renderTable = (rows, caption, tableCols = shownCols) => `<div class="table-wrap"><table class="t prop-compare"><caption class="small muted" style="text-align:left;padding-bottom:6px">${esc(caption)}</caption><thead><tr><th>Player</th>${tableCols.map(([,label]) => `<th>${esc(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(player => {
@@ -477,17 +483,18 @@
           const playerHead = `<th class="prop-player"><span class="with-art">${headshot(g.league,player.id,'sm')}<span><span class="prop-player-head"><a href="#player/${esc(g.league)}/${esc(player.id)}">${esc(player.name)}</a><span class="prop-pos">${esc(inferredPos(player) || 'Position unavailable')}</span></span>${injury ? `<span class="badge ${HARD_INJURY.test(injury.status || '') ? 'warn' : 'research'}">${esc(injury.status || 'Listed')}</span>` : player.lineOnly ? '<span class="badge research">Projection held</span>' : ''}</span></span></th>`;
           return `<tr>${playerHead}${tableCols.map(([key,label]) => `<td data-stat="${esc(label)}">${statCell(player,key)}</td>`).join('')}</tr>`;
         }).join('')}</tbody></table></div>`;
-        const featured = ordered.filter(player => shownCols.some(([key]) => usableProjection(player,key) || hasLine(player,key))).slice(0,2);
+        const featured = ordered.filter(player => shownCols.some(([key]) => usableProjection(player,key) || hasLine(player,key)))
+          .filter((player, index) => index < 2 || shownCols.some(([key]) => likedPropQuote(player, key)));
         const featuredIds = new Set(featured.map(player => String(player.id || player.name)));
         const depth = ordered.filter(player => !featuredIds.has(String(player.id || player.name)));
         const visibleUnavailable = unavailable.filter(player => shownCols.some(([key]) => hasLine(player,key))).slice(0,1);
         const visibleUnavailableIds = new Set(visibleUnavailable.map(player => String(player.id || player.name)));
         const hiddenUnavailable = unavailable.filter(player => !visibleUnavailableIds.has(String(player.id || player.name)));
         const primaryRows = [...featured, ...visibleUnavailable];
-        const extraFeatured = primaryRows.filter(player => secondaryCols.some(([key]) => usableProjection(player,key) || hasLine(player,key)));
+        const extraFeatured = primaryRows.filter(player => extraCols.some(([key]) => usableProjection(player,key) || hasLine(player,key)));
         const extras = extraFeatured.length || depth.length || hiddenUnavailable.length;
         const extraRows = depth.length + hiddenUnavailable.length;
-        return `<div class="prop-position">${primaryRows.length ? renderTable(primaryRows, `${pos} · featured`) : ''}${extras ? `<details class="more-box prop-depth-more"><summary>More ${esc(pos)} players &amp; markets${extraRows ? ` · ${extraRows}` : ''}</summary>${extraFeatured.length ? renderTable(extraFeatured, `${pos} · more markets`, secondaryCols) : ''}${depth.length ? renderTable(depth, `${pos} · depth`, cols) : ''}${hiddenUnavailable.length ? renderTable(hiddenUnavailable, `${pos} · unavailable`, cols) : ''}</details>` : ''}</div>`;
+        return `<div class="prop-position">${primaryRows.length ? renderTable(primaryRows, `${pos} · featured`) : ''}${extras ? `<details class="more-box prop-depth-more"><summary>More ${esc(pos)} players &amp; markets${extraRows ? ` · ${extraRows}` : ''}</summary>${extraFeatured.length ? renderTable(extraFeatured, `${pos} · more markets`, extraCols) : ''}${depth.length ? renderTable(depth, `${pos} · depth`, cols) : ''}${hiddenUnavailable.length ? renderTable(hiddenUnavailable, `${pos} · unavailable`, cols) : ''}</details>` : ''}</div>`;
       };
       return `<p class="small muted">${esc(g[side].abbr)}${isNum(vol.plays) ? ` · ${C.fixed(vol.plays,0)} projected plays · ${Math.round(100*(vol.passRate || 0))}% pass` : ''} · featured players and popular markets first</p>${['QB','RB','WR','TE'].map(pos => table(pos,group(pos))).join('')}`;
     };
