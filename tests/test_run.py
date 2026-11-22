@@ -1520,6 +1520,33 @@ class ParlayGuardTests(unittest.TestCase):
         incomplete = {name: status for name, status in statuses.items() if name != 'Daiyan Henley'}
         self.assertFalse(run.matches_reviewed_status_list(report, incomplete, game))
 
+    def test_reviewed_center_replacement_requires_the_same_active_reserve(self):
+        source = 'https://www.jaguars.com/news/jaguars-friday-a-great-challenge'
+        game = dict(league='NFL', home={'id': '19'}, away={'id': '30'})
+        ticket = dict(selectionMethod='sourced-fun-ticket-review-v1', quotedAt='2026-11-22T19:38:00Z')
+        review = dict(name='Robert Hainsey', source=source, status='out', replacement='Jonah Monheim')
+        leg = dict(researchCase={'sources': [{'url': source}], 'knownAbsences': [review]})
+        center = dict(name='Robert Hainsey', position='C', status='Out', injury='Knee',
+                      reportedAt='2026-11-18T16:05Z')
+        reserve = dict(name='Jonah Monheim', position='C', status='Active',
+                       reportedAt='2026-11-20T21:24Z')
+        ctx = SimpleNamespace(injuries={'NFL-30': {'1': center, '2': reserve}})
+        report = ('Jacksonville starting center Robert Hainsey was ruled out with a knee injury, '
+                  'and Jonah Monheim is expected to start at center.')
+        fact = dict(kind='injury', origin='codex researcher', verified=True, direction='against',
+                    source=source, entities=['Robert Hainsey', 'Jonah Monheim'], claim=report)
+        self.assertTrue(run.reviewed_ticket_absence(ticket, leg, game, fact, ctx))
+        for changed in (report.replace('at center', 'at guard'),
+                        report.replace('knee injury', 'foot injury'),
+                        report + ' The new starter left warmups.'):
+            self.assertFalse(run.reviewed_ticket_absence(ticket, leg, game, dict(fact, claim=changed), ctx))
+        for field, value in (('status', 'Out'), ('position', 'G'),
+                             ('reportedAt', '2026-11-22T19:39Z')):
+            with mock.patch.dict(reserve, {field: value}):
+                self.assertFalse(run.reviewed_ticket_absence(ticket, leg, game, fact, ctx))
+        with mock.patch.dict(review, {'replacement': 'Walker Little'}):
+            self.assertFalse(run.reviewed_ticket_absence(ticket, leg, game, fact, ctx))
+
     def test_reviewed_status_list_matches_published_groups_and_plural_positions(self):
         game = dict(home={'short': 'Chargers'}, away={'short': 'Jets'})
         statuses = dict.fromkeys(('Daiyan Henley', 'Rodney Shelley', 'Kendall Williamson'), 'out')

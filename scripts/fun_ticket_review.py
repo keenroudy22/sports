@@ -151,8 +151,11 @@ def refusal(ticket, ctx):
                 or not absence['name'].strip()
                 or absence.get('status', 'out') not in ('out', 'doubtful', 'questionable')
                 or absence.get('source') not in {fact['url'] for fact in facts}
+                or ('replacement' in absence and
+                    (absence.get('status', 'out') != 'out' or not isinstance(absence['replacement'], str)
+                     or not absence['replacement'].strip() or absence['replacement'] == absence['name']))
                 for absence in known_absences):
-            return 'Previously reviewed absences must name the player and cite their availability report'
+            return 'Previously reviewed absences must cite their report and identify any replacement'
         product *= parlay.decimal(price)
     if ids != set(ticket.get('gameIds') or []):
         return 'Fun-ticket games do not match its legs'

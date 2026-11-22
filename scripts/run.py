@@ -5312,21 +5312,26 @@ def reviewed_ticket_absence(ticket, leg, game, fact, ctx):
     source = fact.get('source')
     if not source or not any(row.get('url') == source for row in case.get('sources') or []):
         return False
-    reviewed = {row['name']: row.get('status', 'out').lower()
-                for row in case.get('knownAbsences') or [] if row.get('source') == source}
+    reviewed = {row['name']: row for row in case.get('knownAbsences') or []
+                if row.get('source') == source}
     teams = [gates.team_key(game['league'], game[side]['id']) for side in ('home', 'away')]
+    report = reviewed.get(names[0], {})
+    replacement = report.get('replacement')
+    covers_replacement = len(names) == 2 and replacement == names[1] and report.get('status', 'out') == 'out'
+    absent_names = names[:1] if covers_replacement else names
     players = {}
-    for name in names:
-        matches = [row for team in teams for row in ctx.injuries.get(team, {}).values()
+    statuses = {}
+    for name in absent_names:
+        matches = [(team, row) for team in teams for row in ctx.injuries.get(team, {}).values()
                    if row.get('name') == name]
         if len(matches) != 1 or name not in reviewed:
             return False
-        player = matches[0]
+        team, player = matches[0]
         position = str(player.get('position') or '').upper()
         status = str(player.get('status') or '').lower()
         if status == 'injured reserve':
             status = 'out'
-        if not position or position == 'QB' or status != reviewed[name]:
+        if not position or position == 'QB' or status != reviewed[name].get('status', 'out').lower():
             return False
         try:
             if gates.when(player.get('reportedAt')) > gates.when(ticket['quotedAt']):
@@ -5334,17 +5339,37 @@ def reviewed_ticket_absence(ticket, leg, game, fact, ctx):
         except (KeyError, TypeError, ValueError):
             return False
         players[name] = player
+        statuses[name] = status
     text = str(fact.get('claim') or '').strip()
-    if len(names) != 1 or reviewed[names[0]] != 'out':
-        return matches_reviewed_status_list(text, {name: reviewed[name] for name in names}, game)
+    if not covers_replacement and (len(names) != 1 or statuses[names[0]] != 'out'):
+        return matches_reviewed_status_list(text, statuses, game)
     name = names[0]
-    # Treat only same-status reporting as a duplicate. Role, workload, roster
-    # changes, additional names and mismatched diagnoses remain normal vetoes.
     injury = str(players[name].get('injury') or '').strip()
-    diagnosis = rf'(?: with (?:a |an )?{re.escape(injury)})?' if injury else ''
+    diagnosis = rf'(?: with (?:a |an )?{re.escape(injury)}(?: injury)?)?' if injury else ''
     claim = (rf'(?:[\w -]+ )?{re.escape(name)} (?:was downgraded to out|was ruled out|is out)'
-             rf'{diagnosis}(?: and will not (?:play|travel))?\.?')
-    return bool(re.fullmatch(claim, text, re.IGNORECASE)
+             rf'{diagnosis}')
+    if covers_replacement:
+        # Recognize a reviewed center substitution only while the same team's
+        # official report still lists that reserve as active at center.
+        if position != 'C':
+            return False
+        reserves = [(key, row) for key in teams for row in ctx.injuries.get(key, {}).values()
+                    if row.get('name') == replacement]
+        if len(reserves) != 1:
+            return False
+        reserve_team, reserve = reserves[0]
+        if (reserve_team != team or str(reserve.get('position', '')).upper() != position
+                or str(reserve.get('status', '')).lower() != 'active'):
+            return False
+        try:
+            if gates.when(reserve.get('reportedAt')) > gates.when(ticket['quotedAt']):
+                return False
+        except (KeyError, TypeError, ValueError):
+            return False
+        return bool(re.fullmatch(
+            rf'{claim},? and {re.escape(replacement)} (?:is expected to start|will start) at center\.?', text,
+            re.IGNORECASE))
+    return bool(re.fullmatch(rf'{claim}(?: and will not (?:play|travel))?\.?', text, re.IGNORECASE)
                 or matches_reviewed_status_list(text, {name: 'out'}, game))
 
 
