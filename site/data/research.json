@@ -73525,5 +73525,128 @@
         "units": -0.25
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-22T06:21:05Z",
+    "targetWeek": 12,
+    "summary": "Research update for Nov 22: Settled 1: 4-leg parlay at DraftKings loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "parlays": [
+      {
+        "book": "DraftKings",
+        "league": "CFB",
+        "odds": 382,
+        "parlayStyle": "short",
+        "quotedAt": "2026-11-21T23:12:30.634Z",
+        "selectionMethod": "sourced-fun-ticket-review-v1",
+        "favorite": false,
+        "status": "settled",
+        "parlayType": "longshot",
+        "riskUnits": 0.25,
+        "quoteType": "sportsbook",
+        "priceEstimated": false,
+        "gameIds": [
+          "CFB-401858306",
+          "CFB-401860918",
+          "CFB-401856753",
+          "CFB-401860925"
+        ],
+        "id": "CFB-2026-11-21-short-draftkings",
+        "title": "4-leg parlay at DraftKings",
+        "firstKickoff": "2026-11-22T00:30:00Z",
+        "confidence": 1,
+        "cutoff": "A fun ticket is not re-entered. It stands or falls as posted.",
+        "expiresAt": "2026-11-22T00:00:00Z",
+        "sources": [
+          "https://app.hdintelligence.com/?conf=ACC&source=ACC&sport=Football&type=report",
+          "https://broncosports.com/news/2026/11/16/football-madsen-named-to-manning-stars-of-the-week",
+          "https://csurams.com/game-center/21977",
+          "https://csurams.com/news/2026/11/20/football-setting-the-stage-looking-for-consistent-approach",
+          "https://forecast.weather.gov/MapClick.php?FcstType=text&TextType=2&lat=43.6179&lg=english&lon=-116.2132&unit=1",
+          "https://georgiadogs.com/news/2026/11/16/football-georgia-wraps-up-sec-slate-on-the-road-against-gamecocks",
+          "https://goaztecs.com/news/2026/11/16/san-diego-state-heads-to-no-1515-boise-state-looking-for-berth-in-pac-12-championship-game",
+          "https://gobulldogs.com/news/2026/11/16/football-bulldogs-return-home-to-host-colorado-state",
+          "https://gocards.com/news/2026/11/20/football-louisville-hosts-pitt-in-home-finale",
+          "https://marine.weather.gov/product.php?issuedby=CAE&product=ZFP&site=TAE",
+          "https://pac-12.com/news/2026/9/11/2026-football-reports.aspx",
+          "https://pittsburghpanthers.com/news/2026/11/16/football-game-week-pitt-louisville-meet-in-primetime",
+          "https://sportsbook.draftkings.com/event/georgia-bulldogs-%40-south-carolina/34999708",
+          "https://www.secsports.com/fbreports"
+        ],
+        "edge": "Desk-researched fun ticket. No validated win probability or positive-EV claim.",
+        "why": "Louisville has 21 sacks in five games, and I get below seven against a Pitt team starting a freshman quarterback. Fresno State has scored 31 or more in every home game and won all five of its victories by at least 14. Georgia gives up 14.7 points a game and South Carolina lists three offensive linemen and three receivers out. Maddux Madsen threw for 371 yards and four touchdowns in his return last week.",
+        "risks": [
+          "Pitt allows 71.2 rushing yards per game. Louisville lists two offensive linemen out and needed its defense in a 16\u201314 win last week.",
+          "Fresno averages just 123.9 rushing yards per game and Colorado State still had 213 passing yards last week.",
+          "Georgia center Drew Bobo is out and rain could slow both offenses. South Carolina still has its starting quarterback and is at home.",
+          "San Diego State held Utah State to 200 yards last week and rushed for 210. Boise State has already secured the conference title game at home."
+        ],
+        "correlation": "One leg per game; the sportsbook combined price is preserved exactly.",
+        "risk": "Pitt allows 71.2 rushing yards per game. Louisville lists two offensive linemen out and needed its defense in a 16\u201314 win last week. Fresno averages just 123.9 rushing yards per game and Colorado State still had 213 passing yards last week. Georgia center Drew Bobo is out and rain could slow both offenses. South Carolina still has its starting quarterback and is at home. San Diego State held Utah State to 200 yards last week and rushed for 210. Boise State has already secured the conference title game at home. Every leg must hit. This is a fun ticket, not a validated probability or positive-EV claim.",
+        "jurisdictionVerified": true,
+        "publishedAt": "2026-11-21T23:13:04Z",
+        "legs": [
+          {
+            "id": "CFB-401858306-home-alt",
+            "gameId": "CFB-401858306",
+            "title": "Louisville -6.5",
+            "line": -6.5,
+            "odds": -200,
+            "kickoff": "2026-11-22T00:30Z",
+            "marketType": "spread",
+            "direction": "home",
+            "marketWindow": "Full game",
+            "book": "DraftKings",
+            "alternate": true
+          },
+          {
+            "id": "CFB-401860918-home-alt",
+            "gameId": "CFB-401860918",
+            "title": "Fresno State -13.5",
+            "line": -13.5,
+            "odds": -238,
+            "kickoff": "2026-11-22T00:30Z",
+            "marketType": "spread",
+            "direction": "home",
+            "marketWindow": "Full game",
+            "book": "DraftKings",
+            "alternate": true
+          },
+          {
+            "id": "CFB-401856753-away-alt",
+            "gameId": "CFB-401856753",
+            "title": "Georgia -8.5",
+            "line": -8.5,
+            "odds": -226,
+            "kickoff": "2026-11-22T00:30Z",
+            "marketType": "spread",
+            "direction": "away",
+            "marketWindow": "Full game",
+            "book": "DraftKings",
+            "alternate": true
+          },
+          {
+            "id": "CFB-401860925-home-alt",
+            "gameId": "CFB-401860925",
+            "kickoff": "2026-11-22T02:30Z",
+            "title": "Boise State -16.5",
+            "line": -16.5,
+            "odds": -175,
+            "book": "DraftKings",
+            "marketType": "spread",
+            "direction": "home",
+            "marketWindow": "Full game",
+            "alternate": true
+          }
+        ],
+        "result": "loss",
+        "actual": "legs: win, loss, win, loss",
+        "settledAt": "2026-11-22T06:21:05Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401858306",
+        "settlementReason": "One leg lost; the ticket loses.",
+        "units": -0.25
+      }
+    ]
   }
 ]
