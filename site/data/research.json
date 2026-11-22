@@ -73648,5 +73648,89 @@
         "units": -0.25
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-11-22T14:38:00Z",
+    "summary": "Released 1: Daily Double -102 at DraftKings.",
+    "takeaways": [],
+    "parlays": [
+      {
+        "league": "NFL",
+        "book": "DraftKings",
+        "parlayStyle": "daily-double",
+        "odds": -102,
+        "quotedAt": "2026-11-22T14:37:12Z",
+        "selectionMethod": "sourced-fun-ticket-review-v1",
+        "favorite": false,
+        "status": "active",
+        "parlayType": "longshot",
+        "riskUnits": 0.25,
+        "quoteType": "sportsbook",
+        "priceEstimated": false,
+        "gameIds": [
+          "NFL-401873076",
+          "NFL-401873075"
+        ],
+        "id": "NFL-2026-11-22-daily-double-draftkings",
+        "title": "Daily Double",
+        "firstKickoff": "2026-11-22T18:00:00Z",
+        "confidence": 1,
+        "cutoff": "A fun ticket is not re-entered. It stands or falls as posted.",
+        "expiresAt": "2026-11-22T15:37:12Z",
+        "sources": [
+          "https://forecast.weather.gov/MapClick.php?lat=39.7439&lon=-105.0201",
+          "https://forecast.weather.gov/MapClick.php?lat=39.9008&lon=-75.1675",
+          "https://sportsbook.draftkings.com/leagues/football/nfl",
+          "https://www.denverbroncos.com/news/denver-broncos-vs-las-vegas-raiders-how-to-watch-listen-and-live-stream-the-broncos-week-11-game",
+          "https://www.denverbroncos.com/news/injuryreport/injury-report-s-talanoa-hufanga-among-broncos-not-assigned-game-statuses-s-brandon-jones-questionable-for-week-11-vs-raiders",
+          "https://www.philadelphiaeagles.com/news/eagles-activate-will-shipley-place-zack-baun-dontayvion-wicks-on-injured-reserve",
+          "https://www.philadelphiaeagles.com/news/game-preview-vs-steelers-six-storylines-to-follow-sunday-devonta-smith-joe-milton-aaron-rodgers-tj-watt-saquon-barkley-nfl-week-11-2026",
+          "https://www.philadelphiaeagles.com/news/steelers-vs-eagles-injury-report-2026-nfl-week-11-salute-to-service",
+          "https://www.raiders.com/news/game-preview-fernando-mendoza-raiders-face-another-stiff-test-against-potent-broncos-defense",
+          "https://www.raiders.com/news/raiders-broncos-week-11-injury-report"
+        ],
+        "edge": "Desk-researched fun ticket. No validated win probability or positive-EV claim.",
+        "why": "Pittsburgh is averaging 4.8 a carry and Philly is missing Zack Baun. I\u2019ll take the extra point and a half with that matchup. Denver has scored at least 26 in three straight, and Fernando Mendoza took six sacks in his first start. I like Denver by six with Jaylen Waddle back.",
+        "risks": [
+          "DeVonta Smith and Saquon Barkley are back to full practice. Joe Milton can run against pressure, and Nick Herbig is questionable. There is a chance of rain with light wind.",
+          "Mendoza was 11 of 13 before halftime last week and can move the sticks with his legs. Bowers might play and provide a reliable outlet. A division game can stay close."
+        ],
+        "correlation": "One leg per game; the sportsbook combined price is preserved exactly.",
+        "risk": "DeVonta Smith and Saquon Barkley are back to full practice. Joe Milton can run against pressure, and Nick Herbig is questionable. There is a chance of rain with light wind. Mendoza was 11 of 13 before halftime last week and can move the sticks with his legs. Bowers might play and provide a reliable outlet. A division game can stay close. Every leg must hit. This is a fun ticket, not a validated probability or positive-EV claim.",
+        "jurisdictionVerified": false,
+        "publishedAt": "2026-11-22T14:38:00Z",
+        "legs": [
+          {
+            "id": "NFL-401873076-spread-away-1.5-dk",
+            "title": "Pittsburgh +1.5",
+            "gameId": "NFL-401873076",
+            "kickoff": "2026-11-22T18:00Z",
+            "marketType": "spread",
+            "marketWindow": "Full game",
+            "direction": "away",
+            "line": 1.5,
+            "odds": -237,
+            "alternate": true,
+            "book": "DraftKings",
+            "reason": "Pittsburgh is averaging 4.8 a carry and Philly is missing Zack Baun. I\u2019ll take the extra point and a half with that matchup."
+          },
+          {
+            "id": "NFL-401873075-spread-home-5.5-dk",
+            "title": "Denver -5.5",
+            "gameId": "NFL-401873075",
+            "kickoff": "2026-11-22T21:25Z",
+            "marketType": "spread",
+            "marketWindow": "Full game",
+            "direction": "home",
+            "line": -5.5,
+            "odds": -254,
+            "alternate": true,
+            "book": "DraftKings",
+            "reason": "Denver has scored at least 26 in three straight, and Fernando Mendoza took six sacks in his first start. I like Denver by six with Jaylen Waddle back."
+          }
+        ]
+      }
+    ]
   }
 ]
