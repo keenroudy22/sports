@@ -1813,7 +1813,7 @@ def replacement_input_change(now, previous, root=ROOT):
     for store in ('odds', 'prop-odds'):
         digest.update((root / 'data' / store / 'ledger.json').read_bytes())
     context = load_json(root / 'site/data/research-context.json', {})
-    injuries = sorted((league, team, player['id'], player.get('status') or '', player.get('injury') or '')
+    injuries = sorted((league, team, str(player['id']), player.get('status') or '', player.get('injury') or '')
                       for league, data in (context.get('leagues') or {}).items()
                       for team, payload in (data.get('teams') or {}).items()
                       for player in (payload.get('players') or []) if player.get('id'))
@@ -2781,7 +2781,7 @@ def _run(args, now, slot, kinds, status):
     # transport never admits a play and never stops the desk or publication.
     # A successful public-safe row is committed with the ordinary data push;
     # the hosted network-free build attaches it by immutable selection hash.
-    if not args.dry_run and os.environ.get('UNABATED_API_KEY', '').strip():
+    if not args.dry_run and not getattr(args, 'opportunistic', False) and os.environ.get('UNABATED_API_KEY', '').strip():
         try:
             slip_status = betslips.refresh_current(now, logger=log, deadline=8)
             status['betslips'] = slip_status

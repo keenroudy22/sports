@@ -121,8 +121,9 @@ class SlotTests(unittest.TestCase):
             self.assertIsNone(run.replacement_input_change(now + timedelta(minutes=15), previous, root))
             (root / 'data/prop-odds/ledger.json').write_text('{"new": 1}')
             self.assertIsNone(run.replacement_input_change(now + timedelta(minutes=14), previous, root))
-            self.assertNotEqual(run.replacement_input_change(now + timedelta(minutes=15), previous, root),
-                                fingerprint)
+            changed = run.replacement_input_change(now + timedelta(minutes=15), previous, root)
+            self.assertIsNotNone(changed)
+            self.assertNotEqual(changed, fingerprint)
 
     def test_every_official_release_lane_gets_a_draft_without_legacy_flags(self):
         for lane in run.PRIMETIME_COVERAGE_LANES:
