@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-22T17:59:38Z",
+  "updatedAt": "2026-11-22T18:52:19Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1157,6 +1157,15 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4426386",
+              "name": "Roschon Johnson",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-11-22T18:34Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426386/roschon-johnson"
+            },
+            {
               "id": "15168",
               "name": "Case Keenum",
               "position": "QB",
@@ -1299,15 +1308,6 @@
               "injury": null,
               "reportedAt": "2026-11-11T02:28Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685504/sam-roush"
-            },
-            {
-              "id": "4426386",
-              "name": "Roschon Johnson",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-11T01:20Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426386/roschon-johnson"
             },
             {
               "id": "2973405",
@@ -2542,7 +2542,7 @@
               "position": "RB",
               "status": "Out",
               "injury": "Finger",
-              "reportedAt": "2026-11-22T16:58Z",
+              "reportedAt": "2026-11-22T18:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
             },
             {
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4037333",
+              "name": "Alex Highsmith",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-11-22T18:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4037333/alex-highsmith"
+            },
+            {
               "id": "5081338",
               "name": "Kaden Wetjen",
               "position": "WR",
@@ -6201,15 +6210,6 @@
               "injury": null,
               "reportedAt": "2026-11-16T04:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth"
-            },
-            {
-              "id": "8439",
-              "name": "Aaron Rodgers",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-16T04:37Z",
-              "source": "https://www.espn.com/nfl/player/_/id/8439/aaron-rodgers"
             }
           ]
         },
@@ -6222,7 +6222,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Achilles",
-              "reportedAt": "2026-11-22T12:13Z",
+              "reportedAt": "2026-11-22T18:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "6",
-          "name": "Luke Schoonmaker",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-11-22T17:59:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4372096/luke-schoonmaker"
-        },
-        {
-          "teamId": "6",
           "name": "Jonathan Bullard",
           "from": "Active",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-11-22T17:59:38Z",
           "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
+        },
+        {
+          "teamId": "3",
+          "name": "Roschon Johnson",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-11-22T18:52:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426386/roschon-johnson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-22T17:59:38Z",
-      "lastAttemptAt": "2026-11-22T17:59:38Z",
+      "checkedAt": "2026-11-22T18:52:19Z",
+      "lastAttemptAt": "2026-11-22T18:52:19Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-22T17:59:38Z",
-      "lastAttemptAt": "2026-11-22T17:59:38Z",
+      "checkedAt": "2026-11-22T18:52:19Z",
+      "lastAttemptAt": "2026-11-22T18:52:19Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
