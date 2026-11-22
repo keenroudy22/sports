@@ -5342,7 +5342,8 @@ def reviewed_ticket_absence(ticket, leg, game, fact, ctx):
         statuses[name] = status
     text = str(fact.get('claim') or '').strip()
     if not covers_replacement and (len(names) != 1 or statuses[names[0]] != 'out'):
-        return matches_reviewed_status_list(text, statuses, game)
+        injuries = {name: str(player.get('injury') or '').strip() for name, player in players.items()}
+        return matches_reviewed_status_list(text, statuses, game, injuries=injuries)
     name = names[0]
     injury = str(players[name].get('injury') or '').strip()
     diagnosis = rf'(?: with (?:a |an )?{re.escape(injury)}(?: injury)?)?' if injury else ''
@@ -5373,22 +5374,36 @@ def reviewed_ticket_absence(ticket, leg, game, fact, ctx):
                 or matches_reviewed_status_list(text, {name: 'out'}, game))
 
 
-def matches_reviewed_status_list(text, reviewed, game):
-    """Check status-only sentences, retaining the status attached to each name."""
+def matches_reviewed_status_list(text, reviewed, game, *, injuries=None):
+    """Match status lists, verifying any stated injury against the typed report."""
     placeholders = {}
+    diagnoses = {}
     for index, name in enumerate(sorted(reviewed, key=len, reverse=True)):
         token = f'@{index}@'
         text = re.sub(rf'(?<!\w){re.escape(name)}(?!\w)', token, text, flags=re.IGNORECASE)
         placeholders[token] = reviewed[name]
+        injury = (injuries or {}).get(name)
+        diagnoses[token] = rf'(?: with (?:a |an )?{re.escape(injury)}(?: injury)?)?' if injury else ''
     labels = {'defensive lineman', 'offensive lineman', 'defensive end', 'defensive tackle',
               'offensive tackle', 'wide receiver', 'linebacker', 'cornerback', 'safety',
               'running back', 'tight end', 'center', 'guard', 'edge rusher', 'kicker', 'tackle'}
     labels.update(label + 's' for label in tuple(labels) if label not in {'safety', 'offensive lineman', 'defensive lineman'})
     labels.update({'safeties', 'offensive linemen', 'defensive linemen'})
-    labels.update(game[side].get(field) for side in ('home', 'away')
-                  for field in ('name', 'short', 'school', 'abbreviation') if game[side].get(field))
+    team_labels = {game[side][field] for side in ('home', 'away')
+                   for field in ('name', 'short', 'school', 'abbreviation') if game[side].get(field)}
+    labels.update(team_labels)
     prefixes = '|'.join(re.escape(label) for label in sorted(labels, key=len, reverse=True))
     text = re.sub(rf'(?:\b(?:{prefixes})\s+)+(?=@)', '', text, flags=re.IGNORECASE)
+    if injuries and len(placeholders) == 2 and set(placeholders.values()) & {'questionable', 'doubtful'}:
+        first = next((token for token, status in placeholders.items() if status == 'out'), None)
+        if first:
+            second = next(token for token in placeholders if token != first)
+            club = '|'.join(re.escape(label) for label in sorted(team_labels, key=len, reverse=True))
+            team_prefix = rf'(?:(?:{club}) )?' if club else ''
+            report = (rf'{team_prefix}ruled out {first}{diagnoses[first]},? and listed '
+                      rf'{second} as {placeholders[second]}{diagnoses[second]}\.?')
+            if re.fullmatch(report, text, re.IGNORECASE):
+                return True
     groups = re.compile(r'(@\d+@(?:\s*(?:,\s*(?:and\s+)?|and\s+)@\d+@)*)'
                         r'\s+(?:is|are|was|were) (?:ruled )?(out|doubtful|questionable)\b',
                         re.IGNORECASE)

@@ -1560,6 +1560,18 @@ class ParlayGuardTests(unittest.TestCase):
         self.assertFalse(run.matches_reviewed_status_list(report.replace('are questionable', 'are out'), statuses, game))
         self.assertFalse(run.matches_reviewed_status_list(report.replace('while wide receiver', 'while starting quarterback'), statuses, game))
 
+    def test_reviewed_grouped_injury_report_matches_each_diagnosis(self):
+        game = dict(home={'short': 'Giants'}, away={'short': 'Jaguars', 'school': 'Jacksonville'})
+        statuses = {'Danny Striggow': 'out', 'Matt Dickerson': 'questionable'}
+        injuries = {'Danny Striggow': 'Concussion', 'Matt Dickerson': 'Neck'}
+        report = ('Jacksonville ruled out defensive end Danny Striggow with a concussion and listed '
+                  'defensive tackle Matt Dickerson as questionable with a neck injury.')
+        self.assertTrue(run.matches_reviewed_status_list(report, statuses, game, injuries=injuries))
+        for changed in (report.replace('as questionable', 'as doubtful'),
+                        report.replace('neck injury', 'hamstring injury'),
+                        report + ' Another starter will be out.'):
+            self.assertFalse(run.matches_reviewed_status_list(changed, statuses, game, injuries=injuries))
+
     def test_the_price_check_takes_a_ticket_off_when_its_leg_was_pulled(self):
         from unittest import mock
         import x_post
