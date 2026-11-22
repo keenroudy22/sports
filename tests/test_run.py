@@ -1520,6 +1520,19 @@ class ParlayGuardTests(unittest.TestCase):
         incomplete = {name: status for name, status in statuses.items() if name != 'Daiyan Henley'}
         self.assertFalse(run.matches_reviewed_status_list(report, incomplete, game))
 
+    def test_reviewed_status_list_matches_published_groups_and_plural_positions(self):
+        game = dict(home={'short': 'Chargers'}, away={'short': 'Jets'})
+        statuses = dict.fromkeys(('Daiyan Henley', 'Rodney Shelley', 'Kendall Williamson'), 'out')
+        statuses['Brenen Thompson'] = 'doubtful'
+        statuses.update(dict.fromkeys(('Ladd McConkey', 'Charlie Kolar', 'Trey Pipkins III',
+                                      'Tarheeb Still', 'Isas Waxter'), 'questionable'))
+        report = ('Chargers linebacker Daiyan Henley, cornerback Rodney Shelley and safety Kendall Williamson are out; '
+                  'wide receiver Brenen Thompson is doubtful, while wide receiver Ladd McConkey, tight end Charlie Kolar, '
+                  'tackle Trey Pipkins III and cornerbacks Tarheeb Still and Isas Waxter are questionable.')
+        self.assertTrue(run.matches_reviewed_status_list(report, statuses, game))
+        self.assertFalse(run.matches_reviewed_status_list(report.replace('are questionable', 'are out'), statuses, game))
+        self.assertFalse(run.matches_reviewed_status_list(report.replace('while wide receiver', 'while starting quarterback'), statuses, game))
+
     def test_the_price_check_takes_a_ticket_off_when_its_leg_was_pulled(self):
         from unittest import mock
         import x_post

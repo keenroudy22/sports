@@ -5357,7 +5357,9 @@ def matches_reviewed_status_list(text, reviewed, game):
         placeholders[token] = reviewed[name]
     labels = {'defensive lineman', 'offensive lineman', 'defensive end', 'defensive tackle',
               'offensive tackle', 'wide receiver', 'linebacker', 'cornerback', 'safety',
-              'running back', 'tight end', 'center', 'guard', 'edge rusher', 'kicker'}
+              'running back', 'tight end', 'center', 'guard', 'edge rusher', 'kicker', 'tackle'}
+    labels.update(label + 's' for label in tuple(labels) if label not in {'safety', 'offensive lineman', 'defensive lineman'})
+    labels.update({'safeties', 'offensive linemen', 'defensive linemen'})
     labels.update(game[side].get(field) for side in ('home', 'away')
                   for field in ('name', 'short', 'school', 'abbreviation') if game[side].get(field))
     prefixes = '|'.join(re.escape(label) for label in sorted(labels, key=len, reverse=True))
@@ -5367,7 +5369,7 @@ def matches_reviewed_status_list(text, reviewed, game):
                         re.IGNORECASE)
     seen, end = set(), 0
     for match in groups.finditer(text):
-        if not re.fullmatch(r'[\s,.;&]*(?:and[\s,.;&]+)?', text[end:match.start()], re.IGNORECASE):
+        if not re.fullmatch(r'[\s,.;&]*(?:(?:and|while)[\s,.;&]+)?', text[end:match.start()], re.IGNORECASE):
             return False
         group = set(re.findall(r'@\d+@', match[1]))
         if seen.intersection(group) or any(placeholders.get(token) != match[2].lower() for token in group):
