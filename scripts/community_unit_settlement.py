@@ -27,7 +27,8 @@ def review(ticket, evidence, posts, now):
 def _review(ticket, evidence, posts, now):
     legs = ticket.get('legs')
     league = ticket.get('league')
-    if (league not in tickets.STATS or not isinstance(legs, list) or not 1 <= len(legs) <= 8
+    stats = tickets.STATS.get('NFL' if league == 'CFB' else league, {})
+    if (not stats or not isinstance(legs, list) or not 1 <= len(legs) <= 8
             or any(not isinstance(leg, dict) for leg in legs)
             or ticket.get('riskUnits') != .25 or isinstance(ticket.get('riskUnits'), bool)
             or ticket.get('book') not in ('DraftKings', 'FanDuel')
@@ -71,7 +72,18 @@ def _review(ticket, evidence, posts, now):
             return None, 'Duplicate original leg'
         seen.add(key)
         period = leg.get('period')
-        if (leg.get('market') not in tickets.STATS[league]
+        team_market = league in ('NFL', 'CFB') and leg.get('market') in ('moneyline', 'total')
+        if team_market:
+            if (period != 'full_game' or leg.get('book') != ticket['book']
+                    or leg.get('kickoff') != ticket['kickoff'] or not leg.get('gameId')
+                    or leg.get('milestone') is not None
+                    or leg.get('market') == 'moneyline' and
+                       (leg.get('direction') not in ('home', 'away') or leg.get('line') is not None)
+                    or leg.get('market') == 'total' and
+                       (leg.get('direction') not in ('over', 'under') or not tickets.numeric(leg.get('line'))
+                        or leg['line'] <= 0 or not float(leg['line']*2).is_integer())):
+                return None, 'Unsupported original team market terms'
+        elif (leg.get('market') not in stats
                 or period not in (('full_game', '1Q') if league == 'NFL' else ('full_game',))
                 or leg.get('book') != ticket['book'] or not str(leg.get('athleteId') or '')
                 or leg.get('kickoff') != ticket['kickoff']
@@ -89,15 +101,27 @@ def _review(ticket, evidence, posts, now):
             return None, 'Exact completed-period stats, participation and clear injury review required'
         value = row.get('actual')
         if (not tickets.numeric(value) or not float(value).is_integer()
-                or leg['market'] not in ('rushYds', 'recYds', 'passYds') and value < 0):
+                or leg['market'] not in ('rushYds', 'recYds', 'passYds', 'moneyline') and value < 0):
             return None, 'Official numeric actual required; missing stats cannot become zero'
-        if value == leg['line'] or row.get('result') in ('push', 'void'):
+        if team_market:
+            scores = row.get('scores')
+            if (not isinstance(scores, dict) or set(scores) != {'home', 'away'}
+                    or any(not tickets.numeric(v) or v < 0 or not float(v).is_integer() for v in scores.values())):
+                return None, 'Official final home and away scores required for team markets'
+            expected = (scores['home'] + scores['away'] if leg['market'] == 'total'
+                        else scores[leg['direction']] - scores['away' if leg['direction'] == 'home' else 'home'])
+            if value != expected:
+                return None, 'Team actual contradicts official final scores'
+        threshold = 0 if leg['market'] == 'moneyline' else leg['line']
+        if value == threshold or row.get('result') in ('push', 'void'):
             return None, 'Removed leg needs an actual book decision and verified revised ticket price'
-        result = 'win' if (value > leg['line']) == (leg['direction'] == 'over') else 'loss'
+        result = 'win' if (value > threshold) == (leg['direction'] in ('over', 'home', 'away')) else 'loss'
         if row.get('result') != result:
             return None, 'Leg outcome contradicts its original threshold'
         results.append(result)
-        actuals.append(f"{leg['player']}: {value:g} {tickets.STATS[league][leg['market']]} ({period}; {result})")
+        label = leg.get('title', leg['market']) if team_market else leg['player']
+        stat = leg['market'] if team_market else stats[leg['market']]
+        actuals.append(f"{label}: {value:g} {stat} ({period}; {result})")
     result = 'loss' if 'loss' in results else 'win'
     odds = ticket['odds']
     units = -.25 if result == 'loss' else round(.25 * (odds / 100 if odds > 0 else 100 / -odds), 6)

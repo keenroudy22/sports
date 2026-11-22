@@ -47,6 +47,40 @@ def fixture():
 
 
 class CommunityUnitSettlementTests(unittest.TestCase):
+    def test_mixed_football_ticket_uses_exact_final_scores(self):
+        ticket, evidence, posts, now = fixture()
+        ticket['league'] = 'CFB'
+        for leg, row in zip(ticket['legs'], evidence['legs']):
+            leg.update(period='full_game')
+            row.update(completedPeriod='full_game', terms=identity(leg))
+        for market, direction, line, scores, actual, result in (
+                ('moneyline', 'away', None, {'home': 10, 'away': 42}, 32, 'win'),
+                ('total', 'under', 68.5, {'home': 38, 'away': 34}, 72, 'loss')):
+            leg = {'gameId': 'CFB-'+market, 'market': market, 'direction': direction,
+                   'period': 'full_game', 'book': ticket['book'], 'kickoff': ticket['kickoff']}
+            if line is not None:
+                leg['line'] = line
+            ticket['legs'].append(leg)
+            row = copy.deepcopy(evidence['legs'][0])
+            row.update(terms=identity(leg), scores=scores, actual=actual, result=result)
+            evidence['legs'].append(row)
+        evidence['original']['ticket'] = copy.deepcopy(ticket)
+        result, held = unit.review(ticket, evidence, posts, now)
+        self.assertIsNone(held)
+        self.assertEqual(result['units'], -.25)
+        for change in ({'scores': None}, {'scores': {'home': True, 'away': 34}},
+                       {'actual': 70}, {'result': 'win'}):
+            bad = copy.deepcopy(evidence)
+            bad['legs'][-1].update(change)
+            self.assertIsNone(unit.review(ticket, bad, posts, now)[0], change)
+        for change in ({'period': '1Q'}, {'direction': 'over'}, {'line': 0}):
+            badticket = copy.deepcopy(ticket)
+            badticket['legs'][2].update(change)
+            bad = copy.deepcopy(evidence)
+            bad['original']['ticket'] = copy.deepcopy(badticket)
+            bad['legs'][2]['terms'] = identity(badticket['legs'][2])
+            self.assertIsNone(unit.review(badticket, bad, posts, now)[0], change)
+
     def test_exact_published_allocation_is_not_a_cash_receipt(self):
         ticket, evidence, posts, now = fixture()
         result, held = unit.review(ticket, evidence, posts, now)
