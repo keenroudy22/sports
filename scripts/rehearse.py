@@ -145,6 +145,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     parser.add_argument('--slot', required=True, help='HHMM Eastern; use the current scheduled window')
     parser.add_argument('--now', help='optional recorded UTC instant; future instants are refused')
+    parser.add_argument('--discard-snapshot', action='store_true',
+                        help='remove the copied inputs after the run; retain the logs and results')
     parser.add_argument('--worker', help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     if len(args.slot) != 4 or not args.slot.isdigit() or int(args.slot[:2]) > 23 or int(args.slot[2:]) > 59:
@@ -159,13 +161,18 @@ def main(argv=None):
     if args.worker:
         return worker(args.worker, args.slot, args.now)
     workspace = Path(tempfile.mkdtemp(prefix='kookn-rehearsal-')).resolve()
-    snapshot = stage(ROOT, workspace)
-    argv = [sys.executable, str(snapshot / 'scripts' / 'rehearse.py'), '--worker', str(workspace), '--slot', args.slot]
-    if args.now:
-        argv += ['--now', args.now]
     print(f'Offline rehearsal artifacts: {workspace}', flush=True)
-    with (workspace / 'rehearsal.log').open('w') as log:
-        result = subprocess.run(argv, cwd=snapshot, env=environment(workspace), stdout=log, stderr=subprocess.STDOUT)
+    try:
+        snapshot = stage(ROOT, workspace)
+        argv = [sys.executable, str(snapshot / 'scripts' / 'rehearse.py'), '--worker', str(workspace), '--slot', args.slot]
+        if args.now:
+            argv += ['--now', args.now]
+        with (workspace / 'rehearsal.log').open('w') as log:
+            result = subprocess.run(argv, cwd=snapshot, env=environment(workspace), stdout=log, stderr=subprocess.STDOUT)
+    finally:
+        copied_inputs = workspace / 'snapshot'
+        if args.discard_snapshot and copied_inputs.exists():
+            shutil.rmtree(copied_inputs)
     print(f'Exit {result.returncode}; log: {workspace / "rehearsal.log"}')
     if (workspace / 'result.json').exists():
         print((workspace / 'result.json').read_text())

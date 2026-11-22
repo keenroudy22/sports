@@ -152,6 +152,8 @@ class GateAndLockTests(unittest.TestCase):
                 self.assertIn([sys.executable, f'scripts/{name}.py'], commands)
             self.assertIn([sys.executable, 'scripts/record_audit.py', '--today', 'site/data/app/record.json'], commands)
             self.assertIn([sys.executable, 'scripts/asset_versions.py', '--check'], commands)
+            rehearsal = next(command for command in commands if command[1] == 'scripts/rehearse.py')
+            self.assertIn('--discard-snapshot', rehearsal)
 
     def test_actual_midnight_uses_previous_real_settlement_slot(self):
         self.assertEqual(deploy.rehearsal_slot(datetime(2026, 10, 27, 4, 10, tzinfo=timezone.utc)), '2355')
