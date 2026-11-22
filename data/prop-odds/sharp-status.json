@@ -1,53 +1,53 @@
 {
- "at": "2026-11-22T18:53:06Z",
+ "at": "2026-11-22T20:55:00Z",
  "confirmed": {
-  "NFL-401873069": "2026-11-22T18:56:18Z",
+  "NFL-401873069": "2026-11-22T20:57:10Z",
   "NFL-401873074": "2026-11-22T18:56:18Z",
-  "NFL-401873075": "2026-11-22T18:56:18Z",
-  "NFL-401873077": "2026-11-22T18:56:18Z",
-  "NFL-401873078": "2026-11-22T18:56:18Z"
+  "NFL-401873075": "2026-11-22T20:57:10Z",
+  "NFL-401873077": "2026-11-22T20:57:10Z",
+  "NFL-401873078": "2026-11-22T20:57:10Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 4026,
-    "fanduel": 2215
+    "draftkings": 2761,
+    "fanduel": 1613
    },
-   "eventsListed": 22,
-   "eventsMatched": 5,
+   "eventsListed": 6,
+   "eventsMatched": 4,
    "games": 5,
    "marketTypes": {
-    "player_assists": 94,
-    "player_defensive_interceptions": 114,
-    "player_extra_points_made": 20,
-    "player_field_goals_made": 20,
-    "player_interceptions": 20,
-    "player_kicking_points": 20,
-    "player_longest_passing_completion": 20,
-    "player_longest_reception": 98,
-    "player_longest_rush": 46,
-    "player_passing_+_rushing_yards": 18,
-    "player_passing_attempts": 20,
-    "player_passing_completions": 20,
-    "player_passing_touchdowns": 68,
-    "player_passing_yards": 376,
-    "player_passing_yards_combo_": 68,
-    "player_receiving_yards": 1603,
-    "player_receiving_yards_combo_": 101,
-    "player_receptions": 872,
-    "player_rushing_+_receiving_yards": 60,
-    "player_rushing_attempts": 34,
-    "player_rushing_yards": 680,
-    "player_rushing_yards_combo_": 43,
-    "player_sacks": 119,
-    "player_tackles": 94,
-    "player_tackles_+_assists": 94,
-    "player_touchdowns": 223,
-    "player_touchdowns_combo_": 436,
-    "point_spread": 860
+    "player_assists": 65,
+    "player_defensive_interceptions": 78,
+    "player_extra_points_made": 12,
+    "player_field_goals_made": 16,
+    "player_interceptions": 14,
+    "player_kicking_points": 14,
+    "player_longest_passing_completion": 16,
+    "player_longest_reception": 82,
+    "player_longest_rush": 29,
+    "player_passing_+_rushing_yards": 12,
+    "player_passing_attempts": 16,
+    "player_passing_completions": 12,
+    "player_passing_touchdowns": 46,
+    "player_passing_yards": 249,
+    "player_passing_yards_combo_": 44,
+    "player_receiving_yards": 1137,
+    "player_receiving_yards_combo_": 74,
+    "player_receptions": 630,
+    "player_rushing_+_receiving_yards": 34,
+    "player_rushing_attempts": 20,
+    "player_rushing_yards": 460,
+    "player_rushing_yards_combo_": 23,
+    "player_sacks": 94,
+    "player_tackles": 62,
+    "player_tackles_+_assists": 58,
+    "player_touchdowns": 159,
+    "player_touchdowns_combo_": 358,
+    "point_spread": 560
    },
-   "requestsLeft": 25,
-   "rows": 6241,
+   "requestsLeft": 36,
+   "rows": 4374,
    "slateGames": [
     "New York Jets at Los Angeles Chargers 2026-11-22T21:05Z",
     "Jacksonville Jaguars at New York Giants 2026-11-22T21:25Z",
@@ -68,14 +68,12 @@
       "draftkings_predictions": "34118092",
       "fanatics": "5929172",
       "fanatics_markets": "9005314",
-      "fanduel": "35607031",
       "fliff": "fobj__conflict_event__391734",
-      "gemini": "NFL-2611260100-GB-LAR-M",
+      "gemini": "NFL-2611260100-GB-LAR-T",
       "hardrock": "322352419623272876",
       "kalshi": "KXNFL1HTEAMTOTAL-26NOV25GBLAR",
       "novig": "01a1ec38-db7d-74c3-8700-65f05fada348",
       "onexbet": "720898999",
-      "paddypower": "35607031",
       "polymarket": "nfl_packers_rams_2026-11-25_b3",
       "polymarket_us": "nfl-gb-lar-2026-11-25",
       "prophetx": "1700008889",
@@ -118,9 +116,15 @@
        "point_spread",
        "team_total",
        "team_total_odd_even",
+       "team_total_rushing_touchdowns",
+       "team_total_rushing_yards",
+       "team_total_sacks",
        "team_total_touchdowns",
+       "total_field_goals",
+       "total_passing_touchdowns",
        "total_points",
        "total_points_odd_even",
+       "total_punts",
        "total_touchdowns",
        "will_there_be_overtime"
       ]
@@ -129,418 +133,20 @@
      "type": "fixture"
     },
     {
-     "away": "Chicago Bears",
+     "away": null,
      "external": {
-      "ballybet": "1028824835",
-      "bet365": "197328218",
-      "betrivers": "1028824835",
-      "draftkings": "34118200",
-      "draftkings_predictions": "34118200",
-      "fanatics": "5936641",
-      "fanatics_markets": "9067388",
-      "fanduel": "35607159",
-      "fliff": "392109_c_p_202_prematch",
-      "gemini": "NFL-2611261800-CHI-DET-S",
-      "hardrock": "7686130027324375446",
-      "kalshi": "KXNFL1HTEAMTOTAL-26NOV26CHIDET",
-      "novig": "01a1edd4-dde5-7bb2-a1ff-f577d9dbada8",
-      "onexbet": "720928146",
-      "paddypower": "35607159",
-      "polymarket": "nfl_bears_lions_2026-11-26_b2",
-      "polymarket_us": "nfl-chi-det-2026-11-26",
-      "prophetx": "1700008862",
-      "robinhood": "4b85c28a-9258-4c47-9a7d-a690e55b5621",
-      "saba": "138168696",
-      "smarkets": "45078617",
-      "smarkets_lay": "45078617",
-      "stake": "aa54d759-9620-4ec7-8c42-4f34e0c2c844"
+      "fanduel": "28297422"
      },
-     "home": "Detroit Lions",
+     "home": null,
      "sample": {
-      "away_team": "Chicago Bears",
-      "home_team": "Detroit Lions",
+      "away_team": "",
+      "home_team": "",
       "markets": [
-       "1st_half_team_total",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points"
+       "mvp"
       ]
      },
-     "start": "2026-11-26T18:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Philadelphia Eagles",
-     "external": {
-      "ballybet": "1027638968",
-      "bet365": "197328221",
-      "betrivers": "1027638968",
-      "draftkings": "34118122",
-      "draftkings_predictions": "34118122",
-      "fanatics": "5937356",
-      "fanatics_markets": "9067390",
-      "fanduel": "35599534",
-      "fliff": "391442_c_p_202_prematch",
-      "gemini": "NFL-2611262130-PHI-DAL-M",
-      "hardrock": "4657459277917716914",
-      "kalshi": "KXNFLTOTAL-26NOV26PHIDAL",
-      "novig": "019fed1f-6057-7b73-a1df-c2e2bad37dce",
-      "onexbet": "720532931",
-      "paddypower": "35599534",
-      "polymarket": "nfl_cowboys_eagles_2026-11-26_b2",
-      "polymarket_us": "nfl-phi-dal-2026-11-26",
-      "prophetx": "1700008839",
-      "robinhood": "8955e3b5-b341-418a-b758-f95574903364",
-      "saba": "138168698",
-      "smarkets": "45070599",
-      "smarkets_lay": "45070599",
-      "stake": "d6ee21a5-dff6-4ca5-b32d-bce22a0f70c9"
-     },
-     "home": "Dallas Cowboys",
-     "sample": {
-      "away_team": "Philadelphia Eagles",
-      "home_team": "Dallas Cowboys",
-      "markets": [
-       "1st_half_team_total",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-26T21:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Kansas City Chiefs",
-     "external": {
-      "ballybet": "1028824890",
-      "bet365": "197328224",
-      "betrivers": "1028824890",
-      "draftkings": "34118209",
-      "draftkings_predictions": "34118209",
-      "fanatics": "5938045",
-      "fanatics_markets": "9067389",
-      "fanduel": "35607552",
-      "fliff": "392110_c_p_202_prematch",
-      "gemini": "NFL-2611270120-KC-BUF-M",
-      "hardrock": "8573902103869784453",
-      "kalshi": "KXNFLTOTAL-26NOV26KCBUF",
-      "novig": "01a1edd4-dedf-7362-868c-e8e56ed998d6",
-      "onexbet": "720994021",
-      "paddypower": "35607552",
-      "polymarket": "nfl_bills_chiefs_2026-11-26_b3",
-      "polymarket_us": "nfl-kc-buf-2026-11-26",
-      "prophetx": "1700008892",
-      "robinhood": "77f36a13-261e-4564-bf2e-9028298fc43a",
-      "saba": "138168701",
-      "smarkets": "45078616",
-      "smarkets_lay": "45078616",
-      "stake": "894292dd-11fa-4c14-93d4-1c4cb6946e33"
-     },
-     "home": "Buffalo Bills",
-     "sample": {
-      "away_team": "Kansas City Chiefs",
-      "home_team": "Buffalo Bills",
-      "markets": [
-       "1st_half_team_total",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-27T01:20:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Denver Broncos",
-     "external": {
-      "ballybet": "1028824892",
-      "bet365": "197328227",
-      "betrivers": "1028824892",
-      "draftkings": "34118077",
-      "draftkings_predictions": "34118077",
-      "fanatics": "5947144",
-      "fanatics_markets": "9132562",
-      "fanduel": "35610249",
-      "fliff": "393181_c_p_202_prematch",
-      "gemini": "NFL-2611272000-DEN-PIT-M",
-      "hardrock": "7411900144173580713",
-      "kalshi": "KXNFLSPREAD-26NOV27DENPIT",
-      "novig": "01a1edd4-df45-73a2-aab2-0210b67e7c7d",
-      "onexbet": "734886827",
-      "paddypower": "35610249",
-      "polymarket": "nfl_broncos_steelers_2026-11-27_b2",
-      "polymarket_us": "nfl-den-pit-2026-11-27",
-      "prophetx": "1700008865",
-      "robinhood": "06676503-85ba-4cfb-ba5b-69f83010804b",
-      "saba": "138168700",
-      "smarkets": "45274659",
-      "smarkets_lay": "45274659",
-      "stake": "505df154-fec7-489c-bfd8-80ad9f65788b"
-     },
-     "home": "Pittsburgh Steelers",
-     "sample": {
-      "away_team": "Denver Broncos",
-      "home_team": "Pittsburgh Steelers",
-      "markets": [
-       "1st_half_team_total",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-27T20:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "New Orleans Saints",
-     "external": {
-      "ballybet": "1028824893",
-      "bet365": "204700742",
-      "betrivers": "1028824893",
-      "draftkings": "34118135",
-      "draftkings_predictions": "34118135",
-      "fanatics_markets": "9327956",
-      "fanduel": "36331649",
-      "fliff": "407859_c_p_202_prematch",
-      "kalshi": "KXNFLGAME-26NOV29NOCIN",
-      "novig": "01a1edd4-e457-7532-b96f-98ca9d7c1c5b",
-      "onexbet": "771828228",
-      "paddypower": "36331649",
-      "polymarket": "nfl_bengals_saints_2026-11-29_b2",
-      "polymarket_us": "nfl-no-cin-2026-11-29",
-      "robinhood": "b07ca103-278b-4301-9ef6-a859fa08dbd2",
-      "saba": "138168695",
-      "stake": "a4d9e893-5042-470a-af03-4b267d8bba95"
-     },
-     "home": "Cincinnati Bengals",
-     "sample": {
-      "away_team": "New Orleans Saints",
-      "home_team": "Cincinnati Bengals",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-29T18:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "New York Giants",
-     "external": {
-      "ballybet": "1028824894",
-      "bet365": "204887945",
-      "betrivers": "1028824894",
-      "draftkings": "34118274",
-      "draftkings_predictions": "34118274",
-      "fanatics_markets": "9327948",
-      "fanduel": "36331652",
-      "fliff": "407939_c_p_202_prematch",
-      "kalshi": "KXNFLGAME-26NOV29NYGIND",
-      "novig": "01a1edd4-e07f-7613-8df8-0e517f38fc0f",
-      "onexbet": "771828229",
-      "paddypower": "36331652",
-      "polymarket": "nfl_colts_giants_2026-11-29_b2",
-      "polymarket_us": "nfl-nyg-ind-2026-11-29",
-      "robinhood": "5094823b-308d-46c6-aab5-fdcf79b470d1",
-      "saba": "138168697",
-      "stake": "5aee650c-eac4-4e7a-9793-2fb7c78641a9"
-     },
-     "home": "Indianapolis Colts",
-     "sample": {
-      "away_team": "New York Giants",
-      "home_team": "Indianapolis Colts",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-29T18:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "New York Jets",
-     "external": {
-      "ballybet": "1028824896",
-      "bet365": "204888736",
-      "betrivers": "1028824896",
-      "draftkings": "34118186",
-      "draftkings_predictions": "34118186",
-      "fanatics_markets": "9327950",
-      "fanduel": "36331653",
-      "fliff": "407941_c_p_202_prematch",
-      "kalshi": "KXNFLGAME-26NOV29NYJMIA",
-      "novig": "01a1edd4-e3eb-76b3-97aa-a91e12f85f60",
-      "onexbet": "771828230",
-      "paddypower": "36331653",
-      "polymarket": "nfl_dolphins_jets_2026-11-29_b2",
-      "polymarket_us": "nfl-nyj-mia-2026-11-29",
-      "robinhood": "ec2379cd-b880-4511-8497-d0030683a6fc",
-      "saba": "138168704",
-      "stake": "4c23e7b0-1edf-441c-a3bf-781c7a5a7c03"
-     },
-     "home": "Miami Dolphins",
-     "sample": {
-      "away_team": "New York Jets",
-      "home_team": "Miami Dolphins",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-29T18:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Atlanta Falcons",
-     "external": {
-      "ballybet": "1028824895",
-      "bet365": "204700754",
-      "betrivers": "1028824895",
-      "draftkings": "34118158",
-      "draftkings_predictions": "34118158",
-      "fanatics_markets": "9327954",
-      "fanduel": "36331656",
-      "fliff": "407938_c_p_202_prematch",
-      "kalshi": "KXNFLGAME-26NOV29ATLMIN",
-      "novig": "01a1edd4-e00e-76b2-9102-7ecda9880297",
-      "onexbet": "771828226",
-      "paddypower": "36331656",
-      "polymarket": "nfl_falcons_vikings_2026-11-29_b2",
-      "polymarket_us": "nfl-atl-min-2026-11-29",
-      "robinhood": "cc756766-587c-463a-8780-9befca99fec8",
-      "saba": "138168705",
-      "stake": "7179e4cc-93f4-43a4-b6df-f26ea1673256"
-     },
-     "home": "Minnesota Vikings",
-     "sample": {
-      "away_team": "Atlanta Falcons",
-      "home_team": "Minnesota Vikings",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
-      ]
-     },
-     "start": "2026-11-29T18:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Tennessee Titans",
-     "external": {
-      "ballybet": "1028824898",
-      "bet365": "204700874",
-      "betrivers": "1028824898",
-      "caesars": "a78085a5-dd12-09ca-8747-6e048e128599",
-      "draftkings": "34118248",
-      "draftkings_predictions": "34118248",
-      "fanatics_markets": "9327955",
-      "fanduel": "36331654",
-      "fliff": "407942_c_p_202_prematch",
-      "kalshi": "KXNFLGAME-26NOV29TENJAC",
-      "novig": "01a1edd4-e222-7763-afe8-5bd100a50457",
-      "onexbet": "771828231",
-      "paddypower": "36331654",
-      "polymarket": "nfl_jaguars_titans_2026-11-29_b2",
-      "polymarket_us": "nfl-ten-jax-2026-11-29",
-      "prophetx": "1700008875",
-      "robinhood": "e1ca4430-a443-497f-af72-ba36ef7653b9",
-      "saba": "138168703",
-      "stake": "2585dc3b-26e9-4678-9348-48b075911e15"
-     },
-     "home": "Jacksonville Jaguars",
-     "sample": {
-      "away_team": "Tennessee Titans",
-      "home_team": "Jacksonville Jaguars",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-29T18:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Baltimore Ravens",
-     "external": {
-      "ballybet": "1028824899",
-      "bet365": "204700757",
-      "betrivers": "1028824899",
-      "draftkings": "34118022",
-      "draftkings_predictions": "34118022",
-      "fanatics_markets": "9327949",
-      "fanduel": "36331650",
-      "fliff": "407937_c_p_202_prematch",
-      "kalshi": "KXNFLGAME-26NOV29BALHOU",
-      "novig": "01a1edd4-e2fa-7b50-ac99-2ae1ee43e263",
-      "onexbet": "771828227",
-      "paddypower": "36331650",
-      "polymarket": "nfl_ravens_texans_2026-11-29_b2",
-      "polymarket_us": "nfl-bal-hou-2026-11-29",
-      "robinhood": "e1447554-e9f6-4822-9fb8-560edc199a0d",
-      "saba": "138168702",
-      "stake": "0fe255eb-cca4-42f0-83f4-7aa7ccd4b7ca"
-     },
-     "home": "Houston Texans",
-     "sample": {
-      "away_team": "Baltimore Ravens",
-      "home_team": "Houston Texans",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-11-29T18:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "New England Patriots",
-     "external": {
-      "ballybet": "1028824902",
-      "bet365": "204700883",
-      "betrivers": "1028824902",
-      "caesars": "f3b9d7da-1b03-1d6e-f681-feb172be126d",
-      "draftkings": "34118155",
-      "draftkings_predictions": "34118155",
-      "fanatics_markets": "9327951",
-      "fanduel": "36331658",
-      "fliff": "407945_c_p_202_prematch",
-      "kalshi": "KXNFLGAME-26NOV29NELAC",
-      "novig": "01a1edd4-e4d3-7671-955d-25d2fea9d42a",
-      "onexbet": "771829270",
-      "paddypower": "36331658",
-      "polymarket": "nfl_chargers_patriots_2026-11-29_b2",
-      "polymarket_us": "nfl-ne-lac-2026-11-29",
-      "robinhood": "4057e1ba-1689-4a67-8cee-d154e04214ab",
-      "saba": "138168707",
-      "stake": "084025b0-c9ea-42ef-96e1-c6112f3ad00c"
-     },
-     "home": "Los Angeles Chargers",
-     "sample": {
-      "away_team": "New England Patriots",
-      "home_team": "Los Angeles Chargers",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
-      ]
-     },
-     "start": "2026-11-29T21:05:00Z",
-     "type": "fixture"
+     "start": "2027-02-06T18:00:00Z",
+     "type": "outright"
     }
    ]
   }
