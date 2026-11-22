@@ -112,6 +112,39 @@ class FunTicketReviewTests(unittest.TestCase):
         self.assertEqual((len(pick['legs']), pick['parlayStyle']), (6, 'lotto'))
         self.assertTrue(gates.longshot_shape(pick, ctx).ok)
 
+    def test_sunday_nfl_early_and_late_shorts_share_neither_id_nor_daily_slot(self):
+        now = datetime(2026, 11, 22, 16, 10, tzinfo=timezone.utc)
+        candidates = []
+        games = {}
+        for window, kickoffs in (('early', ('18:00',) * 3),
+                                 ('late', ('21:05', '21:25', '21:25'))):
+            spec, ctx = fixture()
+            ctx.now = now
+            spec['quotedAt'] = '2026-11-22T16:05:00Z'
+            spec['researchReview']['reviewedAt'] = '2026-11-22T16:06:00Z'
+            for index, (leg, kickoff) in enumerate(zip(spec['legs'], kickoffs)):
+                game = ctx.games.pop(leg['gameId'])
+                game_id = f'NFL-{window}-{index}'
+                game.update(id=game_id, league='NFL', kickoff=f'2026-11-22T{kickoff}:00Z')
+                ctx.games[game_id] = game
+                leg.update(gameId=game_id, kickoff=game['kickoff'], observedAt=spec['quotedAt'])
+                leg['researchCase']['sources'][0]['checkedAt'] = '2026-11-22T16:00:00Z'
+            pick, held = review.candidate(ctx, now, spec)
+            self.assertIsNone(held)
+            self.assertEqual(pick['id'], f'NFL-2026-11-22-short-{window}-draftkings')
+            candidates.append(dict(pick, publishedAt=gates.stamp(now)))
+            games.update(ctx.games)
+
+        early, late = candidates
+        ctx = SimpleNamespace(now=now, first={early['id']: early}, latest={}, games=games)
+        self.assertTrue(gates.longshot_one_per_day(late, ctx).ok)
+        self.assertFalse(gates.longshot_one_per_day(dict(early, id='other-early-book'), ctx).ok)
+        self.assertTrue(gates.longshot_one_per_day(dict(late, id='weekend-lotto', parlayStyle='lotto'), ctx).ok)
+        self.assertFalse(gates.longshot_one_per_day(dict(late, id='mixed-group',
+            legs=[early['legs'][0], *late['legs'][1:]]), ctx).ok)
+        ctx.first[late['id']] = late
+        self.assertFalse(gates.longshot_one_per_day(dict(late, id='other-late-book'), ctx).ok)
+
     def test_reviewed_ticket_expiry_respects_the_next_desk_run(self):
         spec, ctx = fixture()
         boundary = datetime(2026, 11, 13, 16, 45, tzinfo=timezone.utc)

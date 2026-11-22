@@ -1456,8 +1456,28 @@ def favorite_needs_reason(candidate, ctx):
     return Decision(False, 'favorite_needs_reason', 'no verified, sourced reason for the pick')
 
 
+def sunday_nfl_short_window(ticket):
+    """Return the kickoff group for an exact reviewed Sunday NFL short ticket."""
+    legs = ticket.get('legs') or []
+    if (ticket.get('parlayStyle') != 'short'
+            or ticket.get('selectionMethod') != 'sourced-fun-ticket-review-v1'
+            or not legs or not all(isinstance(leg, dict)
+                                   and str(leg.get('gameId', '')).startswith('NFL-') for leg in legs)):
+        return None
+    try:
+        kickoffs = [when(leg.get('kickoff')).astimezone(EASTERN) for leg in legs]
+    except (TypeError, ValueError):
+        return None
+    day = kickoffs[0].date()
+    if day.isoformat() < '2026-11-22' or day.weekday() != 6:
+        return None
+    if not all(k.date() == day and k.hour == kickoffs[0].hour for k in kickoffs):
+        return None
+    return {13: 'early', 16: 'late'}.get(kickoffs[0].hour)
+
+
 def longshot_one_per_day(candidate, ctx):
-    """One fun parlay of each explicit style a day; a short card and lotto may coexist."""
+    """One per style, with separate reviewed Sunday early and late NFL shorts."""
     kind = candidate.get('parlayType') or 'longshot'
     style = candidate.get('parlayStyle') or kind
     publications = dict(published_today(ctx, candidate.get('id')))
@@ -1471,6 +1491,10 @@ def longshot_one_per_day(candidate, ctx):
              if (p.get('parlayStyle') or p.get('parlayType') or ('longshot' if p.get('legs') else None)) == style
              and (style == 'daily-double' or not pulled_before_post(k, ctx))]
     word = {'easyProps': 'easy parlay', 'short': 'short parlay', 'lotto': 'lotto', 'daily-double': 'Daily Double'}.get(style, 'longshot')
+    window = sunday_nfl_short_window(candidate)
+    if window:
+        today = [key for key in today if sunday_nfl_short_window(publications[key]) in (None, window)]
+        word = f'Sunday {window} NFL parlay'
     if len(today) >= LONGSHOTS_PER_DAY:
         return Decision(False, 'longshot_one_per_day', f"{today[0]} is already today's {word}")
     return Decision(True, 'longshot_one_per_day', f'first {word} today')
