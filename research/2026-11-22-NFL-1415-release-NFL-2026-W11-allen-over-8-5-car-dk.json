@@ -1,0 +1,362 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-22T19:15:33Z",
+  "summary": "Released 1: Braelon Allen OVER 8.5 carries +104 at DraftKings.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "4685247",
+      "market": "car",
+      "line": 8.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873074"
+      ],
+      "book": "DraftKings",
+      "odds": 104,
+      "projection": 10.0,
+      "edge": "Price-checked chance 51.2% against the exact two-sided price; 49.0% needed at +104: +2.1 percentage points.",
+      "cutoff": "OVER 8.5 at +104 or better; off the card at 9+, or at +103 or worse at 8.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-21T21:48:28Z",
+      "quotedAt": "2026-11-22T18:56:18Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 1:56 PM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-22T19:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.628,
+        "chance": 0.512,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.49,
+        "edgePoints": 2.1,
+        "evPerUnit": 0.044,
+        "snapshotAt": "2026-11-21T21:48:28Z",
+        "probabilitySpec": "94fa27c8f0fde9d87d4d57abd9a66536afed17026b435e4c32b047917ed9310a",
+        "evaluatedAt": "2026-11-22T19:11:15Z",
+        "fairChance": 0.462,
+        "anchoredChance": 0.512,
+        "gap": 5.0,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "New York Jets at Los Angeles Chargers",
+      "title": "Braelon Allen OVER 8.5 carries",
+      "id": "NFL-2026-W11-allen-over-8-5-car-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873074",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 6 of 10 over 8.5.",
+        "context": [
+          "Role: 1st of 3 NYJ RBs by projected carries, 10.0 a game.",
+          "Defense: LAC allows 23.78 carries a game to RBs, 24th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 10 against 8.5. The over reads 51.2% after adjustment from the raw 62.8%; 49.0% is needed at +104. Last 10 games: 6 of 10 over 8.5. Role: 1st of 3 NYJ RBs by projected carries, 10.0 a game. Defense: LAC allows 23.78 carries a game to RBs, 24th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 10 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Over 8.5 in 6 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-22T19:11:15Z"
+          },
+          {
+            "text": "Book says 8.5. I say 10.",
+            "numbers": {
+              "projection": 10.0,
+              "line": 8.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-21T21:48:28Z"
+          },
+          {
+            "text": "3 of his last 5 games finished over 8.5 carries.",
+            "numbers": {
+              "values": [
+                17,
+                17,
+                21,
+                8,
+                8
+              ],
+              "hits": 3,
+              "games": 5,
+              "line": 8.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-15T18:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 10 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-22T19:11:15Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Ladd McConkey (LAC) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey",
+            "time": "2026-11-22T12:33Z"
+          },
+          {
+            "text": "Trey Pipkins III (LAC) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4411189/trey-pipkins-iii",
+            "time": "2026-11-22T00:44Z"
+          },
+          {
+            "text": "Isas Waxter (LAC) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4574105/isas-waxter",
+            "time": "2026-11-21T01:40Z"
+          },
+          {
+            "text": "Kendall Williamson (LAC) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4360745/kendall-williamson",
+            "time": "2026-11-21T01:31Z"
+          },
+          {
+            "text": "Tarheeb Still (LAC) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4432571/tarheeb-still",
+            "time": "2026-11-21T00:26Z"
+          },
+          {
+            "text": "Daiyan Henley (LAC) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4241597/daiyan-henley",
+            "time": "2026-11-21T00:06Z"
+          },
+          {
+            "text": "Brenen Thompson (LAC) is listed Doubtful.",
+            "numbers": {
+              "status": "Doubtful"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685553/brenen-thompson",
+            "time": "2026-11-21T00:04Z"
+          },
+          {
+            "text": "Charlie Kolar (LAC) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4241263/charlie-kolar",
+            "time": "2026-11-20T21:39Z"
+          },
+          {
+            "text": "Dylan Parham (NYJ) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham",
+            "time": "2026-11-21T01:18Z"
+          },
+          {
+            "text": "Harrison Phillips (NYJ) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3117255/harrison-phillips",
+            "time": "2026-11-21T01:15Z"
+          },
+          {
+            "text": "Trevin Wallace (NYJ) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4683815/trevin-wallace",
+            "time": "2026-11-20T22:59Z"
+          },
+          {
+            "text": "Isaiah Williams (NYJ) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4569371/isaiah-williams",
+            "time": "2026-11-20T16:11Z"
+          },
+          {
+            "text": "Omar Cooper Jr. (NYJ) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr",
+            "time": "2026-11-20T15:18Z"
+          },
+          {
+            "text": "Joseph Ossai (NYJ) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai",
+            "time": "2026-11-18T22:04Z"
+          }
+        ],
+        "weather": {
+          "tempF": 69,
+          "windMph": 10,
+          "windDirection": "WNW",
+          "precipProb": 3,
+          "periodStart": "2026-11-22T13:00:00-08:00",
+          "issuedAt": "2026-11-22T06:26:39+00:00",
+          "source": "https://api.weather.gov/gridpoints/LOX/150,42/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 8.5,
+                "price": 101,
+                "time": "2026-11-22T03:45:04Z"
+              },
+              "now": {
+                "line": 8.5,
+                "price": 104,
+                "time": "2026-11-22T18:56:18Z"
+              }
+            },
+            "FanDuel": null
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 8.5,
+            "price": 104,
+            "time": "2026-11-22T18:56:18Z"
+          }
+        },
+        "ours": {
+          "projection": 10.0,
+          "line": 8.5,
+          "market": "car",
+          "text": "Over 8.5 in 6 of his last 10 games.",
+          "snapshotAt": "2026-11-21T21:48:28Z"
+        },
+        "history": "Last 10 games: 6 of 10 over 8.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey",
+            "time": "2026-11-22T12:33Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4411189/trey-pipkins-iii",
+            "time": "2026-11-22T00:44Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4574105/isas-waxter",
+            "time": "2026-11-21T01:40Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4360745/kendall-williamson",
+            "time": "2026-11-21T01:31Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4432571/tarheeb-still",
+            "time": "2026-11-21T00:26Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4241597/daiyan-henley",
+            "time": "2026-11-21T00:06Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685553/brenen-thompson",
+            "time": "2026-11-21T00:04Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4241263/charlie-kolar",
+            "time": "2026-11-20T21:39Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham",
+            "time": "2026-11-21T01:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3117255/harrison-phillips",
+            "time": "2026-11-21T01:15Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4683815/trevin-wallace",
+            "time": "2026-11-20T22:59Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4569371/isaiah-williams",
+            "time": "2026-11-20T16:11Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr",
+            "time": "2026-11-20T15:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai",
+            "time": "2026-11-18T22:04Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/LOX/150,42/forecast/hourly",
+            "time": "2026-11-22T06:26:39+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873074",
+            "time": "2026-11-22T19:11:15Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-22T19:11:15Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-22T19:15:33Z"
+    }
+  ]
+}
