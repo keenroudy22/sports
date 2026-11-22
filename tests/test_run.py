@@ -1520,6 +1520,18 @@ class ParlayGuardTests(unittest.TestCase):
         incomplete = {name: status for name, status in statuses.items() if name != 'Daiyan Henley'}
         self.assertFalse(run.matches_reviewed_status_list(report, incomplete, game))
 
+    def test_team_can_list_statuses_without_changing_the_reviewed_availability(self):
+        game = dict(home={'short': 'Chargers'}, away={'short': 'Jets'})
+        statuses = dict.fromkeys(('Daiyan Henley', 'Rodney Shelley', 'Kendall Williamson'), 'out')
+        statuses.update({'Brenen Thompson': 'doubtful', 'Ladd McConkey': 'questionable'})
+        report = ('The Chargers listed Daiyan Henley, Rodney Shelley and Kendall Williamson as out, '
+                  'Brenen Thompson as doubtful, and Ladd McConkey as questionable.')
+        self.assertTrue(run.matches_reviewed_status_list(report, statuses, game))
+        for changed in (report.replace('as questionable', 'as out'),
+                        report.replace('The Chargers', 'The Rams'),
+                        report + ' Ladd McConkey left warmups.'):
+            self.assertFalse(run.matches_reviewed_status_list(changed, statuses, game))
+
     def test_reviewed_center_replacement_requires_the_same_active_reserve(self):
         source = 'https://www.jaguars.com/news/jaguars-friday-a-great-challenge'
         game = dict(league='NFL', home={'id': '19'}, away={'id': '30'})

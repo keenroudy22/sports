@@ -5393,19 +5393,24 @@ def matches_reviewed_status_list(text, reviewed, game, *, injuries=None):
                    for field in ('name', 'short', 'school', 'abbreviation') if game[side].get(field)}
     labels.update(team_labels)
     prefixes = '|'.join(re.escape(label) for label in sorted(labels, key=len, reverse=True))
+    clubs = '|'.join(re.escape(label) for label in sorted(team_labels, key=len, reverse=True))
     text = re.sub(rf'(?:\b(?:{prefixes})\s+)+(?=@)', '', text, flags=re.IGNORECASE)
     if injuries and len(placeholders) == 2 and set(placeholders.values()) & {'questionable', 'doubtful'}:
         first = next((token for token, status in placeholders.items() if status == 'out'), None)
         if first:
             second = next(token for token in placeholders if token != first)
-            club = '|'.join(re.escape(label) for label in sorted(team_labels, key=len, reverse=True))
-            team_prefix = rf'(?:(?:{club}) )?' if club else ''
+            team_prefix = rf'(?:(?:{clubs}) )?' if clubs else ''
             report = (rf'{team_prefix}ruled out {first}{diagnoses[first]},? and listed '
                       rf'{second} as {placeholders[second]}{diagnoses[second]}\.?')
             if re.fullmatch(report, text, re.IGNORECASE):
                 return True
+    listed_by_club = re.match(rf'(?:the )?(?:{clubs}) listed\s+', text, re.IGNORECASE) if clubs else None
+    link = r'(?:is|are|was|were) (?:ruled )?'
+    if listed_by_club:
+        text = text[listed_by_club.end():]
+        link = 'as '
     groups = re.compile(r'(@\d+@(?:\s*(?:,\s*(?:and\s+)?|and\s+)@\d+@)*)'
-                        r'\s+(?:is|are|was|were) (?:ruled )?(out|doubtful|questionable)\b',
+                        rf'\s+{link}(out|doubtful|questionable)\b',
                         re.IGNORECASE)
     seen, end = set(), 0
     for match in groups.finditer(text):
