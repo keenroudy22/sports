@@ -42,6 +42,9 @@ def challenge_amounts(pick):
     info = pick.get('ladder') or {}
     if pick.get('parlayType') != 'ladder' or info.get('fullRollover') is not True:
         return ()
+    from social_units import hide_climb_amounts
+    if hide_climb_amounts(pick):
+        return ()
     from ticket_kit import money
     values = (info.get(key) for key in ('start', 'goal', 'stake', 'payout', 'nextStake', 'totalAfter'))
     return tuple(sorted({'$0', *(money(value) for value in values if type(value) in (int, float))}))

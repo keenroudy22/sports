@@ -338,6 +338,20 @@ def climb_card(p):
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(540, 380))
     chip, _ = kit.series_chip(card, COL_X, 204, 'THE CLIMB' if full else '80/20 CLIMB')
     inner += chip
+    if p.get('hide_amounts'):
+        title = f"STEP {p['step']}"
+        inner += card.text(COL_X, 430, title, 126, CHALK)
+        sub = f"CLIMB #{p['run']} · {kit.price(p['odds'])} {p['book'].upper()}"
+        inner += card.text(COL_X, panel_bottom - 30, sub, 46, CHALK, tracking=1)
+        pitch = 72 if len(p['legs']) > 2 else 84
+        rows, _ = leg_rows(card, p['legs'], panel_bottom + 24, pitch, compact=len(p['legs']) > 2,
+                           settled=p.get('leg_results'))
+        inner += rows
+        y = panel_bottom + 44 + pitch * len(p['legs'])
+        wording = {'win': 'CASHED', 'loss': 'MISSED', 'push': 'PUSH', 'void': 'VOID'}
+        inner += kit.leader(card, y + 70, 'Climb', wording[result] if result else 'OPEN STEP')
+        frame(card, HOUSE, CHALK, y + 114, 1196, inner)
+        return card
     cy, r = 396, 104
     a, b = 316, 764
     inner += kit.poker_chip(card, a, cy, r, money(p['stake']))
@@ -553,7 +567,8 @@ def final_card(p):
         y += row_height
     net_units = p.get('net_units', 0)
     if net_units is not None:
-        inner += card.text(X1, perf + 64, f"NET {float(net_units):+.2f}u", 62, INK)
+        net_line = f"{p.get('net_label') or 'NET'} {float(net_units):+.2f}u"
+        inner += card.text(X1, perf + 64, net_line, fit(net_line, 62, X2 - X1), INK)
     if category_units := p.get('category_units'):
         inner += card.text(X1, perf + 115, category_units, fit(category_units, 42, X2 - X1), INK_SOFT)
     frame(card, HOUSE, CHALK, perf, perf + footer, inner)

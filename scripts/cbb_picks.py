@@ -155,6 +155,7 @@ def current_match(play,now,root=STORE):
 
 def plans(now,log_book,root=STORE,reserved=(), *, for_discord=False):
     import buffer_post,x_post
+    import result_display
     # Re-plan Discord-only placeholders as one batch. A proposed X time has
     # no provider reservation. Keep every actual or ambiguous send attempt.
     attempts = ('bufferPostId', 'bufferAttemptAt', 'webDelivery', 'typefullyDelivery',
@@ -184,6 +185,7 @@ def plans(now,log_book,root=STORE,reserved=(), *, for_discord=False):
         return result
     for p in public_rows(root):
         if not p.get('result') or not now-timedelta(days=3)<=boxscores.instant(p['settledAt'])<=now:continue
+        if result_display.individual_final_suppressed(p):continue
         original=next((e for e in reversed(log_book.get('posts',[])) if e.get('id')==p['id']
                        and e.get('sentAt') and e.get('tweetId') and not e.get('cancelledAt')
                        and not e.get('deletedAt')),None)
@@ -331,11 +333,13 @@ def render_result(p,folder):
 
 
 def queue_results(log_book,now,root=STORE):
+    import result_display
     saved={p['id']:p for p in public_rows(root)};count=0
     for entry in log_book.get('posts',[]):
         p=saved.get(entry['id']);mirror=entry.get('discord') or {}
         if entry.get('kind')!='buffer:cbb-pick' or entry.get('cbbPick') is not True or not p or not p.get('result') or mirror.get('state')!='sent':continue
         signature=f"{p['result']}:{p['actual']}";old=mirror.get('result')
+        if not old and result_display.individual_final_suppressed(p):continue
         if old and (old.get('gradeHash')==signature or old.get('state')!='sent'):continue
         if old:mirror.setdefault('previousResults',[]).append(dict(old))
         import social_voice,social_copy

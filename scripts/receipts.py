@@ -453,10 +453,16 @@ def quiet_parlay_result(pick):
             and gates.when(pick['settledAt']) >= PARLAY_WIN_POSTS_FROM)
 
 
-def daily_climb_units(row):
-    """Use the posted Climb stake for the recap without changing the ledger."""
+def daily_climb_row(row, include_units=True):
+    """Keep the outcome and leg grades, with unit conversion for historical cards only."""
     if pick_card.play_kind(row) != 'ladder':
         return row
+    results = leg_results(row)
+    detail = (f"{results.count('win')}/{len(results)} legs hit" if results
+              else f"{len(row['legs'])}/{len(row['legs'])} legs hit" if row.get('result') == 'win' and row.get('legs') else '')
+    if not include_units:
+        public = {key: value for key, value in row.items() if key not in ('units', 'riskUnits')}
+        return dict(public, dailyActual=detail)
     info = row.get('ladder') or {}
     stake, returned = info.get('stake'), info.get('payout')
     result = row.get('result')
@@ -464,9 +470,6 @@ def daily_climb_units(row):
         return row
     from staking import OWNER_UNIT
     net = returned - stake if result == 'win' else -stake if result == 'loss' else 0
-    results = leg_results(row)
-    detail = (f"{results.count('win')}/{len(results)} legs hit" if results
-              else f"{len(row['legs'])}/{len(row['legs'])} legs hit" if result == 'win' and row.get('legs') else '')
     return dict(row, units=net / OWNER_UNIT, dailyActual=detail)
 
 
@@ -477,8 +480,9 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     if not settled(rows):
         return None
     complete = day >= COMPLETE_CARD_FROM
+    recap_only = day >= result_display.DAILY_RECAP_ONLY_FROM
     if complete:
-        rows = [daily_climb_units(row) for row in rows]
+        rows = [daily_climb_row(row, include_units=not recap_only) for row in rows]
         rows.sort(key=lambda row: {'team': 0, 'player': 0, 'parlay': 1, 'ladder': 2}[pick_card.play_kind(row)])
     shown = rows if complete else [row for row in rows if not quiet_parlay_result(row)]
     if not shown:
@@ -493,13 +497,18 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     climb = [r for r in rows if pick_card.play_kind(r) == 'ladder']
     if complete:
-        head = f"{name} recap 🍳 {record_text(x_post.summarize(rows))} overall"
+        summary_all = x_post.summarize(rows)
+        sweep = recap_only and summary_all['win'] >= 2 and summary_all['win'] == len(rows)
+        head = f"{name} recap 🍳 {record_text(summary_all)} {'SWEEP 🔥' if sweep else 'overall'}"
         parts = []
         for category, plays in (('Straights', straight), ('Parlays', fun), ('Climb', climb)):
             if plays:
                 summary = x_post.summarize(plays)
-                parts.append(f"{category} {record_text(summary)} ({summary['units']:+.2f}u)")
-        tail = ' · '.join(parts + [f"Net {x_post.summarize(rows)['units']:+.2f}u"])
+                suffix = '' if recap_only and category == 'Climb' else f" ({summary['units']:+.2f}u)"
+                parts.append(f"{category} {record_text(summary)}{suffix}")
+        if not recap_only:
+            parts.append(f"Net {summary_all['units']:+.2f}u")
+        tail = ' · '.join(parts)
     if day == date(2026, 11, 19):
         shown = [dict(r, dailyCaptionSelection='+696 Houston Texans parlay')
                  if r['id'] == 'NFL-2026-11-19-prop-ticket-3ba30e34b6ea9820' else r for r in shown]
@@ -674,7 +683,8 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
     rows += nba_daily_rows(day, now, log_book)
     rows += cbb_daily_rows(day, now, log_book)
     rows += unit_fun_rows(now, day=day, log_book=log_book)
-    if today >= date(2026, 11, 16):
+    recap_only = day >= result_display.DAILY_RECAP_ONLY_FROM
+    if date(2026, 11, 16) <= today and not recap_only:
         import cbb_picks
         cbb = [p for p in cbb_picks.public_rows()
                if p.get('kickoff') and eastern_date(gates.when(p['kickoff'])) == day]
@@ -683,8 +693,10 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
         if hold:
             return hold
     expected = {row['id'] for row in rows}
-    if not expected or all(quiet_parlay_result(row) for row in rows):
+    if not expected or (not recap_only and all(quiet_parlay_result(row) for row in rows)):
         return None
+    if recap_only and not settled(rows):
+        return f"yesterday's receipt:day:{day.isoformat()} is waiting for the complete graded card on {channel}"
     key = f'receipt:day:{day.isoformat()}'
     for entry in reversed(log_book.get('posts', [])):
         if entry.get('id') != key or entry.get('cancelledAt') or entry.get('deletedAt'):
@@ -999,7 +1011,8 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
             continue
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
-        if quiet_parlay_result(pick):
+        starts = [games[g]['kickoff'] for g in pick.get('gameIds') or [] if games.get(g, {}).get('kickoff')]
+        if quiet_parlay_result(pick) or result_display.individual_final_suppressed(pick, min(starts, default=None)):
             continue
         ladder = pick_card.play_kind(pick) == 'ladder'
         fun_final = has_fun_final(pick)
@@ -1015,7 +1028,6 @@ def cashed(first, latest, games, log_book, now, fresh_window=None):
         parlay = pick_card.play_kind(pick) == 'parlay'
         price = f"({int(pick['odds']):+d}, {pick.get('book')})"
         head = win_reaction(pick, games)
-        import result_display
         what = ''
         if parlay:
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
@@ -1072,6 +1084,12 @@ def ladder_result(pick):
     """(head, body) for one settled rung: advance, restart with the bank protected, or keep riding."""
     import social_units
     info = pick.get('ladder') or {}
+    if social_units.hide_climb_amounts(pick):
+        result = pick.get('result') or 'win'
+        mark = MARKS[result]
+        title = f"{mark} Climb #{info.get('run', 1)} · Step {info.get('step', 1)}"
+        status = {'win': 'Cashed', 'loss': 'Stopped here', 'push': 'Push', 'void': 'Void'}[result]
+        return f'{title} · {status}', daily_climb_row(pick, include_units=False)['dailyActual']
     full = info.get('fullRollover')
     from ticket_kit import money as dollar_amount
     money = dollar_amount if full else social_units.climb if social_units.active(pick) else pick_card.dollars

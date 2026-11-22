@@ -207,6 +207,7 @@ def climb_data(pick, games, player_team=None, **kwargs):
     stake, payout = money(info['stake']), money(info['payout'])
     bank_this = int(info.get('bankThisWin', round(payout * .2)))
     return {'social_units': social_units.active(pick), 'full_rollover': full,
+            'hide_amounts': social_units.hide_climb_amounts(pick),
             'run': int(info['run']), 'step': int(info['step']), 'stake': stake, 'payout': payout,
             'banked': int(info.get('banked') or 0), 'bank_this': bank_this,
             'next_stake': money(info.get('nextStake', payout - bank_this)),
@@ -394,25 +395,31 @@ def daily_result_svg(rows, day):
         return final_svg(rows, day)
     if not rows or any(row.get('result') not in receipts.MARKS for row in rows):
         raise ValueError('Complete graded daily card required')
-    values = [0 if row['result'] == 'void' else x_post.units_for(row) for row in rows]
+    from result_display import DAILY_RECAP_ONLY_FROM
+    kinds = [pick_card.play_kind(row) for row in rows]
+    private = [kind == 'ladder' and str(day) >= DAILY_RECAP_ONLY_FROM.isoformat() for kind in kinds]
+    values = [None if hide else 0 if row['result'] == 'void' else x_post.units_for(row)
+              for row, hide in zip(rows, private)]
+    public_values = [value for value, hide in zip(values, private) if not hide]
     totals = []
     if complete:
-        for label, kinds in (('STRAIGHTS', ('player', 'team')), ('PARLAYS', ('parlay',)), ('CLIMB', ('ladder',))):
-            unit_rows = [value for row, value in zip(rows, values) if pick_card.play_kind(row) in kinds]
+        for label, group in (('STRAIGHTS', ('player', 'team')), ('PARLAYS', ('parlay',)), ('CLIMB', ('ladder',))):
+            unit_rows = [value for kind, value, hide in zip(kinds, values, private) if kind in group and not hide]
             if unit_rows and all(value is not None for value in unit_rows):
                 totals.append(f"{label} {sum(unit_rows):+.2f}u")
     card = ticket_cards.final_card({
         'headline': 'DAILY FINAL', 'row_label': 'PLAYS',
         'subheading': (f'{len(rows)} PLAYS TOTAL · {receipts.record_text(x_post.summarize(rows))}'
                        if len(shown) < len(rows) else None),
-        'net_units': sum(values) if all(value is not None for value in values) else None,
+        'net_units': (sum(public_values) if public_values and all(value is not None for value in public_values) else None),
+        'net_label': 'STRAIGHTS + PARLAYS NET' if any(private) else 'NET',
         'category_units': ' · '.join(totals),
         'rows': [{'result': {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}[row['result']],
                   'title': (row.get('dailyCaptionSelection') if complete else None) or receipts.label(row),
                   'detail': (f"{int(row['odds']):+d} {x_post.public_book(row['book'])} · {receipts.result_detail(row)}"
                              if pick_card.play_kind(row) == 'parlay' else row.get('dailyActual') or final_detail(row)),
-                  'unit_text': f'{value:+.2f}u' if value is not None else None}
-                 for row, value in zip(rows, values) if complete or not receipts.quiet_parlay_result(row)],
+                  'unit_text': f'{value:+.2f}u' if value is not None else None, 'hide_units': hide}
+                 for row, value, hide in zip(rows, values, private) if complete or not receipts.quiet_parlay_result(row)],
     })
     problems = ticket_kit.qa(card, 'daily-final-'+day)
     if problems:

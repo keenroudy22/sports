@@ -3497,9 +3497,10 @@ def result_recovery_needed(now, root=ROOT, conf=CONF):
     except (OSError, ValueError, KeyError, TypeError):
         nba_missing = 0
     import buffer_post
+    import result_display
     missing_nba_fun = 0
     for row in nba_fun_rows:
-        if receipts.quiet_parlay_result(row):
+        if receipts.quiet_parlay_result(row) or result_display.individual_final_suppressed(row):
             continue
         if not row.get('settledAt') or not now - receipts.RESULT_RECOVERY_FRESH < gates.when(row['settledAt']) <= now:
             continue

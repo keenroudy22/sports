@@ -3,6 +3,7 @@ import hashlib
 from datetime import timedelta
 from pathlib import Path
 import boxscores
+import result_display
 
 
 def key(play):
@@ -24,6 +25,7 @@ def caption(play):
 
 def eligible(play,now):
     return (play.get('marketType')=='player' and play.get('result') in ('win','loss','push','void')
+        and not result_display.individual_final_suppressed(play)
         and now-timedelta(days=3)<=boxscores.instant(play['settledAt'])<=now)
 
 

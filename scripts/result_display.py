@@ -1,6 +1,25 @@
 """Factual public settlement copy from stored box scores; never edits a report."""
 import re
+from datetime import date, datetime
 from functools import lru_cache
+from zoneinfo import ZoneInfo
+
+
+DAILY_RECAP_ONLY_FROM = date(2026, 11, 22)
+EASTERN = ZoneInfo('America/New_York')
+
+
+def individual_final_suppressed(pick, kickoff=None):
+    """New slates publish one full recap; real corrections can still go out."""
+    clock = (kickoff or pick.get('firstKickoff') or pick.get('kickoff')
+             or (pick.get('game') or {}).get('kickoff'))
+    if pick.get('correctedAt') or not clock:
+        return False
+    try:
+        instant = datetime.fromisoformat(str(clock).replace('Z', '+00:00'))
+    except ValueError:
+        return False
+    return instant.tzinfo is not None and instant.astimezone(EASTERN).date() >= DAILY_RECAP_ONLY_FROM
 
 
 def player_name(pick, box_player=None):

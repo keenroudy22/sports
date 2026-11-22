@@ -416,6 +416,9 @@ def public_book(value):
 def ladder_text(pick):
     """Format each Climb using its original tracking rules."""
     info = pick.get('ladder') or {}
+    if social_units.hide_climb_amounts(pick):
+        return (f"Climb #{info.get('run', 1)} · Step {info.get('step', 1)}",
+                f"{int(pick['odds']):+d} {public_book(pick.get('book'))}", '')
     if info.get('fullRollover'):
         from ticket_kit import money
         return (f"{money(info['start'])} to {money(info['goal'])} Climb · Step {info['step']}",
@@ -722,6 +725,8 @@ def guard(text, pick, reason=None, now_quote=None, *, now=None):
     challenge = social_style.challenge_amounts(pick)
     units_active = social_units.active(pick) or (now is not None and now >= social_units.EFFECTIVE)
     problems = x_style(text.replace(SITE, ''))
+    if pick.get('ladder') and social_units.hide_climb_amounts(pick) and re.search(r'(?<![\w.])\d+(?:\.\d+)?\s*u\b', text, re.I):
+        problems.append('Climb amounts are private')
     # A formatter may omit an unsafe suffix from the final shape.  Refuse the
     # source title anyway so a malformed saved play cannot slip through merely
     # because this particular caption template did not repeat the bad glyph.
@@ -735,7 +740,7 @@ def guard(text, pick, reason=None, now_quote=None, *, now=None):
     extra.append({'stake': pick_card.stake(pick)})
     if challenge:
         extra.append({'challenge': challenge})
-    elif units_active and pick.get('ladder'):
+    elif units_active and pick.get('ladder') and not social_units.hide_climb_amounts(pick):
         extra.append({'climbUnits': [social_units.climb(v) for k, v in pick['ladder'].items() if k in ('stake', 'payout', 'banked', 'bankThisWin', 'nextStake', 'start', 'goal') and isinstance(v, (int, float))]})
     if pick.get('ladder'):          # "$1,062" reads as 1 and 62: the rung's dollars as the post writes them
         extra.append({k: pick_card.dollars(v) for k, v in pick['ladder'].items() if isinstance(v, int)})

@@ -16,6 +16,37 @@ NOW = datetime(2026, 11, 16, 14, tzinfo=timezone.utc)
 
 
 class ResultsOrderTests(unittest.TestCase):
+    def test_morning_recap_replaces_individual_finals_and_covers_loss_only(self):
+        now = datetime(2026, 11, 23, 12, tzinfo=timezone.utc)
+        start = '2026-11-22T18:00:00Z'
+        game = {'id': 'sun', 'kickoff': start, 'league': 'NFL'}
+        play = {'id': 'NFL-parlay', 'title': 'Two-leg parlay', 'gameIds': ['sun'], 'parlayType': 'longshot',
+                'legs': [{'title': 'One'}, {'title': 'Two'}], 'odds': 230, 'book': 'DraftKings', 'riskUnits': .25,
+                'result': 'loss', 'settledAt': '2026-11-22T21:00:00Z'}
+        original = {'id': play['id'], 'kind': 'buffer:play', 'tweetId': '2123456789012345678',
+                    'sentAt': '2026-11-22T15:00:00Z', 'discord': {'state': 'sent',
+                      'sentAt': '2026-11-22T15:00:00Z', 'messageId': '1571995108096745533'}}
+        book = {'posts': [original]}
+        first = {play['id']: play}
+        games = {'sun': game}
+        self.assertEqual(receipts.cashed(first, {}, games, book, now), [])
+        self.assertEqual(discord_post.queue_results(book, first, {}, games, now), 0)
+        with patch.object(receipts, 'nba_daily_rows', return_value=[]), \
+                patch.object(receipts, 'cbb_daily_rows', return_value=[]), \
+                patch.object(receipts, 'unit_fun_rows', return_value=[]):
+            hold = lambda: receipts.prior_day_results_hold(first, {}, games, book, now)
+            self.assertIn('ready but not delivered', hold())
+            recap = {'id': 'receipt:day:2026-11-22', 'resultPickIds': [play['id']],
+                     'sentAt': '2026-11-23T11:46:00Z', 'tweetId': '2123456789012345679',
+                     'link': 'https://x.com/keenkooks/status/2123456789012345679'}
+            book['posts'].append(recap)
+            self.assertIn('ready but not delivered', hold())
+            recap['discord'] = {'state': 'sent', 'sentAt': '2026-11-23T11:46:30Z',
+                                'messageId': '1571995108096745534'}
+            self.assertIsNone(hold())
+            self.assertIn('waiting for the complete graded card', receipts.prior_day_results_hold(
+                first, {play['id']: {'result': None}}, games, book, now))
+
     def fixture(self):
         row = {'id': 'NFL-prior', 'result': 'loss'}
         original = {'id': row['id'], 'kind': 'buffer:play',

@@ -447,7 +447,7 @@ def result_timeliness(record, posts, now, *, individual_only=False):
         if not settled or not cutoff <= settled <= now:
             continue
         result = str(pick.get('result') or '').lower()
-        if receipts.quiet_parlay_result(pick):
+        if receipts.quiet_parlay_result(pick) or result_display.individual_final_suppressed(pick):
             continue
         eligible = result == 'win' or (individual_only and result in ('push', 'void')
                                        and (pick.get('selectionMethod') == 'sourced-prop-ticket-v1' or receipts.neutral_straight(pick)))

@@ -509,6 +509,34 @@ class LadderReceiptTests(unittest.TestCase):
                         'bankedAfter': 48, 'nextStake': 117, 'totalAfter': 165, 'bankPercent': 20,
                         'ridePercent': 80, 'start': 50, 'goal': 1000})
 
+    def test_morning_recap_shows_climb_outcome_without_exposing_its_units(self):
+        day = datetime(2026, 11, 22).date()
+        rung = pick('ladder', 'sun', **self.RUNG, result='loss', units=-3,
+                    actual='legs: win, loss', publishedAt='2026-11-22T15:00:00Z')
+        straight = pick('straight', 'sun', result='win', odds=100, riskUnits=1)
+        first = {row['id']: row for row in (rung, straight)}
+        games = {'sun': dict(GAMES['sun'], kickoff='2026-11-22T18:00:00Z')}
+        receipt = receipts.day_receipt(day, first, {}, games, set(first))
+        self.assertIn('Climb 0-1', receipt['text'])
+        self.assertIn('Straights 1-0 (+1.00u)', receipt['text'])
+        self.assertNotIn('-3.00u', receipt['text'])
+        self.assertEqual(receipt['pickIds'], [straight['id'], rung['id']])
+        self.assertEqual(rung['units'], -3)
+        svg = ticket_card.daily_result_svg(receipt['dailyRows'], day.isoformat())
+        self.assertIn('STRAIGHTS + PARLAYS NET +1.00u', svg)
+        self.assertNotIn('-3.00u', svg)
+        self.assertNotIn('CLIMB -', svg)
+        caption = ' '.join(receipts.x_post.ladder_text(rung))
+        self.assertIn('Step 2', caption)
+        self.assertNotIn('$', caption)
+        self.assertIn('Climb amounts are private', receipts.x_post.guard(caption + ' · 3u', rung))
+        from check_svg import text_nodes
+        priced = dict(rung, legs=[dict(leg, odds=-110) for leg in rung['legs']])
+        art = '\n'.join(text_nodes(ticket_card.climb_svg(priced, games, art=[None, None])))
+        self.assertIn('STEP 2', art)
+        self.assertNotIn('$75', art)
+        self.assertNotIn('3u', art)
+
     def test_current_climb_does_not_block_full_slate_with_private_dollars(self):
         rung = pick('l', 'sun', **self.RUNG, result='win', publishedAt='2026-11-08T15:17:05Z')
         self.assertEqual(receipts.label(rung), '80/20 Climb step 2')

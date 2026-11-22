@@ -1,3 +1,14 @@
+# November 22 recap cadence and Climb privacy
+
+Starting with the November 22 Eastern slate, publish one complete graded morning
+recap on X and Discord before new content. Preserve real grading and both send
+receipts. Keep routine individual Finals on the site and reserve separate posts
+for factual corrections. Keep straight and parlay result units independent of
+the Climb. The public recap may show each Climb step's result, with no stake,
+unit conversion or Climb contribution to the displayed net. New social Climb
+posts and graphics show the step, legs, price and outcome without wager amounts.
+Continue the private Climb bookkeeping and preserve prior sent receipts.
+
 # November 19 Daily Double
 
 Review the two favorite supported alternate lines early every day as a Daily

@@ -267,6 +267,7 @@ def public_rows(root=nba_trial.STORE):
 
 def queue_discord_results(log_book, now, plays=None):
  """Use actual NBA ledger grades for the original play's Discord update."""
+ import result_display
  saved={p['id']:p for p in (public_rows() if plays is None else plays)};count=0;seen=set()
  for entry in log_book.get('posts',[]):
   mirror=entry.get('discord') or {};play=saved.get(entry.get('id'))
@@ -295,6 +296,7 @@ def queue_discord_results(log_book, now, plays=None):
   import nba_prop_probability
   signature=nba_prop_probability.digest({k:play.get(k) for k in ('result','actual','settlementReason')})
   prior=mirror.get('result')
+  if not prior and result_display.individual_final_suppressed(play):continue
   if prior:
    if prior.get('gradeHash')==signature or prior.get('state')!='sent' or not prior.get('gradeHash'):continue
    mirror.setdefault('previousResults',[]).append(dict(prior))

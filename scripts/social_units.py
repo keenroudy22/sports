@@ -17,6 +17,20 @@ def active(pick):
     return False
 
 
+def hide_climb_amounts(pick):
+    """Keep personal wagering amounts off prospective social Climb artwork and copy."""
+    from result_display import DAILY_RECAP_ONLY_FROM, EASTERN
+    value = (pick.get('correctedAt') or pick.get('publishedAt') or pick.get('firstKickoff')
+             or pick.get('kickoff') or pick.get('quotedAt'))
+    if not value:
+        return False
+    try:
+        instant = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except ValueError:
+        return False
+    return instant.tzinfo is not None and instant.astimezone(EASTERN).date() >= DAILY_RECAP_ONLY_FROM
+
+
 def label(value):
     if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
         raise ValueError('Social units require a known nonnegative amount')

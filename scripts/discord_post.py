@@ -191,6 +191,9 @@ def queue_results(log_book, first, latest, games, now):
         if entry.get('kind') != 'buffer:play' or mirror.get('state') != 'sent' or key not in first:
             continue
         pick = dict(first[key], **latest.get(key, {}))
+        starts = [games[g]['kickoff'] for g in pick.get('gameIds') or [] if games.get(g, {}).get('kickoff')]
+        if result_display.individual_final_suppressed(pick, min(starts, default=None)):
+            continue
         result = str(pick.get('result') or '').lower()
         if result not in ('win', 'loss', 'push', 'void') or not pick.get('settledAt') or mirror.get('result'):
             continue
@@ -229,9 +232,10 @@ def queue_nba_fun_results(log_book, now, root=None):
     """Prepare a Final for tickets whose Discord original has no confirmed X quote."""
     import buffer_post
     import receipts
+    import result_display
     graded = {pick['id']: pick for pick in receipts.unit_fun_rows(now, log_book=log_book, root=root)
               if pick.get('family') == 'NBA-alts' and pick.get('result') in receipts.MARKS
-              and not receipts.quiet_parlay_result(pick)}
+              and not receipts.quiet_parlay_result(pick) and not result_display.individual_final_suppressed(pick)}
     queued = 0
     for entry in log_book.get('posts', []):
         pick = graded.get(entry.get('id'))
