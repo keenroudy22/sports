@@ -8858,3 +8858,20 @@ reconciled 211 plays. Browser preview at 375px and 1440px showed the correct
 thresholds and opened Likely’s profile. Live 375px verified all three bonuses,
 $750,000 combined, the original two sources, and zero overflow or console errors.
 Evidence: `work/nov21-contract-bonuses/live-check.json` and `live-phone.jpg`.
+
+### November 22 ranked NFL Contract Bonuses page
+
+More → Tools → Contract Bonuses opens `#bonuses`, combining the sourced NFL
+snapshots in one view. The default order uses the percentage of season target
+already reached. Each card shows the exact remaining stat, amount, snapshot
+date and sources. Stat filters have shareable links. Matchup links go directly
+to the bonus section while detail pages are available. Older snapshots stay in
+the index through the stored finals. The first view contains Isaiah Likely’s
+three reported incentives.
+
+Release `91fb6df6d` passed 2,505 Python tests (two skipped), 390 frontend tests,
+the clean export, publication and record audits (213 plays), and the offline
+rehearsal. [Pages run 45051134427](https://github.com/keenroudy22/sports/actions/runs/45051134427)
+succeeded. Live browser checks confirmed the 55/60, 575/650 and 7/8 order at
+375px and 1280px, the Receiving yards filter, and no console errors or overflow.
+Evidence: `work/nov22-nfl-bonus-index/live-check.json` and `live-phone.jpg`.
