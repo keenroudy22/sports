@@ -88,21 +88,41 @@ class SlotTests(unittest.TestCase):
         args = desk.call_args.args[0]
         self.assertEqual((args.slot, args.publish_kinds, args.no_llm), ('0055', 'settle,ladder', True))
 
-    def test_a_morning_hold_starts_one_stored_price_replacement_scan(self):
+    def test_a_hold_starts_one_stored_price_replacement_scan(self):
         now = datetime(2026, 11, 22, 9, 25, tzinfo=run.EASTERN)
         early = {'id': 'NFL-early', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-11-22T18:00Z'}
         later = {'id': 'NFL-later', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-11-22T21:25Z'}
         ctx = SimpleNamespace(games={game['id']: game for game in (early, later)}, first={}, latest={})
-        original = {'id': 'first-prop', 'kind': 'props', 'held': True, 'holdReason': 'role changed',
+        original = {'id': 'first-prop', 'kind': 'props', 'league': 'NFL', 'held': True,
+                    'holdReason': 'role changed', 'kickoffs': [early['kickoff']],
                     'pick': {'gameIds': [early['id']], 'quotedAt': '2026-11-22T14:00Z'}}
-        scope, checked = run.morning_replacement_scan(ctx, now, [original], {})
+        held = run.replacement_holds(now, [original], {})
+        scope, checked = run.replacement_scope(ctx, now, held)
         self.assertEqual(scope, {'NFL-early', 'NFL-later'})
         self.assertEqual(checked, {'first-prop|2026-11-22T14:00Z'})
         previous = {'day': '2026-11-22', 'quotes': list(checked)}
-        self.assertEqual(run.morning_replacement_scan(ctx, now, [original], previous), (set(), set()))
+        self.assertEqual(run.replacement_holds(now, [original], previous), {})
         sent = dict(original, discordSentAt='2026-11-22T14:01Z')
-        self.assertEqual(run.morning_replacement_scan(ctx, now, [sent], {}), (set(), set()))
-        self.assertEqual(run.morning_replacement_scan(ctx, now.replace(hour=12), [original], {}), (set(), set()))
+        self.assertEqual(run.replacement_holds(now, [sent], {}), {})
+        self.assertEqual(run.replacement_holds(now.replace(hour=20), [original], {}), {})
+        cooldown = {'day': '2026-11-22', 'checkedAt': run.stamp(now - timedelta(minutes=10))}
+        self.assertEqual(run.replacement_holds(now, [original], cooldown), {})
+        self.assertEqual(run.replacement_holds(now + timedelta(minutes=5), [original], cooldown), held)
+
+    def test_pregame_input_check_uses_changed_stored_quotes_only_after_fifteen_minutes(self):
+        now = datetime(2026, 11, 22, 11, 25, tzinfo=run.EASTERN)
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            for store in ('odds', 'prop-odds'):
+                (root / 'data' / store).mkdir(parents=True)
+                (root / 'data' / store / 'ledger.json').write_text('{}')
+            fingerprint = run.replacement_input_change(now, {}, root)
+            previous = {'day': '2026-11-22', 'checkedAt': run.stamp(now), 'inputs': fingerprint}
+            self.assertIsNone(run.replacement_input_change(now + timedelta(minutes=15), previous, root))
+            (root / 'data/prop-odds/ledger.json').write_text('{"new": 1}')
+            self.assertIsNone(run.replacement_input_change(now + timedelta(minutes=14), previous, root))
+            self.assertNotEqual(run.replacement_input_change(now + timedelta(minutes=15), previous, root),
+                                fingerprint)
 
     def test_every_official_release_lane_gets_a_draft_without_legacy_flags(self):
         for lane in run.PRIMETIME_COVERAGE_LANES:

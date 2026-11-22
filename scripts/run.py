@@ -1795,11 +1795,61 @@ def straight_target(day, games):
     return 5 if day and day.weekday() in (5, 6) and slate >= 10 else 1
 
 
-def morning_replacement_scan(ctx, now, queue, previous):
-    """Let the existing results worker replace failed football admissions from stored prices."""
+REPLACEMENT_RECHECK = timedelta(minutes=15)
+
+
+def replacement_check_due(now, previous):
     local = now.astimezone(EASTERN)
-    if not 7 <= local.hour < 12:
+    checked = previous.get('checkedAt') if previous.get('day') == local.date().isoformat() else None
+    return 7 <= local.hour < 20 and (not checked or now - gates.when(checked) >= REPLACEMENT_RECHECK)
+
+
+def replacement_input_change(now, previous, root=ROOT):
+    """Detect actual stored price or availability changes without a provider request."""
+    import hashlib
+    if not replacement_check_due(now, previous):
+        return None
+    digest = hashlib.sha256()
+    for store in ('odds', 'prop-odds'):
+        digest.update((root / 'data' / store / 'ledger.json').read_bytes())
+    context = load_json(root / 'site/data/research-context.json', {})
+    injuries = sorted((league, team, player['id'], player.get('status') or '', player.get('injury') or '')
+                      for league, data in (context.get('leagues') or {}).items()
+                      for team, payload in (data.get('teams') or {}).items()
+                      for player in (payload.get('players') or []) if player.get('id'))
+    digest.update(json.dumps(injuries).encode())
+    fingerprint = digest.hexdigest()
+    return fingerprint if previous.get('inputs') != fingerprint else None
+
+
+def replacement_holds(now, queue, previous):
+    """Detect new failed admissions without rebuilding the board or refreshing any feed."""
+    local = now.astimezone(EASTERN)
+    if not replacement_check_due(now, previous):
+        return {}
+    checked = set(previous.get('quotes') or []) if previous.get('day') == local.date().isoformat() else set()
+    held = {}
+    for row in queue:
+        pick = row.get('pick') or {}
+        if row.get('discordSentAt') or row.get('publicPath') or row.get('releasedAt'):
+            continue
+        if not row.get('id') or not row.get('held') or not row.get('holdReason') or not pick.get('quotedAt'):
+            continue
+        claim = f"{row['id']}|{pick['quotedAt']}"
+        if claim in checked or row.get('kind') not in ('props', 'gamePicks'):
+            continue
+        if any(eastern_date(gates.when(start)) == local.date()
+               and post_windows.reachable(row.get('league'), start, now)
+               for start in row.get('kickoffs') or []):
+            held[claim] = pick.get('gameIds') or []
+    return held
+
+
+def replacement_scope(ctx, now, held, inputs_changed=False):
+    """Select current-day games that can still reach the normal release window."""
+    if not held and not inputs_changed:
         return set(), set()
+    local = now.astimezone(EASTERN)
     day = local.date()
     active = sum(1 for key, pick in ctx.first.items()
                  if gates.occupies_game(pick, ctx.latest.get(key), now)
@@ -1809,17 +1859,12 @@ def morning_replacement_scan(ctx, now, queue, previous):
     today = official_selection_scope(local, ctx.games, ctx, now, select_now=True)
     reachable = {key for key in today if post_windows.reachable(
         ctx.games[key]['league'], ctx.games[key]['kickoff'], now)}
-    checked = set(previous.get('quotes') or []) if previous.get('day') == day.isoformat() else set()
-    held = set()
-    for row in queue:
-        pick = row.get('pick') or {}
-        if row.get('discordSentAt') or row.get('publicPath') or row.get('releasedAt'):
-            continue
-        if not row.get('id') or not row.get('held') or not row.get('holdReason') or not pick.get('quotedAt'):
-            continue
-        if row.get('kind') in ('props', 'gamePicks') and reachable.intersection(pick.get('gameIds') or []):
-            held.add(f"{row['id']}|{pick['quotedAt']}")
-    return reachable if held - checked else set(), held - checked
+    quotes = {claim for claim, games in held.items() if reachable.intersection(games)}
+    return reachable if quotes or inputs_changed else set(), quotes
+
+
+def replacement_state_path():
+    return CONF / 'pending' / 'straight-replacement-scan.json'
 
 
 def research_family(candidate):
@@ -2581,10 +2626,13 @@ def run(args):
         write_status(status)
         return 0
     kinds = set(args.publish_kinds.split(',')) if args.publish_kinds else set(KINDS)
+    opportunistic = getattr(args, 'opportunistic', False)
     try:
-        with Lock(CONF / 'run.lock', wait=0 if args.dry_run else RUN_LOCK_WAIT):
+        with Lock(CONF / 'run.lock', wait=0 if args.dry_run or opportunistic else RUN_LOCK_WAIT):
             return _run(args, now, slot, kinds, status)
     except RunError as error:
+        if opportunistic and str(error) == 'another run holds the lock':
+            return 0
         log('STOPPED:', error)
         status.update(outcome=f'failed: {error}', finishedAt=stamp(datetime.now(timezone.utc)))
         status['errors'].append(str(error))
@@ -2710,16 +2758,19 @@ def _run(args, now, slot, kinds, status):
     held_quotes = {row['id']: (row.get('pick') or {}).get('quotedAt')
                    for row in private_queue if row.get('held') and row.get('id')
                    and not (row.get('discordSentAt') or row.get('publicPath'))}
-    replacement_path = CONF / 'pending' / 'straight-replacement-scan.json'
+    replacement_path = replacement_state_path()
     replacement_previous = {}
-    replacement_scope, replacement_quotes = set(), set()
+    replacement_games, replacement_quotes = set(), set()
+    replacement_inputs = None
     if args.command == 'results' and not args.dry_run:
         try:
             replacement_previous = load_json(replacement_path, {})
             if not isinstance(replacement_previous, dict):
                 raise ValueError('invalid replacement state')
-            replacement_scope, replacement_quotes = morning_replacement_scan(
-                ctx, now, private_queue, replacement_previous)
+            held_replacements = replacement_holds(now, private_queue, replacement_previous)
+            replacement_inputs = replacement_input_change(now, replacement_previous)
+            replacement_games, replacement_quotes = replacement_scope(
+                ctx, now, held_replacements, inputs_changed=bool(replacement_inputs))
         except (OSError, TypeError, ValueError) as error:
             log(f'stored-price replacement recheck unavailable: {error}')
     release_queue.reopen_expired(CONF, now, log=log)
@@ -2741,20 +2792,21 @@ def _run(args, now, slot, kinds, status):
             log(f'betslips unavailable; official plays continue: {error}')
     lines = load_candidate_lines(build_site.OUT / 'lines.json')
     selection_scope = official_selection_scope(slot, games, ctx, now, getattr(args, 'select_now', False))
-    if replacement_scope:
-        selection_scope = replacement_scope
+    if replacement_games:
+        selection_scope = replacement_games
         kinds = kinds | {'lean', 'prop'}
-        status['morningReplacement'] = {'holds': len(replacement_quotes), 'games': len(replacement_scope)}
+        status['replacementScan'] = {'holds': len(replacement_quotes), 'games': len(replacement_games),
+                                     'inputsChanged': bool(replacement_inputs)}
     selection_run = selection_scope is None or bool(selection_scope)
     wanted = rank_card(candidates(lines, games, now), ctx) if selection_run else []
     if selection_scope is not None:
         wanted = [candidate for candidate in wanted if candidate['gameIds'][0] in selection_scope]
-    if replacement_scope:
+    if replacement_games:
         wanted.sort(key=lambda candidate: gates.when(games[candidate['gameIds'][0]]['kickoff']))
     if not selection_run:
         log('owner plan: this slot is settlement/research only; selection runs at the game-day and primetime checks')
-    elif replacement_scope:
-        log(f"stored-price replacement recheck: {len(replacement_scope)} games after {len(replacement_quotes)} private holds")
+    elif replacement_games:
+        log(f"stored-price recheck: {len(replacement_games)} games, {len(replacement_quotes)} new private holds")
     elif selection_scope is not None:
         label = 'early-game' if (slot.hour, slot.minute) == (7, 30) else \
             'later game-day' if (slot.hour, slot.minute) in ((8, 30), (11, 45)) else 'primetime'
@@ -3124,7 +3176,10 @@ def _run(args, now, slot, kinds, status):
         if replacement_quotes and lines:
             day = eastern_date(now).isoformat()
             checked = set(replacement_previous.get('quotes') or []) if replacement_previous.get('day') == day else set()
-            boxscores.write_json(replacement_path, {'day': day, 'quotes': sorted(checked | replacement_quotes)})
+            boxscores.write_json(replacement_path, {
+                'day': day, 'checkedAt': stamp(now), 'quotes': sorted(checked | replacement_quotes),
+                'inputs': replacement_inputs or replacement_previous.get('inputs'),
+            })
         try:
             shadow = reasoned_edges.step(decided, ctx, now)
             status['reasonedEdges'] = shadow
@@ -4668,6 +4723,22 @@ def mirror(args):
                            or cbb_picks.discord_delivery_due(now, observed_posts)
                            or discord_post.queue_nba_fun_results(copy.deepcopy(observed_posts), now))
     private_waiting = private_release_ready(now)
+    if not args.dry_run and not private_waiting:
+        import release_queue
+        try:
+            saved = load_json(replacement_state_path(), {})
+            held = replacement_holds(now, release_queue.load(CONF)['plays'], saved)
+            changed = replacement_input_change(now, saved)
+            if (held or changed) and replacement_scope(gates.Stores().as_of(now), now, held, bool(changed))[0]:
+                recovery = copy.copy(args)
+                recovery.command, recovery.slot = 'results', now.astimezone(EASTERN).strftime('%H%M')
+                recovery.no_llm, recovery.opportunistic = True, True
+                recovery.publish_kinds, recovery.record_screens = 'settle', False
+                result = run(recovery)
+                if result:
+                    return result
+        except (OSError, TypeError, ValueError, AttributeError) as error:
+            log(f'stored-price replacement check deferred: {error}')
     if not chef_waiting and not nba_discord_waiting and not private_waiting and not retry_results and not basketball_due and not nba_result_due:
         if result_transport_hold:
             if not stored_discord_work_due(now, x_post.load_log()):
