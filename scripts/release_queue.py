@@ -115,15 +115,20 @@ def enqueue(conf, rows, reasons, decisions, draft_dir, now, games=None, log=prin
     play disappear from both delivery and the chosen-but-not-posted checks.
     """
     book = load(conf)
-    known = {row.get('id') for row in book['plays']}
+    known = {row.get('id'): row for row in book['plays']}
     added = []
     decision_by_id = {row.get('id'): row for row in decisions if row.get('decision') == 'published'}
     card_dir = cards(conf)
     card_dir.mkdir(parents=True, exist_ok=True)
     for league, kind, candidate in rows:
         key = candidate.get('id')
-        if not key or key in known:
+        if not key:
             continue
+        existing = known.get(key)
+        if existing is not None:
+            if not fresh_straight_replaces_hold(existing, candidate, kind, now):
+                continue
+            record_withdrawal(conf, existing, existing['holdReason'], now)
         source = Path(draft_dir) / f'{key}.png'
         copy_source = Path(draft_dir) / f'{key}.txt'
         target = card_dir / f'{key}.png'
@@ -145,11 +150,27 @@ def enqueue(conf, rows, reasons, decisions, draft_dir, now, games=None, log=prin
             row['artifactState'] = 'recovery-needed'
             row['artifactMissing'] = missing
             log(f"private admission queued for artifact recovery: {key}: missing {', '.join(missing)}")
+        if existing is not None:
+            book['plays'].remove(existing)
         book['plays'].append(row)
-        known.add(key)
+        known[key] = row
         added.append(key)
     save(conf, book)
     return added
+
+
+def fresh_straight_replaces_hold(existing, candidate, kind, now):
+    if (kind not in ('props', 'gamePicks') or existing.get('kind') != kind
+            or not existing.get('held') or not existing.get('holdReason')
+            or any(existing.get(key) for key in ('discordSentAt', 'publicPath', 'releasedAt',
+                                                   'scheduledAt', 'bufferPostId', 'xSentAt', 'xUrl'))):
+        return False
+    try:
+        prior = gates.when(existing['pick']['quotedAt'])
+        held = gates.when(existing['heldAt'])
+        return max(prior, held) < gates.when(candidate['quotedAt']) <= now
+    except (KeyError, TypeError, ValueError):
+        return False
 
 
 def remove(conf, key):
@@ -179,8 +200,17 @@ def withdrawn_straights(conf, now):
                 continue
             key = receipt['id']
             checked = gates.when(receipt['checkedAt'])
-            if checked <= now and (key not in withdrawals or checked > withdrawals[key]):
-                withdrawals[key] = checked
+            if checked > now:
+                continue
+            admission = receipt.get('admission') or {}
+            refusal = checked
+            if admission.get('held') and admission.get('holdReason') == receipt.get('reason'):
+                try:
+                    refusal = min(checked, gates.when(admission.get('heldAt')))
+                except (TypeError, ValueError):
+                    pass
+            if key not in withdrawals or refusal > withdrawals[key]:
+                withdrawals[key] = refusal
     return withdrawals
 
 
@@ -201,9 +231,15 @@ def withdraw(conf, key, reason, now):
     row = next((row for row in load(conf)['plays'] if row.get('id') == key), None)
     if row is None or not isinstance(reason, str) or not reason.strip():
         raise ValueError('An existing private admission and withdrawal reason are required')
+    receipt = record_withdrawal(conf, row, reason, now)
+    remove(conf, key)
+    return receipt
+
+
+def record_withdrawal(conf, row, reason, now):
     state = ('x-recovery-closed' if row.get('discordSentAt') or row.get('publicPath')
              else 'withdrawn-before-release')
-    receipt = {'id': key, 'checkedAt': gates.stamp(now), 'state': state,
+    receipt = {'id': row['id'], 'checkedAt': gates.stamp(now), 'state': state,
                'reason': reason, 'admission': row}
     target = withdrawal_path(conf)
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -215,7 +251,6 @@ def withdraw(conf, key, reason, now):
         out.write(json.dumps(receipt, ensure_ascii=False) + '\n')
         out.flush()
         os.fsync(out.fileno())
-    remove(conf, key)
     return receipt
 
 

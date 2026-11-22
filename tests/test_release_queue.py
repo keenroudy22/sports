@@ -104,6 +104,32 @@ class ReleaseQueueTests(unittest.TestCase):
                 dict(houston, quotedAt='2026-10-11T12:01:00Z'), withdrawals))
             self.assertIsNone(release_queue.withdrawn_quote_refusal(ticket, withdrawals))
 
+    def test_new_price_replaces_only_an_unsent_held_straight(self):
+        with tempfile.TemporaryDirectory() as folder:
+            conf = Path(folder)
+            old = {'id': 'play', 'quotedAt': '2026-10-11T11:10:00Z', 'odds': 110}
+            held = {'id': 'play', 'kind': 'props', 'pick': old, 'held': True,
+                    'heldAt': '2026-10-11T11:20:00Z', 'holdReason': 'price moved'}
+            fresh = dict(old, odds=115, quotedAt='2026-10-11T11:25:00Z')
+
+            def enqueue(pick):
+                return release_queue.enqueue(conf, [('NFL', 'props', pick)], {}, [], conf, NOW)
+
+            for field in ('discordSentAt', 'publicPath', 'releasedAt', 'scheduledAt', 'bufferPostId'):
+                release_queue.save(conf, {'plays': [dict(held, **{field: 'exists'})]})
+                self.assertEqual(enqueue(fresh), [])
+            release_queue.save(conf, {'plays': [held]})
+            self.assertEqual(enqueue(old), [])
+            self.assertEqual(enqueue(dict(old, quotedAt='2026-10-11T11:19:00Z')), [])
+            self.assertFalse(release_queue.withdrawal_path(conf).exists())
+            self.assertEqual(enqueue(fresh), ['play'])
+            self.assertEqual([row['pick'] for row in release_queue.load(conf)['plays']], [fresh])
+            archived = json.loads(release_queue.withdrawal_path(conf).read_text())
+            self.assertEqual(archived['admission'], held)
+            latest = release_queue.withdrawn_straights(conf, NOW)
+            self.assertIsNotNone(release_queue.withdrawn_quote_refusal(old, latest))
+            self.assertIsNone(release_queue.withdrawn_quote_refusal(fresh, latest))
+
     def test_new_climb_rung_without_latest_row_is_marked_pending(self):
         rung = {'id': 'CFB-2026-W7-ladder-1017-c3s2-dk', 'title': '80/20 Climb #3 · Step 2'}
         ctx = SimpleNamespace(first={rung['id']: dict(rung, league='CFB', kind='parlays')}, latest={})

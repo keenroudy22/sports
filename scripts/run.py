@@ -3173,7 +3173,7 @@ def _run(args, now, slot, kinds, status):
         if admitted_ids:
             log('private admissions:', ', '.join(admitted_ids))
         release_before_background(args, status)
-        if replacement_quotes and lines:
+        if replacement_games and lines:
             day = eastern_date(now).isoformat()
             checked = set(replacement_previous.get('quotes') or []) if replacement_previous.get('day') == day else set()
             boxscores.write_json(replacement_path, {
