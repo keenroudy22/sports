@@ -1795,6 +1795,33 @@ def straight_target(day, games):
     return 5 if day and day.weekday() in (5, 6) and slate >= 10 else 1
 
 
+def morning_replacement_scan(ctx, now, queue, previous):
+    """Let the existing results worker replace failed football admissions from stored prices."""
+    local = now.astimezone(EASTERN)
+    if not 7 <= local.hour < 12:
+        return set(), set()
+    day = local.date()
+    active = sum(1 for key, pick in ctx.first.items()
+                 if gates.occupies_game(pick, ctx.latest.get(key), now)
+                 and gates.slate_day(pick, ctx) == day)
+    if active >= 5:
+        return set(), set()
+    today = official_selection_scope(local, ctx.games, ctx, now, select_now=True)
+    reachable = {key for key in today if post_windows.reachable(
+        ctx.games[key]['league'], ctx.games[key]['kickoff'], now)}
+    checked = set(previous.get('quotes') or []) if previous.get('day') == day.isoformat() else set()
+    held = set()
+    for row in queue:
+        pick = row.get('pick') or {}
+        if row.get('discordSentAt') or row.get('publicPath') or row.get('releasedAt'):
+            continue
+        if not row.get('id') or not row.get('held') or not row.get('holdReason') or not pick.get('quotedAt'):
+            continue
+        if row.get('kind') in ('props', 'gamePicks') and reachable.intersection(pick.get('gameIds') or []):
+            held.add(f"{row['id']}|{pick['quotedAt']}")
+    return reachable if held - checked else set(), held - checked
+
+
 def research_family(candidate):
     if candidate.get('athleteId'):
         return 'prop'
@@ -2679,6 +2706,22 @@ def _run(args, now, slot, kinds, status):
     # occupy duplicate/card-cap space on later selection passes.  An expired
     # private price is reopened first so this pass can evaluate the fresh quote.
     import release_queue
+    private_queue = release_queue.load(CONF).get('plays', [])
+    held_quotes = {row['id']: (row.get('pick') or {}).get('quotedAt')
+                   for row in private_queue if row.get('held') and row.get('id')
+                   and not (row.get('discordSentAt') or row.get('publicPath'))}
+    replacement_path = CONF / 'pending' / 'straight-replacement-scan.json'
+    replacement_previous = {}
+    replacement_scope, replacement_quotes = set(), set()
+    if args.command == 'results' and not args.dry_run:
+        try:
+            replacement_previous = load_json(replacement_path, {})
+            if not isinstance(replacement_previous, dict):
+                raise ValueError('invalid replacement state')
+            replacement_scope, replacement_quotes = morning_replacement_scan(
+                ctx, now, private_queue, replacement_previous)
+        except (OSError, TypeError, ValueError) as error:
+            log(f'stored-price replacement recheck unavailable: {error}')
     release_queue.reopen_expired(CONF, now, log=log)
     release_queue.merge_context(ctx, CONF)
 
@@ -2698,12 +2741,20 @@ def _run(args, now, slot, kinds, status):
             log(f'betslips unavailable; official plays continue: {error}')
     lines = load_candidate_lines(build_site.OUT / 'lines.json')
     selection_scope = official_selection_scope(slot, games, ctx, now, getattr(args, 'select_now', False))
+    if replacement_scope:
+        selection_scope = replacement_scope
+        kinds = kinds | {'lean', 'prop'}
+        status['morningReplacement'] = {'holds': len(replacement_quotes), 'games': len(replacement_scope)}
     selection_run = selection_scope is None or bool(selection_scope)
     wanted = rank_card(candidates(lines, games, now), ctx) if selection_run else []
     if selection_scope is not None:
         wanted = [candidate for candidate in wanted if candidate['gameIds'][0] in selection_scope]
+    if replacement_scope:
+        wanted.sort(key=lambda candidate: gates.when(games[candidate['gameIds'][0]]['kickoff']))
     if not selection_run:
         log('owner plan: this slot is settlement/research only; selection runs at the game-day and primetime checks')
+    elif replacement_scope:
+        log(f"stored-price replacement recheck: {len(replacement_scope)} games after {len(replacement_quotes)} private holds")
     elif selection_scope is not None:
         label = 'early-game' if (slot.hour, slot.minute) == (7, 30) else \
             'later game-day' if (slot.hour, slot.minute) in ((8, 30), (11, 45)) else 'primetime'
@@ -2732,7 +2783,10 @@ def _run(args, now, slot, kinds, status):
             continue
         if price(candidate, ctx, now) is None:
             continue
-        withdrawn_quote = release_queue.withdrawn_quote_refusal(candidate, withdrawals)
+        old_quote = held_quotes.get(candidate['id'])
+        withdrawn_quote = ('the private release already failed on this captured quote'
+                           if old_quote and gates.when(candidate['quotedAt']) <= gates.when(old_quote)
+                           else release_queue.withdrawn_quote_refusal(candidate, withdrawals))
         if withdrawn_quote:
             early_hold = gates.Decision(False, 'withdrawn_quote', withdrawn_quote)
         else:
@@ -3067,6 +3121,10 @@ def _run(args, now, slot, kinds, status):
         if admitted_ids:
             log('private admissions:', ', '.join(admitted_ids))
         release_before_background(args, status)
+        if replacement_quotes and lines:
+            day = eastern_date(now).isoformat()
+            checked = set(replacement_previous.get('quotes') or []) if replacement_previous.get('day') == day else set()
+            boxscores.write_json(replacement_path, {'day': day, 'quotes': sorted(checked | replacement_quotes)})
         try:
             shadow = reasoned_edges.step(decided, ctx, now)
             status['reasonedEdges'] = shadow

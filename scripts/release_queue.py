@@ -97,6 +97,8 @@ def reopen_expired(conf, now, log=print):
         if not expired:
             kept.append(row)
             continue
+        if row.get('held') and row.get('holdReason'):
+            withdraw(conf, row['id'], row['holdReason'], now)
         reopened.append(row.get('id'))
         log(f"private admission reopened for a fresh price: {row.get('id')}")
     if reopened:

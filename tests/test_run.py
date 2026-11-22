@@ -88,6 +88,22 @@ class SlotTests(unittest.TestCase):
         args = desk.call_args.args[0]
         self.assertEqual((args.slot, args.publish_kinds, args.no_llm), ('0055', 'settle,ladder', True))
 
+    def test_a_morning_hold_starts_one_stored_price_replacement_scan(self):
+        now = datetime(2026, 11, 22, 9, 25, tzinfo=run.EASTERN)
+        early = {'id': 'NFL-early', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-11-22T18:00Z'}
+        later = {'id': 'NFL-later', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-11-22T21:25Z'}
+        ctx = SimpleNamespace(games={game['id']: game for game in (early, later)}, first={}, latest={})
+        original = {'id': 'first-prop', 'kind': 'props', 'held': True, 'holdReason': 'role changed',
+                    'pick': {'gameIds': [early['id']], 'quotedAt': '2026-11-22T14:00Z'}}
+        scope, checked = run.morning_replacement_scan(ctx, now, [original], {})
+        self.assertEqual(scope, {'NFL-early', 'NFL-later'})
+        self.assertEqual(checked, {'first-prop|2026-11-22T14:00Z'})
+        previous = {'day': '2026-11-22', 'quotes': list(checked)}
+        self.assertEqual(run.morning_replacement_scan(ctx, now, [original], previous), (set(), set()))
+        sent = dict(original, discordSentAt='2026-11-22T14:01Z')
+        self.assertEqual(run.morning_replacement_scan(ctx, now, [sent], {}), (set(), set()))
+        self.assertEqual(run.morning_replacement_scan(ctx, now.replace(hour=12), [original], {}), (set(), set()))
+
     def test_every_official_release_lane_gets_a_draft_without_legacy_flags(self):
         for lane in run.PRIMETIME_COVERAGE_LANES:
             self.assertTrue(run.draft_postable({'lane': lane}), lane)

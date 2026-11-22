@@ -302,6 +302,21 @@ class ReleaseQueueTests(unittest.TestCase):
             self.assertEqual([row['id'] for row in release_queue.load(root)['plays']], ['live', 'sent'])
             self.assertEqual(messages, ['private admission reopened for a fresh price: stale'])
 
+    def test_expired_hold_preserves_reason_and_blocks_reusing_the_same_capture(self):
+        with tempfile.TemporaryDirectory() as folder:
+            pick = {'id': 'stale', 'quotedAt': '2026-10-11T11:40:00Z', 'expiresAt': '2026-10-11T11:59:00Z'}
+            release_queue.save(folder, {'plays': [
+                {'id': pick['id'], 'held': True, 'holdReason': 'Target share changed.', 'pick': pick},
+            ]})
+            self.assertEqual(release_queue.reopen_expired(folder, NOW, log=lambda _: None), ['stale'])
+            receipt = json.loads(release_queue.withdrawal_path(folder).read_text())
+            self.assertEqual(receipt['reason'], 'Target share changed.')
+            self.assertEqual(receipt['admission']['pick'], pick)
+            grades = release_queue.withdrawn_straights(folder, NOW)
+            self.assertIsNotNone(release_queue.withdrawn_quote_refusal(pick, grades))
+            self.assertIsNone(release_queue.withdrawn_quote_refusal(
+                dict(pick, quotedAt='2026-10-11T12:01:00Z'), grades))
+
     def test_delivery_clock_reads_the_private_kickoff_without_a_public_row(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
