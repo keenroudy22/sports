@@ -1,0 +1,288 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-22T21:25:13Z",
+  "targetWeek": 11,
+  "summary": "Research update for Nov 22: Settled 1: Chuba Hubbard OVER 3.5 receptions loss. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "4241416",
+      "market": "rec",
+      "line": 3.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401873068"
+      ],
+      "book": "DraftKings",
+      "odds": 113,
+      "projection": 3.6,
+      "edge": "Price-checked chance 50.2% against the exact two-sided price; 46.9% needed at +113: +3.2 percentage points.",
+      "cutoff": "OVER 3.5 at +113 or better; off the card at 4+, or at +112 or worse at 3.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-21T21:48:28Z",
+      "quotedAt": "2026-11-22T15:43:16Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 10:43 AM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-22T16:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.519,
+        "chance": 0.502,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.469,
+        "edgePoints": 3.2,
+        "evPerUnit": 0.069,
+        "snapshotAt": "2026-11-21T21:48:28Z",
+        "probabilitySpec": "00781a91dd029585608477973eb77b0d1e2c1c98921df8af2c110822c937095c",
+        "evaluatedAt": "2026-11-22T16:08:26Z",
+        "fairChance": 0.442,
+        "anchoredChance": 0.502,
+        "gap": 5.9,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Baltimore Ravens at Carolina Panthers",
+      "title": "Chuba Hubbard OVER 3.5 receptions",
+      "id": "NFL-2026-W11-hubbard-over-3-5-rec-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873068",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 5 of 10 over 3.5.",
+        "context": [
+          "Role: projected for 4.4 targets a game.",
+          "Defense: BAL allows 3.9 receptions a game to RBs, 9th-stingiest of 32 this season."
+        ],
+        "cautions": [],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 3.6 against 3.5. The over reads 50.2% after adjustment from the raw 51.9%; 46.9% is needed at +113. Last 10 games: 5 of 10 over 3.5. Role: projected for 4.4 targets a game. Defense: BAL allows 3.9 receptions a game to RBs, 9th-stingiest of 32 this season.",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Book says 3.5. I say 3.6.",
+            "numbers": {
+              "projection": 3.6,
+              "line": 3.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-21T21:48:28Z"
+          },
+          {
+            "text": "4 of his last 5 games finished over 3.5 receptions.",
+            "numbers": {
+              "values": [
+                1,
+                4,
+                7,
+                4,
+                5
+              ],
+              "hits": 4,
+              "games": 5,
+              "line": 3.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-15T18:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-22T16:08:26Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Mike Jackson (CAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3917853/mike-jackson",
+            "time": "2026-11-22T00:19Z"
+          },
+          {
+            "text": "Tommy Tremble (CAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4372780/tommy-tremble",
+            "time": "2026-11-20T23:29Z"
+          },
+          {
+            "text": "Bobby Okereke (CAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3117253/bobby-okereke",
+            "time": "2026-11-20T19:19Z"
+          },
+          {
+            "text": "Darren Waller (CAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/2576925/darren-waller",
+            "time": "2026-11-20T17:34Z"
+          },
+          {
+            "text": "Jaylinn Hawkins (BAL) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3858276/jaylinn-hawkins",
+            "time": "2026-11-20T20:17Z"
+          },
+          {
+            "text": "Nnamdi Madubuike (BAL) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4035245/nnamdi-madubuike",
+            "time": "2026-11-20T20:09Z"
+          },
+          {
+            "text": "Marlon Humphrey (BAL) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3126356/marlon-humphrey",
+            "time": "2026-11-19T17:07Z"
+          }
+        ],
+        "weather": {
+          "tempF": 60,
+          "windMph": 8,
+          "windDirection": "NNE",
+          "precipProb": 40,
+          "periodStart": "2026-11-22T13:00:00-05:00",
+          "issuedAt": "2026-11-22T06:23:25+00:00",
+          "source": "https://api.weather.gov/gridpoints/GSP/119,65/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.5,
+                "price": 136,
+                "time": "2026-11-22T02:36:20Z"
+              },
+              "now": {
+                "line": 3.5,
+                "price": 113,
+                "time": "2026-11-22T15:43:16Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.5,
+                "price": 112,
+                "time": "2026-11-22T02:36:20Z"
+              },
+              "now": {
+                "line": 3.5,
+                "price": 112,
+                "time": "2026-11-22T15:43:16Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 3.5,
+            "price": 113,
+            "time": "2026-11-22T15:43:16Z"
+          }
+        },
+        "ours": {
+          "projection": 3.6,
+          "line": 3.5,
+          "market": "rec",
+          "text": "Book says 3.5. I say 3.6.",
+          "snapshotAt": "2026-11-21T21:48:28Z"
+        },
+        "history": "Last 10 games: 5 of 10 over 3.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3917853/mike-jackson",
+            "time": "2026-11-22T00:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4372780/tommy-tremble",
+            "time": "2026-11-20T23:29Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3117253/bobby-okereke",
+            "time": "2026-11-20T19:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/2576925/darren-waller",
+            "time": "2026-11-20T17:34Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3858276/jaylinn-hawkins",
+            "time": "2026-11-20T20:17Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4035245/nnamdi-madubuike",
+            "time": "2026-11-20T20:09Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3126356/marlon-humphrey",
+            "time": "2026-11-19T17:07Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/GSP/119,65/forecast/hourly",
+            "time": "2026-11-22T06:23:25+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873068",
+            "time": "2026-11-22T16:08:26Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-22T16:08:26Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-22T16:10:16Z",
+      "result": "loss",
+      "actual": "Chuba Hubbard: 0 receptions",
+      "settledAt": "2026-11-22T21:25:13Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401873068",
+      "actualValue": 0,
+      "settlementStats": {
+        "car": 27,
+        "rushYds": 120
+      },
+      "units": -1
+    }
+  ]
+}
