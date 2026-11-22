@@ -1483,6 +1483,28 @@ class ParlayGuardTests(unittest.TestCase):
         mixed = dict(active, claim=active['claim'] + ' His quarterback was ruled out.')
         self.assertIsNotNone(run.release_pull_reason(pick, [mixed]))
 
+    def test_reviewed_sunday_ticket_ignores_only_the_same_known_absence(self):
+        source = 'https://www.jaguars.com/news/injury-report'
+        game = dict(league='NFL', home={'id': '19'}, away={'id': '30'})
+        ticket = dict(selectionMethod='sourced-fun-ticket-review-v1', quotedAt='2026-11-22T17:26:44Z')
+        leg = dict(researchCase={'sources': [{'url': source}],
+                                'knownAbsences': [{'name': 'Danny Striggow', 'source': source}]})
+        player = dict(name='Danny Striggow', position='DE', status='Out', injury='Concussion',
+                      reportedAt='2026-11-22T00:45:00Z')
+        ctx = SimpleNamespace(injuries={'NFL-30': {'4573319': player}})
+        fact = dict(kind='injury', origin='codex researcher', verified=True, direction='against',
+                    source=source, entities=['Danny Striggow'],
+                    claim='Jaguars defensive end Danny Striggow was downgraded to out with a concussion and will not travel.')
+        self.assertTrue(run.reviewed_ticket_absence(ticket, leg, game, fact, ctx))
+        self.assertFalse(run.reviewed_ticket_absence(ticket, {}, game, fact, ctx))
+        for changed in (dict(fact, kind='role'), dict(fact, source='https://other.example/news'),
+                        dict(fact, claim=fact['claim'] + ' His replacement is also out.')):
+            self.assertFalse(run.reviewed_ticket_absence(ticket, leg, game, changed, ctx))
+        for field, value in (('position', 'QB'), ('status', 'Questionable'),
+                             ('reportedAt', '2026-11-22T17:27:00Z')):
+            with mock.patch.dict(player, {field: value}):
+                self.assertFalse(run.reviewed_ticket_absence(ticket, leg, game, fact, ctx))
+
     def test_the_price_check_takes_a_ticket_off_when_its_leg_was_pulled(self):
         from unittest import mock
         import x_post

@@ -5300,6 +5300,43 @@ def release_pull_reason(pick, facts):
     return None
 
 
+def reviewed_ticket_absence(ticket, leg, game, fact, ctx):
+    """Recognize an unchanged, explicitly reviewed non-quarterback absence."""
+    if (ticket.get('selectionMethod') != 'sourced-fun-ticket-review-v1'
+            or not researcher.from_web(fact) or fact.get('verified') is not True
+            or fact.get('kind') != 'injury' or len(fact.get('entities') or []) != 1):
+        return False
+    name = fact['entities'][0]
+    case = leg.get('researchCase') or {}
+    source = fact.get('source')
+    if not source or not any(row.get('url') == source for row in case.get('sources') or []):
+        return False
+    if not any(row.get('name') == name and row.get('source') == source
+               for row in case.get('knownAbsences') or []):
+        return False
+    teams = [gates.team_key(game['league'], game[side]['id']) for side in ('home', 'away')]
+    matches = [row for team in teams for row in ctx.injuries.get(team, {}).values()
+               if row.get('name') == name]
+    if len(matches) != 1:
+        return False
+    player = matches[0]
+    position = player.get('position')
+    if not position or position == 'QB' or str(player.get('status')).lower() != 'out':
+        return False
+    try:
+        if gates.when(player.get('reportedAt')) > gates.when(ticket['quotedAt']):
+            return False
+    except (KeyError, TypeError, ValueError):
+        return False
+    # Treat only same-status reporting as a duplicate. Role, workload, roster
+    # changes, additional names and mismatched diagnoses remain normal vetoes.
+    injury = str(player.get('injury') or '').strip()
+    diagnosis = rf'(?: with (?:a |an )?{re.escape(injury)})?' if injury else ''
+    claim = (rf'(?:[\w -]+ )?{re.escape(name)} (?:was downgraded to out|was ruled out|is out)'
+             rf'{diagnosis}(?: and will not (?:play|travel))?\.?')
+    return bool(re.fullmatch(claim, str(fact.get('claim') or '').strip(), re.IGNORECASE))
+
+
 def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), look=None):
     """Why a fun parlay should not post, or None.
 
@@ -5322,7 +5359,11 @@ def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), 
             continue
         single['_team'] = ctx.player_team.get(str(single.get('athleteId') or ''))
         flag, _, facts = look(single, game, ctx, context_file, use_llm, status, now)
-        reason = release_pull_reason(single, relevant_facts(single, facts, ctx)) or flag
+        material = relevant_facts(single, facts, ctx)
+        current = [fact for fact in material if not reviewed_ticket_absence(pick, leg, game, fact, ctx)]
+        if len(current) != len(material):
+            flag = judge(single, current, use_llm, status)
+        reason = release_pull_reason(single, current) or flag
         if reason:
             return f"its {leg.get('title')} leg: {reason}"
     return None

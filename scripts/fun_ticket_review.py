@@ -145,6 +145,13 @@ def refusal(ticket, ctx):
                 return 'Fun-ticket evidence check clock is missing'
             if not reviewed - timedelta(hours=24) <= checked <= reviewed:
                 return 'Fun-ticket evidence must be checked before review and within one day'
+        known_absences = case.get('knownAbsences', [])
+        if not isinstance(known_absences, list) or any(
+                not isinstance(absence, dict) or not isinstance(absence.get('name'), str)
+                or not absence['name'].strip()
+                or absence.get('source') not in {fact['url'] for fact in facts}
+                for absence in known_absences):
+            return 'Previously reviewed absences must name the player and cite their availability report'
         product *= parlay.decimal(price)
     if ids != set(ticket.get('gameIds') or []):
         return 'Fun-ticket games do not match its legs'
