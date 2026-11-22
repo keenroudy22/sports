@@ -1505,6 +1505,21 @@ class ParlayGuardTests(unittest.TestCase):
             with mock.patch.dict(player, {field: value}):
                 self.assertFalse(run.reviewed_ticket_absence(ticket, leg, game, fact, ctx))
 
+    def test_reviewed_status_list_requires_every_players_status_to_match(self):
+        game = dict(home={'short': 'Chargers'}, away={'short': 'Jets'})
+        statuses = {'Daiyan Henley': 'out', 'Rodney Shelley': 'out',
+                    'Kendall Williamson': 'out', 'Brenen Thompson': 'doubtful'}
+        report = ('Chargers linebacker Daiyan Henley, cornerback Rodney Shelley and safety '
+                  'Kendall Williamson are out, and wide receiver Brenen Thompson is doubtful.')
+        self.assertTrue(run.matches_reviewed_status_list(report, statuses, game))
+        for changed in (report.replace('doubtful', 'out'),
+                        report.replace('Williamson are out', 'Williamson are doubtful'),
+                        report + ' A backup will start instead.',
+                        report.replace('Chargers linebacker', 'The new starter')):
+            self.assertFalse(run.matches_reviewed_status_list(changed, statuses, game))
+        incomplete = {name: status for name, status in statuses.items() if name != 'Daiyan Henley'}
+        self.assertFalse(run.matches_reviewed_status_list(report, incomplete, game))
+
     def test_the_price_check_takes_a_ticket_off_when_its_leg_was_pulled(self):
         from unittest import mock
         import x_post

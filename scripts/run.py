@@ -5301,40 +5301,80 @@ def release_pull_reason(pick, facts):
 
 
 def reviewed_ticket_absence(ticket, leg, game, fact, ctx):
-    """Recognize an unchanged, explicitly reviewed non-quarterback absence."""
+    """Recognize unchanged, explicitly reviewed non-quarterback availability."""
+    names = fact.get('entities') or []
     if (ticket.get('selectionMethod') != 'sourced-fun-ticket-review-v1'
             or not researcher.from_web(fact) or fact.get('verified') is not True
-            or fact.get('kind') != 'injury' or len(fact.get('entities') or []) != 1):
+            or fact.get('kind') != 'injury' or not isinstance(names, list) or not names
+            or not all(isinstance(name, str) for name in names)):
         return False
-    name = fact['entities'][0]
     case = leg.get('researchCase') or {}
     source = fact.get('source')
     if not source or not any(row.get('url') == source for row in case.get('sources') or []):
         return False
-    if not any(row.get('name') == name and row.get('source') == source
-               for row in case.get('knownAbsences') or []):
-        return False
+    reviewed = {row['name']: row.get('status', 'out').lower()
+                for row in case.get('knownAbsences') or [] if row.get('source') == source}
     teams = [gates.team_key(game['league'], game[side]['id']) for side in ('home', 'away')]
-    matches = [row for team in teams for row in ctx.injuries.get(team, {}).values()
-               if row.get('name') == name]
-    if len(matches) != 1:
-        return False
-    player = matches[0]
-    position = player.get('position')
-    if not position or position == 'QB' or str(player.get('status')).lower() != 'out':
-        return False
-    try:
-        if gates.when(player.get('reportedAt')) > gates.when(ticket['quotedAt']):
+    players = {}
+    for name in names:
+        matches = [row for team in teams for row in ctx.injuries.get(team, {}).values()
+                   if row.get('name') == name]
+        if len(matches) != 1 or name not in reviewed:
             return False
-    except (KeyError, TypeError, ValueError):
-        return False
+        player = matches[0]
+        position = str(player.get('position') or '').upper()
+        status = str(player.get('status') or '').lower()
+        if status == 'injured reserve':
+            status = 'out'
+        if not position or position == 'QB' or status != reviewed[name]:
+            return False
+        try:
+            if gates.when(player.get('reportedAt')) > gates.when(ticket['quotedAt']):
+                return False
+        except (KeyError, TypeError, ValueError):
+            return False
+        players[name] = player
+    text = str(fact.get('claim') or '').strip()
+    if len(names) != 1 or reviewed[names[0]] != 'out':
+        return matches_reviewed_status_list(text, {name: reviewed[name] for name in names}, game)
+    name = names[0]
     # Treat only same-status reporting as a duplicate. Role, workload, roster
     # changes, additional names and mismatched diagnoses remain normal vetoes.
-    injury = str(player.get('injury') or '').strip()
+    injury = str(players[name].get('injury') or '').strip()
     diagnosis = rf'(?: with (?:a |an )?{re.escape(injury)})?' if injury else ''
     claim = (rf'(?:[\w -]+ )?{re.escape(name)} (?:was downgraded to out|was ruled out|is out)'
              rf'{diagnosis}(?: and will not (?:play|travel))?\.?')
-    return bool(re.fullmatch(claim, str(fact.get('claim') or '').strip(), re.IGNORECASE))
+    return bool(re.fullmatch(claim, text, re.IGNORECASE)
+                or matches_reviewed_status_list(text, {name: 'out'}, game))
+
+
+def matches_reviewed_status_list(text, reviewed, game):
+    """Check status-only sentences, retaining the status attached to each name."""
+    placeholders = {}
+    for index, name in enumerate(sorted(reviewed, key=len, reverse=True)):
+        token = f'@{index}@'
+        text = re.sub(rf'(?<!\w){re.escape(name)}(?!\w)', token, text, flags=re.IGNORECASE)
+        placeholders[token] = reviewed[name]
+    labels = {'defensive lineman', 'offensive lineman', 'defensive end', 'defensive tackle',
+              'offensive tackle', 'wide receiver', 'linebacker', 'cornerback', 'safety',
+              'running back', 'tight end', 'center', 'guard', 'edge rusher', 'kicker'}
+    labels.update(game[side].get(field) for side in ('home', 'away')
+                  for field in ('name', 'short', 'school', 'abbreviation') if game[side].get(field))
+    prefixes = '|'.join(re.escape(label) for label in sorted(labels, key=len, reverse=True))
+    text = re.sub(rf'(?:\b(?:{prefixes})\s+)+(?=@)', '', text, flags=re.IGNORECASE)
+    groups = re.compile(r'(@\d+@(?:\s*(?:,\s*(?:and\s+)?|and\s+)@\d+@)*)'
+                        r'\s+(?:is|are|was|were) (?:ruled )?(out|doubtful|questionable)\b',
+                        re.IGNORECASE)
+    seen, end = set(), 0
+    for match in groups.finditer(text):
+        if not re.fullmatch(r'[\s,.;&]*(?:and[\s,.;&]+)?', text[end:match.start()], re.IGNORECASE):
+            return False
+        group = set(re.findall(r'@\d+@', match[1]))
+        if seen.intersection(group) or any(placeholders.get(token) != match[2].lower() for token in group):
+            return False
+        seen.update(group)
+        end = match.end()
+    return seen == placeholders.keys() and bool(re.fullmatch(r'[\s.!]*', text[end:]))
 
 
 def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), look=None):

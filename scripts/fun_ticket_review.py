@@ -149,6 +149,7 @@ def refusal(ticket, ctx):
         if not isinstance(known_absences, list) or any(
                 not isinstance(absence, dict) or not isinstance(absence.get('name'), str)
                 or not absence['name'].strip()
+                or absence.get('status', 'out') not in ('out', 'doubtful', 'questionable')
                 or absence.get('source') not in {fact['url'] for fact in facts}
                 for absence in known_absences):
             return 'Previously reviewed absences must name the player and cite their availability report'
