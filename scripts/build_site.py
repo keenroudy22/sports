@@ -729,6 +729,32 @@ def matchup_market_players(player_ids, player_index, game, depth_charts, now, *,
     return sorted(entries, key=lambda entry: (entry[1] or '', entry[0]))
 
 
+def matchup_first_quarter(game, player_index, shards, depth_charts, now, final_box):
+    if game['league'] != 'NFL':
+        return []
+    teams = {str(game[side]['id']) for side in ('home', 'away')}
+    cutoff = day(min(now, features.when(game['kickoff'])).isoformat())
+    season = game.get('season')
+    stats = ('passYds', 'cmp', 'att', 'rushYds', 'car', 'recYds', 'rec')
+    players = matchup_market_players(player_index.keys(), player_index, game, depth_charts, now,
+                                     final_box=final_box)
+    rows = []
+    for athlete, name, position, team, abbr in players:
+        if team not in teams or position not in ('QB', 'RB', 'FB', 'WR', 'TE'):
+            continue
+        profile = shards.get(int(athlete) % SHARDS['NFL'], {}).get(athlete, {})
+        logs = []
+        for row in sorted(profile.get('firstQuarter', []), key=lambda row: row['date'], reverse=True):
+            if row['season'] != season or row['seasonType'] != 2 or row['date'] >= cutoff:
+                continue
+            values = {key: row['stats'][key] for key in stats if type(row['stats'].get(key)) in (int, float)}
+            if values:
+                logs.append({'date': row['date'], 'opp': row['opp'], 'stats': values})
+        if logs:
+            rows.append({'id': athlete, 'name': name, 'team': abbr, 'logs': logs})
+    return rows
+
+
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
                 records, snap_players, now, grading, favorites=None, trends=None, reads=None, alternates=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
@@ -2489,6 +2515,9 @@ def build(now=None):
         detail['marketPlayers'] = matchup_market_players(
             market_players, football_indexes[game['league']], game, depth_charts, now,
             final_box=stored.get(game['id']))
+        if game['league'] == 'NFL':
+            detail['firstQuarterPlayers'] = matchup_first_quarter(
+                game, football_indexes['NFL'], football_players['NFL'][1], depth_charts, now, stored.get(game['id']))
         if game.get('state') == 'pre' and features.when(game['kickoff']) > now:
             detail['positionGames'] = football_position_games(game, info['records'], snap_players, now)
         detail['lines'] = [reader_line(row) for row in detail['lines']]

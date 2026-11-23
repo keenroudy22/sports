@@ -98,6 +98,26 @@
 
   const GARBAGE = 'Garbage-time risk: spread 21+.';
   const anchored = (id, html) => html.replace('<section class="section">', `<section class="section" id="${id}">`);
+  const firstQuarterStats = (players, teams) => {
+    if (!players?.length) return '';
+    const stats = [['rushYds', 'Rushing yards'], ['recYds', 'Receiving yards'], ['rec', 'Receptions'],
+      ['passYds', 'Passing yards'], ['cmp', 'Completions'], ['att', 'Pass attempts'], ['car', 'Carries']];
+    const average = values => values.reduce((sum, value) => sum + value, 0) / values.length;
+    const groups = stats.map(([key, label]) => {
+      const rows = players.map(player => {
+        const games = player.logs.filter(row => isNum(row.stats[key]));
+        return games.length ? { player, games, avg: average(games.map(row => row.stats[key])) } : null;
+      }).filter(Boolean).sort((a, b) => b.avg - a.avg || a.player.name.localeCompare(b.player.name));
+      if (!rows.length) return '';
+      return `<details class="more-box"><summary>${esc(label)} · ${rows.length} players</summary>
+        <div class="grid">${rows.map(({ player, games, avg }) => `<details class="card"><summary>
+          <b>${esc(player.name)}</b> <span class="muted">${esc(player.team)}</span><br>
+          <span class="small">Season avg <b>${round1(avg)}</b> · Last ${Math.min(5, games.length)} avg <b>${round1(average(games.slice(0, 5).map(row => row.stats[key])))}</b> · ${games.length} games</span>
+          </summary><ul>${games.map(row => `<li>${esc(row.date)} · ${esc(teams?.teams?.[row.opp]?.abbr || '')} <b>${esc(row.stats[key])}</b></li>`).join('')}</ul></details>`).join('')}</div></details>`;
+    }).join('');
+    return anchored('first-quarter', section('1Q player stats', `<div class="grid">${groups}</div>`, '',
+      'Regular season before kickoff. Open a stat to compare players by season average, then tap a player for the game log.'));
+  };
   const dollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
   const bonusDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
   const contractBonuses = (game, rows) => {
@@ -562,14 +582,14 @@
       `<a class="more" href="#game/${esc(g.id)}#model-vs" data-copy-link>Copy matchup link</a>`,
       'Projected score, spread and total compared with the captured market.')) : '';
 
-    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${header}${postedHtml}${linePreview}${contractBonuses(g, detail.contractBonuses)}${quickNumber}${sheet}${tdHtml}${actions}${liveStamp(liveNow.refreshed)}
+    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${header}${postedHtml}${linePreview}${g.league === 'NFL' && detail.firstQuarterPlayers?.length ? `<p><a href="#game/${esc(g.id)}#first-quarter">1Q player stats ↓</a></p>` : ''}${contractBonuses(g, detail.contractBonuses)}${quickNumber}${sheet}${tdHtml}${actions}${liveStamp(liveNow.refreshed)}
       ${finalHtml}
       ${whySection(g, why, final)}
       ${pregame ? anchored('lines-we-like', section('Lines we like', favHtml, why && !final ? `<a class="more" href="#game/${esc(g.id)}#why">Why my number differs →</a>` : '', fav.length ? 'Current prices where my estimated chance is above what the price needs. Research, not extra best bets.' : 'Research held until the stated check clears. Not an official play.')) : ''}
       ${edgesHtml ? section('Matchup lines', edgesHtml, '<span class="small muted">Research, not posted plays</span>', 'Our projection, this-season hit rate at the exact line, and the opponent defense in one view. College game-script cautions rank lower.') : ''}
       ${othersHtml ? `<section class="section">${othersHtml}</section>` : ''}
       ${pregame || (final && detail.final) ? '' : anchored('model-vs', section('Model vs market', modelBlock))}
-      ${upsetHtml}${trendsHtml}${depthHtml}${projHtml}${alternateHtml}${matchupHtml}
+      ${upsetHtml}${trendsHtml}${depthHtml}${firstQuarterStats(detail.firstQuarterPlayers, teams)}${projHtml}${alternateHtml}${matchupHtml}
       ${section('Recent form', `<div class="grid two">${form('away')}${form('home')}</div>`)}
       ${injuryHtml}`;
   };

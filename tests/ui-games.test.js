@@ -630,3 +630,20 @@ test('live scores and the team page render from the Games bundle', async () => {
   assert.match(teamPage, /<h1>Alabama<\/h1>/);
   assert.match(teamPage, /Blowout · gap 4/, 'the team page cards carry the same badge');
 });
+
+test('matchup first-quarter stats rank players and count verified zeroes', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = { ...slate().at(-1), id: 'NFL-1', league: 'NFL' };
+  const log = (date, recYds) => ({ date, opp: '19', stats: { recYds } });
+  const detail = { ...g, marketPlayers: [], firstQuarterPlayers: [
+    { name: 'Lower Player', team: 'NYG', logs: [log('2026-11-01', 0), log('2026-10-25', 10)] },
+    { name: 'Higher Player', team: 'JAX', logs: [log('2026-11-01', 30)] },
+  ] };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
+  const html = await factory(ctx).game({ id: g.id });
+  assert.match(html, /href="#game\/NFL-1#first-quarter"/);
+  const panel = html.split('id="first-quarter"')[1].split('</section>')[0];
+  assert.match(panel, /Receiving yards · 2 players[\s\S]+Higher Player[\s\S]+Lower Player/);
+  assert.match(panel, /Season avg <b>5<\/b> · Last 2 avg <b>5<\/b> · 2 games/);
+  assert.match(panel, /2026-11-01[^<]*<b>0<\/b>/);
+});
