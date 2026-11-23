@@ -8892,3 +8892,17 @@ succeeded. Live checks at 375 px confirmed all 16 cards in order, the Sacks
 filter, the Titans matchup link, and no horizontal overflow or console errors.
 Evidence is in `work/nov23-nfl-contract-bonuses/live-check.json` and
 `work/nov23-nfl-contract-bonuses/live-phone.jpg`.
+
+### November 23 first-quarter NFL matchup stats
+
+Released `668a574b0` through [Pages run 45232473529](https://github.com/keenroudy22/sports/actions/runs/45232473529).
+The matchup shortcut opens first-quarter stats for both teams. Each stat ranks
+players by regular-season average before kickoff and shows their recent
+average, sample count and expandable game log. The full test suites, clean
+export, publication checks and offline rehearsal passed. Live CIN at WAS
+verification at 375 px opened the shortcut, receiving yards and a nine-game
+log without horizontal overflow or console errors.
+
+Evidence and the workload research are in `work/nov23-matchup-1q/`.
+The research compares later-game milestone frequencies. An NFL first-quarter
+price backtest is the next validation step before any edge claim.
