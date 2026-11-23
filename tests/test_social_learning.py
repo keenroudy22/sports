@@ -15,7 +15,7 @@ class SocialLearningTests(unittest.TestCase):
         start = before + timedelta(minutes=1)
         end = start + timedelta(days=7)
         for key in ('research:morning:2026-11-20', 'research:numbers:2026-11-20',
-                    'nba-projections-2026-11-20', 'nba-trends-2026-11-20', 'sheet:NFL:2026-11-22'):
+                    'research:end-zone:2026-11-23', 'nba-projections-2026-11-20', 'nba-trends-2026-11-20', 'sheet:NFL:2026-11-22'):
             self.assertIsNone(s.research_trial_hold(key, before))
             self.assertTrue(s.research_trial_hold(key, start))
             self.assertEqual(b.queued_relevance_issues({'id': key, 'dueAt': gates.stamp(start)}, before),
