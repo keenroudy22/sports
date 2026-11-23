@@ -353,3 +353,20 @@ test('basketball prop finder links short histories and exact saved prices withou
  assert.match(html, /Player directory/);
  assert.doesNotMatch(html, /13\.2|Research lean/);
 });
+
+test('the NFL 1Q slate ranks selected season averages and keeps recorded zeroes', async () => {
+  const { api, factory } = loadBrowserApi();
+  const make = (id, name, averages) => ({ id, name, averages, team: 'BUF',
+    gameId: 'NFL-1', kickoff: '2026-11-29T18:00Z' });
+  const players = [
+    make('1', 'Zero Player', { recYds: [0, 3] }),
+    make('2', 'Top Player', { recYds: [18, 5], rec: [2, 5] }),
+    make('2', 'Duplicate Player', { recYds: [20, 5] }),
+    make('3', 'Carries Only', { rushYds: [15, 4] }),
+  ];
+  const views = factory(api.moreContext({ get: async () => ({ players }) }));
+  const html = await views['first-quarter'](api.model.resolve('#first-quarter/recYds'));
+  assert.match(html, /href="#first-quarter\/recYds" aria-current="page"/);
+  assert.match(html, /Top Player[\s\S]*Zero Player[\s\S]*class="n">0(?:\.0)?<\/td><td class="n">3/);
+  assert.doesNotMatch(html, /Duplicate Player|Carries Only/);
+});

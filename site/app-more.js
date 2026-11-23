@@ -427,6 +427,28 @@ button.cal-day { cursor: pointer; }
       <p class="small muted" style="margin-top:14px">Entertainment only, 21+. This describes past games. It is not betting advice, and no pick is ever certain.</p>`;
   };
 
+  views['first-quarter'] = async ({ stat } = {}) => {
+    const { players } = await get('app/first-quarter-slate.json');
+    const stats = [['rec', 'Receptions'], ['rushYds', 'Rushing yards'], ['recYds', 'Receiving yards']];
+    const [selected] = stats.find(([key]) => key === stat) || stats[0];
+    const filters = segLinks(stats.map(([key, title]) => [`#first-quarter/${key}`, title, key]), selected);
+    const rows = [];
+    const seen = new Set();
+    for (const player of players) {
+      if (seen.has(player.id)) continue;
+      seen.add(player.id);
+      const sample = player.averages[selected];
+      if (sample) rows.push({ ...player, average: sample[0], count: sample[1] });
+    }
+    rows.sort((a, b) => b.average - a.average || b.count - a.count || a.name.localeCompare(b.name));
+    const top = head('NFL', '1Q Player Stats', 'First-quarter regular-season averages for players on today’s and upcoming matchups. The Games column shows how many verified games went into each average.',
+      '<a class="back" href="#games">← Games</a>');
+    return `${top}<div class="toolbar">${filters}</div>${rows.length ?
+      `<div class="card"><table class="t"><thead><tr><th scope="col">Player</th><th scope="col" class="n">1Q avg</th><th scope="col" class="n">Games</th></tr></thead>
+      <tbody>${rows.map(row => `<tr><td><a href="#game/${esc(row.gameId)}#first-quarter"><b>${esc(row.name)}</b></a><br><span class="small muted">${esc(row.team)} · ${esc(whenShort(row.kickoff))}</span></td><td class="n">${esc(C.fixed(row.average, 1))}</td><td class="n">${row.count}</td></tr>`).join('')}</tbody></table></div>` :
+      empty('No first-quarter stats available', 'Verified season averages will appear here when players on the slate have recorded games.')}`;
+  };
+
   views.bonuses = async ({ stat } = {}) => {
     const { reports } = await get('app/contract-bonuses.json');
     const top = head('NFL', 'Contract Bonuses', 'Closest first by percentage of the season target reached. Amounts show what the listed milestone would add.',
@@ -462,7 +484,7 @@ button.cal-day { cursor: pointer; }
       <a href="https://x.com/keenkooks" target="_blank" rel="noopener"><span><b>Follow on X</b></span><small>@keenkooks ↗</small></a>`)}
     ${moreGroup('Yours', `<a href="#saved"><span><b>Saved</b></span><small>${state.watchlist.length} saved →</small></a>
       <a href="#ticket"><span><b>My ticket</b><br><span class="small muted">Save and compare legs</span></span><small>${state.ticket.length} legs →</small></a>`)}
-    ${moreGroup('Tools', `<a href="#bonuses"><span><b>Contract Bonuses</b><br><span class="small muted">Reported NFL incentives ranked by progress</span></span><small>→</small></a>
+    ${moreGroup('Tools', `<a href="#first-quarter"><span><b>1Q Player Stats</b></span><small>→</small></a><a href="#bonuses"><span><b>Contract Bonuses</b><br><span class="small muted">Reported NFL incentives ranked by progress</span></span><small>→</small></a>
       <a href="#arbs"><span><b>Arb calculator</b><br><span class="small muted">Exact two-book stake math</span></span><small>→</small></a>`)}
     ${moreGroup('Help', `<a href="#feedback"><span><b>Feedback</b></span><small>→</small></a>`)}`;
   views.glossary = async () => views.start();

@@ -71,7 +71,7 @@
     return `<section class="section" style="margin:8px 0 18px" aria-labelledby="worth-h"><div class="section-head"><h2 id="worth-h" style="white-space:nowrap">Worth your time</h2><span class="kt-kind">Research · the one thing to check</span></div>
       <div class="chip-scroll"><div class="kt-worth-strip">${top.map(g => `<a class="kt-worth-card" href="#game/${esc(g.id)}"><span class="wc-t">${esc(g.away.abbr)} at ${esc(g.home.abbr)}</span><b>${esc(g.look || g.plainGap || 'Take a look')}</b><small>${esc([C.TIER_WORD[g.tier], whenShort(g.kickoff).split(', ').pop(), !(g.bettableParts || {}).official ? 'Research lean · not a bet' : ''].filter(Boolean).join(' · '))}</small></a>`).join('')}</div></div></section>`;
   };
-  const gameTabs = tab => `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/favorites', 'Favorite lines', 'favorites'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
+  const gameTabs = tab => `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/favorites', 'Favorite lines', 'favorites'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final'], ['#first-quarter', '1Q Player Stats', 'first-quarter']], tab)}</div>`;
   const teamSearch = () => `<div class="grow"><label class="sr" for="gq">Find a team</label><input id="gq" class="search" type="search" placeholder="Find a team" value="${esc(state.games.q || '')}" data-input="gq" autocomplete="off" maxlength="80"></div>`;
   const projectionWindow = (rows, newest = false) => {
     const q=String(state.games.q || '').trim().toLowerCase();

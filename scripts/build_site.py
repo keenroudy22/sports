@@ -755,6 +755,21 @@ def matchup_first_quarter(game, player_index, shards, depth_charts, now, final_b
     return rows
 
 
+def first_quarter_slate_rows(game, players):
+    """Compact summaries from the same verified history as the matchup view."""
+    rows = []
+    for player in players:
+        averages = {}
+        for key in ('rec', 'rushYds', 'recYds'):
+            values = [row['stats'][key] for row in player['logs'] if key in row['stats']]
+            if values:
+                averages[key] = [sum(values) / len(values), len(values)]
+        if averages:
+            rows.append({'id': player['id'], 'name': player['name'], 'team': player['team'],
+                         'gameId': game['id'], 'kickoff': game['kickoff'], 'averages': averages})
+    return rows
+
+
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
                 records, snap_players, now, grading, favorites=None, trends=None, reads=None, alternates=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
@@ -2483,6 +2498,7 @@ def build(now=None):
     write(OUT / 'contract-bonuses.json', {'reports': contract_bonus_index(
         by_id, contract_bonus_reports, {g['id'] for g in window}, football_indexes['NFL'])})
     gap_rows = market_read.load_rows()
+    first_quarter_slate = []
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
         latest_snap = snaps_for[-1] if snaps_for else None
@@ -2518,6 +2534,8 @@ def build(now=None):
         if game['league'] == 'NFL':
             detail['firstQuarterPlayers'] = matchup_first_quarter(
                 game, football_indexes['NFL'], football_players['NFL'][1], depth_charts, now, stored.get(game['id']))
+            if day(game['kickoff']) >= day(now.isoformat()) and game.get('seasonType') in (2, 3):
+                first_quarter_slate.extend(first_quarter_slate_rows(game, detail['firstQuarterPlayers']))
         if game.get('state') == 'pre' and features.when(game['kickoff']) > now:
             detail['positionGames'] = football_position_games(game, info['records'], snap_players, now)
         detail['lines'] = [reader_line(row) for row in detail['lines']]
@@ -2525,6 +2543,7 @@ def build(now=None):
         if bonuses:
             detail['contractBonuses'] = bonuses
         write(OUT / 'games' / f"{game['id']}.json", detail)
+    write(OUT / 'first-quarter-slate.json', {'players': first_quarter_slate})
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],
                'picks': (scoreboard.get('picks') or {}).get('summary')}
