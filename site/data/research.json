@@ -76472,5 +76472,288 @@
         "publishedAt": "2026-11-23T13:42:38Z"
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-11-23T19:52:57Z",
+    "summary": "Released 1: Austin Ekeler OVER 1.5 receptions +126 at FanDuel.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "RB",
+        "athleteId": "3068267",
+        "market": "rec",
+        "line": 1.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401873078"
+        ],
+        "book": "FanDuel",
+        "odds": 126,
+        "projection": 1.9,
+        "edge": "Price-checked chance 50.9% against the exact two-sided price; 44.2% needed at +126: +6.7 percentage points.",
+        "cutoff": "OVER 1.5 at +126 or better; off the card at 2+, or at +125 or worse at 1.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-23T19:31:44Z",
+        "quotedAt": "2026-11-23T19:33:45Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 2:33 PM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-11-23T22:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.601,
+          "chance": 0.509,
+          "calibrated": true,
+          "calibration": 0.09,
+          "calibrationN": 3361,
+          "push": 0.0,
+          "breakEven": 0.442,
+          "edgePoints": 6.7,
+          "evPerUnit": 0.151,
+          "snapshotAt": "2026-11-23T19:31:44Z",
+          "probabilitySpec": "00781a91dd029585608477973eb77b0d1e2c1c98921df8af2c110822c937095c",
+          "evaluatedAt": "2026-11-23T19:46:59Z",
+          "fairChance": 0.412,
+          "anchoredChance": 0.509,
+          "gap": 9.7,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Cincinnati Bengals at Washington Commanders",
+        "title": "Austin Ekeler OVER 1.5 receptions",
+        "id": "NFL-2026-W11-ekeler-over-1-5-rec-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873078",
+          "https://api.sharpapi.io/api/v1/odds"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 7 of 10 over 1.5.",
+          "context": [
+            "Role: projected for 2.3 targets a game.",
+            "Defense: CIN allows 4.78 receptions a game to RBs, 21st-stingiest of 32 this season."
+          ],
+          "cautions": [],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 1.9 against 1.5. The over reads 50.9% after adjustment from the raw 60.1%; 44.2% is needed at +126. Last 10 games: 7 of 10 over 1.5. Role: projected for 2.3 targets a game. Defense: CIN allows 4.78 receptions a game to RBs, 21st-stingiest of 32 this season.",
+        "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Over 1.5 in 7 of his last 10 games.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-23T19:46:59Z"
+            },
+            {
+              "text": "Book says 1.5. I say 1.9.",
+              "numbers": {
+                "projection": 1.9,
+                "line": 1.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-23T19:31:44Z"
+            },
+            {
+              "text": "3 of his last 5 games finished over 1.5 receptions.",
+              "numbers": {
+                "values": [
+                  1,
+                  2,
+                  0,
+                  2,
+                  4
+                ],
+                "hits": 3,
+                "games": 5,
+                "line": 1.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-11-13T01:15Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 6 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-23T19:46:59Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Lucas Patrick (WSH) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/2576736/lucas-patrick",
+              "time": "2026-11-22T00:59Z"
+            },
+            {
+              "text": "Amik Robertson (WSH) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4239694/amik-robertson",
+              "time": "2026-11-22T00:26Z"
+            },
+            {
+              "text": "Rachaad White (WSH) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white",
+              "time": "2026-11-21T21:21Z"
+            },
+            {
+              "text": "Kyle Dugger (CIN) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger",
+              "time": "2026-11-22T00:54Z"
+            },
+            {
+              "text": "Dalton Risner (CIN) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3125082/dalton-risner",
+              "time": "2026-11-22T00:42Z"
+            },
+            {
+              "text": "Dax Hill (CIN) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4426422/dax-hill",
+              "time": "2026-11-22T00:17Z"
+            },
+            {
+              "text": "Dylan Fairchild (CIN) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4646773/dylan-fairchild",
+              "time": "2026-11-19T21:30Z"
+            }
+          ],
+          "weather": {
+            "tempF": 57,
+            "windMph": 9,
+            "windDirection": "NW",
+            "precipProb": 5,
+            "periodStart": "2026-11-23T20:00:00-05:00",
+            "issuedAt": "2026-11-23T18:30:02+00:00",
+            "source": "https://api.weather.gov/gridpoints/LWX/101,74/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": 123,
+                  "time": "2026-11-23T19:33:45Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": 123,
+                  "time": "2026-11-23T19:33:45Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 1.5,
+                  "price": 126,
+                  "time": "2026-11-23T19:33:45Z"
+                },
+                "now": {
+                  "line": 1.5,
+                  "price": 126,
+                  "time": "2026-11-23T19:33:45Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 1.5,
+              "price": 126,
+              "time": "2026-11-23T19:33:45Z"
+            }
+          },
+          "ours": {
+            "projection": 1.9,
+            "line": 1.5,
+            "market": "rec",
+            "text": "Over 1.5 in 7 of his last 10 games.",
+            "snapshotAt": "2026-11-23T19:31:44Z"
+          },
+          "history": "Last 10 games: 7 of 10 over 1.5.",
+          "sources": [
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/2576736/lucas-patrick",
+              "time": "2026-11-22T00:59Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4239694/amik-robertson",
+              "time": "2026-11-22T00:26Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white",
+              "time": "2026-11-21T21:21Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger",
+              "time": "2026-11-22T00:54Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3125082/dalton-risner",
+              "time": "2026-11-22T00:42Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4426422/dax-hill",
+              "time": "2026-11-22T00:17Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4646773/dylan-fairchild",
+              "time": "2026-11-19T21:30Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/LWX/101,74/forecast/hourly",
+              "time": "2026-11-23T18:30:02+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873078",
+              "time": "2026-11-23T19:46:59Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-11-23T19:46:59Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-23T19:52:57Z"
+      }
+    ]
   }
 ]
