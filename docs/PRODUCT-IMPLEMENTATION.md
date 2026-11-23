@@ -8875,3 +8875,20 @@ rehearsal. [Pages run 45051134427](https://github.com/keenroudy22/sports/actions
 succeeded. Live browser checks confirmed the 55/60, 575/650 and 7/8 order at
 375px and 1280px, the Receiving yards filter, and no console errors or overflow.
 Evidence: `work/nov22-nfl-bonus-index/live-check.json` and `live-phone.jpg`.
+
+### November 23 NFL contract bonus additions
+
+Added 13 publicly reported milestones for nine players to the Contract Bonuses
+page. The Nov. 23 snapshots link to contract reporting and official season
+totals. The page now has 16 milestones across 10 players, with half-sacks
+displayed and ranked at their full precision. Where a milestone tops up an
+earned tier, the card displays the additional payout. Each matchup card links
+back to the full tracker.
+
+Release `e9925c1d9` passed 2,514 Python tests (two skipped), 390 frontend tests,
+the clean export, publication and record audits (220 plays), and the offline
+rehearsal. [Pages run 45195081647](https://github.com/keenroudy22/sports/actions/runs/45195081647)
+succeeded. Live checks at 375 px confirmed all 16 cards in order, the Sacks
+filter, the Titans matchup link, and no horizontal overflow or console errors.
+Evidence is in `work/nov23-nfl-contract-bonuses/live-check.json` and
+`work/nov23-nfl-contract-bonuses/live-phone.jpg`.
