@@ -399,6 +399,8 @@ def parlay_head(pick, league):
     odds = int(pick['odds'])
     if pick.get('parlayStyle') == 'daily-double':
         return f"Daily Double {odds:+d} ({public_book(pick.get('book'))})"
+    if pick.get('parlayStyle') == 'first-quarter':
+        return f"{pick['family']} 1Q parlay {odds:+d} ({public_book(pick.get('book'))})"
     return f"🎰 {odds:+d} Chef's Special ({public_book(pick.get('book'))})"
 
 

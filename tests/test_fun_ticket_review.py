@@ -97,10 +97,10 @@ class FunTicketReviewTests(unittest.TestCase):
         pick, held = review.candidate(ctx, NOW, spec)
         self.assertIsNone(held)
         self.assertEqual((pick['title'], pick['riskUnits']), ('Daily Double', .25))
-        for quote in (-111, -110, -100, -1, 0, 99, 100, 110, 111):
+        for quote in (-116, -115, -112, -110, -100, -1, 0, 99, 100, 110, 115, 116):
             with self.subTest(quote=quote):
                 self.assertEqual(gates.longshot_shape(dict(pick, odds=quote), ctx).ok,
-                                 quote in (-110, -100, 100, 110))
+                                 quote in (-115, -112, -110, -100, 100, 110, 115))
         self.assertFalse(gates.longshot_shape(dict(pick, legs=pick['legs'][:1]), ctx).ok)
         spec['legs'][0]['alternate'] = False
         self.assertIsNone(review.candidate(ctx, NOW, spec)[0])

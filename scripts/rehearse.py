@@ -32,6 +32,7 @@ def stage(root, workspace):
     root, workspace = Path(root), Path(workspace)
     snapshot = workspace / 'snapshot'
     snapshot.mkdir()
+    (snapshot / 'work').mkdir()
     ignore = shutil.ignore_patterns('__pycache__', '*.pyc', '.DS_Store')
     for name in ('scripts', 'data', 'research'):
         shutil.copytree(root / name, snapshot / name, ignore=ignore)
@@ -109,7 +110,7 @@ class OfflineGuard:
         raise OSError(f'offline rehearsal: {host} unavailable; use saved evidence')
 
 
-def worker(workspace, slot, now=None):
+def worker(workspace, slot, now=None, command='run'):
     workspace = Path(workspace).resolve()
     if ROOT != workspace / 'snapshot' or not (workspace / 'offline-rehearsal.json').is_file():
         raise ValueError('worker must run from its staged snapshot')
@@ -122,7 +123,7 @@ def worker(workspace, slot, now=None):
     # Draft wording still runs. Browser/card rendering is tested separately and is
     # intentionally absent from this no-process, no-network rehearsal.
     run.pick_card.chrome_path = lambda: None
-    argv = ['run', '--dry-run', '--no-llm', '--slot', slot, '--record-screens']
+    argv = [command, '--dry-run', '--no-llm', '--slot', slot, '--record-screens']
     if now:
         argv += ['--now', now]
     code = run.main(argv)
@@ -130,6 +131,7 @@ def worker(workspace, slot, now=None):
     status = json.loads(status_path.read_text()) if status_path.exists() else {}
     result = {'exitCode': code, 'outcome': status.get('outcome', 'missing status'),
               'scope': 'real _run; stored inputs only; no fresh availability/price validation',
+              'command': command,
               'blocked': guard.denied, 'status': str(status_path), 'workspace': str(workspace)}
     # Missing state or a write attempted outside the copy is a failed rehearsal,
     # even if an optional production-code catch swallowed the refusal.
@@ -147,6 +149,7 @@ def main(argv=None):
     parser.add_argument('--now', help='optional recorded UTC instant; future instants are refused')
     parser.add_argument('--discard-snapshot', action='store_true',
                         help='remove the copied inputs after the run; retain the logs and results')
+    parser.add_argument('--command', choices=('run', 'results'), default='run')
     parser.add_argument('--worker', help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     if len(args.slot) != 4 or not args.slot.isdigit() or int(args.slot[:2]) > 23 or int(args.slot[2:]) > 59:
@@ -159,12 +162,14 @@ def main(argv=None):
         except ValueError:
             parser.error('--now must be a timezone-aware instant no later than now')
     if args.worker:
-        return worker(args.worker, args.slot, args.now)
+        return worker(args.worker, args.slot, args.now, args.command)
     workspace = Path(tempfile.mkdtemp(prefix='kookn-rehearsal-')).resolve()
     print(f'Offline rehearsal artifacts: {workspace}', flush=True)
     try:
         snapshot = stage(ROOT, workspace)
         argv = [sys.executable, str(snapshot / 'scripts' / 'rehearse.py'), '--worker', str(workspace), '--slot', args.slot]
+        if args.command != 'run':
+            argv += ['--command', args.command]
         if args.now:
             argv += ['--now', args.now]
         with (workspace / 'rehearsal.log').open('w') as log:

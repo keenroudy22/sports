@@ -43,6 +43,17 @@ def fresh(value, now, minutes=60):
         return False
 
 
+def ticket_period(spec):
+    return 'first_quarter' if spec.get('parlayStyle') == 'first-quarter' else 'full_game'
+
+
+def leg_title(leg, league):
+    stat = STATS[league][leg['market']]
+    if leg.get('period') == 'first_quarter':
+        stat = f'1Q {stat}'
+    return f"{leg['player']} {leg['direction']} {leg['line']:g} {stat}"
+
+
 def terms(spec):
     """Exact identity shared by the visible book receipt and reviewed packet."""
     return {'book': spec.get('book'), 'odds': spec.get('odds'),
@@ -162,10 +173,10 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
             issues.append('unique named player/game identity required')
         seen.add(identity)
         game_ids.add(leg.get('gameId'))
-        if (leg.get('market') not in STATS.get(league, {}) or leg.get('period') != 'full_game'
+        if (leg.get('market') not in STATS.get(league, {}) or leg.get('period') != ticket_period(spec)
                 or leg.get('direction') not in ('over', 'under') or not numeric(leg.get('line'))
                 or leg.get('line', 0) <= 0 or not float(leg.get('line', 0) * 2).is_integer()):
-            issues.append('supported exact full-game player threshold required')
+            issues.append('supported exact player threshold and ticket period required')
         if leg.get('book') != spec.get('book') or not price(leg.get('odds')):
             issues.append('exact leg price at the ticket sportsbook required')
         if (not https(leg.get('source'), spec.get('book')) or not fresh(leg.get('observedAt'), now)):
@@ -198,7 +209,7 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
             issues.append('leg probabilities cannot be multiplied into an SGP claim')
         holds.extend(f'Leg {index}: {issue}' for issue in issues)
         if not issues:
-            captions.append(f"{leg['player']} {leg['direction']} {leg['line']:g} {STATS[league][leg['market']]}")
+            captions.append(leg_title(leg, league))
     if league == 'NFL' and len(game_ids) != 1:
         holds.append('MNF/TNF review must describe one exact primetime game')
     if len(game_ids) < len(legs):
@@ -230,7 +241,9 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
     if not holds:
         if len(legs) >= 6:
             captions = [parlay_caption.compact_prop(leg) for leg in legs]
-        title = 'Daily Double' if spec.get('parlayStyle') == 'daily-double' else f'My {family} parlay'
+        style = spec.get('parlayStyle')
+        title = ('Daily Double' if style == 'daily-double' else f'{family} 1Q parlay'
+                 if style == 'first-quarter' else f'My {family} parlay')
         result['caption'] = parlay_caption.layout(
             f"{title} · {int(spec['odds']):+d} {spec['book']}", captions, '21+ only')
         if x_post.tweet_length(result['caption']) > x_post.LIMIT or x_post.x_style(result['caption']):

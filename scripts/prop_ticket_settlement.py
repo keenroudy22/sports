@@ -95,7 +95,7 @@ def review(spec, evidence, now):
         if key in seen:
             holds.append('Duplicate original leg identity')
         seen.add(key)
-        if (leg.get('book') != spec['book'] or leg.get('period') != 'full_game'
+        if (leg.get('book') != spec['book'] or leg.get('period') != tickets.ticket_period(spec)
                 or leg.get('market') not in tickets.STATS.get('NBA' if spec.get('family') == 'NBA-alts' else 'NFL', {})
                 or leg.get('direction') not in ('over', 'under') or not tickets.numeric(leg.get('line'))):
             holds.append(f'Leg {index + 1}: unsupported original market or period')
@@ -115,6 +115,9 @@ def review(spec, evidence, now):
                 or not clock(row.get('checkedAt'), now)):
             holds.append(f'Leg {index + 1}: exact terminal identity and source required')
             continue
+        if leg['period'] == 'first_quarter' and (
+                row.get('actualPeriod') != 'first_quarter' or row.get('periodComplete') is not True):
+            holds.append(f'Leg {index + 1}: completed first-quarter actual and participation evidence required')
         try:
             if (gates.when(row.get('checkedAt')) < gates.when(leg.get('kickoff'))
                     or gates.when(receipt.get('checkedAt')) < gates.when(leg.get('kickoff'))):

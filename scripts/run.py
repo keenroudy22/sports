@@ -2668,23 +2668,24 @@ def _run(args, now, slot, kinds, status):
     now = current_run_time(args, now)
     if not settle_only:
         early_nba_selection(args, now, slot, status)
-    try:
-        opportunities = arbs.scan(ROOT, now)
-    except Exception as error:  # an optional private alert can never stop grading or publishing
-        opportunities = []
-        log(f'arb radar unavailable ({type(error).__name__}); the desk continues')
-    import discord_post
-    status['arbs'] = {'found': len(opportunities), 'alerted': 0, 'destination': 'Discord'}
-    for hit in opportunities[:3]:
-        log(f"arb radar: {hit['label']} {hit['roi']:.2f}%")
-        if args.dry_run:
-            continue
+    if not settle_only:
         try:
-            if discord_post.send_arb_alert(arbs.message(hit), arbs.alert_id(hit), now,
-                                           CONF / 'arb-discord-alerts.json'):
-                status['arbs']['alerted'] += 1
-        except discord_post.DiscordError as error:  # an optional alert can never stop the desk
-            log(f'arb radar Discord alert not sent: {error}')
+            opportunities = arbs.scan(ROOT, now)
+        except Exception as error:  # an optional private alert can never stop grading or publishing
+            opportunities = []
+            log(f'arb radar unavailable ({type(error).__name__}); the desk continues')
+        import discord_post
+        status['arbs'] = {'found': len(opportunities), 'alerted': 0, 'destination': 'Discord'}
+        for hit in opportunities[:3]:
+            log(f"arb radar: {hit['label']} {hit['roi']:.2f}%")
+            if args.dry_run:
+                continue
+            try:
+                if discord_post.send_arb_alert(arbs.message(hit), arbs.alert_id(hit), now,
+                                               CONF / 'arb-discord-alerts.json'):
+                    status['arbs']['alerted'] += 1
+            except discord_post.DiscordError as error:  # an optional alert can never stop the desk
+                log(f'arb radar Discord alert not sent: {error}')
     slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
     if not args.dry_run and not settle_only:
         try:
@@ -2710,7 +2711,7 @@ def _run(args, now, slot, kinds, status):
         # The per-game summary often reports Final before ESPN's day scoreboard.
         # Reuse the five-minute watcher's verified summary so grading is prompt.
         import live_watch
-        watched = live_watch.final_records()
+        watched = live_watch.final_records(CONF / 'live-watch.json')
         live_watch.overlay_finals(games, watched)
         settlement_records = live_watch.settlement_records(records, watched)
     now = current_run_time(args, now)
@@ -2718,12 +2719,11 @@ def _run(args, now, slot, kinds, status):
     stores = gates.Stores(records=records)
     ctx = stores.as_of(now)
     ctx.games = games
-    prime_weather(records)
     raw_first = raw_first_publications(stores.reports)
     context_file = stores.context_file
     settled, closed, published, screened, unclear = [], [], [], [], []
     llm.reset_calls()
-    use_llm = not args.no_llm and llm.available()
+    use_llm = not settle_only and not args.no_llm and llm.available()
     polish_on = use_llm and llm.polish_enabled()
     status['llm'] = {'used': use_llm, 'model': llm.model_name() if use_llm else None,
                      'judgeModel': llm.model_name() if use_llm else None,
@@ -2776,12 +2776,17 @@ def _run(args, now, slot, kinds, status):
     release_queue.reopen_expired(CONF, now, log=log)
     release_queue.merge_context(ctx, CONF)
 
-    build_site.build(now)
+    # The hosted release builds public payloads from the committed records.
+    # A settlement pass only needs a local market board for a real replacement.
+    needs_board = not settle_only or bool(replacement_games)
+    if needs_board:
+        prime_weather(records)
+        build_site.build(now)
     # Match already-public official plays to one-click slips. This optional
     # transport never admits a play and never stops the desk or publication.
     # A successful public-safe row is committed with the ordinary data push;
     # the hosted network-free build attaches it by immutable selection hash.
-    if not args.dry_run and not getattr(args, 'opportunistic', False) and os.environ.get('UNABATED_API_KEY', '').strip():
+    if not settle_only and not args.dry_run and not getattr(args, 'opportunistic', False) and os.environ.get('UNABATED_API_KEY', '').strip():
         try:
             slip_status = betslips.refresh_current(now, logger=log, deadline=8)
             status['betslips'] = slip_status
@@ -2790,8 +2795,9 @@ def _run(args, now, slot, kinds, status):
         except betslips.BetslipError as error:
             status['betslips'] = {'configured': True, 'failed': 1}
             log(f'betslips unavailable; official plays continue: {error}')
-    lines = load_candidate_lines(build_site.OUT / 'lines.json')
-    selection_scope = official_selection_scope(slot, games, ctx, now, getattr(args, 'select_now', False))
+    lines = load_candidate_lines(build_site.OUT / 'lines.json') if needs_board else []
+    selection_scope = (set() if settle_only else
+                       official_selection_scope(slot, games, ctx, now, getattr(args, 'select_now', False)))
     if replacement_games:
         selection_scope = replacement_games
         kinds = kinds | {'lean', 'prop'}
@@ -3180,25 +3186,26 @@ def _run(args, now, slot, kinds, status):
                 'day': day, 'checkedAt': stamp(now), 'quotes': sorted(checked | replacement_quotes),
                 'inputs': replacement_inputs or replacement_previous.get('inputs'),
             })
-        try:
-            shadow = reasoned_edges.step(decided, ctx, now)
-            status['reasonedEdges'] = shadow
-            log(f"reasoned edges: {shadow['captured']} triggers, {shadow['graded']} grades; private shadow only")
-        except Exception as error:
-            status['errors'].append(f'reasoned edges: {type(error).__name__}: {error}')
-            log(f'reasoned edges unavailable ({type(error).__name__}); the desk continues')
-        try:
-            projection_shadow = projection_shadows.step(decided, ctx, now)
-            status['projectionShadows'] = projection_shadow
-            log(f"projection shadows: {projection_shadow['captured']} captured, "
-                f"{projection_shadow['graded']} graded; private comparison only")
-        except Exception as error:
-            status['errors'].append(f'projection shadows: {type(error).__name__}: {error}')
-            log(f'projection shadows unavailable ({type(error).__name__}); the desk continues')
-        admission_keys = {candidate.get('id') for _, _, candidate in admitted}
-        public_decisions = [row for row in decided if row.get('id') not in admission_keys]
-        remember(public_decisions, now, slot, status)
-        paper_trials(now, slot, status)
+        if needs_board:
+            try:
+                shadow = reasoned_edges.step(decided, ctx, now)
+                status['reasonedEdges'] = shadow
+                log(f"reasoned edges: {shadow['captured']} triggers, {shadow['graded']} grades; private shadow only")
+            except Exception as error:
+                status['errors'].append(f'reasoned edges: {type(error).__name__}: {error}')
+                log(f'reasoned edges unavailable ({type(error).__name__}); the desk continues')
+            try:
+                projection_shadow = projection_shadows.step(decided, ctx, now)
+                status['projectionShadows'] = projection_shadow
+                log(f"projection shadows: {projection_shadow['captured']} captured, "
+                    f"{projection_shadow['graded']} graded; private comparison only")
+            except Exception as error:
+                status['errors'].append(f'projection shadows: {type(error).__name__}: {error}')
+                log(f'projection shadows unavailable ({type(error).__name__}); the desk continues')
+            admission_keys = {candidate.get('id') for _, _, candidate in admitted}
+            public_decisions = [row for row in decided if row.get('id') not in admission_keys]
+            remember(public_decisions, now, slot, status)
+            paper_trials(now, slot, status)
         if (not settle_only and os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and nba_game_capture_due(slot)
                 and 'nbaCapture' not in status and args.command != 'run'):
             try:
@@ -3215,15 +3222,16 @@ def _run(args, now, slot, kinds, status):
                 capture_nba_props_and_select(args,now,status)
             except Exception as error:
                 status['errors'].append(f'NBA player props: {type(error).__name__}: {error}')
-        try:
-            import nba_editorial
-            # Feed receipts are newer than this run's start. Use the real
-            # post-capture instant, or their future-time guard would suppress
-            # every freshly captured morning post. Rehearsals retain their clock.
-            status['nbaEditorialPrepared'] = nba_editorial.prepare(now if args.dry_run else datetime.now(timezone.utc))
-        except Exception as error:
-            status['errors'].append(f'NBA editorial: {type(error).__name__}: {error}')
-            log(f'NBA editorial unavailable: {type(error).__name__}: {error}')
+        if not settle_only:
+            try:
+                import nba_editorial
+                # Feed receipts are newer than this run's start. Use the real
+                # post-capture instant, or their future-time guard would suppress
+                # every freshly captured morning post. Rehearsals retain their clock.
+                status['nbaEditorialPrepared'] = nba_editorial.prepare(now if args.dry_run else datetime.now(timezone.utc))
+            except Exception as error:
+                status['errors'].append(f'NBA editorial: {type(error).__name__}: {error}')
+                log(f'NBA editorial unavailable: {type(error).__name__}: {error}')
         try:
             import nba_trial_runtime
             if settle_only and not args.dry_run and not getattr(args, 'now', None):
@@ -3237,7 +3245,7 @@ def _run(args, now, slot, kinds, status):
             status['cbbPicksGraded'] = cbb_picks.grade(nba_grade_now)
             import nba_player_props
             status['nbaPlayerPropGraded'] = nba_player_props.grade(nba_grade_now)
-            if not args.dry_run and not getattr(args,'no_push',True):
+            if not settle_only and not args.dry_run and not getattr(args,'no_push',True):
                 import nba_roster_runtime
                 try:
                     status['nbaRosterGraded']=nba_roster_runtime.grade(now,root=ROOT/'data/nba-roster-research',boxes=[r for p in (ROOT/'data/sport-box').glob('nba-*.jsonl') for r in __import__('boxscores').read_store(p)])
@@ -3248,7 +3256,7 @@ def _run(args, now, slot, kinds, status):
                     now, capture=args.command == 'run' and nba_trial_needs_capture(slot, status))
         except Exception as error:
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
-        if slot.hour in (21,23):
+        if not settle_only and slot.hour in (21,23):
             try:
                 import next_day_prep
                 import nba_player_props
@@ -3273,19 +3281,20 @@ def _run(args, now, slot, kinds, status):
             except Exception as error:
                 status['errors'].append(f'next-day prep: {type(error).__name__}: {error}')
                 log(f'next-day prep unavailable ({type(error).__name__}); delivery continues')
-        try:
-            import morning_brief
-            public_today=any(not dict(p,**ctx.latest.get(k,{})).get('result') and not p.get('parlayType')
-                and any(g in games and eastern_date(gates.when(games[g]['kickoff']))==eastern_date(now)
-                        for g in p.get('gameIds',[])) for k,p in ctx.first.items())
-            status['morningBriefPrepared']=morning_brief.prepare(
-                now if args.dry_run else datetime.now(timezone.utc),screened,
-                official=bool(morning_brief.has_official_straight(admitted) or public_today))
-        except Exception as error:
-            status['errors'].append(f'morning brief: {type(error).__name__}: {error}')
-        # The lane is fixed at admission, but the public feature store cannot
-        # reveal an unreleased play.
-        pick_of_the_day(now, ctx, status, current=potd_market, write=not bool(admitted))
+        if needs_board:
+            try:
+                import morning_brief
+                public_today=any(not dict(p,**ctx.latest.get(k,{})).get('result') and not p.get('parlayType')
+                    and any(g in games and eastern_date(gates.when(games[g]['kickoff']))==eastern_date(now)
+                            for g in p.get('gameIds',[])) for k,p in ctx.first.items())
+                status['morningBriefPrepared']=morning_brief.prepare(
+                    now if args.dry_run else datetime.now(timezone.utc),screened,
+                    official=bool(morning_brief.has_official_straight(admitted) or public_today))
+            except Exception as error:
+                status['errors'].append(f'morning brief: {type(error).__name__}: {error}')
+            # The lane is fixed at admission, but the public feature store cannot
+            # reveal an unreleased play.
+            pick_of_the_day(now, ctx, status, current=potd_market, write=not bool(admitted))
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result
@@ -3293,8 +3302,9 @@ def _run(args, now, slot, kinds, status):
         # Posts are scheduled after the push: the push deploys the cards of anything just published, and a
         # post never goes out without its card.
         buffer_posts(now if args.dry_run else datetime.now(timezone.utc), ctx, games, closed, status,
-                     deploying=bool(git_result.get('pushed')))
-        owner_agenda(now, ctx, games)
+                     deploying=bool(git_result.get('pushed')), settlement_pass=settle_only)
+        if not settle_only:
+            owner_agenda(now, ctx, games)
         # Optional local editorial work comes AFTER official scheduling, never in its critical path.
         homepage_editor(now, status, enabled=use_llm)
         if (use_llm and args.command == 'run' and not args.dry_run and not args.no_push
@@ -3387,7 +3397,8 @@ def draft_postable(pick):
 
 # ------------------------------------------------------------------ posting through Buffer
 
-def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sleep, clock=time.monotonic):
+def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sleep, clock=time.monotonic, *,
+                 settlement_pass=False):
     """Schedule today's plays through Buffer (scripts/buffer_post.py), record what became of past posts and
     cancel any whose pick closed. Off without a token. Missing hosted cards retry
     on the next existing pass; never hold the shared posting lock waiting for a
@@ -3425,12 +3436,14 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
         quotes = now_quotes(ctx, games, now)
         refused = []
-        import news_posts
-        # Posting tests and recovery tools can call this helper without a built
-        # site. The primary candidate path above remains strict; optional news
-        # enrichment keeps its historical empty-catalog fallback.
-        lines = line_payload.load(build_site.OUT / 'lines.json', strict=False, log=log)
-        news = news_posts.candidates(ctx, features.load(), lines, now, log_book, games=games)
+        news = []
+        if not settlement_pass:
+            import news_posts
+            # Posting tests and recovery tools can call this helper without a built
+            # site. The primary candidate path above remains strict; optional news
+            # enrichment keeps its historical empty-catalog fallback.
+            lines = line_payload.load(build_site.OUT / 'lines.json', strict=False, log=log)
+            news = news_posts.candidates(ctx, features.load(), lines, now, log_book, games=games)
         plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
                                  refused=refused, news=news, log=log)
         for key, problems in refused:
@@ -3440,7 +3453,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
                 log(f"buffer: {key} held back, its text fails the post check: {'; '.join(problems)}")
                 alert('KeenRoudy post held back', f"{key}: {'; '.join(problems)}")
         import nba_trial_runtime
-        plans += nba_trial_runtime.social_plans(now, log_book, reserved=plans)
+        plans += nba_trial_runtime.social_plans(now, log_book, reserved=plans, refresh=not settlement_pass)
         plans += cbb_picks.plans(now, log_book, reserved=plans)
         if results_first_hold:
             held = [plan[0] for plan in plans
@@ -3460,7 +3473,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             replan_at = max(now, datetime.now(timezone.utc))
             plans = buffer_post.plan(ctx.first, ctx.latest, games, replan_at, log_book, ctx.player_team,
                                      quotes=quotes, news=news, log=log)
-            plans += nba_trial_runtime.social_plans(replan_at, log_book, reserved=plans)
+            plans += nba_trial_runtime.social_plans(replan_at, log_book, reserved=plans, refresh=not settlement_pass)
             plans += cbb_picks.plans(replan_at, log_book, reserved=plans)
             if results_first_hold:
                 plans = [plan for plan in plans
@@ -3506,7 +3519,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         feature_scheduled(log_book, ctx, games, now)
         upgrade_ladder_result_cards(log_book, ctx, now, channel=channel)
         # Publishing and result repairs get the allowance before optional stats.
-        buffer_post.collect_metrics(log_book, now, log=log)
+        if not settlement_pass:
+            buffer_post.collect_metrics(log_book, now, log=log)
     except (buffer_post.BufferError, buffer_post.MissingToken) as error:
         log(f'buffer: {error}')
         status['errors'].append(f'buffer: {error}')
@@ -5640,8 +5654,8 @@ def main(argv=None):
         return mirror(args)
     if args.command == 'results':
         # Free-feed settlement pass. It never captures odds or props, but it
-        # grades finals, rebuilds the site, queues Cooked/Burnt reactions and
-        # immediately gives a newly settled Climb its next stored-price scan.
+        # grades finals, publishes their records for the hosted rebuild, and
+        # gives a newly settled Climb its next stored-price scan.
         moment = gates.when(args.now) if args.now else datetime.now(timezone.utc)
         args.slot = moment.astimezone(EASTERN).strftime('%H%M')
         args.no_llm = True

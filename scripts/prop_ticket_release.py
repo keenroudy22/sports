@@ -71,7 +71,7 @@ def candidate(spec, ctx, now):
     key = f"{league}-{gates.eastern_date(now)}-prop-ticket-{digest[:16]}"
     legs = [{**{k: leg.get(k) for k in PUBLIC_LEG_FIELDS},
              'id': f"{key}-leg-{i}",
-             'title': f"{leg['player']} {leg['direction']} {leg['line']:g} {review.STATS[league][leg['market']]}"}
+             'title': review.leg_title(leg, league)}
             for i, leg in enumerate(spec['legs'], 1)]
     first = min(gates.when(leg['kickoff']) for leg in legs)
     quoted = gates.when(spec['ticketQuote']['checkedAt'])
@@ -81,6 +81,7 @@ def candidate(spec, ctx, now):
             'book': spec['book'], 'odds': spec['odds'], 'legs': legs,
             'gameIds': list(dict.fromkeys(leg['gameId'] for leg in legs)),
             'title': ('Daily Double' if spec['parlayStyle'] == 'daily-double'
+                      else f"{spec['family']} 1Q parlay" if spec['parlayStyle'] == 'first-quarter'
                       else f"{len(legs)}-leg {spec['family']} parlay at {spec['book']}"),
             'quotedAt': gates.stamp(quoted), 'firstKickoff': gates.stamp(first),
             'expiresAt': gates.stamp(min(quoted + timedelta(hours=1), first-timedelta(minutes=30))),
@@ -230,6 +231,8 @@ def _settlement_revision(original, now, *, packet=None, conf=None):
     details = []
     for leg, row in zip(spec['legs'], rows):
         stat = review.STATS[league][leg['market']]
+        if leg.get('period') == 'first_quarter':
+            stat = f'1Q {stat}'
         if row['result'] == 'void':
             details.append(f"{leg['player']}: {stat} void")
         else:

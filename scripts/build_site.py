@@ -3048,7 +3048,8 @@ def board_picks(first, latest, by_id, identities, now=None):
                      'projection': pick.get('projection'), 'confidence': pick.get('confidence'),
                      'favorite': pick.get('favorite') is True or key in FAVORITES_BEFORE_FLAG,
                      'marketType': pick_market_type(pick, recent), 'parlayType': pick.get('parlayType'),
-                     **({'parlayStyle': 'daily-double'} if pick.get('parlayStyle') == 'daily-double' else {}),
+                     **({'parlayStyle': pick['parlayStyle']}
+                        if pick.get('parlayStyle') in ('daily-double', 'first-quarter') else {}),
                      'ladder': pick.get('ladder'),                         # a ladder rung's run, step and dollars (scripts/ladder.py)
                      'cutoff': pick.get('cutoff'), **cutoff_fields(pick, current_straight=bool(
                          now >= pricing.STRAIGHT_PRICE_MARGIN_FROM and pick.get('lane') in ('best_bet', 'chef_pick')

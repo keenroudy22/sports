@@ -68,7 +68,9 @@ def verify(candidate):
               [python, 'scripts/asset_versions.py', '--check'],
               [python, '-m', 'unittest', 'tests.test_check_svg'],
               [python, 'scripts/rehearse.py', '--slot', rehearsal_slot(datetime.now().astimezone()),
-               '--discard-snapshot']]
+               '--discard-snapshot'],
+              [python, 'scripts/rehearse.py', '--command', 'results', '--slot',
+               rehearsal_slot(datetime.now().astimezone()), '--discard-snapshot']]
     for args in plans:
         command(args, candidate)
     # Generated tracked-index changes must be reviewed/committed before retry,

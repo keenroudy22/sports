@@ -1871,6 +1871,32 @@ class BufferPostsTests(unittest.TestCase):
         self.assertEqual(news.call_args.args[2], [])
         self.assertTrue(any('optional use skipped' in message for message in messages))
 
+    def test_settlement_pass_schedules_official_work_without_optional_lookups(self):
+        import nba_trial_runtime
+        import news_posts
+        import x_post
+
+        now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
+        ctx = SimpleNamespace(first={}, latest={}, player_team={})
+        plans = [('result', 'receipt', 'text', now, 'result')]
+        with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
+                mock.patch.object(x_post, 'load_log', return_value={'posts': []}), \
+                mock.patch.object(x_post, 'save_log'), \
+                mock.patch.object(buffer_post, 'reconcile', return_value=[]), \
+                mock.patch.object(buffer_post, 'plan', return_value=plans), \
+                mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                mock.patch.object(buffer_post, 'daily_limit', return_value=None), \
+                mock.patch.object(buffer_post, 'schedule') as schedule, \
+                mock.patch.object(buffer_post, 'collect_metrics') as metrics, \
+                mock.patch.object(news_posts, 'candidates') as news, \
+                mock.patch.object(nba_trial_runtime, 'social_plans', return_value=[]) as nba:
+            run.buffer_posts(now, ctx, {}, [], {'errors': [], 'x': {}}, settlement_pass=True)
+
+        self.assertEqual(schedule.call_args.args[0], plans)
+        news.assert_not_called()
+        metrics.assert_not_called()
+        self.assertTrue(all(call.kwargs['refresh'] is False for call in nba.call_args_list))
+
     def test_missing_prebuild_lines_never_blocks_play_scheduling(self):
         self.assert_optional_line_catalog_does_not_block_play(lambda _out: None)
 

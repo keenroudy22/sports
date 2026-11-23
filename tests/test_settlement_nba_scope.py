@@ -88,6 +88,9 @@ class SettlementScopeTests(unittest.TestCase):
         code = compile(ast.Module(body=[climb, *effects], type_ignores=[]), '<actual results branches>', 'exec')
         class ReachedBuild(Exception):
             pass
+
+        class ReachedDrafts(Exception):
+            pass
         for command, clock in [('results', '2026-10-27T04:25:00Z'),
                                ('results', '2026-10-27T21:25:00Z'),
                                ('results', '2026-10-27T21:55:00Z'),
@@ -102,6 +105,7 @@ class SettlementScopeTests(unittest.TestCase):
             ctx = SimpleNamespace(first={}, latest={}, games={})
             stores = MagicMock(reports=[], context_file={})
             stores.as_of.return_value = ctx
+            live_climb = MagicMock()
             with patch.object(run, 'sync'), patch.object(run, 'log'), \
                  patch.object(run, 'capture', return_value=[]) as football, \
                  patch.object(run, 'early_nba_selection') as early, \
@@ -111,22 +115,25 @@ class SettlementScopeTests(unittest.TestCase):
                  patch.object(run, 'live_games', return_value={}) as finals, \
                  patch.object(run.features, 'load', return_value=[]), \
                  patch.object(run.gates, 'Stores', return_value=stores), \
-                 patch.object(run, 'prime_weather'), patch.object(run, 'raw_first_publications', return_value={}), \
+                 patch.multiple(run, prime_weather=MagicMock(), raw_first_publications=MagicMock(return_value={}),
+                                ladder_step=live_climb, drafts=MagicMock(side_effect=ReachedDrafts)), \
                  patch.object(run, 'settle', return_value=([], [])) as grade, \
                  patch.object(live_watch, 'final_records', return_value={}) as watched, \
                  patch.object(live_watch, 'overlay_finals') as overlay, \
                  patch.object(live_watch, 'settlement_records', return_value=[]), \
                  patch('release_queue.reopen_expired'), patch('release_queue.merge_context'), \
-                 patch.object(run.build_site, 'build', side_effect=ReachedBuild):
-                with self.assertRaises(ReachedBuild):
+                 patch.object(run.build_site, 'build', side_effect=ReachedBuild) as build:
+                with self.assertRaises(ReachedDrafts if command == 'results' else ReachedBuild):
                     run._run(args, now, slot, kinds, status)
                 finals.assert_called_once()
                 grade.assert_called_once()
                 if command == 'results':
                     football.assert_not_called(); early.assert_not_called(); sgo.assert_not_called()
-                    watched.assert_called_once(); overlay.assert_called_once()
+                    watched.assert_called_once_with(run.CONF / 'live-watch.json')
+                    overlay.assert_called_once(); build.assert_not_called(); live_climb.assert_called_once()
                 else:
                     football.assert_called_once(); early.assert_called_once(); sgo.assert_called_once()
+                    build.assert_called_once(); live_climb.assert_not_called()
             with patch.object(nba_capture, 'step') as capture, \
                  patch.object(nba_player_props, 'capture') as props, \
                  patch.object(nba_trial_runtime, 'admission') as admit, \

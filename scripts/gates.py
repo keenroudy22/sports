@@ -1490,7 +1490,8 @@ def longshot_one_per_day(candidate, ctx):
     today = [k for k, p in publications.items()
              if (p.get('parlayStyle') or p.get('parlayType') or ('longshot' if p.get('legs') else None)) == style
              and (style == 'daily-double' or not pulled_before_post(k, ctx))]
-    word = {'easyProps': 'easy parlay', 'short': 'short parlay', 'lotto': 'lotto', 'daily-double': 'Daily Double'}.get(style, 'longshot')
+    word = {'easyProps': 'easy parlay', 'short': 'short parlay', 'lotto': 'lotto', 'daily-double': 'Daily Double',
+            'first-quarter': 'first-quarter parlay'}.get(style, 'longshot')
     window = sunday_nfl_short_window(candidate)
     if window:
         today = [key for key in today if sunday_nfl_short_window(publications[key]) in (None, window)]
@@ -1509,8 +1510,14 @@ def longshot_shape(candidate, ctx):
     if style == 'daily-double':
         reviewed = candidate.get('selectionMethod') in ('sourced-prop-ticket-v1', 'sourced-fun-ticket-review-v1')
         ok = (reviewed and len(legs) == 2 and all(isinstance(leg, dict) and leg.get('alternate') is True for leg in legs)
-              and type(odds) in (float, int) and (-110 <= odds <= -100 or 100 <= odds <= 110) and int(odds) == odds)
-        reason = 'Daily Double needs two reviewed alternates and an exact combined price from -110 to +110'
+              and type(odds) in (float, int) and 100 <= abs(odds) <= 115 and int(odds) == odds)
+        reason = 'Daily Double needs two reviewed alternates and an exact combined price from -115 to +115'
+    elif style == 'first-quarter':
+        ok = (candidate.get('selectionMethod') == 'sourced-prop-ticket-v1'
+              and candidate.get('family') in ('MNF', 'TNF') and 2 <= len(legs) <= 4
+              and all(isinstance(leg, dict) and leg.get('period') == 'first_quarter' for leg in legs)
+              and type(odds) in (int, float) and 500 <= odds <= 20000 and int(odds) == odds)
+        reason = 'First-quarter parlay needs two to four reviewed MNF/TNF legs and exact unboosted odds of +500 or better'
     elif style == 'short':
         ok = 3 <= len(legs) <= 4 and isinstance(odds, (int, float)) and 200 <= odds <= 1500
         reason = 'short parlay needs 3–4 legs and +200 to +1500; no forced ticket'

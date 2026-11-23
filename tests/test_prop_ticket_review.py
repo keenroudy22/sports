@@ -57,6 +57,23 @@ class PropTicketWorkbenchTests(unittest.TestCase):
         self.assertEqual(reviewed['state'], 'reviewed-private', reviewed['holds'])
         self.assertIn('Daily Double · -105', reviewed['caption'])
 
+    def test_first_quarter_requires_exact_joint_price_and_an_all_quarter_ticket(self):
+        spec, games, now = fixture('MNF')
+        spec.update(parlayStyle='first-quarter', odds=548)
+        for leg in spec['legs']:
+            leg['period'] = 'first_quarter'
+        spec['ticketQuote']['terms'] = R.terms(spec)
+        result = R.review(spec, games, now)
+        self.assertEqual(result['state'], 'reviewed-private', result)
+        self.assertIn('MNF 1Q parlay', result['caption'])
+        self.assertIn('1Q ', result['caption'])
+
+        for price, period in ((499, 'first_quarter'), (548, 'full_game')):
+            spec['odds'] = price
+            spec['legs'][0]['period'] = period
+            spec['ticketQuote']['terms'] = R.terms(spec)
+            self.assertEqual(R.review(spec, games, now)['state'], 'held')
+
     def test_long_ticket_keeps_full_name_direction_threshold_and_market(self):
         import parlay_caption
         cases = [('over', 7.5, 'rushYds', 'Daniel Jones O7.5 rush yds'),

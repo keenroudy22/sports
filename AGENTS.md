@@ -1,3 +1,11 @@
+# November 23 first-quarter parlays and Daily Double prices
+
+Review MNF/TNF first-quarter parlays in their own daily slot. Require two to
+four exact quarter legs and an observed unboosted book price of +500 or higher.
+Grade from completed first-quarter evidence, with the ordinary participation,
+injury, void and repricing checks. The Daily Double accepts exact unboosted
+prices from -115 to +115. Keep prior published terms and stakes intact.
+
 # November 22 recap cadence and Climb privacy
 
 Starting with the November 22 Eastern slate, publish one complete graded morning

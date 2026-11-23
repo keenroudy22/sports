@@ -47,6 +47,23 @@ class PropTicketSettlementTests(unittest.TestCase):
             self.assertEqual(result['providerRequests'], 0)
             self.assertNotIn('Synthetic private', str(result))
 
+    def test_first_quarter_does_not_grade_from_full_game_or_incomplete_actuals(self):
+        spec, evidence, now = case()
+        spec.update(parlayStyle='first-quarter', odds=548)
+        for leg, row in zip(spec['legs'], evidence['legs']):
+            leg['period'] = 'first_quarter'
+            row.update(terms=S.identity(leg), actualPeriod='first_quarter', periodComplete=True)
+        spec['ticketQuote']['terms'] = R.terms(spec)
+        fingerprint = R.fingerprint(spec)
+        evidence['originalReview']['termsFingerprint'] = fingerprint
+        evidence['bookSettlement'].update(termsFingerprint=fingerprint, settledOdds=548)
+        self.assertAlmostEqual(S.review(spec, evidence, now)['units'], 1.37)
+
+        evidence['legs'][0]['actualPeriod'] = 'full_game'
+        self.assertEqual(S.review(spec, evidence, now)['state'], 'held')
+        evidence['legs'][0].update(actualPeriod='first_quarter', periodComplete=False)
+        self.assertEqual(S.review(spec, evidence, now)['state'], 'held')
+
     def test_losing_and_all_void_tickets_use_original_stake(self):
         spec, evidence, now = case()
         evidence['legs'][0].update(actual=1, result='loss')
