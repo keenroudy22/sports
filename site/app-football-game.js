@@ -104,10 +104,12 @@
     if (game.league !== 'NFL' || !rows?.length) return '';
     const cards = rows.map(row => {
       const team = String(game.home.id) === row.teamId ? game.home : game.away;
+      const name = esc(row.player);
+      const player = row.playerPage === false ? name : `<a href="#player/NFL/${esc(row.athleteId)}">${name}</a>`;
       const total = row.bonuses.reduce((sum, item) => sum + item.amount, 0);
       return `<article class="card bonus-card"><div class="bonus-head">
         <div class="bonus-player">${headshot('NFL', row.athleteId, '', team, team.abbr)}
-          <div><h3><a href="#player/NFL/${esc(row.athleteId)}">${esc(row.player)}</a></h3><p class="small muted">${esc(team.abbr)} · Pregame snapshot · ${esc(bonusDate.format(new Date(row.reportedOn)))}</p></div>
+          <div><h3>${player}</h3><p class="small muted">${esc(team.abbr)} · Pregame snapshot · ${esc(bonusDate.format(new Date(row.reportedOn)))}</p></div>
         </div><div><span class="small muted">Up to </span><b class="bonus-total num">${dollars.format(total)}</b></div></div>
         <ul class="grid three bonus-targets" role="list">${row.bonuses.map(item => `<li><div class="bonus-metric"><b>${esc(item.label)}</b><b class="num green">${dollars.format(item.amount)}</b></div>
           <div class="small muted">${item.before} of ${item.target} this season · <b>${item.target - item.before} more needed</b></div></li>`).join('')}</ul>

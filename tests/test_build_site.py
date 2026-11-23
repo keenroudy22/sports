@@ -27,6 +27,20 @@ class ContractBonusTests(unittest.TestCase):
         self.assertEqual(build_site.contract_bonus_rows(dict(card, id='NFL-other'), reports), [])
         self.assertEqual(build_site.contract_bonus_rows(dict(card, league='CFB'), reports), [])
 
+    def test_half_sacks_keep_precision_and_unlisted_players_have_no_profile(self):
+        reports = json.loads((ROOT / 'data/nfl-contract-bonuses.json').read_text())
+        game_id = 'NFL-401873084'
+        hockenson, cashman = (dict(row) for row in reports[game_id])
+        sacks, = cashman['bonuses']
+        card = {'id': game_id, 'league': 'NFL', 'kickoff': '2026-11-29T18:00Z',
+                'home': {'id': '16'}, 'away': {'id': '1'}}
+        reports[game_id][1] = dict(cashman, bonuses=[
+            sacks, dict(sacks, before=4.25), dict(sacks, label='Receptions'),
+            dict(sacks, before=True), dict(sacks, target=float('inf')), dict(sacks, amount=1.5)
+        ])
+        self.assertEqual(build_site.contract_bonus_rows(card, reports, {hockenson['athleteId']}),
+                         [hockenson, dict(cashman, playerPage=False)])
+
     def test_bonus_index_lists_snapshots_even_when_game_pages_age_out(self):
         reports = json.loads((ROOT / 'data/nfl-contract-bonuses.json').read_text())
         game_id, (report,) = next(iter(reports.items()))

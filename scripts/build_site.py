@@ -82,7 +82,13 @@ def read(path, fallback):
     return json.loads(path.read_text(encoding='utf-8')) if path.exists() else fallback
 
 
-def contract_bonus_rows(card, reports):
+def contract_bonus_stat(label, value):
+    if type(value) is int:
+        return True
+    return label == 'Sacks' and type(value) is float and value % 0.5 == 0
+
+
+def contract_bonus_rows(card, reports, player_pages=None):
     """Only dated, sourced NFL season incentives for the teams in this matchup."""
     if card['league'] != 'NFL':
         return []
@@ -104,22 +110,26 @@ def contract_bonus_rows(card, reports):
             continue
         bonuses = [{key: bonus[key] for key in ('label', 'before', 'target', 'amount')}
                    for bonus in row['bonuses'] if bonus['label'] and
-                   all(type(bonus[key]) is int for key in ('before', 'target', 'amount')) and
+                   all(contract_bonus_stat(bonus['label'], bonus[key]) for key in ('before', 'target')) and
+                   type(bonus['amount']) is int and
                    0 <= bonus['before'] < bonus['target'] and bonus['amount'] > 0]
         if bonuses:
-            rows.append({**{key: row[key] for key in ('athleteId', 'teamId', 'player', 'reportedOn', *source_keys)},
-                         'bonuses': bonuses})
+            report = {key: row[key] for key in ('athleteId', 'teamId', 'player', 'reportedOn', *source_keys)}
+            report['bonuses'] = bonuses
+            if player_pages is not None and row['athleteId'] not in player_pages:
+                report['playerPage'] = False
+            rows.append(report)
     return rows
 
 
-def contract_bonus_index(games, reports, game_pages):
+def contract_bonus_index(games, reports, game_pages, player_pages=None):
     """Keep sourced snapshots available after their matchup pages age out."""
     rows = []
     for game_id in sorted(reports):
         game = games.get(game_id)
         if not game:
             continue
-        for report in contract_bonus_rows(game, reports):
+        for report in contract_bonus_rows(game, reports, player_pages):
             away, home = (game[side].get('abbreviation') or game[side].get('abbr') or game[side].get('name')
                           for side in ('away', 'home'))
             team = home if str(game['home']['id']) == report['teamId'] else away
@@ -2283,8 +2293,6 @@ def build(now=None):
         shutil.rmtree(OUT)
     window = [g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')
               and now - WINDOW_BACK <= features.when(g['kickoff']) <= now + WINDOW_AHEAD]
-    write(OUT / 'contract-bonuses.json', {'reports': contract_bonus_index(
-        by_id, contract_bonus_reports, {g['id'] for g in window})})
     grading = defaultdict(list)
     for row in (read(DATA / 'scoreboard-games.json', {}) or {}).values():
         for r in row:
@@ -2446,6 +2454,8 @@ def build(now=None):
         for league in ('NFL', 'CFB')}
     football_indexes = {league: {str(entry[0]): entry for entry in data[0]}
                         for league, data in football_players.items()}
+    write(OUT / 'contract-bonuses.json', {'reports': contract_bonus_index(
+        by_id, contract_bonus_reports, {g['id'] for g in window}, football_indexes['NFL'])})
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
@@ -2482,7 +2492,7 @@ def build(now=None):
         if game.get('state') == 'pre' and features.when(game['kickoff']) > now:
             detail['positionGames'] = football_position_games(game, info['records'], snap_players, now)
         detail['lines'] = [reader_line(row) for row in detail['lines']]
-        bonuses = contract_bonus_rows(card, contract_bonus_reports)
+        bonuses = contract_bonus_rows(card, contract_bonus_reports, football_indexes['NFL'])
         if bonuses:
             detail['contractBonuses'] = bonuses
         write(OUT / 'games' / f"{game['id']}.json", detail)

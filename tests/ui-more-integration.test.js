@@ -102,8 +102,14 @@ test('the real app shared interface renders every lazy view with fixture data', 
 
 test('NFL bonus index ranks progress across stats and filters via a shareable route', async () => {
   const { api, factory } = loadBrowserApi();
-  const [gameId, [report]] = Object.entries(require('../data/nfl-contract-bonuses.json'))[0];
-  const reports = [{ ...report, gameId, gamePage: true, team: 'NYG', matchup: 'JAX at NYG', kickoff: '2026-11-22T21:25Z' }];
+  const bonusData = require('../data/nfl-contract-bonuses.json');
+  const gameId = 'NFL-401873069';
+  const [report] = bonusData[gameId];
+  const [, cashman] = bonusData['NFL-401873084'];
+  const reports = [
+    { ...report, gameId, gamePage: true, team: 'NYG', matchup: 'JAX at NYG', kickoff: '2026-11-22T21:25Z' },
+    { ...cashman, playerPage: false, team: 'MIN', matchup: 'ATL at MIN', kickoff: '2026-11-29T18:00Z' },
+  ];
   const views = factory(api.moreContext({ get: async path => {
     assert.equal(path, 'app/contract-bonuses.json');
     return { reports };
@@ -111,13 +117,16 @@ test('NFL bonus index ranks progress across stats and filters via a shareable ro
   assert.match(await views.more(), /href="#bonuses"/);
   const all = await views.bonuses(api.model.resolve('#bonuses'));
   assert.deepEqual([...all.matchAll(/<h2>([^<]+)<\/h2>/g)].map(match => match[1]),
-    ['Receptions', 'Receiving yards', 'Receiving TDs']);
+    ['Receptions', 'Sacks', 'Receiving yards', 'Receiving TDs']);
   assert.match(all, /5 more needed[\s\S]*91\.7% of target/);
   assert.ok(all.includes(`#game/${gameId}#contract-bonuses`));
   const filtered = await views.bonuses(api.model.resolve('#bonuses/Receiving%20yards'));
   assert.match(filtered, /<h2>Receiving yards<\/h2>[\s\S]*75 more needed/);
   assert.doesNotMatch(filtered, /<h2>(Receptions|Receiving TDs)<\/h2>/);
   assert.match(filtered, /href="#bonuses\/Receiving%20yards" aria-current="page"/);
+  const sacks = await views.bonuses(api.model.resolve('#bonuses/Sacks'));
+  assert.match(sacks, /<b>Blake Cashman<\/b>[\s\S]*0\.5 more needed[\s\S]*4\.5 of 5/);
+  assert.doesNotMatch(sacks, /#player\/NFL\/3728281|Isaiah Likely/);
 });
 
 test('Results tracks daily Chef designations and keeps legacy picks in Every result', async () => {

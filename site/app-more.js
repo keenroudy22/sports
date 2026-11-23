@@ -429,7 +429,7 @@ button.cal-day { cursor: pointer; }
 
   views.bonuses = async ({ stat } = {}) => {
     const { reports } = await get('app/contract-bonuses.json');
-    const top = head('NFL', 'Contract Bonuses', 'Closest first, based on the percentage of each season target reached in the pregame snapshot.',
+    const top = head('NFL', 'Contract Bonuses', 'Closest first by percentage of the season target reached. Amounts show what the listed milestone would add.',
       '<a class="back" href="#more">← More</a>');
     const rows = reports.flatMap(report => report.bonuses.map(bonus => ({ ...bonus, report, progress: bonus.before / bonus.target })));
     if (!rows.length) return top + empty('No bonuses listed yet', 'Sourced NFL bonus snapshots will appear here.');
@@ -444,8 +444,10 @@ button.cal-day { cursor: pointer; }
     return `${top}<div class="toolbar">${filters}</div>
       <div class="section grid two" aria-label="Bonuses, closest first">${cards.map(({ report, label, amount, before, target, progress }) => {
         const matchup = report.gamePage ? `<a href="#game/${esc(report.gameId)}#contract-bonuses">${esc(report.matchup)} ›</a>` : esc(report.matchup);
+        const name = `<b>${esc(report.player)}</b>`;
+        const player = report.playerPage === false ? name : `<a href="#player/NFL/${esc(report.athleteId)}">${name}</a>`;
         return `<article class="card"><div class="section-head"><h2>${esc(label)}</h2><b class="green num">${dollars.format(amount)}</b></div>
-          <p><a href="#player/NFL/${esc(report.athleteId)}"><b>${esc(report.player)}</b></a> <span class="small muted">${esc(report.team)}</span></p>
+          <p>${player} <span class="small muted">${esc(report.team)}</span></p>
           <p class="small muted">${matchup} · ${esc(whenShort(report.kickoff))}</p>
           <p style="margin-top:10px"><b>${target - before} more needed</b> · ${before} of ${target}</p>
           <progress aria-label="${esc(label)} toward season target" value="${before}" max="${target}" style="width:100%;accent-color:var(--kookd)">${pct.format(progress)}</progress>
