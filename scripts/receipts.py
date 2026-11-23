@@ -314,11 +314,15 @@ def fit(lines, head, tail, head_sep='\n\n'):
         rows.pop()
 
 
-def fit_result_rows(rows, head, tail, games=None):
+def fit_result_rows(rows, head, tail, games=None, *, final_caption=False):
     """Keep every miss visible before shortening a win on a daily recap."""
+    from social_copy import x_ticket_copy
+    def fits(text):
+        outgoing = x_ticket_copy(text, 'receipt') if final_caption else text
+        return x_post.tweet_length(outgoing) <= x_post.LIMIT
     full = [result_line(row, games) for row in rows]
     text = '\n'.join((head, *full)) + ('\n\n' + tail if tail else '')
-    if x_post.tweet_length(text) <= x_post.LIMIT:
+    if fits(text):
         return text
     # Margins and explanatory detail go first. The attached receipt still holds
     # every full row; X never shows a win while concealing a loss for length.
@@ -330,7 +334,7 @@ def fit_result_rows(rows, head, tail, games=None):
         if omitted:
             suffix.append(f"+{omitted.count('win')} wins, {omitted.count('loss')} losses on card")
         text = '\n'.join((head, *(short[index] for index in kept), *suffix)) + ('\n\n' + tail if tail else '')
-        if x_post.tweet_length(text) <= x_post.LIMIT or not kept:
+        if fits(text) or not kept:
             return text
         wins = [index for index in kept if rows[index]['result'] == 'win']
         kept.remove(wins[-1] if wins else kept[-1])
@@ -506,7 +510,11 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
                 summary = x_post.summarize(plays)
                 suffix = '' if recap_only and category == 'Climb' else f" ({summary['units']:+.2f}u)"
                 parts.append(f"{category} {record_text(summary)}{suffix}")
-        if not recap_only:
+        if recap_only:
+            head = f"{name} recap 🍳 {record_text(x_post.summarize(straight))} on straights"
+            net = x_post.summarize(straight + fun)['units']
+            parts.append(f"Net {net:+.2f}u")
+        else:
             parts.append(f"Net {summary_all['units']:+.2f}u")
         tail = ' · '.join(parts)
     if day == date(2026, 11, 19):
@@ -516,7 +524,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
         tail = (f"Straights {x_post.summarize(straight)['units']:+g}u · "
                 f"Parlays {record_text(x_post.summarize(fun))} · "
                 f"Full card {x_post.summarize(rows)['units']:+g}u")
-    text = fit_result_rows(shown, head, tail.strip(), games)
+    text = fit_result_rows(shown, head, tail.strip(), games, final_caption=recap_only)
     card = f'receipt-day-{day.isoformat()}' + ('-all-sports' if basketball or fun_rows else '')
     if complete and (climb or fun):
         card += '-complete'

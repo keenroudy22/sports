@@ -509,6 +509,16 @@ class LadderReceiptTests(unittest.TestCase):
                         'bankedAfter': 48, 'nextStake': 117, 'totalAfter': 165, 'bankPercent': 20,
                         'ridePercent': 80, 'start': 50, 'goal': 1000})
 
+    def test_complete_recap_reserves_age_notice_space_and_preserves_losses(self):
+        from social_copy import x_ticket_copy
+        rows = [pick(str(i), 'sun', title=('Long verified player name over 14.5 points'),
+                     result='win' if i < 5 else 'loss') for i in range(7)]
+        text = receipts.fit_result_rows(rows, 'Sunday recap: 4-2 on straights',
+                                       'Parlays 0-1 · Net +2.01u', final_caption=True)
+        self.assertLessEqual(receipts.x_post.tweet_length(x_ticket_copy(text, 'receipt')), 280)
+        self.assertEqual(text.count('❌'), 2)
+        self.assertIn('Net +2.01u', text)
+
     def test_morning_recap_shows_climb_outcome_without_exposing_its_units(self):
         day = datetime(2026, 11, 22).date()
         rung = pick('ladder', 'sun', **self.RUNG, result='loss', units=-3,
