@@ -24,7 +24,7 @@ class WorkflowTests(unittest.TestCase):
             self.assertIn(f'python scripts/{command}.py', fast)
         self.assertIn('python scripts/publication_guard.py', fast)
         self.assertIn('actions/upload-pages-artifact@', fast)
-        self.assertIn('actions/deploy-pages@', fast)
+        self.assertIn('python scripts/pages_deploy.py', fast)
         self.assertNotIn('Preserve the public record', fast)
         for capture in ('refresh.py', 'sports_refresh.py', 'odds_api.py', 'prop_odds.py', 'sharp_odds.py'):
             self.assertNotIn(capture, fast)
@@ -50,13 +50,13 @@ class WorkflowTests(unittest.TestCase):
         fast = WORKFLOW.split('  publish:',1)[0]
         name = 'github-pages-${{ github.run_id }}-${{ github.run_attempt }}'
         self.assertIn('name: '+name, fast)
-        self.assertIn('artifact_name: '+name, fast)
+        self.assertIn('PAGES_ARTIFACT_NAME: '+name, fast)
         self.assertIn('PAGES_ARTIFACT_ID: ${{ steps.pages-artifact.outputs.artifact_id }}', fast)
-        self.assertLess(fast.index('python scripts/pages_artifact_ready.py'),fast.index('uses: actions/deploy-pages@'))
+        self.assertLess(fast.index('uses: actions/upload-pages-artifact@'),fast.index('python scripts/pages_deploy.py'))
 
     def test_only_the_serialized_current_main_lane_can_publish_pages(self):
         fast, refresh = WORKFLOW.split('  publish:', 1)
-        self.assertEqual(WORKFLOW.count('uses: actions/deploy-pages@'), 1)
+        self.assertEqual(WORKFLOW.count('python scripts/pages_deploy.py'), 1)
         self.assertEqual(WORKFLOW.count('uses: actions/upload-pages-artifact@'), 1)
         self.assertIn('pages: write', fast)
         self.assertNotIn('pages: write', refresh)
