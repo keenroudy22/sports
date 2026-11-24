@@ -47,6 +47,7 @@ import boxscores
 import asset_versions
 import betslips
 import features
+import game_alternates
 import game_context
 import line_payload
 import market_read
@@ -2328,7 +2329,7 @@ def build(now=None):
             continue
         row['actual'] = result_display.clean_actual(row)
         row['resultDetail'] = result_display.detail(row, stored.get(row.get('gameId')))
-    lines = catalog_lines(catalog, by_id, identities, now) + game_market_lines(slate, now, books)
+    lines = catalog_lines(catalog, by_id, identities, now) + game_market_lines(slate, now, books, prop_prices)
 
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -3731,7 +3732,27 @@ def book_rows(game, record):
     return rows
 
 
-def game_market_lines(slate, now, captures=None):
+def captured_main_spreads(game, record, now):
+    """Use verified full-game main spreads already archived with the prop capture."""
+    if not record or record.get('gameId') != game['id'] or instant(record.get('kickoff')) != instant(game['kickoff']):
+        return []
+    books, clocks = {}, {}
+    for book, entry in (record.get('books') or {}).items():
+        markets = entry.get('gameMarkets') or {}
+        spread = markets.get('spread') or {}
+        observed = instant(spread.get('observedAt'))
+        prices = (spread.get('homePrice'), spread.get('awayPrice'))
+        if (book not in odds_api.PICK_BOOKS or markets.get('schemaVersion') != 1 or spread.get('main') is not True
+                or not observed or not timedelta(0) <= now - observed <= BOARD_QUOTES_FRESH
+                or not game_alternates.number(spread.get('home'))
+                or not all(type(price) is int and abs(price) >= 100 for price in prices)
+                or not .99 <= sum(pricing.break_even(price) for price in prices) <= 1.15):
+            continue
+        books[book], clocks[book] = {'spread': spread}, observed
+    return book_rows(game, {'books': books, 'retrievedAt': stamp(min(clocks.values()))}) if books else []
+
+
+def game_market_lines(slate, now, captures=None, prop_captures=None):
     """Current spread and total for each upcoming game, as board rows.
 
     With a fresh multi-book capture, each side gets its best number and price and the
@@ -3741,16 +3762,26 @@ def game_market_lines(slate, now, captures=None):
     """
     out = []
     for game in slate.get('games', []):
-        m = market(game)
-        if not m or game.get('state') != 'pre' or features.when(game['kickoff']) <= now:
+        if game.get('state') != 'pre' or features.when(game['kickoff']) <= now:
             continue
+        m = market(game)
         record = (captures or {}).get(game['id'])
         captured_at = instant(record.get('retrievedAt')) if record else None
-        if captured_at and timedelta(0) <= now - captured_at <= BOARD_QUOTES_FRESH:
-            out += book_rows(game, record)
-            # Multi-book captures contain spreads/totals, not moneylines. Keep
-            # the independent actual two-sided feed pair in the morning pool.
-            m = dict(m, spread=None, total=None)
+        quoted = book_rows(game, record) if captured_at and timedelta(0) <= now - captured_at <= BOARD_QUOTES_FRESH else []
+        quoted_markets = {row['market'] for row in quoted}
+        feed_at = instant(game.get('marketRetrievedAt'))
+        fresh_feed_spread = (m and m['spread'] is not None and m['spreadOdds'] is not None
+                             and feed_at and timedelta(0) <= now - feed_at <= BOARD_QUOTES_FRESH)
+        if 'point spread' not in quoted_markets and not fresh_feed_spread:
+            quoted.extend(captured_main_spreads(game, (prop_captures or {}).get(game['id']), now))
+            quoted_markets = {row['market'] for row in quoted}
+        out.extend(quoted)
+        if not m:
+            continue
+        if 'point spread' in quoted_markets:
+            m['spread'] = None
+        if 'total points' in quoted_markets:
+            m['total'] = None
         home, away = game['home']['abbreviation'], game['away']['abbreviation']
         rows = []
         if m['spread'] is not None:

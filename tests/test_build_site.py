@@ -582,6 +582,27 @@ class GameLineTests(unittest.TestCase):
         old = {r['id'] for r in build_site.game_market_lines({'games': [game]}, self.now, {'NFL-1': stale})}
         self.assertEqual(old, {'game-NFL-1-spread', 'game-NFL-1-over', 'game-NFL-1-under'}, 'a day-old capture falls back to the feed')
 
+    def test_archived_main_spread_fills_missing_schedule_odds(self):
+        game = slate_game('NFL-1', '2026-09-20T17:00:00Z', spread=None, total=None)
+        observed = '2026-09-19T11:20:00Z'
+        spread = {'main': True, 'home': -3.5, 'homePrice': -112, 'awayPrice': -108, 'observedAt': observed}
+        captures = {'NFL-1': {'gameId': 'NFL-1', 'kickoff': game['kickoff'],
+                              'books': {'draftkings': {'gameMarkets': {'schemaVersion': 1, 'spread': spread}}}}}
+        rows = build_site.game_market_lines({'games': [game]}, self.now, prop_captures=captures)
+        by_side = {row['side']: row for row in rows}
+        self.assertEqual(set(by_side), {'home', 'away'})
+        self.assertEqual((by_side['home']['line'], by_side['away']['line']), (-3.5, 3.5))
+        for side, price, opposite in [('home', -112, -108), ('away', -108, -112)]:
+            row = by_side[side]
+            self.assertEqual((row['odds'], row['oppositeOdds'], row['observedAt'], row['book']),
+                             (price, opposite, observed, 'DraftKings'))
+        for change in ({'observedAt': '2026-09-19T07:59:59Z'}, {'main': False}, {'awayPrice': None}):
+            with self.subTest(change=change):
+                markets = captures['NFL-1']['books']['draftkings']['gameMarkets']
+                markets['spread'] = dict(spread, **change)
+                self.assertEqual(build_site.game_market_lines({'games': [game]}, self.now,
+                                                              prop_captures=captures), [])
+
     def test_started_games_and_games_without_a_line_are_left_out(self):
         games = [slate_game('NFL-1', '2026-09-19T11:00:00Z'), slate_game('NFL-2', '2026-09-20T17:00:00Z', state='in'),
                  slate_game('NFL-3', '2026-09-20T17:00:00Z', spread=None, total=None)]
