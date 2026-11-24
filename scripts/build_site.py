@@ -2564,6 +2564,10 @@ def build(now=None):
     cbb_public = cbb_record_picks(now)
     import hoops_store
     nba_finals = hoops_store.load('NBA')
+    import secret_santa
+    santa_entries = read(ROOT / 'data' / 'secret-santa.json', [])
+    santa_finals = {'NBA': nba_finals, 'CBB': hoops_store.load('CBB')} if santa_entries else {}
+    write(OUT / 'secret-santa.json', secret_santa.build(santa_entries, records, santa_finals, now))
     nba_public = nba_record_picks(now, team_finals=nba_finals)
     nba_fun = nba_fun_picks(now)
     posted_records = list({p['id']: p for p in picks + cbb_public + nba_public + community_records + nba_fun}.values())

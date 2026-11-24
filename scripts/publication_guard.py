@@ -21,7 +21,7 @@ DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.
               'scoreboard-games.json', 'forecasts.json', 'feed.xml'}
 APP_FILES = {'today.json', 'today-hero.json', 'record.json', 'lines.json', 'lines-NFL.json', 'lines-CFB.json',
              'kvb-NFL.json', 'kvb-CFB.json', 'research.json', 'sport-research.json', 'vegas.json',
-             'nba.json', 'nba-props.json', 'cbb.json', 'contract-bonuses.json', 'first-quarter-slate.json'}
+             'nba.json', 'nba-props.json', 'cbb.json', 'contract-bonuses.json', 'first-quarter-slate.json', 'secret-santa.json'}
 PRIVATE_NAMES = {'env', '.env', 'desk-health.html', 'desk-health.json', 'desk-health-state.json',
                  'desk-reliability.json', 'reliability-history.json', 'live-watch.json',
                  'live-progress.json', 'x-posted.json', 'status.json', 'policy.json',
@@ -55,6 +55,8 @@ def allowed_path(relative):
     if any(p.lower() in PRIVATE_NAMES or p.lower().startswith(('review-packet-', 'review-20')) for p in parts):
         return False
     value = relative.as_posix()
+    if parts[0] == 'secret-santa':
+        return len(parts) == 2 and parts[1] in {'index.html', 'santa.css', 'santa.js'}
     if parts[0] == 'p':
         from pick_share import PICK_ID
         return len(parts) == 2 and relative.suffix == '.html' and bool(PICK_ID.fullmatch(relative.stem))

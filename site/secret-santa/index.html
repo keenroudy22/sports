@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0b1913">
+  <title>Secret Santa · Kook’n</title>
+  <link rel="icon" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="santa.css">
+  <script src="santa.js" defer></script>
+</head>
+<body>
+  <header class="mast"><a href="../">Kook’n Sports</a><span>Through Christmas Day</span></header>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <p class="eyebrow">Holiday rollover · Paper challenge</p>
+      <h1 id="title">Secret Santa</h1>
+      <p>One favorite near −400 after the slate review. Start at a simulated $20 and roll the full return into the next verified play.</p>
+      <dl class="balances">
+        <div><dt>Paper balance</dt><dd id="balance">—</dd></div>
+        <div><dt>Record</dt><dd id="record">—</dd></div>
+      </dl>
+    </section>
+    <section class="slip" aria-labelledby="slip-title">
+      <p class="eyebrow" id="step-label">Current step</p>
+      <h2 id="slip-title">Loading the card</h2>
+      <p id="status" role="status"></p>
+      <template id="ticket">
+        <div class="terms"><p class="matchup"></p><strong class="price"></strong></div>
+        <p class="quote"></p>
+        <dl class="details"><div><dt>Paper rollover</dt><dd class="risk"></dd></div><div><dt>Return if it hits</dt><dd class="return"></dd></div></dl>
+        <div class="read"><h3>Why I like it</h3><p class="reason"></p><h3>What could beat it</h3><p class="risk-note"></p></div>
+        <ul class="sources"></ul>
+      </template>
+    </section>
+    <section class="history" aria-labelledby="history-title">
+      <h2 id="history-title">Step history</h2>
+      <ol id="history"></ol>
+      <p id="empty">The first settled step will appear here.</p>
+    </section>
+    <p class="rules">A push returns the paper balance. A loss ends the run. A second play can go up only after the first settles and a later line qualifies.</p>
+  </main>
+  <footer>21+ · For entertainment</footer>
+</body>
+</html>

@@ -1,3 +1,19 @@
+# November 24 Secret Santa
+
+Secret Santa is a site-only paper rollover through December 25 Eastern.
+Review the slate for one favorite single priced near -400, within -350 to -450,
+after completing the ordinary daily card review. Verify the exact unboosted book
+quote, news, matchup and game time before adding the original to
+`data/secret-santa.json`. An early selection requires a complete review of that
+window. A second selection can qualify only after the first settles, with a
+fresh review and time to deploy before the later game. A pass is allowed.
+Keep the simulated $20 start, roll wins in full, carry a push forward and end
+the run on a loss. Use the official stored finals to grade. Publish only to the
+unlisted `/sports/secret-santa/` route through the existing Pages workflow.
+Exclude this challenge from social delivery, phone pushes, the regular card,
+records and feeds. No real account information, stake or transaction belongs
+in this experiment.
+
 # November 24 straight results
 
 Starting with the November 23 Eastern slate, send one complete graded
