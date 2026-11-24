@@ -959,8 +959,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             import nba_trial_runtime
             # Research, artwork and provider checks can outlast the initial
             # two-minute lead. Use the actual submission clock and queue.
-            attempt_at = clock() if clock else datetime.now(timezone.utc) if send is http_send else now
-            if clock or send is http_send:
+            attempt_at = clock() if clock else now
+            if clock:
                 occupied = {'posts': [entry for entry in log_book.get('posts', [])
                                       if not entry.get('nbaDiscordOnly')]}
                 due = free_slot(max(due, attempt_at + SOON), taken(occupied, attempt_at))
@@ -983,7 +983,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             if kind == 'nba-trial':
                 if isinstance(error, BufferPastDue):
                     nba_trial_runtime.record_past_due_rejection(
-                        guid, datetime.now(timezone.utc) if send is http_send else attempt_at)
+                        guid, clock() if clock else attempt_at)
                 else:
                     nba_trial_runtime.delivery_failed(guid, now)
             if kind == 'play' and missed_target(guid, due, now, items):

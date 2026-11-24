@@ -3503,7 +3503,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             if starts:
                 item['kickoff'] = min(starts)
         if plans:
-            buffer_post.schedule(plans, channel['id'], log_book, now, log=log, stats=schedule_stats, items=theme_items)
+            buffer_post.schedule(plans, channel['id'], log_book, now, log=log, stats=schedule_stats,
+                                 items=theme_items, clock=lambda: datetime.now(timezone.utc))
         newly_scheduled = [e for e in log_book.get('posts', [])
                            if e.get('bufferPostId') and e['bufferPostId'] not in before]
         status['x']['posted'] = len(newly_scheduled)
