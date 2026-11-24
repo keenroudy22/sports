@@ -259,6 +259,17 @@ def _settlement_revision(original, now, *, packet=None, conf=None):
     return revision, None
 
 
+def settlement_original(ctx, key, now):
+    """Resolve history independently of the current exposure index."""
+    original = ctx.first.get(key) or ctx.risk_external.get(key)
+    if original is None:
+        import nba_fun_record
+        original = nba_fun_record.rows(ctx.root, now).get(key)
+    if not original or original.get('_pendingRelease'):
+        raise ValueError('Only a published original may receive settlement evidence')
+    return original
+
+
 def main():
     import argparse
     import release_queue
@@ -287,9 +298,7 @@ def main():
             if not packet:
                 raise ValueError('Original private packet missing')
             packet['settlementEvidence'] = json.loads(Path(args.settlement).read_text())
-            original = ctx.first.get(args.id) or ctx.risk_external.get(args.id)
-            if not original or original.get('_pendingRelease'):
-                raise ValueError('Only a published original may receive settlement evidence')
+            original = settlement_original(ctx, args.id, now)
             revised, held = settlement_revision(original, now, packet=packet)
             if held:
                 raise ValueError(held)

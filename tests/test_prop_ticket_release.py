@@ -375,3 +375,34 @@ class PropTicketReleaseTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+
+class SettlementOriginalLookupTests(unittest.TestCase):
+    def test_historical_nba_original_outside_current_exposure_is_resolved(self):
+        import nba_fun_record
+        from datetime import datetime, timezone
+        now = datetime.now(timezone.utc)
+        ctx = SimpleNamespace(first={}, risk_external={}, root=ROOT)
+        original = {'id': 'historical', 'family': 'NBA-alts', 'odds': 235}
+        with patch.object(nba_fun_record, 'rows', return_value={'historical': original}) as rows:
+            self.assertIs(P.settlement_original(ctx, 'historical', now), original)
+            rows.assert_called_once_with(ROOT, now)
+
+    def test_missing_and_pending_originals_remain_held(self):
+        import nba_fun_record
+        from datetime import datetime, timezone
+        now = datetime.now(timezone.utc)
+        for first in ({}, {'historical': {'_pendingRelease': True}}):
+            ctx = SimpleNamespace(first=first, risk_external={}, root=ROOT)
+            with patch.object(nba_fun_record, 'rows', return_value={}):
+                with self.assertRaisesRegex(ValueError, 'Only a published original'):
+                    P.settlement_original(ctx, 'historical', now)
+
+    def test_current_original_keeps_priority_over_ledger_fallback(self):
+        import nba_fun_record
+        from datetime import datetime, timezone
+        original = {'id': 'current', 'odds': -110}
+        ctx = SimpleNamespace(first={'current': original}, risk_external={}, root=ROOT)
+        with patch.object(nba_fun_record, 'rows') as rows:
+            self.assertIs(P.settlement_original(ctx, 'current', datetime.now(timezone.utc)), original)
+            rows.assert_not_called()
