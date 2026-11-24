@@ -5,7 +5,7 @@
 ## Changes this week
 
 - **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
-- **researcher** domains: {'preferDomains': ['si.com', 'on3.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'fausports.com', 'seahawks.com'], 'avoidDomains': ['startribune.com', 'storage.googleapis.com']} to {'preferDomains': ['si.com', 'on3.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'fausports.com', 'ballstatesports.com'], 'avoidDomains': ['startribune.com', 'storage.googleapis.com']}. Which sites the researcher cites keep checking out.
+- **researcher** domains: {'avoidDomains': ['startribune.com', 'storage.googleapis.com'], 'preferDomains': ['si.com', 'on3.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'fausports.com', 'seahawks.com']} to {'avoidDomains': ['startribune.com', 'storage.googleapis.com'], 'preferDomains': ['si.com', 'on3.com', 'abqjournal.com', 'sports.yahoo.com', 'philadelphiaeagles.com', 'chicagobears.com', 'fausports.com', 'ballstatesports.com']}. Which sites the researcher cites keep checking out.
 - **CFB/prop:passYds** twoWay.trust: 0.839 to 0.866. CFB/prop:passYds trust 0.84 to 0.87.
 - **CFB/prop:recYds** twoWay.trust: 0.985 to 1.014. CFB/prop:recYds trust 0.98 to 1.01.
 - **CFB/spread** twoWay.trust: 0.909 to 0.916. CFB/spread trust 0.91 to 0.92.
@@ -19,6 +19,7 @@
 - **NFL/spread** twoWay.trust: 0.975 to 0.948. NFL/spread trust 0.97 to 0.95.
 - **NFL/spread/plus_money** twoWay.trust: 1.0 to 1.034. NFL/spread/plus_money trust 1.00 to 1.03.
 - **NFL/total** twoWay.gap: 6.0 to 8.0. NFL/total gap floor +2 points.
+- **Climb/alternate-offers** ladderSegments: 0 to 0. Weekly stored pregame alternate offers versus official final boxes.
 
 ## Direction changes
 
@@ -28,7 +29,7 @@ Applied:
 - none
 
 In force now:
-- NFL totals: paused as a best bet since 2026-10-08 (research and shadow only); edge bar +6 since None
+- NFL totals: paused as a best bet since 2026-10-08 (research and shadow only); edge bar +8 since None
 
 Report only (nothing loosens):
 - Diagnostic only after October31 owner reset: Weekend card back to 5 best bets (since the cut 20-19, 51% vs 50% break-even).
@@ -73,24 +74,13 @@ Report only (nothing loosens):
 
 ## Two-way Autopilot learning
 
-- Applied trust:CFB/prop:passYds: CFB/prop:passYds trust 0.84 to 0.87.
-- Applied trust:CFB/prop:recYds: CFB/prop:recYds trust 0.98 to 1.01.
-- Applied trust:CFB/spread: CFB/spread trust 0.91 to 0.92.
-- Applied trust:NFL/moneyline/plus_money: NFL/moneyline/plus_money trust 0.85 to 0.80.
-- Applied trust:NFL/prop:car: NFL/prop:car trust 0.90 to 0.88.
-- Applied trust:NFL/prop:cmp: NFL/prop:cmp trust 1.09 to 1.07.
-- Applied trust:NFL/prop:cmp/plus_money: NFL/prop:cmp/plus_money trust 0.95 to 0.94.
-- Applied trust:NFL/prop:rec: NFL/prop:rec trust 1.00 to 0.96.
-- Applied trust:NFL/prop:rec/plus_money: NFL/prop:rec/plus_money trust 1.05 to 1.00.
-- Applied trust:NFL/prop:recYds: NFL/prop:recYds trust 1.02 to 0.98.
-- Applied trust:NFL/spread: NFL/spread trust 0.97 to 0.95.
-- Applied trust:NFL/spread/plus_money: NFL/spread/plus_money trust 1.00 to 1.03.
-- Applied gap:NFL/total: NFL/total gap floor +2 points.
+- Waiting for a second Tuesday: gap:NFL/total (NFL/total gap floor +2 points).
 - Waiting for a second Tuesday: trust:CFB/moneyline (CFB/moneyline trust 0.95 to 0.94).
 - Waiting for a second Tuesday: trust:CFB/moneyline/plus_money (CFB/moneyline/plus_money trust 0.94 to 0.95).
 - Waiting for a second Tuesday: trust:CFB/prop:rushYds (CFB/prop:rushYds trust 1.01 to 0.99).
 - Waiting for a second Tuesday: trust:CFB/total/plus_money (CFB/total/plus_money trust 1.00 to 0.99).
 - Waiting for a second Tuesday: trust:NFL/moneyline (NFL/moneyline trust 1.06 to 1.05).
+- Waiting for a second Tuesday: trust:NFL/moneyline/plus_money (NFL/moneyline/plus_money trust 0.80 to 0.79).
 - Waiting for a second Tuesday: trust:NFL/prop:car/plus_money (NFL/prop:car/plus_money trust 0.93 to 0.94).
 - Waiting for a second Tuesday: trust:NFL/prop:passYds (NFL/prop:passYds trust 0.95 to 0.93).
 - Waiting for a second Tuesday: trust:NFL/prop:rushYds (NFL/prop:rushYds trust 0.75 to 0.76).

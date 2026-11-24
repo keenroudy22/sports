@@ -9030,6 +9030,22 @@
    "to": 8.0,
    "undoKey": "gap:NFL/total",
    "why": "NFL/total gap floor +2 points"
+  },
+  {
+   "at": "2026-11-24T13:47:09Z",
+   "evidence": {
+    "added": 0,
+    "hash": "35c6cf7abb4888f23b30a8311fb1783cde837dbb5573defa33ceffc7c975b542",
+    "offered": 72975,
+    "open": 0
+   },
+   "from": 0,
+   "fromOpen": [],
+   "knob": "ladderSegments",
+   "segment": "Climb/alternate-offers",
+   "to": 0,
+   "toOpen": [],
+   "why": "weekly stored pregame alternate offers versus official final boxes"
   }
  ],
  "knobs": {
@@ -9065,7 +9081,7 @@
  "ladderSegments": {
   "CFB/att/over/DraftKings/150-199": {
    "abovePrice": -0.06945917587704054,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1fc5213d955df01cdb3848cbaeb2468a59b4a39f75db343af427d83269fd2b02",
    "graded": 126,
    "hitRate": 0.5826771653543307,
@@ -9079,7 +9095,7 @@
   },
   "CFB/att/over/DraftKings/200-249": {
    "abovePrice": -0.07642751401809267,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c6b6769494dbd624df1cefe2c38dd72eb27be8db70579da036c6dd5657181713",
    "graded": 235,
    "hitRate": 0.6108786610878661,
@@ -9093,7 +9109,7 @@
   },
   "CFB/att/over/DraftKings/250-299": {
    "abovePrice": -0.10804151246743765,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "37abd44c2cfd0356f26a7ab77cb94aca42fa5b8562b66ec5e7dc83a2d47a5759",
    "graded": 186,
    "hitRate": 0.6178010471204188,
@@ -9107,7 +9123,7 @@
   },
   "CFB/att/over/DraftKings/300-349": {
    "abovePrice": -0.09421651509297102,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2eb0a0da7ff87d56ba7069a3905a9ea3eeeea3c124e21a7685ee07a0223e38ef",
    "graded": 6,
    "hitRate": 0.6666666666666666,
@@ -9121,7 +9137,7 @@
   },
   "CFB/car/over/DraftKings/150-199": {
    "abovePrice": -0.01521348227292374,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "cbb515bd3bca47ebad24a25e70e1c23f19efbfb44db6202553b9e6f112848054",
    "graded": 153,
    "hitRate": 0.6387096774193548,
@@ -9135,7 +9151,7 @@
   },
   "CFB/car/over/DraftKings/200-249": {
    "abovePrice": -0.10051598630843595,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ddbabf9d7abd3583c95efad482bcea56bf0cd7c45f3302640895da3448ca5369",
    "graded": 259,
    "hitRate": 0.5895522388059702,
@@ -9149,7 +9165,7 @@
   },
   "CFB/car/over/DraftKings/250-299": {
    "abovePrice": -0.022120594973222163,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1e2a739d723fe0e0ac99d9348fe817312622fc2bd10f04e5170e620f2e3a366b",
    "graded": 136,
    "hitRate": 0.704225352112676,
@@ -9163,7 +9179,7 @@
   },
   "CFB/car/over/DraftKings/300-349": {
    "abovePrice": 0.07496054696029208,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a8a9060f6ad7f160d9f7afa807a37ccd7c08d3fbd6782814cabc8d8a38e34fee",
    "graded": 6,
    "hitRate": 0.8333333333333334,
@@ -9177,7 +9193,7 @@
   },
   "CFB/car/over/DraftKings/350-399": {
    "abovePrice": 0.2141327623126339,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a137acc106e9f6815392970e19ea1eadc684b8246f947068f1970e3eac834210",
    "graded": 1,
    "hitRate": 1.0,
@@ -9191,7 +9207,7 @@
   },
   "CFB/car/over/DraftKings/400-449": {
    "abovePrice": 0.19083969465648853,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "059845ce227b517392ec0ac7a0f89f5e95c9a652c9992f3c01198a13f12edfc7",
    "graded": 1,
    "hitRate": 1.0,
@@ -9205,7 +9221,7 @@
   },
   "CFB/cmp/over/DraftKings/150-199": {
    "abovePrice": -0.1357960809109876,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "16050a8831ec81d8825bd00d27325bd7e0334bb9f4354c3d422403ff38cac814",
    "graded": 95,
    "hitRate": 0.5208333333333334,
@@ -9219,7 +9235,7 @@
   },
   "CFB/cmp/over/DraftKings/200-249": {
    "abovePrice": -0.04259346433387723,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c0447d578a2e909a4459ada4b88dfbd3773df75d57fc4126886d0748b52aa658",
    "graded": 188,
    "hitRate": 0.6476683937823834,
@@ -9233,7 +9249,7 @@
   },
   "CFB/cmp/over/DraftKings/250-299": {
    "abovePrice": -0.07399868874524429,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "79eb57930655a06562fcc7693d7680dd1de5133f1acb5cd1726f8376ccd27d72",
    "graded": 102,
    "hitRate": 0.6538461538461539,
@@ -9247,7 +9263,7 @@
   },
   "CFB/cmp/over/DraftKings/300-349": {
    "abovePrice": -0.004125499264242105,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "352d70b180252c4feddec23b0ea47307da3a77847d7a4d90dcac9ffe0dd3e3a8",
    "graded": 4,
    "hitRate": 0.75,
@@ -9261,7 +9277,7 @@
   },
   "CFB/cmp/over/DraftKings/350-399": {
    "abovePrice": 0.2174077434966727,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "cdeaa522c68f52645b1160dfe618e5094b8184b063f1a34a6b47f54c84f07eee",
    "graded": 2,
    "hitRate": 1.0,
@@ -9275,7 +9291,7 @@
   },
   "CFB/passYds/over/DraftKings/150-199": {
    "abovePrice": -0.13040950775749272,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4e60ddd65a3baac1d65108b44993b774b2ee23b2769e671c27baa569d6e8ae06",
    "graded": 346,
    "hitRate": 0.5234159779614325,
@@ -9289,7 +9305,7 @@
   },
   "CFB/passYds/over/DraftKings/200-249": {
    "abovePrice": -0.12380369514639766,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5c087e62a80690db8e1d4e9a48259475b9d929c78248eaec4f510719ab93ce30",
    "graded": 433,
    "hitRate": 0.5655913978494623,
@@ -9303,7 +9319,7 @@
   },
   "CFB/passYds/over/DraftKings/250-299": {
    "abovePrice": -0.11372873622993562,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "3bcc5fa80d6e20d00146f6d5c6b0a32cd5ab750c2420cb99327184346add5568",
    "graded": 398,
    "hitRate": 0.6179245283018868,
@@ -9317,7 +9333,7 @@
   },
   "CFB/passYds/over/DraftKings/300-349": {
    "abovePrice": -0.09613538305247482,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7807d2301ad70b78bece9a50d775cbc9d22fd7d13dd6119720f07fa0e45e3065",
    "graded": 342,
    "hitRate": 0.667590027700831,
@@ -9331,7 +9347,7 @@
   },
   "CFB/passYds/over/DraftKings/350-399": {
    "abovePrice": -0.12005976210194313,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "37856b1384f21fd014c00c85bb632c8e9c68c7d6ab579f7fa51dd5804e775ce0",
    "graded": 309,
    "hitRate": 0.6686746987951807,
@@ -9345,7 +9361,7 @@
   },
   "CFB/passYds/over/DraftKings/400-449": {
    "abovePrice": -0.10604036596918764,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "94ac14c68d6bf246fe27c590bbb6d1acc17f20e3033b971a1cd1b914a3fb6b6e",
    "graded": 274,
    "hitRate": 0.7030716723549488,
@@ -9359,7 +9375,7 @@
   },
   "CFB/passYds/over/DraftKings/450-499": {
    "abovePrice": -0.08646413717588564,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9d5758daf7f076edfd7b80ae90b8a0fe9fb5e71c63396fa2646411553738c5ab",
    "graded": 242,
    "hitRate": 0.7392996108949417,
@@ -9373,7 +9389,7 @@
   },
   "CFB/passYds/over/DraftKings/500-549": {
    "abovePrice": -0.10478613763989886,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "20398e8878ff1e063d685b71d5ef40077954d1f88d081e923824e3c2af4b8da8",
    "graded": 220,
    "hitRate": 0.7345132743362832,
@@ -9387,7 +9403,7 @@
   },
   "CFB/passYds/over/DraftKings/550-599": {
    "abovePrice": -0.09319422887805529,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "91c06c2616a3bf1ba9ba0aed374d986a07d4a97d253bd6ff383fef9048736383",
    "graded": 173,
    "hitRate": 0.7584269662921348,
@@ -9401,7 +9417,7 @@
   },
   "CFB/passYds/over/DraftKings/600-649": {
    "abovePrice": -0.052044331840414904,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e659757ed8961c5879e8098a0d287a24ab54ac1321ec9958e0f0937ac66c874c",
    "graded": 140,
    "hitRate": 0.8098591549295775,
@@ -9415,7 +9431,7 @@
   },
   "CFB/passYds/over/DraftKings/650-699": {
    "abovePrice": -0.08640423413716802,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c7013820d49947e6ef407cfe21a0e52bee34614ae7b8bf63e0ee20fa1cdd1446",
    "graded": 154,
    "hitRate": 0.7834394904458599,
@@ -9429,7 +9445,7 @@
   },
   "CFB/passYds/over/DraftKings/700-749": {
    "abovePrice": -0.10451849300140603,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d813896882ca8811e294eb4e6331f5afe9c3c71524ac5cff62e164d47835c610",
    "graded": 117,
    "hitRate": 0.773109243697479,
@@ -9443,7 +9459,7 @@
   },
   "CFB/passYds/over/DraftKings/750-799": {
    "abovePrice": -0.08998890490174982,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "94f1ddf81a5ff79b91f7ae66e438efc976c3c9f37fff8a3df9d0063cfcead7f2",
    "graded": 118,
    "hitRate": 0.7950819672131147,
@@ -9457,7 +9473,7 @@
   },
   "CFB/passYds/over/DraftKings/800-849": {
    "abovePrice": -0.0671480977897777,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "3895b8385d96ae43b58121f7bebeaf0d2a7b7e4df6673e1138be42fe969a3fad",
    "graded": 106,
    "hitRate": 0.8240740740740741,
@@ -9471,7 +9487,7 @@
   },
   "CFB/passYds/over/DraftKings/850-899": {
    "abovePrice": -0.07375596343758772,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "14e7ad7948bfdf3978f29d0e2e8596268e7242c6b3a9addf65da4269c9dfe17a",
    "graded": 111,
    "hitRate": 0.8230088495575221,
@@ -9485,7 +9501,7 @@
   },
   "CFB/passYds/over/DraftKings/900-949": {
    "abovePrice": -0.1499999999999999,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a3ce8e556e62b84388350eb563282093d2a93e0f8a9bf158c69fcb31e7e334e7",
    "graded": 29,
    "hitRate": 0.75,
@@ -9499,7 +9515,7 @@
   },
   "CFB/passYds/over/FanDuel/150-199": {
    "abovePrice": -0.09625981055411903,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a0d5ce937968a4600edca1f43f3f450098a44899cb38f825bfb0042ac6a2c6a8",
    "graded": 170,
    "hitRate": 0.5568181818181818,
@@ -9513,7 +9529,7 @@
   },
   "CFB/passYds/over/FanDuel/200-249": {
    "abovePrice": -0.05918419943587683,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5bff3072c8f3a47a0cd34835105abb3efef4163cbd3eccf9b75fe9a56911920c",
    "graded": 282,
    "hitRate": 0.6279863481228669,
@@ -9527,7 +9543,7 @@
   },
   "CFB/passYds/over/FanDuel/250-299": {
    "abovePrice": -0.05229441554285208,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "014b43216976a9270ddd4c3ced3ff64ed3cbbcb4374102c847aebf014df13b67",
    "graded": 252,
    "hitRate": 0.6744186046511628,
@@ -9541,7 +9557,7 @@
   },
   "CFB/passYds/over/FanDuel/300-349": {
    "abovePrice": -0.04820792335238466,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2b1843eea62d03228a3454248c29d20ce5b2cccee8b49a88b8c799cb131e3503",
    "graded": 209,
    "hitRate": 0.7116279069767442,
@@ -9555,7 +9571,7 @@
   },
   "CFB/passYds/over/FanDuel/350-399": {
    "abovePrice": -0.026528516707027605,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "466be6ff2552df43d0f8797e4fb925ebc3ddbc063a72fce1d366fa9ccfdd8c15",
    "graded": 185,
    "hitRate": 0.7591623036649214,
@@ -9569,7 +9585,7 @@
   },
   "CFB/passYds/over/FanDuel/400-449": {
    "abovePrice": -0.06118454215641833,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bab097f6d9f99aec9cd7466c0d5a661dc331e8f2e5f200d8249e2c3294164a7e",
    "graded": 203,
    "hitRate": 0.7452830188679245,
@@ -9583,7 +9599,7 @@
   },
   "CFB/passYds/over/FanDuel/450-499": {
    "abovePrice": -0.09046917246989106,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c0dc96fdca71e64795c00a63cf29d7b2d5f238ce47c742c6acc4fedd980943df",
    "graded": 173,
    "hitRate": 0.7329545454545454,
@@ -9597,7 +9613,7 @@
   },
   "CFB/passYds/over/FanDuel/500-549": {
    "abovePrice": -0.07379836412094487,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "264e03ae6a15a11f0e721f38e84c6c89cfccb5c99a157bc77f5e0222d9ad2a21",
    "graded": 114,
    "hitRate": 0.7606837606837606,
@@ -9611,7 +9627,7 @@
   },
   "CFB/passYds/over/FanDuel/550-599": {
    "abovePrice": -0.0840156286305761,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5c49ddfe1a2be754c470bb8f079f10e43b593ac4820f42c5823aeb39bd2d361e",
    "graded": 156,
    "hitRate": 0.7654320987654321,
@@ -9625,7 +9641,7 @@
   },
   "CFB/passYds/over/FanDuel/600-649": {
    "abovePrice": -0.08639455782312921,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9d4b546926dea7aab2a29130873e39d76ba31bd48584526b269674df0f96d1a2",
    "graded": 102,
    "hitRate": 0.7714285714285715,
@@ -9639,7 +9655,7 @@
   },
   "CFB/passYds/over/FanDuel/650-699": {
    "abovePrice": -0.055330086580086535,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a252761e5dc43c1ae84273d6a6f946a62631d77cc24d8cdcaa4f424d3607a997",
    "graded": 123,
    "hitRate": 0.8125,
@@ -9653,7 +9669,7 @@
   },
   "CFB/passYds/over/FanDuel/700-749": {
    "abovePrice": 0.007352941176470562,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f64df137cceaa7bb72a281c986d9034ab7428c6fe83cc5a839e1fb6340e11132",
    "graded": 99,
    "hitRate": 0.8823529411764706,
@@ -9667,7 +9683,7 @@
   },
   "CFB/passYds/over/FanDuel/750-799": {
    "abovePrice": -0.08235294117647052,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "114b643ddb3b863c28f843c802747d4d12f3939ab443fe75e70351d7eb705ffd",
    "graded": 112,
    "hitRate": 0.8,
@@ -9681,7 +9697,7 @@
   },
   "CFB/passYds/over/FanDuel/800-849": {
    "abovePrice": -0.11965811965811957,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4a10f0ab4d39443140bf1dcd5793734a1caa48326e696c9f52a13f1aa2988de9",
    "graded": 88,
    "hitRate": 0.7692307692307693,
@@ -9695,7 +9711,7 @@
   },
   "CFB/passYds/over/FanDuel/850-899": {
    "abovePrice": -0.08954203691045792,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a0d61d1879fc536501f284a7587189d27ae2e167080a8a90b0b6f593f16b3178",
    "graded": 75,
    "hitRate": 0.8051948051948052,
@@ -9709,7 +9725,7 @@
   },
   "CFB/passYds/over/FanDuel/900-949": {
    "abovePrice": -0.09469026548672554,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7b1bac2d2c7ec917e59b2bcdfb037a692373e654577d0c979db5aa21b033d813",
    "graded": 110,
    "hitRate": 0.8053097345132744,
@@ -9723,7 +9739,7 @@
   },
   "CFB/rec/over/DraftKings/150-199": {
    "abovePrice": -0.11817599587150629,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ce918a6e6c42f7cbf93896f2b4d313bc481b9047110c20ba395ef9abcefc9431",
    "graded": 190,
    "hitRate": 0.5373134328358209,
@@ -9737,7 +9753,7 @@
   },
   "CFB/rec/over/DraftKings/200-249": {
    "abovePrice": -0.10270640724227087,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e3055c74654905e22f2b31904095c34647c636205a51114c060b4456817f9905",
    "graded": 391,
    "hitRate": 0.5874125874125874,
@@ -9751,7 +9767,7 @@
   },
   "CFB/rec/over/DraftKings/250-299": {
    "abovePrice": -0.15131248276201914,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "94e73733df537b34626e3233d1bc6d48916493b84d45fde85169875457cc37aa",
    "graded": 235,
    "hitRate": 0.5758754863813229,
@@ -9765,7 +9781,7 @@
   },
   "CFB/rec/over/DraftKings/300-349": {
    "abovePrice": -0.13121741981477997,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "516c8b5db3d2afd4678aab568c90ff48c115c9e96dd79fec47399b7485d9702a",
    "graded": 23,
    "hitRate": 0.6296296296296297,
@@ -9779,7 +9795,7 @@
   },
   "CFB/rec/over/DraftKings/350-399": {
    "abovePrice": 0.016846818732783486,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7d661b8bde4e300feda093c60c6191cb37eb0e5c533bc5bd949da4ed388c427a",
    "graded": 4,
    "hitRate": 0.8,
@@ -9793,7 +9809,7 @@
   },
   "CFB/rec/over/DraftKings/400-449": {
    "abovePrice": -0.8130841121495328,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a98148ead6bb127c814c8254bdae6d7240da76356071739222fb75f9cd541d2b",
    "graded": 1,
    "hitRate": 0.0,
@@ -9807,7 +9823,7 @@
   },
   "CFB/rec/over/DraftKings/450-499": {
    "abovePrice": -0.32946912998726474,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1e529b464590ab62200ed6dfb45adebd2e4715406e288a3d9206722b2ca46ef7",
    "graded": 1,
    "hitRate": 0.5,
@@ -9821,7 +9837,7 @@
   },
   "CFB/rec/over/FanDuel/150-199": {
    "abovePrice": -0.03311461046231512,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "453e58f3b68326f2b3c0093c0b8b7a55b9acbab11172c76a938c5750c09870e5",
    "graded": 133,
    "hitRate": 0.6187050359712231,
@@ -9835,7 +9851,7 @@
   },
   "CFB/rec/over/FanDuel/200-249": {
    "abovePrice": -0.06048212132074704,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "18c6f4d47333feed03b60c2dc8ed438b152c8b704da4301619aecb6c5c6c30c3",
    "graded": 272,
    "hitRate": 0.6284722222222222,
@@ -9849,7 +9865,7 @@
   },
   "CFB/rec/over/FanDuel/250-299": {
    "abovePrice": -0.1277334471240289,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a95f9147209204bd7bb7e71516bd6919b4158d539415ff9a6e17a8e3da1ef5ec",
    "graded": 205,
    "hitRate": 0.6008771929824561,
@@ -9863,7 +9879,7 @@
   },
   "CFB/rec/over/FanDuel/300-349": {
    "abovePrice": -0.08640638450425331,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9852dd6526624405a7fd939c9a67d6996ae29adada74ab608ff258935353e44a",
    "graded": 175,
    "hitRate": 0.675531914893617,
@@ -9877,7 +9893,7 @@
   },
   "CFB/rec/over/FanDuel/350-399": {
    "abovePrice": -0.09790049994995231,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0761baeeddcf1703ac4fcbf88ccdf2eb5af2ef1c028110d837dc7e1a569eff26",
    "graded": 122,
    "hitRate": 0.6870229007633588,
@@ -9891,7 +9907,7 @@
   },
   "CFB/rec/over/FanDuel/400-449": {
    "abovePrice": -0.053521956970232765,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f2f3b26c4c2d0a04f0132bf2706dbb654333981e68e981a44f02f9aba9c93dee",
    "graded": 162,
    "hitRate": 0.7528735632183908,
@@ -9905,7 +9921,7 @@
   },
   "CFB/rec/over/FanDuel/450-499": {
    "abovePrice": -0.017522008668306555,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f5f790dcfa4707c804f0428a25052c83b421cc108e837008aec83e1863c93941",
    "graded": 113,
    "hitRate": 0.8083333333333333,
@@ -9919,7 +9935,7 @@
   },
   "CFB/rec/over/FanDuel/500-549": {
    "abovePrice": 0.06497175141242939,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ba7025f8f6d9b70c715bea3ed8f2eb9ddfaaed5df2222e1be870462ab716bea1",
    "graded": 57,
    "hitRate": 0.8983050847457628,
@@ -9933,7 +9949,7 @@
   },
   "CFB/rec/over/FanDuel/550-599": {
    "abovePrice": -0.03143093465674107,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "684d0cf6d014ade007663a31832ce05da8f80b6403954a1c9b2686c7a51e0cf0",
    "graded": 89,
    "hitRate": 0.8172043010752689,
@@ -9947,7 +9963,7 @@
   },
   "CFB/rec/over/FanDuel/600-649": {
    "abovePrice": -0.05117270788912576,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "fcf66857c24247bd33758a7d3449fe3121d9c2e19bc93675f0c34eef3be5e767",
    "graded": 66,
    "hitRate": 0.8059701492537313,
@@ -9961,7 +9977,7 @@
   },
   "CFB/rec/over/FanDuel/650-699": {
    "abovePrice": -0.07829313543599259,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ac781c90b2440ddb2d8860c565abc6c4f0a63c2d97132ce63b8f1ea08618fdd7",
    "graded": 112,
    "hitRate": 0.7899159663865546,
@@ -9975,7 +9991,7 @@
   },
   "CFB/rec/over/FanDuel/700-749": {
    "abovePrice": -0.010135135135135087,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "992f59868000bdbfb35d3d2f3fdd51a143a4353b44ae88236edd07a0f5c550fb",
    "graded": 71,
    "hitRate": 0.8648648648648649,
@@ -9989,7 +10005,7 @@
   },
   "CFB/rec/over/FanDuel/750-799": {
    "abovePrice": -0.07679738562091498,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "437e3666c1c1460e1a15cb349a1ba89dfc0980b5bdd9a3625f61cb41935b3c7d",
    "graded": 68,
    "hitRate": 0.8055555555555556,
@@ -10003,7 +10019,7 @@
   },
   "CFB/rec/over/FanDuel/800-849": {
    "abovePrice": -0.11965811965811957,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1dd730b597fb40f0a9441240802d153b4fa7439d682aeb15709e59d12cd49789",
    "graded": 46,
    "hitRate": 0.7692307692307693,
@@ -10017,7 +10033,7 @@
   },
   "CFB/rec/over/FanDuel/850-899": {
    "abovePrice": -0.1386392811296534,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4041b4d69f0f62488175a101faeb346dd2d7e9fa2483ad87d547b5ff01bc8697",
    "graded": 37,
    "hitRate": 0.7560975609756098,
@@ -10031,7 +10047,7 @@
   },
   "CFB/rec/over/FanDuel/900-949": {
    "abovePrice": -0.1535211267605633,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c0cc519c3aa1b1769ad2ef33e812c46086ea55a9995daae5561cede6384c6faf",
    "graded": 64,
    "hitRate": 0.7464788732394366,
@@ -10045,7 +10061,7 @@
   },
   "CFB/recYds/over/DraftKings/150-199": {
    "abovePrice": -0.24096835296731695,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "fe172a1b74317b36f28f786548dbc86bd6939fac8ac77f94d967943d8bef8ccc",
    "graded": 505,
    "hitRate": 0.41289437585733885,
@@ -10059,7 +10075,7 @@
   },
   "CFB/recYds/over/DraftKings/200-249": {
    "abovePrice": -0.2649702860864188,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "df8f02f1bfb1bf6a937784f72be40cc7e31fc3d9451848d4f46f03c7dbd27683",
    "graded": 860,
    "hitRate": 0.4244139046079224,
@@ -10073,7 +10089,7 @@
   },
   "CFB/recYds/over/DraftKings/250-299": {
    "abovePrice": -0.29498178872029385,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8fff968a2f98bfd83af3dda8e9bd063496c58c7af5b5639658313a157ff781fc",
    "graded": 682,
    "hitRate": 0.43609756097560975,
@@ -10087,7 +10103,7 @@
   },
   "CFB/recYds/over/DraftKings/300-349": {
    "abovePrice": -0.265600504623807,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "08acfffceda0e0d5c39f943cda3a35bd745d058690292ecf5883d6e8eada0bcd",
    "graded": 609,
    "hitRate": 0.4982456140350877,
@@ -10101,7 +10117,7 @@
   },
   "CFB/recYds/over/DraftKings/350-399": {
    "abovePrice": -0.2911775734135767,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4fa3d96812869d8d0f505f8a9c5b269dde0bfb0bffc826c883c9a11413da89d9",
    "graded": 501,
    "hitRate": 0.4972375690607735,
@@ -10115,7 +10131,7 @@
   },
   "CFB/recYds/over/DraftKings/400-449": {
    "abovePrice": -0.2979270668309235,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9c7ad9a98ee08b9a0f36d60759fe16d1e3dc62d91b47eab49138062cb09c356a",
    "graded": 438,
    "hitRate": 0.5105348460291734,
@@ -10129,7 +10145,7 @@
   },
   "CFB/recYds/over/DraftKings/450-499": {
    "abovePrice": -0.30171916513366737,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "3d15649b19b899baaf7831fdef12389c9d721094f9c45c04e7b9944c6bba88c0",
    "graded": 431,
    "hitRate": 0.5231788079470199,
@@ -10143,7 +10159,7 @@
   },
   "CFB/recYds/over/DraftKings/500-549": {
    "abovePrice": -0.24224889562250806,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "083f6777e8fa3eaa84c7c27dfe0703be48528ee0d91b398d1c3e7bf62e87d740",
    "graded": 362,
    "hitRate": 0.596529284164859,
@@ -10157,7 +10173,7 @@
   },
   "CFB/recYds/over/DraftKings/550-599": {
    "abovePrice": -0.11929127777703719,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a2f3cc3e5ee77b5387f41da937dcf3b30e4f84d2dafb2d79efa30d67bc95b3cf",
    "graded": 343,
    "hitRate": 0.73224043715847,
@@ -10171,7 +10187,7 @@
   },
   "CFB/recYds/over/DraftKings/600-649": {
    "abovePrice": -0.13073190935586732,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9adcac6b8529e77dd0dbbf98933df25da4a3ca4bd03b586508dbe325aac580a6",
    "graded": 280,
    "hitRate": 0.7308970099667774,
@@ -10185,7 +10201,7 @@
   },
   "CFB/recYds/over/DraftKings/650-699": {
    "abovePrice": -0.1263401609819983,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9cc89d2bc47a01e79d60576924e96b1696bde9607db7452c35bebc229c0612d5",
    "graded": 252,
    "hitRate": 0.7434944237918215,
@@ -10199,7 +10215,7 @@
   },
   "CFB/recYds/over/DraftKings/700-749": {
    "abovePrice": -0.17828751062640136,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8f8ecc1e2df69258570cfaf1debbac7b62f247676fb91e5f702762eff7c3f5d8",
    "graded": 223,
    "hitRate": 0.6995884773662552,
@@ -10213,7 +10229,7 @@
   },
   "CFB/recYds/over/DraftKings/750-799": {
    "abovePrice": -0.17364002660458355,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "93bd2406913034de2ff3b68664b535e4ebc7879b8e62604ceaef16f822f35a96",
    "graded": 244,
    "hitRate": 0.7116104868913857,
@@ -10227,7 +10243,7 @@
   },
   "CFB/recYds/over/DraftKings/800-849": {
    "abovePrice": -0.17072824438404888,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "71c98c865296555d1f0648bde245df6389a762df1675677c1766a645f5f8e54f",
    "graded": 215,
    "hitRate": 0.7203389830508474,
@@ -10241,7 +10257,7 @@
   },
   "CFB/recYds/over/DraftKings/850-899": {
    "abovePrice": -0.18580293027635608,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f18cdd6f76325a5e78eac27bc2ad76f71e07cad3561dc518d9d71b367a11eb4d",
    "graded": 204,
    "hitRate": 0.7111111111111111,
@@ -10255,7 +10271,7 @@
   },
   "CFB/recYds/over/DraftKings/900-949": {
    "abovePrice": -0.2870967741935483,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "69198dbf43821dc9be8a78106c7d7f9a0d1d164cf9bb4dd2ac9c03f3103b887a",
    "graded": 56,
    "hitRate": 0.6129032258064516,
@@ -10269,7 +10285,7 @@
   },
   "CFB/recYds/over/FanDuel/150-199": {
    "abovePrice": -0.0631352682707379,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "32a90f5bb2391650b70c7e54bd54189f250998b99dd8b8fb4ad8439413d0ce45",
    "graded": 607,
    "hitRate": 0.5877061469265368,
@@ -10283,7 +10299,7 @@
   },
   "CFB/recYds/over/FanDuel/200-249": {
    "abovePrice": -0.07373155627409489,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "94feefd885440f026d03567dd04fd7672f8b20b9879ad8fe7e4128e194965fcb",
    "graded": 1092,
    "hitRate": 0.6134316134316135,
@@ -10297,7 +10313,7 @@
   },
   "CFB/recYds/over/FanDuel/250-299": {
    "abovePrice": -0.06762988803496695,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9a40d5673aec3568aee1497b86f621b9fba982939d69dc2fc055de46e07ae6d9",
    "graded": 950,
    "hitRate": 0.6631679389312977,
@@ -10311,7 +10327,7 @@
   },
   "CFB/recYds/over/FanDuel/300-349": {
    "abovePrice": -0.06710487537795362,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "fc81519d1521a6be4fa1cec0f77df5e5de4cc0aae3339a32f3689d30d8f91342",
    "graded": 837,
    "hitRate": 0.6947141316073355,
@@ -10325,7 +10341,7 @@
   },
   "CFB/recYds/over/FanDuel/350-399": {
    "abovePrice": -0.09788622185651452,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8f3802efc34958eb36b0ce534e6a6fdae8f89b13f4d8c2ec4c11ebe634c9937b",
    "graded": 588,
    "hitRate": 0.6873065015479877,
@@ -10339,7 +10355,7 @@
   },
   "CFB/recYds/over/FanDuel/400-449": {
    "abovePrice": -0.06926792765521339,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2beadaf3cab2bcce13e329f5d7974a299519025fbdbc43b30d40529ec6882c61",
    "graded": 720,
    "hitRate": 0.7373737373737373,
@@ -10353,7 +10369,7 @@
   },
   "CFB/recYds/over/FanDuel/450-499": {
    "abovePrice": -0.07157326660242458,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "43570d446aa72d368037f7c1076e6e0137171880deb4001562727e5a10fc9e41",
    "graded": 563,
    "hitRate": 0.7520128824476651,
@@ -10367,7 +10383,7 @@
   },
   "CFB/recYds/over/FanDuel/500-549": {
    "abovePrice": -0.08326988969325555,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1dfe925f5880ca74fc3417d65b586f8268aa441f3915634ab2761e68d44d8bf6",
    "graded": 516,
    "hitRate": 0.7530647985989493,
@@ -10381,7 +10397,7 @@
   },
   "CFB/recYds/over/FanDuel/550-599": {
    "abovePrice": -0.0854753877027179,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "718d8820d55a269ac6ce5eec7be7745fa5770d5af1314f4301e85a48703a38f9",
    "graded": 511,
    "hitRate": 0.7649186256781193,
@@ -10395,7 +10411,7 @@
   },
   "CFB/recYds/over/FanDuel/600-649": {
    "abovePrice": -0.07072829131652658,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "346646e3073318607cd2644fea605f1432b1c72ec1c89f1302b7ea591ac587e5",
    "graded": 395,
    "hitRate": 0.788235294117647,
@@ -10409,7 +10425,7 @@
   },
   "CFB/recYds/over/FanDuel/650-699": {
    "abovePrice": -0.08159313906005783,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bebff99341dd7b97f4c132c922bb16a04a304c61b3d7aaa1a75ded03599a76b4",
    "graded": 493,
    "hitRate": 0.7863894139886578,
@@ -10423,7 +10439,7 @@
   },
   "CFB/recYds/over/FanDuel/700-749": {
    "abovePrice": -0.04896387309737771,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e98fae228b010b952dc3b7f829ab3485c00ca6202eb1b18aeb57893652c1a2bb",
    "graded": 376,
    "hitRate": 0.8270676691729323,
@@ -10437,7 +10453,7 @@
   },
   "CFB/recYds/over/FanDuel/750-799": {
    "abovePrice": -0.06379884419610393,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "78170017020320d85955cd925c3132b3b46dc977eeb3366db129fd1c565cf5a6",
    "graded": 342,
    "hitRate": 0.8194070080862533,
@@ -10451,7 +10467,7 @@
   },
   "CFB/recYds/over/FanDuel/800-849": {
    "abovePrice": -0.0628019323671497,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "37bf12b8180a5601661b5707ded436b8d1831a68bf431adedb00cf90d3c546b6",
    "graded": 231,
    "hitRate": 0.8260869565217391,
@@ -10465,7 +10481,7 @@
   },
   "CFB/recYds/over/FanDuel/850-899": {
    "abovePrice": -0.0734440664398639,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "228dd72deab3d55b9c970b9384ac9442483a333e659b7b5b0ea46ad480b33ac9",
    "graded": 247,
    "hitRate": 0.8212927756653993,
@@ -10479,7 +10495,7 @@
   },
   "CFB/recYds/over/FanDuel/900-949": {
    "abovePrice": -0.09633507853403134,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1f417874eacc688ed01fbb287d0f8500589f52c2e6f222f3f14099f1f2ddcd9d",
    "graded": 352,
    "hitRate": 0.8036649214659686,
@@ -10493,7 +10509,7 @@
   },
   "CFB/rushYds/over/DraftKings/150-199": {
    "abovePrice": -0.2613581022325193,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "27d98ebee7cc79794fe4055365dabab0e6f0f237603ddaabddeef83023f57351",
    "graded": 391,
    "hitRate": 0.3916967509025271,
@@ -10507,7 +10523,7 @@
   },
   "CFB/rushYds/over/DraftKings/200-249": {
    "abovePrice": -0.29337102447622737,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "cf8658077dfce19660c1c53e9ec4582ceefbc0bff38646a48b95afb5b28f8010",
    "graded": 588,
    "hitRate": 0.3958333333333333,
@@ -10521,7 +10537,7 @@
   },
   "CFB/rushYds/over/DraftKings/250-299": {
    "abovePrice": -0.3035567334943974,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c60308dfdabe8dca385662c10f73327d1b722618b2ead24092dd91ecc035e644",
    "graded": 535,
    "hitRate": 0.42800528401585203,
@@ -10535,7 +10551,7 @@
   },
   "CFB/rushYds/over/DraftKings/300-349": {
    "abovePrice": -0.2883390206225663,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ade2ed8b3f6d4c17a400a61a031358650756814f038d162bbe43f52b9ebfc66b",
    "graded": 474,
    "hitRate": 0.47473200612557426,
@@ -10549,7 +10565,7 @@
   },
   "CFB/rushYds/over/DraftKings/350-399": {
    "abovePrice": -0.35482242600612696,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1b0bb650eafebc1b9849bd25cef364e8b72f2e5d079c4c31e110df76f91dbc07",
    "graded": 368,
    "hitRate": 0.43283582089552236,
@@ -10563,7 +10579,7 @@
   },
   "CFB/rushYds/over/DraftKings/400-449": {
    "abovePrice": -0.3106677582450599,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0b944094052e404a409742f1462b1754787f5956a59eff91721667757801ff69",
    "graded": 340,
    "hitRate": 0.49783549783549785,
@@ -10577,7 +10593,7 @@
   },
   "CFB/rushYds/over/DraftKings/450-499": {
    "abovePrice": -0.294833020465304,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "631126b1064c4076213c5d28822e70f7e5503293d22454bc8ded797474039d66",
    "graded": 349,
    "hitRate": 0.5303983228511531,
@@ -10591,7 +10607,7 @@
   },
   "CFB/rushYds/over/DraftKings/500-549": {
    "abovePrice": -0.2467491901051697,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1ace050d9b1619695ed8ddba4b1685861606dccefdbf4bfa1c4d6c8cc3d2457a",
    "graded": 298,
    "hitRate": 0.5918918918918918,
@@ -10605,7 +10621,7 @@
   },
   "CFB/rushYds/over/DraftKings/550-599": {
    "abovePrice": -0.15556307346540832,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "46b5571354861f533ae06defd0256723aa9ec0f8820fa95e6d06eec649b80d3b",
    "graded": 285,
    "hitRate": 0.6959459459459459,
@@ -10619,7 +10635,7 @@
   },
   "CFB/rushYds/over/DraftKings/600-649": {
    "abovePrice": -0.15474587186733002,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e3949aa4f74f83cd2ce3b0d9b1f4f2770078411a3484b810810bb2443a593fb5",
    "graded": 223,
    "hitRate": 0.7068965517241379,
@@ -10633,7 +10649,7 @@
   },
   "CFB/rushYds/over/DraftKings/650-699": {
    "abovePrice": -0.17488125583680925,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "422d7a51e5d9b4e8928d14fda9cc0819abd50acdeefaf203888afc9855a441da",
    "graded": 246,
    "hitRate": 0.694980694980695,
@@ -10647,7 +10663,7 @@
   },
   "CFB/rushYds/over/DraftKings/700-749": {
    "abovePrice": -0.17901244631371382,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "20ce7981a047216c613440d4b1ebb85837a2c36124e01c58e2cd6576d490c660",
    "graded": 199,
    "hitRate": 0.6990291262135923,
@@ -10661,7 +10677,7 @@
   },
   "CFB/rushYds/over/DraftKings/750-799": {
    "abovePrice": -0.13506799504472844,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "69922cd154f4386c483ed1eee3205a28168d61724438415803e1277910c97d72",
    "graded": 201,
    "hitRate": 0.75,
@@ -10675,7 +10691,7 @@
   },
   "CFB/rushYds/over/DraftKings/800-849": {
    "abovePrice": -0.17193413594791085,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "64240aff76285b43632b5ae049dd22241191eb67be0fa987353bc4f597765565",
    "graded": 212,
    "hitRate": 0.7194570135746606,
@@ -10689,7 +10705,7 @@
   },
   "CFB/rushYds/over/DraftKings/850-899": {
    "abovePrice": -0.16552058389858892,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "46459506570f8e03c75c8bff4feec3a406930a64ca20e6f18793aa409a092679",
    "graded": 169,
    "hitRate": 0.7314285714285714,
@@ -10703,7 +10719,7 @@
   },
   "CFB/rushYds/over/DraftKings/900-949": {
    "abovePrice": -0.15423728813559312,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "3272991a78a656f34f5915c4406a46d12b8e03ee16f6ffb4b7388df3b3f96a2d",
    "graded": 56,
    "hitRate": 0.7457627118644068,
@@ -10717,7 +10733,7 @@
   },
   "CFB/rushYds/over/FanDuel/150-199": {
    "abovePrice": -0.1097351818339809,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "246338d9441ac7acecce183ded199583484d998599e637f745282f40a84bcbf0",
    "graded": 401,
    "hitRate": 0.542997542997543,
@@ -10731,7 +10747,7 @@
   },
   "CFB/rushYds/over/FanDuel/200-249": {
    "abovePrice": -0.12073217871638597,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "14cd5f5bfba34fc05edc753fc15a65d2746696248d7c65badd6848f0bdda1286",
    "graded": 704,
    "hitRate": 0.5700416088765603,
@@ -10745,7 +10761,7 @@
   },
   "CFB/rushYds/over/FanDuel/250-299": {
    "abovePrice": -0.09568301560247616,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2e851846e5e903b4041225d14d48e7a51e9073abcefb9af91c50f64442007e52",
    "graded": 555,
    "hitRate": 0.6334519572953736,
@@ -10759,7 +10775,7 @@
   },
   "CFB/rushYds/over/FanDuel/300-349": {
    "abovePrice": -0.09231346004646701,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bb589baca756a436cab48e093b1baca7bf313e8a9a74013037ade8c3c105e823",
    "graded": 540,
    "hitRate": 0.6690777576853526,
@@ -10773,7 +10789,7 @@
   },
   "CFB/rushYds/over/FanDuel/350-399": {
    "abovePrice": -0.1065660164333232,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4b66d8a3aa91f2a8834b9f653c1965fcb1651397799991254212e7d371b78cfb",
    "graded": 354,
    "hitRate": 0.6776859504132231,
@@ -10787,7 +10803,7 @@
   },
   "CFB/rushYds/over/FanDuel/400-449": {
    "abovePrice": -0.06932238914617772,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "174944f8f65255d044b041a57a749d5db007e3bbb84fb399a431fc3403233455",
    "graded": 448,
    "hitRate": 0.737885462555066,
@@ -10801,7 +10817,7 @@
   },
   "CFB/rushYds/over/FanDuel/450-499": {
    "abovePrice": -0.0751394825341063,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6b7f7d6e4b08b6811daf93d9764786f141506408b02b71774dc1bbbd6c2a19ee",
    "graded": 358,
    "hitRate": 0.7493188010899182,
@@ -10815,7 +10831,7 @@
   },
   "CFB/rushYds/over/FanDuel/500-549": {
    "abovePrice": -0.11441441441441458,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1d72a40ad2857b90b64c925a4fcfa18784fa93f10f7b03c81a33ab1476dea200",
    "graded": 180,
    "hitRate": 0.7189189189189189,
@@ -10829,7 +10845,7 @@
   },
   "CFB/rushYds/over/FanDuel/550-599": {
    "abovePrice": -0.11138183083884423,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "178cf12350c15bad2d1b00b0e7c015121c432bf30b1c2affb6f103673ca39c51",
    "graded": 283,
    "hitRate": 0.7377622377622378,
@@ -10843,7 +10859,7 @@
   },
   "CFB/rushYds/over/FanDuel/600-649": {
    "abovePrice": -0.043583535108958626,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5dda5782c81c8b006ca5ca240d974370b7c1001796d3330499195028fa5344a5",
    "graded": 174,
    "hitRate": 0.8135593220338984,
@@ -10857,7 +10873,7 @@
   },
   "CFB/rushYds/over/FanDuel/650-699": {
    "abovePrice": -0.05510353100714549,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e50014a230383e7085862e45189f03ad00e1bbc8ee103ba9792299357c569f59",
    "graded": 329,
    "hitRate": 0.8132530120481928,
@@ -10871,7 +10887,7 @@
   },
   "CFB/rushYds/over/FanDuel/700-749": {
    "abovePrice": -0.08207070707070707,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8987f27faff5a5c634f8d15fcf1764956b1079b4fbe2b21edfaea292c5a9ae33",
    "graded": 194,
    "hitRate": 0.7929292929292929,
@@ -10885,7 +10901,7 @@
   },
   "CFB/rushYds/over/FanDuel/750-799": {
    "abovePrice": -0.1024486349563749,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2a12a23ecc20b713d6c9b1baa2ea3a19b62d8231cb4a12aa88352d6493baa8c8",
    "graded": 206,
    "hitRate": 0.7799043062200957,
@@ -10899,7 +10915,7 @@
   },
   "CFB/rushYds/over/FanDuel/800-849": {
    "abovePrice": -0.06718346253229968,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "973d80a955fe22054d22aa0183fd5f73e1789a4ee8378865e981a4ca53f75b09",
    "graded": 127,
    "hitRate": 0.8217054263565892,
@@ -10913,7 +10929,7 @@
   },
   "CFB/rushYds/over/FanDuel/850-899": {
    "abovePrice": -0.03989813242784379,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "305b0456da924b5a64a533eb5c2b1a8d3dd786932cd68591b541d30e8617f8a0",
    "graded": 122,
    "hitRate": 0.8548387096774194,
@@ -10927,7 +10943,7 @@
   },
   "CFB/rushYds/over/FanDuel/900-949": {
    "abovePrice": -0.053110047846889996,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1a2a53e4a3e1ae17234960738e93f7340dd253f93879f382c73b1a3504a8db25",
    "graded": 203,
    "hitRate": 0.84688995215311,
@@ -10941,7 +10957,7 @@
   },
   "CFB/spread/away/DraftKings/150-199": {
    "abovePrice": -0.03585967990901073,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "12f84bde3973c60e685ac0bba80b5c5262ebae8bb5a50fef264aa1e518ff2454",
    "graded": 191,
    "hitRate": 0.6178010471204188,
@@ -10955,7 +10971,7 @@
   },
   "CFB/spread/away/DraftKings/200-249": {
    "abovePrice": -0.016045554647468263,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "da6bea7602c8a38d178790bd32dbee99941218639f85affc3eec919865325472",
    "graded": 213,
    "hitRate": 0.6666666666666666,
@@ -10969,7 +10985,7 @@
   },
   "CFB/spread/away/DraftKings/250-299": {
    "abovePrice": -0.031896878949396634,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "af525a176de37fc9afb6e8011cfac7485c2844430467014422b9e5f04940b158",
    "graded": 213,
    "hitRate": 0.6948356807511737,
@@ -10983,7 +10999,7 @@
   },
   "CFB/spread/away/DraftKings/300-349": {
    "abovePrice": -0.030678367837204124,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e7c3298077a89286de59004a46d0b7d60adfdab27ce872b6d7aee5301f007a68",
    "graded": 212,
    "hitRate": 0.7311320754716981,
@@ -10997,7 +11013,7 @@
   },
   "CFB/spread/away/DraftKings/350-399": {
    "abovePrice": -0.03965656729946809,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "fedd19351ca71ce94b1292ff250b90f8fefa0e41011478a51f087f1b3f1ef03a",
    "graded": 198,
    "hitRate": 0.7474747474747475,
@@ -11011,7 +11027,7 @@
   },
   "CFB/spread/away/DraftKings/400-449": {
    "abovePrice": -0.03987031346857195,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4d6e77f94d6e6352655dc46be12bbef256ba117340dff075bc0ad081473d41ab",
    "graded": 190,
    "hitRate": 0.7684210526315789,
@@ -11025,7 +11041,7 @@
   },
   "CFB/spread/away/DraftKings/450-499": {
    "abovePrice": -0.0029737609292695977,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4a05b5cfa2c29ff728eddd80da0d5fb743158382b7daede4500bd73a7fe1be7a",
    "graded": 180,
    "hitRate": 0.8222222222222222,
@@ -11039,7 +11055,7 @@
   },
   "CFB/spread/away/DraftKings/500-549": {
    "abovePrice": -0.06328055070523753,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6d68e9423ef431190cb788611e96eb97682544b3acfbb7b5abd4a7238bdee10b",
    "graded": 170,
    "hitRate": 0.7764705882352941,
@@ -11053,7 +11069,7 @@
   },
   "CFB/spread/away/DraftKings/550-599": {
    "abovePrice": -0.016138927390613067,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "00c864fa96ef47cda79777a0115a54594bfa5d74ccb5ca06d91c40648f392942",
    "graded": 176,
    "hitRate": 0.8352272727272727,
@@ -11067,7 +11083,7 @@
   },
   "CFB/spread/away/DraftKings/600-649": {
    "abovePrice": -0.0336947926964577,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7d0b8e534dae1ea16cedf554c10f7bd23aa5b2703535e207dc6d5e332c94adb5",
    "graded": 151,
    "hitRate": 0.8278145695364238,
@@ -11081,7 +11097,7 @@
   },
   "CFB/spread/away/DraftKings/650-699": {
    "abovePrice": -0.01035288977230131,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "de90b5e197b7ce344943318a6cd6c66d18e22163a82a40dc26403ab89d42ad41",
    "graded": 164,
    "hitRate": 0.8597560975609756,
@@ -11095,7 +11111,7 @@
   },
   "CFB/spread/away/DraftKings/700-749": {
    "abovePrice": -0.010055736147008387,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "862f0c630455f53de7f9f0bd565f6893f3452d7cf59a51087b6ca530e99a8ad2",
    "graded": 144,
    "hitRate": 0.8680555555555556,
@@ -11109,7 +11125,7 @@
   },
   "CFB/spread/away/DraftKings/750-799": {
    "abovePrice": -0.027074848875500046,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "dbeb51920d8bced7d834a3f35e41a028f5bf0c21fda2c701628a04989646b21c",
    "graded": 134,
    "hitRate": 0.8582089552238806,
@@ -11123,7 +11139,7 @@
   },
   "CFB/spread/away/DraftKings/800-849": {
    "abovePrice": -0.039634865013596365,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b229baf9371633e3b3ab804d8b773634f298d1ac3708fd05265c9411587dee76",
    "graded": 135,
    "hitRate": 0.8518518518518519,
@@ -11137,7 +11153,7 @@
   },
   "CFB/spread/away/DraftKings/850-899": {
    "abovePrice": -0.03978577499733116,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "83fd0dff4489e0426d2bd969500763926406785ed53a3d927693144726b15be4",
    "graded": 126,
    "hitRate": 0.8571428571428571,
@@ -11151,7 +11167,7 @@
   },
   "CFB/spread/away/DraftKings/900-949": {
    "abovePrice": 0.03939393939393954,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8ecbffd1e7facf1802209e83f9ce9c3ad72c5d9c20959e17ca47605674a1d3f5",
    "graded": 33,
    "hitRate": 0.9393939393939394,
@@ -11165,7 +11181,7 @@
   },
   "CFB/spread/away/FanDuel/150-199": {
    "abovePrice": -0.010105251533010673,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "374eed0574370cc99cb721e204c05dcdb1342a55e15b39cfff32280a19c9feef",
    "graded": 198,
    "hitRate": 0.6414141414141414,
@@ -11179,7 +11195,7 @@
   },
   "CFB/spread/away/FanDuel/200-249": {
    "abovePrice": -0.01084945974275242,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "cfe64d68b08568311ce3501a16b76b23f7b57c47420f2c7f64d9adb76dc4d16a",
    "graded": 218,
    "hitRate": 0.6697247706422018,
@@ -11193,7 +11209,7 @@
   },
   "CFB/spread/away/FanDuel/250-299": {
    "abovePrice": -0.018428241567966075,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "adde0f3ec16eab564985ad1a9d96963a7e24a3619dae81af530e04bca63a696f",
    "graded": 219,
    "hitRate": 0.7077625570776256,
@@ -11207,7 +11223,7 @@
   },
   "CFB/spread/away/FanDuel/300-349": {
    "abovePrice": -0.02212221036668005,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "32239c5bd0f787c51f6a3a7becc44c5bbd2ab4d71c60c2af24d8eb837f7d98e3",
    "graded": 208,
    "hitRate": 0.7403846153846154,
@@ -11221,7 +11237,7 @@
   },
   "CFB/spread/away/FanDuel/350-399": {
    "abovePrice": -0.030083266732533365,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "aa740faff1565285fb56a227a7de3e5c33d11c5cfab5426e367cf20ca32c1476",
    "graded": 200,
    "hitRate": 0.755,
@@ -11235,7 +11251,7 @@
   },
   "CFB/spread/away/FanDuel/400-449": {
    "abovePrice": -0.03365686176636973,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "325129a297e4dfebc6ac5b287ce5ef2b40779031e5e8112bb865175c8bc3ac5c",
    "graded": 210,
    "hitRate": 0.7714285714285715,
@@ -11249,7 +11265,7 @@
   },
   "CFB/spread/away/FanDuel/450-499": {
    "abovePrice": -0.020845296019825432,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "47308cdc80d6a1acf1abcb967636ed74a31c0346c9ddfae7412bc064de01c524",
    "graded": 163,
    "hitRate": 0.803680981595092,
@@ -11263,7 +11279,7 @@
   },
   "CFB/spread/away/FanDuel/500-549": {
    "abovePrice": -0.02783676194492135,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "daaf645a2b947c813911032d1d30b90d3dfc5c949a12c697a6ca724079f14adb",
    "graded": 204,
    "hitRate": 0.8088235294117647,
@@ -11277,7 +11293,7 @@
   },
   "CFB/spread/away/FanDuel/550-599": {
    "abovePrice": -0.056913410950678034,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0a3ed7390cabde39d90f5ee1ae84e36dc2f5e9835ce1abdd2a8cad5da2000002",
    "graded": 147,
    "hitRate": 0.7959183673469388,
@@ -11291,7 +11307,7 @@
   },
   "CFB/spread/away/FanDuel/600-649": {
    "abovePrice": 0.006944444444444531,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b9f003ea7f6d65c61bf2cacf1f40b6bd00560433a1b8a8e3dc0e64b6df7fd030",
    "graded": 144,
    "hitRate": 0.8680555555555556,
@@ -11305,7 +11321,7 @@
   },
   "CFB/spread/away/FanDuel/650-699": {
    "abovePrice": -0.02874149659863945,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0e5292477724ed3a1242c8df80434c813f6973db481d3946cbcc913a8b2d5c77",
    "graded": 168,
    "hitRate": 0.8392857142857143,
@@ -11319,7 +11335,7 @@
   },
   "CFB/spread/away/FanDuel/700-749": {
    "abovePrice": -0.026733864277418418,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "3d4456a1d89cb2baf31e67b9e3081cfe90ea7a7f4b895ef88167a3c6932a5659",
    "graded": 147,
    "hitRate": 0.8503401360544217,
@@ -11333,7 +11349,7 @@
   },
   "CFB/spread/away/FanDuel/750-799": {
    "abovePrice": 0.001052993271927205,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "dd01654535d79e885aed5b4eea647a8c3fc02c66e723f44711c2ee7add8dd272",
    "graded": 122,
    "hitRate": 0.8852459016393442,
@@ -11347,7 +11363,7 @@
   },
   "CFB/spread/away/FanDuel/800-849": {
    "abovePrice": -0.02154195011337856,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "caf8a21be474ce658aec8f846f4dda72d6cc78b6c814505c2e9076e02fd2ec0a",
    "graded": 98,
    "hitRate": 0.8673469387755102,
@@ -11361,7 +11377,7 @@
   },
   "CFB/spread/away/FanDuel/850-899": {
    "abovePrice": -0.03759398496240607,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "23eaa0d6499511387a6e28b09b671b68e4de26bda9390d11af5b35f763a9e10c",
    "graded": 119,
    "hitRate": 0.8571428571428571,
@@ -11375,7 +11391,7 @@
   },
   "CFB/spread/away/FanDuel/900-949": {
    "abovePrice": -0.053846153846153766,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5ef6e1e2ca896bc193ad65dd11094775328563db2753b63b503729dc9b6300d2",
    "graded": 130,
    "hitRate": 0.8461538461538461,
@@ -11389,7 +11405,7 @@
   },
   "CFB/spread/home/DraftKings/150-199": {
    "abovePrice": -0.0683610269997289,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "fc050858b5e467a0c760f8fb6dd2b6de168bb81b4f0b66103169e42316b701ad",
    "graded": 188,
    "hitRate": 0.5851063829787234,
@@ -11403,7 +11419,7 @@
   },
   "CFB/spread/home/DraftKings/200-249": {
    "abovePrice": -0.06520571802017328,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9a9e56254cbbd3bedc06d0a90e6dedc12cea60248d39badc6d91165c8e2d01c4",
    "graded": 214,
    "hitRate": 0.616822429906542,
@@ -11417,7 +11433,7 @@
   },
   "CFB/spread/home/DraftKings/250-299": {
    "abovePrice": -0.08145656216899466,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "3c286f9bbe2c6d54f8d11c4de819bce22bf3c67fddbeb355056acd85643c4c33",
    "graded": 206,
    "hitRate": 0.6456310679611651,
@@ -11431,7 +11447,7 @@
   },
   "CFB/spread/home/DraftKings/300-349": {
    "abovePrice": -0.054834573855769286,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bd35d2622a5931171f79edd4b9875f31ccc6a7cdebd18ed6bb9e4d90aa70e63c",
    "graded": 198,
    "hitRate": 0.7070707070707071,
@@ -11445,7 +11461,7 @@
   },
   "CFB/spread/home/DraftKings/350-399": {
    "abovePrice": -0.08622583590664445,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f0d3cc5c4b091fbb438dcf7b68a8cb0b9652171d0eba8e8674249ffa86a972ed",
    "graded": 197,
    "hitRate": 0.700507614213198,
@@ -11459,7 +11475,7 @@
   },
   "CFB/spread/home/DraftKings/400-449": {
    "abovePrice": -0.08318973568598209,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6b7f7bd0fc61a60b80dd970dc4380b229d1e5a73d5eb3a27827fc4b8b8e1716c",
    "graded": 178,
    "hitRate": 0.7247191011235955,
@@ -11473,7 +11489,7 @@
   },
   "CFB/spread/home/DraftKings/450-499": {
    "abovePrice": -0.04818372730666043,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "120fb943170772cb49a2c97c83284fa8cfb04874a7a6d63e7d1a83a52231358c",
    "graded": 175,
    "hitRate": 0.7771428571428571,
@@ -11487,7 +11503,7 @@
   },
   "CFB/spread/home/DraftKings/500-549": {
    "abovePrice": -0.04575917871688395,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a9270f8df721ffdd14f7b37f001986ba30277c525e3d43b68b5163ff4bc90bfd",
    "graded": 165,
    "hitRate": 0.793939393939394,
@@ -11501,7 +11517,7 @@
   },
   "CFB/spread/home/DraftKings/550-599": {
    "abovePrice": -0.05275271487645716,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6f34b59c8b5045c9f33a4c2a49ba39121e6778a07a51692f5055049829750855",
    "graded": 144,
    "hitRate": 0.7986111111111112,
@@ -11515,7 +11531,7 @@
   },
   "CFB/spread/home/DraftKings/600-649": {
    "abovePrice": -0.06447036118558402,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7c6401781967e473b5b3505e071f1647a1a63dc9ae126140a2286fbc903f34fb",
    "graded": 128,
    "hitRate": 0.796875,
@@ -11529,7 +11545,7 @@
   },
   "CFB/spread/home/DraftKings/650-699": {
    "abovePrice": -0.0575780802463014,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d2344b9928194aab98a56daf4291b903bb700c5f6c80411c94b777d1dd1a07cb",
    "graded": 144,
    "hitRate": 0.8125,
@@ -11543,7 +11559,7 @@
   },
   "CFB/spread/home/DraftKings/700-749": {
    "abovePrice": -0.06272027751472098,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6b78aed3197a3c60471e1b17c126f8e60fc20515f495315b21ffa0288f88548a",
    "graded": 146,
    "hitRate": 0.815068493150685,
@@ -11557,7 +11573,7 @@
   },
   "CFB/spread/home/DraftKings/750-799": {
    "abovePrice": -0.06071145791803334,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "cfa27e439cadfe8f433d6c5c8274482a669277e7e5bd94783c9d842f2aa10ae6",
    "graded": 131,
    "hitRate": 0.8244274809160306,
@@ -11571,7 +11587,7 @@
   },
   "CFB/spread/home/DraftKings/800-849": {
    "abovePrice": -0.07422414040053982,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ceac1517cc6a03c9fc5e5da74851ec1615845d216abe71e4954c6321aa9a16a1",
    "graded": 142,
    "hitRate": 0.8169014084507042,
@@ -11585,7 +11601,7 @@
   },
   "CFB/spread/home/DraftKings/850-899": {
    "abovePrice": -0.08486362760094768,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f424b397146fea92598839f55d9259bf2ac4556c3e22ff0a4764437ead21dc7b",
    "graded": 117,
    "hitRate": 0.811965811965812,
@@ -11599,7 +11615,7 @@
   },
   "CFB/spread/home/DraftKings/900-949": {
    "abovePrice": 0.03750000000000009,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0f84046dc76b46a4a8d5b9839591e8a6ceb4ced950aabb7c1726440f7c8a34f9",
    "graded": 32,
    "hitRate": 0.9375,
@@ -11613,7 +11629,7 @@
   },
   "CFB/spread/home/FanDuel/150-199": {
    "abovePrice": -0.06707636415793428,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0b48156820767076431f12a09ba8c53e0c090e2c4097431c43c347b5cca1138f",
    "graded": 190,
    "hitRate": 0.5842105263157895,
@@ -11627,7 +11643,7 @@
   },
   "CFB/spread/home/FanDuel/200-249": {
    "abovePrice": -0.0647324382718667,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b84502a364abbe0da6275917f33431c18710d2a0a4ed63af934ebd089b7f7f56",
    "graded": 219,
    "hitRate": 0.6164383561643836,
@@ -11641,7 +11657,7 @@
   },
   "CFB/spread/home/FanDuel/250-299": {
    "abovePrice": -0.0828332448074538,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "454894713aadb77836ca9f62ac9e57559f31f89f2567dff59b1a8af33c75950f",
    "graded": 222,
    "hitRate": 0.6441441441441441,
@@ -11655,7 +11671,7 @@
   },
   "CFB/spread/home/FanDuel/300-349": {
    "abovePrice": -0.0821072047907242,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "dd957bfbd46e32429a270704b5a3c7e576802552b410f73e2f5d56029f3eb0af",
    "graded": 201,
    "hitRate": 0.681592039800995,
@@ -11669,7 +11685,7 @@
   },
   "CFB/spread/home/FanDuel/350-399": {
    "abovePrice": -0.09249139624453495,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "677afa815b04522a424d283566e0212d24da7243bb765a0531309282a590b57a",
    "graded": 198,
    "hitRate": 0.6919191919191919,
@@ -11683,7 +11699,7 @@
   },
   "CFB/spread/home/FanDuel/400-449": {
    "abovePrice": -0.07811415991765658,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "cc97cfbae15b57d2b2e78acfe6f503e25b441afc12fe25d06a6ac504007ee621",
    "graded": 202,
    "hitRate": 0.7277227722772277,
@@ -11697,7 +11713,7 @@
   },
   "CFB/spread/home/FanDuel/450-499": {
    "abovePrice": -0.044726824899238626,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b6c9bfe0826b44a5e0b15c9f1d9090b755094487e35f6c742627656b1e28ccd5",
    "graded": 154,
    "hitRate": 0.7792207792207793,
@@ -11711,7 +11727,7 @@
   },
   "CFB/spread/home/FanDuel/500-549": {
    "abovePrice": -0.03477404279762242,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ea363c98b50a9cab472ad09485f1f1f0a7cab94cc1002d7e686079dc9f5135ac",
    "graded": 197,
    "hitRate": 0.8020304568527918,
@@ -11725,7 +11741,7 @@
   },
   "CFB/spread/home/FanDuel/550-599": {
    "abovePrice": -0.05289348332826593,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5335718ebbf61e26ecb7446bf448b87f6beb0af4a8181977ea58c6b0b4764947",
    "graded": 130,
    "hitRate": 0.8,
@@ -11739,7 +11755,7 @@
   },
   "CFB/spread/home/FanDuel/600-649": {
    "abovePrice": -0.08800186741363203,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ef485fe102c916efd00931479fce6cc0b5b32cad09df21778e31cf3a8ac94458",
    "graded": 119,
    "hitRate": 0.773109243697479,
@@ -11753,7 +11769,7 @@
   },
   "CFB/spread/home/FanDuel/650-699": {
    "abovePrice": -0.08000524727797464,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "583b54eec5c81732017465898507ce8f611925db3ec0052b06893a8be716a48e",
    "graded": 165,
    "hitRate": 0.7878787878787878,
@@ -11767,7 +11783,7 @@
   },
   "CFB/spread/home/FanDuel/700-749": {
    "abovePrice": -0.05932882321523947,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bcaa6bb01700da8d42c7f042cbf2cfcb84c31d1fbdfccdef883b10f36404ddfd",
    "graded": 137,
    "hitRate": 0.8175182481751825,
@@ -11781,7 +11797,7 @@
   },
   "CFB/spread/home/FanDuel/750-799": {
    "abovePrice": -0.07529928807222686,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c7034d1ee1532b48ac0f597470980202cb34599e86177dda4d8805bf661f006e",
    "graded": 136,
    "hitRate": 0.8088235294117647,
@@ -11795,7 +11811,7 @@
   },
   "CFB/spread/home/FanDuel/800-849": {
    "abovePrice": -0.04678362573099415,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e4d90e2e8e68a375e169e3e6d14a5662dfc9ada2f69bc5800198dc22aaef8105",
    "graded": 95,
    "hitRate": 0.8421052631578947,
@@ -11809,7 +11825,7 @@
   },
   "CFB/spread/home/FanDuel/850-899": {
    "abovePrice": -0.030330062444246186,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d332f556fa62512796a851b3a9631c1c05418cabd7de0038105bcb772f78312d",
    "graded": 118,
    "hitRate": 0.864406779661017,
@@ -11823,7 +11839,7 @@
   },
   "CFB/spread/home/FanDuel/900-949": {
    "abovePrice": -0.06379310344827582,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "271eaf832f01a5383c298e11099881ad5d5cee2bca28d33c517b555ca49b1181",
    "graded": 116,
    "hitRate": 0.8362068965517241,
@@ -11837,7 +11853,7 @@
   },
   "NFL/passYds/over/DraftKings/150-199": {
    "abovePrice": -0.040932093442944906,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b8b23f91552e6d61eeaa59382bdc32126e81ef01441e34a1697ec7eb57773b8c",
    "graded": 104,
    "hitRate": 0.6140350877192983,
@@ -11851,7 +11867,7 @@
   },
   "NFL/passYds/over/DraftKings/200-249": {
    "abovePrice": -0.1221256614890115,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "173047ccb30aaae1de717ba60b5a5343129f2ce2abf7ce96d78ffc355fa35005",
    "graded": 148,
    "hitRate": 0.5672514619883041,
@@ -11865,7 +11881,7 @@
   },
   "NFL/passYds/over/DraftKings/250-299": {
    "abovePrice": -0.10772123641779685,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ca16020c21df2097c2e4934b27e17d15a58f21cbc96fb779dfd77253abedb67e",
    "graded": 129,
    "hitRate": 0.6232876712328768,
@@ -11879,7 +11895,7 @@
   },
   "NFL/passYds/over/DraftKings/300-349": {
    "abovePrice": -0.12827151206853582,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c9b93147f8aeaa9015477f04375863c7b22f09913d72e3e265f4b0153fbfb122",
    "graded": 121,
    "hitRate": 0.6370370370370371,
@@ -11893,7 +11909,7 @@
   },
   "NFL/passYds/over/DraftKings/350-399": {
    "abovePrice": -0.1862117708805413,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9900069585db3f1b39139dc7892d71b1500c32ab57475ecf12f13ea1c77b952e",
    "graded": 100,
    "hitRate": 0.6016949152542372,
@@ -11907,7 +11923,7 @@
   },
   "NFL/passYds/over/DraftKings/400-449": {
    "abovePrice": -0.14350315734111685,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "96b9e6bd1398734c39941a71d59a1271b3d33f69c0e78061c57a05777bc37985",
    "graded": 81,
    "hitRate": 0.6666666666666666,
@@ -11921,7 +11937,7 @@
   },
   "NFL/passYds/over/DraftKings/450-499": {
    "abovePrice": -0.08342964550131271,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "78bf272155e7814b112874d3b876799dedf4091b7831a480d0503d7ec9dfdae1",
    "graded": 91,
    "hitRate": 0.7425742574257426,
@@ -11935,7 +11951,7 @@
   },
   "NFL/passYds/over/DraftKings/500-549": {
    "abovePrice": -0.12557489302720437,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "3898211c90be367da6627ec2d331c4735f20ea71b0857dc2068ade4d4e44d94e",
    "graded": 76,
    "hitRate": 0.7142857142857143,
@@ -11949,7 +11965,7 @@
   },
   "NFL/passYds/over/DraftKings/550-599": {
    "abovePrice": -0.14419030104719566,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "041f84bf837eab372fbb179eba81c982e0296227b166704d0c6ea51ff588e0dc",
    "graded": 59,
    "hitRate": 0.7076923076923077,
@@ -11963,7 +11979,7 @@
   },
   "NFL/passYds/over/DraftKings/600-649": {
    "abovePrice": -0.061620491920097775,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "61065d871895b09a7d2a5a07d2864d6a747c5391c9fdbdcdc520b9937cfcb202",
    "graded": 65,
    "hitRate": 0.8,
@@ -11977,7 +11993,7 @@
   },
   "NFL/passYds/over/DraftKings/650-699": {
    "abovePrice": -0.1399481676915768,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ea1e19d847fc9688bb810b9a7c188c4677c30cf0c833d244016a1b1e6091cb98",
    "graded": 52,
    "hitRate": 0.7301587301587301,
@@ -11991,7 +12007,7 @@
   },
   "NFL/passYds/over/DraftKings/700-749": {
    "abovePrice": -0.11661557639444431,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "53f93f05a10774c1ba77f2832c62a25121325808f0845b00bd3d35d05294bcd0",
    "graded": 56,
    "hitRate": 0.7611940298507462,
@@ -12005,7 +12021,7 @@
   },
   "NFL/passYds/over/DraftKings/750-799": {
    "abovePrice": -0.14478581502333143,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "45022945b608da3e3d22ddba793b4df660956df903d8306f847076a8b067b86d",
    "graded": 46,
    "hitRate": 0.74,
@@ -12019,7 +12035,7 @@
   },
   "NFL/passYds/over/DraftKings/800-849": {
    "abovePrice": -0.23986701524032195,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2c470d4a842e41fe6b18fef5d4f26f5c3c9278d04dd49845f3ebf373877bca15",
    "graded": 35,
    "hitRate": 0.6511627906976745,
@@ -12033,7 +12049,7 @@
   },
   "NFL/passYds/over/DraftKings/850-899": {
    "abovePrice": -0.12093441775800673,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "06cf26592db141e6b011149752efb35a105a6dd1efd0bb8f3236dbd4460e71a0",
    "graded": 51,
    "hitRate": 0.7758620689655172,
@@ -12047,7 +12063,7 @@
   },
   "NFL/passYds/over/DraftKings/900-949": {
    "abovePrice": 0.023076923076923217,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2966316f8a661770841c3b9fecb5f7c6aaffeb3a67ed7c560268b623486cc579",
    "graded": 13,
    "hitRate": 0.9230769230769231,
@@ -12061,7 +12077,7 @@
   },
   "NFL/passYds/over/FanDuel/150-199": {
    "abovePrice": 0.021260421777240412,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8f55b071a36890e2c8c4206fc8786196bb620d58674c03ab952b3311c45595f5",
    "graded": 55,
    "hitRate": 0.6727272727272727,
@@ -12075,7 +12091,7 @@
   },
   "NFL/passYds/over/FanDuel/200-249": {
    "abovePrice": 0.007930017595580319,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "01efa8e334df194029eaa7d4d59e7b046f4a0ced00d59b8f5f9ef000ba14fbad",
    "graded": 116,
    "hitRate": 0.6982758620689655,
@@ -12089,7 +12105,7 @@
   },
   "NFL/passYds/over/FanDuel/250-299": {
    "abovePrice": 0.014660294223564074,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c7898532a4757f0c6cecc5415744e1f04ec0be08495c01f27a061e3d1c1664c7",
    "graded": 94,
    "hitRate": 0.7446808510638298,
@@ -12103,7 +12119,7 @@
   },
   "NFL/passYds/over/FanDuel/300-349": {
    "abovePrice": -0.09823522451066169,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ee7776ad54692a8e57a4299cb696b2a6d0b86b135ce2565f593e2033cd881d84",
    "graded": 89,
    "hitRate": 0.6629213483146067,
@@ -12117,7 +12133,7 @@
   },
   "NFL/passYds/over/FanDuel/350-399": {
    "abovePrice": -0.028272740625383763,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d77988670b6e9cf7faf36ce63a3161ecadfec7a6942f0b480a44988c19847704",
    "graded": 49,
    "hitRate": 0.7551020408163265,
@@ -12131,7 +12147,7 @@
   },
   "NFL/passYds/over/FanDuel/400-449": {
    "abovePrice": 0.013834622167955501,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "693162b702bc5d3a3eba8a8fd1fc1aef3e46c601a040adb33875939986b2a6cf",
    "graded": 84,
    "hitRate": 0.8214285714285714,
@@ -12145,7 +12161,7 @@
   },
   "NFL/passYds/over/FanDuel/450-499": {
    "abovePrice": -0.04918777737074209,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e9abe792c8cd3041b25e497caac2e2c926a8a19a18a5195e8510e0117bf569a3",
    "graded": 58,
    "hitRate": 0.7758620689655172,
@@ -12159,7 +12175,7 @@
   },
   "NFL/passYds/over/FanDuel/500-549": {
    "abovePrice": 0.005376344086021501,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "07fc2f20077ae3d7cb3ac07967f6d3f607892fde5467f34ee245183db094a114",
    "graded": 31,
    "hitRate": 0.8387096774193549,
@@ -12173,7 +12189,7 @@
   },
   "NFL/passYds/over/FanDuel/550-599": {
    "abovePrice": 0.02311805841217618,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ce447bedc0c51e7b3ae7e027ebc3a29563824e1c38e7feb731e87d3341471ad9",
    "graded": 55,
    "hitRate": 0.8727272727272727,
@@ -12187,7 +12203,7 @@
   },
   "NFL/passYds/over/FanDuel/600-649": {
    "abovePrice": 0.0,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9af009cff19d321468e7c7c353cfdc8391cb1842fa6c8ce3c50c350d9ed72b67",
    "graded": 35,
    "hitRate": 0.8571428571428571,
@@ -12201,7 +12217,7 @@
   },
   "NFL/passYds/over/FanDuel/650-699": {
    "abovePrice": -0.02819499341238474,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "34474b5924e69a254e0cb02effb456943375f35766ea2b8bdfe087397e470034",
    "graded": 69,
    "hitRate": 0.8405797101449275,
@@ -12215,7 +12231,7 @@
   },
   "NFL/passYds/over/FanDuel/700-749": {
    "abovePrice": -0.08430232558139539,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "45006dc94e8d59a68af09f486e55bd02adf2577e0442a1c2369a6ada56cfdc6e",
    "graded": 43,
    "hitRate": 0.7906976744186046,
@@ -12229,7 +12245,7 @@
   },
   "NFL/passYds/over/FanDuel/750-799": {
    "abovePrice": -0.018716577540106916,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "567f239052a3abe6ac4223556a21fa2846c52096d049da9b9bdeff1958ed0ba6",
    "graded": 44,
    "hitRate": 0.8636363636363636,
@@ -12243,7 +12259,7 @@
   },
   "NFL/passYds/over/FanDuel/800-849": {
    "abovePrice": -0.05555555555555547,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ac3a6f21828e5a721cc8a09a0e1110ccdd3780090fbf29ec90db9ad5cd84adfd",
    "graded": 24,
    "hitRate": 0.8333333333333334,
@@ -12257,7 +12273,7 @@
   },
   "NFL/passYds/over/FanDuel/850-899": {
    "abovePrice": -0.02376910016977929,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "244c076099bc666193153b9d85c34980bf03e3689bef898f38b62ef5777ee695",
    "graded": 31,
    "hitRate": 0.8709677419354839,
@@ -12271,7 +12287,7 @@
   },
   "NFL/passYds/over/FanDuel/900-949": {
    "abovePrice": -0.019999999999999907,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9eeef59cb2a9e563284daa86de8515cb9331cb3c144898c902b2cbdd19884990",
    "graded": 50,
    "hitRate": 0.88,
@@ -12285,7 +12301,7 @@
   },
   "NFL/rec/over/DraftKings/150-199": {
    "abovePrice": -0.030191943286159262,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a5f602c4c76165958c5270a9988f681ad186f575945f45e49a94aa0a9e8a9628",
    "graded": 134,
    "hitRate": 0.6258992805755396,
@@ -12299,7 +12315,7 @@
   },
   "NFL/rec/over/DraftKings/200-249": {
    "abovePrice": -0.10206090851291805,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7b0c58b25aeea9e958369af03923fc53575855b40976851814e46ff36f9e59f3",
    "graded": 264,
    "hitRate": 0.5869565217391305,
@@ -12313,7 +12329,7 @@
   },
   "NFL/rec/over/DraftKings/250-299": {
    "abovePrice": -0.14506386516529146,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "cc67653d2ccadf840ee84307afda3812f460902e3fbf77257b13f24f5db36c65",
    "graded": 198,
    "hitRate": 0.5865384615384616,
@@ -12327,7 +12343,7 @@
   },
   "NFL/rec/over/DraftKings/300-349": {
    "abovePrice": -0.1520784832698917,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "65f101ec7804cafc7366085d2bafb5753ce5ba94bb8fb6a86bdb71a332f97759",
    "graded": 156,
    "hitRate": 0.6111111111111112,
@@ -12341,7 +12357,7 @@
   },
   "NFL/rec/over/DraftKings/350-399": {
    "abovePrice": -0.14199423000876343,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "266bcc9b83ba2c7728bea5cc4715ba0579e743a2745d8124a05912cacec1aafb",
    "graded": 123,
    "hitRate": 0.6456692913385826,
@@ -12355,7 +12371,7 @@
   },
   "NFL/rec/over/DraftKings/400-449": {
    "abovePrice": -0.07492601449211189,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c487fbfd2b1c0c5578030b559440a80d73c62aad01def6537e0897f5f7d98fd9",
    "graded": 113,
    "hitRate": 0.7350427350427351,
@@ -12369,7 +12385,7 @@
   },
   "NFL/rec/over/DraftKings/450-499": {
    "abovePrice": -0.11118994578970565,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8308f042742bb448d857b37b4e46daeeddb70292dab7bcc64bcfbfeeab30107c",
    "graded": 100,
    "hitRate": 0.7142857142857143,
@@ -12383,7 +12399,7 @@
   },
   "NFL/rec/over/DraftKings/500-549": {
    "abovePrice": -0.07031533818568203,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0a537b2b0352bb75d2722840f70d68eef950aa896214c868e6deca5bd3196ead",
    "graded": 66,
    "hitRate": 0.7681159420289855,
@@ -12397,7 +12413,7 @@
   },
   "NFL/rec/over/DraftKings/550-599": {
    "abovePrice": -0.0065598072479305936,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "54a70d5312785009a8185d1a0249c4a41bc84ffb465c45d35d404be013818aa5",
    "graded": 67,
    "hitRate": 0.8450704225352113,
@@ -12411,7 +12427,7 @@
   },
   "NFL/rec/over/DraftKings/600-649": {
    "abovePrice": -0.04218841681459862,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c2886260cdece2119eb24557d67ee351642b5bef4e3f0fb2e08505474d854b59",
    "graded": 71,
    "hitRate": 0.8194444444444444,
@@ -12425,7 +12441,7 @@
   },
   "NFL/rec/over/DraftKings/650-699": {
    "abovePrice": -0.09230667616928623,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "75f66cd7640cb9f1a9c27d22b9f50698c8035d2a167e3381577d087797e01226",
    "graded": 80,
    "hitRate": 0.7777777777777778,
@@ -12439,7 +12455,7 @@
   },
   "NFL/rec/over/DraftKings/700-749": {
    "abovePrice": -0.06251100374178054,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ddf30d097e71b5eee8698b9c40950420d50073a5617d2638339f44ba5f5d9c24",
    "graded": 62,
    "hitRate": 0.8153846153846154,
@@ -12453,7 +12469,7 @@
   },
   "NFL/rec/over/DraftKings/750-799": {
    "abovePrice": -0.01961908488858688,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "03f1bafe8115ff33927b0c65d6aba5b4a42f62568937498a6dc6e72f4f2133f0",
    "graded": 52,
    "hitRate": 0.8653846153846154,
@@ -12467,7 +12483,7 @@
   },
   "NFL/rec/over/DraftKings/800-849": {
    "abovePrice": -0.13644850182613333,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bbb4c92e5b8c13c497c1d12a3135040d92043b258b723f26d436c213f53ecd49",
    "graded": 52,
    "hitRate": 0.7547169811320755,
@@ -12481,7 +12497,7 @@
   },
   "NFL/rec/over/DraftKings/850-899": {
    "abovePrice": -0.1613199837038527,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "18949b998407d551ee5bee86088e644124ecee585bf30af77a9d837a2695d527",
    "graded": 52,
    "hitRate": 0.7358490566037735,
@@ -12495,7 +12511,7 @@
   },
   "NFL/rec/over/DraftKings/900-949": {
    "abovePrice": -0.20769230769230762,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b01c6907b871d10d65818e099d36f31922a2630341b843f162f2960e201ea36e",
    "graded": 13,
    "hitRate": 0.6923076923076923,
@@ -12509,7 +12525,7 @@
   },
   "NFL/rec/over/FanDuel/150-199": {
    "abovePrice": -0.07609354634240928,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0cbcdf5af9a36ac57a46b3a35fbd5d26dabafaab129ad4a468351990afc4a692",
    "graded": 113,
    "hitRate": 0.5775862068965517,
@@ -12523,7 +12539,7 @@
   },
   "NFL/rec/over/FanDuel/200-249": {
    "abovePrice": -0.057153352533773294,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c9dd5a5104c199b29930d1cc79d2b7618f1899ad50ba689508180b63a5854c4a",
    "graded": 348,
    "hitRate": 0.6325966850828729,
@@ -12537,7 +12553,7 @@
   },
   "NFL/rec/over/FanDuel/250-299": {
    "abovePrice": -0.09169255994913894,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5bd42fbcdc442e9f0ad568b023e6b9ede31b00a4c6088231bdb1f19ec0e88617",
    "graded": 328,
    "hitRate": 0.6363636363636364,
@@ -12551,7 +12567,7 @@
   },
   "NFL/rec/over/FanDuel/300-349": {
    "abovePrice": -0.11418250916011685,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8cc155d7a4cdb823963365c4b69dad108b5d50cc307194a0de2397ac31910244",
    "graded": 312,
    "hitRate": 0.6477611940298508,
@@ -12565,7 +12581,7 @@
   },
   "NFL/rec/over/FanDuel/350-399": {
    "abovePrice": -0.14731150737119747,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bd9de87eb00d499d6a5532b339c0ed491f394ca4050b8e021b8881e36b9361a5",
    "graded": 198,
    "hitRate": 0.6376146788990825,
@@ -12579,7 +12595,7 @@
   },
   "NFL/rec/over/FanDuel/400-449": {
    "abovePrice": -0.09075388189779332,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9178bdca21c444969beb3395a46a3770e831e0fbe7a06fb13131a6f63c2ceeab",
    "graded": 255,
    "hitRate": 0.7158671586715867,
@@ -12593,7 +12609,7 @@
   },
   "NFL/rec/over/FanDuel/450-499": {
    "abovePrice": -0.07334867569022807,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "593ac4e311ff81d12143f9e84fe3782e214dcb8597d1083d6cdcad40f1b30565",
    "graded": 193,
    "hitRate": 0.7511961722488039,
@@ -12607,7 +12623,7 @@
   },
   "NFL/rec/over/FanDuel/500-549": {
    "abovePrice": -0.1634304207119741,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f3393da675340f7223debeb3117e531a7b5f337c01dd2b349af3b2bde727228b",
    "graded": 95,
    "hitRate": 0.6699029126213593,
@@ -12621,7 +12637,7 @@
   },
   "NFL/rec/over/FanDuel/550-599": {
    "abovePrice": -0.1258184721852541,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a3687f185c152faba8f12cb38c8550229b41b5525fac6ea91da9c227e6b79655",
    "graded": 156,
    "hitRate": 0.7235294117647059,
@@ -12635,7 +12651,7 @@
   },
   "NFL/rec/over/FanDuel/600-649": {
    "abovePrice": -0.020779220779220786,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "525d82132bf8ae33aaaa9ef084976d46f2ee0cb141db27c84d4407ac798a2b7c",
    "graded": 106,
    "hitRate": 0.8363636363636363,
@@ -12649,7 +12665,7 @@
   },
   "NFL/rec/over/FanDuel/650-699": {
    "abovePrice": -0.07709433423719136,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a5c3e225fbaca4702ef2f0a8490e09ade9b0ebcc7356657a0e0171f7cf1faa1a",
    "graded": 172,
    "hitRate": 0.7912087912087912,
@@ -12663,7 +12679,7 @@
   },
   "NFL/rec/over/FanDuel/700-749": {
    "abovePrice": -0.15760869565217395,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "759036911680a9ae12f61050a9488c47e7c2fefb982728efec43e03ab145fb7e",
    "graded": 131,
    "hitRate": 0.717391304347826,
@@ -12677,7 +12693,7 @@
   },
   "NFL/rec/over/FanDuel/750-799": {
    "abovePrice": -0.03682448589191767,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6e1a7ba747d1d12d4290a64844adf4dcbca62a21ea90116deacf8bcb4a2ad03e",
    "graded": 119,
    "hitRate": 0.8455284552845529,
@@ -12691,7 +12707,7 @@
   },
   "NFL/rec/over/FanDuel/800-849": {
    "abovePrice": -0.10966810966810958,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2e9356199aba235a6cea56c5380fd6d626a43a2f523a374feba9f515a1f3b03c",
    "graded": 71,
    "hitRate": 0.7792207792207793,
@@ -12705,7 +12721,7 @@
   },
   "NFL/rec/over/FanDuel/850-899": {
    "abovePrice": -0.11695906432748537,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6ed092d7d03c5a15d64a84325f5df16d03447e39ea9bd62d33f52317260c6169",
    "graded": 67,
    "hitRate": 0.7777777777777778,
@@ -12719,7 +12735,7 @@
   },
   "NFL/rec/over/FanDuel/900-949": {
    "abovePrice": -0.03934426229508192,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f2d895c36417be4d38e0a319ec633ed1e0ca5d64e7a8fa69050c03306d90c373",
    "graded": 118,
    "hitRate": 0.860655737704918,
@@ -12733,7 +12749,7 @@
   },
   "NFL/recYds/over/DraftKings/150-199": {
    "abovePrice": -0.09190513944941037,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "aeb4beaa6e867b11d9a9951964e17a7811bb4f763151fa87f8c3fb5a499b4d18",
    "graded": 292,
    "hitRate": 0.5625,
@@ -12747,7 +12763,7 @@
   },
   "NFL/recYds/over/DraftKings/200-249": {
    "abovePrice": -0.10005699566997239,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8d31efceed9107244e19b5e52605ed25e2bddf41c656d22d0493a72434f3a23f",
    "graded": 424,
    "hitRate": 0.5891304347826087,
@@ -12761,7 +12777,7 @@
   },
   "NFL/recYds/over/DraftKings/250-299": {
    "abovePrice": -0.07123690933240934,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a6b2ec85f02605e5f5f2daa6f98753ae5c63c85837b641a0ea0850e74f43c176",
    "graded": 332,
    "hitRate": 0.6611111111111111,
@@ -12775,7 +12791,7 @@
   },
   "NFL/recYds/over/DraftKings/300-349": {
    "abovePrice": -0.1107743332035297,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "27d55027abd4f1fac1ba2e3743df55c7981e5267a251e5350bb59ef5012c9221",
    "graded": 307,
    "hitRate": 0.6526946107784432,
@@ -12789,7 +12805,7 @@
   },
   "NFL/recYds/over/DraftKings/350-399": {
    "abovePrice": -0.11795924100488342,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c192a86743bf7f69a2bf593341e8f56f955fc83db151d5a36a80007001682084",
    "graded": 229,
    "hitRate": 0.6706827309236948,
@@ -12803,7 +12819,7 @@
   },
   "NFL/recYds/over/DraftKings/400-449": {
    "abovePrice": -0.0931722261549025,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f4fb20b105b4198de2420d63aecb715ec6d739c571193537d250f54c14f0a4b9",
    "graded": 198,
    "hitRate": 0.7162790697674418,
@@ -12817,7 +12833,7 @@
   },
   "NFL/recYds/over/DraftKings/450-499": {
    "abovePrice": -0.09104287378131981,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6bebaec4e2119fff59434579416ca0acd2030cdbf0968408411be39f01cab1ad",
    "graded": 187,
    "hitRate": 0.7339901477832512,
@@ -12831,7 +12847,7 @@
   },
   "NFL/recYds/over/DraftKings/500-549": {
    "abovePrice": -0.0907097449651385,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9750b0fa85a2e5b8e0bed7ee10083cab9fb7ab7b1c25f42e84c3eb9c8265623c",
    "graded": 158,
    "hitRate": 0.7485380116959064,
@@ -12845,7 +12861,7 @@
   },
   "NFL/recYds/over/DraftKings/550-599": {
    "abovePrice": -0.10696776974602029,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7c2318e215d6cf77065f390418b5fb73e30c10989c3883432a3844769ae2d449",
    "graded": 123,
    "hitRate": 0.7443609022556391,
@@ -12859,7 +12875,7 @@
   },
   "NFL/recYds/over/DraftKings/600-649": {
    "abovePrice": -0.05689111377035072,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "23497e45ace6098755eaf6247c7d44299bc9a55e3e9a47feb740e41fe19a1333",
    "graded": 111,
    "hitRate": 0.8050847457627118,
@@ -12873,7 +12889,7 @@
   },
   "NFL/recYds/over/DraftKings/650-699": {
    "abovePrice": -0.016332622603826397,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5feae44a0a3b6b673e3fd2b9c7c6276d851dc317fc900eaa35440ce45fcfe57f",
    "graded": 127,
    "hitRate": 0.8538461538461538,
@@ -12887,7 +12903,7 @@
   },
   "NFL/recYds/over/DraftKings/700-749": {
    "abovePrice": -0.003915468183107951,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a1cac41e6a072a3a1051175b490e8405fd376058ab0d2aa6e7478d3a58e43c97",
    "graded": 107,
    "hitRate": 0.8738738738738738,
@@ -12901,7 +12917,7 @@
   },
   "NFL/recYds/over/DraftKings/750-799": {
    "abovePrice": -0.0461138863628997,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bdc487dcf8560a8a6735aef7a29285b997589953482fc77ff48f3e8f476caeb6",
    "graded": 87,
    "hitRate": 0.8387096774193549,
@@ -12915,7 +12931,7 @@
   },
   "NFL/recYds/over/DraftKings/800-849": {
    "abovePrice": -0.05248857102220594,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d7906214ed1ad72b2817ccfd72a6aedb4316b39c4456520092492985ba3eb298",
    "graded": 86,
    "hitRate": 0.8387096774193549,
@@ -12929,7 +12945,7 @@
   },
   "NFL/recYds/over/DraftKings/850-899": {
    "abovePrice": -0.06774849861117993,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c885d951327897281cbf7840214e9018227a91f472b2f049add6c37a58de1424",
    "graded": 78,
    "hitRate": 0.8292682926829268,
@@ -12943,7 +12959,7 @@
   },
   "NFL/recYds/over/DraftKings/900-949": {
    "abovePrice": -0.053846153846153766,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "581b89c1adf5c20ba75735dd4fe8eedfd16027e1d018bf00468fe285411ccc10",
    "graded": 26,
    "hitRate": 0.8461538461538461,
@@ -12957,7 +12973,7 @@
   },
   "NFL/recYds/over/FanDuel/150-199": {
    "abovePrice": -0.06388121915445621,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e3273479b368b3681dc5dbbb3e26ae6949dae7195d7b179902de6e5b5d986ed9",
    "graded": 470,
    "hitRate": 0.5891783567134269,
@@ -12971,7 +12987,7 @@
   },
   "NFL/recYds/over/FanDuel/200-249": {
    "abovePrice": -0.09740615492549731,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "10dd089f7082dc4f473408df7a285b2ca5e791672ce8058f5c2ba9279153374f",
    "graded": 754,
    "hitRate": 0.5915841584158416,
@@ -12985,7 +13001,7 @@
   },
   "NFL/recYds/over/FanDuel/250-299": {
    "abovePrice": -0.08732868412400585,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0cda36ec6b8288c79894664c71d5e4ac31578619cd74c286c9fb11b8b80e4d77",
    "graded": 629,
    "hitRate": 0.6414814814814814,
@@ -12999,7 +13015,7 @@
   },
   "NFL/recYds/over/FanDuel/300-349": {
    "abovePrice": -0.07685628790660282,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5fad72093e5a4e0b39837d2388ed83f23d150efabaf1937b9aa04de75030142f",
    "graded": 535,
    "hitRate": 0.6838365896980462,
@@ -13013,7 +13029,7 @@
   },
   "NFL/recYds/over/FanDuel/350-399": {
    "abovePrice": -0.10386097748071532,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c2f4f9329abcf48b43e1d09796d48ed5d66f56bdd526c6c66acdee3bda83ae84",
    "graded": 334,
    "hitRate": 0.6809116809116809,
@@ -13027,7 +13043,7 @@
   },
   "NFL/recYds/over/FanDuel/400-449": {
    "abovePrice": -0.05336466631583403,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e3f72bd694b0f004a484bc3bc5b1e3d5b56cf649aafaf2cc8addeab39808b671",
    "graded": 453,
    "hitRate": 0.7537154989384289,
@@ -13041,7 +13057,7 @@
   },
   "NFL/recYds/over/FanDuel/450-499": {
    "abovePrice": -0.09803871828234312,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "85798525b50de09ee3154f8723c1694ee7028c675d8e0127eb58cdc977bf19dd",
    "graded": 395,
    "hitRate": 0.7266009852216748,
@@ -13055,7 +13071,7 @@
   },
   "NFL/recYds/over/FanDuel/500-549": {
    "abovePrice": -0.07377049180327877,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8b21b4b12cfce536198881ab7b01746cb49c8bae1373bd2a20c9a69e0af87b99",
    "graded": 175,
    "hitRate": 0.7595628415300546,
@@ -13069,7 +13085,7 @@
   },
   "NFL/recYds/over/FanDuel/550-599": {
    "abovePrice": -0.07442630898513236,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "89596b3745cad31513993399bc23d009d4c35553a77924cd3cdc3a3b7c0fd25c",
    "graded": 267,
    "hitRate": 0.775,
@@ -13083,7 +13099,7 @@
   },
   "NFL/recYds/over/FanDuel/600-649": {
    "abovePrice": -0.036918138041733495,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "44dfbd88244736a080cb4c445f9e5f3a82658ec968c386ea16aa41bca0072473",
    "graded": 172,
    "hitRate": 0.8202247191011236,
@@ -13097,7 +13113,7 @@
   },
   "NFL/recYds/over/FanDuel/650-699": {
    "abovePrice": -0.08350321657094573,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2d88cb84bc735f4a1d2dd387f20ff0dc0fae412f1db2c2606177dc98fe76028f",
    "graded": 238,
    "hitRate": 0.7848605577689243,
@@ -13111,7 +13127,7 @@
   },
   "NFL/recYds/over/FanDuel/700-749": {
    "abovePrice": -0.08743523316062174,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c6b4c7e49224814cd7cf07bdc68ef536ee88cab0e05314b47f6b9905f78ab9b3",
    "graded": 188,
    "hitRate": 0.7875647668393783,
@@ -13125,7 +13141,7 @@
   },
   "NFL/recYds/over/FanDuel/750-799": {
    "abovePrice": -0.10110294117647056,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1337e1ea09e145a1da03ba808110a6e3c95de7af4e37e97312795faa8836f068",
    "graded": 188,
    "hitRate": 0.78125,
@@ -13139,7 +13155,7 @@
   },
   "NFL/recYds/over/FanDuel/800-849": {
    "abovePrice": -0.0713213213213213,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f00fed73c9c03363bacfc812cb9fa802092a2e896db75522eb21f0dcb138dfb0",
    "graded": 143,
    "hitRate": 0.8175675675675675,
@@ -13153,7 +13169,7 @@
   },
   "NFL/recYds/over/FanDuel/850-899": {
    "abovePrice": -0.04179566563467496,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "65a2756efd5d6adf2f5eca70349c20f85d143e6f1881a06602f858fed645c88c",
    "graded": 134,
    "hitRate": 0.8529411764705882,
@@ -13167,7 +13183,7 @@
   },
   "NFL/recYds/over/FanDuel/900-949": {
    "abovePrice": -0.07180616740088097,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7c2bd645f13344c992d48158b149e1091f44dc43491f798f3d47af0d92e81793",
    "graded": 220,
    "hitRate": 0.8281938325991189,
@@ -13181,7 +13197,7 @@
   },
   "NFL/rushYds/over/DraftKings/150-199": {
    "abovePrice": -0.14969705000448186,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "920ef8f050cdeb94d650589085815c51cfee38d32379a9e33e1bc07e7c68355a",
    "graded": 111,
    "hitRate": 0.5042016806722689,
@@ -13195,7 +13211,7 @@
   },
   "NFL/rushYds/over/DraftKings/200-249": {
    "abovePrice": -0.0798189632430828,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "3de6aeee7ee436127e758b889fc1852b003b56f59890826734579ca44b361b17",
    "graded": 172,
    "hitRate": 0.6096256684491979,
@@ -13209,7 +13225,7 @@
   },
   "NFL/rushYds/over/DraftKings/250-299": {
    "abovePrice": -0.15544534558790157,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0a0515a5b66c1ae735f3bc896ed608051f5d9c250fce872df284a96b4219832a",
    "graded": 152,
    "hitRate": 0.5773809523809523,
@@ -13223,7 +13239,7 @@
   },
   "NFL/rushYds/over/DraftKings/300-349": {
    "abovePrice": -0.18769401261290442,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a1a6a2e775b61eb7e88629aca35d3404d4f1d45f0f0ee7724c63cb2c67dfffc4",
    "graded": 129,
    "hitRate": 0.5753424657534246,
@@ -13237,7 +13253,7 @@
   },
   "NFL/rushYds/over/DraftKings/350-399": {
    "abovePrice": -0.1760333494309817,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "085937c7e06c12bf7b7357b339dbdd12f0ed823d0e0cb3a088b676f5aa58786a",
    "graded": 97,
    "hitRate": 0.6126126126126126,
@@ -13251,7 +13267,7 @@
   },
   "NFL/rushYds/over/DraftKings/400-449": {
    "abovePrice": -0.09369609091498687,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a36224b88580059ec35a82c6c5204c810b8714fbec51726ec17f969d520430d6",
    "graded": 91,
    "hitRate": 0.7156862745098039,
@@ -13265,7 +13281,7 @@
   },
   "NFL/rushYds/over/DraftKings/450-499": {
    "abovePrice": -0.19173457835932373,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b87474bee8bdce08088d8c801283b553c97349b8741580f5f340953f84fa0604",
    "graded": 94,
    "hitRate": 0.6336633663366337,
@@ -13279,7 +13295,7 @@
   },
   "NFL/rushYds/over/DraftKings/500-549": {
    "abovePrice": -0.14979550472487602,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9ca730e81ef8dcc10592a9aa19814a7448b62a8d6a013a94061b75c6d4ccdfd4",
    "graded": 81,
    "hitRate": 0.6904761904761905,
@@ -13293,7 +13309,7 @@
   },
   "NFL/rushYds/over/DraftKings/550-599": {
    "abovePrice": -0.1893924612264034,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "eb5a044d704a061ecfde5a493f7baccb70f9943c4912ed8356ece4aca5669266",
    "graded": 74,
    "hitRate": 0.6625,
@@ -13307,7 +13323,7 @@
   },
   "NFL/rushYds/over/DraftKings/600-649": {
    "abovePrice": -0.15661909934800822,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f7a8f23ee5014615cac2421fc6e70909d77438daa5756dd673fe8f357f187735",
    "graded": 57,
    "hitRate": 0.7049180327868853,
@@ -13321,7 +13337,7 @@
   },
   "NFL/rushYds/over/DraftKings/650-699": {
    "abovePrice": -0.14403181261354248,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "996760a0b4130adb1068d91b68e609dd2468e61105b9317ff4213fc273d8d9c3",
    "graded": 47,
    "hitRate": 0.7254901960784313,
@@ -13335,7 +13351,7 @@
   },
   "NFL/rushYds/over/DraftKings/700-749": {
    "abovePrice": -0.1889244104506238,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e1f1ca8ae7ee5d6e440c454acf34a302220e6b09a14e0ef3286c5071e7f0ad3c",
    "graded": 40,
    "hitRate": 0.6888888888888889,
@@ -13349,7 +13365,7 @@
   },
   "NFL/rushYds/over/DraftKings/750-799": {
    "abovePrice": -0.15497618682075653,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5868137691e62521e080ad72518920214b08a2ee016b8aff16d0f62646757ade",
    "graded": 36,
    "hitRate": 0.7297297297297297,
@@ -13363,7 +13379,7 @@
   },
   "NFL/rushYds/over/DraftKings/800-849": {
    "abovePrice": -0.05109004172595233,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "faf19fc97456129f57433642c5258c4b7b470542e944e5e1f54024b1e3a473a7",
    "graded": 49,
    "hitRate": 0.84,
@@ -13377,7 +13393,7 @@
   },
   "NFL/rushYds/over/DraftKings/850-899": {
    "abovePrice": -0.06837335178825865,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "14253100f94ce420c1f03fe1759f81ab68ef9b1bb6dbd9c6e8190354fd449127",
    "graded": 34,
    "hitRate": 0.8285714285714286,
@@ -13391,7 +13407,7 @@
   },
   "NFL/rushYds/over/DraftKings/900-949": {
    "abovePrice": -0.053846153846153766,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "39018d2ea539344fdffa27e4e0bd2665198dabdd709a1f03323ac392a5b0ed16",
    "graded": 13,
    "hitRate": 0.8461538461538461,
@@ -13405,7 +13421,7 @@
   },
   "NFL/rushYds/over/FanDuel/150-199": {
    "abovePrice": -0.16995512044071265,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "953881d9c227908ac5ebdb141331191e6689be2ac5617c1292304db2b0d9adfa",
    "graded": 190,
    "hitRate": 0.4830917874396135,
@@ -13419,7 +13435,7 @@
   },
   "NFL/rushYds/over/FanDuel/200-249": {
    "abovePrice": -0.09741752957593552,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "6d860a259717bc3c20d900f4cd3a13e351c357a76c98869be0ae95df7b8933b5",
    "graded": 347,
    "hitRate": 0.5906593406593407,
@@ -13433,7 +13449,7 @@
   },
   "NFL/rushYds/over/FanDuel/250-299": {
    "abovePrice": -0.12513331215801682,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "06e46e52893ce5ef42ac7c4425c54c4a36a75404b28d0c0f6021fe38f96b14fb",
    "graded": 234,
    "hitRate": 0.6040816326530613,
@@ -13447,7 +13463,7 @@
   },
   "NFL/rushYds/over/FanDuel/300-349": {
    "abovePrice": -0.09990447751598674,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "83c0a4cf383eaddbd5aca945d259ff3ef209d82084df640573ae3a089b7eb4af",
    "graded": 263,
    "hitRate": 0.6618181818181819,
@@ -13461,7 +13477,7 @@
   },
   "NFL/rushYds/over/FanDuel/350-399": {
    "abovePrice": -0.14422261658286495,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d2d77cffcff99038ccf650d581166d0dc3fb13421e35a27de1fad08ecac6aeb4",
    "graded": 156,
    "hitRate": 0.6411764705882353,
@@ -13475,7 +13491,7 @@
   },
   "NFL/rushYds/over/FanDuel/400-449": {
    "abovePrice": -0.1880779103551381,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a42e2ab2ab846b7a231c2105fce70f791c507bfe90cc41848c2e8db5147bf87d",
    "graded": 190,
    "hitRate": 0.6188118811881188,
@@ -13489,7 +13505,7 @@
   },
   "NFL/rushYds/over/FanDuel/450-499": {
    "abovePrice": -0.1338482546657066,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1c2ba702dd38ac770d6741d93d3ec7696e4d3e85d1ec248784f75d21ca0247f5",
    "graded": 156,
    "hitRate": 0.6909090909090909,
@@ -13503,7 +13519,7 @@
   },
   "NFL/rushYds/over/FanDuel/500-549": {
    "abovePrice": -0.04583333333333339,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "74333f1203cc9d204e21ecde075bead7a82321cf66600a53dc39a39a9357f421",
    "graded": 77,
    "hitRate": 0.7875,
@@ -13517,7 +13533,7 @@
   },
   "NFL/rushYds/over/FanDuel/550-599": {
    "abovePrice": -0.0567789508965979,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "5f64b3a4d9f2f5b87c4535211457c7e54a1ba75905d81444425ad722ac23f9f3",
    "graded": 130,
    "hitRate": 0.7925925925925926,
@@ -13531,7 +13547,7 @@
   },
   "NFL/rushYds/over/FanDuel/600-649": {
    "abovePrice": -0.0793650793650793,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "854d6e70cdee968b51a7ea48c3a03910ec5389178eacaef3e148ef0922b187b0",
    "graded": 87,
    "hitRate": 0.7777777777777778,
@@ -13545,7 +13561,7 @@
   },
   "NFL/rushYds/over/FanDuel/650-699": {
    "abovePrice": -0.16473304473304473,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "fb9104fc6e3754729ba1f55c4895f3fc6eab6d9902c93e42abe76fe81df6e121",
    "graded": 129,
    "hitRate": 0.7037037037037037,
@@ -13559,7 +13575,7 @@
   },
   "NFL/rushYds/over/FanDuel/700-749": {
    "abovePrice": -0.0884831460674157,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "88d6fe333b18bb460c493afeef7af5cf8b52d6511c0c70e33297212d639b5fd2",
    "graded": 85,
    "hitRate": 0.7865168539325843,
@@ -13573,7 +13589,7 @@
   },
   "NFL/rushYds/over/FanDuel/750-799": {
    "abovePrice": -0.11223799864773498,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "95c9c48b84c86c4fdb56703e5b6aa239cc5ca2d5531ad28b00b03815bf491376",
    "graded": 83,
    "hitRate": 0.7701149425287356,
@@ -13587,7 +13603,7 @@
   },
   "NFL/rushYds/over/FanDuel/800-849": {
    "abovePrice": -0.01388888888888884,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "13943d9f8a9cf4a539afd7f91d01905f02e410b05bc69892d0dffce959efc01e",
    "graded": 63,
    "hitRate": 0.875,
@@ -13601,7 +13617,7 @@
   },
   "NFL/rushYds/over/FanDuel/850-899": {
    "abovePrice": -0.017185821697099923,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "bcff9197abd9456fd1e0bd4d56e05affe236b1c91220728b3c392a3338cccadb",
    "graded": 47,
    "hitRate": 0.8775510204081632,
@@ -13615,7 +13631,7 @@
   },
   "NFL/rushYds/over/FanDuel/900-949": {
    "abovePrice": -0.06216216216216208,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "afe4a295f4e8f8b07dae9c648ffdc870c67a13a6c155d3c769e4471ac3d3646a",
    "graded": 72,
    "hitRate": 0.8378378378378378,
@@ -13629,7 +13645,7 @@
   },
   "NFL/spread/away/DraftKings/150-199": {
    "abovePrice": 0.03224777933806178,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "23e0bd81a761bcf997301fac7f8e2abd720658df962974c043ee18a197d42276",
    "graded": 54,
    "hitRate": 0.6851851851851852,
@@ -13643,7 +13659,7 @@
   },
   "NFL/spread/away/DraftKings/200-249": {
    "abovePrice": 0.003429154864997286,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "da2cc19787267813d23e8ed2309d3668555e6e959093b553e6c3bdc3be953e58",
    "graded": 64,
    "hitRate": 0.6875,
@@ -13657,7 +13673,7 @@
   },
   "NFL/spread/away/DraftKings/250-299": {
    "abovePrice": -0.04076199220973398,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "584f22c60b1d2d240417df10d49e6da616acac3e5f2dd81b4d5709a1a2ac74e0",
    "graded": 61,
    "hitRate": 0.6885245901639344,
@@ -13671,7 +13687,7 @@
   },
   "NFL/spread/away/DraftKings/300-349": {
    "abovePrice": -0.05442915559148109,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "74e00d91d318e233688eb0c336e6b67bf8e34b8527438449db2db52a20462925",
    "graded": 58,
    "hitRate": 0.7068965517241379,
@@ -13685,7 +13701,7 @@
   },
   "NFL/spread/away/DraftKings/350-399": {
    "abovePrice": -0.022206228607753786,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "856d4d659730d1330ffce7ec5a2ca686428be290f41687144e5140c903767a03",
    "graded": 64,
    "hitRate": 0.765625,
@@ -13699,7 +13715,7 @@
   },
   "NFL/spread/away/DraftKings/400-449": {
    "abovePrice": -0.07569802296919814,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "8dca67b2cff657a66675854bc894f7667c20af518da9531b03e9dcacfc20faf2",
    "graded": 56,
    "hitRate": 0.7321428571428571,
@@ -13713,7 +13729,7 @@
   },
   "NFL/spread/away/DraftKings/450-499": {
    "abovePrice": -0.041245134794299476,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a7df83fda241a53962924e0f457924d08a5c70667f54bd9cd7b2f008eabeae45",
    "graded": 51,
    "hitRate": 0.7843137254901961,
@@ -13727,7 +13743,7 @@
   },
   "NFL/spread/away/DraftKings/500-549": {
    "abovePrice": -0.026067095358623282,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4a3eaa7374b61cdd3d611a4cd238f405869d269f196a42ab2fa083db11d92e58",
    "graded": 59,
    "hitRate": 0.8135593220338984,
@@ -13741,7 +13757,7 @@
   },
   "NFL/spread/away/DraftKings/550-599": {
    "abovePrice": -0.055073879598874,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b37253f7a41ae18f839e6a17037f9fe17802cc3ae19fb3a0e7f9f5443793b9ef",
    "graded": 54,
    "hitRate": 0.7962962962962963,
@@ -13755,7 +13771,7 @@
   },
   "NFL/spread/away/DraftKings/600-649": {
    "abovePrice": -0.004930905540039832,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "aa9158e908f8143d380d59351b2e0d560e392c5d1a493f9426a07cb8d4a18ac1",
    "graded": 42,
    "hitRate": 0.8571428571428571,
@@ -13769,7 +13785,7 @@
   },
   "NFL/spread/away/DraftKings/650-699": {
    "abovePrice": -0.0001587903160766846,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b66aa52abd5fa292198f2c98cabf05be97a1204f876eef0a4943a85adfec920a",
    "graded": 46,
    "hitRate": 0.8695652173913043,
@@ -13783,7 +13799,7 @@
   },
   "NFL/spread/away/DraftKings/700-749": {
    "abovePrice": 0.029107778836130582,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "080ea8a74f69509cde5447b6393aa8240e8ebaad440b5f70dd3efc3c038e1c87",
    "graded": 43,
    "hitRate": 0.9069767441860465,
@@ -13797,7 +13813,7 @@
   },
   "NFL/spread/away/DraftKings/750-799": {
    "abovePrice": -0.03856628325532141,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f22429c0df3273f6999dc833260442597804bfbc65c735a310e94f841bdb3113",
    "graded": 39,
    "hitRate": 0.8461538461538461,
@@ -13811,7 +13827,7 @@
   },
   "NFL/spread/away/DraftKings/800-849": {
    "abovePrice": -0.010383171128896418,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "218d1d570a710b864cb865bb2f7607c1fd919e3793908182324fc47539acaab1",
    "graded": 42,
    "hitRate": 0.8809523809523809,
@@ -13825,7 +13841,7 @@
   },
   "NFL/spread/away/DraftKings/850-899": {
    "abovePrice": -0.0055542945468903815,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b153b5b6cdfaf5206cbd9452d9687f367df3d4893b13d6761385fa2ed7e61a7d",
    "graded": 46,
    "hitRate": 0.8913043478260869,
@@ -13839,7 +13855,7 @@
   },
   "NFL/spread/away/DraftKings/900-949": {
    "abovePrice": -0.12222222222222212,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c11d8586531e0eff803827def232f17a65fd5ed9707c63b481f72a43a11c1ebf",
    "graded": 9,
    "hitRate": 0.7777777777777778,
@@ -13853,7 +13869,7 @@
   },
   "NFL/spread/away/FanDuel/150-199": {
    "abovePrice": -0.016564926481684727,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "2329efbce815dd5934721d6b8ad9c55ea30481b1fd92cf965499b79a5c6f714b",
    "graded": 52,
    "hitRate": 0.6346153846153846,
@@ -13867,7 +13883,7 @@
   },
   "NFL/spread/away/FanDuel/200-249": {
    "abovePrice": -0.019402444543286435,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "62333702809616f3ec65e53cabfec8dab6026bc2050ecd65625be0fa20ab11a8",
    "graded": 65,
    "hitRate": 0.6615384615384615,
@@ -13881,7 +13897,7 @@
   },
   "NFL/spread/away/FanDuel/250-299": {
    "abovePrice": -0.026478428036933788,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "224b6f44cbe30a2373425ec81ebc36f76db5cbbba2039642503c5f2981d0a180",
    "graded": 67,
    "hitRate": 0.7014925373134329,
@@ -13895,7 +13911,7 @@
   },
   "NFL/spread/away/FanDuel/300-349": {
    "abovePrice": -0.052140827629449715,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "34b7d13a06c2fcebe4a33c273b5ebc6f983fa19d4f4a1a3b5f0057b0d61bd0a7",
    "graded": 59,
    "hitRate": 0.711864406779661,
@@ -13909,7 +13925,7 @@
   },
   "NFL/spread/away/FanDuel/350-399": {
    "abovePrice": -0.05777261371288078,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "579ae7adfca6bfdc7a84d9ada9dd15eada7c23c4cffb2d8c5a1d35e739c77080",
    "graded": 55,
    "hitRate": 0.7272727272727273,
@@ -13923,7 +13939,7 @@
   },
   "NFL/spread/away/FanDuel/400-449": {
    "abovePrice": -0.030446239636691463,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "f5da7f4926afa45d4ec1157ea87164b28e550d74972b68990c8b3a38e82a8f04",
    "graded": 67,
    "hitRate": 0.7761194029850746,
@@ -13937,7 +13953,7 @@
   },
   "NFL/spread/away/FanDuel/450-499": {
    "abovePrice": -0.08597231996246768,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d5557782471866326763ccdcb8bc1163bd5d7e544b1280f5e7e0bbf22672c231",
    "graded": 42,
    "hitRate": 0.7380952380952381,
@@ -13951,7 +13967,7 @@
   },
   "NFL/spread/away/FanDuel/500-549": {
    "abovePrice": -0.061973621484188834,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9f73672a9ba11dc0b2cd6468ead1824ef4f3a90c0f8e65b0bdac2d5fcf5c5f71",
    "graded": 58,
    "hitRate": 0.7758620689655172,
@@ -13965,7 +13981,7 @@
   },
   "NFL/spread/away/FanDuel/550-599": {
    "abovePrice": -0.09470196031460854,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "335955f90d65a681fbc4c282cc9df883442ff3f1d373b9b18bb1f5e54974ada3",
    "graded": 33,
    "hitRate": 0.7575757575757576,
@@ -13979,7 +13995,7 @@
   },
   "NFL/spread/away/FanDuel/600-649": {
    "abovePrice": -0.08062330623306213,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4e10e57d71345951692cf87a1c12b6361387da3007c7fd2e8200421850041ad0",
    "graded": 41,
    "hitRate": 0.7804878048780488,
@@ -13993,7 +14009,7 @@
   },
   "NFL/spread/away/FanDuel/650-699": {
    "abovePrice": -0.05560966810966805,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b8329aef311a207c5ce522670e0a534098628073a6509a42fa69314a4c2ce15b",
    "graded": 48,
    "hitRate": 0.8125,
@@ -14007,7 +14023,7 @@
   },
   "NFL/spread/away/FanDuel/700-749": {
    "abovePrice": -0.013650221729490042,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "9955db4908ce39f51c96eb952a76f3a3e095c3360b8ccfcb8587fada43c4845b",
    "graded": 44,
    "hitRate": 0.8636363636363636,
@@ -14021,7 +14037,7 @@
   },
   "NFL/spread/away/FanDuel/750-799": {
    "abovePrice": -0.05104800540906007,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "0ec037b5057f7d31dba7e6b0bf7a4fb95a1c8ac1ca315514c8b84db7abd8e5a8",
    "graded": 36,
    "hitRate": 0.8333333333333334,
@@ -14035,7 +14051,7 @@
   },
   "NFL/spread/away/FanDuel/800-849": {
    "abovePrice": -0.08119658119658113,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a3b7a19b917cd15c6011af7ccf05a6a120dddb2474bb48a668f0f59e94d8228b",
    "graded": 26,
    "hitRate": 0.8076923076923077,
@@ -14049,7 +14065,7 @@
   },
   "NFL/spread/away/FanDuel/850-899": {
    "abovePrice": -0.06616541353383454,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "da3b7207aa73c1cf83248c43fb68b024327904eed6aabef971abab235aad9e33",
    "graded": 35,
    "hitRate": 0.8285714285714286,
@@ -14063,7 +14079,7 @@
   },
   "NFL/spread/away/FanDuel/900-949": {
    "abovePrice": -0.028205128205127994,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d014cc99a3aed6c682c11933595d167a99823347ed93919b3ffe7b85fbdfa433",
    "graded": 39,
    "hitRate": 0.8717948717948718,
@@ -14077,7 +14093,7 @@
   },
   "NFL/spread/home/DraftKings/150-199": {
    "abovePrice": -0.05744116895761875,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a14716986255210f38ba35f50bb5bdf6dac3f88ebaf2a019650389b285e0785f",
    "graded": 52,
    "hitRate": 0.5961538461538461,
@@ -14091,7 +14107,7 @@
   },
   "NFL/spread/home/DraftKings/200-249": {
    "abovePrice": -0.022612028606781576,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "686637696ba1a7596f5b7c37d355b12d72bb589f049019f3d8d6f803b49eff95",
    "graded": 63,
    "hitRate": 0.6666666666666666,
@@ -14105,7 +14121,7 @@
   },
   "NFL/spread/home/DraftKings/250-299": {
    "abovePrice": -0.032391127319080226,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c4290d51a67a7df392deff1147c62775f4d93d800c2e18ce53a69f377374a351",
    "graded": 59,
    "hitRate": 0.6949152542372882,
@@ -14119,7 +14135,7 @@
   },
   "NFL/spread/home/DraftKings/300-349": {
    "abovePrice": 0.00016550517451985325,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "c5f51619b44d52ebbda5c30e42a3ba15329ff3881d586bdfd75d3525058527c7",
    "graded": 55,
    "hitRate": 0.7636363636363637,
@@ -14133,7 +14149,7 @@
   },
   "NFL/spread/home/DraftKings/350-399": {
    "abovePrice": -0.0648785409654854,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b0f7cfedc97b6526fa5621010e969bce1c2002a5a1582ab7a9e53965b83ea850",
    "graded": 58,
    "hitRate": 0.7241379310344828,
@@ -14147,7 +14163,7 @@
   },
   "NFL/spread/home/DraftKings/400-449": {
    "abovePrice": -0.06890795198902,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "95fdeb017fa10d1142e76657540d474c6ee97ee713bce83101f42f389e7b1d59",
    "graded": 54,
    "hitRate": 0.7407407407407407,
@@ -14161,7 +14177,7 @@
   },
   "NFL/spread/home/DraftKings/450-499": {
    "abovePrice": -0.04649035921943245,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "497216d5a933d81c74f860e91b5ca8110786823c54f835e142542fd756ede503",
    "graded": 50,
    "hitRate": 0.78,
@@ -14175,7 +14191,7 @@
   },
   "NFL/spread/home/DraftKings/500-549": {
    "abovePrice": -0.023787639478489497,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4ed99f30172cbf38194a0363ba53db3d193dfedfe363594d2f2c17f80c9954c5",
    "graded": 49,
    "hitRate": 0.8163265306122449,
@@ -14189,7 +14205,7 @@
   },
   "NFL/spread/home/DraftKings/550-599": {
    "abovePrice": -0.015155680575913433,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "a72b4e28168cb9f9bfaaaad801d0f7918befa68ed76302c5b8dedd17189119fc",
    "graded": 49,
    "hitRate": 0.8367346938775511,
@@ -14203,7 +14219,7 @@
   },
   "NFL/spread/home/DraftKings/600-649": {
    "abovePrice": -0.07019757700770146,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4bf36e994d3e253df39292624d92a4c13cae132d8f2670b2d9e15da4b875448e",
    "graded": 48,
    "hitRate": 0.7916666666666666,
@@ -14217,7 +14233,7 @@
   },
   "NFL/spread/home/DraftKings/650-699": {
    "abovePrice": -0.09006849956616769,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "009eaa199fecd1edacf5281d8ec5b29d11dbbdd7d4694e6824a87cf4cfad413a",
    "graded": 50,
    "hitRate": 0.78,
@@ -14231,7 +14247,7 @@
   },
   "NFL/spread/home/DraftKings/700-749": {
    "abovePrice": -0.1032384247274295,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "467b1a96e02a9a8227c2afb86097263793aa8a4d7814a860c9fe7e25d196f6b7",
    "graded": 40,
    "hitRate": 0.775,
@@ -14245,7 +14261,7 @@
   },
   "NFL/spread/home/DraftKings/750-799": {
    "abovePrice": -0.009831816733088972,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7f0f32fb5822715e215fbf619e6db35a8a5e301b26f13f3cc31fc8129ed65c68",
    "graded": 40,
    "hitRate": 0.875,
@@ -14259,7 +14275,7 @@
   },
   "NFL/spread/home/DraftKings/800-849": {
    "abovePrice": -0.07363525303903085,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "12c641f0dfa2645ab8e60dda822c066710572ac05a0a632f1b437904c1108261",
    "graded": 33,
    "hitRate": 0.8181818181818182,
@@ -14273,7 +14289,7 @@
   },
   "NFL/spread/home/DraftKings/850-899": {
    "abovePrice": -0.0282496458327125,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d8622371c1e7de297390696b4b73e01a8ab8bb327603b2b6e9304c818efdc6ca",
    "graded": 38,
    "hitRate": 0.868421052631579,
@@ -14287,7 +14303,7 @@
   },
   "NFL/spread/home/DraftKings/900-949": {
    "abovePrice": -0.09999999999999998,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "60c17c1cfa38047ae1580535ac2554c88b9c1314148257d511dd79ce375d1385",
    "graded": 5,
    "hitRate": 0.8,
@@ -14301,7 +14317,7 @@
   },
   "NFL/spread/home/FanDuel/150-199": {
    "abovePrice": -0.06280630299794199,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4b78730f839f6829aa471b9ca274a0a0b051b7f636bc8178b551f04418ffd20e",
    "graded": 56,
    "hitRate": 0.5892857142857143,
@@ -14315,7 +14331,7 @@
   },
   "NFL/spread/home/FanDuel/200-249": {
    "abovePrice": -0.008607119166903043,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b6cb55e0866ec3222f8403c1f4ef83124ea4641611f37df1d6fc655666c39a86",
    "graded": 62,
    "hitRate": 0.6774193548387096,
@@ -14329,7 +14345,7 @@
   },
   "NFL/spread/home/FanDuel/250-299": {
    "abovePrice": -0.029303179798739754,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "639d78a6472624bb8921665252916413f10042b5365ba4814dac9cad4eefd43d",
    "graded": 66,
    "hitRate": 0.696969696969697,
@@ -14343,7 +14359,7 @@
   },
   "NFL/spread/home/FanDuel/300-349": {
    "abovePrice": -0.06856350609666984,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d3df07480e17bc82c0de81a408c87c3ab3b9245a582908b2a03db19a9ecc6f07",
    "graded": 62,
    "hitRate": 0.6935483870967742,
@@ -14357,7 +14373,7 @@
   },
   "NFL/spread/home/FanDuel/350-399": {
    "abovePrice": 0.003298483054765433,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "e32e625b5a58d4fb754977385ed802e1aa42952fb56f3cb9410147e41cd8bc63",
    "graded": 57,
    "hitRate": 0.7894736842105263,
@@ -14371,7 +14387,7 @@
   },
   "NFL/spread/home/FanDuel/400-449": {
    "abovePrice": -0.07592530606465753,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7598e32c3e44c4707c6354eef16207283c569483827cabd5355356c85caf93ed",
    "graded": 63,
    "hitRate": 0.7301587301587301,
@@ -14385,7 +14401,7 @@
   },
   "NFL/spread/home/FanDuel/450-499": {
    "abovePrice": -0.12435344827586214,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "1505d77cabbd4507ff6fc0ce76c672d4c64cde5a2c3688fee39b89944fb9efe8",
    "graded": 40,
    "hitRate": 0.7,
@@ -14399,7 +14415,7 @@
   },
   "NFL/spread/home/FanDuel/500-549": {
    "abovePrice": -0.041240334296649306,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "7659db5f4743a274346f99f41065f13a9813c008889c497ac713fae5fd4da3f2",
    "graded": 59,
    "hitRate": 0.7966101694915254,
@@ -14413,7 +14429,7 @@
   },
   "NFL/spread/home/FanDuel/550-599": {
    "abovePrice": 0.04105124471257193,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "4f77ce104e81272ec628a2c047798c1272e827327a8f9311e26420471de624dd",
    "graded": 38,
    "hitRate": 0.8947368421052632,
@@ -14427,7 +14443,7 @@
   },
   "NFL/spread/home/FanDuel/600-649": {
    "abovePrice": -0.012626262626262541,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "ef55b85a8a2e51898149038f7da0b0b65cbd2061da48c69818f69c48a004bb9f",
    "graded": 33,
    "hitRate": 0.8484848484848485,
@@ -14441,7 +14457,7 @@
   },
   "NFL/spread/home/FanDuel/650-699": {
    "abovePrice": -0.05870954442383014,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "04cdae7dbe5b7a8028137226b349b4a0a97ddb81abc44f3403d320ef357edc8e",
    "graded": 42,
    "hitRate": 0.8095238095238095,
@@ -14455,7 +14471,7 @@
   },
   "NFL/spread/home/FanDuel/700-749": {
    "abovePrice": -0.11368741976893448,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d185bba6d49be7490cc7bc45efa96887a45d77211daa5b375e1a18e478593161",
    "graded": 38,
    "hitRate": 0.7631578947368421,
@@ -14469,7 +14485,7 @@
   },
   "NFL/spread/home/FanDuel/750-799": {
    "abovePrice": -0.026910074374577375,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "d8e1a3cc8be1014ce319ed364f356f8eb78df8be97e39fbee2c8e059cf8572e4",
    "graded": 35,
    "hitRate": 0.8571428571428571,
@@ -14483,7 +14499,7 @@
   },
   "NFL/spread/home/FanDuel/800-849": {
    "abovePrice": -0.13026819923371646,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "b75689a0087784092d3b055b3c5ca30b8591508f9a96c672405298b8aa74cbcb",
    "graded": 29,
    "hitRate": 0.7586206896551724,
@@ -14497,7 +14513,7 @@
   },
   "NFL/spread/home/FanDuel/850-899": {
    "abovePrice": -0.01594896331738438,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "680d377ff06c2ff9f4724d36f99b40f951dc6f74d151c138dbab03f49160b773",
    "graded": 33,
    "hitRate": 0.8787878787878788,
@@ -14511,7 +14527,7 @@
   },
   "NFL/spread/home/FanDuel/900-949": {
    "abovePrice": -0.07500000000000007,
-   "checkedAt": "2026-11-24T13:33:57Z",
+   "checkedAt": "2026-11-24T13:47:09Z",
    "evidenceHash": "562774a8fbc1e96bf0c0326537af7a39e95b4614d4415855ffc6edf57a1a29fa",
    "graded": 40,
    "hitRate": 0.825,
@@ -14573,6 +14589,12 @@
    }
   },
   "pending": {
+   "gap:NFL/total": {
+    "direction": 1,
+    "firstSeenAt": "2026-11-24T13:47:09Z",
+    "sentence": "NFL/total gap floor +2 points",
+    "week": "2026-W48"
+   },
    "trust:CFB/moneyline": {
     "direction": -1,
     "firstSeenAt": "2026-11-24T13:33:57Z",
@@ -14601,6 +14623,12 @@
     "direction": -1,
     "firstSeenAt": "2026-11-24T13:33:57Z",
     "sentence": "NFL/moneyline trust 1.06 to 1.05",
+    "week": "2026-W48"
+   },
+   "trust:NFL/moneyline/plus_money": {
+    "direction": -1,
+    "firstSeenAt": "2026-11-24T13:47:09Z",
+    "sentence": "NFL/moneyline/plus_money trust 0.80 to 0.79",
     "week": "2026-W48"
    },
    "trust:NFL/prop:car/plus_money": {
