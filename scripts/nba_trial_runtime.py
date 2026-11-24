@@ -431,6 +431,7 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=(),refresh=True):
     text=candidate;break
   if not text:continue
   plans.append((play['id'],'nba-trial',text,due,daily_potd.card_key(play)))
+  busy.append(due)
  return plans+results
 
 

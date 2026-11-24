@@ -744,7 +744,7 @@ def prior_discord_result(log_book, guid):
     return None
 
 
-def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=None, log=print, stats=None, items=None):
+def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=None, log=print, stats=None, items=None, clock=None):
     """Create the planned posts in Buffer and record each in the log; a play whose card is not live yet is left
     for the next run, never posted bare. Returns the log."""
     stats = stats if stats is not None else {}
@@ -957,8 +957,19 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         if kind == 'nba-trial':
             import nba_trial_runtime
-            reserved = (nba_trial_runtime.reserve_delivery(guid, now, cancelled=prior) if prior
-                        else nba_trial_runtime.reserve_delivery(guid, now))
+            # Research, artwork and provider checks can outlast the initial
+            # two-minute lead. Use the actual submission clock and queue.
+            attempt_at = clock() if clock else datetime.now(timezone.utc) if send is http_send else now
+            if clock or send is http_send:
+                occupied = {'posts': [entry for entry in log_book.get('posts', [])
+                                      if not entry.get('nbaDiscordOnly')]}
+                due = free_slot(max(due, attempt_at + SOON), taken(occupied, attempt_at))
+                original = next((play for play in nba_trial_runtime.public_rows() if play['id'] == guid), None)
+                if not original or due >= gates.when(original['kickoff']) - timedelta(minutes=15):
+                    log(f'buffer: {guid} held: no remaining NBA pregame slot')
+                    continue
+            reserved = (nba_trial_runtime.reserve_delivery(guid, attempt_at, cancelled=prior) if prior
+                        else nba_trial_runtime.reserve_delivery(guid, attempt_at))
             if not reserved:
                 log(f'buffer: {guid} held: NBA delivery not cleared or already attempted; recheck before retry')
                 continue
@@ -971,7 +982,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 cbb_picks.delivery_failed(guid, now)
             if kind == 'nba-trial':
                 if isinstance(error, BufferPastDue):
-                    nba_trial_runtime.record_past_due_rejection(guid, datetime.now(timezone.utc) if send is http_send else now)
+                    nba_trial_runtime.record_past_due_rejection(
+                        guid, datetime.now(timezone.utc) if send is http_send else attempt_at)
                 else:
                     nba_trial_runtime.delivery_failed(guid, now)
             if kind == 'play' and missed_target(guid, due, now, items):

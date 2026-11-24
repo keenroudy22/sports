@@ -593,6 +593,23 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual([row['id'] for row in rows], ['official'])
         self.assertTrue(create.call_args.kwargs['essential'])
 
+    def test_nba_submission_retimes_expired_slot_without_crowding_queue(self):
+        now = datetime(2026, 11, 24, 18, tzinfo=timezone.utc)
+        attempt_at = now + timedelta(minutes=4)
+        occupied_at = now + timedelta(minutes=6)
+        guid = 'NBA-reviewed-test'
+        book = {'posts': [{'id': 'occupied', 'bufferPostId': 'queued', 'dueAt': bp.stamp(occupied_at)}]}
+        play = {'id': guid, 'kickoff': bp.stamp(now + timedelta(hours=2))}
+        plan = [(guid, 'nba-trial', 'Anthony Davis over 21.5 points (-111, DraftKings)',
+                 now + timedelta(minutes=2), None)]
+        with mock.patch.object(bp.receipts, 'current_results_hold', return_value=None), \
+             mock.patch('nba_trial_runtime.public_rows', return_value=[play]), \
+             mock.patch('nba_trial_runtime.reserve_delivery', return_value=True) as reserve, \
+             mock.patch.object(bp, 'create_post', return_value='new') as create:
+            bp.schedule(plan, 'x', book, now, clock=lambda: attempt_at, log=lambda *_: None)
+        reserve.assert_called_once_with(guid, attempt_at)
+        self.assertEqual(create.call_args.args[2], occupied_at + bp.SPACING)
+
     def test_card_theme_is_resolved_before_buffer_accepts_the_post(self):
         fake = FakeBuffer()
         plan = [('a', 'play', 'text', NOW + timedelta(hours=1), 'a')]
