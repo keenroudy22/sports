@@ -19847,9 +19847,19 @@
    "socialVoiceVersion": "casual-20261022",
    "socialAgeVersion": "age-20261023",
    "nbaPrecheck": {
-    "at": "2026-11-24T19:31:14Z",
-    "result": "clear"
-   }
+    "at": "2026-11-24T19:35:19Z",
+    "result": "held"
+   },
+   "cancelledAt": "2026-11-24T19:35:57Z",
+   "nbaCancellation": {
+    "state": "deleted-before-due",
+    "postId": "6b05e28e4148285e965cb6ce",
+    "priorState": "scheduled",
+    "verifiedAt": "2026-11-24T19:35:57Z",
+    "deletedAt": "2026-11-24T19:35:57Z",
+    "textHash": "87d373dc308cd46a"
+   },
+   "nbaHold": "Role or exact-price check did not clear. The published play stays in its record."
   }
  ]
 }
