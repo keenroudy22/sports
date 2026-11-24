@@ -450,6 +450,13 @@ PARLAY_WIN_POSTS_FROM = datetime(2026, 11, 19, 7, 29, tzinfo=gates.EASTERN)
 COMPLETE_CARD_FROM = date(2026, 11, 20)
 
 
+def daily_scope(day, rows):
+    if day < result_display.STRAIGHTS_RECAP_FROM:
+        return rows
+    return [row for row in rows if pick_card.play_kind(row) in ('team', 'player')
+            and record_scope.is_headline(row)]
+
+
 def quiet_parlay_result(pick):
     """Non-winning new parlays stay in the ledger and unit totals. Corrections remain deliverable."""
     return (pick_card.play_kind(pick) == 'parlay' and pick.get('result') in ('loss', 'push', 'void')
@@ -479,8 +486,9 @@ def daily_climb_row(row, include_units=True):
 
 def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
     basketball = nba_daily_rows(day, as_of, log_book or {}) + cbb_daily_rows(day, as_of, log_book or {})
-    fun_rows = unit_fun_rows(as_of, day=day, log_book=log_book or {}) if as_of else []
-    rows = plays_between(first, latest, games, ids, day, day) + basketball + fun_rows
+    fun_rows = (unit_fun_rows(as_of, day=day, log_book=log_book or {})
+                if as_of and day < result_display.STRAIGHTS_RECAP_FROM else [])
+    rows = daily_scope(day, plays_between(first, latest, games, ids, day, day) + basketball + fun_rows)
     if not settled(rows):
         return None
     complete = day >= COMPLETE_CARD_FROM
@@ -510,7 +518,11 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
                 summary = x_post.summarize(plays)
                 suffix = '' if recap_only and category == 'Climb' else f" ({summary['units']:+.2f}u)"
                 parts.append(f"{category} {record_text(summary)}{suffix}")
-        if recap_only:
+        if day >= result_display.STRAIGHTS_RECAP_FROM:
+            summary = x_post.summarize(straight)
+            head = f"{name} recap 🍳 {record_text(summary)} on straights" + (' SWEEP 🔥' if sweep else '')
+            parts = [f"Straights {summary['units']:+.2f}u"]
+        elif recap_only:
             head = f"{name} recap 🍳 {record_text(x_post.summarize(straight))} on straights"
             net = x_post.summarize(straight + fun)['units']
             parts.append(f"Net {net:+.2f}u")
@@ -690,7 +702,9 @@ def prior_day_results_hold(first, latest, games, log_book, now, channel='all'):
     rows = plays_between(public_first, latest, games, ids, day, day)
     rows += nba_daily_rows(day, now, log_book)
     rows += cbb_daily_rows(day, now, log_book)
-    rows += unit_fun_rows(now, day=day, log_book=log_book)
+    if day < result_display.STRAIGHTS_RECAP_FROM:
+        rows += unit_fun_rows(now, day=day, log_book=log_book)
+    rows = daily_scope(day, rows)
     recap_only = day >= result_display.DAILY_RECAP_ONLY_FROM
     if date(2026, 11, 16) <= today and not recap_only:
         import cbb_picks

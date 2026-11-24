@@ -6,11 +6,12 @@ from zoneinfo import ZoneInfo
 
 
 DAILY_RECAP_ONLY_FROM = date(2026, 11, 22)
+STRAIGHTS_RECAP_FROM = date(2026, 11, 23)
 EASTERN = ZoneInfo('America/New_York')
 
 
 def individual_final_suppressed(pick, kickoff=None):
-    """New slates publish one full recap; real corrections can still go out."""
+    """Straight results are bundled; fun-ticket wins and corrections may post."""
     clock = (kickoff or pick.get('firstKickoff') or pick.get('kickoff')
              or (pick.get('game') or {}).get('kickoff'))
     if pick.get('correctedAt') or not clock:
@@ -19,7 +20,13 @@ def individual_final_suppressed(pick, kickoff=None):
         instant = datetime.fromisoformat(str(clock).replace('Z', '+00:00'))
     except ValueError:
         return False
-    return instant.tzinfo is not None and instant.astimezone(EASTERN).date() >= DAILY_RECAP_ONLY_FROM
+    if instant.tzinfo is None:
+        return False
+    day = instant.astimezone(EASTERN).date()
+    if (day >= STRAIGHTS_RECAP_FROM and pick.get('result') == 'win'
+            and pick.get('parlayType') != 'ladder' and (pick.get('legs') or pick.get('parlayType'))):
+        return False
+    return day >= DAILY_RECAP_ONLY_FROM
 
 
 def player_name(pick, box_player=None):

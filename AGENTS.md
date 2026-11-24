@@ -1,3 +1,10 @@
+# November 24 straight results
+
+Starting with the November 23 Eastern slate, send one complete graded
+straights-only recap to X and Discord before new plays. Keep ticket settlements
+in their normal records. Separately celebrate verified fun-ticket wins, and
+keep routine fun-ticket losses off socials. Preserve factual corrections.
+
 # November 23 first-quarter parlays and Daily Double prices
 
 Review MNF/TNF first-quarter parlays in their own daily slot. Require two to

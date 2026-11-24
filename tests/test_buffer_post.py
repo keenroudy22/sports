@@ -238,6 +238,17 @@ TICKET = dict(legs=[{'title': 'Iowa at Michigan over 38.5'}, {'title': 'Oklahoma
 
 
 class PlanTests(unittest.TestCase):
+    def test_november_23_straight_recap_can_retry_only_after_private_cancellation(self):
+        entry = {'id': 'receipt:day:2026-11-23', 'kind': 'buffer:receipt',
+                 'bufferPostId': '6b052e10ca4899309e634683',
+                 'cancelledAt': '2026-11-24T11:35:57Z', 'dueAt': '2026-11-24T11:45:00Z',
+                 'cancelReason': 'Incomplete full-slate recap: Nov23 public tickets',
+                 'fullDailyRecap': True, 'discord': {'state': 'cancelled'}}
+        self.assertTrue(bp.replaced_partial_daily(entry))
+        self.assertFalse(bp.replaced_partial_daily(dict(entry, bufferPostId='other')))
+        self.assertFalse(bp.replaced_partial_daily(dict(entry, sentAt='2026-11-24T11:44:00Z')))
+        self.assertFalse(bp.replaced_partial_daily(dict(entry, discord={'state': 'cancelled', 'messageId': '123'})))
+
     def test_november_19_incomplete_recap_can_retry_after_private_removal(self):
         entry = {'id': 'receipt:day:2026-11-19', 'kind': 'buffer:receipt',
                  'bufferPostId': '6affe431ca85ebefb0febfbf',

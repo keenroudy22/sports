@@ -46,6 +46,37 @@ MONDAY_MORNING = datetime(2026, 9, 28, 12, 30, tzinfo=timezone.utc)       # Mon 
 
 
 class ReceiptTests(unittest.TestCase):
+    def test_straight_recap_and_gate_ignore_unsettled_fun_tickets(self):
+        now = datetime(2026, 11, 24, 14, tzinfo=timezone.utc)
+        day = (now - timedelta(days=1)).date()
+        game = dict(GAMES['sun'], kickoff='2026-11-23T18:00Z')
+        straight = pick('straight', 'sun', posted=True, odds=100, riskUnits=1,
+                        publishedAt='2026-11-23T16:00Z')
+        fun = dict(straight, id='fun', parlayType='longshot', legs=[{}, {}], riskUnits=.25)
+        first = {row['id']: row for row in (straight, fun)}
+        latest = {straight['id']: {'result': 'win'}}
+        games = {'sun': game}
+        log = {'posts': [dict(id=row['id'], kind='buffer:play', sentAt='2026-11-23T16:05Z')
+                         for row in (straight, fun)]}
+        with patch.object(receipts, 'nba_daily_rows', return_value=[]), \
+                patch.object(receipts, 'cbb_daily_rows', return_value=[]):
+            recap = receipts.day_receipt(day, first, latest, games, set(first), now, log)
+            self.assertEqual(recap['pickIds'], [straight['id']])
+            self.assertIn('Straights +1.00u', recap['text'])
+            self.assertIn('ready but not delivered', receipts.prior_day_results_hold(first, latest, games, log, now))
+            log['posts'].append({'id': recap['key'], 'resultPickIds': recap['pickIds'],
+                                 'sentAt': '2026-11-24T13:00Z', 'tweetId': '2123456789012345678',
+                                 'link': 'https://x.com/keenkooks/status/2123456789012345678',
+                                 'discord': {'state': 'sent', 'sentAt': '2026-11-24T13:01Z',
+                                             'messageId': '1571763542208675946'}})
+            self.assertIsNone(receipts.prior_day_results_hold(first, latest, games, log, now))
+            self.assertIn('waiting for the complete graded card',
+                          receipts.prior_day_results_hold(first, {}, games, log, now))
+        self.assertFalse(receipts.result_display.individual_final_suppressed(
+            dict(fun, result='win'), game['kickoff']))
+        self.assertTrue(receipts.result_display.individual_final_suppressed(
+            dict(fun, result='loss'), game['kickoff']))
+
     def test_rebuilt_november_19_recap_uses_a_distinct_card_url(self):
         key = 'NFL-2026-11-19-prop-ticket-22d1525ad2ff09f4'
         game = dict(GAMES['sun'], kickoff='2026-11-20T01:15:00Z')
