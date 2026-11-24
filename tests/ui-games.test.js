@@ -110,6 +110,32 @@ test('Favorite Lines ranks a posted Chef’s Pick and one current priced lean pe
   assert.doesNotMatch(html, /Second market|Stale quote|Closed reentry/);
 });
 
+test('Favorite Lines shows a separate verified prop without replacing the game line', async () => {
+  const { api, factory } = loadBrowserApi();
+  const matchup = game('CFB-68', team('1', 'HOME', 'Home Team', 2, 3), team('2', 'AWAY', 'Away Team', 4, 5),
+    -6, 50, 9, 56, { status: '12:00 PM' });
+  const observedAt = new Date(Date.now() - 120000).toISOString();
+  const quote = (title, market, edge, extra = {}) => ({ gameId: matchup.id, kickoff: matchup.kickoff, title, market,
+    state: 'open', book: 'DraftKings', odds: -110, observedAt,
+    grade: { calibrated: true, pricePaired: true, tier: 'lean', edge }, ...extra });
+  const ctx = contextFor(api, [matchup], { etDay: () => C.dayOf(matchup.kickoff),
+    lineData: async () => ({ lines: [
+      quote('Home -6', 'point spread', 2),
+      quote('Starting back over 60.5 rushing yards', 'rushing yards', 5,
+        { athleteId: '123', grade: { calibrated: true, view: 'lean', edge: 5 } }),
+      quote('Held player over 90.5 rushing yards', 'rushing yards', 20,
+        { athleteId: '456', roleHold: true, grade: { calibrated: true, view: 'lean', edge: 20 } }),
+      quote('Stale player under 22.5 rushing yards', 'rushing yards', 21,
+        { athleteId: '789', freshness: 'stale', grade: { calibrated: true, view: 'lean', edge: 21 } }),
+      quote('Comparison player over 50.5 rushing yards', 'rushing yards', 22, { athleteId: '890' }),
+    ] }) });
+  const html = unesc(await factory(ctx).games({ tab: 'favorites', league: 'CFB' }));
+  assert.match(html, /Home -6/);
+  assert.match(html, /Starting back over 60.5 rushing yards/);
+  assert.match(html, /Player prop · Research lean · -110 · DraftKings/);
+  assert.doesNotMatch(html, /Held player|Stale player|Comparison player/);
+});
+
 test('Favorite Lines uses the priced side in basketball and respects roster holds and historical totals', async () => {
   const { api, factory } = loadBrowserApi();
   const tip = kickoff(12);
@@ -120,6 +146,9 @@ test('Favorite Lines uses the priced side in basketball and respects roster hold
   const spread = { book: 'DraftKings', observedAt, homeLine: -5, awayLine: 5, homeOdds: -102, awayOdds: -118 };
   const nba = { games: [basketball('NBA-60', { spreadQuote: spread, status: 'scheduled' }),
     basketball('NBA-61', { spreadQuote: spread, rosterContext: { reportedAt: observedAt, holds: ['Availability pending'] } })] };
+  const prop = { athleteId: '123', name: 'Example Player', side: 'over', line: 12.5, statName: 'points',
+    over: -115, under: -105, book: 'DraftKings', kickoff: tip, sourceAt: observedAt, availabilityReportedAt: observedAt };
+  nba.favoriteProps = { '60': [prop], '61': [{ ...prop, name: 'Held Player' }] };
   const cbb = { games: [basketball('CBB-62', { spreadQuote: spread, firstTotal: { book: 'DraftKings', line: 145 } }),
     basketball('CBB-63', { firstTotal: { book: 'DraftKings', line: 150 } })] };
   const ctx = contextFor(api, [], { etDay: () => C.dayOf(tip), maybe: async path => ({ 'app/nba.json': nba, 'app/cbb.json': cbb }[path] || null) });
@@ -127,6 +156,8 @@ test('Favorite Lines uses the priced side in basketball and respects roster hold
   assert.equal((html.match(/<b>Away \+5<\/b>/g) || []).length, 2);
   assert.equal((html.match(/-118 · DraftKings/g) || []).length, 2);
   assert.match(html, /Lineup check pending/);
+  assert.match(html, /Example Player over 12.5 points/);
+  assert.doesNotMatch(html, /Held Player/);
   assert.match(html, /Team-rating lean/);
   assert.match(html, /No fresh line/);
   assert.doesNotMatch(html, /Over 145|Over 150|-102 · DraftKings/);

@@ -32,6 +32,7 @@
       .slate-favorite-row { display:grid; grid-template-columns:3ch minmax(0,1.45fr) minmax(0,1.1fr) minmax(0,.8fr); gap:10px; padding:12px; align-items:start; }
       .slate-favorite-row > span:not(.slate-rank) { display:grid; gap:3px; min-width:0; overflow-wrap:anywhere; }
       .slate-favorite-row small, .slate-rank { font-size:12px; color:var(--dim); }
+      .slate-favorite-row .slate-prop { grid-column:2 / -1; border-top:1px solid var(--line); padding-top:6px; }
       .slate-favorite-row .slate-posted { color:var(--kookd); }
       .slate-day { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:12px 0; }
       .slate-day input { max-width:100%; }
@@ -258,9 +259,9 @@
   const nbaLineupsPending = game => !game.rosterContext?.reportedAt || Boolean(game.rosterContext.holds?.length);
   const footballFavorites = rows => rows.filter(row => {
     const grade = row.grade || {};
-    return grade.calibrated && grade.pricePaired && !grade.thin && !grade.limited && !grade.unproven
-      && !row.roleHold && !row.priceHold && !row.injuryHold
-      && ['lean', 'strong'].includes(grade.tier) && isNum(grade.edge) && grade.edge > 0;
+    const liked = row.athleteId ? grade.view === 'lean' : grade.pricePaired && ['lean', 'strong'].includes(grade.tier);
+    return liked && grade.calibrated && !grade.thin && !grade.limited && !grade.unproven
+      && !row.roleHold && !row.priceHold && !row.injuryHold && isNum(grade.edge) && grade.edge > 0;
   }).map(row => ({ ...row, score: row.grade.edge, status: 'Research lean' }));
 
   const basketballFavorites = (game, league, now) => {
@@ -285,6 +286,25 @@
         book: total.book, observedAt: total.retrievedAt, score: Math.abs(gap), status });
     }
     return candidates.filter(row => row.score >= .05 && boardPrice(row, game.kickoff, now));
+  };
+
+  const favoriteProp = (game, league, prices, nbaProps, line, now) => {
+    const kickoff = Date.parse(game.kickoff);
+    if (!(kickoff > now) || game.completed || ['in', 'post'].includes(game.state)
+        || /postpon|cancel|final/i.test(game.status || '')) return null;
+    const eligible = row => row.athleteId && row.title && Date.parse(row.kickoff) === kickoff
+      && String(row.athleteId) !== String(line.athleteId) && boardPrice(row, game.kickoff, now);
+    if (FOOTBALL.includes(league)) {
+      const props = prices.filter(row => row.state === 'open' && row.freshness !== 'stale' && eligible(row));
+      return footballFavorites(props).sort((a, b) => b.score - a.score || b.odds - a.odds || a.title.localeCompare(b.title))[0];
+    }
+    if (league !== 'NBA' || game.status !== 'scheduled' || nbaLineupsPending(game)) return null;
+    return nbaProps.map(row => ({
+      ...row, title: `${row.name} ${row.side} ${row.line} ${row.statName}`, observedAt: row.sourceAt, odds: row[row.side],
+    })).find(row => row.name && row.statName && ['over', 'under'].includes(row.side) && isNum(row.line)
+      && [row.over, row.under].every(odds => isNum(odds) && Math.abs(odds) >= 100)
+      && Date.parse(row.availabilityReportedAt) <= now && now - Date.parse(row.availabilityReportedAt) <= 3600000
+      && eligible(row));
   };
 
   const favoriteLine = (game, league, prices, picks, now) => {
@@ -379,11 +399,19 @@
         const gameLink = game.favoriteDetail ? `#game/${encodeURIComponent(game.id)}`
           : `#games/live?${new URLSearchParams({ sport: league, date: day })}`;
         const link = line.rankGroup < 2 ? `#pick/${encodeURIComponent(line.id)}` : gameLink;
+        const nbaProps = nba?.favoriteProps?.[game.providerId || game.id.replace(/^NBA-/, '')] || [];
+        const prop = !past && !['Previous line closed', 'Game unavailable'].includes(line.status)
+          ? favoriteProp(game, league, byPrice.get(game.id) || [], nbaProps, line, now) : null;
+        const propLink = prop && league === 'NBA'
+          ? C.playerLineHref({ league, athleteId: prop.athleteId, stat: prop.stat, line: prop.line,
+            direction: prop.side, book: bookLabel(prop.book), gameId: game.id }) : gameLink;
+        const lineStatus = prop && line.status === 'No fresh line' ? 'No fresh spread or total' : line.status;
         const priceLabel = line.originalPrice ? 'Original posted price' : line.observedAt ? `Checked ${ago(line.observedAt)}` : '';
         return `<li class="slate-favorite-row"><span class="slate-rank">${line.rankGroup != null ? index + 1 : ''}</span>
           <span class="slate-matchup"><a href="${esc(gameLink)}">${esc(teamName(teams.away))} at ${esc(teamName(teams.home))}</a><small>${esc(whenShort(game.kickoff))}</small></span>
-          <span>${line.title ? `<a href="${esc(link)}"><b>${esc(line.title)}</b></a>` : isNum(line.modelTotal) ? `<b>Kook’n total ${esc(C.fixed(line.modelTotal, 1))}</b>` : ''}<small class="${line.rankGroup < 2 ? 'slate-posted' : ''}">${esc(line.status)}</small></span>
-          ${line.title ? `<span class="slate-price"><b>${esc(oddsText(line.odds))} · ${esc(bookLabel(line.book))}</b><small>${esc(priceLabel)}</small></span>` : ''}</li>`;
+          <span>${line.title ? `<a href="${esc(link)}"><b>${esc(line.title)}</b></a>` : isNum(line.modelTotal) ? `<b>Kook’n total ${esc(C.fixed(line.modelTotal, 1))}</b>` : ''}<small class="${line.rankGroup < 2 ? 'slate-posted' : ''}">${esc(lineStatus)}</small></span>
+          ${line.title ? `<span class="slate-price"><b>${esc(oddsText(line.odds))} · ${esc(bookLabel(line.book))}</b><small>${esc(priceLabel)}</small></span>` : ''}
+          ${prop ? `<span class="slate-prop"><a href="${esc(propLink || gameLink)}"><b>${esc(prop.title)}</b></a><small>Player prop · Research lean · ${esc(oddsText(prop.odds))} · ${esc(bookLabel(prop.book))} · Checked ${esc(ago(prop.observedAt))}</small></span>` : ''}</li>`;
       }).join('');
       const emptySlate = live?.failed ? 'Schedule unavailable for this date.'
         : live?.at || source || schedule ? 'No games listed for this date.' : 'Checking the schedule…';
@@ -394,7 +422,7 @@
       <label for="favorite-date" class="sr">Slate date in Eastern time</label><input class="select" type="date" id="favorite-date" data-favorite-date value="${esc(day)}">
       <a class="btn small" href="${esc(favoritePath(selected, dayOffset(1)))}">Next day</a>
       <a class="btn small" href="${esc(favoritePath(selected))}">Today</a></nav>`;
-    return `${head('Games', 'Favorite lines', 'One ranked line per game when available. Posted Best Bets come first, followed by research leans.')}${gameTabs('favorites')}${dates}
+    return `${head('Games', 'Favorite lines', 'One ranked line per game when available, plus a qualifying player prop. Posted Best Bets come first, followed by research leans.')}${gameTabs('favorites')}${dates}
       <div class="chip-scroll">${segLinks(sportNav, selected)}</div>${sections.join('')}`;
   };
 

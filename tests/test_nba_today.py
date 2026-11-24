@@ -25,6 +25,14 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertEqual(props['holds'],original['playerProps']['holds'])
   self.assertEqual(len(overview['teamTrends']),1)
   self.assertEqual(json.dumps(original,sort_keys=True),saved)
+ def test_favorite_props_keep_only_compact_ranked_rows_per_game(self):
+  rows=[{'eventId':'11','athleteId':str(n),'favorite':True,'line':10.5,'photo':'large URL'}
+        for n in range(4)]
+  rows.insert(0,{'eventId':'11','athleteId':'held','favorite':True,'hold':'Pending'})
+  rows.append({'eventId':'12','athleteId':'comparison','favorite':False})
+  overview,_=nba_today.public_payloads({'playerProps':{'rows':rows}})
+  self.assertEqual(overview['favoriteProps'],{'11':[
+   {'athleteId':str(n),'line':10.5} for n in range(3)]})
  def test_matchup_shards_reuse_exact_rows_in_original_order(self):
   rows=[{'eventId':'22','line':12.5},{'eventId':'11','line':4.5},
         {'eventId':22,'line':13.5},{'eventId':'../raw','line':2.5}]

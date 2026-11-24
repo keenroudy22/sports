@@ -30,6 +30,15 @@ def public_payloads(data):
         overview['readiness'] = {'stage': overview['readiness'].get('stage')}
     overview['playerPropsFile'] = 'nba-props.json'
     overview['playerProps'] = {k: props[k] for k in ('availabilityAt', 'availableRows', 'note') if k in props}
+    favorites = defaultdict(list)
+    for row in props.get('rows', []):
+        event = row.get('eventId')
+        if event and row.get('favorite') is True and not row.get('hold') and len(favorites[event]) < 3:
+            favorites[event].append({key: row[key] for key in (
+                'athleteId', 'name', 'stat', 'statName', 'kickoff', 'line', 'book',
+                'sourceAt', 'availabilityReportedAt', 'side', 'over', 'under',
+            ) if key in row})
+    overview['favoriteProps'] = dict(favorites)
     overview['teamTrends'] = list({json.dumps(r, sort_keys=True): r for r in data.get('teamTrends', [])}.values())
     board = {'generatedAt': data.get('generatedAt'), **props}
     if len(props.get('rows', [])) > 60:

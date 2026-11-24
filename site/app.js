@@ -2187,7 +2187,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-99a5ca341f92';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
-  const GAMES_ASSET = 'app-games.js?v=sha256-1e020742fcc9';
+  const GAMES_ASSET = 'app-games.js?v=sha256-00f68c2fb460';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-485ecb30ec2f';
   const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
