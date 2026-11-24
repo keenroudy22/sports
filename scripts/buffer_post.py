@@ -94,6 +94,10 @@ class BufferError(RuntimeError):
     pass
 
 
+class BufferPastDue(BufferError):
+    """Buffer explicitly declined a create request whose time had passed."""
+
+
 class BufferRateLimited(BufferError):
     def __init__(self, retry_at, window='unknown'):
         self.retry_at, self.window = retry_at, window
@@ -292,6 +296,8 @@ def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_se
         payload['metadata'] = {'twitter': {'retweet': {'id': quote_tweet_id, 'comment': text}}}
     data = graphql(CREATE, {'input': payload}, key=key, send=send, essential=essential)
     result = data.get('createPost') or {}
+    if result.get('message') == 'Scheduled time must be in the future' and not result.get('post'):
+        raise BufferPastDue(f"createPost refused: {result['message']}")
     if result.get('message'):
         raise BufferError(f"createPost refused: {result['message']}")
     post = result.get('post') or {}
@@ -964,7 +970,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             if cbb_regular:
                 cbb_picks.delivery_failed(guid, now)
             if kind == 'nba-trial':
-                nba_trial_runtime.delivery_failed(guid, now)
+                if isinstance(error, BufferPastDue):
+                    nba_trial_runtime.record_past_due_rejection(guid, datetime.now(timezone.utc) if send is http_send else now)
+                else:
+                    nba_trial_runtime.delivery_failed(guid, now)
             if kind == 'play' and missed_target(guid, due, now, items):
                 stats['officialNotScheduled'] += 1
             log(f'buffer: {guid} not scheduled: {error}')

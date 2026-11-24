@@ -165,6 +165,20 @@ class TrialRuntimeTests(unittest.TestCase):
   nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')
   self.assertTrue(rt.reserve_delivery(play['id'],NOW,self.root))
   self.assertFalse(rt.reserve_delivery(play['id'],NOW,self.root))
+
+ def test_explicit_past_due_rejection_allows_one_retry(self):
+  play={**offer(),'eventId':'NBA-1','direction':'under'}
+  nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')
+  self.assertTrue(rt.reserve_delivery(play['id'],NOW,self.root))
+  self.assertFalse(rt.record_past_due_rejection(play['id'],NOW-timedelta(seconds=1),self.root))
+  rejected_at=NOW+timedelta(seconds=10)
+  self.assertTrue(rt.record_past_due_rejection(play['id'],rejected_at,self.root))
+  self.assertFalse(rt.reserve_delivery(play['id'],NOW,self.root))
+  self.assertTrue(rt.reserve_delivery(play['id'],rejected_at,self.root))
+  self.assertFalse(rt.reserve_delivery(play['id'],rejected_at,self.root))
+  self.assertEqual([row['type'] for row in rt.rows(self.root)],
+                   ['publish','send-attempt','send-rejected','send-attempt'])
+
  def test_render_restores_a_confirmed_current_attachment_before_enforcing_history(self):
   play={'id':'NBA-Reviewed-Player','publishedAt':boxscores.stamp(NOW),'marketType':'player'}
   book={'posts':[{'id':play['id'],'cardKey':'nba-reviewed-player','sentAt':boxscores.stamp(NOW)}]}

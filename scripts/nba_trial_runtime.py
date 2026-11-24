@@ -589,11 +589,33 @@ def retryable_cancelled(entry,now):
  except (KeyError,ValueError,TypeError):return False
 
 
+def record_past_due_rejection(guid, now, root=nba_trial.STORE):
+ """Keep Buffer's definite rejection alongside the original create intent."""
+ attempts = [row for row in rows(root) if row.get('type') == 'send-attempt' and row['id'] == guid]
+ if len(attempts) != 1 or boxscores.instant(attempts[0]['retrievedAt']) > now:
+  return False
+ attempt = attempts[0]
+ rejection = dict(type='send-rejected', id=guid, season=attempt['season'],
+                  retrievedAt=boxscores.stamp(now), attemptAt=attempt['retrievedAt'],
+                  source='Buffer createPost refused: Scheduled time must be in the future')
+ existing = any(row.get('type') == 'send-rejected' and row['id'] == guid for row in rows(root))
+ if existing:
+  return False
+ return bool(nba_capture.append_changed([rejection], root, lambda row: (row['type'], row['id'])))
+
+
 def reserve_delivery(guid,now,root=nba_trial.STORE,cancelled=None):
- """Ambiguous creates stay held; a verified deleted private post may retry once."""
+ """Retry once after a proven rejection or deletion; ambiguous creates stay held."""
  saved=rows(root)
  retry=cancelled.get('bufferPostId') if cancelled and retryable_cancelled(cancelled,now) and cancelled.get('id')==guid else None
  attempts=[r for r in saved if r.get('type')=='send-attempt' and r['id']==guid]
+ if not cancelled and len(attempts) == 1 and any(
+     row.get('type') == 'send-rejected' and row['id'] == guid
+     and row.get('attemptAt') == attempts[0]['retrievedAt']
+     and row.get('source') == 'Buffer createPost refused: Scheduled time must be in the future'
+     and boxscores.instant(attempts[0]['retrievedAt']) <= boxscores.instant(row['retrievedAt']) <= now
+     for row in saved):
+  retry = 'past-due:' + attempts[0]['retrievedAt']
  if attempts and (not retry or any(r.get('retryOf')==retry for r in attempts)):return False
  if cancelled and not retry:return False
  play=next((r for r in saved if r.get('type')=='publish' and r['id']==guid),None)
