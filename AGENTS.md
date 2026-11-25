@@ -1,3 +1,13 @@
+# November 25 morning source fallback and delivery
+
+At the 6 a.m. desk start, review the earliest eligible games across supported
+sports, including the college basketball board when it is offered. Carry named
+backups from different games into each morning check. If the NBA availability
+listing or a book quote fails, record the exact hold and move to the next
+supported game in that same review. Use current paired book prices and official
+game or team evidence where already supported. Keep NBA review open for the
+next official update. Keep the complete recap and existing release checks.
+
 # November 25 weekly results posts
 
 Pause routine weekly results summaries on X and Discord. Keep the weekly review

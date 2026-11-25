@@ -2660,7 +2660,13 @@ def _run(args, now, slot, kinds, status):
     if not args.dry_run:
         sync()
         status['checks'].append('synced')
-        captures = ['settlement scan: no odds or prop requests'] if settle_only else capture(slot)
+        if settle_only:
+            captures = ['settlement scan: no odds or prop requests']
+        else:
+            publish_waiting_basketball(current_run_time(args, now), status, push=not args.no_push)
+            captures = capture(slot)
+            # A Pages build can finish while the initial price capture is running.
+            publish_waiting_basketball(current_run_time(args, now), status, push=not args.no_push)
     else:
         captures = ['dry run: no capture']
     for note in captures:
@@ -3397,8 +3403,30 @@ def draft_postable(pick):
 
 # ------------------------------------------------------------------ posting through Buffer
 
+def publish_waiting_basketball(now, status, *, push):
+    """Give already reviewed, hosted basketball plays a turn before new research."""
+    import cbb_picks
+    import nba_trial_runtime
+    import x_post
+
+    if not os.environ.get('BUFFER_TOKEN', '').strip():
+        return
+    book = x_post.load_log()
+    if not (cbb_picks.discord_delivery_due(now, book)
+            or nba_trial_runtime.discord_delivery_due(now, book)
+            or any((e.get('cbbDiscordOnly') or e.get('nbaDiscordOnly'))
+                   and not any(e.get(key) for key in ('bufferPostId', 'sentAt', 'cancelledAt', 'deletedAt', 'error'))
+                   and e.get('postedAt') and now - timedelta(hours=1) <= gates.when(e['postedAt']) <= now
+                   for e in book['posts'])):
+        return
+    ctx = gates.Stores().as_of(now)
+    buffer_posts(now, ctx, ctx.games, [], status, settlement_pass=True, basketball_only=True)
+    # Preserve sends before capture or a subsequent failure can dirty other stores.
+    commit_log(now, push=push, paths=('data/x-posted.json', 'data/cbb-picks/', 'data/nba-trial/'))
+
+
 def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sleep, clock=time.monotonic, *,
-                 settlement_pass=False):
+                 settlement_pass=False, basketball_only=False):
     """Schedule today's plays through Buffer (scripts/buffer_post.py), record what became of past posts and
     cancel any whose pick closed. Off without a token. Missing hosted cards retry
     on the next existing pass; never hold the shared posting lock waiting for a
@@ -3414,6 +3442,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         import receipts
         results_first_hold = receipts.prior_day_results_hold(
             ctx.first, ctx.latest, games, log_book, now, channel='all')
+        if basketball_only and results_first_hold:
+            return
         import nba_trial_runtime
         nba_discord_plans = nba_trial_runtime.social_plans(now, log_book, refresh=False)
         if not results_first_hold:
@@ -3421,20 +3451,23 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         import cbb_picks
         if not results_first_hold:
             cbb_picks.queue_discord(now, log_book)
-        queued_results = discord_post.queue_results(log_book, ctx.first, ctx.latest, games, now)
+        queued_results = 0 if basketball_only else discord_post.queue_results(
+            log_book, ctx.first, ctx.latest, games, now)
         if queued_results:
             log(f'discord: queued {queued_results} official result update(s)')
+        discord_book = log_book if not basketball_only else {
+            'posts': [e for e in log_book['posts'] if e.get('kind') in {'buffer:cbb-pick', 'buffer:nba-trial'}]}
         for entry in discord_post.mirror_sent(
-                log_book, now, log=log, hold_new_plays=results_first_hold):
+                discord_book, now, log=log, hold_new_plays=results_first_hold):
             status['errors'].append(f"discord: {entry['id']} failed to mirror: {entry['error']}")
             alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
-        for entry in buffer_post.reconcile(log_book, now, log=log):
+        for entry in ([] if basketball_only else buffer_post.reconcile(log_book, now, log=log)):
             status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
             alert('KeenRoudy post did not go out', f"{entry['id']}: {entry['error']}")
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
-        quotes = now_quotes(ctx, games, now)
+        quotes = {} if basketball_only else now_quotes(ctx, games, now)
         refused = []
         news = []
         if not settlement_pass:
@@ -3444,8 +3477,9 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             # enrichment keeps its historical empty-catalog fallback.
             lines = line_payload.load(build_site.OUT / 'lines.json', strict=False, log=log)
             news = news_posts.candidates(ctx, features.load(), lines, now, log_book, games=games)
-        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
-                                 refused=refused, news=news, log=log)
+        plans = [] if basketball_only else buffer_post.plan(
+            ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
+            refused=refused, news=news, log=log)
         for key, problems in refused:
             if 'has no X window' in problems:
                 log(f'buffer: {key} has no X window')
@@ -3455,6 +3489,9 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         import nba_trial_runtime
         plans += nba_trial_runtime.social_plans(now, log_book, reserved=plans, refresh=not settlement_pass)
         plans += cbb_picks.plans(now, log_book, reserved=plans)
+        if basketball_only:
+            prepared = {e['id'] for e in log_book['posts'] if e.get('cbbDiscordOnly') or e.get('nbaDiscordOnly')}
+            plans = [plan for plan in plans if plan[0] in prepared and plan[1] in {'cbb-pick', 'nba-trial'}]
         if results_first_hold:
             held = [plan[0] for plan in plans
                     if receipts.waits_for_morning_results(plan[0], plan[1], eastern_date(plan[3]))]
@@ -3463,7 +3500,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             if held:
                 log('results-first: held new posts until prior results reach X and Discord: '
                     + ', '.join(held))
-        upgrades = pending_ladder_result_cards(log_book, ctx, now)
+        upgrades = {} if basketball_only else pending_ladder_result_cards(log_book, ctx, now)
         if deploying and (plans or upgrades):
             cards = [card for *_, card in plans if card] + list(upgrades.values())
             waiting = [card for card in cards if not buffer_post.reachable(buffer_post.card_url(card))]
@@ -3507,7 +3544,10 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
                                  items=theme_items, clock=lambda: datetime.now(timezone.utc))
         newly_scheduled = [e for e in log_book.get('posts', [])
                            if e.get('bufferPostId') and e['bufferPostId'] not in before]
-        status['x']['posted'] = len(newly_scheduled)
+        status['x']['posted'] = status['x'].get('posted', 0) + len(newly_scheduled)
+        if basketball_only:
+            x_post.save_log(log_book)
+            return
         status['x']['officialUnscheduled'] = schedule_stats.get('officialNotScheduled', 0) + len({key for key, problems in refused if 'has no X window' in problems})
         missing = buffer_post.chosen_not_posted(ctx.first, ctx.latest, games, log_book, now)
         status['x']['chosenNotPosted'] = len(missing)
@@ -5084,10 +5124,11 @@ def homepage_editor(now, status, enabled=True):
     log('homepage editor:', status['localEditor'])
 
 
-def commit_log(now, push=True, runner=git, cwd=ROOT):
+def commit_log(now, push=True, runner=git, cwd=ROOT, *, paths=None):
     """Commit delivery evidence and the optional local homepage notes after scheduling."""
-    paths = ('data/x-posted.json', 'site/data/desk-notes.json', 'data/nba-capture/', 'data/sport-box/',
-             'data/nba-trial/', 'data/cbb-picks/', 'data/community-settlements.jsonl', 'data/nba-fun/', 'data/release-cards/')
+    if paths is None:
+        paths = ('data/x-posted.json', 'site/data/desk-notes.json', 'data/nba-capture/', 'data/sport-box/',
+                 'data/nba-trial/', 'data/cbb-picks/', 'data/community-settlements.jsonl', 'data/nba-fun/', 'data/release-cards/')
     changed = [p for p in paths if runner('status', '--porcelain', '--', p, cwd=cwd).stdout.strip()]
     if not changed:
         return {'committed': False, 'pushed': False}

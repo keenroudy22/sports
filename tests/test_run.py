@@ -1897,6 +1897,69 @@ class BufferPostsTests(unittest.TestCase):
         metrics.assert_not_called()
         self.assertTrue(all(call.kwargs['refresh'] is False for call in nba.call_args_list))
 
+    def test_game_day_delivers_waiting_basketball_before_capture(self):
+        now = datetime(2026, 11, 25, 16, 45, tzinfo=timezone.utc)
+        args = SimpleNamespace(command='run', dry_run=False, no_push=False, now=None)
+        status = {'checks': []}
+        order = []
+        with mock.patch.object(run, 'sync', side_effect=lambda: order.append('sync')), \
+                mock.patch.object(run, 'publish_waiting_basketball',
+                                  side_effect=lambda *a, **k: order.append('deliver')), \
+                mock.patch.object(run, 'capture', side_effect=lambda _: (order.append('capture') or [])), \
+                mock.patch.object(run, 'early_nba_selection', side_effect=RuntimeError('research reached')):
+            with self.assertRaisesRegex(RuntimeError, 'research reached'):
+                run._run(args, now, now.astimezone(run.EASTERN), {'settle', 'prop'}, status)
+        self.assertEqual(order, ['sync', 'deliver', 'capture', 'deliver'])
+
+    def test_waiting_basketball_uses_stored_delivery_and_commits(self):
+        now = datetime(2026, 11, 25, 16, 45, tzinfo=timezone.utc)
+        ctx = SimpleNamespace(games={})
+        status = {'errors': [], 'x': {}}
+        with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
+                mock.patch('x_post.load_log', return_value={'posts': []}), \
+                mock.patch('cbb_picks.discord_delivery_due', return_value=True), \
+                mock.patch.object(run.gates, 'Stores') as stores, \
+                mock.patch.object(run, 'buffer_posts') as post, \
+                mock.patch.object(run, 'commit_log') as commit:
+            stores.return_value.as_of.return_value = ctx
+            run.publish_waiting_basketball(now, status, push=True)
+        post.assert_called_once_with(now, ctx, {}, [], status, settlement_pass=True, basketball_only=True)
+        commit.assert_called_once_with(now, push=True,
+                                       paths=('data/x-posted.json', 'data/cbb-picks/', 'data/nba-trial/'))
+
+    def test_early_basketball_preserves_recap_gate_and_stored_price_checks(self):
+        now = datetime(2026, 11, 25, 16, 45, tzinfo=timezone.utc)
+        ctx = SimpleNamespace(first={}, latest={}, player_team={})
+        plans = [('early-cbb', 'cbb-pick', 'text', now, 'card'),
+                 ('missing-art', 'cbb-pick', 'text', now, 'missing'),
+                 ('yesterday', 'receipt', 'result', now, 'final')]
+        ready = {'id': 'early-cbb', 'kind': 'buffer:cbb-pick', 'cbbDiscordOnly': True}
+        book = {'posts': [{'kind': 'buffer:research'}, ready]}
+        with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
+                mock.patch('x_post.load_log', return_value=book), \
+                mock.patch('x_post.save_log'), \
+                mock.patch('receipts.prior_day_results_hold', side_effect=['recap pending', None]), \
+                mock.patch('cbb_picks.queue_discord') as queue, \
+                mock.patch('cbb_picks.plans', return_value=plans), \
+                mock.patch('nba_trial_runtime.social_plans', return_value=[]) as nba, \
+                mock.patch('discord_post.mirror_sent', return_value=[]) as mirror, \
+                mock.patch.object(run, 'now_quotes') as quotes, \
+                mock.patch.object(buffer_post, 'plan') as ordinary_plan, \
+                mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                mock.patch.object(buffer_post, 'daily_limit', return_value=None), \
+                mock.patch.object(buffer_post, 'schedule') as schedule:
+            status = {'errors': [], 'x': {}}
+            run.buffer_posts(now, ctx, {}, [], status, settlement_pass=True, basketball_only=True)
+            queue.assert_not_called()
+            schedule.assert_not_called()
+            run.buffer_posts(now, ctx, {}, [], status, settlement_pass=True, basketball_only=True)
+
+        self.assertEqual(schedule.call_args.args[0], plans[:1])
+        self.assertEqual(mirror.call_args.args[0], {'posts': [ready]})
+        self.assertTrue(all(call.kwargs['refresh'] is False for call in nba.call_args_list))
+        quotes.assert_not_called()
+        ordinary_plan.assert_not_called()
+
     def test_missing_prebuild_lines_never_blocks_play_scheduling(self):
         self.assert_optional_line_catalog_does_not_block_play(lambda _out: None)
 
