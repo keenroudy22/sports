@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-25T20:16:34Z",
+  "updatedAt": "2026-11-25T20:57:02Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 188,
+    "lines": 189,
     "current": 0,
-    "references": 1
+    "references": 2
   },
   "lines": [
     {
@@ -10782,6 +10782,69 @@
           "source": "https://www.espn.com/nfl/game/_/gameId/401873078",
           "marketWindow": "Full game",
           "cutoff": "OVER 8.5 at +111 or better; off the card at 9+, or at +110 or worse at 8.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401873079",
+      "player": "Konata Mumpfield",
+      "athleteId": null,
+      "position": "WR",
+      "reportId": "NFL-2026-W12-mumpfield-under-2-5-rec-fd",
+      "identityVerified": false,
+      "direction": "UNDER",
+      "line": 2.5,
+      "market": "receptions",
+      "book": "FanDuel",
+      "odds": 112,
+      "observedAt": "2026-11-25T20:14:44Z",
+      "expiresAt": "2026-11-25T22:30:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401873079",
+      "marketWindow": "Full game",
+      "cutoff": "UNDER 2.5 at +112 or better; off the card at 2 or lower, or at +111 or worse at 2.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-11-25T20:14:44Z",
+      "kickoff": "2026-11-26T01:00Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Konata Mumpfield UNDER 2.5 receptions",
+      "id": "line-c2840a9d7f9f06d86115",
+      "observations": [
+        {
+          "line": 2.5,
+          "odds": 112,
+          "observedAt": "2026-11-25T20:14:44Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873079",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401873079",
+          "player": "Konata Mumpfield",
+          "athleteId": null,
+          "position": "WR",
+          "reportId": "NFL-2026-W12-mumpfield-under-2-5-rec-fd",
+          "identityVerified": false,
+          "direction": "UNDER",
+          "line": 2.5,
+          "market": "receptions",
+          "book": "FanDuel",
+          "odds": 112,
+          "observedAt": "2026-11-25T20:14:44Z",
+          "expiresAt": "2026-11-25T22:30:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873079",
+          "marketWindow": "Full game",
+          "cutoff": "UNDER 2.5 at +112 or better; off the card at 2 or lower, or at +111 or worse at 2.5.",
           "quoteType": "source reference"
         }
       ]
