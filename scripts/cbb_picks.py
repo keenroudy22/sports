@@ -242,10 +242,16 @@ def grade(now,root=STORE,finals=None):
     for p in public_rows(root):
         f=available.get(p['eventId']) or available.get(p['eventId'].removeprefix('CBB-'))
         if not f or boxscores.instant(p['kickoff'])>=now or f.get('type')!=2 or f.get('season')!=p['season'] or boxscores.instant(f['kickoff'])!=boxscores.instant(p['kickoff']):continue
-        if str(f['home']['id'])!=str(p['game']['teams']['home']['id']) or str(f['away']['id'])!=str(p['game']['teams']['away']['id']):continue
+        original_ids = {side: str(p['game']['teams'][side]['id']) for side in ('home', 'away')}
+        final_ids = {side: str(f[side]['id']) for side in ('home', 'away')}
+        if final_ids != original_ids:
+            # Neutral-site providers can reverse designations after publication.
+            # Preserve the selected team, original spread and official score.
+            if not p['game'].get('neutral') or len(set(original_ids.values())) != 2 or set(final_ids.values()) != set(original_ids.values()):continue
         h,a=f['homeScore'],f['awayScore']
         if not finite(h) or not finite(a):continue
-        actual=h+a if p['marketType']=='total' else (h-a if p['direction']=='home' else a-h)
+        scores = {final_ids['home']: h, final_ids['away']: a}
+        actual=h+a if p['marketType']=='total' else scores[original_ids[p['direction']]]-scores[original_ids['away' if p['direction']=='home' else 'home']]
         margin=(actual-p['line'])*(1 if p['direction']=='over' else -1) if p['marketType']=='total' else actual+p['line']
         result='win' if margin>0 else 'loss' if margin<0 else 'push'
         if p.get('result')==result and p.get('actual')==actual:continue

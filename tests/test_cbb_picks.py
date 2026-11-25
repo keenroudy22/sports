@@ -151,6 +151,32 @@ class CBBPicksTests(unittest.TestCase):
             self.assertEqual(row['odds'],p['odds'])
             self.assertEqual(row['riskUnits'],1)
 
+    def test_neutral_designation_reversal_grades_original_selected_team(self):
+        later=datetime(2026,11,4,4,tzinfo=timezone.utc)
+        for market, direction, line, expected in [('spread','away',7.5,1), ('spread','home',-7.5,-1), ('total','under',150.5,135)]:
+            with self.subTest(market=market,direction=direction), tempfile.TemporaryDirectory() as d:
+                p=fixture();p['game']['neutral']=True
+                p.update(marketType=market,direction=direction,line=line)
+                p['quote'].update(marketType=market,direction=direction,line=line)
+                root=Path(d);ctx=context();ctx.risk_games['CBB-123']=p['game'];cbb.admit(p,ctx,NOW,root)
+                final=dict(eventId='123',type=2,season=2027,kickoff=p['game']['kickoff'],
+                    home={'id':'2'},away={'id':'1'},homeScore=68,awayScore=67,retrievedAt='2026-11-04T03:00:00Z')
+                for field, value in [('season',2026),('kickoff','2026-11-04T00:01:00Z'),('eventId','456'),('away',{'id':'3'})]:
+                    self.assertEqual(cbb.grade(later,root,[dict(final,**{field:value})]),0)
+                self.assertEqual(cbb.grade(later,root,[final]),1)
+                self.assertEqual(cbb.grade(later,root,[final]),0)
+                settled=cbb.public_rows(root)[0]
+                self.assertEqual(settled['actual'],expected)
+                self.assertEqual(settled['line'],line)
+                self.assertEqual(settled['game'],p['game'])
+
+    def test_non_neutral_designation_reversal_stays_held(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=fixture();root=Path(d);cbb.admit(p,context(),NOW,root)
+            final=dict(eventId='123',type=2,season=2027,kickoff=p['game']['kickoff'],
+                home={'id':'2'},away={'id':'1'},homeScore=68,awayScore=67,retrievedAt='2026-11-04T03:00:00Z')
+            self.assertEqual(cbb.grade(datetime(2026,11,4,4,tzinfo=timezone.utc),root,[final]),0)
+
     def test_future_final_is_not_graded(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);p=fixture();cbb.admit(p,context(),NOW,root)
