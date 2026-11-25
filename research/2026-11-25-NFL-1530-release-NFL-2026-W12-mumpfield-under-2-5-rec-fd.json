@@ -1,0 +1,337 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-11-25T20:30:44Z",
+  "summary": "Released 1: Konata Mumpfield UNDER 2.5 receptions +112 at FanDuel.",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4710855",
+      "market": "rec",
+      "line": 2.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401873079"
+      ],
+      "book": "FanDuel",
+      "odds": 112,
+      "projection": 2.0,
+      "edge": "Price-checked chance 51.1% against the exact two-sided price; 47.2% needed at +112: +3.9 percentage points.",
+      "cutoff": "UNDER 2.5 at +112 or better; off the card at 2 or lower, or at +111 or worse at 2.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-24T20:53:24Z",
+      "quotedAt": "2026-11-25T20:14:44Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 3:14 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-11-25T22:30:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.62,
+        "chance": 0.511,
+        "calibrated": true,
+        "calibration": 0.09,
+        "calibrationN": 3361,
+        "push": 0.0,
+        "breakEven": 0.472,
+        "edgePoints": 3.9,
+        "evPerUnit": 0.083,
+        "snapshotAt": "2026-11-24T20:53:24Z",
+        "probabilitySpec": "00781a91dd029585608477973eb77b0d1e2c1c98921df8af2c110822c937095c",
+        "evaluatedAt": "2026-11-25T20:25:14Z",
+        "fairChance": 0.441,
+        "anchoredChance": 0.511,
+        "gap": 6.9,
+        "calibrationFamily": "NFL/prop",
+        "calibrationMethod": "neutral-centered-held-out"
+      },
+      "matchup": "Green Bay Packers at Los Angeles Rams",
+      "title": "Konata Mumpfield UNDER 2.5 receptions",
+      "id": "NFL-2026-W12-mumpfield-under-2-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873079",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 8 of 10 under 2.5.",
+        "context": [
+          "Role: 1st of 4 LAR WRs by projected targets, 3.9 a game.",
+          "Defense: GB allows 14 receptions a game to WRs, 31st-stingiest of 32 this season."
+        ],
+        "cautions": [
+          "The defense leans against this side (that's the whole position group, not just him)."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 2 against 2.5. The under reads 51.1% after adjustment from the raw 62.0%; 47.2% is needed at +112. Last 10 games: 8 of 10 under 2.5. Role: 1st of 4 LAR WRs by projected targets, 3.9 a game. Defense: GB allows 14 receptions a game to WRs, 31st-stingiest of 32 this season.",
+      "risk": "The defense leans against this side (that's the whole position group, not just him). An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Under 2.5 in 8 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-11-25T20:25:14Z"
+          },
+          {
+            "text": "Book says 2.5. I say 2.",
+            "numbers": {
+              "projection": 2.0,
+              "line": 2.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-11-24T20:53:24Z"
+          },
+          {
+            "text": "4 of his last 5 games finished under 2.5 receptions.",
+            "numbers": {
+              "values": [
+                2,
+                1,
+                0,
+                2,
+                3
+              ],
+              "hits": 4,
+              "games": 5,
+              "line": 2.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-11-15T21:05Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "The defense leans against this side (that's the whole position group, not just him). An estimated chance, not a guarantee; a player line turns on a handful of touches. 9 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-11-25T20:25:14Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Coleman Shelton (LAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3052180/coleman-shelton",
+            "time": "2026-11-23T22:25Z"
+          },
+          {
+            "text": "Steve Avila (LAR) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4362474/steve-avila",
+            "time": "2026-11-22T01:01Z"
+          },
+          {
+            "text": "Kevin Zeitler (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/14931/kevin-zeitler",
+            "time": "2026-11-25T01:25Z"
+          },
+          {
+            "text": "Sean Rhyan (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426411/sean-rhyan",
+            "time": "2026-11-25T01:18Z"
+          },
+          {
+            "text": "Travis Glover (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361904/travis-glover",
+            "time": "2026-11-25T01:13Z"
+          },
+          {
+            "text": "Skyy Moore (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4430191/skyy-moore",
+            "time": "2026-11-24T20:48Z"
+          },
+          {
+            "text": "Bo Melton (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4259305/bo-melton",
+            "time": "2026-11-24T20:40Z"
+          },
+          {
+            "text": "Zaire Franklin (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3124005/zaire-franklin",
+            "time": "2026-11-24T20:28Z"
+          },
+          {
+            "text": "Micah Parsons (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+            "time": "2026-11-24T19:34Z"
+          },
+          {
+            "text": "Josh Jacobs (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs",
+            "time": "2026-11-24T18:19Z"
+          },
+          {
+            "text": "Luke Musgrave (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4428085/luke-musgrave",
+            "time": "2026-11-22T14:06Z"
+          }
+        ],
+        "weather": {
+          "tempF": 70,
+          "windMph": 5,
+          "windDirection": "N",
+          "precipProb": 0,
+          "periodStart": "2026-11-25T17:00:00-08:00",
+          "issuedAt": "2026-11-25T19:39:35+00:00",
+          "source": "https://api.weather.gov/gridpoints/LOX/150,42/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.5,
+                "price": -168,
+                "time": "2026-11-24T03:09:36Z"
+              },
+              "now": {
+                "line": 2.5,
+                "price": 112,
+                "time": "2026-11-25T20:14:44Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.5,
+                "price": -166,
+                "time": "2026-11-24T03:09:36Z"
+              },
+              "now": {
+                "line": 2.5,
+                "price": 112,
+                "time": "2026-11-25T20:14:44Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 2.5,
+            "price": 112,
+            "time": "2026-11-25T20:14:44Z"
+          }
+        },
+        "ours": {
+          "projection": 2.0,
+          "line": 2.5,
+          "market": "rec",
+          "text": "Under 2.5 in 8 of his last 10 games.",
+          "snapshotAt": "2026-11-24T20:53:24Z"
+        },
+        "history": "Last 10 games: 8 of 10 under 2.5.",
+        "sources": [
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3052180/coleman-shelton",
+            "time": "2026-11-23T22:25Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4362474/steve-avila",
+            "time": "2026-11-22T01:01Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/14931/kevin-zeitler",
+            "time": "2026-11-25T01:25Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426411/sean-rhyan",
+            "time": "2026-11-25T01:18Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361904/travis-glover",
+            "time": "2026-11-25T01:13Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4430191/skyy-moore",
+            "time": "2026-11-24T20:48Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4259305/bo-melton",
+            "time": "2026-11-24T20:40Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3124005/zaire-franklin",
+            "time": "2026-11-24T20:28Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+            "time": "2026-11-24T19:34Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs",
+            "time": "2026-11-24T18:19Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4428085/luke-musgrave",
+            "time": "2026-11-22T14:06Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/LOX/150,42/forecast/hourly",
+            "time": "2026-11-25T19:39:35+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873079",
+            "time": "2026-11-25T20:25:14Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-11-25T20:25:14Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-25T20:30:44Z"
+    }
+  ]
+}
