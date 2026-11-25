@@ -77334,5 +77334,328 @@
         "units": 1.26
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-11-25T13:40:06Z",
+    "summary": "Released 1: Blake Corum UNDER 11.5 carries +106 at DraftKings.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "RB",
+        "athleteId": "4429096",
+        "market": "car",
+        "line": 11.5,
+        "direction": "under",
+        "gameIds": [
+          "NFL-401873079"
+        ],
+        "book": "DraftKings",
+        "odds": 106,
+        "projection": 10.2,
+        "edge": "Price-checked chance 51.0% against the exact two-sided price; 48.5% needed at +106: +2.4 percentage points.",
+        "cutoff": "UNDER 11.5 at +106 or better; off the card at 11 or lower, or at +105 or worse at 11.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-24T20:53:24Z",
+        "quotedAt": "2026-11-25T13:31:10Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 8:31 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-25T16:45:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.609,
+          "chance": 0.51,
+          "calibrated": true,
+          "calibration": 0.09,
+          "calibrationN": 3361,
+          "push": 0.0,
+          "breakEven": 0.485,
+          "edgePoints": 2.4,
+          "evPerUnit": 0.05,
+          "snapshotAt": "2026-11-24T20:53:24Z",
+          "probabilitySpec": "94fa27c8f0fde9d87d4d57abd9a66536afed17026b435e4c32b047917ed9310a",
+          "evaluatedAt": "2026-11-25T13:34:35Z",
+          "fairChance": 0.458,
+          "anchoredChance": 0.51,
+          "gap": 5.2,
+          "calibrationFamily": "NFL/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Green Bay Packers at Los Angeles Rams",
+        "title": "Blake Corum UNDER 11.5 carries",
+        "id": "NFL-2026-W12-corum-under-11-5-car-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401873079",
+          "https://api.sharpapi.io/api/v1/odds"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 7 of 10 under 11.5.",
+          "context": [
+            "Role: 2nd of 3 LAR RBs by projected carries, 10.2 a game.",
+            "Defense: GB allows 23.1 carries a game to RBs, 20th-stingiest of 32 this season."
+          ],
+          "cautions": [],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 10.2 against 11.5. The under reads 51.0% after adjustment from the raw 60.9%; 48.5% is needed at +106. Last 10 games: 7 of 10 under 11.5. Role: 2nd of 3 LAR RBs by projected carries, 10.2 a game. Defense: GB allows 23.1 carries a game to RBs, 20th-stingiest of 32 this season.",
+        "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 10 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Under 11.5 in 7 of his last 10 games.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-25T13:34:35Z"
+            },
+            {
+              "text": "Book says 11.5. I say 10.2.",
+              "numbers": {
+                "projection": 10.2,
+                "line": 11.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-24T20:53:24Z"
+            },
+            {
+              "text": "3 of his last 5 games finished under 11.5 carries.",
+              "numbers": {
+                "values": [
+                  9,
+                  17,
+                  11,
+                  11,
+                  17
+                ],
+                "hits": 3,
+                "games": 5,
+                "line": 11.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-11-15T21:05Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 10 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-25T13:34:35Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Coleman Shelton (LAR) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3052180/coleman-shelton",
+              "time": "2026-11-23T22:25Z"
+            },
+            {
+              "text": "Steve Avila (LAR) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4362474/steve-avila",
+              "time": "2026-11-22T01:01Z"
+            },
+            {
+              "text": "Kevin Zeitler (GB) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/14931/kevin-zeitler",
+              "time": "2026-11-25T01:25Z"
+            },
+            {
+              "text": "Sean Rhyan (GB) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4426411/sean-rhyan",
+              "time": "2026-11-25T01:18Z"
+            },
+            {
+              "text": "Travis Glover (GB) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4361904/travis-glover",
+              "time": "2026-11-25T01:13Z"
+            },
+            {
+              "text": "Skyy Moore (GB) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4430191/skyy-moore",
+              "time": "2026-11-24T20:48Z"
+            },
+            {
+              "text": "Bo Melton (GB) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4259305/bo-melton",
+              "time": "2026-11-24T20:40Z"
+            },
+            {
+              "text": "Zaire Franklin (GB) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3124005/zaire-franklin",
+              "time": "2026-11-24T20:28Z"
+            },
+            {
+              "text": "Micah Parsons (GB) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+              "time": "2026-11-24T19:34Z"
+            },
+            {
+              "text": "Josh Jacobs (GB) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs",
+              "time": "2026-11-24T18:19Z"
+            },
+            {
+              "text": "Luke Musgrave (GB) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4428085/luke-musgrave",
+              "time": "2026-11-22T14:06Z"
+            }
+          ],
+          "weather": {
+            "tempF": 71,
+            "windMph": 5,
+            "windDirection": "WNW",
+            "precipProb": 0,
+            "periodStart": "2026-11-25T17:00:00-08:00",
+            "issuedAt": "2026-11-25T04:41:47+00:00",
+            "source": "https://api.weather.gov/gridpoints/LOX/150,42/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 12.5,
+                  "price": -121,
+                  "time": "2026-11-24T03:09:36Z"
+                },
+                "now": {
+                  "line": 11.5,
+                  "price": 106,
+                  "time": "2026-11-25T13:31:10Z"
+                }
+              },
+              "FanDuel": null
+            },
+            "best": {
+              "book": "DraftKings",
+              "line": 11.5,
+              "price": 106,
+              "time": "2026-11-25T13:31:10Z"
+            }
+          },
+          "ours": {
+            "projection": 10.2,
+            "line": 11.5,
+            "market": "car",
+            "text": "Under 11.5 in 7 of his last 10 games.",
+            "snapshotAt": "2026-11-24T20:53:24Z"
+          },
+          "history": "Last 10 games: 7 of 10 under 11.5.",
+          "sources": [
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3052180/coleman-shelton",
+              "time": "2026-11-23T22:25Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4362474/steve-avila",
+              "time": "2026-11-22T01:01Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/14931/kevin-zeitler",
+              "time": "2026-11-25T01:25Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4426411/sean-rhyan",
+              "time": "2026-11-25T01:18Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4361904/travis-glover",
+              "time": "2026-11-25T01:13Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4430191/skyy-moore",
+              "time": "2026-11-24T20:48Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4259305/bo-melton",
+              "time": "2026-11-24T20:40Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3124005/zaire-franklin",
+              "time": "2026-11-24T20:28Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+              "time": "2026-11-24T19:34Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs",
+              "time": "2026-11-24T18:19Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4428085/luke-musgrave",
+              "time": "2026-11-22T14:06Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/LOX/150,42/forecast/hourly",
+              "time": "2026-11-25T04:41:47+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401873079",
+              "time": "2026-11-25T13:34:35Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-11-25T13:34:35Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-25T13:40:06Z"
+      }
+    ]
   }
 ]
