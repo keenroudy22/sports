@@ -759,6 +759,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     results_checked = False
     for plan_row in plans:
         guid, kind, _, due, _ = plan_row
+        if guid.startswith('receipt:week:') and eastern_date(max(now, due)) >= receipts.WEEKLY_RESULTS_PAUSED_FROM:
+            log(f'buffer: {guid} held: routine weekly results posts are paused')
+            continue
         trial_hold = social_learning.research_trial_hold(guid, max(now, due))
         if trial_hold:
             log(f'buffer: {guid} held: {trial_hold}')

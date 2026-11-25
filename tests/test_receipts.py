@@ -288,6 +288,20 @@ class ReceiptTests(unittest.TestCase):
         self.assertIn('receipt-day-2026-09-27', cards)
         self.assertIn('receipt-week-2026-09-29', cards)
 
+    def test_weekly_social_pause_preserves_daily_receipts_and_weekly_cards(self):
+        wednesday = datetime(2026, 12, 2, 14, tzinfo=timezone.utc)
+        day = {'key': 'receipt:day:2026-12-01', 'stale': wednesday + timedelta(hours=1)}
+        week = {'key': 'receipt:week:2026-12-01', 'stale': wednesday + timedelta(hours=1)}
+        with (patch.object(receipts, 'day_receipt', side_effect=[None, day]),
+              patch.object(receipts, 'week_receipt', return_value=week) as build_week,
+              patch('daily_straight_card.link_final', side_effect=lambda row, *_: row)):
+            self.assertEqual(receipts.ready({}, {}, {}, {}, wednesday), [day])
+            build_week.assert_not_called()
+        with (patch.object(receipts, 'day_receipt', return_value=None),
+              patch.object(receipts, 'week_receipt', return_value=week),
+              patch('daily_straight_card.link_final', side_effect=lambda row, *_: row)):
+            self.assertEqual(receipts.card_history({}, {}, {}, wednesday, days=0, log_book={}), [week])
+
     def test_retained_receipt_keeps_the_season_record_from_its_due_time(self):
         first = {
             'early': pick('early', 'sun', publishedAt='2026-09-27T12:00:00Z'),

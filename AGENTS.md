@@ -1,3 +1,9 @@
+# November 25 weekly results posts
+
+Pause routine weekly results summaries on X and Discord. Keep the weekly review
+private, the site record complete, and the daily straight recap and factual
+corrections on their normal paths. Preserve historical posts and receipts.
+
 # November 24 Secret Santa
 
 Secret Santa is a site-only paper rollover through December 25 Eastern.

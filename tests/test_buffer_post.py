@@ -64,6 +64,15 @@ class FakeBuffer:
 
 
 class ClientTests(unittest.TestCase):
+    def test_weekly_results_pause_rejects_a_prebuilt_social_retry(self):
+        now = datetime(2026, 11, 25, 14, tzinfo=timezone.utc)
+        book = {'posts': []}
+        provider = mock.Mock(side_effect=AssertionError('Paused recap reached Buffer'))
+        bp.schedule([('receipt:week:2026-11-24', 'receipt', 'The week', now, None)],
+                    'x', book, now, send=provider, log=lambda *_: None)
+        provider.assert_not_called()
+        self.assertEqual(book['posts'], [])
+
     def test_private_replacement_keeps_verified_caption_correction(self):
         text = ("Best Bet: Javonte Williams over 2.5 catches (+106, FanDuel)\n\n"
                 "I project 3.4 targets.\n\n#NFL\n\nCopy the bet 👇 @Playbook\n\n21+ only")

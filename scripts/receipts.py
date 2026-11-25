@@ -34,6 +34,7 @@ WEEKDAY = 2                       # Wednesday: the week's receipt
 CARD_HISTORY_DAYS = 8             # Discord embeds and retrying publishers need recent generated URLs to survive
 RESULTS_FIRST_EFFECTIVE = date(2026, 11, 15)
 MORNING_RECAP_FIRST = date(2026, 11, 18)
+WEEKLY_RESULTS_PAUSED_FROM = date(2026, 11, 25)
 MARKS = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}
 KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun parlays', 'ladder': '80/20 Climb'}
 
@@ -593,8 +594,7 @@ def week_receipt(wednesday, first, latest, games, ids, as_of=None):
 
 
 def ready(first, latest, games, log_book, now):
-    """The receipts that can go out now: yesterday's (or the day before's, if it settled late) and, on Wednesday,
-    the week's. Each only when every play it covers is settled, and none after its evening."""
+    """Return settled receipts still inside their social publishing window."""
     first = released_first(first, log_book, games)
     ids = counted(first, latest)
     today = eastern_date(now)
@@ -603,7 +603,7 @@ def ready(first, latest, games, log_book, now):
         receipt = day_receipt(today - timedelta(days=back), first, latest, games, ids, now, log_book)
         if receipt:
             out.append(receipt)
-    if today.weekday() == WEEKDAY:
+    if today.weekday() == WEEKDAY and today < WEEKLY_RESULTS_PAUSED_FROM:
         receipt = week_receipt(today, first, latest, games, ids, now)
         if receipt:
             out.append(receipt)
