@@ -49,7 +49,14 @@ def build(entries, football, basketball, now):
     seen = set()
     previous = None
     settled = None
-    for index, play in enumerate(entries, start=1):
+    last_event = None
+    run, step = 1, 0
+    for play in entries:
+        if 'restartAfter' in play:
+            if balance or last_event != play['restartAfter']:
+                break
+            run, step, balance = run + 1, 0, START_CENTS
+            continue
         league, event = play['league'], play['eventId']
         key = league, event
         if (league not in ('NFL', 'CFB', 'NBA', 'CBB') or not event.isdigit()
@@ -74,9 +81,10 @@ def build(entries, football, basketball, now):
             raise ValueError('Secret Santa requires published research and book evidence')
         if checked > now or not balance or settled and checked < settled:
             break
+        step += 1
         ticket = {field: play[field] for field in ('selection', 'matchup', 'startsAt', 'book', 'checkedAt',
                   'odds', 'reason', 'countercase', 'sources')}
-        ticket.update(step=index, balance=balance, winReturn=return_on_win(balance, play['odds']))
+        ticket.update(run=run, step=step, balance=balance, winReturn=return_on_win(balance, play['odds']))
         final = grade(play, finals.get(key), now)
         if not final:
             current = ticket
@@ -91,8 +99,8 @@ def build(entries, football, basketball, now):
         history.append(dict(ticket, result=result, score=score, after=after, resultUrl=result_url))
         balance = after
         settled = boxscores.instant(final_game['retrievedAt'])
-    return dict(balance=balance, current=current, history=history,
-                wins=sum(step['result']=='win' for step in history),
-                losses=sum(step['result']=='loss' for step in history),
-                pushes=sum(step['result']=='push' for step in history),
+        last_event = event
+    results = Counter(row['result'] for row in history if row['run'] == run)
+    return dict(run=run, balance=balance, current=current, history=history,
+                wins=results['win'], losses=results['loss'], pushes=results['push'],
                 closed=not balance or (not current and now.astimezone(EASTERN).date() > LAST_DAY))

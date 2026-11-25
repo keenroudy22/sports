@@ -48,3 +48,23 @@ class SecretSantaTests(unittest.TestCase):
         view = secret_santa.build([play], [self.game], {}, self.now)
         self.assertEqual(view['pushes'], 1)
         self.assertEqual(view['balance'], 2000)
+
+    def test_owner_restart_preserves_the_loss_and_funds_a_new_step(self):
+        restart = {'restartAfter': self.play['eventId']}
+        loss = dict(self.game, away={'id': '193', 'score': 21})
+        view = secret_santa.build([self.play, restart], [loss], {}, self.now)
+        self.assertEqual((view['run'], view['balance'], view['losses']), (2, 2000, 0))
+        self.assertFalse(view['closed'])
+        self.assertIsNone(view['current'])
+        self.assertEqual([(row['run'], row['step'], row['result']) for row in view['history']], [(1, 1, 'loss')])
+
+        later = dict(self.play, eventId='2', startsAt='2026-11-25T03:50:00Z', checkedAt='2026-11-25T03:05:00Z')
+        view = secret_santa.build([self.play, restart, later], [loss], {}, self.now)
+        self.assertEqual((view['current']['run'], view['current']['step'], view['current']['balance']), (2, 1, 2000))
+
+    def test_restart_requires_the_named_official_loss(self):
+        restart = {'restartAfter': self.play['eventId']}
+        self.assertEqual(secret_santa.build([self.play, restart], [], {}, self.now)['run'], 1)
+        self.assertEqual(secret_santa.build([self.play, restart], [self.game], {}, self.now)['run'], 1)
+        loss = dict(self.game, away={'id': '193', 'score': 21})
+        self.assertTrue(secret_santa.build([self.play, {'restartAfter': '999'}], [loss], {}, self.now)['closed'])

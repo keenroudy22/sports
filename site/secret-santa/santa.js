@@ -9,13 +9,14 @@ const eastern = new Intl.DateTimeFormat('en-US', {
 const byId = id => document.getElementById(id);
 const set = (id, value) => { byId(id).textContent = value; };
 
-function render({balance, wins, losses, pushes, current, history, closed}) {
+function render({run = 1, balance, wins, losses, pushes, current, history, closed}) {
   set('balance', money(balance));
   set('record', [wins, losses, ...(pushes ? [pushes] : [])].join('–'));
+  set('step-label', `Run ${run}`);
   if (current) {
     const piece = byId('ticket').content.cloneNode(true);
     const fill = (selector, value) => { piece.querySelector(selector).textContent = value; };
-    set('step-label', `Step ${current.step}`);
+    set('step-label', `Run ${run} · Step ${current.step}`);
     set('slip-title', current.selection);
     const gameStarted = Date.now() >= Date.parse(current.startsAt);
     set('status', gameStarted ? 'Awaiting verified final' : `Starts ${eastern.format(new Date(current.startsAt))}`);
@@ -43,7 +44,7 @@ function render({balance, wins, losses, pushes, current, history, closed}) {
   for (const step of history.slice().reverse()) {
     const li = document.createElement('li');
     const label = document.createElement('span');
-    label.textContent = `Step ${step.step} · ${step.selection}`;
+    label.textContent = `Run ${step.run ?? 1} · Step ${step.step} · ${step.selection}`;
     const result = document.createElement('a');
     result.href = step.resultUrl;
     result.textContent = `${step.result.toUpperCase()} · ${step.score} · ${money(step.after)}`;

@@ -14,6 +14,12 @@ Exclude this challenge from social delivery, phone pushes, the regular card,
 records and feeds. No real account information, stake or transaction belongs
 in this experiment.
 
+The owner approved one fresh $20 paper run after the Nov 24 Western Michigan
+loss. Preserve the original entry and final in the history. The explicit
+`restartAfter` entry takes effect only after the exact preceding game grades
+as a loss. The next qualifying play is Run 2 Step 1. Any later restart requires
+another owner direction.
+
 # November 24 straight results
 
 Starting with the November 23 Eastern slate, send one complete graded
