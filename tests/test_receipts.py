@@ -51,7 +51,7 @@ class ReceiptTests(unittest.TestCase):
         game=dict(GAMES['sun'],kickoff='2026-11-24T18:00Z')
         plays=[pick(str(i),'sun',posted=True,odds=100,riskUnits=1,publishedAt='2026-11-24T16:00Z') for i in range(5)]
         first={r['id']:r for r in plays};latest={r['id']:{'result':'win' if i<2 else 'loss'} for i,r in enumerate(plays)}
-        with patch.object(receipts,'nba_daily_rows',return_value=[]), patch.object(receipts,'cbb_daily_rows',return_value=[]), patch.object(receipts,'fit_result_rows',return_value='Long complete breakdown ' * 25):
+        with patch.object(receipts,'nba_daily_rows',return_value=[]), patch.object(receipts,'cbb_daily_rows',return_value=[]), patch.object(receipts,'fit_result_rows',return_value='🍳' * 135):
             recap=receipts.day_receipt(day,first,latest,{'sun':game},set(first),now,{'posts':[]})
         self.assertIn('2-3 on straights',recap['text'])
         self.assertIn('Straights -1.00u',recap['text'])
