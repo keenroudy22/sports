@@ -400,7 +400,7 @@
     };
   };
 
-  /* A research line (lines.json row) as a view model. Best price only compares quotes at the same line. */
+  /* Compare prices at the same line. */
   const lineVM = (row, now = Date.now()) => {
     const g = row.grade || {};
     const needs = isNum(g.needs) ? g.needs : breakEven(row.odds);
@@ -422,7 +422,7 @@
       key: officialKey(row), opened: isNum(row.opened) ? row.opened : isNum(row.move) && isNum(row.line) ? round1(row.line - row.move) : null, src: row,
     };
   };
-  /* The key a best bet and a board line share: market and side, so a player's receptions pick never badges his yards. */
+  /* Match posted picks by market and side. */
   let gameLookup = null;
   const officialKey = row => {
     let dir = String(row.direction || row.side || '').toLowerCase();
@@ -544,13 +544,14 @@
     const day = new Date(`${value}T12:00:00Z`);
     return Number.isFinite(day.getTime()) && day.toISOString().slice(0, 10) === value ? value : null;
   };
-  const gamesPath = (tab, league, day) => {
+  const gamesPath = (tab, league, day, review) => {
     const params = new URLSearchParams();
     if (league && league !== 'ALL') params.set('sport', league);
     if (day) params.set('date', day);
+    if (review) params.set('view', 'review');
     return `#games${tab && tab !== 'upcoming' ? `/${tab}` : ''}${params.size ? `?${params}` : ''}`;
   };
-  const favoritePath = (league, day) => gamesPath('favorites', league, day);
+  const favoritePath = (league, day, review) => gamesPath('favorites', league, day, review);
   const parseHash = hash => {
     const raw = String(hash || '').replace(/^#\/?/, '');
     const cut = raw.indexOf('?');
@@ -592,7 +593,8 @@
       case 'games': {
         const day = ['favorites', 'live'].includes(a) && gameDate(params.get('date'));
         return { view: 'games', tab: ['favorites', 'live', 'final'].includes(a) ? a : 'upcoming',
-          league: params.get('sport') ? params.get('sport').toUpperCase() : null, ...(day ? { day } : {}) };
+          league: params.get('sport') ? params.get('sport').toUpperCase() : null, ...(day ? { day } : {}),
+          ...(a === 'favorites' && params.get('view') === 'review' ? { review: true } : {}) };
       }
       case 'scores': return { view: 'games', tab: 'live', league: a ? a.toUpperCase() : 'ALL', legacy: true };
       case 'sport': return { view: 'games', tab: 'live', league: (a || 'NBA').toUpperCase(), legacy: true };
@@ -2187,7 +2189,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-99a5ca341f92';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
-  const GAMES_ASSET = 'app-games.js?v=sha256-00f68c2fb460';
+  const GAMES_ASSET = 'app-games.js?v=sha256-e3e637661125';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-485ecb30ec2f';
   const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
@@ -2369,9 +2371,8 @@
     document.body.appendChild(el); setTimeout(() => el.remove(), 1800);
   };
   let inputTimer = null;
-  /* What the sport picker should open: the same tab in the new sport, or the list a sport-specific page belongs to. */
   const sportDestination = route => {
-    if (route.view === 'games') return gamesPath(route.tab, state.league, route.day);
+    if (route.view === 'games') return gamesPath(route.tab, state.league, route.day, route.review);
     if (route.view === 'game' || route.view === 'team') return '#games';
     if (route.view === 'player') return '#research/players';
     if (route.view === 'today') return state.league === 'ALL' ? '#today' : `#today?sport=${state.league}`;
@@ -2380,8 +2381,7 @@
     if (route.view === 'vegas' && route.league) return '#vegas';
     return null;
   };
-  /* Background refresh: live pages only, never while someone is typing or picking. Data keeps its 5-minute cache;
-     the re-render re-checks price ages and live scores. */
+  /* Recheck quote ages without interrupting input. */
   const LIVE_VIEWS = new Set(['today', 'pick', 'games', 'game', 'team', 'research', 'record', 'player', 'saved', 'ticket']);
   const refreshPage = () => {
     if (document.hidden) return;
@@ -2531,7 +2531,8 @@
       const el = event.target;
       if (el.hasAttribute('data-favorite-date')) {
         const day = gameDate(el.value);
-        if (day) location.hash = favoritePath(resolve(location.hash).league || 'ALL', day);
+        const route = resolve(location.hash);
+        if (day) location.hash = favoritePath(route.league || 'ALL', day, route.review);
         return;
       }
       if (el.id === 'league') {

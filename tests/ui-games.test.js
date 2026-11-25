@@ -110,6 +110,29 @@ test('Favorite Lines ranks a posted Chef’s Pick and one current priced lean pe
   assert.doesNotMatch(html, /Second market|Stale quote|Closed reentry/);
 });
 
+test('All model reviews rank qualifying props first and expose exact prices across books', async () => {
+  const { api, factory } = loadBrowserApi();
+  const matchup = game('CFB-69', team('1', 'HOME', 'Home Team', 2, 3), team('2', 'AWAY', 'Away Team', 4, 5),
+    -6, 50, 9, 56);
+  const day = C.dayOf(matchup.kickoff);
+  const observedAt = new Date(Date.now() - 120000).toISOString();
+  const row = { id: 'prop', league: 'CFB', gameId: matchup.id, kickoff: matchup.kickoff, athleteId: '123',
+    stat: 'rec', market: 'receptions', direction: 'over', line: 4.5, state: 'open', book: 'DraftKings',
+    odds: -110, observedAt, books: [{ book: 'FanDuel', line: 5.5, odds: 120 }] };
+  const ctx = contextFor(api, [matchup], { etDay: () => day, lineData: async () => ({ lines: [
+    { ...row, title: 'Comparison player', grade: { calibrated: true, view: 'pass', edge: 10, projection: 4 } },
+    { ...row, title: 'Favorite player', grade: { calibrated: true, view: 'lean', edge: 5, projection: 6 } },
+    { ...row, title: 'Stale player', freshness: 'stale', grade: { calibrated: true, view: 'lean', edge: 25, projection: 8 } },
+  ] }) });
+  const route = api.model.resolve(`#games/favorites?sport=CFB&date=${day}&view=review`);
+  assert.equal(route.review, true);
+  const html = unesc(await factory(ctx).games(route));
+  assert.ok(html.indexOf('Favorite player') < html.indexOf('Comparison player'));
+  assert.match(html, /2 reviewed · 1 favorites/);
+  assert.match(html, /FanDuel 5.5 \(\+120\)/);
+  assert.doesNotMatch(html, /Stale player/);
+});
+
 test('Favorite Lines shows a separate verified prop without replacing the game line', async () => {
   const { api, factory } = loadBrowserApi();
   const matchup = game('CFB-68', team('1', 'HOME', 'Home Team', 2, 3), team('2', 'AWAY', 'Away Team', 4, 5),
