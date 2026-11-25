@@ -3807,6 +3807,9 @@ def private_release_refusal(row, ctx, now):
     effective market rule.
     """
     pick = dict(row.get('pick') or {}, league=row.get('league'))
+    held = gates.staking.cbb_review_hold(pick, now)
+    if held:
+        return held
     if pick.get('selectionMethod') == 'sourced-prop-ticket-v1':
         import prop_ticket_release
         held = prop_ticket_release.refusal(pick, ctx, now, conf=CONF)
@@ -4394,6 +4397,8 @@ def retry_typefully_basketball(now, book, settings):
     for entry in book['posts']:
         kind = entry.get('kind')
         if kind not in ('buffer:nba-trial', 'buffer:cbb-pick') or entry.get('sentAt'):
+            continue
+        if kind == 'buffer:cbb-pick' and gates.staking.cbb_review_hold({'league': 'CBB'}, now):
             continue
         if entry.get('typefullyDelivery'):
             typefully_backup.deliver(

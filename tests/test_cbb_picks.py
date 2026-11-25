@@ -33,6 +33,17 @@ def context():
     return SimpleNamespace(now=NOW,games={},first={},latest={},risk_external={},risk_games={'CBB-123':fixture()['game']})
 
 class CBBPicksTests(unittest.TestCase):
+    def test_selection_pause_holds_new_picks_without_suppressing_existing_grades(self):
+        now = staking.CBB_REVIEW_HOLD_FROM
+        play = fixture()
+        self.assertEqual(cbb.refusal(play, now), staking.CBB_REVIEW_HOLD)
+        self.assertFalse(cbb.current_match(play, now))
+        with patch.object(cbb, 'public_rows', return_value=[play]):
+            self.assertEqual(cbb.plans(now, {'posts': []}, for_discord=True), [])
+            self.assertFalse(cbb.discord_delivery_due(now, {'posts': []}))
+        play.update(result='win', actual=2, book='DraftKings')
+        self.assertIn('CBB FINAL', cbb.result_text(play))
+
     def test_recap_dates_and_labels_actual_market_without_changing_grade(self):
         p=fixture();p.update(result='win',actual=2,book='DraftKings',marketType='spread',direction='away',line=11.5)
         before=copy.deepcopy(p)

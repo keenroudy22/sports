@@ -52,6 +52,9 @@ def web(url, book=None):
 
 
 def refusal(play, now, *, check_day=True):
+    held = staking.cbb_review_hold(play, now)
+    if held:
+        return held
     try:
         g=play['game']; review=play['review']; quote=play['quote']
         if not re.fullmatch(r'CBB-[A-Za-z0-9-]{1,120}',str(play.get('id',''))):return 'Invalid CBB pick ID'
@@ -392,7 +395,8 @@ def precheck(now,log_book,root=STORE,delete=None):
         if not okay:
             (delete or buffer_post.delete_post)(e['bufferPostId'])
             e['cancelledAt']=boxscores.stamp(now)
-            e['cbbHold']='Current quote/review expired. Original public terms and record are retained.'
+            e['cbbHold']=(staking.cbb_review_hold(p or {'league': 'CBB'}, now)
+                          or 'Current quote/review expired. Original public terms and record are retained.')
     return changed
 
 

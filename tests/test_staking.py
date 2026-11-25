@@ -25,6 +25,16 @@ def context(**extra):
 
 
 class StakingTests(unittest.TestCase):
+    def test_cbb_hold_blocks_pending_mixed_ticket_but_preserves_other_sports(self):
+        now = staking.CBB_REVIEW_HOLD_FROM
+        mixed = dict(league='NBA', legs=[{'gameId': 'NBA-1'}, {'gameId': 'CBB-2'}])
+        ctx = SimpleNamespace(now=now)
+        self.assertIsNone(staking.cbb_review_hold(mixed, now - timedelta(seconds=1)))
+        self.assertEqual(staking.check(mixed, ctx), staking.CBB_REVIEW_HOLD)
+        row = dict(league='NBA', pick=mixed, discordSentAt='already sent')
+        self.assertEqual(run.private_release_refusal(row, ctx, now), staking.CBB_REVIEW_HOLD)
+        self.assertIsNone(staking.cbb_review_hold({'league': 'CFB', 'gameIds': ['CFB-1']}, now))
+
     def test_owner_cancellation_releases_nba_fun_slot_only_after_discord_deletion(self):
         import json
         import nba_fun_record

@@ -1,3 +1,12 @@
+# November 25 college basketball selection review
+
+Hold all new CBB plays, including CBB legs in mixed tickets and Secret Santa,
+pending the selection review. Keep CBB research private, grade prior official
+picks normally, and keep the morning recap and other sports running. Review
+pregame opponent quality, availability, shot volume, and pace. Compare the
+original lines with the closing market and grade selection quality separately
+from final scores before lifting the hold.
+
 # November 25 morning source fallback and delivery
 
 At the 6 a.m. desk start, review the earliest eligible games across supported

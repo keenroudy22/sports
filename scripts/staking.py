@@ -13,6 +13,20 @@ EASTERN = ZoneInfo('America/New_York')
 OWNER_UNIT = 25  # Private Climb dollar-to-exposure conversion; never rescale old results.
 SEPARATE_CLIMB = datetime.fromisoformat('2026-11-19T16:11:00+00:00')
 CAP_EFFECTIVE = datetime.fromisoformat('2026-11-08T15:30:00+00:00')
+CBB_REVIEW_HOLD_FROM = datetime.fromisoformat('2026-11-25T21:52:00+00:00')
+CBB_REVIEW_HOLD = 'New CBB plays paused for a selection review'
+
+
+def cbb_review_hold(candidate, now):
+    if now < CBB_REVIEW_HOLD_FROM:
+        return None
+    game_ids = [candidate.get('eventId'), candidate.get('gameId'),
+                *(candidate.get('gameIds') or []),
+                *(leg.get('gameId') for leg in (candidate.get('legs') or [])
+                  if isinstance(leg, dict))]
+    if candidate.get('league') == 'CBB' or any(str(key).startswith('CBB-') for key in game_ids):
+        return CBB_REVIEW_HOLD
+    return None
 
 
 def active(now):
@@ -96,6 +110,9 @@ def limit(on, games, now=None):
 
 
 def check(candidate, ctx):
+    held = cbb_review_hold(candidate, ctx.now)
+    if held:
+        return held
     if not active(ctx.now):
         return None
     games = {**ctx.games, **getattr(ctx, 'risk_games', {})}
