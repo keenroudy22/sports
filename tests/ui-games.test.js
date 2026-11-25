@@ -118,10 +118,11 @@ test('All model reviews rank qualifying props first and expose exact prices acro
   const observedAt = new Date(Date.now() - 120000).toISOString();
   const row = { id: 'prop', league: 'CFB', gameId: matchup.id, kickoff: matchup.kickoff, athleteId: '123',
     stat: 'rec', market: 'receptions', direction: 'over', line: 4.5, state: 'open', book: 'DraftKings',
-    odds: -110, observedAt, books: [{ book: 'FanDuel', line: 5.5, odds: 120 }] };
+    odds: -110, observedAt, books: [{ book: 'FanDuel', line: 5.5, odds: 120,
+      reviewGrade: { calibrated: true, view: 'pass', edge: -2, projection: 6 } }] };
   const ctx = contextFor(api, [matchup], { etDay: () => day, lineData: async () => ({ lines: [
-    { ...row, title: 'Comparison player', grade: { calibrated: true, view: 'pass', edge: 10, projection: 4 } },
-    { ...row, title: 'Favorite player', grade: { calibrated: true, view: 'lean', edge: 5, projection: 6 } },
+    { ...row, player: 'Comparison player', title: 'Comparison player', grade: { calibrated: true, view: 'pass', edge: 10, projection: 4 } },
+    { ...row, player: 'Favorite player', title: 'Favorite player', grade: { calibrated: true, view: 'lean', edge: 5, projection: 6 } },
     { ...row, title: 'Stale player', freshness: 'stale', grade: { calibrated: true, view: 'lean', edge: 25, projection: 8 } },
   ] }) });
   const route = api.model.resolve(`#games/favorites?sport=CFB&date=${day}&view=review`);
@@ -131,6 +132,12 @@ test('All model reviews rank qualifying props first and expose exact prices acro
   assert.match(html, /2 reviewed · 1 favorites/);
   assert.match(html, /FanDuel 5.5 \(\+120\)/);
   assert.doesNotMatch(html, /Stale player/);
+  const bookRoute = api.model.resolve(`#games/favorites?sport=CFB&date=${day}&view=review&book=fanduel`);
+  const filtered = unesc(await factory(ctx).games(bookRoute));
+  assert.match(filtered, /Favorite player over 5.5 receptions/);
+  assert.match(filtered, /\+120 · FanDuel/);
+  assert.match(filtered, /2 reviewed · 0 favorites/);
+  assert.doesNotMatch(filtered, /-110 · DraftKings|Research favorite/);
 });
 
 test('Favorite Lines shows a separate verified prop without replacing the game line', async () => {

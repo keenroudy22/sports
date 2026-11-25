@@ -238,6 +238,7 @@ def public_lines(rows, now):
             if named:
                 item = {**quote, 'book': named}
                 item.pop('displayBook', None)
+                item.pop('oppositeOdds', None)
                 quotes.append(item)
         if 'books' in source:
             row['books'] = quotes
@@ -2395,8 +2396,9 @@ def build(now=None):
     for record in prop_prices.values():
         for book in (record.get('books') or {}).values():
             sharp_odds.drop_impossible(book.get('markets') or {})
+    prop_calibration = learned_prop_calibration()
     lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices, established,
-                       calibration=learned_prop_calibration())
+                       calibration=prop_calibration)
     for row in lines:
         if row.get('athleteId') and row.get('grade'):
             segment = f"{row['league']}/prop:{row.get('stat')}"
@@ -2428,6 +2430,11 @@ def build(now=None):
                     player['underReview'].append(field)
                 if volume == role and field:
                     player.setdefault('reviewReasons', {})[field] = explanation
+    for row in lines:
+        game = by_id.get(row.get('gameId'))
+        if game and row.get('grade') and row.get('books'):
+            snapshot = (pregame(forecasts.get(game['id'], []), game['kickoff']) or [None])[-1]
+            review_book_quotes(row, snapshot, game_calibration, prop_calibration, prop_prices.get(game['id']))
     lines = public_lines(lines, now)
     for row in lines:
         if row.get('athleteId'):
@@ -2603,7 +2610,7 @@ def build(now=None):
     line_index = line_payload.manifest(lines, generated)
     for league, name in line_index['files'].items():
         write(OUT / name, {'generatedAt': generated, 'league': league,
-                           'lines': [reader_line(row) for row in lines if row.get('league') == league]})
+                           'lines': [reader_line(row, book_reviews=True) for row in lines if row.get('league') == league]})
     for league in ('NFL', 'CFB'):
         info = league_data[league]
         charts = build_player_charts(league, window, forecasts, info['player_logs'], info['current'], lines, now)
@@ -2945,11 +2952,13 @@ def reader_grade(grade):
             if key not in ('raw', 'rawTier', 'model', 'performanceNeed', 'snapshotAt')}
 
 
-def reader_line(row):
+def reader_line(row, book_reviews=False):
     """Keep the public comparison and availability, without raw model inputs."""
     line = {key: value for key, value in row.items() if key != 'marketWindow'}
     if isinstance(line.get('grade'), dict):
         line['grade'] = reader_grade(line['grade'])
+    if not book_reviews and 'books' in line:
+        line['books'] = [{k: v for k, v in quote.items() if k != 'reviewGrade'} for quote in line['books']]
     return line
 
 
@@ -3146,6 +3155,47 @@ def grade_line(line, snapshot, thin, calibration=None):
             'model': p['model'], 'snapshotAt': p['snapshotAt'], 'fairOdds': fair_american(p['chance']) if p['calibrated'] else None,
             'ev': p['evPerUnit'], 'chanceDisplay': chance_display,
             'range80': p.get('range80')}
+
+
+def review_book_quotes(row, snapshot, game_calibration, prop_calibration, capture=None):
+    """Grade captured DK/FD quotes at their own threshold and price for the review board."""
+    primary = row['grade']
+    for quote in row['books']:
+        book = provider_book(quote['book'])
+        if book not in ('DraftKings', 'FanDuel') or book == provider_book(row['book']):
+            continue
+        odds, line = quote['odds'], quote['line']
+        if not snapshot or type(odds) is not int or not 100 <= abs(odds) < 1000:
+            continue
+        if row.get('gameMarket'):
+            candidate = dict(row, odds=odds, line=line, oppositeOdds=quote.get('oppositeOdds'))
+            grade = grade_line(candidate, snapshot, primary.get('thin'), game_calibration)
+        else:
+            grade = None
+            stat, direction = row.get('stat'), row.get('direction')
+            if role_sanity.quote_issue(price_quotes(capture, stat, row.get('player'), line),
+                                       quote['book'], line, direction, odds):
+                continue
+            try:
+                priced = pricing.price(snapshot, stat, direction, line, odds, row['athleteId'])
+            except ValueError:
+                continue
+            k, minimum = prop_calibration.get(row['league'], (None, 0.0))
+            priced = pricing.calibrated_prop(priced, {'k': k})
+            if role_sanity.price_suspect(odds, priced['chance'] if k is not None else None):
+                continue
+            edge = priced['edgePoints']
+            liked = (k is not None and priced['rawChance'] >= .6 and edge > 0 and edge >= minimum
+                     and not primary.get('thin') and not primary.get('limited'))
+            grade = {key: primary[key] for key in ('thin', 'limited', 'unproven') if key in primary}
+            grade.update(edge=edge, calibrated=k is not None, projection=priced['projection'],
+                         view='lean' if liked else 'pass')
+        if grade:
+            if primary.get('performanceCaution') and grade['edge'] < primary['performanceNeed']:
+                grade.update(tier='pass', view='pass')
+            quote['reviewGrade'] = {key: grade[key] for key in
+                ('edge', 'projection', 'calibrated', 'tier', 'view', 'pricePaired', 'thin', 'limited', 'unproven')
+                if key in grade}
 
 
 def guard_player_lines(lines, games, forecasts, league_data, now, logger=print, prop_prices=None):
@@ -3715,10 +3765,12 @@ def book_rows(game, record):
                 continue
             if kind == 'spread':
                 quotes.append({'book': BOOK_NAMES.get(book, book), 'line': block['home'] if side == 'home' else -block['home'],
-                               'odds': block['homePrice'] if side == 'home' else block['awayPrice']})
+                               'odds': block['homePrice'] if side == 'home' else block['awayPrice'],
+                               'oppositeOdds': block['awayPrice'] if side == 'home' else block['homePrice']})
             else:
                 quotes.append({'book': BOOK_NAMES.get(book, book), 'line': block['line'],
-                               'odds': block['over'] if side == 'over' else block['under']})
+                               'odds': block['over'] if side == 'over' else block['under'],
+                               'oppositeOdds': block['under'] if side == 'over' else block['over']})
         title = (f"{home if side == 'home' else away} {line:+g}" if kind == 'spread'
                  else f"{away} @ {home} {side} {line:g}")
         rows.append({'id': f"game-{game['id']}-{side}", 'league': game['league'], 'gameId': game['id'],

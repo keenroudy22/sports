@@ -349,10 +349,19 @@
     return { status: 'Pass' };
   };
 
-  const footballReview = (rows, games, league, day, now) => {
+  const footballReview = (rows, games, league, day, now, book) => {
     const eligible = new Map(games.filter(game => C.dayOf(game.kickoff) === day && Date.parse(game.kickoff) > now
       && !game.completed && !['in', 'post'].includes(game.state)
       && !/postpon|cancel|final/i.test(game.status || '')).map(game => [game.id, Date.parse(game.kickoff)]));
+    if (book) rows = rows.flatMap(row => {
+      if (bookLabel(row.book) === book) return [row];
+      const quote = row.books?.find(quote => bookLabel(quote.book) === book && quote.reviewGrade);
+      if (!quote) return [];
+      const line = row.market === 'point spread' && quote.line > 0 ? `+${quote.line}` : quote.line;
+      const title = row.athleteId ? `${row.player} ${row.direction} ${line} ${row.market}`
+        : row.title.replace(/[+-]?\d+(?:\.\d+)?$/, String(line));
+      return [{ ...row, ...quote, grade: quote.reviewGrade, title }];
+    });
     const ranked = rows.filter(row => row.league === league && eligible.get(row.gameId) === Date.parse(row.kickoff)
       && row.state === 'open' && row.freshness !== 'stale' && isNum(row.grade?.projection) && boardPrice(row, row.kickoff, now))
       .map(row => ({ row, favorite: footballFavorites([row]).length > 0,
@@ -363,7 +372,7 @@
       const chart = row.athleteId && C.playerLineHref({ ...row, book: bookLabel(row.book) });
       const books = (row.books || []).filter(quote => bookLabel(quote.book) && isNum(quote.line)
         && isNum(quote.odds) && Math.abs(quote.odds) >= 100);
-      const otherBooks = books.filter(quote => bookLabel(quote.book) !== bookLabel(row.book));
+      const otherBooks = book ? [] : books.filter(quote => bookLabel(quote.book) !== bookLabel(row.book));
       const status = favorite ? 'Research favorite' : held ? 'Held' : 'Comparison';
       const projection = row.market === 'moneyline' ? pctText(row.grade.projection) : C.fixed(row.grade.projection);
       return `<li class="slate-favorite-row"><span class="slate-rank"></span>
@@ -385,7 +394,10 @@
     const now = Date.now(), todayDay = etDay(), day = route.day || todayDay;
     const past = day < todayDay;
     const review = route.review === true;
-    const path = (league, date) => favoritePath(league, date, review);
+    const sportsbooks = [['', 'All books'], ['draftkings', 'DraftKings'], ['fanduel', 'FanDuel']];
+    const selectedBook = sportsbooks.find(([key]) => key === route.book) || sportsbooks[0];
+    const book = selectedBook[0] ? selectedBook[1] : null;
+    const path = (league, date) => favoritePath(league, date, review, selectedBook[0]);
     const tabs = `<div class="chip-scroll">${segLinks([
       [favoritePath(selected, route.day), 'Matchup favorites', 'favorites'],
       [favoritePath(selected, route.day, true), 'All model reviews', 'review'],
@@ -416,12 +428,13 @@
     if (review) {
       const reviews = past ? ['<p>Model reviews show current pregame quotes. <a href="#record">See settled results ›</a></p>']
         : await Promise.all(leagues.map(league => {
-          if (FOOTBALL.includes(league)) return footballReview((league === 'NFL' ? nflPrices : cfbPrices)?.lines || [], today?.games || [], league, day, now);
-          if (['NBA', 'CBB'].includes(league)) return views.basketballEdges(league, { day, limit: Infinity });
+          if (FOOTBALL.includes(league)) return footballReview((league === 'NFL' ? nflPrices : cfbPrices)?.lines || [], today?.games || [], league, day, now, book);
+          if (['NBA', 'CBB'].includes(league)) return views.basketballEdges(league, { day, book, limit: Infinity });
           return section(LEAGUE_NAME[league], '<p class="small muted">Model review coverage is unavailable for this league.</p>');
         }));
       return `${head('Games', 'Favorite lines', 'Fresh lines the model reviewed. Football starts with favorites, ordered by edge against the quoted price.')}${gameTabs('favorites')}${tabs}${dates}
-        <div class="chip-scroll">${segLinks(sportNav, selected)}</div>${reviews.join('')}`;
+        <div class="chip-scroll">${segLinks(sportNav, selected)}</div><nav class="slate-day" aria-label="Sportsbook">
+        ${segLinks(sportsbooks.map(([key, label]) => [favoritePath(selected, route.day, true, key), label, key]), selectedBook[0])}</nav>${reviews.join('')}`;
     }
     const teamName = team => team?.shortName || team?.name || team?.abbr || team?.abbreviation || 'TBD';
     const sections = leagues.map(league => {
@@ -761,7 +774,7 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
     const picks = showPicks ? (open.length ? `${open.length} posted NBA pick${open.length === 1 ? '' : 's'} today. ` : 'No NBA play posted yet. ') : '';
     return `<section class="kt-sec" id="today-nba"><div class="kt-focus-head"><h2>Today’s NBA</h2><a href="#today?sport=NBA">NBA plays, props & trends ›</a></div><p class="small">${picks}${games.length} game${games.length === 1 ? '' : 's'} · tap a matchup for Kook vs Book.</p>${showPicks && open.length ? nbaTrialSection({...data,trial:{...data.trial,plays:open}}) : ''}${nbaProjectionContext(games)}${games.length ? `<div class="today-game-list">${games.slice(0,3).map(nbaSummaryGame).join('')}</div>` : ''}<a class="more" href="#today?sport=NBA">${games.length > 3 ? `See all ${games.length} NBA games` : 'Open NBA Today'} ›</a></section>`;
   };
-  views.basketballEdges = async (league, { type, q, day, preview = false, limit = 40 } = {}) => {
+  views.basketballEdges = async (league, { type, q, day, book, preview = false, limit = 40 } = {}) => {
     const [schedule, props] = await Promise.all([
       maybe(`app/${league.toLowerCase()}.json`),
       league === 'NBA' && type !== 'games' ? maybe('app/nba-props.json') : null,
@@ -781,18 +794,18 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
       const margin = p.margin ?? (isNum(p.home) && isNum(p.away) ? p.home-p.away : null);
       const spread = league === 'NBA' ? g.spreadQuote : freshCbbSpread(g, now);
       const observedAt = spread?.observedAt || spread?.retrievedAt;
-      if (spread?.book && upcoming(g.kickoff, observedAt) && isNum(margin) && isNum(spread.homeLine)
+      if (spread?.book && (!book || bookLabel(spread.book) === book) && upcoming(g.kickoff, observedAt) && isNum(margin) && isNum(spread.homeLine)
           && validOdds(spread.homeOdds ?? spread.home) && validOdds(spread.awayOdds ?? spread.away)
           && matches(title(g), ...Object.values(g.teams).map(t => t.name), league, 'spread')) {
         const gap = margin + spread.homeLine;
         const homePrice = oddsText(spread.homeOdds ?? spread.home), awayPrice = oddsText(spread.awayOdds ?? spread.away);
-        const price = spread.homeLine === 0 ? `${home} ${homePrice} / ${away} ${awayPrice}` : spread.homeLine < 0 ? homePrice : awayPrice;
+        const price = day || spread.homeLine === 0 ? `${home} ${homePrice} / ${away} ${awayPrice}` : spread.homeLine < 0 ? homePrice : awayPrice;
         comparisons.push({ name:title(g), market:'Spread', model:C.modelSpread(home,away,margin),
           line:C.modelSpread(home,away,-spread.homeLine), price, book:spread.book, observedAt,
           gap:Math.abs(gap), difference:Math.abs(gap)<.05 ? 'Same line' : `${C.fixed(Math.abs(gap))} toward ${gap>0 ? home : away}`, href:`#game/${g.id}` });
       }
       const total = league === 'NBA' && g.totalQuote;
-      if (total?.book && upcoming(g.kickoff, total.retrievedAt) && isNum(total.line) && isNum(p.total)
+      if (total?.book && (!book || bookLabel(total.book) === book) && upcoming(g.kickoff, total.retrievedAt) && isNum(total.line) && isNum(p.total)
           && validOdds(total.over) && validOdds(total.under)
           && matches(title(g), ...Object.values(g.teams).map(t => t.name), league, 'total')) {
         const gap = p.total-total.line;
@@ -809,7 +822,7 @@ return `<article class="card" style="margin-top:12px"><h3>${p.athleteId ? `<a hr
     const playerRows = [];
     for (const row of quotes) {
       const game = gameById.get(String(row.eventId)), dir = row.side;
-      if (!game || !row.athleteId || !row.stat || !row.book || !['over','under'].includes(dir) || row.hold
+      if (!game || !row.athleteId || !row.stat || !row.book || (book && bookLabel(row.book) !== book) || !['over','under'].includes(dir) || row.hold
           || !isNum(row.line) || !isNum(row.projection?.value) || !validOdds(row[dir])
           || Date.parse(game.kickoff) !== Date.parse(row.kickoff) || !upcoming(game.kickoff, row.sourceAt)
           || !matches(row.name,row.teamName,row.teamAbbr,row.statName,title(game),league)) continue;

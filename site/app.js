@@ -544,14 +544,17 @@
     const day = new Date(`${value}T12:00:00Z`);
     return Number.isFinite(day.getTime()) && day.toISOString().slice(0, 10) === value ? value : null;
   };
-  const gamesPath = (tab, league, day, review) => {
+  const gamesPath = (tab, league, day, review, book) => {
     const params = new URLSearchParams();
     if (league && league !== 'ALL') params.set('sport', league);
     if (day) params.set('date', day);
-    if (review) params.set('view', 'review');
+    if (review) {
+      params.set('view', 'review');
+      if (book) params.set('book', book);
+    }
     return `#games${tab && tab !== 'upcoming' ? `/${tab}` : ''}${params.size ? `?${params}` : ''}`;
   };
-  const favoritePath = (league, day, review) => gamesPath('favorites', league, day, review);
+  const favoritePath = (league, day, review, book) => gamesPath('favorites', league, day, review, book);
   const parseHash = hash => {
     const raw = String(hash || '').replace(/^#\/?/, '');
     const cut = raw.indexOf('?');
@@ -594,7 +597,7 @@
         const day = ['favorites', 'live'].includes(a) && gameDate(params.get('date'));
         return { view: 'games', tab: ['favorites', 'live', 'final'].includes(a) ? a : 'upcoming',
           league: params.get('sport') ? params.get('sport').toUpperCase() : null, ...(day ? { day } : {}),
-          ...(a === 'favorites' && params.get('view') === 'review' ? { review: true } : {}) };
+          ...(a === 'favorites' && params.get('view') === 'review' ? { review: true, book: params.get('book') } : {}) };
       }
       case 'scores': return { view: 'games', tab: 'live', league: a ? a.toUpperCase() : 'ALL', legacy: true };
       case 'sport': return { view: 'games', tab: 'live', league: (a || 'NBA').toUpperCase(), legacy: true };
@@ -2189,7 +2192,7 @@
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-99a5ca341f92';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
-  const GAMES_ASSET = 'app-games.js?v=sha256-e3e637661125';
+  const GAMES_ASSET = 'app-games.js?v=sha256-2618486b194d';
   const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-485ecb30ec2f';
   const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
@@ -2372,7 +2375,7 @@
   };
   let inputTimer = null;
   const sportDestination = route => {
-    if (route.view === 'games') return gamesPath(route.tab, state.league, route.day, route.review);
+    if (route.view === 'games') return gamesPath(route.tab, state.league, route.day, route.review, route.book);
     if (route.view === 'game' || route.view === 'team') return '#games';
     if (route.view === 'player') return '#research/players';
     if (route.view === 'today') return state.league === 'ALL' ? '#today' : `#today?sport=${state.league}`;
@@ -2532,7 +2535,7 @@
       if (el.hasAttribute('data-favorite-date')) {
         const day = gameDate(el.value);
         const route = resolve(location.hash);
-        if (day) location.hash = favoritePath(route.league || 'ALL', day, route.review);
+        if (day) location.hash = favoritePath(route.league || 'ALL', day, route.review, route.book);
         return;
       }
       if (el.id === 'league') {

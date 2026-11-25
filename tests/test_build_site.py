@@ -674,6 +674,17 @@ class GradeTests(unittest.TestCase):
         return {'state': 'open', 'odds': -110, 'line': 44.5, 'gameMarket': True, 'market': 'total points',
                 'direction': 'under', **extra}
 
+    def test_review_regrades_the_other_books_exact_total_and_price(self):
+        row = self.line(league='CFB', book='DraftKings', oppositeOdds=-110)
+        row['grade'] = build_site.grade_line(row, self.snapshot, False)
+        quote = {'book': 'FanDuel', 'line': 30.5, 'odds': -115, 'oppositeOdds': -105}
+        row['books'] = [quote]
+        build_site.review_book_quotes(row, self.snapshot, {}, {})
+        expected = build_site.grade_line(dict(row, **quote), self.snapshot, False)
+        self.assertTrue(quote['reviewGrade']['pricePaired'])
+        self.assertEqual(quote['reviewGrade']['edge'], expected['edge'])
+        self.assertNotEqual(quote['reviewGrade']['edge'], row['grade']['edge'])
+
     def test_a_game_line_is_graded_with_the_desk_arithmetic(self):
         grade = build_site.grade_line(self.line(), self.snapshot, thin=False)
         self.assertEqual(grade['tier'], 'strong')
