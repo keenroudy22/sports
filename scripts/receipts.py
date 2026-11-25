@@ -537,6 +537,10 @@ def day_receipt(day, first, latest, games, ids, as_of=None, log_book=None):
                 f"Parlays {record_text(x_post.summarize(fun))} · "
                 f"Full card {x_post.summarize(rows)['units']:+g}u")
     text = fit_result_rows(shown, head, tail.strip(), games, final_caption=recap_only)
+    if day >= result_display.STRAIGHTS_RECAP_FROM and x_post.tweet_length(text + '\n\n21+ only') > x_post.LIMIT:
+        # The verified card carries every original straight. Keep its summary
+        # deliverable when searchable names and outcomes exceed X's limit.
+        text = head + '\n' + tail.strip() + '\n\nFull straight breakdown on the card.'
     card = f'receipt-day-{day.isoformat()}' + ('-all-sports' if basketball or fun_rows else '')
     if complete and (climb or fun):
         card += '-complete'
