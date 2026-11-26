@@ -53,6 +53,11 @@ injury alone is availability context, not proof this player inherits targets or
 minutes: keep it neutral unless sourced reporting establishes that connection.
 Do not invent that connection from positions, depth order, or an injury list.
 
+For a player market, look for actual opportunities in a comparable lineup or role and explain why the
+opponent and likely game script change those opportunities. Look for a plausible way the workload goes
+the other way, especially a lead or a teammate absence that can lift an under. A season hit count
+alone does not explain how the player gets there in this game. Keep missing role evidence explicit.
+
 Look only at: official team or league injury and availability reports, the teams' own sites, and established
 beat reporting (major outlets or the local paper that covers the team). Prefer reporting from the last four days.
 You have room for about eight searches or page reads. Answer with what you have found by then; an answer with

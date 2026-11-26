@@ -1118,6 +1118,8 @@ def plan_reasons(candidate, ctx):
     for fact in [*(candidate.get('_evidence') or []), *(candidate.get('_research') or [])]:
         if fact.get('direction') != 'for' or not (fact.get('claim') or fact.get('text')):
             continue
+        if ctx.now >= gates.PROP_FIRST_FROM and fact.get('verified') is not True:
+            continue
         if not market_support.allowed(candidate, fact.get('text') or fact.get('claim'), ctx.now):
             continue
         kind = fact.get('kind') or fact.get('type')
@@ -1128,6 +1130,7 @@ def plan_reasons(candidate, ctx):
             continue
         reasons.append({'type': reason_type, 'class': 'A' if reason_type in gates.CLASS_A_REASONS else 'B',
                         'direction': 'for', 'text': fact.get('text') or fact.get('claim'),
+                        'evidenceKind': kind,
                         'number': fact.get('numbers'), 'source': fact.get('source'),
                         'observedAt': fact.get('observedAt') or fact.get('retrievedAt') or now})
     # A current, quantified model-versus-market difference is itself a real
@@ -2022,15 +2025,22 @@ def prop_reasoning(candidate, ctx, records, snapshot):
 
 
 def post_reason(candidate, facts, ctx, records, weights=None):
-    """The one sentence the play's post gives as its reason, chosen now from structured facts, never from prose:
-    for a player prop, his own record at this line when it backs the side; for a game line, a verified fact from
-    the web check or a weather flag that points the same way as the play. None when nothing backs it: then the
-    post stands on the number."""
+    """Lead with sourced directional context. Historical replays retain their older caption choice."""
     import x_post
     if candidate.get('legs'):
         return None
     side, line = gates.side_of(candidate), float(candidate['line'])
     if candidate.get('athleteId'):
+        if getattr(ctx, 'now', None) and ctx.now >= gates.PROP_FIRST_FROM:
+            reasons = gates.plan_reasons(candidate)
+            current = gates.straight_context(reasons)
+            if current:
+                return first_sentence(current[0]['text'])
+            paired = {row['type']: row['text'] for row in reasons
+                      if row.get('type') in ('usage_trend', 'matchup')}
+            if len(paired) == 2:
+                return ' '.join(first_sentence(paired[kind]) for kind in ('usage_trend', 'matchup'))
+            return None
         game = ctx.games[candidate['gameIds'][0]]
         logs = features.player_logs([g for g in records if g['league'] == game['league']]).get(str(candidate['athleteId']), [])
         recent = [v for v in (features.value(r, gates.market_key(candidate)) for r in logs[-10:]) if v is not None]
@@ -2940,6 +2950,7 @@ def _run(args, now, slot, kinds, status):
         change = morning_brief.promotion_note(morning_brief.current(now), candidate, facts)
         if change:
             candidate['whatChanged'] = change
+        candidate['_planReasons'] = plan_reasons(candidate, ctx)
         headline_reason = post_reason(candidate, facts, ctx, records, learning_weights())
         game = ctx.games[candidate['gameIds'][0]]
         try:
@@ -2950,7 +2961,6 @@ def _run(args, now, slot, kinds, status):
         except (KeyError, TypeError, ValueError, AttributeError) as error:
             log(f"dossier partial for {candidate['id']}: {type(error).__name__}")
             candidate['dossier'] = dossier.empty(candidate)
-        candidate['_planReasons'] = plan_reasons(candidate, ctx)
         if candidate.get('marketType') == 'moneyline':
             safer_pool.append((league, candidate))
         if candidate.get('selectionPolicy') == gates.TIER_POLICY:
@@ -2985,7 +2995,8 @@ def _run(args, now, slot, kinds, status):
     # Apply capacity again as rows join the in-run record.
     hot_days = {gates.slate_day(pick, ctx) for pick in ctx.first.values()
                 if pick.get('lane') == 'hot_plate' or pick.get('favorite') is True}
-    for league, candidate in sorted(best_pool, key=lambda item: (coverage_priority.candidate_tier(item[1], ctx, item[0]), -item[1]['_kitchenScore']['total'], item[1]['id'])):
+    for league, candidate in sorted(best_pool, key=lambda item: (gates.straight_market_priority(item[1], now),
+            coverage_priority.candidate_tier(item[1], ctx, item[0]), -item[1]['_kitchenScore']['total'], item[1]['id'])):
         duplicate = gates.not_duplicate(candidate, ctx)
         cap = gates.card_cap(candidate, ctx)
         if not duplicate.ok or not cap.ok:
@@ -3031,6 +3042,7 @@ def _run(args, now, slot, kinds, status):
                    and gates.when(game['kickoff']).astimezone(gates.EASTERN).hour >= 19}
     selected_guts = []
     for league, candidate, best_refusal in sorted(gut_pool, key=lambda item: (
+            gates.straight_market_priority(item[1], now),
             coverage_priority.candidate_tier(item[1], ctx, item[0]), -gates.kitchen_score(item[1], ctx, item[1]['_selectionDecision'])['total'], item[1]['id'])):
         game_id = candidate['gameIds'][0]
         day = gates.slate_day(candidate, ctx)

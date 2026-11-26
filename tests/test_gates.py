@@ -180,6 +180,21 @@ class NoForcedBestBetTests(unittest.TestCase):
                                               'text': 'The book has Green Bay -1; my margin makes it Green Bay -3.5.'}])
         self.assertTrue(gates.selection_verdict(projected, context(), 'gut_call').ok)
 
+    def test_prop_first_uses_context_and_sends_projection_only_sides_to_paper(self):
+        ctx = context(now=gates.PROP_FIRST_FROM)
+        numbers = {'rawChance': .62, 'fairChance': .50, 'anchoredChance': .60, 'breakEven': .53, 'gap': 10}
+        hit_rate = {'type': 'hit_strip', 'direction': 'for', 'text': 'Under in 8 of 10.'}
+        current = {'type': 'news', 'evidenceKind': 'role', 'direction': 'for',
+                   'source': 'https://www.nfl.com/news/current-role', 'text': 'The starting back is back in the lead role.'}
+        prop = prop_lean(_selection=numbers, selectionPolicy=gates.TIER_POLICY, _planReasons=[hit_rate])
+        self.assertEqual(gates.selection_verdict(prop, ctx).rule, 'prop_context')
+        self.assertTrue(gates.selection_verdict(dict(prop, _planReasons=[hit_rate, current]), ctx).ok)
+        side = total_lean(marketType='spread', direction='away', line=3.5, _selection=numbers,
+                          selectionPolicy=gates.TIER_POLICY, _planReasons=[dict(hit_rate, type='projection_edge')])
+        self.assertEqual(gates.selection_verdict(side, ctx).rule, 'side_in_private_review')
+        self.assertTrue(gates.selection_verdict(dict(side, _planReasons=[current]), ctx).ok)
+        self.assertLess(gates.straight_market_priority(prop, ctx.now), gates.straight_market_priority(side, ctx.now))
+
     def test_best_bet_spot_lookup_keeps_an_internal_only_league(self):
         from unittest.mock import patch
         reason = {'type': 'line_move', 'class': 'A', 'direction': 'for', 'text': 'Moved 20 cents.'}

@@ -124,6 +124,25 @@ class ReasonedEdgesTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'changed'):
                 reasoned_edges.append([dict(found[0], id='different')], path, manifest)
 
+    def test_paper_moneyline_freezes_first_price_and_grades_against_close(self):
+        ctx = self.context()
+        pick = dict(id='first-side', league='CFB', season=2026, marketType='moneyline',
+                    direction='home', line=0, odds=105, book='DraftKings', gameIds=['CFB-1'],
+                    kickoff='2026-10-15T00:00:00Z', quotedAt='2026-10-14T17:00:00Z',
+                    rules=['side_in_private_review'])
+        ctx.odds_history['CFB-1'][1]['books']['draftkings']['moneyline'] = {'home': -105}
+        ctx.records = [dict(league='CFB', eventId='1', home={'score': 28}, away={'score': 20})]
+        with tempfile.TemporaryDirectory() as folder:
+            path, manifest = Path(folder) / 'rows.jsonl', Path(folder) / 'ledger.json'
+            result = reasoned_edges.step([pick, dict(pick, id='moved-side', odds=110)], ctx, NOW,
+                                         path, manifest, {})
+            self.assertEqual(result['captured'], 1)
+            self.assertEqual(reasoned_edges.rows(path)[0]['candidate']['odds'], 105)
+            ctx.now = datetime(2026, 10, 15, 4, tzinfo=timezone.utc)
+            report = reasoned_edges.step([], ctx, ctx.now, path, manifest, {})['table']
+            row = next(row for row in report if row['type'] == 'paper_moneyline')
+            self.assertEqual((row['record'], row['netUnits'], row['avgPriceClv']), ('1-0', 1.05, 10))
+
 
 if __name__ == '__main__':
     unittest.main()

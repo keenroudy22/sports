@@ -1012,6 +1012,18 @@ def plan_reasons(candidate):
 
 STRAIGHT_PRICE_MARGIN_FROM = pricing.STRAIGHT_PRICE_MARGIN_FROM
 MONEYLINE_ALIGNMENT_FROM = datetime(2026,10,27,17,tzinfo=timezone.utc)
+PROP_FIRST_FROM = datetime(2026,11,26,13,8,tzinfo=timezone.utc)
+
+
+def straight_context(reasons):
+    """Directional, sourced context separate from a historical hit rate or model gap."""
+    return [row for row in reasons if str(row.get('source') or '').startswith('https://')
+            and (row.get('type') in ('injury_role', 'qb_change', 'weather')
+                 or row.get('evidenceKind') in ('injury', 'role', 'weather'))]
+
+
+def straight_market_priority(candidate, now):
+    return int(now >= PROP_FIRST_FROM and not candidate.get('athleteId'))
 
 
 def moneyline_projection_agreement(candidate, ctx, lane='best_bet'):
@@ -1069,7 +1081,7 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     full_send_side = lane == 'gut_call' or regular
     if league == 'NFL' and market in ('spread', 'moneyline') and not full_send_side:
         return Decision(False, 'plan_selection', 'NFL sides remain in shadow until 30 forward grades clear the promotion rule', numbers)
-    if league == 'NFL' and market in ('spread', 'moneyline') and full_send_side \
+    if ctx.now < PROP_FIRST_FROM and league == 'NFL' and market in ('spread', 'moneyline') and full_send_side \
             and not any(row.get('class') == 'A' or row.get('type') in STRONG_SIDE_REASONS for row in reasons):
         return Decision(False, 'plan_selection', 'an NFL side needs a strong current reason before it can be a Full Send', numbers)
     if league == 'CFB' and market in ('spread', 'moneyline'):
@@ -1104,6 +1116,17 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     if gap < lane_floor:
         return Decision(False, 'plan_selection',
                         f'anchored gap {gap:.1f}; {lane} needs {lane_floor} points', numbers)
+    if ctx.now >= PROP_FIRST_FROM:
+        current = straight_context(reasons)
+        if market in ('spread', 'moneyline') and not current:
+            return Decision(False, 'side_in_private_review',
+                            'Side needs a sourced, current game-specific reason beyond the model and price', numbers)
+        if candidate.get('athleteId') and not current:
+            observed = {row.get('type') for row in reasons
+                        if str(row.get('source') or '').startswith('https://')}
+            if not {'usage_trend', 'matchup'} <= observed:
+                return Decision(False, 'prop_context',
+                                'Player prop needs current role evidence or both directional workload and matchup evidence', numbers)
     if not reasons:
         return Decision(False, 'plan_selection', 'no supporting reason points the same way as the bet', numbers)
     if lane == 'gut_call' or regular:

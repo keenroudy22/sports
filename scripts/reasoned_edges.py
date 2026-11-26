@@ -15,14 +15,16 @@ import boxscores
 import features
 import gates
 import learning
+import pricing
 import weather
 
 CONF = Path.home() / '.config' / 'keenroudy'
 ROOT = CONF / 'reasoned-edges'
 LEDGER = ROOT / 'observations.jsonl'
 MANIFEST = ROOT / 'ledger.json'
+PAPER_SIDES = {'moneyline': 'paper_moneyline', 'spread': 'paper_spread'}
 TYPES = ('cfb_opener_move', 'news_not_in_number', 'receiving_role_overreaction',
-         'wind_not_in_total', 'projection_vs_first_capture')
+         'wind_not_in_total', 'projection_vs_first_capture', *PAPER_SIDES.values())
 OUT = {'out', 'doubtful', 'injured reserve', 'suspension', 'inactive'}
 
 
@@ -187,9 +189,18 @@ def detect(candidates, ctx, weather_rows=None):
     """Return silent triggers from candidate rows and cached stores only."""
     weather_rows = weather_rows if weather_rows is not None else weather.stored()
     out = []
+    paper_sides = {}
     for candidate in candidates:
         if candidate.get('legs') or not candidate.get('id') or not candidate.get('gameIds'):
             continue
+        kind = PAPER_SIDES.get(candidate.get('marketType'))
+        if kind and 'side_in_private_review' in (candidate.get('rules') or []) and candidate.get('quotedAt'):
+            game_id = candidate['gameIds'][0]
+            paper = trigger_row(kind, candidate, ctx.now, {'reason': candidate.get('reason')}, candidate['quotedAt'])
+            # Freeze one side per fixture and market. Neither repricing nor a
+            # later change of side creates a second paper entry for that market.
+            paper['id'] = hashlib.sha256(f'{kind}|{game_id}'.encode()).hexdigest()[:20]
+            paper_sides.setdefault(paper['id'], paper)
         first, current = movement(ctx, candidate)
         first_line = first[1][0] if first else None
         current_line = current[1][0] if current else candidate.get('line')
@@ -232,7 +243,7 @@ def detect(candidates, ctx, weather_rows=None):
                 out.append(trigger_row(TYPES[4], candidate, ctx.now,
                                        {'firstLine': first_line, 'medianProjection': projection,
                                         'gapPercent': round(gap * 100, 2)}, first[0].get('retrievedAt')))
-    return out
+    return out + list(paper_sides.values())
 
 
 def same_book_close(trigger, ctx):
@@ -267,11 +278,16 @@ def settle(ctx, now, path=LEDGER, manifest=MANIFEST):
         if not graded:
             continue
         close_line = closing[1][0] if closing else None
+        market = candidate.get('marketType')
+        close_price = closing[1][1] if closing else None
         new.append({'type': 'grade', 'id': 'grade-' + trigger['id'], 'triggerId': trigger['id'],
                     'reasonType': trigger['reasonType'], 'gradedAt': stamp(now), 'result': graded['result'],
                     'actual': graded.get('value'), 'close': close_line,
-                    'clv': learning.clv('spread' if candidate.get('marketType') == 'spread' else 'total',
-                                        candidate.get('direction'), candidate.get('line'), close_line)})
+                    'clv': None if market == 'moneyline' else learning.clv(
+                        'spread' if market == 'spread' else 'total', candidate.get('direction'),
+                        candidate.get('line'), close_line),
+                    'priceClv': (pricing.cents(candidate['odds']) - pricing.cents(close_price)
+                                 if market == 'moneyline' and close_price and candidate.get('odds') else None)})
     append(new, path, manifest)
     return new
 
@@ -292,6 +308,13 @@ def report(path=LEDGER):
                       'record': f'{wins}-{losses}' + (f'-{pushes}' if pushes else ''),
                       'avgClv': round(sum(clv) / len(clv), 2) if clv else None,
                       'finding': 'inconclusive' if len(sample) < 150 else 'owner review required'})
+        if kind in PAPER_SIDES.values():
+            prices = [row['priceClv'] for row in sample if isinstance(row.get('priceClv'), (int, float))]
+            units = sum((triggers[key]['candidate']['odds'] / 100 if triggers[key]['candidate']['odds'] > 0
+                         else 100 / -triggers[key]['candidate']['odds']) if grades[key]['result'] == 'win'
+                        else -1 if grades[key]['result'] == 'loss' else 0 for key in ids if key in grades)
+            table[-1].update(netUnits=round(units, 2),
+                             avgPriceClv=round(sum(prices) / len(prices), 2) if prices else None)
     return table
 
 

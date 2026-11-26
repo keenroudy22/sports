@@ -1,3 +1,15 @@
+# November 26 player props first
+
+Prioritize supported player props for the everyday straights and Chef’s Pick.
+Use current workload, active personnel, the matchup and one realistic way the
+bet loses to explain why the exact line is playable. A season hit rate is
+supporting context. Prioritize player alternates for the Daily Double when they
+qualify. Moneylines and spreads are exceptions with a strong, sourced reason
+specific to the matchup and price. Keep promising sides in the private paper
+review at their first eligible line and price, grade them from official finals,
+and review the season by market before increasing their role. This applies to
+new daily selection. Secret Santa stays on its existing site-only rules.
+
 # November 26 pregame selection review
 
 At 6 a.m. Eastern, reconcile the straight recap and then compare the early
