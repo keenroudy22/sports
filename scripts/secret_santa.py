@@ -93,6 +93,10 @@ def build(entries, football, basketball, now):
         after = {'win': ticket['winReturn'], 'loss': 0, 'push': balance}[result]
         final_game = finals[key]
         result_url = (final_game.get('sources') or {}).get('page') or final_game.get('source')
+        if not result_url and league in ('NBA', 'CBB') and final_game.get('state') == 'post':
+            # The official hoops store retains ESPN event IDs, not page URLs.
+            sport = 'nba' if league == 'NBA' else 'mens-college-basketball'
+            result_url = f'https://www.espn.com/{sport}/boxscore/_/gameId/{event}'
         if not isinstance(result_url, str) or urlsplit(result_url).scheme != 'https':
             current = ticket
             break

@@ -68,3 +68,18 @@ class SecretSantaTests(unittest.TestCase):
         self.assertEqual(secret_santa.build([self.play, restart], [self.game], {}, self.now)['run'], 1)
         loss = dict(self.game, away={'id': '193', 'score': 21})
         self.assertTrue(secret_santa.build([self.play, {'restartAfter': '999'}], [loss], {}, self.now)['closed'])
+
+    def test_espn_hoops_final_without_source_field_settles_houston_step(self):
+        entries = json.loads((ROOT / 'data/secret-santa.json').read_text())[:3]
+        loss = dict(self.game, away={'id': '193', 'score': 21})
+        final = dict(eventId='401909323', kickoff='2026-11-26T01:30Z',
+                     retrievedAt='2026-11-26T04:34:23Z', state='post', type=2,
+                     home={'id': '10'}, away={'id': '21'}, homeScore=116, awayScore=104)
+        now = datetime(2026, 11, 26, 12, tzinfo=timezone.utc)
+        view = secret_santa.build(entries, [loss], {'NBA': [final]}, now)
+        self.assertEqual((view['run'], view['wins'], view['balance']), (2, 1, 2472))
+        self.assertIsNone(view['current'])
+        self.assertEqual(view['history'][-1]['resultUrl'],
+                         'https://www.espn.com/nba/boxscore/_/gameId/401909323')
+        scheduled = dict(final, state='pre')
+        self.assertEqual(secret_santa.build(entries, [loss], {'NBA': [scheduled]}, now)['wins'], 0)
