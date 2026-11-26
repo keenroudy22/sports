@@ -188,6 +188,25 @@ class CBBPicksTests(unittest.TestCase):
                 home={'id':'2'},away={'id':'1'},homeScore=68,awayScore=67,retrievedAt='2026-11-04T03:00:00Z')
             self.assertEqual(cbb.grade(datetime(2026,11,4,4,tzinfo=timezone.utc),root,[final]),0)
 
+    def test_neutral_session_delay_preserves_original_terms_and_identity(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=fixture();p['game']['neutral']=True
+            ctx=context();ctx.risk_games[p['eventId']]=p['game']
+            root=Path(d);cbb.admit(p,ctx,NOW,root)
+            f=dict(eventId='123',type=2,season=2027,neutral=True,
+                kickoff='2026-11-04T01:43:00Z',home={'id':'1'},away={'id':'2'},
+                homeScore=88,awayScore=83,retrievedAt='2026-11-04T03:00:00Z')
+            later=datetime(2026,11,4,4,tzinfo=timezone.utc)
+            for change in [dict(eventId='456'),dict(season=2026),dict(home={'id':'3'}),
+                           dict(neutral=False),dict(kickoff='2026-11-04T03:01:00Z')]:
+                self.assertEqual(cbb.grade(later,root,[dict(f,**change)]),0)
+            self.assertEqual(cbb.grade(later,root,[f]),1)
+            self.assertEqual(cbb.grade(later,root,[f]),0)
+            row=cbb.public_rows(root)[0]
+            self.assertEqual(row['kickoff'],p['game']['kickoff'])
+            self.assertEqual(row['odds'],p['odds'])
+            self.assertEqual(row['actual'],171)
+
     def test_future_final_is_not_graded(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);p=fixture();cbb.admit(p,context(),NOW,root)

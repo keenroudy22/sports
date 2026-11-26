@@ -33,6 +33,18 @@ def reduced_quote_clock(value, legs, removed, now):
         return False
 
 
+def original_rules_clock(value, frozen):
+    try:
+        checked, reviewed = gates.when(value), gates.when(frozen)
+        # The frozen review serializer records whole seconds. Preserve the
+        # policy's finer precision only within that same recorded second.
+        if reviewed.microsecond == 0 and checked.replace(microsecond=0) == reviewed:
+            return True
+        return tickets.fresh(value, reviewed, 1440)
+    except (TypeError, ValueError):
+        return False
+
+
 def review(spec, evidence, now):
     """Return a private settlement proposal, or explicit holds, without side effects."""
     invalid = {'version': VERSION, 'state': 'held', 'releaseReady': False,
@@ -82,7 +94,7 @@ def review(spec, evidence, now):
                 or receipt.get('ruleVersion') != policy.get('ruleVersion')
                 or receipt.get('jurisdiction') != policy.get('jurisdiction')
                 or not policy.get('receipt')
-                or not tickets.fresh(policy.get('checkedAt'), gates.when(frozen.get('checkedAt')), 1440)):
+                or not original_rules_clock(policy.get('checkedAt'), frozen.get('checkedAt'))):
             holds.append('Stat-based grading requires the original reviewed book rules and jurisdiction')
     rows = evidence.get('legs') or []
     if not isinstance(rows, list) or len(rows) != len(legs) or any(not isinstance(r, dict) for r in rows):

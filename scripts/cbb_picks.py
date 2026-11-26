@@ -237,6 +237,19 @@ def queue_discord(now,log_book,root=STORE,opener=None):
     return count
 
 
+def final_tip_matches(play, final, now):
+    original = boxscores.instant(play['kickoff'])
+    actual = boxscores.instant(final['kickoff'])
+    if actual == original:
+        return True
+    # Tournament games can be delayed by earlier games in the same session.
+    # Only reconcile a completed, explicitly neutral event on the original day;
+    # event, season and both team identities are checked separately by grade().
+    return (play['game'].get('neutral') is True and final.get('neutral') is True
+            and actual < now and timedelta(0) < actual - original <= timedelta(hours=3)
+            and actual.astimezone(gates.EASTERN).date() == original.astimezone(gates.EASTERN).date())
+
+
 def grade(now,root=STORE,finals=None):
     import hoops_store
     finals=hoops_store.load('CBB') if finals is None else finals
@@ -244,7 +257,7 @@ def grade(now,root=STORE,finals=None):
     count=0
     for p in public_rows(root):
         f=available.get(p['eventId']) or available.get(p['eventId'].removeprefix('CBB-'))
-        if not f or boxscores.instant(p['kickoff'])>=now or f.get('type')!=2 or f.get('season')!=p['season'] or boxscores.instant(f['kickoff'])!=boxscores.instant(p['kickoff']):continue
+        if not f or boxscores.instant(p['kickoff'])>=now or f.get('type')!=2 or f.get('season')!=p['season'] or not final_tip_matches(p,f,now):continue
         original_ids = {side: str(p['game']['teams'][side]['id']) for side in ('home', 'away')}
         final_ids = {side: str(f[side]['id']) for side in ('home', 'away')}
         if final_ids != original_ids:

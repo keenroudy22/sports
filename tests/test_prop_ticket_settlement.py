@@ -36,6 +36,15 @@ def void(row):
 
 
 class PropTicketSettlementTests(unittest.TestCase):
+    def test_frozen_rules_clock_accepts_only_same_rounded_second(self):
+        frozen='2026-11-25T18:23:54Z'
+        self.assertTrue(S.original_rules_clock('2026-11-25T18:23:54.515411Z',frozen))
+        self.assertFalse(S.original_rules_clock('2026-11-25T18:23:55Z',frozen))
+        self.assertFalse(S.original_rules_clock('2026-11-25T18:23:54.515411Z',
+                                              '2026-11-25T18:23:54.100000Z'))
+        self.assertFalse(S.original_rules_clock('2026-11-24T18:23:53Z',frozen))
+        self.assertFalse(S.original_rules_clock(None,frozen))
+
     def test_original_joint_price_drives_private_units_across_families(self):
         for family in R.FAMILIES:
             spec, evidence, now = case(family)
