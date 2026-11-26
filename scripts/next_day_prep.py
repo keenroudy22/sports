@@ -135,7 +135,7 @@ def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports
         if type(edge) not in (int,float) or not math.isfinite(edge):continue
         holds=['Fresh game-day quote, current news and full admission still required']
         if row.get('freshness')!='fresh':holds.append('Price needs refresh')
-        if grade.get('view') == 'pass':
+        if (grade.get('view') or grade.get('tier')) == 'pass':
             holds.append('Model review marks this line as a pass')
         if grade.get('performanceCaution'):
             holds.append('Model performance caution requires independent support')
@@ -144,7 +144,7 @@ def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports
             'holds':holds,'planningOnly':True})
     watches={}
     for family,rows in groups.items():
-        rows.sort(key=lambda r: (r['grade'].get('view') == 'pass',
+        rows.sort(key=lambda r: ((r['grade'].get('view') or r['grade'].get('tier')) == 'pass',
                                  bool(r['grade'].get('performanceCaution')),
                                  -r['grade']['edge'], str(r['id'])))
         # Different market families get a turn; one repeated player/side cannot

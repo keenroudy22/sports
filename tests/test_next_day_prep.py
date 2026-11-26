@@ -13,7 +13,7 @@ class PrepTests(unittest.TestCase):
         now = prep.gates.staking.CBB_REVIEW_HOLD_FROM
         game = {'league': 'NFL', 'state': 'pre', 'kickoff': '2026-11-26T18:00:00Z'}
         base = dict(gameId='NFL-1', state='open', market='point spread', odds=-110)
-        rows = [dict(base, id='pass', title='A', grade={'edge': 10, 'view': 'pass'}),
+        rows = [dict(base, id='pass', title='A', grade={'edge': 10, 'tier': 'pass'}),
                 dict(base, id='caution', title='B', grade={'edge': 8, 'performanceCaution': True}),
                 dict(base, id='lean', title='C', grade={'edge': 3, 'view': 'lean'})]
         report = prep.prepare({'NFL-1': game}, rows, {}, {}, now)
