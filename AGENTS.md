@@ -1,3 +1,18 @@
+# November 26 pregame selection review
+
+At 6 a.m. Eastern, reconcile the straight recap and then compare the early
+window across eligible games. Use the Thanksgiving handoff for backups by
+kickoff. Keep CBB in private review. For every player prop and ticket leg,
+review the active lineup, recent comparable opportunities (carries, routes,
+targets, snaps or minutes), opponent and exact book price. For an under,
+write down a plausible path to higher opportunity, such as an expanded role
+with a teammate out or a team protecting a lead. Pass if the evidence for the
+under depends on assuming that path away. Treat hit rates from a different
+rotation as context. For game lines, check pace, opponent strength, venue,
+weather where relevant and the strongest contrary evidence. Use the same
+review for Chef's Pick, Daily Double, Secret Santa and every parlay leg. Record
+the open question and immediately check the named backup when a play fails.
+
 # November 25 college basketball selection review
 
 Hold all new CBB plays, including CBB legs in mixed tickets and Secret Santa,

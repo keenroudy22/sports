@@ -9,6 +9,20 @@ import next_day_prep as prep
 
 
 class PrepTests(unittest.TestCase):
+    def test_overnight_ranking_surfaces_reviewable_lines_and_actual_cbb_hold(self):
+        now = prep.gates.staking.CBB_REVIEW_HOLD_FROM
+        game = {'league': 'NFL', 'state': 'pre', 'kickoff': '2026-11-26T18:00:00Z'}
+        base = dict(gameId='NFL-1', state='open', market='point spread', odds=-110)
+        rows = [dict(base, id='pass', title='A', grade={'edge': 10, 'view': 'pass'}),
+                dict(base, id='caution', title='B', grade={'edge': 8, 'performanceCaution': True}),
+                dict(base, id='lean', title='C', grade={'edge': 3, 'view': 'lean'})]
+        report = prep.prepare({'NFL-1': game}, rows, {}, {}, now)
+        watches = report['football']['watchByFamily']['sides']
+        self.assertEqual([row['id'] for row in watches], ['lean', 'caution', 'pass'])
+        self.assertIn('Model review marks this line as a pass', watches[-1]['holds'])
+        self.assertEqual(report['cbb']['hold'], prep.gates.staking.CBB_REVIEW_HOLD)
+        self.assertFalse(report['releaseReady'])
+
     def test_optional_nba_context_failure_keeps_preparation_and_true_target(self):
         now=datetime(2026,10,26,4,45,tzinfo=timezone.utc)
         packet=prep.prepare({},[],{}, {},now,target_date='2026-10-26')

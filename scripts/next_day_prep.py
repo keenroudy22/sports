@@ -135,12 +135,18 @@ def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports
         if type(edge) not in (int,float) or not math.isfinite(edge):continue
         holds=['Fresh game-day quote, current news and full admission still required']
         if row.get('freshness')!='fresh':holds.append('Price needs refresh')
+        if grade.get('view') == 'pass':
+            holds.append('Model review marks this line as a pass')
+        if grade.get('performanceCaution'):
+            holds.append('Model performance caution requires independent support')
         groups[family].append({**{k:row.get(k) for k in
             ('id','gameId','title','league','book','odds','line','observedAt','kickoff','grade','gradeNote')},
             'holds':holds,'planningOnly':True})
     watches={}
     for family,rows in groups.items():
-        rows.sort(key=lambda r:(-r['grade']['edge'],str(r['id'])))
+        rows.sort(key=lambda r: (r['grade'].get('view') == 'pass',
+                                 bool(r['grade'].get('performanceCaution')),
+                                 -r['grade']['edge'], str(r['id'])))
         # Different market families get a turn; one repeated player/side cannot
         # occupy the entire prep list through alternate books or prices.
         chosen=[];seen=set()
@@ -156,11 +162,15 @@ def prepare(games, lines, nba_slate, nba_props, now, *, target_date=None, sports
     cbb_block=(sports.get('leagues') or {}).get('CBB') or {}
     cbb_games=[g for g in cbb_block.get('games',[]) if g.get('status')=='scheduled' and tomorrow(g.get('kickoff'))]
     cbb_watch=cbb_watch_rows(cbb_research,target,now)
+    cbb_hold = gates.staking.cbb_review_hold({'league': 'CBB'}, now)
+    if cbb_hold:
+        for row in cbb_watch:
+            row['holds'].insert(0, cbb_hold)
     return dict(asOf=gates.stamp(now),targetDate=target.isoformat(),planningOnly=True,releaseReady=False,
         morningChecksEastern=['06:45','08:30'],
         football=dict(games=len(football),pricedRowsByFamily=dict(counts),watchByFamily=watches),
         cbb=dict(games=len(cbb_games),checkedAt=cbb_block.get('checkedAt'),watch=cbb_watch,
-                 hold=('Fresh exact two-sided DraftKings spreads/totals, both team source packets and '
+                 hold=cbb_hold or ('Fresh exact two-sided DraftKings spreads/totals, both team source packets and '
                        'current availability review are required before a sourced CBB straight can release')),
         nba=dict(games=len(nba_games),freshPropRows=len(nba_rows),
                  watch=nba_rows[:12],availabilityAt=nba_props.get('availabilityAt'),
