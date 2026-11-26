@@ -83,3 +83,21 @@ class SecretSantaTests(unittest.TestCase):
                          'https://www.espn.com/nba/boxscore/_/gameId/401909323')
         scheduled = dict(final, state='pre')
         self.assertEqual(secret_santa.build(entries, [loss], {'NBA': [scheduled]}, now)['wins'], 0)
+
+    def test_pregame_withdrawal_preserves_original_and_does_not_consume_a_step(self):
+        action = dict(withdrawBeforeKickoff=self.play['eventId'],
+                      withdrawnAt='2026-11-24T23:00:00Z', reason='The original price did not qualify.')
+        before = datetime(2026, 11, 24, 22, tzinfo=timezone.utc)
+        self.assertEqual(secret_santa.build([self.play, action], [], {}, before)['current']['step'], 1)
+        view = secret_santa.build([self.play, action], [self.game], {}, self.now)
+        self.assertEqual((view['balance'], view['wins'], view['losses'], view['pushes']), (2000, 0, 0, 0))
+        self.assertIsNone(view['current'])
+        self.assertEqual(view['passToday'], action['reason'])
+        self.assertEqual(view['history'][0]['result'], 'withdrawn')
+        self.assertEqual(view['history'][0]['odds'], self.play['odds'])
+        new_play = dict(self.play, eventId='2', startsAt='2026-11-25T02:00:00Z', checkedAt='2026-11-24T23:15:00Z')
+        replacement = secret_santa.build([self.play, action, new_play], [self.game], {}, self.now)
+        self.assertEqual(replacement['current']['step'], 1)
+        self.assertIsNone(replacement['passToday'])
+        with self.assertRaises(ValueError):
+            secret_santa.build([self.play, dict(action, withdrawnAt=self.start)], [], {}, self.now)

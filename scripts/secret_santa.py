@@ -51,7 +51,13 @@ def build(entries, football, basketball, now):
     settled = None
     last_event = None
     run, step = 1, 0
-    for play in entries:
+    pass_today = None
+    withdrawal_index = None
+    for index, play in enumerate(entries):
+        if 'withdrawBeforeKickoff' in play:
+            if index == withdrawal_index:
+                continue
+            raise ValueError('Secret Santa withdrawal must immediately follow its original')
         if 'restartAfter' in play:
             if balance or last_event != play['restartAfter']:
                 break
@@ -81,10 +87,28 @@ def build(entries, football, basketball, now):
             raise ValueError('Secret Santa requires published research and book evidence')
         if checked > now or not balance or settled and checked < settled:
             break
-        step += 1
         ticket = {field: play[field] for field in ('selection', 'matchup', 'startsAt', 'book', 'checkedAt',
                   'odds', 'reason', 'countercase', 'sources')}
-        ticket.update(run=run, step=step, balance=balance, winReturn=return_on_win(balance, play['odds']))
+        ticket.update(run=run, step=step + 1, balance=balance, winReturn=return_on_win(balance, play['odds']))
+        action = entries[index + 1] if index + 1 < len(entries) else {}
+        if 'withdrawBeforeKickoff' in action:
+            withdrawn = boxscores.instant(action['withdrawnAt'])
+            reason = action['reason']
+            if (action['withdrawBeforeKickoff'] != event or not checked < withdrawn < start
+                    or not isinstance(reason, str) or not reason.strip()):
+                raise ValueError('Secret Santa withdrawal needs the exact original and a pregame reason')
+            if withdrawn <= now:
+                history.append(dict(ticket, result='withdrawn', withdrawnAt=action['withdrawnAt'],
+                                    withdrawalReason=reason, after=balance))
+                if withdrawn.astimezone(EASTERN).date() == now.astimezone(EASTERN).date():
+                    pass_today = reason
+                previous = withdrawn
+                count[day] -= 1
+                withdrawal_index = index + 1
+                continue
+        step += 1
+        if day == now.astimezone(EASTERN).date():
+            pass_today = None
         final = grade(play, finals.get(key), now)
         if not final:
             current = ticket
@@ -105,6 +129,6 @@ def build(entries, football, basketball, now):
         settled = boxscores.instant(final_game['retrievedAt'])
         last_event = event
     results = Counter(row['result'] for row in history if row['run'] == run)
-    return dict(run=run, balance=balance, current=current, history=history,
+    return dict(run=run, balance=balance, current=current, history=history, passToday=pass_today,
                 wins=results['win'], losses=results['loss'], pushes=results['push'],
                 closed=not balance or (not current and now.astimezone(EASTERN).date() > LAST_DAY))

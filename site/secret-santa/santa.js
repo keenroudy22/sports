@@ -9,7 +9,7 @@ const eastern = new Intl.DateTimeFormat('en-US', {
 const byId = id => document.getElementById(id);
 const set = (id, value) => { byId(id).textContent = value; };
 
-function render({run = 1, balance, wins, losses, pushes, current, history, closed}) {
+function render({run = 1, balance, wins, losses, pushes, current, history, closed, passToday}) {
   set('balance', money(balance));
   set('record', [wins, losses, ...(pushes ? [pushes] : [])].join('–'));
   set('step-label', `Run ${run}`);
@@ -37,17 +37,22 @@ function render({run = 1, balance, wins, losses, pushes, current, history, close
     }
     byId('ticket').after(piece);
   } else {
-    set('slip-title', closed ? 'Run complete' : 'Next play pending');
-    set('status', closed ? 'See the final paper results below.' : 'The next verified play will appear here.');
+    set('slip-title', closed ? 'Run complete' : passToday ? 'Pass for now' : 'Next play pending');
+    set('status', closed ? 'See the final paper results below.' : passToday || 'The next verified play will appear here.');
   }
 
   for (const step of history.slice().reverse()) {
     const li = document.createElement('li');
     const label = document.createElement('span');
     label.textContent = `Run ${step.run ?? 1} · Step ${step.step} · ${step.selection}`;
-    const result = document.createElement('a');
-    result.href = step.resultUrl;
-    result.textContent = `${step.result.toUpperCase()} · ${step.score} · ${money(step.after)}`;
+    const withdrawn = step.result === 'withdrawn';
+    const result = document.createElement(withdrawn ? 'span' : 'a');
+    if (withdrawn) {
+      result.textContent = `WITHDRAWN PREGAME · ${money(step.after)} carried forward`;
+    } else {
+      result.href = step.resultUrl;
+      result.textContent = `${step.result.toUpperCase()} · ${step.score} · ${money(step.after)}`;
+    }
     li.append(label, result);
     byId('history').append(li);
   }
