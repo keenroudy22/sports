@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'site' / 'data'
@@ -131,7 +132,23 @@ def fetch_by_week(league, season, games, now, end):
                 raise ValueError(f'{league}: invalid week {week} group {group} response')
             events.update({event['id']: event for event in page})
             urls.append(url)
-    missing = sorted(g['id'] for g in saved if g['id'].split('-', 1)[1] not in events)
+    saved_by_id = {g['id'].split('-', 1)[1]: g for g in saved}
+    if league == 'CFB':
+        # Previously listed FCS opponents and playoff placeholders can drop
+        # out of the FBS groups. Reconcile only the saved IDs on their dates.
+        missing_by_day = {}
+        for event_id in saved_by_id.keys() - events.keys():
+            kickoff = datetime.fromisoformat(saved_by_id[event_id]['kickoff'].replace('Z', '+00:00'))
+            day = kickoff.astimezone(ZoneInfo('America/New_York')).date()
+            missing_by_day.setdefault(day, set()).add(event_id)
+        for day, ids in sorted(missing_by_day.items()):
+            url = f'https://site.api.espn.com/apis/site/v2/sports/football/{slug}/scoreboard?dates={day:%Y%m%d}&groups=90&limit=1000'
+            page = scoreboard_json(url).get('events')
+            if not isinstance(page, list):
+                raise ValueError(f'{league}: invalid Division I scoreboard for {day}')
+            events.update({event['id']: event for event in page if event['id'] in ids})
+            urls.append(url)
+    missing = sorted(saved_by_id[k]['id'] for k in saved_by_id.keys() - events.keys())
     if missing:
         raise ValueError(f'{league}: weekly fallback missing {len(missing)} saved games: {missing[:4]}')
     return list(events.values()), urls

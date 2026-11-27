@@ -149,6 +149,22 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual({e['id'] for e in events},{'1','2'})
         self.assertTrue(any('week=4' in url for url in urls), 'Thursday week 4 is discovered before it was saved')
 
+    def test_cfb_reconciles_only_missing_saved_games_on_their_eastern_date(self):
+        at = datetime(2026,11,26,23,tzinfo=timezone.utc)
+        game = dict(self.game(), id='CFB-1', league='CFB', season=2026, week=14,
+                    kickoff='2026-12-05T01:00:00Z')
+        saved = {g['id']: g for g in (game, dict(game, id='CFB-2'))}
+        day_url = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=20261204&groups=90&limit=1000'
+        def board(url):
+            return {'events': [{'id':'2'}, {'id':'unrelated'}] if url == day_url else [{'id':'1'}]}
+        with patch('refresh.scoreboard_json', side_effect=board):
+            events, urls = fetch_by_week('CFB',2026,saved,at,at+timedelta(days=14))
+            self.assertEqual({e['id'] for e in events}, {'1','2'})
+            self.assertEqual(urls.count(day_url), 1)
+            saved['CFB-3'] = dict(game, id='CFB-3')
+            with self.assertRaisesRegex(ValueError, 'missing 1 saved games'):
+                fetch_by_week('CFB',2026,saved,at,at+timedelta(days=14))
+
     def test_week_feed_uses_the_latest_past_week_when_the_saved_window_is_empty(self):
         at=datetime(2026,9,30,16,30,tzinfo=timezone.utc)
         old=self.game();old.update(league='CFB',kickoff='2026-09-20T20:00:00Z',week=4,seasonType=2)
