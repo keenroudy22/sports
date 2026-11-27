@@ -1532,9 +1532,14 @@ def longshot_shape(candidate, ctx):
     style = candidate.get('parlayStyle')
     if style == 'daily-double':
         reviewed = candidate.get('selectionMethod') in ('sourced-prop-ticket-v1', 'sourced-fun-ticket-review-v1')
-        ok = (reviewed and len(legs) == 2 and all(isinstance(leg, dict) and leg.get('alternate') is True for leg in legs)
+        ticket_day = eastern_date(when(candidate['publishedAt']) if candidate.get('publishedAt') else ctx.now)
+        three_game_ticket = (ticket_day.isoformat() >= '2026-11-27' and len(legs) == 3
+                             and all(isinstance(leg, dict) and leg.get('gameId') for leg in legs)
+                             and len({leg['gameId'] for leg in legs}) == 3)
+        ok = (reviewed and (len(legs) == 2 or three_game_ticket)
+              and all(isinstance(leg, dict) and leg.get('alternate') is True for leg in legs)
               and type(odds) in (float, int) and 100 <= abs(odds) <= 115 and int(odds) == odds)
-        reason = 'Daily Double needs two reviewed alternates and an exact combined price from -115 to +115'
+        reason = 'Daily Double needs two reviewed alternates or three from distinct games and an exact combined price from -115 to +115'
     elif style == 'first-quarter':
         ok = (candidate.get('selectionMethod') == 'sourced-prop-ticket-v1'
               and candidate.get('family') in ('MNF', 'TNF') and 2 <= len(legs) <= 4

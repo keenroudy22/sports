@@ -1,3 +1,12 @@
+# November 27 Daily Double comparison
+
+Compare the best two-leg ticket with three player alternates from distinct games
+priced around -400 each. Prefer the ticket with the better workload and matchup
+case at its actual unboosted price. Keep one official Daily Double per day, -115
+to +115 combined. Save the comparable unposted ticket privately before tip or
+kickoff when a complete quote is available, then grade both on the original
+terms. Compare records and returns separately by leg count.
+
 # November 26 Secret Santa player props
 
 Review player-prop singles for Secret Santa starting November 27. Compare actual

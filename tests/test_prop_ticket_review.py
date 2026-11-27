@@ -85,7 +85,7 @@ class PropTicketWorkbenchTests(unittest.TestCase):
                          post_windows.target('NBA', kickoff))
 
     def test_college_cross_game_alternates_require_exact_current_quotes(self):
-        for style, count, odds in [('daily-double', 2, 114), ('lotto', 7, 511)]:
+        for style, count, odds in [('daily-double', 2, 114), ('daily-double', 3, -105), ('lotto', 7, 511)]:
             spec, games, now = college_fixture(style, count, odds)
             result = R.review(spec, games, now)
             self.assertEqual(result['state'], 'reviewed-private', result['holds'])
