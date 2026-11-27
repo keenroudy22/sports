@@ -75,6 +75,15 @@ class PropTicketWorkbenchTests(unittest.TestCase):
         self.assertEqual(reviewed['state'], 'reviewed-private', reviewed['holds'])
         self.assertIn('Daily Double · -105', reviewed['caption'])
 
+    def test_reviewed_nba_ticket_can_use_early_window(self):
+        import post_windows
+        pick = {'family': 'NBA-alts', 'selectionMethod': R.METHOD}
+        kickoff = '2026-11-28T00:00:00Z'
+        early = post_windows.private_play_target('NBA', kickoff, pick)
+        self.assertEqual(early.isoformat(), '2026-11-27T11:45:00+00:00')
+        self.assertEqual(post_windows.private_play_target('NBA', kickoff, {}),
+                         post_windows.target('NBA', kickoff))
+
     def test_college_cross_game_alternates_require_exact_current_quotes(self):
         for style, count, odds in [('daily-double', 2, 114), ('lotto', 7, 511)]:
             spec, games, now = college_fixture(style, count, odds)

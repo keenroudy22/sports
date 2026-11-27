@@ -42,6 +42,15 @@ def target(league, kickoff):
     return opens(league, start)
 
 
+def private_play_target(league, kickoff, pick):
+    local = instant(kickoff).astimezone(EASTERN)
+    if (local.date() >= date(2026, 11, 27) and league == 'NBA'
+            and pick.get('selectionMethod') == 'sourced-prop-ticket-v1'
+            and pick.get('family') == 'NBA-alts'):
+        return local.replace(hour=6, minute=45, second=0, microsecond=0).astimezone(timezone.utc)
+    return target(league, kickoff)
+
+
 def public_release_open(now, target_time):
     """Discord/site can release when the morning opens; X spacing is separate."""
     return instant(now) >= instant(target_time) - discord_play_lead(now)

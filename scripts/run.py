@@ -3623,7 +3623,7 @@ def private_release_ready(now):
         # New queue rows normally use the live game table below.  Persisted
         # kickoffs make this cheap check work without loading public stores.
         if starts:
-            target = post_windows.target(row.get('league'), min(starts))
+            target = post_windows.private_play_target(row.get('league'), min(starts), pick)
             if now >= target - post_windows.discord_play_lead(now):
                 return True
         elif row.get('discordSentAt') or row.get('publicPath'):
@@ -4070,7 +4070,7 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
                 log(f'buffer: {key} already released on Discord/site; X transport held: {blocked}')
                 continue
         kickoff = starts[0]
-        target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
+        target = post_windows.private_play_target(row.get('league'), kickoff, pick) + post_windows.jitter(key)
         due = post_windows.play_due(now, target, row.get('discordSentAt'))
         if not fallback and not review_only and now >= target-post_windows.discord_play_lead(now) and not row.get('bufferPostId'):
             try:
