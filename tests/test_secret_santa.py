@@ -49,6 +49,24 @@ class SecretSantaTests(unittest.TestCase):
         self.assertEqual(view['pushes'], 1)
         self.assertEqual(view['balance'], 2000)
 
+    def test_receiving_alt_uses_the_exact_player_stat_and_official_final(self):
+        play = dict(self.play, market='player', side='over', line=24.5, stat='recYds',
+                    athleteId='5127885', teamId=self.play['homeId'])
+        player = dict(id=play['athleteId'], team=play['teamId'], recYds=25)
+        def build(rows, **changes):
+            return secret_santa.build([dict(play, **changes)], [dict(self.game, players=rows)], {}, self.now)
+        for yards, result in [(25, 'win'), (24, 'loss'), (0, 'loss')]:
+            view = build([dict(player, recYds=yards)])
+            self.assertEqual((view['history'][0]['result'], view['history'][0]['score']),
+                             (result, f'{yards} receiving yards'))
+        self.assertEqual(build([player], line=25, side='under')['pushes'], 1)
+        for rows in [[], [dict(player, id='2')], [dict(player, team=play['awayId'])],
+                     [dict(player, dnp=True)], [dict(player, recYds=None)], [player, player]]:
+            self.assertIsNotNone(build(rows)['current'])
+        for changes in [dict(teamId='0'), dict(stat='yards'), dict(league='NBA'), dict(athleteId='')]:
+            with self.assertRaises(ValueError):
+                build([player], **changes)
+
     def test_owner_restart_preserves_the_loss_and_funds_a_new_step(self):
         restart = {'restartAfter': self.play['eventId']}
         loss = dict(self.game, away={'id': '193', 'score': 21})

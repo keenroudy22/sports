@@ -11,6 +11,8 @@ import boxscores
 START_CENTS = 2000
 LAST_DAY = date(2026, 12, 25)
 EASTERN = ZoneInfo('America/New_York')
+FOOTBALL_PROPS = {'recYds': 'receiving yards', 'rec': 'receptions',
+                  'rushYds': 'rushing yards', 'passYds': 'passing yards'}
 
 
 def return_on_win(cents, odds):
@@ -34,11 +36,21 @@ def grade(play, game, now):
     if any(type(score) is not int or score < 0 for score in (away, home)):
         return None
     side = play['side']
-    if play['market'] == 'total':
+    detail = f'{away}–{home}'
+    if play['market'] == 'player':
+        players = [p for p in game.get('players', []) if str(p.get('id')) == play['athleteId']]
+        if len(players) != 1 or str(players[0].get('team')) != play['teamId']:
+            return None
+        actual = players[0].get(play['stat'])
+        if type(actual) is not int or players[0].get('dnp'):
+            return None
+        margin = (actual - play['line']) * (1 if side == 'over' else -1)
+        detail = f"{actual} {FOOTBALL_PROPS[play['stat']]}"
+    elif play['market'] == 'total':
         margin = (home + away - play['line']) * (1 if side == 'over' else -1)
     else:
         margin = (home - away if side == 'home' else away - home) + play.get('line', 0)
-    return ('win' if margin > 0 else 'loss' if margin < 0 else 'push', f'{away}–{home}')
+    return ('win' if margin > 0 else 'loss' if margin < 0 else 'push', detail)
 
 
 def build(entries, football, basketball, now):
@@ -70,8 +82,12 @@ def build(entries, football, basketball, now):
             raise ValueError('Secret Santa needs a distinct supported single near −400')
         seen.add(key)
         market, side = play['market'], play['side']
-        if (market not in ('spread', 'moneyline', 'total')
-                or side not in (('over', 'under') if market == 'total' else ('home', 'away'))
+        if market == 'player' and (league not in ('NFL', 'CFB') or play.get('stat') not in FOOTBALL_PROPS
+                or not isinstance(play.get('athleteId'), str) or not play['athleteId'].isdigit()
+                or play.get('teamId') not in (play['homeId'], play['awayId'])):
+            raise ValueError('Secret Santa player prop requires an exact supported athlete, team and stat')
+        if (market not in ('spread', 'moneyline', 'total', 'player')
+                or side not in (('over', 'under') if market in ('total', 'player') else ('home', 'away'))
                 or market != 'moneyline' and type(play.get('line')) not in (int, float)
                 or market == 'moneyline' and play.get('line', 0) != 0):
             raise ValueError('Invalid Secret Santa market')

@@ -1,3 +1,14 @@
+# November 26 Secret Santa player props
+
+Review player-prop singles for Secret Santa starting November 27. Compare actual
+offered alternates and their unboosted prices. Verify current participation,
+workload, opponent, weather where relevant, game time and settlement support.
+Keep the site-only paper record and its existing price and timing rules.
+For full-game NFL/CFB player entries use market `player`, the official
+`athleteId` and `teamId`, stat `rec`, `recYds`, `rushYds` or `passYds`, and
+the book's exact over/under line (25+ yards corresponds to over 24.5).
+An absent or ambiguous stat needs reconciliation. Preserve historical picks.
+
 # November 26 player props first
 
 Prioritize supported player props for the everyday straights and Chef’s Pick.
