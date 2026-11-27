@@ -26,7 +26,7 @@ def case(family='MNF'):
                                    'checkedAt': now.isoformat(), 'jurisdiction': 'IN',
                                    'ruleVersion': 'synthetic-rule-version',
                                    'rulesSource': 'https://sportsbook.draftkings.com/fixture-rules',
-                                   'result': 'win', 'settledOdds': 425}}
+                                   'result': 'win', 'settledOdds': spec['odds']}}
     return spec, evidence, now
 
 
@@ -50,7 +50,7 @@ class PropTicketSettlementTests(unittest.TestCase):
             spec, evidence, now = case(family)
             result = S.review(spec, evidence, now)
             self.assertEqual(result['state'], 'settled-private', result)
-            self.assertEqual(result['units'], 1.0625)
+            self.assertEqual(result['units'], 1.2775 if family == 'CFB-alts' else 1.0625)
             self.assertFalse(result['releaseReady'])
             self.assertFalse(result['recordWriteAllowed'])
             self.assertEqual(result['providerRequests'], 0)

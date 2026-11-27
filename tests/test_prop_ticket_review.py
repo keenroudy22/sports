@@ -15,6 +15,8 @@ SOURCE = 'https://sportsbook.draftkings.com/event/test-fixture'
 
 
 def fixture(family='MNF', *, days=0):
+    if family == 'CFB-alts':
+        return college_fixture()
     league = 'NBA' if family == 'NBA-alts' else 'NFL'
     now = NOW + timedelta(days=days) + (timedelta(days=3) if family == 'TNF' else timedelta())
     at = now.isoformat()
@@ -47,6 +49,22 @@ def fixture(family='MNF', *, days=0):
     return spec, games, now
 
 
+def college_fixture(style='lotto', count=7, odds=511):
+    spec, _, now = fixture(days=11)
+    template = spec['legs'][0]
+    games = {}
+    spec.update(family='CFB-alts', parlayStyle=style, odds=odds, legs=[])
+    for i in range(count):
+        game = f'CFB-{i}'
+        leg = copy.deepcopy(template)
+        leg.update(gameId=game, athleteId=str(i), player=f'Player {i}', market='recYds')
+        leg['review']['availability'].update(gameId=game, athleteId=str(i))
+        games[game] = dict(id=game, league='CFB', state='pre', kickoff=leg['kickoff'])
+        spec['legs'].append(leg)
+    spec['ticketQuote']['terms'] = R.terms(spec)
+    return spec, games, now
+
+
 class PropTicketWorkbenchTests(unittest.TestCase):
     def test_daily_double_uses_verified_two_leg_joint_quote(self):
         spec, games, now = fixture('NBA-alts')
@@ -56,6 +74,20 @@ class PropTicketWorkbenchTests(unittest.TestCase):
         reviewed = R.review(spec, games, now)
         self.assertEqual(reviewed['state'], 'reviewed-private', reviewed['holds'])
         self.assertIn('Daily Double · -105', reviewed['caption'])
+
+    def test_college_cross_game_alternates_require_exact_current_quotes(self):
+        for style, count, odds in [('daily-double', 2, 114), ('lotto', 7, 511)]:
+            spec, games, now = college_fixture(style, count, odds)
+            result = R.review(spec, games, now)
+            self.assertEqual(result['state'], 'reviewed-private', result['holds'])
+            self.assertEqual(R.review(dict(spec, priceEstimated=True), games, now)['state'], 'held')
+            below = dict(spec, odds=499 if style == 'lotto' else 116)
+            below['ticketQuote'] = dict(spec['ticketQuote'], terms=R.terms(below))
+            self.assertEqual(R.review(below, games, now)['state'], 'held')
+            spec['legs'][1]['gameId'] = spec['legs'][0]['gameId']
+            spec['legs'][1]['review']['availability']['gameId'] = spec['legs'][0]['gameId']
+            spec['ticketQuote']['terms'] = R.terms(spec)
+            self.assertIn('College alternate tickets require distinct games', R.review(spec, games, now)['holds'])
 
     def test_first_quarter_requires_exact_joint_price_and_an_all_quarter_ticket(self):
         spec, games, now = fixture('MNF')
@@ -84,7 +116,7 @@ class PropTicketWorkbenchTests(unittest.TestCase):
             self.assertEqual(parlay_caption.compact_prop(leg), expected)
 
     def test_reviewed_families_are_private_and_keep_book_joint_price(self):
-        for family in R.FAMILIES:
+        for family in ('MNF', 'TNF', 'NBA-alts'):
             spec, games, now = fixture(family)
             result = R.review(spec, games, now)
             with self.subTest(family=family):

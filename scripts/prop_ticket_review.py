@@ -1,4 +1,4 @@
-"""Private MNF/TNF and NBA-alt ticket workbench. No network, admission or posting.
+"""Private football and basketball player ticket workbench. No network, admission or posting.
 
 Stage exact, sourced ticket reviews on the existing desk-health clock. The
 release worker separately verifies admission, the latest exact combined quote,
@@ -22,8 +22,10 @@ METHOD = 'sourced-prop-ticket-v1'
 STATS = {'NFL': {'car': 'carries', 'rec': 'receptions', 'rushYds': 'rushing yards',
                  'recYds': 'receiving yards', 'passYds': 'passing yards',
                  'att': 'passing attempts', 'cmp': 'completions'},
+         'CFB': {'rushYds': 'rushing yards', 'recYds': 'receiving yards'},
          'NBA': {'pts': 'points', 'reb': 'rebounds', 'ast': 'assists'}}
-FAMILIES = {'MNF': ('NFL', 0), 'TNF': ('NFL', 3), 'NBA-alts': ('NBA', None)}
+FAMILIES = {'MNF': ('NFL', 0), 'TNF': ('NFL', 3), 'NBA-alts': ('NBA', None),
+            'CFB-alts': ('CFB', None)}
 RELEASE_HOLDS = ['Private admission and attended exact combined-price recheck required before release',
                  'Book-specific parlay void/reprice and injury settlement proof required']
 
@@ -153,6 +155,9 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
         holds.append('Fresh visible same-book combined ticket receipt matching every exact leg required')
     if spec.get('priceEstimated') is not False:
         holds.append('A multiplied or estimated price is not a sportsbook combined quote')
+    if family == 'CFB-alts' and (gates.eastern_date(now).isoformat() < '2026-11-27'
+                                 or spec.get('parlayStyle') not in ('daily-double', 'lotto')):
+        holds.append('College alternates require a Daily Double or lotto starting November 27')
     seen, game_ids, captions = set(), set(), []
     for index, leg in enumerate(legs, 1):
         issues = []
@@ -181,8 +186,8 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
             issues.append('exact leg price at the ticket sportsbook required')
         if (not https(leg.get('source'), spec.get('book')) or not fresh(leg.get('observedAt'), now)):
             issues.append('fresh exact sportsbook leg source required')
-        if family == 'NBA-alts' and leg.get('alternate') is not True:
-            issues.append('NBA alternate must be an observed priced alternate, not an invented milestone')
+        if family in ('NBA-alts', 'CFB-alts') and leg.get('alternate') is not True:
+            issues.append(f'{league} alternate must be an observed priced alternate, not an invented milestone')
         if leg.get('alternate'):
             main = leg.get('mainLine')
             if not numeric(main) or not numeric(leg.get('line')) or not (
@@ -210,6 +215,8 @@ def review(spec, games, now, *, first=None, latest=None, risk_external=None):
         holds.extend(f'Leg {index}: {issue}' for issue in issues)
         if not issues:
             captions.append(leg_title(leg, league))
+    if family == 'CFB-alts' and len(game_ids) != len(legs):
+        holds.append('College alternate tickets require distinct games')
     if league == 'NFL' and len(game_ids) != 1:
         holds.append('MNF/TNF review must describe one exact primetime game')
     if len(game_ids) < len(legs):

@@ -63,6 +63,7 @@ def review(spec, evidence, now):
             or not tickets.price(spec.get('odds')) or spec.get('riskUnits', .25) != .25
             or spec.get('priceEstimated') is not False):
         return invalid
+    league = tickets.FAMILIES[spec['family']][0]
     fingerprint = tickets.fingerprint(spec)
     if not isinstance(receipt, dict) or not isinstance(frozen, dict):
         return invalid
@@ -108,7 +109,7 @@ def review(spec, evidence, now):
             holds.append('Duplicate original leg identity')
         seen.add(key)
         if (leg.get('book') != spec['book'] or leg.get('period') != tickets.ticket_period(spec)
-                or leg.get('market') not in tickets.STATS.get('NBA' if spec.get('family') == 'NBA-alts' else 'NFL', {})
+                or leg.get('market') not in tickets.STATS[league]
                 or leg.get('direction') not in ('over', 'under') or not tickets.numeric(leg.get('line'))):
             holds.append(f'Leg {index + 1}: unsupported original market or period')
             continue

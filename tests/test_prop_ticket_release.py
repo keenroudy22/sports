@@ -71,7 +71,7 @@ class PropTicketReleaseTests(unittest.TestCase):
         for family in R.FAMILIES:
             spec,ctx,pick,packet=prepared(family)
             self.assertEqual(R.terms(pick),R.terms(spec))
-            self.assertEqual(pick['odds'],425)
+            self.assertEqual(pick['odds'],511 if family == 'CFB-alts' else 425)
             self.assertEqual(pick['riskUnits'],.25)
             self.assertNotIn('Synthetic private',json.dumps(pick))
             self.assertNotIn('Private synthetic',json.dumps(pick))

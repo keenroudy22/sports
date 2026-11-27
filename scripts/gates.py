@@ -1551,7 +1551,11 @@ def longshot_shape(candidate, ctx):
                      and eastern_date(ctx.now).isoformat() == '2026-11-19'
                      and all(isinstance(leg, dict) and leg.get('gameId') == 'NFL-401873066'
                              for leg in legs))
-        minimum = 100 if nov19_tnf else 1500
+        college_alts = (candidate.get('family') == 'CFB-alts' and candidate.get('league') == 'CFB'
+                        and candidate.get('selectionMethod') == 'sourced-prop-ticket-v1'
+                        and eastern_date(when(candidate['publishedAt']) if candidate.get('publishedAt')
+                                         else ctx.now).isoformat() >= '2026-11-27')
+        minimum = 500 if college_alts else 100 if nov19_tnf else 1500
         ok = 6 <= len(legs) <= 8 and isinstance(odds, (int, float)) and minimum <= odds <= 20000
         reason = f'lotto needs 6–8 legs and +{minimum} to +20000; no forced ticket'
     else:
