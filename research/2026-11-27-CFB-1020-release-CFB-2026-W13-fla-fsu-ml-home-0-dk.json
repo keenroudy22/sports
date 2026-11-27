@@ -1,0 +1,225 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-27T15:20:07Z",
+  "summary": "Released 1: Florida State MONEYLINE +195 at DraftKings.",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "moneyline",
+      "line": 0.0,
+      "direction": "home",
+      "gameIds": [
+        "CFB-401856759"
+      ],
+      "book": "DraftKings",
+      "odds": 195,
+      "projection": 0.5,
+      "edge": "Price-checked chance 39.1% against the exact two-sided price; 33.9% needed at +195: +5.2 percentage points.",
+      "cutoff": "HOME moneyline at +195 or better; off the card at +194 or worse at 0.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-11-19T23:13:00Z",
+      "quotedAt": "2026-11-27T14:37:54Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 9:37 AM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-11-27T16:45:00Z",
+      "selectionPolicy": "2026-10-19-1u-2u",
+      "lane": "best_bet",
+      "riskUnits": 1,
+      "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+      "probabilityAtPublication": {
+        "rawChance": 0.515,
+        "chance": 0.391,
+        "calibrated": true,
+        "calibration": 0.35,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.339,
+        "edgePoints": 5.2,
+        "evPerUnit": 0.155,
+        "snapshotAt": "2026-11-19T23:13:00Z",
+        "probabilitySpec": "4f30d3a0acb736d74d205db08a18b5f3dd54a911cb4af719d65064736fa34d90",
+        "evaluatedAt": "2026-11-27T15:12:38Z",
+        "fairChance": 0.325,
+        "anchoredChance": 0.391,
+        "gap": 6.7,
+        "calibrationFamily": "CFB/moneyline"
+      },
+      "matchup": "Florida Gators at Florida State Seminoles",
+      "title": "Florida State MONEYLINE",
+      "id": "CFB-2026-W13-fla-fsu-ml-home-0-dk",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401856759",
+        "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown"
+      ],
+      "why": "Price-checked win chance 39.1%; +195 needs 33.9%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Florida lists neither Aaron Philo nor Tramell Jones Jr. on its availability report for the game. Checked before publishing: Florida State's game notes identify Ashton Daniels as its quarterback, and he is absent from the pregame availability report. The market: The spread opened +4.5 and is +6.5 at DraftKings, a move of 2 toward the away. The total opened 52.5 and is 53.5 at DraftKings, 1 toward the over. Our spread is 7.1 points off, bigger than 77% of our past gaps. Gaps this size went 416-414 against the close in 3584 games. Our total is 0 points off, bigger than 0% of our past gaps. Gaps this size went 1893-1692 against the close in 3602 games.",
+      "risk": "Statistical counterpoint: Philo completed 20 of 26 passes for 241 yards and rushed for 73 yards against Vanderbilt last week. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Florida lists wide receiver Vernell Brown III as out with a knee injury and linebacker Jaden Robinson, tight end Lacota Dippre, safety DJ Coleman, offensive lineman Emeka Ugorji and cornerback Dijon Johnson as questionable."
+        ],
+        "cautions": [
+          "Aaron Philo is Florida's expected starting quarterback after winning both starts since returning from a midseason benching.",
+          "Florida State lists wide receiver Duce Robinson, running backs Ousmane Kromah and Amari Thomas, and center Bradyn Welch-Joiner as out.",
+          "Florida State lists running backs Quintrevion Wisner and Sam Singleton Jr. as questionable.",
+          "Philo completed 20 of 26 passes for 241 yards and rushed for 73 yards against Vanderbilt last week."
+        ],
+        "directionsChecked": true
+      },
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Price-checked win chance 39.1%; this price needs 33.9%.",
+            "numbers": {
+              "chance": 0.391,
+              "breakEven": 0.339
+            },
+            "source": "Kook'n exact-price check",
+            "time": "2026-11-27T14:37:54Z"
+          },
+          {
+            "text": "Florida lists wide receiver Vernell Brown III as out with a knee injury and linebacker Jaden Robinson, tight end Lacota Dippre, safety DJ Coleman, offensive lineman Emeka Ugorji and cornerback Dijon Johnson as questionable.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Florida lists wide receiver Vernell Brown III as out with a knee injury and linebacker Jaden Robinson, tight end Lacota Dippre, safety DJ Coleman, offensive lineman Emeka Ugorji and cornerback Dijon Johnson as questionable.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Aaron Philo is Florida's expected starting quarterback after winning both starts since returning from a midseason benching.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Florida State lists wide receiver Duce Robinson, running backs Ousmane Kromah and Amari Thomas, and center Bradyn Welch-Joiner as out.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Aaron Philo is Florida's expected starting quarterback after winning both starts since returning from a midseason benching.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Florida State lists wide receiver Duce Robinson, running backs Ousmane Kromah and Amari Thomas, and center Bradyn Welch-Joiner as out.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Florida State lists running backs Quintrevion Wisner and Sam Singleton Jr. as questionable.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Florida lists wide receiver Vernell Brown III as out with a knee injury and linebacker Jaden Robinson, tight end Lacota Dippre, safety DJ Coleman, offensive lineman Emeka Ugorji and cornerback Dijon Johnson as questionable.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Aaron Philo is Florida's expected starting quarterback after winning both starts since returning from a midseason benching.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Florida State lists wide receiver Duce Robinson, running backs Ousmane Kromah and Amari Thomas, and center Bradyn Welch-Joiner as out.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Florida State lists running backs Quintrevion Wisner and Sam Singleton Jr. as questionable.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Florida lists wide receiver Vernell Brown III as out with a knee injury and linebacker Jaden Robinson, tight end Lacota Dippre, safety DJ Coleman, offensive lineman Emeka Ugorji and cornerback Dijon Johnson as questionable.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "text": "Kahleil Jackson (FLA) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/college-football/player/_/id/4693740/kahleil-jackson",
+            "time": "2020-11-21T18:31Z"
+          }
+        ],
+        "weather": {
+          "tempF": 57,
+          "windMph": 10,
+          "windDirection": "W",
+          "precipProb": 0,
+          "periodStart": "2026-11-27T15:00:00-05:00",
+          "issuedAt": "2026-11-27T14:15:28+00:00",
+          "source": "https://api.weather.gov/gridpoints/TAE/84,86/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": null,
+            "FanDuel": null
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 0.0,
+            "price": 195,
+            "time": "2026-11-27T14:37:54Z"
+          }
+        },
+        "ours": {
+          "projection": 0.5,
+          "line": 0.0,
+          "market": "moneyline",
+          "text": "Price-checked win chance 39.1%; this price needs 33.9%.",
+          "snapshotAt": "2026-11-19T23:13:00Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "role",
+            "url": "https://floridagators.com/news/2026/11/25/football-the-opening-kickoff-no-20-gators-at-florida-state-a-friday-afternoon-sunshine-showdown",
+            "time": "2026-11-27T15:12:38Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/college-football/player/_/id/4693740/kahleil-jackson",
+            "time": "2020-11-21T18:31Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/TAE/84,86/forecast/hourly",
+            "time": "2026-11-27T14:15:28+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856759",
+            "time": "2026-11-27T15:12:38Z"
+          }
+        ],
+        "partial": false
+      },
+      "publishedAt": "2026-11-27T15:20:07Z"
+    }
+  ]
+}
