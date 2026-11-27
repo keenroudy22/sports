@@ -24,6 +24,10 @@ class PlatformReworkTests(unittest.TestCase):
    self.assertEqual(r['issues'],[]);self.assertEqual(r['networkCalls'],0)
    (d/'com.keenroudy.sports.precheck.plist').unlink()
    self.assertIn('Installed schedule differs: precheck',schedule_audit.audit(ROOT,d)['issues'])
+   (d/'com.keenroudy.sports.discord.plist').write_text('["/bin/bash", "run.sh", "mirror"]')
+   report=schedule_audit.audit(ROOT,d)
+   self.assertCountEqual(report['issues'],['Installed schedule unreadable: discord','Installed schedule differs: precheck'])
+   self.assertEqual(len(report['jobs']),len(schedule_audit.OWNERS))
  def test_promotion_credit_not_added_to_captured_result(self):
   p=dict(id='x',league='CFB',season=2026,lane='best_bet',publishedAt='2026-10-27T12:00:00Z',
    kickoff='2026-10-28T00:00:00Z',settledAt='2026-10-28T03:00:00Z',result='loss',units=0,

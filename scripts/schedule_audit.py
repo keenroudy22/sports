@@ -2,6 +2,7 @@
 import json
 import plistlib
 from pathlib import Path
+from xml.parsers.expat import ExpatError
 import nba_readiness
 
 OWNERS={
@@ -22,8 +23,13 @@ def audit(root,installed=None):
   source=root/'deployment/mac'/filename;target=installed/filename
   if not source.exists():issues.append(f'Missing source job {name}');continue
   expected=plistlib.loads(source.read_bytes())
-  current=plistlib.loads(target.read_bytes()) if target.exists() else None
-  if current!=expected:issues.append(f'Installed schedule differs: {name}')
+  try:
+   current=plistlib.loads(target.read_bytes()) if target.exists() else None
+  except (OSError, ValueError, plistlib.InvalidFileException, ExpatError):
+   current=None
+   issues.append(f'Installed schedule unreadable: {name}')
+  else:
+   if current!=expected:issues.append(f'Installed schedule differs: {name}')
   jobs.append(dict(name=name,purpose=purpose,deadline=deadline,receipt=receipt,installedMatches=current==expected))
  config=nba_readiness.policy(root/'data/policy/nba.json')
  actual={'06:45','08:30','11:45','13:30','17:30','21:00'}

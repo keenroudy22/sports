@@ -18,6 +18,11 @@ class NBAFreeOnlyTests(unittest.TestCase):
             if name == 'nba_capture.py':
                 # Public contact URI in the identified reader, never a fetch endpoint.
                 allowed.add('keenroudy.com')
+                # The league moved the public listing here. Keep the path check
+                # as well as the host allowlist so this doesn't approve its API.
+                allowed.add('www.nba.com')
+                for url in re.findall(r"""https?://www\.nba\.com[^'"\s]*""", source):
+                    self.assertEqual(url, 'https://www.nba.com/players/injury-report')
             # Also inspect literal URL guards containing escaped regex dots.
             for host in re.findall(r'https?://([a-z0-9.-]+)', source.replace(r'\.', '.')):
                 self.assertIn(host, allowed)
