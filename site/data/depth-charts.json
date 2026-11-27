@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-11-26T05:36:17Z",
+  "updatedAt": "2026-11-27T02:48:58Z",
   "coverage": "ESPN listed roles for upcoming NFL teams with injuries; not confirmed game starters.",
   "teams": {
     "22": {
       "name": "Arizona Cardinals",
       "abbr": "ARI",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ari",
       "positions": [
         {
@@ -732,8 +732,8 @@
       "name": "Atlanta Falcons",
       "abbr": "ATL",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/atl",
       "positions": [
         {
@@ -1381,8 +1381,8 @@
       "name": "Baltimore Ravens",
       "abbr": "BAL",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/bal",
       "positions": [
         {
@@ -2046,8 +2046,8 @@
       "name": "Buffalo Bills",
       "abbr": "BUF",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/buf",
       "positions": [
         {
@@ -2187,8 +2187,8 @@
               "name": "Skyler Bell",
               "order": 2,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -2217,8 +2217,8 @@
               }
             },
             {
-              "id": "4573699",
-              "name": "Jackson Hawes",
+              "id": "4688552",
+              "name": "Keleki Latu",
               "order": 3,
               "availability": {
                 "status": "Active",
@@ -2226,8 +2226,8 @@
               }
             },
             {
-              "id": "4688552",
-              "name": "Keleki Latu",
+              "id": "4573699",
+              "name": "Jackson Hawes",
               "order": 4,
               "availability": {
                 "status": "Active",
@@ -2394,6 +2394,10 @@
             {
               "id": "4688931",
               "order": 2
+            },
+            {
+              "id": "4682749",
+              "order": 3
             }
           ]
         },
@@ -2629,11 +2633,11 @@
               "order": 2
             },
             {
-              "id": "4573699",
+              "id": "4688552",
               "order": 3
             },
             {
-              "id": "4688552",
+              "id": "4573699",
               "order": 4
             }
           ]
@@ -2661,8 +2665,8 @@
       "name": "Carolina Panthers",
       "abbr": "CAR",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/car",
       "positions": [
         {
@@ -3331,695 +3335,12 @@
         }
       ]
     },
-    "3": {
-      "name": "Chicago Bears",
-      "abbr": "CHI",
-      "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
-      "source": "https://www.espn.com/nfl/team/depth/_/name/chi",
-      "positions": [
-        {
-          "key": "qb",
-          "label": "QB",
-          "group": "QB",
-          "players": [
-            {
-              "id": "4431611",
-              "name": "Caleb Williams",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4434153",
-              "name": "Tyson Bagent",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "15168",
-              "name": "Case Keenum",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "rb",
-          "label": "RB",
-          "group": "RB",
-          "players": [
-            {
-              "id": "4259545",
-              "name": "D'Andre Swift",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4608686",
-              "name": "Kyle Monangai",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4243315",
-              "name": "Salvon Ahmed",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4426386",
-              "name": "Roschon Johnson",
-              "order": 4,
-              "availability": {
-                "status": "Out",
-                "unavailable": true
-              }
-            },
-            {
-              "id": "4257364",
-              "name": "Zavier Scott",
-              "order": 5,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            },
-            {
-              "id": "4036032",
-              "name": "Brittain Brown",
-              "order": 6,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr1",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4685278",
-              "name": "Luther Burden III",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4869748",
-              "name": "Zavion Thomas",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr2",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4431299",
-              "name": "Rome Odunze",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "5160110",
-              "name": "Jahdae Walker",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "2973405",
-              "name": "Kalif Raymond",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "te",
-          "label": "TE",
-          "group": "TE",
-          "players": [
-            {
-              "id": "4723086",
-              "name": "Colston Loveland",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4685504",
-              "name": "Sam Roush",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "3948283",
-              "name": "Stephen Carlson",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "5150662",
-              "name": "Hayden Large",
-              "order": 4,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            },
-            {
-              "id": "4258595",
-              "name": "Cole Kmet",
-              "order": 5,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            },
-            {
-              "id": "4916349",
-              "name": "Nikola Kalinic",
-              "order": 6,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        }
-      ],
-      "rolePositions": [
-        {
-          "key": "lde",
-          "players": [
-            {
-              "id": "3134690",
-              "order": 1
-            },
-            {
-              "id": "4683553",
-              "order": 2
-            },
-            {
-              "id": "4365629",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "ldt",
-          "players": [
-            {
-              "id": "2576492",
-              "order": 1
-            },
-            {
-              "id": "3892883",
-              "order": 2
-            },
-            {
-              "id": "4875381",
-              "order": 3
-            },
-            {
-              "id": "4877376",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "rdt",
-          "players": [
-            {
-              "id": "4035369",
-              "order": 1
-            },
-            {
-              "id": "4432804",
-              "order": 2
-            },
-            {
-              "id": "3116726",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rde",
-          "players": [
-            {
-              "id": "4259181",
-              "order": 1
-            },
-            {
-              "id": "4242659",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wlb",
-          "players": [
-            {
-              "id": "4036261",
-              "order": 1
-            },
-            {
-              "id": "4372576",
-              "order": 2
-            },
-            {
-              "id": "4245655",
-              "order": 3
-            },
-            {
-              "id": "4241611",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "mlb",
-          "players": [
-            {
-              "id": "3121544",
-              "order": 1
-            },
-            {
-              "id": "4911952",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "slb",
-          "players": [
-            {
-              "id": "4430822",
-              "order": 1
-            },
-            {
-              "id": "4241007",
-              "order": 2
-            },
-            {
-              "id": "4429970",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "lcb",
-          "players": [
-            {
-              "id": "4243253",
-              "order": 1
-            },
-            {
-              "id": "4429067",
-              "order": 2
-            },
-            {
-              "id": "3122797",
-              "order": 3
-            },
-            {
-              "id": "4360203",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "ss",
-          "players": [
-            {
-              "id": "4954445",
-              "order": 1
-            },
-            {
-              "id": "4242402",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "fs",
-          "players": [
-            {
-              "id": "3916577",
-              "order": 1
-            },
-            {
-              "id": "4879561",
-              "order": 2
-            },
-            {
-              "id": "4239094",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rcb",
-          "players": [
-            {
-              "id": "4426374",
-              "order": 1
-            },
-            {
-              "id": "4870953",
-              "order": 2
-            },
-            {
-              "id": "4917592",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "nb",
-          "players": [
-            {
-              "id": "4361093",
-              "order": 1
-            },
-            {
-              "id": "4240459",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "pk",
-          "players": [
-            {
-              "id": "17427",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "p",
-          "players": [
-            {
-              "id": "4686889",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "h",
-          "players": [
-            {
-              "id": "4686889",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "pr",
-          "players": [
-            {
-              "id": "2973405",
-              "order": 1
-            },
-            {
-              "id": "4869748",
-              "order": 2
-            },
-            {
-              "id": "4240459",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "kr",
-          "players": [
-            {
-              "id": "4869748",
-              "order": 1
-            },
-            {
-              "id": "4240459",
-              "order": 2
-            },
-            {
-              "id": "2973405",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "ls",
-          "players": [
-            {
-              "id": "2980138",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "wr1",
-          "players": [
-            {
-              "id": "4685278",
-              "order": 1
-            },
-            {
-              "id": "4869748",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wr2",
-          "players": [
-            {
-              "id": "4431299",
-              "order": 1
-            },
-            {
-              "id": "5160110",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "players": [
-            {
-              "id": "2973405",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "lt",
-          "players": [
-            {
-              "id": "5125873",
-              "order": 1
-            },
-            {
-              "id": "4432595",
-              "order": 2
-            },
-            {
-              "id": "4251007",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "lg",
-          "players": [
-            {
-              "id": "2577773",
-              "order": 1
-            },
-            {
-              "id": "4360319",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "c",
-          "players": [
-            {
-              "id": "3116729",
-              "order": 1
-            },
-            {
-              "id": "4686907",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "rg",
-          "players": [
-            {
-              "id": "3930040",
-              "order": 1
-            },
-            {
-              "id": "4695895",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "rt",
-          "players": [
-            {
-              "id": "4426358",
-              "order": 1
-            },
-            {
-              "id": "5125873",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "qb",
-          "players": [
-            {
-              "id": "4431611",
-              "order": 1
-            },
-            {
-              "id": "4434153",
-              "order": 2
-            },
-            {
-              "id": "15168",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "te",
-          "players": [
-            {
-              "id": "4723086",
-              "order": 1
-            },
-            {
-              "id": "4685504",
-              "order": 2
-            },
-            {
-              "id": "3948283",
-              "order": 3
-            },
-            {
-              "id": "5150662",
-              "order": 4
-            },
-            {
-              "id": "4258595",
-              "order": 5
-            },
-            {
-              "id": "4916349",
-              "order": 6
-            }
-          ]
-        },
-        {
-          "key": "rb",
-          "players": [
-            {
-              "id": "4259545",
-              "order": 1
-            },
-            {
-              "id": "4608686",
-              "order": 2
-            },
-            {
-              "id": "4243315",
-              "order": 3
-            },
-            {
-              "id": "4426386",
-              "order": 4
-            },
-            {
-              "id": "4257364",
-              "order": 5
-            },
-            {
-              "id": "4036032",
-              "order": 6
-            }
-          ]
-        }
-      ]
-    },
     "4": {
       "name": "Cincinnati Bengals",
       "abbr": "CIN",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/cin",
       "positions": [
         {
@@ -4642,8 +3963,8 @@
       "name": "Cleveland Browns",
       "abbr": "CLE",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/cle",
       "positions": [
         {
@@ -5311,673 +4632,12 @@
         }
       ]
     },
-    "6": {
-      "name": "Dallas Cowboys",
-      "abbr": "DAL",
-      "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
-      "source": "https://www.espn.com/nfl/team/depth/_/name/dal",
-      "positions": [
-        {
-          "key": "qb",
-          "label": "QB",
-          "group": "QB",
-          "players": [
-            {
-              "id": "2577417",
-              "name": "Dak Prescott",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4426875",
-              "name": "Sam Howell",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "rb",
-          "label": "RB",
-          "group": "RB",
-          "players": [
-            {
-              "id": "4361579",
-              "name": "Javonte Williams",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4372519",
-              "name": "Jashaun Corbin",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4429676",
-              "name": "Tyler Goodson",
-              "order": 3,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            },
-            {
-              "id": "4240603",
-              "name": "Malik Davis",
-              "order": 4,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "fb",
-          "label": "FB",
-          "group": "FB",
-          "players": [
-            {
-              "id": "4383396",
-              "name": "Hunter Luepke",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr1",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4241389",
-              "name": "CeeDee Lamb",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "3676833",
-              "name": "KaVontae Turpin",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr2",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4426354",
-              "name": "George Pickens",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4426485",
-              "name": "Jonathan Mingo",
-              "order": 2,
-              "availability": {
-                "status": "Out",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "5083754",
-              "name": "Ryan Flournoy",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4808759",
-              "name": "Camden Brown",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "te",
-          "label": "TE",
-          "group": "TE",
-          "players": [
-            {
-              "id": "4242355",
-              "name": "Jake Ferguson",
-              "order": 1,
-              "availability": {
-                "status": "Out",
-                "unavailable": true
-              }
-            },
-            {
-              "id": "4360967",
-              "name": "Brevyn Spann-Ford",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4372096",
-              "name": "Luke Schoonmaker",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4361988",
-              "name": "James Mitchell",
-              "order": 4,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4242442",
-              "name": "Princeton Fant",
-              "order": 5,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        }
-      ],
-      "rolePositions": [
-        {
-          "key": "lde",
-          "players": [
-            {
-              "id": "4040982",
-              "order": 1
-            },
-            {
-              "id": "4870960",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "nt",
-          "players": [
-            {
-              "id": "4367210",
-              "order": 1
-            },
-            {
-              "id": "2980097",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "rde",
-          "players": [
-            {
-              "id": "3122752",
-              "order": 1
-            },
-            {
-              "id": "4039170",
-              "order": 2
-            },
-            {
-              "id": "4431547",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "wlb",
-          "players": [
-            {
-              "id": "4046523",
-              "order": 1
-            },
-            {
-              "id": "13976",
-              "order": 2
-            },
-            {
-              "id": "4685266",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "lilb",
-          "players": [
-            {
-              "id": "4685400",
-              "order": 1
-            },
-            {
-              "id": "4362088",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "rilb",
-          "players": [
-            {
-              "id": "4428914",
-              "order": 1
-            },
-            {
-              "id": "4429249",
-              "order": 2
-            },
-            {
-              "id": "4427816",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "slb",
-          "players": [
-            {
-              "id": "4683848",
-              "order": 1
-            },
-            {
-              "id": "4240608",
-              "order": 2
-            },
-            {
-              "id": "4710067",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "lcb",
-          "players": [
-            {
-              "id": "4426506",
-              "order": 1
-            },
-            {
-              "id": "5095865",
-              "order": 2
-            },
-            {
-              "id": "4702577",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "ss",
-          "players": [
-            {
-              "id": "4043089",
-              "order": 1
-            },
-            {
-              "id": "3929850",
-              "order": 2
-            },
-            {
-              "id": "4241921",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "fs",
-          "players": [
-            {
-              "id": "3121415",
-              "order": 1
-            },
-            {
-              "id": "4595352",
-              "order": 2
-            },
-            {
-              "id": "4360590",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rcb",
-          "players": [
-            {
-              "id": "4384549",
-              "order": 1
-            },
-            {
-              "id": "4259546",
-              "order": 2
-            },
-            {
-              "id": "4248911",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "nb",
-          "players": [
-            {
-              "id": "4870706",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "pk",
-          "players": [
-            {
-              "id": "3953687",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "p",
-          "players": [
-            {
-              "id": "14950",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "h",
-          "players": [
-            {
-              "id": "14950",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "pr",
-          "players": [
-            {
-              "id": "3676833",
-              "order": 1
-            },
-            {
-              "id": "4426485",
-              "order": 2
-            },
-            {
-              "id": "4870706",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "kr",
-          "players": [
-            {
-              "id": "3676833",
-              "order": 1
-            },
-            {
-              "id": "4808759",
-              "order": 2
-            },
-            {
-              "id": "4429676",
-              "order": 3
-            },
-            {
-              "id": "4240603",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "ls",
-          "players": [
-            {
-              "id": "3052357",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "wr1",
-          "players": [
-            {
-              "id": "4241389",
-              "order": 1
-            },
-            {
-              "id": "3676833",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wr2",
-          "players": [
-            {
-              "id": "4426354",
-              "order": 1
-            },
-            {
-              "id": "4426485",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "players": [
-            {
-              "id": "5083754",
-              "order": 1
-            },
-            {
-              "id": "4808759",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "lt",
-          "players": [
-            {
-              "id": "4609048",
-              "order": 1
-            },
-            {
-              "id": "4685554",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "lg",
-          "players": [
-            {
-              "id": "4568652",
-              "order": 1
-            },
-            {
-              "id": "4685120",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "c",
-          "players": [
-            {
-              "id": "4426663",
-              "order": 1
-            },
-            {
-              "id": "3920591",
-              "order": 2
-            },
-            {
-              "id": "4044138",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rg",
-          "players": [
-            {
-              "id": "4685263",
-              "order": 1
-            },
-            {
-              "id": "4685120",
-              "order": 2
-            },
-            {
-              "id": "3920591",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rt",
-          "players": [
-            {
-              "id": "3915834",
-              "order": 1
-            },
-            {
-              "id": "4428990",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "qb",
-          "players": [
-            {
-              "id": "2577417",
-              "order": 1
-            },
-            {
-              "id": "4426875",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "te",
-          "players": [
-            {
-              "id": "4242355",
-              "order": 1
-            },
-            {
-              "id": "4360967",
-              "order": 2
-            },
-            {
-              "id": "4372096",
-              "order": 3
-            },
-            {
-              "id": "4361988",
-              "order": 4
-            },
-            {
-              "id": "4242442",
-              "order": 5
-            }
-          ]
-        },
-        {
-          "key": "rb",
-          "players": [
-            {
-              "id": "4361579",
-              "order": 1
-            },
-            {
-              "id": "4372519",
-              "order": 2
-            },
-            {
-              "id": "4429676",
-              "order": 3
-            },
-            {
-              "id": "4240603",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "fb",
-          "players": [
-            {
-              "id": "4383396",
-              "order": 1
-            }
-          ]
-        }
-      ]
-    },
     "7": {
       "name": "Denver Broncos",
       "abbr": "DEN",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/den",
       "positions": [
         {
@@ -6042,14 +4702,23 @@
               "name": "Tyler Badie",
               "order": 3,
               "availability": {
-                "status": "Injured Reserve",
+                "status": "Day-To-Day",
                 "unavailable": true
+              }
+            },
+            {
+              "id": "4391845",
+              "name": "Cody Schrader",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
               }
             },
             {
               "id": "4568490",
               "name": "RJ Harvey",
-              "order": 4,
+              "order": 5,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -6430,12 +5099,16 @@
               "order": 1
             },
             {
-              "id": "4568490",
+              "id": "4391845",
               "order": 2
             },
             {
-              "id": "4362748",
+              "id": "4568490",
               "order": 3
+            },
+            {
+              "id": "4362748",
+              "order": 4
             }
           ]
         },
@@ -6499,8 +5172,12 @@
               "order": 2
             },
             {
-              "id": "4361691",
+              "id": "5085625",
               "order": 3
+            },
+            {
+              "id": "4361691",
+              "order": 4
             }
           ]
         },
@@ -6626,8 +5303,12 @@
               "order": 3
             },
             {
-              "id": "4568490",
+              "id": "4391845",
               "order": 4
+            },
+            {
+              "id": "4568490",
+              "order": 5
             }
           ]
         },
@@ -6642,671 +5323,12 @@
         }
       ]
     },
-    "8": {
-      "name": "Detroit Lions",
-      "abbr": "DET",
-      "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
-      "source": "https://www.espn.com/nfl/team/depth/_/name/det",
-      "positions": [
-        {
-          "key": "qb",
-          "label": "QB",
-          "group": "QB",
-          "players": [
-            {
-              "id": "3046779",
-              "name": "Jared Goff",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "3044720",
-              "name": "Joshua Dobbs",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "rb",
-          "label": "RB",
-          "group": "RB",
-          "players": [
-            {
-              "id": "4429795",
-              "name": "Jahmyr Gibbs",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4912274",
-              "name": "Sione Vaki",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4383429",
-              "name": "Jacob Saylors",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4361529",
-              "name": "Isiah Pacheco",
-              "order": 4,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr1",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4374302",
-              "name": "Amon-Ra St. Brown",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4245144",
-              "name": "Tay Martin",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4685441",
-              "name": "Kendrick Law",
-              "order": 3,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr2",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4426388",
-              "name": "Jameson Williams",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "2580216",
-              "name": "DeAndre Carter",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "5123663",
-              "name": "Isaac TeSlaa",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "3126997",
-              "name": "Tom Kennedy",
-              "order": 2,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "te",
-          "label": "TE",
-          "group": "TE",
-          "players": [
-            {
-              "id": "4430027",
-              "name": "Sam LaPorta",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4242392",
-              "name": "Brock Wright",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "3915486",
-              "name": "Tyler Conklin",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        }
-      ],
-      "rolePositions": [
-        {
-          "key": "lde",
-          "players": [
-            {
-              "id": "4685461",
-              "order": 1
-            },
-            {
-              "id": "4892218",
-              "order": 2
-            },
-            {
-              "id": "4710422",
-              "order": 3
-            },
-            {
-              "id": "4372099",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "ldt",
-          "players": [
-            {
-              "id": "4361662",
-              "order": 1
-            },
-            {
-              "id": "4586333",
-              "order": 2
-            },
-            {
-              "id": "5103940",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rdt",
-          "players": [
-            {
-              "id": "4431615",
-              "order": 1
-            },
-            {
-              "id": "4039020",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "rde",
-          "players": [
-            {
-              "id": "4038849",
-              "order": 1
-            },
-            {
-              "id": "4361861",
-              "order": 2
-            },
-            {
-              "id": "4689333",
-              "order": 3
-            },
-            {
-              "id": "4685442",
-              "order": 4
-            },
-            {
-              "id": "4240269",
-              "order": 5
-            }
-          ]
-        },
-        {
-          "key": "wlb",
-          "players": [
-            {
-              "id": "4260409",
-              "order": 1
-            },
-            {
-              "id": "4036507",
-              "order": 2
-            },
-            {
-              "id": "4362636",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "mlb",
-          "players": [
-            {
-              "id": "4241411",
-              "order": 1
-            },
-            {
-              "id": "4242521",
-              "order": 2
-            },
-            {
-              "id": "4569465",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "slb",
-          "players": [
-            {
-              "id": "5144894",
-              "order": 1
-            },
-            {
-              "id": "4038432",
-              "order": 2
-            },
-            {
-              "id": "4035434",
-              "order": 3
-            },
-            {
-              "id": "4896353",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "lcb",
-          "players": [
-            {
-              "id": "3139387",
-              "order": 1
-            },
-            {
-              "id": "4027919",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "ss",
-          "players": [
-            {
-              "id": "4692025",
-              "order": 1
-            },
-            {
-              "id": "5093004",
-              "order": 2
-            },
-            {
-              "id": "4569323",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "fs",
-          "players": [
-            {
-              "id": "3045463",
-              "order": 1
-            },
-            {
-              "id": "4360383",
-              "order": 2
-            },
-            {
-              "id": "4361939",
-              "order": 3
-            },
-            {
-              "id": "3123938",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "rcb",
-          "players": [
-            {
-              "id": "3910229",
-              "order": 1
-            },
-            {
-              "id": "4566092",
-              "order": 2
-            },
-            {
-              "id": "5143915",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "nb",
-          "players": [
-            {
-              "id": "4371973",
-              "order": 1
-            },
-            {
-              "id": "4372459",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "pk",
-          "players": [
-            {
-              "id": "4689936",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "p",
-          "players": [
-            {
-              "id": "3916370",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "h",
-          "players": [
-            {
-              "id": "3916370",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "pr",
-          "players": [
-            {
-              "id": "2580216",
-              "order": 1
-            },
-            {
-              "id": "4374302",
-              "order": 2
-            },
-            {
-              "id": "4245144",
-              "order": 3
-            },
-            {
-              "id": "3126997",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "kr",
-          "players": [
-            {
-              "id": "2580216",
-              "order": 1
-            },
-            {
-              "id": "4383429",
-              "order": 2
-            },
-            {
-              "id": "4912274",
-              "order": 3
-            },
-            {
-              "id": "3126997",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "ls",
-          "players": [
-            {
-              "id": "4571755",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "wr1",
-          "players": [
-            {
-              "id": "4374302",
-              "order": 1
-            },
-            {
-              "id": "4245144",
-              "order": 2
-            },
-            {
-              "id": "4685441",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "wr2",
-          "players": [
-            {
-              "id": "4426388",
-              "order": 1
-            },
-            {
-              "id": "2580216",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "players": [
-            {
-              "id": "5123663",
-              "order": 1
-            },
-            {
-              "id": "3126997",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "lt",
-          "players": [
-            {
-              "id": "4373825",
-              "order": 1
-            },
-            {
-              "id": "4241217",
-              "order": 2
-            },
-            {
-              "id": "5209589",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "lg",
-          "players": [
-            {
-              "id": "4427864",
-              "order": 1
-            },
-            {
-              "id": "4608890",
-              "order": 2
-            },
-            {
-              "id": "4611506",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "c",
-          "players": [
-            {
-              "id": "4361425",
-              "order": 1
-            },
-            {
-              "id": "4429187",
-              "order": 2
-            },
-            {
-              "id": "4361788",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rg",
-          "players": [
-            {
-              "id": "4429035",
-              "order": 1
-            },
-            {
-              "id": "4608890",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "rt",
-          "players": [
-            {
-              "id": "5081450",
-              "order": 1
-            },
-            {
-              "id": "4241217",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "qb",
-          "players": [
-            {
-              "id": "3046779",
-              "order": 1
-            },
-            {
-              "id": "3044720",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "te",
-          "players": [
-            {
-              "id": "4430027",
-              "order": 1
-            },
-            {
-              "id": "4242392",
-              "order": 2
-            },
-            {
-              "id": "3915486",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rb",
-          "players": [
-            {
-              "id": "4429795",
-              "order": 1
-            },
-            {
-              "id": "4912274",
-              "order": 2
-            },
-            {
-              "id": "4383429",
-              "order": 3
-            },
-            {
-              "id": "4361529",
-              "order": 4
-            }
-          ]
-        }
-      ]
-    },
     "34": {
       "name": "Houston Texans",
       "abbr": "HOU",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/hou",
       "positions": [
         {
@@ -8000,8 +6022,8 @@
       "name": "Indianapolis Colts",
       "abbr": "IND",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ind",
       "positions": [
         {
@@ -8675,8 +6697,8 @@
       "name": "Jacksonville Jaguars",
       "abbr": "JAX",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/jax",
       "positions": [
         {
@@ -9310,8 +7332,8 @@
       "name": "Kansas City Chiefs",
       "abbr": "KC",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/kc",
       "positions": [
         {
@@ -9342,8 +7364,8 @@
               "name": "Garrett Nussmeier",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -9381,9 +7403,18 @@
               }
             },
             {
+              "id": "4605841",
+              "name": "Nate Carter",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "4596602",
               "name": "Brashard Smith",
-              "order": 4,
+              "order": 5,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -9542,9 +7573,18 @@
               }
             },
             {
+              "id": "4379401",
+              "name": "John FitzPatrick",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "4430723",
               "name": "Jared Wiley",
-              "order": 4,
+              "order": 5,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -9553,7 +7593,7 @@
             {
               "id": "4708490",
               "name": "John Michael Gyllenborg",
-              "order": 5,
+              "order": 6,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -9900,10 +7940,6 @@
             {
               "id": "4241385",
               "order": 1
-            },
-            {
-              "id": "4367645",
-              "order": 2
             }
           ]
         },
@@ -9919,12 +7955,8 @@
               "order": 2
             },
             {
-              "id": "4043039",
-              "order": 3
-            },
-            {
               "id": "4370876",
-              "order": 4
+              "order": 3
             }
           ]
         },
@@ -9938,10 +7970,6 @@
             {
               "id": "3915106",
               "order": 2
-            },
-            {
-              "id": "4043041",
-              "order": 3
             }
           ]
         },
@@ -9978,12 +8006,16 @@
               "order": 3
             },
             {
-              "id": "4430723",
+              "id": "4379401",
               "order": 4
             },
             {
-              "id": "4708490",
+              "id": "4430723",
               "order": 5
+            },
+            {
+              "id": "4708490",
+              "order": 6
             }
           ]
         },
@@ -10003,8 +8035,12 @@
               "order": 3
             },
             {
-              "id": "4596602",
+              "id": "4605841",
               "order": 4
+            },
+            {
+              "id": "4596602",
+              "order": 5
             }
           ]
         },
@@ -10023,8 +8059,8 @@
       "name": "Las Vegas Raiders",
       "abbr": "LV",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lv",
       "positions": [
         {
@@ -10650,8 +8686,8 @@
       "name": "Los Angeles Chargers",
       "abbr": "LAC",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lac",
       "positions": [
         {
@@ -10678,9 +8714,18 @@
               }
             },
             {
+              "id": "3886812",
+              "name": "Jake Browning",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
               "id": "4383351",
               "name": "Trey Lance",
-              "order": 3,
+              "order": 4,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -11012,11 +9057,11 @@
               "order": 1
             },
             {
-              "id": "4690171",
+              "id": "4574105",
               "order": 2
             },
             {
-              "id": "4574105",
+              "id": "4690171",
               "order": 3
             }
           ]
@@ -11264,8 +9309,12 @@
               "order": 2
             },
             {
-              "id": "4383351",
+              "id": "3886812",
               "order": 3
+            },
+            {
+              "id": "4383351",
+              "order": 4
             }
           ]
         },
@@ -11322,8 +9371,8 @@
       "name": "Los Angeles Rams",
       "abbr": "LAR",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lar",
       "positions": [
         {
@@ -11375,8 +9424,8 @@
           "group": "RB",
           "players": [
             {
-              "id": "4430737",
-              "name": "Kyren Williams",
+              "id": "4429096",
+              "name": "Blake Corum",
               "order": 1,
               "availability": {
                 "status": "Active",
@@ -11384,8 +9433,8 @@
               }
             },
             {
-              "id": "4429096",
-              "name": "Blake Corum",
+              "id": "4430737",
+              "name": "Kyren Williams",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -11427,8 +9476,8 @@
               }
             },
             {
-              "id": "4386544",
-              "name": "Xavier Smith",
+              "id": "4360797",
+              "name": "Tutu Atwell",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -11436,8 +9485,8 @@
               }
             },
             {
-              "id": "4569382",
-              "name": "Jordan Whittington",
+              "id": "4426515",
+              "name": "Puka Nacua",
               "order": 3,
               "availability": {
                 "status": "Injured Reserve",
@@ -11461,18 +9510,9 @@
               }
             },
             {
-              "id": "4431342",
-              "name": "Brennan Presley",
+              "id": "16800",
+              "name": "Davante Adams",
               "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4426515",
-              "name": "Puka Nacua",
-              "order": 3,
               "availability": {
                 "status": "Injured Reserve",
                 "unavailable": true
@@ -11486,8 +9526,8 @@
           "group": "WR",
           "players": [
             {
-              "id": "4360797",
-              "name": "Tutu Atwell",
+              "id": "4386544",
+              "name": "Xavier Smith",
               "order": 1,
               "availability": {
                 "status": "Active",
@@ -11495,8 +9535,8 @@
               }
             },
             {
-              "id": "16800",
-              "name": "Davante Adams",
+              "id": "4569382",
+              "name": "Jordan Whittington",
               "order": 2,
               "availability": {
                 "status": "Injured Reserve",
@@ -11782,12 +9822,8 @@
               "order": 1
             },
             {
-              "id": "4431342",
-              "order": 2
-            },
-            {
               "id": "4569382",
-              "order": 3
+              "order": 2
             }
           ]
         },
@@ -11795,24 +9831,20 @@
           "key": "kr",
           "players": [
             {
-              "id": "4386544",
+              "id": "4243003",
               "order": 1
             },
             {
-              "id": "4243003",
+              "id": "4386544",
               "order": 2
             },
             {
-              "id": "4431342",
+              "id": "5082269",
               "order": 3
             },
             {
-              "id": "5082269",
-              "order": 4
-            },
-            {
               "id": "4569382",
-              "order": 5
+              "order": 4
             }
           ]
         },
@@ -11833,11 +9865,11 @@
               "order": 1
             },
             {
-              "id": "4386544",
+              "id": "4360797",
               "order": 2
             },
             {
-              "id": "4569382",
+              "id": "4426515",
               "order": 3
             }
           ]
@@ -11850,12 +9882,8 @@
               "order": 1
             },
             {
-              "id": "4431342",
+              "id": "16800",
               "order": 2
-            },
-            {
-              "id": "4426515",
-              "order": 3
             }
           ]
         },
@@ -11863,11 +9891,11 @@
           "key": "wr3",
           "players": [
             {
-              "id": "4360797",
+              "id": "4386544",
               "order": 1
             },
             {
-              "id": "16800",
+              "id": "4569382",
               "order": 2
             }
           ]
@@ -11999,11 +10027,11 @@
           "key": "rb",
           "players": [
             {
-              "id": "4430737",
+              "id": "4429096",
               "order": 1
             },
             {
-              "id": "4429096",
+              "id": "4430737",
               "order": 2
             },
             {
@@ -12022,8 +10050,8 @@
       "name": "Miami Dolphins",
       "abbr": "MIA",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/mia",
       "positions": [
         {
@@ -12696,8 +10724,8 @@
       "name": "Minnesota Vikings",
       "abbr": "MIN",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/min",
       "positions": [
         {
@@ -13350,8 +11378,8 @@
       "name": "New England Patriots",
       "abbr": "NE",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ne",
       "positions": [
         {
@@ -14036,8 +12064,8 @@
       "name": "New Orleans Saints",
       "abbr": "NO",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/no",
       "positions": [
         {
@@ -14693,8 +12721,8 @@
       "name": "New York Giants",
       "abbr": "NYG",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyg",
       "positions": [
         {
@@ -15400,8 +13428,8 @@
       "name": "New York Jets",
       "abbr": "NYJ",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyj",
       "positions": [
         {
@@ -16050,683 +14078,12 @@
         }
       ]
     },
-    "21": {
-      "name": "Philadelphia Eagles",
-      "abbr": "PHI",
-      "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
-      "source": "https://www.espn.com/nfl/team/depth/_/name/phi",
-      "positions": [
-        {
-          "key": "qb",
-          "label": "QB",
-          "group": "QB",
-          "players": [
-            {
-              "id": "4360698",
-              "name": "Joe Milton",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4685201",
-              "name": "Tanner McKee",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4879250",
-              "name": "Cole Payton",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4040715",
-              "name": "Jalen Hurts",
-              "order": 4,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "rb",
-          "label": "RB",
-          "group": "RB",
-          "players": [
-            {
-              "id": "3929630",
-              "name": "Saquon Barkley",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4431545",
-              "name": "Will Shipley",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4685279",
-              "name": "Jaydon Blue",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4429013",
-              "name": "Tank Bigsby",
-              "order": 4,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr1",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4241478",
-              "name": "DeVonta Smith",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4372414",
-              "name": "Elijah Moore",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4686104",
-              "name": "Johnny Wilson",
-              "order": 3,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr2",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4715355",
-              "name": "Darius Cooper",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "3926231",
-              "name": "Britain Covey",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4870795",
-              "name": "Makai Lemon",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4428850",
-              "name": "Dontayvion Wicks",
-              "order": 2,
-              "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
-              }
-            }
-          ]
-        },
-        {
-          "key": "te",
-          "label": "TE",
-          "group": "TE",
-          "players": [
-            {
-              "id": "3121023",
-              "name": "Dallas Goedert",
-              "order": 1,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "3052096",
-              "name": "Johnny Mundt",
-              "order": 2,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "15835",
-              "name": "Zach Ertz",
-              "order": 3,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4431574",
-              "name": "Eli Stowers",
-              "order": 4,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            },
-            {
-              "id": "4241374",
-              "name": "Grant Calcaterra",
-              "order": 5,
-              "availability": {
-                "status": "Active",
-                "unavailable": false
-              }
-            }
-          ]
-        }
-      ],
-      "rolePositions": [
-        {
-          "key": "lde",
-          "players": [
-            {
-              "id": "4685759",
-              "order": 1
-            },
-            {
-              "id": "4429731",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "nt",
-          "players": [
-            {
-              "id": "4567123",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "rde",
-          "players": [
-            {
-              "id": "4362116",
-              "order": 1
-            },
-            {
-              "id": "4569586",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wlb",
-          "players": [
-            {
-              "id": "4426331",
-              "order": 1
-            },
-            {
-              "id": "4257591",
-              "order": 2
-            },
-            {
-              "id": "4240585",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "lilb",
-          "players": [
-            {
-              "id": "4432777",
-              "order": 1
-            },
-            {
-              "id": "4431573",
-              "order": 2
-            },
-            {
-              "id": "3917657",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rilb",
-          "players": [
-            {
-              "id": "4685287",
-              "order": 1
-            },
-            {
-              "id": "4372051",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "slb",
-          "players": [
-            {
-              "id": "3916409",
-              "order": 1
-            },
-            {
-              "id": "4571162",
-              "order": 2
-            },
-            {
-              "id": "4691903",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "lcb",
-          "players": [
-            {
-              "id": "2971027",
-              "order": 1
-            },
-            {
-              "id": "4245185",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "ss",
-          "players": [
-            {
-              "id": "3139368",
-              "order": 1
-            },
-            {
-              "id": "4240456",
-              "order": 2
-            },
-            {
-              "id": "4693345",
-              "order": 3
-            },
-            {
-              "id": "4878896",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "fs",
-          "players": [
-            {
-              "id": "4602197",
-              "order": 1
-            },
-            {
-              "id": "4682618",
-              "order": 2
-            },
-            {
-              "id": "4218312",
-              "order": 3
-            },
-            {
-              "id": "4250510",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "rcb",
-          "players": [
-            {
-              "id": "4686273",
-              "order": 1
-            },
-            {
-              "id": "4428992",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "nb",
-          "players": [
-            {
-              "id": "4682618",
-              "order": 1
-            },
-            {
-              "id": "4240456",
-              "order": 2
-            },
-            {
-              "id": "4218312",
-              "order": 3
-            },
-            {
-              "id": "4689651",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "pk",
-          "players": [
-            {
-              "id": "3050478",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "p",
-          "players": [
-            {
-              "id": "4035239",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "h",
-          "players": [
-            {
-              "id": "4035239",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "pr",
-          "players": [
-            {
-              "id": "3926231",
-              "order": 1
-            },
-            {
-              "id": "4870795",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "kr",
-          "players": [
-            {
-              "id": "3926231",
-              "order": 1
-            },
-            {
-              "id": "4685279",
-              "order": 2
-            },
-            {
-              "id": "4431545",
-              "order": 3
-            },
-            {
-              "id": "4715355",
-              "order": 4
-            },
-            {
-              "id": "4429013",
-              "order": 5
-            }
-          ]
-        },
-        {
-          "key": "ls",
-          "players": [
-            {
-              "id": "4686566",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "wr1",
-          "players": [
-            {
-              "id": "4241478",
-              "order": 1
-            },
-            {
-              "id": "4372414",
-              "order": 2
-            },
-            {
-              "id": "4686104",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "wr2",
-          "players": [
-            {
-              "id": "4715355",
-              "order": 1
-            },
-            {
-              "id": "3926231",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "players": [
-            {
-              "id": "4870795",
-              "order": 1
-            },
-            {
-              "id": "4428850",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "lt",
-          "players": [
-            {
-              "id": "4334215",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "lg",
-          "players": [
-            {
-              "id": "4035624",
-              "order": 1
-            },
-            {
-              "id": "4582836",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "c",
-          "players": [
-            {
-              "id": "4567802",
-              "order": 1
-            }
-          ]
-        },
-        {
-          "key": "rg",
-          "players": [
-            {
-              "id": "4362805",
-              "order": 1
-            },
-            {
-              "id": "4432738",
-              "order": 2
-            },
-            {
-              "id": "4696203",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "rt",
-          "players": [
-            {
-              "id": "5219831",
-              "order": 1
-            },
-            {
-              "id": "4240015",
-              "order": 2
-            },
-            {
-              "id": "15797",
-              "order": 3
-            }
-          ]
-        },
-        {
-          "key": "qb",
-          "players": [
-            {
-              "id": "4360698",
-              "order": 1
-            },
-            {
-              "id": "4685201",
-              "order": 2
-            },
-            {
-              "id": "4879250",
-              "order": 3
-            },
-            {
-              "id": "4040715",
-              "order": 4
-            }
-          ]
-        },
-        {
-          "key": "te",
-          "players": [
-            {
-              "id": "3121023",
-              "order": 1
-            },
-            {
-              "id": "3052096",
-              "order": 2
-            },
-            {
-              "id": "15835",
-              "order": 3
-            },
-            {
-              "id": "4431574",
-              "order": 4
-            },
-            {
-              "id": "4241374",
-              "order": 5
-            }
-          ]
-        },
-        {
-          "key": "rb",
-          "players": [
-            {
-              "id": "3929630",
-              "order": 1
-            },
-            {
-              "id": "4431545",
-              "order": 2
-            },
-            {
-              "id": "4685279",
-              "order": 3
-            },
-            {
-              "id": "4429013",
-              "order": 4
-            }
-          ]
-        }
-      ]
-    },
     "23": {
       "name": "Pittsburgh Steelers",
       "abbr": "PIT",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/pit",
       "positions": [
         {
@@ -16846,8 +14203,8 @@
               }
             },
             {
-              "id": "4035656",
-              "name": "Ben Skowronek",
+              "id": "4431492",
+              "name": "Roman Wilson",
               "order": 2,
               "availability": {
                 "status": "Active",
@@ -16855,8 +14212,8 @@
               }
             },
             {
-              "id": "5192448",
-              "name": "Cole Burgess",
+              "id": "4035656",
+              "name": "Ben Skowronek",
               "order": 3,
               "availability": {
                 "status": "Injured Reserve",
@@ -16880,12 +14237,21 @@
               }
             },
             {
-              "id": "5081338",
-              "name": "Kaden Wetjen",
+              "id": "4694237",
+              "name": "Max Hurleman",
               "order": 2,
               "availability": {
                 "status": "Active",
                 "unavailable": false
+              }
+            },
+            {
+              "id": "5192448",
+              "name": "Cole Burgess",
+              "order": 3,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
               }
             }
           ]
@@ -16896,21 +14262,21 @@
           "group": "WR",
           "players": [
             {
-              "id": "4431492",
-              "name": "Roman Wilson",
+              "id": "4035687",
+              "name": "Michael Pittman Jr.",
               "order": 1,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Day-To-Day",
+                "unavailable": true
               }
             },
             {
-              "id": "4035687",
-              "name": "Michael Pittman Jr.",
+              "id": "5081338",
+              "name": "Kaden Wetjen",
               "order": 2,
               "availability": {
-                "status": "Injured Reserve",
-                "unavailable": true
+                "status": "Active",
+                "unavailable": false
               }
             }
           ]
@@ -17038,6 +14404,10 @@
             {
               "id": "4429490",
               "order": 2
+            },
+            {
+              "id": "4428909",
+              "order": 3
             }
           ]
         },
@@ -17162,12 +14532,16 @@
               "order": 1
             },
             {
-              "id": "4685261",
+              "id": "4694237",
               "order": 2
             },
             {
-              "id": "4608004",
+              "id": "4685261",
               "order": 3
+            },
+            {
+              "id": "4608004",
+              "order": 4
             }
           ]
         },
@@ -17179,24 +14553,28 @@
               "order": 1
             },
             {
-              "id": "4428119",
+              "id": "4694237",
               "order": 2
             },
             {
-              "id": "4685261",
+              "id": "4428119",
               "order": 3
             },
             {
-              "id": "4037457",
+              "id": "4685261",
               "order": 4
             },
             {
-              "id": "5081508",
+              "id": "4037457",
               "order": 5
             },
             {
-              "id": "4608004",
+              "id": "5081508",
               "order": 6
+            },
+            {
+              "id": "4608004",
+              "order": 7
             }
           ]
         },
@@ -17217,11 +14595,11 @@
               "order": 1
             },
             {
-              "id": "4035656",
+              "id": "4431492",
               "order": 2
             },
             {
-              "id": "5192448",
+              "id": "4035656",
               "order": 3
             }
           ]
@@ -17234,8 +14612,12 @@
               "order": 1
             },
             {
-              "id": "5081338",
+              "id": "4694237",
               "order": 2
+            },
+            {
+              "id": "5192448",
+              "order": 3
             }
           ]
         },
@@ -17243,11 +14625,11 @@
           "key": "wr3",
           "players": [
             {
-              "id": "4431492",
+              "id": "4035687",
               "order": 1
             },
             {
-              "id": "4035687",
+              "id": "5081338",
               "order": 2
             }
           ]
@@ -17326,6 +14708,10 @@
             {
               "id": "4570898",
               "order": 2
+            },
+            {
+              "id": "4426368",
+              "order": 3
             }
           ]
         },
@@ -17403,8 +14789,8 @@
       "name": "San Francisco 49ers",
       "abbr": "SF",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sf",
       "positions": [
         {
@@ -18131,8 +15517,8 @@
       "name": "Seattle Seahawks",
       "abbr": "SEA",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sea",
       "positions": [
         {
@@ -18789,8 +16175,8 @@
       "name": "Tampa Bay Buccaneers",
       "abbr": "TB",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/tb",
       "positions": [
         {
@@ -19396,8 +16782,8 @@
       "name": "Tennessee Titans",
       "abbr": "TEN",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ten",
       "positions": [
         {
@@ -20040,8 +17426,8 @@
       "name": "Washington Commanders",
       "abbr": "WSH",
       "status": "ok",
-      "checkedAt": "2026-11-26T05:36:17Z",
-      "lastAttemptAt": "2026-11-26T05:36:17Z",
+      "checkedAt": "2026-11-27T02:48:58Z",
+      "lastAttemptAt": "2026-11-27T02:48:58Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/wsh",
       "positions": [
         {
