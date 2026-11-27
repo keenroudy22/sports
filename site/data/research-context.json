@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T04:33:02Z",
+  "updatedAt": "2026-11-27T05:32:13Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,24 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "3918298",
+              "name": "Josh Allen",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-27T04:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3918298/josh-allen"
+            },
+            {
+              "id": "4379399",
+              "name": "James Cook III",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-27T04:49Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4379399/james-cook-iii"
+            },
+            {
               "id": "4684527",
               "name": "T.J. Sanders",
               "position": "DT",
@@ -902,24 +920,6 @@
               "injury": null,
               "reportedAt": "2026-11-22T23:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4373678/khalil-shakir"
-            },
-            {
-              "id": "3915416",
-              "name": "DJ Moore",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-22T21:31Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3915416/dj-moore"
-            },
-            {
-              "id": "4379399",
-              "name": "James Cook III",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-22T21:26Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4379399/james-cook-iii"
             }
           ]
         },
@@ -3457,12 +3457,39 @@
           "name": "Kansas City Chiefs",
           "players": [
             {
+              "id": "15847",
+              "name": "Travis Kelce",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-27T05:12Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15847/travis-kelce"
+            },
+            {
+              "id": "4242459",
+              "name": "Trey Smith",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-11-27T05:12Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242459/trey-smith"
+            },
+            {
+              "id": "4832955",
+              "name": "Emmett Johnson",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-11-27T05:04Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4832955/emmett-johnson"
+            },
+            {
               "id": "5082630",
               "name": "Jalen Royals",
               "position": "WR",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-11-27T03:53Z",
+              "reportedAt": "2026-11-27T04:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/5082630/jalen-royals"
             },
             {
@@ -3547,15 +3574,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4605841/nate-carter"
             },
             {
-              "id": "4242459",
-              "name": "Trey Smith",
-              "position": "G",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-26T02:57Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242459/trey-smith"
-            },
-            {
               "id": "4591008",
               "name": "Omarr Norman-Lott",
               "position": "DT",
@@ -3572,15 +3590,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-11-26T02:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore"
-            },
-            {
-              "id": "4832955",
-              "name": "Emmett Johnson",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-25T17:16Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4832955/emmett-johnson"
             },
             {
               "id": "4372070",
@@ -3671,15 +3680,6 @@
               "injury": null,
               "reportedAt": "2026-11-22T23:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428331/rashee-rice"
-            },
-            {
-              "id": "15847",
-              "name": "Travis Kelce",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-11-22T23:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15847/travis-kelce"
             }
           ]
         },
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "29",
-          "name": "Feleipe Franks",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-11-27T02:48:56Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4034948/feleipe-franks"
-        },
-        {
-          "teamId": "3",
-          "name": "Caleb Williams",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-11-27T02:48:56Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
-        },
-        {
           "teamId": "3",
           "name": "Colston Loveland",
           "from": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-11-27T04:33:02Z",
           "source": "https://www.espn.com/nfl/player/_/id/3139368/marcus-epps"
+        },
+        {
+          "teamId": "12",
+          "name": "Trey Smith",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-11-27T05:32:13Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242459/trey-smith"
+        },
+        {
+          "teamId": "12",
+          "name": "Jalen Royals",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-11-27T05:32:13Z",
+          "source": "https://www.espn.com/nfl/player/_/id/5082630/jalen-royals"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-11-27T04:33:02Z",
-      "lastAttemptAt": "2026-11-27T04:33:02Z",
+      "checkedAt": "2026-11-27T05:32:13Z",
+      "lastAttemptAt": "2026-11-27T05:32:13Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-11-27T04:33:02Z",
-      "lastAttemptAt": "2026-11-27T04:33:02Z",
+      "checkedAt": "2026-11-27T05:32:13Z",
+      "lastAttemptAt": "2026-11-27T05:32:13Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
