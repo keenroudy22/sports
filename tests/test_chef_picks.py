@@ -47,9 +47,17 @@ class ChefEvidenceTests(unittest.TestCase):
         grades=copy.deepcopy(self.grades)
         for i,g in enumerate(grades):g['result']='win' if i%2 else 'loss'
         self.assertFalse(self.evidence(grades=grades)['ok'])
+    def current_tier_candidate(self):
+        fixture = test_play_tiers.PlayTierTests()
+        fixture.setUp()
+        fixture.ctx.now = self.ctx.now
+        role = dict(type='injury_role', direction='for', text='The runner is on a reduced workload.',
+                    source='https://team.example/injury-report', observedAt=self.ctx.now.isoformat())
+        pick = fixture.pick(chance=.60, gap=6, modelVersion='v2.0', _planReasons=[role])
+        return fixture, pick
+
     def test_actual_chooser_falls_back_without_upgrading_stake(self):
-        fixture=test_play_tiers.PlayTierTests();fixture.setUp();fixture.ctx.now=self.ctx.now
-        pick=fixture.pick(chance=.60,gap=6,modelVersion='v2.0')
+        fixture, pick = self.current_tier_candidate()
         with patch.object(gates.spot,'for_candidate',return_value={'spotHit':.6,'n':40}),patch.object(chef,'evidence',return_value={'ok':False,'reason':'not enough forward evidence'}):
             self.assertTrue(run.choose_straight_tier(pick,fixture.ctx).ok)
         self.assertEqual((pick['lane'],pick['riskUnits']),('best_bet',1))
@@ -59,8 +67,7 @@ class ChefEvidenceTests(unittest.TestCase):
         self.assertEqual(pick['chefEvidence']['policy'],chef.VERSION)
 
     def test_gate_rechecks_proof_and_grandfathers_only_trusted_published_history(self):
-        fixture=test_play_tiers.PlayTierTests();fixture.setUp();fixture.ctx.now=self.ctx.now
-        pick=fixture.pick(chance=.60,gap=6,modelVersion='v2.0')
+        fixture, pick = self.current_tier_candidate()
         pick['chefEvidence']={'ok':True,'policy':chef.VERSION}
         with patch.object(gates.spot,'for_candidate',return_value={'spotHit':.6,'n':40}),patch.object(chef,'evidence',return_value={'ok':False,'reason':'held'}) as check:
             self.assertFalse(gates.selection_verdict(pick,fixture.ctx,'chef_pick').ok)
@@ -116,8 +123,7 @@ class ChefEvidenceTests(unittest.TestCase):
         for row in rows:row.pop('recordedAt')
         self.assertEqual(self.evidence(rows=rows)['n'],0)
     def test_private_admission_cannot_claim_historical_grandfathering(self):
-        fixture=test_play_tiers.PlayTierTests();fixture.setUp();fixture.ctx.now=self.ctx.now
-        pick=fixture.pick(chance=.60,gap=6,modelVersion='v2.0')
+        fixture, pick = self.current_tier_candidate()
         fixture.ctx.first[pick['id']]=dict(pick,publishedAt='2026-10-20T00:00Z',_pendingRelease=True)
         with patch.object(gates.spot,'for_candidate',return_value={'spotHit':.6,'n':40}),patch.object(chef,'evidence',return_value={'ok':False,'reason':'needs proof'}):
             self.assertFalse(gates.selection_verdict(pick,fixture.ctx,'chef_pick').ok)
