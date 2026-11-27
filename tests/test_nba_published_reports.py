@@ -96,6 +96,21 @@ class PublishedReportTests(unittest.TestCase):
         with patch.object(nba_capture,'urlopen',return_value=response):
             with self.assertRaises(ValueError):nba_capture.Budget(sleep=lambda _:None).report_index(official.index_url(NOW))
 
+    def test_official_listing_moved_to_the_league_player_directory(self):
+        from unittest.mock import MagicMock
+        response = MagicMock()
+        response.__enter__.return_value = response
+        response.read.return_value = b'<html></html>'
+        landing = 'https://www.nba.com/players/injury-report'
+        with patch.object(nba_capture, 'urlopen', return_value=response):
+            for final in (landing, landing + '/'):
+                response.geturl.return_value = final
+                self.assertEqual(nba_capture.Budget(sleep=lambda _: None).report_index(official.index_url(NOW)), '<html></html>')
+            for final in (landing + '/archive', landing + '?next=elsewhere', landing.replace('https:', 'http:')):
+                response.geturl.return_value = final
+                with self.assertRaises(ValueError):
+                    nba_capture.Budget(sleep=lambda _: None).report_index(official.index_url(NOW))
+
     def test_request_timeout_is_distinct_from_exhausted_budget_without_error_content(self):
         self.assertEqual(official.failure(TimeoutError('secret remote error'),NOW)['reason'],'Official report request timed out')
         for reason in ('NBA free capture budget exhausted','NBA capture timebox exhausted'):

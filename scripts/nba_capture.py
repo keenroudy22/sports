@@ -75,7 +75,7 @@ class Budget:
                 if remaining <= 0:
                     raise TimeoutError('NBA capture timebox exhausted')
                 with urlopen(request, timeout=min(request_limit, remaining)) as response:
-                    if html and response.geturl().rstrip('/') != url:
+                    if html and response.geturl().removesuffix('/') not in (url, 'https://www.nba.com/players/injury-report'):
                         raise ValueError('Official listing redirected outside its source')
                     result = response.read(1_000_001) if html else response.read(3_000_001) if raw else json.load(response)
             if html:
