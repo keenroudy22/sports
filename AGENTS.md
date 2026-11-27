@@ -1,3 +1,14 @@
+# November 27 straight captions on X
+
+Write the full play, opponent, line, unboosted price and book in the post.
+Explain in Kook’n’s voice what gives this player a realistic path across this
+particular number today. Use an observed workload in the current role and
+relevant evidence about the opponent when available. For a side, name the
+specific matchup that makes the price attractive. A bare injury listing,
+generic praise or a streak by itself does not explain the bet. Check each
+claim against the reviewed sources. Keep the graphic simple and make the
+words stand on their own.
+
 # November 27 Daily Double comparison
 
 Compare the best two-leg ticket with three player alternates from distinct games

@@ -337,9 +337,9 @@ We have it at 47.
 @Playbook #CFB
 ```
 
-Short and plain, the way a bettor types it (the owner, 2026-09-26: "Not so AI looking. And straight to the point on
-the tweets"): the play, the price and book, and our number in a few words ("We have it at 47.", "We have Duke by
-14."); no labels, no slogans, no reason sentences (the site keeps the reasons). A fun parlay leads with its price
+For straight posts, give the selection, opponent, line, book and price. Follow with a short first-person
+reason for that specific number using the reviewed workload and matchup. A reader scrolling X should
+understand the case from the caption alone. Keep any attached slip easy to scan. A fun parlay leads with its price
 and book (`x_post.parlay_head`): "🎰 +2506 COLLEGE LOTTO (ESPN BET)" from +1000 up, "🎯 +583 NFL LONGSHOT" under it,
 "🍀 +450 NFL EASY PROPS", then its legs one a line ("Iowa/Michigan over 38.5", "Drake London 40+ rec yds"). A ladder
 rung: "🪜 KOOK'N 80/20 CLIMB · STEP 2", "$75 → $146 (+95, FanDuel)", "$19 banked · win banks $29, $117 rides",
@@ -347,8 +347,7 @@ its legs, "❤️ if you're climbing". Receipts,
 the book, the menu and cashed posts stay compact too ("Saturday: 5-3" with ✅ ❌ per play, "✅ Cashed: ...",
 "Today: 3 plays.", "📌 Full NFL projections for the slate.").
 
-The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
-every sentence is arithmetic the post stands on the play and the number. Straight-play units stay off X. A receipt
+When a draft only repeats a projection or a box score, return to the reviewed evidence and explain how the player gets there. Straight-play units stay off X. A receipt
 may identify a fun ticket as 0.25u so followers do not read it as a full-unit play.
 A parlay lists its legs and says "Just for fun."
 Approved design (2026-10-02): `pick_card.ticket_svg` gives each longshot/lotto/easy-props
