@@ -1,0 +1,83 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-11-28T14:02:10Z",
+  "summary": "Released 1: Daily Double +111 at DraftKings.",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "CFB-2026-11-28-prop-ticket-60ee6b3d41d0712c",
+      "league": "CFB",
+      "kind": "parlays",
+      "family": "CFB-alts",
+      "selectionMethod": "sourced-prop-ticket-v1",
+      "parlayType": "longshot",
+      "parlayStyle": "daily-double",
+      "status": "active",
+      "favorite": false,
+      "riskUnits": 0.25,
+      "book": "DraftKings",
+      "odds": 111,
+      "legs": [
+        {
+          "gameId": "CFB-401856758",
+          "athleteId": "5079420",
+          "player": "Trey'Dez Green",
+          "market": "recYds",
+          "direction": "over",
+          "line": 49.5,
+          "period": "full_game",
+          "book": "DraftKings",
+          "odds": -177,
+          "alternate": true,
+          "kickoff": "2026-11-28T17:45Z",
+          "id": "CFB-2026-11-28-prop-ticket-60ee6b3d41d0712c-leg-1",
+          "title": "Trey'Dez Green over 49.5 receiving yards"
+        },
+        {
+          "gameId": "CFB-401858537",
+          "athleteId": "5328488",
+          "player": "Luke Dehnicke",
+          "market": "recYds",
+          "direction": "over",
+          "line": 29.5,
+          "period": "full_game",
+          "book": "DraftKings",
+          "odds": -282,
+          "alternate": true,
+          "kickoff": "2026-11-28T17:30Z",
+          "id": "CFB-2026-11-28-prop-ticket-60ee6b3d41d0712c-leg-2",
+          "title": "Luke Dehnicke over 29.5 receiving yards"
+        }
+      ],
+      "gameIds": [
+        "CFB-401856758",
+        "CFB-401858537"
+      ],
+      "title": "Daily Double",
+      "quotedAt": "2026-11-28T13:58:40Z",
+      "firstKickoff": "2026-11-28T17:30:00Z",
+      "expiresAt": "2026-11-28T14:58:40Z",
+      "quoteType": "sportsbook",
+      "priceEstimated": false,
+      "ticketReceipt": "60ee6b3d41d0712cbcc3de3656cd87ca9d9ab61b7ca242f2cdfa68b2106a1774",
+      "propTicketFingerprint": "60ee6b3d41d0712cbcc3de3656cd87ca9d9ab61b7ca242f2cdfa68b2106a1774",
+      "confidence": 1,
+      "cutoff": "Exact posted ticket; no substitutions or re-entry.",
+      "edge": "Sourced fun ticket; no calibrated probability or positive-EV claim.",
+      "why": "I like the nine targets Green saw last week with Leavitt. He can get 50 on underneath catches even without a deep ball. Marchiol was already throwing to Dehnicke. His last three games with that quarterback cleared 50 yards; I want 30 in the wind.",
+      "risk": "He had 49 two games ago. Arkansas held Texas tight end Winston to 21 last week, and another receiver can take the short targets. Illinois held three Iowa tight ends under 20 apiece last game. Wind or fewer throws can erase a long reception.",
+      "sources": [
+        "https://bigten.org/fb/availability-reports/",
+        "https://nusports.com/news/2026/11/27/nu-to-host-illinois-close-regular-season-with-rivalry-week",
+        "https://sportsbook.draftkings.com/event/illinois-%40-northwestern/34226160",
+        "https://storage.googleapis.com/lsusports-net-prod/2026/11/27/gO4kDXNsvYoQllJJ2kO70mW53gInY4H4nWeFB1Ft.pdf",
+        "https://www.espn.com/college-football/boxscore/_/gameId/401856882",
+        "https://www.espn.com/college-football/boxscore/_/gameId/401858510",
+        "https://www.secsports.com/fbreports"
+      ],
+      "correlation": "Observed same-book combined price; never multiplied leg prices or probabilities.",
+      "jurisdictionVerified": true,
+      "publishedAt": "2026-11-28T14:02:10Z"
+    }
+  ]
+}
