@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-11-28T05:17:00Z",
+  "updatedAt": "2026-11-28T14:00:42Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 189,
+    "lines": 190,
     "current": 0,
-    "references": 0
+    "references": 1
   },
   "lines": [
     {
@@ -10908,6 +10908,69 @@
           "source": "https://www.espn.com/nfl/game/_/gameId/401873079",
           "marketWindow": "Full game",
           "cutoff": "UNDER 11.5 at +106 or better; off the card at 11 or lower, or at +105 or worse at 11.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "CFB",
+      "gameId": "CFB-401856761",
+      "player": "Lawayne McCoy",
+      "athleteId": null,
+      "position": "WR",
+      "reportId": "CFB-2026-W13-mccoy-over-4-5-rec-fd",
+      "identityVerified": false,
+      "direction": "OVER",
+      "line": 4.5,
+      "market": "receptions",
+      "book": "FanDuel",
+      "odds": 130,
+      "observedAt": "2026-11-28T11:46:13Z",
+      "expiresAt": "2026-11-28T13:30:00Z",
+      "source": "https://www.espn.com/college-football/game/_/gameId/401856761",
+      "marketWindow": "Full game",
+      "cutoff": "OVER 4.5 at +130 or better; off the card at 5+, or at +129 or worse at 4.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-11-28T11:46:13Z",
+      "kickoff": "2026-11-28T17:00Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Lawayne McCoy OVER 4.5 receptions",
+      "id": "line-548f198a68061f736273",
+      "observations": [
+        {
+          "line": 4.5,
+          "odds": 130,
+          "observedAt": "2026-11-28T11:46:13Z",
+          "source": "https://www.espn.com/college-football/game/_/gameId/401856761",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "CFB",
+          "gameId": "CFB-401856761",
+          "player": "Lawayne McCoy",
+          "athleteId": null,
+          "position": "WR",
+          "reportId": "CFB-2026-W13-mccoy-over-4-5-rec-fd",
+          "identityVerified": false,
+          "direction": "OVER",
+          "line": 4.5,
+          "market": "receptions",
+          "book": "FanDuel",
+          "odds": 130,
+          "observedAt": "2026-11-28T11:46:13Z",
+          "expiresAt": "2026-11-28T13:30:00Z",
+          "source": "https://www.espn.com/college-football/game/_/gameId/401856761",
+          "marketWindow": "Full game",
+          "cutoff": "OVER 4.5 at +130 or better; off the card at 5+, or at +129 or worse at 4.5.",
           "quoteType": "source reference"
         }
       ]
