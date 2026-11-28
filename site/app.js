@@ -2193,7 +2193,7 @@
   const MORE_ASSET = 'app-more.js?v=sha256-99a5ca341f92';
   const PLAYER_ASSET = 'app-player.js?v=sha256-16cba856bcbb';
   const GAMES_ASSET = 'app-games.js?v=sha256-2618486b194d';
-  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-485ecb30ec2f';
+  const FOOTBALL_GAME_ASSET = 'app-football-game.js?v=sha256-f3caf1cdf15d';
   const KVB_ASSET = 'app-kvb.js?v=sha256-cc4c1b9a0b5b';
   const RESEARCH_CSS = 'research.css?v=sha256-1964ee545b39';
   let researchCssLoading = null;
