@@ -154,8 +154,8 @@ def build_singles(entries, football, basketball, now):
 
 PAIR_FORMAT = 'two-player-rollover-v1'
 GOAL_CENTS = 1_000_000
-PLAN_WINS = 14
-MIN_PAIR_ODDS = -178
+PLAN_WINS = 20
+MIN_PAIR_ODDS = -270
 HOOPS_PROPS = {'pts': 'points', 'reb': 'rebounds', 'ast': 'assists', 'fg3m': 'made threes'}
 REVIEW_FIELDS = ('workload', 'availability', 'matchup', 'countercase')
 

@@ -160,7 +160,8 @@ class SecretSantaPairTests(unittest.TestCase):
         balance=v['balance']
         for _ in range(v['planWins']):
             balance=secret_santa.return_on_win(balance,v['targetOdds'])
-        self.assertEqual(balance,1027600)
+        self.assertEqual(balance, 1090971)
+        self.assertEqual(self.view([dict(self.pair, odds=-270)])['balance'], 2741)
         self.assertEqual(secret_santa.return_on_win(2000,120),4400)
 
     def test_settles_both_official_fixtures_once(self):
@@ -175,7 +176,7 @@ class SecretSantaPairTests(unittest.TestCase):
         self.assertTrue(self.view()['closed'])
 
     def test_research_and_quote_validation(self):
-        for changes in [dict(legs=self.pair['legs'][:1]),dict(odds=-179),dict(quoteVerified=False),
+        for changes in [dict(legs=self.pair['legs'][:1]),dict(odds=-271),dict(quoteVerified=False),
                         dict(unboosted=False),dict(quoteUrl='https://example.com/')]:
             with self.assertRaises(ValueError):
                 self.view([dict(self.pair,**changes)])
