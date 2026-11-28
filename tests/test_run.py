@@ -14,6 +14,32 @@ import run
 import buffer_post
 
 
+class CollegePlayerReviewTests(unittest.TestCase):
+    def test_current_player_and_fixture_must_match_even_when_qb_is_cleared(self):
+        now = datetime(2026, 11, 28, 13, tzinfo=timezone.utc)
+        fixture = 'CFB-401856761'
+        kickoff = '2026-11-28T17:00Z'
+        ctx = SimpleNamespace(names={'7': 'Lawayne McCoy'}, games={fixture: {'kickoff': kickoff}})
+        pick = {'league': 'CFB', 'athleteId': '7', 'gameIds': [fixture]}
+        evidence = {'name': 'Lawayne McCoy', 'source': 'https://gocards.com/preview',
+                    'status': 'available', 'kickoff': kickoff, 'checkedAt': run.stamp(now),
+                    'role': 'Listed as a starting receiver for this fixture.'}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(run, 'CONF', Path(tmp)):
+            folder = Path(tmp) / 'player-availability'
+            folder.mkdir()
+            path = folder / f'{fixture}.json'
+            self.assertTrue(run.cfb_player_review_hold(pick, ctx, now))
+            for row in ({fixture: {'qb': evidence}}, {'other': {'7': evidence}},
+                        {fixture: {'7': dict(evidence, status='questionable')}},
+                        {fixture: {'7': dict(evidence, checkedAt='2026-11-28T08:00Z')}}):
+                path.write_text(json.dumps(row))
+                self.assertTrue(run.cfb_player_review_hold(pick, ctx, now))
+            path.write_text(json.dumps({fixture: {'7': evidence}}))
+            self.assertIsNone(run.cfb_player_review_hold(pick, ctx, now))
+            self.assertTrue(run.cfb_player_review_hold(pick, ctx, now, due=run.gates.when(kickoff)))
+            self.assertIsNone(run.cfb_player_review_hold(dict(pick, league='NFL'), ctx, now))
+
+
 class SlotTests(unittest.TestCase):
     def test_nba_game_and_prop_capture_reuse_six_windows_without_an_afternoon_freshness_hole(self):
         windows = [(6,45),(8,30),(10,0),(11,45),(13,30),(16,0),(17,30),(20,0),(21,0),(23,30)]

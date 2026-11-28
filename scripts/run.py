@@ -1408,6 +1408,34 @@ def needs_research(candidate):
     return league == 'CFB' and not candidate.get('legs')
 
 
+CFB_PLAYER_CHECK_START = datetime(2026, 11, 28, 12, 40, tzinfo=timezone.utc)
+
+
+def cfb_player_review_hold(pick, ctx, now, due=None):
+    """Bind a current participation review to the athlete and exact fixture."""
+    if (now < CFB_PLAYER_CHECK_START or not needs_research(pick)
+            or not pick.get('athleteId') or pick.get('parlayType')):
+        return None
+    import research_views
+    fixture = (pick.get('gameIds') or [None])[0]
+    athlete = str(pick['athleteId'])
+    game = ctx.games.get(fixture) or {}
+    name = gates.player_name(pick, ctx)
+    reason = f'current participation and role need verification for {name} in {fixture}'
+    if not fixture or not game.get('kickoff'):
+        return reason
+    # The desk writes one atomic private file per fixture, using the same schema
+    # as the existing reviewed scoring-research rows. Missing evidence holds.
+    try:
+        checks = load_json(CONF / 'player-availability' / f'{fixture}.json', {})
+    except (OSError, ValueError):
+        return reason
+    if not isinstance(checks, dict) or not research_views.scorer_confirmed(
+            checks, fixture, athlete, name, game['kickoff'], now, due or now):
+        return reason
+    return None
+
+
 def should_research_candidate(candidate, candidate_rank, gap, class_a):
     """Spend the bounded news checks on every eligible college candidate in order.
 
@@ -2928,8 +2956,8 @@ def _run(args, now, slot, kinds, status):
                 + ('' if researched else '; none about who is expected to play'))
             if kept:
                 write_prose(candidate, ctx, records)
-        hold = None
-        if needs_research(candidate) and not researched:
+        hold = cfb_player_review_hold(candidate, ctx, now)
+        if not hold and needs_research(candidate) and not researched:
             hold = research_block or 'the news check returned no verified player-availability evidence; college plays stay held'
         material_facts = relevant_facts(candidate, facts, ctx)
         hold = hold or unresolved_availability(material_facts) or judge(candidate, material_facts, use_llm, status)
@@ -3819,7 +3847,7 @@ def private_release_refusal(row, ctx, now):
     effective market rule.
     """
     pick = dict(row.get('pick') or {}, league=row.get('league'))
-    held = gates.staking.cbb_review_hold(pick, now)
+    held = cfb_player_review_hold(pick, ctx, now) or gates.staking.cbb_review_hold(pick, now)
     if held:
         return held
     if pick.get('selectionMethod') == 'sourced-prop-ticket-v1':
@@ -4102,6 +4130,10 @@ def release_private(now, log=log, only=None, review_only=False, clock=time.monot
         if not post_windows.public_release_open(now, target):
             continue
 
+        participation_hold = cfb_player_review_hold(dict(pick, league=row.get('league')), ctx, now, due=max(now, due))
+        if participation_hold:
+            log(f'release: {key} waits for the player review to cover its scheduled send')
+            continue
         row = recover_private_release_artifacts(row, ctx, ctx.games, now)
         pick = dict(row.get('pick') or {})
 
@@ -5630,7 +5662,7 @@ def precheck(args):
                 game = ctx.games.get((pick.get('gameIds') or [None])[0])
                 pick['_team'] = ctx.player_team.get(str(pick.get('athleteId') or ''))
                 flag, kept, facts = last_look(pick, game, ctx, context_file, use_llm, status, now)
-                reason = release_pull_reason(pick, relevant_facts(pick, facts, ctx)) or flag
+                reason = cfb_player_review_hold(pick, ctx, now, due=max(now, gates.when(entry['dueAt']))) or release_pull_reason(pick, relevant_facts(pick, facts, ctx)) or flag
                 if needs_research(pick) and not lineup_confirmed(kept):
                     reason = reason or 'the last look found no verified player-availability evidence'
                 if reason:
