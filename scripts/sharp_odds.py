@@ -359,15 +359,22 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
     # When each game's numbers were last read, changed or not: the store only grows when a number moves, so an
     # unchanged game's last record can be hours older than the prices it still holds (scripts/ladder.py reads this).
     try:
-        confirmed = json.loads((root / 'sharp-status.json').read_text(encoding='utf-8')).get('confirmed') or {}
+        previous_status = json.loads((root / 'sharp-status.json').read_text(encoding='utf-8'))
     except (OSError, ValueError):
-        confirmed = {}
+        previous_status = {}
+    confirmed = previous_status.get('confirmed') or {}
     kickoffs = {g['id']: g['kickoff'] for g in slate.get('games', [])}
     confirmed = {gid: at for gid, at in confirmed.items() if gid in kickoffs and now < features.when(kickoffs[gid])}
-    status = {'at': boxscores.stamp(now), 'leagues': {}, 'confirmed': confirmed}
+    # Empty offers still use requests. Track attempts separately from verified quote times.
+    attempted = {gid: at for gid, at in (previous_status.get('attempted') or {}).items()
+                 if gid in kickoffs and now < features.when(kickoffs[gid])}
+    status = {'at': boxscores.stamp(now), 'leagues': {}, 'confirmed': confirmed, 'attempted': attempted}
     # Reorder the same bounded requests: NFL/weekend CFB before weekday CFB,
     # then the nearest kickoff. No extra event lists, pages or credits.
-    game_priority = lambda g: (coverage_priority.tier(g['league'], g['kickoff'], now), g['kickoff'], g['id'])
+    def game_priority(game):
+        key = game['id']
+        last = attempted.get(key) or confirmed.get(key) or ''
+        return coverage_priority.tier(game['league'], game['kickoff'], now), game['kickoff'], last, key
     league_priority = lambda league: min((game_priority(g) for g in games if g['league'] == league), default=(2, '9999', ''))
     for league, code in sorted(LEAGUES.items(), key=lambda kv: league_priority(kv[0])):
         if budget[0] <= 0:
@@ -394,6 +401,7 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
         for game in mine:
             if game['id'] not in ids or budget[0] <= 0:
                 continue
+            attempted[game['id']] = boxscores.stamp(now)
             for row in pages(code, key, fetch=fetch, sleep=sleep, log=log, budget=budget, event_id=ids[game['id']]):
                 types[row.get('market_type')] = types.get(row.get('market_type'), 0) + 1
                 books_seen[row.get('sportsbook')] = books_seen.get(row.get('sportsbook'), 0) + 1

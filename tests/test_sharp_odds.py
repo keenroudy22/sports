@@ -170,6 +170,27 @@ class QuoteTests(unittest.TestCase):
         elsewhere = row('draftkings', 'x', 'p', 'over', 1, -110, start='2026-09-21T20:05:00Z')
         self.assertIsNone(sharp_odds.find_game(elsewhere, self.slate), 'a kickoff a day off is another game')
 
+    def test_limited_capture_rotates_equal_kickoffs_without_renewing_empty_quotes(self):
+        starts = '2026-09-20T20:05:00Z'
+        slate = [game('NFL-1', starts, 'LV Raiders', 'LAC Chargers'),
+                 game('NFL-2', starts, 'DAL Cowboys', 'NY Giants')]
+        events = [{'id': g['id'], 'home_team': g['home']['name'], 'away_team': g['away']['name'],
+                   'event_start_time': starts} for g in slate]
+        reads = []
+        def fetch(path, key, **params):
+            if path == '/events':
+                return {'data': events}
+            reads.append(params['event_id'])
+            return {'data': [], 'pagination': {'has_more': False}}
+
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            for minute in (0, 15):
+                sharp_odds.capture({'games': slate}, NOW.replace(minute=minute), 'key', fetch=fetch,
+                                   sleep=lambda _: None, root=root, log=lambda *args: None, requests=2)
+            self.assertEqual(reads, ['NFL-1', 'NFL-2'])
+            self.assertEqual(json.loads((root / 'sharp-status.json').read_text())['confirmed'], {})
+
     def test_a_capture_merges_over_the_other_feeds_books_and_writes_once(self):
         g = self.slate[0]
         calls = []

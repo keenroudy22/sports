@@ -79128,5 +79128,218 @@
         "units": -1
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-11-28T12:12:31Z",
+    "summary": "Released 1: Lawayne McCoy OVER 4.5 receptions +130 at FanDuel.",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "5086096",
+        "market": "rec",
+        "line": 4.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401856761"
+        ],
+        "book": "FanDuel",
+        "odds": 130,
+        "projection": 4.8,
+        "edge": "Price-checked chance 50.7% against the exact two-sided price; 43.5% needed at +130: +7.2 percentage points.",
+        "cutoff": "OVER 4.5 at +130 or better; off the card at 5+, or at +129 or worse at 4.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-11-27T04:33:07Z",
+        "quotedAt": "2026-11-28T11:46:13Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 6:46 AM ET capture across 2 books, the best expected value on the board for this side. FanDuel is the only book with this market; its paired game-day price passed the check.",
+        "expiresAt": "2026-11-28T13:30:00Z",
+        "selectionPolicy": "2026-10-19-1u-2u",
+        "lane": "best_bet",
+        "riskUnits": 1,
+        "stakingPolicy": "2026-10-29-one-two-unit-shared-cap",
+        "probabilityAtPublication": {
+          "rawChance": 0.543,
+          "chance": 0.507,
+          "calibrated": true,
+          "calibration": 0.16,
+          "calibrationN": 2871,
+          "push": 0.0,
+          "breakEven": 0.435,
+          "edgePoints": 7.2,
+          "evPerUnit": 0.166,
+          "snapshotAt": "2026-11-27T04:33:07Z",
+          "probabilitySpec": "37644f2b04b6f380b910ffad8a733653db247d6fe2984953678a97dc3c49ee1c",
+          "evaluatedAt": "2026-11-28T11:50:03Z",
+          "fairChance": 0.406,
+          "anchoredChance": 0.507,
+          "gap": 10.0,
+          "calibrationFamily": "CFB/prop",
+          "calibrationMethod": "neutral-centered-held-out"
+        },
+        "matchup": "Louisville Cardinals at Kentucky Wildcats",
+        "title": "Lawayne McCoy OVER 4.5 receptions",
+        "id": "CFB-2026-W13-mccoy-over-4-5-rec-fd",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856761",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://gocards.com/news/2026/11/27/football-cards-head-to-lexington-for-governors-cup",
+          "https://sports.yahoo.com/articles/uks-offense-2-key-starters-173029694.html"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 4 of 10 over 4.5.",
+          "context": [
+            "Role: 1st of 3 LOU WRs by projected targets, 7.1 a game.",
+            "Defense: UK allows 14 receptions a game to WRs, 122nd-stingiest of 138 this season."
+          ],
+          "cautions": [
+            "Only 4 of the last 10 games cleared this side of the line; recent results oppose it."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 4.8 against 4.5. The over reads 50.7% after adjustment from the raw 54.3%; 43.5% is needed at +130. Last 10 games: 4 of 10 over 4.5. Role: 1st of 3 LOU WRs by projected targets, 7.1 a game. Defense: UK allows 14 receptions a game to WRs, 122nd-stingiest of 138 this season.",
+        "risk": "Only 4 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Usage share is 31.3% over the last 3, versus 24.6% this season. The opponent allows the 15th-most receptions to WRs.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-11-28T11:50:03Z"
+            },
+            {
+              "text": "Book says 4.5. I say 4.8.",
+              "numbers": {
+                "projection": 4.8,
+                "line": 4.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-11-27T04:33:07Z"
+            },
+            {
+              "text": "3 of his last 5 games finished over 4.5 receptions.",
+              "numbers": {
+                "values": [
+                  6,
+                  2,
+                  3,
+                  5,
+                  6
+                ],
+                "hits": 3,
+                "games": 5,
+                "line": 4.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-11-15T00:00Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Only 4 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 8 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-11-28T11:50:03Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "College injury news is thin; no verified status report is stored.",
+              "numbers": {},
+              "source": null,
+              "time": null
+            }
+          ],
+          "weather": {
+            "tempF": 47,
+            "windMph": 10,
+            "windDirection": "SW",
+            "precipProb": 1,
+            "periodStart": "2026-11-28T12:00:00-05:00",
+            "issuedAt": "2026-11-27T18:26:10+00:00",
+            "source": "https://api.weather.gov/gridpoints/LMK/96,69/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 4.5,
+                  "price": 119,
+                  "time": "2026-11-27T04:39:27Z"
+                },
+                "now": {
+                  "line": 4.5,
+                  "price": 120,
+                  "time": "2026-11-28T11:46:13Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 4.5,
+                  "price": 130,
+                  "time": "2026-11-27T04:39:27Z"
+                },
+                "now": {
+                  "line": 4.5,
+                  "price": 130,
+                  "time": "2026-11-28T11:46:13Z"
+                }
+              }
+            },
+            "best": {
+              "book": "FanDuel",
+              "line": 4.5,
+              "price": 130,
+              "time": "2026-11-28T11:46:13Z"
+            }
+          },
+          "ours": {
+            "projection": 4.8,
+            "line": 4.5,
+            "market": "rec",
+            "text": "Usage share is 31.3% over the last 3, versus 24.6% this season. The opponent allows the 15th-most receptions to WRs.",
+            "snapshotAt": "2026-11-27T04:33:07Z"
+          },
+          "history": "Last 10 games: 4 of 10 over 4.5.",
+          "sources": [
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/LMK/96,69/forecast/hourly",
+              "time": "2026-11-27T18:26:10+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856761",
+              "time": "2026-11-28T11:50:03Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-11-28T11:50:03Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://gocards.com/news/2026/11/27/football-cards-head-to-lexington-for-governors-cup",
+              "time": "2026-11-28T11:50:03Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://sports.yahoo.com/articles/uks-offense-2-key-starters-173029694.html",
+              "time": "2026-11-28T11:50:03Z"
+            }
+          ],
+          "partial": false
+        },
+        "publishedAt": "2026-11-28T12:12:31Z"
+      }
+    ]
   }
 ]
