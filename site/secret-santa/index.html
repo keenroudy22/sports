@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="santa.css">
-  <script src="santa.js?v=3" defer></script>
+  <script src="santa.js?v=4" defer></script>
 </head>
 <body>
   <header class="mast"><a href="../">Kook’n Sports</a><span>Through Christmas Day</span></header>
@@ -19,11 +19,16 @@
     <section class="hero" aria-labelledby="title">
       <p class="eyebrow">Holiday rollover · Paper challenge</p>
       <h1 id="title">Secret Santa</h1>
-      <p>One favorite near −400 after the slate review. Start at a simulated $20 and roll the full return into the next verified play.</p>
+      <p>Two player props from different games. The goal is to turn a simulated $20 into $10,000 by December 25.</p>
       <dl class="balances">
         <div><dt>Paper balance</dt><dd id="balance">—</dd></div>
         <div><dt>Current run record</dt><dd id="record">—</dd></div>
       </dl>
+    </section>
+    <section class="plan" aria-labelledby="plan-title">
+      <h2 id="plan-title">The route to $10,000</h2>
+      <p>Fourteen full winning tickets at −178 return $10,276 from $20. We can pass on any slate. One loss ends the run.</p>
+      <p id="remaining"></p>
     </section>
     <section class="slip" aria-labelledby="slip-title">
       <p class="eyebrow" id="step-label">Current step</p>
@@ -31,6 +36,7 @@
       <p id="status" role="status"></p>
       <template id="ticket">
         <div class="terms"><p class="matchup"></p><strong class="price"></strong></div>
+        <ol class="legs" hidden></ol>
         <p class="quote"></p>
         <dl class="details"><div><dt>Paper rollover</dt><dd class="risk"></dd></div><div><dt>Return if it hits</dt><dd class="return"></dd></div></dl>
         <div class="read"><h3>Why I like it</h3><p class="reason"></p><h3>What could beat it</h3><p class="risk-note"></p></div>
@@ -42,7 +48,7 @@
       <ol id="history"></ol>
       <p id="empty">The first settled step will appear here.</p>
     </section>
-    <p class="rules">A push returns the paper balance. A loss ends the run. A second play can go up only after the first settles and a later line qualifies.</p>
+    <p class="rules">We roll the settled paper balance. A confirmed nonparticipant or push removes that leg. A lone winner returns its posted single price. Two removed legs return the balance. Players who appear are graded on their official final stats. A new ticket can follow only after both finals are verified.</p>
   </main>
   <footer>21+ · For entertainment</footer>
 </body>

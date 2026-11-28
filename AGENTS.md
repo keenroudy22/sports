@@ -1,3 +1,11 @@
+# November 27 Secret Santa through Christmas
+
+Run 3 starts with a new simulated $20 after Gilmer’s official Run 2 loss. The site-only target is $10,000 by December 25 Eastern. Start reviewing tickets for the November 28 slate. Fourteen full wins at a combined −178 reach the goal with cent rounding. Prefer the quieter two-leg price when both players earn their places. A qualifying better price is welcome. The number of tickets is a plan, never a publication quota.
+
+During the existing overnight prep and morning review, compare player alternates across supported sports. Choose two players in different games. For each player, verify current role and comparable carries, targets or minutes, current availability and limits, the opposing matchup, weather where relevant, and the strongest reason the leg could lose. Check both exact individual quotes and the actual combined full-game unboosted price at one book. Prepare backups. Pass if either leg or joint price fails. Start another step only after the last ticket settles. Keep ordinary picks, X, Discord and phone alerts independent of this paper challenge.
+
+Append the new-format ticket to the existing original ledger only after validating its two legs against scripts/secret_santa.py and its regression fixtures. Save checkedAt, book, odds, quoteUrl, quoteVerified, unboosted and a short reader-facing reason. Each leg retains the original player/team/game IDs, side, line, stat, selection, matchup, start time, book, odds and book URL. Save checkedAt, workload, availability, matchup, countercase and primary roleSource, matchupSource and availabilitySource in each leg’s review. Use the complete same-book slip, never computed or boosted odds. Test and verify the unlisted page before calling the ticket posted. Keep accounts, private screenshots and private model methods out of tracked data. Grade once from the stored official finals. One losing leg ends the run. A confirmed DNP/push removes a leg in this paper experiment; a single surviving winner returns its frozen individual price. Missing evidence stays pending. Any further restart requires new owner direction.
+
 # November 27 straight captions on X
 
 Write the full play, opponent, line, unboosted price and book in the post.

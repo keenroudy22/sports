@@ -2572,10 +2572,6 @@ def build(now=None):
     cbb_public = cbb_record_picks(now)
     import hoops_store
     nba_finals = hoops_store.load('NBA')
-    import secret_santa
-    santa_entries = read(ROOT / 'data' / 'secret-santa.json', [])
-    santa_finals = {'NBA': nba_finals, 'CBB': hoops_store.load('CBB')} if santa_entries else {}
-    write(OUT / 'secret-santa.json', secret_santa.build(santa_entries, records, santa_finals, now))
     nba_public = nba_record_picks(now, team_finals=nba_finals)
     nba_fun = nba_fun_picks(now)
     posted_records = list({p['id']: p for p in picks + cbb_public + nba_public + community_records + nba_fun}.values())
@@ -2672,6 +2668,10 @@ def build(now=None):
                               opponent_position_games(nba_boxes, nba_season))
     cbb_boxes = list({row['eventId']: row for path in (ROOT / 'data' / 'sport-box').glob('cbb-*.jsonl')
                       for row in boxscores.read_store(path)}.values())
+    import secret_santa
+    santa_entries = read(ROOT / 'data' / 'secret-santa.json', [])
+    santa_finals = {'NBA': nba_finals, 'CBB': hoops_store.load('CBB')} if santa_entries else {}
+    write(OUT / 'secret-santa.json', secret_santa.build(santa_entries, records, santa_finals, now, nba_boxes + cbb_boxes))
     cbb_index, cbb_shards, cbb_season = build_basketball_players(cbb_boxes, 'CBB')
     write(OUT / 'players' / 'CBB.json', {'keys': list(NBA_LOG_KEYS), 'shards': SHARDS['CBB'],
                                          'players': cbb_index, 'season': cbb_season,

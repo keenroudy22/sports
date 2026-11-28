@@ -119,3 +119,72 @@ class SecretSantaTests(unittest.TestCase):
         self.assertIsNone(replacement['passToday'])
         with self.assertRaises(ValueError):
             secret_santa.build([self.play, dict(action, withdrawnAt=self.start)], [], {}, self.now)
+
+
+class SecretSantaPairTests(unittest.TestCase):
+    def setUp(self):
+        SecretSantaTests.setUp(self)
+        self.gilmer_loss = dict(self.game, away={'id': '193', 'score': 21})
+        self.marker = {'format': secret_santa.PAIR_FORMAT, 'restartAfter':self.play['eventId'],
+                       'openedAt':'2026-11-25T03:00:00Z'}
+        self.prefix = [self.play, self.marker]
+        self.now = datetime(2026, 11, 26, 5, tzinfo=timezone.utc)
+        self.check = '2026-11-25T12:00:00Z'
+        self.start = '2026-11-25T20:00:00Z'
+        book_url = 'https://sportsbook.fanduel.com/football/example'
+        src = 'https://www.espn.com/example'
+        review = dict(checkedAt=self.check, workload='16 carries', availability='starting and active',
+                      matchup='opponent conceded 90 on 18 carries', countercase='late substitution',
+                      roleSource=src, availabilitySource=src, matchupSource=src)
+        fb = dict(league='CFB',eventId='500',awayId='1',homeId='2',athleteId='3',teamId='1',
+                  startsAt=self.start,stat='rushYds',side='over',line=39.5,odds=-400,book='FanDuel',
+                  selection='Runner 40+ rushing',matchup='Away at Home',quoteUrl=book_url,review=review)
+        nba = dict(fb,league='NBA',eventId='600',athleteId='4',stat='reb',line=3.5,
+                   selection='Center 4+ rebounds')
+        self.pair = dict(legs=[fb,nba],checkedAt=self.check,book='FanDuel',odds=-178,unboosted=True,
+                         quoteVerified=True,quoteUrl=book_url,reason='Both have the reviewed workload.')
+        self.fb_game = dict(self.game,eventId='500',kickoff=self.start,away={'id':'1','score':21},
+                            home={'id':'2','score':28},retrievedAt='2026-11-25T23:20Z',
+                            players=[dict(id='3',team='1',rushYds=45)])
+        self.nba_game = dict(self.fb_game,league='NBA',eventId='600',state='post',type=2,homeScore=110,awayScore=100)
+        self.box = dict(league='NBA',eventId='NBA-600',kickoff=self.start,teams={'1':{},'2':{}},
+                        players=[dict(id='4',team='1',stats={'reb':4})],retrievedAt='2026-11-25T23:30Z',source=src)
+
+    def view(self, plays=None, boxes=None):
+        return secret_santa.build(self.prefix + ([self.pair] if plays is None else plays),
+                                  [self.gilmer_loss,self.fb_game],{'NBA':[self.nba_game]},
+                                  self.now,[self.box] if boxes is None else boxes)
+
+    def test_pair_plan_and_legacy_history(self):
+        v=self.view([]); self.assertEqual((v['balance'],v['run'],v['history'][0]['result']), (2000,2,'loss'))
+        balance=v['balance']
+        for _ in range(v['planWins']):
+            balance=secret_santa.return_on_win(balance,v['targetOdds'])
+        self.assertEqual(balance,1027600)
+        self.assertEqual(secret_santa.return_on_win(2000,120),4400)
+
+    def test_settles_both_official_fixtures_once(self):
+        v=self.view();self.assertEqual((v['wins'],v['balance'],v['current']),(1,3124,None))
+        self.assertEqual([g['score'] for g in v['history'][-1]['legs']],['45 rushing yards','4 rebounds'])
+        self.assertEqual(self.view(boxes=[])['current']['winReturn'],3124)
+        self.box['players'][0]['dnp']=True
+        self.assertEqual(self.view()['balance'],2500)
+        self.fb_game['players'][0]['dnp']=True
+        self.assertEqual(self.view()['pushes'],1)
+        self.fb_game['players']=[dict(id='3',team='1',rushYds=39)]
+        self.assertTrue(self.view()['closed'])
+
+    def test_research_and_quote_validation(self):
+        for changes in [dict(legs=self.pair['legs'][:1]),dict(odds=-179),dict(quoteVerified=False),
+                        dict(unboosted=False),dict(quoteUrl='https://example.com/')]:
+            with self.assertRaises(ValueError):
+                self.view([dict(self.pair,**changes)])
+        for changes in [dict(book='DraftKings'),dict(startsAt=self.check),
+                        dict(review=dict(self.pair['legs'][0]['review'],availabilitySource='')),
+                        dict(review=dict(self.pair['legs'][0]['review'],checkedAt='2026-11-25T09:00Z'))]:
+            with self.assertRaises(ValueError):
+                self.view([dict(self.pair,legs=[dict(self.pair['legs'][0],**changes),self.pair['legs'][1]])])
+        with self.assertRaises(ValueError):
+            self.view([dict(self.pair,legs=[self.pair['legs'][0],dict(self.pair['legs'][0],athleteId='5')])])
+        with self.assertRaises(ValueError):
+            self.view([self.pair,self.pair])

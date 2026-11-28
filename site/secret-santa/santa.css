@@ -60,3 +60,7 @@ dd { margin: .2rem 0 0; font-size: 1.35rem; font-weight: 700; font-variant-numer
 .rules, #empty, footer { color: var(--muted); font-size: .875rem; line-height: 1.55; }
 footer { border-top: 1px solid var(--line); padding-block: 1rem; }
 [hidden] { display: none !important; }
+
+.plan { margin-bottom: 1.6rem; }
+.plan p { color: var(--muted); line-height: 1.55; margin: .5rem 0; }
+.legs { padding-left: 1.35rem; line-height: 1.6; }
