@@ -1,3 +1,7 @@
+# November 27 football scoring research
+
+Before naming any NFL or CFB player in an end-zone post or graphic, check the latest team or conference availability report for that fixture and the player's actual current role. Resolve earlier exclusions, questionable tags, role changes and conflicting reports. An injury list without the player's name or old red-zone statistics alone cannot confirm participation. In the existing morning or pregame review, save the primary source, checkedAt, exact kickoff, name, status and role under game ID and athlete ID in `data/policy/scorer-availability.json`. Use `available` only after the checks clear. Record a new exclusion promptly when news changes. Refresh the hosted card before release and check every name again before delivery. If fewer than two qualify, move on to another supported research subject.
+
 # November 27 Secret Santa through Christmas
 
 Run 3 starts with a new simulated $20 after Gilmer’s official Run 2 loss. The site-only target is $10,000 by December 25 Eastern. Start reviewing tickets for the November 28 slate. Fourteen full wins at a combined −178 reach the goal with cent rounding. Prefer the quieter two-leg price when both players earn their places. A qualifying better price is welcome. The number of tickets is a plan, never a publication quota.

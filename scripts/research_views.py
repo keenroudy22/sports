@@ -1,5 +1,8 @@
 """Deterministic research views, never candidates or publications. No network or LLM."""
+import json
 import math
+from pathlib import Path
+from urllib.parse import urlsplit
 from datetime import datetime, timedelta, timezone
 
 
@@ -98,7 +101,34 @@ def upset_watch(card, now, snapshot=None):
             'caution': 'Raw winner estimate, not a calibrated moneyline edge. Check schedule strength and current roles.'}
 
 
-def scorer_research(game, snapshot, records, names, now):
+SCORER_CHECK_START = datetime(2026, 11, 28, 1, tzinfo=timezone.utc)
+SCORER_CHECKS = Path(__file__).resolve().parents[1] / 'data/policy/scorer-availability.json'
+
+
+def scorer_checks():
+    try:
+        rows = json.loads(SCORER_CHECKS.read_text())
+    except (OSError, ValueError):
+        return {}
+    return rows if isinstance(rows, dict) else {}
+
+
+def scorer_confirmed(checks, game_id, athlete_id, name, kickoff, now, due):
+    game_checks = checks.get(game_id)
+    row = game_checks.get(str(athlete_id)) if isinstance(game_checks, dict) else None
+    if not isinstance(row, dict) or row.get('status') != 'available' or not name or row.get('name') != name:
+        return False
+    stamp, start = moment(row.get('checkedAt')), moment(kickoff)
+    try:
+        source = urlsplit(row.get('source') or '')
+    except (TypeError, ValueError):
+        return False
+    return bool(stamp and start and stamp <= now <= due < start and due - stamp <= timedelta(hours=4)
+                and moment(row.get('kickoff')) == start and source.scheme == 'https' and source.hostname
+                and isinstance(row.get('role'), str) and row['role'].strip())
+
+
+def scorer_research(game, snapshot, records, names, now, injuries=None):
     """Rank observed current-season scoring opportunities, not touchdown probabilities.
 
     Missing play-by-play is excluded, not zero-filled. Pass TDs never count as
@@ -110,18 +140,23 @@ def scorer_research(game, snapshot, records, names, now):
             or not timedelta(0) <= now - published <= timedelta(days=7):
         return []
     rows = []
+    checks = scorer_checks() if now >= SCORER_CHECK_START else {}
     for side in ('home', 'away'):
         team = str(game[side]['id'])
         history = [r for r in records if r.get('season') == game.get('season') and r.get('seasonType') == 2
                    and moment(r.get('kickoff')) and moment(r['kickoff']) < min(start, now)
                    and team in r.get('teams', {})]
+        flagged = {str(p.get('id')) for p in (injuries or {}).get(team, [])}
         for player in ((snapshot.get('players') or {}).get(side) or {}).get('players', []):
-            if player.get('limited') or player.get('pos') not in ('QB', 'RB', 'FB', 'WR', 'TE'):
+            if str(player.get('id')) in flagged or player.get('limited') or player.get('pos') not in ('QB', 'RB', 'FB', 'WR', 'TE'):
                 continue
             volume = sum((player.get(k) or [0])[0] or 0 for k in ('targets', 'carries'))
             if volume < 3:
                 continue
             pid = str(player['id'])
+            if now >= SCORER_CHECK_START and not scorer_confirmed(
+                    checks, game.get('id'), pid, names.get(pid), game['kickoff'], now, now):
+                continue
             samples = []
             for record in history:
                 if (record.get('quality') or {}).get('plays') != 'ok':

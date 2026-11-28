@@ -8,6 +8,7 @@ no post. On a football off-day, or when the priced families are honestly held,
 the fallback is a next-slate numbers card made only from stored projections and
 fresh book lines. Nothing is invented merely to fill a calendar.
 """
+import hashlib
 import json
 import os
 import re
@@ -15,6 +16,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import gates
+import research_views
 import line_payload
 import pick_card
 from sports_refresh import eastern_date
@@ -377,9 +379,13 @@ def matchup_candidate(games, details, now, teams=None):
 
 def scorer_candidate(games, details, now):
     rows = []
+    checks = research_views.scorer_checks() if now >= research_views.SCORER_CHECK_START else {}
     for game in games:
         for player in (details.get(game['id']) or {}).get('scorerResearch') or []:
             if not current(player.get('roleSnapshotAt'), now, timedelta(days=7)) or player.get('games', 0) < 3:
+                continue
+            if now >= research_views.SCORER_CHECK_START and not research_views.scorer_confirmed(
+                    checks, game['id'], player.get('athleteId'), player.get('player'), game['kickoff'], now, now):
                 continue
             games_seen = player['games']
             rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
@@ -706,6 +712,10 @@ def select(data, details, now, lines=None, teams=None, order=None, log=None, log
     day = eastern_date(now)
     chosen.update(day=day, key=f"research-{chosen['kind']}-{day.isoformat()}", offDay=not bool(today_games),
                   firstKickoff=min(when(row['kickoff']) for row in chosen['rows']))
+    if chosen['kind'] == 'end-zone' and now >= research_views.SCORER_CHECK_START:
+        # The hosted graphic and caption must use the same players and counts even after a rebuild.
+        fingerprint = hashlib.sha256(json.dumps(chosen['rows'], sort_keys=True).encode()).hexdigest()[:16]
+        chosen['key'] += '-' + fingerprint
     chosen['text'] = bounded_caption(chosen)
     return chosen
 
@@ -759,6 +769,8 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log
         if leans:
             _PLANNED_METADATA[key] = {
                 'type': 'td-lean',
+                'players': [{k: row[k] for k in ('title', 'gameId', 'kickoff', 'athleteId')} for row in choice['rows']],
+                'cardKey': choice['key'],
                 'leans': [{'player': row['title'], 'athleteId': str(row.get('athleteId') or ''),
                            'gameId': row['gameId'], 'league': row['league'], 'kickoff': row['kickoff'],
                            'anytime': bool(row.get('tdLean')), 'firstTd': bool(row.get('firstTdDart'))}

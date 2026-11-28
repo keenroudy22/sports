@@ -976,6 +976,12 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             if not reserved:
                 log(f'buffer: {guid} held: NBA delivery not cleared or already attempted; recheck before retry')
                 continue
+        if guid.startswith('research:end-zone:'):
+            import research_posts
+            problem = scorer_release_issue(research_posts.planned_metadata(guid), card_key, now, max(now, due))
+            if problem:
+                log(f'buffer: {guid} held: {problem}')
+                continue
         try:
             post_id = create_post(text, channel_id, due, image, key=key, send=send,
                                   essential=kind in BUFFER_DELIVERY_ESSENTIAL,
@@ -1216,11 +1222,37 @@ def collect_metrics(log_book, now, key=None, send=http_send, log=print):
     return read
 
 
+def scorer_release_issue(metadata, card_key, now, due):
+    import research_views
+    import research_posts
+    if due < research_views.SCORER_CHECK_START:
+        return None
+    metadata = metadata or {}
+    players = metadata.get('players')
+    if not card_key or metadata.get('cardKey') != card_key or not isinstance(players, list) or len(players) < 2:
+        return 'End-zone card lacks a verified list of every featured player'
+    checks = research_views.scorer_checks()
+    if any(not isinstance(row, dict) or not re.fullmatch(r'(?:CFB|NFL)-[0-9]+', str(row.get('gameId') or '')) for row in players):
+        return 'End-zone card lacks an exact game identity'
+    details = research_posts.details_for([{'id': game_id} for game_id in {row['gameId'] for row in players}])
+    for row in players:
+        active = details[row['gameId']].get('scorerResearch') or []
+        if not any(str(p.get('athleteId')) == str(row.get('athleteId')) and p.get('player') == row.get('title') for p in active):
+            return f"Player absent from current scoring-role research: {row.get('title')}"
+        if not research_views.scorer_confirmed(checks, row.get('gameId'), row.get('athleteId'),
+                                              row.get('title'), row.get('kickoff'), now, due):
+            return f"Current game availability and role unverified for {row.get('title') or 'scorer'}"
+    return None
+
+
 def queued_relevance_issues(entry, now):
     due = gates.when(entry['dueAt']) if entry.get('dueAt') else now
     trial_hold = social_learning.research_trial_hold(entry.get('id'), max(now, due))
     if trial_hold:
         return [trial_hold]
+    if str(entry.get('id') or '').startswith('research:end-zone:'):
+        issue = scorer_release_issue(entry.get('research'), entry.get('cardKey'), now, max(now, due))
+        return [issue] if issue else []
     import nba_editorial
     if now < nba_editorial.RELEVANCE_START or not re.fullmatch(r'nba-(?:projections|trends|props)-\d{4}-\d{2}-\d{2}',str(entry.get('id') or '')):
         return []

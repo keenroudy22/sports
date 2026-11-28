@@ -843,7 +843,8 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
             row['qbNews'] = qb_news(injuries.get(str(row.get('team')), [])) or None
             if row.get('qbNews') and row.get('comparison'):
                 row['comparison'] += ' QB news: ' + row['qbNews'] + '.'
-    detail['scorerResearch'] = research_views.scorer_research(game, final, records, names, now)
+    detail['scorerResearch'] = research_views.scorer_research(
+        game, detail.get('forecast'), records, names, now, injuries=injuries)
     detail['researchStatus'] = {'moneyline': 'Winner research only; moneyline value not calibrated.',
                                'teamTotals': 'Research trial only; no validated public team-total prices.',
                                'touchdowns': 'Scoring opportunities, not TD probabilities or priced recommendations.'}
