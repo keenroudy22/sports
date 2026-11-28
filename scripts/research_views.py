@@ -175,6 +175,8 @@ def scorer_research(game, snapshot, records, names, now, injuries=None):
                          'teamGames': len(history), 'redZone': red, 'inside10': inside,
                          'touchdowns': sum((p.get('rushTD') or 0) + (p.get('recTD') or 0) for p in samples),
                          'projectedOpportunities': round(volume, 1), 'roleSnapshotAt': snapshot['publishedAt'],
+                         **({'availabilityCheckedAt': checks[game['id']][pid]['checkedAt']}
+                            if now >= SCORER_CHECK_START else {}),
                          'priceStatus': 'No verified TD price',
                          'label': 'Scoring opportunity watch', 'official': False})
     return sorted(rows, key=lambda r: (-r['inside10'] / r['games'], -r['redZone'] / r['games'], r['athleteId']))[:4]

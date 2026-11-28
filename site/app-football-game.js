@@ -565,8 +565,12 @@
     const injuryHtml = g.league === 'NFL' ? section('Injury report', `<div class="grid two">${injBlock('away')}${injBlock('home')}</div>`, '', 'Listed starters lead their position on ESPN’s depth chart, not confirmed tonight. Depth players are listed behind them; unmatched or old roles stay unconfirmed. Losing several players at one position can hurt depth, but does not automatically make a bet.')
       : section('Injuries', '<p class="small muted">College injury reports are not covered by the feed. Check team sources before relying on a projection.</p>');
 
-    /* Touchdown watch: recent role snapshots only, before kickoff. */
-    const tdw = pregame ? (detail.scorerResearch || []).filter(r => r.roleSnapshotAt && now - Date.parse(r.roleSnapshotAt) >= 0 && now - Date.parse(r.roleSnapshotAt) <= 7 * 86400000 && (r.games ?? 0) >= 3).slice(0, 5) : [];
+    const tdw = pregame && now < Date.parse(g.kickoff) ? (detail.scorerResearch || []).filter(row => {
+      const roleAge = now - Date.parse(row.roleSnapshotAt);
+      const availabilityAge = now - Date.parse(row.availabilityCheckedAt);
+      return roleAge >= 0 && roleAge <= 7 * 86400000 && availabilityAge >= 0 &&
+        availabilityAge <= 4 * 3600000 && row.games >= 3;
+    }).slice(0, 5) : [];
     const tdAt = tdw.map(r => r.roleSnapshotAt).sort().pop();
     const touchdownSide = side => {
       const rows = tdw.filter(r => r.side === side);
